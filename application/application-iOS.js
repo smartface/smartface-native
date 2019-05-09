@@ -33,7 +33,11 @@ Object.defineProperty(SFApplication, 'byteSent', {
 });
 
 SFApplication.call = function(uriScheme, data, onSuccess, onFailure) {
-    SMFApplication.call(uriScheme, data, onSuccess, onFailure);
+    if (Object.keys(uriScheme).indexOf('uriScheme') === -1) {
+        SMFApplication.call(uriScheme, data, onSuccess, onFailure);
+    } else {
+        SMFApplication.call(uriScheme.uriScheme, uriScheme.data, uriScheme.onSuccess, uriScheme.onFailure);
+    }
 };
 
 SFApplication.exit = function() {
@@ -212,9 +216,9 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     enumerable: true
 });
 
-Application.onMaximize = function(){};
+Application.onMaximize = function() {};
 Object.defineProperty(SFApplication, 'onMaximize', {
-    set:function(value){
+    set: function(value) {
         Application.onMaximize = value;
     },
     get: function() {
@@ -223,9 +227,9 @@ Object.defineProperty(SFApplication, 'onMaximize', {
     enumerable: true
 });
 
-Application.onMinimize = function(){};
+Application.onMinimize = function() {};
 Object.defineProperty(SFApplication, 'onMinimize', {
-    set:function(value){
+    set: function(value) {
         Application.onMinimize = value;
     },
     get: function() {

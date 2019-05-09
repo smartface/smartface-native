@@ -133,9 +133,22 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
-    // methods
     'call': {
-        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {
+        /* ToDo : Multiple parameter is deprected.*/
+        value: function() {
+            if (arguments.length === 1 && (typeof arguments[0] === "object"))
+                var {
+                    uriScheme,
+                    data,
+                    onSuccess,
+                    onFailure,
+                    isShowChooser,
+                    chooserTitle,
+                    action = ACTION_VIEW
+                } = arguments[0];
+            else
+                var [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
+
             if (!TypeUtil.isString(uriScheme)) {
                 throw new TypeError('uriScheme must be string');
             }
@@ -143,48 +156,35 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
 
-            var intent = new NativeIntent(ACTION_VIEW);
-
+            let intent = new NativeIntent(action);
+            let uriObject;
             if (TypeUtil.isObject(data)) {
                 // we should use intent.putExtra but it causes native crash.
-
-                var params = Object.keys(data).map(function(k) {
+                let params = Object.keys(data).map(function(k) {
                     return k + '=' + data[k];
                 }).join('&');
-                var uriObject;
+
                 if (uriScheme.indexOf("|") !== -1) {
-                    var classActivityNameArray = uriScheme.split("|");
-                    // JS string pass causes parameter mismatch
-                    const NativeString = requireClass("java.lang.String");
-                    var className = new NativeString(classActivityNameArray[0]);
-                    var activityName = new NativeString(classActivityNameArray[1]);
-                    intent.setClassName(className, activityName);
+                    configureIntent.call(this, uriScheme);
                     uriObject = NativeUri.parse(params);
                 } else {
-                    var uri = uriScheme + "?" + params;
+                    let uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
-                intent.setData(uriObject);
             } else {
-                if (uriScheme.indexOf("|") !== -1) {
-                    var classActivityNameArray = uriScheme.split("|");
-                    // JS string pass causes parameter mismatch
-                    const NativeString = requireClass("java.lang.String");
-                    var className = new NativeString(classActivityNameArray[0]);
-                    var activityName = new NativeString(classActivityNameArray[1]);
-                    intent.setClassName(className, activityName);
-                } else {
-                    var uri = NativeUri.parse(uriScheme);
-                    intent.setData(uri);
-                }
+                if (uriScheme.indexOf("|") !== -1)
+                    configureIntent.call(this, uriScheme);
+                else
+                    uriObject = NativeUri.parse(uriScheme);
             }
+            uriObject && intent.setData(uriObject);
 
-            var packageManager = activity.getPackageManager();
-            var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
+            let packageManager = activity.getPackageManager();
+            let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
             if (activitiesCanHandle.size() > 0) {
                 if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                    var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    var chooserIntent = NativeIntent.createChooser(intent, title);
+                    let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                    let chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
                         activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
                     } catch (e) {
@@ -340,6 +340,16 @@ ApplicationWrapper.setRootController = function(params) {
     params.controller.__isActive = true;
     ViewController.setController(params);
 };
+
+function configureIntent(uriScheme) {
+    const intent = this;
+    let classActivityNameArray = uriScheme.split("|");
+    // JS string pass causes parameter mismatch
+    const NativeString = requireClass("java.lang.String");
+    let className = new NativeString(classActivityNameArray[0]);
+    let activityName = new NativeString(classActivityNameArray[1]);
+    intent.setClassName(className, activityName);
+}
 
 function attachSliderDrawer(sliderDrawer) {
     if (sliderDrawer) {

@@ -115,10 +115,7 @@ const ListView = extend(View)(
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll, _contentOffset = {
-                x: 0,
-                y: 0
-            },
+        var _onScroll,
             _rowHeight, _onRowCreate, _onRowSelected, _onRowLongSelected,
             _onPullRefresh, _onRowHeight, _onRowBind, _onRowType, _itemCount = 0,
             _contentInset = {},
@@ -172,18 +169,6 @@ const ListView = extend(View)(
                     if (TypeUtil.isNumeric(itemCount)) {
                         _itemCount = itemCount;
                     }
-                },
-                enumerable: true
-            },
-            /* 
-            ToDo: Removing onScroll listener makes contentOffset null.
-            */
-            'contentOffset': {
-                get: function() {
-                    return {
-                        x: AndroidUnitConverter.pixelToDp(_contentOffset.x),
-                        y: AndroidUnitConverter.pixelToDp(_contentOffset.y)
-                    };
                 },
                 enumerable: true
             },
@@ -435,23 +420,20 @@ const ListView = extend(View)(
                     if (!self.touchEnabled) {
                         return;
                     }
-                    //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
+                    //Remove  due to the incorrect onScrolled's return parameter. Such as scrollTo(0) causes it to return fault dx & dy parameters.
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
-                    _contentOffset.x += dx;
-                    _contentOffset.y += dy;
+                    // _contentOffset.x += dx;
+                    // _contentOffset.y += dy;
 
-                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                    // var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    // var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                     _onScroll && _onScroll({
                         translation: {
                             x: dX,
                             y: dY
                         },
-                        contentOffset: {
-                            x: offsetX,
-                            y: offsetY
-                        }
+                        contentOffset: self.contentOffset
                     });
                 },
                 onScrollStateChanged: function(newState) {
