@@ -262,40 +262,29 @@ Notifications.ios.UNUserNotificationCenterDelegate.didReceiveNotificationRespons
     Notifications.ios._didReceiveNotificationResponse && Notifications.ios._didReceiveNotificationResponse(e);
 };
 
-Notifications.ios._userNotificationEnabled = false;
-Object.defineProperty(Notifications.ios, 'userNotificationEnabled', {
-    get: function() {
-        return Notifications.ios._userNotificationEnabled;
-    },
-    set: function(value) {
-        if (value) {
-            Notifications.ios._userNotificationEnabled = true;
-            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = Notifications.ios.UNUserNotificationCenterDelegate;
-        }else{
-            Notifications.ios._userNotificationEnabled = false
-            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = undefined;
-        }
-    },
-    enumerable: true
-});
-
 Notifications.ios._willPresentNotification = undefined;
-Object.defineProperty(Notifications.ios, 'willPresentNotification', {
+Object.defineProperty(Notifications, 'onNotificationReceive', {
     get: function() {
         return Notifications.ios._willPresentNotification;
     },
     set: function(value) {
+        if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
+            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = Notifications.ios.UNUserNotificationCenterDelegate;
+        }
         Notifications.ios._willPresentNotification = value;
     },
     enumerable: true
 });
 
 Notifications.ios._didReceiveNotificationResponse = undefined;
-Object.defineProperty(Notifications.ios, 'receivedNotificationResponse', {
+Object.defineProperty(Notifications, 'onNotificationClick', {
     get: function() {
         return Notifications.ios._didReceiveNotificationResponse;
     },
     set: function(value) {
+        if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
+            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = Notifications.ios.UNUserNotificationCenterDelegate;
+        }
         Notifications.ios._didReceiveNotificationResponse = value;
     },
     enumerable: true
