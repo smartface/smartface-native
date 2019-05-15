@@ -1,11 +1,11 @@
 const WebBrowserOptions = function(params) {
-    
+
     const Color = require('sf-core/ui/color');
     var _url = "";
     var _barColor = Color.WHITE;
     var _itemColor = Color.create("#00A1F1");
     var _statusBarVisible = true;
-    
+
     Object.defineProperties(this, {
         'url': {
             get: function() {
@@ -26,7 +26,7 @@ const WebBrowserOptions = function(params) {
             enumerable: true
         }
     });
-    
+
     this.ios = {};
     Object.defineProperties(this.ios, {
         'itemColor': {
@@ -48,7 +48,7 @@ const WebBrowserOptions = function(params) {
             enumerable: true
         }
     });
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

@@ -4,18 +4,18 @@ const Color = require('sf-core/ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
 
 const TabBarController = extend(Page)(
-    function (_super, params) {
-        
+    function(_super, params) {
+
         var self = this;
-        
+
         if (!self.nativeObject) {
             self.nativeObject = new __SF_TopTabViewController();
         }
-        
+
         _super(self);
-        
+
         // Callbacks
-        var _onPageCreate = function(e){}.bind(this);
+        var _onPageCreate = function(e) {}.bind(this);
         Object.defineProperty(self, 'onPageCreate', {
             get: function() {
                 return _onPageCreate;
@@ -31,10 +31,10 @@ const TabBarController = extend(Page)(
                 }.bind(this);
             },
             enumerable: true,
-            configurable : true
+            configurable: true
         });
-        
-        var _onSelected = function(e){}.bind(this);
+
+        var _onSelected = function(e) {}.bind(this);
         Object.defineProperty(self, 'onSelected', {
             get: function() {
                 return _onSelected;
@@ -48,9 +48,9 @@ const TabBarController = extend(Page)(
                 }.bind(this);
             },
             enumerable: true,
-            configurable : true
+            configurable: true
         });
-        
+
         // Properties
         var _items = [];
         Object.defineProperty(this, 'items', {
@@ -60,10 +60,10 @@ const TabBarController = extend(Page)(
             set: function(value) {
                 if (typeof value === 'object') {
                     _items = value;
-                    
+
                     var nativeItems = [];
                     for (var i in _items) {
-                        if (typeof _items[i].nativeObject === "undefined"){
+                        if (typeof _items[i].nativeObject === "undefined") {
                             _items[i].nativeObject = UITabBarItem.new();
                         }
                         _items[i].invalidate();
@@ -74,10 +74,10 @@ const TabBarController = extend(Page)(
             },
             enumerable: true
         });
-        
+
         self.android = {};
         self.ios = {};
-        
+
         Object.defineProperty(self.ios, 'barTextTransform', {
             get: function() {
                 return self.nativeObject.topBar.valueForKey("titleTextTransform");
@@ -87,9 +87,10 @@ const TabBarController = extend(Page)(
                     self.nativeObject.topBar.setValueForKey(value, "titleTextTransform");
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         var _autoCapitalize = true;
         Object.defineProperty(self, 'autoCapitalize', {
             get: function() {
@@ -105,34 +106,41 @@ const TabBarController = extend(Page)(
                     _autoCapitalize = value;
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'barColor', {
             get: function() {
-                return new Color({color : self.nativeObject.topBarBackgroundColor});
+                return new Color({
+                    color: self.nativeObject.topBarBackgroundColor
+                });
             },
             set: function(value) {
                 if (typeof value === "object") {
-                    self.nativeObject.topBarBackgroundColor = value.nativeObject;   
+                    self.nativeObject.topBarBackgroundColor = value.nativeObject;
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'indicatorColor', {
             get: function() {
-                return new Color({color : self.nativeObject.indicatorColor});
+                return new Color({
+                    color: self.nativeObject.indicatorColor
+                });
             },
             set: function(value) {
                 if (typeof value === "object") {
-                    self.nativeObject.indicatorColor = value.nativeObject;   
+                    self.nativeObject.indicatorColor = value.nativeObject;
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
-        Object.defineProperty(self,'indicatorHeight', {
+
+        Object.defineProperty(self, 'indicatorHeight', {
             get: function() {
                 return self.nativeObject.indicatorHeight;
             },
@@ -141,9 +149,10 @@ const TabBarController = extend(Page)(
                     self.nativeObject.indicatorHeight = value;
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.scrollEnabled;
@@ -153,23 +162,26 @@ const TabBarController = extend(Page)(
                     self.nativeObject.scrollEnabled = value;
                 }
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'selectedIndex', {
             get: function() {
                 return self.nativeObject.currentIndex;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'barHeight', {
             get: function() {
                 return self.nativeObject.barHeight;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         var _iconColor = {};
         Object.defineProperty(this, 'iconColor', {
             get: function() {
@@ -178,14 +190,14 @@ const TabBarController = extend(Page)(
             set: function(value) {
                 if (typeof value === 'object') {
                     _iconColor = value;
-                    
+
                     if (_iconColor && (_iconColor.normal || _iconColor.selected)) {
                         if (typeof _iconColor.normal === "object") {
                             self.nativeObject.iconColor = _iconColor.normal.nativeObject;
                         } else {
                             self.nativeObject.iconColor = undefined;
                         }
-                        
+
                         if (typeof _iconColor.selected === "object") {
                             self.nativeObject.selectedIconColor = _iconColor.selected.nativeObject;
                         } else {
@@ -201,7 +213,7 @@ const TabBarController = extend(Page)(
             },
             enumerable: true
         });
-        
+
         var _textColor = {};
         Object.defineProperty(this, 'textColor', {
             get: function() {
@@ -210,14 +222,14 @@ const TabBarController = extend(Page)(
             set: function(value) {
                 if (typeof value === 'object') {
                     _textColor = value;
-                    
+
                     if (_textColor && (_textColor.normal || _textColor.selected)) {
                         if (typeof _textColor.normal === "object") {
                             self.nativeObject.titleColor = _textColor.normal.nativeObject;
                         } else {
                             self.nativeObject.titleColor = undefined;
                         }
-                        
+
                         if (typeof _textColor.selected === "object") {
                             self.nativeObject.selectedTitleColor = _textColor.selected.nativeObject;
                         } else {
@@ -233,12 +245,12 @@ const TabBarController = extend(Page)(
             },
             enumerable: true
         });
-        
+
         //Functions
         self.setSelectedIndex = function(index, animated) {
             var _animated = true;
             if (typeof animated !== "undefined") {
-                _animated = animated;   
+                _animated = animated;
             }
             SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
                 self.nativeObject.setSelectedIndexWithAnimated(index, _animated);
@@ -256,13 +268,13 @@ const TabBarController = extend(Page)(
 
 TabBarController.iOS = {};
 TabBarController.iOS.BarTextTransform = {};
-Object.defineProperty(TabBarController.iOS.BarTextTransform,"AUTO",{
+Object.defineProperty(TabBarController.iOS.BarTextTransform, "AUTO", {
     value: 0
 });
-Object.defineProperty(TabBarController.iOS.BarTextTransform,"NONE",{
+Object.defineProperty(TabBarController.iOS.BarTextTransform, "NONE", {
     value: 1
 });
-Object.defineProperty(TabBarController.iOS.BarTextTransform,"UPPERCASE",{
+Object.defineProperty(TabBarController.iOS.BarTextTransform, "UPPERCASE", {
     value: 2
 });
 

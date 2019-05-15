@@ -11,19 +11,18 @@ function Database(params) {
 
     if (typeof params.inMemory === 'boolean' && params.inMemory) {
         this.nativeObject = NativeSQLiteDatabase.create(null);
-    }
-    else if (params.file instanceof File) {
+    } else if (params.file instanceof File) {
         if (params.file.type === Path.FILE_TYPE.FILE) {
             this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
-        }
-        else if (params.file.type === Path.FILE_TYPE.RAU_ASSETS || params.file.type === Path.FILE_TYPE.EMULATOR_ASSETS) {
+        } else if (params.file.type === Path.FILE_TYPE.RAU_ASSETS || params.file.type === Path.FILE_TYPE.EMULATOR_ASSETS) {
             if (!params.file.exists) {
                 throw new Error("Open Database from Assets failed. Database not exists and cannot create database on assets");
             }
             this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
-        }
-        else if (params.file.type === Path.FILE_TYPE.ASSETS) {
-            var destinationOnRoot = new File({ path: Path.DataDirectory + "/" + params.file.name });
+        } else if (params.file.type === Path.FILE_TYPE.ASSETS) {
+            var destinationOnRoot = new File({
+                path: Path.DataDirectory + "/" + params.file.name
+            });
             if (!destinationOnRoot.exists) {
                 var copyResult = params.file.copy(destinationOnRoot.path);
                 if (!copyResult) {
@@ -61,8 +60,8 @@ function Database(params) {
             value: function(sqlCommand) {
                 if (typeof sqlCommand === 'string') {
                     return new Database.QueryResult({
-                         isInternal: true,
-                         cursor : this.nativeObject.rawQuery(sqlCommand, null)
+                        isInternal: true,
+                        cursor: this.nativeObject.rawQuery(sqlCommand, null)
                     });
                 }
             },
@@ -78,7 +77,7 @@ Database.QueryResult = function(params) {
     }
 
     this.nativeObject = params.cursor;
-  
+
     Object.defineProperties(this, {
         'count': {
             value: function() {
@@ -89,8 +88,8 @@ Database.QueryResult = function(params) {
             value: function() {
                 this.nativeObject.moveToFirst();
                 return new Database.DatabaseObject({
-                     isInternal : true,
-                     cursor : this.nativeObject
+                    isInternal: true,
+                    cursor: this.nativeObject
                 });
             }
         },
@@ -98,8 +97,8 @@ Database.QueryResult = function(params) {
             value: function() {
                 this.nativeObject.moveToLast();
                 return new Database.DatabaseObject({
-                     isInternal: true,
-                     cursor : this.nativeObject
+                    isInternal: true,
+                    cursor: this.nativeObject
                 });
             }
         },
@@ -108,11 +107,10 @@ Database.QueryResult = function(params) {
                 if (typeof location === 'number') {
                     this.nativeObject.moveToPosition(int(location));
                     return new Database.DatabaseObject({
-                         isInternal : true,
-                         cursor : this.nativeObject
+                        isInternal: true,
+                        cursor: this.nativeObject
                     });
-                }
-                else {
+                } else {
                     throw new Error("Parameter mismatch. Parameter must be Number for Database.QueryResult#get");
                 }
             }
@@ -144,8 +142,7 @@ Database.DatabaseObject = function(params) {
                         return this.nativeObject.getString(index);
                     }
                     return null;
-                }
-                else {
+                } else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getString");
                 }
             },
@@ -159,8 +156,7 @@ Database.DatabaseObject = function(params) {
                         return this.nativeObject.getInt(index);
                     }
                     return null;
-                }
-                else {
+                } else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getInteger");
                 }
             },
@@ -174,8 +170,7 @@ Database.DatabaseObject = function(params) {
                         return this.nativeObject.getBoolean(index);
                     }
                     return null;
-                }
-                else {
+                } else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getBoolean");
                 }
             },
@@ -189,8 +184,7 @@ Database.DatabaseObject = function(params) {
                         return this.nativeObject.getFloat(index);
                     }
                     return null;
-                }
-                else {
+                } else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getFloat");
                 }
             },

@@ -1,8 +1,8 @@
 module.exports = {
     View: require('./view'),
     Label: require('./label'),
-    TextAlignment : require('./textalignment'),
-    ImageCacheType : require('./imagecachetype'),
+    TextAlignment: require('./textalignment'),
+    ImageCacheType: require('./imagecachetype'),
     Font: require('./font'),
     Color: require('./color'),
     Button: require('./button'),

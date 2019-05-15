@@ -53,17 +53,7 @@ function Page(params) {
 
     var actionBar = null;
     var callback = {
-        onCreate: function() {
-            // TODO: Add api level check
-            if (!self.enterRevealTransition && !self.returnRevealAnimation)
-                return;
-            self.enterRevealTransition = false;
-            self.returnRevealAnimation = false;
-            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
-            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
-        },
+        onCreate: function() {},
         onCreateView: function() {
             pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());
             self.nativeObject.setHasOptionsMenu(true);
@@ -92,10 +82,11 @@ function Page(params) {
                     if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
                         try {
                             var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                            Application.onReceivedNotification({
+                                'remote': JSON.parse(notificationJson)
+                            });
                             spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
-                        }
-                        catch (e) {
+                        } catch (e) {
                             new Error("An error occured while getting notification json");
                         }
                     }
@@ -103,7 +94,7 @@ function Page(params) {
             }));
         },
         onPause: function() {
-            self.onHide && self.onHide();  
+            self.onHide && self.onHide();
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
@@ -113,38 +104,13 @@ function Page(params) {
             }
             return true;
         },
-        onConfigurationChanged: function(newConfig) {
+        onConfigurationChanged: function() {
             const Screen = require("../../device/screen");
-            _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
+            _onOrientationChange && _onOrientationChange({
+                orientation: Screen.orientation
+            });
         },
-        onOptionsItemSelected: function(menuItem) {
-            var itemId = menuItem.getItemId();
-            if (itemId === NativeAndroidR.id.home) {
-                let leftItem;
-                if (Application.currentPage.pageID === self.pageID) {
-                    leftItem = self._headerBarLeftItem;
-                }
-                else {
-                    leftItem = Application.currentPage._headerBarLeftItem;
-                }
-
-                if (leftItem) {
-                    leftItem.onPress && leftItem.onPress();
-                }
-                else {
-                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
-                }
-
-            }
-            else if (_headerBarItems[itemId]) {
-                var item = _headerBarItems[itemId];
-                if (item.onPress instanceof Function) {
-                    item.onPress();
-                }
-            }
-            return true;
-        },
-        onCreateContextMenu: function(menu, view, menuInfo) {
+        onCreateContextMenu: function(menu) {
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -155,8 +121,8 @@ function Page(params) {
                 menu.add(0, i, 0, menuTitle);
             }
         },
-        onContextItemSelected: function(item) {
-            var itemId = item.getItemId();
+        onContextItemSelected: function(itemId) {
+
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
                 items[itemId].onSelected();
@@ -176,18 +142,14 @@ function Page(params) {
             // for better performance. Remove if statement.
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
-            }
-            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
-            }
-            else if (requestCode === Sound.PICK_SOUND) {
+            } else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);
 
-            }
-            else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
+            } else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
-            }
-            else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
+            } else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
         }
@@ -398,8 +360,7 @@ function Page(params) {
             _borderVisibility = value;
             if (value) {
                 actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
-            }
-            else {
+            } else {
                 actionBar.setElevation(0);
             }
         },
@@ -430,8 +391,7 @@ function Page(params) {
                 if (_transparent) {
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
                     self.headerBar.backgroundColor = Color.TRANSPARENT;
-                }
-                else {
+                } else {
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
                 }
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
@@ -471,8 +431,7 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 toolbar.setTitle(text);
-            }
-            else {
+            } else {
                 toolbar.setTitle("");
             }
         },
@@ -537,8 +496,7 @@ function Page(params) {
                 if (visible) {
                     // View.VISIBLE
                     toolbar.setVisibility(0);
-                }
-                else {
+                } else {
                     // View.GONE
                     toolbar.setVisibility(8);
                 }
@@ -568,8 +526,7 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 toolbar.setSubtitle(text);
-            }
-            else {
+            } else {
                 toolbar.setSubtitle("");
             }
         },
@@ -607,7 +564,10 @@ function Page(params) {
     var _contentInset = {};
     Object.defineProperty(self.headerBar.android, 'contentInset', {
         get: function() {
-            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
+            return {
+                left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()),
+                right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd())
+            };
         },
         set: function(contentInset) { // API Level 21+
             _contentInset = contentInset;
@@ -710,8 +670,7 @@ function Page(params) {
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
             return;
-        }
-        else if (items == null) {
+        } else if (items == null) {
             optionsMenu.clear();
             return;
         }
@@ -733,19 +692,17 @@ function Page(params) {
             var itemView;
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
-            }
-            else {
+            } else {
 
                 var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
 
-                if (item.image && item.image.nativeObject) {
+                if ((item.image && item.image.nativeObject) || item.android.systemIcon)
                     item.nativeObject = new NativeImageButton(activity);
-                }
-                else {
+                else
                     item.nativeObject = new NativeTextButton(activity);
-                }
+
                 nativeBadgeContainer.addView(item.nativeObject);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
                 item.nativeBadgeContainer = nativeBadgeContainer;
@@ -755,6 +712,7 @@ function Page(params) {
                     item.addToHeaderView(item.badge);
                 }
                 itemView = nativeBadgeContainer;
+                item.itemView = itemView;
                 item.setValues();
             }
             if (itemView) {
@@ -781,8 +739,7 @@ function Page(params) {
         if (leftItem && leftItem.image) {
             self._headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
-        }
-        else { // null or undefined
+        } else { // null or undefined
             self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
@@ -799,7 +756,9 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
-                if (!focusedView) { return; }
+                if (!focusedView) {
+                    return;
+                }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");

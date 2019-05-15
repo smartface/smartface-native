@@ -1,12 +1,12 @@
-const AndroidConfig   = require('../../util/Android/androidconfig');
-const UnitConverter   = require('../../util/Android/unitconverter');
-const Image           = require('../../ui/image');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const UnitConverter = require('../../util/Android/unitconverter');
+const Image = require('../../ui/image');
 const OrientationType = require('./orientationtype');
 
-const NativeContext        = requireClass('android.content.Context');
-const NativeBitmap         = requireClass('android.graphics.Bitmap');
+const NativeContext = requireClass('android.content.Context');
+const NativeBitmap = requireClass('android.graphics.Bitmap');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
-const NativeR              = requireClass('android.R');
+const NativeR = requireClass('android.R');
 // Context.WINDOW_SERVICE
 const WINDOW_SERVICE = 'window';
 const WINDOW_MANAGER = 'android.view.WindowManager';
@@ -22,7 +22,7 @@ const orientationArray = [
 ];
 
 Object.defineProperty(Screen, 'dpi', {
-    get: function () {
+    get: function() {
         var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return metrics.densityDpi;
     },
@@ -30,7 +30,7 @@ Object.defineProperty(Screen, 'dpi', {
 });
 
 Object.defineProperty(Screen, 'height', {
-    get: function () {
+    get: function() {
         var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return UnitConverter.pixelToDp(metrics.heightPixels);
     },
@@ -38,7 +38,7 @@ Object.defineProperty(Screen, 'height', {
 });
 
 Object.defineProperty(Screen, 'width', {
-    get: function () {
+    get: function() {
         var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return UnitConverter.pixelToDp(metrics.widthPixels);
     },
@@ -46,7 +46,7 @@ Object.defineProperty(Screen, 'width', {
 });
 
 Object.defineProperty(Screen, 'touchSupported', {
-    get: function () {
+    get: function() {
         var packageManager = AndroidConfig.activity.getPackageManager();
         return packageManager.hasSystemFeature("android.hardware.touchscreen");
     },
@@ -54,7 +54,7 @@ Object.defineProperty(Screen, 'touchSupported', {
 });
 
 Object.defineProperty(Screen, 'orientation', {
-    get: function () {
+    get: function() {
         var windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
         var display = windowManager.getDefaultDisplay();
         return orientationArray[display.getRotation()];

@@ -27,7 +27,7 @@ function Font() {}
  * @return {Object} &emsp;width : Number <br />&emsp;height : Number
  * @since 1.1.18
  */
-Font.prototype.sizeOfString = function(string,maxWidth) { }
+Font.prototype.sizeOfString = function(string, maxWidth) {}
 
 /**
  * @method create
@@ -52,7 +52,7 @@ Font.prototype.sizeOfString = function(string,maxWidth) { }
  * @return {UI.Font} A Font instance.
  * @static
  */
-Font.create = function(fontFamily, size, style) { }
+Font.create = function(fontFamily, size, style) {}
 
 /**
  * @method createFromFile
@@ -75,7 +75,7 @@ Font.create = function(fontFamily, size, style) { }
  *
  * @static
  */
-Font.createFromFile = function(path, size) { }
+Font.createFromFile = function(path, size) {}
 
 /**
  * @method allFontNames

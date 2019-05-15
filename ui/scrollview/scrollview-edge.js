@@ -1,12 +1,12 @@
 /**
-* @enum UI.ScrollView.Edge
-* @static
-* @readonly
-* @since 0.1
-*
-* Indicates where to scroll.
-*
-*/
+ * @enum UI.ScrollView.Edge
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * Indicates where to scroll.
+ *
+ */
 const ScrollViewEdge = {};
 
 /**

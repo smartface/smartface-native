@@ -13,7 +13,7 @@
  *     myDatePicker.show();
  *
  */
-function DatePicker () {}
+function DatePicker() {}
 
 /**
  * Sets the initial date avaliable on the picker.
@@ -265,7 +265,7 @@ DatePicker.iOS.DatePickerMode.DATEANDTIME = 1;
  *     myDatePicker.show();
  *
  */
-DatePicker.Android.Style= {};
+DatePicker.Android.Style = {};
 
 
 /**

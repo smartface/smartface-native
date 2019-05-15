@@ -1,24 +1,24 @@
 /*globals requireClass*/
-const extend        = require('js-base/core/extend');
-const View          = require('../view');
-const Color         = require('../color');
+const extend = require('js-base/core/extend');
+const View = require('../view');
+const Color = require('../color');
 const AndroidConfig = require('../../util/Android/androidconfig');
 
-const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
+const SDK_VERSION = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
-const SeekBar        = requireClass("android.widget.SeekBar");
-const NativeR        = requireClass("android.R");
-const NativeView     = requireClass("android.view.View");
+const SeekBar = requireClass("android.widget.SeekBar");
+const NativeR = requireClass("android.R");
+const NativeView = requireClass("android.view.View");
 
 const Slider = extend(View)(
-    function (_super, params) {
-        if(!this.nativeObject) {
+    function(_super, params) {
+        if (!this.nativeObject) {
             this.nativeObject = new SeekBar(AndroidConfig.activity);
         }
         _super(this);
-        
+
         var _layerDrawable = this.nativeObject.getProgressDrawable().getCurrent();
-        var _defaultThumb  = this.nativeObject.getThumb();
+        var _defaultThumb = this.nativeObject.getThumb();
 
         var _minValue;
         var _maxValue;
@@ -31,14 +31,14 @@ const Slider = extend(View)(
             'value': {
                 get: function() {
                     return this.nativeObject.getProgress() + _minValue;
-                }, 
+                },
                 set: function(value) {
                     if (value < _minValue) {
                         value = _minValue;
                     } else if (value > _maxValue) {
                         value = _maxValue;
                     }
-                    
+
                     this.nativeObject.setProgress(int(value - _minValue));
                 },
                 enumerable: true
@@ -46,7 +46,7 @@ const Slider = extend(View)(
             'minValue': {
                 get: function() {
                     return _minValue;
-                }, 
+                },
                 set: function(value) {
                     _minValue = value;
                     this.nativeObject.setMax(int(_maxValue - _minValue));
@@ -56,7 +56,7 @@ const Slider = extend(View)(
             'maxValue': {
                 get: function() {
                     return _maxValue;
-                }, 
+                },
                 set: function(value) {
                     _maxValue = value;
                     this.nativeObject.setMax(int(_maxValue - _minValue));
@@ -66,7 +66,7 @@ const Slider = extend(View)(
             'minTrackColor': {
                 get: function() {
                     return _minTrackColor;
-                }, 
+                },
                 set: function(color) {
                     if (color) {
                         _minTrackColor = color;
@@ -78,7 +78,7 @@ const Slider = extend(View)(
             'maxTrackColor': {
                 get: function() {
                     return _maxTrackColor;
-                }, 
+                },
                 set: function(color) {
                     if (color) {
                         _maxTrackColor = color;
@@ -94,11 +94,10 @@ const Slider = extend(View)(
                 set: function(thumbImage) {
                     const Image = require("../image");
                     console.log("_thumbImage set: ", typeof(thumbImage));
-                    if(thumbImage instanceof Image && thumbImage.nativeObject){
+                    if (thumbImage instanceof Image && thumbImage.nativeObject) {
                         _thumbImage = thumbImage;
                         this.nativeObject.setThumb(thumbImage.nativeObject);
-                    }
-                    else if(thumbImage === null){
+                    } else if (thumbImage === null) {
                         _thumbImage = thumbImage;
                         this.nativeObject.setThumb(null);
                     }
@@ -107,8 +106,8 @@ const Slider = extend(View)(
             },
             'thumbColor': {
                 get: function() {
-                return _thumbColor;
-                }, 
+                    return _thumbColor;
+                },
                 set: function(color) {
                     if (color) {
                         _thumbColor = color;
@@ -121,22 +120,22 @@ const Slider = extend(View)(
             'onValueChange': {
                 get: function() {
                     return _onValueChange;
-                }, 
+                },
                 set: function(callback) {
                     _onValueChange = callback.bind(this);
                 },
                 enumerable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'Slider';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });
-        
-        if(!this.skipDefaults){
+
+        if (!this.skipDefaults) {
             // SET DEFAULTS
             this.thumbColor = Color.GRAY;
             this.minTrackColor = Color.DARKGRAY;
@@ -148,16 +147,16 @@ const Slider = extend(View)(
                 onProgressChanged: function(seekBar, actualValue, fromUser) {
                     _onValueChange && _onValueChange(actualValue + _minValue);
                 },
-                onStartTrackingTouch: function(seekBar) {}, 
+                onStartTrackingTouch: function(seekBar) {},
                 onStopTrackingTouch: function(seekBar) {}
             }));
-    
+
             // Added for AND-2869 bug.
             this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
-                onClick: function(view) { }
+                onClick: function(view) {}
             }));
         }
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

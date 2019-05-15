@@ -116,7 +116,7 @@ EmailComposer.prototype.addAttachmentForAndroid = function(file) {};
  * @method addAttachmentForiOS
  * @since 3.0.3
  */
-EmailComposer.prototype.addAttachmentForiOS = function(blob,mimeType,fileName) {};
+EmailComposer.prototype.addAttachmentForiOS = function(blob, mimeType, fileName) {};
 
 /**
  * This function shows email composer on the given UI.Page.

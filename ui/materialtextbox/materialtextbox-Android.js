@@ -142,12 +142,15 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             },
             'rightLayout': {
                 get: function() {
-                    return { view: _rightLayout, width: _rightLayoutWidth };
+                    return {
+                        view: _rightLayout,
+                        width: _rightLayoutWidth
+                    };
                 },
                 set: function(params) {
                     _rightLayout = params.view;
                     _rightLayoutWidth = params.width !== undefined ? params.width : 30;
-                    
+
                     const FlexLayout = require("sf-core/ui/flexlayout");
                     let parentFL = new FlexLayout();
                     self.nativeObject.setRightLayout(_rightLayout.nativeObject, _rightLayout.yogaNode, parentFL.nativeObject, _rightLayoutWidth);
@@ -314,8 +317,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         for (var key in sfTextBox) { //Overrides the textbox properties & methods
             if (key !== "android") {
                 assignProperty.call(self, key);
-            }
-            else {
+            } else {
                 for (var key in sfTextBox[key]) {
                     assignAndroidProperty.call(self, key);
                 }

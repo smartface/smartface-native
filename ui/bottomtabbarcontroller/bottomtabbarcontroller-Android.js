@@ -50,8 +50,7 @@ function BottomTabBarController(params) {
                 for (let index in _childControllers) {
                     try {
                         _childControllers[index].parentController = self;
-                    }
-                    catch (e) {
+                    } catch (e) {
                         Application.onUnhandledError && Application.onUnhandledError(e);
                     }
                     ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
@@ -131,8 +130,7 @@ function BottomTabBarController(params) {
                 page: childController,
                 animated: false
             });
-        }
-        else if (childController instanceof NavigationController) {
+        } else if (childController instanceof NavigationController) {
             childController.__isActive = true;
             // first press
             if (childController.childControllers.length < 1) {
@@ -142,8 +140,7 @@ function BottomTabBarController(params) {
                     controller: childController.childControllers[0],
                     animated: false
                 });
-            }
-            else if (childController.childControllers.length >= 1) {
+            } else if (childController.childControllers.length >= 1) {
                 var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
 
@@ -153,8 +150,7 @@ function BottomTabBarController(params) {
                     animated: false
                 });
             }
-        }
-        else {
+        } else {
             throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
         }
     };
@@ -169,13 +165,16 @@ function BottomTabBarController(params) {
 
     this.setChecked = function() {
         initializeOnce();
-        
+
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
         if (_selectedIndex < 0)
             return;
-        // TODO: This check is a workaround. https://smartface.atlassian.net/browse/SUPDEV-1867
+        if (self.__targetIndex === _selectedIndex) {
+            self.push(self.childControllers[_selectedIndex]);
+            return;
+        }
+        // TODO: This check is added for https://smartface.atlassian.net/browse/SUPDEV-1867
         // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
-        if(self.__targetIndex === _selectedIndex) return;
         self.__targetIndex = _selectedIndex;
         self.tabBar.nativeObject.setSelectedItemId(_selectedIndex);
     };
@@ -206,32 +205,35 @@ function BottomTabBarController(params) {
         onNavigationItemSelected: function(item) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
-            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
-            
-            if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
+            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({
+                index: index
+            }) : true;
+
+            let disableItemAnimation = self.tabBar.android && self.tabBar.android.disableItemAnimation;
+            if (!result)
+                return false;
+
+            if (disableItemAnimation)
                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
 
             controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
 
-            if (result) {
-                // TODO: Add this property to controller class
-                // use this property to show/hide bottom naviagtion view after controller transition
-                self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
-                self.childControllers[index].isInsideBottomTabBar = true;
-                self.childControllers[index].__isActive = true;
-                self.push(self.childControllers[index]);
-                _selectedIndex = index;
-                try {
-                    self.didSelectByIndex && self.didSelectByIndex({ index: index });
-                }
-                catch (e) {
-                    Application.onUnhandledError && Application.onUnhandledError(e);
-                }
-            } else {
-                return false;
+            // TODO: Add this property to controller class
+            // use this property to show/hide bottom naviagtion view after controller transition
+            self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
+            self.childControllers[index].isInsideBottomTabBar = true;
+            self.childControllers[index].__isActive = self.__isActive;
+            self.push(self.childControllers[index]);
+            _selectedIndex = index;
+            try {
+                self.didSelectByIndex && self.didSelectByIndex({
+                    index: index
+                });
+            } catch (e) {
+                Application.onUnhandledError && Application.onUnhandledError(e);
             }
-            
-            return self.tabBar.android && self.tabBar.android.disableItemAnimation ? false : result;
+
+            return !disableItemAnimation;
         }
     }));
 
@@ -338,8 +340,7 @@ function disableShiftMode(bottomTabBar) {
         var checked = (item.getItemData()).isChecked();
         if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation) {
             item.setChecked(false);
-        }
-        else
+        } else
             item.setChecked(checked);
     }
     return true;

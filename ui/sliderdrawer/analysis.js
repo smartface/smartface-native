@@ -83,7 +83,7 @@ SliderDrawer.prototype.enabled = true;
  * @ios
  * @since 0.1
  */
-SliderDrawer.prototype.show = function(){};
+SliderDrawer.prototype.show = function() {};
 
 /**
  * This function allows you to hide SliderDrawer if it is on the screen.
@@ -93,7 +93,7 @@ SliderDrawer.prototype.show = function(){};
  * @ios
  * @since 0.1
  */
-SliderDrawer.prototype.hide = function(){};
+SliderDrawer.prototype.hide = function() {};
 
 /**
  * This event is called user opens the SliderDrawer.

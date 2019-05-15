@@ -31,8 +31,7 @@ Object.defineProperties(Reflection, {
                 drawables[1].setColorFilter(color, NativePorterDuff.Mode.SRC_IN);
 
                 fCursorDrawable.set(editor, array(drawables, 'android.graphics.drawable.Drawable'));
-            }
-            catch (e) {
+            } catch (e) {
                 const NativeLog = requireClass("android.util.Log");
                 NativeLog.e("SMF", " This exception is comes from sf-core " + e.stack);
                 //Ignore the exception for now.

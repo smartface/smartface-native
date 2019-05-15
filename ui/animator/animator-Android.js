@@ -1,15 +1,15 @@
 /*globals requireClass*/
 const NativeTransitionManager = requireClass('android.support.transition.TransitionManager');
-const NativeTransition        = requireClass('android.support.transition.Transition');
-const NativeTransitionSet     = requireClass('android.support.transition.TransitionSet');
-const NativeAutoTransition    = requireClass('android.support.transition.AutoTransition');
-const NativeAlphaTransition   = requireClass('io.smartface.android.anims.AlphaTransition');
-const NativeRotateTransition  = requireClass('io.smartface.android.anims.RotateTransition');
-const NativeScaleTransition   = requireClass('io.smartface.android.anims.ScaleTransition');
+const NativeTransition = requireClass('android.support.transition.Transition');
+const NativeTransitionSet = requireClass('android.support.transition.TransitionSet');
+const NativeAutoTransition = requireClass('android.support.transition.AutoTransition');
+const NativeAlphaTransition = requireClass('io.smartface.android.anims.AlphaTransition');
+const NativeRotateTransition = requireClass('io.smartface.android.anims.RotateTransition');
+const NativeScaleTransition = requireClass('io.smartface.android.anims.ScaleTransition');
 
 function Animator(params) {
-    var _layout       = params.layout;
-    var _duration     = params.duration;
+    var _layout = params.layout;
+    var _duration = params.duration;
     var _animFunction = params.animFunction;
 
     var _completeFunction = null;
@@ -22,11 +22,11 @@ function Animator(params) {
             _layout.applyLayout();
         }
     };
-    
+
     Object.defineProperties(this, {
         'perform': {
             value: function() {
-                var scaleTransiton  = new NativeScaleTransition();
+                var scaleTransiton = new NativeScaleTransition();
                 var autoTransition = new NativeAutoTransition();
                 var alphaTransition = new NativeAlphaTransition();
                 var rotateTransition = new NativeRotateTransition();
@@ -37,25 +37,25 @@ function Animator(params) {
                 transitionSet.addTransition(scaleTransiton);
                 transitionSet.setDuration(long(_duration));
                 transitionSet.addListener(NativeTransition.TransitionListener.implement({
-                    onTransitionStart:  function(transition) {},
+                    onTransitionStart: function(transition) {},
                     onTransitionCancel: function(transition) {},
-                    onTransitionPause:  function(transition) {},
+                    onTransitionPause: function(transition) {},
                     onTransitionResume: function(transition) {},
-                    onTransitionEnd:    function(transition) {
+                    onTransitionEnd: function(transition) {
                         _onComplete();
                     }
                 }));
                 NativeTransitionManager.beginDelayedTransition(_layout.nativeObject, transitionSet);
                 _animFunction();
                 _layout.applyLayout();
-                applyLayoutInners(_layout);  
+                applyLayoutInners(_layout);
             }
         },
         'then': {
             value: function(duration, animFunction) {
                 var animator = new Animator({
-                    layout      : _layout,
-                    duration    : duration,
+                    layout: _layout,
+                    duration: duration,
                     animFunction: animFunction
                 });
                 _nextAnimator = animator;
@@ -68,10 +68,10 @@ function Animator(params) {
             }
         },
         'toString': {
-            value: function(){
+            value: function() {
                 return 'Animator';
             },
-            enumerable: true, 
+            enumerable: true,
             configurable: true
         }
     });
@@ -92,9 +92,9 @@ function addInnerNativeViewGroups(viewGroup, viewGroups) {
     for (var i = 0; i < viewGroup.getChildCount(); i++) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
-        
+
         // !NativeMapView.isAssignableFrom(innerClass) added for AND-3120
-        if(NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
+        if (NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
             addInnerNativeViewGroups(innerView, viewGroups);
         }
         viewGroups.push(innerView);
@@ -102,15 +102,15 @@ function addInnerNativeViewGroups(viewGroup, viewGroups) {
 }
 
 Object.defineProperty(Animator, 'animate', {
-   value: function(rootLayout, duration, animFunction) {
-       var animator = new Animator({
-           layout      : rootLayout,
-           duration    : duration,
-           animFunction: animFunction
-       });
-       animator.perform();
-       return animator;
-   }
+    value: function(rootLayout, duration, animFunction) {
+        var animator = new Animator({
+            layout: rootLayout,
+            duration: duration,
+            animFunction: animFunction
+        });
+        animator.perform();
+        return animator;
+    }
 });
 
 module.exports = Animator;

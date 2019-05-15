@@ -24,7 +24,9 @@ const MapView = extend(View)(
         if (params)
             params.lazyLoading = true;
         else
-            params = { lazyLoading: true };
+            params = {
+                lazyLoading: true
+            };
 
         var activityIntent = AndroidConfig.activity.getIntent();
         var savedBundles = activityIntent.getExtras();
@@ -128,7 +130,10 @@ const MapView = extend(View)(
             _clusterOnPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation = { latitude: 40.7828647, longitude: -73.9675491 };
+        var _centerLocation = {
+            latitude: 40.7828647,
+            longitude: -73.9675491
+        };
         var _compassEnabled = true;
         var _rotateEnabled = true;
         var _scrollEnabled = true;
@@ -167,7 +172,10 @@ const MapView = extend(View)(
                     if (!_nativeGoogleMap)
                         return _centerLocation;
                     var nativeLatLng = _nativeGoogleMap.getCameraPosition().target;
-                    return { latitude: nativeLatLng.latitude, longitude: nativeLatLng.longitude };
+                    return {
+                        latitude: nativeLatLng.latitude,
+                        longitude: nativeLatLng.longitude
+                    };
                 },
                 enumerable: true
             },
@@ -390,8 +398,7 @@ const MapView = extend(View)(
                         if (_nativeGoogleMap) {
                             _nativeGoogleMap.setMapType(type);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error("type parameter must be a MapView.Type enum.");
                     }
                 },
@@ -413,8 +420,7 @@ const MapView = extend(View)(
                                         marker.position(position);
                                     }
                                     pin.nativeObject = _nativeGoogleMap.addMarker(marker);
-                                }
-                                else {
+                                } else {
                                     pin.nativeObject = createItem(pin);
                                     pin.isClusterEnabled = self.clusterEnabled;
                                     _nativeClusterManager.addItem(pin.nativeObject);
@@ -428,8 +434,7 @@ const MapView = extend(View)(
                                 pin.subtitle = pin.subtitle;
                                 pin.visible = pin.visible;
                             }
-                        }
-                        else {
+                        } else {
                             _pendingPins.push(pin);
                         }
                     }
@@ -446,8 +451,7 @@ const MapView = extend(View)(
                                     pin.nativeObject.remove();
                                     pin.nativeObject = null;
                                 }
-                            }
-                            else {
+                            } else {
                                 if (_pins.indexOf(pin) !== -1) {
                                     _pins.splice(_pins.indexOf(pin), 1);
                                     _nativeClusterManager.removeItem(pin.nativeObject);
@@ -455,8 +459,7 @@ const MapView = extend(View)(
                                     pin.nativeObject = null;
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             if (_pendingPins.indexOf(pin) !== -1) {
                                 _pendingPins.splice(_pendingPins.indexOf(pin), 1);
                                 pin.nativeObject = null;
@@ -472,8 +475,7 @@ const MapView = extend(View)(
                         _nativeClusterManager.clearItems();
                         _nativeClusterManager.cluster();
                         _pins = [];
-                    }
-                    else if (_pins.length > 0) {
+                    } else if (_pins.length > 0) {
                         _pins.forEach(function(pin) {
                             pin.nativeObject.remove();
                         });

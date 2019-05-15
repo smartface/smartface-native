@@ -103,7 +103,7 @@ AttributedString.prototype.setSpan = function(stringBuilder) {
 
     if (this.link !== undefined) {
         var clickableSpanOverrideMethods = {
-            onClick: function(view) {
+            onClick: function() {
                 self.textView.onClick && self.textView.onClick(self.link);
                 self.textView.onLinkClick && self.textView.onLinkClick(self.link);
             },

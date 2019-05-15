@@ -19,7 +19,7 @@ const View = require('../view');
  * 
  *     myPage.layout.addChild(myActivityIndicator);
  */
-function ActivityIndicator(params){}
+function ActivityIndicator(params) {}
 
 /**
  * Gets/sets color of the activity indicator.

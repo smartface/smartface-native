@@ -54,19 +54,21 @@ Object.defineProperties(Share, {
             let shareIntent = new NativeIntent(NativeIntent.ACTION_SEND_MULTIPLE);
             shareIntent.setType("*/*");
 
-            let contentSharing = { mimeTypes: [], parcelabels: new NativeArrayList() };
-            let addContentItem = addContent.bind(contentSharing)();
+            let contentSharing = {
+                mimeTypes: [],
+                parcelabels: new NativeArrayList()
+            };
+            let addContentItem = addContent.bind(contentSharing);
 
             itemList.forEach((item) => {
                 if (item instanceof File) {
                     addContentItem(item.nativeObject, "application/*");
-                }
-                else if (typeof(item) === 'string') {
+                } else if (typeof(item) === 'string') {
                     shareIntent.putExtra(NativeIntent.EXTRA_TEXT, item);
                     contentSharing.mimeTypes.push("text/plain");
-                }
-                else if (item instanceof Image) {
-                    addContentItem(item.nativeObject, "image/*");
+                } else if (item instanceof Image) {
+                    var imageFile = writeImageToFile(item)
+                    addContentItem(imageFile, "image/*");
                 }
             });
             !(contentSharing.parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, contentSharing.parcelabels);
@@ -110,8 +112,7 @@ function addContent(fileNativeObject, fileType) {
     let uri;
     if (AndroidConfig.sdkVersion < 24) {
         uri = NativeURI.fromFile(fileNativeObject);
-    }
-    else {
+    } else {
         uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, fileNativeObject);
     }
     contentSharing.mimeTypes.push(fileType);
@@ -119,7 +120,12 @@ function addContent(fileNativeObject, fileType) {
 }
 
 function shareContent(params = {}) {
-    let { type, extra, extraType, actionType } = params;
+    let {
+        type,
+        extra,
+        extraType,
+        actionType
+    } = params;
 
     var shareIntent = new NativeIntent(actionType);
     shareIntent.setType(type);

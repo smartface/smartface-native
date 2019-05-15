@@ -13,7 +13,7 @@
  *     myPage.layout.addChild(myTextArea);
  *
  */
-function TextArea(params){}
+function TextArea(params) {}
 
 
 /**

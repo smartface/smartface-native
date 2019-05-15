@@ -37,7 +37,7 @@ const extend = require('js-base/core/extend');
  *     myAbsoluteLayout.addChild(myLabel1);
  *     myAbsoluteLayout.addChild(myLabel2);
  *     myAbsoluteLayout.addChild(myLabel3);
-*/
+ */
 function AbsoluteLayout(params) {
     // Assign parameters given in constructor
     if (params) {

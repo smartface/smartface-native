@@ -1,18 +1,18 @@
 /*globals requireClass*/
-const extend            = require('js-base/core/extend');
-const View              = require('../view');
-const Exception         = require("../../util/exception");
-const AndroidConfig     = require('../../util/Android/androidconfig');
-const NativeVideoView   = requireClass('android.widget.VideoView');
+const extend = require('js-base/core/extend');
+const View = require('../view');
+const Exception = require("../../util/exception");
+const AndroidConfig = require('../../util/Android/androidconfig');
+const NativeVideoView = requireClass('android.widget.VideoView');
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 
 const VideoView = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
 
-        if(!this.nativeObject){
+        if (!this.nativeObject) {
             // To solve stretching due to yoga, we will wrap with RelativeLayout.
             this.nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
-            var layoutParams = new NativeRelativeLayout.LayoutParams(-1,-1);
+            var layoutParams = new NativeRelativeLayout.LayoutParams(-1, -1);
             /** @todo
              * layoutParams.addRule is not a function 
              */
@@ -26,7 +26,7 @@ const VideoView = extend(View)(
 
         const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
         const NativeMediaController = requireClass('android.widget.MediaController');
-        
+
         var _onReady;
         var _onFinish;
         var _nativeMediaPlayer;
@@ -68,19 +68,27 @@ const VideoView = extend(View)(
                 value: function(file) {
                     const File = require("../../io/file");
 
-                    if(!(file instanceof File) || !(file.exists)) {
+                    if (!(file instanceof File) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
                     this.nativeInner.setVideoPath(file.fullPath);
                 }
             },
             'onReady': {
-                get: function() { return _onReady },
-                set: function(callback) { _onReady = callback }
+                get: function() {
+                    return _onReady
+                },
+                set: function(callback) {
+                    _onReady = callback
+                }
             },
             'onFinish': {
-                get: function() { return _onFinish },
-                set: function(callback) { _onFinish = callback }
+                get: function() {
+                    return _onFinish
+                },
+                set: function(callback) {
+                    _onFinish = callback
+                }
             },
             'seekTo': {
                 value: function(milliseconds) {
@@ -109,15 +117,15 @@ const VideoView = extend(View)(
                 }
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'VideoView';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             },
             // Overrided property because videoview does not support background stuffs.
             'backgroundImage': {
-                get: function() {}, 
+                get: function() {},
                 set: function(backgroundImage) {},
                 enumerable: true,
                 configurable: true
@@ -129,8 +137,7 @@ const VideoView = extend(View)(
                 configurable: true
             },
             'borderColor': {
-                get: function() {
-                },
+                get: function() {},
                 set: function(value) {},
                 enumerable: true,
                 configurable: true
@@ -148,7 +155,7 @@ const VideoView = extend(View)(
                 configurable: true
             },
         });
-        
+
         // TODO: Set this listener after onReady callback is set.
         this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
             onPrepared: function(mediaPlayer) {
@@ -157,7 +164,7 @@ const VideoView = extend(View)(
                 _onReady && _onReady();
             }
         }));
-        
+
         // TODO: Set this listener after onFinish callback is set.
         this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
             onCompletion: function(mediaPlayer) {

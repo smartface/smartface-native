@@ -24,8 +24,7 @@ function AttributedTitle(context) {
                     self._attributedTitleBuilder = _attributedTitleBuilder;
 
                     self.__setTitle(_attributedTitleBuilder);
-                }
-                else {
+                } else {
                     self.__setTitle(null);
                 }
             },

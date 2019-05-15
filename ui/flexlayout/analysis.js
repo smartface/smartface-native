@@ -129,7 +129,7 @@ FlexLayout.prototype.flexWrap = UI.FlexLayout.FlexWrap.NOWRAP;
  * @android
  * @ios
  */
-FlexLayout.prototype.applyLayout = function(){};
+FlexLayout.prototype.applyLayout = function() {};
 
 /**
  * @enum {Number} UI.FlexLayout.FlexDirection

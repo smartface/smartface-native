@@ -10,7 +10,7 @@ function NavigationController() {
     var self = this;
     var _willShowCallback;
     var _onTransitionCallback;
-    
+
     this.__navID = ++NavigationController.NavCount;
 
     this.__isActive = false;
@@ -41,9 +41,9 @@ function NavigationController() {
 
                 if (self.__isActive) {
                     ViewController.activateController(self.getCurrentController());
-                    
+
                     self.show({
-                        controller: _childControllers[_childControllers.length-1],
+                        controller: _childControllers[_childControllers.length - 1],
                         animated: false
                     });
                 }
@@ -83,16 +83,19 @@ function NavigationController() {
         if (!pageIDCollectionInStack[params.controller.pageID]) {
             throw new Error("This page doesn't exist in history!");
         }
-        if(!self.__isActive)
-           return;
-        
+        if (!self.__isActive)
+            return;
+
         params.animated && (params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT);
         !params.controller.parentController && (params.controller.parentController = self);
-        _willShowCallback && (_willShowCallback({ controller: params.controller, animated: params.animated }));
+        _willShowCallback && (_willShowCallback({
+            controller: params.controller,
+            animated: params.animated
+        }));
 
         // No need self.__isActive property. show method is triggered when self is active.
         ViewController.activateController(params.controller);
-        
+
         self.showController(params);
         var currentController;
         if (_childControllers.length > 1) {
@@ -115,7 +118,7 @@ function NavigationController() {
         if (pageIDCollectionInStack[params.controller.pageID]) {
             // console.log("This page exist in history! PageID: " + params.controller.pageID);
         }
-        
+
         self.__isActive && (ViewController.deactivateController(self.getCurrentController()));
 
         params.controller.parentController = self;
@@ -134,12 +137,10 @@ function NavigationController() {
                 animationType: params.animationType,
                 isComingFromPresent: params.isComingFromPresent
             });
-        }
-        else if ((params.controller) instanceof BottomTabBarController) {
+        } else if ((params.controller) instanceof BottomTabBarController) {
             params.controller.isInsideBottomTabBar = true;
             params.controller.show();
-        }
-        else {
+        } else {
             throw new Error("The controller is not a Page instance or a BottomTabBarController instance!");
         }
     };
@@ -151,22 +152,25 @@ function NavigationController() {
         params.controller.popupBackNavigator = self;
         ViewController.deactivateRootController(Application.currentPage);
         ViewController.activateController(params.controller);
-        
+
         ViewController.setController({
             controller: params.controller,
             animation: params.animated,
-            isComingFromPresent: true,
-            onComplete: params.onComplete
+            isComingFromPresent: true
         });
+
+        params.onComplete && params.onComplete();
     };
 
     this.dismiss = function(params = {}) {
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
         const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
-        
-        if(!self.popupBackNavigator) { return; }
-        
+
+        if (!self.popupBackNavigator) {
+            return;
+        }
+
         FragmentTransaction.dismissTransition(self.getCurrentController(), params.animated);
         FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
 
@@ -174,7 +178,7 @@ function NavigationController() {
         ViewController.activateRootController(Application.currentPage);
         self.popUpBackPage = null;
         self.popupBackNavigator = null;
-        
+
         ViewController.deactivateController(self);
         params.onComplete && params.onComplete();
     };
@@ -229,15 +233,17 @@ function NavigationController() {
     this.popFromHistoryController = function(currentController, params) {
         var targetController = _childControllers[_childControllers.length - 1];
 
-        _willShowCallback && (_willShowCallback({ controller: targetController, animated: params.animated }));
+        _willShowCallback && (_willShowCallback({
+            controller: targetController,
+            animated: params.animated
+        }));
         if (targetController instanceof Page) {
             var page = targetController;
             FragmentTransaction.pop({
                 page: page,
                 animated: params.animated
             });
-        }
-        else if (targetController instanceof BottomTabBarController) {
+        } else if (targetController instanceof BottomTabBarController) {
             var bottomTabBarController = targetController;
             bottomTabBarController.show();
         }

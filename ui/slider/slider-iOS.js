@@ -10,24 +10,24 @@ const SliderState = {
     pressed: 3,
     focused: 4 // #available(iOS 9.0, *)
 };
-    
+
 const Slider = extend(View)(
-     function (_super, params) {
+    function(_super, params) {
         var self = this;
-        
-        if(!self.nativeObject){
-            self.nativeObject = new __SF_UISlider(); 
+
+        if (!self.nativeObject) {
+            self.nativeObject = new __SF_UISlider();
         }
-        
+
         _super(this);
-        
+
         //defaults
-         self.nativeObject.minimumTrackTintColor = Color.DARKGRAY.nativeObject;
-         self.nativeObject.maximumTrackTintColor = Color.GREEN.nativeObject;
-         self.nativeObject.minimumValue = 0;
-         self.nativeObject.maximumValue = 100;
-         
-         Object.defineProperty(self, 'enabled', {
+        self.nativeObject.minimumTrackTintColor = Color.DARKGRAY.nativeObject;
+        self.nativeObject.maximumTrackTintColor = Color.GREEN.nativeObject;
+        self.nativeObject.minimumValue = 0;
+        self.nativeObject.maximumValue = 100;
+
+        Object.defineProperty(self, 'enabled', {
             get: function() {
                 return self.nativeObject.setEnabled;
             },
@@ -36,50 +36,56 @@ const Slider = extend(View)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'thumbColor', {
             get: function() {
-                return new Color({color : self.nativeObject.thumbTintColor});
+                return new Color({
+                    color: self.nativeObject.thumbTintColor
+                });
             },
             set: function(value) {
                 self.nativeObject.thumbTintColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         var _thumbImage;
         Object.defineProperty(self, 'thumbImage', {
             get: function() {
                 return _thumbImage;
-            }, 
+            },
             set: function(image) {
                 _thumbImage = image;
-                self.nativeObject.setThumbImage(image.nativeObject,SliderState.normal);
-                self.nativeObject.setThumbImage(image.nativeObject,SliderState.pressed);
+                self.nativeObject.setThumbImage(image.nativeObject, SliderState.normal);
+                self.nativeObject.setThumbImage(image.nativeObject, SliderState.pressed);
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'minTrackColor', {
             get: function() {
-                return new Color({color : self.nativeObject.minimumTrackTintColor});
+                return new Color({
+                    color: self.nativeObject.minimumTrackTintColor
+                });
             },
             set: function(value) {
                 self.nativeObject.minimumTrackTintColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'maxTrackColor', {
             get: function() {
-                return new Color({color : self.nativeObject.maximumTrackTintColor});
+                return new Color({
+                    color: self.nativeObject.maximumTrackTintColor
+                });
             },
             set: function(value) {
                 self.nativeObject.maximumTrackTintColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'minValue', {
             get: function() {
                 return self.nativeObject.minimumValue;
@@ -89,7 +95,7 @@ const Slider = extend(View)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'maxValue', {
             get: function() {
                 return self.nativeObject.maximumValue;
@@ -99,8 +105,8 @@ const Slider = extend(View)(
             },
             enumerable: true
         });
-        
-        
+
+
         Object.defineProperty(self, 'value', {
             get: function() {
                 return self.nativeObject.value;
@@ -110,7 +116,7 @@ const Slider = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onValueChange;
         Object.defineProperty(self, 'onValueChange', {
             get: function() {
@@ -118,28 +124,29 @@ const Slider = extend(View)(
             },
             set: function(value) {
                 _onValueChange = value.bind(this);
-                self.nativeObject.addJSTarget(handleValueChange,UIControlEvents.valueChanged);
+                self.nativeObject.addJSTarget(handleValueChange, UIControlEvents.valueChanged);
             },
             enumerable: true
-         });
-         
-         var _value = 0;
-         function handleValueChange(){
-             var intValue = Math.round(self.value);
-             self.nativeObject.setValueAnimated(intValue,true);
-             if (_value !== intValue){
-                 _value = intValue;
-                 if (typeof self.onValueChange === "function"){
+        });
+
+        var _value = 0;
+
+        function handleValueChange() {
+            var intValue = Math.round(self.value);
+            self.nativeObject.setValueAnimated(intValue, true);
+            if (_value !== intValue) {
+                _value = intValue;
+                if (typeof self.onValueChange === "function") {
                     self.onValueChange();
-                 }
-             }
-         }
-         
+                }
+            }
+        }
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-});
-     
+    });
+
 module.exports = Slider;

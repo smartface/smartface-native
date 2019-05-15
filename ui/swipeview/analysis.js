@@ -52,7 +52,7 @@ function SwipeView() {
      * @ios
      * @since 1.1.10
      */
-    this.onPageSelected = function(index,page){};
+    this.onPageSelected = function(index, page) {};
     /**
      * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
      * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
@@ -64,7 +64,7 @@ function SwipeView() {
      * @ios
      * @since 2.0.9
      */
-    this.onPageScrolled = function(index,offset){};
+    this.onPageScrolled = function(index, offset) {};
     /**
      * Gets/Sets the callback triggered during swipe actions.
      *
@@ -74,7 +74,7 @@ function SwipeView() {
      * @ios
      * @since 1.1.10
      */
-    this.onStateChanged = function(state){};
+    this.onStateChanged = function(state) {};
     /**
      * Gets the currently displayed page's index inside the page array.
      *
@@ -95,7 +95,7 @@ function SwipeView() {
      * @ios
      * @since 1.1.10
      */
-    this.swipeToIndex = function(index, animated){};
+    this.swipeToIndex = function(index, animated) {};
 };
 
 /**
@@ -107,7 +107,7 @@ function SwipeView() {
  * @member UI.SwipeView
  * @since 1.1.10
  */
-SwipeView.prototype.onTouch = function onTouch(){ }
+SwipeView.prototype.onTouch = function onTouch() {}
 
 /**
  * This event is called when a touch screen motion event ends. Does not work on iOS.
@@ -118,7 +118,7 @@ SwipeView.prototype.onTouch = function onTouch(){ }
  * @member UI.SwipeView
  * @since 1.1.10
  */
-SwipeView.prototype.onTouchEnded = function onTouchEnded(){ }
+SwipeView.prototype.onTouchEnded = function onTouchEnded() {}
 
 
 /**

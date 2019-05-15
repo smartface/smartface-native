@@ -4,31 +4,35 @@ const RequestCodes = require('../../util/Android/requestcodes');
 
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
-const LOCATION_INTERVAL = 1000 * 1;
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
 const Location = {};
 Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
-
 var _onLocationChanged;
+
 const locationCallback = function(latitude, longitude) {
-    Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
+    Location.onLocationChanged && Location.onLocationChanged({
+        latitude,
+        longitude
+    });
 };
-            
+
 var _onFailureCallback, _onSucessCallback;
-Location.__onActivityResult = function (resultCode) {
-    if(resultCode === -1) { // -1 = OK
+Location.__onActivityResult = function(resultCode) {
+    if (resultCode === -1) { // -1 = OK
         _onSucessCallback && _onSucessCallback();
     } else {
-        _onFailureCallback && _onFailureCallback({statusCode: "DENIED"});
+        _onFailureCallback && _onFailureCallback({
+            statusCode: "DENIED"
+        });
     }
 };
 
 Location.__instance = null;
 Location.__getInstance = function() {
-    if(!Location.__instance)
-        Location.__instance =  new SFLocationCallback(locationCallback);
+    if (!Location.__instance)
+        Location.__instance = new SFLocationCallback(locationCallback);
     return Location.__instance;
 };
 
@@ -42,8 +46,8 @@ Object.defineProperties(Location, {
         enumerable: true
     },
     'start': {
-        value: function(priority = Location.Android.Priority.HIGH_ACCURACY) {
-            Location.__getInstance().start(priority);
+        value: function(priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
+            Location.__getInstance().start(priority, interval);
         }
     },
     'stop': {
@@ -59,6 +63,14 @@ Object.defineProperties(Location, {
             if (TypeUtil.isFunction(callback)) {
                 _onLocationChanged = callback;
             }
+        }
+    },
+    'getLastKnownLocation': {
+        value: function(onSuccess, onFailure) {
+            Location.__getInstance().getLastKnownLocation({
+                'onSuccess': onSuccess,
+                'onFailure': onFailure
+            });
         }
     }
 });
@@ -102,15 +114,17 @@ Object.defineProperties(Location.android, {
         value: function(params = {}) {
             params.onSuccess && (_onSucessCallback = params.onSuccess);
             params.onFailure && (_onFailureCallback = params.onFailure);
-            
+
             Location.__getInstance().checkSettings({
                 onSuccess: function() {
                     _onSucessCallback && _onSucessCallback();
                 },
                 onFailure: function(reason) {
-                    _onFailureCallback && _onFailureCallback({statusCode: reason});
+                    _onFailureCallback && _onFailureCallback({
+                        statusCode: reason
+                    });
                 }
-           });  
+            });
         }
     }
 });

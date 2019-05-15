@@ -52,8 +52,7 @@ const Label = extend(View)(
             get: function() {
                 if (self.nativeObject.numberOfLines === 0 && self.nativeObject.numberOfLines === 0) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             },
@@ -61,8 +60,7 @@ const Label = extend(View)(
                 if (value) {
                     self.nativeObject.numberOfLines = 0;
                     self.nativeObject.lineBreakMode = 0;
-                }
-                else {
+                } else {
                     self.nativeObject.numberOfLines = 1;
                     self.nativeObject.lineBreakMode = 4;
                 }
@@ -94,11 +92,9 @@ const Label = extend(View)(
                 var horizontal;
                 if (value % 3 === 0) {
                     horizontal = 0;
-                }
-                else if (value % 3 === 1) {
+                } else if (value % 3 === 1) {
                     horizontal = 1;
-                }
-                else {
+                } else {
                     horizontal = 2;
                 }
                 self.nativeObject.textAlignment = horizontal;

@@ -32,8 +32,7 @@ function LayoutManager(params) {
                 var view;
                 if (arguments.count === 4) {
                     view = arguments[1];
-                }
-                else {
+                } else {
                     var viewPosition = arguments[1];
                     view = self.nativeObject.findViewByPosition(viewPosition);
                 }
@@ -48,8 +47,7 @@ function LayoutManager(params) {
                     if (self._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
                         outRect.top = spacingStart;
                         outRect.bottom = spacingEnd;
-                    }
-                    else {
+                    } else {
                         outRect.left = spacingStart;
                         outRect.right = spacingEnd;
                     }
@@ -79,8 +77,7 @@ function LayoutManager(params) {
                 if (arguments.count === 4) {
                     var view = arguments[1];
                     viewPosition = parent.getChildViewHolder(view).getAdapterPosition();
-                }
-                else {
+                } else {
                     viewPosition = arguments[1];
                 }
 
@@ -89,16 +86,13 @@ function LayoutManager(params) {
                     if (rowOrColumnIndex == 0) {
                         if (self._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
                             outRect.left = 0;
-                        }
-                        else {
+                        } else {
                             outRect.top = 0;
                         }
-                    }
-                    else {
+                    } else {
                         if (self._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
                             outRect.left = self._lineSpacing;
-                        }
-                        else {
+                        } else {
                             outRect.top = self._lineSpacing;
                         }
                     }
@@ -158,8 +152,7 @@ function setLayoutChangeListener(self) {
             if (initialHeight > 0) {
                 setSpanSizeForHorizontal(self, initialHeight);
             }
-        }
-        else {
+        } else {
             var initialWidth = self._nativeRecyclerView.getWidth();
             if (initialWidth > 0) {
                 setSpanSizeForVertical(self, initialWidth);
@@ -177,8 +170,7 @@ function setLayoutChangeListener(self) {
                         var heightInDp = AndroidUnitConverter.pixelToDp(newHeight);
                         setSpanSizeForHorizontal(self, heightInDp);
                     }
-                }
-                else {
+                } else {
                     var oldWidth = oldRight - oldLeft;
                     var newWidth = right - left;
                     if (newWidth != oldWidth) {
