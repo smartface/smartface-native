@@ -303,7 +303,7 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  * @android
  * @static
  * @return {Boolean}
- * @since 4.0.2
+ * @since 4.0.3
  */
 Application.android.dispatchTouchEvent = function() {};
 
