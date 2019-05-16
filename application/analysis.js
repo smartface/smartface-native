@@ -316,7 +316,7 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  *        return true; //Consume all touches & do not pass to window
  *     }
  *
- * @method dispatchTouchEvent
+ * @event dispatchTouchEvent
  * @android
  * @static
  * @return {Boolean}
