@@ -5,6 +5,7 @@ const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("sf-core/net/http");
 const Network = require('sf-core/device/network');
 
+const NativeSpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -19,16 +20,10 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114;
-var _onMinimize;
-var _onMaximize;
-var _onExit;
-var _onBackButtonPressed;
-var _onReceivedNotification;
-var _onRequestPermissionsResult;
-var _keyboardMode;
-var _sliderDrawer;
-var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
-var activity = AndroidConfig.activity;
+var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
+    _onReceivedNotification, _onRequestPermissionsResult,
+    _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
+    spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
@@ -64,6 +59,12 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         if (requestCode === Location.CHECK_SETTINGS_CODE) {
             Location.__onActivityResult && Location.__onActivityResult(resultCode);
         }
+    },
+    dispatchTouchEvent: function(actionType, x, y) {
+        let dispatchTouchEvent;
+        if (ApplicationWrapper.android.dispatchTouchEvent)
+            dispatchTouchEvent = ApplicationWrapper.android.dispatchTouchEvent();
+        return (typeof(dispatchTouchEvent) === 'boolean') ? dispatchTouchEvent : false;
     }
 });
 
@@ -311,9 +312,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if (ApplicationWrapper.__isSetOnItemSelectedListener) {
-        return;
-    }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
@@ -386,6 +385,15 @@ ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
+        enumerable: true
+    },
+    'dispatchTouchEvent': {
+        get: function() {
+            return _dispatchTouchEvent;
+        },
+        set: function(callback) {
+            _dispatchTouchEvent = callback;
+        },
         enumerable: true
     },
     'onBackButtonPressed': {
