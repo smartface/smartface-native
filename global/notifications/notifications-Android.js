@@ -19,20 +19,42 @@ const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 
 var selectedNotificationIds = [];
 var senderID = null;
-var notificationListener = NativeNotificationListener.implement({
-    onRemoteNotificationReceived: function(data) {
-        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            'remote': JSON.parse(data)
-        });
-    },
-    onLocalNotificationReceived: function(data) {
-        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            'local': JSON.parse(data)
+
+
+var notificationListener = (function() {
+    var sNotificationListener;
+
+    function createNotificationListener() {
+        return NativeNotificationListener.implement({
+            onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
+                let parsedJson = JSON.parse(data);
+                if (isReceivedByOnClick) {
+                    Notifications.onNotificationClick && runOnUiThread(Notifications.onNotificationClick, parsedJson);
+                }
+                else {
+                    Notifications.onNotificationReceive && runOnUiThread(Notifications.onNotificationReceive, parsedJson);
+                    Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
+                        remote: parsedJson
+                    });
+                }
+            },
+            onLocalNotificationReceived: function(data) {
+                Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
+                    'local': JSON.parse(data)
+                });
+            }
         });
     }
-});
+    if (sNotificationListener === undefined)
+        sNotificationListener = createNotificationListener();
 
-NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
+    /*ToDo: Already register by  registerForPushNotifications method.This implemetation might be 
+    specific to location object. So while refactoring consider.
+    */
+    NativeLocalNotificationReceiver.registerRemoteNotificationListener(sNotificationListener);
+
+    return sNotificationListener;
+})();
 
 function Notifications() {}
 
@@ -284,6 +306,7 @@ Notifications.LocalNotification = function(params) {
     }
 }
 
+var _onNotificationClick, _onNotificationReceive;
 Object.defineProperties(Notifications, {
     'cancelAllLocalNotifications': {
         value: function() {
@@ -296,7 +319,8 @@ Object.defineProperties(Notifications, {
         value: function(onSuccess, onFailure) {
             if (!AndroidConfig.isEmulator) {
                 registerPushNotification(onSuccess, onFailure);
-            } else {
+            }
+            else {
                 onFailure && onFailure();
             }
         },
@@ -310,6 +334,20 @@ Object.defineProperties(Notifications, {
         },
         enumerable: true
     },
+    "onNotificationClick": {
+        get: () => _onNotificationClick,
+        set: (callback) => {
+            _onNotificationClick = callback;
+        },
+        enumerable: true
+    },
+    "onNotificationReceive": {
+        get: () => _onNotificationReceive,
+        set: (callback) => {
+            _onNotificationReceive = callback;
+        },
+        enumerable: true
+    }
 });
 
 Object.defineProperty(Notifications, "Priority", {
@@ -341,13 +379,14 @@ function getNewNotificationId() {
 function unregisterPushNotification() {
     // Implemented due to COR-1281
     if (TypeUtil.isString(senderID) && senderID !== "") {
-        const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
-        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
+        const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+        NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
         if (notificationListener) {
-            NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
+            NativeFCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
-    } else {
+    }
+    else {
         throw Error("Not registered to push notification.");
     }
 }
@@ -358,11 +397,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
         readSenderIDFromProjectJson();
     }
     if (TypeUtil.isString(senderID) && senderID !== '') {
-        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
+        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+        NativeFCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
             onSuccess: function(token) {
-                const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
-                NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
+                const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+                NativeFCMListenerService.registerRemoteNotificationListener(notificationListener);
                 onSuccessCallback && onSuccessCallback({
                     'token': token
                 });
@@ -371,15 +410,16 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
                 onFailureCallback && onFailureCallback();
             }
         });
-    } else {
+    }
+    else {
         onFailureCallback && onFailureCallback();
     }
 }
 
 function readSenderIDFromProjectJson() {
-    // get from GCMRegisterUtil due to the project.json encryption
-    const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-    senderID = NativeGCMRegisterUtil.getSenderID();
+    // get from FCMRegisterUtil due to the project.json encryption
+    const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+    senderID = NativeFCMRegisterUtil.getSenderID();
 }
 
 function startNotificationIntent(self, params) {
@@ -402,7 +442,8 @@ function startNotificationIntent(self, params) {
     if (params.repeatInterval) {
         // AlarmManager.RTC_WAKEUP
         alarmManager.setRepeating(0, fireDate, params.repeatInterval, self.mPendingIntent);
-    } else {
+    }
+    else {
         // AlarmManager.ELAPSED_REALTIME_WAKEUP
         alarmManager.set(2, fireDate, self.mPendingIntent);
     }
