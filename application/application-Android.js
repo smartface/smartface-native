@@ -5,6 +5,7 @@ const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("sf-core/net/http");
 const Network = require('sf-core/device/network');
 
+const NativeSpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -19,16 +20,10 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114;
-var _onMinimize;
-var _onMaximize;
-var _onExit;
-var _onBackButtonPressed;
-var _onReceivedNotification;
-var _onRequestPermissionsResult;
-var _keyboardMode;
-var _sliderDrawer;
-var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
-var activity = AndroidConfig.activity;
+var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
+    _onReceivedNotification, _onRequestPermissionsResult,
+    _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
+    spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
@@ -64,6 +59,12 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         if (requestCode === Location.CHECK_SETTINGS_CODE) {
             Location.__onActivityResult && Location.__onActivityResult(resultCode);
         }
+    },
+    dispatchTouchEvent: function(actionType, x, y) {
+        let dispatchTouchEvent;
+        if (ApplicationWrapper.android.dispatchTouchEvent)
+            dispatchTouchEvent = ApplicationWrapper.android.dispatchTouchEvent();
+        return (typeof(dispatchTouchEvent) === 'boolean') ? dispatchTouchEvent : false;
     }
 });
 
@@ -133,9 +134,22 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
-    // methods
     'call': {
-        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {
+        /* ToDo : Multiple parameter is deprected.*/
+        value: function() {
+            if (arguments.length === 1 && (typeof arguments[0] === "object"))
+                var {
+                    uriScheme,
+                    data,
+                    onSuccess,
+                    onFailure,
+                    isShowChooser,
+                    chooserTitle,
+                    action = ACTION_VIEW
+                } = arguments[0];
+            else
+                var [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
+
             if (!TypeUtil.isString(uriScheme)) {
                 throw new TypeError('uriScheme must be string');
             }
@@ -143,48 +157,35 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
 
-            var intent = new NativeIntent(ACTION_VIEW);
-
+            let intent = new NativeIntent(action);
+            let uriObject;
             if (TypeUtil.isObject(data)) {
                 // we should use intent.putExtra but it causes native crash.
-
-                var params = Object.keys(data).map(function(k) {
+                let params = Object.keys(data).map(function(k) {
                     return k + '=' + data[k];
                 }).join('&');
-                var uriObject;
+
                 if (uriScheme.indexOf("|") !== -1) {
-                    var classActivityNameArray = uriScheme.split("|");
-                    // JS string pass causes parameter mismatch
-                    const NativeString = requireClass("java.lang.String");
-                    var className = new NativeString(classActivityNameArray[0]);
-                    var activityName = new NativeString(classActivityNameArray[1]);
-                    intent.setClassName(className, activityName);
+                    configureIntent.call(this, uriScheme);
                     uriObject = NativeUri.parse(params);
                 } else {
-                    var uri = uriScheme + "?" + params;
+                    let uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
-                intent.setData(uriObject);
             } else {
-                if (uriScheme.indexOf("|") !== -1) {
-                    var classActivityNameArray = uriScheme.split("|");
-                    // JS string pass causes parameter mismatch
-                    const NativeString = requireClass("java.lang.String");
-                    var className = new NativeString(classActivityNameArray[0]);
-                    var activityName = new NativeString(classActivityNameArray[1]);
-                    intent.setClassName(className, activityName);
-                } else {
-                    var uri = NativeUri.parse(uriScheme);
-                    intent.setData(uri);
-                }
+                if (uriScheme.indexOf("|") !== -1)
+                    configureIntent.call(this, uriScheme);
+                else
+                    uriObject = NativeUri.parse(uriScheme);
             }
+            uriObject && intent.setData(uriObject);
 
-            var packageManager = activity.getPackageManager();
-            var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
+            let packageManager = activity.getPackageManager();
+            let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
             if (activitiesCanHandle.size() > 0) {
                 if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                    var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    var chooserIntent = NativeIntent.createChooser(intent, title);
+                    let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                    let chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
                         activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
                     } catch (e) {
@@ -311,9 +312,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if (ApplicationWrapper.__isSetOnItemSelectedListener) {
-        return;
-    }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
@@ -340,6 +339,16 @@ ApplicationWrapper.setRootController = function(params) {
     params.controller.__isActive = true;
     ViewController.setController(params);
 };
+
+function configureIntent(uriScheme) {
+    const intent = this;
+    let classActivityNameArray = uriScheme.split("|");
+    // JS string pass causes parameter mismatch
+    const NativeString = requireClass("java.lang.String");
+    let className = new NativeString(classActivityNameArray[0]);
+    let activityName = new NativeString(classActivityNameArray[1]);
+    intent.setClassName(className, activityName);
+}
 
 function attachSliderDrawer(sliderDrawer) {
     if (sliderDrawer) {
@@ -376,6 +385,15 @@ ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
+        enumerable: true
+    },
+    'dispatchTouchEvent': {
+        get: function() {
+            return _dispatchTouchEvent;
+        },
+        set: function(callback) {
+            _dispatchTouchEvent = callback;
+        },
         enumerable: true
     },
     'onBackButtonPressed': {

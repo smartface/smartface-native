@@ -5,7 +5,6 @@ const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const GridViewLayoutManager = require('../layoutmanager');
-const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
@@ -122,10 +121,6 @@ const GridView = extend(View)(
             _onItemCreate, _onItemSelected, _onItemType,
             _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
             _scrollBarEnabled = false,
-            _contentOffset = {
-                x: 0,
-                y: 0
-            },
             _scrollEnabled, _onScrollStateChanged = undefined;
         Object.defineProperties(this, {
             // properties
@@ -342,18 +337,6 @@ const GridView = extend(View)(
                 },
                 enumerable: true,
                 configurable: true
-            },
-            /* 
-            ToDo: Removing onScroll listener makes contentOffset null.
-            */
-            'contentOffset': {
-                get: function() {
-                    return {
-                        x: AndroidUnitConverter.pixelToDp(_contentOffset.x),
-                        y: AndroidUnitConverter.pixelToDp(_contentOffset.y)
-                    };
-                },
-                enumerable: true
             }
         });
 
@@ -435,16 +418,14 @@ const GridView = extend(View)(
                     if (!self.touchEnabled) {
                         return;
                     }
-                    _contentOffset.x += dx;
-                    _contentOffset.y += dy;
+                    //Remove  due to the incorrect onScrolled's return parameter. Such as scrollTo(0) causes it to return fault dx & dy parameters.
+                    // _contentOffset.x += dx;
+                    // _contentOffset.y += dy;
+                    // var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    // var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
 
-                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                     _onScroll && _onScroll({
-                        contentOffset: {
-                            x: offsetX,
-                            y: offsetY
-                        }
+                        contentOffset: self.contentOffset
                     });
                 },
                 onScrollStateChanged: function(newState) {
