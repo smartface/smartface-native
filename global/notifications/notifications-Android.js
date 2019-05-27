@@ -473,4 +473,7 @@ Notifications.iOS = {};
 Notifications.ios.authorizationStatus = {};
 Notifications.ios.getAuthorizationStatus = function() {};
 
+Notifications.iOS.NotificationPresentationOptions = {};
+
+
 module.exports = Notifications;
