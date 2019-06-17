@@ -25,7 +25,7 @@
  *     }
  *     myDataPicker.show();
  */
-function DataPicker() {}
+function DataPicker(params) {}
 
 /**
  * Gets/sets items of the DataPicker.
