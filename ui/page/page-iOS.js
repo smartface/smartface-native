@@ -367,16 +367,9 @@ function Page(params) {
     });
 
     var _titleView = true;
-<<<<<<< HEAD
     function checkIfSearchviewIsSubview(nativeObject){ //Workaround Bug : IOS-2707
         for (var index in nativeObject.subviews){
             if (nativeObject.subviews[index].constructor.name === "SMFUISearchBar") {
-=======
-
-    function checkIfSearchviewIsSubview(nativeObject) { //Workaround Bug : IOS-2707
-        for (var index in nativeObject.subviews) {
-            if (nativeObject.subviews[index].constructor.name === "SMFNative.SMFUISearchBar") {
->>>>>>> develop
                 return true;
             }
             if (checkIfSearchviewIsSubview(nativeObject.subviews[index])) {

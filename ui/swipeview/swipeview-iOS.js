@@ -109,11 +109,7 @@ const SwipeView = extend(View)(
                 for (var i = 0; i < value.length; i++) {
                     var page = new value[i]();
                     bypassPageSpecificProperties(page);
-<<<<<<< HEAD
                     if (page.nativeObject.constructor.name === "SMFUIViewController"){
-=======
-                    if (page.nativeObject.constructor.name === "SMFNative.SMFUIViewController") {
->>>>>>> develop
                         page.orientation = Page.Orientation.AUTO;
                         _instanceArray.push(page);
                         _pageNativeObjectArray.push(page.nativeObject);
