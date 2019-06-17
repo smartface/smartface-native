@@ -236,7 +236,7 @@ WebView.prototype.onChangedURL = function(event) {};
 WebView.prototype.onBackButtonPressed = function() {};
 
 /**
- * Callback triggered when the web page is loaded.
+ * Callback triggered when the web page has started loading.
  *
  * @event onLoad
  * @param {Object} event
@@ -278,7 +278,7 @@ WebView.prototype.onOpenNewWindow = function(event) {};
 WebView.prototype.onError = function(event) {};
 
 /**
- * Callback triggered when a web page is loaded and displayed on the webview.
+ * Callback triggered when a web page has finished loading.
  *
  * @event onShow
  * @param {Object} event
