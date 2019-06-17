@@ -12,7 +12,7 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
-
+const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -29,8 +29,6 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 10
 };
-
-
 
 function Page(params) {
     (!params) && (params = {});
@@ -53,8 +51,7 @@ function Page(params) {
 
     var actionBar = null;
     var callback = {
-        onCreate: function() {
-        },
+        onCreate: function() {},
         onCreateView: function() {
             pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());
             self.nativeObject.setHasOptionsMenu(true);
@@ -80,11 +77,17 @@ function Page(params) {
                     onShowCallback && onShowCallback();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
-                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                    if (spratIntent.hasExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON) === true) {
                         try {
-                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
-                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                            const Notifications = require("sf-core/notifications");
+                            
+                            var notificationJson = spratIntent.getStringExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON);
+                            let parsedJson = JSON.parse(notificationJson);
+                            Application.onReceivedNotification && Application.onReceivedNotification({
+                                remote: parsedJson
+                            });
+                            Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
+                            spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON); //clears notification_json intent
                         }
                         catch (e) {
                             new Error("An error occured while getting notification json");
@@ -94,7 +97,7 @@ function Page(params) {
             }));
         },
         onPause: function() {
-            self.onHide && self.onHide();  
+            self.onHide && self.onHide();
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
@@ -104,38 +107,13 @@ function Page(params) {
             }
             return true;
         },
-        onConfigurationChanged: function(newConfig) {
+        onConfigurationChanged: function() {
             const Screen = require("../../device/screen");
-            _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
+            _onOrientationChange && _onOrientationChange({
+                orientation: Screen.orientation
+            });
         },
-        onOptionsItemSelected: function(menuItem) {
-            var itemId = menuItem.getItemId();
-            if (itemId === NativeAndroidR.id.home) {
-                let leftItem;
-                if (Application.currentPage.pageID === self.pageID) {
-                    leftItem = self._headerBarLeftItem;
-                }
-                else {
-                    leftItem = Application.currentPage._headerBarLeftItem;
-                }
-
-                if (leftItem) {
-                    leftItem.onPress && leftItem.onPress();
-                }
-                else {
-                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
-                }
-
-            }
-            else if (_headerBarItems[itemId]) {
-                var item = _headerBarItems[itemId];
-                if (item.onPress instanceof Function) {
-                    item.onPress();
-                }
-            }
-            return true;
-        },
-        onCreateContextMenu: function(menu, view, menuInfo) {
+        onCreateContextMenu: function(menu) {
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -146,8 +124,8 @@ function Page(params) {
                 menu.add(0, i, 0, menuTitle);
             }
         },
-        onContextItemSelected: function(item) {
-            var itemId = item.getItemId();
+        onContextItemSelected: function(itemId) {
+
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
                 items[itemId].onSelected();
@@ -598,7 +576,10 @@ function Page(params) {
     var _contentInset = {};
     Object.defineProperty(self.headerBar.android, 'contentInset', {
         get: function() {
-            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
+            return {
+                left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()),
+                right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd())
+            };
         },
         set: function(contentInset) { // API Level 21+
             _contentInset = contentInset;
@@ -731,12 +712,11 @@ function Page(params) {
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
 
-                if (item.image && item.image.nativeObject) {
+                if ((item.image && item.image.nativeObject) || item.android.systemIcon)
                     item.nativeObject = new NativeImageButton(activity);
-                }
-                else {
+                else
                     item.nativeObject = new NativeTextButton(activity);
-                }
+
                 nativeBadgeContainer.addView(item.nativeObject);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
                 item.nativeBadgeContainer = nativeBadgeContainer;
@@ -746,6 +726,7 @@ function Page(params) {
                     item.addToHeaderView(item.badge);
                 }
                 itemView = nativeBadgeContainer;
+                item.itemView = itemView;
                 item.setValues();
             }
             if (itemView) {
@@ -790,7 +771,9 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
-                if (!focusedView) { return; }
+                if (!focusedView) {
+                    return;
+                }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");

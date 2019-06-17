@@ -30,15 +30,19 @@ const ScrollView = extend(ViewGroup)(
                         prevX = x;
                         prevOldX = oldX;
 
-                        var translation = { x: (x - oldX), y: (y - oldy) };
-                        _contentOffset.x = x;
+                        var translation = {
+                            x: (x - oldX),
+                            y: (y - oldy)
+                        };
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({
+                            translation: translation,
+                            contentOffset: self.contentOffset
+                        });
                     }
                 };
                 this.nativeObject = new NativeHorizontalScroll(activity, callback);
-            }
-            else {
+            } else {
                 const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
                 callback = {
                     onScrollChanged: function(xObj, yObj, oldx, oldy) {
@@ -52,10 +56,15 @@ const ScrollView = extend(ViewGroup)(
                         prevY = y;
                         prevOldY = oldY;
 
-                        var translation = { x: (xObj - oldx), y: (y - oldY) };
-                        _contentOffset.y = y;
+                        var translation = {
+                            x: (xObj - oldx),
+                            y: (y - oldY)
+                        };
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({
+                            translation: translation,
+                            contentOffset: self.contentOffset
+                        });
                     }
                 };
                 this.nativeObject = new NativeVerticalScroll(activity, callback);
@@ -77,7 +86,6 @@ const ScrollView = extend(ViewGroup)(
 
         _layout.parent = this;
         var _callbackOnScroll = null;
-        var _contentOffset = { x: 0, y: 0 };
         var _autoSizeEnabled = false;
         Object.defineProperties(this, {
             'align': {
@@ -165,12 +173,17 @@ const ScrollView = extend(ViewGroup)(
                 enumerable: true,
                 configurable: true
             },
+            /* 
+            ToDo: There are a few known bugs which comes in front when ListView's items are big.
+            */
             'contentOffset': {
                 get: function() {
-                    return _contentOffset;
+                    return {
+                        x: AndroidUnitConverter.pixelToDp(self.nativeObject.computeHorizontalScrollOffset()),
+                        y: AndroidUnitConverter.pixelToDp(self.nativeObject.computeVerticalScrollOffset())
+                    };
                 },
-                enumerable: true,
-                configurable: true
+                enumerable: true
             }
         });
 
@@ -218,8 +231,7 @@ function calculateScrollViewSize(scrollView) {
                 layoutHeight = measuredHeight;
         }
         scrollView.layout.height = layoutHeight;
-    }
-    else {
+    } else {
         var layoutWidth = scrollView.width;
         for (i = 0; i < arrayLenght; i++) {
             var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());

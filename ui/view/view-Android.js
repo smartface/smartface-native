@@ -12,9 +12,13 @@ const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 
 const rippleSuperView = require("./ripple");
 
-function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
+function PixelToDp(px) {
+    return AndroidUnitConverter.pixelToDp(px);
+}
 
-function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
+function DpToPixel(dp) {
+    return AndroidUnitConverter.dpToPixel(dp);
+}
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -45,12 +49,10 @@ function View(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
-    }
-    else {
+    } else {
         if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
             this.yogaNode = this.nativeObject.getYogaNode();
-        }
-        else {
+        } else {
             this.yogaNode = new NativeYogaNode();
         }
     }
@@ -131,8 +133,7 @@ function View(params) {
                     // this.borderWidth = this.borderWidth;
                     // this.borderColor = this.borderColor;
 
-                }
-                else {
+                } else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                 }
                 setBackgroundDrawable.call(this, _isBackgroundAssigned);
@@ -275,7 +276,10 @@ View.prototype = {
         }
     },
     get scale() {
-        return { x: this.nativeObject.getScaleX(), y: this.nativeObject.getScaleY() }
+        return {
+            x: this.nativeObject.getScaleX(),
+            y: this.nativeObject.getScaleY()
+        }
     },
     set scale(value) {
         if (TypeUtil.isObject(value)) {
@@ -636,8 +640,7 @@ View.prototype = {
         this.yogaNode.setFlexGrow(flexGrow);
         if (flexGrow > 0) {
             this.flexBasis = 1;
-        }
-        else {
+        } else {
             this.flexBasis = NaN;
         }
     },

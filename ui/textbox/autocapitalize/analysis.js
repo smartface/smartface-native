@@ -1,4 +1,3 @@
-
 /**
  * @enum {Number} UI.TextBox.AutoCapitalize
  *

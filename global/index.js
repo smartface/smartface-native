@@ -6,5 +6,5 @@ module.exports = {
     Data: require('./data'),
     SecureData: require('./securedata'),
     SpeechRecognizer: require('./speechrecognizer'),
-    AsyncTask : require('./asynctask')
+    AsyncTask: require('./asynctask')
 };

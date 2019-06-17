@@ -71,7 +71,7 @@ GifImageView.prototype.isAnimating;
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.startAnimating = function(){};
+GifImageView.prototype.startAnimating = function() {};
 
 /**
  * You should call this method when you want stop gif's animation.
@@ -81,7 +81,7 @@ GifImageView.prototype.startAnimating = function(){};
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.stopAnimating = function(){};
+GifImageView.prototype.stopAnimating = function() {};
 
 /**
  * This event is called when every gif's loop ends.
@@ -91,7 +91,7 @@ GifImageView.prototype.stopAnimating = function(){};
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.loopCompletionCallback = function(params){};
+GifImageView.prototype.loopCompletionCallback = function(params) {};
 
 /**
  * Gets/sets the tintColor. Must create a new image object with the imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE) method to work correctly on the iOS.
@@ -120,7 +120,7 @@ GifImageView.prototype.tintColor = null;
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.loadFromUrl = function(params){};
+GifImageView.prototype.loadFromUrl = function(params) {};
 
 /**
  * Load image from the file and place the returned image into the ImageView.
@@ -136,7 +136,7 @@ GifImageView.prototype.loadFromUrl = function(params){};
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.loadFromFile = function(object){};
+GifImageView.prototype.loadFromFile = function(object) {};
 
 /**
  * Fetch image from the server.
@@ -157,6 +157,6 @@ GifImageView.prototype.loadFromFile = function(object){};
  * @ios
  * @since 3.2.0
  */
-GifImageView.prototype.fetchFromUrl = function(object){};
+GifImageView.prototype.fetchFromUrl = function(object) {};
 
 module.exports = GifImageView;

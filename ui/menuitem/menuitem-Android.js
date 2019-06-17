@@ -1,6 +1,6 @@
 /*globals requireClass*/
-const Color     = require("../color");
-const TypeUtil  = require("../../util/type");
+const Color = require("../color");
+const TypeUtil = require("../../util/type");
 const Exception = require("../../util/exception");
 
 const NativeSpannable = requireClass("android.text.Spanned");
@@ -21,19 +21,19 @@ function MenuItem(params) {
                 return _title;
             },
             set: function(title) {
-                if(!TypeUtil.isString(title)){
+                if (!TypeUtil.isString(title)) {
                     throw new TypeError(Exception.TypeError.STRING);
                 }
-               _title = title;
+                _title = title;
             },
             enumerable: true
         },
-        'onSelected':{
-            get: function(){
+        'onSelected': {
+            get: function() {
                 return _onSelected;
             },
-            set: function(callback){
-                if(!TypeUtil.isFunction(callback)){
+            set: function(callback) {
+                if (!TypeUtil.isFunction(callback)) {
                     throw new TypeError(Exception.TypeError.FUNCTION);
                 }
                 _onSelected = callback;
@@ -41,14 +41,14 @@ function MenuItem(params) {
             enumerable: true
         },
         'toString': {
-            value: function(){
+            value: function() {
                 return 'MenuItem';
             },
-            enumerable: true, 
+            enumerable: true,
             configurable: true
         }
     });
-    
+
     Object.defineProperties(this.android, {
         'titleColor': {
             get: function() {

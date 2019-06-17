@@ -12,6 +12,15 @@ const ViewGroup = extend(View)(
         this.childViews = {};
         _super(this);
 
+        Object.defineProperties(this.android, {
+            'requestDisallowInterceptTouchEvent': {
+                value: (disallow) => {
+                    this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
+                },
+                enumerable: true
+            }
+        });
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

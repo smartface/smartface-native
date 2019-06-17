@@ -18,7 +18,7 @@ const UITableViewRowAnimation = {
 
 const ListView = extend(View)(
     function(_super, params) {
-        
+
         var self = this;
 
         if (!self.nativeObject) {
@@ -30,14 +30,16 @@ const ListView = extend(View)(
         }
 
         _super(this);
-        
+
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
-                
+
         self.onRowCreate = function() {};
 
         self.onRowBind = function(listViewItem, index) {};
         self.onRowSelected = function(listViewItem, index) {};
-        self.onRowHeight = function(index) { return 0 };
+        self.onRowHeight = function(index) {
+            return 0
+        };
 
         Object.defineProperty(self.ios, 'leftToRightSwipeEnabled', {
             get: function() {
@@ -86,8 +88,7 @@ const ListView = extend(View)(
                 _refreshEnabled = value;
                 if (value) {
                     self.nativeObject.addSubview(self.refreshControl);
-                }
-                else {
+                } else {
                     self.refreshControl.removeFromSuperview();
                 }
             },
@@ -140,14 +141,13 @@ const ListView = extend(View)(
         self.nativeObject.cellForRowAt = function(e) {
             if (e.cell.contentView.subviews.length > 0) {
                 self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
-            }
-            else {
+            } else {
                 _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
-                
+
                 // Bug ID : IOS-2750
                 (_listItemArray[e.cell.uuid].nativeObject.yoga.direction == 0) && self.nativeObject.superview && (_listItemArray[e.cell.uuid].nativeObject.yoga.direction = self.nativeObject.superview.yoga.resolvedDirection);
                 ///////
-                
+
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
                 self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
             }
@@ -159,8 +159,7 @@ const ListView = extend(View)(
             // e.indexPath.row
             if (typeof self.onRowType === 'function') {
                 return self.onRowType(e.indexPath.row);
-            }
-            else {
+            } else {
                 return "0";
             }
         };
@@ -213,9 +212,9 @@ const ListView = extend(View)(
             return visibleIndexArray[visibleIndexArray.length - 1];
         };
 
-        this.scrollTo = function(index,animated) {
-            let indexPath = __SF_NSIndexPath.indexPathForRowInSection(index,0);
-            self.nativeObject.scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath,1,(animated === false) ? animated : true);
+        this.scrollTo = function(index, animated) {
+            let indexPath = __SF_NSIndexPath.indexPathForRowInSection(index, 0);
+            self.nativeObject.scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath, 1, (animated === false) ? animated : true);
         };
 
         Object.defineProperty(self, 'verticalScrollBarEnabled', {
@@ -235,13 +234,17 @@ const ListView = extend(View)(
         self.setPullRefreshColors = function(param) {
             if (Object.prototype.toString.call(param) === '[object Array]') {
                 self.refreshControl.tintColor = param[0].nativeObject;
-            }
-            else {
+            } else {
                 self.refreshControl.tintColor = param.nativeObject;
             }
         }
 
-        var _contentInset = { top: 0, left: 0, bottom: 0, right: 0 };
+        var _contentInset = {
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0
+        };
         Object.defineProperty(self, 'contentInset', {
             get: function() {
                 return _contentInset;
@@ -255,7 +258,10 @@ const ListView = extend(View)(
                         value: _contentInset
                     });
                     Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
-                    self.nativeObject.contentOffset = { x: 0, y: -_contentInset.top };
+                    self.nativeObject.contentOffset = {
+                        x: 0,
+                        y: -_contentInset.top
+                    };
                 }
             },
             enumerable: true
@@ -283,8 +289,7 @@ ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
 ListView.iOS.createSwipeItem = function(title, color, padding, action, isAutoHide) {
     if (isAutoHide === undefined) {
         return __SF_MGSwipeButton.createMGSwipeButton(title, color.nativeObject, padding, action);
-    }
-    else {
+    } else {
         return __SF_MGSwipeButton.createMGSwipeButtonWithTitleColorPaddingJsActionIsAutoHide(title, color.nativeObject, padding, action, isAutoHide ? true : false);
     }
 }
@@ -300,8 +305,7 @@ ListView.iOS.createSwipeItemWithIcon = function(title, icon, color, padding, act
 
     if (isAutoHide === undefined) {
         return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title, icon.nativeObject, color.nativeObject, padding, action);
-    }
-    else {
+    } else {
         return __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(title, icon.nativeObject, color.nativeObject, padding, action, isAutoHide ? true : false);
     }
 }

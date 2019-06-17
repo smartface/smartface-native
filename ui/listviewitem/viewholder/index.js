@@ -1,3 +1,3 @@
 if (Device.deviceOS === "Android") {
-  module.exports = require('./viewholder-Android');
+    module.exports = require('./viewholder-Android');
 }

@@ -8,86 +8,88 @@ const Invocation = require('sf-core/util').Invocation;
 const System = require('sf-core/device/system');
 
 const UISearchBarStyle = {
-    default : 0,
-    prominent : 1,
+    default: 0,
+    prominent: 1,
     minimal: 2
 }
 
 const UISearchBarIcon = {
-    search : 0,
-    clear : 1,
+    search: 0,
+    clear: 1,
     bookmark: 2,
     resultsList: 3
 }
 
 const SearchView = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
-        
-        if(!self.nativeObject) {
+
+        if (!self.nativeObject) {
             self.nativeObject = new __SF_SMFUISearchBar();
         }
-        
+
         _super(this);
-        
+
         if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
             self.nativeObject.setValueForKey(3, "semanticContentAttribute");
-        } else if(__SF_UIView.viewAppearanceSemanticContentAttribute() == 4){
+        } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
             self.nativeObject.setValueForKey(4, "semanticContentAttribute");
         }
-        
-        if(parseInt(System.OSVersion) >= 11){
-            var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject,"heightAnchor",[],"NSObject");
-            
-            var argConstant= new Invocation.Argument({
-                type:"CGFloat",
+
+        if (parseInt(System.OSVersion) >= 11) {
+            var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject, "heightAnchor", [], "NSObject");
+
+            var argConstant = new Invocation.Argument({
+                type: "CGFloat",
                 value: 44
             });
-            var layoutConstraint = Invocation.invokeInstanceMethod(heightAnchor,"constraintLessThanOrEqualToConstant:",[argConstant],"NSObject");
+            var layoutConstraint = Invocation.invokeInstanceMethod(heightAnchor, "constraintLessThanOrEqualToConstant:", [argConstant], "NSObject");
 
             var argIsActive = new Invocation.Argument({
-                type:"BOOL",
+                type: "BOOL",
                 value: true
             });
-            Invocation.invokeInstanceMethod(layoutConstraint,"setActive:",[argIsActive]);
+            Invocation.invokeInstanceMethod(layoutConstraint, "setActive:", [argIsActive]);
         }
-        
+
         self.textfield = self.nativeObject.valueForKey("searchField");
         self.textfield.addKeyboardObserver();
-        
+
         self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
-            nativeObject : self.nativeObject
+            nativeObject: self.nativeObject
         });
-        
-        self.textfield.onShowKeyboard = function(e){
+
+        self.textfield.onShowKeyboard = function(e) {
             if (_isAddedHeaderBar) {
                 return;
             }
-            if(self.nativeObject.superview.className().indexOf("UINavigationBar") === -1){
-                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight,e);
+            if (self.nativeObject.superview.className().indexOf("UINavigationBar") === -1) {
+                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight, e);
             }
         }
-           
-        self.textfield.onHideKeyboard = function(e){
+
+        self.textfield.onHideKeyboard = function(e) {
             if (_isAddedHeaderBar) {
                 return;
             }
-            if(self.nativeObject.superview.className().indexOf("UINavigationBar") === -1){
+            if (self.nativeObject.superview.className().indexOf("UINavigationBar") === -1) {
                 self.keyboardanimationdelegate.keyboardHideAnimation(e);
             }
         }
-        
+
         Object.defineProperty(this, 'textFieldBackgroundColor', {
             get: function() {
-                return new Color({color : self.nativeObject.valueForKey("searchField").valueForKey("backgroundColor")});
+                return new Color({
+                    color: self.nativeObject.valueForKey("searchField").valueForKey("backgroundColor")
+                });
             },
             set: function(color) {
-                self.nativeObject.valueForKey("searchField").setValueForKey(color.nativeObject,"backgroundColor");
+                self.nativeObject.valueForKey("searchField").setValueForKey(color.nativeObject, "backgroundColor");
             },
             enumerable: true
         });
-        this.textFieldBackgroundColor = Color.create(222,222,222);
-        
+        this.textFieldBackgroundColor = Color.create(222, 222, 222);
+
         Object.defineProperty(this, 'font', {
             get: function() {
                 return self.textfield.valueForKey("font");
@@ -97,7 +99,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _textAligment = 3;
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
@@ -109,31 +111,28 @@ const SearchView = extend(View)(
                 var vertical;
                 if (parseInt(value / 3) === 0) {
                     vertical = 1;
-                }
-                else if (parseInt(value / 3) === 1) {
+                } else if (parseInt(value / 3) === 1) {
                     vertical = 0;
-                }
-                else {
+                } else {
                     vertical = 2;
                 }
 
                 var horizontal;
                 if (value % 3 === 0) {
                     horizontal = 0;
-                }
-                else if (value % 3 === 1) {
+                } else if (value % 3 === 1) {
                     horizontal = 1;
-                }
-                else {
+                } else {
                     horizontal = 2;
                 }
-                
-                self.textfield.setValueForKey(vertical,"contentVerticalAlignment");
-                self.textfield.setValueForKey(horizontal,"textAlignment");
+
+                self.textfield.setValueForKey(vertical, "contentVerticalAlignment");
+                self.textfield.setValueForKey(horizontal, "textAlignment");
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(this, 'text', {
             get: function() {
                 return self.nativeObject.text;
@@ -144,18 +143,18 @@ const SearchView = extend(View)(
                     (text === "") ? (constant = 0) : (constant = -20)
                     if (constant != _constant) {
                         _constant = constant
-                        var argConstant= new Invocation.Argument({
-                            type:"CGFloat",
+                        var argConstant = new Invocation.Argument({
+                            type: "CGFloat",
                             value: _constant
                         });
-                        Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
+                        Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint, "setConstant:", [argConstant]);
                     }
                 }
                 self.nativeObject.text = text;
             },
             enumerable: true
         });
-        
+
         var _hint = "";
         Object.defineProperty(this, 'hint', {
             get: function() {
@@ -168,7 +167,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _hintTextColor = Color.LIGHTGRAY;
         Object.defineProperty(this, 'hintTextColor', {
             get: function() {
@@ -180,11 +179,13 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _textColor = self.nativeObject.textColor;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return new Color({color : _textColor});
+                return new Color({
+                    color: _textColor
+                });
             },
             set: function(textColor) {
                 _textColor = textColor.nativeObject;
@@ -192,11 +193,13 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _backgroundColor = self.nativeObject.barTintColor;
         Object.defineProperty(this, 'backgroundColor', {
             get: function() {
-                return new Color({color : _backgroundColor});
+                return new Color({
+                    color: _backgroundColor
+                });
             },
             set: function(backgroundColor) {
                 _backgroundColor = backgroundColor.nativeObject;
@@ -207,10 +210,10 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         // ATTENTION: Removing this line causes the crash.
         this.backgroundColor = Color.WHITE;
-        
+
         var _borderWidth = 0;
         Object.defineProperty(self, 'borderWidth', {
             get: function() {
@@ -224,15 +227,15 @@ const SearchView = extend(View)(
                     self.nativeObject.layer.borderWidth = 1;
                     self.nativeObject.yoga.borderWidth = 1;
                     self.borderColor = self.backgroundColor;
-                }else{
+                } else {
                     self.nativeObject.layer.borderWidth = value;
                     self.nativeObject.yoga.borderWidth = value;
                 }
             },
             enumerable: true,
-            configurable:true
+            configurable: true
         });
-        
+
         var _backgroundImage;
         Object.defineProperty(this, 'backgroundImage', {
             get: function() {
@@ -240,11 +243,11 @@ const SearchView = extend(View)(
             },
             set: function(backgroundImage) {
                 _backgroundImage = backgroundImage;
-                self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject,0);
+                self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject, 0);
             },
             enumerable: true
         });
-        
+
         var _iconImage;
         Object.defineProperty(this, 'iconImage', { //Depracted use searchIcon
             get: function() {
@@ -256,7 +259,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _searchIcon;
         Object.defineProperty(this, 'searchIcon', {
             get: function() {
@@ -268,57 +271,59 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _isAddedHeaderBar = false;
-        this.addToHeaderBar = function(page){
+        this.addToHeaderBar = function(page) {
             self.nativeObject.layer.borderWidth = 0;
             self.nativeObject.yoga.borderWidth = 0;
             _isAddedHeaderBar = true;
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         };
-        
-        this.removeFromHeaderBar = function(page){
+
+        this.removeFromHeaderBar = function(page) {
             _isAddedHeaderBar = false;
             self.removeFocus();
             page.nativeObject.navigationItem.titleView = undefined;
         };
-        
-        this.showKeyboard = function(){
+
+        this.showKeyboard = function() {
             self.nativeObject.becomeFirstResponder();
         };
-       
-        this.hideKeyboard = function(){
+
+        this.hideKeyboard = function() {
             self.nativeObject.resignFirstResponder();
         };
-        
-        this.requestFocus = function(){
+
+        this.requestFocus = function() {
             self.nativeObject.becomeFirstResponder();
         };
-       
-        this.removeFocus = function(){
+
+        this.removeFocus = function() {
             self.nativeObject.resignFirstResponder();
         };
-        
+
         this.ios = {};
-        
-        self.ios.showLoading = function(){
+
+        self.ios.showLoading = function() {
             self.nativeObject.activityIndicator.startAnimating();
         };
-        
-        self.ios.hideLoading = function(){
+
+        self.ios.hideLoading = function() {
             self.nativeObject.activityIndicator.stopAnimating();
         };
-        
+
         Object.defineProperty(this.ios, 'loadingColor', {
             get: function() {
-                return new Color({color : self.nativeObject.activityIndicator.color});
+                return new Color({
+                    color: self.nativeObject.activityIndicator.color
+                });
             },
             set: function(color) {
                 self.nativeObject.activityIndicator.color = color.nativeObject;
             },
             enumerable: true
         });
-        
+
         var _searchViewStyle = UISearchBarStyle.default;
         Object.defineProperty(this.ios, 'searchViewStyle', {
             get: function() {
@@ -330,49 +335,55 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
         Object.defineProperty(this.ios, 'cursorColor', {
             get: function() {
-                return new Color({color : self.textfield.valueForKey("tintColor")});
+                return new Color({
+                    color: self.textfield.valueForKey("tintColor")
+                });
             },
             set: function(color) {
-                self.textfield.setValueForKey(color.nativeObject,"tintColor");
+                self.textfield.setValueForKey(color.nativeObject, "tintColor");
             },
             enumerable: true
         });
-        
+
         // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
         Object.defineProperty(this, 'cursorColor', {
             get: function() {
-                return new Color({color : self.textfield.valueForKey("tintColor")});
+                return new Color({
+                    color: self.textfield.valueForKey("tintColor")
+                });
             },
             set: function(color) {
-                self.textfield.setValueForKey(color.nativeObject,"tintColor");
+                self.textfield.setValueForKey(color.nativeObject, "tintColor");
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(this.ios, 'cancelButtonColor', {
             get: function() {
-                return new Color({color : self.nativeObject.valueForKey("tintColor")});
+                return new Color({
+                    color: self.nativeObject.valueForKey("tintColor")
+                });
             },
             set: function(color) {
-                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
+                self.nativeObject.setValueForKey(color.nativeObject, "tintColor");
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(this.ios, 'cancelButtonText', {
             get: function() {
                 return self.nativeObject.valueForKey("_cancelButtonText");
             },
             set: function(value) {
-                self.nativeObject.setValueForKey(value,"_cancelButtonText");
+                self.nativeObject.setValueForKey(value, "_cancelButtonText");
             },
             enumerable: true
         });
-        
+
         var _showsCancelButton = false;
         Object.defineProperty(this.ios, 'showsCancelButton', {
             get: function() {
@@ -383,7 +394,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onCancelButtonClicked;
         Object.defineProperty(this.ios, 'onCancelButtonClicked', {
             get: function() {
@@ -405,7 +416,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onSearchEnd;
         Object.defineProperty(this, 'onSearchEnd', {
             get: function() {
@@ -416,7 +427,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onTextChanged;
         Object.defineProperty(this, 'onTextChanged', {
             get: function() {
@@ -427,7 +438,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onSearchButtonClicked;
         Object.defineProperty(this, 'onSearchButtonClicked', {
             get: function() {
@@ -438,62 +449,62 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-        
+
         //////////////////////////////////////////////////////
         // UISearchBarDelegate
         self.searchBarDelegate = new __SF_UISearchBarDelegate();
-        self.searchBarDelegate.cancelButtonClicked = function(e){
-            if (typeof _onCancelButtonClicked === "function"){
-                    _onCancelButtonClicked();
+        self.searchBarDelegate.cancelButtonClicked = function(e) {
+            if (typeof _onCancelButtonClicked === "function") {
+                _onCancelButtonClicked();
             }
         };
-        self.searchBarDelegate.didBeginEditing = function(){
+        self.searchBarDelegate.didBeginEditing = function() {
             if (self.ios.showsCancelButton) {
-                self.nativeObject.setShowsCancelButtonAnimated(true,true);
+                self.nativeObject.setShowsCancelButtonAnimated(true, true);
             }
 
-            if (typeof _onSearchBegin === "function"){
-                    _onSearchBegin();
+            if (typeof _onSearchBegin === "function") {
+                _onSearchBegin();
             }
         };
-        self.searchBarDelegate.didEndEditing = function(){
+        self.searchBarDelegate.didEndEditing = function() {
             if (self.ios.showsCancelButton) {
-                self.nativeObject.setShowsCancelButtonAnimated(false,true);
+                self.nativeObject.setShowsCancelButtonAnimated(false, true);
             }
-            
-            if (typeof _onSearchEnd === "function"){
-                    _onSearchEnd();
+
+            if (typeof _onSearchEnd === "function") {
+                _onSearchEnd();
             }
         };
-        
+
         var _constant = 0;
-        self.searchBarDelegate.textDidChange = function(searchText){
+        self.searchBarDelegate.textDidChange = function(searchText) {
             if (self.nativeObject.activityIndicatorTrailingConstraint) {
                 var constant;
                 (searchText === "") ? (constant = 0) : (constant = -20)
                 if (constant != _constant) {
                     _constant = constant
-                    var argConstant= new Invocation.Argument({
-                        type:"CGFloat",
+                    var argConstant = new Invocation.Argument({
+                        type: "CGFloat",
                         value: _constant
                     });
-                    Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
+                    Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint, "setConstant:", [argConstant]);
                 }
             }
-            if (typeof _onTextChanged === "function"){
+            if (typeof _onTextChanged === "function") {
                 _onTextChanged(searchText);
             }
         };
-        self.searchBarDelegate.searchButtonClicked = function(){
-            if (typeof _onSearchButtonClicked === "function"){
-                    _onSearchButtonClicked();
+        self.searchBarDelegate.searchButtonClicked = function() {
+            if (typeof _onSearchButtonClicked === "function") {
+                _onSearchButtonClicked();
             }
         };
         self.nativeObject.delegate = self.searchBarDelegate;
-        
+
         // Handling android specific properties
         self.android = {};
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

@@ -1,12 +1,12 @@
 const Blob = require("../../global/blob");
 
-var http = function Http(params){
+var http = function Http(params) {
     var self = this;
-    
+
     if (!self.nativeObject) {
         self.nativeObject = new __SF_Http();
     }
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Properties
     Object.defineProperty(self, 'timeout', {
@@ -18,7 +18,7 @@ var http = function Http(params){
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'headers', {
         get: function() {
             return self.nativeObject.defaultHTTPHeaders;
@@ -28,212 +28,214 @@ var http = function Http(params){
         },
         enumerable: true
     });
-    
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
     }
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Functions
-    this.cancelAll = function () {
+    this.cancelAll = function() {
         self.nativeObject.cancelAll();
     };
-    
+
     this.requestFile = function(params) {
-        
+
         var url = params.url;
         var fileName = params.fileName;
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
+
         return new http.Request(
-                self.nativeObject.requestFile(
-                    url,
-                    fileName,
-                    function(e){
-                        const File = require('sf-core/io/file');
-                        // Native returns file path first.
-                        // Convert to sf-core file object.
-                        if (e.file) {
-                            e.file = new File({path:e.file});
-                        }
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+            self.nativeObject.requestFile(
+                url,
+                fileName,
+                function(e) {
+                    const File = require('sf-core/io/file');
+                    // Native returns file path first.
+                    // Convert to sf-core file object.
+                    if (e.file) {
+                        e.file = new File({
+                            path: e.file
+                        });
                     }
-                )
-            );
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
-    
+
     this.requestImage = function(params) {
-        
+
         var url = params.url;
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
-        return new http.Request(
-                self.nativeObject.requestImage(
-                    url,
-                    function(e){
-                        // Native returns UIImage instance.
-                        // Convert to sf-core Image object.
-                        if (e.image) {
-                            const Image = require('sf-core/ui/image');
-                            e.image = Image.createFromImage(e.image);
-                        }
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
 
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+        return new http.Request(
+            self.nativeObject.requestImage(
+                url,
+                function(e) {
+                    // Native returns UIImage instance.
+                    // Convert to sf-core Image object.
+                    if (e.image) {
+                        const Image = require('sf-core/ui/image');
+                        e.image = Image.createFromImage(e.image);
                     }
-                )
-            );
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
 
     this.requestString = function(params) {
-        
+
         var url = params.url;
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
+
         return new http.Request(
-                self.nativeObject.requestString(
-                    url,
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+            self.nativeObject.requestString(
+                url,
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
                     }
-                )
-            );
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
-    
+
     this.requestJSON = function(params) {
-        
+
         var url = params.url;
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
+
         return new http.Request(
-                self.nativeObject.requestJSON(
-                    url,
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+            self.nativeObject.requestJSON(
+                url,
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
                     }
-                )
-            );
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
-    
+
     this.request = function(params) {
-        
+
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
+
         return new http.Request(
-                self.nativeObject.request(
-                    params,
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+            self.nativeObject.request(
+                params,
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
                     }
-                )
-            );
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
-    
+
     this.upload = function(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
-        
+
         // Get NSData inside JS object
-        if( Object.prototype.toString.call( params.body ) === '[object Array]' ) {
-            for (var i = 0; i < params.body.length; i++) { 
+        if (Object.prototype.toString.call(params.body) === '[object Array]') {
+            for (var i = 0; i < params.body.length; i++) {
                 params.body[i].value = params.body[i].value.nativeObject;
             }
         } else {
             params.body = params.body.nativeObject;
         }
-        
+
         return new http.Request(
-                self.nativeObject.upload(
-                    params,
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onLoad === "function") {
-                        	onLoad(e);
-                        }
-                    },
-                    function(e){
-                        if (e.body) {
-                            e.body = new Blob(e.body);
-                        }
-                        if (typeof onError === "function") {
-                        	onError(e);
-                        }
+            self.nativeObject.upload(
+                params,
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
                     }
-                )
-            );
+                    if (typeof onLoad === "function") {
+                        onLoad(e);
+                    }
+                },
+                function(e) {
+                    if (e.body) {
+                        e.body = new Blob(e.body);
+                    }
+                    if (typeof onError === "function") {
+                        onError(e);
+                    }
+                }
+            )
+        );
     };
 };
 
@@ -242,20 +244,20 @@ http.Request = function Request(nativeObject) {
     if (nativeObject) {
         self.nativeObject = nativeObject;
     }
-    
-    this.suspend = function(){
+
+    this.suspend = function() {
         if (self.nativeObject) {
             self.nativeObject.suspend();
         }
     };
-    
-    this.resume = function(){
+
+    this.resume = function() {
         if (self.nativeObject) {
             self.nativeObject.resume();
         }
     };
-    
-    this.cancel = function(){
+
+    this.cancel = function() {
         if (self.nativeObject) {
             self.nativeObject.cancel();
         }

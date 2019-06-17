@@ -70,16 +70,13 @@ Multimedia.startCamera = function(params) {
             var cropImageActivity = NativeCropImage.activity();
             var activity = AndroidConfig.activity
             cropImageActivity.start(activity, page.nativeObject);
-        }
-        else {
+        } else {
             var takePictureIntent = new NativeIntent(NativeAction[_action]);
             page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
         }
-    }
-    else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+    } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
-    }
-    else {
+    } else {
         takePictureIntent = new NativeIntent(NativeAction[_action]);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
@@ -96,8 +93,7 @@ function startCameraWithExtraField() {
         if (_action === ActionType.IMAGE_CAPTURE) {
             contentUri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             _fileURI = contentResolver.insert(contentUri, contentValues);
-        }
-        else if (_action === ActionType.VIDEO_CAPTURE) {
+        } else if (_action === ActionType.VIDEO_CAPTURE) {
             contentUri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             _fileURI = contentResolver.insert(contentUri, contentValues);
         }
@@ -142,8 +138,7 @@ Multimedia.android.getAllGalleryItems = function(params) {
                 type: params.type
             });
             result.videos = videos;
-        }
-        else if (params && params.type === Multimedia.Type.IMAGE) {
+        } else if (params && params.type === Multimedia.Type.IMAGE) {
             uri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             var images = getAllMediaFromUri({
                 uri: uri,
@@ -151,18 +146,18 @@ Multimedia.android.getAllGalleryItems = function(params) {
                 type: params.type
             });
             result.images = images;
-        }
-        else {
+        } else {
             throw new Error("Unexpected value " + params.type);
         }
 
         if (params && params.onSuccess) {
             params.onSuccess(result);
         }
-    }
-    catch (err) {
+    } catch (err) {
         if (params && params.onFailure)
-            params.onFailure({ message: err });
+            params.onFailure({
+                message: err
+            });
     }
 
 };
@@ -170,11 +165,9 @@ Multimedia.android.getAllGalleryItems = function(params) {
 Multimedia.onActivityResult = function(requestCode, resultCode, data) {
     if (requestCode === Multimedia.CAMERA_REQUEST) {
         getCameraData(resultCode, data);
-    }
-    else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
+    } else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
         pickFromGallery(resultCode, data);
-    }
-    else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+    } else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
         cropImage(resultCode, data);
     }
 };
@@ -185,13 +178,15 @@ function cropImage(resultCode, data) {
         var resultUri = result.getUri();
         var croppedImage = Image.createFromFile(resultUri.getPath());
         if (_captureParams.allowsEditing) {
-            _captureParams.onSuccess && _captureParams.onSuccess({ image: croppedImage });
+            _captureParams.onSuccess && _captureParams.onSuccess({
+                image: croppedImage
+            });
+        } else if (_pickParams.allowsEditing) {
+            _pickParams.onSuccess && _pickParams.onSuccess({
+                image: croppedImage
+            });
         }
-        else if (_pickParams.allowsEditing) {
-            _pickParams.onSuccess && _pickParams.onSuccess({ image: croppedImage });
-        }
-    }
-    else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+    } else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
         throw Error('Unexpected error occured while cropping image');
     }
 }
@@ -221,11 +216,12 @@ function pickFromGallery(resultCode, data) {
                 realPath = getRealPathFromURI(uri);
             }
             */
-        }
-        catch (err) {
+        } catch (err) {
             success = false;
             if (_pickParams.onFailure)
-                _pickParams.onFailure({ message: err });
+                _pickParams.onFailure({
+                    message: err
+                });
         }
 
         if (success && _pickParams.onSuccess) {
@@ -234,20 +230,25 @@ function pickFromGallery(resultCode, data) {
                 if (!_pickParams.allowsEditing) {
                     var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
                     var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                    var image = new Image({ bitmap: bitmap });
-                    _pickParams.onSuccess({ image: image });
-                }
-                else {
+                    var image = new Image({
+                        bitmap: bitmap
+                    });
+                    _pickParams.onSuccess({
+                        image: image
+                    });
+                } else {
                     cropPickedFromGallery(uri);
                 }
-            }
-            else {
-                var file = new File({ path: realPath });
-                _pickParams.onSuccess({ video: file });
+            } else {
+                var file = new File({
+                    path: realPath
+                });
+                _pickParams.onSuccess({
+                    video: file
+                });
             }
         }
-    }
-    else {
+    } else {
         if (_pickParams.onCancel)
             _pickParams.onCancel();
     }
@@ -264,11 +265,9 @@ function getRealPathFromID(uri, action) {
 
     if (_pickParams.type === Multimedia.Type.IMAGE) {
         contentUri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-    }
-    else if (_pickParams.type === Multimedia.Type.VIDEO) {
+    } else if (_pickParams.type === Multimedia.Type.VIDEO) {
         contentUri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-    }
-    else {
+    } else {
         throw new Error("Unexpected type: " + _pickParams.type);
     }
 
@@ -295,8 +294,7 @@ function getRealPathFromURI(uri) {
 
     if (cursor == null) {
         return uri.getPath();
-    }
-    else {
+    } else {
         cursor.moveToFirst();
         var idx = cursor.getColumnIndex(projection[0]);
         var realPath = cursor.getString(idx);
@@ -312,16 +310,16 @@ function getCameraData(resultCode, data) {
                 var uri;
                 if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                     uri = _fileURI;
-                }
-                else {
+                } else {
                     uri = data.getData();
                 }
             }
-        }
-        catch (err) {
+        } catch (err) {
             var failure = true;
             if (_captureParams.onFailure)
-                _captureParams.onFailure({ message: err });
+                _captureParams.onFailure({
+                    message: err
+                });
         }
 
 
@@ -329,17 +327,23 @@ function getCameraData(resultCode, data) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 var extras = data.getExtras();
                 var bitmap = extras.get("data");
-                var image = new Image({ bitmap: bitmap });
-                _captureParams.onSuccess({ image: image });
-            }
-            else {
+                var image = new Image({
+                    bitmap: bitmap
+                });
+                _captureParams.onSuccess({
+                    image: image
+                });
+            } else {
                 var realPath = getRealPathFromURI(uri);
-                var file = new File({ path: realPath });
-                _captureParams.onSuccess({ video: file });
+                var file = new File({
+                    path: realPath
+                });
+                _captureParams.onSuccess({
+                    video: file
+                });
             }
         }
-    }
-    else {
+    } else {
         if (_captureParams.onCancel)
             _captureParams.onCancel();
     }
@@ -355,9 +359,10 @@ function getAllMediaFromUri(params) {
             if (params.type === Multimedia.Type.IMAGE) {
                 var image = new Image.createFromFile(path);
                 files.push(image);
-            }
-            else {
-                var file = new File({ path: path });
+            } else {
+                var file = new File({
+                    path: path
+                });
                 files.push(file);
             }
         }

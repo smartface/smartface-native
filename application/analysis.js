@@ -176,45 +176,62 @@ Application.ios.canOpenUrl = function(url) {};
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
- *     Application.call("market://details",{
- *         'id': Application.android.packageName
+ *     Application.call({
+ *         uriScheme: "market://details",
+ *         data: {
+ *             'id': Application.android.packageName
+ *         }
  *     });
  *     // Open caller app with phone number.
- *     Application.call("tel:+901234567890",{});
+ *     Application.call({ uriScheme: "tel:+901234567890", data: {} });
  *     // Call another application with its own url schema.
- *     Application.call("mySchema://",{
- *         key: encodeURIComponent("Smartace Encoded Data")     
- *     },function(){
- *         alert("Application call completed")
- *     },function(){
- *         alert("Application call failed")
+ *     Application.call({
+ *         uriScheme: "mySchema://",
+ *         data: {
+ *             key: encodeURIComponent("Smartace Encoded Data")
+ *         },
+ *         onSuccess: function() {
+ *             alert("Application call completed")
+ *         },
+ *         onFailure: function() {
+ *             alert("Application call failed")
+ *         }
  *     });
  *     // Call another application with package name and activity name. Works only for Android.
- *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
+ *     Application.call({ uriScheme: "io.smartface.SmartfaceDev|io.smartface.SmartfaceDev.A", data: {} });
  *     // Call Smartface Emulator with url schema.
- *     Application.call("smartface-emulator://",{});
+ *     Application.call({ uriScheme: "smartface-emulator://", data : {} });
  *     // Open Youtube with Chooser for Android
- *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},function(){
- *         alert("Application call completed")
- *     },function(){
- *         alert("Application call failed")
- *     },true,"Select an Application");
+ *     Application.call({
+ *         uriScheme: "https://www.youtube.com/watch?v=VMLU9mfzHYI",
+ *         data: {},
+ *         onSuccess: function() {
+ *             alert("Application call completed")
+ *         },
+ *         onFailure: function() {
+ *             alert("Application call failed")
+ *         },
+ *         isShowChooser: true,
+ *         chooserTitle: "Select an Application"
+ *     });
  * 
  *
  * @method call
- * @param {String} uriScheme
- * @param {Object} data parameter should be url encoded if necessary.
- * @param {Function} onSuccess Added in 1.1.13.
- * @param {Function} onFailure Added in 1.1.13.
- * @param {Boolean} isShowChooser Added in 1.1.13.
- * @param {String} chooserTitle Added in 1.1.13.
+ * @param {Object} params
+ * @param {String} params.uriScheme
+ * @param {Object} params.data parameter should be url encoded if necessary.
+ * @param {Function} params.onSuccess Added in 1.1.13.
+ * @param {Function} params.onFailure Added in 1.1.13.
+ * @param {Boolean} params.isShowChooser Added in 1.1.13.
+ * @param {String} params.chooserTitle Added in 1.1.13.
+ * @param {String} params.action  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
  * @readonly
- * @android
+ * @android 
  * @ios
  * @static
  * @since 0.1
  */
-Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {};
+Application.call = function(params) {};
 
 /**
  * Exists the application.
@@ -240,7 +257,7 @@ Application.exit = function() {};
  * @static
  * @since 3.2.0
  */
-Application.setRootController = function(params){};
+Application.setRootController = function(params) {};
 /**
  * Restarts the application.
  *
@@ -287,6 +304,25 @@ Application.android.checkPermission = function(permission) {};
  * @since 1.2
  */
 Application.android.requestPermissions = function(requestIdentifier, permission) {};
+
+
+/**
+ * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.). 
+ * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
+ * 
+ *     @example
+ *     const Application = require("sf-core/application");
+ *     Application.android.dispatchTouchEvent = function(){
+ *        return true; //Consume all touches & do not pass to window
+ *     }
+ *
+ * @event dispatchTouchEvent
+ * @android
+ * @static
+ * @return {Boolean}
+ * @since 4.0.3
+ */
+Application.android.dispatchTouchEvent = function() {};
 
 /**
  * This method checks for a permission is shown before to user 
@@ -371,7 +407,7 @@ Application.checkUpdate = function(callback, user) {};
  * @static
  * @since 3.2.0
  */
-Application.onBackButtonPressed = function(){};
+Application.onBackButtonPressed = function() {};
 /**
  * Triggered before exiting application.
  * 
@@ -501,6 +537,18 @@ Application.android.onRequestPermissionsResult = function(e) {}
  * @since 1.2
  */
 Application.onUnhandledError = function(error) {};
+
+
+/**
+ * Set the configure the native theme. 
+ * 
+ * @method setAppTheme
+ * @param {String} currentTheme
+ * @android
+ * @static
+ * @since 4.0.2
+ */
+Application.setAppTheme = function(currentTheme) {};
 
 /**
  * Android Specific Properties.

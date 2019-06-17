@@ -1,6 +1,7 @@
 /* globals requireClass */
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 function Scrollable(childJsClass, nativeScrollableObject) {
     var self = childJsClass;
@@ -27,7 +28,22 @@ function Scrollable(childJsClass, nativeScrollableObject) {
     if (!self.__isRecyclerView)
         return;
 
-    let _onAttachedToWindow;
+    Object.defineProperties(self, {
+        /* 
+         ToDo: There are a few known bugs which comes in front when ListView's items are big.
+        */
+        'contentOffset': {
+            get: function() {
+                return {
+                    x: AndroidUnitConverter.pixelToDp(self.nativeInner.computeHorizontalScrollOffset()),
+                    y: AndroidUnitConverter.pixelToDp(self.nativeInner.computeVerticalScrollOffset())
+                };
+            },
+            enumerable: true
+        }
+    });
+
+    let _onAttachedToWindow, _onDetachedFromWindow;
     Object.defineProperties(self.android, {
         'onGesture': {
             get: function() {
@@ -39,12 +55,14 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                     self.nativeInner.setJsCallbacks({
                         onScrollGesture: function(distanceX, distanceY) {
                             let returnValue = true;
-                            _onGesture && (returnValue = _onGesture({ distanceX: distanceX, distanceY: distanceY }));
+                            _onGesture && (returnValue = _onGesture({
+                                distanceX: distanceX,
+                                distanceY: distanceY
+                            }));
                             return !!returnValue;
                         }
                     });
-                }
-                else {
+                } else {
                     self.nativeInner.setJsCallbacks(null);
                 }
             },
@@ -71,6 +89,15 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             },
             set: function(onAttachedToWindow) {
                 _onAttachedToWindow = onAttachedToWindow;
+            },
+            enumerable: true
+        },
+        'onDetachedFromWindow': {
+            get: function() {
+                return _onDetachedFromWindow;
+            },
+            set: function(onDetachedFromWindow) {
+                _onDetachedFromWindow = onDetachedFromWindow;
             },
             enumerable: true
         }

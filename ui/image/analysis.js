@@ -72,6 +72,18 @@ Image.prototype.renderingMode = 0;
  */
 Image.prototype.autoMirrored = false;
 
+
+/**
+ * Returns an Image object which built-in icon is created corresponding systemIcon value.
+ *
+ * @android
+ * @method createSystemIcon
+ * @param {Number | String} systemIcon
+ * @see https://developer.android.com/reference/android/R.drawable
+ * @since 4.0.2
+ */
+Image.prototype.createSystemIcon = function(systemIcon) {};
+
 /**
  * Returns a Blob instance.
  *

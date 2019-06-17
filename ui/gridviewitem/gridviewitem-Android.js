@@ -10,13 +10,12 @@ const GridViewItem = extend(ViewHolder)(
         if (!this.nativeInner) {
             if (params && params.nativeInner) {
                 this.nativeInner = params.nativeInner;
-            }
-            else {
+            } else {
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
         }
-        
+
         //StaggeredGridLayoutManager layout params are provides a few related feature. 
         this.nativeObject.setLayoutParams(new StaggeredGridLayoutManager.LayoutParams(-1, -1));
 

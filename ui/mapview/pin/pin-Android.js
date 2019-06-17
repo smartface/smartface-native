@@ -36,8 +36,7 @@ function Pin(params) {
                     var colorHUE = hueDic[color.nativeObject];
                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
                     self.nativeObject.setIcon(colorDrawable);
-                }
-                else if ((color instanceof Color)) {
+                } else if ((color instanceof Color)) {
                     var clusterItemColorHUE = hueDic[color.nativeObject];
                     var clusterItemColorDrawable = NativeDescriptorFactory.defaultMarker(clusterItemColorHUE);
                     self._clusterColor = clusterItemColorDrawable;

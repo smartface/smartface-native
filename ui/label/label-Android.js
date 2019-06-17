@@ -40,8 +40,7 @@ const Label = extend(View)(
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
             self.nativeObject.setGravity(INT_16_3);
             this.viewNativeDefaultTextAlignment = INT_16_3;
-        }
-        else {
+        } else {
             if (!this.skipDefaults) {
                 this._textAlignment = TextAlignment.MIDCENTER;
                 // Gravity.CENTER
@@ -154,8 +153,7 @@ const Label = extend(View)(
                     if (textAlignment === TextAlignment.MIDLEFT || textAlignment === TextAlignment.MIDCENTER || textAlignment === TextAlignment.MIDRIGHT) {
                         this._textAlignment = textAlignment;
                         this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
-                    }
-                    else {
+                    } else {
                         throw new Error("Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.");
                     }
                 },
@@ -169,8 +167,7 @@ const Label = extend(View)(
                     if (textColor.nativeObject) {
                         this._textColor = textColor;
                         this.nativeObject.setTextColor(textColor.nativeObject);
-                    }
-                    else if (TypeUtil.isObject(textColor)) {
+                    } else if (TypeUtil.isObject(textColor)) {
                         this._textColor = textColor;
                         var textColorStateListDrawable = createColorStateList(textColor);
                         this.nativeObject.setTextColor(textColorStateListDrawable);

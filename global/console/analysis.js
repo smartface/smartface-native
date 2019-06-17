@@ -14,7 +14,7 @@
  *     console.error("Uncaught Exception!");
  */
 function console() {}
-   
+
 /**
  * Logs message to the debugging console. You can pass multiple parameters.
  * 
@@ -39,9 +39,9 @@ function console() {}
  * @static
  * @since 0.1
  */
-console.log = function(message){};
+console.log = function(message) {};
 
-   
+
 /**
  * Logs error message to the debugging console. You can pass multiple parameters.
  * 
@@ -54,8 +54,8 @@ console.log = function(message){};
  * @static
  * @since 4.0.0
  */
-console.error = function(message){};
-   
+console.error = function(message) {};
+
 /**
  * Logs an informational message to the debugging console. You can pass multiple parameters.
  * 
@@ -68,8 +68,8 @@ console.error = function(message){};
  * @static
  * @since 4.0.0
  */
-console.info = function(message){};
-   
+console.info = function(message) {};
+
 /**
  * Logs a warning message to the debugging console. You can pass multiple parameters.
  * 
@@ -82,8 +82,8 @@ console.info = function(message){};
  * @static
  * @since 4.0.0
  */
-console.warn = function(message){};
-   
+console.warn = function(message) {};
+
 /**
  * Starts a timer for given name. 
  * 
@@ -99,8 +99,8 @@ console.warn = function(message){};
  * @static
  * @since 4.0.0
  */
-console.time = function(key){};
-   
+console.time = function(key) {};
+
 /**
  * Stops a timer that was previously started by given name. Logs the time to the debugging console in milliseconds. 
  * 
@@ -116,4 +116,4 @@ console.time = function(key){};
  * @static
  * @since 4.0.0
  */
-console.timeEnd = function(key){};
+console.timeEnd = function(key) {};

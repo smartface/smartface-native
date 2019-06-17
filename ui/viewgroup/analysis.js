@@ -25,7 +25,7 @@ function ViewGroup(params) {}
  * @method addChild
  * @since 0.1
  */
-ViewGroup.prototype.addChild = function(view){};
+ViewGroup.prototype.addChild = function(view) {};
 
 /**
  * Remove a child view from viewgroup.
@@ -36,7 +36,7 @@ ViewGroup.prototype.addChild = function(view){};
  * @method removeChild
  * @since 0.1
  */
-ViewGroup.prototype.removeChild = function(view){};
+ViewGroup.prototype.removeChild = function(view) {};
 
 /**
  * Removes all child views from viewgroup.
@@ -46,7 +46,7 @@ ViewGroup.prototype.removeChild = function(view){};
  * @ios
  * @since 0.1
  */
-ViewGroup.prototype.removeAll = function(){};
+ViewGroup.prototype.removeAll = function() {};
 
 /**
  * Gets the count of children in a viewgroup.
@@ -57,7 +57,7 @@ ViewGroup.prototype.removeAll = function(){};
  * @ios
  * @since 0.1
  */
-ViewGroup.prototype.getChildCount = function(){};
+ViewGroup.prototype.getChildCount = function() {};
 
 /**
  * Gets the array of children inside viewgroup.
@@ -68,7 +68,18 @@ ViewGroup.prototype.getChildCount = function(){};
  * @ios
  * @since 3.1.3
  */
-ViewGroup.prototype.getChildList = function(){};
+ViewGroup.prototype.getChildList = function() {};
+
+/**
+ * Called when a child does not want this parent and its ancestors to intercept touch events .
+ * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+ * 
+ * @method requestDisallowInterceptTouchEvent
+ * @param {Boolean} disallow
+ * @android
+ * @since 4.0.3
+ */
+ViewGroup.prototype.requestDisallowInterceptTouchEvent = function(disallow) {};
 
 /**
  * Finds a child view with specified id within the layout.
@@ -91,7 +102,7 @@ ViewGroup.prototype.getChildList = function(){};
  * @ios
  * @since 0.1
  */
-ViewGroup.prototype.findChildById = function(id){};
+ViewGroup.prototype.findChildById = function(id) {};
 
 /**
  * This event is called when a view added to this view's hierarchy.

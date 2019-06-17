@@ -16,7 +16,9 @@ function Dialog(params) {
     let _isTransparent,
         _themeStyle, _layout;
 
-    _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
+    _layout = new Flex({
+        backgroundColor: Color.TRANSPARENT
+    });
     // Assign parameters given in constructor
     _themeStyle = Dialog.Android.Style.ThemeDefault;
     if (params && params.android) {
@@ -29,7 +31,9 @@ function Dialog(params) {
 
     Object.defineProperties(self, {
         'layout': {
-            get: function() { return _layout },
+            get: function() {
+                return _layout
+            },
             enumerable: true
         },
         'show': {
@@ -139,8 +143,7 @@ function Dialog(params) {
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
         dialogWindow.setLayout(-1, -1);
-    }
-    else {
+    } else {
         const Application = require("../../application");
 
         dialogWindow = this.nativeObject.getWindow();
@@ -158,8 +161,7 @@ function Dialog(params) {
         if (statusBarHeight > 0) {
             this.layout.height = layoutHeight;
             dialogWindow.setLayout(-1, -2);
-        }
-        else {
+        } else {
             dialogWindow.setLayout(-1, -1);
         }
     }

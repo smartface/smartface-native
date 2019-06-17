@@ -24,31 +24,11 @@ const Format = {
 };
 
 function Image(params) {
-    var self = this;
-    self.android = {};
+    const self = this;
 
-    var androidResources = AndroidConfig.activityResources;
-    if (params) {
-        if (params.bitmap) {
-            self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
-        }
-        else if (params.path) {
-            var bitmap = NativeBitmapFactory.decodeFile(params.path);
-            self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
-        }
-        else if (params.roundedBitmapDrawable) {
-            self.nativeObject = params.roundedBitmapDrawable;
-        }
-        else if (params.drawable) {
-            self.nativeObject = params.drawable;
-        }
-        else {
-            throw new Error("path or bitmap can not be empty for Image!");
-        }
-    }
-    else {
+    const androidResources = AndroidConfig.activityResources;
+    if (typeof(params) !== 'object')
         throw new Error("Constructor parameters needed for Image!");
-    }
 
     Object.defineProperties(this, {
         'height': {
@@ -68,7 +48,9 @@ function Image(params) {
                 var bitmap = self.nativeObject.getBitmap();
                 var stream = new NativeByteArrayOutputStream();
                 bitmap.compress(CompressFormat[1], 100, stream);
-                return new Blob(stream.toByteArray(), { type: "image" });
+                return new Blob(stream.toByteArray(), {
+                    type: "image"
+                });
             },
             enumerable: true
         },
@@ -78,19 +60,26 @@ function Image(params) {
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
                     var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);
-                }
-                catch (err) {
+                } catch (err) {
                     success = false;
                     if (onFailure)
-                        onFailure({ message: err });
+                        onFailure({
+                            message: err
+                        });
                     else
                         return null;
                 }
                 if (success) {
                     if (onSuccess)
-                        onSuccess({ image: new Image({ bitmap: newBitmap }) });
+                        onSuccess({
+                            image: new Image({
+                                bitmap: newBitmap
+                            })
+                        });
                     else
-                        return (new Image({ bitmap: newBitmap }));
+                        return (new Image({
+                            bitmap: newBitmap
+                        }));
                 }
             },
             enumerable: true
@@ -101,19 +90,26 @@ function Image(params) {
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
                     var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
-                }
-                catch (err) {
+                } catch (err) {
                     success = false;
                     if (onFailure)
-                        onFailure({ message: err });
+                        onFailure({
+                            message: err
+                        });
                     else
                         return null;
                 }
                 if (success) {
                     if (onSuccess)
-                        onSuccess({ image: new Image({ bitmap: newBitmap }) });
+                        onSuccess({
+                            image: new Image({
+                                bitmap: newBitmap
+                            })
+                        });
                     else
-                        return (new Image({ bitmap: newBitmap }));
+                        return (new Image({
+                            bitmap: newBitmap
+                        }));
                 }
             },
             enumerable: true
@@ -128,19 +124,26 @@ function Image(params) {
                     var width = bitmap.getWidth(),
                         height = bitmap.getHeight();
                     var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-                }
-                catch (err) {
+                } catch (err) {
                     success = false;
                     if (onFailure)
-                        onFailure({ message: err });
+                        onFailure({
+                            message: err
+                        });
                     else
                         return null;
                 }
                 if (success) {
                     if (onSuccess)
-                        onSuccess({ image: new Image({ bitmap: newBitmap }) });
+                        onSuccess({
+                            image: new Image({
+                                bitmap: newBitmap
+                            })
+                        });
                     else
-                        return (new Image({ bitmap: newBitmap }));
+                        return (new Image({
+                            bitmap: newBitmap
+                        }));
                 }
             },
             enumerable: true
@@ -153,19 +156,26 @@ function Image(params) {
                     var bitmap = self.nativeObject.getBitmap();
                     bitmap.compress(CompressFormat[format], quality, out);
                     var byteArray = out.toByteArray();
-                }
-                catch (err) {
+                } catch (err) {
                     success = false;
                     if (onFailure)
-                        onFailure({ message: err });
+                        onFailure({
+                            message: err
+                        });
                     else
                         return null;
                 }
                 if (success) {
                     if (onSuccess)
-                        onSuccess({ blob: new Blob(byteArray, { type: "image" }) });
+                        onSuccess({
+                            blob: new Blob(byteArray, {
+                                type: "image"
+                            })
+                        });
                     else
-                        return (new Blob(byteArray, { type: "image" }));
+                        return (new Blob(byteArray, {
+                            type: "image"
+                        }));
                 }
             },
             enumerable: true
@@ -186,9 +196,50 @@ function Image(params) {
                     return;
                 self.nativeObject.setAutoMirrored(isAutoMirrored);
             }
+        },
+        'bitmap': {
+            set: function(value) {
+                self.nativeObject = new NativeBitmapDrawable(androidResources, value);
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'path': {
+            set: function(value) {
+                var bitmap = NativeBitmapFactory.decodeFile(value);
+                self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'roundedBitmapDrawable': {
+            set: function(value) {
+                self.nativeObject = value;
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'drawable': {
+            set: function(value) {
+                self.nativeObject = value;
+            },
+            enumerable: false,
+            configurable: false
         }
     });
 
+
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
+    let _systemIcon;
     Object.defineProperties(self.android, {
         'round': {
             value: function(radius) {
@@ -200,6 +251,17 @@ function Image(params) {
                     roundedBitmapDrawable: roundedBitmapDrawable
                 });
             }
+        },
+        'systemIcon': {
+            get: function() {
+                return _systemIcon;
+            },
+            set: function(systemIcon) {
+                const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
+                _systemIcon = systemIcon;
+                self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, Image.systemDrawableId(_systemIcon));
+            },
+            enumerable: true
         }
     });
 
@@ -213,28 +275,47 @@ function Image(params) {
     self.ios.imageWithRenderingMode = function() {
         return self;
     };
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 Object.defineProperties(Image, {
     'createFromFile': {
         value: function(path, width, height) {
-            var imageFile = new File({ path: path });
+            var imageFile = new File({
+                path: path
+            });
             if (imageFile && imageFile.nativeObject) {
                 var bitmap;
                 if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
                     bitmap = imageFile.nativeObject;
-                }
-                else {
+                } else {
                     if (width && height) {
                         bitmap = decodeSampledBitmapFromResource(imageFile.fullPath, width, height);
-                    }
-                    else {
+                    } else {
                         bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
                     }
                 }
-                return (new Image({ bitmap: bitmap }));
+                return (new Image({
+                    bitmap: bitmap
+                }));
             }
             return null;
+        },
+        enumerable: true
+    },
+    'createSystemIcon': {
+        value: function(systemIcon) {
+            return (new Image({
+                android: {
+                    systemIcon: systemIcon
+                }
+            }));
         },
         enumerable: true
     },
@@ -242,7 +323,9 @@ Object.defineProperties(Image, {
         value: function(blob) {
             var newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
             if (newBitmap)
-                return (new Image({ bitmap: newBitmap }));
+                return (new Image({
+                    bitmap: newBitmap
+                }));
             return null;
         },
         enumerable: true
@@ -264,12 +347,15 @@ Object.defineProperty(Image.android, 'createRoundedImage', {
         if (typeof(params.radius) !== "number")
             throw new Error("radius value must be a number.");
 
-        var imageFile = new File({ path: params.path });
+        var imageFile = new File({
+            path: params.path
+        });
         if ((imageFile.type === Path.FILE_TYPE.ASSET) || (imageFile.type === Path.FILE_TYPE.DRAWABLE)) {
-            var image = Image.createFromFile({ path: params.path });
+            var image = Image.createFromFile({
+                path: params.path
+            });
             return image.android.round(params.radius);
-        }
-        else {
+        } else {
             var roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
             return new Image({
                 roundedBitmapDrawable: roundedBitmapDrawable
@@ -329,6 +415,17 @@ Image.createImageFromPath = function(path) {
         path = Image.createFromFile(path);
     return path;
 };
+
+Image.systemDrawableId = function(systemIcon) {
+    let resID;
+    if (systemIcon.constructor === String) {
+        const NativeR = requireClass('android.R');
+        resID = NativeR.drawable["" + systemIcon];
+    } else {
+        resID = systemIcon;
+    }
+    return resID;
+}
 
 Image.iOS = {};
 Image.iOS.RenderingMode = {};

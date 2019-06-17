@@ -10,7 +10,7 @@
  *     var myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
  *     var myHEXColor = Color.create("#FFAACC");
  */
-function Color () {}
+function Color() {}
 
 // Constants
 /**
@@ -150,7 +150,7 @@ Color.WHITE = (red, green, blue);
  * @ios
  * @since 0.1
  */
-Color.create = function(params){}
+Color.create = function(params) {}
 
 /**
  * @method createGradient
@@ -187,7 +187,9 @@ Color.createGradient = function(params) {}
  * @ios
  * @since 0.1
  */
-Color.red = function(color){ return color.red };
+Color.red = function(color) {
+    return color.red
+};
 
 /**
  * Returns the green value of a color instance.
@@ -206,7 +208,9 @@ Color.red = function(color){ return color.red };
  * @ios
  * @since 0.1
  */
-Color.green = function(color){ return color.green };
+Color.green = function(color) {
+    return color.green
+};
 
 /**
  * Returns the blue value of a color instance.
@@ -225,7 +229,9 @@ Color.green = function(color){ return color.green };
  * @ios
  * @since 0.1
  */
-Color.blue = function(color){ return color.blue };
+Color.blue = function(color) {
+    return color.blue
+};
 
 /**
  * Returns the alpha value of a color instance.
@@ -244,7 +250,9 @@ Color.blue = function(color){ return color.blue };
  * @ios
  * @since 0.1
  */
-Color.alpha = function(color){ return color.alpha };
+Color.alpha = function(color) {
+    return color.alpha
+};
 
 /**
  * @enum UI.Color.GradientDirection

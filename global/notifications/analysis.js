@@ -23,7 +23,7 @@ function Notifications() {}
  * @static
  * @since 0.1
  */
-Notifications.cancelAllLocalNotifications = function(){};
+Notifications.cancelAllLocalNotifications = function() {};
 
 /**
  * Register for remote push notifications. For emulator this will not work and always calls onFailure callback.
@@ -40,7 +40,7 @@ Notifications.cancelAllLocalNotifications = function(){};
  * @static
  * @since 0.1
  */
-Notifications.registerForPushNotifications = function(onSuccess, onFailure){};
+Notifications.registerForPushNotifications = function(onSuccess, onFailure) {};
 
 /**
  * Unregister for remote push notifications. For emulator this will not work and does nothing.
@@ -51,7 +51,7 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){};
  * @static
  * @since 0.1
  */
-Notifications.unregisterForPushNotifications = function(){};
+Notifications.unregisterForPushNotifications = function() {};
 
 /**
  * Gets authorization status.
@@ -86,12 +86,87 @@ Notifications.applicationIconBadgeNumber = 0;
  */
 Notifications.scheduledLocalNotifications = null;
 
+
+/**
+ * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background. 
+ * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
+ * 
+ *     @example
+ *     Notifications.onNotificationReceive = function(e){
+ *      console.log("willPresentNotification", e);
+ *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
+ *     };
+ * 
+ * @event onNotificationReceive
+ * @param {Object} data
+ * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
+ * @ios
+ * @android
+ * @static
+ * @since 4.0.3
+ */
+Notifications.onNotificationReceive = function(data) {};
+
+/**
+ * This event triggered when clicked on notification alert
+ * 
+ * @event onNotificationClick
+ * @param {Object} data
+ * @ios
+ * @android
+ * @static
+ * @since 4.0.3
+ */
+Notifications.onNotificationClick = function(data) {};
+
 /**
  * iOS Specific Properties.
  * @class Notifications.iOS
  * @since 3.1.1
  */
 Notifications.iOS = {};
+
+/** 
+ * Constants indicating how to present a notification in a foreground app.
+ * 
+ * @enum {Number} Notifications.iOS.NotificationPresentationOptions 
+ * @since 4.0.3
+ * @ios
+ */
+Notifications.iOS.NotificationPresentationOptions = {};
+
+/** 
+ * Apply the notification's badge value to the app’s icon.
+ * 
+ * @property {Number} BADGE
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.0.3
+ */
+Notifications.iOS.NotificationPresentationOptions.BADGE;
+
+/** 
+ * Play the sound associated with the notification.
+ * 
+ * @property {Number} SOUND
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.0.3
+ */
+Notifications.iOS.NotificationPresentationOptions.SOUND;
+
+/** 
+ * Display the alert using the content provided by the notification.
+ * 
+ * @property {Number} ALERT
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.0.3
+ */
+Notifications.iOS.NotificationPresentationOptions.ALERT;
 
 /** 
  * @enum {Number} Notifications.iOS.AuthorizationStatus 
@@ -197,7 +272,7 @@ Notifications.authorizationStatus.Authorized = 2;
  * 
  */
 Notifications.LocalNotification = function() {};
-    
+
 /**
  * Gets/sets the message displayed in the notification alert. 
  * 
@@ -392,7 +467,7 @@ Notifications.LocalNotification.prototype.ios.userInfo = {};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.schedule = function(){};
+Notifications.LocalNotification.prototype.schedule = function() {};
 
 /**
  * Presents notification to the user immediately.
@@ -403,7 +478,7 @@ Notifications.LocalNotification.prototype.schedule = function(){};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.present = function(){};
+Notifications.LocalNotification.prototype.present = function() {};
 
 /**
  * Cancels this notification even if this is scheduled or presented notification.
@@ -414,7 +489,7 @@ Notifications.LocalNotification.prototype.present = function(){};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.cancel = function(){};
+Notifications.LocalNotification.prototype.cancel = function() {};
 
 /** 
  * @enum {Number} Notifications.Priority 

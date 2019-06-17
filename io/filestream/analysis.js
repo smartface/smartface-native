@@ -17,7 +17,7 @@
  * 
  */
 function FileStream(params) {}
-    
+
 /**
  * Gets the mode of FileStream operation.
  * 
@@ -92,7 +92,7 @@ FileStream.prototype.path;
  * @ios
  * @since 0.1
  */
-FileStream.prototype.close = function(){};
+FileStream.prototype.close = function() {};
 
 /**
  * Gets the {@link Blob} object from FileStream.
@@ -103,7 +103,7 @@ FileStream.prototype.close = function(){};
  * @ios
  * @deprecated since 1.1.10, you may use FileStream.readToEnd() function after you change contentMode of FileStream to FileStream.ContentMode.BINARY.
  */
-FileStream.prototype.readBlob = function(){};
+FileStream.prototype.readBlob = function() {};
 
 /**
  * Gets all characters or blob content from the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
@@ -115,7 +115,7 @@ FileStream.prototype.readBlob = function(){};
  * @ios
  * @since 0.1
  */
-FileStream.prototype.readToEnd = function(){};
+FileStream.prototype.readToEnd = function() {};
 
 /**
  * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
@@ -128,7 +128,7 @@ FileStream.prototype.readToEnd = function(){};
  * @ios
  * @since 0.1
  */
-FileStream.prototype.write = function(content){};
+FileStream.prototype.write = function(content) {};
 
 /**
  * The StreamType determines type of the FileStream operation.

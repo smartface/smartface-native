@@ -87,6 +87,6 @@ Hardware.android.vendorID;
  * @static
  * @since 1.1.12
  */
-Hardware.ios.microphone.requestRecordPermission(function callback(){});
+Hardware.ios.microphone.requestRecordPermission(function callback() {});
 
 module.exports = Hardware;

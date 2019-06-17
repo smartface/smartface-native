@@ -35,20 +35,21 @@ function Location() {}
  * @static
  * @since 4.0.2
  */
-Location.checkSettings = function(priority){};
+Location.checkSettings = function(priority) {};
 
 /**
- * Starts capturing. For android, you should define which priority you want to 
- * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
+ * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;  
+ * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
- * @param {Location.Android.Priority} priority 
+ * @param {Location.Android.Priority} [priority = Location.Android.Priority.HIGH_ACCURACY]
+ * @param {Number} [interval = 1000] 
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Location.start = function(priority){};
+Location.start = function(priority, interval) {};
 
 /**
  * Stops capturing.
@@ -59,7 +60,7 @@ Location.start = function(priority){};
  * @static
  * @since 0.1
  */
-Location.stop = function(){};
+Location.stop = function() {};
 
 /**
  * Callback to capture location events.
@@ -72,7 +73,23 @@ Location.stop = function(){};
  * @ios
  * @since 0.1
  */
-Location.onLocationChanged = function onLocationChanged(event){}
+Location.onLocationChanged = function onLocationChanged(event) {}
+
+
+/**
+ * Gets last known location. The onFailure function will be triggered if no location data has ever been retrieved or unexpected error occurred.
+ * 
+ * @method getLastKnownLocation
+ * @param {Function} onSuccess
+ * @param {Number}   onSuccess.latitude
+ * @param {Number}   onSuccess.longitude
+ * @param {Function} onFailure
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.2
+ */
+Location.getLastKnownLocation = function(onSuccess, onFailure) {};
 
 /**
  * Callback to capture authorization status changes.
@@ -83,7 +100,7 @@ Location.onLocationChanged = function onLocationChanged(event){}
  * @ios
  * @since 2.0.11
  */
-Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status){}
+Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status) {}
 
 /**
  * Gets authorization status.

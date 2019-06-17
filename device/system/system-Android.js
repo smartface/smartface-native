@@ -77,8 +77,7 @@ Object.defineProperties(System, {
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
                 return storedData.getItemAt(0).getText().toString();
-            }
-            else {
+            } else {
                 return null;
             }
         },
@@ -173,6 +172,19 @@ Object.defineProperties(System.android, {
                 }
             }
             return false;
+        },
+        enumerable: true
+    },
+    'getPackageVersion': {
+        value: function(params) {
+            if (params && params.packageName) {
+                try {
+                    var packageVersion = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName, 0).versionName;
+                    params.onSuccess && params.onSuccess(packageVersion)
+                } catch (err) {
+                    params.onError && params.onError(err);
+                }
+            }
         },
         enumerable: true
     }
