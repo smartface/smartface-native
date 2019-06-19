@@ -236,7 +236,8 @@ WebView.prototype.onChangedURL = function(event) {};
 WebView.prototype.onBackButtonPressed = function() {};
 
 /**
- * Callback triggered when the web page has started loading.
+ * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or 
+ * framesets will call onLoad one time for the main frame. 
  *
  * @event onLoad
  * @param {Object} event
@@ -278,7 +279,8 @@ WebView.prototype.onOpenNewWindow = function(event) {};
 WebView.prototype.onError = function(event) {};
 
 /**
- * Callback triggered when a web page has finished loading.
+ * Callback triggered when a web page has finished loading. In Android, this method is called only for main frame. Receiving an onShow callback
+ * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point. 
  *
  * @event onShow
  * @param {Object} event
