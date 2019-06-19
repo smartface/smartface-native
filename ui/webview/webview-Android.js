@@ -473,6 +473,11 @@ const WebView = extend(View)(
                 _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
                 return true;
 
+            },
+            onConsoleMessage: function(sourceId, message, lineNumber, messageLevel){
+                console.log(sourceId, message, lineNumber, messageLevel);
+                
+                return false;
             }
         };
         const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
