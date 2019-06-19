@@ -368,4 +368,68 @@ WebView.prototype.clearAllData = function() {};
  */
 WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
+
+
+WebView.Android = {};
+/**
+ * @enum {String} UI.WebView.Android.ConsoleMessageLevel
+ *
+ * Indicates the console message level
+ * @android
+ * @static
+ * @since 4.0.4
+ *
+ */
+WebView.Android.ConsoleMessageLevel = {};
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.DEBUG = "DEBUG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.ERROR = "ERROR";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.LOG = "LOG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.TIP = "TIP";
+
+/**
+ * 
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.WARNING = "WARNING";
+
 module.exports = WebView;
