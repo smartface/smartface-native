@@ -302,7 +302,7 @@ WebView.prototype.onShow = function(event) {};
  * @param {String} params.lineNumber   The line number of the error.
  * @param {String} params.messageLevel The message level of the report
  * @android
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.prototype.onConsoleMessage = function(params) {};
 
@@ -392,7 +392,7 @@ WebView.Android = {};
  * Indicates the console message level
  * @android
  * @static
- * @since 4.0.5
+ * @since 4.0.4
  *
  */
 WebView.Android.ConsoleMessageLevel = {};
@@ -403,7 +403,7 @@ WebView.Android.ConsoleMessageLevel = {};
  * @android
  * @static
  * @readonly
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.Android.ConsoleMessageLevel.DEBUG = "DEBUG";
 
@@ -413,7 +413,7 @@ WebView.Android.ConsoleMessageLevel.DEBUG = "DEBUG";
  * @android
  * @static
  * @readonly
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.Android.ConsoleMessageLevel.ERROR = "ERROR";
 
@@ -423,7 +423,7 @@ WebView.Android.ConsoleMessageLevel.ERROR = "ERROR";
  * @android
  * @static
  * @readonly
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.Android.ConsoleMessageLevel.LOG = "LOG";
 
@@ -433,7 +433,7 @@ WebView.Android.ConsoleMessageLevel.LOG = "LOG";
  * @android
  * @static
  * @readonly
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.Android.ConsoleMessageLevel.TIP = "TIP";
 
@@ -443,7 +443,7 @@ WebView.Android.ConsoleMessageLevel.TIP = "TIP";
  * @android
  * @static
  * @readonly
- * @since 4.0.5
+ * @since 4.0.4
  */
 WebView.Android.ConsoleMessageLevel.WARNING = "WARNING";
 
