@@ -291,6 +291,21 @@ WebView.prototype.onError = function(event) {};
  */
 WebView.prototype.onShow = function(event) {};
 
+
+/**
+ * Report a JavaScript console message to the host application.
+ *
+ * @event onConsoleMessage
+ * @param {Object} params
+ * @param {Number} params.sourceId     The name of the source file that caused the error.
+ * @param {String} params.message      The error message to report.
+ * @param {String} params.lineNumber   The line number of the error.
+ * @param {String} params.messageLevel The message level of the report
+ * @android
+ * @since 4.0.4
+ */
+WebView.prototype.onConsoleMessage = function(params) {};
+
 /**
  * Clears the resource cache.
  *
