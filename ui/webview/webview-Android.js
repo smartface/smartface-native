@@ -75,8 +75,7 @@ const WebView = extend(View)(
                         _scrollBarEnabled = true;
                         this.nativeObject.setHorizontalScrollBarEnabled(true);
                         this.nativeObject.setVerticalScrollBarEnabled(true);
-                    }
-                    else {
+                    } else {
                         _scrollBarEnabled = false;
                         this.nativeObject.setHorizontalScrollBarEnabled(false);
                         this.nativeObject.setVerticalScrollBarEnabled(false);
@@ -91,8 +90,7 @@ const WebView = extend(View)(
                 set: function(value) {
                     if (value) {
                         this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS 
-                    }
-                    else {
+                    } else {
                         this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
                     }
                 },
@@ -161,8 +159,7 @@ const WebView = extend(View)(
                         if (file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
                             //Generate FILE PATH
                             this.nativeObject.loadUrl("file:///" + file.fullPath);
-                        }
-                        else if (file.type == Path.FILE_TYPE.ASSET) {
+                        } else if (file.type == Path.FILE_TYPE.ASSET) {
                             this.nativeObject.loadUrl("file:///android_asset/" + (file.path.replace("assets://", "")));
                         }
                     }
@@ -180,8 +177,7 @@ const WebView = extend(View)(
                             }
                         });
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
-                    }
-                    else {
+                    } else {
                         this.nativeObject.loadUrl("javascript:" + javascript);
                     }
                 },
@@ -271,8 +267,7 @@ const WebView = extend(View)(
 
                     if (NativeBuild.VERSION.SDK_INT >= 23) {
                         cookieManager.removeAllCookies(null);
-                    }
-                    else {
+                    } else {
                         cookieManager.removeAllCookie();
                     }
 
@@ -311,14 +306,12 @@ const WebView = extend(View)(
                                 typeof _onBackButtonPressedCallback === "function" &&
                                     _onBackButtonPressedCallback();
                                 return true;
-                            }
-                            else {
+                            } else {
                                 return false;
                             }
                         }
                     }));
-                }
-                else {
+                } else {
                     _onBackButtonPressedCallback = onBackButtonPressedCallback;
                 }
             },
@@ -362,8 +355,7 @@ const WebView = extend(View)(
                 return overrideURLChange(url, _canOpenLinkInside);
 
             };
-        }
-        else {
+        } else {
             overrideMethods.shouldOverrideUrlLoading = function(url) {
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({
@@ -393,8 +385,7 @@ const WebView = extend(View)(
                     code: code,
                     url: url
                 });
-            }
-            else {
+            } else {
                 /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
                  * arguments[0] = errorCode, 
                  * arguments[1] = description, 
@@ -435,8 +426,7 @@ const WebView = extend(View)(
                 if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
                     if (event.getAction() === ACTION_UP) {
                         _onTouchEnded && _onTouchEnded();
-                    }
-                    else if (event.getAction() === ACTION_DOWN) {
+                    } else if (event.getAction() === ACTION_DOWN) {
                         _onTouch && _onTouch();
                     }
                 }
@@ -466,8 +456,7 @@ const WebView = extend(View)(
                         mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
                             NativeUri.fromFile(photoFile));
-                    }
-                    else {
+                    } else {
                         takePictureIntent = null;
                     }
                 }
@@ -493,7 +482,12 @@ const WebView = extend(View)(
 
             },
             onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
-                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({ sourceId, message, lineNumber, messageLevel }) : false;
+                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
+                    sourceId,
+                    message,
+                    lineNumber,
+                    messageLevel
+                }) : false;
                 return TypeUtil.isBoolean(result) ? result : false;
             }
         };
@@ -523,8 +517,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
         }
         mUploadMessage.onReceiveValue(uri);
         mUploadMessage = null;
-    }
-    else if (requestCode == WebView.REQUEST_CODE_LOLIPOP) {
+    } else if (requestCode == WebView.REQUEST_CODE_LOLIPOP) {
         var results = null;
         // Check that the response is a good one
         if (resultCode == -1) { // Activity.RESULT_OK
@@ -535,8 +528,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
                     parsedUri.push(NativeUri.parse(mCameraPhotoPath));
                     results = array(parsedUri, "android.net.Uri");
                 }
-            }
-            else {
+            } else {
                 var dataString = data.getDataString();
                 var parsedUri2 = [];
                 parsedUri2.push(NativeUri.parse(dataString));
@@ -568,8 +560,7 @@ function createImageFile() {
 function overrideURLChange(url, _canOpenLinkInside) {
     if (_canOpenLinkInside) {
         return false;
-    }
-    else {
+    } else {
         const NativeIntent = requireClass('android.content.Intent');
         const NativeURI = requireClass('android.net.Uri');
         var action = NativeIntent.ACTION_VIEW;

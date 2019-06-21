@@ -312,7 +312,9 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if (ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) {
+        return;
+    }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
