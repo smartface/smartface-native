@@ -291,6 +291,21 @@ WebView.prototype.onError = function(event) {};
  */
 WebView.prototype.onShow = function(event) {};
 
+
+/**
+ * Report a JavaScript console message to the host application.
+ *
+ * @event onConsoleMessage
+ * @param {Object} params
+ * @param {Number} params.sourceId     The name of the source file that caused the error.
+ * @param {String} params.message      The error message to report.
+ * @param {String} params.lineNumber   The line number of the error.
+ * @param {String} params.messageLevel The message level of the report
+ * @android
+ * @since 4.0.4
+ */
+WebView.prototype.onConsoleMessage = function(params) {};
+
 /**
  * Clears the resource cache.
  *
@@ -367,5 +382,69 @@ WebView.prototype.clearAllData = function() {};
  * @since 4.0.0
  */
 WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+
+
+
+WebView.Android = {};
+/**
+ * @enum {String} UI.WebView.Android.ConsoleMessageLevel
+ *
+ * Indicates the console message level
+ * @android
+ * @static
+ * @since 4.0.4
+ *
+ */
+WebView.Android.ConsoleMessageLevel = {};
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.DEBUG = "DEBUG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.ERROR = "ERROR";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.LOG = "LOG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.TIP = "TIP";
+
+/**
+ * 
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.WARNING = "WARNING";
 
 module.exports = WebView;

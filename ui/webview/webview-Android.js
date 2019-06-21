@@ -6,6 +6,7 @@ const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
 const RequestCodes = require("sf-core/util/Android/requestcodes");
+const TypeUtil = require("../../util/type");
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -319,21 +320,27 @@ const WebView = extend(View)(
         });
 
         // android-only properties
-        Object.defineProperty(this.android, 'clearHistory', {
-            value: function() {
-                this.nativeObject.clearHistory();
-            }.bind(this),
-            enumerable: true,
-            configurable: true
-        });
-
-        // android-only properties
-        Object.defineProperty(this.android, 'clearFormData', {
-            value: function() {
-                this.nativeObject.clearFormData();
-            }.bind(this),
-            enumerable: true,
-            configurable: true
+        let _onConsoleMessage;
+        Object.defineProperties(this.android, {
+            'clearHistory': {
+                value: function() {
+                    this.nativeObject.clearHistory();
+                }.bind(this),
+                enumerable: true,
+                configurable: true
+            },
+            'clearFormData': {
+                value: function() {
+                    this.nativeObject.clearFormData();
+                }.bind(this),
+                enumerable: true,
+                configurable: true
+            },
+            'onConsoleMessage': {
+                get: () => _onConsoleMessage,
+                set: (callback) => _onConsoleMessage = callback,
+                enumerable: true
+            }
         });
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
@@ -473,6 +480,15 @@ const WebView = extend(View)(
                 _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
                 return true;
 
+            },
+            onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
+                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
+                    sourceId,
+                    message,
+                    lineNumber,
+                    messageLevel
+                }) : false;
+                return TypeUtil.isBoolean(result) ? result : false;
             }
         };
         const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
@@ -554,4 +570,15 @@ function overrideURLChange(url, _canOpenLinkInside) {
         return true;
     }
 }
+
+
+WebView.Android = {};
+WebView.Android.ConsoleMessageLevel = Object.freeze({
+    DEBUG: "DEBUG",
+    ERROR: "ERROR",
+    LOG: "LOG",
+    TIP: "TIP",
+    WARNING: "WARNING"
+});
+
 module.exports = WebView;
