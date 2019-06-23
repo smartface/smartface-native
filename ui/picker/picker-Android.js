@@ -4,12 +4,12 @@ const View = require('../view');
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
-const Color = require('sf-core/ui/color');
-
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
+
+const ParentPicker = require("../datapicker/parentPicker");
 
 const Picker = extend(View)(
     function(_super, params) {
@@ -19,14 +19,11 @@ const Picker = extend(View)(
             self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
-
+        
+        var parentPicker = new ParentPicker();
+        console.log()
         var _items = [];
         var _onSelected;
-        var _title = "";
-        var _titleColor = Color.BLACK;
-        var _titleFont;
-        var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText;
-        var buttonCustomize = false;
         Object.defineProperties(this, {
             'items': {
                 get: function() {
@@ -56,108 +53,6 @@ const Picker = extend(View)(
                 },
                 enumerable: true
             },
-            'title': {
-                get: function() {
-                    return _title;
-                },
-                set: function(text) {
-                    if (typeof text === 'string')
-                        _title = text;
-                },
-                enumerable: true
-            },
-            'titleColor': {
-                get: function() {
-                    return _titleColor;
-
-                },
-                set: function(color) {
-                    if (color instanceof Color)
-                        _titleColor = color;
-                },
-                enumerable: true
-            },
-            'titleFont': {
-                get: function() {
-                    return _titleFont;
-                },
-                set: function(font) {
-                    const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _titleFont = font;
-                },
-                enumerable: true
-            },
-            'okColor': {
-                get: function() {
-                    return _okColor;
-                },
-                set: function(color) {
-                    buttonCustomize = true;
-                    if (color instanceof Color)
-                        _okColor = color;
-                },
-                enumerable: true
-            },
-            'cancelColor': {
-                get: function() {
-                    return _cancelColor;
-                },
-                set: function(color) {
-                    buttonCustomize = true;
-                    if (color instanceof Color)
-                        _cancelColor = color;
-                },
-                enumerable: true
-            },
-            'cancelText': {
-                get: function() {
-                    return _cancelText;
-                },
-                set: function(text) {
-                    if (typeof text !== "string")
-                        return;
-                    buttonCustomize = true;
-                    _cancelText = text;
-                },
-                enumerable: true
-            },
-            'okText': {
-                get: function() {
-                    return _okText;
-                },
-                set: function(text) {
-                    if (typeof text !== "string")
-                        return;
-                    buttonCustomize = true;
-                    _okText = text;
-                },
-                enumerable: true
-            },
-            'okFont': {
-                get: function() {
-                    return _okFont;
-                },
-                set: function(font) {
-                    buttonCustomize = true;
-                    const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _okFont = font;
-                },
-                enumerable: true
-            },
-            'cancelFont': {
-                get: function() {
-                    return _cancelFont;
-                },
-                set: function(font) {
-                    buttonCustomize = true;
-                    const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _cancelFont = font;
-                },
-                enumerable: true
-            },
             'show': {
                 value: function(done, cancel) {
                     var layout = addViewToLayout(this.nativeObject);
@@ -184,21 +79,13 @@ const Picker = extend(View)(
                     builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
                     builder = builder.setPositiveButton(NativeRString.ok, doneListener);
 
-                    if (typeof self.title === 'string')
-                        builder = builder.setCustomTitle(creatTitleView.call(self));
+                    builder = builder.setCustomTitle(parentPicker.createTitleView.call(self));
 
                     var alertDialog = builder.show(); //return native alertdailog
-
-                    if (buttonCustomize === true) {
-                        var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
-                        var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
-                        self.cancelText && negativeButton.setText(self.cancelText);
-                        self.okText && positiveButton.setText(self.okText);
-                        self.cancelColor && negativeButton.setTextColor(self.cancelColor.nativeObject);
-                        self.okColor && positiveButton.setTextColor(self.okColor.nativeObject);
-                        self.okFont && positiveButton.setTypeface(self.okFont.nativeObject);
-                        self.cancelFont && negativeButton.setTypeface(self.cancelFont.nativeObject);
-                    }
+                    var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
+                    var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
+                    
+                    parentPicker.makeCustomizeButton.call(self, negativeButton, positiveButton);
                 },
                 enumerable: true
             },
@@ -233,7 +120,18 @@ const Picker = extend(View)(
                 }
             }));
         }
-
+        
+        for (var key in parentPicker) { 
+            Object.defineProperty(this, key, {
+                get: function(param) {
+                    return this[param];
+                }.bind(parentPicker, key),
+                set: function(param, value) {
+                    this[param] = value;
+                }.bind(parentPicker, key),
+                enumerable: true
+            });
+        }
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -269,25 +167,4 @@ function addViewToLayout(nativeObject) {
         17)); // Gravity.CENTER
     return layout;
 }
-
-function creatTitleView() {
-    const picker = this;
-
-    const NativeTextView = requireClass("android.widget.TextView");
-    const Color = require('sf-core/ui/color');
-
-    const CENTER = 17;
-
-    var titleTextView = new NativeTextView(AndroidConfig.activity);
-    titleTextView.setText(picker.title);
-    titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-    titleTextView.setPaddingRelative(10, 20, 10, 10);
-    titleTextView.setGravity(CENTER);
-    picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
-    picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);
-    picker.titleFont && titleTextView.setTextSize(picker.titleFont.size);
-
-    return titleTextView;
-}
-
 module.exports = Picker;

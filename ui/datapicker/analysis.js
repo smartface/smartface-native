@@ -15,15 +15,15 @@
  *     ];
  *     var myDataPicker = new DataPicker({
  *          items: items,
- *          enableMultiplePick: true;
+ *          enableMultiplePick: true,
  *     });
- *     var okCallback = function(params){
+ *     var doneCallback = function(params){
  *          console.log(params.items);
  *     }
  *     var cancelCallback = function(params){
  *          console.log("Canceled");
  *     }
- *     myDataPicker.show();
+ *     myDataPicker.show(doneCallback,cancelCallback);
  */
 function DataPicker(params) {}
 
@@ -37,7 +37,8 @@ function DataPicker(params) {}
 DataPicker.prototype.items = [];
 
 /**
- * This event is called when an item is selected/unselected on a multiple DataPicker.
+ * This event is called when an item is selected/unselected on a DataPicker.
+ * If enableMultipleItems is false, selected will be always true.
  *
  * @param {Number} index
  * @param {Boolean} selected
@@ -45,38 +46,31 @@ DataPicker.prototype.items = [];
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.onMultipleChoiceItems = function onMultipleChoiceItems(index, selected) {};
+DataPicker.prototype.onSelectedItems = function onSelectedItems(index, selected) {};
 
 /**
- * This event is called when an item is selected on a single DataPicker.
+ * Gets/sets title of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @param {Number} index
- * @event onSingleChoiceItem
- * @android
- * @since 4.0.4
- */
-DataPicker.prototype.onSingleChoiceItem = function onSingleChoiceItem(index) {};
-
-/**
- * Gets/sets title of the DataPicker. This property only works with show method. Must set before show method.
- *
- * @property {String} title
+ * @property {String} [title = Picker]
  * @android
  * @since 4.0.4
  */
 DataPicker.prototype.title;
 
 /**
- * Gets/sets titleColor of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets titleColor of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Color} titleColor
+ * @property {UI.Color} [titleColor = Color.BLACK]
  * @android
  * @since 4.0.4
  */
 DataPicker.prototype.titleColor;
 
 /**
- * Gets/sets titleFont of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets titleFont of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
  * @property {UI.Font} titleFont
  * @android
@@ -85,7 +79,8 @@ DataPicker.prototype.titleColor;
 DataPicker.prototype.titleFont;
 
 /**
- * Gets/sets enableMultiplePick of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets enableMultiplePick of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
  * @property {Boolean} [enableMultiplePick = false]
  * @android
@@ -104,89 +99,98 @@ DataPicker.prototype.enableMultiplePick;
 DataPicker.prototype.cancelable;
 
 /**
- * Gets/sets selected item of the DataPicker. If enableMultiplePick is false, selectedItems must be number otherwise array of boolean.
+ * Gets/sets checked item of the DataPicker. 
+ * If enableMultiplePick is false, checkedItems must be number or array of boolean.
+ * If the checkedItems is boolean array, Size of array must be same with items's size
  * This property only works with show method. Must set before show method.
  *
- * @property {Number|Array} [selectedItems = -1 | selectedItems = false]
+ * @property {Number|Array} [checkedItems = -1 | checkedItems = false]
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.selectedItems;
+DataPicker.prototype.checkedItems;
 
 /**
- * Gets/sets backgroundColor of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets backgroundColor of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Color} backgroundColor
+ * @property {UI.Color|String} [backgroundColor = Color.WHITE|backgroundColor = "#FFFFFF"]
  * @android
  * @since 4.0.4
  */
 DataPicker.prototype.backgroundColor;
 
 /**
- * Gets/sets negativeButtonColor of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets cancelButtonColor of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Color} negativeButtonColor
+ * @property {UI.Color} cancelButtonColor
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.negativeButtonColor;
+DataPicker.prototype.cancelButtonColor;
 
 /**
- * Gets/sets negativeButtonFont of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets cancelButtonFont of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Font} negativeButtonFont
+ * @property {UI.Font} cancelButtonFont
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.negativeButtonFont;
+DataPicker.prototype.cancelButtonFont;
 
 /**
- * Gets/sets negativeButtonText of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets cancelButtonText of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {String} negativeButtonText
+ * @property {String} [cancelButtonText = Cancel]
  * @android
  * @since 4.04
  */
-DataPicker.prototype.negativeButtonText;
+DataPicker.prototype.cancelButtonText;
 
 /**
- * Gets/sets positiveButtonColor of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets doneButtonColor of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Color} positiveButtonColor
+ * @property {UI.Color} doneButtonColor
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.positiveButtonColor;
+DataPicker.prototype.doneButtonColor;
 
 /**
- * Gets/sets positiveButtonText of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets doneButtonText of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {String} positiveButtonText
+ * @property {String} [doneButtonText = Ok]
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.positiveButtonText;
+DataPicker.prototype.doneButtonText;
 
 /**
- * Gets/sets positiveButtonText of the DataPicker. This property only works with show method. Must set before show method.
+ * Gets/sets doneButtonFont of the DataPicker. 
+ * This property only works with show method. Must set before show method.
  *
- * @property {UI.Font} positiveButtonText
+ * @property {UI.Font} doneButtonFont
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.positiveButtonFont;
+DataPicker.prototype.doneButtonFont;
 
 /**
  * This function shows DataPicker in a dialog.
  *
- * @param {Function} ok This event is called when user clicks ok button.
- * @param {Object} ok.param
- * @param {Number|Array} ok.param.items If enableMultiplePick is false, items will be number otherwise array of selected items 
+ * @param {Function} done This event is called when user clicks done button.
+ * @param {Object} done.param
+ * @param {Number|Array} done.param.items If enableMultiplePick is false, items will be index of selected item, otherwise array of selected items's indexs
  * @param {Function} cancel This event is called when user clicks cancel button.
  * @method show
  * @android
  * @since 4.0.4
  */
-DataPicker.prototype.show = function(ok, cancel) {};
+DataPicker.prototype.show = function(done, cancel) {};
 
 module.exports = DataPicker;
