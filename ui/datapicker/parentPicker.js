@@ -3,7 +3,8 @@ const Color = require("sf-core/ui/color");
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
-const parentPicker = function(){
+const parentPicker = function(subClass){
+    var self = subClass;
     
     var _title = "Picker";
     var _titleColor = Color.BLACK;
@@ -13,8 +14,7 @@ const parentPicker = function(){
     var _cancelButtonText = "Cancel";
     var _cancelButtonFont, _cancelButtonColor;
 
-    var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText;
-    Object.defineProperties(this, {
+    Object.defineProperties(self, {
         'title': {
             get: function() {
                 return _title;
@@ -107,74 +107,10 @@ const parentPicker = function(){
                         _doneButtonFont = font;
             },
             enumerable: true
-        },
-        'okColor': {
-            get: function() {
-                return _okColor;
-            },
-            set: function(color) {
-                if (color instanceof Color)
-                    _okColor = color;
-            },
-            enumerable: true
-        },
-        'cancelColor': {
-            get: function() {
-                return _cancelColor;
-            },
-            set: function(color) {
-                if (color instanceof Color)
-                    _cancelColor = color;
-            },
-            enumerable: true
-        },
-        'cancelText': {
-            get: function() {
-                return _cancelText;
-            },
-            set: function(text) {
-                if (typeof text !== "string")
-                    return;
-                _cancelText = text;
-            },
-            enumerable: true
-        },
-        'okText': {
-            get: function() {
-                return _okText;
-            },
-            set: function(text) {
-                if (typeof text !== "string")
-                    return;
-                _okText = text;
-            },
-            enumerable: true
-        },
-        'okFont': {
-            get: function() {
-                return _okFont;
-            },
-            set: function(font) {
-                const Font = require('sf-core/ui/font');
-                if (font instanceof Font)
-                    _okFont = font;
-            },
-            enumerable: true
-        },
-        'cancelFont': {
-            get: function() {
-                return _cancelFont;
-            },
-            set: function(font) {
-                const Font = require('sf-core/ui/font');
-                if (font instanceof Font)
-                    _cancelFont = font;
-            },
-            enumerable: true
         }
     });
     
-    this.createTitleView = function() {
+    self.createTitleView = function() {
         const picker = this;
     
         const NativeTextView = requireClass("android.widget.TextView");
@@ -194,7 +130,7 @@ const parentPicker = function(){
         return titleTextView;
     }
     
-    this.makeCustomizeButton = function(negativeButton,positiveButton){
+    self.makeCustomizeButton = function(negativeButton,positiveButton){
         const picker = this;
     
         picker.cancelButtonText && negativeButton.setText(picker.cancelButtonText);
@@ -203,13 +139,6 @@ const parentPicker = function(){
         picker.doneButtonColor && positiveButton.setTextColor(picker.doneButtonColor.nativeObject);
         picker.cancelButtonFont && negativeButton.setTypeface(picker.cancelButtonFont.nativeObject);
         picker.doneButtonFont && positiveButton.setTypeface(picker.doneButtonFont.nativeObject);
-        
-        picker.cancelText && negativeButton.setText(picker.cancelText);
-        picker.okText && positiveButton.setText(picker.okText);
-        picker.cancelColor && negativeButton.setTextColor(picker.cancelColor.nativeObject);
-        picker.okColor && positiveButton.setTextColor(picker.okColor.nativeObject);
-        picker.cancelFont && negativeButton.setTypeface(picker.cancelFont.nativeObject);
-        picker.okFont && positiveButton.setTypeface(picker.okFont.nativeObject);
     }
 }
 

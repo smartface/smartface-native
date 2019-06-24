@@ -16,7 +16,7 @@ function DataPicker(params) {
         self.nativeObject = new NativeAlertDialog.Builder(activity);
     }
     
-    var parentPicker = new ParentPicker();
+    ParentPicker(self);
     
     var _items = [];
     var _enableMultiplePick = false;
@@ -113,7 +113,7 @@ function DataPicker(params) {
                         onClick: function(dialogInterface, i, b) {
                             _onSelectedItems && _onSelectedItems(i,b);
                             if(b){
-                                _selectedItems.push(_items[i]);
+                                _selectedItems.push(i);
                             }else{
                                 if(_selectedItems.indexOf(i) > -1)
                                     _selectedItems.splice(_selectedItems.indexOf(i), 1);
@@ -143,7 +143,7 @@ function DataPicker(params) {
                     self.nativeObject.setSingleChoiceItems(array(_items,"java.lang.String"), _checkedItem, choosingItemListener);
                 }
                 
-                self.nativeObject.setCustomTitle(parentPicker.createTitleView.call(self));
+                self.nativeObject.setCustomTitle(self.createTitleView.call(self));
                 self.nativeObject.setCancelable(_cancelable);
                 
                 var alertDialog = self.nativeObject.show();
@@ -154,7 +154,7 @@ function DataPicker(params) {
                 var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
                 var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
                 
-                parentPicker.makeCustomizeButton.call(self, negativeButton, positiveButton);
+                self.makeCustomizeButton.call(self, negativeButton, positiveButton);
             },
             enumerable: true
         },
@@ -166,22 +166,7 @@ function DataPicker(params) {
             configurable: true
         }
     });
-    
-    for (var key in parentPicker) {
-        if(key !== "okColor" || key !== "okText" || key !== "okFont" ||
-            key !== "cancelColor" || key !== "cancelText" || key !== "cancelFont"){
-            Object.defineProperty(this, key, {
-                get: function(param) {
-                    return this[param];
-                }.bind(parentPicker, key),
-                set: function(param, value) {
-                    this[param] = value;
-                }.bind(parentPicker, key),
-                enumerable: true
-            });
-        }
-    }
-    
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
