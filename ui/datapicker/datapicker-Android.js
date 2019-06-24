@@ -167,16 +167,19 @@ function DataPicker(params) {
         }
     });
     
-    for (var key in parentPicker) { 
-        Object.defineProperty(this, key, {
-            get: function(param) {
-                return this[param];
-            }.bind(parentPicker, key),
-            set: function(param, value) {
-                this[param] = value;
-            }.bind(parentPicker, key),
-            enumerable: true
-        });
+    for (var key in parentPicker) {
+        if(key !== "okColor" || key !== "okText" || key !== "okFont" ||
+            key !== "cancelColor" || key !== "cancelText" || key !== "cancelFont"){
+            Object.defineProperty(this, key, {
+                get: function(param) {
+                    return this[param];
+                }.bind(parentPicker, key),
+                set: function(param, value) {
+                    this[param] = value;
+                }.bind(parentPicker, key),
+                enumerable: true
+            });
+        }
     }
     
     if (params) {

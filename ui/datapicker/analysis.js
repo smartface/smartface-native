@@ -1,6 +1,6 @@
 /**
  * @class UI.DataPicker
- * @since 4.0.4
+ * @since 4.0.5
  *
  * Data is a dialog where users are able to pick item/items on.
  *
@@ -32,7 +32,7 @@ function DataPicker(params) {}
  *
  * @property {Array} items
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.items = [];
 
@@ -44,7 +44,7 @@ DataPicker.prototype.items = [];
  * @param {Boolean} selected
  * @event onMultipleChoiceItems
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.onSelectedItems = function onSelectedItems(index, selected) {};
 
@@ -54,7 +54,7 @@ DataPicker.prototype.onSelectedItems = function onSelectedItems(index, selected)
  *
  * @property {String} [title = Picker]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.title;
 
@@ -64,7 +64,7 @@ DataPicker.prototype.title;
  *
  * @property {UI.Color} [titleColor = Color.BLACK]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.titleColor;
 
@@ -74,7 +74,7 @@ DataPicker.prototype.titleColor;
  *
  * @property {UI.Font} titleFont
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.titleFont;
 
@@ -84,7 +84,7 @@ DataPicker.prototype.titleFont;
  *
  * @property {Boolean} [enableMultiplePick = false]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.enableMultiplePick;
 
@@ -94,7 +94,7 @@ DataPicker.prototype.enableMultiplePick;
  *
  * @property {Boolean} [cancelable = true]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.cancelable;
 
@@ -106,7 +106,7 @@ DataPicker.prototype.cancelable;
  *
  * @property {Number|Array} [checkedItems = -1 | checkedItems = false]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.checkedItems;
 
@@ -116,7 +116,7 @@ DataPicker.prototype.checkedItems;
  *
  * @property {UI.Color|String} [backgroundColor = Color.WHITE|backgroundColor = "#FFFFFF"]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.backgroundColor;
 
@@ -126,7 +126,7 @@ DataPicker.prototype.backgroundColor;
  *
  * @property {UI.Color} cancelButtonColor
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.cancelButtonColor;
 
@@ -136,7 +136,7 @@ DataPicker.prototype.cancelButtonColor;
  *
  * @property {UI.Font} cancelButtonFont
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.cancelButtonFont;
 
@@ -146,7 +146,7 @@ DataPicker.prototype.cancelButtonFont;
  *
  * @property {String} [cancelButtonText = Cancel]
  * @android
- * @since 4.04
+ * @since 4.0.5
  */
 DataPicker.prototype.cancelButtonText;
 
@@ -156,7 +156,7 @@ DataPicker.prototype.cancelButtonText;
  *
  * @property {UI.Color} doneButtonColor
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.doneButtonColor;
 
@@ -166,7 +166,7 @@ DataPicker.prototype.doneButtonColor;
  *
  * @property {String} [doneButtonText = Ok]
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.doneButtonText;
 
@@ -176,7 +176,7 @@ DataPicker.prototype.doneButtonText;
  *
  * @property {UI.Font} doneButtonFont
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.doneButtonFont;
 
@@ -189,7 +189,7 @@ DataPicker.prototype.doneButtonFont;
  * @param {Function} cancel This event is called when user clicks cancel button.
  * @method show
  * @android
- * @since 4.0.4
+ * @since 4.0.5
  */
 DataPicker.prototype.show = function(done, cancel) {};
 

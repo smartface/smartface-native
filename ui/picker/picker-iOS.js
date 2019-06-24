@@ -205,6 +205,94 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
+        
+        var _cancelColor;
+        Object.defineProperty(this, 'cancelColor', {
+            get: function() {
+                return _cancelColor;
+            },
+            set: function(value) {
+                _cancelColor = value;
+            },
+            enumerable: true
+        });
+
+        var _cancelHighlightedColor;
+        Object.defineProperty(this.ios, 'cancelHighlightedColor', {
+            get: function() {
+                return _cancelHighlightedColor;
+            },
+            set: function(value) {
+                _cancelHighlightedColor = value;
+            },
+            enumerable: true
+        });
+
+        var _cancelFont;
+        Object.defineProperty(this, 'cancelFont', {
+            get: function() {
+                return _cancelFont;
+            },
+            set: function(value) {
+                _cancelFont = value;
+            },
+            enumerable: true
+        });
+
+        var _okColor;
+        Object.defineProperty(this, 'okColor', {
+            get: function() {
+                return _okColor;
+            },
+            set: function(value) {
+                _okColor = value;
+            },
+            enumerable: true
+        });
+
+        var _okHighlightedColor;
+        Object.defineProperty(this.ios, 'okHighlightedColor', {
+            get: function() {
+                return _okHighlightedColor;
+            },
+            set: function(value) {
+                _okHighlightedColor = value;
+            },
+            enumerable: true
+        });
+
+        var _okFont;
+        Object.defineProperty(this, 'okFont', {
+            get: function() {
+                return _okFont;
+            },
+            set: function(value) {
+                _okFont = value;
+            },
+            enumerable: true
+        });
+
+        var _okText;
+        Object.defineProperty(this, 'okText', {
+            get: function() {
+                return _okText;
+            },
+            set: function(value) {
+                _okText = value;
+            },
+            enumerable: true
+        });
+
+        var _cancelText;
+        Object.defineProperty(this, 'cancelText', {
+            get: function() {
+                return _cancelText;
+            },
+            set: function(value) {
+                _cancelText = value;
+            },
+            enumerable: true
+        });
 
         self.show = function(done, cancel) {
             var doneFunc = function(e) {
@@ -233,7 +321,16 @@ const Picker = extend(View)(
                 self.ios.doneButtonHighlightedColor ? self.ios.doneButtonHighlightedColor.nativeObject : undefined,
                 self.doneButtonFont ? self.doneButtonFont : undefined,
                 self.doneButtonText ? self.doneButtonText : undefined,
-                self.cancelButtonText ? self.cancelButtonText : undefined
+                self.cancelButtonText ? self.cancelButtonText : undefined,
+                
+                self.cancelColor ? self.cancelColor.nativeObject : undefined,
+                self.ios.cancelHighlightedColor ? self.ios.cancelHighlightedColor.nativeObject : undefined,
+                self.cancelFont ? self.cancelFont : undefined,
+                self.okColor ? self.okColor.nativeObject : undefined,
+                self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
+                self.okFont ? self.okFont : undefined,
+                self.okText ? self.okText : undefined,
+                self.cancelText ? self.cancelText : undefined
             );
         }
         // Assign parameters given in constructor

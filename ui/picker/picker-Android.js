@@ -21,7 +21,7 @@ const Picker = extend(View)(
         _super(this);
         
         var parentPicker = new ParentPicker();
-        console.log()
+
         var _items = [];
         var _onSelected;
         Object.defineProperties(this, {

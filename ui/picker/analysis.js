@@ -115,13 +115,101 @@ Picker.prototype.titleColor;
  */
 Picker.prototype.titleFont;
 
+
+/**
+ * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} cancelColor
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.cancelColor;
+
+/**
+ * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Font} cancelFont
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.cancelFont;
+
+/**
+ * Gets/sets cancelText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} cancelText
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.3
+ */
+Picker.prototype.cancelText;
+
+/**
+ * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} cancelHighlightedColor
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.cancelHighlightedColor;
+
+/**
+ * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} okColor
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.okColor;
+
+/**
+ * Gets/sets okText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} okText
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.3
+ */
+Picker.prototype.okText;
+
+/**
+ * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} okHighlightedColor
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.okHighlightedColor;
+
+/**
+ * Gets/sets okFont of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Font} okFont
+ * @android
+ * @ios
+ * @deprecated
+ * @since 3.1.1
+ */
+Picker.prototype.okFont;
+
+
 /**
  * Gets/sets cancelButtonColor of the picker. This property only works with show method. Must set before show method.
  *
  * @property {UI.Color} cancelButtonColor
  * @android
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.cancelButtonColor;
 
@@ -130,7 +218,7 @@ Picker.prototype.cancelButtonColor;
  *
  * @property {UI.Color} cancelButtonHighlightedColor
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.cancelButtonHighlightedColor;
 
@@ -140,7 +228,7 @@ Picker.prototype.cancelButtonHighlightedColor;
  * @property {UI.Font} cancelButtonFont
  * @android
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.cancelButtonFont;
 
@@ -150,7 +238,7 @@ Picker.prototype.cancelButtonFont;
  * @property {String} cancelButtonText
  * @android
  * @ios
- * @since 3.1.3
+ * @since 4.0.5
  */
 Picker.prototype.cancelButtonText;
 
@@ -160,7 +248,7 @@ Picker.prototype.cancelButtonText;
  * @property {UI.Color} doneButtonColor
  * @android
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.doneButtonColor;
 
@@ -170,7 +258,7 @@ Picker.prototype.doneButtonColor;
  * @property {String} doneButtonText
  * @android
  * @ios
- * @since 3.1.3
+ * @since 4.0.5
  */
 Picker.prototype.doneButtonText;
 
@@ -179,7 +267,7 @@ Picker.prototype.doneButtonText;
  *
  * @property {UI.Color} doneButtonHighlightedColor
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.doneButtonHighlightedColor;
 
@@ -189,7 +277,7 @@ Picker.prototype.doneButtonHighlightedColor;
  * @property {UI.Font} doneButtonFont
  * @android
  * @ios
- * @since 3.1.1
+ * @since 4.0.5
  */
 Picker.prototype.doneButtonFont;
 
