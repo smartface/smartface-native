@@ -236,7 +236,8 @@ WebView.prototype.onChangedURL = function(event) {};
 WebView.prototype.onBackButtonPressed = function() {};
 
 /**
- * Callback triggered when the web page is loaded.
+ * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or 
+ * framesets will call onLoad one time for the main frame. 
  *
  * @event onLoad
  * @param {Object} event
@@ -278,7 +279,8 @@ WebView.prototype.onOpenNewWindow = function(event) {};
 WebView.prototype.onError = function(event) {};
 
 /**
- * Callback triggered when a web page is loaded and displayed on the webview.
+ * Callback triggered when a web page has finished loading. In Android, this method is called only for main frame. Receiving an onShow callback
+ * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point. 
  *
  * @event onShow
  * @param {Object} event
@@ -288,6 +290,21 @@ WebView.prototype.onError = function(event) {};
  * @since 0.1
  */
 WebView.prototype.onShow = function(event) {};
+
+
+/**
+ * Report a JavaScript console message to the host application.
+ *
+ * @event onConsoleMessage
+ * @param {Object} params
+ * @param {Number} params.sourceId     The name of the source file that caused the error.
+ * @param {String} params.message      The error message to report.
+ * @param {String} params.lineNumber   The line number of the error.
+ * @param {String} params.messageLevel The message level of the report
+ * @android
+ * @since 4.0.4
+ */
+WebView.prototype.onConsoleMessage = function(params) {};
 
 /**
  * Clears the resource cache.
@@ -365,5 +382,69 @@ WebView.prototype.clearAllData = function() {};
  * @since 4.0.0
  */
 WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+
+
+
+WebView.Android = {};
+/**
+ * @enum {String} UI.WebView.Android.ConsoleMessageLevel
+ *
+ * Indicates the console message level
+ * @android
+ * @static
+ * @since 4.0.4
+ *
+ */
+WebView.Android.ConsoleMessageLevel = {};
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.DEBUG = "DEBUG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.ERROR = "ERROR";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.LOG = "LOG";
+
+/**
+ *
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.TIP = "TIP";
+
+/**
+ * 
+ * @property {String} 
+ * @android
+ * @static
+ * @readonly
+ * @since 4.0.4
+ */
+WebView.Android.ConsoleMessageLevel.WARNING = "WARNING";
 
 module.exports = WebView;

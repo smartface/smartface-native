@@ -368,4 +368,8 @@ WebView.removeAllData = function() {
     }
 }
 
+//Android specific enums object
+WebView.Android = {};
+WebView.Android.ConsoleMessageLevel = {};
+
 module.exports = WebView;
