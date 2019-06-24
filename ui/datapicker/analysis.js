@@ -42,7 +42,7 @@ DataPicker.prototype.items = [];
  *
  * @param {Number} index
  * @param {Boolean} selected
- * @event onMultipleChoiceItems
+ * @event onSelectedItems
  * @android
  * @since 4.0.5
  */
