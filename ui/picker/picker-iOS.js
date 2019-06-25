@@ -118,94 +118,6 @@ const Picker = extend(View)(
             enumerable: true
         });
 
-        var _cancelButtonColor;
-        Object.defineProperty(this, 'cancelButtonColor', {
-            get: function() {
-                return _cancelButtonColor;
-            },
-            set: function(value) {
-                _cancelButtonColor = value;
-            },
-            enumerable: true
-        });
-
-        var _cancelButtonHighlightedColor;
-        Object.defineProperty(this.ios, 'cancelButtonHighlightedColor', {
-            get: function() {
-                return _cancelButtonHighlightedColor;
-            },
-            set: function(value) {
-                _cancelButtonHighlightedColor = value;
-            },
-            enumerable: true
-        });
-
-        var _cancelButtonFont;
-        Object.defineProperty(this, 'cancelButtonFont', {
-            get: function() {
-                return _cancelButtonFont;
-            },
-            set: function(value) {
-                _cancelButtonFont = value;
-            },
-            enumerable: true
-        });
-
-        var _doneButtonColor;
-        Object.defineProperty(this, 'doneButtonColor', {
-            get: function() {
-                return _doneButtonColor;
-            },
-            set: function(value) {
-                _doneButtonColor = value;
-            },
-            enumerable: true
-        });
-
-        var _doneButtonHighlightedColor;
-        Object.defineProperty(this.ios, 'doneButtonHighlightedColor', {
-            get: function() {
-                return _doneButtonHighlightedColor;
-            },
-            set: function(value) {
-                _doneButtonHighlightedColor = value;
-            },
-            enumerable: true
-        });
-
-        var _doneButtonFont;
-        Object.defineProperty(this, 'doneButtonFont', {
-            get: function() {
-                return _doneButtonFont;
-            },
-            set: function(value) {
-                _doneButtonFont = value;
-            },
-            enumerable: true
-        });
-
-        var _doneButtonText;
-        Object.defineProperty(this, 'doneButtonText', {
-            get: function() {
-                return _doneButtonText;
-            },
-            set: function(value) {
-                _doneButtonText = value;
-            },
-            enumerable: true
-        });
-
-        var _cancelButtonText;
-        Object.defineProperty(this, 'cancelButtonText', {
-            get: function() {
-                return _cancelButtonText;
-            },
-            set: function(value) {
-                _cancelButtonText = value;
-            },
-            enumerable: true
-        });
-        
         var _cancelColor;
         Object.defineProperty(this, 'cancelColor', {
             get: function() {
@@ -294,10 +206,10 @@ const Picker = extend(View)(
             enumerable: true
         });
 
-        self.show = function(done, cancel) {
-            var doneFunc = function(e) {
-                if (typeof done === "function") {
-                    done({
+        self.show = function(ok, cancel) {
+            var okFunc = function(e) {
+                if (typeof ok === "function") {
+                    ok({
                         index: e.index
                     });
                 }
@@ -311,18 +223,9 @@ const Picker = extend(View)(
             self.nativeObject.show(self.nativeObject,
                 (self.title === undefined) ? "" : self.title,
                 cancelFunc,
-                doneFunc,
+                okFunc,
                 self.titleColor ? self.titleColor.nativeObject : undefined,
                 self.titleFont ? self.titleFont : undefined,
-                self.cancelButtonColor ? self.cancelButtonColor.nativeObject : undefined,
-                self.ios.cancelButtonHighlightedColor ? self.ios.cancelButtonHighlightedColor.nativeObject : undefined,
-                self.cancelButtonFont ? self.cancelButtonFont : undefined,
-                self.doneButtonColor ? self.doneButtonColor.nativeObject : undefined,
-                self.ios.doneButtonHighlightedColor ? self.ios.doneButtonHighlightedColor.nativeObject : undefined,
-                self.doneButtonFont ? self.doneButtonFont : undefined,
-                self.doneButtonText ? self.doneButtonText : undefined,
-                self.cancelButtonText ? self.cancelButtonText : undefined,
-                
                 self.cancelColor ? self.cancelColor.nativeObject : undefined,
                 self.ios.cancelHighlightedColor ? self.ios.cancelHighlightedColor.nativeObject : undefined,
                 self.cancelFont ? self.cancelFont : undefined,
