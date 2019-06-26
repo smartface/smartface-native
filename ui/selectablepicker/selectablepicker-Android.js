@@ -8,7 +8,7 @@ const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 const ParentPicker = require("./parentPicker");
 
-function DataPicker(params) {
+function SelectablePicker(params) {
     var self = this;
     var activity = AndroidConfig.activity;
     
@@ -66,7 +66,7 @@ function DataPicker(params) {
             set: function(checkedItems) {
                 if(_enableMultiplePick && TypeUtil.isArray(checkedItems)){
                     _checkedItems = checkedItems;
-                }else if(TypeUtil.isNumeric(checkedItems)){
+                }else if(TypeUtil.isNumeric(checkedItems) && (checkedItems > -1)){
                     _checkedItem = checkedItems;
                 }
             },
@@ -160,7 +160,7 @@ function DataPicker(params) {
         },
         'toString': {
             value: function() {
-                return 'DataPicker';
+                return 'SelectablePicker';
             },
             enumerable: true,
             configurable: true
@@ -174,4 +174,4 @@ function DataPicker(params) {
     }
     
 }
-module.exports = DataPicker;
+module.exports = SelectablePicker;

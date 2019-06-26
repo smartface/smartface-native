@@ -1,11 +1,11 @@
 /**
- * @class UI.DataPicker
+ * @class UI.SelectablePicker
  * @since 4.0.5
  *
- * Data is a dialog where users are able to pick item/items on.
+ * SelectablePicker is a dialog where users are able to pick item/items on.
  *
  *     @example
- *     const DataPicker = require('sf-core/ui/datapicker');
+ *     const SelectablePicker = require('sf-core/ui/selectablepicker');
  *     var items = [
  *          "item1",
  *          "item2",
@@ -13,9 +13,12 @@
  *          "item4",
  *          "item5"
  *     ];
- *     var myDataPicker = new DataPicker({
- *          items: items,
+ * 
+ *     var checkedItems = [false,false,true,false,false]
+ *     var mySelectablePicker = new SelectablePicker({
  *          enableMultiplePick: true,
+ *          items: items,
+ *          checkedItems: checkedItems
  *     });
  *     var doneCallback = function(params){
  *          console.log(params.items);
@@ -23,21 +26,21 @@
  *     var cancelCallback = function(params){
  *          console.log("Canceled");
  *     }
- *     myDataPicker.show(doneCallback,cancelCallback);
+ *     SelectablePicker.show(doneCallback,cancelCallback);
  */
-function DataPicker(params) {}
+function SelectablePicker(params) {}
 
 /**
- * Gets/sets items of the DataPicker.
+ * Gets/sets items of the SelectablePicker.
  *
  * @property {Array} items
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.items = [];
+SelectablePicker.prototype.items = [];
 
 /**
- * This event is called when an item is selected/unselected on a DataPicker.
+ * This event is called when an item is selected/unselected on the SelectablePicker.
  * If enableMultipleItems is false, selected will be always true.
  *
  * @param {Number} index
@@ -46,142 +49,142 @@ DataPicker.prototype.items = [];
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.onSelectedItems = function onSelectedItems(index, selected) {};
+SelectablePicker.prototype.onSelectedItems = function onSelectedItems(index, selected) {};
 
 /**
- * Gets/sets title of the DataPicker. 
+ * Gets/sets title of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {String} [title = Picker]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.title;
+SelectablePicker.prototype.title;
 
 /**
- * Gets/sets titleColor of the DataPicker. 
+ * Gets/sets titleColor of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Color} [titleColor = Color.BLACK]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.titleColor;
+SelectablePicker.prototype.titleColor;
 
 /**
- * Gets/sets titleFont of the DataPicker. 
+ * Gets/sets titleFont of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Font} titleFont
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.titleFont;
+SelectablePicker.prototype.titleFont;
 
 /**
- * Gets/sets enableMultiplePick of the DataPicker. 
+ * Gets/sets enableMultiplePick of the SelectablePicker. You should set this property before the others. Otherwise SelectablePicker will not work properly
  * This property only works with show method. Must set before show method.
  *
  * @property {Boolean} [enableMultiplePick = false]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.enableMultiplePick;
+SelectablePicker.prototype.enableMultiplePick;
 
 /**
- * Gets/sets cancelable of the DataPicker. If click outside of dialog, it will be canceled.
+ * Gets/sets cancelable of the SelectablePicker. If click outside of dialog, it will be canceled.
  * This property only works with show method. Must set before show method.
  *
  * @property {Boolean} [cancelable = true]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.cancelable;
+SelectablePicker.prototype.cancelable;
 
 /**
- * Gets/sets checked item of the DataPicker. 
+ * Gets/sets checked item of the SelectablePicker. 
  * If enableMultiplePick is false, checkedItems must be number or array of boolean.
- * If the checkedItems is boolean array, Size of array must be same with items's size
+ * If the checkedItems is boolean array, size of array must be same with items's size
  * This property only works with show method. Must set before show method.
  *
  * @property {Number|Array} [checkedItems = -1 | checkedItems = false]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.checkedItems;
+SelectablePicker.prototype.checkedItems;
 
 /**
- * Gets/sets backgroundColor of the DataPicker. 
+ * Gets/sets backgroundColor of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Color|String} [backgroundColor = Color.WHITE|backgroundColor = "#FFFFFF"]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.backgroundColor;
+SelectablePicker.prototype.backgroundColor;
 
 /**
- * Gets/sets cancelButtonColor of the DataPicker. 
+ * Gets/sets cancelButtonColor of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Color} cancelButtonColor
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.cancelButtonColor;
+SelectablePicker.prototype.cancelButtonColor;
 
 /**
- * Gets/sets cancelButtonFont of the DataPicker. 
+ * Gets/sets cancelButtonFont of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Font} cancelButtonFont
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.cancelButtonFont;
+SelectablePicker.prototype.cancelButtonFont;
 
 /**
- * Gets/sets cancelButtonText of the DataPicker. 
+ * Gets/sets cancelButtonText of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {String} [cancelButtonText = Cancel]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.cancelButtonText;
+SelectablePicker.prototype.cancelButtonText;
 
 /**
- * Gets/sets doneButtonColor of the DataPicker. 
+ * Gets/sets doneButtonColor of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Color} doneButtonColor
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.doneButtonColor;
+SelectablePicker.prototype.doneButtonColor;
 
 /**
- * Gets/sets doneButtonText of the DataPicker. 
+ * Gets/sets doneButtonText of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {String} [doneButtonText = Ok]
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.doneButtonText;
+SelectablePicker.prototype.doneButtonText;
 
 /**
- * Gets/sets doneButtonFont of the DataPicker. 
+ * Gets/sets doneButtonFont of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
  * @property {UI.Font} doneButtonFont
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.doneButtonFont;
+SelectablePicker.prototype.doneButtonFont;
 
 /**
- * This function shows DataPicker in a dialog.
+ * This function shows SelectablePicker in a dialog.
  *
  * @param {Function} done This event is called when user clicks done button.
  * @param {Object} done.param
@@ -191,6 +194,6 @@ DataPicker.prototype.doneButtonFont;
  * @android
  * @since 4.0.5
  */
-DataPicker.prototype.show = function(done, cancel) {};
+SelectablePicker.prototype.show = function(done, cancel) {};
 
-module.exports = DataPicker;
+module.exports = SelectablePicker;
