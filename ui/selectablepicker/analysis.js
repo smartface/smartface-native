@@ -14,7 +14,7 @@
  *          "item5"
  *     ];
  * 
- *     var checkedItems = [false,false,true,false,false]
+ *     var checkedItems = [3,2]
  *     var mySelectablePicker = new SelectablePicker({
  *          multiSelectEnabled: true,
  *          items: items,
@@ -41,7 +41,7 @@ SelectablePicker.prototype.items = [];
 
 /**
  * This event is called when an item is selected/unselected on the SelectablePicker.
- * If enableMultipleItems is false, selected will be always true.
+ * If multiSelectEnabled is false, selected will be always true.
  *
  * @param {Number} index
  * @param {Boolean} selected
@@ -102,7 +102,7 @@ SelectablePicker.prototype.multiSelectEnabled;
 SelectablePicker.prototype.cancelable;
 
 /**
- * Gets/sets checked item of the SelectablePicker. 
+ * Gets/sets checkedItems of the SelectablePicker. 
  * If multiSelectEnabled is false, checkedItems must be a spesific index of the items array or array of index.
  * This property only works with show method. Must set before show method.
  *
