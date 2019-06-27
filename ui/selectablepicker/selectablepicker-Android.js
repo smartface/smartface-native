@@ -19,13 +19,13 @@ function SelectablePicker(params) {
     ParentPicker(self);
     
     var _items = [];
-    var _enableMultiplePick = false;
+    var _multiSelectEnabled = false;
     var _cancelable = true;
     var _checkedItem = -1;
     var _checkedItems = [];
     var _backgroundColor;
     var _selectedItems = [];
-    var _onSelectedItems;
+    var _onSelected;
     
     Object.defineProperties(this, {
         'items': {
@@ -38,13 +38,13 @@ function SelectablePicker(params) {
             },
             enumerable: true
         },
-        'enableMultiplePick': {
+        'multiSelectEnabled': {
             get: function() {
-                return _enableMultiplePick;
+                return _multiSelectEnabled;
             },
-            set: function(enableMultiplePick) {
-                if(TypeUtil.isBoolean(enableMultiplePick))
-                    _enableMultiplePick = enableMultiplePick;
+            set: function(multiSelectEnabled) {
+                if(TypeUtil.isBoolean(multiSelectEnabled))
+                    _multiSelectEnabled = multiSelectEnabled;
             },
             enumerable: true
         },
@@ -60,11 +60,11 @@ function SelectablePicker(params) {
         },
         'checkedItems': {
             get: function() {
-                if(_enableMultiplePick) return _checkedItems;
+                if(_multiSelectEnabled) return _checkedItems;
                 else return _checkedItem;
             },
             set: function(checkedItems) {
-                if(_enableMultiplePick && TypeUtil.isArray(checkedItems)){
+                if(_multiSelectEnabled && TypeUtil.isArray(checkedItems)){
                     _checkedItems = checkedItems;
                 }else if(TypeUtil.isNumeric(checkedItems) && (checkedItems > -1)){
                     _checkedItem = checkedItems;
@@ -82,21 +82,26 @@ function SelectablePicker(params) {
             },
             enumerable: true
         },
-        'onSelectedItems': {
+        'onSelected': {
             get: function() {
-                return _onSelectedItems;
+                return _onSelected;
             },
-            set: function(onSelectedItems) {
-                if(TypeUtil.isFunction(onSelectedItems))
-                    _onSelectedItems = onSelectedItems;
+            set: function(onSelected) {
+                if(TypeUtil.isFunction(onSelected))
+                    _onSelected = onSelected;
             },
             enumerable: true
         },
         'show': {
             value: function(done, cancel) {
+                
+                var checkedItemsBoolean = [];
+                for(let i=0;i<_items.length;++i)
+                    checkedItemsBoolean[i] = false;
+                    
                 var doneButtonListener = NativeDialogInterface.OnClickListener.implement({
                     onClick: function(dialogInterface, i) {
-                        if(_enableMultiplePick) done && done({ items : _selectedItems });
+                        if(_multiSelectEnabled) done && done({ items : _selectedItems });
                         else done && done({ items : _selectedItems[0] });
                     }
                 });
@@ -108,10 +113,10 @@ function SelectablePicker(params) {
                 });
 
                 var choosingItemListener;
-                if(_enableMultiplePick){
+                if(_multiSelectEnabled){
                     choosingItemListener = NativeDialogInterface.OnMultiChoiceClickListener.implement({
                         onClick: function(dialogInterface, i, b) {
-                            _onSelectedItems && _onSelectedItems(i,b);
+                            _onSelected && _onSelected(i,b);
                             if(b){
                                 _selectedItems.push(i);
                             }else{
@@ -123,7 +128,7 @@ function SelectablePicker(params) {
                 }else{
                     choosingItemListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
-                            _onSelectedItems && _onSelectedItems(i,true);
+                            _onSelected && _onSelected(i,true);
                             _selectedItems[0] = i;
                         }
                     });
@@ -132,14 +137,17 @@ function SelectablePicker(params) {
                 self.nativeObject.setPositiveButton(self.doneButtonText, doneButtonListener);
                 self.nativeObject.setNegativeButton(self.cancelButtonText, cancelButtonListener);
                 
-                if(_enableMultiplePick){
-                    if(_checkedItems.length === 0){
-                        for(var i = 0;i<_items.length;++i){
-                            _checkedItems[i] = false;
+                if(_multiSelectEnabled){
+                    for(let i = 0;i<_checkedItems.length;++i){
+                        if(_checkedItems[i] > -1){
+                            checkedItemsBoolean[_checkedItems[i]] = true;
+                            _selectedItems.push(_checkedItems[i]);
                         }
                     }
-                    self.nativeObject.setMultiChoiceItems(array(_items,"java.lang.String"), array(_checkedItems, "boolean"), choosingItemListener);
-                } else { 
+                    self.nativeObject.setMultiChoiceItems(array(_items,"java.lang.String"), array(checkedItemsBoolean, "boolean"), choosingItemListener);
+                } else {
+                    if(_checkedItem > -1)
+                        _selectedItems[0] = _checkedItem;
                     self.nativeObject.setSingleChoiceItems(array(_items,"java.lang.String"), _checkedItem, choosingItemListener);
                 }
                 

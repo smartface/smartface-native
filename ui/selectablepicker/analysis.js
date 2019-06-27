@@ -16,7 +16,7 @@
  * 
  *     var checkedItems = [false,false,true,false,false]
  *     var mySelectablePicker = new SelectablePicker({
- *          enableMultiplePick: true,
+ *          multiSelectEnabled: true,
  *          items: items,
  *          checkedItems: checkedItems
  *     });
@@ -26,7 +26,7 @@
  *     var cancelCallback = function(params){
  *          console.log("Canceled");
  *     }
- *     SelectablePicker.show(doneCallback,cancelCallback);
+ *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
 function SelectablePicker(params) {}
 
@@ -45,11 +45,11 @@ SelectablePicker.prototype.items = [];
  *
  * @param {Number} index
  * @param {Boolean} selected
- * @event onSelectedItems
+ * @event onSelected
  * @android
  * @since 4.0.5
  */
-SelectablePicker.prototype.onSelectedItems = function onSelectedItems(index, selected) {};
+SelectablePicker.prototype.onSelected = function onSelected(index, selected) {};
 
 /**
  * Gets/sets title of the SelectablePicker. 
@@ -82,14 +82,14 @@ SelectablePicker.prototype.titleColor;
 SelectablePicker.prototype.titleFont;
 
 /**
- * Gets/sets enableMultiplePick of the SelectablePicker. You should set this property before the others. Otherwise SelectablePicker will not work properly
+ * Gets/sets multiSelectEnabled of the SelectablePicker. You should set this property before the others. Otherwise SelectablePicker will not work properly
  * This property only works with show method. Must set before show method.
  *
- * @property {Boolean} [enableMultiplePick = false]
+ * @property {Boolean} [multiSelectEnabled = false]
  * @android
  * @since 4.0.5
  */
-SelectablePicker.prototype.enableMultiplePick;
+SelectablePicker.prototype.multiSelectEnabled;
 
 /**
  * Gets/sets cancelable of the SelectablePicker. If click outside of dialog, it will be canceled.
@@ -103,11 +103,10 @@ SelectablePicker.prototype.cancelable;
 
 /**
  * Gets/sets checked item of the SelectablePicker. 
- * If enableMultiplePick is false, checkedItems must be number or array of boolean.
- * If the checkedItems is boolean array, size of array must be same with items's size
+ * If multiSelectEnabled is false, checkedItems must be a spesific index of the items array or array of index.
  * This property only works with show method. Must set before show method.
  *
- * @property {Number|Array} [checkedItems = -1 | checkedItems = false]
+ * @property {Number|Array} [checkedItems = -1]
  * @android
  * @since 4.0.5
  */
@@ -188,7 +187,7 @@ SelectablePicker.prototype.doneButtonFont;
  *
  * @param {Function} done This event is called when user clicks done button.
  * @param {Object} done.param
- * @param {Number|Array} done.param.items If enableMultiplePick is false, items will be index of selected item, otherwise array of selected items's indexs
+ * @param {Number|Array} done.param.items If multiSelectEnabled is false, items will be index of selected item, otherwise array of selected items's indexs
  * @param {Function} cancel This event is called when user clicks cancel button.
  * @method show
  * @android
