@@ -116,7 +116,7 @@ SelectablePicker.prototype.checkedItems;
  * Gets/sets backgroundColor of the SelectablePicker. 
  * This property only works with show method. Must set before show method.
  *
- * @property {UI.Color|String} [backgroundColor = Color.WHITE|backgroundColor = "#FFFFFF"]
+ * @property {UI.Color} [backgroundColor = Color.WHITE]
  * @android
  * @since 4.0.5
  */
