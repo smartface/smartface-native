@@ -3,9 +3,9 @@ const Color = require("sf-core/ui/color");
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
-const parentPicker = function(subClass){
+const parentPicker = function(subClass) {
     var self = subClass;
-    
+
     var _title = "Picker";
     var _titleColor = Color.BLACK;
     var _titleFont;
@@ -20,7 +20,7 @@ const parentPicker = function(subClass){
                 return _title;
             },
             set: function(title) {
-                if(TypeUtil.isString(title))
+                if (TypeUtil.isString(title))
                     _title = title;
             },
             enumerable: true
@@ -30,7 +30,7 @@ const parentPicker = function(subClass){
                 return _titleColor;
             },
             set: function(color) {
-                if(color instanceof Color)
+                if (color instanceof Color)
                     _titleColor = color;
             },
             enumerable: true
@@ -41,7 +41,7 @@ const parentPicker = function(subClass){
             },
             set: function(font) {
                 const Font = require('sf-core/ui/font');
-                if(font instanceof Font)
+                if (font instanceof Font)
                     _titleFont = font;
             },
             enumerable: true
@@ -51,7 +51,7 @@ const parentPicker = function(subClass){
                 return _cancelButtonColor;
             },
             set: function(color) {
-                if(color instanceof Color)
+                if (color instanceof Color)
                     _cancelButtonColor = color;
             },
             enumerable: true
@@ -62,8 +62,8 @@ const parentPicker = function(subClass){
             },
             set: function(font) {
                 const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _cancelButtonFont = font;
+                if (font instanceof Font)
+                    _cancelButtonFont = font;
             },
             enumerable: true
         },
@@ -72,7 +72,7 @@ const parentPicker = function(subClass){
                 return _cancelButtonText;
             },
             set: function(text) {
-                if(TypeUtil.isString(text))
+                if (TypeUtil.isString(text))
                     _cancelButtonText = text;
             },
             enumerable: true
@@ -82,7 +82,7 @@ const parentPicker = function(subClass){
                 return _doneButtonColor;
             },
             set: function(color) {
-                if(color instanceof Color)
+                if (color instanceof Color)
                     _doneButtonColor = color;
             },
             enumerable: true
@@ -92,7 +92,7 @@ const parentPicker = function(subClass){
                 return _doneButtonText;
             },
             set: function(text) {
-                if(TypeUtil.isString(text))
+                if (TypeUtil.isString(text))
                     _doneButtonText = text;
             },
             enumerable: true
@@ -103,21 +103,21 @@ const parentPicker = function(subClass){
             },
             set: function(font) {
                 const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _doneButtonFont = font;
+                if (font instanceof Font)
+                    _doneButtonFont = font;
             },
             enumerable: true
         }
     });
-    
+
     self.createTitleView = function() {
         const picker = this;
-    
+
         const NativeTextView = requireClass("android.widget.TextView");
         const Color = require('sf-core/ui/color');
-    
+
         const CENTER = 17;
-    
+
         var titleTextView = new NativeTextView(AndroidConfig.activity);
         titleTextView.setText(picker.title);
         titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
@@ -126,13 +126,13 @@ const parentPicker = function(subClass){
         picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
         picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);
         picker.titleFont && titleTextView.setTextSize(picker.titleFont.size);
-    
+
         return titleTextView;
     }
-    
-    self.makeCustomizeButton = function(negativeButton,positiveButton){
+
+    self.makeCustomizeButton = function(negativeButton, positiveButton) {
         const picker = this;
-    
+
         picker.cancelButtonText && negativeButton.setText(picker.cancelButtonText);
         picker.doneButtonText && positiveButton.setText(picker.doneButtonText);
         picker.cancelButtonColor && negativeButton.setTextColor(picker.cancelButtonColor.nativeObject);

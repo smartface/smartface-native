@@ -240,25 +240,25 @@ Notifications.iOS.NotificationPresentationOptions = {
 };
 
 Notifications.ios.UNUserNotificationCenterDelegate = new __SF_SMFUNUserNotificationCenterDelegate();
-Notifications.ios.UNUserNotificationCenterDelegate.willPresentNotification = function(e){
+Notifications.ios.UNUserNotificationCenterDelegate.willPresentNotification = function(e) {
     if (Notifications.ios._willPresentNotification === undefined) {
         return 0;
     }
-    
+
     var returnValue = Notifications.ios._willPresentNotification(e);
     if (returnValue === undefined || returnValue.length === 0) {
         return 0;
     }
-    
+
     var returnNSUIInteger;
-    for(var index in returnValue){
+    for (var index in returnValue) {
         returnNSUIInteger = returnNSUIInteger | returnValue[index]
     };
-    
+
     return returnNSUIInteger;
 };
 
-Notifications.ios.UNUserNotificationCenterDelegate.didReceiveNotificationResponse = function(e){
+Notifications.ios.UNUserNotificationCenterDelegate.didReceiveNotificationResponse = function(e) {
     Notifications.ios._didReceiveNotificationResponse && Notifications.ios._didReceiveNotificationResponse(e);
 };
 
