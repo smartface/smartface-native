@@ -103,9 +103,9 @@ function SelectablePicker(params) {
                     checkedItemsBoolean[i] = false;
 
                 var doneButtonListener;
-                if('doneButtonListener' in _listeners){
+                if ('doneButtonListener' in _listeners) {
                     doneButtonListener = _listeners['doneButtonListener'];
-                }else{
+                } else {
                     doneButtonListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             if (_multiSelectEnabled) done && done({
@@ -118,11 +118,11 @@ function SelectablePicker(params) {
                     });
                     _listeners['doneButtonListener'] = doneButtonListener;
                 }
-                
+
                 var cancelButtonListener;
-                if('cancelButtonListener' in _listeners){
+                if ('cancelButtonListener' in _listeners) {
                     cancelButtonListener = _listeners['cancelButtonListener'];
-                }else{
+                } else {
                     cancelButtonListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             cancel && cancel();
@@ -133,10 +133,10 @@ function SelectablePicker(params) {
 
                 var choosingItemListener;
                 if (_multiSelectEnabled) {
-                    if('choosingItemListenerMulti' in _listeners){
+                    if ('choosingItemListenerMulti' in _listeners) {
                         _selectedItems = [];
                         choosingItemListener = _listeners['choosingItemListenerMulti'];
-                    }else{
+                    } else {
                         choosingItemListener = NativeDialogInterface.OnMultiChoiceClickListener.implement({
                             onClick: function(dialogInterface, i, selected) {
                                 _onSelected && _onSelected(i, selected);
@@ -151,10 +151,10 @@ function SelectablePicker(params) {
                         _listeners['choosingItemListenerMulti'] = choosingItemListener;
                     }
                 } else {
-                    if('choosingItemListenerSingle' in _listeners){
+                    if ('choosingItemListenerSingle' in _listeners) {
                         _selectedItems = [];
                         choosingItemListener = _listeners['choosingItemListenerSingle'];
-                    }else{
+                    } else {
                         choosingItemListener = NativeDialogInterface.OnClickListener.implement({
                             onClick: function(dialogInterface, i) {
                                 _onSelected && _onSelected(i, true);
