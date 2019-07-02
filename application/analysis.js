@@ -60,7 +60,7 @@ Application.android.locale;
  * @static
  * @since 3.1.3
  */
-Application.getLayoutDirection;
+Application.android.getLayoutDirection;
 
 /**
  * Application bundle identifier.
@@ -128,9 +128,22 @@ Application.currentReleaseChannel;
  * @android
  * @ios
  * @static
+ * @deprecated
  * @since 0.1
  */
 Application.smartfaceAppName;
+
+/**
+ * The application name within project.json
+ * 
+ * @property {String} appName
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.5
+ */
+Application.appName;
 
 /**
  * The application version within project.json
