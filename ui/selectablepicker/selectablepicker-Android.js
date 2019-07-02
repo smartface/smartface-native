@@ -138,9 +138,9 @@ function SelectablePicker(params) {
                         choosingItemListener = _listeners['choosingItemListenerMulti'];
                     }else{
                         choosingItemListener = NativeDialogInterface.OnMultiChoiceClickListener.implement({
-                            onClick: function(dialogInterface, i, b) {
-                                _onSelected && _onSelected(i, b);
-                                if (b) {
+                            onClick: function(dialogInterface, i, selected) {
+                                _onSelected && _onSelected(i, selected);
+                                if (selected) {
                                     _selectedItems.push(i);
                                 } else {
                                     if (_selectedItems.indexOf(i) > -1)

@@ -82,8 +82,8 @@ SelectablePicker.prototype.titleColor;
 SelectablePicker.prototype.titleFont;
 
 /**
- * Gets/sets multiSelectEnabled of the SelectablePicker. You should set this property before the others  
- * and can not change this property on run-time. Otherwise SelectablePicker will not work properly. 
+ * Gets/sets multiSelectEnabled of the SelectablePicker. You must set this property in constructor  
+ * and can not change this property on run-time. Otherwise SelectablePicker may not work properly. 
  * This property only works with show method. Must set before show method.
  *
  * @property {Boolean} [multiSelectEnabled = false]
