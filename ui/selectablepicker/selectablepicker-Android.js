@@ -27,6 +27,7 @@ function SelectablePicker(params) {
     var _selectedItems = [];
     var _onSelected;
     var _listeners = {};
+	var _isShowed = false;
 
     Object.defineProperties(this, {
         'items': {
@@ -44,9 +45,7 @@ function SelectablePicker(params) {
                 return _multiSelectEnabled;
             },
             set: function(multiSelectEnabled) {
-                if (TypeUtil.isBoolean(multiSelectEnabled) &&
-                    !('choosingItemListenerMulti' in _listeners) &&
-                    !('choosingItemListenerSingle' in _listeners))
+                if (TypeUtil.isBoolean(multiSelectEnabled) && !_isShowed)
                     _multiSelectEnabled = multiSelectEnabled;
             },
             enumerable: true
@@ -96,75 +95,14 @@ function SelectablePicker(params) {
             enumerable: true
         },
         'show': {
-            value: function(done, cancel) {
-
-                var checkedItemsBoolean = [];
-                for (let i = 0; i < _items.length; ++i)
-                    checkedItemsBoolean[i] = false;
-
-                var doneButtonListener;
-                if ('doneButtonListener' in _listeners) {
-                    doneButtonListener = _listeners['doneButtonListener'];
-                } else {
-                    doneButtonListener = NativeDialogInterface.OnClickListener.implement({
-                        onClick: function(dialogInterface, i) {
-                            if (_multiSelectEnabled) done && done({
-                                items: _selectedItems
-                            });
-                            else done && done({
-                                items: _selectedItems[0]
-                            });
-                        }
-                    });
-                    _listeners['doneButtonListener'] = doneButtonListener;
-                }
-
-                var cancelButtonListener;
-                if ('cancelButtonListener' in _listeners) {
-                    cancelButtonListener = _listeners['cancelButtonListener'];
-                } else {
-                    cancelButtonListener = NativeDialogInterface.OnClickListener.implement({
-                        onClick: function(dialogInterface, i) {
-                            cancel && cancel();
-                        }
-                    });
-                    _listeners['cancelButtonListener'] = cancelButtonListener;
-                }
-
-                var choosingItemListener;
-                if (_multiSelectEnabled) {
-                    if ('choosingItemListenerMulti' in _listeners) {
-                        _selectedItems = [];
-                        choosingItemListener = _listeners['choosingItemListenerMulti'];
-                    } else {
-                        choosingItemListener = NativeDialogInterface.OnMultiChoiceClickListener.implement({
-                            onClick: function(dialogInterface, i, selected) {
-                                _onSelected && _onSelected(i, selected);
-                                if (selected) {
-                                    _selectedItems.push(i);
-                                } else {
-                                    if (_selectedItems.indexOf(i) > -1)
-                                        _selectedItems.splice(_selectedItems.indexOf(i), 1);
-                                }
-                            }
-                        });
-                        _listeners['choosingItemListenerMulti'] = choosingItemListener;
-                    }
-                } else {
-                    if ('choosingItemListenerSingle' in _listeners) {
-                        _selectedItems = [];
-                        choosingItemListener = _listeners['choosingItemListenerSingle'];
-                    } else {
-                        choosingItemListener = NativeDialogInterface.OnClickListener.implement({
-                            onClick: function(dialogInterface, i) {
-                                _onSelected && _onSelected(i, true);
-                                _selectedItems[0] = i;
-                            }
-                        });
-                        _listeners['choosingItemListenerSingle'] = choosingItemListener;
-                    }
-                }
-
+            value: function(doneCallback, cancelCallback) {
+                var checkedItemsBoolean = Array(_items.length).fill(false);
+                var doneButtonListener = createDoneButtonListener(doneCallback);
+                var cancelButtonListener = createCancelButtonListener(cancelCallback);
+                var choosingItemListener = _multiSelectEnabled ? createMultiSelectListener : createSingleSelectListener();
+                
+                _selectedItems = [];
+                _isShowed = true;
                 self.nativeObject.setPositiveButton(self.doneButtonText, doneButtonListener);
                 self.nativeObject.setNegativeButton(self.cancelButtonText, cancelButtonListener);
 
@@ -182,18 +120,11 @@ function SelectablePicker(params) {
                     self.nativeObject.setSingleChoiceItems(array(_items, "java.lang.String"), _checkedItem, choosingItemListener);
                 }
 
-                self.nativeObject.setCustomTitle(self.createTitleView.call(self));
+                self.nativeObject.setCustomTitle(self.createTitleView());
                 self.nativeObject.setCancelable(_cancelable);
 
                 var alertDialog = self.nativeObject.show();
-
-                const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-                self.backgroundColor && alertDialog.getWindow().setBackgroundDrawable(new NativeColorDrawable(_backgroundColor.nativeObject));
-
-                var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
-                var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
-
-                self.makeCustomizeButton.call(self, negativeButton, positiveButton);
+                customizeDialog(alertDialog);
             },
             enumerable: true
         },
@@ -205,6 +136,68 @@ function SelectablePicker(params) {
             configurable: true
         }
     });
+    
+    function customizeDialog(alertDialog) {
+        const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
+        self.backgroundColor && alertDialog.getWindow().setBackgroundDrawable(new NativeColorDrawable(_backgroundColor.nativeObject));
+
+        var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
+        var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
+
+        self.makeCustomizeButton(negativeButton, positiveButton);
+    }
+    
+    function createCancelButtonListener(cancelCallback) {
+    	if(!_listeners['cancelButtonListener']) {
+	        _listeners['cancelButtonListener']  = NativeDialogInterface.OnClickListener.implement({
+	            onClick: function(dialogInterface, i) {
+	                cancelCallback && cancelCallback();
+	            }
+	        });
+    	}
+        return _listeners['cancelButtonListener'];
+    }
+    
+    function createDoneButtonListener(doneCallback) {
+    	if(!_listeners['doneButtonListener']) {
+	        _listeners['doneButtonListener']  = NativeDialogInterface.OnClickListener.implement({
+	            onClick: function(dialogInterface, i) {
+	                let items = _multiSelectEnabled ? _selectedItems : _selectedItems[0];
+	                doneCallback && doneCallback({ items: items });
+	            }
+	        });
+    	}
+        return _listeners['doneButtonListener'];
+    }
+    
+    function createSingleSelectListener() {
+    	if(!_listeners["singleSelectListener"]) {
+	        _listeners['singleSelectListener'] = NativeDialogInterface.OnClickListener.implement({
+	            onClick: function(dialogInterface, i) {
+	                _onSelected && _onSelected(i, true);
+	                _selectedItems[0] = i;
+	            }
+	        });
+    	}
+        return _listeners["singleSelectListener"];
+    }
+    
+    function createMultiSelectListener() {
+    	if(!_listeners["multiSelectListener"]) {
+	        _listeners['multiSelectListener'] = NativeDialogInterface.OnMultiChoiceClickListener.implement({
+	            onClick: function(dialogInterface, i, selected) {
+	                _onSelected && _onSelected(i, selected);
+	                if (selected) {
+	                    _selectedItems.push(i);
+	                } else {
+	                    if (_selectedItems.indexOf(i) > -1)
+	                        _selectedItems.splice(_selectedItems.indexOf(i), 1);
+	                }
+	            }
+	        });
+    	}
+        return _listeners["multiSelectListener"];
+    }
 
     if (params) {
         for (var param in params) {

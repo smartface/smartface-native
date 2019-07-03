@@ -111,35 +111,32 @@ const parentPicker = function(subClass) {
     });
 
     self.createTitleView = function() {
-        const picker = this;
-
         const NativeTextView = requireClass("android.widget.TextView");
         const Color = require('sf-core/ui/color');
 
         const CENTER = 17;
 
         var titleTextView = new NativeTextView(AndroidConfig.activity);
-        titleTextView.setText(picker.title);
+        titleTextView.setText(self.title);
         titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
         titleTextView.setPaddingRelative(10, 20, 10, 10);
         titleTextView.setGravity(CENTER);
-        picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
-        picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);
-        picker.titleFont && titleTextView.setTextSize(picker.titleFont.size);
+        
+        self.titleColor && titleTextView.setTextColor(self.titleColor.nativeObject);
+        self.titleFont && titleTextView.setTypeface(self.titleFont.nativeObject);
+        self.titleFont && titleTextView.setTextSize(self.titleFont.size);
 
         return titleTextView;
-    }
+    };
 
     self.makeCustomizeButton = function(negativeButton, positiveButton) {
-        const picker = this;
-
-        picker.cancelButtonText && negativeButton.setText(picker.cancelButtonText);
-        picker.doneButtonText && positiveButton.setText(picker.doneButtonText);
-        picker.cancelButtonColor && negativeButton.setTextColor(picker.cancelButtonColor.nativeObject);
-        picker.doneButtonColor && positiveButton.setTextColor(picker.doneButtonColor.nativeObject);
-        picker.cancelButtonFont && negativeButton.setTypeface(picker.cancelButtonFont.nativeObject);
-        picker.doneButtonFont && positiveButton.setTypeface(picker.doneButtonFont.nativeObject);
-    }
-}
+        self.cancelButtonText && negativeButton.setText(self.cancelButtonText);
+        self.doneButtonText && positiveButton.setText(self.doneButtonText);
+        self.cancelButtonColor && negativeButton.setTextColor(self.cancelButtonColor.nativeObject);
+        self.doneButtonColor && positiveButton.setTextColor(self.doneButtonColor.nativeObject);
+        self.cancelButtonFont && negativeButton.setTypeface(self.cancelButtonFont.nativeObject);
+        self.doneButtonFont && positiveButton.setTypeface(self.doneButtonFont.nativeObject);
+    };
+};
 
 module.exports = parentPicker;
