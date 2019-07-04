@@ -5,6 +5,7 @@ const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
 const Color = require('sf-core/ui/color');
+const ParentPicker = require("sf-core/ui/picker/parentPicker");
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
@@ -19,6 +20,7 @@ const Picker = extend(View)(
             self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
+    	ParentPicker(self);
 
         var _items = [];
         var _onSelected;
@@ -185,7 +187,7 @@ const Picker = extend(View)(
                     builder = builder.setPositiveButton(NativeRString.ok, doneListener);
 
                     if (typeof self.title === 'string')
-                        builder = builder.setCustomTitle(creatTitleView.call(self));
+                        builder = builder.setCustomTitle(self.__createTitleView());
 
                     var alertDialog = builder.show(); //return native alertdailog
 
@@ -268,26 +270,6 @@ function addViewToLayout(nativeObject) {
         -2, // FrameLayout.LayoutParams.WRAP_CONTENT
         17)); // Gravity.CENTER
     return layout;
-}
-
-function creatTitleView() {
-    const picker = this;
-
-    const NativeTextView = requireClass("android.widget.TextView");
-    const Color = require('sf-core/ui/color');
-
-    const CENTER = 17;
-
-    var titleTextView = new NativeTextView(AndroidConfig.activity);
-    titleTextView.setText(picker.title);
-    titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-    titleTextView.setPaddingRelative(10, 20, 10, 10);
-    titleTextView.setGravity(CENTER);
-    picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
-    picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);
-    picker.titleFont && titleTextView.setTextSize(picker.titleFont.size);
-
-    return titleTextView;
 }
 
 module.exports = Picker;

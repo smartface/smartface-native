@@ -6,7 +6,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
-const ParentPicker = require("./parentPicker");
+const ParentPicker = require("sf-core/ui/picker/parentPicker");
 
 function SelectablePicker(params) {
     var self = this;
@@ -28,6 +28,10 @@ function SelectablePicker(params) {
     var _onSelected;
     var _listeners = {};
 	var _isShowed = false;
+    var _doneButtonText;
+    var _doneButtonFont, _doneButtonColor;
+    var _cancelButtonText;
+    var _cancelButtonFont, _cancelButtonColor;
 
     Object.defineProperties(this, {
         'items': {
@@ -99,7 +103,7 @@ function SelectablePicker(params) {
                 var checkedItemsBoolean = Array(_items.length).fill(false);
                 var doneButtonListener = createDoneButtonListener(doneCallback);
                 var cancelButtonListener = createCancelButtonListener(cancelCallback);
-                var choosingItemListener = _multiSelectEnabled ? createMultiSelectListener : createSingleSelectListener();
+                var choosingItemListener = _multiSelectEnabled ? createMultiSelectListener() : createSingleSelectListener();
                 
                 _selectedItems = [];
                 _isShowed = true;
@@ -113,6 +117,7 @@ function SelectablePicker(params) {
                             _selectedItems.push(_checkedItems[i]);
                         }
                     }
+                    
                     self.nativeObject.setMultiChoiceItems(array(_items, "java.lang.String"), array(checkedItemsBoolean, "boolean"), choosingItemListener);
                 } else {
                     if (_checkedItem > -1)
@@ -120,11 +125,73 @@ function SelectablePicker(params) {
                     self.nativeObject.setSingleChoiceItems(array(_items, "java.lang.String"), _checkedItem, choosingItemListener);
                 }
 
-                self.nativeObject.setCustomTitle(self.createTitleView());
+                self.title && self.nativeObject.setCustomTitle(self.__createTitleView());
                 self.nativeObject.setCancelable(_cancelable);
 
                 var alertDialog = self.nativeObject.show();
                 customizeDialog(alertDialog);
+            },
+            enumerable: true
+        },
+        'cancelButtonColor': {
+            get: function() {
+                return _cancelButtonColor;
+            },
+            set: function(color) {
+                if (color instanceof Color)
+                    _cancelButtonColor = color;
+            },
+            enumerable: true
+        },
+        'cancelButtonFont': {
+            get: function() {
+                return _cancelButtonFont;
+            },
+            set: function(font) {
+                const Font = require('sf-core/ui/font');
+                if (font instanceof Font)
+                    _cancelButtonFont = font;
+            },
+            enumerable: true
+        },
+        'cancelButtonText': {
+            get: function() {
+                return _cancelButtonText;
+            },
+            set: function(text) {
+                if (TypeUtil.isString(text))
+                    _cancelButtonText = text;
+            },
+            enumerable: true
+        },
+        'doneButtonColor': {
+            get: function() {
+                return _doneButtonColor;
+            },
+            set: function(color) {
+                if (color instanceof Color)
+                    _doneButtonColor = color;
+            },
+            enumerable: true
+        },
+        'doneButtonText': {
+            get: function() {
+                return _doneButtonText;
+            },
+            set: function(text) {
+                if (TypeUtil.isString(text))
+                    _doneButtonText = text;
+            },
+            enumerable: true
+        },
+        'doneButtonFont': {
+            get: function() {
+                return _doneButtonFont;
+            },
+            set: function(font) {
+                const Font = require('sf-core/ui/font');
+                if (font instanceof Font)
+                    _doneButtonFont = font;
             },
             enumerable: true
         },
@@ -137,6 +204,16 @@ function SelectablePicker(params) {
         }
     });
     
+
+    self.__makeCustomizeButton = function(negativeButton, positiveButton) {
+        self.cancelButtonText && negativeButton.setText(self.cancelButtonText);
+        self.doneButtonText && positiveButton.setText(self.doneButtonText);
+        self.cancelButtonColor && negativeButton.setTextColor(self.cancelButtonColor.nativeObject);
+        self.doneButtonColor && positiveButton.setTextColor(self.doneButtonColor.nativeObject);
+        self.cancelButtonFont && negativeButton.setTypeface(self.cancelButtonFont.nativeObject);
+        self.doneButtonFont && positiveButton.setTypeface(self.doneButtonFont.nativeObject);
+    };
+    
     function customizeDialog(alertDialog) {
         const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
         self.backgroundColor && alertDialog.getWindow().setBackgroundDrawable(new NativeColorDrawable(_backgroundColor.nativeObject));
@@ -144,7 +221,7 @@ function SelectablePicker(params) {
         var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
         var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
 
-        self.makeCustomizeButton(negativeButton, positiveButton);
+        self.__makeCustomizeButton(negativeButton, positiveButton);
     }
     
     function createCancelButtonListener(cancelCallback) {
