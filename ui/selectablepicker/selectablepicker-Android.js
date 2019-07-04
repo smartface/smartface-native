@@ -28,9 +28,9 @@ function SelectablePicker(params) {
     var _onSelected;
     var _listeners = {};
 	var _isShowed = false;
-    var _doneButtonText;
+    var _doneButtonText = "Ok";
     var _doneButtonFont, _doneButtonColor;
-    var _cancelButtonText;
+    var _cancelButtonText = "Cancel";
     var _cancelButtonFont, _cancelButtonColor;
 
     Object.defineProperties(this, {

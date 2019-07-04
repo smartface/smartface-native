@@ -24,9 +24,6 @@ const Picker = extend(View)(
 
         var _items = [];
         var _onSelected;
-        var _title = "";
-        var _titleColor = Color.BLACK;
-        var _titleFont;
         var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText;
         var buttonCustomize = false;
         Object.defineProperties(this, {
@@ -55,38 +52,6 @@ const Picker = extend(View)(
                 },
                 set: function(onSelected) {
                     _onSelected = onSelected;
-                },
-                enumerable: true
-            },
-            'title': {
-                get: function() {
-                    return _title;
-                },
-                set: function(text) {
-                    if (typeof text === 'string')
-                        _title = text;
-                },
-                enumerable: true
-            },
-            'titleColor': {
-                get: function() {
-                    return _titleColor;
-
-                },
-                set: function(color) {
-                    if (color instanceof Color)
-                        _titleColor = color;
-                },
-                enumerable: true
-            },
-            'titleFont': {
-                get: function() {
-                    return _titleFont;
-                },
-                set: function(font) {
-                    const Font = require('sf-core/ui/font');
-                    if (font instanceof Font)
-                        _titleFont = font;
                 },
                 enumerable: true
             },
