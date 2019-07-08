@@ -343,6 +343,19 @@ const WebView = extend(View)(
             }
         });
 
+        WebView.android = {};
+        Object.defineProperty(WebView.android, 'setWebContentsDebuggingEnabled', {
+            value: function(enabled) {
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
+                    const NativeApplicationInfo = requireClass('android.content.pm.ApplicationInfo');
+                    if ((AndroidConfig.activity.getApplicationInfo().flags & NativeApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+                        const NativeWebView = requireClass('android.webkit.WebView');
+                        NativeWebView.setWebContentsDebuggingEnabled(enabled);
+                    }
+                }
+            },
+            enumerable: true,
+        });
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
             overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
                 var url = requestUrl;
@@ -570,7 +583,6 @@ function overrideURLChange(url, _canOpenLinkInside) {
         return true;
     }
 }
-
 
 WebView.Android = {};
 WebView.Android.ConsoleMessageLevel = Object.freeze({
