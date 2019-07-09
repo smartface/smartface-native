@@ -336,7 +336,7 @@ WebView.prototype.clearFormData = function() {};
 WebView.prototype.clearHistory = function() {};
 
 /**
- * Enables debugging of WebView contents. Android API level must greater than or equal to KITKAT(19)
+ * Enables debugging of WebView contents.
  *
  * @method setWebContentsDebuggingEnabled
  * @android

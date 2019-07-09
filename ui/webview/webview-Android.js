@@ -26,6 +26,7 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
+const NativeWebView = requireClass('android.webkit.WebView');
 
 var activity = AndroidConfig.activity;
 
@@ -36,7 +37,6 @@ var mUploadMessage;
 const WebView = extend(View)(
     function(_super, params) {
         if (!this.nativeObject) {
-            const NativeWebView = requireClass('android.webkit.WebView');
             this.nativeObject = new NativeWebView(AndroidConfig.activity);
         }
 
@@ -343,19 +343,6 @@ const WebView = extend(View)(
             }
         });
 
-        WebView.android = {};
-        Object.defineProperty(WebView.android, 'setWebContentsDebuggingEnabled', {
-            value: function(enabled) {
-                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
-                    const NativeApplicationInfo = requireClass('android.content.pm.ApplicationInfo');
-                    if ((AndroidConfig.activity.getApplicationInfo().flags & NativeApplicationInfo.FLAG_DEBUGGABLE) != 0) {
-                        const NativeWebView = requireClass('android.webkit.WebView');
-                        NativeWebView.setWebContentsDebuggingEnabled(enabled);
-                    }
-                }
-            },
-            enumerable: true,
-        });
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
             overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
                 var url = requestUrl;
@@ -591,6 +578,14 @@ WebView.Android.ConsoleMessageLevel = Object.freeze({
     LOG: "LOG",
     TIP: "TIP",
     WARNING: "WARNING"
+});
+
+WebView.android = {};
+Object.defineProperty(WebView.android, 'setWebContentsDebuggingEnabled', {
+    value: function(enabled) {
+        NativeWebView.setWebContentsDebuggingEnabled(enabled);
+    },
+    enumerable: true,
 });
 
 module.exports = WebView;
