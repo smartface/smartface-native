@@ -141,7 +141,7 @@ Application.smartfaceAppName;
  * @android
  * @ios
  * @static
- * @since 4.0.5
+ * @since 4.0.6
  */
 Application.appName;
 
