@@ -141,7 +141,7 @@ Application.smartfaceAppName;
  * @android
  * @ios
  * @static
- * @since 4.0.6
+ * @since 4.0.7
  */
 Application.appName;
 
@@ -158,7 +158,7 @@ Application.appName;
 Application.version;
 
 /**
- * Checks URLâ€™s scheme can be handled or not by some app that installed on the device.
+ * Checks URL’s scheme can be handled or not by some app that installed on the device.
  * 
  * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
  * 
