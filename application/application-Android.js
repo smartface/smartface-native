@@ -120,6 +120,13 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
+    'appName': {
+        get: function() {
+            return Application.smartfaceAppName;
+        },
+        enumerable: true
+    },
+    // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'version': {
         get: function() {
             return Application.version;
