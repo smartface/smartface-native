@@ -45,10 +45,9 @@ FragmentTransaction.push = function(params) {
     page.popUpBackPage = currentPage;
 
     if (currentPage.transitionViews) {
-        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated, true);
     } else {
         FragmentTransaction.popUpTransition(page, params.animated);
-
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
         currentPage.layout.nativeObject.setFocusableInTouchMode(false);
         !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
@@ -107,7 +106,7 @@ FragmentTransaction.replace = function(params) {
     params.onComplete && params.onComplete();
 };
 
-FragmentTransaction.revealTransition = function(transitionViews, page, animated = true) {
+FragmentTransaction.revealTransition = function(transitionViews, page, animated = true, forward) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
@@ -118,7 +117,8 @@ FragmentTransaction.revealTransition = function(transitionViews, page, animated 
             page: page,
             animated: animated,
             fragmentTransaction: fragmentTransaction,
-            transitionViews: transitionViews
+            transitionViews: transitionViews,
+            forward
         });
     }
     _addedFragmentsInContainer = {};
@@ -164,7 +164,7 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         popupBackPage = page.parentController.popUpBackPage;
         if (popupBackPage && popupBackPage.transitionViews) {
             _addedFragmentsInContainer[page.pageID] = false;
-            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
+            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation, false);
             return;
         }
     }
@@ -202,12 +202,20 @@ function addSharedElement(params = {}) {
         animated,
         page,
         fragmentTransaction,
-        transitionViews
+        transitionViews,
+        forward
     } = params;
     if (animated) {
         var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
         var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
         page.nativeObject.setSharedElementEnterTransition(inflateTransition);
+
+        const Application = require("../../../application");
+
+        let sharedElementEnterTransition = page.nativeObject.getSharedElementEnterTransition();
+        let currentPage = (forward === true) ? page.popUpBackPage : Application.currentPage;
+        if (currentPage.android.transitionViewsCallback)
+            currentPage.nativeObject.setSharedElementTransitionCallback(currentPage.android.transitionViewsCallback, sharedElementEnterTransition);
     } else {
         page.nativeObject.setSharedElementEnterTransition(null);
     }

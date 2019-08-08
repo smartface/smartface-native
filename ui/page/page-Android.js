@@ -232,15 +232,24 @@ function Page(params) {
         enumerable: true
     });
     this.android = {};
-    var _onBackButtonPressed;
-    Object.defineProperty(this.android, 'onBackButtonPressed', {
-        get: function() {
-            return _onBackButtonPressed;
+    var _onBackButtonPressed, _transitionViewsCallback;
+    Object.defineProperties(this.android, {
+        'onBackButtonPressed': {
+            get: function() {
+                return _onBackButtonPressed;
+            },
+            set: function(onBackButtonPressed) {
+                _onBackButtonPressed = onBackButtonPressed.bind(this);
+            },
+            enumerable: true
         },
-        set: function(onBackButtonPressed) {
-            _onBackButtonPressed = onBackButtonPressed.bind(this);
-        },
-        enumerable: true
+        'transitionViewsCallback': {
+            get: () => _transitionViewsCallback,
+            set: (transitionViewsCallback) => {
+                _transitionViewsCallback = transitionViewsCallback;
+            },
+            enumerable: true
+        }
     });
 
     var _isShown;
