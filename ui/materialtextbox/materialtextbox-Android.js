@@ -11,6 +11,7 @@ const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 const hintTextColorFieldName = "mDefaultTextColor";
 const hintFocusedTextColorFieldName = "mFocusedTextColor";
@@ -322,11 +323,14 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
+                    if(value && AndroidConfig.isEmulator){
+                        self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextSize);
+                    }
                 },
                 enumerable: true
             }
         });
-
+        
         for (var key in sfTextBox) { //Overrides the textbox properties & methods
             if (key !== "android") {
                 assignProperty.call(self, key);
@@ -368,7 +372,9 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
-
+        if(!AndroidConfig.isEmulator){
+            self.nativeObject.getInstance().setHintTextAppearance(NativeR.style.SFMaterialTextBoxHintSelectedSize);
+        }
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
