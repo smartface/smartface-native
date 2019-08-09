@@ -35,6 +35,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         var _hintTextColor, _hintFocusedTextColor,
             _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font,
+            _editTextFont,
             _rightLayout = null,
             _rightLayoutWidth;
         var _enableCounterMaxLength = 10;
@@ -127,6 +128,18 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(font) {
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
+                },
+                enumerable: true
+            },
+            'font':{
+                get: function() {
+                    return _editTextFont;
+                },
+                set: function(font) {
+                    _editTextFont = font;
+                    nativeTextInputEditText.setTypeface(font.nativeObject);
+                    nativeTextInputEditText.setTextSize(AndroidUnitConverter.pixelToDp(font.size));
+                    reflectionHelper.setExpandedHintTextSize(self.nativeObject.getInstance(), font.size);
                 },
                 enumerable: true
             },
