@@ -166,7 +166,7 @@ Object.defineProperties(ApplicationWrapper, {
 
             let intent = new NativeIntent(action);
             let uriObject;
-            if (TypeUtil.isObject(data)) {
+            if (TypeUtil.isObject(data) && Object.keys(data).length > 0) {
                 // we should use intent.putExtra but it causes native crash.
                 let params = Object.keys(data).map(function(k) {
                     return k + '=' + data[k];
