@@ -389,10 +389,10 @@ const SearchView = extend(View)(
 
         Object.defineProperty(this.ios, 'cancelButtonText', {
             get: function() {
-                return self.nativeObject.valueForKey("_cancelButtonText");
+                return self.nativeObject.valueForKey("cancelButtonText");
             },
             set: function(value) {
-                self.nativeObject.setValueForKey(value, "_cancelButtonText");
+                self.nativeObject.setValueForKey(value, "cancelButtonText");
             },
             enumerable: true
         });
