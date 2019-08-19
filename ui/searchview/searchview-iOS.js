@@ -162,8 +162,21 @@ const SearchView = extend(View)(
             },
             set: function(hint) {
                 _hint = hint;
-                self.nativeObject.placeholder = _hint;
-                self.hintTextColor = self.hintTextColor;
+        		var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString", "alloc", [], "id");
+
+                var argString = new Invocation.Argument({
+                    type: "NSString",
+                    value: hint
+                });
+
+                var argAttributes = new Invocation.Argument({
+                    type: "id",
+                    value: {
+                        "NSColor": _hintTextColor.nativeObject
+                    }
+                });
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, "initWithString:attributes:", [argString, argAttributes], "NSObject");
+                self.textfield.setValueForKey(nativeAttributeString, "attributedPlaceholder");
             },
             enumerable: true
         });
@@ -175,7 +188,7 @@ const SearchView = extend(View)(
             },
             set: function(color) {
                 _hintTextColor = color;
-                self.nativeObject.placeholderColor = color.nativeObject;
+            	self.hint = _hint;
             },
             enumerable: true
         });
