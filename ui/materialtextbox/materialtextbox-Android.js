@@ -51,7 +51,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getHint().toString();
                 },
                 set: function(hintText) {
-
+                    //Why are we need to look at the error text ? 
                     var enableHintMessage = (_errorText !== "" ? true : false);
                     self.nativeObject.setHintEnabled(enableHintMessage);
                     self.nativeObject.setHint(hintText);
@@ -129,18 +129,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(font) {
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
-                },
-                enumerable: true
-            },
-            'font':{
-                get: function() {
-                    return _editTextFont;
-                },
-                set: function(font) {
-                    _editTextFont = font;
-                    nativeTextInputEditText.setTypeface(font.nativeObject);
-                    nativeTextInputEditText.setTextSize(AndroidUnitConverter.pixelToDp(font.size));
-                    reflectionHelper.setExpandedHintTextSize(self.nativeObject.getInstance(), font.size);
+                    self.nativeObject.setExpandedHintTextSize(self.nativeObject.getInstance(), AndroidUnitConverter.dpToPixel(font.size));
                 },
                 enumerable: true
             },
@@ -323,18 +312,16 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
-                    if(value && !AndroidConfig.isEmulator){
-                        self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextSize);
-                    }
                 },
                 enumerable: true
             }
         });
-        
+
         for (var key in sfTextBox) { //Overrides the textbox properties & methods
             if (key !== "android") {
                 assignProperty.call(self, key);
-            } else {
+            }
+            else {
                 for (var key in sfTextBox[key]) {
                     assignAndroidProperty.call(self, key);
                 }
@@ -370,11 +357,14 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
 
+        if (!AndroidConfig.isEmulator) {
+            self.nativeObject.getInstance().setHintTextAppearance(NativeR.style.SFMaterialTextBoxHintAppearance);
+            self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextAppearance);
+        }
+        
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
-        if(!AndroidConfig.isEmulator){
-            self.nativeObject.getInstance().setHintTextAppearance(NativeR.style.SFMaterialTextBoxHintSelectedSize);
-        }
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
