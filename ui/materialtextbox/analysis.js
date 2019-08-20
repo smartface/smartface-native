@@ -110,7 +110,7 @@ MaterialTextBox.prototype.characterRestrictionColor;
 
 
 /**
- * Gets/sets the labelsFont of the MaterialTextBox. In Android, sets the font to hint and any other labels (such as error and counter labels) but size of font does not take into account.
+ * Gets/sets the labelsFont of the MaterialTextBox. In Android, sets the font to hint and any other labels (such as error and counter labels) but size of font does not take into account except for hint text size.
  * Before using this property you should enable conter , error and give hint text. 
  * In iOS, title and error message appear on same view as native behavior. So given font and size of font  will be applied to both of it. 
  * 
