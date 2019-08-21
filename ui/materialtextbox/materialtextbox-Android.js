@@ -312,7 +312,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
-                    if (value === true)
+                    if (value === true && !AndroidConfig.isEmulator)
                         self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextAppearance);
                 },
                 enumerable: true
