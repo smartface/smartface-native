@@ -312,6 +312,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
+                    if (value === true)
+                        self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextAppearance);
                 },
                 enumerable: true
             }
@@ -357,11 +359,11 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
 
+
         if (!AndroidConfig.isEmulator) {
             self.nativeObject.getInstance().setHintTextAppearance(NativeR.style.SFMaterialTextBoxHintAppearance);
-            self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextAppearance);
         }
-        
+
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
 
