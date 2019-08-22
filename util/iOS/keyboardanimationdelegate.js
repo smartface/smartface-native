@@ -77,11 +77,12 @@ function KeyboardAnimationDelegate(params) {
     }
 
     var _top = 0;
-    function getViewTop(view){
-        if(view.superview){
-            if(view.superview.constructor.name === "SMFUIView"){
+
+    function getViewTop(view) {
+        if (view.superview) {
+            if (view.superview.constructor.name === "SMFUIView") {
                 _top += view.frame.y;
-            }else if (view.superview.constructor.name === "SMFUIScrollView") {
+            } else if (view.superview.constructor.name === "SMFUIScrollView") {
                 _top += view.frame.y - view.superview.contentOffset.y;
             }
 
