@@ -45,7 +45,7 @@ FragmentTransaction.push = function(params) {
     page.popUpBackPage = currentPage;
 
     if (currentPage.transitionViews) {
-        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated, true);
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     } else {
         FragmentTransaction.popUpTransition(page, params.animated);
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
@@ -106,7 +106,7 @@ FragmentTransaction.replace = function(params) {
     params.onComplete && params.onComplete();
 };
 
-FragmentTransaction.revealTransition = function(transitionViews, page, animated = true, forward) {
+FragmentTransaction.revealTransition = function(transitionViews, page, animated = true) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
@@ -117,8 +117,7 @@ FragmentTransaction.revealTransition = function(transitionViews, page, animated 
             page: page,
             animated: animated,
             fragmentTransaction: fragmentTransaction,
-            transitionViews: transitionViews,
-            forward
+            transitionViews: transitionViews
         });
     }
     _addedFragmentsInContainer = {};
@@ -164,7 +163,7 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         popupBackPage = page.parentController.popUpBackPage;
         if (popupBackPage && popupBackPage.transitionViews) {
             _addedFragmentsInContainer[page.pageID] = false;
-            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation, false);
+            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
             return;
         }
     }
@@ -202,23 +201,20 @@ function addSharedElement(params = {}) {
         animated,
         page,
         fragmentTransaction,
-        transitionViews,
-        forward
+        transitionViews
     } = params;
     if (animated) {
         var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
         var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
         page.nativeObject.setSharedElementEnterTransition(inflateTransition);
 
-        const Application = require("../../../application");
-
+        const NativeAnimationUtils = requireClass("io.smartface.android.utils.AnimationUtil");
         let sharedElementEnterTransition = page.nativeObject.getSharedElementEnterTransition();
-        let currentPage = (forward === true) ? page.popUpBackPage : Application.currentPage;
-        if (currentPage.android.transitionViewsCallback)
-            currentPage.nativeObject.setSharedElementTransitionCallback(currentPage.android.transitionViewsCallback, sharedElementEnterTransition);
-    } else {
+        if (page.android.transitionViewsCallback)
+            NativeAnimationUtils.setSharedElementTransitionCallback(page.android.transitionViewsCallback, sharedElementEnterTransition);
+    } else 
         page.nativeObject.setSharedElementEnterTransition(null);
-    }
+
 
     var lenght = transitionViews.length;
     for (var i = 0; i < lenght; i++) {
