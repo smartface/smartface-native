@@ -48,7 +48,6 @@ FragmentTransaction.push = function(params) {
         FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     } else {
         FragmentTransaction.popUpTransition(page, params.animated);
-
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
         currentPage.layout.nativeObject.setFocusableInTouchMode(false);
         !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
@@ -208,9 +207,14 @@ function addSharedElement(params = {}) {
         var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
         var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
         page.nativeObject.setSharedElementEnterTransition(inflateTransition);
-    } else {
+
+        const NativeAnimationUtils = requireClass("io.smartface.android.utils.AnimationUtil");
+        let sharedElementEnterTransition = page.nativeObject.getSharedElementEnterTransition();
+        if (page.android.transitionViewsCallback)
+            NativeAnimationUtils.setSharedElementTransitionCallback(page.android.transitionViewsCallback, sharedElementEnterTransition);
+    } else 
         page.nativeObject.setSharedElementEnterTransition(null);
-    }
+
 
     var lenght = transitionViews.length;
     for (var i = 0; i < lenght; i++) {
