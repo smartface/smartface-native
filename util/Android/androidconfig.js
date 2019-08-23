@@ -43,4 +43,6 @@ AndroidConfig.getSystemService = function(serviceName, serviceClassName) {
     return servicesCache[serviceName];
 };
 
+AndroidConfig.getResourceId = (resourceName, type) => activity.getResources().getIdentifier(resourceName, type, packageName);
+
 module.exports = AndroidConfig;

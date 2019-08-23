@@ -312,8 +312,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
-                    if (value === true && !AndroidConfig.isEmulator)
-                        self.nativeObject.getInstance().setErrorTextAppearance(NativeR.style.SFMaterialTextBoxErrorTextAppearance);
+                    if (value === true && !AndroidConfig.isEmulator) {
+                        let SFMaterialTextBoxErrorTextAppearance_ID = AndroidConfig.getResourceId("SFMaterialTextBoxErrorTextAppearance", "style");
+                        self.nativeObject.getInstance().setErrorTextAppearance(SFMaterialTextBoxErrorTextAppearance_ID);
+                    }
                 },
                 enumerable: true
             }
@@ -322,8 +324,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         for (var key in sfTextBox) { //Overrides the textbox properties & methods
             if (key !== "android") {
                 assignProperty.call(self, key);
-            }
-            else {
+            } else {
                 for (var key in sfTextBox[key]) {
                     assignAndroidProperty.call(self, key);
                 }
@@ -359,9 +360,9 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
 
-
         if (!AndroidConfig.isEmulator) {
-            self.nativeObject.getInstance().setHintTextAppearance(NativeR.style.SFMaterialTextBoxHintAppearance);
+            let SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId("SFMaterialTextBoxHintAppearance", "style");
+            self.nativeObject.getInstance().setHintTextAppearance(SFMaterialTextBoxHintAppearance_ID);
         }
 
         //Defaults 
