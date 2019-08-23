@@ -55,7 +55,7 @@ const parentPicker = function(subClass) {
         titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
         titleTextView.setPaddingRelative(10, 20, 10, 10);
         titleTextView.setGravity(CENTER);
-        
+
         self.titleColor && titleTextView.setTextColor(self.titleColor.nativeObject);
         self.titleFont && titleTextView.setTypeface(self.titleFont.nativeObject);
         self.titleFont && titleTextView.setTextSize(self.titleFont.size);

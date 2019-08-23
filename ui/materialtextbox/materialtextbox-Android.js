@@ -11,6 +11,7 @@ const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 const hintTextColorFieldName = "mDefaultTextColor";
 const hintFocusedTextColorFieldName = "mFocusedTextColor";
@@ -35,6 +36,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         var _hintTextColor, _hintFocusedTextColor,
             _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font,
+            _editTextFont,
             _rightLayout = null,
             _rightLayoutWidth;
         var _enableCounterMaxLength = 10;
@@ -49,7 +51,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getHint().toString();
                 },
                 set: function(hintText) {
-
+                    //Why are we need to look at the error text ? 
                     var enableHintMessage = (_errorText !== "" ? true : false);
                     self.nativeObject.setHintEnabled(enableHintMessage);
                     self.nativeObject.setHint(hintText);
@@ -127,6 +129,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(font) {
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
+                    self.nativeObject.setExpandedHintTextSize(self.nativeObject.getInstance(), AndroidUnitConverter.dpToPixel(font.size));
                 },
                 enumerable: true
             },
@@ -309,6 +312,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(value) {
                     _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
+                    if (value === true && !AndroidConfig.isEmulator) {
+                        let SFMaterialTextBoxErrorTextAppearance_ID = AndroidConfig.getResourceId("SFMaterialTextBoxErrorTextAppearance", "style");
+                        self.nativeObject.getInstance().setErrorTextAppearance(SFMaterialTextBoxErrorTextAppearance_ID);
+                    }
                 },
                 enumerable: true
             }
@@ -351,6 +358,11 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     enumerable: true
                 });
             }
+        }
+
+        if (!AndroidConfig.isEmulator) {
+            let SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId("SFMaterialTextBoxHintAppearance", "style");
+            self.nativeObject.getInstance().setHintTextAppearance(SFMaterialTextBoxHintAppearance_ID);
         }
 
         //Defaults 

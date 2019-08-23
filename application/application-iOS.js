@@ -252,6 +252,13 @@ Object.defineProperty(SFApplication, 'smartfaceAppName', {
     enumerable: true
 });
 
+Object.defineProperty(SFApplication, 'appName', {
+    get: function() {
+        return Application.smartfaceAppName;
+    },
+    enumerable: true
+});
+
 Object.defineProperty(SFApplication, 'version', {
     get: function() {
         return Application.version;

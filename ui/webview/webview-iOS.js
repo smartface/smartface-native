@@ -372,4 +372,7 @@ WebView.removeAllData = function() {
 WebView.Android = {};
 WebView.Android.ConsoleMessageLevel = {};
 
+WebView.android = {};
+WebView.android.setWebContentsDebuggingEnabled = function(enabled) {};
+
 module.exports = WebView;
