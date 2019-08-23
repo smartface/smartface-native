@@ -120,6 +120,13 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
+    'appName': {
+        get: function() {
+            return Application.smartfaceAppName;
+        },
+        enumerable: true
+    },
+    // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'version': {
         get: function() {
             return Application.version;
@@ -159,7 +166,7 @@ Object.defineProperties(ApplicationWrapper, {
 
             let intent = new NativeIntent(action);
             let uriObject;
-            if (TypeUtil.isObject(data)) {
+            if (TypeUtil.isObject(data) && Object.keys(data).length > 0) {
                 // we should use intent.putExtra but it causes native crash.
                 let params = Object.keys(data).map(function(k) {
                     return k + '=' + data[k];

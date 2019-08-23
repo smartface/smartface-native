@@ -336,6 +336,17 @@ WebView.prototype.clearFormData = function() {};
 WebView.prototype.clearHistory = function() {};
 
 /**
+ * Enables debugging of WebView contents.
+ *
+ * @method setWebContentsDebuggingEnabled
+ * @android
+ * @param {Boolean} [enabled=false]
+ * @static
+ * @since 4.0.6
+ */
+WebView.android.setWebContentsDebuggingEnabled = function(enabled) {};
+
+/**
  * This event is triggered more than once to get safeAreaInsets.
  *
  * @event safeAreaInsets

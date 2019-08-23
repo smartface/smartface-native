@@ -60,7 +60,7 @@ Application.android.locale;
  * @static
  * @since 3.1.3
  */
-Application.getLayoutDirection;
+Application.android.getLayoutDirection;
 
 /**
  * Application bundle identifier.
@@ -128,9 +128,22 @@ Application.currentReleaseChannel;
  * @android
  * @ios
  * @static
+ * @deprecated
  * @since 0.1
  */
 Application.smartfaceAppName;
+
+/**
+ * The application name within project.json
+ * 
+ * @property {String} appName
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.7
+ */
+Application.appName;
 
 /**
  * The application version within project.json
@@ -145,7 +158,7 @@ Application.smartfaceAppName;
 Application.version;
 
 /**
- * Checks URL’s scheme can be handled or not by some app that installed on the device.
+ * Checks URL's scheme can be handled or not by some app that installed on the device.
  * 
  * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
  * 

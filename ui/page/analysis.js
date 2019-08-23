@@ -137,6 +137,18 @@ Page.prototype.android = {};
  */
 Page.prototype.android.onBackButtonPressed = function() {};
 
+/**
+ * Adds a callback to transition views which will be triggered through the life  of an animation such as start and end. This callback must be assigned in constructor.
+ *
+ * @property {Object} transitionViewsCallback
+ * @param {Object} transitionViewsCallback
+ * @param {Function} transitionViewsCallback.onTransitionStart
+ * @param {Function} transitionViewsCallback.onTransitionEnd
+ * @android
+ * @since 4.0.7
+ */
+Page.prototype.android.transitionViewsCallback;
+
 Page.prototype.ios = {};
 /**
  * Sets padding values to page's layout.

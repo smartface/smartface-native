@@ -20,7 +20,7 @@ const Picker = extend(View)(
             self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
-    	ParentPicker(self);
+        ParentPicker(self);
 
         var _items = [];
         var _onSelected;

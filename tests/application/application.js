@@ -17,8 +17,8 @@ salep.test("sf-core/application Unit Test", function() {
         assert.isString(Application.currentReleaseChannel, 'currentReleaseChannel must be string');
     });
     
-    this.case("[smartfaceAppName] getter.", function() {
-        assert.isString(Application.smartfaceAppName, 'smartfaceAppName must be string');
+    this.case("[appName] getter.", function() {
+        assert.isString(Application.appName, 'appName must be string');
     });
     
     this.case("[version] getter.", function() {
