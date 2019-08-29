@@ -94,7 +94,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded.
  *
  * @method loadFromUrl
  * @param {Object} object
@@ -103,6 +103,8 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {Boolean} object.fade = true
  * @param {Function} object.onSuccess
  * @param {Function} object.onFailure
+ * @param {Object} object.ios
+ * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @android
  * @ios
  * @since 3.1.3
