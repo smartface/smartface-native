@@ -108,11 +108,13 @@ const ImageView = extend(View)(
 				}.bind(self, fade));
 			}
 			else if (typeof url === "object") {
-				var isRefreshCached = url.ios ? (url.ios.isRefreshCached ? [SDWebImageOptions.SDWebImageRefreshCached] : undefined) : undefined;
+				var options;
+				url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached);
+				
 				self.nativeObject.loadFromURL(
 					__SF_NSURL.URLWithString(url.url),
 					url.placeholder ? url.placeholder.nativeObject : undefined,
-					isRefreshCached,
+					options ? options : undefined,
 					function(onSuccess, onError, innerFade, image, error, cache, url) {
 						if (!error) {
 							if (cache == ImageCacheType.NONE && innerFade !== false) {
@@ -141,7 +143,10 @@ const ImageView = extend(View)(
 		}
 
 		self.fetchFromUrl = function(object) {
-			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, [SDWebImageOptions.SDWebImageAvoidAutoSetImage], function(onSuccess, onError, image, error, cache, url) {
+			var options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
+			object.ios && object.ios.isRefreshCached &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached);
+			
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
 				if (!error) {
 					if (typeof onSuccess === "function") {
 						__SF_Dispatch.mainAsync(function(innerIndex) {
