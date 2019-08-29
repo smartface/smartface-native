@@ -325,7 +325,7 @@ ImageView.FillType.ios.BOTTOMRIGHT;
 
 ImageView.Android = {};
 /** 
- * @enum ImageView.Android.KeyboardMode 
+ * @enum ImageView.Android.NetworkPolicy 
  * @since 4.0.8
  * 
  * Designates the policy to use for network requests.

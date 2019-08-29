@@ -40,8 +40,7 @@ const ImageView = extend(View)(
                         return this._image = (drawable ? new Image({
                             drawable: drawable
                         }) : null);
-                    }
-                    else
+                    } else
                         return this._image;
                 },
                 set: function(value) {
@@ -50,16 +49,14 @@ const ImageView = extend(View)(
                         var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
-                    }
-                    else if (typeof value === "string") {
+                    } else if (typeof value === "string") {
                         var imageFile = new File({
                             path: value
                         });
                         this.loadFromFile({
                             file: imageFile
                         });
-                    }
-                    else {
+                    } else {
                         this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
@@ -131,7 +128,11 @@ const ImageView = extend(View)(
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                plainRequestCreator = setRequestCreatorMethods.call(plainRequestCreator, { networkPolicy, fade, placeholder });
+                plainRequestCreator = setRequestCreatorMethods.call(plainRequestCreator, {
+                    networkPolicy,
+                    fade,
+                    placeholder
+                });
                 var requestCreator = scaleImage(plainRequestCreator);
                 if (callback !== null)
                     requestCreator.into(this.nativeObject, callback);
@@ -148,6 +149,7 @@ const ImageView = extend(View)(
             const {
                 onSuccess,
                 onError,
+                onFailure,
                 url,
                 placeholder,
                 networkPolicy
@@ -160,8 +162,8 @@ const ImageView = extend(View)(
                 },
                 onBitmapFailed: function(errorDrawable) {
                     // onFailure callback added instead of onError in sf-core 3.2.1
-                    var onFailure = (onError ? onError : onFailure);
-                    onFailure && onFailure();
+                    var onFailed = (onError ? onError : onFailure);
+                    onFailed && onFailed();
                 },
                 onPrepareLoad: function(placeHolderDrawable) {
                     self.nativeObject.setImageDrawable(placeHolderDrawable);
@@ -170,13 +172,11 @@ const ImageView = extend(View)(
 
             if (TypeUtil.isString(url)) {
                 var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                requestCreator = setRequestCreatorMethods.call(requestCreator, { placeholder, networkPolicy });
-                if (placeholder instanceof Image) {
-                    requestCreator.placeholder(placeholder.nativeObject).into(target);
-                }
-                else {
-                    requestCreator.into(target);
-                }
+                requestCreator = setRequestCreatorMethods.call(requestCreator, {
+                    placeholder,
+                    networkPolicy
+                });
+                requestCreator.into(target);
             }
         };
 
@@ -195,35 +195,39 @@ const ImageView = extend(View)(
                     var resources = AndroidConfig.activity.getResources();
                     var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
                     var plainRequestCreatorDrawable = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
-                    plainRequestCreatorDrawable = setRequestCreatorMethods.call(plainRequestCreatorDrawable, { fade, placeholder });
+                    plainRequestCreatorDrawable = setRequestCreatorMethods.call(plainRequestCreatorDrawable, {
+                        fade,
+                        placeholder
+                    });
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreatorDrawable = scaleImage(plainRequestCreatorDrawable);
                         requestCreatorDrawable.into(this.nativeObject);
                     }
-                }
-                else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                } else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
                     var plaingRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
-                    plaingRequestCreatorAsset = setRequestCreatorMethods.call(plaingRequestCreatorAsset, { fade, placeholder });
+                    plaingRequestCreatorAsset = setRequestCreatorMethods.call(plaingRequestCreatorAsset, {
+                        fade,
+                        placeholder
+                    });
                     if (width && height) {
                         plaingRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreatorAsset = scaleImage(plaingRequestCreatorAsset);
                         requestCreatorAsset.into(this.nativeObject);
                     }
-                }
-                else {
+                } else {
                     var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
-                    plainRequestCreator = setRequestCreatorMethods.call(plainRequestCreator, { fade, placeholder });
+                    plainRequestCreator = setRequestCreatorMethods.call(plainRequestCreator, {
+                        fade,
+                        placeholder
+                    });
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreator = scaleImage(plainRequestCreator);
                         requestCreator.into(this.nativeObject);
                     }
@@ -246,8 +250,7 @@ const ImageView = extend(View)(
                     default:
                         return loadedImage;
                 }
-            }
-            else {
+            } else {
                 return loadedImage;
             }
         }
@@ -293,8 +296,7 @@ function getLoadFromUrlParams() {
             onSuccess: params.onSuccess,
             networkPolicy: params.networkPolicy
         };
-    }
-    else {
+    } else {
         return {
             url: arguments[0],
             placeholder: arguments[1],
