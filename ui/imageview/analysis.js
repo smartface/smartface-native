@@ -140,6 +140,8 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @param {UI.Image} object.onSuccess.image
  * @param {UI.ImageCacheType} object.onSuccess.cache
  * @param {Function} object.onFailure
+ * @param {Object} object.ios
+ * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @android
  * @ios
  * @since 3.0.2
