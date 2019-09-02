@@ -37,7 +37,6 @@ const SwipeView = extend(View)(
                             skipDefaults: true
                         });
                     }
-                    DirectionBasedConverter.flipHorizontally(pageInstance.layout);
                     _pageInstances[position] = pageInstance;
                     bypassPageSpecificProperties(pageInstance);
                     return pageInstance.nativeObject;
@@ -47,7 +46,6 @@ const SwipeView = extend(View)(
 
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
-            DirectionBasedConverter.flipHorizontally(self.nativeObject);
             self.nativeObject.setId(viewID);
         }
 
