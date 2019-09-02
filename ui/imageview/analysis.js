@@ -335,7 +335,7 @@ ImageView.Android = {};
  *     @example
  *     myImageView.loadFromUrl({
  *         url: "IMAGEURL",
- *         networkPolicy: ImageView.Android.NetworkPolicy.NO_CACHE,
+ *         android: { networkPolicy: ImageView.Android.NetworkPolicy.NO_CACHE }
  *     });
  * 
  */
