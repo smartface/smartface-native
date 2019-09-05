@@ -6,8 +6,8 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const Application = require("../../application");
 const Page = require('../page');
 const Color = require('../color');
 const SwipeView = require('../swipeview');
@@ -48,7 +48,8 @@ const TabBarController = extend(Page)(
         this.tabLayout.yogaNode = new NativeYogaNode();
         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
         this.divider = this.tabLayout.nativeObject.getChildAt(0);
-        DirectionBasedConverter.setLayoutDirection(this.tabLayout.nativeObject);
+        //Todo: When Google fixed its issue (https://issuetracker.google.com/issues/36973591), remove this line.
+        this.tabLayout.nativeObject.setLayoutDirection(Application.LayoutDirection.LEFTTORIGHT);
 
         this.dividerDrawable;
         this.swipeView = new SwipeView({
