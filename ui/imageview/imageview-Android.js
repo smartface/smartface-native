@@ -260,24 +260,21 @@ const ImageView = extend(View)(
 );
 
 
-function setArgsToRequestCreator(params) {
+function setArgsToRequestCreator(params = {}) {
     let plainRequestCreator = this;
-    Object.keys(params).forEach((key) => {
-        switch (key) {
-            case "networkPolicy":
-                if (params[key])
-                    plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[params[key]], array([], "com.squareup.picasso.NetworkPolicy"));
-                break;
-            case "fade":
-                if (params[key] === false)
-                    plainRequestCreator = plainRequestCreator.noFade();
-                break;
-            case "placeholder":
-                if (params[key] instanceof Image)
-                    plainRequestCreator = plainRequestCreator.placeholder(params[key].nativeObject);
-                break;
-        }
-    });
+    let {networkPolicy, fade, placeholder} = params;
+
+    if (networkPolicy) {
+        plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[networkPolicy], array([], "com.squareup.picasso.NetworkPolicy"));
+    } 
+
+    if (fade === false) {
+        plainRequestCreator = plainRequestCreator.noFade();
+    }
+
+    if (placeholder instanceof Image) {
+        plainRequestCreator = plainRequestCreator.placeholder(placeholder.nativeObject);
+    }
     return plainRequestCreator;
 }
 
