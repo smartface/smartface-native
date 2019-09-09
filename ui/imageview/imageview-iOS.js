@@ -385,4 +385,10 @@ const SDWebImageOptions = {
 	SDWebImageForceTransition: 1 << 16
 };
 
+ImageView.Android = {}
+ImageView.Android.NetworkPolicy = {};
+ImageView.Android.NetworkPolicy.NO_CACHE = 1;
+ImageView.Android.NetworkPolicy.NO_STORE = 2;
+ImageView.Android.NetworkPolicy.OFFLINE = 3;
+
 module.exports = ImageView;
