@@ -94,7 +94,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded.
  *
  * @method loadFromUrl
  * @param {Object} object
@@ -103,6 +103,10 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {Boolean} object.fade = true
  * @param {Function} object.onSuccess
  * @param {Function} object.onFailure
+ * @param {Object} object.ios
+ * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
+ * @param {Object} object.android Android specific argument
+ * @param {UI.ImageView.Android.NetworkPolicy} object.android.networkPolicy Designates the policy to use for network requests.
  * @android
  * @ios
  * @since 3.1.3
@@ -138,6 +142,10 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @param {UI.Image} object.onSuccess.image
  * @param {UI.ImageCacheType} object.onSuccess.cache
  * @param {Function} object.onFailure
+ * @param {Object} object.ios
+ * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
+ * @param {Object} object.android Android specific argument
+ * @param {UI.ImageView.Android.NetworkPolicy} object.android.networkPolicy Designates the policy to use for network requests.
  * @android
  * @ios
  * @since 3.0.2
@@ -315,5 +323,54 @@ ImageView.FillType.ios.BOTTOMCENTER;
  * @since 0.1
  */
 ImageView.FillType.ios.BOTTOMRIGHT;
+
+
+ImageView.Android = {};
+/** 
+ * @enum UI.ImageView.Android.NetworkPolicy 
+ * @since 4.0.8
+ * 
+ * Designates the policy to use for network requests.
+ * 
+ *     @example
+ *     myImageView.loadFromUrl({
+ *         url: "IMAGEURL",
+ *         android: { networkPolicy: ImageView.Android.NetworkPolicy.NO_CACHE }
+ *     });
+ * 
+ */
+ImageView.Android.NetworkPolicy = {};
+
+
+/**
+ * Skips checking the disk cache and forces loading through the network.
+ *
+ * @property NO_CACHE
+ * @static
+ * @readonly
+ * @since 4.0.8
+ */
+ImageView.Android.NetworkPolicy.NO_CACHE;
+
+/**
+ * Skips storing the result into the disk cache.
+ *
+ * @property NO_STORE
+ * @static
+ * @readonly
+ * @since 4.0.8
+ */
+ImageView.Android.NetworkPolicy.NO_STORE;
+
+
+/**
+ * Forces the request through the disk cache only, skipping network.
+ *
+ * @property OFFLINE
+ * @static
+ * @readonly
+ * @since 4.0.8
+ */
+ImageView.Android.NetworkPolicy.OFFLINE;
 
 module.exports = ImageView;
