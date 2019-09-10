@@ -174,7 +174,7 @@ const SwipeView = extend(View)(
                     // TODO: Hotfix for APC. Please investigate why _pageInstances[intPosition] is null.
                     // Maybe this custom index propagation has logic error.
                     if (!_pageInstances[intPosition]) return;
-                    _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
+                    _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
                 }
             }
         });
@@ -193,8 +193,6 @@ function bypassPageSpecificProperties(page) {
         });
     });
     page.isSwipeViewPage = true;
-    page.onShowSwipeView = page.onShow;
-    page.onShow = function() {};
 }
 
 SwipeView.State = require("./swipeviewState");
