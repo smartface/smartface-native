@@ -5,9 +5,9 @@ const Font = require('../font');
 const Color = require('../color');
 const Image = require("../image");
 const KeyboardType = require('../keyboardtype');
-const ActionKeyType = require('../actionkeytype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
+const Application = require("../../application");
 const Exception = require("../../util/exception");
 const Reflection = require("../android/reflection");
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -469,6 +469,8 @@ const SearchView = extend(View)(
                 return;
             mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event) {
+                    Application.hideKeyboard();
+                    mSearchSrcTextView.dismissDropDown();
                     if (actionId === SEARCH_ACTION_KEY_TYPE)
                         _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
                     return false;
