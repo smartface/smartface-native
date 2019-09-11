@@ -5,6 +5,7 @@ const Font = require('../font');
 const Color = require('../color');
 const Image = require("../image");
 const KeyboardType = require('../keyboardtype');
+const ActionKeyType = require('../actionkeytype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const Exception = require("../../util/exception");
@@ -13,6 +14,7 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
 const NativeSupportR = requireClass('android.support.v7.appcompat.R');
+const NativeTextView = requireClass("android.widget.TextView");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -23,6 +25,7 @@ const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
 const HIDE_IMPLICIT_ONLY = 1;
 const INTEGER_MAX_VALUE = 2147483647;
+const SEARCH_ACTION_KEY_TYPE = 3;
 const NativeKeyboardType = [1, // InputType.TYPE_CLASS_TEXT
     2, //InputType.TYPE_CLASS_NUMBER
     2 | 8192, // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
@@ -241,8 +244,8 @@ const SearchView = extend(View)(
                     return _onTextChangedCallback;
                 },
                 set: function(onTextChanged) {
-                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
-                    _onTextChangedCallback = onTextChanged.bind(this);
+                    _onTextChangedCallback = onTextChanged.bind(self);
+                    self.setQueryTextListener();
                 },
                 enumerable: true
             },
@@ -251,8 +254,8 @@ const SearchView = extend(View)(
                     return _onSearchButtonClickedCallback;
                 },
                 set: function(onSearchButtonClicked) {
-                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
-                    _onSearchButtonClickedCallback = onSearchButtonClicked.bind(this);
+                    _onSearchButtonClickedCallback = onSearchButtonClicked.bind(self);
+                    self.setOnSearchButtonClickedListener();
                 },
                 enumerable: true
             },
@@ -416,7 +419,8 @@ const SearchView = extend(View)(
                     if (_leftItem instanceof Image) {
                         mCompatImageView.setImageDrawable(_leftItem.nativeObject);
                         mSearchEditFrame.addView(mCompatImageView, 0);
-                    } else
+                    }
+                    else
                         mSearchEditFrame.addView(_leftItem.nativeObject, 0);
                     //If searchIcon is assign then can be used leftView as well
                     if (_searchIconAssigned)
@@ -446,18 +450,31 @@ const SearchView = extend(View)(
             mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
         };
 
+        let _isNotSetQueryTextListener = false;
         this.setQueryTextListener = () => {
-            this.__isNotSetQueryTextListener = true;
+            if (_isNotSetQueryTextListener)
+                return;
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-                onQueryTextSubmit: function(query) {
-                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
-                    return false;
-                },
                 onQueryTextChange: function(newText) {
                     _onTextChangedCallback && _onTextChangedCallback(newText);
                     return false;
                 }
             }));
+            _isNotSetQueryTextListener = true;
+        };
+
+        let _isClicklistenerAdded = false;
+        this.setOnSearchButtonClickedListener = () => {
+            if (_isClicklistenerAdded)
+                return;
+            mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
+                onEditorAction: function(textView, actionId, event) {
+                    if (actionId === SEARCH_ACTION_KEY_TYPE)
+                        _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                    return false;
+                }
+            }));
+            _isClicklistenerAdded = true;
         };
 
         // Handling ios specific properties
@@ -474,7 +491,8 @@ const SearchView = extend(View)(
                     if (hasFocus) {
                         _onSearchBeginCallback && _onSearchBeginCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
-                    } else {
+                    }
+                    else {
                         _onSearchEndCallback && _onSearchEndCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
                     }
@@ -501,8 +519,7 @@ const SearchView = extend(View)(
                 this[param] = params[param];
             }
         }
-    }
-);
+    });
 
 SearchView.iOS = {};
 SearchView.iOS.Style = {};
@@ -522,7 +539,8 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
         ssb.setSpan(imageSpan, 1, 2, SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.append(hint);
         mSearchSrcTextView.setHint(ssb);
-    } else {
+    }
+    else {
         self.nativeObject.setQueryHint(hint);
     }
 
