@@ -308,10 +308,11 @@ Notifications.LocalNotification = function(params) {
 var _onNotificationClick, _onNotificationReceive;
 Object.defineProperties(Notifications, {
     'cancelAllLocalNotifications': {
-        value: function() {
-            var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
-            notificationManager.cancelAll();
-        },
+        value: removeAllNotifications,
+        enumerable: true
+    },
+    'removeAllDeliveredNotifications': {
+        value: removeAllNotifications,
         enumerable: true
     },
     'registerForPushNotifications': {
@@ -374,6 +375,8 @@ function getNewNotificationId() {
     return randomnumber;
 }
 
+
+
 function unregisterPushNotification() {
     // Implemented due to COR-1281
     if (TypeUtil.isString(senderID) && senderID !== "") {
@@ -410,6 +413,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
     } else {
         onFailureCallback && onFailureCallback();
     }
+}
+
+function removeAllNotifications() {
+    var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
+    notificationManager.cancelAll();
 }
 
 function readSenderIDFromProjectJson() {
