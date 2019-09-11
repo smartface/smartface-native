@@ -22,6 +22,7 @@ function Notifications() {}
  * @ios
  * @static
  * @since 0.1
+ * @deprecated 4.0.8 Use {@link Notifications.removeAllDeliveredNotifications}
  */
 Notifications.cancelAllLocalNotifications = function() {};
 
