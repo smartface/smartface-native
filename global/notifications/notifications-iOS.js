@@ -292,6 +292,6 @@ Object.defineProperty(Notifications, 'onNotificationClick', {
 
 Notifications.removeAllDeliveredNotifications = function(){
 	__SF_UNUserNotificationCenter.currentNotificationCenter().removeAllDeliveredNotifications();
-}
+};
 
 module.exports = Notifications;

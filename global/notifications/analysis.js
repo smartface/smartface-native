@@ -120,6 +120,17 @@ Notifications.onNotificationReceive = function(data) {};
 Notifications.onNotificationClick = function(data) {};
 
 /**
+ * Use this method to remove all of your app’s delivered notifications.
+ * 
+ * @method removeAllDeliveredNotifications
+ * @ios
+ * @android
+ * @static
+ * @since 4.0.8
+ */
+Notifications.removeAllDeliveredNotifications = function() {};
+
+/**
  * iOS Specific Properties.
  * @class Notifications.iOS
  * @since 3.1.1
