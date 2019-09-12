@@ -463,13 +463,15 @@ const SearchView = extend(View)(
         };
 
         let _isClicklistenerAdded = false;
+        /*
+        Consider Native behavior: Close Drop down list & keyboard if text is not empty and null. 
+        In case of, drop down feature is present, make sure its behavior suggested in api doc or impl.
+        */
         this.setOnSearchButtonClickedListener = () => {
             if (_isClicklistenerAdded)
                 return;
             mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event) {
-                    Application.hideKeyboard();
-                    mSearchSrcTextView.dismissDropDown();
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
                     return true;
                 }
