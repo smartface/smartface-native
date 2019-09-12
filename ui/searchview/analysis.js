@@ -377,7 +377,7 @@ SearchView.prototype.onSearchEnd = function() {};
 SearchView.prototype.onTextChanged = function(searchText) {};
 
 /**
- * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application.hideKeyboard ohide the keyboard}.
+ * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
  *
  * @event onSearchButtonClicked
  * @android
