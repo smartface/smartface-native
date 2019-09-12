@@ -454,6 +454,9 @@ const SearchView = extend(View)(
             if (_isNotSetQueryTextListener)
                 return;
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
+                onQueryTextSubmit: function(query) {
+                    return false;
+                },
                 onQueryTextChange: function(newText) {
                     _onTextChangedCallback && _onTextChangedCallback(newText);
                     return false;
