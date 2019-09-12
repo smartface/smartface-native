@@ -25,22 +25,8 @@ const SwipeView = extend(View)(
                     return self.pages.length;
                 },
                 getItem: function(position) {
-                    var pageInstance;
-                    if (self.onPageCreate) {
-                        pageInstance = self.onPageCreate(position);
-                    }
-                    else if (_pageInstances[position]) {
-                        return (_pageInstances[position]).nativeObject;
-                    }
-                    else { // For backward compatibility
-                        var pageClass = self.pages[position];
-                        pageInstance = new pageClass({
-                            skipDefaults: true
-                        });
-                    }
-                    _pageInstances[position] = pageInstance;
-                    bypassPageSpecificProperties(pageInstance);
-                    return pageInstance.nativeObject;
+                    let pageNativeObject = self.getPageInstance(position);
+                    return pageNativeObject;
                 }
             };
             this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
@@ -155,6 +141,24 @@ const SwipeView = extend(View)(
             }
         });
 
+        this.getPageInstance = function(position) {
+            var pageInstance;
+            if (this.onPageCreate) {
+                pageInstance = this.onPageCreate(position);
+            } else if (_pageInstances[position]) {
+                return (_pageInstances[position]).nativeObject;
+            } else {
+                // For backward compatibility
+                var pageClass = this.pages[position];
+                pageInstance = new pageClass({
+                    skipDefaults: true
+                });
+            }
+            _pageInstances[position] = pageInstance;
+            bypassPageSpecificProperties(pageInstance);
+            return pageInstance.nativeObject;
+        }.bind(self);
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -168,8 +172,7 @@ const SwipeView = extend(View)(
             onPageScrollStateChanged: function(state) {
                 if (state === 0) { // SCROLL_STATE_IDLE
                     self.onStateChanged && self.onStateChanged(SwipeView.State.IDLE);
-                }
-                else if (state === 1) { // SCROLL_STATE_DRAGGING
+                } else if (state === 1) { // SCROLL_STATE_DRAGGING
                     self.onStateChanged && self.onStateChanged(SwipeView.State.DRAGGING);
                 }
             },
