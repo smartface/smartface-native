@@ -32,7 +32,7 @@
  */
 var Http = function(params) {
     /**
-     * Gets/sets request timeout. Time elapsed in millisecond.
+     * Gets/sets request timeout. Time elapsed in millisecond. This parameter must be given in constructor.
      *
      * @property {Number} timeout
      * @android
