@@ -93,9 +93,10 @@ function http(params) {
         }
     }
 
-    self.client = self.clientBuilder.build();
-    if (!self.timeout)
+    if (!Number.isInteger(self.timeout)) {
         self.timeout = 60000;
+    }
+    self.client = self.clientBuilder.build();
 }
 
 http.__cancelAll = function() {

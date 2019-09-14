@@ -70,11 +70,18 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
+                    // TODO: isSwipeViewPage is never set to false. This will cause some unexpected behaviours. 
+                    // Sample case: Add PageA to SwipeView. Remove PageA from SwipeView and push it to NavigationController.
+                    // onShow callback will never be triggered.
                     if (!self.isSwipeViewPage) {
                         Application.currentPage = self;
                     }
+                    
                     Application.registOnItemSelectedListener();
-                    onShowCallback && onShowCallback();
+                    
+                    if(!self.isSwipeViewPage) {
+                        self.__onShowCallback && self.__onShowCallback();
+                    }
 
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.hasExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON) === true) {
@@ -182,13 +189,14 @@ function Page(params) {
         },
         enumerable: true
     });
-    var onShowCallback;
+    
+    self.__onShowCallback;
     Object.defineProperty(this, 'onShow', {
         get: function() {
-            return onShowCallback;
+            return self.__onShowCallback;
         },
         set: function(onShow) {
-            onShowCallback = (function() {
+            self.__onShowCallback = (function() {
                 if (onShow instanceof Function) {
                     onShow.call(this, this.__pendingParameters);
                     delete this.__pendingParameters;
