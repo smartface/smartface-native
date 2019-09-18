@@ -55,6 +55,7 @@ Object.defineProperties(Network, {
     },
     'connectionType': {
         get: function() {
+            //Deprecated in API level 29
             var activeInternet = getActiveInternet();
             if (activeInternet == null) // undefined or null
                 return Network.ConnectionType.NONE;

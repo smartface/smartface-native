@@ -104,7 +104,7 @@ Network.connectionIP;
  * @since 3.0.1
  *
  * Provides an event to notify in case of connection is changed. In Android, notifier fires the subscribed event with cached value at the first launch. That enables to not miss any changes. Such as, changed 
- * value could be missed when application in background. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
+ * value could be missed when application is frozen. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
  * 
  *     @example
  *     const Network = require("sf-core/device/network");
