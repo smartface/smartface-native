@@ -94,22 +94,17 @@ Object.defineProperties(Network, {
 
 var _instanceCollection = [];
 Network.createNotifier = function(params) {
-    const NativeIntentFilter = requireClass("android.content.IntentFilter");
-    const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
-    const SFBroadcastReceiver = requireClass("io.smartface.android.sfcore.device.network.SFBroadcastReceiver");
+    const SFNetworkNotifier = requireClass("io.smartface.android.sfcore.device.network.SFNetworkNotifier");
 
     const self = this;
     if (!self.nativeObject) {
-        var nativeConnectionFilter = new NativeIntentFilter();
-        nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
-
         let callback = {
             onConnectionTypeChanged: function(connectionType) {
                 let cTypeEnum = getConnectionTypeEnum(connectionType);
                 self.connectionTypeChanged && self.connectionTypeChanged(cTypeEnum);
             }
         };
-        self.nativeObject = new SFBroadcastReceiver(callback);
+        self.nativeObject = new SFNetworkNotifier(callback);
     }
 
     var isReceiverCreated = false,
@@ -122,12 +117,12 @@ Network.createNotifier = function(params) {
             _connectionTypeChanged = value;
             if (typeof value === 'function') {
                 if (!isReceiverCreated) {
-                    AndroidConfig.activity.registerReceiver(self.nativeObject, nativeConnectionFilter);
+                    self.nativeObject.registerReceiver();
                     isReceiverCreated = true;
                 }
             } else if (value === null) {
                 if (isReceiverCreated) {
-                    AndroidConfig.activity.unregisterReceiver(self.nativeObject);
+                    self.nativeObject.unregisterReceiver();
                     isReceiverCreated = false;
                 }
             }
