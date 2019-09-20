@@ -6,8 +6,8 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const Application = require("../../application");
 const Page = require('../page');
 const Color = require('../color');
 const SwipeView = require('../swipeview');
@@ -48,21 +48,24 @@ const TabBarController = extend(Page)(
         this.tabLayout.yogaNode = new NativeYogaNode();
         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
         this.divider = this.tabLayout.nativeObject.getChildAt(0);
-        DirectionBasedConverter.setLayoutDirection(this.tabLayout.nativeObject);
+        //Todo: When Google fixed its issue (https://issuetracker.google.com/issues/36973591), remove this line.
+        this.tabLayout.nativeObject.setLayoutDirection(Application.LayoutDirection.LEFTTORIGHT);
 
         this.dividerDrawable;
-        this.swipeView = new SwipeView({
-            page: self,
-            flexGrow: 1,
-            onPageCreate: function(position) {
-                if (!_onPageCreateCallback) {
-                    return null;
-                }
-                return _onPageCreateCallback(position);
-            },
-            // TODO: Remove params.items check later version
-            pageCount: ((params && params.items) ? params.items.length : _items.length)
-        });
+        if (!this.swipeView) {
+            this.swipeView = new SwipeView({
+                page: self,
+                flexGrow: 1,
+                onPageCreate: function(position) {
+                    if (!self.onPageCreate) {
+                        return null;
+                    }
+                    return self.onPageCreate(position);
+                },
+                // TODO: Remove params.items check later version
+                pageCount: ((params && params.items) ? params.items.length : _items.length)
+            });
+        }
         this.android = {};
 
         this.tabLayout.nativeObject.setupWithViewPager(this.swipeView.nativeObject);
@@ -214,7 +217,7 @@ const TabBarController = extend(Page)(
                         itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
                     }
                     if (!this.autoCapitalize) {
-                        setAllCaps(_items, this.tabLayout.nativeObject);
+                        self.setAllCaps(_items, this.tabLayout.nativeObject);
                     }
                 },
                 enumerable: true,
@@ -229,7 +232,7 @@ const TabBarController = extend(Page)(
                     if (this.items && (this.items.length > 0)) {
                         // TODO: If you set title or icon later, native tabLayout capitalizes title of tab item.
                         // Call this function after setting title.
-                        setAllCaps(this.items, this.tabLayout.nativeObject, _autoCapitalize);
+                        self.setAllCaps(this.items, this.tabLayout.nativeObject, _autoCapitalize);
                     }
                 },
                 enumerable: true,
@@ -308,6 +311,24 @@ const TabBarController = extend(Page)(
             }
         };
 
+        this.setAllCaps = function(itemArray, nativeTabLayout, autoCapitalize) {
+            const NativeTextView = requireClass("android.widget.TextView");
+            let viewGroupOfTabLayout = nativeTabLayout.getChildAt(0);
+            let tabsCount = viewGroupOfTabLayout.getChildCount();
+            for (let i = 0; i < tabsCount; i++) {
+                let viewGroupOfTab = viewGroupOfTabLayout.getChildAt(i);
+                let tabChildsCount = viewGroupOfTab.getChildCount();
+                for (let j = 0; j < tabChildsCount; j++) {
+                    let tabViewChild = viewGroupOfTab.getChildAt(j);
+                    let isAssignableFrom = NativeTextView.isAssignableFrom(tabViewChild.getClass());
+                    if (isAssignableFrom) {
+                        tabViewChild.setAllCaps(autoCapitalize);
+                        itemArray[i].nativeTextView = tabViewChild;
+                    }
+                }
+            }
+        };
+
         var listener = NativeTabLayout.OnTabSelectedListener.implement({
             onTabSelected: function(tab) {
                 self.onSelected && self.onSelected(tab.getPosition());
@@ -339,23 +360,4 @@ const TabBarController = extend(Page)(
         }
     }
 );
-
-function setAllCaps(itemArray, nativeTabLayout, autoCapitalize) {
-    const NativeTextView = requireClass("android.widget.TextView");
-    let viewGroupOfTabLayout = nativeTabLayout.getChildAt(0);
-    let tabsCount = viewGroupOfTabLayout.getChildCount();
-    for (let i = 0; i < tabsCount; i++) {
-        let viewGroupOfTab = viewGroupOfTabLayout.getChildAt(i);
-        let tabChildsCount = viewGroupOfTab.getChildCount();
-        for (let j = 0; j < tabChildsCount; j++) {
-            let tabViewChild = viewGroupOfTab.getChildAt(j);
-            let isAssignableFrom = NativeTextView.isAssignableFrom(tabViewChild.getClass());
-            if (isAssignableFrom) {
-                tabViewChild.setAllCaps(autoCapitalize);
-                itemArray[i].nativeTextView = tabViewChild;
-            }
-        }
-    }
-}
-
 module.exports = TabBarController;
