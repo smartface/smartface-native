@@ -1,5 +1,6 @@
 /* globals requireClass */
 const NativeBuildVersion = requireClass("android.os.Build");
+const NativeView = requireClass("android.view.View");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
@@ -11,6 +12,7 @@ const MINAPILEVEL_STATUSBARICONCOLOR = 23;
 const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
 const FLAG_FULLSCREEN = 1024;
 const FLAG_TRANSLUCENT_STATUS = 67108864;
+const SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = NativeView.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
 
 var statusBar = {};
 var activity = AndroidConfig.activity;
@@ -19,18 +21,20 @@ Object.defineProperty(statusBar, 'style', {
     get: function() {
         return statusBarStyle;
     },
-    set: function(value) {
-        if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
+    set: function(value) {if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
             statusBarStyle = value;
+            let decorView = activity.getWindow().getDecorView();
+            let systemUiVisibilityFlags = decorView.getSystemUiVisibility();
             if (statusBarStyle == StatusBarStyle.DEFAULT) {
                 // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
-                AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
+                systemUiVisibilityFlags |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             } else {
                 //STATUS_BAR_VISIBLE = 0
-                AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
+                systemUiVisibilityFlags &= ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
+            
+            decorView.setSystemUiVisibility(systemUiVisibilityFlags);
         }
-
     },
     enumerable: true,
     configurable: true

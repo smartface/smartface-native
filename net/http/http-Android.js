@@ -1,11 +1,11 @@
 /*globals requireClass*/
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
-const OkHttpCallback = requireClass("okhttp3.Callback");
 const OkHttpRequest = requireClass("okhttp3.Request");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const SFHttpCallback = requireClass("io.smartface.android.sfcore.net.SFHttpCallback");
 
 const Blob = require("../../blob");
 
@@ -122,7 +122,7 @@ http.prototype.requestString = function(params) {
     params.onLoad = function(e) {
         if (e && e.body)
             e.string = e.body.toString();
-        requestOnLoad && runOnUiThread(requestOnLoad, e);
+        requestOnLoad && requestOnLoad(e);
     };
     return this.request(params, false, false);
 };
@@ -139,7 +139,7 @@ http.prototype.requestImage = function(params) {
             e.image = Image.createFromBlob(e.body);
         }
 
-        requestOnLoad && runOnUiThread(requestOnLoad, e);
+        requestOnLoad && requestOnLoad(e);
     };
     return this.request(params, false, false);
 };
@@ -153,7 +153,7 @@ http.prototype.requestJSON = function(params) {
         if (e && e.body) {
             e.JSON = JSON.parse(e.string);
         }
-        requestOnLoad && runOnUiThread(requestOnLoad, e);
+        requestOnLoad && requestOnLoad(e);
     };
     return this.requestString(params, false, false);
 };
@@ -181,64 +181,52 @@ http.prototype.requestFile = function(params) {
             e.file = file;
         }
 
-        requestOnLoad && runOnUiThread(requestOnLoad, e);
+        requestOnLoad && requestOnLoad(e);
     };
 
     return this.request(params, false, false);
 };
 
-http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) {
+http.prototype.request = function(params, isMultipart) {
     if (!checkInternet()) {
-        params && typeof params.onError === "function" && runOnUiThread(params.onError, {
+        params && typeof params.onError === "function" && params.onError({
             message: "No network connection"
         });
         return;
     }
-
+    
     var request = new Request();
-    var callback = OkHttpCallback.implement({
-        onFailure: function(call, e) {
-            if (e)
-                var message = e.getMessage();
-            params && typeof params.onError === "function" && runOnUiThread(params.onError, {
-                message: message
+    var callback = SFHttpCallback.getCallback({
+        onFailure: function(msg) {
+            params && typeof params.onError === "function" && params.onError({
+                message: msg
             });
         },
-        onResponse: function(call, response) {
-            var statusCode = response.code();
-            var responseHeaders = getResponseHeaders(response.headers());
+        onResponse: function(isSuccessful, code, headers, bytes, message) {
+            var statusCode = code;
+            var responseHeaders = getResponseHeaders(headers);
 
-            if (statusCode != 304 && response.body()) {
-                var bytes = response.body().bytes();
+            if (statusCode != 304 && bytes) {
                 var responseBody = new Blob(bytes, {
                     type: {}
                 });
             }
 
-            if (response.isSuccessful()) {
+            if (isSuccessful) {
                 if (params && typeof params.onLoad === "function") {
-                    if (isRunOnBackgroundThread) {
-                        params.onLoad({
-                            statusCode: statusCode,
-                            headers: responseHeaders,
-                            body: responseBody
-                        });
-                    } else {
-                        runOnUiThread(params.onLoad, {
-                            statusCode: statusCode,
-                            headers: responseHeaders,
-                            body: responseBody
-                        });
-                    }
-                }
-            } else {
-                params && typeof params.onError === "function" && runOnUiThread(
-                    params.onError, {
+                    params.onLoad({
                         statusCode: statusCode,
                         headers: responseHeaders,
-                        message: response.message(),
                         body: responseBody
                     });
+                }
+            } else if(params && typeof params.onError === "function") {
+                params.onError({
+                    statusCode: statusCode,
+                    headers: responseHeaders,
+                    message: message,
+                    body: responseBody
+                });
             }
         }
     });
@@ -327,8 +315,6 @@ function createMultipartBody(bodies) {
     return builder.build();
 }
 
-
-
 function getResponseHeaders(headers) {
     var responseHeaders = {};
     var headersSize = headers.size();
@@ -343,16 +329,6 @@ function checkInternet() {
     if (Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
-}
-
-function runOnUiThread(requestOnLoad, e) {
-    const Runnable = requireClass("java.lang.Runnable");
-    var runnable = Runnable.implement({
-        run: function() {
-            requestOnLoad(e);
-        }
-    });
-    activity.runOnUiThread(runnable);
 }
 
 function createCookieJar() {
