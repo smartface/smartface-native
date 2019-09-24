@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
-// const OkHttpCallback = requireClass("okhttp3.Callback");
 const OkHttpRequest = requireClass("okhttp3.Request");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
