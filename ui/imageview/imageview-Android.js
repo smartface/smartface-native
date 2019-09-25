@@ -6,6 +6,7 @@ const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
 const NativeNetworkPolicy = requireClass("com.squareup.picasso.NetworkPolicy");
+const NativeMemoryPolicy = requireClass("com.squareup.picasso.MemoryPolicy");
 const File = require('../../io/file');
 const Path = require('../../io/path');
 
@@ -111,7 +112,8 @@ const ImageView = extend(View)(
                 fade,
                 onFailure,
                 onSuccess,
-                networkPolicy
+                networkPolicy,
+                memoryPolicy
             } = getLoadFromUrlParams.apply(null, arguments);
             var callback = null;
             if (onFailure || onSuccess) {
@@ -131,7 +133,8 @@ const ImageView = extend(View)(
                 plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
                     networkPolicy,
                     fade,
-                    placeholder
+                    placeholder,
+                    memoryPolicy
                 });
                 var requestCreator = scaleImage(plainRequestCreator);
                 if (callback !== null)
@@ -153,7 +156,8 @@ const ImageView = extend(View)(
                 url,
                 placeholder,
                 android: {
-                    networkPolicy: networkPolicy
+                    networkPolicy: networkPolicy,
+                    memoryPolicy: memoryPolicy
                 } = {}
             } = params;
             var target = NativeTarget.implement({
@@ -176,7 +180,8 @@ const ImageView = extend(View)(
                 var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 requestCreator = setArgsToRequestCreator.call(requestCreator, {
                     placeholder,
-                    networkPolicy
+                    networkPolicy,
+                    memoryPolicy
                 });
                 requestCreator.into(target);
             }
@@ -188,7 +193,10 @@ const ImageView = extend(View)(
                 fade,
                 width,
                 height,
-                placeholder
+                placeholder,
+                android: {
+                    memoryPolicy: memoryPolicy
+                } = {}
             } = params;
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (file instanceof File) {
@@ -199,7 +207,8 @@ const ImageView = extend(View)(
                     let plainRequestCreatorDrawable = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
                     plainRequestCreatorDrawable = setArgsToRequestCreator.call(plainRequestCreatorDrawable, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -213,7 +222,8 @@ const ImageView = extend(View)(
                     let plainRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
                     plainRequestCreatorAsset = setArgsToRequestCreator.call(plainRequestCreatorAsset, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -225,7 +235,8 @@ const ImageView = extend(View)(
                     let plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
                     plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -262,19 +273,27 @@ const ImageView = extend(View)(
 
 function setArgsToRequestCreator(params = {}) {
     let plainRequestCreator = this;
-    let {networkPolicy, fade, placeholder} = params;
+    let {
+        networkPolicy,
+        fade,
+        placeholder,
+        memoryPolicy
+    } = params;
 
-    if (networkPolicy) {
+    if (networkPolicy)
         plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[networkPolicy], array([], "com.squareup.picasso.NetworkPolicy"));
-    } 
 
-    if (fade === false) {
+    if (memoryPolicy) {
+        console.log(" memoryPolicy " + ImageViewMemoryPolicy[memoryPolicy]);
+        plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[memoryPolicy], array([], "com.squareup.picasso.MemoryPolicy"));
+    }
+
+    if (fade === false)
         plainRequestCreator = plainRequestCreator.noFade();
-    }
 
-    if (placeholder instanceof Image) {
+    if (placeholder instanceof Image)
         plainRequestCreator = plainRequestCreator.placeholder(placeholder.nativeObject);
-    }
+
     return plainRequestCreator;
 }
 
@@ -288,7 +307,8 @@ function getLoadFromUrlParams() {
             onFailure: (params.onError ? params.onError : params.onFailure),
             fade: params.fade,
             onSuccess: params.onSuccess,
-            networkPolicy: params.android ? params.android.networkPolicy : undefined
+            networkPolicy: params.android ? params.android.networkPolicy : undefined,
+            memoryPolicy: params.android ? params.android.memoryPolicy : undefined
         };
     } else {
         return {
@@ -337,15 +357,25 @@ ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
 ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
 ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
 
-ImageView.Android = {}
+ImageView.Android = {};
 ImageView.Android.NetworkPolicy = {};
 ImageView.Android.NetworkPolicy.NO_CACHE = 1;
 ImageView.Android.NetworkPolicy.NO_STORE = 2;
 ImageView.Android.NetworkPolicy.OFFLINE = 3;
+Object.freeze(ImageView.Android.NetworkPolicy);
 
 const ImageViewNetworkPolicy = {};
 ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_CACHE] = NativeNetworkPolicy.NO_CACHE;
 ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_STORE] = NativeNetworkPolicy.NO_STORE;
 ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.OFFLINE] = NativeNetworkPolicy.OFFLINE;
+
+ImageView.Android.MemoryPolicy = {};
+ImageView.Android.MemoryPolicy.NO_CACHE = 1;
+ImageView.Android.MemoryPolicy.NO_STORE = 2;
+
+const ImageViewMemoryPolicy = {};
+ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_CACHE] = NativeMemoryPolicy.NO_CACHE;
+ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_STORE] = NativeMemoryPolicy.NO_STORE;
+Object.freeze(ImageView.Android.MemoryPolicy);
 
 module.exports = ImageView;
