@@ -5,10 +5,14 @@ const View = require('../view');
 const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
-const NativeNetworkPolicy = requireClass("com.squareup.picasso.NetworkPolicy");
-const NativeMemoryPolicy = requireClass("com.squareup.picasso.MemoryPolicy");
 const File = require('../../io/file');
 const Path = require('../../io/path');
+const {
+    ImageViewMemoryPolicy,
+    MemoryPolicy,
+    ImageViewNetworkPolicy,
+    NetworkPolicy
+} = require("./Android/policy.js");
 
 const ImageView = extend(View)(
     function(_super, params) {
@@ -283,10 +287,8 @@ function setArgsToRequestCreator(params = {}) {
     if (networkPolicy)
         plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[networkPolicy], array([], "com.squareup.picasso.NetworkPolicy"));
 
-    if (memoryPolicy) {
-        console.log(" memoryPolicy " + ImageViewMemoryPolicy[memoryPolicy]);
+    if (memoryPolicy) 
         plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[memoryPolicy], array([], "com.squareup.picasso.MemoryPolicy"));
-    }
 
     if (fade === false)
         plainRequestCreator = plainRequestCreator.noFade();
@@ -358,24 +360,15 @@ ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_C
 ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
 
 ImageView.Android = {};
-ImageView.Android.NetworkPolicy = {};
-ImageView.Android.NetworkPolicy.NO_CACHE = 1;
-ImageView.Android.NetworkPolicy.NO_STORE = 2;
-ImageView.Android.NetworkPolicy.OFFLINE = 3;
-Object.freeze(ImageView.Android.NetworkPolicy);
-
-const ImageViewNetworkPolicy = {};
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_CACHE] = NativeNetworkPolicy.NO_CACHE;
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_STORE] = NativeNetworkPolicy.NO_STORE;
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.OFFLINE] = NativeNetworkPolicy.OFFLINE;
-
-ImageView.Android.MemoryPolicy = {};
-ImageView.Android.MemoryPolicy.NO_CACHE = 1;
-ImageView.Android.MemoryPolicy.NO_STORE = 2;
-
-const ImageViewMemoryPolicy = {};
-ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_CACHE] = NativeMemoryPolicy.NO_CACHE;
-ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_STORE] = NativeMemoryPolicy.NO_STORE;
-Object.freeze(ImageView.Android.MemoryPolicy);
+Object.defineProperties(ImageView.Android, {
+    'NetworkPolicy': {
+        value: NetworkPolicy,
+        enumerable: true
+    },
+    'MemoryPolicy': {
+        value: MemoryPolicy,
+        enumerable: true
+    },
+});
 
 module.exports = ImageView;
