@@ -107,6 +107,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @param {Object} object.android Android specific argument
  * @param {UI.ImageView.Android.NetworkPolicy} object.android.networkPolicy Designates the policy to use for network requests.
+ * @param {UI.ImageView.Android.MemoryPolicy} object.android.memoryPolicy Designates the policy to use for memory cache.
  * @android
  * @ios
  * @since 3.1.3
@@ -122,6 +123,8 @@ ImageView.prototype.loadFromUrl = function(params) {};
  * @param {Boolean} object.fade = true
  * @param {Number} object.width
  * @param {Number} object.height
+ * @param {Object} object.android Android specific argument
+ * @param {UI.ImageView.Android.MemoryPolicy} object.android.memoryPolicy Designates the policy to use for memory cache.
  * @android
  * @ios
  * @since 3.1.0
@@ -146,6 +149,7 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @param {Object} object.android Android specific argument
  * @param {UI.ImageView.Android.NetworkPolicy} object.android.networkPolicy Designates the policy to use for network requests.
+ * @param {UI.ImageView.Android.MemoryPolicy} object.android.memoryPolicy Designates the policy to use for memory cache.
  * @android
  * @ios
  * @since 3.0.2
