@@ -284,19 +284,45 @@ function setArgsToRequestCreator(params = {}) {
         memoryPolicy
     } = params;
 
-    if (networkPolicy)
-        plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[networkPolicy], array([], "com.squareup.picasso.NetworkPolicy"));
+    if (networkPolicy != undefined) {
+        let {
+            fPolicy,
+            policies
+        } = getPolicyArgs(networkPolicy, ImageViewNetworkPolicy);
+        if (fPolicy != undefined) {
+            plainRequestCreator = plainRequestCreator.networkPolicy(fPolicy, array(policies, "com.squareup.picasso.NetworkPolicy"));
+        }
+    }
 
-    if (memoryPolicy) 
-        plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[memoryPolicy], array([], "com.squareup.picasso.MemoryPolicy"));
+    if (memoryPolicy != undefined) {
+        let {
+            fPolicy,
+            policies
+        } = getPolicyArgs(memoryPolicy, ImageViewMemoryPolicy);
+        if (fPolicy != undefined)
+            plainRequestCreator = plainRequestCreator.memoryPolicy(fPolicy, array(policies, "com.squareup.picasso.MemoryPolicy"));
+    }
 
     if (fade === false)
         plainRequestCreator = plainRequestCreator.noFade();
 
     if (placeholder instanceof Image)
         plainRequestCreator = plainRequestCreator.placeholder(placeholder.nativeObject);
-
     return plainRequestCreator;
+}
+
+function getPolicyArgs(policy, convertionObj) {
+    let fPolicy, policies = [];
+    if (TypeUtil.isArray(policy)) {
+        policies = policy.map(e => convertionObj[e]);
+        fPolicy = policies.shift();
+    } else {
+        fPolicy = convertionObj[policy];
+    }
+    return {
+        fPolicy,
+        policies
+    };
 }
 
 function getLoadFromUrlParams() {
