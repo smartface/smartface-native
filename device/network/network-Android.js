@@ -55,18 +55,14 @@ Object.defineProperties(Network, {
     },
     'connectionType': {
         get: function() {
+            //Deprecated in API level 29
             var activeInternet = getActiveInternet();
-            if (activeInternet == null) { // undefined or null
+            if (activeInternet == null) // undefined or null
                 return Network.ConnectionType.NONE;
-            } else {
-                if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
-                    return Network.ConnectionType.WIFI;
-                } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
-                    return Network.ConnectionType.MOBILE;
-                } else {
-                    return Network.ConnectionType.NONE;
-                }
-            }
+
+            let nConnectionType = activeInternet.getType();
+            let cTypeEnum = getConnectionTypeEnum(nConnectionType);
+            return cTypeEnum;
         },
         configurable: false
     },
@@ -94,63 +90,49 @@ Object.defineProperties(Network, {
         },
         configurable: false
     }
-    // 'connectionTypeChanged': {
-    //     get: function() {
-    //         return _connectionTypeCallback;
-    //     },
-    //     set: function(connectionTypeCallback) {
-    //         if (typeof connectionTypeCallback !== 'function')
-    //             return;
-
-    //         if (!isReceiverInit) {
-    //             isReceiverInit = true;
-    //             initConnectionTypeReceiver();
-    //         }
-    //         _connectionTypeCallback = connectionTypeCallback;
-    //     }
-    // }
 });
 
 var _instanceCollection = [];
 Network.createNotifier = function(params) {
-    const NativeIntentFilter = requireClass("android.content.IntentFilter");
-    const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
+    const SFNetworkNotifier = requireClass("io.smartface.android.sfcore.device.network.SFNetworkNotifier");
 
     const self = this;
-
     if (!self.nativeObject) {
-        var nativeConnectionFilter = new NativeIntentFilter();
-        nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
-        var callbacks = {
-            onReceive: function() {
-                // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-                self.connectionTypeChanged && self.connectionTypeChanged(Network.connectionType);
+        let callback = {
+            onConnectionTypeChanged: function(connectionType) {
+                let cTypeEnum = getConnectionTypeEnum(connectionType);
+                self.connectionTypeChanged && self.connectionTypeChanged(cTypeEnum);
             }
         };
-        const SFBroadcastReceiver = requireClass("io.smartface.android.sfcore.device.network.SFBroadcastReceiver");
-        self.nativeObject = new SFBroadcastReceiver(callbacks);
+        self.nativeObject = new SFNetworkNotifier(callback);
     }
 
-    var isReceiverCreated = false;
-    var _connectionTypeChanged;
+    var isReceiverCreated = false,
+        _connectionTypeChanged;
     Object.defineProperty(self, 'connectionTypeChanged', {
         get: function() {
             return _connectionTypeChanged;
         },
         set: function(value) {
+            _connectionTypeChanged = value;
             if (typeof value === 'function') {
-                _connectionTypeChanged = value;
                 if (!isReceiverCreated) {
-                    AndroidConfig.activity.registerReceiver(self.nativeObject, nativeConnectionFilter);
+                    self.nativeObject.registerReceiver();
                     isReceiverCreated = true;
                 }
             } else if (value === null) {
                 if (isReceiverCreated) {
-                    AndroidConfig.activity.unregisterReceiver(self.nativeObject);
+                    self.nativeObject.unregisterReceiver();
                     isReceiverCreated = false;
                 }
             }
         }
+    });
+
+    self.android = {};
+    Object.defineProperty(self.android, 'isInitialStickyNotification', {
+        value: () => self.nativeObject.isInitialStickyBroadcast(),
+        enumerable: true
     });
 
     _instanceCollection.push(this);
@@ -175,6 +157,15 @@ Network.__cancelAll = function() {
         _instanceCollection[i].unsubscribe();
     }
 };
+
+function getConnectionTypeEnum(type) {
+    let connectionType = Network.ConnectionType.NONE;
+    if (type === NativeConnectivityManager.TYPE_WIFI)
+        connectionType = Network.ConnectionType.WIFI;
+    else if (type === NativeConnectivityManager.TYPE_MOBILE)
+        connectionType = Network.ConnectionType.MOBILE;
+    return connectionType;
+}
 
 function getActiveInternet() {
     var connectivityManager;

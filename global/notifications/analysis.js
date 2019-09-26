@@ -22,6 +22,7 @@ function Notifications() {}
  * @ios
  * @static
  * @since 0.1
+ * @deprecated 4.0.8 Use {@link Notifications#removeAllDeliveredNotifications}
  */
 Notifications.cancelAllLocalNotifications = function() {};
 
@@ -118,6 +119,17 @@ Notifications.onNotificationReceive = function(data) {};
  * @since 4.0.3
  */
 Notifications.onNotificationClick = function(data) {};
+
+/**
+ * Use this method to remove all of your app’s delivered notifications.
+ * 
+ * @method removeAllDeliveredNotifications
+ * @ios
+ * @android
+ * @static
+ * @since 4.0.8
+ */
+Notifications.removeAllDeliveredNotifications = function() {};
 
 /**
  * iOS Specific Properties.

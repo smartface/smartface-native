@@ -11,10 +11,10 @@ var http = function Http(params) {
     // Properties
     Object.defineProperty(self, 'timeout', {
         get: function() {
-            return self.nativeObject.timeoutIntervalForRequest;
+            return self.nativeObject.timeoutIntervalForRequest * 1000;
         },
         set: function(value) {
-            self.nativeObject.timeoutIntervalForRequest = value;
+            self.nativeObject.timeoutIntervalForRequest = value / 1000;
         },
         enumerable: true
     });

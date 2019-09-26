@@ -106,6 +106,10 @@ Network.createNotifier = function(params) {
             this[param] = params[param];
         }
     }
+
+    //Android specs
+    self.android = {};
+    self.android.isInitialStickyNotification = () => {};
 }
 
 

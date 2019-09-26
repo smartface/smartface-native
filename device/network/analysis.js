@@ -103,7 +103,8 @@ Network.connectionIP;
  * @class Device.Network.createNotifier
  * @since 3.0.1
  *
- * Provides an event to notify in case of connection is changed.  
+ * Provides an event to notify in case of connection is changed. In Android, notifier fires the subscribed event with cached value at the first launch. That enables to not miss any changes. Such as, changed 
+ * value could be missed when application is frozen. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
  * 
  *     @example
  *     const Network = require("sf-core/device/network");
@@ -126,6 +127,18 @@ Network.createNotifier = function() {};
  * @since 3.0.1
  */
 Network.createNotifier.subscribe = function(connectionType) {};
+
+
+/**
+ * Returns true if the notifier is currently processing the initial value which is currently held in the sticky cache, 
+ * so this is not directly the result of a notifier right now. 
+ * 
+ * @method isInitialStickyNotification
+ * @return {Boolean}
+ * @android
+ * @since 4.0.8
+ */
+Network.createNotifier.isInitialStickyNotification = function(){};
 
 /**
  * This method stops receiving subcribed callback.
