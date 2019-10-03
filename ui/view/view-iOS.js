@@ -386,7 +386,11 @@ function View(params) {
             };
             _onTouch = value;
             var onTouchHandler = function(e) {
-                return value.call(this);
+            	var object = {
+            		x:e.point.x,
+            		y:e.point.y
+            	};
+                return value.call(this,object);
             };
             self.nativeObject.onTouch = onTouchHandler.bind(this);
         },
@@ -406,7 +410,13 @@ function View(params) {
             _onTouchEnded = value;
             var onTouchEndedHandler = function(e) {
                 if (e && e.point) {
-                    return value.call(this, isInside(self.nativeObject.frame, e.point));
+                	var inside = isInside(self.nativeObject.frame, e.point);
+                	var object = {
+                		isInside: inside,
+                		x:e.point.x,
+                		y:e.point.y
+                	};
+                    return value.call(this,inside,object);
                 } else {
                     return value.call(this);
                 }
@@ -428,7 +438,13 @@ function View(params) {
             };
             var onTouchMoveHandler = function(e) {
                 if (e && e.point) {
-                    return value.call(this, isInside(self.nativeObject.frame, e.point));
+                	var inside = isInside(self.nativeObject.frame, e.point);
+                	var object = {
+                		isInside: inside,
+                		x:e.point.x,
+                		y:e.point.y
+                	};
+                    return value.call(this,inside,object);
                 } else {
                     return value.call(this);
                 }
@@ -449,7 +465,11 @@ function View(params) {
                 return;
             };
             var onTouchCancelledHandler = function(e) {
-                return value.call(this);
+            	var object = {
+            		x:e.point.x,
+            		y:e.point.y
+            	};
+                return value.call(this,object);
             };
             self.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
         },
