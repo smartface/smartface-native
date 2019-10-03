@@ -687,8 +687,8 @@ View.prototype.setTouchHandlers = function() {
             var isInside = !(x > w || x < 0 || y > h || y < 0);
             if (this.touchEnabled) {
                 let result, mEvent = {
-                    x,
-                    y,
+                    x : AndroidUnitConverter.pixelToDp(x),
+                    y : AndroidUnitConverter.pixelToDp(y),
                     isInside
                 };
                 switch (event.getAction()) {
