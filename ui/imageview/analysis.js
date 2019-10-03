@@ -101,7 +101,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {String} object.url
  * @param {UI.Image} object.placeholder
  * @param {Boolean} object.fade = true
- * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. 
+ * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
  * @param {Function} object.onSuccess
  * @param {Function} object.onFailure
  * @param {Object} object.ios
@@ -141,7 +141,7 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @method fetchFromUrl
  * @param {Object} object
  * @param {String} object.url
- * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. 
+ * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
  * @param {UI.Image} object.placeholder
  * @param {Function} object.onSuccess
  * @param {UI.Image} object.onSuccess.image
