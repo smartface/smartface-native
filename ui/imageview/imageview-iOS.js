@@ -32,7 +32,14 @@ const ImageView = extend(View)(
 		}
 
 		_super(this);
-
+		
+		if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+			self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+		}
+		else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
+			self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+		}
+		
 		//defaults
 		self.nativeObject.contentMode = FillType.NORMAL;
 		self.touchEnabled = true;
