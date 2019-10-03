@@ -386,11 +386,15 @@ function View(params) {
             };
             _onTouch = value;
             var onTouchHandler = function(e) {
-            	var object = {
-            		x:e.point.x,
-            		y:e.point.y
-            	};
-                return value.call(this,object);
+            	if (e && e.point) {
+	            	var object = {
+	            		x:e.point.x,
+	            		y:e.point.y
+	            	};
+	                return value.call(this,object);
+            	}else{
+            		return value.call(this);
+            	}
             };
             self.nativeObject.onTouch = onTouchHandler.bind(this);
         },
@@ -465,11 +469,15 @@ function View(params) {
                 return;
             };
             var onTouchCancelledHandler = function(e) {
-            	var object = {
-            		x:e.point.x,
-            		y:e.point.y
-            	};
-                return value.call(this,object);
+            	if (e && e.point) {
+		        	var object = {
+		        		x:e.point.x,
+		        		y:e.point.y
+		        	};
+		            return value.call(this,object);
+            	}else{
+            		value.call(this);
+            	}
             };
             self.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
         },
