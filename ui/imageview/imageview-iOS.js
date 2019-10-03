@@ -116,7 +116,8 @@ const ImageView = extend(View)(
 			}
 			else if (typeof url === "object") {
 				var options;
-				url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached);
+				url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
+				url.ios && url.useHTTPCacheControl && (options = SDWebImageOptions.SDWebImageRefreshCached);
 				
 				self.nativeObject.loadFromURL(
 					__SF_NSURL.URLWithString(url.url),
@@ -151,7 +152,8 @@ const ImageView = extend(View)(
 
 		self.fetchFromUrl = function(object) {
 			var options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
-			object.ios && object.ios.isRefreshCached &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached);
+			object.ios && object.ios.isRefreshCached &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
+			object.ios && object.useHTTPCacheControl &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached);
 			
 			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
 				if (!error) {
