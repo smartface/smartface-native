@@ -24,180 +24,194 @@ FillType.ios = {
 };
 
 const ImageView = extend(View)(
-    function(_super, params) {
-        var self = this;
+	function(_super, params) {
+		var self = this;
 
-        if (!self.nativeObject) {
-            self.nativeObject = new __SF_UIImageView();
-        }
+		if (!self.nativeObject) {
+			self.nativeObject = new __SF_UIImageView();
+		}
 
-        _super(this);
+		_super(this);
+		
+		if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+			self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+		}
+		else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
+			self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+		}
+		
+		//defaults
+		self.nativeObject.contentMode = FillType.NORMAL;
+		self.touchEnabled = true;
 
-        //defaults
-        self.nativeObject.contentMode = FillType.NORMAL;
-        self.touchEnabled = true;
+		Object.defineProperty(self, 'image', {
+			get: function() {
+				return self.nativeObject.image ? Image.createFromImage(self.nativeObject.image) : undefined;
+			},
+			set: function(value) {
+				_imageTemplate = undefined;
 
-        Object.defineProperty(self, 'image', {
-            get: function() {
-                return self.nativeObject.image ? Image.createFromImage(self.nativeObject.image) : undefined;
-            },
-            set: function(value) {
-                _imageTemplate = undefined;
+				if (typeof value === "string") {
+					var image = Image.createFromFile(value);
+					if (_isSetTintColor) {
+						image.nativeObject = image.nativeObject.imageWithRenderingMode(2);
+						_imageTemplate = image.nativeObject;
+					}
+					self.nativeObject.loadImage(image.nativeObject);
+				}
+				else {
+					if (value) {
+						if (_isSetTintColor) {
+							value.nativeObject = value.nativeObject.imageWithRenderingMode(2);
+							_imageTemplate = value.nativeObject;
+						}
+						self.nativeObject.loadImage(value.nativeObject);
+					}
+					else {
+						self.nativeObject.loadImage(undefined);
+					}
+				}
+			},
+			enumerable: true
+		});
 
-                if (typeof value === "string") {
-                    var image = Image.createFromFile(value);
-                    if (_isSetTintColor) {
-                        image.nativeObject = image.nativeObject.imageWithRenderingMode(2);
-                        _imageTemplate = image.nativeObject;
-                    }
-                    self.nativeObject.loadImage(image.nativeObject);
-                } else {
-                    if (value) {
-                        if (_isSetTintColor) {
-                            value.nativeObject = value.nativeObject.imageWithRenderingMode(2);
-                            _imageTemplate = value.nativeObject;
-                        }
-                        self.nativeObject.loadImage(value.nativeObject);
-                    } else {
-                        self.nativeObject.loadImage(undefined);
-                    }
-                }
-            },
-            enumerable: true
-        });
+		self.loadFromFile = function(params) {
+			if (params.file) {
+				var file = params.file;
+				var filePath = file.nativeObject.getActualPath();
+				var image = Image.createFromFile(filePath);
 
-        self.loadFromFile = function(params) {
-            if (params.file) {
-                var file = params.file;
-                var filePath = file.nativeObject.getActualPath();
-                var image = Image.createFromFile(filePath);
+				var fade = true;
+				if (typeof params.fade === "boolean") {
+					fade = params.fade;
+				}
 
-                var fade = true;
-                if (typeof params.fade === "boolean") {
-                    fade = params.fade;
-                }
+				if (fade) {
+					self.nativeObject.loadImage(image.nativeObject);
+					var alpha = self.nativeObject.alpha;
+					self.nativeObject.alpha = 0;
+					__SF_UIView.animation(0.3, 0, function() {
+						self.nativeObject.alpha = alpha;
+					}.bind(this), function() {});
+				}
+				else {
+					self.nativeObject.loadImage(image.nativeObject);
+				}
+			}
+		}
 
-                if (fade) {
-                    self.nativeObject.loadImage(image.nativeObject);
-                    var alpha = self.nativeObject.alpha;
-                    self.nativeObject.alpha = 0;
-                    __SF_UIView.animation(0.3, 0, function() {
-                        self.nativeObject.alpha = alpha;
-                    }.bind(this), function() {});
-                } else {
-                    self.nativeObject.loadImage(image.nativeObject);
-                }
-            }
-        }
+		self.loadFromUrl = function(url, placeholder, fade) {
+			if (typeof url === "string") { // Deprecated: Use loadFromUrl(object);
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url), placeholder ? placeholder.nativeObject : undefined, undefined, function(innerFade, image, error, cache, url) {
+					if (!error) {
+						if (cache == ImageCacheType.NONE && innerFade !== false) {
+							var alpha = this.nativeObject.alpha;
+							this.nativeObject.alpha = 0;
+							__SF_UIView.animation(0.3, 0, function() {
+								this.nativeObject.alpha = alpha;
+							}.bind(this), function() {});
+						}
+					}
+				}.bind(self, fade));
+			}
+			else if (typeof url === "object") {
+				var options;
+				url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached);
+				
+				self.nativeObject.loadFromURL(
+					__SF_NSURL.URLWithString(url.url),
+					url.placeholder ? url.placeholder.nativeObject : undefined,
+					options ? options : undefined,
+					function(onSuccess, onError, innerFade, image, error, cache, url) {
+						if (!error) {
+							if (cache == ImageCacheType.NONE && innerFade !== false) {
+								var alpha = this.nativeObject.alpha;
+								this.nativeObject.alpha = 0;
+								__SF_UIView.animation(0.3, 0, function() {
+									this.nativeObject.alpha = alpha;
+								}.bind(this), function() {});
+							}
+							if (typeof onSuccess === "function") {
+								__SF_Dispatch.mainAsync(function(innerIndex) {
+									onSuccess();
+								});
+							}
+						}
+						else {
+							if (typeof onError === "function") {
+								__SF_Dispatch.mainAsync(function(innerIndex) {
+									onError();
+								});
+							}
+						}
+					}.bind(self, url.onSuccess, url.onError ? url.onError : url.onFailure, url.fade)
+				); //onFailure COR-1817
+			}
+		}
 
-        self.loadFromUrl = function(url, placeholder, fade) {
-            if (typeof url === "string") { // Deprecated: Use loadFromUrl(object);
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url), placeholder ? placeholder.nativeObject : undefined, undefined, function(innerFade, image, error, cache, url) {
-                    if (!error) {
-                        if (cache == ImageCacheType.NONE && innerFade !== false) {
-                            var alpha = this.nativeObject.alpha;
-                            this.nativeObject.alpha = 0;
-                            __SF_UIView.animation(0.3, 0, function() {
-                                this.nativeObject.alpha = alpha;
-                            }.bind(this), function() {});
-                        }
-                    }
-                }.bind(self, fade));
-            } else if (typeof url === "object") {
-                var options;
-                url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached);
+		self.fetchFromUrl = function(object) {
+			var options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
+			object.ios && object.ios.isRefreshCached &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached);
+			
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
+				if (!error) {
+					if (typeof onSuccess === "function") {
+						__SF_Dispatch.mainAsync(function(innerIndex) {
+							onSuccess(Image.createFromImage(image), cache);
+						});
+					}
+				}
+				else {
+					if (typeof onError === "function") {
+						__SF_Dispatch.mainAsync(function(innerIndex) {
+							onError();
+						});
+					}
+				}
+			}.bind(self, object.onSuccess, object.onError ? object.onError : object.onFailure)); //onFailure COR-1817
+		};
 
-                self.nativeObject.loadFromURL(
-                    __SF_NSURL.URLWithString(url.url),
-                    url.placeholder ? url.placeholder.nativeObject : undefined,
-                    options ? options : undefined,
-                    function(onSuccess, onError, innerFade, image, error, cache, url) {
-                        if (!error) {
-                            if (cache == ImageCacheType.NONE && innerFade !== false) {
-                                var alpha = this.nativeObject.alpha;
-                                this.nativeObject.alpha = 0;
-                                __SF_UIView.animation(0.3, 0, function() {
-                                    this.nativeObject.alpha = alpha;
-                                }.bind(this), function() {});
-                            }
-                            if (typeof onSuccess === "function") {
-                                __SF_Dispatch.mainAsync(function(innerIndex) {
-                                    onSuccess();
-                                });
-                            }
-                        } else {
-                            if (typeof onError === "function") {
-                                __SF_Dispatch.mainAsync(function(innerIndex) {
-                                    onError();
-                                });
-                            }
-                        }
-                    }.bind(self, url.onSuccess, url.onError ? url.onError : url.onFailure, url.fade)
-                ); //onFailure COR-1817
-            }
-        }
+		Object.defineProperty(self, 'imageFillType', {
+			get: function() {
+				return self.nativeObject.contentMode;
+			},
+			set: function(value) {
+				self.nativeObject.contentMode = value;
+			},
+			enumerable: true,
+			configurable: true
+		});
 
-        self.fetchFromUrl = function(object) {
-            var options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
-            object.ios && object.ios.isRefreshCached && (options = options | SDWebImageOptions.SDWebImageRefreshCached);
+		var _imageTemplate;
+		var _isSetTintColor = false;
+		Object.defineProperty(self, 'tintColor', {
+			get: function() {
+				return new Color({
+					color: self.nativeObject.tintColor
+				});
+			},
+			set: function(value) {
+				if (self.nativeObject.image) {
+					if (_imageTemplate) {
+						self.nativeObject.image = _imageTemplate;
+					}
+					else {
+						_imageTemplate = self.nativeObject.image.imageWithRenderingMode(2);
+						self.nativeObject.image = _imageTemplate;
+					}
+				}
+				_isSetTintColor = true;
+				self.nativeObject.tintColor = value.nativeObject;
+			},
+			enumerable: true
+		});
 
-            self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
-                if (!error) {
-                    if (typeof onSuccess === "function") {
-                        __SF_Dispatch.mainAsync(function(innerIndex) {
-                            onSuccess(Image.createFromImage(image), cache);
-                        });
-                    }
-                } else {
-                    if (typeof onError === "function") {
-                        __SF_Dispatch.mainAsync(function(innerIndex) {
-                            onError();
-                        });
-                    }
-                }
-            }.bind(self, object.onSuccess, object.onError ? object.onError : object.onFailure)); //onFailure COR-1817
-        };
-
-        Object.defineProperty(self, 'imageFillType', {
-            get: function() {
-                return self.nativeObject.contentMode;
-            },
-            set: function(value) {
-                self.nativeObject.contentMode = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-
-        var _imageTemplate;
-        var _isSetTintColor = false;
-        Object.defineProperty(self, 'tintColor', {
-            get: function() {
-                return new Color({
-                    color: self.nativeObject.tintColor
-                });
-            },
-            set: function(value) {
-                if (self.nativeObject.image) {
-                    if (_imageTemplate) {
-                        self.nativeObject.image = _imageTemplate;
-                    } else {
-                        _imageTemplate = self.nativeObject.image.imageWithRenderingMode(2);
-                        self.nativeObject.image = _imageTemplate;
-                    }
-                }
-                _isSetTintColor = true;
-                self.nativeObject.tintColor = value.nativeObject;
-            },
-            enumerable: true
-        });
-
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    }
+		if (params) {
+			for (var param in params) {
+				this[param] = params[param];
+			}
+		}
+	}
 );
 
 Object.defineProperty(ImageView, "FillType", {
