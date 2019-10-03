@@ -1,6 +1,4 @@
 /* global requireClass */
-const AndroidConfig = require('../../util/Android/androidconfig');
-const RequestCodes = require("sf-core/util/Android/requestcodes");
 const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
@@ -9,8 +7,11 @@ const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage')
 const NativeSFMultimedia = requireClass("io.smartface.android.sfcore.device.multimedia.SFMultimedia");
 const NativeUri = requireClass("android.net.Uri");
 
-const File = require("../../io/file");
-const Image = require("../../ui/image");
+const AndroidConfig = require('sf-core/util/Android/androidconfig');
+const RequestCodes = require("sf-core/util/Android/requestcodes");
+const File = require("sf-core/io/file");
+const Image = require("sf-core/ui/image");
+const TypeUtil = require("sf-core/util/type");
 
 const Type = {
     IMAGE: 0,
@@ -62,8 +63,8 @@ var _fileURI = null;
 // https://github.com/ArthurHub/Android-Image-Cropper/wiki/FAQ#why-image-captured-from-camera-is-blurred-or-low-quality
 var nativeImageFile = null;
 
-Multimedia.startCamera = function(params) {
-    if (!(params || (params.page instanceof require("../../ui/page")))) {
+Multimedia.startCamera = function(params = {}) {
+    if (!(params.page instanceof require("../../ui/page"))) {
         throw new TypeError('Page parameter required');
     }
 
@@ -115,14 +116,14 @@ function startCameraWithExtraField() {
     }
 }
 
-Multimedia.pickFromGallery = function(params) {
-    if (!(params || (params.page instanceof require("../../ui/page")))) {
+Multimedia.pickFromGallery = function(params = {}) {
+    if (!(params.page instanceof require("../../ui/page"))) {
         throw new TypeError('Page parameter required');
     }
     _pickParams = params;
     var intent = new NativeIntent();
     var type = Type.ALL;
-    if (params && (params.type !== undefined))
+    if (params.type !== undefined)
         type = params.type;
     intent.setType(_types[type]);
     intent.setAction(NativeIntent.ACTION_PICK);
@@ -134,12 +135,12 @@ Multimedia.pickFromGallery = function(params) {
 
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function(params) {
+Multimedia.android.getAllGalleryItems = function(params = {}) {
     try {
         var projection = array([NativeMediaStore.MediaColumns.DATA], "int");
         var result = {};
         var uri;
-        if (params && params.type === Multimedia.Type.VIDEO) {
+        if (params.type === Multimedia.Type.VIDEO) {
             uri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             var videos = getAllMediaFromUri({
                 uri: uri,
@@ -148,7 +149,7 @@ Multimedia.android.getAllGalleryItems = function(params) {
             });
             result.videos = videos;
         }
-        else if (params && params.type === Multimedia.Type.IMAGE) {
+        else if (params.type === Multimedia.Type.IMAGE) {
             uri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             var images = getAllMediaFromUri({
                 uri: uri,
@@ -161,15 +162,10 @@ Multimedia.android.getAllGalleryItems = function(params) {
             throw new Error("Unexpected value " + params.type);
         }
 
-        if (params && params.onSuccess) {
-            params.onSuccess(result);
-        }
+        params.onSuccess && params.onSuccess(result);
     }
     catch (err) {
-        if (params && params.onFailure)
-            params.onFailure({
-                message: err
-            });
+        params.onFailure && params.onFailure({ message: err });
     }
 
 };
@@ -207,9 +203,15 @@ function cropImage(resultCode, data) {
     }
 }
 
-function startCropActivity(uri, nativeFragment) {
+function startCropActivity(uri, nativeFragment, aspectRatio = {}) {
     if (!uri) return;
-    NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment);
+    let {x, y} = aspectRatio;
+    if (TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y)) {
+        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, x, y);
+    }
+    else {
+        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment);
+    }
 }
 
 function pickFromGallery(resultCode, data) {
@@ -237,7 +239,7 @@ function pickFromGallery(resultCode, data) {
                     });
                 }
                 else {
-                    startCropActivity(uri, _pickParams.page.nativeObject);
+                    startCropActivity(uri, _pickParams.page.nativeObject, _pickParams.aspectRatio);
                 }
             }
             else {
@@ -294,7 +296,7 @@ function getCameraData(resultCode, data) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 if (nativeImageFile != null) {
                     var imageFileUri = NativeUri.fromFile(nativeImageFile);
-                    startCropActivity(imageFileUri, _captureParams.page.nativeObject);
+                    startCropActivity(imageFileUri, _captureParams.page.nativeObject, _captureParams.aspectRatio);
                 }
                 else {
                     var bitmap = data.getExtras().get("data");
