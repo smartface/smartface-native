@@ -45,7 +45,8 @@ const ImageView = extend(View)(
                         return this._image = (drawable ? new Image({
                             drawable: drawable
                         }) : null);
-                    } else
+                    }
+                    else
                         return this._image;
                 },
                 set: function(value) {
@@ -54,14 +55,16 @@ const ImageView = extend(View)(
                         var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
-                    } else if (typeof value === "string") {
+                    }
+                    else if (typeof value === "string") {
                         var imageFile = new File({
                             path: value
                         });
                         this.loadFromFile({
                             file: imageFile
                         });
-                    } else {
+                    }
+                    else {
                         this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
@@ -117,7 +120,8 @@ const ImageView = extend(View)(
                 onFailure,
                 onSuccess,
                 networkPolicy,
-                memoryPolicy
+                memoryPolicy,
+                useHTTPCacheControl
             } = getLoadFromUrlParams.apply(null, arguments);
             var callback = null;
             if (onFailure || onSuccess) {
@@ -138,7 +142,8 @@ const ImageView = extend(View)(
                     networkPolicy,
                     fade,
                     placeholder,
-                    memoryPolicy
+                    memoryPolicy,
+                    useHTTPCacheControl
                 });
                 var requestCreator = scaleImage(plainRequestCreator);
                 if (callback !== null)
@@ -162,7 +167,8 @@ const ImageView = extend(View)(
                 android: {
                     networkPolicy: networkPolicy,
                     memoryPolicy: memoryPolicy
-                } = {}
+                } = {},
+                useHTTPCacheControl
             } = params;
             var target = NativeTarget.implement({
                 onBitmapLoaded: function(bitmap, from) {
@@ -185,7 +191,8 @@ const ImageView = extend(View)(
                 requestCreator = setArgsToRequestCreator.call(requestCreator, {
                     placeholder,
                     networkPolicy,
-                    memoryPolicy
+                    memoryPolicy,
+                    useHTTPCacheControl
                 });
                 requestCreator.into(target);
             }
@@ -216,11 +223,13 @@ const ImageView = extend(View)(
                     });
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    } else {
+                    }
+                    else {
                         var requestCreatorDrawable = scaleImage(plainRequestCreatorDrawable);
                         requestCreatorDrawable.into(this.nativeObject);
                     }
-                } else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                }
+                else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
                     let plainRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
@@ -231,11 +240,13 @@ const ImageView = extend(View)(
                     });
                     if (width && height) {
                         plainRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    } else {
+                    }
+                    else {
                         var requestCreatorAsset = scaleImage(plainRequestCreatorAsset);
                         requestCreatorAsset.into(this.nativeObject);
                     }
-                } else {
+                }
+                else {
                     let plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
                     plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
                         fade,
@@ -244,7 +255,8 @@ const ImageView = extend(View)(
                     });
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    } else {
+                    }
+                    else {
                         let requestCreator = scaleImage(plainRequestCreator);
                         requestCreator.into(this.nativeObject);
                     }
@@ -267,7 +279,8 @@ const ImageView = extend(View)(
                     default:
                         return loadedImage;
                 }
-            } else {
+            }
+            else {
                 return loadedImage;
             }
         }
@@ -281,10 +294,12 @@ function setArgsToRequestCreator(params = {}) {
         networkPolicy,
         fade,
         placeholder,
-        memoryPolicy
+        memoryPolicy,
+        useHTTPCacheControl
     } = params;
 
-    if (networkPolicy != undefined) {
+    let shouldSetPolicy = (useHTTPCacheControl === undefined);
+    if (networkPolicy != undefined && shouldSetPolicy) {
         let {
             fPolicy,
             policies
@@ -294,13 +309,18 @@ function setArgsToRequestCreator(params = {}) {
         }
     }
 
-    if (memoryPolicy != undefined) {
+    if (memoryPolicy != undefined && shouldSetPolicy) {
         let {
             fPolicy,
             policies
         } = getPolicyArgs(memoryPolicy, ImageViewMemoryPolicy);
         if (fPolicy != undefined)
             plainRequestCreator = plainRequestCreator.memoryPolicy(fPolicy, array(policies, "com.squareup.picasso.MemoryPolicy"));
+    }
+
+    if (useHTTPCacheControl) {
+        console.log(" useHTTPCacheControl innn ");
+        plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_CACHE], array([], "com.squareup.picasso.MemoryPolicy"));
     }
 
     if (fade === false)
@@ -316,7 +336,8 @@ function getPolicyArgs(policy, convertionObj) {
     if (TypeUtil.isArray(policy)) {
         policies = policy.map(e => convertionObj[e]);
         fPolicy = policies.shift();
-    } else {
+    }
+    else {
         fPolicy = convertionObj[policy];
     }
     return {
@@ -336,9 +357,11 @@ function getLoadFromUrlParams() {
             fade: params.fade,
             onSuccess: params.onSuccess,
             networkPolicy: params.android ? params.android.networkPolicy : undefined,
-            memoryPolicy: params.android ? params.android.memoryPolicy : undefined
+            memoryPolicy: params.android ? params.android.memoryPolicy : undefined,
+            useHTTPCacheControl: params.useHTTPCacheControl
         };
-    } else {
+    }
+    else {
         return {
             url: arguments[0],
             placeholder: arguments[1],
