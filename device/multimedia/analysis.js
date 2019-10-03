@@ -57,7 +57,7 @@ function Multimedia() {}
  * @param {UI.Page} params.page
  * @param {Device.Multimedia.ActionType} params.action Camera action.
  * @param {Boolean} params.allowsEditing opens editing screen of selected content.
- * @param {Object} params.aspectRatio This property only works on android. 
+ * @param {Object} params.aspectRatio This property affects only on android. 
  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
  * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
@@ -121,7 +121,7 @@ Multimedia.startCamera = function(e) {};
  * @param {UI.Page} params.page
  * @param {Device.Multimedia.Type} params.type Data type.
  * @param {Boolean} params.allowsEditing opens editing screen of selected content.
- * @param {Object} params.aspectRatio This property only works on android. 
+ * @param {Object} params.aspectRatio This property affects only on android.
  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
  * @param {Function} params.onSuccess Callback for success situation.
