@@ -61,7 +61,7 @@ var _fileURI = null;
 // We should store image file, because data.getData() and data.getExtras() return null on activity result
 // when we use intent with MediaStore.EXTRA_OUTPUT.
 // https://github.com/ArthurHub/Android-Image-Cropper/wiki/FAQ#why-image-captured-from-camera-is-blurred-or-low-quality
-var nativeImageFile = null;
+var imageFileUri = null;
 
 Multimedia.startCamera = function(params = {}) {
     if (!(params.page instanceof require("../../ui/page"))) {
@@ -75,11 +75,11 @@ Multimedia.startCamera = function(params = {}) {
     var page = _captureParams.page;
 
     if (_action === ActionType.IMAGE_CAPTURE) {
-        nativeImageFile = null;
+        imageFileUri = null;
         if (params.allowsEditing) {
-            nativeImageFile = NativeSFMultimedia.createImageFile();
+            imageFileUri = NativeSFMultimedia.createImageFile(activity);
         }
-        var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, nativeImageFile);
+        var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, imageFileUri);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
     else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
@@ -291,11 +291,9 @@ function getCameraData(resultCode, data) {
             _captureParams.onFailure && _captureParams.onFailure({ message: err });
         }
 
-
         if (!failure && _captureParams.onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
-                if (nativeImageFile != null) {
-                    var imageFileUri = NativeUri.fromFile(nativeImageFile);
+                if (imageFileUri != null) {
                     startCropActivity(imageFileUri, _captureParams.page.nativeObject, _captureParams.aspectRatio);
                 }
                 else {
