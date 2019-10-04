@@ -104,8 +104,6 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
  * @param {Function} object.onSuccess
  * @param {Function} object.onFailure
- * @param {Object} object.ios
- * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @param {Object} object.android Android specific argument
  * @param {UI.ImageView.Android.NetworkPolicy | Array} object.android.networkPolicy Designates the policy to use for network requests.
  * @param {UI.ImageView.Android.MemoryPolicy | Array} object.android.memoryPolicy Designates the policy to use for memory cache.
@@ -147,8 +145,6 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @param {UI.Image} object.onSuccess.image
  * @param {UI.ImageCacheType} object.onSuccess.cache
  * @param {Function} object.onFailure
- * @param {Object} object.ios
- * @param {Boolean} object.ios.isRefreshCached = false Even if the image is cached, respect the HTTP response cache control, and refresh the image from remote location if needed. This option helps deal with images changing behind the same request URL.
  * @param {Object} object.android Android specific argument
  * @param {UI.ImageView.Android.NetworkPolicy | Array} object.android.networkPolicy Designates the policy to use for network requests.
  * @param {UI.ImageView.Android.MemoryPolicy | Array} object.android.memoryPolicy Designates the policy to use for memory cache.
