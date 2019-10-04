@@ -686,21 +686,25 @@ View.prototype.setTouchHandlers = function() {
 
             var isInside = !(x > w || x < 0 || y > h || y < 0);
             if (this.touchEnabled) {
-                let result;
+                let result, mEvent = {
+                    x : AndroidUnitConverter.pixelToDp(x),
+                    y : AndroidUnitConverter.pixelToDp(y),
+                    isInside
+                };
                 switch (event.getAction()) {
                     case ACTION_UP:
-                        this._onTouchEnded && (result = this._onTouchEnded(isInside));
+                        this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
                         return (result === true);
                     case ACTION_DOWN:
                         // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                         // So we should consume ACTION_DOWN event.
-                        this._onTouch && (result = this._onTouch());
+                        this._onTouch && (result = this._onTouch(mEvent));
                         return !(result === false);
                     case ACTION_MOVE:
-                        this._onTouchMoved && (result = this._onTouchMoved(isInside));
+                        this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
                         return (result === true);
                     case ACTION_CANCEL:
-                        this._onTouchCancelled && (result = this._onTouchCancelled());
+                        this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
                         return (result === true);
                     default:
                         return false;

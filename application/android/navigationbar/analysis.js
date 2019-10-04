@@ -20,7 +20,7 @@ NavigationBar.prototype.color;
 
 /**
  * Gets/sets transparency of status bar.This property works only for Android version 
- * OREO (API 26) or above.
+ * OREO 8.1.0 (API 27) or above.
  *
  * @property {Application.Android.NavigationBar.Style} [style = Application.Android.NavigationBar.Style.DARKCONTENT]
  * @android
