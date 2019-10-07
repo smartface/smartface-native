@@ -139,8 +139,7 @@ const TabBarController = extend(Page)(
                         var tabIcon = this.tabLayout.nativeObject.getTabAt(i).getIcon();
                         if (i === this.selectedIndex) {
                             tabIcon && (tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN));
-                        }
-                        else {
+                        } else {
                             tabIcon && (tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN));
                         }
                     }
@@ -181,8 +180,7 @@ const TabBarController = extend(Page)(
                     if (value) {
                         this.tabLayout.nativeObject.setTabMode(0); // 0 = TabLayout.MODE_SCROLLABLE
                         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-2, -2));
-                    }
-                    else {
+                    } else {
                         this.tabLayout.nativeObject.setTabMode(1); // 1 = TabLayout.MODE_FIXED
                         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
                     }
@@ -219,8 +217,11 @@ const TabBarController = extend(Page)(
 
                         if (itemTitle)
                             item.title = itemTitle;
+
                         if (itemIcon)
                             item.nativeObject.setIcon(itemIcon.nativeObject);
+                        else if (item.android.systemIcon)
+                            item.android.systemIcon = item.android.systemIcon;
                     }
                     if (!this.autoCapitalize)
                         self.setAllCaps(_items, this.tabLayout.nativeObject);

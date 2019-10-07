@@ -109,7 +109,7 @@ function TabBarItem(params) {
     attributedTitleSuper(self);
 
     this.__setTitle = function(title) {
-        self.nativeObject && self.nativeObject.setTitle(title);
+        self.nativeObject && self.nativeObject.setText(title);
     };
 
     // Assign parameters given in constructor
@@ -144,7 +144,7 @@ function TabBarItem(params) {
         const NativeR = requireClass('android.R');
 
         var res = new NativeStateListDrawable();
-        res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
+        res.addState(array([NativeR.attr.state_selected], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
         return {
