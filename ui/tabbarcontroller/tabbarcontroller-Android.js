@@ -219,7 +219,7 @@ const TabBarController = extend(Page)(
                             item.title = itemTitle;
 
                         if (itemIcon)
-                            item.nativeObject.setIcon(itemIcon.nativeObject);
+                            item.icon = itemIcon;
                         else if (item.android.systemIcon)
                             item.android.systemIcon = item.android.systemIcon;
                     }
