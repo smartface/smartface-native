@@ -139,7 +139,8 @@ const TabBarController = extend(Page)(
                         var tabIcon = this.tabLayout.nativeObject.getTabAt(i).getIcon();
                         if (i === this.selectedIndex) {
                             tabIcon && (tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN));
-                        } else {
+                        }
+                        else {
                             tabIcon && (tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN));
                         }
                     }
@@ -180,7 +181,8 @@ const TabBarController = extend(Page)(
                     if (value) {
                         this.tabLayout.nativeObject.setTabMode(0); // 0 = TabLayout.MODE_SCROLLABLE
                         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-2, -2));
-                    } else {
+                    }
+                    else {
                         this.tabLayout.nativeObject.setTabMode(1); // 1 = TabLayout.MODE_FIXED
                         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
                     }
@@ -210,15 +212,18 @@ const TabBarController = extend(Page)(
                     this.swipeView.pagerAdapter.notifyDataSetChanged();
 
                     for (let i = 0; i < itemArray.length; i++) {
-                        var itemTitle = itemArray[i].title;
-                        var itemIcon = itemArray[i].icon;
-                        var tabItem = this.tabLayout.nativeObject.getTabAt(i);
-                        itemTitle && (tabItem.setText(itemTitle));
-                        itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
+                        let item = itemArray[i],
+                            itemTitle = item.title ? item.title : item._attributedTitleBuilder,
+                            itemIcon = item.icon;
+                        item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
+
+                        if (itemTitle)
+                            item.title = itemTitle;
+                        if (itemIcon)
+                            item.nativeObject.setIcon(itemIcon.nativeObject);
                     }
-                    if (!this.autoCapitalize) {
+                    if (!this.autoCapitalize)
                         self.setAllCaps(_items, this.tabLayout.nativeObject);
-                    }
                 },
                 enumerable: true,
                 configurable: true
