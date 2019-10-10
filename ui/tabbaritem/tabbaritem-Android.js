@@ -1,3 +1,4 @@
+/* globals requireClass array */
 const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 const BottomTabBar = require("../bottomtabbar");
 const TabBarController = require("../tabbarcontroller");
@@ -168,7 +169,12 @@ function TabBarItem(params) {
         const NativeR = requireClass('android.R');
 
         var res = new NativeStateListDrawable();
-        res.addState(array([NativeR.attr.state_selected], "int"), selectedImage.nativeObject);
+        let attrState;
+        if (self.tabBarItemParent instanceof TabBarController)
+            attrState = "state_selected";
+        else
+            attrState = "state_checked";
+        res.addState(array([NativeR.attr[attrState]], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
         return {
