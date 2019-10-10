@@ -211,17 +211,15 @@ const TabBarController = extend(Page)(
 
                     for (let i = 0; i < itemArray.length; i++) {
                         let item = itemArray[i],
-                            itemTitle = item.title ? item.title : item._attributedTitleBuilder,
-                            itemIcon = item.icon;
+                            itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
+
+                        item.tabBarItemParent = self;
                         item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
-
-                        if (itemTitle)
-                            item.title = itemTitle;
-
-                        if (itemIcon)
-                            item.icon = itemIcon;
-                        else if (item.android.systemIcon)
-                            item.android.systemIcon = item.android.systemIcon;
+                        item.setProperties({
+                            itemTitle,
+                            itemIcon: item.icon,
+                            systemIcon: item.android.systemIcon
+                        });
                     }
                     if (!this.autoCapitalize)
                         self.setAllCaps(_items, this.tabLayout.nativeObject);

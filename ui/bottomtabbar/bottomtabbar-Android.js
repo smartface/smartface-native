@@ -122,6 +122,7 @@ function BottomTabBar(params) {
 
         for (var i = 0; i < tabBarItems.length; i++) {
             var tabbarItem = tabBarItems[i];
+            tabbarItem.tabBarItemParent = self;
             let title;
             if (tabbarItem._attributedTitleBuilder !== undefined)
                 title = tabbarItem._attributedTitleBuilder;
@@ -129,9 +130,10 @@ function BottomTabBar(params) {
                 title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
 
             tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
-            tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
-            tabbarItem.android.systemIcon && (tabbarItem.android.systemIcon = tabbarItem.android.systemIcon);
-            tabbarItem.tabBarItemParent = self.nativeObject;
+            tabbarItem.setProperties({
+                itemIcon: tabbarItem.icon,
+                systemIcon: tabbarItem.android.systemIcon
+            });
             tabbarItem.index = i;
         }
         addBadgeToItem(tabBarItems);
