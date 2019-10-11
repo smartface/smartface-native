@@ -83,7 +83,19 @@ function KeyboardAnimationDelegate(params) {
             if (view.superview.constructor.name === "SMFUIView") {
                 _top += view.frame.y;
             } else if (view.superview.constructor.name === "SMFUIScrollView") {
-                _top += view.frame.y - view.superview.contentOffset.y;
+            	_top += view.frame.y;
+            	if (_top + self.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
+            		view.superview.setContentOffsetAnimated({
+	                    x: 0,
+	                    y: _top - view.superview.frame.height + self.nativeObject.frame.height
+	                }, false);
+            	}else if(view.superview.contentOffset.y > _top){
+	        		view.superview.setContentOffsetAnimated({
+	                    x: 0,
+	                    y: _top
+	                }, false);
+            	}
+        		_top -= view.superview.contentOffset.y;
             }
 
             if (view.superview.constructor.name === "UIWindow") { // Check Dialog
