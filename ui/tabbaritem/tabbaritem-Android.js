@@ -1,4 +1,7 @@
+/* globals requireClass array */
 const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
+const BottomTabBar = require("../bottomtabbar");
+const TabBarController = require("../tabbarcontroller");
 
 function TabBarItem(params) {
     this.ios = {};
@@ -109,8 +112,30 @@ function TabBarItem(params) {
     attributedTitleSuper(self);
 
     this.__setTitle = function(title) {
-        self.nativeObject && self.nativeObject.setTitle(title);
+        if (!self.nativeObject)
+            return;
+
+        if (self.tabBarItemParent instanceof TabBarController)
+            self.nativeObject.setText(title);
+        else if (self.tabBarItemParent instanceof BottomTabBar)
+            self.nativeObject.setTitle(title);
     };
+
+    this.setProperties = function(params = {}) {
+        const {
+            itemTitle,
+            itemIcon,
+            systemIcon
+        } = params;
+
+        if (itemTitle)
+            self.title = itemTitle;
+        if (itemIcon)
+            self.icon = itemIcon;
+        if (systemIcon)
+            self.android.systemIcon = systemIcon;
+    };
+
 
     // Assign parameters given in constructor
     if (params) {
@@ -133,7 +158,7 @@ function TabBarItem(params) {
             layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(12));
             badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
 
-            let nativeBottomTabarMenuView = self.tabBarItemParent.getChildAt(0);
+            let nativeBottomTabarMenuView = self.tabBarItemParent.nativeObject.getChildAt(0);
             let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(self.index);
             nativeMenuItem.addView(badgeObj.nativeObject);
         }
@@ -144,7 +169,12 @@ function TabBarItem(params) {
         const NativeR = requireClass('android.R');
 
         var res = new NativeStateListDrawable();
-        res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
+        let attrState;
+        if (self.tabBarItemParent instanceof TabBarController)
+            attrState = "state_selected";
+        else
+            attrState = "state_checked";
+        res.addState(array([NativeR.attr[attrState]], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
         return {

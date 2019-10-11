@@ -210,15 +210,19 @@ const TabBarController = extend(Page)(
                     this.swipeView.pagerAdapter.notifyDataSetChanged();
 
                     for (let i = 0; i < itemArray.length; i++) {
-                        var itemTitle = itemArray[i].title;
-                        var itemIcon = itemArray[i].icon;
-                        var tabItem = this.tabLayout.nativeObject.getTabAt(i);
-                        itemTitle && (tabItem.setText(itemTitle));
-                        itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
+                        let item = itemArray[i],
+                            itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
+
+                        item.tabBarItemParent = self;
+                        item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
+                        item.setProperties({
+                            itemTitle,
+                            itemIcon: item.icon,
+                            systemIcon: item.android.systemIcon
+                        });
                     }
-                    if (!this.autoCapitalize) {
+                    if (!this.autoCapitalize)
                         self.setAllCaps(_items, this.tabLayout.nativeObject);
-                    }
                 },
                 enumerable: true,
                 configurable: true
