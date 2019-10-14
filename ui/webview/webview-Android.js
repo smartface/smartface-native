@@ -55,8 +55,21 @@ const WebView = extend(View)(
                 _onLoad && _onLoad({
                     url: url
                 });
+            },
+            shouldOverrideUrlLoading: function(url) {
+                var callbackValue = true;
+                _onChangedURL && (callbackValue = _onChangedURL({
+                    url: url
+                }));
+                if (!callbackValue)
+                    return true;
+                return overrideURLChange(url, _canOpenLinkInside);
+            },
+            onReceivedError: function(code, message, url) {
+                _onError && _onError({ code, message, url });
             }
         };
+        
         var _canOpenLinkInside = true;
         var _onError;
         var _onShow;
@@ -342,62 +355,6 @@ const WebView = extend(View)(
                 enumerable: true
             }
         });
-
-        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-            overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
-                var url = requestUrl;
-                var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({
-                    url: url
-                }));
-                if (!callbackValue)
-                    return true;
-                return overrideURLChange(url, _canOpenLinkInside);
-
-            };
-        } else {
-            overrideMethods.shouldOverrideUrlLoading = function(url) {
-                var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({
-                    url: url
-                }));
-                if (!callbackValue)
-                    return true;
-                return overrideURLChange(url, _canOpenLinkInside);
-            };
-        }
-
-        // SDK version check will not work because implement engine does not supports types
-        overrideMethods.onReceivedError = function() {
-            if (arguments.count === 2) {
-                /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webResourceRequest
-                 * arguments[1] = webResourceError
-                 */
-                const NativeString = requireClass('java.lang.String');
-                var uri = arguments[0].getUrl();
-                var url = NativeString.valueOf(uri);
-                var code = arguments[1].getErrorCode();
-                var message = arguments[1].getDescription();
-
-                _onError && _onError({
-                    message: message,
-                    code: code,
-                    url: url
-                });
-            } else {
-                /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = errorCode, 
-                 * arguments[1] = description, 
-                 * arguments[2] = failingUrl, 
-                 */
-                _onError && _onError({
-                    message: arguments[1],
-                    code: arguments[0],
-                    url: arguments[2]
-                });
-            }
-        };
 
         const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
         var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
