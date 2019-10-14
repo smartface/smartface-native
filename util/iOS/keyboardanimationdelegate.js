@@ -89,13 +89,13 @@ function KeyboardAnimationDelegate(params) {
             		view.superview.setContentOffsetAnimated({
 	                    x: 0,
 	                    y: newTop
-	                }, false);
+	                }, true);
 	                _top -= newTop;
             	}else if(view.superview.contentOffset.y > _top){
 	        		view.superview.setContentOffsetAnimated({
 	                    x: 0,
 	                    y: _top
-	                }, false);
+	                }, true);
 	                _top -= (_top);
             	}else{
             		_top -= view.superview.contentOffset.y;
