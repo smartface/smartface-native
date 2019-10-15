@@ -146,7 +146,6 @@ Network.createNotifier.isInitialStickyNotification = function() {};
  * Assigning true to this property means that ignore the held value in the sticky cache. Thus, subscribed function won't fire at the initial time.
  *
  * @android
- * @readonly
  * @property {Boolean} ignoreCacheInitial
  * @since 4.0.8
  */
