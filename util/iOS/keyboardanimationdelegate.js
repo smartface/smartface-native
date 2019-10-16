@@ -83,7 +83,49 @@ function KeyboardAnimationDelegate(params) {
             if (view.superview.constructor.name === "SMFUIView") {
                 _top += view.frame.y;
             } else if (view.superview.constructor.name === "SMFUIScrollView") {
-                _top += view.frame.y - view.superview.contentOffset.y;
+            	_top += view.frame.y;
+            	if (_top + self.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
+            		var newTop = _top - view.superview.frame.height + self.nativeObject.frame.height;
+            		view.superview.setContentOffsetAnimated({
+	                    x: 0,
+	                    y: newTop
+	                }, true);
+	                _top -= newTop;
+            	}else if(view.superview.contentOffset.y > _top){
+	        		view.superview.setContentOffsetAnimated({
+	                    x: 0,
+	                    y: _top
+	                }, true);
+	                _top -= (_top);
+            	}else{
+            		_top -= view.superview.contentOffset.y;
+            	}
+            }else if(view.superview.constructor.name === "SMFUITableView"){
+            	if (view.constructor.name === "SMFUITableViewCell") {
+            		var cell = view;
+            		var tableView = view.superview;
+	            	var indexPath = tableView.indexPathForCell(cell);
+	            	var rect = tableView.rectForRowAtIndexPath(indexPath);
+            		
+            		_top += rect.y;
+            		
+            		if (_top + self.nativeObject.frame.height > tableView.contentOffset.y + tableView.frame.height) {
+            			var newTop =  _top - tableView.frame.height + self.nativeObject.frame.height;
+	            		tableView.setContentOffsetAnimated({
+		                    x: 0,
+		                    y: newTop
+		                }, true);
+		                _top -= newTop;
+	            	}else if(tableView.contentOffset.y > _top){
+		        		tableView.setContentOffsetAnimated({
+		                    x: 0,
+		                    y: _top
+		                }, true);
+		                _top -= (_top);
+	            	}else{
+	            		_top -= tableView.contentOffset.y;
+	            	}
+            	}
             }
 
             if (view.superview.constructor.name === "UIWindow") { // Check Dialog
