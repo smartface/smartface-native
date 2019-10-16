@@ -2,18 +2,16 @@
 const extend = require('js-base/core/extend');
 const TextView = require('../textview');
 const TypeUtil = require('../../util/type');
-const Color = require('../color');
 const KeyboardType = require('../keyboardtype');
 const ActionKeyType = require('../actionkeytype');
-const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
-const Reflection = require("../android/reflection");
 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeInputFilter = requireClass("android.text.InputFilter");
+const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -72,7 +70,6 @@ const TextBox = extend(TextView)(
         var self = this;
         var activity = AndroidConfig.activity;
         if (!self.nativeObject) {
-            const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
             //AND-3123: Due to the issue, hardware button listener added.
             var callback = {
                 'onKeyPreIme': function(keyCode, keyEventAction) {
@@ -125,7 +122,7 @@ const TextBox = extend(TextView)(
                 },
                 set: function(color) {
                     _cursorColor = color;
-                    Reflection.setCursorColor(this.nativeObject, color.nativeObject);
+                    SFEditText.setCursorColor(this.nativeObject, color.nativeObject);
                 },
                 enumerable: true,
                 configurable: true
