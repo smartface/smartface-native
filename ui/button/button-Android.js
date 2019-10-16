@@ -260,13 +260,6 @@ const Button = extend(Label)(
             // so we should use created drawables.
             if (borderWidth_px >= 0) {
                 this.borderShapeDrawable = SFViewUtil.getShapeDrawable(this.borderColor.nativeObject, borderWidth_px, this._borderRadius);
-                
-                // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
-                if (borderWidth_px !== 0) {
-                    this.borderShapeDrawable.getPaint().setColor(this._borderColor.nativeObject);
-                } else {
-                    this.borderShapeDrawable.getPaint().setColor(0);
-                }
                 this.setBackground(1);
             }
         };
