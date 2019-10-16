@@ -104,11 +104,11 @@ Network.createNotifier = function(params) {
                 let cTypeEnum = getConnectionTypeEnum(connectionType),
                     isInitialStickyNotification = self.android.isInitialStickyNotification();
 
-                if (self.android.ignoreCacheInitial) {
+                if (self.android.initialCacheEnabled) {
+                    self.connectionTypeChanged(cTypeEnum);
+                } else {
                     if (!isInitialStickyNotification)
                         self.connectionTypeChanged(cTypeEnum);
-                } else {
-                    self.connectionTypeChanged(cTypeEnum);
                 }
             }
         };
@@ -138,16 +138,16 @@ Network.createNotifier = function(params) {
     });
 
     self.android = {};
-    let ignoreCacheInitial = true;
+    let initialCacheEnabled = false;
     Object.defineProperties(self.android, {
         'isInitialStickyNotification': {
             value: () => self.nativeObject.isInitialStickyBroadcast(),
             enumerable: true
         },
-        'ignoreCacheInitial': {
-            get: () => ignoreCacheInitial,
+        'initialCacheEnabled': {
+            get: () => initialCacheEnabled,
             set: (value) => {
-                ignoreCacheInitial = value;
+                initialCacheEnabled = value;
             },
             enumerable: true
         }

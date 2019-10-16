@@ -136,7 +136,7 @@ Network.createNotifier.subscribe = function(connectionType) {};
  * @method isInitialStickyNotification
  * @return {Boolean}
  * @android
- * @deprecated Use {@link Device.Network.createNotifier#ignoreCacheInitial} instead
+ * @deprecated Use {@link Device.Network.createNotifier#initialCacheEnabled} instead
  * @since 4.0.8
  */
 Network.createNotifier.isInitialStickyNotification = function() {};
@@ -146,10 +146,10 @@ Network.createNotifier.isInitialStickyNotification = function() {};
  * Assigning true to this property means that ignore the held value in the sticky cache. Thus, subscribed function won't fire at the initial time.
  *
  * @android
- * @property {Boolean} ignoreCacheInitial
+ * @property {Boolean} initialCacheEnabled
  * @since 4.0.8
  */
-Network.createNotifier.ignoreCacheInitial = true;
+Network.createNotifier.initialCacheEnabled = false;
 
 /**
  * This method stops receiving subcribed callback.
