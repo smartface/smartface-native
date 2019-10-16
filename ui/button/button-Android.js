@@ -1,4 +1,4 @@
-/*globals requireClass*/
+/* globals requireClass, array */
 const TextAlignment = require("../textalignment");
 
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -12,11 +12,10 @@ const NativeView = requireClass("android.view.View");
 const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawable");
 const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
-const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
-const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-const NativeRectF = requireClass("android.graphics.RectF");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
+
+const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 
 const YogaEdge = {
     "LEFT": NativeYogaEdge.LEFT,
@@ -78,12 +77,12 @@ const Button = extend(Label)(
                 },
                 set: function(borderWidth) {
                     this._borderWidth = borderWidth;
-                    var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+                    var borderWidth_px = AndroidUnitConverter.dpToPixel(borderWidth);
 
-                    this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
-                    this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
-                    this.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
-                    this.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderWidth);
+                    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidth_px);
+                    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidth_px);
+                    this.yogaNode.setBorder(YogaEdge.TOP, borderWidth_px);
+                    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidth_px);
                     this.setBorder();
                 },
                 enumerable: true,
@@ -122,11 +121,7 @@ const Button = extend(Label)(
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
 
         this._borderRadius = 0;
-        this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
-        this.rectF = new NativeRectF(0, 0, 0, 0);
-        this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
-        this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
-        this.borderShapeDrawable.getPaint().setColor(0);
+        this.borderShapeDrawable = SFViewUtil.getShapeDrawable(0, 0, this._borderRadius);
 
         this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
         this.__backgroundImages = null;
@@ -260,24 +255,11 @@ const Button = extend(Label)(
         };
 
         this.setBorder = function() {
-            var dp_borderWidth = AndroidUnitConverter.dpToPixel(this.borderWidth);
+            var borderWidth_px = AndroidUnitConverter.dpToPixel(this.borderWidth);
             // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
             // so we should use created drawables.
-            if (dp_borderWidth >= 0) {
-                this.radii = array([this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius,
-                    this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius
-                ], "float");
-
-                this.rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
-                this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
-                this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
-
-                // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
-                if (dp_borderWidth !== 0) {
-                    this.borderShapeDrawable.getPaint().setColor(this._borderColor.nativeObject);
-                } else {
-                    this.borderShapeDrawable.getPaint().setColor(0);
-                }
+            if (borderWidth_px >= 0) {
+                this.borderShapeDrawable = SFViewUtil.getShapeDrawable(this.borderColor.nativeObject, borderWidth_px, this._borderRadius);
                 this.setBackground(1);
             }
         };
