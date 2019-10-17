@@ -29,6 +29,16 @@ const WebView = extend(View)(
             },
             enumerable: true
         });
+        
+        Object.defineProperty(self, 'userAgent', {
+            get: function() {
+                return self.nativeObject.valueForKey("customUserAgent");
+            },
+            set: function(value) {
+                self.nativeObject.setValueForKey(value, "customUserAgent");
+            },
+            enumerable: true
+        });
 
         Object.defineProperty(self, 'loadFile', {
             value: function(value) {
