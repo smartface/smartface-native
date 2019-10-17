@@ -35,7 +35,11 @@ const WebView = extend(View)(
                 return self.nativeObject.valueForKey("customUserAgent");
             },
             set: function(value) {
-                self.nativeObject.setValueForKey(value, "customUserAgent");
+            	if (value) {
+            		self.nativeObject.setValueForKey(value, "customUserAgent");
+            	}else{
+            		self.nativeObject.setValueForKey("", "customUserAgent");
+            	}
             },
             enumerable: true
         });
