@@ -54,14 +54,16 @@ WebView.prototype.openLinkInside = true;
 WebView.prototype.scrollEnabled = true;
 
 /**
- * Sets/Gets the userAgent.
+ * Sets/Gets the userAgent. On Android, if the string is null or empty, 
+ * the system default value will be used. Changing the user-agent while 
+ * loading a web page causes WebView to initiate loading once again.
  *
  * @property {String} userAgent
  * @android
  * @ios
  * @since 4.1.1
  */
-WebView.prototype.userAgent = "";
+WebView.prototype.userAgent;
 
 /**
  * Sets/Gets the visibility of scrollbar.
