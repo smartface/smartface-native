@@ -104,12 +104,10 @@ Network.createNotifier = function(params) {
                 let cTypeEnum = getConnectionTypeEnum(connectionType),
                     isInitialStickyNotification = self.android.isInitialStickyNotification();
 
-                if (self.android.initialCacheEnabled) {
-                    self.connectionTypeChanged(cTypeEnum);
-                } else {
-                    if (!isInitialStickyNotification)
-                        self.connectionTypeChanged(cTypeEnum);
-                }
+                if(!self.android.initialCacheEnabled && isInitialStickyNotification)
+                    return;
+
+                self.connectionTypeChanged(cTypeEnum);
             }
         };
         self.nativeObject = new SFNetworkNotifier(callback);
