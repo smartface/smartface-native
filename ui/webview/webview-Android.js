@@ -152,6 +152,15 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             },
+            'userAgent': {
+                get: function() {
+                    return this.nativeObject.getUserAgent();
+                },
+                set: function(value) {
+                    this.nativeObject.setUserAgent(value);
+                },
+                enumerable: true
+            },
             'bounceEnabled': {
                 get: function() {
                     return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
