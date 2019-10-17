@@ -54,6 +54,16 @@ WebView.prototype.openLinkInside = true;
 WebView.prototype.scrollEnabled = true;
 
 /**
+ * Sets/Gets the userAgent.
+ *
+ * @property {String} userAgent
+ * @android
+ * @ios
+ * @since 4.1.1
+ */
+WebView.prototype.userAgent = "";
+
+/**
  * Sets/Gets the visibility of scrollbar.
  *
  * @property {Boolean} scrollBarEnabled
