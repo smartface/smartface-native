@@ -100,8 +100,14 @@ Network.createNotifier = function(params) {
     if (!self.nativeObject) {
         let callback = {
             onConnectionTypeChanged: function(connectionType) {
-                let cTypeEnum = getConnectionTypeEnum(connectionType);
-                self.connectionTypeChanged && self.connectionTypeChanged(cTypeEnum);
+                if (!self.connectionTypeChanged) return;
+                let cTypeEnum = getConnectionTypeEnum(connectionType),
+                    isInitialStickyNotification = self.android.isInitialStickyNotification();
+
+                if(!self.android.initialCacheEnabled && isInitialStickyNotification)
+                    return;
+
+                self.connectionTypeChanged(cTypeEnum);
             }
         };
         self.nativeObject = new SFNetworkNotifier(callback);
@@ -130,9 +136,19 @@ Network.createNotifier = function(params) {
     });
 
     self.android = {};
-    Object.defineProperty(self.android, 'isInitialStickyNotification', {
-        value: () => self.nativeObject.isInitialStickyBroadcast(),
-        enumerable: true
+    let initialCacheEnabled = false;
+    Object.defineProperties(self.android, {
+        'isInitialStickyNotification': {
+            value: () => self.nativeObject.isInitialStickyBroadcast(),
+            enumerable: true
+        },
+        'initialCacheEnabled': {
+            get: () => initialCacheEnabled,
+            set: (value) => {
+                initialCacheEnabled = value;
+            },
+            enumerable: true
+        }
     });
 
     _instanceCollection.push(this);
@@ -143,7 +159,6 @@ Network.createNotifier = function(params) {
     self.unsubscribe = function() {
         self.connectionTypeChanged = null;
     };
-
 
     if (params) {
         for (var param in params) {
