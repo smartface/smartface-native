@@ -41,7 +41,7 @@ Network.SMSEnabled;
 
 /**
  *
- * Returns the 'International Mobile Subscriber Identity' of the device.
+ * Returns the 'International Mobile Subscriber Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {String} IMSI
  * @readonly
  * @static

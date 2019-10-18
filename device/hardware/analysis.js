@@ -17,7 +17,7 @@ function Hardware() {}
 
 /**
  *
- * Returns the unique id of the device. The value may change if the device is formatted.
+ * Returns the unique id of the device. The value may change if the device is formatted. 
  * @property {String} UID
  * @android
  * @ios
@@ -29,7 +29,7 @@ Hardware.UID;
 
 /**
  *
- * Returns 'International Mobile Equipment Identity' of the device.
+ * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {String} IMEI
  * @android
  * @readonly
@@ -64,7 +64,7 @@ Hardware.brandName;
 
 /**
  *
- * Returns the vendor id of the device.
+ * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {Number} vendorID
  * @android
  * @readonly
