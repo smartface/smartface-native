@@ -31,26 +31,61 @@ const SwipeView = extend(View)(
         }
 
         _super(this);
-
+		
+		var _onTouch;
         Object.defineProperty(self, 'onTouch', {
             get: function() {
-                return self.pageController.view.onTouch;
+                return _onTouch;
             },
             set: function(value) {
                 if (typeof value === 'function') {
-                    self.pageController.view.onTouch = value.bind(this);
+    	            _onTouch = value;
+		            var onTouchHandler = function(e) {
+		            	if (e && e.point) {
+			            	var object = {
+			            		x:e.point.x,
+			            		y:e.point.y
+			            	};
+			                return value.call(this,object);
+		            	}else{
+		            		return value.call(this);
+		            	}
+		            };
+                    self.pageController.view.onTouch = onTouchHandler.bind(this);
                 }
             },
             enumerable: true
         });
 
+		var _onTouchEnded;
         Object.defineProperty(self, 'onTouchEnded', {
             get: function() {
-                return self.pageController.view.onTouchEnded;
+                return _onTouchEnded;
             },
             set: function(value) {
                 if (typeof value === 'function') {
-                    self.pageController.view.onTouchEnded = value.bind(this);
+                	_onTouchEnded = value;
+		            var onTouchEndedHandler = function(e) {
+		                if (e && e.point) {
+		                	var inside = function(frame,point) {
+                		        var x = point.x;
+						        var y = point.y;
+						        var w = frame.width;
+						        var h = frame.height;
+						        return !(x > w || x < 0 || y > h || y < 0);
+		                	}(self.nativeObject.frame, e.point)
+		                	
+		                	var object = {
+		                		isInside: inside,
+		                		x:e.point.x,
+		                		y:e.point.y
+		                	};
+		                    return value.call(this,inside,object);
+		                } else {
+		                    return value.call(this);
+		                }
+		            };
+                    self.pageController.view.onTouchEnded = onTouchEndedHandler.bind(this);
                 }
             },
             enumerable: true

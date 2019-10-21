@@ -98,28 +98,6 @@ function SwipeView() {
     this.swipeToIndex = function(index, animated) {};
 };
 
-/**
- * This event is called when a touch screen motion event starts. Does not work on iOS.
- *
- * @event onTouch
- * @android
- * @deprecated 2.0.4
- * @member UI.SwipeView
- * @since 1.1.10
- */
-SwipeView.prototype.onTouch = function onTouch() {}
-
-/**
- * This event is called when a touch screen motion event ends. Does not work on iOS.
- *
- * @event onTouchEnded
- * @android
- * @deprecated 2.0.4
- * @member UI.SwipeView
- * @since 1.1.10
- */
-SwipeView.prototype.onTouchEnded = function onTouchEnded() {}
-
 
 /**
  * Gets/sets over-scroll mode for this view.

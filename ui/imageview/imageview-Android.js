@@ -5,9 +5,14 @@ const View = require('../view');
 const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
-const NativeNetworkPolicy = requireClass("com.squareup.picasso.NetworkPolicy");
 const File = require('../../io/file');
 const Path = require('../../io/path');
+const {
+    ImageViewMemoryPolicy,
+    MemoryPolicy,
+    ImageViewNetworkPolicy,
+    NetworkPolicy
+} = require("./Android/policy.js");
 
 const ImageView = extend(View)(
     function(_super, params) {
@@ -111,7 +116,9 @@ const ImageView = extend(View)(
                 fade,
                 onFailure,
                 onSuccess,
-                networkPolicy
+                networkPolicy,
+                memoryPolicy,
+                useHTTPCacheControl
             } = getLoadFromUrlParams.apply(null, arguments);
             var callback = null;
             if (onFailure || onSuccess) {
@@ -131,7 +138,9 @@ const ImageView = extend(View)(
                 plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
                     networkPolicy,
                     fade,
-                    placeholder
+                    placeholder,
+                    memoryPolicy,
+                    useHTTPCacheControl
                 });
                 var requestCreator = scaleImage(plainRequestCreator);
                 if (callback !== null)
@@ -153,8 +162,10 @@ const ImageView = extend(View)(
                 url,
                 placeholder,
                 android: {
-                    networkPolicy: networkPolicy
-                } = {}
+                    networkPolicy: networkPolicy,
+                    memoryPolicy: memoryPolicy
+                } = {},
+                useHTTPCacheControl
             } = params;
             var target = NativeTarget.implement({
                 onBitmapLoaded: function(bitmap, from) {
@@ -176,7 +187,9 @@ const ImageView = extend(View)(
                 var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 requestCreator = setArgsToRequestCreator.call(requestCreator, {
                     placeholder,
-                    networkPolicy
+                    networkPolicy,
+                    memoryPolicy,
+                    useHTTPCacheControl
                 });
                 requestCreator.into(target);
             }
@@ -188,7 +201,10 @@ const ImageView = extend(View)(
                 fade,
                 width,
                 height,
-                placeholder
+                placeholder,
+                android: {
+                    memoryPolicy: memoryPolicy
+                } = {}
             } = params;
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (file instanceof File) {
@@ -199,7 +215,8 @@ const ImageView = extend(View)(
                     let plainRequestCreatorDrawable = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
                     plainRequestCreatorDrawable = setArgsToRequestCreator.call(plainRequestCreatorDrawable, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -213,7 +230,8 @@ const ImageView = extend(View)(
                     let plainRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
                     plainRequestCreatorAsset = setArgsToRequestCreator.call(plainRequestCreatorAsset, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -225,7 +243,8 @@ const ImageView = extend(View)(
                     let plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
                     plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
                         fade,
-                        placeholder
+                        placeholder,
+                        memoryPolicy
                     });
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -262,20 +281,59 @@ const ImageView = extend(View)(
 
 function setArgsToRequestCreator(params = {}) {
     let plainRequestCreator = this;
-    let {networkPolicy, fade, placeholder} = params;
+    let {
+        networkPolicy,
+        fade,
+        placeholder,
+        memoryPolicy,
+        useHTTPCacheControl
+    } = params;
 
-    if (networkPolicy) {
-        plainRequestCreator = plainRequestCreator.networkPolicy(ImageViewNetworkPolicy[networkPolicy], array([], "com.squareup.picasso.NetworkPolicy"));
-    } 
+    let shouldSetPolicy = (useHTTPCacheControl === undefined);
+    if (networkPolicy != undefined && shouldSetPolicy) {
+        let {
+            fPolicy,
+            policies
+        } = getPolicyArgs(networkPolicy, ImageViewNetworkPolicy);
+        if (fPolicy != undefined) {
+            plainRequestCreator = plainRequestCreator.networkPolicy(fPolicy, array(policies, "com.squareup.picasso.NetworkPolicy"));
+        }
+    }
 
-    if (fade === false) {
+    if (memoryPolicy != undefined && shouldSetPolicy) {
+        let {
+            fPolicy,
+            policies
+        } = getPolicyArgs(memoryPolicy, ImageViewMemoryPolicy);
+        if (fPolicy != undefined)
+            plainRequestCreator = plainRequestCreator.memoryPolicy(fPolicy, array(policies, "com.squareup.picasso.MemoryPolicy"));
+    }
+
+    if (useHTTPCacheControl) {
+        console.log(" useHTTPCacheControl innn ");
+        plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_CACHE], array([], "com.squareup.picasso.MemoryPolicy"));
+    }
+
+    if (fade === false)
         plainRequestCreator = plainRequestCreator.noFade();
-    }
 
-    if (placeholder instanceof Image) {
+    if (placeholder instanceof Image)
         plainRequestCreator = plainRequestCreator.placeholder(placeholder.nativeObject);
-    }
     return plainRequestCreator;
+}
+
+function getPolicyArgs(policy, convertionObj) {
+    let fPolicy, policies = [];
+    if (TypeUtil.isArray(policy)) {
+        policies = policy.map(e => convertionObj[e]);
+        fPolicy = policies.shift();
+    } else {
+        fPolicy = convertionObj[policy];
+    }
+    return {
+        fPolicy,
+        policies
+    };
 }
 
 function getLoadFromUrlParams() {
@@ -288,7 +346,9 @@ function getLoadFromUrlParams() {
             onFailure: (params.onError ? params.onError : params.onFailure),
             fade: params.fade,
             onSuccess: params.onSuccess,
-            networkPolicy: params.android ? params.android.networkPolicy : undefined
+            networkPolicy: params.android ? params.android.networkPolicy : undefined,
+            memoryPolicy: params.android ? params.android.memoryPolicy : undefined,
+            useHTTPCacheControl: params.useHTTPCacheControl
         };
     } else {
         return {
@@ -337,15 +397,16 @@ ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
 ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
 ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
 
-ImageView.Android = {}
-ImageView.Android.NetworkPolicy = {};
-ImageView.Android.NetworkPolicy.NO_CACHE = 1;
-ImageView.Android.NetworkPolicy.NO_STORE = 2;
-ImageView.Android.NetworkPolicy.OFFLINE = 3;
-
-const ImageViewNetworkPolicy = {};
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_CACHE] = NativeNetworkPolicy.NO_CACHE;
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.NO_STORE] = NativeNetworkPolicy.NO_STORE;
-ImageViewNetworkPolicy[ImageView.Android.NetworkPolicy.OFFLINE] = NativeNetworkPolicy.OFFLINE;
+ImageView.Android = {};
+Object.defineProperties(ImageView.Android, {
+    'NetworkPolicy': {
+        value: NetworkPolicy,
+        enumerable: true
+    },
+    'MemoryPolicy': {
+        value: MemoryPolicy,
+        enumerable: true
+    },
+});
 
 module.exports = ImageView;

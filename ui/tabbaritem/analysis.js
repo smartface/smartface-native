@@ -76,7 +76,7 @@ TabBarItem.prototype.icon = null;
 TabBarItem.prototype.systemIcon;
 
 /**
- * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge usage isn't currently supported if this TabBarItem is belongs to TabBarController. 
  * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.
  *
  *     @example
