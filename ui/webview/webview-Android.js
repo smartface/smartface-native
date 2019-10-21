@@ -1,4 +1,4 @@
-/*globals array,requireClass,release */
+/*globals array,requireClass */
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');
@@ -27,6 +27,7 @@ const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
 const NativeWebView = requireClass('android.webkit.WebView');
+const SFWebView = requireClass('io.smartface.android.sfcore.ui.webview.SFWebView');
 
 var activity = AndroidConfig.activity;
 
@@ -36,16 +37,9 @@ var mUploadMessage;
 
 const WebView = extend(View)(
     function(_super, params) {
-        if (!this.nativeObject) {
-            this.nativeObject = new NativeWebView(AndroidConfig.activity);
-        }
-
-        _super(this);
-        scrollableSuper(this, this.nativeObject);
-
         const self = this;
 
-        var overrideMethods = {
+        var webViewClientCallbacks = {
             onPageFinished: function(url) {
                 _onShow && _onShow({
                     url: url
@@ -55,8 +49,85 @@ const WebView = extend(View)(
                 _onLoad && _onLoad({
                     url: url
                 });
+            },
+            shouldOverrideUrlLoading: function(url) {
+                var callbackValue = true;
+                _onChangedURL && (callbackValue = _onChangedURL({
+                    url: url
+                }));
+                if (!callbackValue)
+                    return true;
+                return overrideURLChange(url, _canOpenLinkInside);
+            },
+            onReceivedError: function(code, message, url) {
+                _onError && _onError({ code, message, url });
             }
         };
+        
+        var webChromeClientCallbacks = {
+            //For Android5.0+
+            onShowFileChooser: function(filePathCallback) {
+                if (mFilePathCallback != null) {
+                    mFilePathCallback.onReceiveValue(null);
+                }
+                mFilePathCallback = filePathCallback;
+
+                var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    var photoFile = null;
+                    photoFile = createImageFile();
+                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                        takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
+                            NativeUri.fromFile(photoFile));
+                    } else {
+                        takePictureIntent = null;
+                    }
+                }
+
+                var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType("image/*");
+
+                var intentArray;
+                var tempArr = [];
+                if (takePictureIntent != null) {
+                    tempArr.push(takePictureIntent);
+                }
+                intentArray = array(tempArr, "android.content.Intent");
+
+                var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
+                chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
+
+                _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
+                return true;
+
+            },
+            onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
+                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
+                    sourceId,
+                    message,
+                    lineNumber,
+                    messageLevel
+                }) : false;
+                return TypeUtil.isBoolean(result) ? result : false;
+            }
+        };
+        
+        
+        if (!this.nativeObject) {
+            this.nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
+        }
+
+        _super(this);
+        scrollableSuper(this, this.nativeObject);
+        
         var _canOpenLinkInside = true;
         var _onError;
         var _onShow;
@@ -73,13 +144,20 @@ const WebView = extend(View)(
                 set: function(value) {
                     if (value) {
                         _scrollBarEnabled = true;
-                        this.nativeObject.setHorizontalScrollBarEnabled(true);
-                        this.nativeObject.setVerticalScrollBarEnabled(true);
+                        this.nativeObject.setScrollBarEnabled(true);
                     } else {
                         _scrollBarEnabled = false;
-                        this.nativeObject.setHorizontalScrollBarEnabled(false);
-                        this.nativeObject.setVerticalScrollBarEnabled(false);
+                        this.nativeObject.setScrollBarEnabled(false);
                     }
+                },
+                enumerable: true
+            },
+            'userAgent': {
+                get: function() {
+                    return this.nativeObject.getUserAgent();
+                },
+                set: function(value) {
+                    this.nativeObject.setUserAgent(value);
                 },
                 enumerable: true
             },
@@ -125,10 +203,10 @@ const WebView = extend(View)(
             },
             'zoomEnabled': {
                 get: function() {
-                    return this.nativeObject.getSettings().getBuiltInZoomControls();
+                    return this.nativeObject.getZoomEnabled();
                 },
                 set: function(enabled) {
-                    this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
+                    this.nativeObject.setZoomEnabled(enabled);
                 },
                 enumerable: true
             },
@@ -343,84 +421,8 @@ const WebView = extend(View)(
             }
         });
 
-        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-            overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
-                var url = requestUrl;
-                var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({
-                    url: url
-                }));
-                if (!callbackValue)
-                    return true;
-                return overrideURLChange(url, _canOpenLinkInside);
-
-            };
-        } else {
-            overrideMethods.shouldOverrideUrlLoading = function(url) {
-                var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({
-                    url: url
-                }));
-                if (!callbackValue)
-                    return true;
-                return overrideURLChange(url, _canOpenLinkInside);
-            };
-        }
-
-        // SDK version check will not work because implement engine does not supports types
-        overrideMethods.onReceivedError = function() {
-            if (arguments.count === 2) {
-                /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webResourceRequest
-                 * arguments[1] = webResourceError
-                 */
-                const NativeString = requireClass('java.lang.String');
-                var uri = arguments[0].getUrl();
-                var url = NativeString.valueOf(uri);
-                var code = arguments[1].getErrorCode();
-                var message = arguments[1].getDescription();
-
-                _onError && _onError({
-                    message: message,
-                    code: code,
-                    url: url
-                });
-            } else {
-                /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = errorCode, 
-                 * arguments[1] = description, 
-                 * arguments[2] = failingUrl, 
-                 */
-                _onError && _onError({
-                    message: arguments[1],
-                    code: arguments[0],
-                    url: arguments[2]
-                });
-            }
-        };
-
-        const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
-        var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
-        /*
-        ToDo: Trying to access any field or methods of instance will cause exception.  Consider when getDeclatedMethods exceptions are handled
-        */
-        this.nativeObject.setWebViewClient(nativeWebClient.getInstance());
-        this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
-        this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
-        var settings = this.nativeObject.getSettings();
-        /** @todo causes exception 
-         * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
-         */
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-        settings.setLoadsImagesAutomatically(true);
-
-        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-            settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
-        }
-
+        this.nativeObject.setScrollBarEnabled(_scrollBarEnabled);
+        
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {
                 if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
@@ -436,65 +438,6 @@ const WebView = extend(View)(
             }.bind(this)
         }));
 
-        var overrideMethodsWebChrome = {
-            //For Android5.0+
-            onShowFileChooser: function(filePathCallback) {
-                if (mFilePathCallback != null) {
-                    mFilePathCallback.onReceiveValue(null);
-                }
-                mFilePathCallback = filePathCallback;
-
-                var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    var photoFile = null;
-                    photoFile = createImageFile();
-                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
-                        takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
-                            NativeUri.fromFile(photoFile));
-                    } else {
-                        takePictureIntent = null;
-                    }
-                }
-
-                var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-                contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
-                contentSelectionIntent.setType("image/*");
-
-                var intentArray;
-                var tempArr = [];
-                if (takePictureIntent != null) {
-                    tempArr.push(takePictureIntent);
-                }
-                intentArray = array(tempArr, "android.content.Intent");
-
-                var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
-                chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
-                chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
-
-                _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
-                return true;
-
-            },
-            onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
-                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
-                    sourceId,
-                    message,
-                    lineNumber,
-                    messageLevel
-                }) : false;
-                return TypeUtil.isBoolean(result) ? result : false;
-            }
-        };
-        const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
-        var nativeWebChromeClient = new SFWebChromeClient(overrideMethodsWebChrome);
-        this.nativeObject.setWebChromeClient(nativeWebChromeClient);
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -509,7 +452,6 @@ WebView.REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
 WebView.RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;
 
 WebView.onActivityResult = function(requestCode, resultCode, data) {
-
     if (requestCode == WebView.RESULT_CODE_ICE_CREAM) {
         var uri = null;
         if (data != null) {
@@ -544,7 +486,6 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function createImageFile() {
-
     var timeStamp = new NativeSimpleDateFormat("yyyyMMdd_HHmmss").format(new NativeDate());
     var imageFileName = "JPEG_" + timeStamp + "_";
     var storageDir = NativeEnvironment.getExternalStoragePublicDirectory(NativeEnvironment.DIRECTORY_PICTURES);
@@ -566,7 +507,7 @@ function overrideURLChange(url, _canOpenLinkInside) {
         var action = NativeIntent.ACTION_VIEW;
         var uri = NativeURI.parse(url);
         var intent = new NativeIntent(action, uri);
-        AndroidConfig.activity.startActivity(intent);
+        activity.startActivity(intent);
         return true;
     }
 }

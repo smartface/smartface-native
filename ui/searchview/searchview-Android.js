@@ -7,11 +7,10 @@ const Image = require("../image");
 const KeyboardType = require('../keyboardtype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
-const Application = require("../../application");
 const Exception = require("../../util/exception");
-const Reflection = require("../android/reflection");
-const PorterDuff = requireClass('android.graphics.PorterDuff');
 
+const PorterDuff = requireClass('android.graphics.PorterDuff');
+const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
 const NativeSupportR = requireClass('android.support.v7.appcompat.R');
 const NativeTextView = requireClass("android.widget.TextView");
@@ -288,7 +287,7 @@ const SearchView = extend(View)(
                 },
                 set: function(color) {
                     _textViewCursorColor = color;
-                    Reflection.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
+                    SFEditText.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
                 },
                 enumerable: true
             },

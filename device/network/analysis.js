@@ -41,7 +41,7 @@ Network.SMSEnabled;
 
 /**
  *
- * Returns the 'International Mobile Subscriber Identity' of the device.
+ * Returns the 'International Mobile Subscriber Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {String} IMSI
  * @readonly
  * @static
@@ -136,9 +136,20 @@ Network.createNotifier.subscribe = function(connectionType) {};
  * @method isInitialStickyNotification
  * @return {Boolean}
  * @android
+ * @deprecated Use {@link Device.Network.createNotifier#initialCacheEnabled} instead
  * @since 4.0.8
  */
-Network.createNotifier.isInitialStickyNotification = function(){};
+Network.createNotifier.isInitialStickyNotification = function() {};
+
+
+/**
+ * Assigning true to this property means that ignore the held value in the sticky cache. Thus, subscribed function won't fire at the initial time.
+ *
+ * @android
+ * @property {Boolean} initialCacheEnabled
+ * @since 4.0.8
+ */
+Network.createNotifier.initialCacheEnabled = false;
 
 /**
  * This method stops receiving subcribed callback.
