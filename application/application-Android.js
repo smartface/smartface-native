@@ -222,7 +222,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'restart': {
         value: function() {
-            spratAndroidActivityInstance.restartSpratActivityFromPushNotification();
+            spratAndroidActivityInstance.restartSpratActivity();
         },
         enumerable: true
     },
