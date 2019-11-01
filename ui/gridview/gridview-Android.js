@@ -1,4 +1,4 @@
-/* globals requireClass, array */
+/* globals requireClass, array, toJSArray */
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const GridViewItem = require('../gridviewitem');
@@ -209,14 +209,16 @@ const GridView = extend(View)(
             },
             //methods
             'getLastVisibleIndex': {
-                value: function(colors) {
-                    return this.nativeInner.getLayoutManager().findLastVisibleItemPosition();
+                value: function() {
+                    let lastVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findLastVisibleItemPositions(null));
+                    return Math.max(...lastVisibleItemPositions);
                 },
                 enumerable: true
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    return this.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
+                    let firstVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findFirstVisibleItemPositions(null)).filter(x => x !== -1);
+                    return Math.min(...firstVisibleItemPositions);
                 },
                 enumerable: true
             },
