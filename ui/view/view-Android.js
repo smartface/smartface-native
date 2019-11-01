@@ -9,6 +9,7 @@ const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
+const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager");
 
 const rippleSuperView = require("./ripple");
 
@@ -77,6 +78,7 @@ function View(params) {
 
     this._gradientDrawable = createGradientDrawable();
     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
+    this._sfOnTouchViewManager = new SFOnTouchViewManager();
 
     var _nativeObject = this.nativeObject;
     var _overScrollMode = 0,
@@ -197,6 +199,47 @@ function View(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        "_touchCallbacks": {
+            value: {
+                'onTouchEnded': function(isInside, x, y) {
+                    let result, mEvent = {
+                        x,
+                        y,
+                        isInside
+                    };
+                    this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
+                    return (result === true);
+                }.bind(this),
+                'onTouch': function(x, y) {
+                    let result, mEvent = {
+                        x,
+                        y
+                    };
+                    this._onTouch && (result = this._onTouch(mEvent));
+                    return !(result === false);
+                }.bind(this),
+                'onTouchMoved': function(isInside, x, y) {
+                    let result, mEvent = {
+                        x,
+                        y,
+                        isInside
+                    };
+                    this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
+                    return (result === true);
+                }.bind(this),
+                'onTouchCancelled': function(x, y) {
+                    let result, mEvent = {
+                        x,
+                        y
+                    };
+                    this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
+                    return (result === true);
+                }.bind(this)
+            },
+            enumerable: true,
+            configurable: true,
+            writable: true
         }
     });
 
@@ -211,6 +254,7 @@ function View(params) {
 
     var idInitial = NativeView.generateViewId();
     this.nativeObject.setId(idInitial);
+
 
     // Assign parameters given in constructor
     if (params) {
@@ -308,6 +352,7 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
+        this._sfOnTouchViewManager.setTouchEnabled(value);
     },
     get onTouch() {
         return this._onTouch;
@@ -675,44 +720,9 @@ View.prototype = {
 
 View.prototype.setTouchHandlers = function() {
     if (this.didSetTouchHandler) return;
-
     let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
-    touchableView.setOnTouchListener(NativeView.OnTouchListener.implement({
-        onTouch: function(view, event) {
-            var x = event.getX();
-            var y = event.getY();
-            var w = view.getWidth();
-            var h = view.getHeight();
-
-            var isInside = !(x > w || x < 0 || y > h || y < 0);
-            if (this.touchEnabled) {
-                let result, mEvent = {
-                    x : AndroidUnitConverter.pixelToDp(x),
-                    y : AndroidUnitConverter.pixelToDp(y),
-                    isInside
-                };
-                switch (event.getAction()) {
-                    case ACTION_UP:
-                        this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
-                        return (result === true);
-                    case ACTION_DOWN:
-                        // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
-                        // So we should consume ACTION_DOWN event.
-                        this._onTouch && (result = this._onTouch(mEvent));
-                        return !(result === false);
-                    case ACTION_MOVE:
-                        this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
-                        return (result === true);
-                    case ACTION_CANCEL:
-                        this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
-                        return (result === true);
-                    default:
-                        return false;
-                }
-            }
-            return false;
-        }.bind(this)
-    }));
+    this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
+    touchableView.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
 };
 
