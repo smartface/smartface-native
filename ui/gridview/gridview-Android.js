@@ -217,8 +217,9 @@ const GridView = extend(View)(
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    let firstVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findFirstVisibleItemPositions(null)).filter(x => x !== -1);
-                    return Math.min(...firstVisibleItemPositions);
+                    let firstVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findFirstVisibleItemPositions(null));
+                    // -1 = RecyclerView.NO_POSITION
+                    return Math.min(...(firstVisibleItemPositions.filter(x => x !== -1)));
                 },
                 enumerable: true
             },
