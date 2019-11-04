@@ -136,8 +136,22 @@ const SwipeView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
-            "pageInstances": {
+            "_pageInstances": {
                 value: _pageInstances
+            },
+            "_bypassPageSpecificProperties": {
+                value: function(page) {
+                    page.headerBar.visible = false;
+                    Object.keys(page.headerBar).forEach(function(key) {
+                        Object.defineProperty(page.headerBar, key, {
+                            set: function() {},
+                            get: function() {
+                                return {};
+                            },
+                        });
+                    });
+                    page.isSwipeViewPage = true;
+                }
             }
         });
 
@@ -155,7 +169,7 @@ const SwipeView = extend(View)(
                 });
             }
             _pageInstances[position] = pageInstance;
-            bypassPageSpecificProperties(pageInstance);
+            this._bypassPageSpecificProperties(pageInstance);
             return pageInstance.nativeObject;
         }.bind(self);
 
@@ -199,19 +213,6 @@ const SwipeView = extend(View)(
         self.nativeObject.addOnPageChangeListener(listener);
     }
 );
-
-function bypassPageSpecificProperties(page) {
-    page.headerBar.visible = false;
-    Object.keys(page.headerBar).forEach(function(key) {
-        Object.defineProperty(page.headerBar, key, {
-            set: function() {},
-            get: function() {
-                return {};
-            },
-        });
-    });
-    page.isSwipeViewPage = true;
-}
 
 SwipeView.State = require("./swipeviewState");
 
