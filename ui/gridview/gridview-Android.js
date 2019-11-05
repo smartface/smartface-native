@@ -6,6 +6,7 @@ const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const GridViewLayoutManager = require('../layoutmanager');
 const scrollableSuper = require("../../util/Android/scrollable");
+const LayoutParams = require("../../util/Android/layoutparams");
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -473,7 +474,8 @@ function assignSizeBasedOnDirection(holderViewLayout, viewType) {
             } else {
                 let calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
                 if (holderViewLayout.height != calculatedItemHeight)
-                    holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+                    holderViewLayout.height = calculatedItemHeight;
+                holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
             }
 
         } else {
@@ -486,6 +488,7 @@ function assignSizeBasedOnDirection(holderViewLayout, viewType) {
                 var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
                 if (holderViewLayout.width != calculatedItemWidth)
                     holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
+                holderViewLayout.nativeObject.getLayoutParams().height = LayoutParams.MATCH_PARENT;
             }
         }
     }

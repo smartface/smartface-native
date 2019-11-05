@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const View = require('../view');
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const LayoutParams = require("../../util/Android/layoutparams");
 
 const Color = require('sf-core/ui/color');
 const ParentPicker = require("sf-core/ui/picker/parentPicker");
@@ -231,8 +232,8 @@ function addViewToLayout(nativeObject) {
     if (parent) {
         parent.removeView(nativeObject);
     }
-    layout.addView(nativeObject, new NativeFrameLayout.LayoutParams(-1, // FrameLayout.LayoutParams.MATCH_PARENT
-        -2, // FrameLayout.LayoutParams.WRAP_CONTENT
+    layout.addView(nativeObject, new NativeFrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, // FrameLayout.LayoutParams.MATCH_PARENT
+        LayoutParams.WRAP_CONTENT, // FrameLayout.LayoutParams.WRAP_CONTENT
         17)); // Gravity.CENTER
     return layout;
 }
