@@ -408,23 +408,16 @@ const TextBox = extend(TextView)(
         // setMovementMethod in label-Android.js file removes the textbox cursor. 
         self.nativeObject.setSingleLine(true);
 
-        // Always return false for using both touch and focus events. 
-        // It will not broke events on scrollable parents. Solves: AND-2798
-        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
-            onTouch: function(view, event) {
-                if (_touchEnabled && (self.onTouch || self.onTouchEnded)) {
-                    // MotionEvent.ACTION_UP
-                    if (event.getAction() === 1) {
-                        self.onTouchEnded && self.onTouchEnded();
-                    }
-                    // MotionEvent.ACTION_DOWN
-                    else if (event.getAction() === 0) {
-                        self.onTouch && self.onTouch();
-                    }
-                }
-                return false;
-            }
-        }));
+        /* Override the onTouch and make default returning false to prevent bug in other listener.*/
+        self._touchCallbacks.onTouch = function(x, y) {
+            let result, mEvent = {
+                x,
+                y
+            };
+            if (this.onTouch)
+                result = this.onTouch(mEvent);
+            return (result === true);
+        };
 
         // Assign parameters given in constructor
         if (params) {

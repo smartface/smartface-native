@@ -44,7 +44,7 @@ function WebView(params) {}
 WebView.prototype.openLinkInside = true;
 
 /**
- * Sets/Gets the visibility of scrollbar.
+ * If this property is false then scrolling ability is no longer exist.
  *
  * @property {Boolean} scrollEnabled
  * @android
