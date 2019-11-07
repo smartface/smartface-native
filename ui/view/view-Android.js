@@ -8,7 +8,6 @@ const NativeView = requireClass("android.view.View");
 const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
-const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager");
 
@@ -75,11 +74,15 @@ function View(params) {
     this._borderColor = Color.BLACK;
     this._borderRadius = 0;
     this._borderWidth = 0;
-   
+    this._gradientDrawable = null;
+
+    this._gradientDrawable = createGradientDrawable();
+    this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
 
     var _nativeObject = this.nativeObject;
-    var _overScrollMode = 0;
+    var _overScrollMode = 0,
+        _isBackgroundAssigned = false;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -125,7 +128,17 @@ function View(params) {
             },
             set: function(color) {
                 this._backgroundColor = color;
-                this._resetBackground();
+                if (color.isGradient) {
+                    this._gradientDrawable.setOrientation(color.direction);
+                    this._gradientDrawable.setColors(array(color.colors, "int"));
+                    // this.borderRadius = this.borderRadius;
+                    // this.borderWidth = this.borderWidth;
+                    // this.borderColor = this.borderColor;
+
+                } else {
+                    this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
+                }
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
             },
             enumerable: true,
             configurable: true
@@ -137,8 +150,16 @@ function View(params) {
             set: function(value) {
                 this._borderColor = value;
 
-                this._resetBackground();
-                this._setBorderToAllEdges();
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
+                var borderWidthPx = DpToPixel(this._borderWidth);
+                !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
+                this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
+
+                this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
             },
             enumerable: true,
             configurable: true
@@ -150,8 +171,17 @@ function View(params) {
             set: function(value) {
                 this._borderWidth = value;
 
-                this._resetBackground();
-                this._setBorderToAllEdges();
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
+                var borderWidthPx = DpToPixel(this._borderWidth);
+
+                !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
+                this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
+
+                this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
             },
             enumerable: true,
             configurable: true
@@ -162,8 +192,9 @@ function View(params) {
             },
             set: function(value) {
                 this._borderRadius = value;
-                this._resetBackground();
-
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+                var borderRadiusPx = DpToPixel(this._borderRadius);
+                this._gradientDrawable.setCornerRadius(borderRadiusPx);
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
             },
             enumerable: true,
@@ -697,44 +728,16 @@ View.prototype.setTouchHandlers = function() {
 
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
-View.prototype._resetBackground = function() {
-    let gradientDrawable = new NativeGradientDrawable();
+function createGradientDrawable() {
+    const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+    return new NativeGradientDrawable();
+}
 
-    let color = this.backgroundColor;
-    if (color.isGradient) {
-        gradientDrawable.setOrientation(color.direction);
-        gradientDrawable.setColors(array(color.colors, "int"));
-    } else
-        gradientDrawable.setColor(this.backgroundColor.nativeObject);
-
-    let borderWidth = this.borderWidth;
-    if (!isNaN(borderWidth)) {
-        var borderWidthPx = DpToPixel(borderWidth);
-        if (!borderWidthPx)
-            borderWidthPx = 0; // NaN, undefined etc.
-        gradientDrawable.setStroke(borderWidthPx, this.borderColor.nativeObject);
-    }
-
-    let borderRadius = this.borderRadius;
-    if (!isNaN(borderRadius)) {
-        if (!borderRadius)
-            borderRadius = 0; // NaN, undefined etc.
-        var borderRadiusPx = DpToPixel(borderRadius);
-        gradientDrawable.setCornerRadius(borderRadiusPx);
-    }
-
-    this.nativeObject.setBackground(gradientDrawable);
-};
-
-View.prototype._setBorderToAllEdges = function() {
-    var borderWidthPx = DpToPixel(this.borderWidth);
-    if (!borderWidthPx)
-        borderWidthPx = 0; // NaN, undefined etc.
-    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
-};
+function setBackgroundDrawable(isBackgroundAssigned) {
+    if (!isBackgroundAssigned)
+        this.nativeObject.setBackground(this._gradientDrawable);
+    isBackgroundAssigned = true;
+}
 
 View.State = {};
 
