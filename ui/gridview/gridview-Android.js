@@ -461,6 +461,7 @@ const GridView = extend(View)(
     }
 );
 
+// TODO: Refactor this function. It is too complicated
 function assignSizeBasedOnDirection(holderViewLayout, viewType) {
     const self = this;
     let spanSize = self._layoutManager.spanSize;
