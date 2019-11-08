@@ -1,6 +1,6 @@
 /*globals requireClass*/
 const StaggeredGridLayoutManager = requireClass('android.support.v7.widget.StaggeredGridLayoutManager');
-
+const LayoutParams = require("../../util/Android/layoutparams");
 const ViewHolder = require("sf-core/ui/listviewitem/viewholder");
 const extend = require('js-base/core/extend');
 
@@ -17,7 +17,7 @@ const GridViewItem = extend(ViewHolder)(
         }
 
         //StaggeredGridLayoutManager layout params are provides a few related feature. 
-        this.nativeObject.setLayoutParams(new StaggeredGridLayoutManager.LayoutParams(-1, -1));
+        this.nativeObject.setLayoutParams(new StaggeredGridLayoutManager.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         if (params) {
             for (var param in params) {

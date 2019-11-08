@@ -2,6 +2,7 @@
 const NativeDialog = requireClass("android.app.Dialog");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const LayoutParams = require("../../util/Android/layoutparams");
 const Color = require("../color");
 const Flex = require("../flexlayout");
 const Screen = require('sf-core/device/screen');
@@ -142,7 +143,7 @@ function Dialog(params) {
         colorDrawable = new NativeColorDrawable((Color.create(58, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
-        dialogWindow.setLayout(-1, -1);
+        dialogWindow.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     } else {
         const Application = require("../../application");
 
@@ -160,9 +161,9 @@ function Dialog(params) {
         var layoutHeight = Screen.height - statusBarHeight;
         if (statusBarHeight > 0) {
             this.layout.height = layoutHeight;
-            dialogWindow.setLayout(-1, -2);
+            dialogWindow.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         } else {
-            dialogWindow.setLayout(-1, -1);
+            dialogWindow.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         }
     }
 
