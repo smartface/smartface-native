@@ -465,32 +465,34 @@ const GridView = extend(View)(
 function assignSizeBasedOnDirection(holderViewLayout, viewType) {
     const self = this;
     let spanSize = self._layoutManager.spanSize;
-    if ((self._layoutManager.onItemLength && spanSize) || self._layoutManager.onFullSpan) {
-        if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-            let fullSpanHeight;
-            if (self._layoutManager.onFullSpan &&
-                TypeUtil.isNumeric(fullSpanHeight = self._layoutManager.onFullSpan(viewType))) {
-                holderViewLayout.height = fullSpanHeight;
-                applyFullSpan(holderViewLayout);
-            } else {
-                let calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
-                if (holderViewLayout.height != calculatedItemHeight)
-                    holderViewLayout.height = calculatedItemHeight;
-                holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
-            }
-
+    let isVertical = (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL);
+    let onFullSpan = self._layoutManager.onFullSpan;
+    let onItemLength = self._layoutManager.onItemLength;
+    
+    if (!(self._layoutManager.onItemLength && spanSize) && !self._layoutManager.onFullSpan) {
+        return;
+    }
+    
+    let fullSpanLenght = onFullSpan ? onFullSpan(viewType) : null;
+    let itemLenght = onItemLength ? onItemLength(spanSize) : null;
+    if (isVertical) {
+        if (TypeUtil.isNumeric(fullSpanLenght)) {
+            holderViewLayout.height = fullSpanLenght;
+            applyFullSpan(holderViewLayout);
         } else {
-            let fullSpanWidth;
-            if (self._layoutManager.onFullSpan &&
-                TypeUtil.isNumeric(fullSpanWidth = self._layoutManager.onFullSpan(viewType))) {
-                holderViewLayout.width = fullSpanWidth;
-                applyFullSpan(holderViewLayout);
-            } else {
-                var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
-                if (holderViewLayout.width != calculatedItemWidth)
-                    holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
-                holderViewLayout.nativeObject.getLayoutParams().height = LayoutParams.MATCH_PARENT;
-            }
+            if (holderViewLayout.height != itemLenght)
+                holderViewLayout.height = itemLenght;
+            holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+        }
+
+    } else {
+        if (TypeUtil.isNumeric(fullSpanLenght)) {
+            holderViewLayout.width = fullSpanLenght;
+            applyFullSpan(holderViewLayout);
+        } else {
+            if (holderViewLayout.width != itemLenght)
+                holderViewLayout.width = itemLenght;
+            holderViewLayout.nativeObject.getLayoutParams().height = LayoutParams.MATCH_PARENT;
         }
     }
 }
