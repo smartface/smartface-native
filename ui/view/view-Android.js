@@ -7,11 +7,12 @@ const NativeR = requireClass("android.R");
 const NativeView = requireClass("android.view.View");
 const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
-const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+
 const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager");
 
 const rippleSuperView = require("./ripple");
+const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
 function PixelToDp(px) {
     return AndroidUnitConverter.pixelToDp(px);
@@ -82,25 +83,22 @@ function View(params) {
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
-                return NativeViewCompat.getZ(_nativeObject);
+                return SFViewUtil.getZ(_nativeObject);
             },
             set: function(index) {
                 if (!TypeUtil.isNumeric(index))
                     throw new Error("zIndex value must be a number.");
-                NativeViewCompat.setZ(_nativeObject, index);
+                SFViewUtil.setZ(_nativeObject, index);
             },
             enumerable: true,
             configurable: true
         },
         'elevation': {
             get: function() {
-                return NativeViewCompat.getElevation(_nativeObject);
+                return SFViewUtil.getElevation(_nativeObject); 
             },
             set: function(value) {
-                NativeViewCompat.setElevation(_nativeObject, value);
-                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-                    _nativeObject.setStateListAnimator(null);
-                }
+                SFViewUtil.setElevation(_nativeObject, value);
             },
             enumerable: true,
             configurable: true
@@ -234,10 +232,10 @@ function View(params) {
 
 View.prototype = {
     get transitionId() {
-        return NativeViewCompat.getTransitionName(this.nativeObject);
+        return SFViewUtil.getTransitionName(); 
     },
     set transitionId(id) {
-        NativeViewCompat.setTransitionName(this.nativeObject, id);
+        SFViewUtil.setTransitionName(this.nativeObject, id);
     },
     get alpha() {
         // Avoiding integer-float conflics of engine
