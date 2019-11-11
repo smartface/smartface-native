@@ -77,12 +77,7 @@ const Button = extend(Label)(
                 },
                 set: function(borderWidth) {
                     this._borderWidth = borderWidth;
-                    var borderWidth_px = AndroidUnitConverter.dpToPixel(borderWidth);
-
-                    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidth_px);
-                    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidth_px);
-                    this.yogaNode.setBorder(YogaEdge.TOP, borderWidth_px);
-                    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidth_px);
+                    this._setBorderToAllEdges();
                     this.setBorder();
                 },
                 enumerable: true,

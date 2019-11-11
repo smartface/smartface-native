@@ -8,13 +8,10 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
 const SFMaterialTextBoxWrapper = requireClass("io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
-const NativeR = requireClass(AndroidConfig.packageName + '.R');
-
-const hintTextColorFieldName = "mDefaultTextColor";
-const hintFocusedTextColorFieldName = "mFocusedTextColor";
+const hintTextColorFieldName = "defaultHintTextColor";
+const hintFocusedTextColorFieldName = "focusedTextColor";
 
 const WRAP_CONTENT = -2;
 const MATCH_PARENT = -1;
@@ -40,7 +37,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             _rightLayout = null,
             _rightLayoutWidth;
         var _enableCounterMaxLength = 10;
-        var reflectionHelper = new SfReflectionHelper();
         var enableCounter = false;
         var _enableErrorMessage = false;
         var _enableCharacterRestriction = false;
@@ -65,7 +61,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintTextColor) {
                     _hintTextColor = hintTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject.getInstance(), _hintTextColor.nativeObject);
+                    self.nativeObject.changedErrorTextColor(hintTextColorFieldName, _hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -76,7 +72,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintFocusedTextColor) {
                     _hintFocusedTextColor = hintFocusedTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject.getInstance(), _hintFocusedTextColor.nativeObject);
+                    self.nativeObject.changedErrorTextColor(hintFocusedTextColorFieldName, _hintFocusedTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -129,7 +125,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(font) {
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
-                    self.nativeObject.setExpandedHintTextSize(self.nativeObject.getInstance(), AndroidUnitConverter.dpToPixel(font.size));
+                    self.nativeObject.setExpandedHintTextSize(AndroidUnitConverter.dpToPixel(font.size));
                 },
                 enumerable: true
             },

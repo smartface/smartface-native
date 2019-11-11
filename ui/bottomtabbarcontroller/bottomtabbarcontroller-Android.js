@@ -50,7 +50,8 @@ function BottomTabBarController(params) {
                 for (let index in _childControllers) {
                     try {
                         _childControllers[index].parentController = self;
-                    } catch (e) {
+                    }
+                    catch (e) {
                         Application.onUnhandledError && Application.onUnhandledError(e);
                     }
                     ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
@@ -130,7 +131,8 @@ function BottomTabBarController(params) {
                 page: childController,
                 animated: false
             });
-        } else if (childController instanceof NavigationController) {
+        }
+        else if (childController instanceof NavigationController) {
             childController.__isActive = true;
             // first press
             if (childController.childControllers.length < 1) {
@@ -140,7 +142,8 @@ function BottomTabBarController(params) {
                     controller: childController.childControllers[0],
                     animated: false
                 });
-            } else if (childController.childControllers.length >= 1) {
+            }
+            else if (childController.childControllers.length >= 1) {
                 var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
 
@@ -150,7 +153,8 @@ function BottomTabBarController(params) {
                     animated: false
                 });
             }
-        } else {
+        }
+        else {
             throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
         }
     };
@@ -229,7 +233,8 @@ function BottomTabBarController(params) {
                 self.didSelectByIndex && self.didSelectByIndex({
                     index: index
                 });
-            } catch (e) {
+            }
+            catch (e) {
                 Application.onUnhandledError && Application.onUnhandledError(e);
             }
 
@@ -325,23 +330,20 @@ function attributedItemBuilder(tabBarItem, color) {
 }
 
 function disableShiftMode(bottomTabBar) {
+    bottomTabBar.nativeObject.setLabelVisibilityMode(1);
+
     var menuView = bottomTabBar.nativeObject.getChildAt(0);
-    var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-    shiftingMode.setAccessible(true);
-    shiftingMode.setBoolean(menuView, false);
-    shiftingMode.setAccessible(false);
     let childCount = menuView.getChildCount();
     if (childCount === 0)
         return false;
 
+    /* This is workarround to solve bug of material component https://github.com/material-components/material-components-android/issues/139 */
     for (var i = 0; i < childCount; i++) {
-        var item = menuView.getChildAt(i);
-        item.setShiftingMode(false);
-        var checked = (item.getItemData()).isChecked();
-        if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation) {
-            item.setChecked(false);
-        } else
-            item.setChecked(checked);
+        var menuViewItem = menuView.getChildAt(i);
+        var activeLabel = menuViewItem.findViewById(NativeSFR.id.largeLabel);
+        if (activeLabel) {
+            activeLabel.setPadding(0, 0, 0, 0);
+        }
     }
     return true;
 }
