@@ -7,6 +7,7 @@ const NativeContext = requireClass('android.content.Context');
 const NativeBitmap = requireClass('android.graphics.Bitmap');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
 const NativeR = requireClass('android.R');
+const NativeDisplayMetrics = requireClass('android.util.DisplayMetrics');
 // Context.WINDOW_SERVICE
 const WINDOW_SERVICE = 'window';
 const WINDOW_MANAGER = 'android.view.WindowManager';
@@ -21,9 +22,13 @@ const orientationArray = [
     OrientationType.LANDSCAPELEFT,
 ];
 
+const windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
+const display = windowManager.getDefaultDisplay();
+const metrics = new NativeDisplayMetrics();
+
 Object.defineProperty(Screen, 'dpi', {
     get: function() {
-        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
+        display.getRealMetrics(metrics);
         return metrics.densityDpi;
     },
     configurable: false
@@ -31,7 +36,7 @@ Object.defineProperty(Screen, 'dpi', {
 
 Object.defineProperty(Screen, 'height', {
     get: function() {
-        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
+        display.getRealMetrics(metrics);
         return UnitConverter.pixelToDp(metrics.heightPixels);
     },
     configurable: false
@@ -39,7 +44,7 @@ Object.defineProperty(Screen, 'height', {
 
 Object.defineProperty(Screen, 'width', {
     get: function() {
-        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
+        display.getRealMetrics(metrics);
         return UnitConverter.pixelToDp(metrics.widthPixels);
     },
     configurable: false
@@ -55,8 +60,6 @@ Object.defineProperty(Screen, 'touchSupported', {
 
 Object.defineProperty(Screen, 'orientation', {
     get: function() {
-        var windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
-        var display = windowManager.getDefaultDisplay();
         return orientationArray[display.getRotation()];
     },
     configurable: false
