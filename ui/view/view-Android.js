@@ -232,7 +232,7 @@ function View(params) {
 
 View.prototype = {
     get transitionId() {
-        return SFViewUtil.getTransitionName(); 
+        return SFViewUtil.getTransitionName(this.nativeObject); 
     },
     set transitionId(id) {
         SFViewUtil.setTransitionName(this.nativeObject, id);
