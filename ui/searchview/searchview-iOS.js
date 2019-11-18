@@ -285,17 +285,30 @@ const SearchView = extend(View)(
             enumerable: true
         });
 
+		var searchContainerView; // Workaround For iOS 13, increase height navbar issue
         var _isAddedHeaderBar = false;
         this.addToHeaderBar = function(page) {
             self.nativeObject.layer.borderWidth = 0;
             self.nativeObject.yoga.borderWidth = 0;
             _isAddedHeaderBar = true;
-            page.nativeObject.navigationItem.titleView = self.nativeObject;
+            if (parseInt(System.OSVersion) >= 13) { // Workaround For iOS 13, increase height navbar issue
+            	if (searchContainerView == undefined) {
+            		searchContainerView = __SF_SearchBarContainerView.createWithSearchBar(self.nativeObject);
+            	}
+            	page.nativeObject.navigationItem.titleView = searchContainerView;
+            }else{
+            	page.nativeObject.navigationItem.titleView = self.nativeObject;
+            }
+            
         };
 
         this.removeFromHeaderBar = function(page) {
             _isAddedHeaderBar = false;
             self.removeFocus();
+            if (parseInt(System.OSVersion) >= 13) {
+            	searchContainerView = undefined;
+            	self.nativeObject.removeFromSuperview();
+            }
             page.nativeObject.navigationItem.titleView = undefined;
         };
 
