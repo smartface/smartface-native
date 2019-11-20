@@ -434,7 +434,7 @@ Application.onBackButtonPressed = function() {};
 Application.onExit = function() {};
 
 /**
- * Triggered after application bring to front. In Android, it triggered even the user is leaving another activity(even the activities launched by your app). 
+ * Triggered after application bring to foreground state. In Android, it triggered even the user is leaving another activity(even the activities launched by your app). 
  * That means Permissions & derived from Dialog components are makes this callback to triggered.
  * 
  * @since 0.1
@@ -447,7 +447,7 @@ Application.onExit = function() {};
 Application.onMaximize = function() {};
 
 /**
- * Triggered after application bring to back. Background state means that user is in another app or on the home screen. In Android, it triggered even the user is launching another activity(even the activities launched by your app).
+ * Triggered after application bring to background state. Background state means that user is in another app or on the home screen. In Android, it triggered even the user is launching another activity(even the activities launched by your app).
  * That means Permissions & derived from Dialog components are make this callback to triggered.
  * 
  * @since 0.1
