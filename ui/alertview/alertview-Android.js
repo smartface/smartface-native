@@ -1,8 +1,10 @@
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Type = require("../../util/type");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
+const TextBox = require("../textbox");
 
 AlertView.Android = {};
 AlertView.Android.ButtonType = {
@@ -39,6 +41,7 @@ function AlertView(params) {
 AlertView.prototype = {
     __title: "",
     __message: "",
+    __textBoxes: [],
     get title() {
         return this.__title;
     },
@@ -71,6 +74,9 @@ AlertView.prototype = {
         for (var param in properties) {
             this.__androidProperties[param] = properties[param];
         }
+    },
+    get textBoxes() {
+        return this.__textBoxes;
     }
 };
 
@@ -126,6 +132,23 @@ AlertView.prototype.addButton = function(params) {
             }.bind(this)
         })
     );
+};
+
+AlertView.prototype.addTextBox = function(callback) {
+    let mTextBox = new TextBox();
+    let mViewSpacing = callback && callback(mTextBox);
+    if (typeof mViewSpacing === 'object') {
+        const viewSpacingInPx = {};
+        Object.keys(mViewSpacing).map((key) => {
+            viewSpacingInPx[key] = AndroidUnitConverter.dpToPixel(mViewSpacing[key]);
+        });
+        let {
+            left = 0, top = 0, right = 0, bottom = 0
+        } = viewSpacingInPx;
+        this.nativeObject.setView(mTextBox.nativeObject, left, top, right, bottom);
+    } else
+        this.nativeObject.setView(mTextBox.nativeObject);
+    this.__textBoxes.push(mTextBox);
 };
 
 AlertView.prototype.toString = function() {
