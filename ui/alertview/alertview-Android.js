@@ -1,10 +1,15 @@
+const Color = require("sf-core/ui/color");
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Type = require("../../util/type");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
-const TextBox = require("../textbox");
+const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
+const {
+    MATCH_PARENT,
+    WRAP_CONTENT
+} = require("../../util/Android/layoutparams");
 
 AlertView.Android = {};
 AlertView.Android.ButtonType = {
@@ -134,20 +139,39 @@ AlertView.prototype.addButton = function(params) {
     );
 };
 
-AlertView.prototype.addTextBox = function(callback) {
-    let mTextBox = new TextBox();
-    let mViewSpacing = callback && callback(mTextBox);
-    if (typeof mViewSpacing === 'object') {
-        const viewSpacingInPx = {};
-        Object.keys(mViewSpacing).map((key) => {
-            viewSpacingInPx[key] = AndroidUnitConverter.dpToPixel(mViewSpacing[key]);
-        });
+AlertView.prototype.addTextBox = function(params = {}) {
+    const TextBox = require("../textbox");
+    const TextAlignment = require('../textalignment');
+    const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+
+    const {
+        hint = "", text = "", isPassword = false, android: {
+            viewSpacings: viewSpacings = {}
+        } = {}
+    } = params;
+    let mTextBox = new TextBox({
+        hint,
+        text,
+        isPassword,
+        textAlignment: TextAlignment.MIDLEFT
+    });
+    if (!this._alertLayout) {
+        this._alertLayout = new NativeLinearLayout(activity);
+        this._alertLayout.setOrientation(1);
+    }
+    if (viewSpacings.constructor === Object && Object.keys(viewSpacings).length > 0) {
         let {
             left = 0, top = 0, right = 0, bottom = 0
-        } = viewSpacingInPx;
-        this.nativeObject.setView(mTextBox.nativeObject, left, top, right, bottom);
-    } else
-        this.nativeObject.setView(mTextBox.nativeObject);
+        } = viewSpacings;
+        let nativeLinearParams = new NativeLinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        nativeLinearParams.setMargins(left, top, right, bottom);
+        mTextBox.nativeObject.setLayoutParams(nativeLinearParams);
+    }
+    this._alertLayout.addView(mTextBox.nativeObject);
+    if (!this.__layoutAdded) {
+        this.__layoutAdded = true;
+        this.nativeObject.setView(this._alertLayout);
+    }
     this.__textBoxes.push(mTextBox);
 };
 
