@@ -207,7 +207,7 @@ AlertView.prototype.dismiss = function() {};
  * Returns object which contains text of added TextBox
  *
  * @property {Object[]} textBoxes
- * @property {String} textBoxes[].text Text of added TextBox
+ * @property {String} textBoxes.text Text of added TextBox
  * @android
  * @ios
  * @since 4.1.1
