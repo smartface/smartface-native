@@ -146,7 +146,9 @@ AlertView.prototype.addTextBox = function(params = {}) {
 
     const {
         hint = "", text = "", isPassword = false, android: {
-            viewSpacings: viewSpacings = {}
+            viewSpacings: viewSpacings = {},
+            height,
+            width
         } = {}
     } = params;
     let mTextBox = new TextBox({
@@ -159,11 +161,13 @@ AlertView.prototype.addTextBox = function(params = {}) {
         this._alertLayout = new NativeLinearLayout(activity);
         this._alertLayout.setOrientation(1);
     }
-    if (viewSpacings.constructor === Object && Object.keys(viewSpacings).length > 0) {
+    if (Object.keys(viewSpacings).length > 0 || (height !== undefined || width !== undefined)) {
         let {
             left = 0, top = 0, right = 0, bottom = 0
         } = viewSpacings;
-        let nativeLinearParams = new NativeLinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        let dpHeight = height !== undefined ? AndroidUnitConverter.dpToPixel(height) : MATCH_PARENT;
+        let dpWidth = width !== undefined ? AndroidUnitConverter.dpToPixel(width) : MATCH_PARENT;
+        let nativeLinearParams = new NativeLinearLayout.LayoutParams(dpWidth, dpHeight);
         nativeLinearParams.setMargins(left, top, right, bottom);
         mTextBox.nativeObject.setLayoutParams(nativeLinearParams);
     }
