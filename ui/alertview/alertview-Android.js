@@ -1,11 +1,9 @@
-const Color = require("sf-core/ui/color");
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Type = require("../../util/type");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
-const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 const {
     MATCH_PARENT,
     WRAP_CONTENT
@@ -80,8 +78,8 @@ AlertView.prototype = {
             this.__androidProperties[param] = properties[param];
         }
     },
-    get textBoxes() {
-        return this.__textBoxes;
+    get inputsText() {
+        return this.__textBoxes.map(textBox => textBox.text);
     }
 };
 
@@ -157,27 +155,32 @@ AlertView.prototype.addTextBox = function(params = {}) {
         isPassword,
         textAlignment: TextAlignment.MIDLEFT
     });
-    if (!this._alertLayout) {
-        this._alertLayout = new NativeLinearLayout(activity);
-        this._alertLayout.setOrientation(1);
-    }
     if (Object.keys(viewSpacings).length > 0 || (height !== undefined || width !== undefined)) {
+        let viewSpacingsInPx = {};
+        Object.keys(viewSpacings).map((key) => {
+            viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
+        });
         let {
             left = 0, top = 0, right = 0, bottom = 0
-        } = viewSpacings;
-        let dpHeight = height !== undefined ? AndroidUnitConverter.dpToPixel(height) : MATCH_PARENT;
-        let dpWidth = width !== undefined ? AndroidUnitConverter.dpToPixel(width) : MATCH_PARENT;
+        } = viewSpacingsInPx;
+        let dpHeight = dpToPixel(height);
+        let dpWidth = dpToPixel(width);
         let nativeLinearParams = new NativeLinearLayout.LayoutParams(dpWidth, dpHeight);
         nativeLinearParams.setMargins(left, top, right, bottom);
         mTextBox.nativeObject.setLayoutParams(nativeLinearParams);
     }
-    this._alertLayout.addView(mTextBox.nativeObject);
-    if (!this.__layoutAdded) {
-        this.__layoutAdded = true;
+    if (!this._alertLayout) {
+        this._alertLayout = new NativeLinearLayout(activity);
+        this._alertLayout.setOrientation(1);
         this.nativeObject.setView(this._alertLayout);
     }
+    this._alertLayout.addView(mTextBox.nativeObject);
     this.__textBoxes.push(mTextBox);
 };
+
+function dpToPixel(size) {
+    return size !== undefined ? AndroidUnitConverter.dpToPixel(size) : MATCH_PARENT;
+}
 
 AlertView.prototype.toString = function() {
     return 'AlertView';
