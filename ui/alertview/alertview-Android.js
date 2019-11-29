@@ -79,7 +79,9 @@ AlertView.prototype = {
         }
     },
     get textBoxes() {
-        return this.__textBoxes.map(textBox => textBox.text);
+        return this.__textBoxes.map(textBox => ({
+            text: textBox.text
+        }));
     }
 };
 
