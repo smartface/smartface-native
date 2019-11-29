@@ -78,7 +78,7 @@ AlertView.prototype = {
             this.__androidProperties[param] = properties[param];
         }
     },
-    get inputsText() {
+    get textBoxes() {
         return this.__textBoxes.map(textBox => textBox.text);
     }
 };
