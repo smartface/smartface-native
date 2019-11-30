@@ -85,9 +85,10 @@ function AlertView(params) {
     };
 	
 	function _bindTextFieldProperties(textfield,object){
-		textfield.setValueForKey(object.text ? object.text : "","text");
-		textfield.setValueForKey(object.hint ? object.hint : "","placeholder");
-		textfield.setValueForKey(object.isPassword ? true : false,"isSecure");
+		var internalObject = object ? object : {};
+		textfield.setValueForKey(internalObject.text ? internalObject.text : "","text");
+		textfield.setValueForKey(internalObject.hint ? internalObject.hint : "","placeholder");
+		textfield.setValueForKey(internalObject.isPassword ? true : false,"isSecure");
 	}
 	
     this.dismiss = function() {
@@ -116,13 +117,13 @@ function AlertView(params) {
         	
         	if (textfield1) {
         		returnArray.push({
-        			text: textfield1.text
+        			text: textfield1.valueForKey("text")
         		});
         	}
         	
         	if (textfield2) {
         		returnArray.push({
-        			text: textfield2.text
+        			text: textfield2.valueForKey("text")
         		});
         	}
 
@@ -136,7 +137,7 @@ function AlertView(params) {
 	var _textBoxArray = [];
 	this.addTextBox = function(object){
 		if (_textBoxArray.length == 2) {
-			throw new Error('More than two textboxes cannot be added to Alertview.');
+			throw new Error('More than two textboxes cannot be added to AlertView.');
 		}else{
 			_textBoxArray.push(object);
 		}
