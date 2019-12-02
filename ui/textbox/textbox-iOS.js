@@ -1,4 +1,3 @@
-const Screen = require("sf-core/device/screen");
 const FlexLayout = require("sf-core/ui/flexlayout");
 const View = require('../view');
 const extend = require('js-base/core/extend');
