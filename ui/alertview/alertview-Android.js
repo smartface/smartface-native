@@ -32,7 +32,9 @@ function AlertView(params) {
 
     this.__androidProperties = new AndroidSpesificProperties(this);
     this.__buttonCallbacks = [];
-
+    this.__title = "";
+    this.__message = "";
+    this.__textBoxes = [];
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -42,9 +44,6 @@ function AlertView(params) {
 }
 
 AlertView.prototype = {
-    __title: "",
-    __message: "",
-    __textBoxes: [],
     get title() {
         return this.__title;
     },
@@ -154,9 +153,16 @@ AlertView.prototype.addTextBox = function(params = {}) {
     let mTextBox = new TextBox({
         hint,
         text,
-        isPassword,
         textAlignment: TextAlignment.MIDLEFT
     });
+    if (isPassword) {
+        mTextBox.isPassword = isPassword;
+        mTextBox.cursorPosition = {
+            start: text.length,
+            end: text.length
+        };
+    }
+
     if (Object.keys(viewSpacings).length > 0 || (height !== undefined || width !== undefined)) {
         let viewSpacingsInPx = {};
         Object.keys(viewSpacings).map((key) => {
