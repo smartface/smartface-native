@@ -2,7 +2,7 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Type = require("../../util/type");
-const NativeAlertDialog = requireClass("android.app.AlertDialog");
+const NativeAlertDialog = requireClass("io.smartface.android.sfcore.ui.alertview.SFAlertView");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 const {
     MATCH_PARENT,
@@ -27,7 +27,7 @@ const activity = AndroidConfig.activity;
 
 function AlertView(params) {
     if (!this.nativeObject) {
-        this.nativeObject = new NativeAlertDialog.Builder(activity).create();
+        this.nativeObject = new NativeAlertDialog(activity);
     }
 
     this.__androidProperties = new AndroidSpesificProperties(this);
@@ -140,8 +140,6 @@ AlertView.prototype.addButton = function(params) {
 
 AlertView.prototype.addTextBox = function(params = {}) {
     const TextBox = require("../textbox");
-    const TextAlignment = require('../textalignment');
-    const NativeLinearLayout = requireClass("android.widget.LinearLayout");
 
     const {
         hint = "", text = "", isPassword = false, android: {
@@ -152,8 +150,7 @@ AlertView.prototype.addTextBox = function(params = {}) {
     } = params;
     let mTextBox = new TextBox({
         hint,
-        text,
-        textAlignment: TextAlignment.MIDLEFT
+        text
     });
     if (isPassword) {
         mTextBox.isPassword = isPassword;
@@ -162,27 +159,16 @@ AlertView.prototype.addTextBox = function(params = {}) {
             end: text.length
         };
     }
-
-    if (Object.keys(viewSpacings).length > 0 || (height !== undefined || width !== undefined)) {
-        let viewSpacingsInPx = {};
-        Object.keys(viewSpacings).map((key) => {
-            viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
-        });
-        let {
-            left = 0, top = 0, right = 0, bottom = 0
-        } = viewSpacingsInPx;
-        let dpHeight = dpToPixel(height);
-        let dpWidth = dpToPixel(width);
-        let nativeLinearParams = new NativeLinearLayout.LayoutParams(dpWidth, dpHeight);
-        nativeLinearParams.setMargins(left, top, right, bottom);
-        mTextBox.nativeObject.setLayoutParams(nativeLinearParams);
-    }
-    if (!this._alertLayout) {
-        this._alertLayout = new NativeLinearLayout(activity);
-        this._alertLayout.setOrientation(1);
-        this.nativeObject.setView(this._alertLayout);
-    }
-    this._alertLayout.addView(mTextBox.nativeObject);
+    let viewSpacingsInPx = {};
+    Object.keys(viewSpacings).map((key) => {
+        viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
+    });
+    let {
+        left = 0, top = 0, right = 0, bottom = 0
+    } = viewSpacingsInPx;
+    let dpHeight = dpToPixel(height);
+    let dpWidth = dpToPixel(width);
+    this.nativeObject.addTextBox(mTextBox.nativeObject, dpWidth, dpHeight, left, top, right, bottom);
     this.__textBoxes.push(mTextBox);
 };
 
