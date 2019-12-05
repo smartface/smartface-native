@@ -210,7 +210,7 @@ AlertView.prototype.dismiss = function() {};
  * @property {String} textBoxes.text Text of added TextBox
  * @android
  * @ios
- * @since 4.1.1
+ * @since 4.1.2
  * @readonly
  */
 AlertView.prototype.textBoxes = [];
