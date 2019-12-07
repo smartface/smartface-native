@@ -60,10 +60,14 @@ const WebView = extend(View)(
                 return overrideURLChange(url, _canOpenLinkInside);
             },
             onReceivedError: function(code, message, url) {
-                _onError && _onError({ code, message, url });
+                _onError && _onError({
+                    code,
+                    message,
+                    url
+                });
             }
         };
-        
+
         var webChromeClientCallbacks = {
             //For Android5.0+
             onShowFileChooser: function(filePathCallback) {
@@ -119,23 +123,20 @@ const WebView = extend(View)(
                 return TypeUtil.isBoolean(result) ? result : false;
             }
         };
-        
-        
+
+
         if (!this.nativeObject) {
             this.nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
         }
 
         _super(this);
         scrollableSuper(this, this.nativeObject);
-        
-        var _canOpenLinkInside = true;
-        var _onError;
-        var _onShow;
-        var _onLoad;
-        var _onChangedURL;
-        var _scrollBarEnabled = true;
-        var _scrollEnabled = true;
-        var _onTouch, _onTouchEnded;
+
+        var _canOpenLinkInside = true,
+            _onError, _onShow, _onLoad, _onChangedURL, _scrollBarEnabled = true,
+            _scrollEnabled = true,
+            touchEnabled = true,
+            _superTouchCallbacks = this._touchCallbacks;
         Object.defineProperties(this, {
             'scrollBarEnabled': {
                 get: function() {
@@ -216,6 +217,7 @@ const WebView = extend(View)(
                 },
                 set: function(enabled) {
                     _scrollEnabled = enabled;
+                    self.setTouchHandlers();
                 },
                 enumerable: true
             },
@@ -297,25 +299,6 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             },
-            // Overriden for touch events
-            'onTouch': {
-                get: function() {
-                    return _onTouch;
-                },
-                set: function(onTouch) {
-                    _onTouch = onTouch.bind(this);
-                },
-                enumerable: true
-            },
-            'onTouchEnded': {
-                get: function() {
-                    return _onTouchEnded;
-                },
-                set: function(onTouchEnded) {
-                    _onTouchEnded = onTouchEnded.bind(this);
-                },
-                enumerable: true
-            },
             'toString': {
                 value: function() {
                     return 'WebView';
@@ -351,6 +334,50 @@ const WebView = extend(View)(
 
                 },
                 enumerable: true
+            },
+            "touchEnabled": {
+                get: () => touchEnabled,
+                set: (value) => {
+                    touchEnabled = value;
+                    self.setTouchHandlers();
+                },
+                enumerable: true
+            },
+            '_touchCallbacks': {
+                value: {
+                    'onTouchEnded': function(isInside, xInDp, yInDp) {
+                        if (!self.touchEnabled)
+                            return true;
+                        let result = _superTouchCallbacks.onTouchEnded(isInside, xInDp, yInDp);
+                        return result;
+                    },
+                    /*Overrides the View onTouch to keep backward compatibility. Returning true makes untouchable*/
+                    'onTouch': function(x, y) {
+                        if (!self.touchEnabled)
+                            return true;
+                        let result, mEvent = {
+                            x,
+                            y
+                        };
+                        self.onTouch && (result = self.onTouch(mEvent));
+                        return (result === true);
+                    },
+                    'onTouchMoved': function(isInside, xInDp, yInDp) {
+                        if (!self.touchEnabled || !self.scrollEnabled)
+                            return true;
+                        let result = _superTouchCallbacks.onTouchMoved(isInside, xInDp, yInDp);
+                        return result;
+                    },
+                    'onTouchCancelled': function(xInDp, yInDp) {
+                        if (!self.touchEnabled)
+                            return true;
+                        let result = _superTouchCallbacks.onTouchCancelled(xInDp, yInDp);
+                        return result;
+                    }
+                },
+                enumerable: true,
+                configurable: true,
+                writable: true
             }
         });
 
@@ -422,21 +449,6 @@ const WebView = extend(View)(
         });
 
         this.nativeObject.setScrollBarEnabled(_scrollBarEnabled);
-        
-        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
-            onTouch: function(view, event) {
-                if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
-                    if (event.getAction() === ACTION_UP) {
-                        _onTouchEnded && _onTouchEnded();
-                    } else if (event.getAction() === ACTION_DOWN) {
-                        _onTouch && _onTouch();
-                    }
-                }
-                if (!this.touchEnabled)
-                    return true;
-                return (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
-            }.bind(this)
-        }));
 
         // Assign parameters given in constructor
         if (params) {

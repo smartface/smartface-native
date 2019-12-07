@@ -3,6 +3,7 @@ const NativeView = requireClass('android.view.View');
 
 const AndroidConverter = require("./unitconverter");
 const AndroidConfig = require("./androidconfig.js");
+const { COMPLEX_UNIT_DIP } = require("./typevalue.js");
 
 function SizeCalculator(context) {};
 
@@ -17,8 +18,9 @@ SizeCalculator.calculateStringSize = function(params) {
         nativeTextView = new NativeTextView(AndroidConfig.activity);
         typeface && nativeTextView.setTypeface(typeface);
         nativeTextView.setText(text, NativeTextView.BufferType.SPANNABLE);
-        textSize !== undefined && nativeTextView.setTextSize(textSize); //setTextSize's unit is SP by default
-    } else {
+        textSize !== undefined && nativeTextView.setTextSize(COMPLEX_UNIT_DIP, textSize); //setTextSize's unit is SP by default
+    }
+    else {
         nativeTextView = text.nativeObject;
     }
 

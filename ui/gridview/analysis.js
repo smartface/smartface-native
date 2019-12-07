@@ -272,10 +272,9 @@ GridView.prototype.snapToAlignment;
 GridView.prototype.paginationEnabled;
 
 /**
- * This method returns the index of item which is visible at
- * the top of a GridView at a given time.
+ * Returns the adapter position of the first visible view for first span.
  *
- * @return {Number}
+ * @return {Number} 
  * @method getFirstVisibleIndex
  * @android
  * @ios
@@ -284,8 +283,7 @@ GridView.prototype.paginationEnabled;
 GridView.prototype.getFirstVisibleIndex = function() {};
 
 /**
- * This method returns the index of item which is visible at
- * the bottom of a GridView at a given time.
+ * Returns the adapter position of the last visible view for last span.
  *
  * @return {Number}
  * @method getLastVisibleIndex

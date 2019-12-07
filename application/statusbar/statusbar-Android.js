@@ -4,6 +4,7 @@ const NativeView = requireClass("android.view.View");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -128,15 +129,7 @@ Object.defineProperty(statusBar.android, 'transparent', {
 });
 
 function setFitsSystemWindows(window, isSetFitsSystemWindows) {
-    const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
-    // ID_ANDROID_CONTENT = The ID that the main layout in the XML layout file should have.
-    // 16908290 = ID_ANDROID_CONTENT
-    let mContentView = window.findViewById(16908290);
-    let mChildView = mContentView.getChildAt(0);
-    if (mChildView != null) {
-        mChildView.setFitsSystemWindows(isSetFitsSystemWindows);
-        NativeViewCompat.requestApplyInsets(mChildView);
-    }
+    SFViewUtil.setFitsSystemWindows(window, isSetFitsSystemWindows);
 }
 Object.defineProperty(statusBar, 'height', {
     get: function() {

@@ -6,6 +6,7 @@ const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
+const LayoutParams = require("../../util/Android/layoutparams");
 
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
@@ -72,9 +73,10 @@ const ListView = extend(View)(
                     holderViewLayout = new ListViewItem();
                 }
 
-                if (self.rowHeight) {
+                if (self.rowHeight) 
                     holderViewLayout.height = self.rowHeight;
-                }
+                holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+
                 _listViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
 
                 holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
@@ -89,6 +91,7 @@ const ListView = extend(View)(
                 } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
                     _holderViewLayout.height = self.rowHeight;
                 }
+                _holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
 
                 _onRowBind && _onRowBind(_holderViewLayout, position);
             },
