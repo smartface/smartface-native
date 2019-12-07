@@ -2,6 +2,7 @@
 const Color = require("sf-core/ui/color");
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 
 const parentPicker = function(subClass) {
     var self = subClass;
@@ -58,7 +59,7 @@ const parentPicker = function(subClass) {
 
         self.titleColor && titleTextView.setTextColor(self.titleColor.nativeObject);
         self.titleFont && titleTextView.setTypeface(self.titleFont.nativeObject);
-        self.titleFont && titleTextView.setTextSize(self.titleFont.size);
+        self.titleFont && titleTextView.setTextSize(COMPLEX_UNIT_DIP, self.titleFont.size);
 
         return titleTextView;
     };

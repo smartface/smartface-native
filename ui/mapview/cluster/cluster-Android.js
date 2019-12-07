@@ -1,6 +1,6 @@
 /* globals requireClass */
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
-
+const { COMPLEX_UNIT_DIP } = require("../../../util/Android/typevalue.js");
 const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance().getApplicationContext();
 
 function Cluster(params) {
@@ -32,7 +32,7 @@ function Cluster(params) {
             },
             makeSquareTextView: function(context) {
                 var nativeSquareTextView = new NativeSquareTextView(context);
-                nativeSquareTextView.setTextSize(COMPLEX_UNIT_SP, mapView.clusterFont.size);
+                nativeSquareTextView.setTextSize(COMPLEX_UNIT_DIP, mapView.clusterFont.size);
                 nativeSquareTextView.setTextColor(mapView.clusterTextColor);
                 nativeSquareTextView.setTypeface(mapView.clusterFont.nativeObject);
                 nativeSquareTextView.setId(NativeGoogleMapR.id.amu_text);
