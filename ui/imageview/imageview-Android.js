@@ -309,10 +309,9 @@ function setArgsToRequestCreator(params = {}) {
             plainRequestCreator = plainRequestCreator.memoryPolicy(fPolicy, array(policies, "com.squareup.picasso.MemoryPolicy"));
     }
 
-    if (useHTTPCacheControl) {
-        console.log(" useHTTPCacheControl innn ");
+    if (useHTTPCacheControl)
         plainRequestCreator = plainRequestCreator.memoryPolicy(ImageViewMemoryPolicy[ImageView.Android.MemoryPolicy.NO_CACHE], array([], "com.squareup.picasso.MemoryPolicy"));
-    }
+
 
     if (fade === false)
         plainRequestCreator = plainRequestCreator.noFade();

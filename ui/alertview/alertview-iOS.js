@@ -15,6 +15,13 @@ const MethodNames = {
     didDismissWithButtonIndex: "didDismissWithButtonIndex"
 };
 
+const UIAlertViewStyle = {
+	DEFAULT: 0,
+	SECURETEXTINPUT:1,
+	PLAINTEXTINPUT:2,
+	LOGINANDPASSWORDINPUT:3
+}
+
 function AlertView(params) {
     var self = this;
 
@@ -63,9 +70,27 @@ function AlertView(params) {
     });
 
     this.show = function() {
+		if (_textBoxArray.length == 1){
+			self.nativeObject.alertViewStyle = UIAlertViewStyle.PLAINTEXTINPUT;
+			var textfield = self.nativeObject.textFieldAtIndex(0);
+			_bindTextFieldProperties(textfield,_textBoxArray[0]);
+    	}else if (_textBoxArray.length == 2){
+    		self.nativeObject.alertViewStyle = UIAlertViewStyle.LOGINANDPASSWORDINPUT;
+			var textfield = self.nativeObject.textFieldAtIndex(0);
+			_bindTextFieldProperties(textfield,_textBoxArray[0]);
+			var textfield2 = self.nativeObject.textFieldAtIndex(1);
+			_bindTextFieldProperties(textfield2,_textBoxArray[1]);
+    	}
         self.nativeObject.show();
     };
-
+	
+	function _bindTextFieldProperties(textfield,object){
+		var internalObject = object ? object : {};
+		textfield.setValueForKey(internalObject.text ? internalObject.text : "","text");
+		textfield.setValueForKey(internalObject.hint ? internalObject.hint : "","placeholder");
+		textfield.setValueForKey(internalObject.isPassword ? true : false,"isSecure");
+	}
+	
     this.dismiss = function() {
         self.nativeObject.dismissWithClickedButtonIndexAnimated(-1, true);
     };
@@ -82,9 +107,42 @@ function AlertView(params) {
         },
         enumerable: true
     });
+	
+    Object.defineProperty(this, 'textBoxes', {
+        get: function() {
+        	var textfield1 = self.nativeObject.textFieldAtIndex(0);
+        	var textfield2 = self.nativeObject.textFieldAtIndex(1);
+        	
+        	var returnArray = [];
+        	
+        	if (textfield1) {
+        		returnArray.push({
+        			text: textfield1.valueForKey("text")
+        		});
+        	}
+        	
+        	if (textfield2) {
+        		returnArray.push({
+        			text: textfield2.valueForKey("text")
+        		});
+        	}
 
+            return returnArray;
+        },
+        enumerable: true
+    });
+    
     this.onDismiss = function(AlertView) {};
-
+	
+	var _textBoxArray = [];
+	this.addTextBox = function(object){
+		if (_textBoxArray.length == 2) {
+			throw new Error('More than two textboxes cannot be added to AlertView.');
+		}else{
+			_textBoxArray.push(object);
+		}
+	};
+	
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
