@@ -7,6 +7,7 @@ const Image = require("../image");
 const KeyboardType = require('../keyboardtype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
+const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const Exception = require("../../util/exception");
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -266,7 +267,7 @@ const SearchView = extend(View)(
                     if (font instanceof Font) {
                         _font = font;
                         mSearchSrcTextView.setTypeface(font.nativeObject);
-                        mSearchSrcTextView.setTextSize(font.size);
+                        mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
                     }
                 },
                 enumerable: true
@@ -352,7 +353,7 @@ const SearchView = extend(View)(
                     if (font instanceof Font) {
                         _font = font;
                         mSearchSrcTextView.setTypeface(font.nativeObject);
-                        mSearchSrcTextView.setTextSize(font.size);
+                        mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
                     }
                 },
                 enumerable: true
@@ -418,7 +419,8 @@ const SearchView = extend(View)(
                     if (_leftItem instanceof Image) {
                         mCompatImageView.setImageDrawable(_leftItem.nativeObject);
                         mSearchEditFrame.addView(mCompatImageView, 0);
-                    } else
+                    }
+                    else
                         mSearchEditFrame.addView(_leftItem.nativeObject, 0);
                     //If searchIcon is assign then can be used leftView as well
                     if (_searchIconAssigned)
@@ -495,7 +497,8 @@ const SearchView = extend(View)(
                     if (hasFocus) {
                         _onSearchBeginCallback && _onSearchBeginCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
-                    } else {
+                    }
+                    else {
                         _onSearchEndCallback && _onSearchEndCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
                     }
@@ -542,7 +545,8 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
         ssb.setSpan(imageSpan, 1, 2, SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.append(hint);
         mSearchSrcTextView.setHint(ssb);
-    } else {
+    }
+    else {
         self.nativeObject.setQueryHint(hint);
     }
 

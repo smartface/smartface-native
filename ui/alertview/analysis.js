@@ -204,6 +204,18 @@ AlertView.prototype.isShowing = false; // read only
 AlertView.prototype.dismiss = function() {};
 
 /**
+ * Returns object which contains text of added TextBox
+ *
+ * @property {Object[]} textBoxes
+ * @property {String} textBoxes.text Text of added TextBox
+ * @android
+ * @ios
+ * @since 4.1.2
+ * @readonly
+ */
+AlertView.prototype.textBoxes = [];
+
+/**
  * Allows you to add button to AlertView. You can add maximum 3 buttons
  * on Android platform, on iOS there is no limitation.
  *
@@ -229,6 +241,40 @@ AlertView.prototype.dismiss = function() {};
  * @since 0.1
  */
 AlertView.prototype.addButton = function(params) {};
+
+
+/**
+ * Allows to add TextBox to AlertView. In iOS, maximum two textbox can be added. It is not applied to Android but 2 textboxes recommended.
+ *
+ *     @example
+ *     myAlertView.addTextBox({
+ *          text: "Hello!",
+ *          hint: "Hint!",
+ *          isPassword: false,
+ *          android: {
+ *              viewSpacings: { left: 50, right: 50 }
+ *          }
+ *     });
+ *
+ * @param {Object} params Object describing TextBox's properties
+ * @param {String} params.text Sets the text of the TextBox.
+ * @param {String} params.hint Sets hint text that will be displayed when TextBox is empty.
+ * @param {Boolean} params.isPassword If it is true, content will be hidden
+ * @param {Object} params.android Android specific properties
+ * @param {Object} params.android.width Width of view
+ * @param {Object} params.android.height Height of view
+ * @param {Object} params.android.viewSpacings Extra space to appearence of view
+ * @param {Number} params.android.viewSpacings.left Extra space to appear to the left of view
+ * @param {Number} params.android.viewSpacings.right Extra space to appear to the right of view
+ * @param {Number} params.android.viewSpacings.top Extra space to appear to the top of view
+ * @param {Number} params.android.viewSpacings.bottom Extra space to appear to the bottom of view
+ * @method addTextBox
+ * @android
+ * @ios
+ * @since 4.1.2
+ */
+AlertView.prototype.addTextBox = function(params) {};
+
 
 /**
  * Gets/sets dismiss callback function.

@@ -3,6 +3,7 @@ const Font = require("sf-core/ui/font");
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const NativeTextView = requireClass("android.widget.TextView");
 const TypeUtil = require("../../util/type");
 const View = require('../view');
@@ -105,7 +106,7 @@ function Badge(params) {
                 if (self.nativeObject && font) {
                     self.nativeObject.setTypeface(font.nativeObject);
                     if (font.size && TypeUtil.isNumeric(font.size)) {
-                        self.nativeObject.setTextSize(font.size);
+                        self.nativeObject.setTextSize(COMPLEX_UNIT_DIP, font.size);
                     }
                 }
             },

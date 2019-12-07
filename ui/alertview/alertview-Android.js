@@ -1,8 +1,13 @@
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Type = require("../../util/type");
-const NativeAlertDialog = requireClass("android.app.AlertDialog");
+const NativeAlertDialog = requireClass("io.smartface.android.sfcore.ui.alertview.SFAlertView");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
+const {
+    MATCH_PARENT,
+    WRAP_CONTENT
+} = require("../../util/Android/layoutparams");
 
 AlertView.Android = {};
 AlertView.Android.ButtonType = {
@@ -22,12 +27,14 @@ const activity = AndroidConfig.activity;
 
 function AlertView(params) {
     if (!this.nativeObject) {
-        this.nativeObject = new NativeAlertDialog.Builder(activity).create();
+        this.nativeObject = new NativeAlertDialog(activity);
     }
 
     this.__androidProperties = new AndroidSpesificProperties(this);
     this.__buttonCallbacks = [];
-
+    this.__title = "";
+    this.__message = "";
+    this.__textBoxes = [];
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -37,8 +44,6 @@ function AlertView(params) {
 }
 
 AlertView.prototype = {
-    __title: "",
-    __message: "",
     get title() {
         return this.__title;
     },
@@ -71,6 +76,11 @@ AlertView.prototype = {
         for (var param in properties) {
             this.__androidProperties[param] = properties[param];
         }
+    },
+    get textBoxes() {
+        return this.__textBoxes.map(textBox => ({
+            text: textBox.text
+        }));
     }
 };
 
@@ -127,6 +137,44 @@ AlertView.prototype.addButton = function(params) {
         })
     );
 };
+
+AlertView.prototype.addTextBox = function(params = {}) {
+    const TextBox = require("../textbox");
+
+    const {
+        hint = "", text = "", isPassword = false, android: {
+            viewSpacings: viewSpacings = {},
+            height,
+            width
+        } = {}
+    } = params;
+    let mTextBox = new TextBox({
+        hint,
+        text
+    });
+    if (isPassword) {
+        mTextBox.isPassword = isPassword;
+        mTextBox.cursorPosition = {
+            start: text.length,
+            end: text.length
+        };
+    }
+    let viewSpacingsInPx = {};
+    Object.keys(viewSpacings).map((key) => {
+        viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
+    });
+    let {
+        left = 0, top = 0, right = 0, bottom = 0
+    } = viewSpacingsInPx;
+    let dpHeight = dpToPixel(height);
+    let dpWidth = dpToPixel(width);
+    this.nativeObject.addTextBox(mTextBox.nativeObject, dpWidth, dpHeight, left, top, right, bottom);
+    this.__textBoxes.push(mTextBox);
+};
+
+function dpToPixel(size) {
+    return size !== undefined ? AndroidUnitConverter.dpToPixel(size) : MATCH_PARENT;
+}
 
 AlertView.prototype.toString = function() {
     return 'AlertView';
