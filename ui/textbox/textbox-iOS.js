@@ -1,3 +1,4 @@
+const FlexLayout = require("sf-core/ui/flexlayout");
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
@@ -430,8 +431,9 @@ const TextBox = extend(View)(
             },
             set: function(value) {
                 if (typeof value === "object") {
-                    value.applyLayout();
-
+                	_keyboardLayout = value;
+					_keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+					
                     // Bug : IOS-2601
                     var oldOntouch = value.onTouch;
                     value.onTouch = function() {
@@ -630,13 +632,72 @@ const TextBox = extend(View)(
         });
 
         self.nativeObject.onShowKeyboard = function(e) {
+        	if (_inputViewMain) {
+				__SF_UIView.performWithoutAnimationWrapper(
+					function(){
+						_inputViewMain.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+					});
+        	}
+        	
+        	if (_keyboardLayout) {
+				__SF_UIView.performWithoutAnimationWrapper(
+					function(){
+						_keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+					});
+        	}
+
             self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight, e);
         }
-
+		
+		self.nativeObject.addObserver(function() {
+			_keyboardLayout && _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+			_inputViewMain && _inputViewMain.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+		}, __SF_UIDeviceOrientationDidChangeNotification);
+		
         self.nativeObject.onHideKeyboard = function(e) {
             self.keyboardanimationdelegate.keyboardHideAnimation(e);
         }
+		
+		var _inputView = undefined;
+        var _inputViewMain;
+        Object.defineProperty(self.ios, 'inputView', {
+            get: function() {
+                return _inputView;
+            },
+            set: function(object) {
+                _inputView = object;
+				
+                if (!_inputViewMain) {
+                    var flexMain = new FlexLayout();
+                    flexMain.nativeObject.frame = {
+                        x: 0,
+                        y: 0,
+                        width: 0,
+                        height: object.height ? object.height : 0
+                    };
+                    _inputViewMain = flexMain;
+                } else {
+                    var childs = _inputViewMain.content.getChildList();
+                    for (var i in childs) {
+                        _inputViewMain.content.removeChild(childs[i]);
+                    }
+                }
+				
+                // Bug : IOS-2601
+                var oldOntouch = object.view.onTouch;
+                object.view.onTouch = function() {
+                    var returnValue = oldOntouch && oldOntouch();
+                    return (typeof returnValue) === "undefined" ? true : returnValue;
+                };
+                //////////////////
+                    
+                _inputViewMain.addChild(object.view);
 
+                self.nativeObject.setValueForKey(_inputViewMain.nativeObject,"inputView");
+            },
+            enumerable: true
+        });
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
