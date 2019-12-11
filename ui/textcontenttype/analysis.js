@@ -241,7 +241,7 @@ TextContentType.CREDITCARDNUMBER;
 /**
  * @property {String} USERNAME
  * @ios
- * The expectation that a text input area specifies an account or login name.
+ * The expectation that a text input area specifies an account or login name. @available(iOS 11.0, *)
  * @static
  * @readonly
  * @since 4.1.3
@@ -251,7 +251,7 @@ TextContentType.USERNAME;
 /**
  * @property {String} PASSWORD
  * @ios
- * The expectation that a text input area specifies a password.
+ * The expectation that a text input area specifies a password. @available(iOS 11.0, *)
  * @static
  * @readonly
  * @since 4.1.3
@@ -261,7 +261,7 @@ TextContentType.PASSWORD;
 /**
  * @property {String} NEWPASSWORD
  * @ios
- * The expectation that a text input area specifies a new password.
+ * The expectation that a text input area specifies a new password. @available(iOS 12.0, *)
  * @static
  * @readonly
  * @since 4.1.3
@@ -271,7 +271,7 @@ TextContentType.NEWPASSWORD;
 /**
  * @property {String} ONETIMECODE
  * @ios
- * The expectation that a text input area specifies a single-factor SMS login code.
+ * The expectation that a text input area specifies a single-factor SMS login code. @available(iOS 12.0, *)
  * @static
  * @readonly
  * @since 4.1.3
