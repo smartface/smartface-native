@@ -181,6 +181,16 @@ TextBox.prototype.ios.inputView = null;
 TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
 
 /**
+ * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+ * This property works only for iOS.
+ *
+ * @property {UI.TextContentType} textContentType
+ * @ios
+ * @since 4.1.3
+ */
+TextBox.prototype.ios.textContentType;
+
+/**
  * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.
  *
  * @property {Boolean} [isPassword = false]
