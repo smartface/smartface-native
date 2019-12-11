@@ -12,8 +12,8 @@ const Exception = require("../../util/exception");
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
-const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
-const NativeSupportR = requireClass('android.support.v7.appcompat.R');
+const NativeSearchView = requireClass('androidx.appcompat.widget.SearchView');
+const NativeSupportR = requireClass('androidx.appcompat.R');
 const NativeTextView = requireClass("android.widget.TextView");
 
 // Context.INPUT_METHOD_SERVICE

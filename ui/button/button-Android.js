@@ -125,7 +125,7 @@ const Button = extend(Label)(
 
         this.setBackgroundImage = function() {
             var resources = AndroidConfig.activityResources;
-            const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
+            const NativeRoundedBitmapFactory = requireClass("androidx.core.graphics.drawable.RoundedBitmapDrawableFactory");
             const Image = require("../image");
             var bitmap;
             if (this.__backgroundImages instanceof Image) {

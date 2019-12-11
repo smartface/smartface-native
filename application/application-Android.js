@@ -427,7 +427,7 @@ Object.defineProperties(ApplicationWrapper.android, {
 
             if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 // PackageManager.PERMISSION_GRANTED
-                const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
+                const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
                 return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
             } else {
                 var packageManager = activity.getPackageManager();

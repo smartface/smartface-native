@@ -5,9 +5,9 @@ WebBrowser.show = function(page, options) {
     if (!(options && options.url && (options.url.startsWith("https://") || options.url.startsWith("http://")))) {
         throw new Error("The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.");
     } else {
-        const NativeCustomTabsIntent = requireClass("android.support.customtabs.CustomTabsIntent");
-        // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
-        // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");
+        const NativeCustomTabsIntent = requireClass("androidx.browser.customtabs.CustomTabsIntent");
+        // const NativeCustomTabsServiceConnection = requireClass("androidx.browser.customtabs.CustomTabsServiceConnection");
+        // const NativeCustomTabsClient = requireClass("androidx.browser.customtabs.CustomTabsClient");
         const NativeUri = requireClass("android.net.Uri");
         // const NativeIntent = requireClass("android.content.Intent");
         const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();

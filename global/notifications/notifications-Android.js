@@ -3,7 +3,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const Application = require("../../application");
 const Color = require("../../ui/color");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
-const NativeNotificationCompat = requireClass("android.support.v4.app.NotificationCompat");
+const NativeNotificationCompat = requireClass("androidx.core.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 const NativeNotificationListener = requireClass('io.smartface.android.listeners.NotificationListener');
 const Runnable = requireClass("java.lang.Runnable");
@@ -242,7 +242,7 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         /** @todo it looks like we got problems with primitive arrays
-         * method android.support.v4.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
+         * method androidx.core.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
          * */
         'vibrate': {
             get: function() {

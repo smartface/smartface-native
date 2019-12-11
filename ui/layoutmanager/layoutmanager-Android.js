@@ -1,6 +1,6 @@
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const NativeItemDecoration = requireClass("android.support.v7.widget.RecyclerView$ItemDecoration");
+const NativeItemDecoration = requireClass("androidx.recyclerview.widget.RecyclerView$ItemDecoration");
 const NativeSFStaggeredGridLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager");
 const LayoutChangeListener = requireClass("android.view.View$OnLayoutChangeListener");
 

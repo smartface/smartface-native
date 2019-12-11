@@ -1,5 +1,5 @@
 /* globals requireClass */
-const NativeTabLayout = requireClass("android.support.design.widget.TabLayout");
+const NativeTabLayout = requireClass("com.google.android.material.tabs.TabLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");

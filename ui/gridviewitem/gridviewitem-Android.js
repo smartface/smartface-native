@@ -1,5 +1,5 @@
 /*globals requireClass*/
-const StaggeredGridLayoutManager = requireClass('android.support.v7.widget.StaggeredGridLayoutManager');
+const StaggeredGridLayoutManager = requireClass('androidx.recyclerview.widget.StaggeredGridLayoutManager');
 const LayoutParams = require("../../util/Android/layoutparams");
 const ViewHolder = require("sf-core/ui/listviewitem/viewholder");
 const extend = require('js-base/core/extend');
