@@ -468,6 +468,16 @@ const TextBox = extend(View)(
             },
             enumerable: true
         });
+		
+        Object.defineProperty(this.ios, 'textContentType', {
+            get: function() {
+                return self.nativeObject.textContentType;
+            },
+            set: function(value) {
+                self.nativeObject.textContentType = value;
+            },
+            enumerable: true
+        });
 
         Object.defineProperty(this, 'actionKeyType', {
             get: function() {
