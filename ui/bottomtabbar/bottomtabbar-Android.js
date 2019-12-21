@@ -2,7 +2,7 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Color = require("../../ui/color");
 
-const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
+const NativeBottomNavigationView = requireClass("com.google.android.material.bottomnavigation.BottomNavigationView");
 
 const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;

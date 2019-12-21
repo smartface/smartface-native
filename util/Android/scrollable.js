@@ -1,6 +1,6 @@
 /* globals requireClass */
-const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
-const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const NativeRecyclerView = requireClass("androidx.recyclerview.widget.RecyclerView");
+const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
 const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 function Scrollable(childJsClass, nativeScrollableObject) {

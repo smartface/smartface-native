@@ -4,7 +4,7 @@ const Page = require("../../ui/page");
 const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 const BottomTabBar = require("../../ui/bottomtabbar");
 
-const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
+const NativeBottomNavigationView = requireClass("com.google.android.material.bottomnavigation.BottomNavigationView");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
