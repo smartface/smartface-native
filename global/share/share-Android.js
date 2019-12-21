@@ -2,7 +2,7 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeIntent = requireClass('android.content.Intent');
 const NativeBuildConfig = requireClass(AndroidConfig.activity.getPackageName() + ".BuildConfig");
-const NativeFileProvider = requireClass('android.support.v4.content.FileProvider');
+const NativeFileProvider = requireClass('androidx.core.content.FileProvider');
 
 const Authority = NativeBuildConfig.APPLICATION_ID + ".provider";
 

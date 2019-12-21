@@ -4,7 +4,7 @@ const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawa
 const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
-const RoundedBitmapDrawableFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
+const RoundedBitmapDrawableFactory = requireClass("androidx.core.graphics.drawable.RoundedBitmapDrawableFactory");
 
 
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
@@ -257,7 +257,7 @@ function Image(params) {
                 return _systemIcon;
             },
             set: function(systemIcon) {
-                const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
+                const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
                 _systemIcon = systemIcon;
                 self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, Image.systemDrawableId(_systemIcon));
             },

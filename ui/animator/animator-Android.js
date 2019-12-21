@@ -1,8 +1,8 @@
 /*globals requireClass*/
-const NativeTransitionManager = requireClass('android.support.transition.TransitionManager');
-const NativeTransition = requireClass('android.support.transition.Transition');
-const NativeTransitionSet = requireClass('android.support.transition.TransitionSet');
-const NativeAutoTransition = requireClass('android.support.transition.AutoTransition');
+const NativeTransitionManager = requireClass('androidx.transition.TransitionManager');
+const NativeTransition = requireClass('androidx.transition.Transition');
+const NativeTransitionSet = requireClass('androidx.transition.TransitionSet');
+const NativeAutoTransition = requireClass('androidx.transition.AutoTransition');
 const NativeAlphaTransition = requireClass('io.smartface.android.anims.AlphaTransition');
 const NativeRotateTransition = requireClass('io.smartface.android.anims.RotateTransition');
 const NativeScaleTransition = requireClass('io.smartface.android.anims.ScaleTransition');

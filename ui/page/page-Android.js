@@ -7,7 +7,7 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
-const NativeSupportR = requireClass("android.support.v7.appcompat.R");
+const NativeSupportR = requireClass("androidx.appcompat.R");
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
@@ -358,7 +358,7 @@ function Page(params) {
             return _titleLayout;
         },
         set: function(view) {
-            const ToolbarLayoutParams = requireClass("android.support.v7.widget.Toolbar$LayoutParams");
+            const ToolbarLayoutParams = requireClass("androidx.appcompat.widget.Toolbar$LayoutParams");
             var toolbarParams = new ToolbarLayoutParams(1); // Gravity.CENTER
             view && toolbar.addView(view.nativeObject, toolbarParams);
             _titleLayout = view;

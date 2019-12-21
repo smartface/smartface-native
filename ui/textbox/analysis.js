@@ -160,6 +160,17 @@ TextBox.prototype.ios.clearButtonEnabled = false;
 TextBox.prototype.ios.keyboardLayout = null;
 
 /**
+ * The custom input view to display instead of system keyboard
+ * when the textbox object became focus. This property works only for iOS only.
+ *
+ * @property {Object} inputView
+ * @property {Number} inputView.height
+ * @property {UI.View} inputView.view
+ * @ios
+ */
+TextBox.prototype.ios.inputView = null;
+
+/**
  * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
  * This property works only for iOS.
  *
@@ -168,6 +179,16 @@ TextBox.prototype.ios.keyboardLayout = null;
  * @since 0.1
  */
 TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
+
+/**
+ * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+ * This property works only for iOS.
+ *
+ * @property {UI.TextContentType} textContentType
+ * @ios
+ * @since 4.1.3
+ */
+TextBox.prototype.ios.textContentType;
 
 /**
  * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.

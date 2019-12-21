@@ -9,7 +9,7 @@ const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
-const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");

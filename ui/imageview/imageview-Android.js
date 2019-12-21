@@ -78,7 +78,7 @@ const ImageView = extend(View)(
                         return;
                     this._tintColor = tintColor;
 
-                    const NativeImageCompat = requireClass("android.support.v4.widget.ImageViewCompat");
+                    const NativeImageCompat = requireClass("androidx.core.widget.ImageViewCompat");
                     const NativeColorStateListUtil = requireClass("io.smartface.android.utils.ColorStateListUtil");
 
                     NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(this._tintColor.nativeObject));
