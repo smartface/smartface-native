@@ -141,6 +141,15 @@ GridView.prototype.onItemBind = function onItemBind(gridViewItem, index) {};
 GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
+ * A floating-point value that determines the rate of deceleration after the user lifts their finger.
+ *
+ * @property {UI.iOS.DecelerationRate} [decelerationRate = UI.iOS.DecelerationRate.NORMAL]
+ * @ios
+ * @since 4.1.2
+ */
+GridView.prototype.decelerationRate = UI.iOS.DecelerationRate.NORMAL;
+
+/**
  * This event is called before onItemCreate callback. Returns item type you should use based on position.
  *
  * @event onItemType
