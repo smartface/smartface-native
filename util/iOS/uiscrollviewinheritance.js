@@ -21,7 +21,7 @@ UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
         enumerable: true
     });
 	
-    Object.defineProperty(self, 'pagingEnabled', {
+    Object.defineProperty(self.ios, 'pagingEnabled', {
         get: function() {
             return nativeObject.valueForKey("pagingEnabled");
         },
