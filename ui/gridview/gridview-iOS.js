@@ -197,18 +197,6 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(sfSelf, 'pagingEnabled', {
-            get: function() {
-                return sfSelf.nativeObject.valueForKey("pagingEnabled");
-            },
-            set: function(value) {
-                if (typeof value === "boolean") {
-                    sfSelf.nativeObject.setValueForKey(true,"pagingEnabled");
-                }
-            },
-            enumerable: true
-        });
-
         Object.defineProperty(sfSelf, 'scrollEnabled', {
             get: function() {
                 return sfSelf.nativeObject.valueForKey("scrollEnabled");
