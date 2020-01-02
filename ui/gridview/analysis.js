@@ -141,6 +141,15 @@ GridView.prototype.onItemBind = function onItemBind(gridViewItem, index) {};
 GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
+ * A Boolean value that determines whether paging is enabled.
+ * 
+ * @property {Boolean} [pagingEnabled = false]
+ * @ios
+ * @since 4.1.2
+ */
+GridView.prototype.pagingEnabled = false;
+
+/**
  * A floating-point value that determines the rate of deceleration after the user lifts their finger.
  *
  * @property {UI.iOS.DecelerationRate} [decelerationRate = UI.iOS.DecelerationRate.NORMAL]
