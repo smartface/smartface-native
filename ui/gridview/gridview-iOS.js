@@ -163,24 +163,15 @@ const GridView = extend(View)(
             },
             set: function(value) {
                 if (typeof value === "boolean") {
-                    if (typeof sfSelf.layoutManager.scrollDirection === "number") {
-                        _scrollBarEnabled = value;
-                        switch (sfSelf.layoutManager.scrollDirection) {
-                            case 0:
-                                sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
-                                break;
-                            case 1:
-                                sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                	_scrollBarEnabled = value;
+                    sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
+                    sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
                 }
             },
             enumerable: true
         });
-
+		sfSelf.scrollBarEnabled = false;
+		
         var _refreshEnabled = false;
         Object.defineProperty(sfSelf, 'refreshEnabled', {
             get: function() {
