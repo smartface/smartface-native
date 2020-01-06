@@ -213,8 +213,11 @@ const GridView = extend(View)(
                 return a.section - b.section
             });
 
-            var visibleindex = sfSelf.nativeObject.indexPathsForVisibleItems()[0];
-            if (sfSelf.sectionCount > 1) {
+            var visibleindex = visibleIndexArray[0];
+            
+            if (visibleindex === undefined){
+            	return undefined;
+            }else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
@@ -238,7 +241,10 @@ const GridView = extend(View)(
             });
 
             var visibleindex = visibleIndexArray[visibleIndexArray.length - 1];
-            if (sfSelf.sectionCount > 1) {
+            
+            if (visibleindex === undefined){
+            	return undefined;
+            }else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
