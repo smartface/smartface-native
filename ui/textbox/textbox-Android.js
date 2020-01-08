@@ -14,8 +14,7 @@ const NativeInputFilter = requireClass("android.text.InputFilter");
 const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
 
 // Context.INPUT_METHOD_SERVICE
-const INPUT_METHOD_SERVICE = 'input_method';
-const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Android/systemservices');
 
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
