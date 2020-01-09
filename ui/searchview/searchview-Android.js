@@ -494,7 +494,7 @@ const SearchView = extend(View)(
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus) {
                     if (hasFocus) { 
-                        var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                        let inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                         inputManager.showSoftInput(view, 0);
                         _onSearchBeginCallback && _onSearchBeginCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
