@@ -5,6 +5,7 @@ const View = require('../view');
 const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
+const NativeUri = requireClass("android.net.Uri");
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const {
@@ -111,14 +112,14 @@ const ImageView = extend(View)(
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var {
-                url,
-                placeholder,
-                fade,
-                onFailure,
-                onSuccess,
-                networkPolicy,
-                memoryPolicy,
-                useHTTPCacheControl
+                url = "",
+                    placeholder,
+                    fade,
+                    onFailure,
+                    onSuccess,
+                    networkPolicy,
+                    memoryPolicy,
+                    useHTTPCacheControl
             } = getLoadFromUrlParams.apply(null, arguments);
             var callback = null;
             if (onFailure || onSuccess) {
@@ -133,21 +134,21 @@ const ImageView = extend(View)(
                 });
             }
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
-            if (TypeUtil.isString(url)) {
-                var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
-                    networkPolicy,
-                    fade,
-                    placeholder,
-                    memoryPolicy,
-                    useHTTPCacheControl
-                });
-                var requestCreator = scaleImage(plainRequestCreator);
-                if (callback !== null)
-                    requestCreator.into(this.nativeObject, callback);
-                else
-                    requestCreator.into(this.nativeObject);
-            }
+
+            var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(NativeUri.parse(url));
+            plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
+                networkPolicy,
+                fade,
+                placeholder,
+                memoryPolicy,
+                useHTTPCacheControl
+            });
+            var requestCreator = scaleImage(plainRequestCreator);
+            if (callback !== null)
+                requestCreator.into(this.nativeObject, callback);
+            else
+                requestCreator.into(this.nativeObject);
+
             this.__newImageLoaded = true;
         };
 
@@ -159,7 +160,7 @@ const ImageView = extend(View)(
                 onSuccess,
                 onError,
                 onFailure,
-                url,
+                url = "",
                 placeholder,
                 android: {
                     networkPolicy: networkPolicy,
@@ -183,16 +184,14 @@ const ImageView = extend(View)(
                 }
             });
 
-            if (TypeUtil.isString(url)) {
-                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                requestCreator = setArgsToRequestCreator.call(requestCreator, {
-                    placeholder,
-                    networkPolicy,
-                    memoryPolicy,
-                    useHTTPCacheControl
-                });
-                requestCreator.into(target);
-            }
+            var requestCreator = NativePicasso.with(AndroidConfig.activity).load(NativeUri.parse(url));
+            requestCreator = setArgsToRequestCreator.call(requestCreator, {
+                placeholder,
+                networkPolicy,
+                memoryPolicy,
+                useHTTPCacheControl
+            });
+            requestCreator.into(target);
         };
 
         imageViewPrototype.loadFromFile = function(params) {
@@ -390,6 +389,7 @@ Object.defineProperties(ImageView.FillType, {
         enumerable: true
     },
 });
+
 const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL] = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
