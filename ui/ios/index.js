@@ -1,3 +1,4 @@
 module.exports = {
-    ContentInsetAdjustment: require('./contentinsetadjustment')
+    ContentInsetAdjustment: require('./contentinsetadjustment'),
+    DecelerationRate: require('./decelerationrate')
 };
