@@ -251,7 +251,7 @@ GridView.prototype.layoutManager;
 /**
  * Gets/sets the visibility of scroll bar of GridView.
  * If set to true, vertical or horizontal scroll bar will be shown depending on gridview's
- * scroll direction.
+ * scroll direction. This property must be set after assigning layout manager.
  *
  * @property {Boolean} [scrollBarEnabled = false]
  * @android
