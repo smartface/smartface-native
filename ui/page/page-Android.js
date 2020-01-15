@@ -3,6 +3,7 @@ const FlexLayout = require("../flexlayout");
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Android/systemservices');
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
@@ -779,7 +780,7 @@ function Page(params) {
                 }
                 var windowToken = focusedView.getWindowToken();
 
-                var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
+                var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                 inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
             }
         }
