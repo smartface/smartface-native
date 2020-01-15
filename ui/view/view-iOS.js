@@ -111,6 +111,17 @@ function View(params) {
 
     Object.defineProperty(self.ios, 'masksToBounds', {
         get: function() {
+            return self.masksToBounds;
+        },
+        set: function(value) {
+            self.masksToBounds = value;
+        },
+        enumerable: true
+    });
+
+
+    Object.defineProperty(self, 'masksToBounds', {
+        get: function() {
             return self.nativeObject.layer.masksToBounds;
         },
         set: function(value) {
