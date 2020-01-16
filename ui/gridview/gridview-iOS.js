@@ -163,15 +163,15 @@ const GridView = extend(View)(
             },
             set: function(value) {
                 if (typeof value === "boolean") {
-                	_scrollBarEnabled = value;
+                    _scrollBarEnabled = value;
                     sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
                     sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
                 }
             },
             enumerable: true
         });
-		sfSelf.scrollBarEnabled = false;
-		
+        sfSelf.scrollBarEnabled = false;
+
         var _refreshEnabled = false;
         Object.defineProperty(sfSelf, 'refreshEnabled', {
             get: function() {
@@ -214,10 +214,10 @@ const GridView = extend(View)(
             });
 
             var visibleindex = visibleIndexArray[0];
-            
-            if (visibleindex === undefined){
-            	return undefined;
-            }else if (sfSelf.sectionCount > 1) {
+
+            if (visibleindex === undefined) {
+                return undefined;
+            } else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
@@ -241,10 +241,10 @@ const GridView = extend(View)(
             });
 
             var visibleindex = visibleIndexArray[visibleIndexArray.length - 1];
-            
-            if (visibleindex === undefined){
-            	return undefined;
-            }else if (sfSelf.sectionCount > 1) {
+
+            if (visibleindex === undefined) {
+                return undefined;
+            } else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
@@ -405,4 +405,7 @@ const GridView = extend(View)(
         }
     }
 );
+
+GridView.Android = {};
+GridView.Android.SnapAlignment = {};
 module.exports = GridView;
