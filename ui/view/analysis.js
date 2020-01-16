@@ -633,13 +633,14 @@ View.prototype.android.zIndex;
 View.prototype.ios.exclusiveTouch = false;
 
 /**
- * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
+ * A Boolean indicating whether sublayers are clipped to the layer’s bounds. In Android, right & bottom border's width isn't take into account.
  *
  * @property {Boolean} [masksToBounds = true]
  * @ios
- * @since 1.1.15
+ * @android
+ * @since 4.1.4
  */
-View.prototype.ios.masksToBounds = 0;
+View.prototype.masksToBounds = true;
 
 /**
  * A Boolean value that determines whether subviews are confined to the bounds of the view.
