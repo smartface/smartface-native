@@ -163,23 +163,14 @@ const GridView = extend(View)(
             },
             set: function(value) {
                 if (typeof value === "boolean") {
-                    if (typeof sfSelf.layoutManager.scrollDirection === "number") {
-                        _scrollBarEnabled = value;
-                        switch (sfSelf.layoutManager.scrollDirection) {
-                            case 0:
-                                sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
-                                break;
-                            case 1:
-                                sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    _scrollBarEnabled = value;
+                    sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
+                    sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
                 }
             },
             enumerable: true
         });
+        sfSelf.scrollBarEnabled = false;
 
         var _refreshEnabled = false;
         Object.defineProperty(sfSelf, 'refreshEnabled', {
@@ -192,20 +183,6 @@ const GridView = extend(View)(
                     sfSelf.nativeObject.addSubview(sfSelf.refreshControl);
                 } else {
                     sfSelf.refreshControl.removeFromSuperview();
-                }
-            },
-            enumerable: true
-        });
-
-        var _pagingEnabled = false;
-        Object.defineProperty(sfSelf, 'pagingEnabled', {
-            get: function() {
-                return _pagingEnabled;
-            },
-            set: function(value) {
-                if (typeof value === "boolean") {
-                    _pagingEnabled = value;
-                    sfSelf.nativeObject.pagingEnabled = _pagingEnabled;
                 }
             },
             enumerable: true
@@ -236,8 +213,11 @@ const GridView = extend(View)(
                 return a.section - b.section
             });
 
-            var visibleindex = sfSelf.nativeObject.indexPathsForVisibleItems()[0];
-            if (sfSelf.sectionCount > 1) {
+            var visibleindex = visibleIndexArray[0];
+
+            if (visibleindex === undefined) {
+                return undefined;
+            } else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
@@ -261,7 +241,10 @@ const GridView = extend(View)(
             });
 
             var visibleindex = visibleIndexArray[visibleIndexArray.length - 1];
-            if (sfSelf.sectionCount > 1) {
+
+            if (visibleindex === undefined) {
+                return undefined;
+            } else if (sfSelf.sectionCount > 1) {
                 retval = {
                     index: visibleindex.row,
                     section: visibleindex.section
@@ -422,4 +405,7 @@ const GridView = extend(View)(
         }
     }
 );
+
+GridView.Android = {};
+GridView.Android.SnapAlignment = {};
 module.exports = GridView;
