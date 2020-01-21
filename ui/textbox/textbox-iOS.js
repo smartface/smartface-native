@@ -677,6 +677,11 @@ const TextBox = extend(View)(
             set: function(object) {
                 _inputView = object;
 				
+				if (_inputView === undefined) {
+					self.nativeObject.setValueForKey(undefined,"inputView");
+					return;
+				}
+				
                 if (!_inputViewMain) {
                     var flexMain = new FlexLayout();
                     flexMain.nativeObject.frame = {
@@ -687,9 +692,9 @@ const TextBox = extend(View)(
                     };
                     _inputViewMain = flexMain;
                 } else {
-                    var childs = _inputViewMain.content.getChildList();
+                    var childs = _inputViewMain.getChildList();
                     for (var i in childs) {
-                        _inputViewMain.content.removeChild(childs[i]);
+                        _inputViewMain.removeChild(childs[i]);
                     }
                 }
 				
