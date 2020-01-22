@@ -154,10 +154,10 @@ TextBox.prototype.ios.clearButtonEnabled = false;
  * Gets/sets a layout to be displayed above the standard system keyboard
  * when the textbox object became focus. This property works only for iOS only.
  *
- * @property {UI.FlexLayout} [keyboardLayout = null]
+ * @property {UI.FlexLayout} [keyboardLayout = undefined]
  * @ios
  */
-TextBox.prototype.ios.keyboardLayout = null;
+TextBox.prototype.ios.keyboardLayout = undefined;
 
 /**
  * The custom input view to display instead of system keyboard
@@ -168,7 +168,7 @@ TextBox.prototype.ios.keyboardLayout = null;
  * @property {UI.View} inputView.view
  * @ios
  */
-TextBox.prototype.ios.inputView = null;
+TextBox.prototype.ios.inputView = undefined;
 
 /**
  * Gets/sets the appearance style of the keyboard that is associated with the TextBox.

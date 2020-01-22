@@ -430,6 +430,12 @@ const TextBox = extend(View)(
                 return _keyboardLayout;
             },
             set: function(value) {
+            	if (value === undefined){
+            		_keyboardLayout = value;
+            		self.nativeObject.setValueForKey(undefined, "inputAccessoryView");
+            		return;
+            	}
+            	
                 if (typeof value === "object") {
                 	_keyboardLayout = value;
 					_keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
