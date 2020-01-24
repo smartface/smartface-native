@@ -180,13 +180,24 @@ TextBox.prototype.ios.inputView = null;
  */
 TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
 
-/**
+ /**
  * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
  * This property works only for iOS.
  *
- * @property {UI.TextContentType} textContentType
+ * @method textContentType
  * @ios
+ * Creates a textContentType for ios.
+ *
+ *     @example
+ *     const TextContentType = require("sf-core/ui/textcontenttype");
+ *     const System = require('sf-core/device/system');
+ *
+ *     if (System.OS == "iOS" && System.OSVersion >= 12){
+ *         textbox.ios.textContentType = TextContentType.ONETIMECODE;
+ *     }
+ *
  * @since 4.1.3
+ *
  */
 TextBox.prototype.ios.textContentType;
 

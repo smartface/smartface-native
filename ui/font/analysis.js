@@ -38,7 +38,7 @@ Font.prototype.sizeOfString = function(string, maxWidth) {}
  * To obtain actual font name for iOS, use {@link UI.Font#allFontNames  allFontNames} method. 
  * The actual name is same as named of font file in Android.
  *
- *     @example
+ *@example
  *     const Font = require('sf-core/ui/font');
  *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label({
@@ -83,11 +83,12 @@ Font.createFromFile = function(path, size) {}
  * Returns supported font names.
  *
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     var fontNames = Font.ios.allFontNames();
- *     for (var index in fontNames) {
- *         console.log(fontNames[index]);
- *     }
+ *     
+*		const System = require('sf-core/device/system');
+*
+*		if (System.OS == "iOS" && System.OSVersion >= 12){
+*		  textbox.ios.textContentType = TextContentType.ONETIMECODE;
+*		}
  *
  * @return {String} supported font name array.
  * @since 0.1
