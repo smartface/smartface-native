@@ -184,7 +184,7 @@ TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
  * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
  * This property works only for iOS.
  *
- * @method textContentType
+ * @property {UI.TextContentType} textContentType
  * @ios
  * Creates a textContentType for ios.
  *
