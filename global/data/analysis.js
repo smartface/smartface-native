@@ -163,14 +163,13 @@ Data.containsVariable = function(key) {};
 Data.removeVariable = function(key) {};
 
 /**
- * Remove all variables.
+ * Removes all variables from storage regardless of their types.
  * 
  * @method removeAllVariables
- * @param {String} key
  * @android
  * @ios
  * @since 0.1
  */
-Data.removeAllVariables = function(key) {};
+Data.removeAllVariables = function() {};
 
 module.exports = Data;
