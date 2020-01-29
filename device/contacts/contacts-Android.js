@@ -59,11 +59,10 @@ Contacts.add = function(params) {
 
         const AUTHORITY = "com.android.contacts"; // ContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
-        if (_onSuccess)
-            _onSuccess();
+        
+        _onSuccess && _onSuccess();
     } catch (error) {
-        if (_onFailure)
-            _onFailure(error);
+        _onFailure && _onFailure(error);
     }
 };
 
@@ -82,8 +81,7 @@ Contacts.pick = function(params) {
 
         params.page.nativeObject.startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
     } catch (error) {
-        if (_onFailure)
-            _onFailure(error);
+        _onFailure && _onFailure(error);
     }
 };
 
@@ -109,7 +107,7 @@ Contacts.onActivityResult = function(requestCode, resultCode, data) {
     }
 };
 
-Contacts.getAll = function(params) {
+Contacts.getAll = function(params = {}) {
     var success = true;
     try {
         var contentResolver = AndroidConfig.activity.getContentResolver();
@@ -121,38 +119,34 @@ Contacts.getAll = function(params) {
         var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
         if (cursor === null)
             throw new Error("query returns null.");
-        cursor.moveToFirst();
+        let firstRow = cursor.moveToFirst();
         var contacts = [];
-        do {
-            var index = cursor.getColumnIndex(projection[0]);
-            var id = cursor.getString(index);
-            index = cursor.getColumnIndex(projection[1]);
-            var queryParams = {
-                id: id,
-                projection: [CommonColumns_DATA],
-                contentResolver: contentResolver,
-                columnTag: CommonColumns_DATA,
-                uri: uri
-            };
-            var phoneNumber = getPhonesById(queryParams);
-            var emailAddresses = getEmailById(queryParams);
-            var address = getAddressById(queryParams);
-            contacts.push({
-                displayName: cursor.getString(index),
-                phoneNumber: phoneNumber,
-                emailAddresses: emailAddresses,
-                address: address
-            });
-        } while (cursor.moveToNext());
-
+        if (firstRow) {
+            do {
+                var index = cursor.getColumnIndex(projection[0]);
+                var queryParams = {
+                    id: cursor.getString(index),
+                    projection: [CommonColumns_DATA],
+                    contentResolver: contentResolver,
+                    columnTag: CommonColumns_DATA,
+                    uri: uri
+                };
+                
+                index = cursor.getColumnIndex(projection[1]);
+                contacts.push({
+                    displayName: cursor.getString(index),
+                    phoneNumber: getPhonesById(queryParams),
+                    emailAddresses: getEmailById(queryParams),
+                    address: getAddressById(queryParams)
+                });
+            } while (cursor.moveToNext());
+        }
     } catch (error) {
         success = false;
-        if (params && params.onFailure) {
-            params.onFailure(error);
-        }
+        params.onFailure && params.onFailure(error);
     }
 
-    if (success && params && params.onSuccess) {
+    if (success && params.onSuccess) {
         params.onSuccess(contacts);
     }
 };

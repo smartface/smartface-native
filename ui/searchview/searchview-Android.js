@@ -17,8 +17,7 @@ const NativeSupportR = requireClass('androidx.appcompat.R');
 const NativeTextView = requireClass("android.widget.TextView");
 
 // Context.INPUT_METHOD_SERVICE
-const INPUT_METHOD_SERVICE = 'input_method';
-const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Android/systemservices');
 
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
@@ -68,7 +67,7 @@ const SearchView = extend(View)(
         if (!this.nativeObject) {
             this.nativeObject = new NativeSearchView(AndroidConfig.activity);
             // Prevent gain focus when SearchView appear.
-            this.nativeObject.clearFocus();
+            this.nativeObject.clearFocus(); 
         }
 
         var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
@@ -204,7 +203,7 @@ const SearchView = extend(View)(
                 value: function() {
                     this.nativeObject.requestFocus();
                 },
-                enumerable: true
+                enumerable: true 
             },
             'removeFocus': {
                 value: function() {
@@ -494,7 +493,9 @@ const SearchView = extend(View)(
 
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus) {
-                    if (hasFocus) {
+                    if (hasFocus) { 
+                        let inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                        inputManager.showSoftInput(view, 0);
                         _onSearchBeginCallback && _onSearchBeginCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
                     }

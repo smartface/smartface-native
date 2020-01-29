@@ -48,6 +48,6 @@ module.exports = {
     BottomTabBarController: require('./bottomtabbarcontroller'),
     ShimmerFlexLayout: require("./shimmerflexlayout"),
     GifImage: require("./gifimage"),
-    GifImageView: require("./gifimageview")
-
+    GifImageView: require("./gifimageview"),
+	iOS: require("./ios")
 };

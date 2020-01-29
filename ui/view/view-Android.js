@@ -78,8 +78,8 @@ function View(params) {
 
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
 
-    var _nativeObject = this.nativeObject;
-    var _overScrollMode = 0;
+    var _nativeObject = this.nativeObject,
+     _overScrollMode = 0, _masksToBounds = false;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -165,6 +165,13 @@ function View(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'masksToBounds' : {
+            get: () => _masksToBounds,
+            set: (value) => {
+                _masksToBounds = value;
+                this.nativeObject.setClipToOutline(_masksToBounds);
+            }
         },
         "_touchCallbacks": {
             value: {
@@ -709,6 +716,7 @@ View.prototype._resetBackground = function() {
     }
 };
 
+//ToDo: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
 View.prototype._setBorderToAllEdges = function() {
     var borderWidthPx = DpToPixel(this.borderWidth);
     if (!borderWidthPx)

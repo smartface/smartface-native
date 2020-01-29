@@ -15,11 +15,11 @@ const VideoView = extend(View)(
         _super(this);
         self.nativeObject.addSubview(self.avPlayerViewController.view);
 
-        self.avPlayerViewController.viewDidDisappear = function() {
-            if (self.avPlayer && self.avPlayer.constructor.name === "AVPlayer") {
-                self.pause();
-            }
-        };
+        // self.avPlayerViewController.viewDidDisappear = function() {
+        //     if (self.avPlayer && self.avPlayer.constructor.name === "AVPlayer") {
+        //         self.pause();
+        //     }
+        // };
 
         self.loadURL = function(value) {
             if (TypeUtil.isURL(value)) {
@@ -44,15 +44,15 @@ const VideoView = extend(View)(
         }
 
         self.play = function() {
-            self.avPlayer.play();
+            self.avPlayer && self.avPlayer.play();
         }
 
         self.pause = function() {
-            self.avPlayer.pause();
+            self.avPlayer && self.avPlayer.pause();
         };
 
         self.stop = function() {
-            self.avPlayer.pause();
+            self.avPlayer && self.avPlayer.pause();
             self.seekTo(0);
         };
 
@@ -103,7 +103,27 @@ const VideoView = extend(View)(
             },
             enumerable: true
         });
-
+    
+        Object.defineProperty(self.ios, 'entersFullScreenWhenPlaybackBegins', {
+            get: function() {
+                return self.avPlayerViewController.valueForKey("entersFullScreenWhenPlaybackBegins");
+            },
+            set: function(value) {
+                self.avPlayerViewController.setValueForKey(value,"entersFullScreenWhenPlaybackBegins");
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self.ios, 'exitsFullScreenWhenPlaybackEnds', {
+            get: function() {
+                return self.avPlayerViewController.valueForKey("exitsFullScreenWhenPlaybackEnds");
+            },
+            set: function(value) {
+                self.avPlayerViewController.setValueForKey(value,"exitsFullScreenWhenPlaybackEnds");
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'totalDuration', {
             get: function() {
 
@@ -123,7 +143,24 @@ const VideoView = extend(View)(
         self.setVolume = function(value) {
             self.avPlayer.volume = value;
         };
-
+	
+        // self.show = function(animation,callback) {
+        // 	__SF_Dispatch.mainAsync(function() {
+	       // 	if (!self.ios.page) {
+	       // 		throw new Error("page property cannot be undefined.")
+	       // 	}
+	       //     self.avPlayerViewController.view.removeFromSuperview();
+	       //     self.avPlayerViewController.removeFromParentViewController();
+	       //     self.ios.page.nativeObject.presentViewController(self.avPlayerViewController,callback,animation);
+        // 	});
+        // };
+        
+        // self.dismiss = function(animation,callback) {
+        // 	__SF_Dispatch.mainAsync(function() {
+        // 		self.avPlayerViewController.dismissViewController(callback, animation);
+        // 	});
+        // };
+        
         self.setControllerEnabled = function(value) {
             self.avPlayerViewController.showsPlaybackControls = value;
         };
