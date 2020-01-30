@@ -39,6 +39,17 @@ Application.prototype.statusBar;
  */
 Application.android.packageName;
 
+/**
+ * Treat the content of the window as secure, preventing it from appearing in screenshots or from being viewed on non-secure displays.
+ * 
+ * @property {Boolean} secureWindowContent
+ * @readonly
+ * @android
+ * @static
+ * @since 4.1.5
+ */
+Application.android.secureWindowContent = false;
+
 
 /**
  * Set/Get the layout direction from a Locale. 
