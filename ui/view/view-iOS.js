@@ -176,6 +176,22 @@ function View(params) {
         enumerable: true
     });
 
+	var _maskedBorders = [View.Border.TOP_LEFT,View.Border.TOP_RIGHT,View.Border.BOTTOM_LEFT,View.Border.BOTTOM_RIGHT];
+    Object.defineProperty(self, 'maskedBorders', {
+        get: function() {
+            return _maskedBorders;
+        },
+        set: function(value) {
+    		var corners = 0;
+    		for (var i = 0; i < value.length; i++) {
+    			corners = corners | value[i];
+    		}
+    		_maskedBorders = value;
+    		self.nativeObject.layer.maskedCorners = corners;
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
             return new Color({
@@ -1247,6 +1263,14 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
     },
     enumerable: true
 });
+
+View.Border = {
+	TOP_LEFT: 1 << 0,
+	TOP_RIGHT: 1 << 1,
+	BOTTOM_LEFT: 1 << 2,
+	BOTTOM_RIGHT: 1 << 3
+};
+
 
 View.iOS = {};
 

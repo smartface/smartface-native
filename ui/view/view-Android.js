@@ -79,7 +79,9 @@ function View(params) {
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
 
     var _nativeObject = this.nativeObject,
-     _overScrollMode = 0, _masksToBounds = false;
+        _overScrollMode = 0,
+        _masksToBounds = false,
+        _maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT];
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -95,7 +97,7 @@ function View(params) {
         },
         'elevation': {
             get: function() {
-                return SFViewUtil.getElevation(_nativeObject); 
+                return SFViewUtil.getElevation(_nativeObject);
             },
             set: function(value) {
                 SFViewUtil.setElevation(_nativeObject, value);
@@ -160,13 +162,24 @@ function View(params) {
             set: function(value) {
                 this._borderRadius = value;
                 this._resetBackground();
-
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
             },
             enumerable: true,
             configurable: true
         },
-        'masksToBounds' : {
+        'maskedBorders': {
+            get: function() {
+                return _maskedBorders;
+            },
+            set: function(value) {
+                _maskedBorders = value;
+                this._resetBackground();
+                this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'masksToBounds': {
             get: () => _masksToBounds,
             set: (value) => {
                 _masksToBounds = value;
@@ -239,7 +252,7 @@ function View(params) {
 
 View.prototype = {
     get transitionId() {
-        return SFViewUtil.getTransitionName(this.nativeObject); 
+        return SFViewUtil.getTransitionName(this.nativeObject);
     },
     set transitionId(id) {
         SFViewUtil.setTransitionName(this.nativeObject, id);
@@ -703,16 +716,18 @@ View.prototype._backgroundColor = Color.TRANSPARENT;
 
 View.prototype._resetBackground = function() {
     let color = this.backgroundColor;
-    let borderRadius = this.borderRadius ? DpToPixel(this.borderRadius) : 0;
+    let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
+    //Provide backward support in case of diff behavior of border radius.
+    let borderRadiuses = bitwiseBorders !== View.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [this.borderRadius];
     let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
     let borderColor = this.borderColor.nativeObject;
     let backgroundColor = this.backgroundColor.nativeObject;
-    
+
     if (color.isGradient) {
         let colors = array(color.colors, "int");
-        SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, borderRadius);
+        SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, "float"));
     } else {
-        SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, borderRadius);
+        SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, "float"));
     }
 };
 
@@ -726,6 +741,41 @@ View.prototype._setBorderToAllEdges = function() {
     this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
     this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
 };
+
+View.prototype._setMaskedBorders = function(bitwiseBorders) {
+    let borderRadiusInDp = DpToPixel(this.borderRadius);
+    let borderRadiuses = Array(8).fill(0);
+    for (let i = 0; i < 4; i++) {
+        let borderEnum = 1 << i;
+        if (bitwiseBorders & borderEnum) {
+            bitwiseBorders &= ~borderEnum;
+            switch (borderEnum) {
+                case View.Border.TOP_LEFT:
+                    borderRadiuses.fill(borderRadiusInDp, 0, 3);
+                    break;
+                case View.Border.TOP_RIGHT:
+                    borderRadiuses.fill(borderRadiusInDp, 2, 4);
+                    break;
+                case View.Border.BOTTOM_RIGHT:
+                    borderRadiuses.fill(borderRadiusInDp, 4, 6);
+                    break;
+                case View.Border.BOTTOM_LEFT:
+                    borderRadiuses.fill(borderRadiusInDp, 6, 8);
+                    break;
+            }
+        }
+    }
+    return borderRadiuses;
+};
+
+View.Border = {
+    TOP_LEFT: 1 << 0,
+    TOP_RIGHT: 1 << 1,
+    BOTTOM_RIGHT: 1 << 2,
+    BOTTOM_LEFT: 1 << 3,
+    ALL: 1 << 0 | 1 << 1 | 1 << 2 | 1 << 3
+};
+Object.freeze(View.Border);
 
 View.State = {};
 
