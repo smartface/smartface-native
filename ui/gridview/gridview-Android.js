@@ -84,7 +84,7 @@ const GridView = extend(View)(
                 holderViewLayout.viewType = viewType;
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
 
-                holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
+                holderViewLayout.nativeInner.setRecyclerViewAdapter(self.nativeDataAdapter);
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(itemViewHashCode, position) {
@@ -115,7 +115,7 @@ const GridView = extend(View)(
                 _onItemLongSelected && _onItemLongSelected(selectedItem, position);
             }
         };
-        var dataAdapter = new SFRecyclerViewAdapter(callbacks);
+        this.nativeDataAdapter = new SFRecyclerViewAdapter(callbacks);
 
         var _onScroll = undefined,
             isScrollListenerAdded = false,
@@ -239,7 +239,7 @@ const GridView = extend(View)(
                 value: function() {
                     // this.nativeInner.setLayoutManager(linearLayoutManager);
                     // this.nativeInner.setAdapter(dataAdapter);
-                    dataAdapter.notifyDataSetChanged();
+                    self.nativeDataAdapter.notifyDataSetChanged();
                     // dataAdapter.notifyItemInserted(_itemCount);
                 },
                 enumerable: true
@@ -367,7 +367,7 @@ const GridView = extend(View)(
         });
 
         // android-only properties
-        var _snapToAlignment,_nativeLinearSnapHelper;
+        var _snapToAlignment, _nativeLinearSnapHelper;
         Object.defineProperties(this.android, {
             'onScrollStateChanged': {
                 get: function() {
@@ -469,7 +469,7 @@ const GridView = extend(View)(
             return {};
         };
 
-        this.nativeInner.setAdapter(dataAdapter);
+        this.nativeInner.setAdapter(this.nativeDataAdapter);
 
         if (params) {
             for (var param in params) {

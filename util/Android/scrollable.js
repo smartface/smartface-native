@@ -40,7 +40,41 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                 };
             },
             enumerable: true
-        }
+        },
+        'indexByListViewItem': {
+            value: (listViewItem) => self.nativeInner.getChildAdapterPosition(listViewItem.nativeObject),
+            enumerable: true
+        },
+        'deleteRowRange': {
+            value: function(params = {}) {
+                const {
+                    positionStart,
+                    itemCount
+                } = params;
+                self.nativeDataAdapter.notifyItemRangeRemoved(positionStart, itemCount);
+            },
+            enumerable: true
+        },
+        'insertRowRange': {
+            value: function(params = {}) {
+                const {
+                    positionStart,
+                    itemCount
+                } = params;
+                self.nativeDataAdapter.notifyItemRangeInserted(positionStart, itemCount);
+            },
+            enumerable: true
+        },
+        'refreshRowRange': {
+            value: function(params = {}) {
+                const {
+                    positionStart,
+                    itemCount
+                } = params;
+                self.nativeDataAdapter.notifyItemRangeChanged(positionStart, itemCount);
+            },
+            enumerable: true
+        },
     });
 
     let _onAttachedToWindow, _onDetachedFromWindow;

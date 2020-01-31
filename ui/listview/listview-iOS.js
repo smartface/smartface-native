@@ -140,16 +140,21 @@ const ListView = extend(View)(
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e) {
             if (e.cell.contentView.subviews.length > 0) {
-                self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
+                self.onRowBind(_listItemArray[e.cell.uuid].jsItem, e.indexPath.row);
             } else {
-                _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+                var listViewItem = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+                listViewItem.__private_uuid = e.cell.uuid;
+                _listItemArray[e.cell.uuid] = {
+                    jsItem : listViewItem,
+                    nativeItem : e.cell
+                };
 
                 // Bug ID : IOS-2750
-                (_listItemArray[e.cell.uuid].nativeObject.yoga.direction == 0) && self.nativeObject.superview && (_listItemArray[e.cell.uuid].nativeObject.yoga.direction = self.nativeObject.superview.yoga.resolvedDirection);
+                (_listItemArray[e.cell.uuid].jsItem.nativeObject.yoga.direction == 0) && self.nativeObject.superview && (_listItemArray[e.cell.uuid].jsItem.nativeObject.yoga.direction = self.nativeObject.superview.yoga.resolvedDirection);
                 ///////
 
-                e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
-                self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
+                e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].jsItem.nativeObject);
+                self.onRowBind(_listItemArray[e.cell.uuid].jsItem, e.indexPath.row);
             }
             //  _listItemArray[e.uuid].applyLayout();
         }
@@ -184,14 +189,18 @@ const ListView = extend(View)(
             var cell = Invocation.invokeInstanceMethod(self.nativeObject, "cellForRowAtIndexPath:", [argIndexPath], "NSObject");
             if (cell) {
                 var uuid = Invocation.invokeInstanceMethod(cell, "uuid", [], "NSString");
-                return _listItemArray[uuid];
+                return _listItemArray[uuid].jsItem;
             }
 
             return undefined
         }
-
+        
+        self.indexByListViewItem = function(listViewItem){
+            return self.nativeObject.indexPathForCell(_listItemArray[listViewItem.__private_uuid].nativeItem).row;
+        };
+        
         self.nativeObject.didSelectRowAt = function(e) {
-            self.onRowSelected(_listItemArray[e.uuid], e.index);
+            self.onRowSelected(_listItemArray[e.uuid].jsItem, e.index);
         };
 
         self.refreshData = function() {
@@ -230,6 +239,7 @@ const ListView = extend(View)(
         self.android = {};
         self.android.saveInstanceState = function() {};
         self.android.restoreInstanceState = function() {};
+        self.android.startDrag = function() {};
 
         self.setPullRefreshColors = function(param) {
             if (Object.prototype.toString.call(param) === '[object Array]') {
@@ -273,7 +283,76 @@ const ListView = extend(View)(
             },
             enumerable: true
         });
-
+ 
+        Object.defineProperty(self, 'rowMoveEnabled', {
+            get: function() {
+                return self.nativeObject.isEditing;
+            },
+            set: function(value) {
+                self.nativeObject.setEditing(value);
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowCanMove', {
+            set: function(value) {
+                if (value === undefined) {
+                    self.nativeObject.canMoveRowAt = undefined;
+                }else{
+                    self.nativeObject.canMoveRowAt = function(value,e){
+                    	return value(e.indexPath.row);
+                    }.bind(self,value);
+                }
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowMoved', {
+            set: function(value) {
+                self.nativeObject.moveRowAt = function(value,e){
+                	return value(e.sourceIndexPath.row,e.destinationIndexPath.row);
+                }.bind(self,value);
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowMove', {
+            set: function(value) {
+                if (value === undefined) {
+                    self.nativeObject.targetIndexPathForMoveFromRowAt = undefined;
+                }else{
+                    self.nativeObject.targetIndexPathForMoveFromRowAt = function(value,e){
+                        return value(e.sourceIndexPath.row,e.proposedDestinationIndexPath.row) ? e.proposedDestinationIndexPath.row : e.sourceIndexPath.row;
+                    }.bind(self,value);
+                }
+            },
+            enumerable: true
+        });
+        
+        self.insertRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(0, object.positionStart, object.itemCount, animation);
+        };
+        
+        self.deleteRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(1, object.positionStart, object.itemCount, animation);
+        };
+        
+        self.refreshRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(2, object.positionStart, object.itemCount, animation);
+        };
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
@@ -308,6 +387,17 @@ ListView.iOS.createSwipeItemWithIcon = function(title, icon, color, padding, act
     } else {
         return __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(title, icon.nativeObject, color.nativeObject, padding, action, isAutoHide ? true : false);
     }
+}
+
+ListView.iOS.RowAnimation = {
+    FADE: 0,
+    RIGHT: 1,
+    LEFT: 2,
+    TOP: 3,
+    BOTTOM: 4,
+    NONE: 5,
+    MIDDLE: 6,
+    AUTOMATIC: 100
 }
 
 module.exports = ListView;
