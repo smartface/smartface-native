@@ -329,6 +329,7 @@ GridView.prototype.setPullRefreshColors = function(colors) {};
  */
 GridView.prototype.refreshData = function() {};
 
+
 /**
  * This method scrolls GridView to a specific index.
  *

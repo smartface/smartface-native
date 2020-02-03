@@ -18,11 +18,11 @@ const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../util/Android/
 const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
-const REQUEST_CODE_CALL_APPLICATION = 114;
+const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
 var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
     _onReceivedNotification, _onRequestPermissionsResult,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
-    spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
+    spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
@@ -527,6 +527,16 @@ Object.defineProperties(ApplicationWrapper.android, {
             sharedPreferences.edit().putInt("SFCurrentBaseTheme", _themeRes).commit();
         },
         enumerable: true
+    },
+    'secureWindowContent': {
+        get : () => _secureWindowContent,
+        set : (value) => {
+            _secureWindowContent = value;
+            if(_secureWindowContent)
+                activity.getWindow().setFlags(FLAG_SECURE, FLAG_SECURE);
+            else 
+                activity.getWindow().clearFlags(FLAG_SECURE);
+        } 
     }
 });
 

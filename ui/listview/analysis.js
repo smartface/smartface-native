@@ -265,6 +265,29 @@ ListView.prototype.scrollEnabled = false;
  */
 ListView.prototype.refreshEnabled = true;
 
+
+
+/**
+ * Enables/disables drag & drop behavior. When rowMoveEnabled property is true, onRowSelected callback is not triggered for iOS.
+ *
+ * @property {Boolean} [rowMoveEnabled = false]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.rowMoveEnabled = true;
+
+/**
+ * When {UI.ListView#rowMoveEnabled rowMoveEnabled} is true, default value is true but you may want to disable this 
+ * if you want to start dragging on a custom view touch using {UI.ListView#startDrag startDrag}.
+ *
+ * @property {Boolean} [longPressDragEnabled = false]
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.longPressDragEnabled = true;
+
+
 /**
  * This method returns the index of row which is visible at
  * the top of a ListView at a given time.
@@ -313,6 +336,66 @@ ListView.prototype.setPullRefreshColors = function(colors) {};
  * @since 0.1
  */
 ListView.prototype.refreshData = function() {};
+
+
+/**
+ * Starts dragging the provided ListViewItem. By default, ListView starts a drag when a ListViewItem is long pressed. 
+ * You can disable that behavior by setting longPressDragEnabled.
+ *
+ * @method startDrag
+ * @param {UI.ListViewItem} listViewItem
+ * @android
+ * @since 4.1.3
+ */
+ListView.prototype.startDrag = function(listViewItem) {};
+
+
+/**
+ * This method notify the ListView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
+ *
+ * @method deleteRowRange
+ * @param {Object} params 
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be removed from the data set
+ * @param {Number} params.ios iOS specific property
+ * @param {UI.ListView.iOS.RowAnimation} [params.ios.animation = UI.ListView.iOS.RowAnimation.AUTOMATIC]  A constant that indicates how the deletion is to be animated, for example, fade out or slide out from the bottom.
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.deleteRowRange = function(params) {};
+
+
+/**
+ * This method notify the ListView  that given range of items inserted. Must set the itemCount value to a changed number before calling this function.
+ *
+ * @method insertRowRange
+ * @param {Object} params 
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be inserted from the data set
+ * @param {Number} params.ios iOS specific property
+ * @param {UI.ListView.iOS.RowAnimation} [params.ios.animation = UI.ListView.iOS.RowAnimation.AUTOMATIC]  A constant that either specifies the kind of animation to perform when inserting the row or requests no animation.
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.insertRowRange = function(params) {};
+
+
+/**
+ * This method notify the ListView  that given range of items changed.
+ *
+ * @method refreshRowRange
+ * @param {Object} params 
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be changed from the data set
+ * @param {Number} params.ios iOS specific property
+ * @param {UI.ListView.iOS.RowAnimation} [params.ios.animation = UI.ListView.iOS.RowAnimation.AUTOMATIC]  A constant that indicates how the reloading is to be animated, for example, fade out or slide out from the bottom.
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.refreshRowRange = function(params) {};
 
 
 
@@ -591,6 +674,19 @@ ListView.createSwipeItemWithIcon = function(title, icon, color, padding, action,
  */
 ListView.prototype.listViewItemByIndex = function(index) {};
 
+
+/**
+ * This method returns ListViewItem's index.
+ *
+ * @return {Number} Returns the index of given {@link UI.ListViewItem listviewitem}.
+ * @method indexByListViewItem
+ * @param {UI.ListViewItem} 
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.indexByListViewItem = function(listViewItem) {};
+
 /**
  * This event is called when the list view is about to start scrolling the content.
  * 
@@ -678,6 +774,48 @@ ListView.prototype.onAttachedToWindow = function() {};
 ListView.prototype.onDetachedFromWindow = function() {};
 
 
+
+/**
+ * This event is called when dragged item reordered in the list view. 
+ * 
+ * @param {Number} source
+ * @param {Number} destination
+ * @event onRowMoved
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.onRowMoved = function(source, destination) {};
+
+
+/**
+ * This event is called when dragged item before reordered in the list view. 
+ * 
+ * @param {Number} source
+ * @param {Number} destination
+ * @event onRowMove
+ * @return {Boolean} Return true if source index can be reordered by destination index.
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.onRowMove = function(source, destination) {};
+
+
+/**
+ * By default all the items are draggable if {UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
+ * by specific condition.
+ * 
+ * @param {Number} index
+ * @event onRowCanMove 
+ * @return {Boolean} Return true if index can be draggable 
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.onRowCanMove = function(index) {};
+
+
 /**
  * iOS Specific Properties.
  * @class UI.ListView.iOS
@@ -686,7 +824,7 @@ ListView.iOS = {};
 
 /**
  * Bar style that specifies the search bar’s appearance.
- * @class UI.ListView.iOS.SwipeDirection
+ * @enum UI.ListView.iOS.SwipeDirection
  * @readonly
  * @ios
  * @since 1.1.14
@@ -710,5 +848,86 @@ ListView.iOS.SwipeDirection.LEFTTORIGHT = 0;
  * @since 1.1.14
  */
 ListView.iOS.SwipeDirection.RIGHTTOLEFT = 1;
+
+/**
+ * The type of animation to use when rows are inserted or deleted or reloaded.
+ * @enum UI.ListView.iOS.RowAnimation
+ * @readonly
+ * @ios
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation = {};
+
+/**
+ * @property {Number} FADE
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.FADE = 0;
+
+/**
+ * @property {Number} RIGHT
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.RIGHT = 1;
+
+/**
+ * @property {Number} LEFT
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.LEFT = 2;
+
+/**
+ * @property {Number} TOP
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.TOP = 3;
+
+/**
+ * @property {Number} BOTTOM
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.BOTTOM = 4;
+
+/**
+ * @property {Number} NONE
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.NONE = 5;
+
+/**
+ * @property {Number} MIDDLE
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.MIDDLE = 6;
+
+/**
+ * @property {Number} AUTOMATIC
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.iOS.RowAnimation.AUTOMATIC = 100;
 
 module.exports = ListView;
