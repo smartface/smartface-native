@@ -718,7 +718,7 @@ View.prototype._resetBackground = function() {
     let color = this.backgroundColor;
     let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
     //Provide backward support in case of diff behavior of border radius.
-    let borderRadiuses = bitwiseBorders !== View.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [this.borderRadius];
+    let borderRadiuses = bitwiseBorders !== View.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
     let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
     let borderColor = this.borderColor.nativeObject;
     let backgroundColor = this.backgroundColor.nativeObject;
