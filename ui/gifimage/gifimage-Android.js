@@ -1,3 +1,4 @@
+// TODO: [AND-3663] Create a java wrapper class for GifDrawable. 
 const NativeGifDrawable = requireClass("pl.droidsonroids.gif.GifDrawable");
 
 const FileStream = require('../../io/filestream');
