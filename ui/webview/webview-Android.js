@@ -448,6 +448,10 @@ const WebView = extend(View)(
             }
         });
 
+        /* Webview contains background color which draws all over given background drawbles.
+         It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
+         */
+        this.nativeObject.setBackgroundColor(0);
         this.nativeObject.setScrollBarEnabled(_scrollBarEnabled);
 
         // Assign parameters given in constructor
