@@ -161,6 +161,23 @@ ListView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
 ListView.prototype.onRowHeight = function onRowHeight(index) {};
 
 /**
+ * Animates multiple insert, delete and refresh operations as a group.
+ * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations. 
+ * Use the block passed in the updates parameter to specify all of the operations you want to perform.
+ * Deletes are processed before inserts in batch operations. 
+ * This means the indexes for the deletions are processed relative to the indexes of the table view’s state before the batch operation, and the indexes for the insertions are processed relative to the indexes of the state after all the deletions in the batch operation.
+ *
+ * @param {Function} updates
+ * @param {Function} completion A completion handler block to execute when all of the operations are finished.
+ * @param {Object} completion.e
+ * @param {Boolean} completion.e.finished
+ * @method performBatchUpdates
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.performBatchUpdates = function performBatchUpdates(updates, completion) {};
+
+/**
  * This event is called when a UI.ListViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
@@ -352,7 +369,8 @@ ListView.prototype.startDrag = function(listViewItem) {};
 
 /**
  * This method notify the ListView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
- *
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
+ * 
  * @method deleteRowRange
  * @param {Object} params 
  * @param {Number} params.positionStart Position of start item
@@ -368,6 +386,7 @@ ListView.prototype.deleteRowRange = function(params) {};
 
 /**
  * This method notify the ListView  that given range of items inserted. Must set the itemCount value to a changed number before calling this function.
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
  *
  * @method insertRowRange
  * @param {Object} params 
@@ -384,7 +403,8 @@ ListView.prototype.insertRowRange = function(params) {};
 
 /**
  * This method notify the ListView  that given range of items changed.
- *
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
+ * 
  * @method refreshRowRange
  * @param {Object} params 
  * @param {Number} params.positionStart Position of start item
