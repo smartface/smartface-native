@@ -329,6 +329,10 @@ const ListView = extend(View)(
             enumerable: true
         });
         
+        self.ios.performBatchUpdates = function(updates, completion){
+        	self.nativeObject.js_performBatchUpdates(updates,completion);
+        };
+        
         self.insertRowRange = function(object){
             var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
             if (object.ios && object.ios.animation !== undefined) {
