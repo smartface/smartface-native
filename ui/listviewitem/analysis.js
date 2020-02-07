@@ -13,4 +13,14 @@ const extend = require('js-base/core/extend');
  */
 function ListViewItem(params) {}
 
+/**
+ * This method manually performs an expansion scroll.
+ *
+ * @method expandSwipe
+ * @param {UI.ListView.iOS.SwipeDirection} swipeDirection 
+ * @ios
+ * @since 4.1.4
+ */
+ListViewItem.prototype.expandSwipe = function(swipeDirection) {};
+
 module.exports = ListViewItem;

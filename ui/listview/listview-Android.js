@@ -23,7 +23,6 @@ const ListView = extend(View)(
             this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
 
-
         let _callbacks = {
             onAttachedToWindow: function() {
                 self.android.onAttachedToWindow && self.android.onAttachedToWindow();
@@ -120,7 +119,8 @@ const ListView = extend(View)(
 
         var _onScroll,
             _rowHeight, _onRowCreate, _onRowSelected, _onRowLongSelected, _onRowMoved, _onRowCanMove,
-            _onPullRefresh, _onRowHeight, _onRowBind, _onRowType, _itemCount = 0, _onRowMove,
+            _onPullRefresh, _onRowHeight, _onRowBind, _onRowType, _itemCount = 0,
+            _onRowMove, _onRowCanSwipe,
             _contentInset = {},
             _onScrollListener = undefined,
             _scrollEnabled, isScrollListenerAdded = false,
@@ -213,6 +213,14 @@ const ListView = extend(View)(
                     _longPressDragEnabled = value;
                     if (sfItemTouchHelperCallback)
                         sfItemTouchHelperCallback.setLongPressDragEnabled(_longPressDragEnabled);
+                },
+                enumerable: true
+            },
+            'swipeEnabled': {
+                get: () => _swipeEnabled,
+                set: (value) => {
+                    _swipeEnabled = value;
+                    getItemTouchHelper().sfItemTouchHelperCallback.setEnableSwipe(_swipeEnabled);
                 },
                 enumerable: true
             },
@@ -322,6 +330,13 @@ const ListView = extend(View)(
                 get: () => _onRowMove,
                 set: (onRowMoveCallback) => {
                     _onRowMove = onRowMoveCallback;
+                },
+                enumerable: true
+            },
+            'onRowCanSwipe': {
+                get: () => _onRowCanSwipe,
+                set: (onRowCanSwipeCallback) => {
+                    _onRowCanSwipe = onRowCanSwipeCallback;
                 },
                 enumerable: true
             },
@@ -472,7 +487,7 @@ const ListView = extend(View)(
                 const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.SFItemTouchHelper');
 
                 sfItemTouchHelperCallback = new SFItemTouchHelperCallback({
-                    onRowMove: function(draggedItemIndex, targetItemIndex){
+                    onRowMove: function(draggedItemIndex, targetItemIndex) {
                         let result = self.onRowMove && self.onRowMove(draggedItemIndex, targetItemIndex);
                         return result === undefined ? true : result;
                     },
@@ -482,6 +497,58 @@ const ListView = extend(View)(
                     onRowCanMove: function(index) {
                         let result = self.onRowCanMove && self.onRowCanMove(index);
                         return result === undefined ? true : result;
+                    },
+                    onRowSwipe: function(direction, index) {
+                        let result = self.onRowSwipe && self.onRowSwipe({
+                            direction,
+                            index,
+                            ios: {
+                                expansionSettings: {}
+                            }
+                        });
+                        if (!result || result.length === 0)
+                            return null;
+                        const {
+                            font,
+                            backgroundColor,
+                            textColor,
+                            text,
+                            icon,
+                            android: {
+                                threshold: threshold = 0.5,
+                                borderBottomLeftRadius: borderBottomLeftRadius = 0,
+                                borderBottomRightRadius: borderBottomRightRadius = 0,
+                                borderTopLeftRadius: borderTopLeftRadius = 0,
+                                borderTopRightRadius: borderTopRightRadius = 0,
+                                paddingLeft: paddingLeft = 0,
+                                paddingRight: paddingRight = 0,
+                                paddingTop: paddingTop = 0,
+                                paddingBottom: paddingBottom = 0,
+                            } = {},
+                            onPress
+                        } = result[0];
+                        if (!self.sfSwipeItem)
+                            self.sfSwipeItem = new SFItemTouchHelperCallback.SFSwipeItem();
+                        self.sfSwipeItem.resetVariables();
+                        let bitmap = icon ? icon.nativeObject.getBitmap() : null;
+                        self.sfSwipeItem.setSwipeItemProps(font.nativeObject, font.size, backgroundColor.nativeObject, text, textColor.nativeObject, bitmap, threshold, {
+                            onPress: function(index) {
+                                onPress && onPress({
+                                    index
+                                });
+                            }
+                        });
+                        let borderRadii = array([borderTopLeftRadius, borderTopLeftRadius, borderTopRightRadius, borderTopRightRadius,
+                            borderBottomRightRadius, borderBottomRightRadius, borderBottomLeftRadius, borderBottomLeftRadius
+                        ].map(r => AndroidUnitConverter.dpToPixel(r)), "float");
+                        let paddings = array([paddingLeft, paddingRight, paddingTop, paddingBottom].map(p => AndroidUnitConverter.dpToPixel(p)), "float")
+                        self.sfSwipeItem.setSwipeItemDimensions(paddings, borderRadii);
+
+                        return self.sfSwipeItem;
+                    },
+                    onRowCanSwipe: function(index) {
+                        let result = self.onRowCanSwipe && self.onRowCanSwipe(index);
+                        return (!result || result.length < 1) ? ListView.SwipeDirection.LEFTTORIGHT | ListView.SwipeDirection.RIGHTTOLEFT : result.reduce((acc, cValue) => acc | cValue, 0);
                     }
                 });
                 nItemTouchHelper = new SFItemTouchHelper(sfItemTouchHelperCallback);
@@ -542,6 +609,14 @@ const ListView = extend(View)(
         }
     }
 );
+
+ListView.SwipeItem = require('./swipeitem.js');
+
+ListView.SwipeDirection = {
+    LEFTTORIGHT: 1 << 3,
+    RIGHTTOLEFT: 1 << 2
+};
+Object.freeze(ListView.SwipeDirection);
 
 ListView.iOS = {};
 ListView.iOS.RowAnimation = {};

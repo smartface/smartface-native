@@ -633,7 +633,8 @@ View.prototype.android.zIndex;
 View.prototype.ios.exclusiveTouch = false;
 
 /**
- * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width.
+ * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
+ * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
  *
  * @property {Boolean} [masksToBounds = true]
  * @ios

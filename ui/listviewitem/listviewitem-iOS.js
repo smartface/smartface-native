@@ -12,8 +12,13 @@ const ListViewItem = extend(ViewGroup)(
     function(_super, params) {
         _super(this);
 
-        // Assign parameters given in constructor
-
+        var self = this;
+		
+		this.expandSwipe = function(direction){
+			self.__nativeCell.expandSwipeAnimated(direction,true);
+		}
+		
+		// Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
