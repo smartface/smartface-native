@@ -227,4 +227,22 @@ VideoView.prototype.setControllerEnabled = function(enabled) {};
  */
 VideoView.prototype.ios.page = null;
 
+/**
+ * A Boolean value that determines whether the player automatically displays in full screen when the play button is tapped.
+ *
+ * @property {Boolean} entersFullScreenWhenPlaybackBegins
+ * @ios
+ * @since 4.1.4
+ */
+VideoView.prototype.ios.entersFullScreenWhenPlaybackBegins = false;
+
+/**
+ * A Boolean value that indicates whether the player exits full screen when playback ends.
+ *
+ * @property {Boolean} exitsFullScreenWhenPlaybackEnds
+ * @ios
+ * @since 4.1.4
+ */
+VideoView.prototype.ios.exitsFullScreenWhenPlaybackEnds = false;
+
 module.exports = VideoView;

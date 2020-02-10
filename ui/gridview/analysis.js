@@ -141,6 +141,15 @@ GridView.prototype.onItemBind = function onItemBind(gridViewItem, index) {};
 GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
+ * A floating-point value that determines the rate of deceleration after the user lifts their finger.
+ *
+ * @property {UI.iOS.DecelerationRate} [decelerationRate = UI.iOS.DecelerationRate.NORMAL]
+ * @ios
+ * @since 4.1.2
+ */
+GridView.prototype.decelerationRate = UI.iOS.DecelerationRate.NORMAL;
+
+/**
  * This event is called before onItemCreate callback. Returns item type you should use based on position.
  *
  * @event onItemType
@@ -233,7 +242,7 @@ GridView.prototype.layoutManager;
 /**
  * Gets/sets the visibility of scroll bar of GridView.
  * If set to true, vertical or horizontal scroll bar will be shown depending on gridview's
- * scroll direction.
+ * scroll direction. This property must be set after assigning layout manager.
  *
  * @property {Boolean} [scrollBarEnabled = false]
  * @android
@@ -254,20 +263,22 @@ GridView.prototype.scrollBarEnabled = false;
 GridView.prototype.refreshEnabled = true;
 
 /**
- * This property supportes pager style snapping in either vertical or horizontal orientation. For iOS, prefer to UI.LayoutManager.targetContentOffset
+ * This property enables/disables snapping the center of the target child view to the center of the GridView in either vertical or horizontal orientation. For iOS, prefer to UI.LayoutManager.targetContentOffset
  *
- * @property {UI.GridView.Android.SnapAlignment} [snapToAlignment = UI.GridView.Android.SnapAlignment.SNAPTO_START]
+ * @property {UI.GridView.Android.SnapAlignment} [snapToAlignment = UI.GridView.Android.SnapAlignment.SNAPTO_NONE]
  * @android
  * @since 3.2.0
  */
 GridView.prototype.snapToAlignment;
 
 /**
- * This property allows snapping to behave as pager  or linear. 
+ * This property allows snapping to behave as pager. There is slight difference in both OS. In Android, paginated gridview item should occupy spaces as much as gridview but iOS 
+ * scrolls all visible gridview items at once.
  *
  * @property {Boolean} [paginationEnabled = true]
  * @android
- * @since 3.2.0
+ * @ios
+ * @since 4.1.4
  */
 GridView.prototype.paginationEnabled;
 
@@ -317,6 +328,7 @@ GridView.prototype.setPullRefreshColors = function(colors) {};
  * @since 3.0.2
  */
 GridView.prototype.refreshData = function() {};
+
 
 /**
  * This method scrolls GridView to a specific index.
@@ -380,7 +392,7 @@ GridView.prototype.stopRefresh = function() {};
  * @ios
  * @since 3.1.3
  */
-GridView.prototype.onScroll = function onScroll() {}
+GridView.prototype.onScroll = function onScroll() {};
 
 /**
  * This event is called when a GridView's scroll state is changed. To remove this evet, set null.
@@ -552,5 +564,16 @@ GridView.Android.SnapAlignment.SNAPTO_CENTER;
  * @since 3.2.0
  */
 GridView.Android.SnapAlignment.SNAPTO_END;
+
+
+/**
+ * This property  will stop snapping.
+ *
+ * @property SNAPTO_NONE
+ * @static
+ * @readonly
+ * @since 4.1.3
+ */
+GridView.Android.SnapAlignment.SNAPTO_NONE;
 
 module.exports = GridView;

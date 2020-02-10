@@ -2,14 +2,12 @@
 const NativeDialog = requireClass("android.app.Dialog");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Android/systemservices');
 const LayoutParams = require("../../util/Android/layoutparams");
 const Color = require("../color");
 const Flex = require("../flexlayout");
 const Screen = require('sf-core/device/screen');
 
-//InputMethodManager to close softinput keyboard
-const INPUT_METHOD_SERVICE = 'input_method';
-const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 function Dialog(params) {
     const self = this;

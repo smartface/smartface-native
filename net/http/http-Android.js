@@ -1,6 +1,6 @@
 /*globals requireClass*/
-const OkHttpClient = requireClass("okhttp3.OkHttpClient");
-const OkHttpRequest = requireClass("okhttp3.Request");
+const OkHttpClientBuilder = requireClass("okhttp3.OkHttpClient$Builder");
+const OkHttpRequestBuilder = requireClass("okhttp3.Request$Builder");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
@@ -33,7 +33,7 @@ const Request = function() {
 function http(params) {
     const self = this;
 
-    self.clientBuilder = new OkHttpClient.Builder();
+    self.clientBuilder = new OkHttpClientBuilder();
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
@@ -240,7 +240,7 @@ function createRequest(params, isMultipart, httpManagerHeaders) {
     if (!params || !params.url) {
         throw new Error("URL parameter is required.");
     }
-    var builder = new OkHttpRequest.Builder();
+    var builder = new OkHttpRequestBuilder();
     builder = builder.url(params.url);
 
     var contentType = null;
@@ -315,6 +315,7 @@ function createMultipartBody(bodies) {
     return builder.build();
 }
 
+// TODO: [AND-3663] To obfuscate okttp3.Headers class, implement this function in java side.
 function getResponseHeaders(headers) {
     var responseHeaders = {};
     var headersSize = headers.size();
@@ -331,14 +332,13 @@ function checkInternet() {
     return true;
 }
 
+// TODO: [AND-3663] Implement this function in java side. Otherwise, we can't obfuscate classes named PersistentCookieJar, SetCookieCache and SharedPrefsCookiePersistor.
 function createCookieJar() {
     const NativePersistenCookieJar = requireClass("com.franmontiel.persistentcookiejar.PersistentCookieJar");
     const NativeSetCookieCache = requireClass("com.franmontiel.persistentcookiejar.cache.SetCookieCache");
     const NativeSharedPrefsCookiePersistor = requireClass("com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor");
-
-    var cookieJar = new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity));
-
-    return cookieJar;
+    
+    return (new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity)));
 }
 
 module.exports = http;

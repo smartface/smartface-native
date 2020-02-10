@@ -84,7 +84,7 @@ const GridView = extend(View)(
                 holderViewLayout.viewType = viewType;
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
 
-                holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
+                holderViewLayout.nativeInner.setRecyclerViewAdapter(self.nativeDataAdapter);
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(itemViewHashCode, position) {
@@ -115,14 +115,15 @@ const GridView = extend(View)(
                 _onItemLongSelected && _onItemLongSelected(selectedItem, position);
             }
         };
-        var dataAdapter = new SFRecyclerViewAdapter(callbacks);
+        this.nativeDataAdapter = new SFRecyclerViewAdapter(callbacks);
 
         var _onScroll = undefined,
             isScrollListenerAdded = false,
             _onItemCreate, _onItemSelected, _onItemType,
             _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
             _scrollBarEnabled = false,
-            _scrollEnabled, _onScrollStateChanged = undefined;
+            _scrollEnabled, _onScrollStateChanged = undefined,
+            _nativePagerSnapHelper, _paginationEnabled = null;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -238,7 +239,7 @@ const GridView = extend(View)(
                 value: function() {
                     // this.nativeInner.setLayoutManager(linearLayoutManager);
                     // this.nativeInner.setAdapter(dataAdapter);
-                    dataAdapter.notifyDataSetChanged();
+                    self.nativeDataAdapter.notifyDataSetChanged();
                     // dataAdapter.notifyItemInserted(_itemCount);
                 },
                 enumerable: true
@@ -335,6 +336,27 @@ const GridView = extend(View)(
                 },
                 enumerable: true
             },
+            'paginationEnabled': {
+                get: function() {
+                    return _paginationEnabled;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                    _paginationEnabled = value;
+
+                    if (_paginationEnabled) {
+                        if (!_nativePagerSnapHelper) {
+                            const NativeSFCustomizedPagerSnapHelper = requireClass("androidx.recyclerview.widget.PagerSnapHelper");
+                            _nativePagerSnapHelper = new NativeSFCustomizedPagerSnapHelper();
+                        }
+                        _nativePagerSnapHelper.attachToRecyclerView(self.nativeInner);
+                    } else if (_nativePagerSnapHelper)
+                        _nativePagerSnapHelper.attachToRecyclerView(null);
+
+                },
+                enumerable: true
+            },
             'toString': {
                 value: function() {
                     return 'GridView';
@@ -345,8 +367,7 @@ const GridView = extend(View)(
         });
 
         // android-only properties
-        var _snapToAlignment, _paginationEnabled = null,
-            _nativeLinearSnapHelper, _paginationAssigned = false;
+        var _snapToAlignment, _nativeLinearSnapHelper;
         Object.defineProperties(this.android, {
             'onScrollStateChanged': {
                 get: function() {
@@ -379,18 +400,13 @@ const GridView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
+            //ToDo:[Deprecated] paginationEnabled is no more Android specific. 
             'paginationEnabled': {
                 get: function() {
-                    return _paginationEnabled;
+                    return self.paginationEnabled;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
-                    _paginationEnabled = value;
-                    if (_nativeLinearSnapHelper) {
-                        _nativeLinearSnapHelper.disablePagination(!_paginationEnabled);
-                        _paginationAssigned = true;
-                    }
+                    self.paginationEnabled = value;
                 },
                 enumerable: true
             },
@@ -401,13 +417,15 @@ const GridView = extend(View)(
                 set: function(alignment) {
                     if (typeof alignment !== 'number')
                         return;
-                    const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
-                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment, self.nativeInner);
-                    _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
-
-                    if (self.android.paginationEnabled !== null && !_paginationAssigned) {
-                        self.android.paginationEnabled = _paginationEnabled;
-                    }
+                    _snapToAlignment = alignment;
+                    if (alignment !== GridView.Android.SnapAlignment.SNAPTO_NONE) {
+                        if (!_nativeLinearSnapHelper) {
+                            const NativeSFCustomizedLinearSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedLinearSnapHelper");
+                            _nativeLinearSnapHelper = new NativeSFCustomizedLinearSnapHelper(alignment, self.nativeInner);
+                        }
+                        _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
+                    } else if (_nativeLinearSnapHelper)
+                        _nativeLinearSnapHelper.attachToRecyclerView(null);
                 },
                 enumerable: true
             },
@@ -451,7 +469,7 @@ const GridView = extend(View)(
             return {};
         };
 
-        this.nativeInner.setAdapter(dataAdapter);
+        this.nativeInner.setAdapter(this.nativeDataAdapter);
 
         if (params) {
             for (var param in params) {
@@ -468,11 +486,11 @@ function assignSizeBasedOnDirection(holderViewLayout, viewType) {
     let isVertical = (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL);
     let onFullSpan = self._layoutManager.onFullSpan;
     let onItemLength = self._layoutManager.onItemLength;
-    
+
     if (!(self._layoutManager.onItemLength && spanSize) && !self._layoutManager.onFullSpan) {
         return;
     }
-    
+
     let fullSpanLenght = onFullSpan ? onFullSpan(viewType) : null;
     let itemLenght = onItemLength ? onItemLength(spanSize) : null;
     if (isVertical) {
@@ -506,7 +524,8 @@ GridView.Android = {};
 GridView.Android.SnapAlignment = {
     SNAPTO_START: 0,
     SNAPTO_CENTER: 1,
-    SNAPTO_END: 2
+    SNAPTO_END: 2,
+    SNAPTO_NONE: 3
 };
 Object.freeze(GridView.Android.SnapAlignment);
 GridView.iOS = {};

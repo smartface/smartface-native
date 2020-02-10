@@ -60,21 +60,83 @@ const ListView = extend(View)(
             },
             enumerable: true
         });
-
-        self.ios.onRowSwiped = function(swipeDirection, expansionSettings, index) {};
-
-        self.ios.swipeItem = function(title, color, padding, action) {
-            return __SF_MGSwipeButton.createMGSwipeButton(title, color.nativeObject, padding, action);
-        }
+		
+        Object.defineProperty(self, 'swipeEnabled', {
+            get: function() {
+                return self.nativeObject.rightToLeftSwipeEnabled && self.nativeObject.leftToRightSwipeEnabled;
+            },
+            set: function(value) {
+            	self.nativeObject.leftToRightSwipeEnabled = value;
+                self.nativeObject.rightToLeftSwipeEnabled = value;
+            },
+            enumerable: true
+        });
+        
+        // self.ios.onRowSwiped = function(swipeDirection, expansionSettings, index) {}; ///Deprecated on 4.1.4
 
         self.nativeObject.onRowSwiped = function(e) {
             var index;
             if (e.index != -1) {
                 index = e.index
             }
-            return self.ios.onRowSwiped(e.direction, e.expansionSettings, index);
-        }
+            
+        	if (self.ios.onRowSwiped) { //Deprecated on 4.1.4
+        		return self.ios.onRowSwiped(e.direction, e.expansionSettings, index);
+        	}
+        	
+        	if (self.onRowCanSwipe) {
+        		var returnOnRowCanSwipe = self.onRowCanSwipe(index);
+        		if (returnOnRowCanSwipe){
+        			if (returnOnRowCanSwipe.includes(e.direction)) {
+        				var object = {
+        					index : index,
+        					direction : e.direction,
+        					ios : {
+        						expansionSettings : e.expansionSettings
+        					}
+        				}
+        				return self.__onRowSwipeWrapper(object);
+        			}
+        		}
+        	}
 
+            return [];
+        }
+		
+		self.__onRowSwipeWrapper = function(object){
+			var items = self.onRowSwipe(object);
+		
+			var nativeItems = [];
+			for (var i = 0; i < items.length; i++) {
+				
+				var text = items[i].text;
+				var backgroundColor = items[i].backgroundColor;
+				var onPress = items[i].onPress;
+				
+				var padding = items[i].ios.padding
+				var isAutoHide = items[i].ios.isAutoHide;
+				
+				var icon = items[i].icon;
+				var item;
+				if (icon) {
+					item = __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(text,icon.nativeObject, backgroundColor.nativeObject, padding, onPress, isAutoHide);
+				}else{
+					item = __SF_MGSwipeButton.createMGSwipeButtonWithTitleColorPaddingJsActionIsAutoHide(text, backgroundColor.nativeObject, padding, onPress, isAutoHide);
+				}
+				
+				item.setTitleColor(items[i].textColor.nativeObject, 0);
+				item.titleLabel.font = items[i].font;
+				
+				if (icon && text) {
+					item.centerIconOverTextWithSpacing(items[i].ios.iconTextSpacing);
+				}
+				
+				nativeItems.push(item);
+			}
+			
+			return nativeItems;
+		};
+		
         self.stopRefresh = function() {
             self.refreshControl.endRefreshing();
         }
@@ -139,19 +201,19 @@ const ListView = extend(View)(
 
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e) {
-            if (e.cell.contentView.subviews.length > 0) {
-                self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
-            } else {
-                _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+            if (e.cell.contentView.subviews.length === 0) {
+                var listViewItem = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+                listViewItem.__nativeCell = e.cell;
+                _listItemArray[e.cell.uuid] = listViewItem;
 
                 // Bug ID : IOS-2750
                 (_listItemArray[e.cell.uuid].nativeObject.yoga.direction == 0) && self.nativeObject.superview && (_listItemArray[e.cell.uuid].nativeObject.yoga.direction = self.nativeObject.superview.yoga.resolvedDirection);
                 ///////
 
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
-                self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
             }
-            //  _listItemArray[e.uuid].applyLayout();
+            
+            self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
         }
 
         // var _cellIdentifier = "cell";
@@ -189,7 +251,11 @@ const ListView = extend(View)(
 
             return undefined
         }
-
+        
+        self.indexByListViewItem = function(listViewItem){
+            return self.nativeObject.indexPathForCell(listViewItem.__nativeCell).row;
+        };
+        
         self.nativeObject.didSelectRowAt = function(e) {
             self.onRowSelected(_listItemArray[e.uuid], e.index);
         };
@@ -230,6 +296,7 @@ const ListView = extend(View)(
         self.android = {};
         self.android.saveInstanceState = function() {};
         self.android.restoreInstanceState = function() {};
+        self.android.startDrag = function() {};
 
         self.setPullRefreshColors = function(param) {
             if (Object.prototype.toString.call(param) === '[object Array]') {
@@ -273,7 +340,80 @@ const ListView = extend(View)(
             },
             enumerable: true
         });
-
+ 
+        Object.defineProperty(self, 'rowMoveEnabled', {
+            get: function() {
+                return self.nativeObject.isEditing;
+            },
+            set: function(value) {
+                self.nativeObject.setEditing(value);
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowCanMove', {
+            set: function(value) {
+                if (value === undefined) {
+                    self.nativeObject.canMoveRowAt = undefined;
+                }else{
+                    self.nativeObject.canMoveRowAt = function(value,e){
+                    	return value(e.indexPath.row);
+                    }.bind(self,value);
+                }
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowMoved', {
+            set: function(value) {
+                self.nativeObject.moveRowAt = function(value,e){
+                	return value(e.sourceIndexPath.row,e.destinationIndexPath.row);
+                }.bind(self,value);
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onRowMove', {
+            set: function(value) {
+                if (value === undefined) {
+                    self.nativeObject.targetIndexPathForMoveFromRowAt = undefined;
+                }else{
+                    self.nativeObject.targetIndexPathForMoveFromRowAt = function(value,e){
+                        return value(e.sourceIndexPath.row,e.proposedDestinationIndexPath.row) ? e.proposedDestinationIndexPath.row : e.sourceIndexPath.row;
+                    }.bind(self,value);
+                }
+            },
+            enumerable: true
+        });
+        
+        self.ios.performBatchUpdates = function(updates, completion){
+        	self.nativeObject.js_performBatchUpdates(updates,completion);
+        };
+        
+        self.insertRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(0, object.positionStart, object.itemCount, animation);
+        };
+        
+        self.deleteRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(1, object.positionStart, object.itemCount, animation);
+        };
+        
+        self.refreshRowRange = function(object){
+            var animation =  ListView.iOS.RowAnimation.AUTOMATIC;
+            if (object.ios && object.ios.animation !== undefined) {
+                animation = object.ios.animation
+            }
+            self.nativeObject.actionRowRange(2, object.positionStart, object.itemCount, animation);
+        };
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
@@ -282,11 +422,37 @@ const ListView = extend(View)(
     }
 );
 
+ListView.SwipeItem = require('./swipeitem.js');;
+
+ListView.SwipeDirection = {};
+
+Object.defineProperties(ListView.SwipeDirection, {
+    'LEFTTORIGHT': {
+        value: 0,
+        configurable: false
+    },
+    'RIGHTTOLEFT': {
+        value: 1,
+        configurable: false
+    }
+});
+
 ListView.iOS = {};
 
-ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
+ListView.iOS.SwipeDirection = {}; //Deprecated on 4.1.4
 
-ListView.iOS.createSwipeItem = function(title, color, padding, action, isAutoHide) {
+Object.defineProperties(ListView.iOS.SwipeDirection, { //Deprecated on 4.1.4
+    'LEFTTORIGHT': {
+        value: 0,
+        configurable: false
+    },
+    'RIGHTTOLEFT': {
+        value: 1,
+        configurable: false
+    }
+});
+
+ListView.iOS.createSwipeItem = function(title, color, padding, action, isAutoHide) { //Deprecated on 4.1.4
     if (isAutoHide === undefined) {
         return __SF_MGSwipeButton.createMGSwipeButton(title, color.nativeObject, padding, action);
     } else {
@@ -294,7 +460,7 @@ ListView.iOS.createSwipeItem = function(title, color, padding, action, isAutoHid
     }
 }
 
-ListView.iOS.createSwipeItemWithIcon = function(title, icon, color, padding, action, isAutoHide) {
+ListView.iOS.createSwipeItemWithIcon = function(title, icon, color, padding, action, isAutoHide) { //Deprecated on 4.1.4
     if (!(icon instanceof Image)) {
         throw new TypeError('icon must be a UI.Image');
     }
@@ -308,6 +474,17 @@ ListView.iOS.createSwipeItemWithIcon = function(title, icon, color, padding, act
     } else {
         return __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(title, icon.nativeObject, color.nativeObject, padding, action, isAutoHide ? true : false);
     }
+}
+
+ListView.iOS.RowAnimation = {
+    FADE: 0,
+    RIGHT: 1,
+    LEFT: 2,
+    TOP: 3,
+    BOTTOM: 4,
+    NONE: 5,
+    MIDDLE: 6,
+    AUTOMATIC: 100
 }
 
 module.exports = ListView;

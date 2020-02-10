@@ -633,13 +633,25 @@ View.prototype.android.zIndex;
 View.prototype.ios.exclusiveTouch = false;
 
 /**
- * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
+ * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
+ * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
  *
  * @property {Boolean} [masksToBounds = true]
  * @ios
- * @since 1.1.15
+ * @android
+ * @since 4.1.4
  */
-View.prototype.ios.masksToBounds = 0;
+View.prototype.masksToBounds = true;
+
+/**
+ * Specified enums indicates that which corner of View will have radius.  
+ *
+ * @property {UI.View.Border[]} [maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT]]
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+View.prototype.maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT];
 
 /**
  * A Boolean value that determines whether subviews are confined to the bounds of the view.
@@ -708,6 +720,66 @@ View.prototype.ios.shadowColor = UI.Color.BLACK;
  * @since 3.1.3
  */
 View.ios.viewAppearanceSemanticContentAttribute;
+
+/** 
+ * @enum {Number} UI.View.Border
+ * @since 4.1.4
+ * @ios
+ * @android
+ * 
+ * Includes enums of View's borders.
+ */
+View.Border = {};
+
+
+/**
+ * View's top-left border.
+ *
+ * @property {Number} TOP_LEFT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+View.Border.TOP_LEFT =  0;
+
+/**
+ * View's top-right border.
+ *
+ * @property {Number} TOP_RIGHT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+View.Border.TOP_RIGHT =  2;
+
+/**
+ * View's bottom-right border.
+ *
+ * @property {Number} BOTTOM_RIGHT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+View.Border.BOTTOM_RIGHT =  4;
+
+/**
+ * View's bottom-left border.
+ *
+ * @property {Number} BOTTOM_LEFT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+View.Border.BOTTOM_LEFT = 8;
+
 
 /**
  * iOS Specific Properties.
