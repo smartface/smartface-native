@@ -14,11 +14,12 @@ const ListViewItem = extend(ViewHolder)(
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
-
             var layoutParams = new NativeYogaLayout.LayoutParams(-1, -2);
             this.nativeObject.setLayoutParams(layoutParams);
         }
-
+		
+		this.ios.expandSwipe = function(){};
+		
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

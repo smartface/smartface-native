@@ -6,6 +6,7 @@ const TypeUtil = require('../../util/type');
 const Font = require('../font');
 const AndroidConfig = require('../../util/Android/androidconfig');
 
+// TODO: [AND-3663] Create a java wrapper class for google map
 const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.MapClusterItem");
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');

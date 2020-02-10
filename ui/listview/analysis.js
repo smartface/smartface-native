@@ -67,38 +67,7 @@ const extend = require('js-base/core/extend');
  *         myListView.refreshData();
  *         myListView.stopRefresh();
  *     };
- *      
- *     myListView.ios.leftToRightSwipeEnabled = true;
- *     myListView.ios.rightToLeftSwipeEnabled = true;
- *       
- *     myListView.ios.onRowSwiped = function(direction,expansionSettings,index){
- *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
- *             //Expansion button index. Default value 0
- *             expansionSettings.buttonIndex = -1;
- *             
- *             var archiveSwipeItem = ListView.iOS.createSwipeItem("ARCHIVE",Color.GREEN,30,function(e){
- *                 console.log("Archive " + e.index);
- *             });
- *             
- *             return [archiveSwipeItem];
- *         } else if(direction == ListView.iOS.SwipeDirection.RIGHTTOLEFT){
- *             //Expansion button index. Default value 0
- *             expansionSettings.buttonIndex = 0;
- *             //Size proportional threshold to trigger the expansion button. Default value 1.5
- *             expansionSettings.threshold = 1; 
- *             
- *             var moreSwipeItem = ListView.iOS.createSwipeItem("MORE",Color.GRAY,30,function(e){
- *                 console.log("More "+ e.index);
- *             });
- *             
- *             var deleteSwipeItem = ListView.iOS.createSwipeItem("DELETE",Color.RED,30,function(e){
- *                 console.log("Delete "+ e.index);
- *             });
- *             
- *             return [deleteSwipeItem,moreSwipeItem];
- *         }
- *     }
- * 
+ *            
  *
  */
 
@@ -159,6 +128,23 @@ ListView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @since 1.1.18
  */
 ListView.prototype.onRowHeight = function onRowHeight(index) {};
+
+/**
+ * Animates multiple insert, delete and refresh operations as a group.
+ * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations. 
+ * Use the block passed in the updates parameter to specify all of the operations you want to perform.
+ * Deletes are processed before inserts in batch operations. 
+ * This means the indexes for the deletions are processed relative to the indexes of the table view’s state before the batch operation, and the indexes for the insertions are processed relative to the indexes of the state after all the deletions in the batch operation.
+ *
+ * @param {Function} updates
+ * @param {Function} completion A completion handler block to execute when all of the operations are finished.
+ * @param {Object} completion.e
+ * @param {Boolean} completion.e.finished
+ * @method performBatchUpdates
+ * @ios
+ * @since 4.1.4
+ */
+ListView.prototype.performBatchUpdates = function performBatchUpdates(updates, completion) {};
 
 /**
  * This event is called when a UI.ListViewItem created at specified row index.
@@ -278,8 +264,8 @@ ListView.prototype.refreshEnabled = true;
 ListView.prototype.rowMoveEnabled = true;
 
 /**
- * When {UI.ListView#rowMoveEnabled rowMoveEnabled} is true, default value is true but you may want to disable this 
- * if you want to start dragging on a custom view touch using {UI.ListView#startDrag startDrag}.
+ * When {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, default value is true but you may want to disable this 
+ * if you want to start dragging on a custom view touch using {@link UI.ListView#startDrag startDrag}.
  *
  * @property {Boolean} [longPressDragEnabled = false]
  * @android
@@ -352,7 +338,8 @@ ListView.prototype.startDrag = function(listViewItem) {};
 
 /**
  * This method notify the ListView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
- *
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
+ * 
  * @method deleteRowRange
  * @param {Object} params 
  * @param {Number} params.positionStart Position of start item
@@ -368,6 +355,7 @@ ListView.prototype.deleteRowRange = function(params) {};
 
 /**
  * This method notify the ListView  that given range of items inserted. Must set the itemCount value to a changed number before calling this function.
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
  *
  * @method insertRowRange
  * @param {Object} params 
@@ -384,7 +372,8 @@ ListView.prototype.insertRowRange = function(params) {};
 
 /**
  * This method notify the ListView  that given range of items changed.
- *
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.ListView#performBatchUpdates performBatchUpdates}.
+ * 
  * @method refreshRowRange
  * @param {Object} params 
  * @param {Number} params.positionStart Position of start item
@@ -517,21 +506,6 @@ ListView.prototype.onScrollStateChanged = function onScrollStateChanged() {}
 ListView.prototype.onPullRefresh = function onPullRefresh() {}
 
 /**
- * @deprecated 1.1.14
- * 
- * @param {String} title
- * @param {UI.Color} color
- * @param {Number} padding
- * @param {Function} action Callback for button click action
- * This method is create swipe item
- *
- * @method swipeItem
- * @ios
- * @since 0.1
- */
-ListView.prototype.ios.swipeItem = function(title, color, padding, action) {}
-
-/**
  * This event is called when user swipe listview row
  * 
  *     @example
@@ -575,6 +549,7 @@ ListView.prototype.ios.swipeItem = function(title, color, padding, action) {}
  * @param {Number} index
  * @ios
  * @since 0.1
+ * @deprecated 4.1.4  Use {@link UI.ListView#onRowSwipe} instead.
  * 
  */
 ListView.prototype.ios.onRowSwiped = function(swipeDirection, expansionSettings, index) {}
@@ -613,6 +588,19 @@ ListView.prototype.ios.leftToRightSwipeEnabled = false;
  */
 ListView.prototype.ios.rightToLeftSwipeEnabled = false;
 
+
+
+/**
+ * Enables the swiping behavior. For iOS, this property changes leftToRightSwipeEnabled and rightToLeftSwipeEnabled properties.
+ *
+ * @property {Boolean} [swipeEnabled = false]
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.swipeEnabled = false;
+
+
 /**
  * 
  * This method is create swipe item
@@ -627,6 +615,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * @param {Number} padding
  * @param {Function} action Callback for button click action
  * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
+ * @deprecated 4.1.4  Use {@link UI.ListView#SwipeItem} instead.
  * 
  * @method createSwipeItem
  * @static
@@ -652,6 +641,7 @@ ListView.createSwipeItem = function(title, color, padding, action, isAutoHide) {
  * @param {Number} padding
  * @param {Function} action Callback for button click action
  * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
+ * @deprecated 4.1.4  Use {@link UI.ListView#SwipeItem} instead.
  * 
  * @method createSwipeItemWithIcon
  * @static
@@ -787,6 +777,64 @@ ListView.prototype.onDetachedFromWindow = function() {};
  */
 ListView.prototype.onRowMoved = function(source, destination) {};
 
+/**
+ * This event is called when ListViewItem about to swipe. For iOS, this callback is triggered twice consecutively.
+ * 
+ *     @example 
+ *     myListView.onRowSwipe = function (e) {
+ *      if (e.direction == ListView.SwipeDirection.LEFTTORIGHT) {
+ *          e.ios.expansionSettings.buttonIndex = -1;
+ *          var archiveItem = new ListView.SwipeItem();
+ *          archiveItem.text = "ARCHIVE " + e.index;
+ *          archiveItem.backgroundColor = Color.GREEN;
+ *          archiveItem.textColor = Color.BLACK;
+ *          archiveItem.font = Font.create("Arial-ItalicMT", 8);
+ *          archiveItem.ios.padding = 40;
+ *          
+ *          archiveItem.ios.isAutoHide = false;
+ *          archiveItem.onPress = function (e) {
+ *              console.log("Archive : " + e.index);
+ *          };
+ *          return [archiveItem];
+ *      }
+ *      else if (e.direction == ListView.SwipeDirection.RIGHTTOLEFT) {
+ *          e.ios.expansionSettings.buttonIndex = 0;
+ *          e.ios.expansionSettings.threshold = 1.5;
+ *          var deleteItem = new ListView.SwipeItem();
+ *          deleteItem.text = "DELETE " + e.index;
+ *          deleteItem.backgroundColor = Color.RED;
+ *          deleteItem.textColor = Color.YELLOW;
+ *          deleteItem.icon = Image.createFromFile("images://smartface.png");
+ *          deleteItem.ios.iconTextSpacing = 10;
+ *          deleteItem.onPress = function (e) {
+ *              console.log("Delete Index : " + e.index);
+ *          };
+ *          var moreItem = new ListView.SwipeItem();
+ *          moreItem.text = "MORE";
+ *          moreItem.onPress = function (e) {
+ *              console.log("More : " + e.index);
+ *          };
+ *          return [deleteItem, moreItem];
+ *      }
+ *     }
+ * 
+ * @param {Object} params
+ * @param {Number} params.index
+ * @param {UI.ListView.SwipeDirection} params.direction
+ * @param {Object} params.ios iOS specific  
+ * @param {Object} params.ios.expansionSettings 
+ * @param {Number} params.ios.expansionSettings.buttonIndex Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+ * @param {Boolean} params.ios.expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+ * @param {Number} params.ios.expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+ * @event onRowSwipe
+ * @ios
+ * @android
+ * @since 4.1.4
+ * 
+ * 
+ */
+ListView.prototype.onRowSwipe = function(params) {};
+
 
 /**
  * This event is called when dragged item before reordered in the list view. 
@@ -803,7 +851,7 @@ ListView.prototype.onRowMove = function(source, destination) {};
 
 
 /**
- * By default all the items are draggable if {UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
+ * By default all the items are draggable if {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
  * by specific condition.
  * 
  * @param {Number} index
@@ -817,37 +865,244 @@ ListView.prototype.onRowCanMove = function(index) {};
 
 
 /**
+ * By default all the items are swipeable if {@link UI.ListView#swipeEnabled swipeEnabled} is true, to restrict some rows set this method and change return value
+ * by specific condition. For iOS, this callback is triggered twice consecutively.
+ * 
+ * @param {Number} index
+ * @event onRowCanSwipe 
+ * @return {UI.ListView.SwipeDirection[]} Return allowed swipe direction in array.
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.prototype.onRowCanSwipe = function(index) {};
+
+
+
+/**
+ * @class UI.ListView.SwipeItem
+ * @since 4.1.4
+ * 
+ * ListView.SwipeItem contains set of properties that define appearance of SwipeItem while drawing on swipe action.
+ */
+
+ListView.SwipeItem = function(params) {};
+
+
+
+/**
+ * Set/Get text of swipe item. 
+ *
+ * @property {String} [text = ""]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.text = "";
+
+
+/**
+ * Set/Get background color of swipe item. 
+ *
+ * @property {UI.Color} [backgroundColor = UI.Color.GRAY]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.backgroundColor = UI.Color.GRAY;
+
+
+/**
+ * Set/Get text color of swipe item. 
+ *
+ * @property {UI.Color} [textColor = UI.Color.WHITE ]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.textColor = UI.Color.WHITE;
+
+
+/**
+ * Set/Get icon of swipe item. 
+ *
+ * @property {UI.Image} [icon = undefined]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.icon = undefined;
+
+/**
+ * Set/Get font of swipe item. 
+ *
+ * @property {UI.Font} [font = UI.Font.Default]
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.font = UI.Font.Default;
+
+
+/**
+ * This event triggers after ListViewItem is swiped or clicked. To be aware, Android doesn't support click for now.
+ *
+ * @method
+ * @param {Object} params
+ * @param {Number} params.index
+ * @android
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.onPress = function(params) {};
+
+
+/**
+ * @property {Number} padding
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.padding = 10;
+
+
+/**
+ * The fraction that the user should move the View to be considered as swiped. The fraction is calculated with respect to ListView's bounds
+ * 
+ * @property {Number} [threshold = 0.5]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.threshold = 0.5;
+
+/**
+ * Gets/Sets the padding space on the top side of a SwipeItem.
+ *
+ * @property {Number} [paddingTop = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.paddingTop = 0;
+
+/**
+ * Gets/Sets the padding space on the bottom side of a SwipeItem.
+ *
+ * @property {Number} [paddingBottom = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.paddingBottom = 0;
+
+/**
+ * Gets/Sets the padding space on the left side of a SwipeItem.
+ *
+ * @property {Number} [paddingLeft = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.paddingLeft = 0;
+
+/**
+ * Gets/Sets the padding space on the right side of a SwipeItem.
+ *
+ * @property {Number} [paddingRight = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.paddingRight = 0;
+
+
+/**
+ * Sets/gets bottom-left corner radius of a SwipeItem.
+ *
+ * @property {Number} [borderBottomLeftRadius = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.borderBottomLeftRadius = 0;
+
+/**
+ * Sets/gets bottom-right corner radius of a SwipeItem.
+ *
+ * @property {Number} [borderBottomRightRadius = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.borderBottomRightRadius = 0;
+
+/**
+ * Sets/gets top-left corner radius of a SwipeItem.
+ *
+ * @property {Number} [borderTopLeftRadius = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.borderTopLeftRadius = 0;
+
+/**
+ * Sets/gets top-right corner radius of a SwipeItem.
+ *
+ * @property {Number} [borderTopRightRadius = 0]
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.borderTopRightRadius = 0;
+
+
+/**
+ * @property {Boolean} isAutoHide = true
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.isAutoHide = true;
+
+
+
+/**
+ * @property {Number} [iconTextSpacing = 3] Space between icon and text.
+ * @ios
+ * @since 4.1.4
+ */
+ListView.SwipeItem.prototype.iconTextSpacing = 3;
+
+/**
+ * Swipe Direction enums used to define allowed direction of swipe.
+ * @enum UI.ListView.SwipeDirection
+ * @readonly
+ * @ios
+ * @android
+ * @since 4.1.4
+ */
+ListView.SwipeDirection = {};
+
+/**
+ * Left direction, used for swipe control.
+ * 
+ * @property {Number} LEFTTORIGHT
+ * @ios
+ * @android
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.SwipeDirection.LEFTTORIGHT = 0;
+
+/**
+ * Right direction, used for swipe control.
+ * @property {Number} RIGHTTOLEFT
+ * @ios
+ * @android
+ * @static
+ * @readonly
+ * @since 4.1.4
+ */
+ListView.SwipeDirection.RIGHTTOLEFT = 1;
+
+
+/**
  * iOS Specific Properties.
  * @class UI.ListView.iOS
  */
 ListView.iOS = {};
-
-/**
- * Bar style that specifies the search bar’s appearance.
- * @enum UI.ListView.iOS.SwipeDirection
- * @readonly
- * @ios
- * @since 1.1.14
- */
-ListView.iOS.SwipeDirection = {};
-
-/**
- * @property {Number} LEFTTORIGHT
- * @ios
- * @static
- * @readonly
- * @since 1.1.14
- */
-ListView.iOS.SwipeDirection.LEFTTORIGHT = 0;
-
-/**
- * @property {Number} RIGHTTOLEFT
- * @ios
- * @static
- * @readonly
- * @since 1.1.14
- */
-ListView.iOS.SwipeDirection.RIGHTTOLEFT = 1;
 
 /**
  * The type of animation to use when rows are inserted or deleted or reloaded.

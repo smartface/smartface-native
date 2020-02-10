@@ -3,13 +3,13 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 
+// TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
 const NativeYogaFlexDirection = requireClass('com.facebook.yoga.YogaFlexDirection');
 const NativeYogaJustify = requireClass('com.facebook.yoga.YogaJustify');
 const NativeYogaAlign = requireClass('com.facebook.yoga.YogaAlign');
 const NativeYogaWrap = requireClass('com.facebook.yoga.YogaWrap');
-const NativeYogaOverflow = requireClass('com.facebook.yoga.YogaOverflow');
 const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
 
 const activity = AndroidConfig.activity;
