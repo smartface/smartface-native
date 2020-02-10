@@ -6,7 +6,7 @@ const UITableViewCellSelectionStyle = {
     blue: 1,
     gray: 2,
     default: 3 // @available(iOS 7.0, *)
-}
+};
 
 const ListViewItem = extend(ViewGroup)(
     function(_super, params) {
@@ -14,7 +14,7 @@ const ListViewItem = extend(ViewGroup)(
 
         var self = this;
 		
-		this.expandSwipe = function(direction){
+		this.ios.expandSwipe = function(direction){
 			self.__nativeCell.expandSwipeAnimated(direction,true);
 		}
 		

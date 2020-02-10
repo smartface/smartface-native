@@ -17,7 +17,9 @@ const ListViewItem = extend(ViewHolder)(
             var layoutParams = new NativeYogaLayout.LayoutParams(-1, -2);
             this.nativeObject.setLayoutParams(layoutParams);
         }
-
+		
+		this.ios.expandSwipe = function(){};
+		
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
