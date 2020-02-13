@@ -56,6 +56,16 @@ SearchView.prototype.textColor;
 SearchView.prototype.backgroundImage;
 
 /**
+ * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
+ * This property works only for iOS.
+ *
+ * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
+ * @ios
+ * @since 4.1.5
+ */
+SearchView.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
+
+/**
  * Gets/sets search icon image of SearchView.
  *
  * @property {UI.Image} iconImage
