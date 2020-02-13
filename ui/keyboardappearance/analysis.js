@@ -10,16 +10,17 @@
  *     const TextBox = require('sf-core/ui/textbox');
  *     const KeyboardAppearance = require('sf-core/ui/keyboardappearance');
  *
- *     var myTextBox = new TextBox({
- *         top: 50, left:50, width: 100, height: 80,
- *         hint: "your hint text",
- *         backgroundColor: Color.create("#67fcaa"),
- *         ios: {
- *             KeyboardAppearance: KeyboardAppearance.DARK
- *         }
- *     });
- *
- *     myPage.layout.addChild(myTextBox);
+ *	   var myTextBox = new TextBox({
+ *		top: 50,
+ *		left: 50,
+ *		width: 100,
+ *		height: 80,
+ *		hint: "your hint text",
+ *		backgroundColor: Color.create("#67fcaa")
+ *	   });
+ *	   myTextBox.ios.keyboardAppearance = KeyboardAppearance.DARK;
+ *	   
+ *	   this.layout.addChild(myTextBox);
  *
  */
 var KeyboardAppearance = {};
