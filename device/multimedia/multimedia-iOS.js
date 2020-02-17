@@ -109,6 +109,8 @@ Multimedia.pickFromGallery = function(e) {
 Multimedia.android = {};
 
 Multimedia.android.getAllGalleryItems = function() {};
+Multimedia.Android = {};
+Multimedia.Android.CropShape = {};
 
 Multimedia.Type = {};
 

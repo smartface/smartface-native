@@ -5,7 +5,6 @@ const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
 const NativeContentValues = requireClass("android.content.ContentValues");
 const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage');
 const NativeSFMultimedia = requireClass("io.smartface.android.sfcore.device.multimedia.SFMultimedia");
-const NativeUri = requireClass("android.net.Uri");
 
 const AndroidConfig = require('sf-core/util/Android/androidconfig');
 const RequestCodes = require("sf-core/util/Android/requestcodes");
@@ -28,20 +27,33 @@ const NativeAction = [
     NativeMediaStore.ACTION_VIDEO_CAPTURE
 ];
 
+const CropShape = {
+    RECTANGLE: 1,
+    OVAL: 2
+};
+
 function Multimedia() {}
 Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
 Multimedia.CropImage.RESULT_OK = -1;
 Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
 Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
 
-Object.defineProperty(Multimedia, 'Type', {
-    value: Type,
-    writable: false,
-    enumerable: true
+Object.defineProperties(Multimedia, {
+    'Type': {
+        value: Type,
+        writable: false,
+        enumerable: true
+    },
+    'ActionType': {
+        value: ActionType,
+        writable: false,
+        enumerable: true
+    }
 });
 
-Object.defineProperty(Multimedia, 'ActionType', {
-    value: ActionType,
+Multimedia.Android = {};
+Object.defineProperty(Multimedia.Android, 'CropShape', {
+    value: CropShape,
     writable: false,
     enumerable: true
 });
@@ -81,11 +93,9 @@ Multimedia.startCamera = function(params = {}) {
         }
         var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, imageFileUri);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
-    }
-    else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+    } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
-    }
-    else {
+    } else {
         takePictureIntent = new NativeIntent(NativeAction[_action]);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
@@ -102,8 +112,7 @@ function startCameraWithExtraField() {
         if (_action === ActionType.IMAGE_CAPTURE) {
             contentUri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             _fileURI = contentResolver.insert(contentUri, contentValues);
-        }
-        else if (_action === ActionType.VIDEO_CAPTURE) {
+        } else if (_action === ActionType.VIDEO_CAPTURE) {
             contentUri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             _fileURI = contentResolver.insert(contentUri, contentValues);
         }
@@ -148,8 +157,7 @@ Multimedia.android.getAllGalleryItems = function(params = {}) {
                 type: params.type
             });
             result.videos = videos;
-        }
-        else if (params.type === Multimedia.Type.IMAGE) {
+        } else if (params.type === Multimedia.Type.IMAGE) {
             uri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             var images = getAllMediaFromUri({
                 uri: uri,
@@ -157,15 +165,15 @@ Multimedia.android.getAllGalleryItems = function(params = {}) {
                 type: params.type
             });
             result.images = images;
-        }
-        else {
+        } else {
             throw new Error("Unexpected value " + params.type);
         }
 
         params.onSuccess && params.onSuccess(result);
-    }
-    catch (err) {
-        params.onFailure && params.onFailure({ message: err });
+    } catch (err) {
+        params.onFailure && params.onFailure({
+            message: err
+        });
     }
 
 };
@@ -173,11 +181,9 @@ Multimedia.android.getAllGalleryItems = function(params = {}) {
 Multimedia.onActivityResult = function(requestCode, resultCode, data) {
     if (requestCode === Multimedia.CAMERA_REQUEST) {
         getCameraData(resultCode, data);
-    }
-    else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
+    } else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
         pickFromGallery(resultCode, data);
-    }
-    else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+    } else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
         cropImage(resultCode, data);
     }
 };
@@ -191,66 +197,77 @@ function cropImage(resultCode, data) {
             _captureParams.onSuccess && _captureParams.onSuccess({
                 image: croppedImage
             });
-        }
-        else if (_pickParams.allowsEditing) {
+        } else if (_pickParams.allowsEditing) {
             _pickParams.onSuccess && _pickParams.onSuccess({
                 image: croppedImage
             });
         }
-    }
-    else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+    } else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
         throw Error('Unexpected error occured while cropping image');
     }
 }
 
-function startCropActivity(uri, nativeFragment, aspectRatio = {}) {
+function startCropActivity(uri, nativeFragment, cropShape, aspectRatio = {}) {
     if (!uri) return;
-    let {x, y} = aspectRatio;
+    let {
+        x,
+        y
+    } = aspectRatio;
     if (TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y)) {
-        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, x, y);
-    }
-    else {
-        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment);
+        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, cropShape, x, y);
+    } else {
+        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, cropShape);
     }
 }
 
 function pickFromGallery(resultCode, data) {
-    var success = true;
+    const {
+        onFailure,
+        onSuccess,
+        onCancel,
+        type,
+        allowsEditing,
+        page,
+        aspectRatio,
+        android: {
+            cropShape: cropShape = CropShape.RECTANGLE
+        } = {}
+    } = _pickParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             var uri = data.getData();
             var realPath = getRealPathFromURI(uri);
-        }
-        catch (err) {
-            success = false;
-            _pickParams.onFailure && _pickParams.onFailure({ message: err });
+        } catch (err) {
+            onFailure && onFailure({
+                message: err
+            });
+            return;
         }
 
-        if (success && _pickParams.onSuccess) {
-            if (_pickParams.type === Multimedia.Type.IMAGE) {
-                if (!_pickParams.allowsEditing) {
+        if (onSuccess) {
+            if (type === Multimedia.Type.IMAGE) {
+                if (!allowsEditing) {
                     var inputStream = activity.getContentResolver().openInputStream(uri);
                     var bitmap = NativeBitmapFactory.decodeStream(inputStream);
                     var image = new Image({
                         bitmap: bitmap
                     });
-                    _pickParams.onSuccess({
+                    onSuccess({
                         image: image
                     });
+                } else {
+                    startCropActivity(uri, page.nativeObject, cropShape, aspectRatio);
                 }
-                else {
-                    startCropActivity(uri, _pickParams.page.nativeObject, _pickParams.aspectRatio);
-                }
-            }
-            else {
-                _pickParams.onSuccess({
-                    video: new File({ path: realPath })
+            } else {
+                onSuccess({
+                    video: new File({
+                        path: realPath
+                    })
                 });
             }
         }
-    }
-    else {
-        _pickParams.onCancel && _pickParams.onCancel();
+    } else {
+        onCancel && onCancel();
     }
 }
 
@@ -263,8 +280,7 @@ function getRealPathFromURI(uri) {
 
     if (cursor == null) {
         return uri.getPath();
-    }
-    else {
+    } else {
         cursor.moveToFirst();
         var idx = cursor.getColumnIndex(projection[0]);
         var realPath = cursor.getString(idx);
@@ -274,45 +290,56 @@ function getRealPathFromURI(uri) {
 }
 
 function getCameraData(resultCode, data) {
+    const {
+        onSuccess,
+        onFailure,
+        page,
+        aspectRatio,
+        onCancel,
+        android: {
+            cropShape: cropShape = CropShape.RECTANGLE
+        } = {}
+    } = _captureParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             if (_action !== ActionType.IMAGE_CAPTURE) {
                 var uri;
                 if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                     uri = _fileURI;
-                }
-                else {
+                } else {
                     uri = data.getData();
                 }
             }
-        }
-        catch (err) {
+        } catch (err) {
             var failure = true;
-            _captureParams.onFailure && _captureParams.onFailure({ message: err });
+            onFailure && onFailure({
+                message: err
+            });
         }
 
-        if (!failure && _captureParams.onSuccess) {
+        if (!failure && onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 if (imageFileUri != null) {
-                    startCropActivity(imageFileUri, _captureParams.page.nativeObject, _captureParams.aspectRatio);
-                }
-                else {
+                    startCropActivity(imageFileUri, page.nativeObject, cropShape, aspectRatio);
+                } else {
                     var bitmap = data.getExtras().get("data");
-                    _captureParams.onSuccess({
-                        image: new Image({ bitmap: bitmap })
+                    onSuccess({
+                        image: new Image({
+                            bitmap: bitmap
+                        })
                     });
                 }
-            }
-            else {
+            } else {
                 var realPath = getRealPathFromURI(uri);
-                _captureParams.onSuccess({
-                    video: new File({ path: realPath })
+                onSuccess({
+                    video: new File({
+                        path: realPath
+                    })
                 });
             }
         }
-    }
-    else {
-        _captureParams.onCancel && _captureParams.onCancel();
+    } else {
+        onCancel && onCancel();
     }
 }
 
@@ -325,9 +352,10 @@ function getAllMediaFromUri(params) {
             var path = cursor.getString(0);
             if (params.type === Multimedia.Type.IMAGE) {
                 files.push(new Image.createFromFile(path));
-            }
-            else {
-                files.push(new File({ path: path }));
+            } else {
+                files.push(new File({
+                    path: path
+                }));
             }
         }
         cursor.close();
