@@ -157,8 +157,13 @@ const ListView = extend(View)(
             enumerable: true
         });
 
+		var _onPullRefresh = undefined;
         Object.defineProperty(self, 'onPullRefresh', {
+        	get: function() {
+                return _onPullRefresh;
+            },
             set: function(value) {
+            	_onPullRefresh = value;
                 self.refreshControl.addJSTarget(value.bind(this), UIControlEvents.valueChanged);
             },
             enumerable: true
@@ -335,6 +340,9 @@ const ListView = extend(View)(
         });
 
         Object.defineProperty(self, 'onScroll', {
+        	get: function() {
+                return self.nativeObject.didScroll;
+            },
             set: function(value) {
                 self.nativeObject.didScroll = value;
             },
@@ -351,8 +359,13 @@ const ListView = extend(View)(
             enumerable: true
         });
         
+        var _onRowCanMove = undefined;
         Object.defineProperty(self, 'onRowCanMove', {
+        	get: function() {
+                return _onRowCanMove;
+            },
             set: function(value) {
+            	_onRowCanMove = value;
                 if (value === undefined) {
                     self.nativeObject.canMoveRowAt = undefined;
                 }else{
@@ -364,8 +377,13 @@ const ListView = extend(View)(
             enumerable: true
         });
         
+        var _onRowMoved = undefined;
         Object.defineProperty(self, 'onRowMoved', {
+        	get: function() {
+                return _onRowMoved;
+            },
             set: function(value) {
+            	_onRowMoved = value;
                 self.nativeObject.moveRowAt = function(value,e){
                 	return value(e.sourceIndexPath.row,e.destinationIndexPath.row);
                 }.bind(self,value);
@@ -373,8 +391,13 @@ const ListView = extend(View)(
             enumerable: true
         });
         
+        var _onRowMove = undefined;
         Object.defineProperty(self, 'onRowMove', {
+        	get: function() {
+                return _onRowMove;
+            },
             set: function(value) {
+            	_onRowMove = value;
                 if (value === undefined) {
                     self.nativeObject.targetIndexPathForMoveFromRowAt = undefined;
                 }else{
