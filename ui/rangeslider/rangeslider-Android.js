@@ -13,7 +13,7 @@ const RangeSlider = extend(View)(
         _super(this);
 
         let _android = {}, _snapStepSize = 1,
-            _minValue = 0, _maxValue = 5, _onValueChange, isTrackRounded = true, _rangeEnabled = true;
+            _minValue = 0, _maxValue = 5, _onValueChange, _isTrackRounded = true, _rangeEnabled = true, _maxValueChanged = false;
         Object.defineProperties(this, {
             value: {
                 get: () => this.rangeEnabled  ? [this.nativeObject.getLeftPinValue(), this.nativeObject.getRightPinValue()] : [this.nativeObject.getRightPinValue()],
@@ -43,17 +43,21 @@ const RangeSlider = extend(View)(
             },
             minValue: {
                 get: () => _minValue,
-                set: (value) => {
+                set: (value) => { 
                     _minValue = value;
+                    //This workaround is imp. to prevent min > max(default) exeption for first assign.
+                    if(!_maxValueChanged)
+                      this.nativeObject.setTickEnd(_minValue + 5);
                     this.nativeObject.setTickStart(_minValue);
                 },
                 enumerable: true
             },
             maxValue: {
-                get: () => _maxValue,
+                get: () => _maxValue, 
                 set: (value) => {
                     _maxValue = value;
                     this.nativeObject.setTickEnd(_maxValue);
+                    _maxValueChanged = true;
                 },
                 enumerable: true
             },
