@@ -170,11 +170,23 @@ const RangeSlider = extend(View)(
 			enumerable: true
 		});
 
-		if (params) {
+		// Assign parameters given in constructor
+		params && (function(params) {
 			for (var param in params) {
-				this[param] = params[param];
+				if (param === "ios" || param === "android") {
+					setOSSpecificParams.call(this, params[param], param);
+				}
+				else {
+					this[param] = params[param];
+				}
 			}
-		}
+
+			function setOSSpecificParams(params, key) {
+				for (var param in params) {
+					this[key][param] = params[param];
+				}
+			}
+		}.bind(this)(params));
 	});
 
 module.exports = RangeSlider;
