@@ -61,6 +61,8 @@ function Multimedia() {}
  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
  * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+ * @param {Object} params.android Android specific argument
+ * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
@@ -124,6 +126,8 @@ Multimedia.startCamera = function(e) {};
  * @param {Object} params.aspectRatio This property affects only on android.
  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
+ * @param {Object} params.android Android specific argument
+ * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
@@ -364,6 +368,49 @@ Multimedia.cameraAuthorizationStatus.Denied = 2;
  * @since 2.0.11
  */
 Multimedia.cameraAuthorizationStatus.Authorized = 3;
+
+
+
+/**
+ * Android Specific Properties.
+ * @class Device.Multimedia.Android
+ * @since 4.1.5
+ */
+Multimedia.Android = {};
+
+
+/** 
+ * These enums used to specify shape of crop window.
+ * 
+ * @enum {Number} Device.Multimedia.Android.CropShape
+ * @since 4.1.5
+ * @android
+ */
+Multimedia.Android.CropShape = {};
+
+
+/**
+ * Specifies that crop window shape is oval.
+ * 
+ * @property {Number} OVAL
+ * @static
+ * @android
+ * @readonly
+ * @since 4.1.5
+ */
+Multimedia.Android.CropShape.OVAL = 2;
+
+
+/**
+ * Specifies that crop window shape is rectangle.
+ * 
+ * @property {Number} RECTANGLE
+ * @static
+ * @android
+ * @readonly
+ * @since 4.1.5
+ */
+Multimedia.Android.CropShape.RECTANGLE = 1;
 
 /**
  * iOS Specific Properties.

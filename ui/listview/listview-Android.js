@@ -125,7 +125,7 @@ const ListView = extend(View)(
             _onScrollListener = undefined,
             _scrollEnabled, isScrollListenerAdded = false,
             _rowMoveEnabled = false,
-            _longPressDragEnabled = false;
+            _longPressDragEnabled = false, _swipeEnabled = false;
         Object.defineProperties(this, {
             'layoutManager': {
                 get: function() {
@@ -202,8 +202,8 @@ const ListView = extend(View)(
             'rowMoveEnabled': {
                 get: () => _rowMoveEnabled,
                 set: (value) => {
-                    rowMoveEnabled = value;
-                    getItemTouchHelper().sfItemTouchHelperCallback.setEnableDragAndDrop(rowMoveEnabled);
+                    _rowMoveEnabled = value;
+                    getItemTouchHelper().sfItemTouchHelperCallback.setEnableDragAndDrop(_rowMoveEnabled);
                 },
                 enumerable: true
             },
@@ -548,7 +548,7 @@ const ListView = extend(View)(
                     },
                     onRowCanSwipe: function(index) {
                         let result = self.onRowCanSwipe && self.onRowCanSwipe(index);
-                        return (!result || result.length < 1) ? ListView.SwipeDirection.LEFTTORIGHT | ListView.SwipeDirection.RIGHTTOLEFT : result.reduce((acc, cValue) => acc | cValue, 0);
+                        return (!result) ? ListView.SwipeDirection.LEFTTORIGHT | ListView.SwipeDirection.RIGHTTOLEFT : result.reduce((acc, cValue) => acc | cValue, 0);
                     }
                 });
                 nItemTouchHelper = new SFItemTouchHelper(sfItemTouchHelperCallback);
