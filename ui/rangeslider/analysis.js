@@ -17,9 +17,9 @@
  *          trackColor: Color.GREEN,
  *          outerTrackColor: Color.BLACK,
  *          trackWeight: 20,
- *          snapStepSize : 2,
  *          minValue: 0,
  *          maxValue: 100,
+ *          snapStepSize : 2,
  *          onValueChange: (value) => {
  *              console.log("Value : " + value);
  *              }
