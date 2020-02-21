@@ -140,6 +140,7 @@ function Page(params) {
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
             const Contacts = require("sf-core/device/contacts");
+            const RequestCodes = require("sf-core/util/Android/requestcodes");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
@@ -148,8 +149,9 @@ function Page(params) {
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
             // todo: Define a method to register request and its callback 
-            // for better performance. Remove if statement.
-            if (Contacts.PICK_REQUEST_CODE === requestCode) {
+            // for better performance. Remove if statement. 
+            // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
+            if (RequestCodes.Contacts.PICK_REQUEST_CODE === requestCode || RequestCodes.Contacts.PICKFROM_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);

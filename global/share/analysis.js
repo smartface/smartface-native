@@ -82,13 +82,21 @@ Share.shareFile = function(file, page, blacklist) {};
  *     var file = new File({
  *         path: 'assets://yourFile.pdf'
  *     });
+ *     let contact = new Contacts.Contact({
+ *          firstName: 'Smartface',
+ *          urlAddresses: ["https://smartface.io"],
+ *          lastName: 'Team',
+ *          emailAddresses: ["info@smartface.io"],
+ *          phoneNumbers: ["+16506173265"],
+ *          addresses: ["3790 El Camino Real # 1022 Palo Alto CA, 94306,United States"]
+ *      });
  *     var image = Image.createFromFile("images://smartface.png");
  *     var text = "Hello from Smartface";
- *     Share.share({ items: [text, file, image] , page: myPage, blacklist: [Share.ios.Twitter, Share.ios.Facebook]});
+ *     Share.share({ items: [text, file, image, contact] , page: myPage, blacklist: [Share.ios.Twitter, Share.ios.Facebook]});
  *
  * @method share
  * @param {Object} params
- * @param {Array} params.items 
+ * @param {Array} params.items types of item; {@link UI.Image Image}, {@link IO.File File} &  {@link Device.Contacts.Contact Contact}
  * @param {UI.Page} params.page
  * @param {Array} [params.blacklist]
  * @ios

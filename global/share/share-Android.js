@@ -9,7 +9,7 @@ const Authority = NativeBuildConfig.APPLICATION_ID + ".provider";
 const Share = {};
 Object.defineProperties(Share, {
     'shareText': {
-        value: function(text, page, blacklist) {
+        value: function (text, page, blacklist) {
             shareContent({
                 type: "text/plain",
                 extra: text,
@@ -19,7 +19,7 @@ Object.defineProperties(Share, {
         }
     },
     'shareImage': {
-        value: function(image, page, blacklist) {
+        value: function (image, page, blacklist) {
             var imageFile = writeImageToFile(image);
             let uri = getUriFromFile(imageFile);
 
@@ -32,7 +32,7 @@ Object.defineProperties(Share, {
         }
     },
     'shareFile': {
-        value: function(file, page, blacklist) {
+        value: function (file, page, blacklist) {
             let uri = getUriFromFile(file.nativeObject);
 
             shareContent({
@@ -44,9 +44,10 @@ Object.defineProperties(Share, {
         }
     },
     'share': {
-        value: function(params) {
+        value: function (params) {
             const File = require("sf-core/io/file");
             const Image = require("sf-core/ui/image");
+            const Contacts = require("../../device/contacts");
             const NativeArrayList = requireClass("java.util.ArrayList");
 
 
@@ -59,16 +60,19 @@ Object.defineProperties(Share, {
                 parcelabels: new NativeArrayList()
             };
             let addContentItem = addContent.bind(contentSharing);
-
+            let count = 0;
             itemList.forEach((item) => {
                 if (item instanceof File) {
                     addContentItem(item.nativeObject, "application/*");
-                } else if (typeof(item) === 'string') {
+                } else if (typeof (item) === 'string') {
                     shareIntent.putExtra(NativeIntent.EXTRA_TEXT, item);
                     contentSharing.mimeTypes.push("text/plain");
                 } else if (item instanceof Image) {
                     var imageFile = writeImageToFile(item)
                     addContentItem(imageFile, "image/*");
+                } else if (item.constructor === Contacts.Contact) {
+                    let file = writeContactFile(item, ++count);
+                    addContentItem(file.nativeObject, "application/*");
                 }
             });
             !(contentSharing.parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, contentSharing.parcelabels);
@@ -96,6 +100,32 @@ function writeImageToFile(image) {
     fileOutStream.close();
 
     return tempFile;
+}
+
+function writeContactFile(contact, fileCount) {
+    const FileStream = require('../../io/filestream');
+    const File = require('../../io/file');
+    const NativeFile = requireClass('java.io.File');
+
+    const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
+    let file = new File({ path: AndroidConfig.activity.getExternalFilesDir(null) + `/readytosharecontact-${fileCount}.vcf` });
+    if (!file.exists)
+        file.createFile(true);
+    let fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
+    fileStream.write("BEGIN:VCARD\r\n");
+    fileStream.write("VERSION:3.0\r\n");
+    fileStream.write(`FN:${firstName}\r\n`);
+    fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
+    phoneNumbers.forEach(phoneNumber => fileStream.write(`TEL;type=WORK,VOICE:${phoneNumber}\r\n`));
+    emailAddresses.forEach(emailAddress => fileStream.write(`EMAIL;type=PREF,INTERNET:${emailAddress}\r\n`));
+    let count = 0;
+    addresses.forEach(address => fileStream.write(`item${++count}.ADR;type=WORK:;;${address}\r\n`));
+    urlAddresses.forEach(urlAddress => fileStream.write(`item${++count}.URL;type=pref:${urlAddress}\r\n`));
+    fileStream.write("END:VCARD\r\n");
+    fileStream.nativeObject.flush();
+    fileStream.close();
+
+    return file;
 }
 
 function getUriFromFile(fileNativeObject) {
