@@ -18,6 +18,7 @@ Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE = 204;
 
 const Contacts = {};
 Contacts.PICK_REQUEST_CODE = 1001;
+Contacts.PICKFROM_REQUEST_CODE = 1002;
 
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 const Location = {};

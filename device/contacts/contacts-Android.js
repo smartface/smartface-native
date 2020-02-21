@@ -1,7 +1,9 @@
+/* global requireClass toJSArray array require module*/
 const NativeContactsContract = requireClass("android.provider.ContactsContract");
 const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
 const NativeIntent = requireClass("android.content.Intent");
+const SFContactUtil = requireClass("io.smartface.android.sfcore.device.contacts.SFContactUtil");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const RequestCodes = require("sf-core/util/Android/requestcodes");
 
@@ -9,7 +11,6 @@ var contentProviderOperation;
 var uri;
 const activity = AndroidConfig.activity;
 var RAW_CONTACT_ID = "raw_contact_id"; // ContactsContract.DataColumns.RAW_CONTACT_ID;
-var CONTACT_ID = "contact_id"; // ContactsContract.RawContactsColumns.CONTACT_ID
 var MIMETYPE = "mimetype"; // ContactsContract.DataColumns.MIMETYPE;
 var CONTENT_ITEM_TYPE = "vnd.android.cursor.item/name"; // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 var DISPLAY_NAME = "data1"; // ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
@@ -26,17 +27,91 @@ var _onFailure;
 
 const CommonColumns_DATA = "data1"; // ContactsContract.CommonDataKinds.CommonColumns.DATA
 
-function Contacts() {}
-Contacts.PICK_REQUEST_CODE = RequestCodes.Contacts.PICK_REQUEST_CODE;
+function Contacts() { }
 
-Contacts.add = function(params) {
-    var contact = {};
+Contacts.Contact = function (params = {}) {
+
+    let _namePrefix, _firstName, _lastName,
+        _middleName, _nameSuffix, _phoneNumbers = [],
+        _urlAddresses = [], _emailAddresses = [], _addresses = [];
+    Object.defineProperties(this, {
+        namePrefix: {
+            get: () => _namePrefix,
+            set: (value) => {
+                _namePrefix = value;
+            },
+            enumerable: true
+        },
+        firstName: {
+            get: () => _firstName,
+            set: (value) => {
+                _firstName = value;
+            },
+            enumerable: true
+        },
+        lastName: {
+            get: () => _lastName,
+            set: (value) => {
+                _lastName = value;
+            },
+            enumerable: true
+        },
+        middleName: {
+            get: () => _middleName,
+            set: (value) => {
+                _middleName = value;
+            },
+            enumerable: true
+        },
+        nameSuffix: {
+            get: () => _nameSuffix,
+            set: (value) => {
+                _nameSuffix = value;
+            },
+            enumerable: true
+        },
+        phoneNumbers: {
+            get: () => _phoneNumbers,
+            set: (value) => {
+                _phoneNumbers = value;
+            },
+            enumerable: true
+        },
+        urlAddresses: {
+            get: () => _urlAddresses,
+            set: (value) => {
+                _urlAddresses = value;
+            },
+            enumerable: true
+        },
+        emailAddresses: {
+            get: () => _emailAddresses,
+            set: (value) => {
+                _emailAddresses = value;
+            },
+            enumerable: true
+        },
+        addresses: {
+            get: () => _addresses,
+            set: (value) => {
+                _addresses = value;
+            },
+            enumerable: true
+        }
+    });
+
     if (params) {
-        contact = params.contact;
-        _onSuccess = params.onSuccess;
-        _onFailure = params.onFailure;
+        for (var param in params) {
+            this[param] = params[param];
+        }
     }
-    var contentResolver = activity.getContentResolver();
+};
+
+Contacts.add = function (params = {}) {
+    const { contact, onSuccess, onFailure } = params;
+    _onSuccess = onSuccess;
+    _onFailure = onFailure;
+    let contentResolver = activity.getContentResolver();
 
     try {
         contentProviderOperation = new NativeArrayList();
@@ -51,22 +126,39 @@ Contacts.add = function(params) {
         contentProviderOperation.add(content);
 
         uri = NativeContactsContract.Data.CONTENT_URI;
-        addContactName(contact.displayName);
-        addContactNumber(contact.phoneNumber);
-        addContactEmail(contact.email);
-        addContactUrl(contact.urlAddress);
-        addContactAddress(contact.address);
+
+        let phoneNumbers, urlAddresses, emailAddresses, addresses;
+        if (contact.constructor === Contacts.Contact) {
+            phoneNumbers = contact.phoneNumbers;
+            urlAddresses = contact.urlAddresses;
+            emailAddresses = contact.emailAddresses;
+            addresses = contact.addresses;
+            addContactStructureName(contact);
+            // else check is deprecated
+        } else {
+            phoneNumbers = [contact.phoneNumber];
+            urlAddresses = [contact.urlAddress];
+            emailAddresses = [contact.email];
+            addresses = [contact.address];
+            addContactName(contact.displayName);
+        }
+        phoneNumbers.forEach(_ => addContactNumber(_));
+        urlAddresses.forEach(_ => addContactUrl(_));
+        emailAddresses.forEach(_ => addContactEmail(_));
+        addresses.forEach(_ => addContactAddress(_));
 
         const AUTHORITY = "com.android.contacts"; // ContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
-        
+
         _onSuccess && _onSuccess();
     } catch (error) {
         _onFailure && _onFailure(error);
     }
 };
 
-Contacts.pick = function(params) {
+
+// Deprecated
+Contacts.pick = function (params) {
     if (!(params && (params.page instanceof require("../../ui/page")))) {
         throw new TypeError('Page parameter required');
     }
@@ -79,35 +171,45 @@ Contacts.pick = function(params) {
         var intent = new NativeIntent(actionPick, uri);
         intent.setType(Phone_CONTENT_TYPE); //should filter only contacts with phone numbers
 
-        params.page.nativeObject.startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
+        params.page.nativeObject.startActivityForResult(intent, RequestCodes.Contacts.PICK_REQUEST_CODE);
     } catch (error) {
         _onFailure && _onFailure(error);
     }
 };
 
-Contacts.onActivityResult = function(requestCode, resultCode, data) {
+Contacts.onActivityResult = function (requestCode, resultCode, data) {
     if (!data) {
         if (typeof _onFailure === "function") {
             _onFailure(new Error("User cancelled Contacts operation"));
         }
         return;
     }
-
-    var contactUri = data.getData();
-    var contact = {};
+    let contactUri = data.getData();
     try {
-        contact.phoneNumber = getContactPhoneNumber(contactUri);
-        contact.displayName = getContactDisplayName(contactUri);
-
-        if (_onSuccess)
-            _onSuccess(contact);
+        let contact = {};
+        //First if check is deprecated. Kept to provide old usage.
+        if (requestCode === RequestCodes.Contacts.PICK_REQUEST_CODE) {
+            contact.phoneNumber = getContactPhoneNumber(contactUri);
+            contact.displayName = getContactDisplayName(contactUri);
+        } else {
+            let contactId = SFContactUtil.getContactId(contactUri);
+            let structuredNames = getStructuredNames({ id: contactId });
+            let params = Object.assign({
+                phoneNumbers: toJSArray(SFContactUtil.getPhoneNumbers(contactId)),
+                emailAddresses: toJSArray(SFContactUtil.getEmailAddresses(contactId)),
+                urlAddresses: toJSArray(SFContactUtil.getUrlAddresses(contactId)),
+                addresses: toJSArray(SFContactUtil.getAddresses(contactId)),
+            }, structuredNames);
+            contact = new Contacts.Contact(params);
+        }
+        _onSuccess && _onSuccess(contact);
     } catch (error) {
-        if (_onFailure)
-            _onFailure(error);
+        _onFailure && _onFailure(error);
     }
 };
 
-Contacts.getAll = function(params = {}) {
+// Deprecated
+Contacts.getAll = function (params = {}) {
     var success = true;
     try {
         var contentResolver = AndroidConfig.activity.getContentResolver();
@@ -131,13 +233,13 @@ Contacts.getAll = function(params = {}) {
                     columnTag: CommonColumns_DATA,
                     uri: uri
                 };
-                
+
                 index = cursor.getColumnIndex(projection[1]);
                 contacts.push({
                     displayName: cursor.getString(index),
                     phoneNumber: getPhonesById(queryParams),
                     emailAddresses: getEmailById(queryParams),
-                    address: getAddressById(queryParams)
+                    address: getAddressById(queryParams)[0]
                 });
             } while (cursor.moveToNext());
         }
@@ -151,33 +253,73 @@ Contacts.getAll = function(params = {}) {
     }
 };
 
-function getContactDataById(params) {
-    var cursor = params.contentResolver.query(
-        params.uri,
-        array(params.projection, "java.lang.String"),
-        CONTACT_ID + " = ?",
-        array([params.id], "java.lang.String"), null
-    );
-
-    var data = [];
-    if (cursor !== null && cursor.getCount() > 0) {
-        cursor.moveToFirst();
-        do {
-            var columnIndex = cursor.getColumnIndex(params.columnTag);
-            if (columnIndex >= 0) {
-                data.push(cursor.getString(columnIndex));
-                return data;
-            }
-        } while (cursor.moveToNext());
-        cursor.close();
+Contacts.fetchAll = function (params = {}) {
+    const { onFailure, onSuccess } = params;
+    let contacts = [];
+    try {
+        let contentResolver = AndroidConfig.activity.getContentResolver();
+        let projection = [
+            "_id", // BaseColumns._ID
+        ];
+        let uri = NativeContactsContract.Contacts.CONTENT_URI;
+        let cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
+        if (cursor === null)
+            throw new Error("query returns null.");
+        if (cursor.moveToFirst()) {
+            do {
+                let index = cursor.getColumnIndex(projection[0]);
+                let queryParams = {
+                    id: cursor.getString(index),
+                    projection: [CommonColumns_DATA],
+                    contentResolver: contentResolver,
+                    columnTag: CommonColumns_DATA,
+                    uri: uri
+                };
+                let structuredNamesObj = getStructuredNames(queryParams);
+                let params = Object.assign({
+                    urlAddresses: getUrlAddressById(queryParams),
+                    phoneNumbers: getPhonesById(queryParams),
+                    emailAddresses: getEmailById(queryParams),
+                    addresses: getAddressById(queryParams)
+                }, structuredNamesObj)
+                let contact = new Contacts.Contact(params);
+                contacts.push(contact);
+            } while (cursor.moveToNext());
+            onSuccess && onSuccess(contacts);
+        }
+    } catch (error) {
+        onFailure && onFailure(error);
     }
+};
 
-    return data;
+Contacts.pickContact = function (params = {}) {
+    const { onSuccess, onFailure, page } = params;
+    if (!(page instanceof require("../../ui/page")))
+        throw new TypeError('Page parameter required');
+
+    _onSuccess = onSuccess;
+    _onFailure = onFailure;
+    try {
+        SFContactUtil.pickContact(page.nativeObject, RequestCodes.Contacts.PICKFROM_REQUEST_CODE);
+    } catch (error) {
+        _onFailure && _onFailure(error);
+    }
+}
+
+function getContactDataById(params) {
+    const { uri, id, projection = [] } = params;
+    let result = toJSArray(SFContactUtil.getContactDataById(uri, array(projection, "java.lang.String"), id))
+    return result;
+}
+
+function getUrlAddressById(params) {
+    let urlAddresses = toJSArray(SFContactUtil.getUrlAddresses(params.id));
+    return urlAddresses;
 }
 
 function getAddressById(params) {
     params.uri = NativeContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-    return getContactDataById(params)[0];
+    return getContactDataById(params).map(address => address.replace(/\s/g, " "));
 }
 
 function getEmailById(params) {
@@ -190,6 +332,12 @@ function getPhonesById(params) {
     return getContactDataById(params);
 }
 
+function getStructuredNames(params) {
+    let result = toJSArray(SFContactUtil.getStructuredName(params.id));
+    return { firstName: result[0], lastName: result[1], namePrefix: result[2], middleName: result[3], nameSuffix: result[4] };
+}
+
+//Deprecated 
 function getContactDisplayName(contactUri) {
     var contactName = "";
     var context = activity.getApplicationContext();
@@ -203,11 +351,10 @@ function getContactDisplayName(contactUri) {
                 contactName = cursor.getString(columnIndex);
         }
     }
-
     cursor.close();
     return contactName;
 }
-
+//Deprecated 
 function getContactPhoneNumber(contactUri) {
     var contentResolver = activity.getContentResolver();
     var projection = [Phone_NUMBER];
@@ -218,6 +365,7 @@ function getContactPhoneNumber(contactUri) {
     var number = "";
     if (columnIndex >= 0)
         number = cursor.getString(columnIndex);
+    cursor.close();
     return number;
 }
 
@@ -232,6 +380,13 @@ function addContactName(displayName) {
         var cpo = displayNameContent.build();
         contentProviderOperation.add(cpo);
     }
+}
+
+
+function addContactStructureName(contact) {
+    const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "" } = contact;
+    let cpo = SFContactUtil.addContactStructureName(uri, namePrefix, firstName, lastName, middleName, nameSuffix);
+    contentProviderOperation.add(cpo);
 }
 
 function addContactNumber(phoneNumber) {
@@ -252,15 +407,15 @@ function addContactEmail(email) {
     if (email != null) {
         // NativeContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
         CONTENT_ITEM_TYPE = "vnd.android.cursor.item/email_v2";
-        var TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Email.TYPE_HOME;
+        let TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Email.TYPE_HOME;
 
-        var content = NativeContentProviderOperation.newInsert(uri);
-        content = content.withValueBackReference(RAW_CONTACT_ID, 0);
-        content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
-        content = content.withValue(CommonColumns_DATA, email);
-        content = content.withValue(TYPE, TYPE_HOME);
-        content = content.build();
-        contentProviderOperation.add(content);
+        let content = NativeContentProviderOperation.newInsert(uri);
+        content.withValueBackReference(RAW_CONTACT_ID, 0);
+        content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+        content.withValue(CommonColumns_DATA, email);
+        content.withValue(TYPE, TYPE_HOME);
+        let build = content.build();
+        contentProviderOperation.add(build);
     }
 }
 
@@ -272,12 +427,12 @@ function addContactUrl(urlAddress) {
         var TYPE_OTHER = 7; // ContactsContract.CommonDataKinds.Website.TYPE_OTHER;
 
         var content = NativeContentProviderOperation.newInsert(uri);
-        content = content.withValueBackReference(RAW_CONTACT_ID, 0);
-        content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
-        content = content.withValue(URL, urlAddress);
-        content = content.withValue(TYPE, TYPE_OTHER);
-        content = content.build();
-        contentProviderOperation.add(content);
+        content.withValueBackReference(RAW_CONTACT_ID, 0);
+        content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+        content.withValue(URL, urlAddress);
+        content.withValue(TYPE, TYPE_OTHER);
+        let build = content.build();
+        contentProviderOperation.add(build);
     }
 }
 
@@ -289,7 +444,7 @@ function addContactAddress(address) {
         var content = NativeContentProviderOperation.newInsert(uri);
         content = content.withValueBackReference(RAW_CONTACT_ID, 0);
         content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
-        content = content.withValue(FORMATTED_ADDRESS, address);
+        content.withValue(FORMATTED_ADDRESS, address);
         content = content.build();
         contentProviderOperation.add(content);
     }
