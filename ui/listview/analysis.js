@@ -827,6 +827,7 @@ ListView.prototype.onRowMoved = function(source, destination) {};
  * @param {Boolean} params.ios.expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
  * @param {Number} params.ios.expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
  * @event onRowSwipe
+ * @return {UI.ListView.SwipeItem[]} Return set of swipe items. Android always just consider first index.
  * @ios
  * @android
  * @since 4.1.4

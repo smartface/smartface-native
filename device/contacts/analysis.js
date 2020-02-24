@@ -172,7 +172,7 @@ Contacts.getAll = function(params) {};
  *     const Contacts = require("sf-core/device/contacts");
  *     Contacts.fetchAll({
  *         onSuccess : function(contacts){
- *             onsole.log("Oontacts object : " , contacts);
+ *             console.log("Contacts object : " , contacts);
  *         },
  *         onFailure : function(error){
  *             console.log("Message : " + error);
