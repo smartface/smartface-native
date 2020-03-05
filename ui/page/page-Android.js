@@ -720,12 +720,17 @@ function Page(params) {
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
             } else {
-
                 var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
-
-                if ((item.image && item.image.nativeObject) || item.android.systemIcon)
+                if (item.customView) {
+                    let customViewContainer = new FlexLayout();
+                    let cParent = item.customView.getParent();
+                    if (cParent !== null)
+                        cParent.removeAll();
+                    customViewContainer.addChild(item.customView);
+                    item.nativeObject = customViewContainer.nativeObject;
+                } else if ((item.image && item.image.nativeObject) || item.android.systemIcon)
                     item.nativeObject = new NativeImageButton(activity);
                 else
                     item.nativeObject = new NativeTextButton(activity);

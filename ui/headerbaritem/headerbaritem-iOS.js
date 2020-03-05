@@ -25,6 +25,7 @@ function HeaderBarItem(params) {
 
     var _nativeView;
     var _font = undefined;
+    var _customView = undefined;
 
     Object.defineProperties(this, {
         'layout': {
@@ -51,6 +52,17 @@ function HeaderBarItem(params) {
                     return;
                 }
                 self.nativeObject.title = value;
+            },
+            enumerable: true
+        },
+        'customView': {
+            get: function() {
+                return _customView;
+            },
+            set: function(value) {
+                _customView = value;
+                _customView.applyLayout();
+                self.nativeObject.setValueForKey(_customView.nativeObject, "customView");
             },
             enumerable: true
         },
