@@ -20,6 +20,9 @@ const Contacts = {};
 Contacts.PICK_REQUEST_CODE = 1001;
 Contacts.PICKFROM_REQUEST_CODE = 1005;
 
+const DocumentPicker = {};
+DocumentPicker.PICK_DOCUMENT_CODE = 2000;
+
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 const Location = {};
 Location.CHECK_SETTINGS_CODE = SFLocationCallback.REQUEST_CHECK_SETTINGS;
@@ -30,5 +33,6 @@ module.exports = {
     Sound,
     Multimedia,
     Contacts,
-    Location
+    Location,
+    DocumentPicker
 };
