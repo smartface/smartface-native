@@ -30,7 +30,8 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _badgeObj = undefined,
-        _systemIcon;
+        _systemIcon,
+        _customView = undefined;
 
 
     this.ios = {};
@@ -166,15 +167,18 @@ function HeaderBarItem(params) {
         'setValues': {
             value: function() {
                 this.enabled = this.enabled;
-                if (this.imageButton) {
-                    this.image && (this.image = this.image);
-                    this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
-                } else if (_attributedTitle) {
-                    this.attributedTitle = _attributedTitle;
-                } else {
-                    this.title = _title;
+
+                if (!self.customView) {
+                    if (this.imageButton) {
+                        this.image && (this.image = this.image);
+                        this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
+                    } else if (_attributedTitle) {
+                        this.attributedTitle = _attributedTitle;
+                    } else {
+                        this.title = _title;
+                    }
+                    this.color = this.color;
                 }
-                this.color = this.color;
 
                 const NativeView = requireClass('android.view.View');
                 this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
@@ -216,6 +220,15 @@ function HeaderBarItem(params) {
                     self.addToHeaderView(_badgeObj);
                 }
                 return _badgeObj;
+            },
+            enumerable: true
+        },
+        'customView': {
+            get: function() {
+                return _customView;
+            },
+            set: function(view) {
+                _customView = view;
             },
             enumerable: true
         }

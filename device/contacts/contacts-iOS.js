@@ -171,6 +171,24 @@ Contacts.Contact = function Contacts(params) {
 		},
 		enumerable: true
 	});
+
+	// Assign parameters given in constructor
+	params && (function(params) {
+		for (var param in params) {
+			if (param === "ios" || param === "android") {
+				setOSSpecificParams.call(this, params[param], param);
+			}
+			else {
+				this[param] = params[param];
+			}
+		}
+
+		function setOSSpecificParams(params, key) {
+			for (var param in params) {
+				this[key][param] = params[param];
+			}
+		}
+	}.bind(this)(params));
 };
 
 Contacts.ios.__pickerDelegate = new __SF_CNContactPickerDelegate();
