@@ -401,11 +401,11 @@ WebView.prototype.clearAllData = function() {};
 /**
  * The behavior for determining the adjusted content offsets.
  *
- * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.ALWAYS]
  * @ios
  * @since 4.0.0
  */
-WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.ALWAYS;
 
 
 
