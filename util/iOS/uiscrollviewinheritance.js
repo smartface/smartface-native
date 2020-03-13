@@ -1,5 +1,3 @@
-const System = require('sf-core/device/system');
-
 function UIScrollViewInheritance() {};
 
 UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
@@ -7,9 +5,7 @@ UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
 
     var nativeObject = customNativeObject ? customNativeObject : self.nativeObject;
 
-    if (System.OSVersion.split(".")[0] >= 11) {
-        nativeObject.setValueForKey(2, "contentInsetAdjustmentBehavior");
-    }
+    nativeObject.setValueForKey(2, "contentInsetAdjustmentBehavior");
 
     Object.defineProperty(self.ios, 'contentInsetAdjustmentBehavior', {
         get: function() {

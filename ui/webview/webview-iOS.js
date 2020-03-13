@@ -15,6 +15,7 @@ const WebView = extend(View)(
         _super(this);
 
         UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
+        self.nativeObject.scrollView.setValueForKey(4, "contentInsetAdjustmentBehavior");
 
         self.android.clearHistory = function() {};
         self.android.clearFormData = function() {};
