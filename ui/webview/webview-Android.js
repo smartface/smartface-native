@@ -1,5 +1,4 @@
 /*globals array,requireClass */
-const extend = require('js-base/core/extend');
 const View = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
@@ -35,434 +34,432 @@ var mFilePathCallback;
 var mCameraPhotoPath;
 var mUploadMessage;
 
-const WebView = extend(View)(
-    function(_super, params) {
-        const self = this;
+WebView.prototype = Object.create(View.prototype);
+function WebView(params) {
+    const self = this;
 
-        var webViewClientCallbacks = {
-            onPageFinished: function(url) {
-                _onShow && _onShow({
-                    url: url
-                });
-            },
-            onPageStarted: function(url) {
-                _onLoad && _onLoad({
-                    url: url
-                });
-            },
-            shouldOverrideUrlLoading: function(url) {
-                var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({
-                    url: url
-                }));
-                if (!callbackValue)
-                    return true;
-                return overrideURLChange(url, _canOpenLinkInside);
-            },
-            onReceivedError: function(code, message, url) {
-                _onError && _onError({
-                    code,
-                    message,
-                    url
-                });
-            }
-        };
-
-        var webChromeClientCallbacks = {
-            //For Android5.0+
-            onShowFileChooser: function(filePathCallback) {
-                if (mFilePathCallback != null) {
-                    mFilePathCallback.onReceiveValue(null);
-                }
-                mFilePathCallback = filePathCallback;
-
-                var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    var photoFile = null;
-                    photoFile = createImageFile();
-                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
-                        takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
-                            NativeUri.fromFile(photoFile));
-                    } else {
-                        takePictureIntent = null;
-                    }
-                }
-
-                var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-                contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
-                contentSelectionIntent.setType("image/*");
-
-                var intentArray;
-                var tempArr = [];
-                if (takePictureIntent != null) {
-                    tempArr.push(takePictureIntent);
-                }
-                intentArray = array(tempArr, "android.content.Intent");
-
-                var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
-                chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
-                chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
-
-                _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
+    var webViewClientCallbacks = {
+        onPageFinished: function(url) {
+            _onShow && _onShow({
+                url: url
+            });
+        },
+        onPageStarted: function(url) {
+            _onLoad && _onLoad({
+                url: url
+            });
+        },
+        shouldOverrideUrlLoading: function(url) {
+            var callbackValue = true;
+            _onChangedURL && (callbackValue = _onChangedURL({
+                url: url
+            }));
+            if (!callbackValue)
                 return true;
-
-            },
-            onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
-                let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
-                    sourceId,
-                    message,
-                    lineNumber,
-                    messageLevel
-                }) : false;
-                return TypeUtil.isBoolean(result) ? result : false;
-            }
-        };
-
-
-        if (!this.nativeObject) {
-            this.nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
+            return overrideURLChange(url, _canOpenLinkInside);
+        },
+        onReceivedError: function(code, message, url) {
+            _onError && _onError({
+                code,
+                message,
+                url
+            });
         }
+    };
 
-        _super(this);
-        scrollableSuper(this, this.nativeObject);
-
-        var _canOpenLinkInside = true,
-            _onError, _onShow, _onLoad, _onChangedURL, _scrollBarEnabled = true,
-            _scrollEnabled = true,
-            touchEnabled = true,
-            _superTouchCallbacks = this._touchCallbacks;
-        Object.defineProperties(this, {
-            'scrollBarEnabled': {
-                get: function() {
-                    return _scrollBarEnabled;
-                },
-                set: function(value) {
-                    if (value) {
-                        _scrollBarEnabled = true;
-                        this.nativeObject.setScrollBarEnabled(true);
-                    } else {
-                        _scrollBarEnabled = false;
-                        this.nativeObject.setScrollBarEnabled(false);
-                    }
-                },
-                enumerable: true
-            },
-            'userAgent': {
-                get: function() {
-                    return this.nativeObject.getUserAgent();
-                },
-                set: function(value) {
-                    this.nativeObject.setUserAgent(value);
-                },
-                enumerable: true
-            },
-            'bounceEnabled': {
-                get: function() {
-                    return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
-                },
-                set: function(value) {
-                    if (value) {
-                        this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS 
-                    } else {
-                        this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
-                    }
-                },
-                enumerable: true
-            },
-            'openLinkInside': {
-                get: function() {
-                    return _canOpenLinkInside;
-                },
-                set: function(enabled) {
-                    _canOpenLinkInside = enabled;
-                },
-                enumerable: true
-            },
-            'refresh': {
-                value: function() {
-                    this.nativeObject.reload();
-                },
-                enumerable: true
-            },
-            'goBack': {
-                value: function() {
-                    this.nativeObject.goBack();
-                },
-                enumerable: true
-            },
-            'goForward': {
-                value: function() {
-                    this.nativeObject.goForward();
-                },
-                enumerable: true
-            },
-            'zoomEnabled': {
-                get: function() {
-                    return this.nativeObject.getZoomEnabled();
-                },
-                set: function(enabled) {
-                    this.nativeObject.setZoomEnabled(enabled);
-                },
-                enumerable: true
-            },
-            'scrollEnabled': {
-                get: function() {
-                    return _scrollEnabled;
-                },
-                set: function(enabled) {
-                    _scrollEnabled = enabled;
-                    self.setTouchHandlers();
-                },
-                enumerable: true
-            },
-            'loadURL': {
-                value: function(url) {
-                    this.nativeObject.loadUrl(url);
-                },
-                enumerable: true
-            },
-            'loadHTML': {
-                value: function(htmlText) {
-                    this.nativeObject.loadDataWithBaseURL(null, htmlText, "text/html", null, null);
-                },
-                enumerable: true
-            },
-            'loadFile': {
-                value: function(file) {
-                    if (file instanceof File) {
-                        if (file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
-                            //Generate FILE PATH
-                            this.nativeObject.loadUrl("file:///" + file.fullPath);
-                        } else if (file.type == Path.FILE_TYPE.ASSET) {
-                            this.nativeObject.loadUrl("file:///android_asset/" + (file.path.replace("assets://", "")));
-                        }
-                    }
-                },
-                enumerable: true
-            },
-            'evaluateJS': {
-                value: function(javascript, callback) {
-                    if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
-                        const ValueCallback = requireClass("android.webkit.ValueCallback");
-                        var valueCallback = ValueCallback.implement({
-                            onReceiveValue: function(value) {
-                                if (callback)
-                                    callback(value);
-                            }
-                        });
-                        this.nativeObject.evaluateJavascript(javascript, valueCallback);
-                    } else {
-                        this.nativeObject.loadUrl("javascript:" + javascript);
-                    }
-                },
-                enumerable: true
-            },
-            'onChangedURL': {
-                get: function() {
-                    return _onChangedURL;
-                },
-                set: function(callback) {
-                    _onChangedURL = callback;
-                },
-                enumerable: true
-            },
-            'onLoad': {
-                get: function() {
-                    return _onLoad;
-                },
-                set: function(callback) {
-                    _onLoad = callback;
-                },
-                enumerable: true
-            },
-            'onError': {
-                get: function() {
-                    return _onError;
-                },
-                set: function(callback) {
-                    _onError = callback;
-                },
-                enumerable: true
-            },
-            'onShow': {
-                get: function() {
-                    return _onShow;
-                },
-                set: function(callback) {
-                    _onShow = callback;
-                },
-                enumerable: true
-            },
-            'toString': {
-                value: function() {
-                    return 'WebView';
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'clearCache': {
-                value: function(deleteDiskFiles) {
-                    this.nativeObject.clearCache(deleteDiskFiles);
-                },
-                enumerable: true
-            },
-            'clearAllData': {
-                value: function() {
-                    this.clearCache(true);
-                    this.clearCookie();
-                    this.android.clearHistory();
-                    this.android.clearFormData();
-                }.bind(this),
-                enumerable: true
-            },
-            'clearCookie': {
-                value: function() {
-
-                    var cookieManager = NativeCookieManager.getInstance();
-
-                    if (NativeBuild.VERSION.SDK_INT >= 23) {
-                        cookieManager.removeAllCookies(null);
-                    } else {
-                        cookieManager.removeAllCookie();
-                    }
-
-                },
-                enumerable: true
-            },
-            "touchEnabled": {
-                get: () => touchEnabled,
-                set: (value) => {
-                    touchEnabled = value;
-                    self.setTouchHandlers();
-                },
-                enumerable: true
-            },
-            '_touchCallbacks': {
-                value: {
-                    'onTouchEnded': function(isInside, xInDp, yInDp) {
-                        if (!self.touchEnabled)
-                            return true;
-                        let result = _superTouchCallbacks.onTouchEnded(isInside, xInDp, yInDp);
-                        return result;
-                    },
-                    /*Overrides the View onTouch to keep backward compatibility. Returning true makes untouchable*/
-                    'onTouch': function(x, y) {
-                        if (!self.touchEnabled)
-                            return true;
-                        let result, mEvent = {
-                            x,
-                            y
-                        };
-                        self.onTouch && (result = self.onTouch(mEvent));
-                        return (result === true);
-                    },
-                    'onTouchMoved': function(isInside, xInDp, yInDp) {
-                        if (!self.touchEnabled || !self.scrollEnabled)
-                            return true;
-                        let result = _superTouchCallbacks.onTouchMoved(isInside, xInDp, yInDp);
-                        return result;
-                    },
-                    'onTouchCancelled': function(xInDp, yInDp) {
-                        if (!self.touchEnabled)
-                            return true;
-                        let result = _superTouchCallbacks.onTouchCancelled(xInDp, yInDp);
-                        return result;
-                    }
-                },
-                enumerable: true,
-                configurable: true,
-                writable: true
+    var webChromeClientCallbacks = {
+        //For Android5.0+
+        onShowFileChooser: function(filePathCallback) {
+            if (mFilePathCallback != null) {
+                mFilePathCallback.onReceiveValue(null);
             }
-        });
+            mFilePathCallback = filePathCallback;
 
-        var _page;
-        // android-only properties
-        Object.defineProperty(this.android, 'page', {
+            var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+                // Create the File where the photo should go
+                var photoFile = null;
+                photoFile = createImageFile();
+                takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
+
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                    takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
+                        NativeUri.fromFile(photoFile));
+                } else {
+                    takePictureIntent = null;
+                }
+            }
+
+            var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+            contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
+            contentSelectionIntent.setType("image/*");
+
+            var intentArray;
+            var tempArr = [];
+            if (takePictureIntent != null) {
+                tempArr.push(takePictureIntent);
+            }
+            intentArray = array(tempArr, "android.content.Intent");
+
+            var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
+            chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
+            chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
+            chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
+
+            _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
+            return true;
+
+        },
+        onConsoleMessage: function(sourceId, message, lineNumber, messageLevel) {
+            let result = self.android.onConsoleMessage ? self.android.onConsoleMessage({
+                sourceId,
+                message,
+                lineNumber,
+                messageLevel
+            }) : false;
+            return TypeUtil.isBoolean(result) ? result : false;
+        }
+    };
+
+
+    if (!this.nativeObject) {
+        this.nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
+    }
+
+    View.call(this);
+    scrollableSuper(this, this.nativeObject);
+
+    var _canOpenLinkInside = true,
+        _onError, _onShow, _onLoad, _onChangedURL, _scrollBarEnabled = true,
+        _scrollEnabled = true,
+        touchEnabled = true,
+        _superTouchCallbacks = this._touchCallbacks;
+    Object.defineProperties(this, {
+        'scrollBarEnabled': {
             get: function() {
-                return _page;
+                return _scrollBarEnabled;
             },
-            set: function(page) {
-                _page = page;
+            set: function(value) {
+                if (value) {
+                    _scrollBarEnabled = true;
+                    this.nativeObject.setScrollBarEnabled(true);
+                } else {
+                    _scrollBarEnabled = false;
+                    this.nativeObject.setScrollBarEnabled(false);
+                }
+            },
+            enumerable: true
+        },
+        'userAgent': {
+            get: function() {
+                return this.nativeObject.getUserAgent();
+            },
+            set: function(value) {
+                this.nativeObject.setUserAgent(value);
+            },
+            enumerable: true
+        },
+        'bounceEnabled': {
+            get: function() {
+                return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
+            },
+            set: function(value) {
+                if (value) {
+                    this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS 
+                } else {
+                    this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
+                }
+            },
+            enumerable: true
+        },
+        'openLinkInside': {
+            get: function() {
+                return _canOpenLinkInside;
+            },
+            set: function(enabled) {
+                _canOpenLinkInside = enabled;
+            },
+            enumerable: true
+        },
+        'refresh': {
+            value: function() {
+                this.nativeObject.reload();
+            },
+            enumerable: true
+        },
+        'goBack': {
+            value: function() {
+                this.nativeObject.goBack();
+            },
+            enumerable: true
+        },
+        'goForward': {
+            value: function() {
+                this.nativeObject.goForward();
+            },
+            enumerable: true
+        },
+        'zoomEnabled': {
+            get: function() {
+                return this.nativeObject.getZoomEnabled();
+            },
+            set: function(enabled) {
+                this.nativeObject.setZoomEnabled(enabled);
+            },
+            enumerable: true
+        },
+        'scrollEnabled': {
+            get: function() {
+                return _scrollEnabled;
+            },
+            set: function(enabled) {
+                _scrollEnabled = enabled;
+                self.setTouchHandlers();
+            },
+            enumerable: true
+        },
+        'loadURL': {
+            value: function(url) {
+                this.nativeObject.loadUrl(url);
+            },
+            enumerable: true
+        },
+        'loadHTML': {
+            value: function(htmlText) {
+                this.nativeObject.loadDataWithBaseURL(null, htmlText, "text/html", null, null);
+            },
+            enumerable: true
+        },
+        'loadFile': {
+            value: function(file) {
+                if (file instanceof File) {
+                    if (file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
+                        //Generate FILE PATH
+                        this.nativeObject.loadUrl("file:///" + file.fullPath);
+                    } else if (file.type == Path.FILE_TYPE.ASSET) {
+                        this.nativeObject.loadUrl("file:///android_asset/" + (file.path.replace("assets://", "")));
+                    }
+                }
+            },
+            enumerable: true
+        },
+        'evaluateJS': {
+            value: function(javascript, callback) {
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
+                    const ValueCallback = requireClass("android.webkit.ValueCallback");
+                    var valueCallback = ValueCallback.implement({
+                        onReceiveValue: function(value) {
+                            if (callback)
+                                callback(value);
+                        }
+                    });
+                    this.nativeObject.evaluateJavascript(javascript, valueCallback);
+                } else {
+                    this.nativeObject.loadUrl("javascript:" + javascript);
+                }
+            },
+            enumerable: true
+        },
+        'onChangedURL': {
+            get: function() {
+                return _onChangedURL;
+            },
+            set: function(callback) {
+                _onChangedURL = callback;
+            },
+            enumerable: true
+        },
+        'onLoad': {
+            get: function() {
+                return _onLoad;
+            },
+            set: function(callback) {
+                _onLoad = callback;
+            },
+            enumerable: true
+        },
+        'onError': {
+            get: function() {
+                return _onError;
+            },
+            set: function(callback) {
+                _onError = callback;
+            },
+            enumerable: true
+        },
+        'onShow': {
+            get: function() {
+                return _onShow;
+            },
+            set: function(callback) {
+                _onShow = callback;
+            },
+            enumerable: true
+        },
+        'toString': {
+            value: function() {
+                return 'WebView';
             },
             enumerable: true,
             configurable: true
-        });
-
-
-        let _onBackButtonPressedCallback = undefined;
-        Object.defineProperty(this.android, 'onBackButtonPressed', {
-            get: function() {
-                return _onBackButtonPressedCallback;
+        },
+        'clearCache': {
+            value: function(deleteDiskFiles) {
+                this.nativeObject.clearCache(deleteDiskFiles);
             },
-            set: function(onBackButtonPressedCallback) {
-                if (_onBackButtonPressedCallback === undefined) {
-                    _onBackButtonPressedCallback = onBackButtonPressedCallback;
+            enumerable: true
+        },
+        'clearAllData': {
+            value: function() {
+                this.clearCache(true);
+                this.clearCookie();
+                this.android.clearHistory();
+                this.android.clearFormData();
+            }.bind(this),
+            enumerable: true
+        },
+        'clearCookie': {
+            value: function() {
 
-                    self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-                        onKey: function(view, keyCode, keyEvent) {
-                            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                                typeof _onBackButtonPressedCallback === "function" &&
-                                    _onBackButtonPressedCallback();
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    }));
+                var cookieManager = NativeCookieManager.getInstance();
+
+                if (NativeBuild.VERSION.SDK_INT >= 23) {
+                    cookieManager.removeAllCookies(null);
                 } else {
-                    _onBackButtonPressedCallback = onBackButtonPressedCallback;
+                    cookieManager.removeAllCookie();
+                }
+
+            },
+            enumerable: true
+        },
+        "touchEnabled": {
+            get: () => touchEnabled,
+            set: (value) => {
+                touchEnabled = value;
+                self.setTouchHandlers();
+            },
+            enumerable: true
+        },
+        '_touchCallbacks': {
+            value: {
+                'onTouchEnded': function(isInside, xInDp, yInDp) {
+                    if (!self.touchEnabled)
+                        return true;
+                    let result = _superTouchCallbacks.onTouchEnded(isInside, xInDp, yInDp);
+                    return result;
+                },
+                /*Overrides the View onTouch to keep backward compatibility. Returning true makes untouchable*/
+                'onTouch': function(x, y) {
+                    if (!self.touchEnabled)
+                        return true;
+                    let result, mEvent = {
+                        x,
+                        y
+                    };
+                    self.onTouch && (result = self.onTouch(mEvent));
+                    return (result === true);
+                },
+                'onTouchMoved': function(isInside, xInDp, yInDp) {
+                    if (!self.touchEnabled || !self.scrollEnabled)
+                        return true;
+                    let result = _superTouchCallbacks.onTouchMoved(isInside, xInDp, yInDp);
+                    return result;
+                },
+                'onTouchCancelled': function(xInDp, yInDp) {
+                    if (!self.touchEnabled)
+                        return true;
+                    let result = _superTouchCallbacks.onTouchCancelled(xInDp, yInDp);
+                    return result;
                 }
             },
             enumerable: true,
-            configurable: true
-        });
-
-        // android-only properties
-        let _onConsoleMessage;
-        Object.defineProperties(this.android, {
-            'clearHistory': {
-                value: function() {
-                    this.nativeObject.clearHistory();
-                }.bind(this),
-                enumerable: true,
-                configurable: true
-            },
-            'clearFormData': {
-                value: function() {
-                    this.nativeObject.clearFormData();
-                }.bind(this),
-                enumerable: true,
-                configurable: true
-            },
-            'onConsoleMessage': {
-                get: () => _onConsoleMessage,
-                set: (callback) => _onConsoleMessage = callback,
-                enumerable: true
-            }
-        });
-
-        /* Webview contains background color which draws all over given background drawbles.
-         It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
-         */
-        this.nativeObject.setBackgroundColor(0);
-        this.nativeObject.setScrollBarEnabled(_scrollBarEnabled);
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+            configurable: true,
+            writable: true
         }
+    });
 
+    var _page;
+    // android-only properties
+    Object.defineProperty(this.android, 'page', {
+        get: function() {
+            return _page;
+        },
+        set: function(page) {
+            _page = page;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+
+    let _onBackButtonPressedCallback = undefined;
+    Object.defineProperty(this.android, 'onBackButtonPressed', {
+        get: function() {
+            return _onBackButtonPressedCallback;
+        },
+        set: function(onBackButtonPressedCallback) {
+            if (_onBackButtonPressedCallback === undefined) {
+                _onBackButtonPressedCallback = onBackButtonPressedCallback;
+
+                self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                    onKey: function(view, keyCode, keyEvent) {
+                        // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                        if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                            typeof _onBackButtonPressedCallback === "function" &&
+                                _onBackButtonPressedCallback();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }));
+            } else {
+                _onBackButtonPressedCallback = onBackButtonPressedCallback;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    // android-only properties
+    let _onConsoleMessage;
+    Object.defineProperties(this.android, {
+        'clearHistory': {
+            value: function() {
+                this.nativeObject.clearHistory();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        },
+        'clearFormData': {
+            value: function() {
+                this.nativeObject.clearFormData();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        },
+        'onConsoleMessage': {
+            get: () => _onConsoleMessage,
+            set: (callback) => _onConsoleMessage = callback,
+            enumerable: true
+        }
+    });
+
+    /* Webview contains background color which draws all over given background drawbles.
+        It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
+        */
+    this.nativeObject.setBackgroundColor(0);
+    this.nativeObject.setScrollBarEnabled(_scrollBarEnabled);
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
     }
-);
+}
 
 WebView.REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
 WebView.RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;

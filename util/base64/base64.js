@@ -4,6 +4,14 @@
  * Version: 1.0
  * LastModified: Dec 25 1999
  * This library is free.  You can redistribute it and/or modify it.
+ * 
+ */
+
+ /** 
+  * @type {{
+ *   Utf8ArrayToStr: (data:string[]) => string,
+ *   StrToUtf8Array: (data: string) => string[]
+ * }} 
  */
 const Base64Util = {};
 

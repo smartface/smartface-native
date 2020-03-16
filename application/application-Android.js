@@ -653,6 +653,7 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
 
 ApplicationWrapper.Android.NavigationBar = {
+    /** @type {typeof import("./android/navigationbar/style")} */
     Style: require("./android/navigationbar/style")
 };
 Object.freeze(ApplicationWrapper.Android.NavigationBar);
@@ -666,7 +667,9 @@ ApplicationWrapper.Android.KeyboardMode = {
     AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
-
+/**
+ * @type {{LEFTTORIGHT: 0, RIGHTTOLEFT: 1}}
+ */
 ApplicationWrapper.LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1

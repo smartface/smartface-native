@@ -1,6 +1,11 @@
 const Blob = require("../../global/blob");
 
-var http = function Http(params) {
+/**
+ * 
+ * @constructor
+ * @params {object} params 
+ */
+function Http(params) {
     var self = this;
 
     if (!self.nativeObject) {
@@ -48,7 +53,7 @@ var http = function Http(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.requestFile(
                 url,
                 fileName,
@@ -122,7 +127,7 @@ var http = function Http(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.requestString(
                 url,
                 function(e) {
@@ -179,7 +184,7 @@ var http = function Http(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.request(
                 params,
                 function(e) {
@@ -215,7 +220,7 @@ var http = function Http(params) {
             params.body = params.body.nativeObject;
         }
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.upload(
                 params,
                 function(e) {
@@ -239,7 +244,10 @@ var http = function Http(params) {
     };
 };
 
-http.Request = function Request(nativeObject) {
+/** 
+ * @class
+ */
+function Request(nativeObject) {
     var self = this;
     if (nativeObject) {
         self.nativeObject = nativeObject;
@@ -264,4 +272,6 @@ http.Request = function Request(nativeObject) {
     };
 };
 
-module.exports = http;
+Http.Request = Request;
+
+module.exports = Http;

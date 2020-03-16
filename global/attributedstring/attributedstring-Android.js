@@ -4,13 +4,17 @@ const Color = require('sf-core/ui/color');
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
-const AttributedString = function(params) {
+/**
+ * @constructor
+ */
+function AttributedStringAndroid(params) {
     var self = this;
 
     self.ios = {};
     self.android = {};
 
     var _string = "";
+    /** @type {string} */
     Object.defineProperty(self, 'string', {
         get: function() {
             return _string;
@@ -22,6 +26,7 @@ const AttributedString = function(params) {
     });
 
     var _font = Font.create(Font.DEFAULT, 14, Font.NORMAL);
+    /** @type {typeof import('sf-core/ui/font')} */
     Object.defineProperty(self, 'font', {
         get: function() {
             return _font;
@@ -33,6 +38,7 @@ const AttributedString = function(params) {
     });
 
     var _foregroundColor = Color.BLACK;
+    /** @type {typeof import('sf-core/ui/color')} */
     Object.defineProperty(self, 'foregroundColor', {
         get: function() {
             return _foregroundColor;
@@ -44,6 +50,7 @@ const AttributedString = function(params) {
     });
 
     var _underline = false;
+    /** @type {boolean} */
     Object.defineProperty(self, 'underline', {
         get: function() {
             return _underline;
@@ -95,7 +102,7 @@ const AttributedString = function(params) {
     }
 };
 
-AttributedString.prototype.setSpan = function(stringBuilder) {
+AttributedStringAndroid.prototype.setSpan = function(stringBuilder) {
     const self = this;
     stringBuilder.append(this.string);
     var start = stringBuilder.length() - this.string.length;
@@ -146,4 +153,4 @@ AttributedString.prototype.setSpan = function(stringBuilder) {
     }
 };
 
-module.exports = AttributedString;
+module.exports = AttributedStringAndroid;

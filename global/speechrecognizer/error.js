@@ -1,9 +1,25 @@
-const Error = {};
+/**
+ * @type {{
+ *   INSUFFICIENT_PERMISSIONS: 'INSUFFICIENT_PERMISSIONS',
+ *   NETWORK: 'NETWORK',
+ *   NETWORK_TIMEOUT: 'NETWORK_TIMEOUT',
+ *   SPEECH_TIMEOUT: 'SPEECH_TIMEOUT',
+ *   CLIENT: 'CLIENT',
+ *   SERVER: 'SERVER',
+ *   android: {
+ *     AUDIO: 'AUDIO',
+ *     NO_MATCH: 'NO_MATCH',
+ *     RECOGNIZER_BUSY: 'RECOGNIZER_BUSY'
+ *   },
+ *   ios: {}
+ * }}
+ */
+const SpeechRecognizerError = {};
 
-Error.ios = {};
-Error.android = {};
+SpeechRecognizerError.ios = {};
+SpeechRecognizerError.android = {};
 
-Object.defineProperties(Error, {
+Object.defineProperties(SpeechRecognizerError, {
     'INSUFFICIENT_PERMISSIONS': {
         value: "INSUFFICIENT_PERMISSIONS",
         configurable: false
@@ -30,7 +46,7 @@ Object.defineProperties(Error, {
     }
 });
 
-Object.defineProperties(Error.android, {
+Object.defineProperties(SpeechRecognizerError.android, {
     'AUDIO': {
         value: "AUDIO",
         configurable: false
@@ -45,4 +61,4 @@ Object.defineProperties(Error.android, {
     }
 });
 
-module.exports = Error;
+module.exports = SpeechRecognizerError;

@@ -1,1 +1,2 @@
-module.exports = require('./navigationbar-' + Device.deviceOS + '.js');
+module.exports =
+  Device.deviceOS === "Android" ? require("./navigationbar-Android.js") : {};
