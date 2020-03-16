@@ -43,14 +43,14 @@ Object.defineProperties(Share, {
         value: function(text, page, blacklist) {
             var activity = Share.createActivity([text]);
             activity.excludedActivityTypes = blacklist;
-            page.nativeObject.presentViewController(activity);
+            Share.ios__presentViewController(page,activity);
         }
     },
     'shareImage': {
         value: function(image, page, blacklist) {
             var activity = Share.createActivity([image.nativeObject]);
             activity.excludedActivityTypes = blacklist;
-            page.nativeObject.presentViewController(activity);
+            Share.ios__presentViewController(page,activity);
         }
     },
     'shareFile': {
@@ -59,7 +59,7 @@ Object.defineProperties(Share, {
             var url = __SF_NSURL.fileURLWithPath(actualPath);
             var activity = Share.createActivity([url]);
             activity.excludedActivityTypes = blacklist;
-            page.nativeObject.presentViewController(activity);
+            Share.ios__presentViewController(page,activity);
         }
     },
     'share': {
@@ -75,8 +75,9 @@ Object.defineProperties(Share, {
                     var actualPath = item.nativeObject.getActualPath();
                     var url = __SF_NSURL.fileURLWithPath(actualPath);
                     _itemsNativeObject.push(url);
-                } else if (item instanceof Image) {
-                    _itemsNativeObject.push(item.nativeObject);
+                } else if (item.constructor.name === "Contacts") {
+                	var path = item.nativeObject.getShareableFilePath();
+                    _itemsNativeObject.push(path);
                 } else {
                     _itemsNativeObject.push(item);
                 }
@@ -84,12 +85,18 @@ Object.defineProperties(Share, {
 
             var activity = Share.createActivity(_itemsNativeObject);
             activity.excludedActivityTypes = blacklist;
-            page.nativeObject.presentViewController(activity);
+            Share.ios__presentViewController(page,activity);
         }
     }
 });
 
 Share.ios = {};
+
+Share.ios__presentViewController = function(page,activity){
+	__SF_Dispatch.mainAsync(function() {
+		page.nativeObject.presentViewController(activity);
+	});
+};
 
 Share.ios.Facebook = UIActivityType.postToFacebook;
 

@@ -3,7 +3,10 @@ const FlexLayout = require("../flexlayout");
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
-const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Android/systemservices');
+const {
+    INPUT_METHOD_SERVICE,
+    INPUT_METHOD_MANAGER
+} = require('../../util/Android/systemservices');
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
@@ -76,10 +79,10 @@ function Page(params) {
                     if (!self.isSwipeViewPage) {
                         Application.currentPage = self;
                     }
-                    
+
                     Application.registOnItemSelectedListener();
-                    
-                    if(!self.isSwipeViewPage) {
+
+                    if (!self.isSwipeViewPage) {
                         self.__onShowCallback && self.__onShowCallback();
                     }
 
@@ -140,16 +143,19 @@ function Page(params) {
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
             const Contacts = require("sf-core/device/contacts");
+            const RequestCodes = require("sf-core/util/Android/requestcodes");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
             const EmailComposer = require('sf-core/ui/emailcomposer');
+            const DocumentPicker = require('sf-core/device/documentpicker');
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
             // todo: Define a method to register request and its callback 
-            // for better performance. Remove if statement.
-            if (Contacts.PICK_REQUEST_CODE === requestCode) {
+            // for better performance. Remove if statement. 
+            // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
+            if (RequestCodes.Contacts.PICK_REQUEST_CODE === requestCode || RequestCodes.Contacts.PICKFROM_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
@@ -160,6 +166,8 @@ function Page(params) {
                 Webview.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
+            } else if (requestCode === RequestCodes.DocumentPicker.PICK_DOCUMENT_CODE) {
+                DocumentPicker.onActivityResult(requestCode, resultCode, data);
             }
         }
     };
@@ -189,7 +197,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     self.__onShowCallback;
     Object.defineProperty(this, 'onShow', {
         get: function() {
@@ -712,12 +720,17 @@ function Page(params) {
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
             } else {
-
                 var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
-
-                if ((item.image && item.image.nativeObject) || item.android.systemIcon)
+                if (item.customView) {
+                    let customViewContainer = new FlexLayout();
+                    let cParent = item.customView.getParent();
+                    if (cParent !== null)
+                        cParent.removeAll();
+                    customViewContainer.addChild(item.customView);
+                    item.nativeObject = customViewContainer.nativeObject;
+                } else if ((item.image && item.image.nativeObject) || item.android.systemIcon)
                     item.nativeObject = new NativeImageButton(activity);
                 else
                     item.nativeObject = new NativeTextButton(activity);

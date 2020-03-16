@@ -113,6 +113,17 @@ HeaderBarItem.prototype.systemItem = undefined;
 HeaderBarItem.prototype.image = null;
 
 /**
+ * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}. 
+ * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
+ * 
+ * @property {UI.View} customView
+ * @android
+ * @ios
+ * @since 4.1.5
+ */
+HeaderBarItem.prototype.customView = undefined;
+
+/**
  * Gets/sets enabled status of header bar item. Enabled is set to true as
  * default.
  *

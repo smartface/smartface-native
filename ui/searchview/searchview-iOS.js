@@ -99,7 +99,7 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
-
+        
         var _textAligment = 3;
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
@@ -328,8 +328,16 @@ const SearchView = extend(View)(
             self.nativeObject.resignFirstResponder();
         };
 
-        this.ios = {};
-
+        Object.defineProperty(this.ios, 'keyboardAppearance', {
+            get: function() {
+                return self.nativeObject.valueForKey("keyboardAppearance");
+            },
+            set: function(value) {
+                self.nativeObject.setValueForKey(value, "keyboardAppearance");
+            },
+            enumerable: true
+        });
+        
         self.ios.showLoading = function() {
             self.nativeObject.activityIndicator.startAnimating();
         };

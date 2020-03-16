@@ -4,10 +4,8 @@ const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawa
 const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
-const RoundedBitmapDrawableFactory = requireClass("androidx.core.graphics.drawable.RoundedBitmapDrawableFactory");
+const SFImage = requireClass("io.smartface.android.sfcore.ui.image.SFImage");
 
-
-const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Blob = require('../../blob');
 const File = require('../../io/file');
@@ -365,10 +363,8 @@ Object.defineProperty(Image.android, 'createRoundedImage', {
     enumerable: true
 });
 
-function getRoundedBitmapDrawable(bitmap, radius) {
-    var roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(AndroidConfig.activityResources, bitmap);
-    roundedBitmapDrawable.setCornerRadius(AndroidUnitConverter.dpToPixel(radius));
-    return roundedBitmapDrawable;
+function getRoundedBitmapDrawable(imagePathOrBitmap, radius) {
+    return SFImage.getRoundedBitmapDrawable(AndroidConfig.activityResources, imagePathOrBitmap, radius);
 }
 
 // Code taken from https://developer.android.com/topic/performance/graphics/load-bitmap.html
