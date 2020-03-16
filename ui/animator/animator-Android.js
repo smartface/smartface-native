@@ -49,6 +49,8 @@ function Animator(params) {
                 _animFunction();
                 _layout.applyLayout();
                 applyLayoutInners(_layout);
+
+                return this;
             }
         },
         'then': {

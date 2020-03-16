@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const View = require('../view');
-const extend = require('js-base/core/extend');
 const Font = require('../font');
 const Color = require('../color');
 const Image = require("../image");
@@ -62,471 +61,471 @@ const NativeTextAlignment = [
     80 | 5 // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
 ];
 
-const SearchView = extend(View)(
-    function(_super, params) {
-        if (!this.nativeObject) {
-            this.nativeObject = new NativeSearchView(AndroidConfig.activity);
-            // Prevent gain focus when SearchView appear.
-            this.nativeObject.clearFocus(); 
-        }
+SearchView.prototype = Object.create(View.prototype);
+function SearchView(params) {
+    if (!this.nativeObject) {
+        this.nativeObject = new NativeSearchView(AndroidConfig.activity);
+        // Prevent gain focus when SearchView appear.
+        this.nativeObject.clearFocus(); 
+    }
 
-        var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
-        var _defaultUnderlineColorFocus = Color.create("#ff444444");
+    var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
+    var _defaultUnderlineColorFocus = Color.create("#ff444444");
 
-        var mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
-        var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
-        var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
-        var mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
-        var mSearchEditFrame = this.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
+    var mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
+    var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+    var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
+    var mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
+    var mSearchEditFrame = this.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
 
-        mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-        // mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
+    mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+    // mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
 
-        _super(this);
+    View.apply(this);
 
-        const self = this;
-        var _hint = "";
-        var _textColor = Color.BLACK;
-        var _onTextChangedCallback, _onSearchBeginCallback,
-            _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor,
-            _searchIconAssigned = false;
-        var _font = null;
-        var _textalignment = TextAlignment.MIDLEFT;
+    const self = this;
+    var _hint = "";
+    var _textColor = Color.BLACK;
+    var _onTextChangedCallback, _onSearchBeginCallback,
+        _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor,
+        _searchIconAssigned = false;
+    var _font = null;
+    var _textalignment = TextAlignment.MIDLEFT;
 
-        Object.defineProperties(this, {
-            'text': {
-                get: function() {
-                    return mSearchSrcTextView.getText().toString();
-                },
-                set: function(text) {
-                    if (typeof text === "string") {
-                        mSearchSrcTextView.setText("" + text);
-                    }
-                },
-                enumerable: true
+    Object.defineProperties(this, {
+        'text': {
+            get: function() {
+                return mSearchSrcTextView.getText().toString();
             },
-            'hint': {
-                get: function() {
-                    return _hint;
-                },
-                set: function(hint) {
-                    if (hint) {
-                        _hint = "" + hint;
-                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
-                    }
-                },
-                enumerable: true
-            },
-            'hintTextColor': { // Added this property after sf-core 3.0.2 version.
-                get: function() {
-                    return _hintTextColor;
-                },
-                set: function(hintTextColor) {
-                    if (!(hintTextColor instanceof Color)) {
-                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
-                    }
-                    _hintTextColor = hintTextColor;
-                    mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
-                },
-                enumerable: true
-            },
-            'textColor': {
-                get: function() {
-                    return _textColor;
-                },
-                set: function(textColor) {
-                    if (!(textColor instanceof Color)) {
-                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
-                    }
-                    _textColor = textColor;
-                    mSearchSrcTextView.setTextColor(textColor.nativeObject);
-                },
-                enumerable: true
-            },
-            "iconImage": {
-                get: function() {
-                    return _searchIcon;
-                },
-                set: function(iconImage) {
-                    _searchIconAssigned = true;
-                    // If setting null to icon, default search icon will be displayed.
-                    if (iconImage == null || iconImage instanceof require("../image")) {
-                        _searchIcon = iconImage;
-                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
-                    }
-                },
-                enumerable: true
-            },
-            'textFieldBackgroundColor': {
-                get: function() {
-                    return _textFieldBackgroundColor;
-                },
-                set: function(value) {
-                    if (!(value instanceof Color)) {
-                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
-                    }
-                    _textFieldBackgroundColor = value;
-                    this.setTextFieldBackgroundDrawable();
-                },
-                enumerable: true
-            },
-            // methods
-            'addToHeaderBar': {
-                value: function(page) {
-                    if (page) {
-                        page.headerBar.addViewToHeaderBar(this);
-                    }
-                },
-                enumerable: true
-            },
-            'removeFromHeaderBar': {
-                value: function(page) {
-                    if (page) {
-                        page.headerBar.removeViewFromHeaderBar(this);
-                    }
-                },
-                enumerable: true
-            },
-            'showKeyboard': {
-                value: function() {
-                    this.requestFocus();
-                },
-                enumerable: true
-            },
-            'hideKeyboard': {
-                value: function() {
-                    this.removeFocus();
-                },
-                enumerable: true
-            },
-            'requestFocus': {
-                value: function() {
-                    this.nativeObject.requestFocus();
-                },
-                enumerable: true 
-            },
-            'removeFocus': {
-                value: function() {
-                    this.nativeObject.clearFocus();
-                    mSearchSrcTextView.clearFocus();
-                },
-                enumerable: true
-            },
-            'toString': {
-                value: function() {
-                    return 'SearchView';
-                },
-                enumerable: true,
-                configurable: true
-            },
-            // events
-            'onSearchBegin': {
-                get: function() {
-                    return _onSearchBeginCallback;
-                },
-                set: function(onSearchBegin) {
-                    _onSearchBeginCallback = onSearchBegin.bind(this);
-                },
-                enumerable: true
-            },
-            'onSearchEnd': {
-                get: function() {
-                    return _onSearchEndCallback;
-                },
-                set: function(onSearchEnd) {
-                    _onSearchEndCallback = onSearchEnd.bind(this);
-                },
-                enumerable: true
-            },
-            'onTextChanged': {
-                get: function() {
-                    return _onTextChangedCallback;
-                },
-                set: function(onTextChanged) {
-                    _onTextChangedCallback = onTextChanged.bind(self);
-                    self.setQueryTextListener();
-                },
-                enumerable: true
-            },
-            'onSearchButtonClicked': {
-                get: function() {
-                    return _onSearchButtonClickedCallback;
-                },
-                set: function(onSearchButtonClicked) {
-                    _onSearchButtonClickedCallback = onSearchButtonClicked.bind(self);
-                    self.setOnSearchButtonClickedListener();
-                },
-                enumerable: true
-            },
-            'font': {
-                get: function() {
-                    return _font;
-                },
-                set: function(font) {
-                    if (font instanceof Font) {
-                        _font = font;
-                        mSearchSrcTextView.setTypeface(font.nativeObject);
-                        mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
-                    }
-                },
-                enumerable: true
-            },
-            'textalignment': {
-                get: function() {
-                    return _textalignment;
-                },
-                set: function(textalignment) {
-                    _textalignment = textalignment;
-                    mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
-                },
-                enumerable: true
-            },
-            'cursorColor': {
-                get: function() {
-                    return _textViewCursorColor;
-                },
-                set: function(color) {
-                    _textViewCursorColor = color;
-                    SFEditText.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
-                },
-                enumerable: true
-            },
-            'searchIcon': {
-                get: function() {
-                    return _searchIcon;
-                },
-                set: function(value) {
-                    _searchIcon = value;
-                    _searchIconAssigned = true;
-                    // If setting null to icon, default search icon will be displayed.
-                    if (_searchIcon == null || _searchIcon instanceof require("../image")) {
-                        updateQueryHint(this, mSearchSrcTextView, _searchIcon, _hint);
-                    }
-                },
-                enumerable: true
-            }
-        });
-
-        var _hintTextColor = Color.LIGHTGRAY;
-        var _keyboardType = KeyboardType.DEFAULT;
-        var _closeImage = null;
-        var _textFieldBackgroundColor = Color.create(222, 222, 222);
-        var _textFieldBorderRadius = 15;
-        var _searchButtonIcon, _closeIcon, _searchIcon, _iconifiedByDefault = false,
-            _leftItem;
-
-        var _underlineColor = {
-            normal: _defaultUnderlineColorNormal,
-            focus: _defaultUnderlineColorFocus
-        };
-
-        Object.defineProperties(this.android, {
-            'hintTextColor': {
-                get: function() {
-                    return _hintTextColor;
-                },
-                set: function(hintTextColor) {
-                    if (!(hintTextColor instanceof Color)) {
-                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
-                    }
-                    _hintTextColor = hintTextColor;
-                    mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
-                },
-                enumerable: true
-            },
-            'keyboardType': {
-                get: function() {
-                    return _keyboardType;
-                },
-                set: function(keyboardType) {
-                    _keyboardType = keyboardType;
-                    this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
-                }.bind(this),
-                enumerable: true
-            },
-            'font': {
-                get: function() {
-                    return _font;
-                },
-                set: function(font) {
-                    if (font instanceof Font) {
-                        _font = font;
-                        mSearchSrcTextView.setTypeface(font.nativeObject);
-                        mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
-                    }
-                },
-                enumerable: true
-            },
-            'textalignment': {
-                get: function() {
-                    return _textalignment;
-                },
-                set: function(textalignment) {
-                    _textalignment = textalignment;
-                    mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
-                },
-                enumerable: true
-            },
-            "closeImage": {
-                get: function() {
-                    return _closeImage;
-                },
-                set: function(closeImage) {
-                    // If setting null to icon, default search icon will be displayed.
-                    if (closeImage == null || closeImage instanceof require("sf-core/ui/image")) {
-                        _closeImage = closeImage;
-                        mCloseButton.setImageDrawable(closeImage.nativeObject);
-                    }
-                },
-                enumerable: true
-            },
-            'textFieldBorderRadius': {
-                get: function() {
-                    return _textFieldBorderRadius;
-                },
-                set: function(value) {
-                    _textFieldBorderRadius = value;
-                    self.setTextFieldBackgroundDrawable();
+            set: function(text) {
+                if (typeof text === "string") {
+                    mSearchSrcTextView.setText("" + text);
                 }
             },
-            'searchButtonIcon': {
-                get: function() {
-                    return _searchButtonIcon;
-                },
-                set: function(value) {
-                    _searchButtonIcon = value;
-                    mSearchButton.setImageDrawable(_searchButtonIcon.nativeObject);
-                },
-                enumerable: true
+            enumerable: true
+        },
+        'hint': {
+            get: function() {
+                return _hint;
             },
-            'closeIcon': {
-                get: function() {
-                    return _closeIcon;
-                },
-                set: function(value) {
-                    _closeIcon = value;
-                    mCloseButton.setImageDrawable(_closeIcon.nativeObject);
-                },
-                enumerable: true
-            },
-            'leftItem': {
-                get: function() {
-                    return _leftItem;
-                },
-                set: function(value) {
-                    _leftItem = value;
-                    if (_leftItem instanceof Image) {
-                        mCompatImageView.setImageDrawable(_leftItem.nativeObject);
-                        mSearchEditFrame.addView(mCompatImageView, 0);
-                    }
-                    else
-                        mSearchEditFrame.addView(_leftItem.nativeObject, 0);
-                    //If searchIcon is assign then can be used leftView as well
-                    if (_searchIconAssigned)
-                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
-                    else
-                        updateQueryHint(self, mSearchSrcTextView, null, _hint);
-                },
-                enumerable: true
-            },
-            'iconifiedByDefault': {
-                get: function() {
-                    return _iconifiedByDefault;
-                },
-                set: function(value) {
-                    _iconifiedByDefault = value;
-                    self.nativeObject.setIconifiedByDefault(_iconifiedByDefault);
-                },
-                enumerable: true
-            }
-        });
-
-        const GradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
-        var textFieldBackgroundDrawable = new GradientDrawable();
-        this.setTextFieldBackgroundDrawable = function() {
-            textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
-            textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
-            mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
-        };
-
-        let _isNotSetQueryTextListener = false;
-        this.setQueryTextListener = () => {
-            if (_isNotSetQueryTextListener)
-                return;
-            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-                onQueryTextSubmit: function(query) {
-                    return false;
-                },
-                onQueryTextChange: function(newText) {
-                    _onTextChangedCallback && _onTextChangedCallback(newText);
-                    return false;
+            set: function(hint) {
+                if (hint) {
+                    _hint = "" + hint;
+                    updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
                 }
-            }));
-            _isNotSetQueryTextListener = true;
-        };
-
-        let _isClicklistenerAdded = false;
-        /*
-        Consider Native behavior: Close Drop down list & keyboard if text is not empty and null. 
-        In case of, drop down feature is present, make sure its behavior suggested in api doc or impl.
-        */
-        this.setOnSearchButtonClickedListener = () => {
-            if (_isClicklistenerAdded)
-                return;
-            mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
-                onEditorAction: function(textView, actionId, event) {
-                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
-                    return true;
+            },
+            enumerable: true
+        },
+        'hintTextColor': { // Added this property after sf-core 3.0.2 version.
+            get: function() {
+                return _hintTextColor;
+            },
+            set: function(hintTextColor) {
+                if (!(hintTextColor instanceof Color)) {
+                    throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                 }
-            }));
-            _isClicklistenerAdded = true;
-        };
-
-        // Handling ios specific properties
-        this.ios.showLoading = function() {};
-        this.ios.hideLoading = function() {};
-
-        if (!this.skipDefaults) {
-            const NativePorterDuff = requireClass('android.graphics.PorterDuff');
-            const NativeView = requireClass("android.view.View");
-            mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);
-
-            mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                onFocusChange: function(view, hasFocus) {
-                    if (hasFocus) { 
-                        let inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                        inputManager.showSoftInput(view, 0);
-                        _onSearchBeginCallback && _onSearchBeginCallback();
-                        mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
-                    }
-                    else {
-                        _onSearchEndCallback && _onSearchEndCallback();
-                        mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
-                    }
-                }.bind(this)
-            }));
-
-            this.android.iconifiedByDefault = false;
-        }
-
-        // Makes SearchView's textbox apperance fully occupied.
-        var mCompatImageView = mSearchEditFrame.getChildAt(0);
-        mSearchEditFrame.removeViewAt(0);
-        let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
-        let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
-        _searchIcon = new Image({
-            roundedBitmapDrawable: mSearchHintIcon
-        });
-        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
-        a.recycle();
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+                _hintTextColor = hintTextColor;
+                mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
+            },
+            enumerable: true
+        },
+        'textColor': {
+            get: function() {
+                return _textColor;
+            },
+            set: function(textColor) {
+                if (!(textColor instanceof Color)) {
+                    throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                }
+                _textColor = textColor;
+                mSearchSrcTextView.setTextColor(textColor.nativeObject);
+            },
+            enumerable: true
+        },
+        "iconImage": {
+            get: function() {
+                return _searchIcon;
+            },
+            set: function(iconImage) {
+                _searchIconAssigned = true;
+                // If setting null to icon, default search icon will be displayed.
+                if (iconImage == null || iconImage instanceof require("../image")) {
+                    _searchIcon = iconImage;
+                    updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
+                }
+            },
+            enumerable: true
+        },
+        'textFieldBackgroundColor': {
+            get: function() {
+                return _textFieldBackgroundColor;
+            },
+            set: function(value) {
+                if (!(value instanceof Color)) {
+                    throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                }
+                _textFieldBackgroundColor = value;
+                this.setTextFieldBackgroundDrawable();
+            },
+            enumerable: true
+        },
+        // methods
+        'addToHeaderBar': {
+            value: function(page) {
+                if (page) {
+                    page.headerBar.addViewToHeaderBar(this);
+                }
+            },
+            enumerable: true
+        },
+        'removeFromHeaderBar': {
+            value: function(page) {
+                if (page) {
+                    page.headerBar.removeViewFromHeaderBar(this);
+                }
+            },
+            enumerable: true
+        },
+        'showKeyboard': {
+            value: function() {
+                this.requestFocus();
+            },
+            enumerable: true
+        },
+        'hideKeyboard': {
+            value: function() {
+                this.removeFocus();
+            },
+            enumerable: true
+        },
+        'requestFocus': {
+            value: function() {
+                this.nativeObject.requestFocus();
+            },
+            enumerable: true 
+        },
+        'removeFocus': {
+            value: function() {
+                this.nativeObject.clearFocus();
+                mSearchSrcTextView.clearFocus();
+            },
+            enumerable: true
+        },
+        'toString': {
+            value: function() {
+                return 'SearchView';
+            },
+            enumerable: true,
+            configurable: true
+        },
+        // events
+        'onSearchBegin': {
+            get: function() {
+                return _onSearchBeginCallback;
+            },
+            set: function(onSearchBegin) {
+                _onSearchBeginCallback = onSearchBegin.bind(this);
+            },
+            enumerable: true
+        },
+        'onSearchEnd': {
+            get: function() {
+                return _onSearchEndCallback;
+            },
+            set: function(onSearchEnd) {
+                _onSearchEndCallback = onSearchEnd.bind(this);
+            },
+            enumerable: true
+        },
+        'onTextChanged': {
+            get: function() {
+                return _onTextChangedCallback;
+            },
+            set: function(onTextChanged) {
+                _onTextChangedCallback = onTextChanged.bind(self);
+                self.setQueryTextListener();
+            },
+            enumerable: true
+        },
+        'onSearchButtonClicked': {
+            get: function() {
+                return _onSearchButtonClickedCallback;
+            },
+            set: function(onSearchButtonClicked) {
+                _onSearchButtonClickedCallback = onSearchButtonClicked.bind(self);
+                self.setOnSearchButtonClickedListener();
+            },
+            enumerable: true
+        },
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(font) {
+                if (font instanceof Font) {
+                    _font = font;
+                    mSearchSrcTextView.setTypeface(font.nativeObject);
+                    mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
+                }
+            },
+            enumerable: true
+        },
+        'textalignment': {
+            get: function() {
+                return _textalignment;
+            },
+            set: function(textalignment) {
+                _textalignment = textalignment;
+                mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
+            },
+            enumerable: true
+        },
+        'cursorColor': {
+            get: function() {
+                return _textViewCursorColor;
+            },
+            set: function(color) {
+                _textViewCursorColor = color;
+                SFEditText.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
+            },
+            enumerable: true
+        },
+        'searchIcon': {
+            get: function() {
+                return _searchIcon;
+            },
+            set: function(value) {
+                _searchIcon = value;
+                _searchIconAssigned = true;
+                // If setting null to icon, default search icon will be displayed.
+                if (_searchIcon == null || _searchIcon instanceof require("../image")) {
+                    updateQueryHint(this, mSearchSrcTextView, _searchIcon, _hint);
+                }
+            },
+            enumerable: true
         }
     });
+
+    var _hintTextColor = Color.LIGHTGRAY;
+    var _keyboardType = KeyboardType.DEFAULT;
+    var _closeImage = null;
+    var _textFieldBackgroundColor = Color.create(222, 222, 222);
+    var _textFieldBorderRadius = 15;
+    var _searchButtonIcon, _closeIcon, _searchIcon, _iconifiedByDefault = false,
+        _leftItem;
+
+    var _underlineColor = {
+        normal: _defaultUnderlineColorNormal,
+        focus: _defaultUnderlineColorFocus
+    };
+
+    Object.defineProperties(this.android, {
+        'hintTextColor': {
+            get: function() {
+                return _hintTextColor;
+            },
+            set: function(hintTextColor) {
+                if (!(hintTextColor instanceof Color)) {
+                    throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                }
+                _hintTextColor = hintTextColor;
+                mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
+            },
+            enumerable: true
+        },
+        'keyboardType': {
+            get: function() {
+                return _keyboardType;
+            },
+            set: function(keyboardType) {
+                _keyboardType = keyboardType;
+                this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
+            }.bind(this),
+            enumerable: true
+        },
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(font) {
+                if (font instanceof Font) {
+                    _font = font;
+                    mSearchSrcTextView.setTypeface(font.nativeObject);
+                    mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, font.size);
+                }
+            },
+            enumerable: true
+        },
+        'textalignment': {
+            get: function() {
+                return _textalignment;
+            },
+            set: function(textalignment) {
+                _textalignment = textalignment;
+                mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
+            },
+            enumerable: true
+        },
+        "closeImage": {
+            get: function() {
+                return _closeImage;
+            },
+            set: function(closeImage) {
+                // If setting null to icon, default search icon will be displayed.
+                if (closeImage == null || closeImage instanceof require("sf-core/ui/image")) {
+                    _closeImage = closeImage;
+                    mCloseButton.setImageDrawable(closeImage.nativeObject);
+                }
+            },
+            enumerable: true
+        },
+        'textFieldBorderRadius': {
+            get: function() {
+                return _textFieldBorderRadius;
+            },
+            set: function(value) {
+                _textFieldBorderRadius = value;
+                self.setTextFieldBackgroundDrawable();
+            }
+        },
+        'searchButtonIcon': {
+            get: function() {
+                return _searchButtonIcon;
+            },
+            set: function(value) {
+                _searchButtonIcon = value;
+                mSearchButton.setImageDrawable(_searchButtonIcon.nativeObject);
+            },
+            enumerable: true
+        },
+        'closeIcon': {
+            get: function() {
+                return _closeIcon;
+            },
+            set: function(value) {
+                _closeIcon = value;
+                mCloseButton.setImageDrawable(_closeIcon.nativeObject);
+            },
+            enumerable: true
+        },
+        'leftItem': {
+            get: function() {
+                return _leftItem;
+            },
+            set: function(value) {
+                _leftItem = value;
+                if (_leftItem instanceof Image) {
+                    mCompatImageView.setImageDrawable(_leftItem.nativeObject);
+                    mSearchEditFrame.addView(mCompatImageView, 0);
+                }
+                else
+                    mSearchEditFrame.addView(_leftItem.nativeObject, 0);
+                //If searchIcon is assign then can be used leftView as well
+                if (_searchIconAssigned)
+                    updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
+                else
+                    updateQueryHint(self, mSearchSrcTextView, null, _hint);
+            },
+            enumerable: true
+        },
+        'iconifiedByDefault': {
+            get: function() {
+                return _iconifiedByDefault;
+            },
+            set: function(value) {
+                _iconifiedByDefault = value;
+                self.nativeObject.setIconifiedByDefault(_iconifiedByDefault);
+            },
+            enumerable: true
+        }
+    });
+
+    const GradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+    var textFieldBackgroundDrawable = new GradientDrawable();
+    this.setTextFieldBackgroundDrawable = function() {
+        textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
+        textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
+        mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
+    };
+
+    let _isNotSetQueryTextListener = false;
+    this.setQueryTextListener = () => {
+        if (_isNotSetQueryTextListener)
+            return;
+        this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
+            onQueryTextSubmit: function(query) {
+                return false;
+            },
+            onQueryTextChange: function(newText) {
+                _onTextChangedCallback && _onTextChangedCallback(newText);
+                return false;
+            }
+        }));
+        _isNotSetQueryTextListener = true;
+    };
+
+    let _isClicklistenerAdded = false;
+    /*
+    Consider Native behavior: Close Drop down list & keyboard if text is not empty and null. 
+    In case of, drop down feature is present, make sure its behavior suggested in api doc or impl.
+    */
+    this.setOnSearchButtonClickedListener = () => {
+        if (_isClicklistenerAdded)
+            return;
+        mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
+            onEditorAction: function(textView, actionId, event) {
+                _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                return true;
+            }
+        }));
+        _isClicklistenerAdded = true;
+    };
+
+    // Handling ios specific properties
+    this.ios.showLoading = function() {};
+    this.ios.hideLoading = function() {};
+
+    if (!this.skipDefaults) {
+        const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+        const NativeView = requireClass("android.view.View");
+        mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);
+
+        mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+            onFocusChange: function(view, hasFocus) {
+                if (hasFocus) { 
+                    let inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                    inputManager.showSoftInput(view, 0);
+                    _onSearchBeginCallback && _onSearchBeginCallback();
+                    mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
+                }
+                else {
+                    _onSearchEndCallback && _onSearchEndCallback();
+                    mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
+                }
+            }.bind(this)
+        }));
+
+        this.android.iconifiedByDefault = false;
+    }
+
+    // Makes SearchView's textbox apperance fully occupied.
+    var mCompatImageView = mSearchEditFrame.getChildAt(0);
+    mSearchEditFrame.removeViewAt(0);
+    let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
+    let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
+    _searchIcon = new Image({
+        roundedBitmapDrawable: mSearchHintIcon
+    });
+    updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
+    a.recycle();
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+}
 
 SearchView.iOS = {};
 SearchView.iOS.Style = {};

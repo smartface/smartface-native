@@ -1,5 +1,5 @@
 const File = require("sf-core/io/file");
-
+/** @type {import('./index')} */
 function Font() {}
 
 Font.create = function(fontFamily, size, style) {

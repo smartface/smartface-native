@@ -10,7 +10,6 @@ module.exports = {
     Switch: require('./switch'),
     AlertView: require('./alertview'),
     Page: require('./page'),
-    Pages: require('./pages'),
     HeaderBarItem: require('./headerbaritem'),
     FlexLayout: require('./flexlayout'),
     Slider: require('./slider'),

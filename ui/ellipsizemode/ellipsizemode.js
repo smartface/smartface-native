@@ -1,3 +1,15 @@
+/** @type {{
+ *   START: "start",
+ *   MIDDLE: "middle",
+ *   WORDWRAPPING: "ios_wordwrapping",
+ *   CHARWRAPPING: "ios_charwrapping",
+ *   END: "end",
+ *   NONE: "none",
+ *   iOS: {
+ *     WORDWRAPPING: "ios_wordwrapping",
+ *     CHARWRAPPING: "ios_charwrapping"
+ *   },
+ * }} */
 const EllipsizeMode = {};
 
 EllipsizeMode.START = "start";

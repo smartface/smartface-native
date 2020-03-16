@@ -1,5 +1,4 @@
 /*globals requireClass*/
-const extend = require('js-base/core/extend');
 const TextView = require('../textview');
 const TypeUtil = require('../../util/type');
 const KeyboardType = require('../keyboardtype');
@@ -64,368 +63,368 @@ const NativeActionKeyType = [
     4 // EditorInfo.IME_ACTION_SEND
 ];
 
-const TextBox = extend(TextView)(
-    function(_super, params) {
-        var self = this;
-        var activity = AndroidConfig.activity;
-        if (!self.nativeObject) {
-            //AND-3123: Due to the issue, hardware button listener added.
-            var callback = {
-                'onKeyPreIme': function(keyCode, keyEventAction) {
-                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if (keyCode === 4 && keyEventAction === 1) {
-                        self.nativeObject.clearFocus();
-                    }
-                    // TODO: Below code moved to SFEditText class implementation. 
-                    // But, I am not sure this implementation doesn't causes unexpected touch handling.
-                    // return false; 
+// const TextBox = extend(TextView)(
+TextBox.prototype = Object.create(TextView.prototype);
+function TextBox(params) {
+    var self = this;
+    var activity = AndroidConfig.activity;
+    if (!self.nativeObject) {
+        //AND-3123: Due to the issue, hardware button listener added.
+        var callback = {
+            'onKeyPreIme': function(keyCode, keyEventAction) {
+                // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                if (keyCode === 4 && keyEventAction === 1) {
+                    self.nativeObject.clearFocus();
                 }
-            };
-            self.nativeObject = new SFEditText(activity, callback);
-        }
-        _super(this);
+                // TODO: Below code moved to SFEditText class implementation. 
+                // But, I am not sure this implementation doesn't causes unexpected touch handling.
+                // return false; 
+            }
+        };
+        self.nativeObject = new SFEditText(activity, callback);
+    }
+    TextView.apply(this);
 
-        var _touchEnabled = true;
-        var _isPassword = false;
-        var _keyboardType = KeyboardType.DEFAULT;
-        var _actionKeyType = ActionKeyType.DEFAULT;
-        var _onTextChanged, _cursorColor, _onEditBegins, _onEditEnds;
-        var _onActionButtonPress;
-        var _hasEventsLocked = false;
-        var _autoCapitalize = 0;
-        Object.defineProperties(this, {
-            'cursorPosition': {
-                get: function() {
-                    return {
-                        start: self.nativeObject.getSelectionStart(),
-                        end: self.nativeObject.getSelectionEnd()
-                    };
-                },
-                set: function(value) {
-                    if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
-                        if (value.start > self.text.length) {
-                            value.start = 0;
-                        }
-                        if (value.end > self.text.length) {
-                            value.end = 0;
-                        }
-                        self.nativeObject.setSelection(value.start, value.end);
-                    }
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'cursorColor': {
-                get: function() {
-                    return _cursorColor;
-                },
-                set: function(color) {
-                    _cursorColor = color;
-                    SFEditText.setCursorColor(this.nativeObject, color.nativeObject);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'touchEnabled': {
-                get: function() {
-                    return _touchEnabled;
-                },
-                set: function(touchEnabled) {
-                    _touchEnabled = touchEnabled;
-                    self.nativeObject.setFocusable(touchEnabled);
-                    self.nativeObject.setFocusableInTouchMode(touchEnabled);
-                    self.nativeObject.setLongClickable(touchEnabled);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'hint': {
-                get: function() {
-                    return self.nativeObject.getHint() && self.nativeObject.getHint().toString();
-                },
-                set: function(hint) {
-                    self.nativeObject.setHint(hint);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'isPassword': {
-                get: function() {
-                    return _isPassword;
-                },
-                set: function(isPassword) {
-                    _isPassword = isPassword;
-                    let typeface = self.nativeObject.getTypeface();
-                    let currentInputType = this.nativeObject.getInputType();
-
-                    let passwordType;
-                    if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) != 0)
-                        passwordType = TYPE_TEXT_VARIATION_PASSWORD;
-                    else
-                        passwordType = TYPE_NUMBER_VARIATION_PASSWORD;
-
-                    let removeTags = TYPE_TEXT_VARIATION_PASSWORD | TYPE_NUMBER_VARIATION_PASSWORD;
-                    if (_isPassword)
-                        updateInputType(this, removeTags, passwordType);
-                    else
-                        updateInputType(this, removeTags, 0);
-                    // Some devices might change the font.
-                    self.nativeObject.setTypeface(typeface);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'keyboardType': {
-                get: function() {
-                    return _keyboardType;
-                },
-                set: function(keyboardType) {
-                    let removeFlags = NativeKeyboardType[_keyboardType];
-                    if (!TypeUtil.isNumeric(NativeKeyboardType[keyboardType])) {
-                        _keyboardType = KeyboardType.DEFAULT;
-                    } else {
-                        _keyboardType = keyboardType;
-                    }
-                    updateInputType(this, removeFlags, NativeKeyboardType[_keyboardType]);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'actionKeyType': {
-                get: function() {
-                    return _actionKeyType;
-                },
-                set: function(actionKeyType) {
-                    _actionKeyType = actionKeyType;
-                    self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'showKeyboard': {
-                value: function() {
-                    this.requestFocus();
-                },
-                enumerable: true
-            },
-            'hideKeyboard': {
-                value: function() {
-                    this.removeFocus();
-                },
-                enumerable: true
-            },
-            'requestFocus': {
-                value: function() {
-                    this.nativeObject.requestFocus();
-                    // Due to the requirements we should show keyboard when focus requested.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
-                },
-                enumerable: true
-            },
-            'removeFocus': {
-                value: function() {
-                    this.nativeObject.clearFocus();
-                    // Due to the requirements we should hide keyboard when focus cleared.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
-                },
-                enumerable: true
-            },
-            'toString': {
-                value: function() {
-                    return 'TextBox';
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'onTextChanged': {
-                get: function() {
-                    return _onTextChanged;
-                },
-                set: function(onTextChanged) {
-                    _onTextChanged = onTextChanged.bind(this);
-                    if (!this.__didAddTextChangedListener) {
-                        this.__didAddTextChangedListener = true;
-                        this.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
-                            // todo: Control insertedText after resolving story/AND-2508 issue.
-                            onTextChanged: function(charSequence, start, before, count) {
-                                if (!_hasEventsLocked) {
-                                    var insertedText = "";
-                                    if (before == 0) {
-                                        insertedText = charSequence.subSequence(start, start + count).toString();
-                                    } else if (before <= count) {
-                                        insertedText = charSequence.subSequence(before, count).toString();
-                                    }
-                                    if (_onTextChanged) {
-                                        _onTextChanged({
-                                            location: (insertedText === "") ? Math.abs(start + before) - 1 : Math.abs(start + before),
-                                            insertedText: insertedText
-                                        });
-                                    }
-                                }
-                            }.bind(this),
-                            beforeTextChanged: function(charSequence, start, count, after) {},
-                            afterTextChanged: function(editable) {}
-                        }));
-                    }
-                },
-                enumerable: true
-            },
-            'onEditBegins': {
-                get: function() {
-                    return _onEditBegins;
-                },
-                set: function(onEditBegins) {
-                    _onEditBegins = onEditBegins.bind(this);
-                    if (!this.__didSetOnFocusChangeListener) {
-                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                            onFocusChange: function(view, hasFocus) {
-                                if (hasFocus) {
-                                    _onEditBegins && _onEditBegins();
-                                } else {
-                                    _onEditEnds && _onEditEnds();
-                                    this.nativeObject.setSelection(0, 0);
-                                }
-                            }.bind(this)
-                        }));
-                        this.__didSetOnFocusChangeListener = true;
-                    }
-                },
-                enumerable: true
-            },
-            'onEditEnds': {
-                get: function() {
-                    return _onEditEnds;
-                },
-                set: function(onEditEnds) {
-                    _onEditEnds = onEditEnds.bind(this);
-                    if (!this.__didSetOnFocusChangeListener) {
-                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                            onFocusChange: function(view, hasFocus) {
-                                if (hasFocus) {
-                                    _onEditBegins && _onEditBegins();
-                                } else {
-                                    _onEditEnds && _onEditEnds();
-                                    this.nativeObject.setSelection(0, 0);
-                                }
-                            }.bind(this)
-                        }));
-                        this.__didSetOnFocusChangeListener = true;
-                    }
-                },
-                enumerable: true
-            },
-            'onActionButtonPress': {
-                get: function() {
-                    return _onActionButtonPress;
-                },
-                set: function(onActionButtonPress) {
-                    _onActionButtonPress = onActionButtonPress.bind(this);
-
-                    if (this.__didSetOnEditorActionListener)
-                        return;
-
-                    self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
-                        onEditorAction: function(textView, actionId, event) {
-                            if (actionId === NativeActionKeyType[_actionKeyType]) {
-                                _onActionButtonPress && _onActionButtonPress({
-                                    actionKeyType: _actionKeyType
-                                });
-                            }
-                            return false;
-                        }
-                    }));
-
-                    this.__didSetOnEditorActionListener = true;
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'text': {
-                get: function() {
-                    return self.nativeObject.getText().toString();
-                },
-                set: function(text) {
-                    _hasEventsLocked = true;
-                    if (typeof text !== "string") text = "";
-
-                    self.nativeObject.setText("" + text);
-
-                    self.nativeObject.setSelection(text.length);
-
-                    _hasEventsLocked = false;
-                },
-                enumerable: true,
-                configurable: true
-            },
-            'autoCapitalize': {
-                get: function() {
-                    return _autoCapitalize;
-                },
-                set: function(autoCapitalize) {
-                    let prevAutoCapitalize = _autoCapitalize;
-                    _autoCapitalize = autoCapitalize;
-                    updateInputType(this, prevAutoCapitalize, NativeAutoCapitalize[_autoCapitalize]);
-                },
-                enumerable: true,
-                configurable: true
-            },
-
-        });
-
-        var _hintTextColor;
-        Object.defineProperty(this.android, 'hintTextColor', {
+    var _touchEnabled = true;
+    var _isPassword = false;
+    var _keyboardType = KeyboardType.DEFAULT;
+    var _actionKeyType = ActionKeyType.DEFAULT;
+    var _onTextChanged, _cursorColor, _onEditBegins, _onEditEnds;
+    var _onActionButtonPress;
+    var _hasEventsLocked = false;
+    var _autoCapitalize = 0;
+    Object.defineProperties(this, {
+        'cursorPosition': {
             get: function() {
-                return _hintTextColor;
+                return {
+                    start: self.nativeObject.getSelectionStart(),
+                    end: self.nativeObject.getSelectionEnd()
+                };
             },
-            set: function(hintTextColor) {
-                _hintTextColor = hintTextColor;
-                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
-            },
-            enumerable: true
-        });
-
-        Object.defineProperty(this.android, 'maxLength', {
-            value: function(value) {
-                var filterArray = toJSArray(self.nativeObject.getFilters());
-                for (var i = 0; i < filterArray.length; i++) {
-                    if ((filterArray[i] + "").includes("android.text.InputFilter$LengthFilter")) {
-                        filterArray.splice(i, 1);
-                        break;
+            set: function(value) {
+                if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
+                    if (value.start > self.text.length) {
+                        value.start = 0;
                     }
+                    if (value.end > self.text.length) {
+                        value.end = 0;
+                    }
+                    self.nativeObject.setSelection(value.start, value.end);
                 }
-                filterArray.push(new NativeInputFilter.LengthFilter(value));
-                self.nativeObject.setFilters(array(filterArray, "android.text.InputFilter"));
             },
             enumerable: true,
             configurable: true
-        });
+        },
+        'cursorColor': {
+            get: function() {
+                return _cursorColor;
+            },
+            set: function(color) {
+                _cursorColor = color;
+                SFEditText.setCursorColor(this.nativeObject, color.nativeObject);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'touchEnabled': {
+            get: function() {
+                return _touchEnabled;
+            },
+            set: function(touchEnabled) {
+                _touchEnabled = touchEnabled;
+                self.nativeObject.setFocusable(touchEnabled);
+                self.nativeObject.setFocusableInTouchMode(touchEnabled);
+                self.nativeObject.setLongClickable(touchEnabled);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'hint': {
+            get: function() {
+                return self.nativeObject.getHint() && self.nativeObject.getHint().toString();
+            },
+            set: function(hint) {
+                self.nativeObject.setHint(hint);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'isPassword': {
+            get: function() {
+                return _isPassword;
+            },
+            set: function(isPassword) {
+                _isPassword = isPassword;
+                let typeface = self.nativeObject.getTypeface();
+                let currentInputType = this.nativeObject.getInputType();
 
-        // Don't use self.multiline = false due to AND-2725 bug.
-        // setMovementMethod in label-Android.js file removes the textbox cursor. 
-        self.nativeObject.setSingleLine(true);
+                let passwordType;
+                if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) != 0)
+                    passwordType = TYPE_TEXT_VARIATION_PASSWORD;
+                else
+                    passwordType = TYPE_NUMBER_VARIATION_PASSWORD;
 
-        /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-        self._touchCallbacks.onTouch = function(x, y) {
-            let result, mEvent = {
-                x,
-                y
-            };
-            if (this.onTouch)
-                result = this.onTouch(mEvent);
-            return (result === true);
-        };
+                let removeTags = TYPE_TEXT_VARIATION_PASSWORD | TYPE_NUMBER_VARIATION_PASSWORD;
+                if (_isPassword)
+                    updateInputType(this, removeTags, passwordType);
+                else
+                    updateInputType(this, removeTags, 0);
+                // Some devices might change the font.
+                self.nativeObject.setTypeface(typeface);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'keyboardType': {
+            get: function() {
+                return _keyboardType;
+            },
+            set: function(keyboardType) {
+                let removeFlags = NativeKeyboardType[_keyboardType];
+                if (!TypeUtil.isNumeric(NativeKeyboardType[keyboardType])) {
+                    _keyboardType = KeyboardType.DEFAULT;
+                } else {
+                    _keyboardType = keyboardType;
+                }
+                updateInputType(this, removeFlags, NativeKeyboardType[_keyboardType]);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'actionKeyType': {
+            get: function() {
+                return _actionKeyType;
+            },
+            set: function(actionKeyType) {
+                _actionKeyType = actionKeyType;
+                self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'showKeyboard': {
+            value: function() {
+                this.requestFocus();
+            },
+            enumerable: true
+        },
+        'hideKeyboard': {
+            value: function() {
+                this.removeFocus();
+            },
+            enumerable: true
+        },
+        'requestFocus': {
+            value: function() {
+                this.nativeObject.requestFocus();
+                // Due to the requirements we should show keyboard when focus requested.
+                var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+            },
+            enumerable: true
+        },
+        'removeFocus': {
+            value: function() {
+                this.nativeObject.clearFocus();
+                // Due to the requirements we should hide keyboard when focus cleared.
+                var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                var windowToken = this.nativeObject.getWindowToken();
+                inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+            },
+            enumerable: true
+        },
+        'toString': {
+            value: function() {
+                return 'TextBox';
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'onTextChanged': {
+            get: function() {
+                return _onTextChanged;
+            },
+            set: function(onTextChanged) {
+                _onTextChanged = onTextChanged.bind(this);
+                if (!this.__didAddTextChangedListener) {
+                    this.__didAddTextChangedListener = true;
+                    this.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
+                        // todo: Control insertedText after resolving story/AND-2508 issue.
+                        onTextChanged: function(charSequence, start, before, count) {
+                            if (!_hasEventsLocked) {
+                                var insertedText = "";
+                                if (before == 0) {
+                                    insertedText = charSequence.subSequence(start, start + count).toString();
+                                } else if (before <= count) {
+                                    insertedText = charSequence.subSequence(before, count).toString();
+                                }
+                                if (_onTextChanged) {
+                                    _onTextChanged({
+                                        location: (insertedText === "") ? Math.abs(start + before) - 1 : Math.abs(start + before),
+                                        insertedText: insertedText
+                                    });
+                                }
+                            }
+                        }.bind(this),
+                        beforeTextChanged: function(charSequence, start, count, after) {},
+                        afterTextChanged: function(editable) {}
+                    }));
+                }
+            },
+            enumerable: true
+        },
+        'onEditBegins': {
+            get: function() {
+                return _onEditBegins;
+            },
+            set: function(onEditBegins) {
+                _onEditBegins = onEditBegins.bind(this);
+                if (!this.__didSetOnFocusChangeListener) {
+                    this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                        onFocusChange: function(view, hasFocus) {
+                            if (hasFocus) {
+                                _onEditBegins && _onEditBegins();
+                            } else {
+                                _onEditEnds && _onEditEnds();
+                                this.nativeObject.setSelection(0, 0);
+                            }
+                        }.bind(this)
+                    }));
+                    this.__didSetOnFocusChangeListener = true;
+                }
+            },
+            enumerable: true
+        },
+        'onEditEnds': {
+            get: function() {
+                return _onEditEnds;
+            },
+            set: function(onEditEnds) {
+                _onEditEnds = onEditEnds.bind(this);
+                if (!this.__didSetOnFocusChangeListener) {
+                    this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                        onFocusChange: function(view, hasFocus) {
+                            if (hasFocus) {
+                                _onEditBegins && _onEditBegins();
+                            } else {
+                                _onEditEnds && _onEditEnds();
+                                this.nativeObject.setSelection(0, 0);
+                            }
+                        }.bind(this)
+                    }));
+                    this.__didSetOnFocusChangeListener = true;
+                }
+            },
+            enumerable: true
+        },
+        'onActionButtonPress': {
+            get: function() {
+                return _onActionButtonPress;
+            },
+            set: function(onActionButtonPress) {
+                _onActionButtonPress = onActionButtonPress.bind(this);
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
+                if (this.__didSetOnEditorActionListener)
+                    return;
+
+                self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
+                    onEditorAction: function(textView, actionId, event) {
+                        if (actionId === NativeActionKeyType[_actionKeyType]) {
+                            _onActionButtonPress && _onActionButtonPress({
+                                actionKeyType: _actionKeyType
+                            });
+                        }
+                        return false;
+                    }
+                }));
+
+                this.__didSetOnEditorActionListener = true;
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'text': {
+            get: function() {
+                return self.nativeObject.getText().toString();
+            },
+            set: function(text) {
+                _hasEventsLocked = true;
+                if (typeof text !== "string") text = "";
+
+                self.nativeObject.setText("" + text);
+
+                self.nativeObject.setSelection(text.length);
+
+                _hasEventsLocked = false;
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'autoCapitalize': {
+            get: function() {
+                return _autoCapitalize;
+            },
+            set: function(autoCapitalize) {
+                let prevAutoCapitalize = _autoCapitalize;
+                _autoCapitalize = autoCapitalize;
+                updateInputType(this, prevAutoCapitalize, NativeAutoCapitalize[_autoCapitalize]);
+            },
+            enumerable: true,
+            configurable: true
+        },
+
+    });
+
+    var _hintTextColor;
+    Object.defineProperty(this.android, 'hintTextColor', {
+        get: function() {
+            return _hintTextColor;
+        },
+        set: function(hintTextColor) {
+            _hintTextColor = hintTextColor;
+            self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(this.android, 'maxLength', {
+        value: function(value) {
+            var filterArray = toJSArray(self.nativeObject.getFilters());
+            for (var i = 0; i < filterArray.length; i++) {
+                if ((filterArray[i] + "").includes("android.text.InputFilter$LengthFilter")) {
+                    filterArray.splice(i, 1);
+                    break;
+                }
             }
+            filterArray.push(new NativeInputFilter.LengthFilter(value));
+            self.nativeObject.setFilters(array(filterArray, "android.text.InputFilter"));
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    // Don't use self.multiline = false due to AND-2725 bug.
+    // setMovementMethod in label-Android.js file removes the textbox cursor. 
+    self.nativeObject.setSingleLine(true);
+
+    /* Override the onTouch and make default returning false to prevent bug in other listener.*/
+    self._touchCallbacks.onTouch = function(x, y) {
+        let result, mEvent = {
+            x,
+            y
+        };
+        if (this.onTouch)
+            result = this.onTouch(mEvent);
+        return (result === true);
+    };
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
         }
     }
-);
+}
 
 /*
 These Android InputType Flags are not supported with isPassword

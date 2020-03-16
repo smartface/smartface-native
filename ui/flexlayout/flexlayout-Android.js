@@ -1,7 +1,6 @@
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
 const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
 
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
@@ -14,92 +13,90 @@ const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType'
 
 const activity = AndroidConfig.activity;
 
-const FlexLayout = extend(ViewGroup)(
-    function(_super, params) {
-        if (!this.nativeObject) {
-            this.nativeObject = new NativeYogaLayout(activity);
-        }
+FlexLayout.prototype = Object.create(ViewGroup.prototype);
 
-        _super(this);
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    },
-    function(flexLayoutPrototype) {
-        flexLayoutPrototype._flexWrap = null;
-        Object.defineProperties(flexLayoutPrototype, {
-            // direction values same as native
-            'direction': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), FlexLayout.Direction);
-                },
-                set: function(direction) {
-                    this.yogaNode.setDirection(direction);
-                },
-                enumerable: true
-            },
-            // flexDirection values same as native
-            'flexDirection': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), FlexLayout.FlexDirection);
-                },
-                set: function(flexDirection) {
-                    this.yogaNode.setFlexDirection(flexDirection);
-                },
-                enumerable: true
-            },
-            // justifyContent values same as native
-            'justifyContent': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), FlexLayout.JustifyContent);
-                },
-                set: function(justifyContent) {
-                    this.yogaNode.setJustifyContent(justifyContent);
-                },
-                enumerable: true
-            },
-            // alignContent values same as native
-            'alignContent': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), FlexLayout.AlignContent);
-                },
-                set: function(alignContent) {
-                    this.yogaNode.setAlignContent(alignContent);
-                },
-                enumerable: true
-            },
-            // alignItems values same as native    
-            'alignItems': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), FlexLayout.AlignItems);
-                },
-                set: function(alignItems) {
-                    this.yogaNode.setAlignItems(alignItems);
-                },
-                enumerable: true
-            },
-            // flexWrap values same as native 
-            'flexWrap': {
-                get: function() {
-                    return this._flexWrap;
-                },
-                set: function(flexWrap) {
-                    this._flexWrap = flexWrap;
-                    this.yogaNode.setWrap(flexWrap);
-                },
-                enumerable: true
-            }
-        });
-
-        flexLayoutPrototype.toString = function() {
-            return 'FlexLayout';
-        };
+function FlexLayout(params) {
+    if (!this.nativeObject) {
+        this.nativeObject = new NativeYogaLayout(activity);
     }
-);
+
+    ViewGroup.call(this);
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+}
+FlexLayout.prototype._flexWrap = null;
+Object.defineProperties(FlexLayout.prototype, {
+    // direction values same as native
+    'direction': {
+        get: function() {
+            return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), FlexLayout.Direction);
+        },
+        set: function(direction) {
+            this.yogaNode.setDirection(direction);
+        },
+        enumerable: true
+    },
+    // flexDirection values same as native
+    'flexDirection': {
+        get: function() {
+            return convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), FlexLayout.FlexDirection);
+        },
+        set: function(flexDirection) {
+            this.yogaNode.setFlexDirection(flexDirection);
+        },
+        enumerable: true
+    },
+    // justifyContent values same as native
+    'justifyContent': {
+        get: function() {
+            return convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), FlexLayout.JustifyContent);
+        },
+        set: function(justifyContent) {
+            this.yogaNode.setJustifyContent(justifyContent);
+        },
+        enumerable: true
+    },
+    // alignContent values same as native
+    'alignContent': {
+        get: function() {
+            return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), FlexLayout.AlignContent);
+        },
+        set: function(alignContent) {
+            this.yogaNode.setAlignContent(alignContent);
+        },
+        enumerable: true
+    },
+    // alignItems values same as native    
+    'alignItems': {
+        get: function() {
+            return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), FlexLayout.AlignItems);
+        },
+        set: function(alignItems) {
+            this.yogaNode.setAlignItems(alignItems);
+        },
+        enumerable: true
+    },
+    // flexWrap values same as native 
+    'flexWrap': {
+        get: function() {
+            return this._flexWrap;
+        },
+        set: function(flexWrap) {
+            this._flexWrap = flexWrap;
+            this.yogaNode.setWrap(flexWrap);
+        },
+        enumerable: true
+    }
+});
+
+FlexLayout.prototype.toString = function() {
+    return 'FlexLayout';
+};
 
 function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
     var jsKeys = Object.keys(jsEnums);

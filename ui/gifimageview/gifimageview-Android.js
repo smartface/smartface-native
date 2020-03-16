@@ -1,72 +1,71 @@
-const extend = require('js-base/core/extend');
 const ImageView = require("sf-core/ui/imageview");
 const GifImage = require("sf-core/ui/gifimage");
 const Image = require("sf-core/ui/image");
 
-const GifImageView = extend(ImageView)(
-    function(_super, params) {
-        _super(this);
+GifImageView.prototype = Object.create(ImageView.prototype);
+function GifImageView(params) {
+    var self = this;
+    ImageView.call(this);
 
-        const self = this;
+    const self = this;
 
-        var _image;
-        Object.defineProperties(self, {
-            'gifImage': {
-                get: function() {
-                    return _image;
-                },
-                set: function(value) {
-                    // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (!(value instanceof GifImage))
-                        return;
-                    _image = value;
-                    this.nativeObject.setImageDrawable(null);
-                    this.nativeObject.setImageDrawable(_image.nativeObject);
-                },
-                enumerable: true
+    var _image;
+    Object.defineProperties(self, {
+        'gifImage': {
+            get: function() {
+                return _image;
             },
-            'startAnimating': {
-                value: function() {
-                    self.gifImage.nativeObject.start();
-                },
-                enumerable: true
+            set: function(value) {
+                // We don't use backgroundImage of view. Because, it breaks image fill type.
+                if (!(value instanceof GifImage))
+                    return;
+                _image = value;
+                this.nativeObject.setImageDrawable(null);
+                this.nativeObject.setImageDrawable(_image.nativeObject);
             },
-            'stopAnimating': {
-                value: function() {
-                    self.gifImage.nativeObject.stop();
-                },
-                enumerable: true
+            enumerable: true
+        },
+        'startAnimating': {
+            value: function() {
+                self.gifImage.nativeObject.start();
             },
-            'currentFrameIndex': {
-                get: function() {
-                    return self.gifImage.nativeObject.getCurrentFrameIndex();
-                },
-                enumerable: true
+            enumerable: true
+        },
+        'stopAnimating': {
+            value: function() {
+                self.gifImage.nativeObject.stop();
             },
-            'currentFrame': {
-                get: function() {
-                    return new Image({
-                        bitmap: self.gifImage.nativeObject.getCurrentFrame()
-                    });
-                },
-                enumerable: true
+            enumerable: true
+        },
+        'currentFrameIndex': {
+            get: function() {
+                return self.gifImage.nativeObject.getCurrentFrameIndex();
             },
-            'isAnimating': {
-                get: function() {
-                    return self.gifImage.nativeObject.isPlaying();
-                },
-                enumerable: true
-            }
-        });
+            enumerable: true
+        },
+        'currentFrame': {
+            get: function() {
+                return new Image({
+                    bitmap: self.gifImage.nativeObject.getCurrentFrame()
+                });
+            },
+            enumerable: true
+        },
+        'isAnimating': {
+            get: function() {
+                return self.gifImage.nativeObject.isPlaying();
+            },
+            enumerable: true
+        }
+    });
 
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
         }
     }
-);
+}
 
 module.exports = GifImageView;

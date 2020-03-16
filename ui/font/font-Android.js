@@ -5,7 +5,7 @@ const AndroidConfig = require("../../util/Android/androidconfig.js");
 const SizeCalculator = require("../../util/Android/textviewsizecalculator.js");
 
 const NativeTypeface = requireClass("android.graphics.Typeface");
-
+/** @type {typeof import('./index')} */
 function Font(params) {
 
     Object.defineProperties(this, {
