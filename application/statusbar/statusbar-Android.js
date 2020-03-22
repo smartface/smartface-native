@@ -18,6 +18,7 @@ const SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = NativeView.SYSTEM_UI_FLAG_LIGHT_STATUS_B
 var statusBar = {};
 var activity = AndroidConfig.activity;
 var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
+
 Object.defineProperty(statusBar, 'style', {
     get: function() {
         return statusBarStyle;

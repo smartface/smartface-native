@@ -1,1 +1,1 @@
-module.exports = require('./application-' + Device.deviceOS + '.js');
+module.exports = require("./application-" + Device.deviceOS + ".js");

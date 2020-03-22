@@ -1,19 +1,18 @@
 const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
 
-const CollectionViewItem = extend(ViewGroup)(
-    function(_super, params) {
+GridViewItem.prototype = Object.create(ViewGroup.prototype);
+// const CollectionViewItem = extend(ViewGroup)(
+function GridViewItem(params) {
 
-        _super(this);
+    ViewGroup.apply(this);
 
-        // Assign parameters given in constructor
+    // Assign parameters given in constructor
 
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
         }
     }
-);
+}
 
-module.exports = CollectionViewItem;
+module.exports = GridViewItem;

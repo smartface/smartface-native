@@ -1,19 +1,17 @@
 const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
-const YogaEnums = require('sf-core/util').YogaEnums;
+const YogaEnums = require('../../util').YogaEnums;
 
-const FlexLayout = extend(ViewGroup)(
-    function(_super, params) {
-        _super(this);
+FlexLayout.prototype = Object.create(ViewGroup.prototype);
+function FlexLayout(params) {
+    ViewGroup.call(this);
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
         }
     }
-);
+}
 
 // YG Enums are inherited from UIView
 ////////////////////////////////////////////////////////////////////////

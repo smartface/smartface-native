@@ -1,1 +1,1 @@
-module.exports = require('./style-' + Device.deviceOS + '.js');
+module.exports = Device.deviceOS === "Android" ? require("./style-Android.js") : {};

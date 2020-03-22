@@ -18,7 +18,7 @@ function Animator(params) {
                         self.completeFunction();
                     }
                 });
-
+                return self;
             }
         },
         'then': {

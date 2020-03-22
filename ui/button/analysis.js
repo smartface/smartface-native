@@ -1,6 +1,3 @@
-const View = require('../view');
-const extend = require('js-base/core/extend');
-
 /**
  * @class UI.Button
  * @extends UI.View
