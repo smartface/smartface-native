@@ -160,7 +160,6 @@ RangeSlider.prototype.minValue = 0;
  */
 RangeSlider.prototype.maxValue = 1;
 
-
 /**
  * Sets given image to thumb
  *
@@ -170,6 +169,54 @@ RangeSlider.prototype.maxValue = 1;
  */
 RangeSlider.prototype.thumbImage = undefined;
 
+/**
+ * The color of the shadow. Use {@link UI.RangeSlider#applyThumbViewChanges applyThumbViewChanges} after changes.
+ *
+ * @since 4.2.0
+ * @property {UI.Color} [thumbShadowColor = UI.Color.GRAY]
+ * @ios
+ */
+RangeSlider.prototype.thumbShadowColor = UI.Color.GRAY;
+
+/**
+ * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). Use {@link UI.RangeSlider#applyThumbViewChanges applyThumbViewChanges} after changes.
+ *
+ * @since 4.2.0
+ * @property {Number} [thumbShadowOpacity = 0.25]
+ * @ios
+ */
+RangeSlider.prototype.thumbShadowOpacity = 0.25;
+
+/**
+ * The blur radius (in points) used to render the shadow. Use {@link UI.RangeSlider#applyThumbViewChanges applyThumbViewChanges} after changes.
+ *
+ * @since 4.2.0
+ * @property {Number} [thumbShadowRadius = 0.5]
+ * @ios
+ */
+RangeSlider.prototype.thumbShadowRadius = 0.5;
+
+/**
+ * The offset (in points) of the shadow. Use {@link UI.RangeSlider#applyThumbViewChanges applyThumbViewChanges} after changes.
+ * 
+ * @property {Object} [thumbShadowOffset = {x: 0.0,y: 4.0}]
+ * @property {Number} thumbShadowOffset.x
+ * @property {Number} thumbShadowOffset.y
+ * @ios
+ * @since 4.2.0
+ */
+RangeSlider.prototype.ios.thumbShadowOffset = {
+    x: 0.0,
+    y: 4.0
+};
+
+/**
+ * If you make any changes to ThumbView, you should call applyThumbViewChanges.
+ *
+ * @method applyThumbViewChanges
+ * @ios
+ */
+RangeSlider.prototype.applyThumbViewChanges = function() {};
 
 /**
  * This property enables / disables haptic feedback when sliding over snap values.
