@@ -91,7 +91,7 @@ function Http(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.requestImage(
                 url,
                 function(e) {
@@ -156,7 +156,7 @@ function Http(params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
-        return new http.Request(
+        return new Http.Request(
             self.nativeObject.requestJSON(
                 url,
                 function(e) {
