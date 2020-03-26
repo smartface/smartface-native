@@ -130,6 +130,58 @@ function RangeSlider(params) {
 		enumerable: true
 	});
 
+    Object.defineProperty(self.ios, 'thumbShadowColor', {
+		get: function() {
+			return self.nativeObject.thumbShadowColor;
+		},
+		set: function(value) {
+			self.nativeObject.thumbShadowColor = value.nativeObject;
+		},
+		enumerable: true
+    });
+    
+    Object.defineProperty(self.ios, 'thumbShadowOpacity', {
+		get: function() {
+			return self.nativeObject.thumbShadowOpacity;
+		},
+		set: function(value) {
+			self.nativeObject.thumbShadowOpacity = value;
+		},
+		enumerable: true
+    });
+
+    Object.defineProperty(self.ios, 'thumbShadowRadius', {
+		get: function() {
+			return self.nativeObject.thumbShadowRadius;
+		},
+		set: function(value) {
+			self.nativeObject.thumbShadowRadius = value;
+		},
+		enumerable: true
+    });
+
+    Object.defineProperty(self.ios, 'thumbShadowOffset', {
+		get: function() {
+            var size = self.nativeObject.thumbShadowOffset;
+            return {
+                x: size.width,
+                y: size.height
+            };
+		},
+		set: function(value) {
+            var size = {
+                width: value.x,
+                height: value.y
+            };
+			self.nativeObject.thumbShadowOffset = size;
+		},
+		enumerable: true
+    });
+
+    self.ios.applyThumbViewChanges = function(){
+        self.nativeObject.applyThumbViewChanges ();
+    };
+
 	var _valueChangeHandler = function() {
 		if (typeof self.onValueChange === "function") {
 			self.onValueChange(self.value);
