@@ -96,7 +96,7 @@ declare class DocumentPicker {
      *
      * @param {Object} params
      * @param {UI.Page} params.page
-     * @param {[String]} params.type On Android these are MIME types such as text/plain or partial MIME types such as image/*. On iOS these must be Apple "Uniform Type Identifiers". Also can use {@link Device.DocumentPicker.Types}.
+     * @param {[DocumentPicker.Types]} params.type On Android these are MIME types such as text/plain or partial MIME types such as image/*. On iOS these must be Apple "Uniform Type Identifiers". Also can use {@link Device.DocumentPicker.Types}.
      * @param {Function} params.onSuccess This event is called after picking document successfully.
      * @param {IO.File} params.onSuccess.file
      * @param {Function} params.onCancel If the user cancels the document picker without choosing a file (by pressing the system back button on Android or the Cancel button on iOS) the Promise will be rejected with a cancellation error.
@@ -109,7 +109,7 @@ declare class DocumentPicker {
     static pick(params: {
         page: Page;
         /** On Android these are MIME types such as text/plain or partial MIME types such as image/*. On iOS these must be Apple "Uniform Type Identifiers". Also can use {@link Device.DocumentPicker.Types}. */
-        type: string;
+        type: DocumentPicker.Types[];
         /** This event is called after picking document successfully. */
         onSuccess: (e: { file: File }) => void;
         /** If the user cancels the document picker without choosing a file (by pressing the system back button on Android or the Cancel button on iOS) the Promise will be rejected with a cancellation error. */

@@ -1,5 +1,6 @@
 import Contacts = require("./device/contacts");
-
+import Color = require("./ui/color");
+import File = require("./io/file");
 abstract class GridViewItem {
     get furkan(): string{
         throw new Error("Not implemented method");
@@ -9,14 +10,6 @@ abstract class GridViewItem {
     }
 }
 
-class XX implements IGridViewItem {
-    get furkan(): string {
-        throw new Error("Method not implemented.");
-    } 
-    
-    set furkan(val: string) {
-        throw new Error("Method not implemented.");
-    }
-}
-
-const contact = new Contacts.Contact
+const color: Color = new Color();
+const file = new File();
+file.path
