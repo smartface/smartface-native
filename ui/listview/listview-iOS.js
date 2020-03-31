@@ -313,9 +313,7 @@ function ListView(params) {
 
     var _contentInset = {
         top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0
+        bottom: 0
     };
     Object.defineProperty(self, 'contentInset', {
         get: function() {
@@ -323,11 +321,20 @@ function ListView(params) {
         },
         set: function(value) {
             if (typeof value === "object") {
-                _contentInset = value;
-
+                var contentInset = {
+                    top: value.top ? value.top : _contentInset.top,
+                    bottom: value.bottom ? value.bottom : _contentInset.bottom
+                }
+                _contentInset = contentInset;
+                
                 var argContentInset = new Invocation.Argument({
                     type: "UIEdgeInsets",
-                    value: _contentInset
+                    value: {
+                        top: _contentInset.top,
+                        left: 0,
+                        bottom: _contentInset.bottom,
+                        right: 0
+                    }
                 });
                 Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
                 self.nativeObject.contentOffset = {
