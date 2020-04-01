@@ -625,7 +625,16 @@ declare class View extends NativeComponent {
 		 * @static
 		 * @since 3.1.3
 		 */
-		viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+        viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+        /**
+         * Disables a view transition animation.
+         *
+         * @method performWithoutAnimation
+         * @param {Function} functionWithoutAnimation
+         * @ios
+         * @since 4.2.1
+         */
+        performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	};
 	/**
 	 * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
@@ -710,7 +719,8 @@ declare namespace View {
 		BOTTOM_LEFT = 0
 	}
 	namespace ios {
-		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+        const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+        const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	}
 	/**
 	 * iOS Specific Properties.
