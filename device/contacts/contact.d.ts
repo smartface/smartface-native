@@ -1,12 +1,16 @@
 export declare class Contact {
-	constructor(params?: Contact);
-	addresses: string[];
-	emailAddresses: string[];
-	firstName: string;
-	lastName: string;
-	middleName: string;
-	namePrefix: string;
-	nameSuffix: string;
-	phoneNumbers: string[];
-	urlAddresses: string[];
+    constructor(params?: any);
+    contact: {
+        phoneNumbers: number[] | string[];
+        emailAddresses: string[];
+        addresses: string[];
+        urlAddresses: string[];
+        firstName: string,
+        lastName: string,
+        middleName: string,
+        namePrefix: string,
+        nameSuffix: string,
+    };
+    onSuccess: () => void;
+    onFailure: () => void;
 }
