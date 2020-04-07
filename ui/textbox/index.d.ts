@@ -185,12 +185,12 @@ declare class TextBox extends View {
 		 * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
 		 * This property works only for iOS.
 		 *
-		 * @property {UI.TextContentType} textContentType
+		 * @property {UI.iOS.TextContentType} textContentType
 		 * @ios
 		 * Creates a textContentType for ios.
 		 *
 		 *     @example
-		 *     const TextContentType = require("sf-core/ui/textcontenttype");
+		 *     const TextContentType = require("sf-core/ui/ios/textcontenttype");
 		 *     const System = require('sf-core/device/system');
 		 *
 		 *     if (System.OS == "iOS" && System.OSVersion >= 12){
