@@ -721,6 +721,17 @@ View.prototype.ios.shadowColor = UI.Color.BLACK;
  */
 View.ios.viewAppearanceSemanticContentAttribute;
 
+/**
+ * Disables a view transition animation.
+ *
+ * @method performWithoutAnimation
+ * @param {Function} functionWithoutAnimation
+ * @ios
+ * @static
+ * @since 4.2.1
+ */
+View.ios.performWithoutAnimation = function() {};
+
 /** 
  * @enum {Number} UI.View.Border
  * @since 4.1.4

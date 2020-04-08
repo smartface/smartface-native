@@ -1,4 +1,5 @@
 module.exports = {
     ContentInsetAdjustment: require('./contentinsetadjustment'),
-    DecelerationRate: require('./decelerationrate')
+    DecelerationRate: require('./decelerationrate'),
+    TextContentType: require('./textcontenttype')
 };

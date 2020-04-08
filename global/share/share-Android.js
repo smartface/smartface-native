@@ -108,7 +108,7 @@ function writeContactFile(contact, fileCount) {
     const NativeFile = requireClass('java.io.File');
 
     const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
-    let file = new File({ path: AndroidConfig.activity.getExternalFilesDir(null) + `/readytosharecontact-${fileCount}.vcf` });
+    let file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/${fileCount}/` + (getContactFileName(contact) + ".vcf" )});
     if (!file.exists)
         file.createFile(true);
     let fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
@@ -126,6 +126,19 @@ function writeContactFile(contact, fileCount) {
     fileStream.close();
 
     return file;
+}
+
+function getContactFileName(contact){
+    const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "", phoneNumbers = []} = contact;
+    let contactFileName = "";
+    if(firstName.length > 0 || lastName.length > 0 || middleName.length > 0){
+        contactFileName += `${namePrefix}${firstName}${middleName}${lastName}${nameSuffix}`;
+    }else if(phoneNumbers.length > 0) {
+        contactFileName += `${phoneNumbers[0]}`;
+    }else {
+        contactFileName += "vcard_" + Math.round(Math.random() * 9999999);
+    }
+return contactFileName;
 }
 
 function getUriFromFile(fileNativeObject) {

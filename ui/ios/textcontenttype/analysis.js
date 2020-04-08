@@ -1,8 +1,8 @@
 /**
- * @enum {String} UI.TextContentType
+ * @enum {String} UI.iOS.TextContentType
+ * @ios
  * @static
- * @deprecated 4.2.1 Use {@link UI.iOS.TextContentType} instead.
- * @since 4.1.3
+ * @since 4.2.1
  *
  * Constants that identify the semantic meaning expected for a text-entry area
  *
@@ -15,7 +15,7 @@ var TextContentType = {};
  * Specifies the expectation of a name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.NAME;
 
@@ -24,7 +24,7 @@ TextContentType.NAME;
  * @ios
  * Specifies the expectation of a prefix or title, such as “Dr.”.
  * @static
- * @since 4.1.3
+ * @since 4.2.1
  * @readonly
  */
 TextContentType.NAMEPREFIX;
@@ -35,7 +35,7 @@ TextContentType.NAMEPREFIX;
  * Specifies the expectation of a given name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.GIVENNAME;
 
@@ -45,7 +45,7 @@ TextContentType.GIVENNAME;
  * Specifies the expectation of a middle name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.MIDDLENAME;
 
@@ -55,7 +55,7 @@ TextContentType.MIDDLENAME;
  * Specifies the expectation of a family name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.FAMILYNAME;
 
@@ -65,7 +65,7 @@ TextContentType.FAMILYNAME;
  * Specifies the expectation of a suffix, such as “Jr.”.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.NAMESUFFIX;
 
@@ -75,7 +75,7 @@ TextContentType.NAMESUFFIX;
  * Specifies the expectation of a nickname.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.NICKNAME;
 
@@ -85,7 +85,7 @@ TextContentType.NICKNAME;
  * Specifies the expectation of a job title.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.JOBTITLE;
 
@@ -95,7 +95,7 @@ TextContentType.JOBTITLE;
  * Specifies the expectation of an organization name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.ORGANIZATIONNAME;
 
@@ -105,7 +105,7 @@ TextContentType.ORGANIZATIONNAME;
  * Specifies the expectation of a location, such as a point of interest, an address, or another way to identify a location.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.LOCATION;
 
@@ -115,7 +115,7 @@ TextContentType.LOCATION;
  * Specifies the expectation of a street address that fully identifies a location.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.FULLSTREETADDRESS;
 
@@ -125,7 +125,7 @@ TextContentType.FULLSTREETADDRESS;
  * Specifies the expectation of the first line of a street address.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.STREETADDRESSLINE1;
 
@@ -135,7 +135,7 @@ TextContentType.STREETADDRESSLINE1;
  * Specifies the expectation of the second line of a street address.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.STREETADDRESSLINE2;
 
@@ -145,7 +145,7 @@ TextContentType.STREETADDRESSLINE2;
  * Specifies the expectation of a city name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.ADDRESSCITY;
 
@@ -155,7 +155,7 @@ TextContentType.ADDRESSCITY;
  * Specifies the expectation of a state name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.ADDRESSSTATE;
 
@@ -165,7 +165,7 @@ TextContentType.ADDRESSSTATE;
  * Specifies the expectation of a city name combined with a state name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.ADDRESSCITYANDSTATE;
 
@@ -175,7 +175,7 @@ TextContentType.ADDRESSCITYANDSTATE;
  * Specifies the expectation of a sublocality.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.SUBLOCALITY;
 
@@ -185,7 +185,7 @@ TextContentType.SUBLOCALITY;
  * Specifies the expectation of a country name.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.COUNTRYNAME;
 
@@ -195,7 +195,7 @@ TextContentType.COUNTRYNAME;
  * Specifies the expectation of a postal code.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.POSTALCODE;
 
@@ -205,7 +205,7 @@ TextContentType.POSTALCODE;
  * Specifies the expectation of a telephone number.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.TELEPHONENUMBER;
 
@@ -215,7 +215,7 @@ TextContentType.TELEPHONENUMBER;
  * Specifies the expectation of an email address.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.EMAILADDRESS;
 
@@ -225,7 +225,7 @@ TextContentType.EMAILADDRESS;
  * Specifies the expectation of a URL.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.URL;
 
@@ -235,7 +235,7 @@ TextContentType.URL;
  * Specifies the expectation of a Credit Card Number.
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.CREDITCARDNUMBER;
 
@@ -245,7 +245,7 @@ TextContentType.CREDITCARDNUMBER;
  * The expectation that a text input area specifies an account or login name. @available(iOS 11.0, *)
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.USERNAME;
 
@@ -255,7 +255,7 @@ TextContentType.USERNAME;
  * The expectation that a text input area specifies a password. @available(iOS 11.0, *)
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.PASSWORD;
 
@@ -265,7 +265,7 @@ TextContentType.PASSWORD;
  * The expectation that a text input area specifies a new password. @available(iOS 12.0, *)
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.NEWPASSWORD;
 
@@ -275,6 +275,6 @@ TextContentType.NEWPASSWORD;
  * The expectation that a text input area specifies a single-factor SMS login code. @available(iOS 12.0, *)
  * @static
  * @readonly
- * @since 4.1.3
+ * @since 4.2.1
  */
 TextContentType.ONETIMECODE;

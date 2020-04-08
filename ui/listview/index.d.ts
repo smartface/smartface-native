@@ -380,7 +380,7 @@ declare interface ListView extends View {
 	refreshRowRange(params: {
 		positionStart: number;
 		itemCount: number;
-		ios: {
+		ios?: {
 			animation: ListView.iOS.RowAnimation;
 		};
 	}): void;
@@ -668,7 +668,7 @@ declare interface ListView extends View {
 	 * @ios
 	 * @since 0.1
 	 */
-	listViewItemByIndex(index: boolean): void;
+	listViewItemByIndex(index: boolean): ListViewItem;
 	/**
 	 * This method returns ListViewItem's index.
 	 *
