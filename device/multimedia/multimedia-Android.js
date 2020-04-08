@@ -83,6 +83,7 @@ Multimedia.startCamera = function(params = {}) {
     if (params.action !== undefined) {
         _action = params.action;
     }
+    _pickParams = {};
     _captureParams = params;
     var page = _captureParams.page;
 
@@ -129,6 +130,7 @@ Multimedia.pickFromGallery = function(params = {}) {
     if (!(params.page instanceof require("../../ui/page"))) {
         throw new TypeError('Page parameter required');
     }
+    _captureParams = {};
     _pickParams = params;
     var intent = new NativeIntent();
     var type = Type.ALL;
@@ -187,7 +189,7 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
         cropImage(resultCode, data);
     }
 };
-
+ //ToDo: To prevent side effect, crop image should know where the image data coming from. eg. pickFromGallery/startCamera
 function cropImage(resultCode, data) {
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
         var result = NativeCropImage.getActivityResult(data);
