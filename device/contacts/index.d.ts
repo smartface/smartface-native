@@ -1,6 +1,6 @@
 import Page = require("sf-core/ui/page");
-import { Contact } from "./contact";
-​
+​import Blob = require("sf-core/global/blob");
+
 declare namespace Contacts {
     /**
      * 
@@ -10,7 +10,23 @@ declare namespace Contacts {
      * Encapsulates the necessary properties of Contact
      *
      */
-    export {Contact};
+    export class Contact{
+        constructor(params?: any);
+        phoneNumbers: number[] | string[];
+        emailAddresses: string[];
+        addresses: string[];
+        urlAddresses: string[];
+        firstName: string;
+        lastName: string;
+        middleName: string;
+        namePrefix: string;
+        nameSuffix: string;
+        title: string;
+        organization: string;
+        // photo: Blob;
+        onSuccess: () => void;
+        onFailure: () => void;
+    }
 }
 ​
 /**
@@ -79,7 +95,7 @@ declare class Contacts {
      * @since 0.1
      */
     static add(params: {
-        contact: Contact;
+        contact: Contacts.Contact;
         onSuccess?: () => void;
         onFailure?: () => void;
     }): void;
@@ -145,7 +161,7 @@ declare class Contacts {
      * @since 0.1
      */
     static fetchAll: (handlers: {
-        onSuccess: (contacts: Contact[]) => void;
+        onSuccess: (contacts: Contacts.Contact[]) => void;
         onFailure?: (error: string) => void;
     }) => void;
 }
