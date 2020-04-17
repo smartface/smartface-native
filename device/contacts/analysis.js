@@ -246,7 +246,6 @@ Contacts.Contact.middleName;
 
 
 
-
 /**
  * A suffix is issued "after" a name.
  * 
@@ -257,6 +256,35 @@ Contacts.Contact.middleName;
  */
 Contacts.Contact.nameSuffix;
 
+/**
+ * The contact’s title.
+ * 
+ * @property {String} title
+ * @since 4.2.1
+ * @android
+ * @ios
+ */
+Contacts.Contact.title;
+
+/**
+ * The name of the organization associated with the contact.
+ * 
+ * @property {String} organization
+ * @since 4.2.1
+ * @android
+ * @ios
+ */
+Contacts.Contact.organization;
+
+// /**
+//  * The profile picture of a contact.
+//  * 
+//  * @property {Blob} photo
+//  * @since 4.2.1
+//  * @android
+//  * @ios
+//  */
+// Contacts.Contact.photo;
 
 /**
  *

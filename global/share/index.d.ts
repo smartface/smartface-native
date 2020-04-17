@@ -1,6 +1,7 @@
 import Page = require("sf-core/ui/page");
 import Image = require("sf-core/ui/image");
 import File = require("sf-core/io/file");
+import Contacts = require("sf-core/device/contacts");
 
 /**
  * @class Share
@@ -49,7 +50,6 @@ declare const Share: {
 	 * @deprecated 4.0.2 Use {@link Share#share} instead.
 	 */
 	shareImage(image: Image, page: Page, blacklist: string[]): void;
-
 	/**
 	 * Shares a file.
 	 *
@@ -69,7 +69,21 @@ declare const Share: {
 	 * @since 0.1
 	 * @deprecated 4.0.2 Use {@link Share#share} instead.
 	 */
-	shareFile(image: File, page: Page, blacklist: string[]): void;
+    shareFile(image: File, page: Page, blacklist: string[]): void;
+    /**
+	 * Shares contact.
+	 *
+	 * @method shareContacts
+	 * @param {Object} params
+	 * @param {Contacts.Contact[]} params.items
+     * @param {String} params.fileName Specifies vCard file name. Defaults to Contacts
+	 * @param {UI.Page} params.page
+	 * @param {Array} [params.blacklist]
+	 * @ios
+	 * @android
+	 * @since 4.2.1
+	 */
+    shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }): void;
 
 	/**
 	 * Shares file, image & text.
@@ -95,7 +109,7 @@ declare const Share: {
 	 * @android
 	 * @since 4.0.2
 	 */
-	share(params: { items: any[]; page: Page; blacklist: string[] }): void;
+    share(params: { items: any[]; page: Page; blacklist: string[] }): void;
 	ios: {
 		/**
 		 * @property {String} AirDrop
