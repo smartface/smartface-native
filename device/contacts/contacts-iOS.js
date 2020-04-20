@@ -1,3 +1,5 @@
+const Blob = require('sf-core/blob');
+
 var Contacts = {};
 
 Contacts.ios = {};
@@ -58,6 +60,36 @@ Contacts.Contact = function Contacts(params) {
 		},
 		enumerable: true
 	});
+
+    Object.defineProperty(self, 'title', {
+		get: function() {
+			return self.nativeObject.jobTitle;
+		},
+		set: function(value) {
+			self.nativeObject.jobTitle = value;
+		},
+		enumerable: true
+    });
+    
+    Object.defineProperty(self, 'organization', {
+		get: function() {
+			return self.nativeObject.organizationName;
+		},
+		set: function(value) {
+			self.nativeObject.organizationName = value;
+		},
+		enumerable: true
+    });
+
+    Object.defineProperty(self, 'photo', {
+		get: function() {
+			return new Blob(self.nativeObject.imageData);
+		},
+		set: function(value) {
+			self.nativeObject.imageData = value.nativeObject;
+		},
+		enumerable: true
+    });
 
 	Object.defineProperty(self, 'phoneNumbers', {
 		get: function() {

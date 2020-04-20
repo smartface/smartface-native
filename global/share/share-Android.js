@@ -60,7 +60,6 @@ Object.defineProperties(Share, {
                 parcelabels: new NativeArrayList()
             };
             let addContentItem = addContent.bind(contentSharing);
-            let count = 0;
             itemList.forEach((item) => {
                 if (item instanceof File) {
                     addContentItem(item.nativeObject, "application/*");
@@ -70,14 +69,40 @@ Object.defineProperties(Share, {
                 } else if (item instanceof Image) {
                     var imageFile = writeImageToFile(item)
                     addContentItem(imageFile, "image/*");
-                } else if (item.constructor === Contacts.Contact) {
-                    let file = writeContactFile(item, ++count);
-                    addContentItem(file.nativeObject, "application/*");
                 }
             });
+            let contacts = itemList.filter(item => item.constructor === Contacts.Contact);
+            if (contacts.length > 0) {
+                let vCardFileName = getContactFileName(contacts);
+                let file = writeContactsToFile(contacts, vCardFileName);
+                addContentItem(file.nativeObject, "text/x-vcard");
+            }
+
             !(contentSharing.parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, contentSharing.parcelabels);
             shareIntent.putExtra(NativeIntent.EXTRA_MIME_TYPES, array(contentSharing.mimeTypes, 'java.lang.String'));
             AndroidConfig.activity.startActivity(shareIntent);
+        }
+    },
+    shareContacts: {
+        value: function (params) {
+            const NativeURI = requireClass('android.net.Uri');
+
+            let itemList = params.items || [];
+            let vCardFileName = params.fileName ? params.fileName : "Contacts";
+            let file = writeContactsToFile(itemList, vCardFileName);
+            let uri;
+            if (AndroidConfig.sdkVersion < 24) {
+                uri = NativeURI.fromFile(file.nativeObject);
+            } else {
+                uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, file.nativeObject);
+            }
+
+            shareContent({
+                type: "text/x-vcard",
+                extra: uri,
+                extraType: NativeIntent.EXTRA_STREAM,
+                actionType: NativeIntent.ACTION_SEND
+            });
         }
     }
 });
@@ -102,30 +127,50 @@ function writeImageToFile(image) {
     return tempFile;
 }
 
-function writeContactFile(contact, fileCount) {
+function writeContactsToFile(contacts, vCardFileName) {
     const FileStream = require('../../io/filestream');
     const File = require('../../io/file');
-    const NativeFile = requireClass('java.io.File');
-
-    const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
-    let file = new File({ path: AndroidConfig.activity.getExternalFilesDir(null) + `/readytosharecontact-${fileCount}.vcf` });
+    let file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/` + (vCardFileName + ".vcf") });
     if (!file.exists)
         file.createFile(true);
     let fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
-    fileStream.write("BEGIN:VCARD\r\n");
-    fileStream.write("VERSION:3.0\r\n");
-    fileStream.write(`FN:${firstName}\r\n`);
-    fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
-    phoneNumbers.forEach(phoneNumber => fileStream.write(`TEL;type=WORK,VOICE:${phoneNumber}\r\n`));
-    emailAddresses.forEach(emailAddress => fileStream.write(`EMAIL;type=PREF,INTERNET:${emailAddress}\r\n`));
-    let count = 0;
-    addresses.forEach(address => fileStream.write(`item${++count}.ADR;type=WORK:;;${address}\r\n`));
-    urlAddresses.forEach(urlAddress => fileStream.write(`item${++count}.URL;type=pref:${urlAddress}\r\n`));
-    fileStream.write("END:VCARD\r\n");
+
+    contacts.forEach((contact) => {
+        const { namePrefix = "", firstName = "", lastName = "", middleName = "", title = "", organization = "",
+            nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
+        fileStream.write("BEGIN:VCARD\r\n");
+        fileStream.write("VERSION:2.1\r\n");
+        fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
+        fileStream.write(`FN:${firstName}\r\n`);
+        fileStream.write(`ORG:${organization}\r\n`);
+        fileStream.write(`TITLE:${title}\r\n`);
+        phoneNumbers.forEach(phoneNumber => fileStream.write(`TEL;HOME;VOICE:${phoneNumber}\r\n`));
+        emailAddresses.forEach(emailAddress => fileStream.write(`EMAIL;PREF;X-INTERNET:${emailAddress}\r\n`));
+        addresses.forEach(address => fileStream.write(`ADR;HOME:;;${address};;;;\r\n`));
+        urlAddresses.forEach(urlAddress => fileStream.write(`URL:${urlAddress}\r\n`));
+        fileStream.write("END:VCARD\r\n");
+    });
     fileStream.nativeObject.flush();
     fileStream.close();
 
     return file;
+}
+
+
+function getContactFileName(contacts) {
+    if (contacts.length > 1)
+        return "Contacts";
+
+    const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "", phoneNumbers = [] } = contacts[0];
+    let contactFileName = "";
+    if (firstName.length > 0 || lastName.length > 0 || middleName.length > 0) {
+        contactFileName += `${namePrefix}${firstName}${middleName}${lastName}${nameSuffix}`;
+    } else if (phoneNumbers.length > 0) {
+        contactFileName += `${phoneNumbers[0]}`;
+    } else {
+        contactFileName += "vcard_" + Math.round(Math.random() * 9999999);
+    }
+    return contactFileName;
 }
 
 function getUriFromFile(fileNativeObject) {

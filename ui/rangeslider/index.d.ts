@@ -1,6 +1,7 @@
 import View = require("../view");
 import Color = require("../color");
 import Image = require("../image");
+import { Point2D } from "sf-core/primitive/point2d";
 
 export = RangeSlider;
 declare interface RangeSliderParams {
@@ -9,6 +10,13 @@ declare interface RangeSliderParams {
     thumbColor?: Color;
     thumbBorderColor?: Color;
     thumbBorderWidth?: number;
+  }
+  ios: {
+      thumbShadowColor?: Color;
+      thumbShadowOpacity?: number;
+      thumbShadowRadius?: number;
+      thumbShadowOffset?: Point2D;
+      applyThumbViewChanges: () => void;
   }
   trackColor?: Color;
   outerTrackColor?: Color;
@@ -32,6 +40,13 @@ declare class RangeSlider extends View implements RangeSliderParams {
     thumbBorderColor?: Color;
     thumbBorderWidth?: number;
   } & View['android'];
+  ios: {
+      thumbShadowColor?: Color;
+      thumbShadowOpacity?: number;
+      thumbShadowRadius?: number;
+      thumbShadowOffset?: Point2D;
+      applyThumbViewChanges: () => void;
+  } & View['ios'];
   trackColor?: Color;  outerTrackColor?: Color;
   outerTrackWeight?: number;
   trackWeight?: number;

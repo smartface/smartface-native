@@ -62,6 +62,24 @@ Object.defineProperties(Share, {
             Share.ios__presentViewController(page,activity);
         }
     },
+    'shareContacts':{
+        value: function(object) {
+            var items = object.items;
+            var page = object.page;
+            var blacklist = object.blacklist;
+            var fileName = object.fileName ? (object.fileName + ".vcf") : "Contacts.vcf";
+            var _itemsNativeObject = [];
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                _itemsNativeObject.push(item.nativeObject);
+            }
+            
+            var path = __SF_CNMutableContact.getShareableFilePathWithContactArrayFileName(_itemsNativeObject,fileName);
+            var activity = Share.createActivity([path]);
+            activity.excludedActivityTypes = blacklist;
+            Share.ios__presentViewController(page,activity);
+        }
+    },
     'share': {
         value: function(object) {
             var items = object.items;

@@ -33,7 +33,8 @@ Contacts.Contact = function (params = {}) {
 
     let _namePrefix, _firstName, _lastName,
         _middleName, _nameSuffix, _phoneNumbers = [],
-        _urlAddresses = [], _emailAddresses = [], _addresses = [];
+        _urlAddresses = [], _emailAddresses = [], _addresses = [],
+        _title, _organization, _photo;
     Object.defineProperties(this, {
         namePrefix: {
             get: () => _namePrefix,
@@ -97,6 +98,27 @@ Contacts.Contact = function (params = {}) {
                 _addresses = value;
             },
             enumerable: true
+        },
+        title: {
+            get: () => _title,
+            set: (value) => {
+                _title = value;
+            },
+            enumerable: true
+        },
+        organization: {
+            get: () => _organization,
+            set: (value) => {
+                _organization = value;
+            },
+            enumerable: true
+        },
+        photo: {
+            get: () => _photo,
+            set: (value) => {
+                _photo = value;
+            },
+            enumerable: true
         }
     });
 
@@ -134,6 +156,7 @@ Contacts.add = function (params = {}) {
             emailAddresses = contact.emailAddresses;
             addresses = contact.addresses;
             addContactStructureName(contact);
+            addContactWork(contact);
             // else check is deprecated
         } else {
             phoneNumbers = [contact.phoneNumber];
@@ -194,12 +217,13 @@ Contacts.onActivityResult = function (requestCode, resultCode, data) {
         } else {
             let contactId = SFContactUtil.getContactId(contactUri);
             let structuredNames = getStructuredNames({ id: contactId });
+            let work = getWorkById(contactId);
             let params = Object.assign({
                 phoneNumbers: toJSArray(SFContactUtil.getPhoneNumbers(contactId)),
                 emailAddresses: toJSArray(SFContactUtil.getEmailAddresses(contactId)),
                 urlAddresses: toJSArray(SFContactUtil.getUrlAddresses(contactId)),
                 addresses: toJSArray(SFContactUtil.getAddresses(contactId)),
-            }, structuredNames);
+            }, structuredNames, work);
             contact = new Contacts.Contact(params);
         }
         _onSuccess && _onSuccess(contact);
@@ -276,12 +300,13 @@ Contacts.fetchAll = function (params = {}) {
                     uri: uri
                 };
                 let structuredNamesObj = getStructuredNames(queryParams);
+                let work = getWorkById(queryParams.id);
                 let params = Object.assign({
                     urlAddresses: getUrlAddressById(queryParams),
                     phoneNumbers: getPhonesById(queryParams),
                     emailAddresses: getEmailById(queryParams),
                     addresses: getAddressById(queryParams)
-                }, structuredNamesObj)
+                }, structuredNamesObj, work)
                 let contact = new Contacts.Contact(params);
                 contacts.push(contact);
             } while (cursor.moveToNext());
@@ -337,6 +362,11 @@ function getStructuredNames(params) {
     return { firstName: result[0], lastName: result[1], namePrefix: result[2], middleName: result[3], nameSuffix: result[4] };
 }
 
+function getWorkById(id) {
+    let result = toJSArray(SFContactUtil.getWorkById(id));
+    return { title: result[0], organization: result[1] };
+}
+
 //Deprecated 
 function getContactDisplayName(contactUri) {
     var contactName = "";
@@ -386,6 +416,12 @@ function addContactName(displayName) {
 function addContactStructureName(contact) {
     const { namePrefix = "", firstName = "", lastName = "", middleName = "", nameSuffix = "" } = contact;
     let cpo = SFContactUtil.addContactStructureName(uri, namePrefix, firstName, lastName, middleName, nameSuffix);
+    contentProviderOperation.add(cpo);
+}
+
+function addContactWork(contact){
+    const { title = "", organization = "" } = contact;
+    let cpo = SFContactUtil.addContactWork(uri, title, organization);
     contentProviderOperation.add(cpo);
 }
 

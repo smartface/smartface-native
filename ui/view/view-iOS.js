@@ -1264,6 +1264,10 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
     enumerable: true
 });
 
+View.ios.performWithoutAnimation = function(functionWithoutAnimation){
+    __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
+};
+
 View.Border = {
 	TOP_LEFT: 1 << 0,
 	TOP_RIGHT: 1 << 1,

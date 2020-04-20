@@ -25,7 +25,7 @@ const Share = {};
  * @since 0.1
  * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
-Share.shareText = function(text, page, blacklist) {};
+Share.shareText = function (text, page, blacklist) { };
 
 /**
  * Shares an image.
@@ -46,7 +46,7 @@ Share.shareText = function(text, page, blacklist) {};
  * @since 0.1
  * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
-Share.shareImage = function(image, page, blacklist) {};
+Share.shareImage = function (image, page, blacklist) { };
 
 /**
  * Shares a file.
@@ -67,8 +67,23 @@ Share.shareImage = function(image, page, blacklist) {};
  * @since 0.1
  * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
-Share.shareFile = function(file, page, blacklist) {};
+Share.shareFile = function (file, page, blacklist) { };
 
+
+/**
+ * Shares contact.
+ *
+ * @method shareContacts
+ * @param {Object} params
+ * @param {Contacts.Contact[]} params.items
+ * @param {String} params.fileName Specifies vCard file name. Defaults to Contacts
+ * @param {UI.Page} params.page
+ * @param {Array} [params.blacklist]
+ * @ios
+ * @android
+ * @since 4.2.1
+ */
+Share.shareContacts = function(params){};
 
 
 /**
@@ -103,7 +118,7 @@ Share.shareFile = function(file, page, blacklist) {};
  * @android
  * @since 4.0.2
  */
-Share.share = function(params) {};
+Share.share = function (params) { };
 
 /**
  * @property {String} AirDrop

@@ -82,7 +82,7 @@ VideoView.prototype.play = function() {};
 /**
  * This function pauses the video clip.
  *
- * @method play
+ * @method pause
  * @android
  * @ios
  * @since 0.1
