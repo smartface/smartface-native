@@ -135,6 +135,16 @@ declare class GridView extends View {
          */
         snapToAlignment: GridView.Android.SnapAlignment;
     }
+    ios: View['ios'] & {
+        /**
+         * A floating-point value that determines the rate of deceleration after the user lifts their finger.
+         *
+         * @property {UI.iOS.DecelerationRate} [decelerationRate = UI.iOS.DecelerationRate.NORMAL]
+         * @ios
+         * @since 4.1.2
+         */
+        decelerationRate: DecelerationRate;
+    }
     /**
      * This event is called when a GridView starts to create a GridViewItem.
      * You can customize your UI(not data-binding) inside this callback.
@@ -187,14 +197,6 @@ declare class GridView extends View {
      * @since 4.0.0
      */
     contentInsetAdjustmentBehavior: ContentInsetAdjustment;
-    /**
-     * A floating-point value that determines the rate of deceleration after the user lifts their finger.
-     *
-     * @property {UI.iOS.DecelerationRate} [decelerationRate = UI.iOS.DecelerationRate.NORMAL]
-     * @ios
-     * @since 4.1.2
-     */
-    decelerationRate: DecelerationRate;
     /**
      * This event is called before onItemCreate callback. Returns item type you should use based on position.
      *
