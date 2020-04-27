@@ -6,6 +6,7 @@ const NativeIntent = requireClass("android.content.Intent");
 const SFContactUtil = requireClass("io.smartface.android.sfcore.device.contacts.SFContactUtil");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const RequestCodes = require("sf-core/util/Android/requestcodes");
+const Blob = require("sf-core/global/blob");
 
 var contentProviderOperation;
 var uri;
@@ -34,7 +35,7 @@ Contacts.Contact = function (params = {}) {
     let _namePrefix, _firstName, _lastName,
         _middleName, _nameSuffix, _phoneNumbers = [],
         _urlAddresses = [], _emailAddresses = [], _addresses = [],
-        _title, _organization, _photo;
+        _title, _organization, _photo, _nickname, _department;
     Object.defineProperties(this, {
         namePrefix: {
             get: () => _namePrefix,
@@ -119,6 +120,20 @@ Contacts.Contact = function (params = {}) {
                 _photo = value;
             },
             enumerable: true
+        },
+        nickname: {
+            get: () => _nickname,
+            set: (value) => {
+                _nickname = value;
+            },
+            enumerable: true
+        },
+        department: {
+            get: () => _department,
+            set: (value) => {
+                _department = value;
+            },
+            enumerable: true
         }
     });
 
@@ -157,6 +172,8 @@ Contacts.add = function (params = {}) {
             addresses = contact.addresses;
             addContactStructureName(contact);
             addContactWork(contact);
+            addContactNickname(contact);
+            addContactPhoto(contact);
             // else check is deprecated
         } else {
             phoneNumbers = [contact.phoneNumber];
@@ -219,6 +236,8 @@ Contacts.onActivityResult = function (requestCode, resultCode, data) {
             let structuredNames = getStructuredNames({ id: contactId });
             let work = getWorkById(contactId);
             let params = Object.assign({
+                nickname: getNicknameById(contactId),
+                photo: getPhotoById(contactId),
                 phoneNumbers: toJSArray(SFContactUtil.getPhoneNumbers(contactId)),
                 emailAddresses: toJSArray(SFContactUtil.getEmailAddresses(contactId)),
                 urlAddresses: toJSArray(SFContactUtil.getUrlAddresses(contactId)),
@@ -302,6 +321,8 @@ Contacts.fetchAll = function (params = {}) {
                 let structuredNamesObj = getStructuredNames(queryParams);
                 let work = getWorkById(queryParams.id);
                 let params = Object.assign({
+                    nickname: getNicknameById(queryParams.id),
+                    photo: getPhotoById(queryParams.id),
                     urlAddresses: getUrlAddressById(queryParams),
                     phoneNumbers: getPhonesById(queryParams),
                     emailAddresses: getEmailById(queryParams),
@@ -364,7 +385,21 @@ function getStructuredNames(params) {
 
 function getWorkById(id) {
     let result = toJSArray(SFContactUtil.getWorkById(id));
-    return { title: result[0], organization: result[1] };
+    return { title: result[0], organization: result[1], department: result[2] };
+}
+
+function getNicknameById(id) {
+    let result = SFContactUtil.getNicknameById(id);
+    return result ? result : "";
+}
+
+function getPhotoById(id) {
+    let photoBlob = SFContactUtil.getPhotoById(id);
+    if (photoBlob)
+        return new Blob(photoBlob, {
+            type: "image"
+        });
+    return null;
 }
 
 //Deprecated 
@@ -419,10 +454,24 @@ function addContactStructureName(contact) {
     contentProviderOperation.add(cpo);
 }
 
-function addContactWork(contact){
-    const { title = "", organization = "" } = contact;
-    let cpo = SFContactUtil.addContactWork(uri, title, organization);
+function addContactWork(contact) {
+    const { title = "", organization = "", department = "" } = contact;
+    let cpo = SFContactUtil.addContactWork(uri, title, organization, department);
     contentProviderOperation.add(cpo);
+}
+
+function addContactNickname(contact) {
+    const { nickname = "" } = contact;
+    let cpo = SFContactUtil.addContactNickname(uri, nickname);
+    contentProviderOperation.add(cpo);
+}
+
+function addContactPhoto(contact) {
+    const { photo } = contact;
+    if (photo) {
+        let cpo = SFContactUtil.addContactPhoto(uri, photo.nativeObject.toByteArray());
+        contentProviderOperation.add(cpo);
+    }
 }
 
 function addContactNumber(phoneNumber) {

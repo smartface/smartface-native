@@ -257,7 +257,7 @@ Contacts.Contact.middleName;
 Contacts.Contact.nameSuffix;
 
 /**
- * The contact’s title.
+ * The contact's title.
  * 
  * @property {String} title
  * @since 4.2.1
@@ -276,15 +276,35 @@ Contacts.Contact.title;
  */
 Contacts.Contact.organization;
 
-// /**
-//  * The profile picture of a contact.
-//  * 
-//  * @property {Blob} photo
-//  * @since 4.2.1
-//  * @android
-//  * @ios
-//  */
-// Contacts.Contact.photo;
+/**
+ * The name of the department associated with the contact.
+ * 
+ * @property {String} department
+ * @since 4.2.2
+ * @android
+ * @ios
+ */
+Contacts.Contact.department;
+
+/**
+ * The nickname of the contact.
+ * 
+ * @property {String} nickname
+ * @since 4.2.2
+ * @android
+ * @ios
+ */
+Contacts.Contact.nickname;
+
+/**
+ * The profile picture of a contact.
+ * 
+ * @property {Blob} photo
+ * @since 4.2.2
+ * @android
+ * @ios
+ */
+Contacts.Contact.photo;
 
 /**
  *

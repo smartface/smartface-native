@@ -136,14 +136,18 @@ function writeContactsToFile(contacts, vCardFileName) {
     let fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
 
     contacts.forEach((contact) => {
-        const { namePrefix = "", firstName = "", lastName = "", middleName = "", title = "", organization = "",
+        const { namePrefix = "", firstName = "", lastName = "", middleName = "", title = "",
+            organization = "", nickname = "", department = "", photo,
             nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
         fileStream.write("BEGIN:VCARD\r\n");
         fileStream.write("VERSION:2.1\r\n");
         fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
         fileStream.write(`FN:${firstName}\r\n`);
-        fileStream.write(`ORG:${organization}\r\n`);
+        fileStream.write(`ORG:${organization};${department}\r\n`);
         fileStream.write(`TITLE:${title}\r\n`);
+        fileStream.write(`X-ANDROID-CUSTOM:vnd.android.cursor.item/nickname;${nickname};1;;;;;;;;;;;;;\r\n`)
+        if (photo)
+            fileStream.write(`PHOTO;ENCODING=BASE64;JPEG:${photo.toBase64()}\r\n`)
         phoneNumbers.forEach(phoneNumber => fileStream.write(`TEL;HOME;VOICE:${phoneNumber}\r\n`));
         emailAddresses.forEach(emailAddress => fileStream.write(`EMAIL;PREF;X-INTERNET:${emailAddress}\r\n`));
         addresses.forEach(address => fileStream.write(`ADR;HOME:;;${address};;;;\r\n`));
