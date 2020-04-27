@@ -51,7 +51,7 @@ FragmentTransaction.push = function(params) {
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
         currentPage.layout.nativeObject.setFocusableInTouchMode(false);
         !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+        // !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
     }
 
     params.onComplete && params.onComplete();
