@@ -3,10 +3,12 @@ const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
 const NativeContentValues = requireClass("android.content.ContentValues");
-const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage');
+const NativeUCrop = requireClass('com.yalantis.ucrop.UCrop');
+const NativeSFUCropOptions = requireClass('io.smartface.android.sfcore.device.multimedia.crop.SFUCropOptions');
 const NativeSFMultimedia = requireClass("io.smartface.android.sfcore.device.multimedia.SFMultimedia");
 
 const AndroidConfig = require('sf-core/util/Android/androidconfig');
+const AndroidUnitConverter = require('sf-core/util/Android/unitconverter');
 const RequestCodes = require("sf-core/util/Android/requestcodes");
 const File = require("sf-core/io/file");
 const Image = require("sf-core/ui/image");
@@ -32,7 +34,7 @@ const CropShape = {
     OVAL: 2
 };
 
-function Multimedia() {}
+function Multimedia() { }
 Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
 Multimedia.CropImage.RESULT_OK = -1;
 Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
@@ -75,7 +77,7 @@ var _fileURI = null;
 // https://github.com/ArthurHub/Android-Image-Cropper/wiki/FAQ#why-image-captured-from-camera-is-blurred-or-low-quality
 var imageFileUri = null;
 
-Multimedia.startCamera = function(params = {}) {
+Multimedia.startCamera = function (params = {}) {
     if (!(params.page instanceof require("../../ui/page"))) {
         throw new TypeError('Page parameter required');
     }
@@ -126,7 +128,7 @@ function startCameraWithExtraField() {
     }
 }
 
-Multimedia.pickFromGallery = function(params = {}) {
+Multimedia.pickFromGallery = function (params = {}) {
     if (!(params.page instanceof require("../../ui/page"))) {
         throw new TypeError('Page parameter required');
     }
@@ -146,7 +148,7 @@ Multimedia.pickFromGallery = function(params = {}) {
 
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function(params = {}) {
+Multimedia.android.getAllGalleryItems = function (params = {}) {
     try {
         var projection = array([NativeMediaStore.MediaColumns.DATA], "int");
         var result = {};
@@ -180,46 +182,95 @@ Multimedia.android.getAllGalleryItems = function(params = {}) {
 
 };
 
-Multimedia.onActivityResult = function(requestCode, resultCode, data) {
+Multimedia.onActivityResult = function (requestCode, resultCode, data) {
     if (requestCode === Multimedia.CAMERA_REQUEST) {
         getCameraData(resultCode, data);
     } else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
         pickFromGallery(resultCode, data);
-    } else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-        cropImage(resultCode, data);
+    } else if (requestCode === Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE) {
+        cropCameraData(resultCode, data);
+    } else if (requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
+        cropGalleryData(resultCode, data);
     }
 };
- //ToDo: To prevent side effect, crop image should know where the image data coming from. eg. pickFromGallery/startCamera
-function cropImage(resultCode, data) {
+
+function cropCameraData(resultCode, data) {
+    const { onSuccess, onCancel, onFailure, allowsEditing } = _captureParams;
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
-        var result = NativeCropImage.getActivityResult(data);
-        var resultUri = result.getUri();
-        var croppedImage = Image.createFromFile(resultUri.getPath());
-        if (_captureParams.allowsEditing) {
-            _captureParams.onSuccess && _captureParams.onSuccess({
-                image: croppedImage
+        try {
+            var resultUri = NativeUCrop.getOutput(data);
+            var croppedImage = Image.createFromFile(resultUri.getPath());
+        } catch (err) {
+            onFailure && onFailure({
+                message: err
             });
-        } else if (_pickParams.allowsEditing) {
-            _pickParams.onSuccess && _pickParams.onSuccess({
+            return;
+        }
+        if (allowsEditing) {
+            onSuccess && onSuccess({
                 image: croppedImage
             });
         }
-    } else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-        throw Error('Unexpected error occured while cropping image');
+    } else {
+        onCancel && onCancel();
     }
 }
 
-function startCropActivity(uri, nativeFragment, cropShape, aspectRatio = {}) {
-    if (!uri) return;
-    let {
-        x,
-        y
-    } = aspectRatio;
-    if (TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y)) {
-        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, cropShape, x, y);
+function cropGalleryData(resultCode, data) {
+    const { onSuccess, onFailure, onCancel, allowsEditing } = _pickParams;
+
+    if (resultCode === Multimedia.CropImage.RESULT_OK) {
+        try {
+        var resultUri = NativeUCrop.getOutput(data);
+        var croppedImage = Image.createFromFile(resultUri.getPath());
+        } catch (err) {
+            onFailure && onFailure({
+                message: err
+            });
+            return;
+        }
+        if (allowsEditing) {
+            onSuccess && onSuccess({
+                image: croppedImage
+            });
+        }
     } else {
-        NativeSFMultimedia.startCropActivity(uri, activity, nativeFragment, cropShape);
+        onCancel && onCancel();
     }
+}
+
+function startCropActivity(params) {
+    const { requestCode, uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop } = params;
+    if (!uri) return;
+    let { x, y } = aspectRatio;
+    let { width, height } = maxResultSize;
+    let uCropOptions = new NativeSFUCropOptions();
+
+    if (TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y))
+        uCropOptions.withAspectRatio(x, y);
+
+    if (cropShape === Multimedia.Android.CropShape.OVAL)
+        uCropOptions.setCircleDimmedLayer(true);
+
+    if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height))
+        uCropOptions.withMaxResultSize(AndroidUnitConverter.dpToPixel(width), AndroidUnitConverter.dpToPixel(height));
+
+    if (rotateText)
+        uCropOptions.setRotateText(rotateText);
+
+    if (scaleText)
+        uCropOptions.setScaleText(scaleText);
+
+    if (cropText)
+        uCropOptions.setCropText(cropText);
+
+    if (headerBarTitle)
+        uCropOptions.setToolbarTitle(headerBarTitle);
+
+    uCropOptions.setHideBottomControls(hideBottomControls);
+    uCropOptions.setFreeStyleCropEnabled(enableFreeStyleCrop);
+
+    NativeSFMultimedia.startCropActivity(uri, activity, page.nativeObject, uCropOptions, requestCode);
 }
 
 function pickFromGallery(resultCode, data) {
@@ -230,9 +281,16 @@ function pickFromGallery(resultCode, data) {
         type,
         allowsEditing,
         page,
-        aspectRatio,
+        aspectRatio = {},
         android: {
-            cropShape: cropShape = CropShape.RECTANGLE
+            cropShape: cropShape = CropShape.RECTANGLE,
+            rotateText: rotateText,
+            scaleText: scaleText,
+            cropText: cropText,
+            headerBarTitle: headerBarTitle,
+            maxResultSize: maxResultSize = {},
+            hideBottomControls: hideBottomControls = false,
+            enableFreeStyleCrop: enableFreeStyleCrop = false
         } = {}
     } = _pickParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
@@ -258,7 +316,7 @@ function pickFromGallery(resultCode, data) {
                         image: image
                     });
                 } else {
-                    startCropActivity(uri, page.nativeObject, cropShape, aspectRatio);
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 }
             } else {
                 onSuccess({
@@ -296,10 +354,17 @@ function getCameraData(resultCode, data) {
         onSuccess,
         onFailure,
         page,
-        aspectRatio,
+        aspectRatio = {},
         onCancel,
         android: {
-            cropShape: cropShape = CropShape.RECTANGLE
+            cropShape: cropShape = CropShape.RECTANGLE,
+            rotateText: rotateText,
+            scaleText: scaleText,
+            cropText: cropText,
+            headerBarTitle: headerBarTitle,
+            maxResultSize: maxResultSize = {},
+            hideBottomControls: hideBottomControls = false,
+            enableFreeStyleCrop: enableFreeStyleCrop = false
         } = {}
     } = _captureParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
@@ -322,7 +387,7 @@ function getCameraData(resultCode, data) {
         if (!failure && onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 if (imageFileUri != null) {
-                    startCropActivity(imageFileUri, page.nativeObject, cropShape, aspectRatio);
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, uri: imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 } else {
                     var bitmap = data.getExtras().get("data");
                     onSuccess({
@@ -368,10 +433,10 @@ function getAllMediaFromUri(params) {
 Multimedia.ios = {};
 Multimedia.iOS = {};
 
-Multimedia.ios.requestGalleryAuthorization = function() {};
-Multimedia.ios.requestCameraAuthorization = function() {};
-Multimedia.ios.getGalleryAuthorizationStatus = function() {};
-Multimedia.ios.getCameraAuthorizationStatus = function() {};
+Multimedia.ios.requestGalleryAuthorization = function () { };
+Multimedia.ios.requestCameraAuthorization = function () { };
+Multimedia.ios.getGalleryAuthorizationStatus = function () { };
+Multimedia.ios.getCameraAuthorizationStatus = function () { };
 Multimedia.ios.cameraAuthorizationStatus = {};
 Multimedia.ios.galleryAuthorizationStatus = {};
 

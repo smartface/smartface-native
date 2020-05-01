@@ -48,6 +48,7 @@
  */
 function Multimedia() {}
 
+
 /**
  * @method startCamera
  * 
@@ -63,6 +64,15 @@ function Multimedia() {}
  * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
  * @param {Object} params.android Android specific argument
  * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+ * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+ * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+ * @param {String} params.android.cropText specifies the text of crop button in the crop window
+ * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
+ * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+ * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+ * @param {Number} params.android.maxResultSize.height max cropped image height
+ * @param {Number} params.android.maxResultSize.width max cropped image width 
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
@@ -128,6 +138,15 @@ Multimedia.startCamera = function(e) {};
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
  * @param {Object} params.android Android specific argument
  * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+ * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+ * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+ * @param {String} params.android.cropText specifies the text of crop button in the crop window
+ * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
+ * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+ * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+ * @param {Number} params.android.maxResultSize.height max cropped image height
+ * @param {Number} params.android.maxResultSize.width max cropped image width 
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
