@@ -157,7 +157,7 @@ function Page(params) {
             // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
             if (RequestCodes.Contacts.PICK_REQUEST_CODE === requestCode || RequestCodes.Contacts.PICKFROM_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
-            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE || requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);

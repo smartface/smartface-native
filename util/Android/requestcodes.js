@@ -28,8 +28,8 @@ Sound.PICK_SOUND = 1004;
  *   CAMERA_REQUEST: 1002,
  *   PICK_FROM_GALLERY: 1003,
  *   CropImage: {
- *     CROP_IMAGE_ACTIVITY_REQUEST_CODE: 203,
- *     CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE: 204
+ *     CROP_CAMERA_DATA_REQUEST_CODE: 203,
+ *     CROP_GALLERY_DATA_REQUEST_CODE: 205
  *   }
  * }}
  */
@@ -37,9 +37,10 @@ const Multimedia = {};
 Multimedia.CAMERA_REQUEST = 1002;
 Multimedia.PICK_FROM_GALLERY = 1003;
 
-Multimedia.CropImage = {};
-Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
-Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE = 204;
+Multimedia.CropImage = {
+    CROP_CAMERA_DATA_REQUEST_CODE : 203,
+    CROP_GALLERY_DATA_REQUEST_CODE : 205
+};
 
 /**
  * @type {{
