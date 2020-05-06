@@ -24,9 +24,37 @@ function Label(params) {
         },
         set: function(value) {
             self.nativeObject.font = value;
+            self.minimumFontSize = self.minimumFontSize;
         },
         enumerable: true
     });
+
+    Object.defineProperty(this, 'adjustFontSizeToFit', {
+        get: function() {
+            return self.nativeObject.adjustsFontSizeToFitWidth;
+        },
+        set: function(value) {
+            value && (self.nativeObject.baselineAdjustment = 1);
+            self.nativeObject.adjustsFontSizeToFitWidth = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    var _minimumFontSize = 1;
+    Object.defineProperty(this, 'minimumFontSize', {
+        get: function() {
+            return _minimumFontSize;
+        },
+        set: function(value) {
+            _minimumFontSize = value;
+            var minimumScaleFactor = _minimumFontSize / self.font.size;
+            self.nativeObject.minimumScaleFactor = minimumScaleFactor;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    self.minimumFontSize = 1; //Default
 
     Object.defineProperty(self, 'ellipsizeMode', {
         get: function() {

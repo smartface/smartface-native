@@ -126,6 +126,40 @@ declare class Label extends View implements Label {
  * @since 0.1
  */
     textColor: Color;
+
+/**
+ * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)
+ *
+ * @property {Boolean} [adjustFontSizeToFit = false]
+ * @ios
+ * @android
+ * @since 4.2.2
+ * @see {@link UI.Label#minimumFontSize minimumFontSize}
+ * @see {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}
+ */
+    adjustFontSizeToFit: Boolean;
+
+/**
+ * Gets/sets minimum font size of Label.
+ *
+ * @property {Number} [minimumFontSize = 1]
+ * @ios
+ * @android
+ * @since 4.2.2
+ */    
+    minimumFontSize: Number;
+
+    android :View["android"] & {
+
+/**
+ * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
+ *
+ * @property {Number} [adjustableFontSizeStep = 1]
+ * @android
+ * @since 4.2.2
+ */         
+        adjustableFontSizeStep: Number;
+    }
 }
 
 declare interface Label {
@@ -138,6 +172,11 @@ declare interface Label {
     text: string;
     textAlignment: TextAlignment;
     textColor: Color;
+    adjustFontSizeToFit: Boolean;
+    minimumFontSize: Number;
+    android :View["android"] & {
+        adjustableFontSizeStep: Number;
+    }
 }
 
 export = Label;
