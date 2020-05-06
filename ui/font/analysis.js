@@ -16,6 +16,18 @@
  */
 function Font() {}
 
+
+/**
+ * Gets size of font. 
+ *
+ * @property {Number} size
+ * @readonly
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+Font.prototype.size;
+
 /**
  * This method returns the string size
  *
@@ -28,6 +40,7 @@ function Font() {}
  * @since 1.1.18
  */
 Font.prototype.sizeOfString = function(string, maxWidth) {}
+
 
 /**
  * @method create

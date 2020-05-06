@@ -18,6 +18,17 @@ export = Font;
  *     myPage.layout.addChild(myLabel);
  */
 declare class Font extends NativeComponent {
+
+/**
+ * Gets size of font. 
+ *
+ * @property {Number} size
+ * @readonly
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+    readonly size: number;
 /**
  * @method create
  * @android
@@ -41,7 +52,7 @@ declare class Font extends NativeComponent {
  * @return {UI.Font} A Font instance.
  * @static
  */
-    static create(fontFamily: string, size: number, style: FontStyle): Font;
+    static create(fontFamily: string, size: number, style?: FontStyle): Font;
 /**
  * @method createFromFile
  * @android
