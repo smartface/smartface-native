@@ -134,4 +134,34 @@ Label.prototype.textAlignment = UI.TextAlignment.MIDLEFT;
  */
 Label.prototype.textColor = UI.Color.BLACK;
 
+
+/**
+ * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)
+ *
+ * @property {Boolean} [adjustFontSizeToFit = false]
+ * @ios
+ * @android
+ * @since 4.2.2
+ */
+Label.prototype.adjustFontSizeToFit = false;
+
+/**
+ * Gets/sets minimum font size of Label.
+ *
+ * @property {Number} [minimumFontSize = 1]
+ * @ios
+ * @android
+ * @since 4.2.2
+ */
+Label.prototype.minimumFontSize = 1;
+
+/**
+ * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
+ *
+ * @property {Number} [adjustableFontSizeStep = 1]
+ * @android
+ * @since 4.2.2
+ */
+Label.prototype.adjustableFontSizeStep = 1;
+
 module.exports = Label;

@@ -8,6 +8,7 @@ const NativeTypeface = requireClass("android.graphics.Typeface");
 /** @type {typeof import('./index')} */
 function Font(params) {
 
+    let _size;
     Object.defineProperties(this, {
         'sizeOfString': {
             value: function(text, maxWidth) {
@@ -19,6 +20,14 @@ function Font(params) {
                 });
             },
             enumerable: true
+        },
+        'size' :{
+            get: () => _size,
+            set: (value) => { 
+                _size = value
+            },
+            enumerable: true,
+            configurable: true
         },
         'toString': {
             value: function() {
