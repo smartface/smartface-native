@@ -81,6 +81,7 @@ Share.shareFile = function (file, page, blacklist) { };
  * @param {Array} [params.blacklist]
  * @ios
  * @android
+ * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
  * @since 4.2.1
  */
 Share.shareContacts = function(params){};
@@ -116,6 +117,7 @@ Share.shareContacts = function(params){};
  * @param {Array} [params.blacklist]
  * @ios
  * @android
+ * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#multiple-sharing
  * @since 4.0.2
  */
 Share.share = function (params) { };
