@@ -81,6 +81,7 @@ declare const Share: {
 	 * @param {Array} [params.blacklist]
 	 * @ios
 	 * @android
+     * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
 	 * @since 4.2.1
 	 */
     shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }): void;
@@ -107,6 +108,7 @@ declare const Share: {
 	 * @param {Array} [params.blacklist]
 	 * @ios
 	 * @android
+     * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#multiple-sharing
 	 * @since 4.0.2
 	 */
     share(params: { items: any[]; page: Page; blacklist: string[] }): void;

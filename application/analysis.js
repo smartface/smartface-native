@@ -492,6 +492,7 @@ Application.hideKeyboard = function() {};
  * @android
  * @ios
  * @static
+ * @deprecated 4.2.1 Use {@link Notifications#onNotificationClick} & {@link Notifications#onNotificationReceive} instead
  * @since 0.1
  */
 Application.onReceivedNotification = function(data) {};
