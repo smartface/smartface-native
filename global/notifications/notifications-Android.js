@@ -5,7 +5,6 @@ const Color = require("../../ui/color");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat = requireClass("androidx.core.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
-const NativeNotificationListener = requireClass('io.smartface.android.listeners.NotificationListener');
 const Runnable = requireClass("java.lang.Runnable");
 
 // android.content.Context.NOTIFICATION_SERVICE;
@@ -15,49 +14,12 @@ const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
 const ALARM_SERVICE = "alarm";
 const ALARM_MANAGER = "android.app.AlarmManager";
 
-const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
-
 var selectedNotificationIds = [];
 var senderID = null;
 
+function Notifications() { }
 
-var notificationListener = (function() {
-    var sNotificationListener;
-
-    function createNotificationListener() {
-        return NativeNotificationListener.implement({
-            onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
-                let parsedJson = JSON.parse(data);
-                if (isReceivedByOnClick) {
-                    Notifications.onNotificationClick && runOnUiThread(Notifications.onNotificationClick, parsedJson);
-                } else {
-                    Notifications.onNotificationReceive && runOnUiThread(Notifications.onNotificationReceive, parsedJson);
-                    Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-                        remote: parsedJson
-                    });
-                }
-            },
-            onLocalNotificationReceived: function(data) {
-                Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-                    'local': JSON.parse(data)
-                });
-            }
-        });
-    }
-    if (sNotificationListener === undefined)
-        sNotificationListener = createNotificationListener();
-
-    /*ToDo: Already register by  registerForPushNotifications method.This implemetation might be 
-    specific to location object. So while refactoring consider.
-    */
-    NativeLocalNotificationReceiver.registerRemoteNotificationListener(sNotificationListener);
-
-    return sNotificationListener;
-})();
-
-function Notifications() {}
-
-Notifications.LocalNotification = function(params) {
+Notifications.LocalNotification = function (params) {
     var self = this;
     this.android = {};
     // When notification builded, notification must canceled 
@@ -73,13 +35,13 @@ Notifications.LocalNotification = function(params) {
     var _alertAction = "";
     var _sound = "";
     var _repeatInterval = 0;
-    var _launchImage;
+    var _launchImage, _fireDate;
     Object.defineProperties(this, {
         'alertBody': {
-            get: function() {
+            get: function () {
                 return _alertBody;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     _alertBody = value;
                     self.nativeObject.setContentText(value);
@@ -88,10 +50,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'alertAction': {
-            get: function() {
+            get: function () {
                 return _alertAction;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     _alertAction = value;
                     self.nativeObject.setContentTitle(value);
@@ -100,10 +62,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'sound': {
-            get: function() {
+            get: function () {
                 return _sound;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     _sound = value;
                     // todo sound setting doesn't work causing by issue CLI-175.
@@ -113,10 +75,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'launchImage': {
-            get: function() {
+            get: function () {
                 return _launchImage;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     const Image = require("../../ui/image");
                     var largeImage = Image.createFromFile(value);
@@ -132,10 +94,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'fireDate': {
-            get: function() {
+            get: function () {
                 return _fireDate;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _fireDate = value;
                 }
@@ -143,10 +105,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'repeatInterval': {
-            get: function() {
+            get: function () {
                 return _repeatInterval;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _repeatInterval = value;
                 }
@@ -154,7 +116,7 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'schedule': {
-            value: function() {
+            value: function () {
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
@@ -169,7 +131,7 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'present': {
-            value: function() {
+            value: function () {
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
@@ -182,7 +144,7 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'cancel': {
-            value: function() {
+            value: function () {
                 if (self.mPendingIntent && self.mNotification) {
                     cancelNotificationIntent(self);
                 }
@@ -191,10 +153,10 @@ Notifications.LocalNotification = function(params) {
         },
         //Internal call only.
         'getId': {
-            value: function() {
+            value: function () {
                 return _id;
             }
-        },
+        }
     });
 
     var _color = 0;
@@ -206,10 +168,10 @@ Notifications.LocalNotification = function(params) {
     var _ongoing = false;
     Object.defineProperties(this.android, {
         'color': {
-            get: function() {
+            get: function () {
                 return _color;
             },
-            set: function(value) {
+            set: function (value) {
                 if ((value instanceof Color) && (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP)) {
                     _color = value;
                     self.nativeObject.setColor(value.nativeObject);
@@ -218,10 +180,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'indeterminate': {
-            get: function() {
+            get: function () {
                 return _indeterminate;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isBoolean(value)) {
                     _indeterminate = value;
                     self.nativeObject.setProgress(0, 100, value);
@@ -230,10 +192,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'ticker': {
-            get: function() {
+            get: function () {
                 return _ticker;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     _ticker = value;
                     self.nativeObject.setTicker(value);
@@ -245,10 +207,10 @@ Notifications.LocalNotification = function(params) {
          * method androidx.core.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
          * */
         'vibrate': {
-            get: function() {
+            get: function () {
                 return _vibrate;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isBoolean(value)) {
                     _vibrate = true;
                     self.nativeObject.setVibrate(array([long(1000)], "long"));
@@ -257,10 +219,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'priority': {
-            get: function() {
+            get: function () {
                 return _priority;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _priority = value;
                     self.nativeObject.setPriority(value);
@@ -269,10 +231,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'subText': {
-            get: function() {
+            get: function () {
                 return _subText;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isString(value)) {
                     _subText = value;
                     self.nativeObject.setSubText(value);
@@ -281,10 +243,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         },
         'ongoing': {
-            get: function() {
+            get: function () {
                 return _ongoing;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isBoolean(value)) {
                     _ongoing = value;
                     self.nativeObject.setOngoing(value);
@@ -294,6 +256,14 @@ Notifications.LocalNotification = function(params) {
         }
     });
 
+    //ToDo: onReceivedNotification is deprecated. Implement click and receive callbacks for local notification as well and refactor callback assignment.
+    NativeLocalNotificationReceiver.registerRemoteNotificationListener({
+        onLocalNotificationReceived: function (data) {
+            Application.onReceivedNotification && Application.onReceivedNotification({
+                'local': JSON.parse(data)
+            });
+        }
+    });
     // Handling iOS specific properties
     self.ios = {};
 
@@ -316,9 +286,9 @@ Object.defineProperties(Notifications, {
         enumerable: true
     },
     'registerForPushNotifications': {
-        value: function(onSuccess, onFailure) {
+        value: function (onSuccess, onFailure) {
             if (!AndroidConfig.isEmulator) {
-                registerPushNotification(onSuccess, onFailure);
+            registerPushNotification(onSuccess, onFailure);
             } else {
                 onFailure && onFailure();
             }
@@ -326,9 +296,9 @@ Object.defineProperties(Notifications, {
         enumerable: true
     },
     'unregisterForPushNotifications': {
-        value: function() {
+        value: function () {
             if (!AndroidConfig.isEmulator) {
-                unregisterPushNotification();
+            unregisterPushNotification();
             }
         },
         enumerable: true
@@ -383,9 +353,7 @@ function unregisterPushNotification() {
         const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
         const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
         NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
-        if (notificationListener) {
-            NativeFCMListenerService.unregisterRemoteNotificationListener(notificationListener);
-        }
+        NativeFCMListenerService.unregisterRemoteNotificationListener();
     } else {
         throw Error("Not registered to push notification.");
     }
@@ -399,14 +367,26 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
     if (TypeUtil.isString(senderID) && senderID !== '') {
         const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
         NativeFCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
-            onSuccess: function(token) {
+            onSuccess: function (token) {
                 const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
-                NativeFCMListenerService.registerRemoteNotificationListener(notificationListener);
+                NativeFCMListenerService.registerRemoteNotificationListener({
+                    onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
+                        let parsedJson = JSON.parse(data);
+                        if (isReceivedByOnClick) {
+                            Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
+                        } else {
+                            Notifications.onNotificationReceive && Notifications.onNotificationReceive(parsedJson);
+                            Application.onReceivedNotification && Application.onReceivedNotification({
+                                remote: parsedJson
+                            });
+                        }
+                    }
+                });
                 onSuccessCallback && onSuccessCallback({
                     'token': token
                 });
             },
-            onFailure: function() {
+            onFailure: function () {
                 onFailureCallback && onFailureCallback();
             }
         });
@@ -434,8 +414,7 @@ function startNotificationIntent(self, params) {
      */
     var nativeNotificationReceiverClass = requireClass("io.smartface.android.notifications.LocalNotificationReceiver");
     var notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
-    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED", "");
-    Object.keys(params).forEach(function(key) {
+    Object.keys(params).forEach(function (key) {
         notificationIntent.putExtra(key.toString(), params[key]);
     });
 
@@ -461,20 +440,11 @@ function cancelNotificationIntent(self) {
     notificationManager.cancel(self.getId());
 }
 
-function runOnUiThread(callback, params) {
-    var runnable = Runnable.implement({
-        run: function() {
-            callback && callback(params);
-        }
-    });
-    AndroidConfig.activity.runOnUiThread(runnable);
-}
-
 // Handling iOS specific properties
 Notifications.ios = {};
 Notifications.iOS = {};
 Notifications.ios.authorizationStatus = {};
-Notifications.ios.getAuthorizationStatus = function() {};
+Notifications.ios.getAuthorizationStatus = function () { };
 
 Notifications.iOS.NotificationPresentationOptions = {};
 

@@ -71,6 +71,7 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             const NativeRunnable = requireClass('java.lang.Runnable');
+
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     // TODO: isSwipeViewPage is never set to false. This will cause some unexpected behaviours. 
@@ -79,7 +80,6 @@ function Page(params) {
                     if (!self.isSwipeViewPage) {
                         Application.currentPage = self;
                     }
-
                     Application.registOnItemSelectedListener();
 
                     if (!self.isSwipeViewPage) {
