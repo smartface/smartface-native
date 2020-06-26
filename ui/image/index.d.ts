@@ -183,8 +183,8 @@ declare class Image extends NativeComponent {
 	resize(
 		width: number,
 		height: number,
-		onSuccess: (e: { image: Image }) => void,
-		onFailure: (e: { message: string }) => void
+		onSuccess?: (e: { image: Image }) => void,
+		onFailure?: (e: { message: string }) => void
 	): Image;
 	/**
 	 * Returns a cropped image from existing image with specified rectangle.

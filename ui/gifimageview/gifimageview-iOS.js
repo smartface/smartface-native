@@ -5,18 +5,18 @@ const Image = require("sf-core/ui/image");
 GifImageView.prototype = Object.create(ImageView.prototype);
 function GifImageView(params) {
     var self = this;
-    ImageView.call(this);
 
     if (!self.nativeObject) {
         self.nativeObject = new __SF_FLAnimatedImageView();
     }
+    ImageView.call(this);
 
     var _gifimage;
     Object.defineProperty(self, 'gifImage', {
-        get: function() {
+        get: function () {
             return _gifimage
         },
-        set: function(value) {
+        set: function (value) {
             _gifimage = value;
             self.nativeObject.animatedImage = value.nativeObject;
         },
@@ -24,35 +24,35 @@ function GifImageView(params) {
     });
 
     Object.defineProperty(self, 'currentFrame', {
-        get: function() {
+        get: function () {
             return Image.createFromImage(self.nativeObject.currentFrame);;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'currentFrameIndex', {
-        get: function() {
+        get: function () {
             return self.nativeObject.currentFrameIndex;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'isAnimating', {
-        get: function() {
+        get: function () {
             return self.nativeObject.animating;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'startAnimating', {
-        value: function() {
+        value: function () {
             self.nativeObject.startAnimating();
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'stopAnimating', {
-        value: function() {
+        value: function () {
             self.nativeObject.stopAnimating();
         },
         enumerable: true
@@ -60,12 +60,12 @@ function GifImageView(params) {
 
     var _loopCompletionCallback;
     Object.defineProperty(self.ios, 'loopCompletionCallback', {
-        get: function() {
+        get: function () {
             return _loopCompletionCallback
         },
-        set: function(value) {
+        set: function (value) {
             _loopCompletionCallback = value;
-            var handler = function(_loopCompletionCallback, loopCountRemaining) {
+            var handler = function (_loopCompletionCallback, loopCountRemaining) {
                 if (typeof _loopCompletionCallback === 'function') {
                     _loopCompletionCallback(loopCountRemaining);
                 }

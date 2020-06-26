@@ -26,8 +26,6 @@ declare namespace Contacts {
         department?: string;
         nickname?: string;
         photo?: Blob;
-        onSuccess: () => void;
-        onFailure: () => void;
     }
 }
 ​

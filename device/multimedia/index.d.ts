@@ -301,8 +301,9 @@ declare namespace Multimedia {
 }
 
 declare type MultimediaParams = {
+    type?: Multimedia.Type;
     page: Page;
-    action: Multimedia.ActionType;
+    action?: Multimedia.ActionType;
     allowsEditing?: boolean;
     aspectRatio?: { x: number; y: number };
     cameraFlashMode?: Multimedia.CameraFlashMode;
@@ -320,8 +321,8 @@ declare type MultimediaParams = {
         }
     };
     onSuccess: (params: { image: Image; video: File }) => void;
-    onCancel: () => void;
-    onFailure: (e: { message: string }) => void;
+    onCancel?: () => void;
+    onFailure?: (e: { message: string }) => void;
 };
 declare class Multimedia {
     /**
