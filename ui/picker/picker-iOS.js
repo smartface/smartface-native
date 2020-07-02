@@ -19,6 +19,7 @@ function Picker(params) {
         }, // after string problem is solved.
         set: function(items) {
             _items = items;
+            self.nativeObject.reloadAllComponents();
         },
         enumerable: true
     });
