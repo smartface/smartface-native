@@ -80,6 +80,9 @@ Hardware.android.vendorID;
  * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
  * indicates whether permission has been granted.
  * 
+ *     @example
+ *     Hardware.ios.microphone.requestRecordPermission(function(granted){});
+ * 
  * @param {Function} callback for permission situation.
  * @method requestRecordPermission
  * @ios

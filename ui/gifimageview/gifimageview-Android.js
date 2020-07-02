@@ -4,7 +4,6 @@ const Image = require("sf-core/ui/image");
 
 GifImageView.prototype = Object.create(ImageView.prototype);
 function GifImageView(params) {
-    var self = this;
     ImageView.call(this);
 
     const self = this;
