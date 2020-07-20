@@ -1,6 +1,7 @@
 import Page = require("../page");
 import Color = require("../color");
 import { WebBrowserParams } from "./webbrowserparams";
+import { WebBrowserOptions } from "./webbrowseroptions";
 /**
  * @class UI.WebBrowser
  * @since 2.0.11
@@ -29,20 +30,7 @@ declare class WebBrowser {
  * @since 2.0.11
  */
   static show(page:Page, options: WebBrowser.Options):void;
-/**
- * @class UI.WebBrowser.Options
- * @since 2.0.11
- *
- * An object that provides a standard interface for browsing the web.
- *
- *      @example
- *      var webOptions = new WebBrowser.Options();
- *      webOptions.url = "https://smartface.io"
- *      webOptions.barColor = Color.RED;
- *      webOptions.ios.itemColor = Color.BLUE;
- *      WebBrowser.show(page,options);
- */
-  static Options(): WebBrowser.Options;
+
   constructor(params?: WebBrowserParams);
 /**
  * Only HTTP and HTTPS URLs are supported.
@@ -82,6 +70,19 @@ declare class WebBrowser {
 }
 
 declare namespace WebBrowser {
-  type Options = {}
+    /**
+   * @class UI.WebBrowser.Options
+   * @since 2.0.11
+   *
+   * An object that provides a standard interface for browsing the web.
+   *
+   *      @example
+   *      var webOptions = new WebBrowser.Options();
+   *      webOptions.url = "https://smartface.io"
+   *      webOptions.barColor = Color.RED;
+   *      webOptions.ios.itemColor = Color.BLUE;
+   *      WebBrowser.show(page,options);
+   */
+  class Options extends WebBrowserOptions {}
 }
 export = WebBrowser;

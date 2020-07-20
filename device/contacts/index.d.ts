@@ -12,20 +12,20 @@ declare namespace Contacts {
      */
     export class Contact{
         constructor(params?: any);
-        phoneNumbers: number[] | string[];
-        emailAddresses: string[];
-        addresses: string[];
-        urlAddresses: string[];
-        firstName: string;
-        lastName: string;
-        middleName: string;
-        namePrefix: string;
-        nameSuffix: string;
-        title: string;
-        organization: string;
-        // photo: Blob;
-        onSuccess: () => void;
-        onFailure: () => void;
+        phoneNumbers?: number[] | string[];
+        emailAddresses?: string[];
+        addresses?: string[];
+        urlAddresses?: string[];
+        firstName?: string;
+        lastName?: string;
+        middleName?: string;
+        namePrefix?: string;
+        nameSuffix?: string;
+        title?: string;
+        organization?: string;
+        department?: string;
+        nickname?: string;
+        photo?: Blob;
     }
 }
 ​

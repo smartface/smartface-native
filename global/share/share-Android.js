@@ -130,24 +130,61 @@ function writeImageToFile(image) {
 function writeContactsToFile(contacts, vCardFileName) {
     const FileStream = require('../../io/filestream');
     const File = require('../../io/file');
+    const NativeStringUtil = requireClass('io.smartface.android.utils.StringUtil');
+
     let file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/` + (vCardFileName + ".vcf") });
     if (!file.exists)
         file.createFile(true);
     let fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
 
     contacts.forEach((contact) => {
-        const { namePrefix = "", firstName = "", lastName = "", middleName = "", title = "", organization = "",
+        const { namePrefix = "", firstName = "", lastName = "", middleName = "", title = "",
+            organization = "", nickname = "", department = "", photo,
             nameSuffix = "", phoneNumbers = [], urlAddresses = [], emailAddresses = [], addresses = [] } = contact;
+        const UTF_8_QUOTED_PRINTABLE = "CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE";
+
         fileStream.write("BEGIN:VCARD\r\n");
         fileStream.write("VERSION:2.1\r\n");
-        fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
-        fileStream.write(`FN:${firstName}\r\n`);
-        fileStream.write(`ORG:${organization}\r\n`);
-        fileStream.write(`TITLE:${title}\r\n`);
+
+        if (NativeStringUtil.isUsAscii(lastName) && NativeStringUtil.isUsAscii(firstName) &&
+            NativeStringUtil.isUsAscii(middleName) && NativeStringUtil.isUsAscii(namePrefix) && NativeStringUtil.isUsAscii(nameSuffix)) {
+            fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`)
+        } else {
+            fileStream.write(`N;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(lastName)};${NativeStringUtil.encodeToUTF8QuotedPrintable(firstName)};${NativeStringUtil.encodeToUTF8QuotedPrintable(middleName)};${NativeStringUtil.encodeToUTF8QuotedPrintable(namePrefix)};${NativeStringUtil.encodeToUTF8QuotedPrintable(nameSuffix)}\r\n`);
+        }
+
+        let vcard_firstName = NativeStringUtil.isUsAscii(firstName) ? `FN:${firstName}\r\n` : `FN;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(firstName)}\r\n`;
+        fileStream.write(vcard_firstName);
+
+        if (NativeStringUtil.isUsAscii(organization) && NativeStringUtil.isUsAscii(department))
+            fileStream.write(`ORG:${organization};${department}\r\n`);
+        else
+            fileStream.write(`ORG;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(organization)};${NativeStringUtil.encodeToUTF8QuotedPrintable(department)}\r\n`);
+
+        let vcard_title = NativeStringUtil.isUsAscii(title) ? `TITLE:${title}\r\n` : `TITLE;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(title)}\r\n`;
+        fileStream.write(vcard_title);
+        let vcard_nickname = NativeStringUtil.isUsAscii(nickname) ? `X-ANDROID-CUSTOM:vnd.android.cursor.item/nickname;${nickname};1;;;;;;;;;;;;;\r\n` : `X-ANDROID-CUSTOM;${UTF_8_QUOTED_PRINTABLE}:vnd.android.cursor.item/nickname;${NativeStringUtil.encodeToUTF8QuotedPrintable(nickname)};1;;;;;;;;;;;;;\r\n`;
+        fileStream.write(vcard_nickname);
+
+        if (photo)
+            fileStream.write(`PHOTO;ENCODING=BASE64;JPEG:${photo.toBase64()}\r\n`)
+
         phoneNumbers.forEach(phoneNumber => fileStream.write(`TEL;HOME;VOICE:${phoneNumber}\r\n`));
-        emailAddresses.forEach(emailAddress => fileStream.write(`EMAIL;PREF;X-INTERNET:${emailAddress}\r\n`));
-        addresses.forEach(address => fileStream.write(`ADR;HOME:;;${address};;;;\r\n`));
-        urlAddresses.forEach(urlAddress => fileStream.write(`URL:${urlAddress}\r\n`));
+
+        emailAddresses.forEach(emailAddress => {
+            let vcard_emailAddress = NativeStringUtil.isUsAscii(emailAddress) ? `EMAIL;PREF;X-INTERNET:${emailAddress}\r\n` : `EMAIL;PREF;X-INTERNET;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(emailAddress)}\r\n`;
+            fileStream.write(vcard_emailAddress)
+        });
+
+        addresses.forEach(address => {
+            let vcard_address = NativeStringUtil.isUsAscii(address) ? `ADR;HOME:;;${address};;;;\r\n` : `ADR;HOME;${UTF_8_QUOTED_PRINTABLE}:;;${NativeStringUtil.encodeToUTF8QuotedPrintable(address)};;;;\r\n`;
+            fileStream.write(vcard_address)
+        });
+
+        urlAddresses.forEach(urlAddress => {
+            let vcard_urlAddress = NativeStringUtil.isUsAscii(urlAddress) ? `URL:${urlAddress}\r\n` : `URL;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(urlAddress)}\r\n`;
+            fileStream.write(vcard_urlAddress)
+        });
         fileStream.write("END:VCARD\r\n");
     });
     fileStream.nativeObject.flush();

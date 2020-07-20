@@ -549,7 +549,6 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
     else {
         self.nativeObject.setQueryHint(hint);
     }
-
 }
 
 module.exports = SearchView;

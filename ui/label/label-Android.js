@@ -9,7 +9,8 @@ const AndroidConfig = require("../../util/Android/androidconfig.js");
 const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const EllipsizeMode = require("../ellipsizemode");
 
-const NativeTextView = requireClass("android.widget.TextView");
+const NativeTextView = requireClass("androidx.appcompat.widget.AppCompatTextView");
+const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const NativeTextUtils = requireClass("android.text.TextUtils");
 
@@ -29,6 +30,7 @@ const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
 const MAX_VALUE = 2147483647;
+const AUTO_SIZE_TEXT_TYPE_NONE = 0;
 
 Label.prototype = Object.create(View.prototype);
 // const Label = extend(View)(
@@ -54,19 +56,43 @@ function Label(params) {
     }
     View.apply(this);
 
-    let _textDirection;
-    Object.defineProperty(self.android, 'textDirection', {
-        get: () => {
-            if (_textDirection === undefined)
-                _textDirection = this.nativeObject.getTextDirection();
-            return _textDirection;
+    this._adjustFontSizeToFit = false;
+    this._minimumFontSize = 7;
+    let _textDirection, _adjustableFontSizeStep = 1;
+    Object.defineProperties(self.android, {
+        'textDirection': {
+            get: () => {
+                if (_textDirection === undefined)
+                    _textDirection = this.nativeObject.getTextDirection();
+                return _textDirection;
+            },
+            set: (direction) => {
+                _textDirection = direction;
+                this.nativeObject.setTextDirection(direction);
+            },
+            enumerable: true
         },
-        set: (direction) => {
-            _textDirection = direction;
-            this.nativeObject.setTextDirection(direction);
-        },
-        enumerable: true
+        'adjustableFontSizeStep': {
+            get: () => {
+                return _adjustableFontSizeStep;
+            },
+            set: (value) => {
+                _adjustableFontSizeStep = value;
+                if (this.adjustFontSizeToFit)
+                    this.setAutoSizeTextTypeUniformWithConfiguration();
+            },
+            enumerable: true
+        }
     });
+
+    this.setAutoSizeTextTypeUniformWithConfiguration = () => {
+        let maximumTextSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
+        if(maximumTextSize <=  this.minimumFontSize)
+            throw new Error(`Maximum auto-size text size (${maximumTextSize}) is less or equal to minimum auto-size text size (${this.minimumFontSize})`);
+            
+        NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize,
+            maximumTextSize, this.android.adjustableFontSizeStep, COMPLEX_UNIT_DIP);
+    }
 
     // Assign parameters given in constructor
     if (params) {
@@ -74,18 +100,18 @@ function Label(params) {
             this[param] = params[param];
         }
     }
-};
+}
 Label.prototype.fontInitial = null;
 Label.prototype._textAlignment = null;
 Label.prototype.viewNativeDefaultTextAlignment = null;
 Label.prototype._textColor = Color.BLACK;
-Label.prototype.toString = function() {
+Label.prototype.toString = function () {
     return 'Label';
 };
 
 Object.defineProperties(Label.prototype, {
     'font': {
-        get: function() {
+        get: function () {
             const Font = require("../font");
             let nativeTypeface = this.nativeObject.getTypeface();
             let textSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
@@ -94,7 +120,7 @@ Object.defineProperties(Label.prototype, {
                 "size": textSize
             });
         },
-        set: function(font) {
+        set: function (font) {
             if (font) {
                 this.fontInitial = font;
                 this.nativeObject.setTypeface(font.nativeObject);
@@ -105,20 +131,20 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'multiline': {
-        get: function() {
+        get: function () {
             return this.nativeObject.getMaxLines() !== 1;
         },
-        set: function(multiline) {
+        set: function (multiline) {
             this.nativeObject.setSingleLine(!multiline);
         },
         enumerable: true
     },
     'maxLines': {
-        get: function() {
+        get: function () {
             let mMaxLines = this.nativeObject.getMaxLines();
             return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
         },
-        set: function(value) {
+        set: function (value) {
             if (value === 0)
                 this.nativeObject.setMaxLines(MAX_VALUE);
             else
@@ -127,10 +153,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'ellipsizeMode': {
-        get: function() {
+        get: function () {
             return this._ellipsizeMode;
         },
-        set: function(ellipsizeModeEnum) {
+        set: function (ellipsizeModeEnum) {
             this._ellipsizeMode = ellipsizeModeEnum;
             this.nativeObject.setEllipsize(NativeEllipsizeMode[ellipsizeModeEnum]);
         },
@@ -138,20 +164,20 @@ Object.defineProperties(Label.prototype, {
         configurable: true
     },
     'text': {
-        get: function() {
+        get: function () {
             return this.nativeObject.getText().toString();
         },
-        set: function(text) {
+        set: function (text) {
             this.nativeObject.setText("" + text);
         },
         enumerable: true,
         configurable: true
     },
     'textAlignment': {
-        get: function() {
+        get: function () {
             return this._textAlignment;
         },
-        set: function(textAlignment) {
+        set: function (textAlignment) {
             if (textAlignment === TextAlignment.MIDLEFT || textAlignment === TextAlignment.MIDCENTER || textAlignment === TextAlignment.MIDRIGHT) {
                 this._textAlignment = textAlignment;
                 this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
@@ -163,10 +189,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'textColor': {
-        get: function() {
+        get: function () {
             return this._textColor;
         },
-        set: function(textColor) {
+        set: function (textColor) {
             if (textColor.nativeObject) {
                 this._textColor = textColor;
                 this.nativeObject.setTextColor(textColor.nativeObject);
@@ -179,11 +205,36 @@ Object.defineProperties(Label.prototype, {
         },
         enumerable: true
     },
+    'adjustFontSizeToFit': {
+        get: function () {
+            return this._adjustFontSizeToFit;
+        },
+        set: function (value) {
+            this._adjustFontSizeToFit = value;
+            if (value)
+                this.setAutoSizeTextTypeUniformWithConfiguration()
+            else
+                NativeTextViewCompat.setAutoSizeTextTypeWithDefaults(this.nativeObject, AUTO_SIZE_TEXT_TYPE_NONE)
+
+        },
+        enumerable: true
+    },
+    'minimumFontSize': {
+        get: function () {
+            return this._minimumFontSize;
+        },
+        set: function (value) {
+            this._minimumFontSize = value;
+            if (this.adjustFontSizeToFit)
+                this.setAutoSizeTextTypeUniformWithConfiguration()
+        },
+        enumerable: true
+    },
     'padding': {
-        get: function() {
+        get: function () {
             return this.paddingLeft;
         },
-        set: function(padding) {
+        set: function (padding) {
             this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(padding),
                 AndroidUnitConverter.dpToPixel(padding),
                 AndroidUnitConverter.dpToPixel(padding),
@@ -192,10 +243,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'paddingLeft': {
-        get: function() {
+        get: function () {
             return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingLeft());
         },
-        set: function(paddingLeft) {
+        set: function (paddingLeft) {
             var paddingBottom = this.paddingBottom;
             var paddingRight = this.paddingRight;
             var paddingTop = this.paddingTop;
@@ -207,10 +258,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'paddingRight': {
-        get: function() {
+        get: function () {
             return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingRight());
         },
-        set: function(paddingRight) {
+        set: function (paddingRight) {
             var paddingLeft = this.paddingLeft;
             var paddingBottom = this.paddingBottom;
             var paddingTop = this.paddingTop;
@@ -222,10 +273,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'paddingTop': {
-        get: function() {
+        get: function () {
             return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingTop());
         },
-        set: function(paddingTop) {
+        set: function (paddingTop) {
             var paddingLeft = this.paddingLeft;
             var paddingRight = this.paddingRight;
             var paddingBottom = this.paddingBottom;
@@ -237,10 +288,10 @@ Object.defineProperties(Label.prototype, {
         enumerable: true
     },
     'paddingBottom': {
-        get: function() {
+        get: function () {
             return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingBottom());
         },
-        set: function(paddingBottom) {
+        set: function (paddingBottom) {
             var paddingLeft = this.paddingLeft;
             var paddingRight = this.paddingRight;
             var paddingTop = this.paddingTop;

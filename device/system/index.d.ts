@@ -97,7 +97,27 @@ declare class System {
 		 * @static
 		 * @since 0.1
 		 */
-		apiLevel?: number;
+        apiLevel?: number;
+        /**
+        *
+        * An ordered list of 64 bit ABIs supported by this device. The most preferred ABI is the first element in the list.
+        * @property {String[]} supported64BitAbis
+        * @readonly
+        * @android
+        * @static
+        * @since 4.2.2
+        */
+        supported64BitAbis?: Array<String>;
+        /**
+        *
+        * An ordered list of 32 bit ABIs supported by this device. The most preferred ABI is the first element in the list.
+        * @property {String[]} supported32BitAbis
+        * @readonly
+        * @android
+        * @static
+        * @since 4.2.2
+        */
+        supported32BitAbis?: Array<String>;
 		/**
 		 *
 		 * Indicates whether there is the menu key or not on the device.

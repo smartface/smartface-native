@@ -770,25 +770,25 @@ function View(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self, 'start', {
-        get: function() {
-            return self.nativeObject.yoga.getYGValueForKey("start");
-        },
-        set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "start");
-        },
-        enumerable: true
-    });
+    // Object.defineProperty(self, 'start', {
+    //     get: function() {
+    //         return self.nativeObject.yoga.getYGValueForKey("start");
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "start");
+    //     },
+    //     enumerable: true
+    // });
 
-    Object.defineProperty(self, 'end', {
-        get: function() {
-            return self.nativeObject.yoga.getYGValueForKey("end");
-        },
-        set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "end");
-        },
-        enumerable: true
-    });
+    // Object.defineProperty(self, 'end', {
+    //     get: function() {
+    //         return self.nativeObject.yoga.getYGValueForKey("end");
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "end");
+    //     },
+    //     enumerable: true
+    // });
 
     Object.defineProperty(self, 'marginLeft', {
         get: function() {

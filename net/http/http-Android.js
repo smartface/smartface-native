@@ -6,6 +6,7 @@ const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const SFHttpCallback = requireClass("io.smartface.android.sfcore.net.SFHttpCallback");
+const SFHttp= requireClass("io.smartface.android.sfcore.net.SFHttp");
 
 const Blob = require("../../blob");
 
@@ -15,7 +16,7 @@ const WITHOUT_BODY_METHODS = {
     "COPY": 2,
     "PURGE": 3
 };
-
+ 
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 var activity = AndroidConfig.activity;
 
@@ -76,7 +77,7 @@ function http(params) {
                 return;
             _cookiePersistenceEnabled = value;
             if (_cookiePersistenceEnabled) {
-                self.clientBuilder.cookieJar(createCookieJar());
+                self.clientBuilder.cookieJar(SFHttp.createCookieJar());
             } else {
                 const NativeCookieJar = requireClass("okhttp3.CookieJar");
                 self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
@@ -330,15 +331,6 @@ function checkInternet() {
     if (Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
-}
-
-// TODO: [AND-3663] Implement this function in java side. Otherwise, we can't obfuscate classes named PersistentCookieJar, SetCookieCache and SharedPrefsCookiePersistor.
-function createCookieJar() {
-    const NativePersistenCookieJar = requireClass("com.franmontiel.persistentcookiejar.PersistentCookieJar");
-    const NativeSetCookieCache = requireClass("com.franmontiel.persistentcookiejar.cache.SetCookieCache");
-    const NativeSharedPrefsCookiePersistor = requireClass("com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor");
-    
-    return (new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity)));
 }
 
 module.exports = http;

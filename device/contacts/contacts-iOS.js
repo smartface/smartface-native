@@ -81,6 +81,26 @@ Contacts.Contact = function Contacts(params) {
 		enumerable: true
     });
 
+    Object.defineProperty(self, 'department', {
+		get: function() {
+			return self.nativeObject.departmentName;
+		},
+		set: function(value) {
+			self.nativeObject.departmentName = value;
+		},
+		enumerable: true
+    });
+
+    Object.defineProperty(self, 'nickname', {
+		get: function() {
+			return self.nativeObject.nickname;
+		},
+		set: function(value) {
+			self.nativeObject.nickname = value;
+		},
+		enumerable: true
+    });
+
     Object.defineProperty(self, 'photo', {
 		get: function() {
 			return new Blob(self.nativeObject.imageData);

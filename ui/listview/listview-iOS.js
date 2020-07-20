@@ -322,8 +322,8 @@ function ListView(params) {
         set: function(value) {
             if (typeof value === "object") {
                 var contentInset = {
-                    top: value.top ? value.top : _contentInset.top,
-                    bottom: value.bottom ? value.bottom : _contentInset.bottom
+                    top: value.top != undefined ? value.top : _contentInset.top,
+                    bottom: value.bottom != undefined ? value.bottom : _contentInset.bottom
                 }
                 _contentInset = contentInset;
                 

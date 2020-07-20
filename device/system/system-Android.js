@@ -157,6 +157,14 @@ Object.defineProperties(System.android, {
         },
         enumerable: true
     },
+    'supported64BitAbis' : {
+        get: () => toJSArray(NativeBuild.SUPPORTED_64_BIT_ABIS), 
+        enumerable: true
+    },
+    'supported32BitAbis' : {
+        get: () => toJSArray(NativeBuild.SUPPORTED_32_BIT_ABIS), 
+        enumerable: true
+    },
     'menuKeyAvaliable': {
         get: function() {
             return NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey();
