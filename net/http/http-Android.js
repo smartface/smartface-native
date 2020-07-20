@@ -6,6 +6,7 @@ const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const SFHttpCallback = requireClass("io.smartface.android.sfcore.net.SFHttpCallback");
+const SFHttp= requireClass("io.smartface.android.sfcore.net.SFHttp");
 
 const Blob = require("../../blob");
 
@@ -76,7 +77,7 @@ function http(params) {
                 return;
             _cookiePersistenceEnabled = value;
             if (_cookiePersistenceEnabled) {
-                self.clientBuilder.cookieJar(createCookieJar());
+                self.clientBuilder.cookieJar(SFHttp.createCookieJar());
             } else {
                 const NativeCookieJar = requireClass("okhttp3.CookieJar");
                 self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
@@ -330,16 +331,6 @@ function checkInternet() {
     if (Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
-}
-
-function createCookieJar() {
-    const NativePersistenCookieJar = requireClass("com.franmontiel.persistentcookiejar.PersistentCookieJar");
-    const NativeSetCookieCache = requireClass("com.franmontiel.persistentcookiejar.cache.SetCookieCache");
-    const NativeSharedPrefsCookiePersistor = requireClass("com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor");
-
-    var cookieJar = new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity));
-
-    return cookieJar;
 }
 
 module.exports = http;

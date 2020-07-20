@@ -116,6 +116,30 @@ System.LAContextBiometricType;
  */
 System.android.apiLevel;
 
+
+/**
+ *
+ * An ordered list of 64 bit ABIs supported by this device. The most preferred ABI is the first element in the list.
+ * @property {String[]} supported64BitAbis
+ * @readonly
+ * @android
+ * @static
+ * @since 4.2.2
+ */
+System.android.supported64BitAbis;
+
+
+/**
+ *
+ * An ordered list of 32 bit ABIs supported by this device. The most preferred ABI is the first element in the list.
+ * @property {String[]} supported32BitAbis
+ * @readonly
+ * @android
+ * @static
+ * @since 4.2.2
+ */
+System.android.supported32BitAbis;
+
 /**
  *
  * Indicates whether there is the menu key or not on the device.

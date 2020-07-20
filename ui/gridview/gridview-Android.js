@@ -21,12 +21,12 @@ function GridView(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
     }
-    
+
     let _callbacks = {
-        onAttachedToWindow: function() {
+        onAttachedToWindow: function () {
             self.android.onAttachedToWindow && self.android.onAttachedToWindow();
         },
-        onDetachedFromWindow: function() {
+        onDetachedFromWindow: function () {
             self.android.onDetachedFromWindow && self.android.onDetachedFromWindow();
         }
     };
@@ -56,7 +56,7 @@ function GridView(params) {
     var _gridViewItems = {};
     const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
     var callbacks = {
-        onCreateViewHolder: function(viewType) {
+        onCreateViewHolder: function (viewType) {
             var holderViewLayout;
             try {
                 holderViewLayout = _onItemCreate(viewType);
@@ -87,30 +87,30 @@ function GridView(params) {
             holderViewLayout.nativeInner.setRecyclerViewAdapter(self.nativeDataAdapter);
             return holderViewLayout.nativeInner;
         },
-        onBindViewHolder: function(itemViewHashCode, position) {
+        onBindViewHolder: function (itemViewHashCode, position) {
             var _holderViewLayout = _gridViewItems[itemViewHashCode];
 
             assignSizeBasedOnDirection.call(self, _holderViewLayout, _holderViewLayout.viewType);
 
             _onItemBind && _onItemBind(_holderViewLayout, position);
         },
-        getItemCount: function() {
+        getItemCount: function () {
             if (isNaN(_itemCount))
                 return 0;
-            else if (typeof(_itemCount) !== "number")
+            else if (typeof (_itemCount) !== "number")
                 throw new Error("itemCount must be an number.");
             return _itemCount;
         },
-        getItemViewType: function(position) {
+        getItemViewType: function (position) {
             let itemType;
             _onItemType && (itemType = _onItemType(position));
-            return (typeof(itemType) === "number") ? itemType : 0;
+            return (typeof (itemType) === "number") ? itemType : 0;
         },
-        onItemSelected: function(position, itemViewHashCode) {
+        onItemSelected: function (position, itemViewHashCode) {
             var selectedItem = _gridViewItems[itemViewHashCode];
             _onItemSelected && _onItemSelected(selectedItem, position);
         },
-        onItemLongSelected: function(position, itemViewHashCode) {
+        onItemLongSelected: function (position, itemViewHashCode) {
             var selectedItem = _gridViewItems[itemViewHashCode];
             _onItemLongSelected && _onItemLongSelected(selectedItem, position);
         }
@@ -127,10 +127,10 @@ function GridView(params) {
     Object.defineProperties(this, {
         // properties
         'layoutManager': {
-            get: function() {
+            get: function () {
                 return this._layoutManager;
             },
-            set: function(layoutManager) {
+            set: function (layoutManager) {
                 if (this._layoutManager) {
                     this._layoutManager.nativeRecyclerView = null;
                 }
@@ -143,7 +143,7 @@ function GridView(params) {
             enumerable: true
         },
         'itemByIndex': {
-            value: function(index) {
+            value: function (index) {
                 var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
                 if (!viewHolder) return undefined; // like ios
 
@@ -152,10 +152,10 @@ function GridView(params) {
             enumerable: true
         },
         'itemCount': {
-            get: function() {
+            get: function () {
                 return _itemCount;
             },
-            set: function(itemCount) {
+            set: function (itemCount) {
                 if (TypeUtil.isNumeric(itemCount)) {
                     _itemCount = itemCount;
                 }
@@ -163,10 +163,10 @@ function GridView(params) {
             enumerable: true
         },
         'scrollBarEnabled': {
-            get: function() {
+            get: function () {
                 return _scrollBarEnabled;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isBoolean(value)) {
                     _scrollBarEnabled = value;
                     if (!this.layoutManager)
@@ -181,10 +181,10 @@ function GridView(params) {
             enumerable: true
         },
         'scrollEnabled': {
-            get: function() {
+            get: function () {
                 return _scrollEnabled;
             },
-            set: function(isScrollEnabled) {
+            set: function (isScrollEnabled) {
                 if (!this.layoutManager)
                     return;
                 if (TypeUtil.isBoolean(isScrollEnabled)) {
@@ -199,10 +199,10 @@ function GridView(params) {
             enumerable: true
         },
         'refreshEnabled': {
-            get: function() {
+            get: function () {
                 return this.nativeObject.isEnabled();
             },
-            set: function(refreshEnabled) {
+            set: function (refreshEnabled) {
                 if (TypeUtil.isBoolean(refreshEnabled)) {
                     this.nativeObject.setEnabled(refreshEnabled);
                 }
@@ -211,14 +211,14 @@ function GridView(params) {
         },
         //methods
         'getLastVisibleIndex': {
-            value: function() {
+            value: function () {
                 let lastVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findLastVisibleItemPositions(null));
                 return Math.max(...lastVisibleItemPositions);
             },
             enumerable: true
         },
         'getFirstVisibleIndex': {
-            value: function() {
+            value: function () {
                 let firstVisibleItemPositions = toJSArray(this.nativeInner.getLayoutManager().findFirstVisibleItemPositions(null));
                 // -1 = RecyclerView.NO_POSITION
                 return Math.min(...(firstVisibleItemPositions.filter(x => x !== -1)));
@@ -226,8 +226,8 @@ function GridView(params) {
             enumerable: true
         },
         'scrollTo': {
-            value: function(index, animate) {
-                if ((typeof(animate) === "undefined") || animate) {
+            value: function (index, animate) {
+                if ((typeof (animate) === "undefined") || animate) {
                     this.nativeInner.smoothScrollToPosition(index);
                 } else {
                     this.nativeInner.scrollToPosition(index);
@@ -236,7 +236,7 @@ function GridView(params) {
             enumerable: true
         },
         'refreshData': {
-            value: function() {
+            value: function () {
                 // this.nativeInner.setLayoutManager(linearLayoutManager);
                 // this.nativeInner.setAdapter(dataAdapter);
                 self.nativeDataAdapter.notifyDataSetChanged();
@@ -245,9 +245,9 @@ function GridView(params) {
             enumerable: true
         },
         'setPullRefreshColors': {
-            value: function(colors) {
+            value: function (colors) {
                 var nativeColors = [];
-                colors.forEach(function(element) {
+                colors.forEach(function (element) {
                     nativeColors.push(element.nativeObject);
                 });
                 /** @todo
@@ -259,59 +259,59 @@ function GridView(params) {
             enumerable: true
         },
         'startRefresh': {
-            value: function() {
+            value: function () {
                 this.nativeObject.setRefreshing(true);
             },
             enumerable: true
         },
         'stopRefresh': {
-            value: function() {
+            value: function () {
                 this.nativeObject.setRefreshing(false);
             },
             enumerable: true
         },
         // callbacks
         'onItemCreate': {
-            get: function() {
+            get: function () {
                 return _onItemCreate;
             },
-            set: function(onItemCreate) {
+            set: function (onItemCreate) {
                 _onItemCreate = onItemCreate.bind(this);
             },
             enumerable: true
         },
         'onItemType': {
-            get: function() {
+            get: function () {
                 return _onItemType;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onItemType = callback;
             },
             enumerable: true
         },
         'onItemBind': {
-            get: function() {
+            get: function () {
                 return _onItemBind;
             },
-            set: function(onItemBind) {
+            set: function (onItemBind) {
                 _onItemBind = onItemBind.bind(this);
             },
             enumerable: true
         },
         'onItemSelected': {
-            get: function() {
+            get: function () {
                 return _onItemSelected;
             },
-            set: function(onItemSelected) {
+            set: function (onItemSelected) {
                 _onItemSelected = onItemSelected.bind(this);
             },
             enumerable: true
         },
         'onScroll': {
-            get: function() {
+            get: function () {
                 return _onScroll;
             },
-            set: function(onScroll) {
+            set: function (onScroll) {
                 _onScroll = onScroll;
                 if (onScroll && isScrollListenerAdded === true)
                     return;
@@ -328,37 +328,38 @@ function GridView(params) {
             enumerable: true
         },
         'onPullRefresh': {
-            get: function() {
+            get: function () {
                 return _onPullRefresh;
             },
-            set: function(onPullRefresh) {
+            set: function (onPullRefresh) {
                 _onPullRefresh = onPullRefresh.bind(this);
             },
             enumerable: true
         },
         'paginationEnabled': {
-            get: function() {
+            get: function () {
                 return _paginationEnabled;
             },
-            set: function(value) {
+            set: function (value) {
                 if (typeof value !== 'boolean')
                     return;
                 _paginationEnabled = value;
 
-                if (_paginationEnabled) {
-                    if (!_nativePagerSnapHelper) {
-                        const NativeSFCustomizedPagerSnapHelper = requireClass("androidx.recyclerview.widget.PagerSnapHelper");
-                        _nativePagerSnapHelper = new NativeSFCustomizedPagerSnapHelper();
-                    }
+                removeSnapHelper(_nativeLinearSnapHelper);
+                if (!_nativePagerSnapHelper) {
+                    const NativeSFCustomizedPagerSnapHelper = requireClass("androidx.recyclerview.widget.PagerSnapHelper");
+                    _nativePagerSnapHelper = new NativeSFCustomizedPagerSnapHelper();
+                }
+                if (_paginationEnabled)
                     _nativePagerSnapHelper.attachToRecyclerView(self.nativeInner);
-                } else if (_nativePagerSnapHelper)
-                    _nativePagerSnapHelper.attachToRecyclerView(null);
+                else
+                    removeSnapHelper(_nativePagerSnapHelper);
 
             },
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'GridView';
             },
             enumerable: true,
@@ -370,10 +371,10 @@ function GridView(params) {
     var _snapToAlignment, _nativeLinearSnapHelper;
     Object.defineProperties(this.android, {
         'onScrollStateChanged': {
-            get: function() {
+            get: function () {
                 return _onScrollStateChanged;
             },
-            set: function(onScrollStateChanged) {
+            set: function (onScrollStateChanged) {
                 _onScrollStateChanged = onScrollStateChanged;
 
                 if (onScrollStateChanged && isScrollListenerAdded === true)
@@ -391,10 +392,10 @@ function GridView(params) {
             enumerable: true
         },
         'onItemLongSelected': {
-            get: function() {
+            get: function () {
                 return _onItemLongSelected;
             },
-            set: function(onItemLongSelected) {
+            set: function (onItemLongSelected) {
                 _onItemLongSelected = onItemLongSelected;
             },
             enumerable: true,
@@ -402,30 +403,32 @@ function GridView(params) {
         },
         //ToDo:[Deprecated] paginationEnabled is no more Android specific. 
         'paginationEnabled': {
-            get: function() {
+            get: function () {
                 return self.paginationEnabled;
             },
-            set: function(value) {
+            set: function (value) {
                 self.paginationEnabled = value;
             },
             enumerable: true
         },
         'snapToAlignment': {
-            get: function() {
+            get: function () {
                 return _snapToAlignment;
             },
-            set: function(alignment) {
+            set: function (alignment) {
                 if (typeof alignment !== 'number')
                     return;
                 _snapToAlignment = alignment;
-                if (alignment !== GridView.Android.SnapAlignment.SNAPTO_NONE) {
-                    if (!_nativeLinearSnapHelper) {
-                        const NativeSFCustomizedLinearSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedLinearSnapHelper");
-                        _nativeLinearSnapHelper = new NativeSFCustomizedLinearSnapHelper(alignment, self.nativeInner);
-                    }
+
+                removeSnapHelper(_nativePagerSnapHelper);
+                if (!_nativeLinearSnapHelper) {
+                    const NativeSFCustomizedLinearSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedLinearSnapHelper");
+                    _nativeLinearSnapHelper = new NativeSFCustomizedLinearSnapHelper(alignment, self.nativeInner);
+                }
+                if (alignment !== GridView.Android.SnapAlignment.SNAPTO_NONE)
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
-                } else if (_nativeLinearSnapHelper)
-                    _nativeLinearSnapHelper.attachToRecyclerView(null);
+                else
+                    removeSnapHelper(_nativeLinearSnapHelper);
             },
             enumerable: true
         },
@@ -436,7 +439,7 @@ function GridView(params) {
     function createOnScrollListernerObject() {
         const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
         var overrideMethods = {
-            onScrolled: function(dx, dy) {
+            onScrolled: function (dx, dy) {
                 if (!self.touchEnabled) {
                     return;
                 }
@@ -450,7 +453,7 @@ function GridView(params) {
                     contentOffset: self.contentOffset
                 });
             },
-            onScrollStateChanged: function(newState) {
+            onScrollStateChanged: function (newState) {
                 if (!self.touchEnabled) {
                     return;
                 }
@@ -462,10 +465,15 @@ function GridView(params) {
         return _onScrollListener;
     }
 
+    function removeSnapHelper(nativeSnapHelper) {
+        if (nativeSnapHelper)
+            nativeSnapHelper.attachToRecyclerView(null);
+    }
+
     // ios-only properties
     this.ios = {};
     this.ios.swipeItems = {};
-    this.ios.swipeItem = function(title, action) {
+    this.ios.swipeItem = function (title, action) {
         return {};
     };
 
