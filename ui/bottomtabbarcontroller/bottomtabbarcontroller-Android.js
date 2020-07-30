@@ -189,7 +189,6 @@ function BottomTabBarController(params) {
         //Set normal color to attributed strings.
         setNormalColorToAttributed.call(self.tabBar, _selectedIndex);
         controlAttributedTextColor.call(self.tabBar, _selectedIndex, cacheNativeBuilders);
-        self.tabBar.android.disableItemAnimation && setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
 
         initializeOneTime = true;
     }
@@ -213,12 +212,8 @@ function BottomTabBarController(params) {
                 index: index
             }) : true;
 
-            let disableItemAnimation = self.tabBar.android && self.tabBar.android.disableItemAnimation;
             if (!result)
                 return false;
-
-            if (disableItemAnimation)
-                setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
 
             controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
 
@@ -238,38 +233,12 @@ function BottomTabBarController(params) {
                 Application.onUnhandledError && Application.onUnhandledError(e);
             }
 
-            return !disableItemAnimation;
+            return true;
         }
     }));
 
     this.addTabBarToActivity();
     params && (Object.assign(this, params));
-}
-
-function setColorToMenuViewItem(index, cahce) {
-    const tabBar = this;
-
-    let selectedColorNO = tabBar.itemColor.selected.nativeObject;
-    let normalColorNO = tabBar.itemColor.normal.nativeObject;
-
-    !cahce[index] && (cahce[index] = {});
-    if (!cahce[index].nativeImageView && !cahce[index].nativeTextView) {
-        let nativeBottomTabarMenuView = tabBar.nativeObject.getChildAt(0);
-        let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(index);
-        cahce[index].nativeImageView = nativeMenuItem.getChildAt(0);
-        cahce[index].nativeTextView = nativeMenuItem.getChildAt(1).getChildAt(0);
-    }
-    cahce[index].nativeImageView.setColorFilter(selectedColorNO);
-    cahce[index].nativeTextView.setTextColor(selectedColorNO);
-
-    for (let i in cahce) {
-        let parsedToInt = parseInt(i);
-        if (parsedToInt !== index && cahce.prevSelectedIndex === parsedToInt) {
-            cahce[i].nativeImageView.setColorFilter(normalColorNO);
-            cahce[i].nativeTextView.setTextColor(normalColorNO);
-        }
-    }
-    cahce.prevSelectedIndex = index;
 }
 
 function setNormalColorToAttributed(selectedIndex) {
