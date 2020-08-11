@@ -35,7 +35,7 @@ function MapView(params) {
         if (!params || !(params.lazyLoading))
             self.nativeObject.onCreate(savedBundles);
     }
-    MapView.call(self);
+    View.call(self);
 
     function asyncMap() {
         const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
