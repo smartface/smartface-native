@@ -7,6 +7,7 @@ const LayoutParams = require("../../util/Android/layoutparams");
 const Color = require('sf-core/ui/color');
 const ParentPicker = require("sf-core/ui/picker/parentPicker");
 
+const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
@@ -24,7 +25,7 @@ function Picker(params) {
 
     var _items = [];
     var _onSelected;
-    var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText;
+    var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText, _backgroundColor, _textColor;
     var buttonCustomize = false;
     Object.defineProperties(this, {
         'items': {
@@ -63,6 +64,28 @@ function Picker(params) {
                 buttonCustomize = true;
                 if (color instanceof Color)
                     _okColor = color;
+            },
+            enumerable: true
+        },
+        'textColor': {
+            get: function() {
+                return _textColor;
+            },
+            set: function(color) {
+                _textColor = color;
+                self.nativeObject.setTextColor(color.nativeObject);
+            },
+            enumerable: true
+        },
+        'dialogBackgroundColor': {
+            get: function() {
+                return _backgroundColor;
+            },
+            set: function(color) {
+                _backgroundColor = color;
+                if(self.dialogInstance) {
+                    self.dialogInstance.getWindow().setBackgroundDrawable(new NativeColorDrawable(_backgroundColor.nativeObject));
+                }
             },
             enumerable: true
         },
@@ -155,6 +178,9 @@ function Picker(params) {
                     builder = builder.setCustomTitle(self.__createTitleView());
 
                 var alertDialog = builder.show(); //return native alertdailog
+                self.dialogInstance = alertDialog;
+                // re-set background color
+                _backgroundColor && (self.dialogBackgroundColor = _backgroundColor);
 
                 if (buttonCustomize === true) {
                     var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
