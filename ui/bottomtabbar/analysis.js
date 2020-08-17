@@ -28,6 +28,7 @@ BottomTabBar.prototype.android.maxItemCount = true;
  * @since 4.0.1
  * @property {Boolean} disableItemAnimation
  * @android
+ * @removed since 4.2.2
  */
 BottomTabBar.prototype.android.disableItemAnimation = false;
 

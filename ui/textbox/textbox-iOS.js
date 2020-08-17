@@ -179,7 +179,8 @@ function TextBox(params) {
         set: function(value) {
             self.nativeObject.font = value;
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     Object.defineProperty(self, 'cursorPosition', {
@@ -285,7 +286,8 @@ function TextBox(params) {
                 self.nativeObject.setValueForKey(characterRange, "selectedTextRange");
             }
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     Object.defineProperty(self, 'text', {

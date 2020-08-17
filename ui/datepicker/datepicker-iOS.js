@@ -1,5 +1,6 @@
 const TypeUtil = require('sf-core/util/type');
 const UIDatePickerMode = require("sf-core/util").UIDatePickerMode;
+const Color = require("sf-core/ui/color");
 
 function DatePicker(params) {
     var self = this;
@@ -10,44 +11,87 @@ function DatePicker(params) {
 
     self.ios = {};
 
-    self.onDateSelected = function() {};
-    self.onCancelled = function() {};
+    self.onDateSelected = function () { };
+    self.onCancelled = function () { };
 
-    self.onDateSelectedListener = function(e) {
+    self.onDateSelectedListener = function (e) {
         self.onDateSelected(e.date);
     };
 
-    self.onCancelledListener = function() {
+    self.onCancelledListener = function () {
         self.onCancelled();
     };
 
     self.nativeObject.onSelected = self.onDateSelectedListener;
     self.nativeObject.onCancelled = self.onCancelledListener;
 
-    self.setDate = function(date) {
+    self.setDate = function (date) {
         if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
             self.nativeObject.defaultDate = date;
         }
     };
 
-    self.setMinDate = function(date) {
+    self.setMinDate = function (date) {
         if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
             self.nativeObject.minimumDate = date;
         }
     };
 
-    self.setMaxDate = function(date) {
+    self.setMaxDate = function (date) {
         if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
             self.nativeObject.maximumDate = date;
         }
     };
 
+    Object.defineProperty(this.ios, 'textColor', {
+        get: function () {
+            if (self.nativeObject.textColor === undefined) {
+                return undefined;
+            }
+            return new Color({
+                color: self.nativeObject.textColor
+            });
+        },
+        set: function (color) {
+            if (color) {
+                self.nativeObject.textColor = color.nativeObject;
+            } else {
+                self.nativeObject.textColor = undefined;
+            }
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(this.ios, 'dialogBackgroundColor', {
+        get: function () {
+            return new Color({
+                color: self.nativeObject.dialogBackgroundColor
+            });
+        },
+        set: function (color) {
+            self.nativeObject.dialogBackgroundColor = color.nativeObject;
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(this.ios, 'dialogLineColor', {
+        get: function () {
+            return new Color({
+                color: self.nativeObject.dialogLineColor
+            });
+        },
+        set: function (color) {
+            self.nativeObject.dialogLineColor = color.nativeObject;
+        },
+        enumerable: true
+    });
+
     var _title;
     Object.defineProperty(this.ios, 'title', {
-        get: function() {
+        get: function () {
             return _title;
         },
-        set: function(value) {
+        set: function (value) {
             _title = value;
         },
         enumerable: true
@@ -55,10 +99,10 @@ function DatePicker(params) {
 
     var _titleColor;
     Object.defineProperty(this.ios, 'titleColor', {
-        get: function() {
+        get: function () {
             return _titleColor;
         },
-        set: function(value) {
+        set: function (value) {
             _titleColor = value;
         },
         enumerable: true
@@ -66,10 +110,10 @@ function DatePicker(params) {
 
     var _titleFont;
     Object.defineProperty(this.ios, 'titleFont', {
-        get: function() {
+        get: function () {
             return _titleFont;
         },
-        set: function(value) {
+        set: function (value) {
             _titleFont = value;
         },
         enumerable: true
@@ -77,10 +121,10 @@ function DatePicker(params) {
 
     var _cancelColor;
     Object.defineProperty(this.ios, 'cancelColor', {
-        get: function() {
+        get: function () {
             return _cancelColor;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelColor = value;
         },
         enumerable: true
@@ -88,10 +132,10 @@ function DatePicker(params) {
 
     var _cancelHighlightedColor;
     Object.defineProperty(this.ios, 'cancelHighlightedColor', {
-        get: function() {
+        get: function () {
             return _cancelHighlightedColor;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelHighlightedColor = value;
         },
         enumerable: true
@@ -99,10 +143,10 @@ function DatePicker(params) {
 
     var _cancelFont;
     Object.defineProperty(this.ios, 'cancelFont', {
-        get: function() {
+        get: function () {
             return _cancelFont;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelFont = value;
         },
         enumerable: true
@@ -110,10 +154,10 @@ function DatePicker(params) {
 
     var _okColor;
     Object.defineProperty(this.ios, 'okColor', {
-        get: function() {
+        get: function () {
             return _okColor;
         },
-        set: function(value) {
+        set: function (value) {
             _okColor = value;
         },
         enumerable: true
@@ -121,10 +165,10 @@ function DatePicker(params) {
 
     var _okHighlightedColor;
     Object.defineProperty(this.ios, 'okHighlightedColor', {
-        get: function() {
+        get: function () {
             return _okHighlightedColor;
         },
-        set: function(value) {
+        set: function (value) {
             _okHighlightedColor = value;
         },
         enumerable: true
@@ -132,20 +176,20 @@ function DatePicker(params) {
 
     var _okFont;
     Object.defineProperty(this.ios, 'okFont', {
-        get: function() {
+        get: function () {
             return _okFont;
         },
-        set: function(value) {
+        set: function (value) {
             _okFont = value;
         },
         enumerable: true
     });
 
     Object.defineProperty(this.ios, 'datePickerMode', {
-        get: function() {
+        get: function () {
             return self.nativeObject.datePickerMode;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.datePickerMode = value;
         },
         enumerable: true
@@ -153,10 +197,10 @@ function DatePicker(params) {
 
     var _okText;
     Object.defineProperty(this.ios, 'okText', {
-        get: function() {
+        get: function () {
             return _okText;
         },
-        set: function(value) {
+        set: function (value) {
             _okText = value;
         },
         enumerable: true
@@ -164,16 +208,16 @@ function DatePicker(params) {
 
     var _cancelText;
     Object.defineProperty(this.ios, 'cancelText', {
-        get: function() {
+        get: function () {
             return _cancelText;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelText = value;
         },
         enumerable: true
     });
 
-    self.show = function() {
+    self.show = function () {
         self.nativeObject.show(
             (self.ios.title === undefined) ? "" : self.ios.title,
             self.ios.titleColor ? self.ios.titleColor.nativeObject : undefined,

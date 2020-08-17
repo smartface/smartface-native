@@ -3,15 +3,18 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const Color = require("../../ui/color");
 
 const NativeBottomNavigationView = requireClass("com.google.android.material.bottomnavigation.BottomNavigationView");
+const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
+
+const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
 function BottomTabBar(params) {
-    this.nativeObject = new NativeBottomNavigationView(activity);
+    this.nativeObject = new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
 
     var self = this;
-    var _itemColors, _disableAnimation = false;
+    var _itemColors;
     var _backgroundColor = Color.WHITE;
     var _items = [];
     Object.defineProperties(this, {
@@ -96,15 +99,6 @@ function BottomTabBar(params) {
         'maxItemCount': {
             get: function() {
                 return MAXITEMCOUNT;
-            },
-            enumerable: true
-        },
-        'disableItemAnimation': {
-            get: function() {
-                return _disableAnimation;
-            },
-            set: function(value) {
-                _disableAnimation = value;
             },
             enumerable: true
         }

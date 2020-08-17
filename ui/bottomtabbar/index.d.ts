@@ -38,6 +38,7 @@ declare class BottomTabBar extends NativeComponent {
  * @since 4.0.1
  * @property {Boolean} disableItemAnimation
  * @android
+ * @removed since 4.2.2
  */
 		disableItemAnimation: boolean;
     };

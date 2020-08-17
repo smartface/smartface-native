@@ -418,6 +418,9 @@ function TextBox(params) {
         return (result === true);
     };
 
+    // Added for https://smartface.atlassian.net/browse/AND-3869
+    self.actionKeyType = ActionKeyType.DEFAULT;
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
