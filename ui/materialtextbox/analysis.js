@@ -94,18 +94,20 @@ MaterialTextBox.prototype.selectedLineHeight;
 
 
 /**
- * Gets/sets the characterRestriction of the MaterialTextBox.
+ * Gets/sets the max value of display at the character counter.
  * @property {Number} characterRestriction
  * @android
- * @since 3.1.2
+ * @ios
+ * @since 4.3.0
  */
 MaterialTextBox.prototype.characterRestriction;
 
 /**
  * Gets/sets the characterRestrictionColor of the MaterialTextBox.
- * @property {Number} characterRestriction
+ * @property {Number} characterRestrictionColor
  * @android
- * @since 3.1.2
+ * @ios
+ * @since 4.3.0
  */
 MaterialTextBox.prototype.characterRestrictionColor;
 
@@ -139,7 +141,8 @@ MaterialTextBox.prototype.enableErrorMessage;
  * 
  * @property {Boolean} enableCharacterRestriction
  * @android
- * @since 3.1.2
+ * @ios
+ * @since 4.3.0
  */
 MaterialTextBox.prototype.enableCharacterRestriction;
 

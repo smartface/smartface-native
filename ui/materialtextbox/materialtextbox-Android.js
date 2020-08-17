@@ -104,6 +104,24 @@ function MaterialTextbox(params) {
             },
             enumerable: true
         },
+        'lineCount': {
+            get: function() {
+                return self.textBoxNativeObject.getMinLines();
+            },
+            set: function(value) {
+                self.textBoxNativeObject.setMinLines(value);
+            },
+            enumerable: true
+        },
+        'multiline': {
+            get: function() {
+                return !self.textBoxNativeObject.isSingleLine();
+            },
+            set: function(value) {
+                self.textBoxNativeObject.setSingleLine(!value);
+            },
+            enumerable: true
+        },
         'errorColor': {
             get: function() {
                 return _errorColor;
@@ -225,6 +243,50 @@ function MaterialTextbox(params) {
             },
             enumerable: true
         },
+        'characterRestriction': {
+            get: function() {
+                return self.nativeObject.getCounterMaxLength();
+            },
+            set: function(value) {
+                _enableCounterMaxLength = value;
+                enableCounter = (_enableCounterMaxLength !== 0 ? true : false);
+
+                //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
+                if (_enableCharacterRestriction !== true)
+                    self.enableCharacterRestriction = true;
+
+                if (_characterRestrictionColor)
+                    self.characterRestrictionColor = _characterRestrictionColor;
+
+                self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
+            },
+            enumerable: true
+        },
+        'characterRestrictionColor': {
+            get: function() {
+                return _characterRestrictionColor;
+            },
+            set: function(value) {
+                _characterRestrictionColor = value;
+
+                if (enableCounter !== true)
+                    self.enableCharacterRestriction = true;
+
+                let counterView = self.nativeObject.getReCreatedCounterView();
+                counterView.setTextColor(_characterRestrictionColor.nativeObject);
+            },
+            enumerable: true
+        },
+        'enableCharacterRestriction': {
+            get: function() {
+                return _enableCharacterRestriction;
+            },
+            set: function(value) {
+                _enableCharacterRestriction = value;
+                self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
+            },
+            enumerable: true
+        }
     });
 
     Object.defineProperties(self.android, {
@@ -255,50 +317,6 @@ function MaterialTextbox(params) {
             set: function(maxHeight) {
 
                 nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
-            },
-            enumerable: true
-        },
-        'characterRestriction': {
-            get: function() {
-                return self.nativeObject.getCounterMaxLength();
-            },
-            set: function(value) {
-                _enableCounterMaxLength = value;
-                enableCounter = (_enableCounterMaxLength !== 0 ? true : false);
-
-                //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
-                if (_enableCharacterRestriction !== true)
-                    self.android.enableCharacterRestriction = true;
-
-                if (_characterRestrictionColor)
-                    self.android.characterRestrictionColor = _characterRestrictionColor;
-
-                self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
-            },
-            enumerable: true
-        },
-        'characterRestrictionColor': {
-            get: function() {
-                return _characterRestrictionColor;
-            },
-            set: function(value) {
-                _characterRestrictionColor = value;
-
-                if (enableCounter !== true)
-                    self.android.enableCharacterRestriction = true;
-
-                let counterView = self.nativeObject.getReCreatedCounterView();
-                counterView.setTextColor(_characterRestrictionColor.nativeObject);
-            },
-            enumerable: true
-        },
-        'enableCharacterRestriction': {
-            get: function() {
-                return _enableCharacterRestriction;
-            },
-            set: function(value) {
-                _enableCharacterRestriction = value;
-                self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
             },
             enumerable: true
         },
@@ -363,7 +381,7 @@ function MaterialTextbox(params) {
     }
 
     //Defaults 
-    self.textBoxNativeObject.setSingleLine(true);
+    self.multiline = false;
 
     // Assign parameters given in constructor
     if (params) {
