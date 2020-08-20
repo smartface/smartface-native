@@ -431,26 +431,26 @@ function TextBox(params) {
             return _keyboardLayout;
         },
         set: function(value) {
-            // if (value === undefined){
-            //     _keyboardLayout = value;
-            //     self.nativeObject.setValueForKey(undefined, "inputAccessoryView");
-            //     return;
-            // }
+            if (value === undefined){
+                _keyboardLayout = value;
+                self.nativeObject.setValueForKey(undefined, "inputAccessoryView");
+                return;
+            }
             
-            // if (typeof value === "object") {
-            //     _keyboardLayout = value;
-            //     _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+            if (typeof value === "object") {
+                _keyboardLayout = value;
+                _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
                 
-            //     // Bug : IOS-2601
-            //     var oldOntouch = value.onTouch;
-            //     value.onTouch = function() {
-            //         var returnValue = oldOntouch && oldOntouch();
-            //         return (typeof returnValue) === "undefined" ? true : returnValue;
-            //     };
-            //     //////////////////
+                // Bug : IOS-2601
+                var oldOntouch = value.onTouch;
+                value.onTouch = function() {
+                    var returnValue = oldOntouch && oldOntouch();
+                    return (typeof returnValue) === "undefined" ? true : returnValue;
+                };
+                //////////////////
 
-            //     self.nativeObject.setValueForKey(value.nativeObject, "inputAccessoryView");
-            // }
+                self.nativeObject.setValueForKey(value.nativeObject, "inputAccessoryView");
+            }
         },
         enumerable: true
     });
@@ -656,18 +656,18 @@ function TextBox(params) {
                 });
         }
         
-        // if (_keyboardLayout) {
-        //     __SF_UIView.performWithoutAnimationWrapper(
-        //         function(){
-        //             _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
-        //         });
-        // }
+        if (_keyboardLayout) {
+            __SF_UIView.performWithoutAnimationWrapper(
+                function(){
+                    _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+                });
+        }
 
         self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight, e);
     }
     
     self.nativeObject.addObserver(function() {
-        // _keyboardLayout && _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+        _keyboardLayout && _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
         _inputViewMain && _inputViewMain.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     }, __SF_UIDeviceOrientationDidChangeNotification);
     
