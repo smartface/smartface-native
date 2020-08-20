@@ -18,7 +18,7 @@ function MaterialTextBox(params) {}
  * This event is called when positioning rightLayout. This event can be called multiple times.
  *
  *     @example
- *     mtbTextbox.onRightLayoutRectForBounds: function(bounds, defaultRect){
+ *     mtbTextbox.ios.onRightLayoutRectForBounds: function(bounds, defaultRect){
  *         defaultRect.x = defaultRect.x + 20;
  *         defaultRect.y = defaultRect.y - 20;
  *      return defaultRect;
@@ -49,7 +49,7 @@ MaterialTextBox.prototype.onRightLayoutRectForBounds = function(e) {};
  * This event is called when positioning leftLayout. This event can be called multiple times.
  *
  *     @example
- *     mtbTextbox.onLeftLayoutRectForBounds: function(bounds, defaultRect){
+ *     mtbTextbox.ios.onLeftLayoutRectForBounds: function(bounds, defaultRect){
  *         defaultRect.x = defaultRect.x + 20;
  *         defaultRect.y = defaultRect.y - 20;
  *      return defaultRect;
@@ -165,7 +165,6 @@ MaterialTextBox.prototype.rightLayout;
  * @property {UI.View} leftLayout.view
  * @property {Number} leftLayout.width
  * @property {Number} leftLayout.height
- * @android
  * @ios
  * @since 4.3.0
  */

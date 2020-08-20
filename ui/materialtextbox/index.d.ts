@@ -39,7 +39,7 @@ declare class MaterialTextBox extends TextBox {
          * This event is called when positioning leftLayout. This event can be called multiple times.
          *
          *     @example
-         *     mtbTextbox.onLeftLayoutRectForBounds: function(bounds, defaultRect){
+         *     mtbTextbox.ios.onLeftLayoutRectForBounds: function(bounds, defaultRect){
          *         defaultRect.x = defaultRect.x + 20;
          *         defaultRect.y = defaultRect.y - 20;
          *      return defaultRect;
@@ -69,7 +69,7 @@ declare class MaterialTextBox extends TextBox {
          * This event is called when positioning rightLayout. This event can be called multiple times.
          *
          *     @example
-         *     mtbTextbox.onRightLayoutRectForBounds: function(bounds, defaultRect){
+         *     mtbTextbox.ios.onRightLayoutRectForBounds: function(bounds, defaultRect){
          *         defaultRect.x = defaultRect.x + 20;
          *         defaultRect.y = defaultRect.y - 20;
          *      return defaultRect;

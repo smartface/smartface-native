@@ -33,7 +33,7 @@ function Picker() {}
 /**
  * Gets/sets items of the picker.
  *
- * @property {Array} items
+ * @property {Array|String} items
  * @android
  * @ios
  * @since 0.1

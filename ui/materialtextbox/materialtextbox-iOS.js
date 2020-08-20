@@ -359,6 +359,10 @@ function MaterialTextbox(params) {
             return _leftLayout;
         },
         set: function (object) {
+            if (self.multiline){
+                throw new Error('leftlayout cannot be used with multiline.');
+            }
+
             _leftLayout = object;
             if (object === undefined) {
                 // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
