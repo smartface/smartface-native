@@ -315,7 +315,10 @@ function cancelAllBackgroundJobs() {
     const Location = require('sf-core/device/location');
     const Accelerometer = require('sf-core/device/accelerometer');
     const Network = require('sf-core/device/network');
+    const Timer = require("sf-core/global/timer");
 
+    Timer.clearAllTimer();
+    
     if (Location.nativeObject) {
         Location.stop();
     }
