@@ -18,8 +18,12 @@ function Blob(parts, properties) {
     }
 }
 
+Blob.__base64AddPadding = function(str) {
+    return str + Array((4 - str.length % 4) % 4 + 1).join('=');
+}
+
 Blob.createFromBase64 = function(base64) {
-    return new Blob(__SF_NSData.base64Encoded(base64));
+    return new Blob(__SF_NSData.base64Encoded(Blob.__base64AddPadding(base64)));
 }
 
 Blob.createFromUTF8String = function(utf8String) {
