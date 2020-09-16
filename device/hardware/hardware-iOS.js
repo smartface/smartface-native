@@ -23,7 +23,8 @@ Object.defineProperty(Hardware, 'brandModel', {
 });
 
 Object.defineProperty(Hardware, 'brandName', {
-    value: __SF_UIDevice.currentDevice().name,
+    // value: __SF_UIDevice.currentDevice().name,
+    value: "Apple",
     writable: false,
     enumerable: true
 });
