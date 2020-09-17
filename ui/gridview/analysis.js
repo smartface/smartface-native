@@ -388,6 +388,10 @@ GridView.prototype.stopRefresh = function() {};
  * @param {Object} params.contentOffset
  * @param {Number} params.contentOffset.x
  * @param {Number} params.contentOffset.y
+ * @param {Object} params.android  Android specific properties
+ * @param {Object} params.android.translation
+ * @param {Number} params.android.translation.y The amount of vertical scroll
+ * @param {Number} params.android.translation.x The amount of horizontal scroll
  * @android
  * @ios
  * @since 3.1.3

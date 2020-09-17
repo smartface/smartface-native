@@ -17,13 +17,17 @@ Object.defineProperty(Hardware, 'IMEI', {
 });
 
 Object.defineProperty(Hardware, 'brandModel', {
-    value: __SF_UIDevice.currentDevice().model,
-    writable: false,
+    // value: __SF_UIDevice.currentDevice().model,
+    get: function() {
+        return __SF_UIDevice.modelName()
+    },
+    // writable: false,
     enumerable: true
 });
 
 Object.defineProperty(Hardware, 'brandName', {
-    value: __SF_UIDevice.currentDevice().name,
+    // value: __SF_UIDevice.currentDevice().name,
+    value: "Apple",
     writable: false,
     enumerable: true
 });

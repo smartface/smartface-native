@@ -7,6 +7,8 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const GridViewLayoutManager = require('../layoutmanager');
 const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
@@ -443,14 +445,17 @@ function GridView(params) {
                 if (!self.touchEnabled) {
                     return;
                 }
-                //Remove  due to the incorrect onScrolled's return parameter. Such as scrollTo(0) causes it to return fault dx & dy parameters.
-                // _contentOffset.x += dx;
-                // _contentOffset.y += dy;
-                // var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                // var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
 
+                dx = AndroidUnitConverter.pixelToDp(dx);
+                dy = AndroidUnitConverter.pixelToDp(dy);
                 _onScroll && _onScroll({
-                    contentOffset: self.contentOffset
+                    contentOffset: self.contentOffset,
+                    android: {
+                        translation: {
+                            x : dx,
+                            y : dy
+                        }
+                    }
                 });
             },
             onScrollStateChanged: function (newState) {
