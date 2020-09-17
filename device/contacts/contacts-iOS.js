@@ -4,6 +4,7 @@ var Contacts = {};
 
 Contacts.ios = {};
 Contacts.android = {};
+Contacts.android.getContactsByPhoneNumber = _ => [];
 
 Contacts.Contact = function Contacts(params) {
 	var self = this;
