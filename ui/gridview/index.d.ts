@@ -387,11 +387,15 @@ declare class GridView extends View {
      * @param {Object} params.contentOffset
      * @param {Number} params.contentOffset.x
      * @param {Number} params.contentOffset.y
+     * @param {Object} params.android  Android specific properties
+     * @param {Object} params.android.translation
+     * @param {Number} params.android.translation.y The amount of vertical scroll
+     * @param {Number} params.android.translation.x The amount of horizontal scroll
      * @android
      * @ios
      * @since 3.1.3
      */
-    onScroll: (e: {contentOffset: Point2D}) => void;
+    onScroll: (e: {contentOffset: Point2D, android: { translation: {x: Number, y: Number}}}) => void;
 
     /**
      * This event is called when user pulls down and releases a GridView
