@@ -165,7 +165,6 @@ declare class Contacts {
         onFailure?: (error: string) => void;
     }) => void;
 
-    static android :{
     /**
      * This function searches contacts by given phone number.You need check 
      * {@link Application.android.Permissions#READ_CONTACTS} permission.
@@ -173,7 +172,7 @@ declare class Contacts {
      *
      *     @example
      *     const Contacts = require("sf-core/device/contacts");
-     *     Contacts.android.getContactsByPhoneNumber("5555555555",{
+     *     Contacts.getContactsByPhoneNumber("5555555555",{
      *         onSuccess : function(contacts){
      *             console.log("Successfully found ", contacts);
      *         },
@@ -189,13 +188,13 @@ declare class Contacts {
      * @param {Function} [callbacks.onFailure] This event is called after getting contact fails.
      * @method getContactsByPhoneNumber
      * @android
+     * @ios
      * @since 4.3.0
      */
      getContactsByPhoneNumber: (phoneNumber: String, handlers: {
         onSuccess: (contacts: Contacts.Contact[]) => void;
         onFailure?: (error: string) => void;
     }) => void;
-}
 }
 ​
 export =  Contacts;

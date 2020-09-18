@@ -342,9 +342,7 @@ Contacts.pickContact = function (params = {}) {
     }
 }
 
-
-Contacts.android = {};
-Contacts.android.getContactsByPhoneNumber = function (phoneNumber = "", callbacks) {
+Contacts.getContactsByPhoneNumber = function (phoneNumber = "", callbacks) {
     const { onFailure, onSuccess } = callbacks;
     try {
         let contacts = toJSArray(SFContactUtil.getContactIdsByPhoneNumber(phoneNumber.replace(/\s/g,"")))
