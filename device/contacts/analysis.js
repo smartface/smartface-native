@@ -198,7 +198,7 @@ Contacts.fetchAll = function(params) {};
  *
  *     @example
  *     const Contacts = require("sf-core/device/contacts");
- *     Contacts.android.getContactsByPhoneNumber("5555555555",{
+ *     Contacts.getContactsByPhoneNumber("5555555555",{
  *         onSuccess : function(contacts){
  *             console.log("Successfully found ", contacts);
  *         },
@@ -214,6 +214,7 @@ Contacts.fetchAll = function(params) {};
  * @param {Function} [callbacks.onFailure] This event is called after getting contact fails.
  * @method getContactsByPhoneNumber
  * @android
+ * @ios
  * @since 4.3.0
  */
 Contacts.getContactsByPhoneNumber = function(phoneNumber, callbacks) {};
