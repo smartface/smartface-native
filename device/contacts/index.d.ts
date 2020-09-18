@@ -191,7 +191,7 @@ declare class Contacts {
      * @ios
      * @since 4.3.0
      */
-     getContactsByPhoneNumber: (phoneNumber: String, handlers: {
+     static getContactsByPhoneNumber: (phoneNumber: String, handlers: {
         onSuccess: (contacts: Contacts.Contact[]) => void;
         onFailure?: (error: string) => void;
     }) => void;
