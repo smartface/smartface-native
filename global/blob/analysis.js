@@ -45,6 +45,21 @@ Blob.prototype.slice = function(start, end, type) {};
  */
 Blob.prototype.toBase64 = function() {};
 
+
+/**
+ * Converts to base64 asynchronously 
+ *
+ * @method toBase64Async
+ * @param {Object} params Object describing parameters for the function.
+ * @param {Function} params.onComplete Triggers when conversion is over.
+ * @param {String} params.onComplete.base64
+ * @param {Function} [params.onFailure] Triggers when failure situation occurred.
+ * @android
+ * @ios
+ * @since 4.3.0
+ */
+Blob.prototype.toBase64Async = function(params) {};
+
 /**
  * Returns a utf8 String
  *

@@ -16,6 +16,22 @@ function Blob(parts, properties) {
     self.toString = function() {
         return self.nativeObject.toUtf8();
     }
+
+    self.toBase64Async = function(callbacks){
+        var onComplete = callbacks.onComplete;
+        var onFailure = callbacks.onFailure;
+        self.nativeObject.toBase64Async(function(base64){
+            if (base64){
+                if (typeof onComplete == 'function') {
+                    onComplete(base64);
+                }
+            }else{
+                if (typeof onFailure == 'function') {
+                    onFailure(base64);
+                }
+            }
+        });
+    }
 }
 
 Blob.__base64AddPadding = function(str) {
