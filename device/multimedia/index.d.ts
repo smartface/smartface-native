@@ -493,7 +493,7 @@ declare class Multimedia {
     /**
     * @method recordVideo
     * 
-    * Calls the camera intent for video.
+    * Calls the camera intent for video. In Android, read/write external storage permission should be obtained before using recorded video.
     * 
     * @param {Object} params Object describing parameters for the function.
     * @param {UI.Page} params.page
@@ -593,6 +593,37 @@ declare class Multimedia {
      * @since 0.1
      */
     static pickFromGallery(params: MultimediaParams): void;
+
+    /**
+    * @method convertToMp4
+    * 
+    * Converts video file to mp4 format.
+    * 
+    *     @example
+    *     Multimedia.convertToMp4({
+    *        videoFile: video,
+    *        outputFileName: "myMp4Video",
+    *        onCompleted: ({video}) => {
+    *             console.log(" Multimedia onCompleted ")
+    *        },
+    *        onFailure: () => {
+    *            console.log(" Multimedia onFailure ")
+    *         }
+    *      });
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {IO.File} params.videoFile Input Video file to convert 
+    * @param {String} params.outputFileName Converted video file name
+    * @param {Function} params.onCompleted Callback for success situation.
+    * @param {Object} params.onCompleted.params 
+    * @param {IO.File} params.onCompleted.params.video Converted video file
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @android
+    * @ios
+    * @since 4.2.2
+    */
+    static convertToMp4(params: { videoFile: File, outputFileName: String, onCompleted: ( params: { video: File }) => void,  onFailure?: () => void}): void;
+
     static ios: {
 
         /**

@@ -136,6 +136,24 @@ Multimedia.startCamera = function (e) {
     }
 };
 
+Multimedia.convertToMp4 = function (e) {
+    var file = e.videoFile;
+    var outputFileName = e.outputFileName;
+    var onCompleted = e.onCompleted;
+    var onFailure = e.onFailure;
+
+    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.path, outputFileName, function (e) {
+        if (e.filePath && typeof onCompleted == 'function') {
+            var video = new File({
+                path: e.filePath
+            });
+            onCompleted({ video });
+        } else if (typeof onFailure == 'function') {
+            onFailure();
+        }
+    });
+}
+
 Multimedia.capturePhoto = function (e) {
     e["sourceType"] = UIImagePickerControllerSourceType.camera;
     e["action"] = Multimedia.ActionType.IMAGE_CAPTURE;

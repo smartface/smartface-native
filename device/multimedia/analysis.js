@@ -45,7 +45,7 @@
  * 
  * 
  */
-function Multimedia() {}
+function Multimedia() { }
 
 
 /**
@@ -85,7 +85,7 @@ function Multimedia() {}
  * @since 0.1
  * @deprecated 4.3.0 use {@link Device.Multimedia#capturePhoto capturePhoto} OR {@link Device.Multimedia#recordVideo recordVideo}
  */
-Multimedia.startCamera = function(e) {};
+Multimedia.startCamera = function (e) { };
 
 
 /**
@@ -122,13 +122,13 @@ Multimedia.startCamera = function(e) {};
  * @ios
  * @since 4.3.0
  */
-Multimedia.capturePhoto = function(params) {};
+Multimedia.capturePhoto = function (params) { };
 
 
 /**
  * @method recordVideo
  * 
- * Calls the camera intent for video.
+ * Calls the camera intent for video. In Android, read/write external storage permission should be obtained before using recorded video
  * 
  * @param {Object} params Object describing parameters for the function.
  * @param {UI.Page} params.page
@@ -145,7 +145,7 @@ Multimedia.capturePhoto = function(params) {};
  * @ios
  * @since 4.3.0
  */
-Multimedia.recordVideo = function(params) {};
+Multimedia.recordVideo = function (params) { };
 
 
 /**
@@ -220,7 +220,7 @@ Multimedia.recordVideo = function(params) {};
  * @ios
  * @since 0.1
  */
-Multimedia.pickFromGallery = function(e) {};
+Multimedia.pickFromGallery = function (e) { };
 
 /**
  * @method requestGalleryAuthorization
@@ -230,7 +230,7 @@ Multimedia.pickFromGallery = function(e) {};
  * @ios
  * @since 2.0.10
  */
-Multimedia.requestGalleryAuthorization = function(callback) {};
+Multimedia.requestGalleryAuthorization = function (callback) { };
 
 /**
  * @method requestCameraAuthorization
@@ -240,7 +240,38 @@ Multimedia.requestGalleryAuthorization = function(callback) {};
  * @ios
  * @since 2.0.10
  */
-Multimedia.requestCameraAuthorization = function(callback) {};
+Multimedia.requestCameraAuthorization = function (callback) { };
+
+
+/**
+ * @method convertToMp4
+ * 
+ * Converts video file to mp4 format.
+ * 
+ *     @example
+ *     Multimedia.convertToMp4({
+ *        videoFile: video,
+ *        outputFileName: "myMp4Video",
+ *        onCompleted: ({video}) => {
+ *             console.log(" Multimedia onCompleted ")
+ *        },
+ *        onFailure: () => {
+ *            console.log(" Multimedia onFailure ")
+ *         }
+ *      });
+ * 
+ * @param {Object} params Object describing parameters for the function.
+ * @param {IO.File} params.videoFile Input Video file to convert 
+ * @param {String} params.outputFileName Converted video file name
+ * @param {Function} params.onCompleted Callback for success situation.
+ * @param {Object} params.onCompleted.params 
+ * @param {IO.File} params.onCompleted.params.video Converted video file
+ * @param {Function} [params.onFailure] Callback for failure situation.
+ * @android
+ * @ios
+ * @since 4.2.2
+ */
+Multimedia.convertToMp4 = function (params) { };
 
 Multimedia.android = {};
 
@@ -262,7 +293,7 @@ Multimedia.android = {};
  * @android
  * @since 0.1
  */
-Multimedia.android.getAllGalleryItems = function(e) {};
+Multimedia.android.getAllGalleryItems = function (e) { };
 
 /**
  * @method getGalleryAuthorizationStatus
@@ -271,7 +302,7 @@ Multimedia.android.getAllGalleryItems = function(e) {};
  * @ios
  * @since 2.0.11
  */
-Multimedia.getGalleryAuthorizationStatus = function() {};
+Multimedia.getGalleryAuthorizationStatus = function () { };
 
 /**
  * @method getCameraAuthorizationStatus
@@ -280,7 +311,7 @@ Multimedia.getGalleryAuthorizationStatus = function() {};
  * @ios
  * @since 2.0.11
  */
-Multimedia.getCameraAuthorizationStatus = function() {};
+Multimedia.getCameraAuthorizationStatus = function () { };
 
 /**
  * @enum {Number} Device.Multimedia.Type
