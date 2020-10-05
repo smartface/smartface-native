@@ -111,7 +111,7 @@ declare class DocumentPicker {
         /** On Android these are MIME types such as text/plain or partial MIME types such as image/*. On iOS these must be Apple "Uniform Type Identifiers". Also can use {@link Device.DocumentPicker.Types}. */
         type: DocumentPicker.Types[];
         /** This event is called after picking document successfully. */
-        onSuccess: (e: { file: File }) => void;
+        onSuccess: (file: File ) => void;
         /** If the user cancels the document picker without choosing a file (by pressing the system back button on Android or the Cancel button on iOS) the Promise will be rejected with a cancellation error. */
         onCancel: () => void;
         onFailure: () => void;

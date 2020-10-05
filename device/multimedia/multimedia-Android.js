@@ -96,12 +96,12 @@ Multimedia.startCamera = function (params = {}) {
     var page = _captureParams.page;
 
     if (_action === ActionType.IMAGE_CAPTURE) {
-        _imageFileUri =  NativeSFMultimedia.createImageFile(activity);
+        _imageFileUri = NativeSFMultimedia.createImageFile(activity);
         var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, _imageFileUri);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     } else
         startRecordVideoWithExtraField();
-}; 
+};
 
 
 Multimedia.recordVideo = function (params = {}) {
@@ -146,6 +146,22 @@ Multimedia.pickFromGallery = function (params = {}) {
      * An error occured
      */
     params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+};
+
+Multimedia.convertToMp4 = function (params) {
+    const { videoFile, outputFileName, onCompleted, onFailure } = params;
+
+    if (!videoFile || !outputFileName)
+        throw new Error("Video File or Output File Name cannot be undefined");
+
+    NativeSFMultimedia.convertToMp4(videoFile.nativeObject, outputFileName,
+        {
+            onCompleted: (outputVideoFilePath) => {
+                let video = new File({ path: outputVideoFilePath });
+                onCompleted && onCompleted({ video });
+            },
+            onFailure
+        });
 };
 
 Multimedia.android = {};
@@ -205,28 +221,13 @@ function startRecordVideoWithExtraField() {
         page
     } = _captureParams;
     let cameraIntent = new NativeIntent(NativeMediaStore.ACTION_VIDEO_CAPTURE);
-    let packageManager = activity.getPackageManager();
-
+    
     if (maximumDuration != undefined)
         cameraIntent.putExtra(NativeMediaStore.EXTRA_DURATION_LIMIT, maximumDuration);
     if (videoQuality != undefined)
         cameraIntent.putExtra(NativeMediaStore.EXTRA_VIDEO_QUALITY, videoQuality);
 
-    if ((AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT)) {
-        if (cameraIntent.resolveActivity(packageManager)) {
-            let contentValues = new NativeContentValues();
-            let contentResolver = activity.getContentResolver();
-            let contentUri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            _fileURI = contentResolver.insert(contentUri, contentValues);
-
-            if (_fileURI) {
-                let output = NativeMediaStore.EXTRA_OUTPUT;
-                cameraIntent.putExtra(output, _fileURI);
-                page.nativeObject.startActivityForResult(cameraIntent, Multimedia.CAMERA_REQUEST);
-            }
-        }
-    } else
-        page.nativeObject.startActivityForResult(cameraIntent, Multimedia.CAMERA_REQUEST);
+    page.nativeObject.startActivityForResult(cameraIntent, Multimedia.CAMERA_REQUEST);
 }
 
 function cropCameraData(resultCode, data) {
@@ -406,12 +407,7 @@ function getCameraData(resultCode, data) {
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             if (_action !== ActionType.IMAGE_CAPTURE) {
-                var uri;
-                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-                    uri = _fileURI;
-                } else {
-                    uri = data.getData();
-                }
+                var uri = data.getData();
             }
         } catch (err) {
             var failure = true;

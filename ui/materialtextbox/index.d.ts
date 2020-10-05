@@ -33,7 +33,7 @@ declare class MaterialTextBox extends TextBox {
         leftLayout: {
             view: View,
             width: number,
-            height: number
+            height?: number
         };
         /**
          * This event is called when positioning leftLayout. This event can be called multiple times.
