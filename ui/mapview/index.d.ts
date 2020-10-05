@@ -247,149 +247,149 @@ declare class MapView extends View {
 	readonly centerLocation: {
 		latitude: number;
 		longitude: number;
-		/**
-		 * Get visible pins on MapView.
-		 *
-		 * @return {UI.MapView.Pin[]} Visible pin array.
-		 * @android
-		 * @ios
-		 * @method getVisiblePins
-		 * @since 2.0.7
-		 */
-		getVisiblePins(): MapView.Pin[];
-		/**
-		 * Adds a UI.MapView.Pin on the map.
-		 *
-		 * @param {UI.MapView.Pin} pin
-		 * @android
-		 * @ios
-		 * @method addPin
-		 * @since 0.1
-		 */
-		addPin(pin: MapView.Pin): void;
-		/**
-		 * Removes the UI.MapView.Pin from the map.
-		 *
-		 * @param {UI.MapView.Pin} pin
-		 * @method removePin
-		 * @android
-		 * @ios
-		 * @since 0.1
-		 */
-		removePin(pin: MapView.Pin): void;
-		/**
-		 * Removes all pins from the map.
-		 *
-		 * @method removeAllPins
-		 * @android
-		 * @ios
-		 * @since 3.1.1
-		 */
-		removeAllPins(): void;
-		/**
-		 * Triggered when pressed on the map and sends the location pressed on the map.
-		 *
-		 * @event onPress
-		 * @param {Object} location
-		 * @param {Number} location.latitude
-		 * @param {Number} location.longitude
-		 * @android
-		 * @ios
-		 * @since 1.1.3
-		 */
-		onPress: (location: { latitude: number; longitude: number }) => void;
-		/**
-		 * Gets/sets callback for dragging start.
-		 *
-		 * @event onCameraMoveStarted
-		 * @android
-		 * @ios
-		 * @since 2.0.9
-		 */
-		onCameraMoveStarted: () => void;
-		/**
-		 * Gets/sets callback for dragging end.
-		 *
-		 * @event onCameraMoveEnded
-		 * @android
-		 * @ios
-		 * @since 2.0.9
-		 */
-		onCameraMoveEnded: () => void;
-		/**
-		 * Triggered when long pressed on the map and sends the location pressed on the map.
-		 *
-		 * @event onLongPress
-		 * @param {Object} location
-		 * @param {Number} location.latitude
-		 * @param {Number} location.longitude
-		 * @android
-		 * @ios
-		 * @since 1.1.3
-		 */
-		onLongPress: (location: {
-			latitude: number;
-			longitude: number;
-		}) => void;
-		/**
-		 * onTouch event
-		 *
-		 * @event onTouch
-		 * @android
-		 * @ios
-		 * @removed
-		 * @since 2.0.9
-		 */
-		onTouch: () => void;
-		/**
-		 * onTouchEnded event
-		 *
-		 * @event onTouchEnded
-		 * @android
-		 * @ios
-		 * @removed
-		 * @since 2.0.9
-		 */
-		onTouchEnded: () => void;
-		/**
-		 * onTouchCancelled event
-		 *
-		 * @event onTouchCancelled
-		 * @android
-		 * @ios
-		 * @removed
-		 * @since 2.0.9
-		 */
-		onTouchCancelled: () => void;
-		/**
-		 * onTouchMoved event
-		 *
-		 * @event onTouchMoved
-		 * @android
-		 * @ios
-		 * @removed
-		 * @since 2.0.9
-		 */
-		onTouchMoved: () => void;
-		/**
-		 * This event is called when map is ready to be used.
-		 *
-		 * @since 0.1
-		 * @event onCreate
-		 * @android
-		 * @ios
-		 */
-		onCreate: () => void;
-		/**
-		 * Gets/Sets map type
-		 *
-		 * @property {UI.MapView.Type} [type = UI.MapView.Type.NORMAL]
-		 * @android
-		 * @ios
-		 * @since 0.1
-		 */
-		type: MapView.Type;
 	};
+	/**
+	 * Get visible pins on MapView.
+	 *
+	 * @return {UI.MapView.Pin[]} Visible pin array.
+	 * @android
+	 * @ios
+	 * @method getVisiblePins
+	 * @since 2.0.7
+	 */
+	getVisiblePins(): MapView.Pin[];
+	/**
+	 * Adds a UI.MapView.Pin on the map.
+	 *
+	 * @param {UI.MapView.Pin} pin
+	 * @android
+	 * @ios
+	 * @method addPin
+	 * @since 0.1
+	 */
+	addPin(pin: MapView.Pin): void;
+	/**
+	 * Removes the UI.MapView.Pin from the map.
+	 *
+	 * @param {UI.MapView.Pin} pin
+	 * @method removePin
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	removePin(pin: MapView.Pin): void;
+	/**
+	 * Removes all pins from the map.
+	 *
+	 * @method removeAllPins
+	 * @android
+	 * @ios
+	 * @since 3.1.1
+	 */
+	removeAllPins(): void;
+	/**
+	 * Triggered when pressed on the map and sends the location pressed on the map.
+	 *
+	 * @event onPress
+	 * @param {Object} location
+	 * @param {Number} location.latitude
+	 * @param {Number} location.longitude
+	 * @android
+	 * @ios
+	 * @since 1.1.3
+	 */
+	onPress: (location: { latitude: number; longitude: number }) => void;
+	/**
+	 * Gets/sets callback for dragging start.
+	 *
+	 * @event onCameraMoveStarted
+	 * @android
+	 * @ios
+	 * @since 2.0.9
+	 */
+	onCameraMoveStarted: () => void;
+	/**
+	 * Gets/sets callback for dragging end.
+	 *
+	 * @event onCameraMoveEnded
+	 * @android
+	 * @ios
+	 * @since 2.0.9
+	 */
+	onCameraMoveEnded: () => void;
+	/**
+	 * Triggered when long pressed on the map and sends the location pressed on the map.
+	 *
+	 * @event onLongPress
+	 * @param {Object} location
+	 * @param {Number} location.latitude
+	 * @param {Number} location.longitude
+	 * @android
+	 * @ios
+	 * @since 1.1.3
+	 */
+	onLongPress: (location: {
+		latitude: number;
+		longitude: number;
+	}) => void;
+	/**
+	 * onTouch event
+	 *
+	 * @event onTouch
+	 * @android
+	 * @ios
+	 * @removed
+	 * @since 2.0.9
+	 */
+	onTouch: () => void;
+	/**
+	 * onTouchEnded event
+	 *
+	 * @event onTouchEnded
+	 * @android
+	 * @ios
+	 * @removed
+	 * @since 2.0.9
+	 */
+	onTouchEnded: () => void;
+	/**
+	 * onTouchCancelled event
+	 *
+	 * @event onTouchCancelled
+	 * @android
+	 * @ios
+	 * @removed
+	 * @since 2.0.9
+	 */
+	onTouchCancelled: () => void;
+	/**
+	 * onTouchMoved event
+	 *
+	 * @event onTouchMoved
+	 * @android
+	 * @ios
+	 * @removed
+	 * @since 2.0.9
+	 */
+	onTouchMoved: () => void;
+	/**
+	 * This event is called when map is ready to be used.
+	 *
+	 * @since 0.1
+	 * @event onCreate
+	 * @android
+	 * @ios
+	 */
+	onCreate: () => void;
+	/**
+	 * Gets/Sets map type
+	 *
+	 * @property {UI.MapView.Type} [type = UI.MapView.Type.NORMAL]
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	type: MapView.Type;
 }
 
 declare namespace MapView {
@@ -401,7 +401,10 @@ declare namespace MapView {
 	 * @ios
 	 * @since 1.1.2
 	 */
-	class Pin extends PinKlass { }
+	class Pin extends PinKlass { 
+		constructor(params?: { location?: { latitude: number, longitude: number }, title?: string })
+	}
+	
 	/**
 	 * @enum UI.MapView.Type
 	 * @static

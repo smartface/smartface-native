@@ -7,6 +7,7 @@ import Color = require("../color");
  *
  */
 declare class MenuItem {
+	constructor(params?: { [key: string]: any });
 
 /**
  * Gets/sets the title of a menu item.
