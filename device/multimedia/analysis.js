@@ -99,7 +99,9 @@ Multimedia.startCamera = function (e) { };
  * @param {Object} params.aspectRatio This property affects only on android. 
  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
- * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+ * @param {Object} params.ios iOS specific argument
+ * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+ * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
  * @param {Object} params.android Android specific argument
  * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
  * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
@@ -134,6 +136,9 @@ Multimedia.capturePhoto = function (params) { };
  * @param {UI.Page} params.page
  * @param {Number} params.maximumDuration maximum allowed record duration in seconds 
  * @param {Device.Multimedia.VideoQuality} params.videoQuality used to control the quality of a recorded video
+ * @param {Object} params.ios iOS specific argument
+ * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+ * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {IO.File} params.onSuccess.params.video Captured video
@@ -802,5 +807,34 @@ Multimedia.iOS.CameraAuthorizationStatus.DENIED = 2;
  * @since 3.1.1
  */
 Multimedia.iOS.CameraAuthorizationStatus.AUTHORIZED = 3;
+
+/** 
+ * @enum {Number} Device.Multimedia.iOS.CameraDevice
+ * @since 4.3.0
+ * @ios
+ */
+Multimedia.iOS.CameraDevice = {};
+
+/**
+ * Specifies the camera on the rear of the device.
+ * 
+ * @property {Number} REAR
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.3.0
+ */
+Multimedia.iOS.CameraDevice.REAR = 0;
+
+/**
+ * Specifies the camera on the front of the device.
+ * 
+ * @property {Number} FRONT
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.3.0
+ */
+Multimedia.iOS.CameraDevice.FRONT = 1;
 
 module.exports = Multimedia;

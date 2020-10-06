@@ -20,6 +20,11 @@ const UIImagePickerControllerCameraFlashMode = {
     on: 1
 }
 
+const UIImagePickerControllerCameraDevice = {
+    rear: 0,
+    front: 1
+}
+
 const UIImagePickerControllerQualityType = {
     typeHigh: 0,
     typeMedium: 1,
@@ -77,7 +82,14 @@ Multimedia.createImagePickerController = function (e) {
     picker.sourceType = e.sourceType;
 
     if (picker.sourceType == UIImagePickerControllerSourceType.camera) {
-        picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
+        if(e.ios){
+            if (e.ios.cameraDevice !== undefined){
+                picker.cameraDevice = e.ios.cameraDevice;
+            }
+            if (e.ios.cameraFlashMode !== undefined){
+                picker.cameraFlashMode = e.ios.cameraFlashMode;
+            }
+        }
     }
 
 
@@ -221,6 +233,10 @@ Multimedia.iOS.CameraFlashMode = {};
 Multimedia.iOS.CameraFlashMode.OFF = [UIImagePickerControllerCameraFlashMode.off];
 Multimedia.iOS.CameraFlashMode.AUTO = [UIImagePickerControllerCameraFlashMode.auto];
 Multimedia.iOS.CameraFlashMode.ON = [UIImagePickerControllerCameraFlashMode.on];
+
+Multimedia.iOS.CameraDevice = {};
+Multimedia.iOS.CameraDevice.REAR = UIImagePickerControllerCameraDevice.rear;
+Multimedia.iOS.CameraDevice.FRONT = UIImagePickerControllerCameraDevice.front;
 
 Multimedia.ios = {};
 
