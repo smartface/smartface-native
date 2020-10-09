@@ -463,6 +463,8 @@ function getAllMediaFromUri(params) {
 Multimedia.ios = {};
 Multimedia.iOS = {};
 Multimedia.VideoQuality.iOS = {};
+Multimedia.iOS.CameraFlashMode = {};
+Multimedia.iOS.CameraDevice = {};
 
 Multimedia.ios.requestGalleryAuthorization = function () { };
 Multimedia.ios.requestCameraAuthorization = function () { };
