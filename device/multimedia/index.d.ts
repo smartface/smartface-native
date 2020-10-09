@@ -28,9 +28,8 @@ import File = require("sf-core/io/file");
  *                        
  *                        button.onPress = function(){
  *                        
- *                           Multimedia.startCamera({
+ *                           Multimedia.capturePhoto({
  *                               onSuccess: capturedImage,
- *                                action: Multimedia.ActionType.IMAGE_CAPTURE,
  *                                page : self
  *                            });
  *                            
@@ -113,7 +112,10 @@ declare namespace Multimedia {
         AUTO,
         ON
     }
-
+    enum CameraDevice {
+        REAR = 0,
+        FRONT = 1
+    }
     enum GalleryAuthorizationStatus {
         NotDetermined = 0,
         Restricted = 1,
@@ -262,6 +264,33 @@ declare namespace Multimedia {
              */
             ON
         }
+        /** 
+         * @enum {Number} Device.Multimedia.iOS.CameraDevice
+         * @since 4.3.0
+         * @ios
+         */
+        enum CameraDevice {
+            /**
+             * Specifies the camera on the rear of the device.
+             * 
+             * @property {Number} REAR
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            REAR = 0,
+            /**
+             * Specifies the camera on the front of the device.
+             * 
+             * @property {Number} FRONT
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            FRONT = 1
+        }
     }
 
     namespace Android {
@@ -306,7 +335,10 @@ declare type MultimediaParams = {
     action?: Multimedia.ActionType;
     allowsEditing?: boolean;
     aspectRatio?: { x: number; y: number };
-    cameraFlashMode?: Multimedia.CameraFlashMode;
+    ios?:{
+        cameraFlashMode?: Multimedia.iOS.CameraFlashMode;
+        cameraDevice?: Multimedia.iOS.CameraDevice;
+    };
     android?: {
         cropShape?: Multimedia.Android.CropShape;
         rotateText?: string;
@@ -320,11 +352,100 @@ declare type MultimediaParams = {
             width: number;
         }
     };
-    onSuccess: (params: { image: Image; video: File }) => void;
+    onSuccess: (params: { image?: Image; video?: File }) => void;
     onCancel?: () => void;
     onFailure?: (e: { message: string }) => void;
 };
+
 declare class Multimedia {
+
+    /**
+     * These enums used to specify quality of video 
+     * 
+     * @property {Object} VideoQuality
+     * @since 4.3.0
+     * @android
+     * @ios
+     *
+     */
+    static readonly VideoQuality : {
+        /**
+         * Specifies that quality of video is low.
+         * 
+         * @property {Number} LOW
+         * @static
+         * @ios
+         * @android
+         * @readonly
+         * @since 4.3.0
+         */
+        LOW : 0,
+
+        /**
+         * Specifies that quality of video is high.
+         * 
+         * @property {Number} HIGH
+         * @static
+         * @ios
+         * @android
+         * @readonly
+         * @since 4.3.0
+         */
+        HIGH : 1
+
+        /**
+         * Specifies ios specific quality of video.
+         * 
+         * @property {Object} iOS
+         * @static
+         * @ios
+         * @readonly
+         * @since 4.3.0
+         */
+        iOS : {
+            /**
+             * If recording, specifies that you want to use medium-quality video recording.
+             * 
+             * @property {Number} MEDIUM
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            MEDIUM : 100
+            /**
+             * If recording, specifies that you want to use VGA-quality video recording (pixel dimensions of 640x480).
+             * 
+             * @property {Number} TYPE640x480
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            TYPE640x480 : 101
+            /**
+             * If recording, specifies that you want to use 1280x720 iFrame format.
+             * 
+             * @property {Number} TYPEIFRAME1280x720
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            TYPEIFRAME1280x720 : 102
+            /**
+             * If recording, specifies that you want to use 960x540 iFrame format.
+             * 
+             * @property {Number} TYPEIFRAME960x540
+             * @static
+             * @ios
+             * @readonly
+             * @since 4.3.0
+             */
+            TYPEIFRAME960x540 : 102
+        }
+    };
+
     /**
      * @method startCamera
      * 
@@ -337,7 +458,7 @@ declare class Multimedia {
      * @param {Object} params.aspectRatio This property affects only on android. 
      * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
      * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
-     * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+     * @param {Device.Multimedia.iOS.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
      * @param {Object} params.android Android specific argument
      * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
      * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
@@ -360,8 +481,86 @@ declare class Multimedia {
      * @android
      * @ios
      * @since 0.1
+     * @deprecated 4.3.0 use {@link Device.Multimedia#capturePhoto capturePhoto} OR {@link Device.Multimedia#recordVideo recordVideo}
      */
     static startCamera(params: MultimediaParams): void;
+
+
+    /**
+    * @method capturePhoto
+    * 
+    * Calls the camera intent for photo.
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {UI.Page} params.page
+    * @param {Boolean} params.allowsEditing opens editing screen of selected content.
+    * @param {Object} params.aspectRatio This property affects only on android. 
+    * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
+    * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
+    * @param {Object} params.ios iOS specific argument
+    * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+    * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
+    * @param {Object} params.android Android specific argument
+    * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+    * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+    * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+    * @param {String} params.android.cropText specifies the text of crop button in the crop window
+    * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
+    * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+    * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+    * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+    * @param {Number} params.android.maxResultSize.height max cropped image height
+    * @param {Number} params.android.maxResultSize.width max cropped image width 
+    * @param {Function} params.onSuccess Callback for success situation.
+    * @param {Object} params.onSuccess.params 
+    * @param {UI.Image} params.onSuccess.params.image Captured image
+    * @param {Function} [params.onCancel] Callback for cancellation situation.
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @param {Object} params.onFailure.params 
+    * @param {String} params.onFailure.params.message Failure message
+    * @android
+    * @ios
+    * @since 4.3.0
+    */
+    static capturePhoto(params: MultimediaParams): void;
+
+
+    /**
+    * @method recordVideo
+    * 
+    * Calls the camera intent for video. In Android, read/write external storage permission should be obtained before using recorded video.
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {UI.Page} params.page
+    * @param {Number} params.maximumDuration maximum allowed record duration in seconds 
+    * @param {Device.Multimedia.VideoQuality} params.videoQuality used to control the quality of a recorded video
+    * @param {Object} params.ios iOS specific argument
+    * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
+    * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
+    * @param {Function} params.onSuccess Callback for success situation.
+    * @param {Object} params.onSuccess.params 
+    * @param {IO.File} params.onSuccess.params.video Captured video
+    * @param {Function} [params.onCancel] Callback for cancellation situation.
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @param {Object} params.onFailure.params 
+    * @param {String} params.onFailure.params.message Failure message
+    * @android
+    * @ios
+    * @since 4.3.0
+    */
+    static recordVideo(params: {
+        page: Page;
+        maximumDuration?: Number;
+        videoQuality?: Number;
+        ios?:{
+            cameraFlashMode?: Multimedia.iOS.CameraFlashMode;
+            cameraDevice?: Multimedia.iOS.CameraDevice;
+        };
+        onSuccess?: (params: { video: File }) => void;
+        onCancel?: () => void;
+        onFailure?: (e: { message: string }) => void;
+    }): void;
+
     /**
      * @method pickFromGallery
      * 
@@ -435,6 +634,37 @@ declare class Multimedia {
      * @since 0.1
      */
     static pickFromGallery(params: MultimediaParams): void;
+
+    /**
+    * @method convertToMp4
+    * 
+    * Converts video file to mp4 format.
+    * 
+    *     @example
+    *     Multimedia.convertToMp4({
+    *        videoFile: video,
+    *        outputFileName: "myMp4Video",
+    *        onCompleted: ({video}) => {
+    *             console.log(" Multimedia onCompleted ")
+    *        },
+    *        onFailure: () => {
+    *            console.log(" Multimedia onFailure ")
+    *         }
+    *      });
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {IO.File} params.videoFile Input Video file to convert 
+    * @param {String} params.outputFileName Converted video file name
+    * @param {Function} params.onCompleted Callback for success situation.
+    * @param {Object} params.onCompleted.params 
+    * @param {IO.File} params.onCompleted.params.video Converted video file
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @android
+    * @ios
+    * @since 4.2.2
+    */
+    static convertToMp4(params: { videoFile: File, outputFileName: String, onCompleted: ( params: { video: File }) => void,  onFailure?: () => void}): void;
+
     static ios: {
 
         /**

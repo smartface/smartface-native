@@ -1,5 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
+const Color = require("sf-core/ui/color");
 
 // const Picker = extend(View)(
 Picker.prototype = Object.create(View.prototype);
@@ -12,13 +13,12 @@ function Picker(params) {
 
     View.call(this);
 
-    var _items = [];
     Object.defineProperty(this, 'items', {
-        get: function() {
-            return _items; // todo: Returns self.nativeObject.getDisplayValues()
-        }, // after string problem is solved.
-        set: function(items) {
-            _items = items;
+        get: function () {
+            return self.nativeObject.items;
+        },
+        set: function (items) {
+            self.nativeObject.items = items;
             self.nativeObject.reloadAllComponents();
         },
         enumerable: true
@@ -26,10 +26,10 @@ function Picker(params) {
 
     var _currentIndex = 0;
     Object.defineProperty(this, 'currentIndex', {
-        get: function() {
+        get: function () {
             return _currentIndex;
         },
-        set: function(currentIndex) {
+        set: function (currentIndex) {
             _currentIndex = currentIndex;
             var defaultComponentIndex = 0; // sf-core does not support multi components.
             self.nativeObject.selectRowInComponentAnimated(_currentIndex, defaultComponentIndex, true);
@@ -39,10 +39,10 @@ function Picker(params) {
 
     var _onSelectedCallback;
     Object.defineProperty(this, 'onSelected', {
-        get: function() {
+        get: function () {
             return _onSelectedCallback;
         },
-        set: function(onSelected) {
+        set: function (onSelected) {
             _onSelectedCallback = onSelected;
         },
         enumerable: true
@@ -52,21 +52,21 @@ function Picker(params) {
     // UIPickerViewDataSource
     var _component = 1;
     self.pickerDataSource = new __SF_UIPickerViewDataSource();
-    self.pickerDataSource.numberOfComponents = function() {
+    self.pickerDataSource.numberOfComponents = function () {
         return _component;
     };
-    self.pickerDataSource.numberOfRowsInComponent = function(component) {
-        return _items.length;
+    self.pickerDataSource.numberOfRowsInComponent = function (component) {
+        return self.items.length;
     };
     self.nativeObject.dataSource = self.pickerDataSource;
 
     //////////////////////////////////////////////////////
     // UIPickerViewDelegate
     self.pickerDelegate = new __SF_UIPickerViewDelegate();
-    self.pickerDelegate.titleForRow = function(e) {
-        return _items[e.row];
+    self.pickerDelegate.titleForRow = function (e) {
+        return self.items[e.row];
     };
-    self.pickerDelegate.didSelectRow = function(e) {
+    self.pickerDelegate.didSelectRow = function (e) {
         _currentIndex = e.row;
         if (typeof _onSelectedCallback === "function") {
             _onSelectedCallback(e.row);
@@ -77,11 +77,55 @@ function Picker(params) {
     this.ios = {};
     this.android = {};
 
+    Object.defineProperty(this, 'textColor', {
+        get: function () {
+            if (self.nativeObject.textColor === undefined) {
+                return undefined;
+            }
+            return new Color({
+                color: self.nativeObject.textColor
+            });
+        },
+        set: function (color) {
+            if (color) {
+                self.nativeObject.textColor = color.nativeObject;
+            } else {
+                self.nativeObject.textColor = undefined;
+            }
+            self.nativeObject.reloadAllComponents();
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(this, 'dialogBackgroundColor', {
+        get: function () {
+            return new Color({
+                color: self.nativeObject.dialogBackgroundColor
+            });
+        },
+        set: function (color) {
+            self.nativeObject.dialogBackgroundColor = color.nativeObject;
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(this.ios, 'dialogLineColor', {
+        get: function () {
+            return new Color({
+                color: self.nativeObject.dialogLineColor
+            });
+        },
+        set: function (color) {
+            self.nativeObject.dialogLineColor = color.nativeObject;
+        },
+        enumerable: true
+    });
+
     Object.defineProperty(this.ios, 'rowHeight', {
-        get: function() {
+        get: function () {
             return self.nativeObject.delegate.rowHeight;
         },
-        set: function(onSelected) {
+        set: function (onSelected) {
             self.nativeObject.delegate.rowHeight = onSelected;
         },
         enumerable: true
@@ -89,10 +133,10 @@ function Picker(params) {
 
     var _title;
     Object.defineProperty(this, 'title', {
-        get: function() {
+        get: function () {
             return _title;
         },
-        set: function(value) {
+        set: function (value) {
             _title = value;
         },
         enumerable: true
@@ -100,10 +144,10 @@ function Picker(params) {
 
     var _titleColor;
     Object.defineProperty(this, 'titleColor', {
-        get: function() {
+        get: function () {
             return _titleColor;
         },
-        set: function(value) {
+        set: function (value) {
             _titleColor = value;
         },
         enumerable: true
@@ -111,10 +155,10 @@ function Picker(params) {
 
     var _titleFont;
     Object.defineProperty(this, 'titleFont', {
-        get: function() {
+        get: function () {
             return _titleFont;
         },
-        set: function(value) {
+        set: function (value) {
             _titleFont = value;
         },
         enumerable: true
@@ -122,10 +166,10 @@ function Picker(params) {
 
     var _cancelColor;
     Object.defineProperty(this, 'cancelColor', {
-        get: function() {
+        get: function () {
             return _cancelColor;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelColor = value;
         },
         enumerable: true
@@ -133,10 +177,10 @@ function Picker(params) {
 
     var _cancelHighlightedColor;
     Object.defineProperty(this.ios, 'cancelHighlightedColor', {
-        get: function() {
+        get: function () {
             return _cancelHighlightedColor;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelHighlightedColor = value;
         },
         enumerable: true
@@ -144,10 +188,10 @@ function Picker(params) {
 
     var _cancelFont;
     Object.defineProperty(this, 'cancelFont', {
-        get: function() {
+        get: function () {
             return _cancelFont;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelFont = value;
         },
         enumerable: true
@@ -155,10 +199,10 @@ function Picker(params) {
 
     var _okColor;
     Object.defineProperty(this, 'okColor', {
-        get: function() {
+        get: function () {
             return _okColor;
         },
-        set: function(value) {
+        set: function (value) {
             _okColor = value;
         },
         enumerable: true
@@ -166,10 +210,10 @@ function Picker(params) {
 
     var _okHighlightedColor;
     Object.defineProperty(this.ios, 'okHighlightedColor', {
-        get: function() {
+        get: function () {
             return _okHighlightedColor;
         },
-        set: function(value) {
+        set: function (value) {
             _okHighlightedColor = value;
         },
         enumerable: true
@@ -177,10 +221,10 @@ function Picker(params) {
 
     var _okFont;
     Object.defineProperty(this, 'okFont', {
-        get: function() {
+        get: function () {
             return _okFont;
         },
-        set: function(value) {
+        set: function (value) {
             _okFont = value;
         },
         enumerable: true
@@ -188,10 +232,10 @@ function Picker(params) {
 
     var _okText;
     Object.defineProperty(this, 'okText', {
-        get: function() {
+        get: function () {
             return _okText;
         },
-        set: function(value) {
+        set: function (value) {
             _okText = value;
         },
         enumerable: true
@@ -199,24 +243,24 @@ function Picker(params) {
 
     var _cancelText;
     Object.defineProperty(this, 'cancelText', {
-        get: function() {
+        get: function () {
             return _cancelText;
         },
-        set: function(value) {
+        set: function (value) {
             _cancelText = value;
         },
         enumerable: true
     });
 
-    self.show = function(ok, cancel) {
-        var okFunc = function(e) {
+    self.show = function (ok, cancel) {
+        var okFunc = function (e) {
             if (typeof ok === "function") {
                 ok({
                     index: e.index
                 });
             }
         };
-        var cancelFunc = function(e) {
+        var cancelFunc = function (e) {
             if (typeof cancel === "function") {
                 cancel();
             }

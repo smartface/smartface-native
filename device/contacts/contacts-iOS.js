@@ -277,6 +277,35 @@ Contacts.pickContact = function(params) {
 	}
 };
 
+Contacts.getContactsByPhoneNumber = function (phoneNumber, callbacks) {
+    var store = __SF_CNContactStore.new();
+    store.requestAccess(function () {
+        store.fetchAllContacts(function (allContactsNativeArray) {
+            var allContactsManagedArray = [];
+            for (var index in allContactsNativeArray) {
+                // Added this check to resolve the sonar issue. 
+                // hasOwnProperty() is used to filter out properties from the object's prototype chain.
+                if (allContactsNativeArray.hasOwnProperty(index)) {
+                    var jsContact = new Contacts.Contact({
+                        nativeObject: allContactsNativeArray[index].mutableCopy()
+                    });
+                    var isMatch = jsContact.phoneNumbers.find(a => a.includes(phoneNumber));
+                    if (isMatch !== undefined){
+                        allContactsManagedArray.push(jsContact);
+                    }
+                }
+            }
+            callbacks.onSuccess(allContactsManagedArray);
+        }, function (error) {
+            callbacks.onFailure(error);
+        });
+    }, function (error) {
+        if (typeof params.onFailure === 'function') {
+            callbacks.onFailure(error);
+        }
+    });
+};
+
 Contacts.fetchAll = function(params) {
 	var store = __SF_CNContactStore.new();
 	store.requestAccess(function() {

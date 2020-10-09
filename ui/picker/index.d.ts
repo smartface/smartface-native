@@ -35,12 +35,12 @@ declare class Picker extends View {
 /**
  * Gets/sets items of the picker.
  *
- * @property {Array} items
+ * @property {Array|String} items
  * @android
  * @ios
  * @since 0.1
  */
-  items: [];
+  items: string[];
 /**
  * Gets/sets current index of the picker.
  *
@@ -60,6 +60,50 @@ declare class Picker extends View {
   android: View['android'] & {
     enabled: boolean;
   }
+  ios: View['ios'] & {
+    /**
+     * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
+     *
+     * @property {UI.Color} cancelHighlightedColor
+     * @ios
+     * @since 3.1.1
+     */
+    cancelHighlightedColor: Color;
+    /** 
+     * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
+     *
+     * @property {UI.Color} okHighlightedColor
+     * @ios
+     * @since 3.1.1
+     */
+    okHighlightedColor: Color;
+    /**
+     * Gets/sets dialogLineColor of Picker.
+     *
+     * @property {UI.Color} dialogLineColor
+     * @ios
+     * @since 4.2.3
+     */
+    dialogLineColor: Color;
+  }
+/**
+ * Gets/sets textColor of Picker.
+ *
+ * @property {UI.Color} textColor
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+textColor?: Color;
+/**
+ * Gets/sets dialogBackgroundColor of Picker.
+ *
+ * @property {UI.Color} dialogBackgroundColor
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+dialogBackgroundColor: Color;
 /**
  * This event is called when scroll ends & an item is selected on a picker.
  *
@@ -120,14 +164,6 @@ declare class Picker extends View {
  */
   cancelColor: Color;
 /**
- * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
- *
- * @property {UI.Color} cancelHighlightedColor
- * @ios
- * @since 3.1.1
- */
-  cancelHighlightedColor: Color;
-/**
  * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
  *
  * @property {UI.Font} cancelFont
@@ -163,14 +199,6 @@ declare class Picker extends View {
  * @since 3.1.3
  */
   okText: string;
-/** 
- * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
- *
- * @property {UI.Color} okHighlightedColor
- * @ios
- * @since 3.1.1
- */
-  okHighlightedColor: Color;
 /**
  * Gets/sets okFont of the picker. This property only works with show method. Must set before show method.
  *

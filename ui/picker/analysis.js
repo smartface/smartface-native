@@ -33,12 +33,41 @@ function Picker() {}
 /**
  * Gets/sets items of the picker.
  *
- * @property {Array} items
+ * @property {Array|String} items
  * @android
  * @ios
  * @since 0.1
  */
 Picker.prototype.items = [];
+
+/**
+ * Gets/sets textColor of the picker.
+ *
+ * @property {UI.Color} textColor
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+Picker.prototype.textColor = undefined;
+
+/**
+ * Gets/sets dialogBackgroundColor of the picker.
+ *
+ * @property {UI.Color} dialogBackgroundColor
+ * @android
+ * @ios
+ * @since 4.2.3
+ */
+Picker.prototype.dialogBackgroundColor;
+
+/**
+ * Gets/sets dialogLineColor of the picker.
+ *
+ * @property {UI.Color} dialogLineColor
+ * @ios
+ * @since 4.2.3
+ */
+Picker.prototype.dialogLineColor;
 
 /**
  * Enables/disables the Picker.

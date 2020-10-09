@@ -25,7 +25,7 @@ declare class File extends NativeComponent {
 		writable?: boolean;
 	});
 	resolvedPath: string;
-	type: string;ß
+	type: string;
 	fullPath: string;
 	drawableResourceId: number;
     getAbsolutePath(): string;

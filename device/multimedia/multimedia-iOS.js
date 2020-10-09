@@ -20,9 +20,23 @@ const UIImagePickerControllerCameraFlashMode = {
     on: 1
 }
 
-function Multimedia() {}
+const UIImagePickerControllerCameraDevice = {
+    rear: 0,
+    front: 1
+}
 
-Multimedia.createImagePickerController = function(e) {
+const UIImagePickerControllerQualityType = {
+    typeHigh: 0,
+    typeMedium: 1,
+    typeLow: 2,
+    type640x480: 3,
+    typeIFrame1280x720: 4,
+    typeIFrame960x540: 5
+}
+
+function Multimedia() { }
+
+Multimedia.createImagePickerController = function (e) {
     var picker = new __SF_UIImagePickerController();
     if (e.action) {
         picker.mediaTypes = e.action;
@@ -32,26 +46,64 @@ Multimedia.createImagePickerController = function(e) {
         picker.mediaTypes = e.type;
     }
 
+    if (e.maximumDuration) {
+        picker.setValueForKey(e.maximumDuration, "videoMaximumDuration");
+    }
+
+    if (e.videoQuality !== undefined) {
+        var quality;
+        switch (e.videoQuality) {
+            case Multimedia.VideoQuality.LOW:
+                quality = UIImagePickerControllerQualityType.typeLow;
+                break;
+            case Multimedia.VideoQuality.HIGH:
+                quality = UIImagePickerControllerQualityType.typeHigh;
+                break;
+            case Multimedia.VideoQuality.iOS.MEDIUM:
+                quality = UIImagePickerControllerQualityType.typeMedium;
+                break;
+            case Multimedia.VideoQuality.iOS.TYPE640x480:
+                quality = UIImagePickerControllerQualityType.type640x480;
+                break;
+            case Multimedia.VideoQuality.iOS.TYPEIFRAME1280x720:
+                quality = UIImagePickerControllerQualityType.typeIFrame1280x720;
+                break;
+            case Multimedia.VideoQuality.iOS.TYPEIFRAME960x540:
+                quality = UIImagePickerControllerQualityType.typeIFrame960x540;
+                break;
+            default:
+                quality = UIImagePickerControllerQualityType.typeMedium;
+        }
+        picker.setValueForKey(quality, "videoQuality");
+    }
+
     picker.allowsEditing = e.allowsEditing ? e.allowsEditing : false;
 
     picker.sourceType = e.sourceType;
 
     if (picker.sourceType == UIImagePickerControllerSourceType.camera) {
-        picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
+        if(e.ios){
+            if (e.ios.cameraDevice !== undefined){
+                picker.cameraDevice = e.ios.cameraDevice;
+            }
+            if (e.ios.cameraFlashMode !== undefined){
+                picker.cameraFlashMode = e.ios.cameraFlashMode;
+            }
+        }
     }
 
 
     this.pickerDelegate = new __SF_UIImagePickerControllerDelegate();
 
-    this.pickerDelegate.imagePickerControllerDidCancel = function() {
+    this.pickerDelegate.imagePickerControllerDidCancel = function () {
         picker.dismissViewController();
         if (e.onCancel) {
             e.onCancel();
         }
     };
 
-    this.pickerDelegate.didFinishPickingMediaWithInfo = function(param) {
-        picker.dismissViewController(function() {
+    this.pickerDelegate.didFinishPickingMediaWithInfo = function (param) {
+        picker.dismissViewController(function () {
             if (e.onSuccess) {
                 if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image) {
                     var image;
@@ -71,7 +123,7 @@ Multimedia.createImagePickerController = function(e) {
                 } else if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video) {
                     var videoURL = param.info["UIImagePickerControllerMediaURL"];
                     var file = new File({
-                        path: videoURL.absoluteString
+                        path: videoURL.path
                     });
                     e.onSuccess({
                         video: file
@@ -86,7 +138,7 @@ Multimedia.createImagePickerController = function(e) {
     return picker;
 }
 
-Multimedia.startCamera = function(e) {
+Multimedia.startCamera = function (e) {
     e["sourceType"] = UIImagePickerControllerSourceType.camera;
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
@@ -96,7 +148,47 @@ Multimedia.startCamera = function(e) {
     }
 };
 
-Multimedia.pickFromGallery = function(e) {
+Multimedia.convertToMp4 = function (e) {
+    var file = e.videoFile;
+    var outputFileName = e.outputFileName;
+    var onCompleted = e.onCompleted;
+    var onFailure = e.onFailure;
+
+    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.path, outputFileName, function (e) {
+        if (e.filePath && typeof onCompleted == 'function') {
+            var video = new File({
+                path: e.filePath
+            });
+            onCompleted({ video });
+        } else if (typeof onFailure == 'function') {
+            onFailure();
+        }
+    });
+}
+
+Multimedia.capturePhoto = function (e) {
+    e["sourceType"] = UIImagePickerControllerSourceType.camera;
+    e["action"] = Multimedia.ActionType.IMAGE_CAPTURE;
+    this.picker = Multimedia.createImagePickerController(e);
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(this.picker);
+    } else {
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
+};
+
+Multimedia.recordVideo = function (e) {
+    e["sourceType"] = UIImagePickerControllerSourceType.camera;
+    e["action"] = Multimedia.ActionType.VIDEO_CAPTURE;
+    this.picker = Multimedia.createImagePickerController(e);
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(this.picker);
+    } else {
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
+};
+
+Multimedia.pickFromGallery = function (e) {
     e["sourceType"] = UIImagePickerControllerSourceType.photoLibrary;
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
@@ -106,9 +198,19 @@ Multimedia.pickFromGallery = function(e) {
     }
 };
 
+Multimedia.VideoQuality = {};
+Multimedia.VideoQuality.iOS = {};
+Multimedia.VideoQuality.LOW = 0;
+Multimedia.VideoQuality.HIGH = 1;
+Multimedia.VideoQuality.iOS.MEDIUM = 100;
+Multimedia.VideoQuality.iOS.TYPE640x480 = 101;
+Multimedia.VideoQuality.iOS.TYPEIFRAME1280x720 = 102;
+Multimedia.VideoQuality.iOS.TYPEIFRAME960x540 = 103;
+
+
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function() {};
+Multimedia.android.getAllGalleryItems = function () { };
 Multimedia.Android = {};
 Multimedia.Android.CropShape = {};
 
@@ -132,10 +234,14 @@ Multimedia.iOS.CameraFlashMode.OFF = [UIImagePickerControllerCameraFlashMode.off
 Multimedia.iOS.CameraFlashMode.AUTO = [UIImagePickerControllerCameraFlashMode.auto];
 Multimedia.iOS.CameraFlashMode.ON = [UIImagePickerControllerCameraFlashMode.on];
 
+Multimedia.iOS.CameraDevice = {};
+Multimedia.iOS.CameraDevice.REAR = UIImagePickerControllerCameraDevice.rear;
+Multimedia.iOS.CameraDevice.FRONT = UIImagePickerControllerCameraDevice.front;
+
 Multimedia.ios = {};
 
-Multimedia.ios.requestGalleryAuthorization = function(callback) {
-    Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function(status) {
+Multimedia.ios.requestGalleryAuthorization = function (callback) {
+    Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function (status) {
         if (typeof callback == 'function') {
             if (status == PHAuthorizationStatus.Authorized) {
                 callback(true);
@@ -146,19 +252,19 @@ Multimedia.ios.requestGalleryAuthorization = function(callback) {
     });
 }
 
-Multimedia.ios.requestCameraAuthorization = function(callback) {
-    Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType(function(status) {
+Multimedia.ios.requestCameraAuthorization = function (callback) {
+    Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType(function (status) {
         if (typeof callback == 'function') {
             callback(status);
         }
     });
 }
 
-Multimedia.ios.getGalleryAuthorizationStatus = function() {
+Multimedia.ios.getGalleryAuthorizationStatus = function () {
     return Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus();
 }
 
-Multimedia.ios.getCameraAuthorizationStatus = function() {
+Multimedia.ios.getCameraAuthorizationStatus = function () {
     return Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType();
 }
 
@@ -183,7 +289,7 @@ Multimedia.iOS.CameraAuthorizationStatus = {
     AUTHORIZED: 3
 }
 
-Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback) {
+Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function (callback) {
     var argType = new Invocation.Argument({
         type: "NSString",
         value: AVMediaType.Video
@@ -195,7 +301,7 @@ Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callba
     Invocation.invokeClassMethod("AVCaptureDevice", "requestAccessForMediaType:completionHandler:", [argType, argCallback]);
 };
 
-Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType = function() {
+Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType = function () {
     var argType = new Invocation.Argument({
         type: "NSString",
         value: AVMediaType.Video
@@ -220,7 +326,7 @@ Multimedia.iOS.GalleryAuthorizationStatus = {
     AUTHORIZED: 3
 }
 
-Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback) {
+Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function (callback) {
     var argCallback = new Invocation.Argument({
         type: "NSIntegerBlock",
         value: callback
@@ -228,7 +334,7 @@ Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback) {
     Invocation.invokeClassMethod("PHPhotoLibrary", "requestAuthorization:", [argCallback]);
 };
 
-Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus = function() {
+Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus = function () {
     return Invocation.invokeClassMethod("PHPhotoLibrary", "authorizationStatus", [], "NSInteger");
 }
 

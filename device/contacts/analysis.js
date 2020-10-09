@@ -191,6 +191,34 @@ Contacts.getAll = function(params) {};
 Contacts.fetchAll = function(params) {};
 
 
+/**
+ * This function searches contacts by given phone number.You need check 
+ * {@link Application.android.Permissions#READ_CONTACTS} permission.
+ *
+ *
+ *     @example
+ *     const Contacts = require("sf-core/device/contacts");
+ *     Contacts.getContactsByPhoneNumber("5555555555",{
+ *         onSuccess : function(contacts){
+ *             console.log("Successfully found ", contacts);
+ *         },
+ *         onFailure : function(error){
+ *             console.log("Something went wrong");
+ *         }
+ *     });
+ *
+ * @param {String} phoneNumber Phone number to search in contacts
+ * @param {Object} callbacks Object describing callbacks
+ * @param {Function} callbacks.onSuccess This event is called after getting contact successfully.
+ * @param {Device.Contacts.Contact[]} callbacks.onSuccess.contact passes {@link Device.Contacts.Contact Contact} array.
+ * @param {Function} [callbacks.onFailure] This event is called after getting contact fails.
+ * @method getContactsByPhoneNumber
+ * @android
+ * @ios
+ * @since 4.3.0
+ */
+Contacts.getContactsByPhoneNumber = function(phoneNumber, callbacks) {};
+
 
 /**
  * 

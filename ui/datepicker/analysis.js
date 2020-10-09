@@ -13,7 +13,7 @@
  *     myDatePicker.show();
  *
  */
-function DatePicker() {}
+function DatePicker() { }
 
 /**
  * Sets the initial date avaliable on the picker.
@@ -24,7 +24,7 @@ function DatePicker() {}
  * @param {Date} date
  * @since 0.1
  */
-DatePicker.prototype.setDate = function(date) {};
+DatePicker.prototype.setDate = function (date) { };
 
 /**
  * Sets the minimum date avaliable on the picker.
@@ -35,7 +35,34 @@ DatePicker.prototype.setDate = function(date) {};
  * @param {Date} minDate
  * @since 0.1
  */
-DatePicker.prototype.setMinDate = function(date) {};
+DatePicker.prototype.setMinDate = function (date) { };
+
+/**
+ * Gets/sets textColor of the picker.
+ *
+ * @property {UI.Color} textColor
+ * @ios
+ * @since 4.2.3
+ */
+DatePicker.prototype.textColor = undefined;
+
+/**
+ * Gets/sets dialogBackgroundColor of the picker.
+ *
+ * @property {UI.Color} dialogBackgroundColor
+ * @ios
+ * @since 4.2.3
+ */
+DatePicker.prototype.dialogBackgroundColor;
+
+/**
+ * Gets/sets dialogLineColor of the picker.
+ *
+ * @property {UI.Color} dialogLineColor
+ * @ios
+ * @since 4.2.3
+ */
+DatePicker.prototype.dialogLineColor;
 
 /**
  * Sets the maximum date avaliable on the picker.
@@ -46,7 +73,7 @@ DatePicker.prototype.setMinDate = function(date) {};
  * @param {Date} maxDate
  * @since 0.1
  */
-DatePicker.prototype.setMaxDate = function(date) {};
+DatePicker.prototype.setMaxDate = function (date) { };
 
 /**
  * Makes the picker appear on the screen.
@@ -56,7 +83,7 @@ DatePicker.prototype.setMaxDate = function(date) {};
  * @ios
  * @since 0.1
  */
-DatePicker.prototype.show = function() {};
+DatePicker.prototype.show = function () { };
 
 /**
  * Triggered when a date is selected on the picker.
@@ -67,7 +94,7 @@ DatePicker.prototype.show = function() {};
  * @android
  * @ios
  */
-DatePicker.prototype.onDateSelected = function(date) {};
+DatePicker.prototype.onDateSelected = function (date) { };
 
 /**
  * Triggered when click cancel button on the picker.
@@ -77,7 +104,7 @@ DatePicker.prototype.onDateSelected = function(date) {};
  * @android
  * @ios
  */
-DatePicker.prototype.onCancelled = function() {};
+DatePicker.prototype.onCancelled = function () { };
 
 /**
  * Gets/sets title of the picker. This property only works with show method. Must set before show method.

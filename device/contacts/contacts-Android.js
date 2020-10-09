@@ -233,17 +233,7 @@ Contacts.onActivityResult = function (requestCode, resultCode, data) {
             contact.displayName = getContactDisplayName(contactUri);
         } else {
             let contactId = SFContactUtil.getContactId(contactUri);
-            let structuredNames = getStructuredNames({ id: contactId });
-            let work = getWorkById(contactId);
-            let params = Object.assign({
-                nickname: getNicknameById(contactId),
-                photo: getPhotoById(contactId),
-                phoneNumbers: toJSArray(SFContactUtil.getPhoneNumbers(contactId)),
-                emailAddresses: toJSArray(SFContactUtil.getEmailAddresses(contactId)),
-                urlAddresses: toJSArray(SFContactUtil.getUrlAddresses(contactId)),
-                addresses: toJSArray(SFContactUtil.getAddresses(contactId)),
-            }, structuredNames, work);
-            contact = new Contacts.Contact(params);
+            contact = createContactById(contactId);
         }
         _onSuccess && _onSuccess(contact);
     } catch (error) {
@@ -350,6 +340,33 @@ Contacts.pickContact = function (params = {}) {
     } catch (error) {
         _onFailure && _onFailure(error);
     }
+}
+
+Contacts.getContactsByPhoneNumber = function (phoneNumber = "", callbacks) {
+    const { onFailure, onSuccess } = callbacks;
+    try {
+        let contacts = toJSArray(SFContactUtil.getContactIdsByPhoneNumber(phoneNumber.replace(/\s/g,"")))
+            .map(contactId => createContactById(contactId));
+        onSuccess && onSuccess(contacts);
+    } catch (error) {
+        onFailure && onFailure(error);
+    }
+}
+
+function createContactById(contactId) {
+
+    let structuredNames = getStructuredNames({ id: contactId });
+    let work = getWorkById(contactId);
+    let params = Object.assign({
+        nickname: getNicknameById(contactId),
+        photo: getPhotoById(contactId),
+        phoneNumbers: toJSArray(SFContactUtil.getPhoneNumbers(contactId)),
+        emailAddresses: toJSArray(SFContactUtil.getEmailAddresses(contactId)),
+        urlAddresses: toJSArray(SFContactUtil.getUrlAddresses(contactId)),
+        addresses: toJSArray(SFContactUtil.getAddresses(contactId)),
+    }, structuredNames, work);
+
+    return new Contacts.Contact(params);
 }
 
 function getContactDataById(params) {

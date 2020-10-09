@@ -24,14 +24,14 @@ const ActionType = {
     VIDEO_CAPTURE: 1
 };
 
-const NativeAction = [
-    NativeMediaStore.ACTION_IMAGE_CAPTURE,
-    NativeMediaStore.ACTION_VIDEO_CAPTURE
-];
-
 const CropShape = {
     RECTANGLE: 1,
     OVAL: 2
+};
+
+const VideoQuality = {
+    HIGH: 1,
+    LOW: 0
 };
 
 function Multimedia() { }
@@ -48,6 +48,11 @@ Object.defineProperties(Multimedia, {
     },
     'ActionType': {
         value: ActionType,
+        writable: false,
+        enumerable: true
+    },
+    'VideoQuality': {
+        value: VideoQuality,
         writable: false,
         enumerable: true
     }
@@ -75,58 +80,55 @@ var _fileURI = null;
 // We should store image file, because data.getData() and data.getExtras() return null on activity result
 // when we use intent with MediaStore.EXTRA_OUTPUT.
 // https://github.com/ArthurHub/Android-Image-Cropper/wiki/FAQ#why-image-captured-from-camera-is-blurred-or-low-quality
-var imageFileUri = null;
+var _imageFileUri = null;
 
+//Deprecated since 4.3.0
 Multimedia.startCamera = function (params = {}) {
-    if (!(params.page instanceof require("../../ui/page"))) {
-        throw new TypeError('Page parameter required');
-    }
 
-    if (params.action !== undefined) {
+    if (!(params.page instanceof require("../../ui/page")))
+        throw new TypeError('Page parameter required');
+
+    if (params.action !== undefined)
         _action = params.action;
-    }
+
     _pickParams = {};
     _captureParams = params;
     var page = _captureParams.page;
 
     if (_action === ActionType.IMAGE_CAPTURE) {
-        imageFileUri = null;
-        if (params.allowsEditing) {
-            imageFileUri = NativeSFMultimedia.createImageFile(activity);
-        }
-        var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, imageFileUri);
+        _imageFileUri = NativeSFMultimedia.createImageFile(activity);
+        var takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, _imageFileUri);
         page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
-    } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-        startCameraWithExtraField();
-    } else {
-        takePictureIntent = new NativeIntent(NativeAction[_action]);
-        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
-    }
+    } else
+        startRecordVideoWithExtraField();
 };
 
-function startCameraWithExtraField() {
-    var takePictureIntent = new NativeIntent(NativeAction[_action]);
-    var packageManager = activity.getPackageManager();
 
-    if (takePictureIntent.resolveActivity(packageManager)) {
-        var contentUri;
-        var contentValues = new NativeContentValues();
-        var contentResolver = activity.getContentResolver();
-        if (_action === ActionType.IMAGE_CAPTURE) {
-            contentUri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            _fileURI = contentResolver.insert(contentUri, contentValues);
-        } else if (_action === ActionType.VIDEO_CAPTURE) {
-            contentUri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            _fileURI = contentResolver.insert(contentUri, contentValues);
-        }
+Multimedia.recordVideo = function (params = {}) {
 
-        if (_fileURI) {
-            var output = NativeMediaStore.EXTRA_OUTPUT;
-            takePictureIntent.putExtra(output, _fileURI);
-            _captureParams.page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
-        }
-    }
-}
+    if (!(params.page instanceof require("../../ui/page")))
+        throw new TypeError('Page parameter required');
+
+    _pickParams = {};
+    _captureParams = params;
+    _action = ActionType.VIDEO_CAPTURE;
+    startRecordVideoWithExtraField();
+};
+
+Multimedia.capturePhoto = function (params = {}) {
+
+    if (!(params.page instanceof require("../../ui/page")))
+        throw new TypeError('Page parameter required');
+
+    _pickParams = {};
+    _captureParams = params;
+    _action = ActionType.IMAGE_CAPTURE;
+    const page = params.page;
+    _imageFileUri = NativeSFMultimedia.createImageFile(activity);
+    let takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, _imageFileUri);
+
+    page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+};
 
 Multimedia.pickFromGallery = function (params = {}) {
     if (!(params.page instanceof require("../../ui/page"))) {
@@ -144,6 +146,22 @@ Multimedia.pickFromGallery = function (params = {}) {
      * An error occured
      */
     params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+};
+
+Multimedia.convertToMp4 = function (params) {
+    const { videoFile, outputFileName, onCompleted, onFailure } = params;
+
+    if (!videoFile || !outputFileName)
+        throw new Error("Video File or Output File Name cannot be undefined");
+
+    NativeSFMultimedia.convertToMp4(videoFile.nativeObject, outputFileName,
+        {
+            onCompleted: (outputVideoFilePath) => {
+                let video = new File({ path: outputVideoFilePath });
+                onCompleted && onCompleted({ video });
+            },
+            onFailure
+        });
 };
 
 Multimedia.android = {};
@@ -194,6 +212,24 @@ Multimedia.onActivityResult = function (requestCode, resultCode, data) {
     }
 };
 
+
+function startRecordVideoWithExtraField() {
+
+    const {
+        videoQuality,
+        maximumDuration,
+        page
+    } = _captureParams;
+    let cameraIntent = new NativeIntent(NativeMediaStore.ACTION_VIDEO_CAPTURE);
+    
+    if (maximumDuration != undefined)
+        cameraIntent.putExtra(NativeMediaStore.EXTRA_DURATION_LIMIT, maximumDuration);
+    if (videoQuality != undefined)
+        cameraIntent.putExtra(NativeMediaStore.EXTRA_VIDEO_QUALITY, videoQuality);
+
+    page.nativeObject.startActivityForResult(cameraIntent, Multimedia.CAMERA_REQUEST);
+}
+
 function cropCameraData(resultCode, data) {
     const { onSuccess, onCancel, onFailure, allowsEditing } = _captureParams;
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
@@ -221,8 +257,8 @@ function cropGalleryData(resultCode, data) {
 
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
         try {
-        var resultUri = NativeUCrop.getOutput(data);
-        var croppedImage = Image.createFromFile(resultUri.getPath());
+            var resultUri = NativeUCrop.getOutput(data);
+            var croppedImage = Image.createFromFile(resultUri.getPath());
         } catch (err) {
             onFailure && onFailure({
                 message: err
@@ -356,6 +392,7 @@ function getCameraData(resultCode, data) {
         page,
         aspectRatio = {},
         onCancel,
+        allowsEditing,
         android: {
             cropShape: cropShape = CropShape.RECTANGLE,
             rotateText: rotateText,
@@ -370,12 +407,7 @@ function getCameraData(resultCode, data) {
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             if (_action !== ActionType.IMAGE_CAPTURE) {
-                var uri;
-                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-                    uri = _fileURI;
-                } else {
-                    uri = data.getData();
-                }
+                var uri = data.getData();
             }
         } catch (err) {
             var failure = true;
@@ -386,14 +418,12 @@ function getCameraData(resultCode, data) {
 
         if (!failure && onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
-                if (imageFileUri != null) {
-                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, uri: imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+                if (allowsEditing) {
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, uri: _imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 } else {
-                    var bitmap = data.getExtras().get("data");
+                    let image = Image.createFromFile(_imageFileUri.getPath());
                     onSuccess({
-                        image: new Image({
-                            bitmap: bitmap
-                        })
+                        image
                     });
                 }
             } else {
@@ -432,6 +462,9 @@ function getAllMediaFromUri(params) {
 
 Multimedia.ios = {};
 Multimedia.iOS = {};
+Multimedia.VideoQuality.iOS = {};
+Multimedia.iOS.CameraFlashMode = {};
+Multimedia.iOS.CameraDevice = {};
 
 Multimedia.ios.requestGalleryAuthorization = function () { };
 Multimedia.ios.requestCameraAuthorization = function () { };

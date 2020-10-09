@@ -42,6 +42,25 @@ declare class Blob {
  * @since 0.1
  */
     toBase64: () => string;
+
+
+/**
+ * Converts to base64 asynchronously 
+ *
+ * @method toBase64Async
+ * @param {Object} params Object describing parameters for the function.
+ * @param {Function} params.onComplete Triggers when conversion is over.
+ * @param {String} params.onComplete.base64 
+ * @param {Function} [params.onFailure] Triggers when failure situation occurred.
+ * @android
+ * @ios
+ * @since 4.3.0
+ */
+    toBase64Async: (handlers: { 
+        onComplete: (base64 : String) => void,
+        onFailure?: () => void
+    }) => void;
+
 /** 
  *  * Returns a utf8 String
  *
