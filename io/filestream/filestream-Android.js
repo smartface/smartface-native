@@ -4,6 +4,7 @@ const Path = require("../path");
 const TypeUtil = require("../../util/type");
 const Blob = require('../../blob');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const StringUtil = requireClass('io.smartface.android.utils.StringUtil');
 
 function FileStream(params) {
     var fileObject;
@@ -116,13 +117,13 @@ function FileStream(params) {
             enumerable: true
         },
         'isReadable': {
-            get: function() {
+            get: function () {
                 return this.nativeObject && !_closed && (_streamType === FileStream.StreamType.READ);
             },
             enumerable: true
         },
         'isWritable': {
-            get: function() {
+            get: function () {
                 return this.nativeObject && !_closed && (_streamType !== FileStream.StreamType.READ);
             },
             enumerable: true
@@ -136,24 +137,23 @@ function FileStream(params) {
             enumerable: true
         },
         'close': {
-            value: function() {
+            value: function () {
                 !_closed && (this.nativeObject.close());
             },
             enumerable: true
         },
         'readBlob': {
-            value: function() {
+            value: function () {
                 if (_closed || (_streamType !== FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is not READ");
                 }
-                var fileContent = this.readToEnd();
+                let fileContent = this.readToEnd();
                 if (_contentMode === FileStream.ContentMode.BINARY) {
                     return new Blob(fileContent, {
                         type: "file"
                     });
                 } else {
-                    const NativeString = requireClass("java.lang.String");
-                    return new Blob(new NativeString(fileContent).getBytes(), {
+                    return new Blob(StringUtil.toByteArray(fileContent), {
                         type: "file"
                     });
                 }
@@ -161,7 +161,7 @@ function FileStream(params) {
             enumerable: true
         },
         'readToEnd': {
-            value: function() {
+            value: function () {
                 if (_closed || (_streamType !== FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is not READ");
                 }
@@ -185,7 +185,7 @@ function FileStream(params) {
             enumerable: true
         },
         'write': {
-            value: function(data) {
+            value: function (data) {
                 if (_closed || (_streamType === FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is READ");
                 }
@@ -231,8 +231,8 @@ Object.defineProperties(FileStream.StreamType, {
         enumerable: true
     },
     'hasValue': {
-        value: function(valueToFind) {
-            return Object.keys(FileStream.StreamType).some(function(element, index, array) {
+        value: function (valueToFind) {
+            return Object.keys(FileStream.StreamType).some(function (element, index, array) {
                 return FileStream.StreamType[element] === valueToFind;
             });
 
@@ -251,8 +251,8 @@ Object.defineProperties(FileStream.ContentMode, {
         enumerable: true
     },
     'hasValue': {
-        value: function(valueToFind) {
-            return Object.keys(FileStream.ContentMode).some(function(element, index, array) {
+        value: function (valueToFind) {
+            return Object.keys(FileStream.ContentMode).some(function (element, index, array) {
                 return FileStream.ContentMode[element] === valueToFind;
             });
         },

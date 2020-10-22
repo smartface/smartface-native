@@ -172,7 +172,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }).join('&');
 
                 if (uriScheme.indexOf("|") !== -1) {
-                    configureIntent.call(this, uriScheme);
+                    configureIntent.call(intent, uriScheme);
                     uriObject = NativeUri.parse(params);
                 } else {
                     let uri = uriScheme + "?" + params;
@@ -180,7 +180,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             } else {
                 if (uriScheme.indexOf("|") !== -1)
-                    configureIntent.call(this, uriScheme);
+                    configureIntent.call(intent, uriScheme);
                 else
                     uriObject = NativeUri.parse(uriScheme);
             }
@@ -351,11 +351,7 @@ ApplicationWrapper.setRootController = function(params) {
 function configureIntent(uriScheme) {
     const intent = this;
     let classActivityNameArray = uriScheme.split("|");
-    // JS string pass causes parameter mismatch
-    const NativeString = requireClass("java.lang.String");
-    let className = new NativeString(classActivityNameArray[0]);
-    let activityName = new NativeString(classActivityNameArray[1]);
-    intent.setClassName(className, activityName);
+    intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
 }
 
 function attachSliderDrawer(sliderDrawer) {

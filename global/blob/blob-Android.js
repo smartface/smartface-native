@@ -43,8 +43,8 @@ function Blob(parts, properties) {
 
     this.toBase64 = function () {
         const NativeBase64 = requireClass("android.util.Base64");
-        var byteArray = self.nativeObject.toByteArray();
-        var encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.DEFAULT);
+        let byteArray = self.nativeObject.toByteArray();
+        let encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.NO_WRAP);
         return encodedString;
     };
 
@@ -60,8 +60,8 @@ function Blob(parts, properties) {
  */
 Blob.createFromBase64 = function (base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
-    var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);
-    var newBlob = new Blob(byteArray, {
+    let byteArray = NativeBase64.decode(base64String, NativeBase64.NO_WRAP);
+    let newBlob = new Blob(byteArray, {
         type: "image"
     });
     return newBlob;
