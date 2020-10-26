@@ -19,7 +19,6 @@ function VideoView(params) {
         // CENTER_IN_PARENT, TRUE
         layoutParams.addRule(13, -1);
         this.nativeInner = new NativeVideoView(AndroidConfig.activity);
-        this.nativeInner.setUseController(false);
         this.nativeObject.addView(this.nativeInner, layoutParams);
         this.nativeObject.setGravity(17);
     }
