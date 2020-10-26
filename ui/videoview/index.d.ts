@@ -211,11 +211,23 @@ declare class VideoView extends View {
  * @property {UI.Page} page
  * @ios
  * @android
- * @since 0.1
+ * @since 4.3.1
  */
     page: Page | null;
 
   ios: View['ios'] & {
+
+/**
+ * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
+ *
+ * @property {UI.Page} page
+ * @ios
+ * @since 0.1
+ * @deprecated 4.3.1 Use {@link UI.VideoView#page} instead.
+ */
+    page: Page | null;
+
+
 /**
  * A Boolean value that determines whether the player automatically displays in full screen when the play button is tapped.
  *
