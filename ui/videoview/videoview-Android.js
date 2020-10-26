@@ -2,8 +2,9 @@
 const View = require('../view');
 const Exception = require("../../util/exception");
 const AndroidConfig = require('../../util/Android/androidconfig');
-const NativeVideoView = requireClass('android.widget.VideoView');
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
+const NativeVideoView = requireClass('io.smartface.android.sfcore.ui.videoview.SFVideoView')
+const NativePlayer = requireClass('com.google.android.exoplayer2.Player');
 
 VideoView.prototype = Object.create(View);
 function VideoView(params) {
@@ -18,6 +19,7 @@ function VideoView(params) {
         // CENTER_IN_PARENT, TRUE
         layoutParams.addRule(13, -1);
         this.nativeInner = new NativeVideoView(AndroidConfig.activity);
+        this.nativeInner.setUseController(false);
         this.nativeObject.addView(this.nativeInner, layoutParams);
         this.nativeObject.setGravity(17);
     }
@@ -26,97 +28,104 @@ function VideoView(params) {
     const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
     const NativeMediaController = requireClass('android.widget.MediaController');
 
-    var _onReady;
-    var _onFinish;
-    var _nativeMediaPlayer;
+    let _onReady,
+        _onFinish,
+        _nativeMediaPlayer,
+        _page;
     Object.defineProperties(this, {
         'play': {
-            value: function() {
-                this.nativeInner.start();
+            value: function () {
+                this.nativeInner.getPlayer().play();
             }
         },
         'pause': {
-            value: function() {
-                this.nativeInner.pause();
+            value: function () {
+                this.nativeInner.getPlayer().pause();
             }
         },
         'stop': {
-            value: function() {
-                this.nativeInner.pause();
-                this.nativeInner.seekTo(0);
+            value: function () {
+                this.nativeInner.getPlayer().pause();
+                this.nativeInner.getPlayer().seekTo(0);
             }
         },
         'isPlaying': {
-            value: function() {
-                return this.nativeInner.isPlaying();
+            value: function () {
+                return this.nativeInner.getPlayer().isPlaying();
             }
         },
         'setLoopEnabled': {
-            value: function(enabled) {
-                _nativeMediaPlayer && _nativeMediaPlayer.setLooping(enabled);
+            value: function (enabled) {
+                this.nativeInner.getPlayer().setRepeatMode(enabled ? NativePlayer.REPEAT_MODE_ALL : NativePlayer.REPEAT_MODE_OFF);
             }
         },
         'loadURL': {
-            value: function(url) {
-                const NativeURI = requireClass('android.net.Uri');
-                var uri = NativeURI.parse(url);
-                this.nativeInner.setVideoURI(uri);
+            value: function (url) {
+                this.nativeInner.setUri(url);
             }
         },
         'loadFile': {
-            value: function(file) {
+            value: function (file) {
                 const File = require("../../io/file");
 
                 if (!(file instanceof File) || !(file.exists)) {
                     throw new TypeError(Exception.TypeError.FILE);
                 }
-                this.nativeInner.setVideoPath(file.fullPath);
+                this.nativeInner.setUri(file.fullPath);
             }
         },
         'onReady': {
-            get: function() {
+            get: function () {
                 return _onReady
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onReady = callback
+                this.nativeInner.setOnReady(_onReady);
             }
         },
         'onFinish': {
-            get: function() {
+            get: function () {
                 return _onFinish
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onFinish = callback
+                this.nativeInner.setOnFinish(_onFinish);
             }
         },
         'seekTo': {
-            value: function(milliseconds) {
-                _nativeMediaPlayer && _nativeMediaPlayer.seekTo(milliseconds);
+            value: function (milliseconds) {
+                this.nativeInner.getPlayer().seekTo(milliseconds);
             }
         },
         'totalDuration': {
-            get: function() {
-                return (_nativeMediaPlayer) ? _nativeMediaPlayer.getDuration() : -1;
+            get: function () {
+                return this.nativeInner.getPlayer().getDuration();
             }
         },
         'currentDuration': {
-            get: function() {
-                return (_nativeMediaPlayer) ? _nativeMediaPlayer.getCurrentPosition() : -1;
+            get: function () {
+                return this.nativeInner.getPlayer().getCurrentPosition();
             }
         },
         'setVolume': {
-            value: function(volume) {
-                _nativeMediaPlayer && _nativeMediaPlayer.setVolume(volume, volume);
+            value: function (volume) {
+                this.nativeInner.getPlayer().getAudioComponent().setVolume(volume);
             }
         },
         'setControllerEnabled': {
-            value: function(enabled) {
-                var controller = enabled ? new NativeMediaController(AndroidConfig.activity) : null;
-                this.nativeInner.setMediaController(controller);
+            value: function (enabled) {
+                this.nativeInner.setUseController(enabled);
+            }
+        },
+        'page': {
+            get: () => _page,
+            set: (page) => {
+                _page = page;
+                _page.nativeObject.getLifecycle().addObserver(this.nativeInner);
             }
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'VideoView';
             },
             enumerable: true,
@@ -124,40 +133,42 @@ function VideoView(params) {
         },
         // Overrided property because videoview does not support background stuffs.
         'backgroundImage': {
-            get: function() {},
-            set: function(backgroundImage) {},
+            get: function () { },
+            set: function (backgroundImage) { },
             enumerable: true,
             configurable: true
         },
         'backgroundColor': {
-            get: function() {},
-            set: function(backgroundColor) {},
+            get: function () { },
+            set: function (backgroundColor) { },
             enumerable: true,
             configurable: true
         },
         'borderColor': {
-            get: function() {},
-            set: function(value) {},
+            get: function () { },
+            set: function (value) { },
             enumerable: true,
             configurable: true
         },
         'borderRadius': {
-            get: function() {},
-            set: function(borderRadius) {},
+            get: function () { },
+            set: function (borderRadius) { },
             enumerable: true,
             configurable: true
         },
         'borderWidth': {
-            get: function() {},
-            set: function(borderRadius) {},
+            get: function () { },
+            set: function (borderRadius) { },
             enumerable: true,
             configurable: true
         },
     });
 
+
+
     // TODO: Set this listener after onReady callback is set.
     this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
-        onPrepared: function(mediaPlayer) {
+        onPrepared: function (mediaPlayer) {
             _nativeMediaPlayer = mediaPlayer;
 
             _onReady && _onReady();
@@ -166,7 +177,7 @@ function VideoView(params) {
 
     // TODO: Set this listener after onFinish callback is set.
     this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
-        onCompletion: function(mediaPlayer) {
+        onCompletion: function (mediaPlayer) {
             _onFinish && _onFinish();
         }
     }));
