@@ -9,8 +9,10 @@ function VideoView(params) {
 
     var self = this;
 
+    self.backgroundModeEnabled = false;
     if (!self.nativeObject) {
         if (params && params.backgroundModeEnabled){
+            self.backgroundModeEnabled = true;
             self.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(true);
         }else{
             self.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(false);
