@@ -184,19 +184,19 @@ function VideoView(params) {
     };
 
     self.avPlayerViewController.didStopPictureInPicture = function() {
-        self.didStopPictureInPicture && self.didStopPictureInPicture();
+        self.ios && self.ios.didStopPictureInPicture && self.ios.didStopPictureInPicture();
     };
 
     self.avPlayerViewController.didStartPictureInPicture = function() {
-        self.didStartPictureInPicture && self.didStartPictureInPicture();
+        self.ios && self.ios.didStartPictureInPicture && self.ios.didStartPictureInPicture();
     };
 
     self.avPlayerViewController.willStopPictureInPicture = function() {
-        self.willStopPictureInPicture && self.willStopPictureInPicture();
+        self.ios && self.ios.willStopPictureInPicture && self.ios.willStopPictureInPicture();
     };
 
     self.avPlayerViewController.willStartPictureInPicture = function() {
-        self.willStartPictureInPicture && self.willStartPictureInPicture();
+        self.ios && self.ios.willStartPictureInPicture && self.ios.willStartPictureInPicture();
     };
 
     if (params) {
