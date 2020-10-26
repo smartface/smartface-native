@@ -219,13 +219,14 @@ VideoView.prototype.setVolume = function(volume) {};
 VideoView.prototype.setControllerEnabled = function(enabled) {};
 
 /**
- * Gets/Sets the page where the videoview is put.
+ * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
  *
  * @property {UI.Page} page
  * @ios
+ * @android
  * @since 0.1
  */
-VideoView.prototype.ios.page = null;
+VideoView.prototype.page = null;
 
 /**
  * A Boolean value that determines whether the player automatically displays in full screen when the play button is tapped.
