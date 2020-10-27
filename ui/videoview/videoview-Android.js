@@ -116,7 +116,7 @@ function VideoView(params) {
             get: () => _page,
             set: (page) => {
                 _page = page;
-                _page.nativeObject.getLifecycle().addObserver(this.nativeInner);
+                this.nativeInner.setPage(page.nativeObject);
             }
         },
         'backgroundModeEnabled': {
