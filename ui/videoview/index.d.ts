@@ -187,7 +187,9 @@ declare class VideoView extends View {
 
 /**
  * Configure your app to continue playing video when it goes into the background.
- *
+ * For iOS, you must add the following key to info.plist.
+ * `<key>UIBackgroundModes</key><array><string>audio</string></array>`
+ * 
  * @property {Boolean} backgroundModeEnabled
  * @android
  * @ios
