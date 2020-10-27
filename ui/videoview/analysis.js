@@ -197,6 +197,16 @@ VideoView.prototype.totalDuration;
 VideoView.prototype.currentDuration;
 
 /**
+ * Configure your app to continue playing video when it goes into the background.
+ *
+ * @property {Boolean} backgroundModeEnabled
+ * @android
+ * @ios
+ * @since 4.3.1
+ */
+VideoView.prototype.backgroundModeEnabled;
+
+/**
  * This function sets the volume of the video clip. The range is between {0.0, 1.0}
  *
  * @method setVolume

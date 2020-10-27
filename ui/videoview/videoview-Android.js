@@ -119,6 +119,13 @@ function VideoView(params) {
                 _page.nativeObject.getLifecycle().addObserver(this.nativeInner);
             }
         },
+        'backgroundModeEnabled':{
+            get: () => _backgroundModeEnabled,
+            set: (value) => {
+                _backgroundModeEnabled = value;
+                this.nativeInner.allowBackgroundRunning(_backgroundModeEnabled);
+            }
+        },
         'toString': {
             value: function () {
                 return 'VideoView';
@@ -156,7 +163,7 @@ function VideoView(params) {
             set: function (borderRadius) { },
             enumerable: true,
             configurable: true
-        },
+        }
     });
 
     let _enableStateSaving;

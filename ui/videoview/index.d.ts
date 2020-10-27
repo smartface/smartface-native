@@ -184,6 +184,17 @@ declare class VideoView extends View {
  * @since 0.1
  */
   currentDuration: number;
+
+/**
+ * Configure your app to continue playing video when it goes into the background.
+ *
+ * @property {Boolean} backgroundModeEnabled
+ * @android
+ * @ios
+ * @since 4.3.1
+ */
+  backgroundModeEnabled: boolean;
+
 /**
  * This function sets the volume of the video clip. The range is between {0.0, 1.0}
  *
