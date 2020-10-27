@@ -98,7 +98,19 @@ function VideoView(params) {
     self.ios = {};
 
     var _page;
-    Object.defineProperty(self.ios, 'page', {
+    Object.defineProperty(self.ios, 'page', { //Deprecated
+        get: function() {
+            return _page;
+        },
+        set: function(value) {
+            _page = value;
+            self.avPlayerViewController.removeFromParentViewController();
+            value.nativeObject.addChildViewController(self.avPlayerViewController);
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(self, 'page', {
         get: function() {
             return _page;
         },
@@ -169,6 +181,22 @@ function VideoView(params) {
     
     self.setControllerEnabled = function(value) {
         self.avPlayerViewController.showsPlaybackControls = value;
+    };
+
+    self.avPlayerViewController.didStopPictureInPicture = function() {
+        self.ios && self.ios.didStopPictureInPicture && self.ios.didStopPictureInPicture();
+    };
+
+    self.avPlayerViewController.didStartPictureInPicture = function() {
+        self.ios && self.ios.didStartPictureInPicture && self.ios.didStartPictureInPicture();
+    };
+
+    self.avPlayerViewController.willStopPictureInPicture = function() {
+        self.ios && self.ios.willStopPictureInPicture && self.ios.willStopPictureInPicture();
+    };
+
+    self.avPlayerViewController.willStartPictureInPicture = function() {
+        self.ios && self.ios.willStartPictureInPicture && self.ios.willStartPictureInPicture();
     };
 
     if (params) {
