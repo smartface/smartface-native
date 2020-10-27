@@ -229,7 +229,7 @@ VideoView.prototype.setControllerEnabled = function(enabled) {};
 VideoView.prototype.page = null;
 
 /**
- * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
+ * Gets/Sets the page where the videoview is assigned. In Android, Page is mandatory to release video resources based on your configurations. 
  *
  * @property {UI.Page} page
  * @ios
@@ -255,5 +255,15 @@ VideoView.prototype.ios.entersFullScreenWhenPlaybackBegins = false;
  * @since 4.1.4
  */
 VideoView.prototype.ios.exitsFullScreenWhenPlaybackEnds = false;
+
+
+/**
+ * Enables state saving of the videoview. Saves the configuration with video's current position.
+ *
+ * @property  {Boolean} [enableStateSaving = true]
+ * @android
+ * @since 4.3.1
+ */
+VideoView.prototype.enableStateSaving = true;
 
 module.exports = VideoView;

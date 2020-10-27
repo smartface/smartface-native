@@ -24,12 +24,8 @@ function VideoView(params) {
     }
     View.call(this);
 
-    const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
-    const NativeMediaController = requireClass('android.widget.MediaController');
-
     let _onReady,
         _onFinish,
-        _nativeMediaPlayer,
         _page;
     Object.defineProperties(this, {
         'play': {
@@ -163,23 +159,16 @@ function VideoView(params) {
         },
     });
 
-
-
-    // TODO: Set this listener after onReady callback is set.
-    this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
-        onPrepared: function (mediaPlayer) {
-            _nativeMediaPlayer = mediaPlayer;
-
-            _onReady && _onReady();
+    let _enableStateSaving;
+    Object.defineProperties(this.android, {
+        'enableStateSaving': {
+            get:() => _enableStateSaving,
+            set:(value) => {
+                _enableStateSaving = value
+                this.nativeInner.setStateful(_enableStateSaving);
+            }
         }
-    }));
-
-    // TODO: Set this listener after onFinish callback is set.
-    this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
-        onCompletion: function (mediaPlayer) {
-            _onFinish && _onFinish();
-        }
-    }));
+    })
 
     // Assign parameters given in constructor
     if (params) {

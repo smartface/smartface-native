@@ -245,5 +245,16 @@ declare class VideoView extends View {
  */
     exitsFullScreenWhenPlaybackEnds: boolean;
   }
+
+    android: View['android'] & {
+ /**
+ * Enables state saving of the videoview. Saves the configuration with video's current position.
+ *
+ * @property  {Boolean} [enableStateSaving = true]
+ * @android
+ * @since 4.3.1
+ */
+    enableStateSaving: boolean;
+   }
 }
 export = VideoView;
