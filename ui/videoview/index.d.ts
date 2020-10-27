@@ -187,7 +187,9 @@ declare class VideoView extends View {
 
 /**
  * Configure your app to continue playing video when it goes into the background.
- *
+ * For iOS, you must add the following key to info.plist.
+ * `<key>UIBackgroundModes</key><array><string>audio</string></array>`
+ * 
  * @property {Boolean} backgroundModeEnabled
  * @android
  * @ios
@@ -255,7 +257,45 @@ declare class VideoView extends View {
  * @since 4.1.4
  */
     exitsFullScreenWhenPlaybackEnds: boolean;
-  }
+
+/**
+ * Picture in Picture has stopped.
+ * 
+ * @event didStopPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+  didStopPictureInPicture: () => void;
+
+/**
+ * Picture in Picture has started.
+ * 
+ * @event didStartPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+  didStartPictureInPicture: () => void;
+/**
+ * Picture in Picture is about to stop.
+ * 
+ * @event willStopPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+  willStopPictureInPicture: () => void;
+/**
+ * Picture in Picture is about to start.
+ * 
+ * @event willStartPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+  willStartPictureInPicture: () => void;
+}
 
     android: View['android'] & {
  /**
