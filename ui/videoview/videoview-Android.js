@@ -119,7 +119,7 @@ function VideoView(params) {
                 _page.nativeObject.getLifecycle().addObserver(this.nativeInner);
             }
         },
-        'backgroundModeEnabled':{
+        'backgroundModeEnabled': {
             get: () => _backgroundModeEnabled,
             set: (value) => {
                 _backgroundModeEnabled = value;
@@ -166,15 +166,122 @@ function VideoView(params) {
         }
     });
 
-    let _enableStateSaving;
+    const SHOW_BUFFERING_ALWAYS = 2,
+        SHOW_BUFFERING_NEVER = 0;
+    let _enableStateSaving,
+        _backgroundColor, _onFullScreenModeChanged,
+        _showLoadingIndicator, _nextButtonEnabled,
+        _fastForwardButtonEnabled, _rewindButtonEnabled,
+        _previousButtonEnabled, _controllerShowTimeoutMs;
     Object.defineProperties(this.android, {
-        'enableStateSaving': {
-            get:() => _enableStateSaving,
-            set:(value) => {
+        'stateSavingEnabled': {
+            get: () => _enableStateSaving,
+            set: (value) => {
                 _enableStateSaving = value
                 this.nativeInner.setStateful(_enableStateSaving);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'customErrorMessage': {
+            get: () => _customErrorMessage,
+            set: (value) => {
+                _customErrorMessage = value
+                this.nativeInner.setCustomErrorMessage(_customErrorMessage);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'backgroundColor': {
+            get: () => _backgroundColor,
+            set: (value) => {
+                _backgroundColor = value;
+                this.nativeInner.setBackgroundColor(_backgroundColor.nativeObject);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'onFullScreenModeChanged': {
+            get: () => {
+                return _onFullScreenModeChanged
+            },
+            set: (callback) => {
+                _onFullScreenModeChanged = callback
+                this.nativeInner.setFullScreenModeChangedCallback(_onFullScreenModeChanged);
             }
-        }
+        },
+        'loadingIndicatorEnabled': {
+            get: () => {
+                return _showLoadingIndicator
+            },
+            set: (value) => {
+                _showLoadingIndicator = value
+                this.nativeInner.setShowBuffering(_showLoadingIndicator ? SHOW_BUFFERING_ALWAYS : SHOW_BUFFERING_NEVER);
+            }
+        },
+        'nextButtonEnabled': {
+            get: () => {
+                return _nextButtonEnabled;
+            },
+            set: (value) => {
+                _nextButtonEnabled = value
+                this.nativeInner.setShowNextButton(_nextButtonEnabled);
+            }
+        },
+        'fastForwardButtonEnabled': {
+            get: () => {
+                return _fastForwardButtonEnabled;
+            },
+            set: (value) => {
+                _fastForwardButtonEnabled = value
+                this.nativeInner.setShowFastForwardButton(_fastForwardButtonEnabled);
+            }
+        },
+        'rewindButtonEnabled': {
+            get: () => {
+                return _rewindButtonEnabled;
+            },
+            set: (value) => {
+                _rewindButtonEnabled = value
+                this.nativeInner.setShowRewindButton(_rewindButtonEnabled);
+            }
+        },
+        'previousButtonEnabled': {
+            get: () => {
+                return _previousButtonEnabled;
+            },
+            set: (value) => {
+                _previousButtonEnabled = value
+                this.nativeInner.setShowPreviousButton(_previousButtonEnabled);
+            }
+        },
+        'controllerShowTimeoutMs': {
+            get: () => {
+                return _controllerShowTimeoutMs
+            },
+            set: (value) => {
+                _controllerShowTimeoutMs = value
+                this.nativeInner.setControllerShowTimeoutMs(_controllerShowTimeoutMs);
+            }
+        },
+        'onControllerVisibilityChange': {
+            get: () => {
+                return _onControllerVisibilityChange
+            },
+            set: (value) => {
+                _onControllerVisibilityChange = value
+                this.nativeInner.setOnControllerVisibilityCallback(_onControllerVisibilityChange);
+            }
+        },
+        'showController': {
+            get: () => {
+                return _showController
+            },
+            set: (value) => {
+                _showController = value
+                this.nativeInner.showController(_showController);
+            }
+        },
     })
 
     // Assign parameters given in constructor

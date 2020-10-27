@@ -261,11 +261,123 @@ declare class VideoView extends View {
  /**
  * Enables state saving of the videoview. Saves the configuration with video's current position.
  *
- * @property  {Boolean} [enableStateSaving = true]
+ * @property  {Boolean} [stateSavingEnabled = true]
  * @android
  * @since 4.3.1
  */
-    enableStateSaving: boolean;
+    stateSavingEnabled: boolean;
+
+
+/**
+ * Sets a custom error message to be displayed by the view. The error message will be displayed
+ * permanently, unless it is cleared by passing null to this method.
+ *
+ * @property  {String} customErrorMessage
+ * @android
+ * @since 4.3.1
+ */
+    customErrorMessage: string
+
+/**
+ * Gets/sets background color of a view. It allows setting background
+ * color with UI.Color instance.
+ *
+ * @property {UI.Color} backgroundColor
+ * @android
+ * @since 4.3.1
+ */
+    backgroundColor: Color;
+
+/**
+ * Sets whether a loading indicator is displayed when the player is in the buffering state. 
+ * The loading indicatorr is not displayed by default.
+ *
+ * @property {Boolean} [loadingIndicatorEnabled = false]
+ * @android
+ * @since 4.3.1
+ */
+    loadingIndicatorEnabled: boolean;
+
+/**
+ * Setting this event makes the fullscreen button appear. The event to be notified when the fullscreen button is clicked, or null to remove the current listener and hide the fullscreen button.
+ *
+ * @event onFullScreenModeChanged
+ * @param {Function} callback
+ * @param {Boolean} callback.isFullScreen true if the video rendering surface should be fullscreen false otherwise.
+ * @android
+ * @since 4.3.1
+ */
+    onFullScreenModeChanged: (isFullScreen: boolean) => void;
+
+/**
+ * Sets whether the next button is shown.
+ *
+ * @property {Boolean} [nextButtonEnabled = true]
+ * @android
+ * @since 4.3.1
+ */
+    nextButtonEnabled: boolean;
+
+
+/**
+ * Sets whether the fast forward button is shown.
+ *
+ * @property {Boolean} [fastForwardButtonEnabled = true]
+ * @android
+ * @since 4.3.1
+ */
+    fastForwardButtonEnabled: boolean;
+
+/**
+ * Sets whether the rewind button is shown.
+ *
+ * @property {Boolean} [rewindButtonEnabled = true]
+ * @android
+ * @since 4.3.1
+ */
+    rewindButtonEnabled: boolean;
+
+/**
+ * Sets whether the previous button is shown.
+ *
+ * @property {Boolean} [previousButtonEnabled = true]
+ * @android
+ * @since 4.3.1
+ */
+    previousButtonEnabled: boolean;
+
+/**
+ * Sets the controller timeout. The controller is automatically hidden after this
+ * duration of time has elapsed without user input and with playback or loading in progress.
+ *
+ * @property {Number} controllerShowTimeoutMs The timeout in milliseconds. A non-positive value will cause the  ontroller to remain visible indefinitely.
+ * @android
+ * @since 4.3.1
+ */
+    controllerShowTimeoutMs: number;
+
+
+/**
+ * The event to be notified about controller visibility changes.
+ *
+ * @method onControllerVisibilityChange
+ * @param {Function} callback
+ * @param {Boolean} callback.visible true if the controller visible, otherwise false
+ * @android
+ * @since 4.3.1
+ */
+    onControllerVisibilityChange: (visible: boolean) => void;
+
+
+/**
+ * Sets controller visibility.
+ *
+ * @property {Boolean} showController
+ * @android
+ * @since 4.3.1
+ */
+    showController: boolean;
+
    }
 }
 export = VideoView;
