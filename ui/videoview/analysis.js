@@ -198,6 +198,8 @@ VideoView.prototype.currentDuration;
 
 /**
  * Configure your app to continue playing video when it goes into the background.
+ * For iOS, you must add the following key to info.plist.
+ * `<key>UIBackgroundModes</key><array><string>audio</string></array>`
  *
  * @property {Boolean} backgroundModeEnabled
  * @android
@@ -227,6 +229,46 @@ VideoView.prototype.setVolume = function(volume) {};
  * @since 0.1
  */
 VideoView.prototype.setControllerEnabled = function(enabled) {};
+
+/**
+ * Picture in Picture has stopped.
+ *
+ * @event didStopPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.didStopPictureInPicture = function() {};
+
+/**
+ * Picture in Picture has started.
+ *
+ * @event didStartPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.didStartPictureInPicture = function() {};
+
+/**
+ * Picture in Picture is about to stop.
+ *
+ * @event willStopPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.willStopPictureInPicture = function() {};
+
+/**
+ * Picture in Picture is about to start.
+ *
+ * @event willStartPictureInPicture
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.willStartPictureInPicture = function() {};
 
 /**
  * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
