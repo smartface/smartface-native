@@ -252,6 +252,7 @@ declare const Application: {
 		chooserTitle?: string;
 		action?: string;
     }) => void;
+	ios: {
 /**
  * The event is called when a user taps a universal link.
  * 
@@ -263,7 +264,6 @@ declare const Application: {
  * @since 3.1.2
  */
 	onUserActivityWithBrowsingWeb: (url: string) => boolean;
-	ios: {
 /**
  * Application bundle identifier.
  * 

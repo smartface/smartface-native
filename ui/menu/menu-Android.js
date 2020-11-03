@@ -46,6 +46,8 @@ function Menu(params) {
                     headerTitle: _headerTitle
                 };
                 layoutNativeObject.showContextMenu();
+                //Menu being shown by long press. To prevent it, unregister after showing. 
+                pageNativeObject.unregisterForContextMenu(layoutNativeObject);
             },
             enumerable: true
         },
