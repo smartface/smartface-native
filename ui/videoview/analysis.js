@@ -432,4 +432,15 @@ VideoView.prototype.onControllerVisibilityChange;
  */
 VideoView.prototype.showController;
 
+
+/**
+ * Sets the full screen button image to minimize/maximize manually. If the {@link UI.VideoView#onFullScreenModeChanged onFullScreenModeChanged} callback wasn't assign, there won't be any changes. 
+ *
+ * @method setFullScreenButtonImage
+ * @param {Boolean} isInFullScreen  if true, full screen button image will be minimize. 
+ * @android
+ * @since 4.3.1
+ */
+VideoView.prototype.setFullScreenButtonImage;
+
 module.exports = VideoView;

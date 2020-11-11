@@ -61,7 +61,7 @@ declare namespace Page {
 			UIInterfaceOrientation.portrait,
 			UIInterfaceOrientation.portraitUpsideDown
 		];
-		LANDSCAPELEF: [UIInterfaceOrientation.landscapeLeft];
+		LANDSCAPELEFT: [UIInterfaceOrientation.landscapeLeft];
 		LANDSCAPERIGHT: [UIInterfaceOrientation.landscapeRight];
 		AUTOLANDSCAPE: [
 			UIInterfaceOrientation.landscapeLeft,

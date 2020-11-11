@@ -282,6 +282,11 @@ function VideoView(params) {
                 this.nativeInner.showController(_showController);
             }
         },
+        'setFullScreenButtonImage': {
+            value: (isInFullScreen) => {
+                this.nativeInner.setFullscreenDrawable(isInFullScreen);
+            }
+        }
     })
 
     // Assign parameters given in constructor
