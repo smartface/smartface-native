@@ -129,28 +129,27 @@ function Dialog(params) {
     };
 
     var skipDefaults = false;
-    if (params && (params.skipDefaults || _isTransparent))
+    if (params && (params.skipDefaults || _isTransparent)) 
         skipDefaults = true;
 
     var dialogWindow, colorDrawable;
     if (!skipDefaults) {
-        // View.Window.FEATURE_NO_TITLE
-        this.nativeObject.requestWindowFeature(1);
-        this.nativeObject.setContentView(_layout.nativeObject);
         dialogWindow = this.nativeObject.getWindow();
         colorDrawable = new NativeColorDrawable((Color.create(58, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
         dialogWindow.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+         // View.Window.FEATURE_NO_TITLE
+        this.nativeObject.requestWindowFeature(1);
+        this.nativeObject.setContentView(_layout.nativeObject);
     } else {
         const Application = require("../../application");
 
         dialogWindow = this.nativeObject.getWindow();
         dialogWindow.setGravity(80);
-        this.nativeObject.setContentView(this.layout.nativeObject);
-
         colorDrawable = new NativeColorDrawable((Color.create(0, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
+        this.nativeObject.setContentView(this.layout.nativeObject);
 
         var isStatusBarVisible = Application.statusBar.visible;
         var statusBarHeight = 0;
@@ -173,6 +172,7 @@ function Dialog(params) {
     }
 }
 
+//ToDo: Holo themes are deprecated. Migrate to material themes or AppCompats.
 Dialog.Android = {};
 Dialog.Android.Style = {
     ThemeDefault: 16974065, //Theme_Holo_Light_NoActionBar_Fullscreen
