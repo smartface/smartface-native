@@ -97,7 +97,9 @@ function Page(params) {
                                 remote: parsedJson
                             });
                             Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
-                            spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON); //clears notification_json intent
+                            //clears notification intent extras
+                            spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON); 
+                            spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_CLICKED);
                         } catch (e) {
                             new Error("An error occured while getting notification json");
                         }
