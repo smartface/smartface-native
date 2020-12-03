@@ -26,36 +26,41 @@ import View = require("sf-core/ui/view");
  *     page.layout.addChild(myBlurView);
  */
 declare class BlurView extends View  {
-	constructor(params?: any);
-    /**
-     * Gets/sets the blur radius. The value range is between (0, 25].
-     * @property {Number} [blurRadius=16]
-     * @android
-     * @since 4.3.1
-     */
-    blurRadius: number;
-    /**
-     * Gets/sets the root to start blur from.
-     * @property {UI.FlexLayout} rootView
-     * @android
-     * @since 4.3.1
-     */
-    rootView: View;
-    /**
-     * Gets/sets the color overlay to be drawn on top of blurred content.
-     * @property {UI.Color} overlayColor
-     * @android
-     * @since 4.3.1
-     */
-    overlayColor: Color;
+    constructor(params?: any);
+    
+	android: View['android'] & {
+        /**
+         * Gets/sets the blur radius. The value range is between (0, 25].
+         * @property {Number} [blurRadius=16]
+         * @android
+         * @since 4.3.1
+         */
+        blurRadius: number;
+        /**
+         * Gets/sets the root to start blur from.
+         * @property {UI.FlexLayout} rootView
+         * @android
+         * @since 4.3.1
+         */
+        rootView: View;
+        /**
+         * Gets/sets the color overlay to be drawn on top of blurred content.
+         * @property {UI.Color} overlayColor
+         * @android
+         * @since 4.3.1
+         */
+        overlayColor: Color;
+    }
 
-    /**
-     * Gets/sets blur style.
-     * @property {UI.BlurView.iOS.EffectStyle} effectStyle
-     * @ios
-     * @since 4.3.1
-     */
-    effectStyle: BlurView.iOS.EffectStyle
+	ios: View['ios'] & { 
+        /**
+         * Gets/sets blur style.
+         * @property {UI.BlurView.iOS.EffectStyle} effectStyle
+         * @ios
+         * @since 4.3.1
+         */
+        effectStyle: BlurView.iOS.EffectStyle
+    }
 }
 
 declare namespace BlurView {
