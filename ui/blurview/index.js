@@ -1,0 +1,1 @@
+module.exports = require("./blurview-" + Device.deviceOS);

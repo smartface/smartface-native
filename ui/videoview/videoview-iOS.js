@@ -204,6 +204,8 @@ function VideoView(params) {
             this[param] = params[param];
         }
     }
+
+    self.android.setFullScreenButtonImage = () => {};
 }
 
 module.exports = VideoView;
