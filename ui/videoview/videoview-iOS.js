@@ -199,6 +199,28 @@ function VideoView(params) {
         self.ios && self.ios.willStartPictureInPicture && self.ios.willStartPictureInPicture();
     };
 
+    Object.defineProperty(self.ios, 'shouldAutomaticallyDismissAtPictureInPictureStart', {
+        get: function() {
+            return self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart;
+        },
+        set: function(value) {
+            self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart = value;
+        },
+        enumerable: true
+    });
+
+    var _restoreUserInterfaceForPictureInPictureStopWithCompletionHandler;
+    Object.defineProperty(self.ios, 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', {
+        get: function() {
+            return _restoreUserInterfaceForPictureInPictureStopWithCompletionHandler;
+        },
+        set: function(value) {
+            _restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = value;
+            self.avPlayerViewController.restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = value;
+        },
+        enumerable: true
+    });
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
