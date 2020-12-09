@@ -376,7 +376,7 @@ function TextBox(params) {
     });
 
     var _hintTextColor;
-    Object.defineProperty(this.android, 'hintTextColor', {
+    Object.defineProperty(this, 'hintTextColor', {
         get: function() {
             return _hintTextColor;
         },
