@@ -10,7 +10,7 @@
  *     myWebSocket.onOpen = function() {
  *         console.log("Web socket opened.");
  *         console.log("Send string.");
- *         myWebSocket.send("some data");
+ *         myWebSocket.send({data: "some data"});
  *     };
  * 
  *     myWebSocket.onClose = function(e) {
