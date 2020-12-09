@@ -14,7 +14,7 @@ function WebSocket(params) {
         throw new Error("url must be initialized.");
     }
     var _listener, _request, _client;
-    var _url = params.url;
+    var {url, headers} = params;
 
     createClientAndRequest();
     createWebSocketListener();
@@ -23,7 +23,7 @@ function WebSocket(params) {
     var _onOpenCallback, _onFailureCallback, _onMessageCallback, _onCloseCallback;
     Object.defineProperty(this, 'url', {
         get: function() {
-            return _url;
+            return url;
         },
         enumerable: true
     });
@@ -96,8 +96,12 @@ function WebSocket(params) {
         var clientBuilder = new OkHttpClient.Builder();
         _client = clientBuilder.build();
 
-        var builder = new OkHttpRequest.Builder().url(_url);
-        _request = builder.build();
+        var requestBuilder = new OkHttpRequest.Builder().url(url);
+
+        for(key in headers) {
+            requestBuilder.addHeader(key, headers[key]);
+        }
+        _request = requestBuilder.build();
     }
 
     function createWebSocketListener() {

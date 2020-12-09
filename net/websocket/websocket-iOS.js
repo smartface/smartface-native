@@ -7,8 +7,9 @@ const SRReadyState = {
     SR_CLOSED: 3
 }
 
-var webSocket = function WebSocket(params) {
+var webSocket = function WebSocket(params = {}) {
     var self = this;
+    let {url, headers} = params;
 
     if (!self.nativeObject) {
         var alloc;
@@ -24,14 +25,24 @@ var webSocket = function WebSocket(params) {
 
         var nsURL;
         var nsURLRequest;
-
-        if (params && params.url) {
-            nsURL = __SF_NSURL.URLWithString(params.url);
-            nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
-        } else {
+        if(!url) {
             throw new Error('invalid arguments');
         }
+        
+        nsURL = __SF_NSURL.URLWithString(url);
+        nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
 
+        if(headers) {
+            const Invocation = require('sf-core/util').Invocation;
+            var mutableRequest = Invocation.invokeInstanceMethod(nsURLRequest, "mutableCopy", [], "NSObject");
+            for(key in headers) {
+                let headerField = getHeaderKeyValue(key, headers[key]);
+                Invocation.invokeInstanceMethod(mutableRequest, "setValue:forHTTPHeaderField:", headerField);
+            }
+        
+            nsURLRequest = Invocation.invokeInstanceMethod(mutableRequest, "copy", [], "NSObject");
+        }
+        
         var socket;
         var invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance("initWithURLRequest:", alloc);
         if (invocationInit) {
@@ -229,5 +240,17 @@ var webSocket = function WebSocket(params) {
 
 };
 
+function getHeaderKeyValue(key, value) {
+    const Invocation = require('sf-core/util').Invocation;
+    var headerKey = new Invocation.Argument({
+        type: "NSString",
+        value: key
+    });
+    var headerValue = new Invocation.Argument({
+        type: "NSString",
+        value: value
+    });
+    return [headerValue, headerKey];
+}
 
 module.exports = webSocket;
