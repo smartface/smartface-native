@@ -107,17 +107,17 @@ function WebSocket(params) {
     function createWebSocketListener() {
         var overrideMethods = {
             onOpen: function() {
-                _onOpenCallback && runOnUiThread(_onOpenCallback);
+                _onOpenCallback && _onOpenCallback();
             },
             onMessage: function(data) {
                 if (typeof(data) === "string" || !data) {
-                    _onMessageCallback && runOnUiThread(_onMessageCallback, {
+                    _onMessageCallback && _onMessageCallback({
                         string: data
                     });
                 } else {
                     // TODO: onMessage doesn't invoke with bytestring parameter. 
                     // Check this implementation after AND-2702 bug is resolved.
-                    _onMessageCallback && runOnUiThread(_onMessageCallback, {
+                    _onMessageCallback && _onMessageCallback({
                         blob: new Blob(data.toByteArray(), {
                             type: ""
                         })
@@ -125,7 +125,7 @@ function WebSocket(params) {
                 }
             },
             onClosing: function(code, reason) {
-                _onCloseCallback && runOnUiThread(_onCloseCallback, {
+                _onCloseCallback && _onCloseCallback({
                     code: code,
                     reason: reason
                 });
@@ -133,7 +133,7 @@ function WebSocket(params) {
             onFailure: function(throwableMessage, responseCode) {
                 var code = responseCode;
                 var reason = throwableMessage;
-                _onFailureCallback && runOnUiThread(_onFailureCallback, {
+                _onFailureCallback && _onFailureCallback({
                     code: code,
                     reason: reason
                 });
@@ -151,14 +151,5 @@ function WebSocket(params) {
         }
     }
 
-}
-
-function runOnUiThread(callback, params) {
-    var runnable = Runnable.implement({
-        run: function() {
-            callback(params);
-        }
-    });
-    activity.runOnUiThread(runnable);
 }
 module.exports = WebSocket;
