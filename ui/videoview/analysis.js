@@ -271,6 +271,26 @@ VideoView.prototype.willStopPictureInPicture = function() {};
 VideoView.prototype.willStartPictureInPicture = function() {};
 
 /**
+ * Tells the delegate when Picture in Picture is about to stop, to give your app an opportunity to restore its video playback user interface.
+ *
+ * @event restoreUserInterfaceForPictureInPictureStopWithCompletionHandler
+ * @ios
+ * @param {Function} callback
+ * @param {Boolean} callback.parameter To allow the system to finish restoring your user interface, you must call the completion handler with a value of true.
+ * @since 4.3.1
+ */
+VideoView.prototype.restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = function() {};
+
+/**
+ * Asks the delegate whether the player view controller should automatically dismiss when Picture in Picture starts.
+ *
+ * @property {Boolean} shouldAutomaticallyDismissAtPictureInPictureStart
+ * @ios
+ * @since 4.3.1
+ */
+VideoView.prototype.ios.shouldAutomaticallyDismissAtPictureInPictureStart = false;
+    
+/**
  * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
  *
  * @property {UI.Page} page
