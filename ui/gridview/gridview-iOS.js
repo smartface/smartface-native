@@ -14,10 +14,7 @@ GridView.prototype = Object.create(View.prototype);
 // const GridView = extend(View)(
 function GridView(params) {
     var sfSelf = this;
-
     sfSelf.registeredIndentifier = [];
-
-    var CollectionViewClass = __SF_UICollectionView;
 
     var defaultflowLayout;
     if (params && params.layoutManager) {
@@ -26,24 +23,7 @@ function GridView(params) {
         throw new Error('GridView constructor must have layoutManager.');
     }
 
-    // CollectionViewClass Init Scope Using Invocation
-    var alloc = Invocation.invokeClassMethod(CollectionViewClass.name, "alloc", [], "id");
-    var argument = new Invocation.Argument({
-        type: "NSObject",
-        value: defaultflowLayout.nativeObject
-    });
-
-    var frame = new Invocation.Argument({
-        type: "CGRect",
-        value: {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0
-        }
-    });
-
-    var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame, argument], "NSObject");
+    var smfcollectionView = new __SF_UICollectionView(defaultflowLayout.nativeObject);
     smfcollectionView.numberOfSectionsCallback = function(collectionView) {
         return _sectionCount;
     };
