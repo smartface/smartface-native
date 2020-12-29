@@ -232,29 +232,11 @@ function ListView(params) {
     };
 
     self.listViewItemByIndex = function(index) {
-        var argActivityItems = new Invocation.Argument({
-            type: "NSInteger",
-            value: index
-        });
-        var argApplicationActivities = new Invocation.Argument({
-            type: "NSInteger",
-            value: 0
-        });
-
-        var indexPath = Invocation.invokeClassMethod("NSIndexPath", "indexPathForRow:inSection:", [argActivityItems, argApplicationActivities], "NSObject");
-
-        var argIndexPath = new Invocation.Argument({
-            type: "NSObject",
-            value: indexPath
-        });
-
-        var cell = Invocation.invokeInstanceMethod(self.nativeObject, "cellForRowAtIndexPath:", [argIndexPath], "NSObject");
-        if (cell) {
-            var uuid = Invocation.invokeInstanceMethod(cell, "uuid", [], "NSString");
-            return _listItemArray[uuid];
+        let uuid = self.nativeObject.getUUIDByIndex(index);
+        if(!uuid) {
+            return undefined
         }
-
-        return undefined
+        return _listItemArray[uuid];
     }
     
     self.indexByListViewItem = function(listViewItem){
