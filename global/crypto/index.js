@@ -1,1 +1,1 @@
-module.exports = require('./crypto-Android');
+module.exports = require('./crypto-' + Device.deviceOS);
