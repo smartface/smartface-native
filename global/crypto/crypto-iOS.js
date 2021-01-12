@@ -1,26 +1,45 @@
 
 function Crypto() {}
+Crypto.ios = {};
 
-const SFCrypto = new __SF_SMFRSA(1); 
+const SFCrypto = new __SF_SMFRSA(); 
 Crypto.generateKeyPair = function (params = {}) {
-    let {keySize, onResult} = params;
-    SFCrypto.generateKeyPair(keySize, function(params) {
-        onResult && onResult(params);
-    });
+    let {keySize} = params;
+    return SFCrypto.generateKeyPair(keySize);
 };
 
-Crypto.setPublicServerKey = function(key) {
-    SFCrypto.setPublicServerKey(key);
+Crypto.encrypt = function(params) {
+    let {plainText, useServerKey = false} = params;
+    return SFCrypto.encrypt(plainText, useServerKey);
 };
 
-Crypto.encrypt = function(params = {}) {
-    let {plainText, usePrivateKey, useServerKey = false} = params;
-    return SFCrypto.encrypt(plainText, usePrivateKey, useServerKey);
+Crypto.decrypt = function(params) {
+    let {encryptedText} = params;
+    return SFCrypto.decrypt(encryptedText);
 };
 
-Crypto.decrypt = function(params = {}) {
-    let {encryptedText, usePrivateKey} = params;
-    return SFCrypto.decrypt(encryptedText, usePrivateKey);
+Crypto.getBase64PublicString = function() {
+    return SFCrypto.toBase64String(false);
 };
+
+Crypto.getBase64PrivateString = function() {
+    return SFCrypto.toBase64String(true);
+};
+
+Crypto.setPrivateKey = function(base64String) {
+    SFCrypto.setPrivateKeyFromBase64String(base64String)
+};
+
+Crypto.setPublicKey = function(base64String) {
+    SFCrypto.setPublicKeyFromBase64String(base64String)
+};
+
+Crypto.setServerPublicKey = function(base64String) {
+    SFCrypto.setServerPublicKeyFromBase64String(base64String)
+};
+
+Crypto.ios.getExportedPublicKey = function () {
+    return SFCrypto.getExportedPublicKey();
+}
 
 module.exports = Crypto
