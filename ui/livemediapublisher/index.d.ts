@@ -203,7 +203,7 @@ declare namespace LiveMediaPublisher {
          * @ios
          * @since 4.2.2
          */
-        FRONT = 0,
+        FRONT = 1,
 
         /**
          * Back camera id
@@ -216,7 +216,7 @@ declare namespace LiveMediaPublisher {
          * @ios
          * @since 4.2.2
          */
-        BACK = 1
+        BACK = 0
     }
 
     /**
