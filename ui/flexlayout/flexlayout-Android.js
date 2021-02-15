@@ -3,7 +3,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const ViewGroup = require('../viewgroup');
 
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
-const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
+const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
 const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
 const NativeYogaFlexDirection = requireClass('com.facebook.yoga.YogaFlexDirection');
 const NativeYogaJustify = requireClass('com.facebook.yoga.YogaJustify');
@@ -16,12 +16,31 @@ const activity = AndroidConfig.activity;
 FlexLayout.prototype = Object.create(ViewGroup.prototype);
 
 function FlexLayout(params) {
+    var self = this;
     if (!this.nativeObject) {
-        this.nativeObject = new NativeYogaLayout(activity);
+        this.nativeObject = new NativeYogaLayout(activity, {
+            onInterceptTouchEvent: function(event) {
+                if(self.android.onInterceptTouchEvent) {
+                    return self.android.onInterceptTouchEvent();
+                } 
+            }
+        });
     }
 
     ViewGroup.call(this);
 
+    let _onInterceptTouchEvent;
+    Object.defineProperties(this.android, {
+        'onInterceptTouchEvent': {
+            get: () => {
+                return _onInterceptTouchEvent;
+            },
+            set: function(callback) {
+                _onInterceptTouchEvent = callback;
+            },
+            enumerable: true
+        }
+    });
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
