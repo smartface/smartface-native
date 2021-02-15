@@ -122,7 +122,21 @@ declare class FlexLayout extends ViewGroup {
  * @android
  * @ios
  */
-	applyLayout(): void;
+    applyLayout(): void;
+    
+	android: {
+        /**
+         * Allows you to watch events as they are dispatched to your children,
+         * and take ownership of the current gesture at any point.
+         *
+         * @event onInterceptTouchEvent
+         * @return {Boolean} Return true to steal motion events from the children
+         * @android
+         * @member UI.FlexLayout
+         * @since 0.1
+         */
+        onInterceptTouchEvent: () => boolean;
+    }
 }
 declare namespace FlexLayout {
 /**
