@@ -199,7 +199,7 @@ declare class ScrollView extends ViewGroup implements IFlexLayout {
 	 * @param {UI.ScrollView.Edge} edge
 	 * @since 0.1
 	 */
-	scrollToEdge(): void;
+	scrollToEdge(edge: ScrollView.Edge): void;
 	/**
 	 * Immediately scrolls to the given coordinate. Coordinate is X position for horizontal alignment and
 	 * Y position for vertical alignment.

@@ -126,7 +126,7 @@ dialogBackgroundColor: Color;
  * @ios
  * @since 0.1
  */
-  show(ok: {index: number}, cancel: () => void):void;
+  show(ok: (param: { index: number }) => void, cancel: () => void):void;
 /**
  * Gets/sets title of the picker. This property only works with show method. Must set before show method.
  *

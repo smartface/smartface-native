@@ -216,7 +216,7 @@ declare class VideoView extends View {
  * @param {Boolean} enabled
  * @since 0.1
  */
-  setControllerEnabled(enabled: string): void;
+  setControllerEnabled(enabled: boolean): void;
 
 /**
  * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
@@ -304,7 +304,7 @@ declare class VideoView extends View {
  * @param {Boolean} callback.parameter To allow the system to finish restoring your user interface, you must call the completion handler with a value of true.
  * @since 4.3.1
  */
-  restoreUserInterfaceForPictureInPictureStopWithCompletionHandler: () => void;
+  restoreUserInterfaceForPictureInPictureStopWithCompletionHandler: (callback: (parameter?: boolean) => void) => void;
 /**
  * Asks the delegate whether the player view controller should automatically dismiss when Picture in Picture starts.
  *

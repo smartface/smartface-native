@@ -321,6 +321,7 @@ declare const Application: {
  */
 	statusBar: StatusBar;
     LayoutDirection: LayoutDirection;
+	android: {
 /**
  * Triggered when user press back key. The default implementation finishes the application, 
  * but you can override this to do whatever you want.
@@ -330,9 +331,24 @@ declare const Application: {
  * @static
  * @since 3.2.0
  */
-	onBackButtonPressed: () => void;
-	android: {
-
+	    onBackButtonPressed: () => void;
+/**
+ * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.). 
+ * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
+ * 
+ *     @example
+ *     const Application = require("sf-core/application");
+ *     Application.android.dispatchTouchEvent = function(){
+ *        return true; //Consume all touches & do not pass to window
+ *     }
+ *
+ * @event dispatchTouchEvent
+ * @android
+ * @static
+ * @return {Boolean}
+ * @since 4.0.3
+ */
+        dispatchTouchEvent: () => boolean;
 /**
  * This event is called after Application.requestPermissions function. This event is 
  * fired asynchronous way, there is no way to make sure which request is answered.
@@ -635,23 +651,6 @@ declare const Application: {
  */
 			readonly WRITE_EXTERNAL_STORAGE: any
         };
-/**
- * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.). 
- * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
- * 
- *     @example
- *     const Application = require("sf-core/application");
- *     Application.android.dispatchTouchEvent = function(){
- *        return true; //Consume all touches & do not pass to window
- *     }
- *
- * @event dispatchTouchEvent
- * @android
- * @static
- * @return {Boolean}
- * @since 4.0.3
- */
-        dispatchTouchEvent: () => boolean;
 /**
  * Application package name.
  * 

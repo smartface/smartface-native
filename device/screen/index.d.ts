@@ -14,7 +14,7 @@ declare namespace Screen {
  * @static
  * @since 0.1
  */
-	const Orientation: {
+	const OrientationType: {
 /**
  * @property {String} PORTRAIT
  * @static

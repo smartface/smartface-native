@@ -134,6 +134,63 @@ declare class GridView extends View {
          * @since 3.2.0
          */
         snapToAlignment: GridView.Android.SnapAlignment;
+        /**
+         * Called when the GridView should save its layout state. This is a good time to save your scroll position, 
+         * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
+         *
+         * @method saveInstanceState
+         * @android
+         * @return {Object}
+         * @since 4.0.2
+         */
+        saveInstanceState(): any;
+        /**
+         * Called when the GridView should restore its layout state. This is a good time to restore your scroll position, 
+         * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
+         *
+         * @param {Object} state
+         * @method restoreInstanceState
+         * @android
+         * @since 4.0.2
+         */
+        restoreInstanceState(state: any): void;
+
+        /**
+         * Gets/sets over-scroll mode for this view.
+         *
+         * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+         * @android
+         * @since 3.2.1
+         */
+        overScrollMode: OverScrollMode;
+        /**
+         * This event is called when a scroll occurs. 
+         *
+         * @param {Object} params
+         * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+         * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+         * @return {Boolean} Return true if the event is consumed.
+         * @event onGesture
+         * @android
+         * @since 4.0.0
+         */
+        onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
+        /**
+         * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing. 
+         * 
+         * @event onAttachedToWindow
+         * @android
+         * @since 4.0.2
+         */
+        onAttachedToWindow: () => void;
+        /**
+         * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+         * 
+         * @event onDetachedFromWindow
+         * @android
+         * @since 4.0.2
+         */
+        onDetachedFromWindow: () => void;
     }
     ios: View['ios'] & {
         /**
@@ -144,6 +201,70 @@ declare class GridView extends View {
          * @since 4.1.2
          */
         decelerationRate: DecelerationRate;
+        /**
+         * Sets/Gets the bounce effect when scrolling.
+         *
+         * @property {Boolean} bounces
+         * @ios
+         * @since 3.2.1
+         */
+        bounces: boolean;
+        /**
+         * This event is called when the grid view is about to start scrolling the content.
+         * 
+         * @param {Object} contentOffset
+         * @param {Number} contentOffset.x
+         * @param {Number} contentOffset.y
+         * @event onScrollBeginDragging
+         * @ios
+         * @since 3.2.1
+         */
+        onScrollBeginDragging: (contentOffset: Point2D) => void;
+        /**
+         * This event is called when the grid view is starting to decelerate the scrolling movement.
+         * 
+         * @param {Object} contentOffset
+         * @param {Number} contentOffset.x
+         * @param {Number} contentOffset.y
+         * @event onScrollBeginDecelerating
+         * @ios
+         * @since 3.2.1
+         */
+        onScrollBeginDecelerating: (contentOffset: Point2D) => void;
+        onScrollEndDecelerating: (contentOffset: Point2D) => void;
+        onScrollEndDraggingWillDecelerate: (
+            contentOffset: Point2D,
+            decelerate: boolean
+        ) => void;
+        /**
+         * This event is called when the user finishes scrolling the content.
+         * 
+         * @param {Object} contentOffset
+         * @param {Number} contentOffset.x
+         * @param {Number} contentOffset.y
+         * @param {Object} velocity
+         * @param {Number} velocity.x
+         * @param {Number} velocity.y
+         * @param {Object} targetContentOffset
+         * @param {Number} targetContentOffset.x
+         * @param {Number} targetContentOffset.y
+         * @event onScrollEndDraggingWithVelocityTargetContentOffset
+         * @ios
+         * @since 3.2.1
+         */
+        onScrollEndDraggingWithVelocityTargetContentOffset: (
+            contentOffset: Point2D,
+            velocity: Point2D,
+            targetContentOffset: Point2D
+        ) => void;
+        /**
+         * The behavior for determining the adjusted content offsets.
+         *
+         * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+         * @ios
+         * @since 4.0.0
+         */
+        contentInsetAdjustmentBehavior: ContentInsetAdjustment;
     }
     /**
      * This event is called when a GridView starts to create a GridViewItem.
@@ -158,26 +279,6 @@ declare class GridView extends View {
      */
     onItemCreate: (type?: number) => GridViewItem;
     /**
-     * Gets/sets over-scroll mode for this view.
-     *
-     * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-     * @android
-     * @since 3.2.1
-     */
-    overScrollMode: OverScrollMode;
-    /**
-     * This event is called when a scroll occurs. 
-     *
-     * @param {Object} params
-     * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
-     * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
-     * @return {Boolean} Return true if the event is consumed.
-     * @event onGesture
-     * @android
-     * @since 4.0.0
-     */
-    onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
-    /**
      * This event is called when a UI.GridViewItem created at specified row index.
      * You can bind your data to row items inside this callback.
      *
@@ -189,14 +290,6 @@ declare class GridView extends View {
      * @since 3.0.2
      */
     onItemBind: (item?: GridViewItem, index?: number) => void;
-    /**
-     * The behavior for determining the adjusted content offsets.
-     *
-     * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
-     * @ios
-     * @since 4.0.0
-     */
-    contentInsetAdjustmentBehavior: ContentInsetAdjustment;
     /**
      * This event is called before onItemCreate callback. Returns item type you should use based on position.
      *
@@ -251,14 +344,6 @@ declare class GridView extends View {
      * @since 3.0.2
      */
     itemCount: number;
-    /**
-     * Sets/Gets the bounce effect when scrolling.
-     *
-     * @property {Boolean} bounces
-     * @ios
-     * @since 3.2.1
-     */
-    bounces: boolean;
     /**
      * Class for GridView layout calculation.
      * The layoutManager used to organize the collected view’s items.
@@ -346,26 +431,6 @@ declare class GridView extends View {
      */
     scrollTo(index: number, animated?: boolean): void;
     /**
-     * Called when the GridView should save its layout state. This is a good time to save your scroll position, 
-     * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
-     *
-     * @method saveInstanceState
-     * @android
-     * @return {Object}
-     * @since 4.0.2
-     */
-    saveInstanceState(): any;
-    /**
-     * Called when the GridView should restore its layout state. This is a good time to restore your scroll position, 
-     * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
-     *
-     * @param {Object} state
-     * @method restoreInstanceState
-     * @android
-     * @since 4.0.2
-     */
-    restoreInstanceState(state: any): void;
-    /**
      * This method cancels refresh operation and stops the refresh
      * indicator on a GridView. You should call this method after
      * finishing event inside onPullRefresh otherwise refresh indicator
@@ -418,70 +483,6 @@ declare class GridView extends View {
      * @since 3.0.2
      */
     itemByIndex(index: number): GridViewItem;
-    /**
-     * This event is called when the grid view is about to start scrolling the content.
-     * 
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @event onScrollBeginDragging
-     * @ios
-     * @since 3.2.1
-     */
-    onScrollBeginDragging: (contentOffset: Point2D) => void;
-    /**
-     * This event is called when the grid view is starting to decelerate the scrolling movement.
-     * 
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @event onScrollBeginDecelerating
-     * @ios
-     * @since 3.2.1
-     */
-    onScrollBeginDecelerating: (contentOffset: Point2D) => void;
-    /**
-     * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing. 
-     * 
-     * @event onAttachedToWindow
-     * @android
-     * @since 4.0.2
-     */
-    onAttachedToWindow: () => void;
-    /**
-     * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
-     * 
-     * @event onDetachedFromWindow
-     * @android
-     * @since 4.0.2
-     */
-    onDetachedFromWindow: () => void;
-    onScrollEndDecelerating: (contentOffset: Point2D) => void;
-    onScrollEndDraggingWillDecelerate: (
-        contentOffset: Point2D,
-        decelerate: boolean
-    ) => void;
-    /**
-     * This event is called when the user finishes scrolling the content.
-     * 
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @param {Object} velocity
-     * @param {Number} velocity.x
-     * @param {Number} velocity.y
-     * @param {Object} targetContentOffset
-     * @param {Number} targetContentOffset.x
-     * @param {Number} targetContentOffset.y
-     * @event onScrollEndDraggingWithVelocityTargetContentOffset
-     * @ios
-     * @since 3.2.1
-     */
-    onScrollEndDraggingWithVelocityTargetContentOffset: (
-        contentOffset: Point2D,
-        velocity: Point2D,
-        targetContentOffset: Point2D
-    ) => void;
 }
 
 
