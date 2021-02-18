@@ -4,17 +4,17 @@ Crypto.ios = {};
 
 const SFCrypto = new __SF_SMFRSA(); 
 Crypto.generateKeyPair = function (params = {}) {
-    let {keySize} = params;
+    const { keySize } = params;
     return SFCrypto.generateKeyPair(keySize);
 };
 
 Crypto.encrypt = function(params) {
-    let {plainText, useServerKey = false} = params;
+    const { plainText, useServerKey = false } = params;
     return SFCrypto.encrypt(plainText, useServerKey);
 };
 
 Crypto.decrypt = function(params) {
-    let {encryptedText} = params;
+    const { encryptedText } = params;
     return SFCrypto.decrypt(encryptedText);
 };
 
@@ -27,15 +27,15 @@ Crypto.getBase64PrivateString = function() {
 };
 
 Crypto.setPrivateKey = function(base64String) {
-    SFCrypto.setPrivateKeyFromBase64String(base64String)
+    SFCrypto.setPrivateKeyFromBase64String(base64String);
 };
 
 Crypto.setPublicKey = function(base64String) {
-    SFCrypto.setPublicKeyFromBase64String(base64String)
+    SFCrypto.setPublicKeyFromBase64String(base64String);
 };
 
 Crypto.setServerPublicKey = function(base64String) {
-    SFCrypto.setServerPublicKeyFromBase64String(base64String)
+    SFCrypto.setServerPublicKeyFromBase64String(base64String);
 };
 
 Crypto.ios.getExportedPublicKey = function () {

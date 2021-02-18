@@ -5,11 +5,13 @@ Crypto.singletonObject = {};
 Crypto.ios = {};
 Crypto.ios.getExportedPublicKey = function() {};
 
+const ENCRYPT_ALGORITHM = "RSA";
 Crypto.generateKeyPair = function (params = {}) {
-    let {keySize, algorithm="RSA"} = params;
-    var keyPair = SFCrypto.generateKeyPair(keySize, algorithm);
+    const { keySize } = params;
+    const keyPair = SFCrypto.generateKeyPair(keySize, ENCRYPT_ALGORITHM);
     Crypto.singletonObject.publicKey = keyPair.getPublic();
     Crypto.singletonObject.privateKey = keyPair.getPrivate();
+    return true;
 };
 
 Crypto.getBase64PublicString = function() {
@@ -21,29 +23,29 @@ Crypto.getBase64PrivateString = function() {
 };
 
 Crypto.setPrivateKey = function(base64String) {
-    let privateKey = SFCrypto.getKeyFromBase64String(base64String, true, "RSA");
+    const privateKey = SFCrypto.getKeyFromBase64String(base64String, true, ENCRYPT_ALGORITHM);
     Crypto.singletonObject.privateKey = privateKey;
 };
 
 Crypto.setPublicKey = function(base64String) {
-    let publicKey = SFCrypto.getKeyFromBase64String(base64String, false, "RSA");
+    const publicKey = SFCrypto.getKeyFromBase64String(base64String, false, ENCRYPT_ALGORITHM);
     Crypto.singletonObject.publicKey = publicKey;
 };
 
 Crypto.setServerPublicKey = function(base64String) {
-    let serverPublicKey = SFCrypto.getKeyFromBase64String(base64String, false, "RSA");
+    const serverPublicKey = SFCrypto.getKeyFromBase64String(base64String, false, ENCRYPT_ALGORITHM);
     Crypto.singletonObject.serverPublicKey = serverPublicKey;
 };
 
 Crypto.encrypt = function(params = {}) {
-    let {plainText, useServerKey, cipherType} = params;
-    let key = useServerKey ? Crypto.singletonObject.serverPublicKey : Crypto.singletonObject.publicKey;
+    const { plainText, useServerKey, cipherType } = params;
+    const key = useServerKey ? Crypto.singletonObject.serverPublicKey : Crypto.singletonObject.publicKey;
     return SFCrypto.encrypt(plainText, key, cipherType);
 };
 
 Crypto.decrypt = function(params = {}) {
-    let {encryptedText, cipherType} = params;
-    let key = Crypto.singletonObject.privateKey;
+    const { encryptedText, cipherType } = params;
+    const key = Crypto.singletonObject.privateKey;
     return SFCrypto.decrypt(encryptedText, key, cipherType);
 };
 
