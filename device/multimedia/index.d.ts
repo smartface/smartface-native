@@ -350,7 +350,9 @@ declare type MultimediaParams = {
         maxResultSize?: {
             height: number;
             width: number;
-        }
+        };
+        fixOrientation?: boolean;
+        maxImageSize?: number;
     };
     onSuccess: (params: { image?: Image; video?: File }) => void;
     onCancel?: () => void;

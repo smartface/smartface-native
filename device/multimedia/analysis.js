@@ -110,6 +110,8 @@ Multimedia.startCamera = function (e) { };
  * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
  * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
  * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+ * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
  * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
  * @param {Number} params.android.maxResultSize.height max cropped image height
  * @param {Number} params.android.maxResultSize.width max cropped image width 
@@ -210,6 +212,8 @@ Multimedia.recordVideo = function (params) { };
  * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
  * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
  * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+ * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
  * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
  * @param {Number} params.android.maxResultSize.height max cropped image height
  * @param {Number} params.android.maxResultSize.width max cropped image width 
