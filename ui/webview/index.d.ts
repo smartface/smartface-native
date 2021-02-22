@@ -79,14 +79,6 @@ declare class WebView extends View {
 	 */
 	scrollBarEnabled: boolean;
 	/**
-	 * Gets/sets over-scroll mode for this view.
-	 *
-	 * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-	 * @android
-	 * @since 3.2.1
-	 */
-	overScrollMode: OverScrollMode;
-	/**
 	 * Sets/Gets the bounce effect when scrolling.
 	 *
 	 * @property {Boolean} bounceEnabled
@@ -96,22 +88,6 @@ declare class WebView extends View {
 	 * @since 1.1.12
 	 */
 	bounceEnabled: boolean;
-	/**
-	 * Sets/Gets the bounce effect when scrolling.
-	 *
-	 * @property {Boolean} bounces
-	 * @ios
-	 * @since 3.2.1
-	 */
-	bounces: boolean;
-	/**
-	 * Sets/Gets the current page which is contain webview.
-	 *
-	 * @property {UI.Page} page
-	 * @android
-	 * @since 2.0.10
-	 */
-	page: Page | undefined;
 	/**
 	 * Reloads the current page.
 	 *
@@ -227,16 +203,6 @@ declare class WebView extends View {
 	 */
 	onChangedURL?: (e: { url: string }) => boolean;
 	/**
-	 * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
-	 * event begin to trigger. The purpose of using this event might be
-	 * navigating back to pervious web pages.
-	 *
-	 * @event onBackButtonPressed
-	 * @android
-	 * @since 3.2.1
-	 */
-	onBackButtonPressed?: () => void;
-	/**
 	 * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or
 	 * framesets will call onLoad one time for the main frame.
 	 *
@@ -289,24 +255,6 @@ declare class WebView extends View {
 	 */
 	onShow?: (e: { url: string }) => void;
 	/**
-	 * Report a JavaScript console message to the host application.
-	 *
-	 * @event onConsoleMessage
-	 * @param {Object} params
-	 * @param {Number} params.sourceId     The name of the source file that caused the error.
-	 * @param {String} params.message      The error message to report.
-	 * @param {String} params.lineNumber   The line number of the error.
-	 * @param {String} params.messageLevel The message level of the report
-	 * @android
-	 * @since 4.0.4
-	 */
-	onConsoleMessage?: (params: {
-		sourceId: number;
-		message: string;
-		lineNumber: number;
-		messageLevel: string;
-	}) => void;
-	/**
 	 * Clears the resource cache.
 	 *
 	 * @method clearCache
@@ -316,50 +264,6 @@ declare class WebView extends View {
 	 * @since 2.0.7
 	 */
 	clearCache(deleteDiskFiles: boolean): void;
-	/**
-	 * Removes the autocomplete popup from the currently focused form field, if present.
-	 *
-	 * @method clearFormData
-	 * @android
-	 * @since 2.0.7
-	 */
-	clearFormData(): void;
-	/**
-	 * Tells this WebView to clear its internal back/forward list.
-	 *
-	 * @method clearHistory
-	 * @android
-	 * @since 2.0.7
-	 */
-	clearHistory(): void;
-	/**
-	 * Enables debugging of WebView contents.
-	 *
-	 * @method setWebContentsDebuggingEnabled
-	 * @android
-	 * @param {Boolean} [enabled=false]
-	 * @static
-	 * @since 4.0.6
-	 */
-	setWebContentsDebuggingEnabled(enabled: boolean): void;
-	/**
-	 * This event is triggered more than once to get safeAreaInsets.
-	 *
-	 * @event safeAreaInsets
-	 * @param {Object} systemSafeAreaInsets
-	 * @param {Number} systemSafeAreaInsets.top
-	 * @param {Number} systemSafeAreaInsets.bottom
-	 * @param {Number} systemSafeAreaInsets.right
-	 * @param {Number} systemSafeAreaInsets.left
-	 * @return {Object} safeAreaInsets
-	 * @return {Number} return.top
-	 * @return {Number} return.bottom
-	 * @return {Number} return.right
-	 * @return {Number} return.left
-	 * @ios
-	 * @since 3.2.1
-	 */
-	safeAreaInsets?: (e: Boundary) => Boundary;
 	/**
 	 * Tells this WebView to clear its Cookie.
 	 *
@@ -378,14 +282,114 @@ declare class WebView extends View {
 	 * @since 2.0.7
 	 */
 	clearAllData(): void;
-	/**
-	 * The behavior for determining the adjusted content offsets.
-	 *
-	 * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
-	 * @ios
-	 * @since 4.0.0
-	 */
-	contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+	android: View['android'] & {
+		/**
+		 * Gets/sets over-scroll mode for this view.
+		 *
+		 * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+		 * @android
+		 * @since 3.2.1
+		 */
+		overScrollMode: OverScrollMode;
+		/**
+		 * Sets/Gets the current page which contains the webview.
+		 *
+		 * @property {UI.Page} page
+		 * @android
+		 * @since 2.0.10
+		 */
+		page: Page | undefined;
+		/**
+		 * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
+		 * event begin to trigger. The purpose of using this event might be
+		 * navigating back to pervious web pages.
+		 *
+		 * @event onBackButtonPressed
+		 * @android
+		 * @since 3.2.1
+		 */
+		onBackButtonPressed?: () => void;
+		/**
+		 * Report a JavaScript console message to the host application.
+		 *
+		 * @event onConsoleMessage
+		 * @param {Object} params
+		 * @param {Number} params.sourceId     The name of the source file that caused the error.
+		 * @param {String} params.message      The error message to report.
+		 * @param {String} params.lineNumber   The line number of the error.
+		 * @param {String} params.messageLevel The message level of the report
+		 * @android
+		 * @since 4.0.4
+		 */
+		onConsoleMessage?: (params: {
+			sourceId: number;
+			message: string;
+			lineNumber: number;
+			messageLevel: string;
+		}) => void;
+		/**
+		 * Removes the autocomplete popup from the currently focused form field, if present.
+		 *
+		 * @method clearFormData
+		 * @android
+		 * @since 2.0.7
+		 */
+		clearFormData(): void;
+		/**
+		 * Tells this WebView to clear its internal back/forward list.
+		 *
+		 * @method clearHistory
+		 * @android
+		 * @since 2.0.7
+		 */
+		clearHistory(): void;
+		/**
+		 * Enables debugging of WebView contents.
+		 *
+		 * @method setWebContentsDebuggingEnabled
+		 * @android
+		 * @param {Boolean} [enabled=false]
+		 * @static
+		 * @since 4.0.6
+		 */
+		setWebContentsDebuggingEnabled(enabled: boolean): void;
+	}
+	ios: View['ios'] & {
+		/**
+		 * Sets/Gets the bounce effect when scrolling.
+		 *
+		 * @property {Boolean} bounces
+		 * @ios
+		 * @since 3.2.1
+		 */
+		bounces: boolean;
+		/**
+		 * This event is triggered more than once to get safeAreaInsets.
+		 *
+		 * @event safeAreaInsets
+		 * @param {Object} systemSafeAreaInsets
+		 * @param {Number} systemSafeAreaInsets.top
+		 * @param {Number} systemSafeAreaInsets.bottom
+		 * @param {Number} systemSafeAreaInsets.right
+		 * @param {Number} systemSafeAreaInsets.left
+		 * @return {Object} safeAreaInsets
+		 * @return {Number} return.top
+		 * @return {Number} return.bottom
+		 * @return {Number} return.right
+		 * @return {Number} return.left
+		 * @ios
+		 * @since 3.2.1
+		 */
+		safeAreaInsets?: (e: Boundary) => Boundary;
+		/**
+		 * The behavior for determining the adjusted content offsets.
+		 *
+		 * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+		 * @ios
+		 * @since 4.0.0
+		 */
+		contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+	}
 }
 declare namespace WebView {
 	namespace Android {

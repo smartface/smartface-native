@@ -15,6 +15,7 @@ declare class Button extends View  implements IButton {
   enabled: boolean;
   backgroundImage: Image;
   backgroundColor: Color;
+  flexGrow: number;
   onPress: () => void;
   onLongPress: () => void;
 }

@@ -1,3 +1,7 @@
-import OverScrollMode = require("./overscrollmode-Android");
+declare enum OverScrollMode {
+	ALWAYS,
+	AUTO,
+	NEVER
+}
 
 export = OverScrollMode;

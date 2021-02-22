@@ -10,6 +10,7 @@ declare interface IButton {
   enabled: boolean;
   backgroundImage: Image;
   backgroundColor: Color;
+  flexGrow: number,
   onPress: () => void;
   onLongPress: () => void;
 }

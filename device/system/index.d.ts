@@ -77,16 +77,6 @@ declare class System {
 	 * @since 0.1
 	 */
 	static OSVersion: string;
-	/**
-	 *
-	 * Returns the type of biometric authentication supported by the device. Works on iOS 11.0+.
-	 * @property {Device.System.LABiometryType} LAContextBiometricType
-	 * @readonly
-	 * @ios
-	 * @static
-	 * @since 3.0.2
-	 */
-	static LAContextBiometricType: System.LABiometryType;
 	static android: {
 		/**
 		 *
@@ -157,6 +147,17 @@ declare class System {
 		}): void;
 	};
 	static ios: {
+		LABiometryType: LABiometryType
+		/**
+		 *
+		 * Returns the type of biometric authentication supported by the device. Works on iOS 11.0+.
+		 * @property {Device.System.LABiometryType} LAContextBiometricType
+		 * @readonly
+		 * @ios
+		 * @static
+		 * @since 3.0.2
+		 */
+		LAContextBiometricType: LABiometryType;
 		/**
 		 * @deprecated
 		 *
@@ -317,44 +318,46 @@ declare namespace System {
 		 */
 		IOS = "iOS"
 	}
+}
+
+
+/**
+ * @enum {Number} Device.System.LABiometryType
+ * @since 3.0.2
+ * @ios
+ *
+ * The set of available biometric authentication types. Works on iOS 11.0+.
+ *
+ */
+declare enum LABiometryType {
 	/**
-	 * @enum {Number} Device.System.LABiometryType
-	 * @since 3.0.2
+	 * No biometry type is supported. Works on iOS 11.0+.
+	 *
+	 * @property {Number} NONE
+	 * @static
 	 * @ios
-	 *
-	 * The set of available biometric authentication types. Works on iOS 11.0+.
-	 *
+	 * @readonly
+	 * @since 3.0.2
 	 */
-	enum LABiometryType {
-		/**
-		 * No biometry type is supported. Works on iOS 11.0+.
-		 *
-		 * @property {Number} NONE
-		 * @static
-		 * @ios
-		 * @readonly
-		 * @since 3.0.2
-		 */
-		NONE = 0,
-		/**
-		 * The device supports Touch ID. Works on iOS 11.0+.
-		 *
-		 * @property {Number} TOUCHID
-		 * @static
-		 * @ios
-		 * @readonly
-		 * @since 3.0.2
-		 */
-		TOUCHID = 1,
-		/**
-		 * The device supports Face ID. Works on iOS 11.0+.
-		 *
-		 * @property {Number} FACEID
-		 * @static
-		 * @ios
-		 * @readonly
-		 * @since 3.0.2
-		 */
-		FACEID = 2
-	}
+	NONE = 0,
+	/**
+	 * The device supports Touch ID. Works on iOS 11.0+.
+	 *
+	 * @property {Number} TOUCHID
+	 * @static
+	 * @ios
+	 * @readonly
+	 * @since 3.0.2
+	 */
+	TOUCHID = 1,
+	/**
+	 * The device supports Face ID. Works on iOS 11.0+.
+	 *
+	 * @property {Number} FACEID
+	 * @static
+	 * @ios
+	 * @readonly
+	 * @since 3.0.2
+	 */
+	FACEID = 2
 }

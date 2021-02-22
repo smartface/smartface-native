@@ -182,6 +182,6 @@ declare class SelectablePicker extends NativeComponent {
  * @android
  * @since 4.0.5
  */
-    show(done: { items: number | number[]; cancel: () => void }, cancel): void;
+    show(done: (param: { items: number | number[]; }) => void, cancel: () => void): void;
 }
 export = SelectablePicker;

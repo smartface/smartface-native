@@ -2,7 +2,6 @@
 const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
-const NativeContentValues = requireClass("android.content.ContentValues");
 const NativeUCrop = requireClass('com.yalantis.ucrop.UCrop');
 const NativeSFUCropOptions = requireClass('io.smartface.android.sfcore.device.multimedia.crop.SFUCropOptions');
 const NativeSFMultimedia = requireClass("io.smartface.android.sfcore.device.multimedia.SFMultimedia");
@@ -221,7 +220,7 @@ function startRecordVideoWithExtraField() {
         page
     } = _captureParams;
     let cameraIntent = new NativeIntent(NativeMediaStore.ACTION_VIDEO_CAPTURE);
-    
+
     if (maximumDuration != undefined)
         cameraIntent.putExtra(NativeMediaStore.EXTRA_DURATION_LIMIT, maximumDuration);
     if (videoQuality != undefined)
@@ -231,52 +230,82 @@ function startRecordVideoWithExtraField() {
 }
 
 function cropCameraData(resultCode, data) {
-    const { onSuccess, onCancel, onFailure, allowsEditing } = _captureParams;
+    const {
+        onSuccess, onCancel,
+        onFailure, allowsEditing,
+        android: {
+            fixOrientation: fixOrientation = false,
+            maxImageSize: maxImageSize = -1
+        } = {}
+    } = _captureParams;
+
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
-        try {
-            var resultUri = NativeUCrop.getOutput(data);
-            var croppedImage = Image.createFromFile(resultUri.getPath());
-        } catch (err) {
-            onFailure && onFailure({
-                message: err
-            });
-            return;
-        }
-        if (allowsEditing) {
-            onSuccess && onSuccess({
-                image: croppedImage
-            });
-        }
+        let resultUri = NativeUCrop.getOutput(data);
+        //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
+        NativeSFMultimedia.getBitmapFromUri(activity, resultUri, maxImageSize, fixOrientation, {
+            onCompleted: (bitmap) => {
+                let croppedImage = new Image({
+                    bitmap
+                });
+                if (allowsEditing) {
+                    onSuccess && onSuccess({
+                        image: croppedImage
+                    });
+                }
+            },
+            onFailure: (err) => {
+                onFailure && onFailure({
+                    message: err
+                });
+            }
+        });
     } else {
         onCancel && onCancel();
     }
 }
 
 function cropGalleryData(resultCode, data) {
-    const { onSuccess, onFailure, onCancel, allowsEditing } = _pickParams;
+    const {
+        onSuccess, onFailure,
+        onCancel, allowsEditing,
+        android: {
+            fixOrientation: fixOrientation = false,
+            maxImageSize: maxImageSize = -1
+        } = {}
+    } = _pickParams;
 
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
-        try {
-            var resultUri = NativeUCrop.getOutput(data);
-            var croppedImage = Image.createFromFile(resultUri.getPath());
-        } catch (err) {
-            onFailure && onFailure({
-                message: err
-            });
-            return;
-        }
-        if (allowsEditing) {
-            onSuccess && onSuccess({
-                image: croppedImage
-            });
-        }
+
+        let resultUri = NativeUCrop.getOutput(data);
+        //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
+        NativeSFMultimedia.getBitmapFromUri(activity, resultUri, maxImageSize, fixOrientation, {
+            onCompleted: (bitmap) => {
+                let croppedImage = new Image({
+                    bitmap
+                });
+                if (allowsEditing) {
+                    onSuccess && onSuccess({
+                        image: croppedImage
+                    });
+                }
+            },
+            onFailure: (err) => {
+                onFailure && onFailure({
+                    message: err
+                });
+            }
+        });
     } else {
         onCancel && onCancel();
     }
 }
 
 function startCropActivity(params) {
-    const { requestCode, uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop } = params;
+    const {
+        requestCode, uri, page, cropShape, aspectRatio,
+        rotateText, scaleText, cropText, headerBarTitle,
+        maxResultSize, hideBottomControls, enableFreeStyleCrop
+    } = params;
     if (!uri) return;
     let { x, y } = aspectRatio;
     let { width, height } = maxResultSize;
@@ -326,7 +355,9 @@ function pickFromGallery(resultCode, data) {
             headerBarTitle: headerBarTitle,
             maxResultSize: maxResultSize = {},
             hideBottomControls: hideBottomControls = false,
-            enableFreeStyleCrop: enableFreeStyleCrop = false
+            enableFreeStyleCrop: enableFreeStyleCrop = false,
+            fixOrientation: fixOrientation = false,
+            maxImageSize: maxImageSize = -1
         } = {}
     } = _pickParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
@@ -343,13 +374,20 @@ function pickFromGallery(resultCode, data) {
         if (onSuccess) {
             if (type === Multimedia.Type.IMAGE) {
                 if (!allowsEditing) {
-                    var inputStream = activity.getContentResolver().openInputStream(uri);
-                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                    var image = new Image({
-                        bitmap: bitmap
-                    });
-                    onSuccess({
-                        image: image
+                    NativeSFMultimedia.getBitmapFromUri(activity, uri, maxImageSize, fixOrientation, {
+                        onCompleted: (bitmap) => {
+                            let image = new Image({
+                                bitmap
+                            });
+                            onSuccess({
+                                image
+                            });
+                        },
+                        onFailure: (err) => {
+                            onFailure && onFailure({
+                                message: err
+                            });
+                        }
                     });
                 } else {
                     startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
@@ -401,7 +439,9 @@ function getCameraData(resultCode, data) {
             headerBarTitle: headerBarTitle,
             maxResultSize: maxResultSize = {},
             hideBottomControls: hideBottomControls = false,
-            enableFreeStyleCrop: enableFreeStyleCrop = false
+            enableFreeStyleCrop: enableFreeStyleCrop = false,
+            fixOrientation: fixOrientation = false,
+            maxImageSize: maxImageSize = -1
         } = {}
     } = _captureParams;
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
@@ -421,9 +461,20 @@ function getCameraData(resultCode, data) {
                 if (allowsEditing) {
                     startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, uri: _imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 } else {
-                    let image = Image.createFromFile(_imageFileUri.getPath());
-                    onSuccess({
-                        image
+                    NativeSFMultimedia.getBitmapFromUri(activity, _imageFileUri, maxImageSize, fixOrientation, {
+                        onCompleted: (bitmap) => {
+                            let image = new Image({
+                                bitmap
+                            });
+                            onSuccess({
+                                image
+                            });
+                        },
+                        onFailure: (err) => {
+                            onFailure && onFailure({
+                                message: err
+                            });
+                        }
                     });
                 }
             } else {
