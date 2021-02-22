@@ -219,7 +219,7 @@ declare class MaterialTextBox extends TextBox {
   rightLayout: {
     view: View,
     width: number,
-    height: number
+    height?: number
   };
 /**
  * Gets/sets the lineColor of the MaterialTextBox. In Android, if error message appears then line color cannot be changed. 

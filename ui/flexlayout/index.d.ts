@@ -122,7 +122,46 @@ declare class FlexLayout extends ViewGroup {
  * @android
  * @ios
  */
-	applyLayout(): void;
+    applyLayout(): void;
+    android: {
+        /**
+         * Allows you to watch events as they are dispatched to your children,
+         * and take ownership of the current gesture at any point.
+         *
+         * @event onInterceptTouchEvent
+         * @return {Boolean} Return true to steal motion events from the children
+         * @android
+         * @member UI.FlexLayout
+         * @since 0.1
+         */
+        onInterceptTouchEvent: () => boolean;
+
+		/**
+		 * Gets/Sets the elevation of the view. For the views that has
+		 * StateListAnimator natively like Button, will lost its own
+		 * StateListAnimation when elevation value changed.
+		 * For details : https://developer.android.com/training/material/shadows-clipping.html
+		 *
+		 * @property {Number} elevation
+		 * @android
+		 * @member UI.FlexLayout
+		 * @see https://developer.android.com/training/material/shadows-clipping.html
+		 * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
+		 * @since 1.1.12
+		 */
+		elevation: number;
+		/**
+		 * Gets/sets the depth location of the view relative to its elevation. To put view over button,
+		 * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+		 * This property affects after Android Lollipop. No-op before api level 21.
+		 *
+		 * @property {Number} zIndex
+		 * @android
+		 * @member UI.FlexLayout
+		 * @since 2.0.8
+		 */
+		zIndex: number;
+    };
 }
 declare namespace FlexLayout {
 /**

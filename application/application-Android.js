@@ -20,7 +20,7 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
 var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
-    _onReceivedNotification, _onRequestPermissionsResult,
+    _onReceivedNotification, _onRequestPermissionsResult, _keepScreenAwake = false,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
     spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
 
@@ -84,6 +84,22 @@ Object.defineProperties(ApplicationWrapper, {
                 attachSliderDrawer(_sliderDrawer);
             } else {
                 throw TypeError("Object must be SliderDrawer instance");
+            }
+        },
+        enumerable: true
+    },
+    'keepScreenAwake': {
+        get: function() {
+            return _keepScreenAwake;
+        },
+        set: function(value) {
+            _keepScreenAwake = value;
+            if(_keepScreenAwake) {
+                // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                activity.getWindow().addFlags(128);
+            } else {
+                // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                activity.getWindow().clearFlags(128);
             }
         },
         enumerable: true
@@ -172,7 +188,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }).join('&');
 
                 if (uriScheme.indexOf("|") !== -1) {
-                    configureIntent.call(this, uriScheme);
+                    configureIntent.call(intent, uriScheme);
                     uriObject = NativeUri.parse(params);
                 } else {
                     let uri = uriScheme + "?" + params;
@@ -180,7 +196,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             } else {
                 if (uriScheme.indexOf("|") !== -1)
-                    configureIntent.call(this, uriScheme);
+                    configureIntent.call(intent, uriScheme);
                 else
                     uriObject = NativeUri.parse(uriScheme);
             }
@@ -351,11 +367,7 @@ ApplicationWrapper.setRootController = function(params) {
 function configureIntent(uriScheme) {
     const intent = this;
     let classActivityNameArray = uriScheme.split("|");
-    // JS string pass causes parameter mismatch
-    const NativeString = requireClass("java.lang.String");
-    let className = new NativeString(classActivityNameArray[0]);
-    let activityName = new NativeString(classActivityNameArray[1]);
-    intent.setClassName(className, activityName);
+    intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
 }
 
 function attachSliderDrawer(sliderDrawer) {

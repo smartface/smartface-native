@@ -529,7 +529,7 @@ declare class View extends NativeComponent {
 	 * @since 2.0.10
 	 */
 	onTouchCancelled: (point: Point2D) => void;
-	onTouchMoved: (e: { isInside: boolean } & Point2D) => void;
+	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
 	android: {
 		/**
 		 * Gets/Sets the elevation of the view. For the views that has

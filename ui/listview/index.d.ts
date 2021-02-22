@@ -385,25 +385,14 @@ declare interface ListView extends View {
 		};
 	}): void;
 	/**
-	 * Called when the ListView should save its layout state. This is a good time to save your scroll position,
-	 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+	 * Enables the swiping behavior. For iOS, this property changes leftToRightSwipeEnabled and rightToLeftSwipeEnabled properties.
 	 *
-	 * @method saveInstanceState
+	 * @property {Boolean} [swipeEnabled = false]
+	 * @ios
 	 * @android
-	 * @return {Object}
-	 * @since 4.0.2
+	 * @since 4.1.4
 	 */
-	saveInstanceState(): any;
-	/**
-	 * Called when the ListView should restore its layout state. This is a good time to restore your scroll position,
-	 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
-	 *
-	 * @param {Object} state
-	 * @method restoreInstanceState
-	 * @android
-	 * @since 4.0.2
-	 */
-	restoreInstanceState(state: any): void;
+	swipeEnabled: boolean;
 	/**
 	 * This method scrolls ListView to a specific index.
 	 *
@@ -472,23 +461,6 @@ declare interface ListView extends View {
 		translation: Point2D;
 		contentOffset: Point2D;
 	}) => void;
-	/**
-	 * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
-	 * For better performance, don't set any callback if does not
-	 * necessary
-	 *
-	 * @event onScrollStateChanged
-	 * @param {UI.Android.ScrollState} newState
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @android
-	 * @since 3.2.1
-	 */
-	onScrollStateChanged: (
-		newState?: ScrollState,
-		contentOffset?: Point2D
-	) => void;
 	/**
 	 * This event is called when user pulls down and releases a ListView
 	 * when scroll position is on the top.
@@ -573,15 +545,114 @@ declare interface ListView extends View {
 		 */
 		rightToLeftSwipeEnabled: boolean;
 		/**
-		 * Enables the swiping behavior. For iOS, this property changes leftToRightSwipeEnabled and rightToLeftSwipeEnabled properties.
+		 * This event is called when the list view is about to start scrolling the content.
 		 *
-		 * @property {Boolean} [swipeEnabled = false]
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @event onScrollBeginDragging
 		 * @ios
-		 * @android
-		 * @since 4.1.4
+		 * @since 3.2.1
 		 */
-		swipeEnabled: boolean;
+		onScrollBeginDragging: (contentOffset: Point2D) => void;
+		/**
+		 * This event is called when the list view is starting to decelerate the scrolling movement.
+		 *
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @event onScrollBeginDecelerating
+		 * @ios
+		 * @since 3.2.1
+		 */
+		onScrollBeginDecelerating: (contentOffset: Point2D) => void;
+		/**
+		 * This event is called when the list view has ended decelerating the scrolling movement.
+		 *
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @event onScrollEndDecelerating
+		 * @ios
+		 * @since 3.2.1
+		 */
+		onScrollEndDecelerating: (contentOffset: Point2D) => void;
+		/**
+		 * This event is called when dragging ended in the list view.
+		 *
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @param {Boolean} decelerate
+		 * @event onScrollEndDraggingWillDecelerate
+		 * @ios
+		 * @since 3.2.1
+		 */
+		onScrollEndDraggingWillDecelerate: (
+			contentOffset: Point2D,
+			decelerate: boolean
+		) => void;
+		/**
+		 * This event is called when the user finishes scrolling the content.
+		 *
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @param {Object} velocity
+		 * @param {Number} velocity.x
+		 * @param {Number} velocity.y
+		 * @param {Object} targetContentOffset
+		 * @param {Number} targetContentOffset.x
+		 * @param {Number} targetContentOffset.y
+		 * @event onScrollEndDraggingWithVelocityTargetContentOffset
+		 * @ios
+		 * @since 3.2.1
+		 */
+		onScrollEndDraggingWithVelocityTargetContentOffset: (
+			contentOffset: Point2D,
+			velocity: Point2D,
+			targetContentOffset: Point2D
+		) => void;
 	};
+	android: View["android"] & {
+		/**
+		 * Called when the ListView should save its layout state. This is a good time to save your scroll position,
+		 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+		 *
+		 * @method saveInstanceState
+		 * @android
+		 * @return {Object}
+		 * @since 4.0.2
+		 */
+		saveInstanceState(): any;
+		/**
+		 * Called when the ListView should restore its layout state. This is a good time to restore your scroll position,
+		 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+		 *
+		 * @param {Object} state
+		 * @method restoreInstanceState
+		 * @android
+		 * @since 4.0.2
+		 */
+		restoreInstanceState(state: any): void;
+		/**
+		 * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
+		 * For better performance, don't set any callback if does not
+		 * necessary
+		 *
+		 * @event onScrollStateChanged
+		 * @param {UI.Android.ScrollState} newState
+		 * @param {Object} contentOffset
+		 * @param {Number} contentOffset.x
+		 * @param {Number} contentOffset.y
+		 * @android
+		 * @since 3.2.1
+		 */
+		onScrollStateChanged: (
+			newState?: ScrollState,
+			contentOffset?: Point2D
+		) => void;
+	}
 	/**
  * 
  * This method is create swipe item
@@ -668,7 +739,7 @@ declare interface ListView extends View {
 	 * @ios
 	 * @since 0.1
 	 */
-	listViewItemByIndex(index: boolean): ListViewItem;
+	listViewItemByIndex(index: number): ListViewItem;
 	/**
 	 * This method returns ListViewItem's index.
 	 *
@@ -680,75 +751,6 @@ declare interface ListView extends View {
 	 * @since 4.1.4
 	 */
 	indexByListViewItem(item: ListViewItem): number;
-	/**
-	 * This event is called when the list view is about to start scrolling the content.
-	 *
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @event onScrollBeginDragging
-	 * @ios
-	 * @since 3.2.1
-	 */
-	onScrollBeginDragging: (contentOffset: Point2D) => void;
-	/**
-	 * This event is called when the list view is starting to decelerate the scrolling movement.
-	 *
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @event onScrollBeginDecelerating
-	 * @ios
-	 * @since 3.2.1
-	 */
-	onScrollBeginDecelerating: (contentOffset: Point2D) => void;
-	/**
-	 * This event is called when the list view has ended decelerating the scrolling movement.
-	 *
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @event onScrollEndDecelerating
-	 * @ios
-	 * @since 3.2.1
-	 */
-	onScrollEndDecelerating: (contentOffset: Point2D) => void;
-	/**
-	 * This event is called when dragging ended in the list view.
-	 *
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @param {Boolean} decelerate
-	 * @event onScrollEndDraggingWillDecelerate
-	 * @ios
-	 * @since 3.2.1
-	 */
-	onScrollEndDraggingWillDecelerate: (
-		contentOffset: Point2D,
-		decelerate: boolean
-	) => void;
-	/**
-	 * This event is called when the user finishes scrolling the content.
-	 *
-	 * @param {Object} contentOffset
-	 * @param {Number} contentOffset.x
-	 * @param {Number} contentOffset.y
-	 * @param {Object} velocity
-	 * @param {Number} velocity.x
-	 * @param {Number} velocity.y
-	 * @param {Object} targetContentOffset
-	 * @param {Number} targetContentOffset.x
-	 * @param {Number} targetContentOffset.y
-	 * @event onScrollEndDraggingWithVelocityTargetContentOffset
-	 * @ios
-	 * @since 3.2.1
-	 */
-	onScrollEndDraggingWithVelocityTargetContentOffset: (
-		contentOffset: Point2D,
-		velocity: Point2D,
-		targetContentOffset: Point2D
-	) => void;
 	/**
 	 * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing.
 	 *

@@ -132,6 +132,17 @@ FlexLayout.prototype.flexWrap = UI.FlexLayout.FlexWrap.NOWRAP;
 FlexLayout.prototype.applyLayout = function() {};
 
 /**
+ * Allows you to watch events as they are dispatched to your children, 
+ * and take ownership of the current gesture at any point.
+ * 
+ * @since 4.3.1
+ * @return {Boolean} Return true to steal motion events from the children
+ * @event onInterceptTouchEvent
+ * @android
+ */
+FlexLayout.prototype.onInterceptTouchEvent = function() {};
+
+/**
  * @enum {Number} UI.FlexLayout.FlexDirection
  * @static
  * @readonly

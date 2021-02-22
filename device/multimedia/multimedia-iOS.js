@@ -82,11 +82,11 @@ Multimedia.createImagePickerController = function (e) {
     picker.sourceType = e.sourceType;
 
     if (picker.sourceType == UIImagePickerControllerSourceType.camera) {
-        if(e.ios){
-            if (e.ios.cameraDevice !== undefined){
+        if (e.ios) {
+            if (e.ios.cameraDevice !== undefined) {
                 picker.cameraDevice = e.ios.cameraDevice;
             }
-            if (e.ios.cameraFlashMode !== undefined){
+            if (e.ios.cameraFlashMode !== undefined) {
                 picker.cameraFlashMode = e.ios.cameraFlashMode;
             }
         }
@@ -239,6 +239,24 @@ Multimedia.iOS.CameraDevice.REAR = UIImagePickerControllerCameraDevice.rear;
 Multimedia.iOS.CameraDevice.FRONT = UIImagePickerControllerCameraDevice.front;
 
 Multimedia.ios = {};
+
+Multimedia.ios._fixVideoOrientation = function (e) {
+    var file = e.videoFile;
+    var onCompleted = e.onCompleted;
+    var onFailure = e.onFailure;
+    var url = file.ios.getNSURL();
+
+    __SF_UIImagePickerController.fixVideoOrientation(url,function(e){
+        if (e.filePath && typeof onCompleted == 'function') {
+            var video = new File({
+                path: e.filePath
+            });
+            onCompleted({ video });
+        } else if (typeof onFailure == 'function') {
+            onFailure();
+        }
+    });
+}
 
 Multimedia.ios.requestGalleryAuthorization = function (callback) {
     Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function (status) {

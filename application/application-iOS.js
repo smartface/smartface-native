@@ -70,6 +70,22 @@ SFApplication.setRootController = function(params) {
     }
 };
 
+Object.defineProperty(SFApplication, 'keepScreenAwake', {
+    get: function() {
+        return Invocation.invokeInstanceMethod(sharedApp, "isIdleTimerDisabled", [], "BOOL");
+    },
+    set: function(value) {
+        var idletimerdisabled = new Invocation.Argument({
+            type: "BOOL",
+            value: value
+        });
+        let sharedApp = __SF_UIApplication.sharedApplication();
+        Invocation.invokeInstanceMethod(sharedApp, "setIdleTimerDisabled:", [idletimerdisabled]);
+    },
+    enumerable: true,
+    configurable: true
+});
+
 Object.defineProperty(SFApplication, 'sliderDrawer', {
     get: function() {
         return _sliderDrawer;

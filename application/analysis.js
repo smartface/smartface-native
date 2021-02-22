@@ -7,6 +7,16 @@
 function Application() {}
 
 /**
+ * This property allows you to prevent the screen from going to sleep while your app is active.
+ *
+ * @property {Boolean} [keepScreenAwake = false]
+ * @android
+ * @ios
+ * @since 4.3.1
+ */
+Application.prototype.keepScreenAwake;
+
+/**
  * Gets/sets sliderDrawer of the Application.
  *
  * @property {UI.SliderDrawer} [sliderDrawer = null]

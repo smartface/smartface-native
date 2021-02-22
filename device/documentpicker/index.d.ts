@@ -114,7 +114,8 @@ declare class DocumentPicker {
         onSuccess: (file: File ) => void;
         /** If the user cancels the document picker without choosing a file (by pressing the system back button on Android or the Cancel button on iOS) the Promise will be rejected with a cancellation error. */
         onCancel: () => void;
-        onFailure: () => void;
+        /** Android only, if any runtime error occures, this method will be called. This method will be ignored on iOS */
+        onFailure: (e?: Error) => void;
     }): void;
 
 }
