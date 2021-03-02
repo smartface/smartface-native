@@ -76,8 +76,21 @@ declare class System {
 	 * @static
 	 * @since 0.1
 	 */
-	static OSVersion: string;
-	static android: {
+    static OSVersion: string;
+    
+    /**
+    *
+    * Returns the set of available biometric authentication supported by the device.
+    * @property {Device.System.BiometricType} biometricType
+    * @readonly
+    * @ios
+    * @android
+    * @static
+    * @since 4.3.1
+    */
+    static biometricType: BiometryType;
+
+    static android: {
 		/**
 		 *
 		 * Returns the api level of the Android system.
@@ -147,16 +160,25 @@ declare class System {
 		}): void;
 	};
 	static ios: {
+        /** 
+        * @enum {Number} Device.System.LABiometryType 
+        * @since 3.0.2
+        * @ios
+        * 
+        * The set of available biometric authentication types. Works on iOS 11.0+.
+        * @deprecated since 4.3.1 Use {@link Device.System.BiometryType}
+        */
 		LABiometryType: LABiometryType
 		/**
-		 *
-		 * Returns the type of biometric authentication supported by the device. Works on iOS 11.0+.
-		 * @property {Device.System.LABiometryType} LAContextBiometricType
-		 * @readonly
-		 * @ios
-		 * @static
-		 * @since 3.0.2
-		 */
+        *
+        * Returns the set of available biometric authentication supported by the device.
+        * @property {Device.System.LABiometryType} LAContextBiometricType
+        * @readonly
+        * @ios
+        * @static
+        * @since 3.0.2
+        * @deprecated since 4.3.1 Use {@link Device.System#biometricType}
+        */
 		LAContextBiometricType: LABiometryType;
 		/**
 		 * @deprecated
@@ -231,6 +253,7 @@ declare class System {
 	 * @ios
 	 * @android
 	 * @since 1.1.13
+     * @deprecated since 4.3.1 Use {@link Device.System#validateBiometric}
 	 */
 	static validateFingerPrint(params: {
 		android: {
@@ -239,7 +262,57 @@ declare class System {
 		message: string;
 		onSuccess: () => void;
 		onError: () => void;
-	}): void;
+    }): void;
+    
+    /**
+    * Shows the biometric prompt to the user. It will trigger onError callback if the biometric not enabled for iOS and user not enrolled at least one 
+    * for Android or hardware not supported by both of iOS and Android.
+    * 
+    *     @example
+    *     System.validateBiometric({
+    *            android: {
+    *                title: "Title",
+    *                cancelButtonText: "Cancel",
+    *                subTitle: "SubTitle",
+    *                confirmationRequired: true
+    *            },
+    *            message : "Message",
+    *            onSuccess : function(){
+    *                  console.log("Success");
+    *            },
+    *            onError : function(cancelled, error){
+    *                  console.log("Error");
+    *            }
+    *      });
+    * @method validateBiometric
+    * @param {String} message Sets the message for the biometric. It's required for Android.
+    * @param {Object} android
+    * @param {String} android.title Sets the title for the biometric. It's required for Android.
+    * @param {String} android.subTitle Sets the subtitle for the biometric.
+    * @param {String} [android.cancelButtonText = 'Cancel'] Sets the text for the cancel button on the biometric. It's required for Android.
+    * @param {Boolean} [android.confirmationRequired = true] Sets a system hint for whether to require explicit user confirmation after a passive biometric (e.g. face) has been recognized but before    onSuccess is called.
+    * @param {Function} onSuccess
+    * @param {Function} onError
+    * @param {String} onError.cancelled A boolean indicating that if the biometric prompt cancelled. `undefined` in iOS.
+    * @param {String} onError.error A human-readable error string that can be shown on an UI. `undefined` in iOS.
+    * @static
+    * @ios
+    * @android
+    * @since 4.3.1
+    */
+	static validateBiometric(params: {
+		android: {
+            title: string;
+            cancelButtonText?: string;
+            subTitle?: string;
+            confirmationRequired?: boolean;
+		};
+		message: string;
+		onSuccess: () => void;
+		onError: (cancelled?: boolean, error?: string) => void;
+    }): void;
+
+
 	/**
 	 * Return value shows that if the device supports feature or not.
 	 * Also it would be show that fingerprint (for Android) or
@@ -253,8 +326,22 @@ declare class System {
 	 * @android
 	 * @static
 	 * @since 1.1.13
+     * @deprecated since 4.3.1 Use {@link Device.System#biometricsAvailable}
 	 */
-	static fingerPrintAvailable: boolean;
+    static fingerPrintAvailable: boolean;
+    
+    /**
+    * Returns true if the device supports the biometric feature and at least one the biometric is enrolled by user.
+    * 
+    * @property {Boolean} biometricsAvailable
+    * @readonly
+    * @ios
+    * @android
+    * @static
+    * @since 4.3.1
+    */
+    static biometricsAvailable: boolean;
+
 	/**
 	 * clipboard can be used to set a text to the device's clipboard or get a text from it.
 	 *
@@ -286,7 +373,63 @@ declare class System {
 	 * @static
 	 * @since 0.1
 	 */
-	static isApplicationInstalled(packageName: string): void;
+    static isApplicationInstalled(packageName: string): void;
+    
+
+/** 
+ * @enum {Number} Device.System.BiometryType 
+ * @since 4.3.1
+ * @ios
+ * @android
+ * 
+ * The set of available biometric authentication types. 
+ */
+static readonly BiometryType: {
+
+    /**
+    * The device supports the biometrics (e.g. fingerprint, iris, or face).
+    * 
+    * @property {Number} BIOMETRICS
+    * @static
+    * @android
+    * @readonly
+    * @since 4.3.1
+    */
+    BIOMETRICS: 3,
+
+   /**
+    * No biometry type is supported. Works on iOS 11.0+.
+    * 
+    * @property {Number} NONE
+    * @static
+    * @ios
+    * @android
+    * @readonly
+    * @since 4.3.1
+    */
+	NONE: 0,
+   /**
+    * The device supports Touch ID. Works on iOS 11.0+.
+    * 
+    * @property {Number} TOUCHID
+    * @static
+    * @ios
+    * @readonly
+    * @since 4.3.1
+    */
+	TOUCHID: 1,
+   /**
+    * The device supports Face ID. Works on iOS 11.0+.
+    * 
+    * @property {Number} FACEID
+    * @static
+    * @ios
+    * @readonly
+    * @since 4.3.1
+    */
+	FACEID: 2
+}
+
 }
 
 declare namespace System {
@@ -327,7 +470,7 @@ declare namespace System {
  * @ios
  *
  * The set of available biometric authentication types. Works on iOS 11.0+.
- *
+ * @deprecated since 4.3.1 Use {@link Device.System#BiometryType}
  */
 declare enum LABiometryType {
 	/**
