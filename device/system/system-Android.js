@@ -9,6 +9,7 @@ const NativeLocale = requireClass('java.util.Locale');
 const OSType = require('./ostype');
 //NativeIntent.ACTION_BATTERY_CHANGED
 const ACTION_BATTERY_CHANGED = 'android.intent.action.BATTERY_CHANGED';
+const SFBiometricPrompt = requireClass("io.smartface.android.sfcore.device.system.SFBiometricPrompt");
 
 // Context.CLIPBOARD_SERVICE
 const CLIPBOARD_SERVICE = 'clipboard';
@@ -30,25 +31,25 @@ System.android = {};
 
 Object.defineProperties(System, {
     'region': {
-        get: function() {
+        get: function () {
             return NativeLocale.getDefault().getCountry();
         },
         enumerable: true
     },
     'language': {
-        get: function() {
+        get: function () {
             return NativeLocale.getDefault().getLanguage().toString();
         },
         enumerable: true
     },
     'OS': {
-        get: function() {
+        get: function () {
             return OSType.ANDROID;
         },
         enumerable: true
     },
     'OSVersion': {
-        get: function() {
+        get: function () {
             return NativeBuild.VERSION.RELEASE;
         },
         enumerable: true
@@ -57,14 +58,14 @@ Object.defineProperties(System, {
         value: OSType
     },
     'isBatteryCharged': {
-        get: function() {
+        get: function () {
             var batteryStatus = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_STATUS, -1);
             return batteryStatus === NativeBatteryManager.BATTERY_STATUS_CHARGING;
         },
         enumerable: true
     },
     'batteryLevel': {
-        get: function() {
+        get: function () {
             var level = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_LEVEL, -1);
             var scale = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_SCALE, -1);
             return (level / scale) * 100;
@@ -72,7 +73,7 @@ Object.defineProperties(System, {
         enumerable: true
     },
     'clipboard': {
-        get: function() {
+        get: function () {
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
@@ -81,7 +82,7 @@ Object.defineProperties(System, {
                 return null;
             }
         },
-        set: function(text) {
+        set: function (text) {
             var clip = NativeClipData.newPlainText("sf-core", text);
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             clipboard.setPrimaryClip(clip);
@@ -89,7 +90,7 @@ Object.defineProperties(System, {
         enumerable: true
     },
     'vibrate': {
-        value: function(options = {}) {
+        value: function (options = {}) {
             let millisecond = options.millisecond || 500;
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
             vibrator.vibrate(millisecond);
@@ -97,7 +98,7 @@ Object.defineProperties(System, {
         enumerable: true
     },
     'fingerPrintAvailable': {
-        get: function() {
+        get: function () {
             if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 var fingerprintManager = AndroidConfig.getSystemService(FINGERPRINT_SERVICE, FINGERPRINT_MANAGER);
                 return fingerprintManager && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
@@ -106,8 +107,50 @@ Object.defineProperties(System, {
         },
         enumerable: true
     },
+    'biometricsAvailable': {
+        get: () => (SFBiometricPrompt.getBiometricType(AndroidConfig.activity) === System.BiometryType.BIOMETRICS),
+        enumerable: true
+    },
+    'validateBiometric': {
+        value: (params) => {
+            const {
+                message,
+                android: {
+                    title: title,
+                    subTitle: subTitle,
+                    cancelButtonText: cancelButtonText = "Cancel",
+                    confirmationRequired: confirmationRequired = true
+                } = {},
+                onError = () => { }, onSuccess = () => { }
+            } = params;
+
+            if (!title || !TypeUtil.isString(title))
+                throw new Error("Title must be set and non-empty.");
+
+            if (!cancelButtonText || !TypeUtil.isString(cancelButtonText))
+                throw new Error("Cancel text must be set and non-empty.");
+
+            let biometricPrompt = new SFBiometricPrompt(AndroidConfig.activity, {
+                onError,
+                onSuccess
+            });
+
+            biometricPrompt.setTitle(title);
+            biometricPrompt.setDescription(message);
+            biometricPrompt.setSubTitle(subTitle);
+            biometricPrompt.setCancelButtonText(cancelButtonText);
+            biometricPrompt.setConfirmationRequired(confirmationRequired);
+
+            biometricPrompt.authenticate();
+        },
+        enumerable: true
+    },
+    'biometricType': {
+        get: () => SFBiometricPrompt.getBiometricType(AndroidConfig.activity),
+        enumerable: true
+    },
     'validateFingerPrint': {
-        value: function(params) {
+        value: function (params) {
             if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable) {
                 const NativeFingerprintAuthenticationDialogFragment = requireClass("com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment");
                 const NativeFingerPrintListener = requireClass("com.android.fingerprintdialog.FingerPrintListener");
@@ -116,19 +159,19 @@ Object.defineProperties(System, {
                 var fragment = new NativeFingerprintAuthenticationDialogFragment();
 
                 var listeners = NativeFingerPrintListener.implement({
-                    'onError': function() {
+                    'onError': function () {
                         params && params.onError && params.onError();
                     },
-                    'onAuthenticated': function() {
+                    'onAuthenticated': function () {
                         params && params.onSuccess && params.onSuccess();
                     },
-                    'onTimeout': function() {
+                    'onTimeout': function () {
                         params && params.onError && params.onError();
                     },
-                    'onCancel': function() {
+                    'onCancel': function () {
                         params && params.onError && params.onError();
                     },
-                    'onLockout': function() {
+                    'onLockout': function () {
                         params && params.onError && params.onError();
                     }
                 });
@@ -152,27 +195,27 @@ Object.defineProperties(System, {
 
 Object.defineProperties(System.android, {
     'apiLevel': {
-        get: function() {
+        get: function () {
             return NativeBuild.VERSION.SDK_INT;
         },
         enumerable: true
     },
-    'supported64BitAbis' : {
-        get: () => toJSArray(NativeBuild.SUPPORTED_64_BIT_ABIS), 
+    'supported64BitAbis': {
+        get: () => toJSArray(NativeBuild.SUPPORTED_64_BIT_ABIS),
         enumerable: true
     },
-    'supported32BitAbis' : {
-        get: () => toJSArray(NativeBuild.SUPPORTED_32_BIT_ABIS), 
+    'supported32BitAbis': {
+        get: () => toJSArray(NativeBuild.SUPPORTED_32_BIT_ABIS),
         enumerable: true
     },
     'menuKeyAvaliable': {
-        get: function() {
+        get: function () {
             return NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey();
         },
         enumerable: true
     },
     'isApplicationInstalled': {
-        value: function(packageName) {
+        value: function (packageName) {
             var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
             for (var i = 0; i < packageList.size(); i++) {
                 if (packageList.get(i).packageName.toString() === packageName) {
@@ -184,7 +227,7 @@ Object.defineProperties(System.android, {
         enumerable: true
     },
     'getPackageVersion': {
-        value: function(params) {
+        value: function (params) {
             if (params && params.packageName) {
                 try {
                     var packageVersion = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName, 0).versionName;
@@ -203,18 +246,23 @@ function getBatteryIntent() {
     return AndroidConfig.activity.registerReceiver(null, intentFilter);
 };
 
+System.BiometryType = Object.freeze({
+    BIOMETRICS: SFBiometricPrompt.BiometricType.BIOMETRICS,
+    NONE: SFBiometricPrompt.BiometricType.NONE
+});
+
 // iOS specifics
 System.ios = {};
 
 Object.defineProperties(System.ios, {
     'validateFingerPrint': {
-        value: function(onSuccess, onError) {}
+        value: function (onSuccess, onError) { }
     }
 });
 
 Object.defineProperties(System.ios, {
     'LAContextBiometricType': {
-        value: function(onSuccess, onError) {}
+        value: function (onSuccess, onError) { }
     }
 });
 
