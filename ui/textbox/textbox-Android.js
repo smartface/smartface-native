@@ -279,19 +279,7 @@ function TextBox(params) {
             },
             set: function(onEditBegins) {
                 _onEditBegins = onEditBegins.bind(this);
-                if (!this.__didSetOnFocusChangeListener) {
-                    this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                        onFocusChange: function(view, hasFocus) {
-                            if (hasFocus) {
-                                _onEditBegins && _onEditBegins();
-                            } else {
-                                _onEditEnds && _onEditEnds();
-                                this.nativeObject.setSelection(0, 0);
-                            }
-                        }.bind(this)
-                    }));
-                    this.__didSetOnFocusChangeListener = true;
-                }
+                this.nativeObject.setOnEditBegins(_onEditBegins);
             },
             enumerable: true
         },
@@ -301,19 +289,7 @@ function TextBox(params) {
             },
             set: function(onEditEnds) {
                 _onEditEnds = onEditEnds.bind(this);
-                if (!this.__didSetOnFocusChangeListener) {
-                    this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                        onFocusChange: function(view, hasFocus) {
-                            if (hasFocus) {
-                                _onEditBegins && _onEditBegins();
-                            } else {
-                                _onEditEnds && _onEditEnds();
-                                this.nativeObject.setSelection(0, 0);
-                            }
-                        }.bind(this)
-                    }));
-                    this.__didSetOnFocusChangeListener = true;
-                }
+                this.nativeObject.setOnEditEnds(_onEditEnds);
             },
             enumerable: true
         },
