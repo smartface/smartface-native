@@ -1,7 +1,7 @@
 /*globals requireClass*/
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
-const NativeSwitch = requireClass("android.widget.Switch");
+const NativeSwitch = requireClass("io.smartface.android.sfcore.ui.switchview.SFSwitch");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 
@@ -9,7 +9,13 @@ Switch.prototype = Object.create(View.prototype);
 function Switch(params) {
     var self = this;
     if (!this.nativeObject) {
-        this.nativeObject = new NativeSwitch(AndroidConfig.activity);
+        this.nativeObject = new NativeSwitch(AndroidConfig.activity, {
+            onToggleChanged: function (isChecked) {
+                setThumbColor(self);
+                setTrackColor(self);
+                _onToggleChangedCallback && _onToggleChangedCallback(isChecked);
+            }
+        });
     }
     View.apply(this);
 
@@ -17,58 +23,58 @@ function Switch(params) {
     var _thumbOffColor;
     var _toggleOnColor;
     var _toggleOffColor;
-    var onToggleChangedCallback;
+    var _onToggleChangedCallback;
     Object.defineProperties(this, {
         'thumbOnColor': {
-            get: function() {
+            get: function () {
                 return _thumbOnColor;
             },
-            set: function(thumbOnColor) {
+            set: function (thumbOnColor) {
                 _thumbOnColor = thumbOnColor;
                 setThumbColor(self);
             },
             enumerable: true
         },
         'thumbOffColor': {
-            get: function() {
+            get: function () {
                 return _thumbOffColor;
             },
-            set: function(thumbOffColor) {
+            set: function (thumbOffColor) {
                 _thumbOffColor = thumbOffColor;
                 setThumbColor(self);
             },
             enumerable: true
         },
         'toggleOnColor': {
-            get: function() {
+            get: function () {
                 return _toggleOnColor;
             },
-            set: function(toggleOnColor) {
+            set: function (toggleOnColor) {
                 _toggleOnColor = toggleOnColor;
                 setTrackColor(self);
             },
             enumerable: true
         },
         'toggle': {
-            get: function() {
+            get: function () {
                 return this.nativeObject.isChecked();
             },
-            set: function(toggle) {
+            set: function (toggle) {
                 this.nativeObject.setChecked(toggle);
             },
             enumerable: true
         },
         'onToggleChanged': {
-            get: function() {
-                return onToggleChangedCallback;
+            get: function () {
+                return _onToggleChangedCallback;
             },
-            set: function(onToggleChanged) {
-                onToggleChangedCallback = onToggleChanged.bind(this);
+            set: function (onToggleChanged) {
+                _onToggleChangedCallback = onToggleChanged;
             },
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'Switch';
             },
             enumerable: true,
@@ -79,10 +85,10 @@ function Switch(params) {
     let _toggleImage, _thumbImage;
     Object.defineProperties(this.android, {
         'toggleImage': {
-            get: function() {
+            get: function () {
                 return _toggleImage;
             },
-            set: function(toggleImage) {
+            set: function (toggleImage) {
                 const Image = require("../image");
                 _toggleImage = toggleImage;
 
@@ -92,10 +98,10 @@ function Switch(params) {
             enumerable: true
         },
         'thumbImage': {
-            get: function() {
+            get: function () {
                 return _thumbImage;
             },
-            set: function(thumbImage) {
+            set: function (thumbImage) {
                 const Image = require("../image");
                 _thumbImage = thumbImage;
 
@@ -105,34 +111,26 @@ function Switch(params) {
             enumerable: true
         },
         'toggleOffColor': {
-            get: function() {
+            get: function () {
                 return _toggleOffColor;
             },
-            set: function(toggleOffColor) {
+            set: function (toggleOffColor) {
                 _toggleOffColor = toggleOffColor;
                 setTrackColor(self);
             },
             enumerable: true
         },
         'thumbOffColor': {
-            get: function() {
+            get: function () {
                 return _thumbOffColor;
             },
-            set: function(value) {
+            set: function (value) {
                 _thumbOffColor = value;
                 setThumbColor(self);
             },
             enumerable: true
         }
     });
-
-    this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
-        onCheckedChanged: function(buttonView, isChecked) {
-            setThumbColor(self);
-            setTrackColor(self);
-            onToggleChangedCallback && onToggleChangedCallback(isChecked);
-        }
-    }));
 
     // Assign parameters given in constructor
     if (params) {
