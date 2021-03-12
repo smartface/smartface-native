@@ -75,9 +75,6 @@ function TabBarController(params) {
         enumerable: true
     });
 
-    self.android = {};
-    self.ios = {};
-
     Object.defineProperty(self.ios, 'barTextTransform', {
         get: function() {
             return self.nativeObject.topBar.valueForKey("titleTextTransform");
