@@ -16,7 +16,7 @@
  *     myView.backgroundColor = Color.RED;
  * 
  */
-function View(params) {}
+function View(params) { }
 
 /**
  * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -28,6 +28,16 @@ function View(params) {}
  * @since 4.0.2
  */
 View.prototype.useForeground;
+/**
+ * Gets/sets test id for view. resource-id for android; accessibilityIdentifier for iOS.
+ * 
+ * @property {String} testId
+ * @android
+ * @ios
+ * @member UI.View
+ * @since 4.3.2
+ */
+View.prototype.testId;
 
 /**
  * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
@@ -470,7 +480,7 @@ View.prototype.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
  * @ios
  * @since 0.1
  */
-View.prototype.bringToFront = function() {};
+View.prototype.bringToFront = function () { };
 
 /**
  * This method flips the view horizontally.
@@ -480,7 +490,7 @@ View.prototype.bringToFront = function() {};
  * @ios
  * @since 3.1.3
  */
-View.prototype.flipHorizontally = function() {};
+View.prototype.flipHorizontally = function () { };
 
 /**
  * This method flips the view vertically.
@@ -490,7 +500,7 @@ View.prototype.flipHorizontally = function() {};
  * @ios
  * @since 3.1.3
  */
-View.prototype.flipVertically = function() {};
+View.prototype.flipVertically = function () { };
 
 /**
  * This method returns an object that defines view location on screen. 
@@ -504,7 +514,7 @@ View.prototype.flipVertically = function() {};
  * @ios
  * @since 3.2.0
  */
-View.prototype.getScreenLocation = function() {};
+View.prototype.getScreenLocation = function () { };
 
 
 /**
@@ -529,7 +539,7 @@ View.prototype.getScreenLocation = function() {};
  * @ios
  * @since 0.1
  */
-View.prototype.getParent = function() {};
+View.prototype.getParent = function () { };
 
 /**
  * This event is called when a touch screen motion event starts.
@@ -544,7 +554,7 @@ View.prototype.getParent = function() {};
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouch = function onTouch(motionEvent) {};
+View.prototype.onTouch = function onTouch(motionEvent) { };
 
 /**
  * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
@@ -561,7 +571,7 @@ View.prototype.onTouch = function onTouch(motionEvent) {};
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouchEnded = function onTouchEnded(isInside, motionEvent) {};
+View.prototype.onTouchEnded = function onTouchEnded(isInside, motionEvent) { };
 
 /**
  * This event is called when changed touch position. If touch position inside this view, isInside parameter will be true.
@@ -578,7 +588,7 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside, motionEvent) {};
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchMoved = function onTouchMoved(isInside, motionEvent) {};
+View.prototype.onTouchMoved = function onTouchMoved(isInside, motionEvent) { };
 
 /**
  * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
@@ -593,7 +603,7 @@ View.prototype.onTouchMoved = function onTouchMoved(isInside, motionEvent) {};
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchCancelled = function onTouchCancelled(motionEvent) {};
+View.prototype.onTouchCancelled = function onTouchCancelled(motionEvent) { };
 
 /**
  * Gets/Sets the elevation of the view. For the views that has 
@@ -730,7 +740,7 @@ View.ios.viewAppearanceSemanticContentAttribute;
  * @static
  * @since 4.2.1
  */
-View.ios.performWithoutAnimation = function() {};
+View.ios.performWithoutAnimation = function () { };
 
 /** 
  * @enum {Number} UI.View.Border
@@ -753,7 +763,7 @@ View.Border = {};
  * @readonly
  * @since 4.1.4
  */
-View.Border.TOP_LEFT =  0;
+View.Border.TOP_LEFT = 0;
 
 /**
  * View's top-right border.
@@ -765,7 +775,7 @@ View.Border.TOP_LEFT =  0;
  * @readonly
  * @since 4.1.4
  */
-View.Border.TOP_RIGHT =  2;
+View.Border.TOP_RIGHT = 2;
 
 /**
  * View's bottom-right border.
@@ -777,7 +787,7 @@ View.Border.TOP_RIGHT =  2;
  * @readonly
  * @since 4.1.4
  */
-View.Border.BOTTOM_RIGHT =  4;
+View.Border.BOTTOM_RIGHT = 4;
 
 /**
  * View's bottom-left border.

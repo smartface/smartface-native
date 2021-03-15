@@ -116,6 +116,16 @@ declare class View extends NativeComponent {
 	 */
 	id: string;
 	/**
+	 * Gets/sets test id for view. resource-id for android; accessibilityIdentifier for iOS.
+	 *
+	 * @property {Number} testId
+	 * @android
+	 * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	testId: string;
+	/**
 	 * Gets/sets visibility of view. It is set to true as default.
 	 *
 	 * @property {Boolean} [visible = true]
@@ -420,7 +430,7 @@ declare class View extends NativeComponent {
 	 * @since 0.1
 	 */
 	alignSelf: FlexLayout.AlignSelf;
-	applyLayout():void;
+	applyLayout(): void;
 	/**
 	 * This method put a view to the top of other views in z-direction.
 	 *
@@ -625,16 +635,16 @@ declare class View extends NativeComponent {
 		 * @static
 		 * @since 3.1.3
 		 */
-        viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
-        /**
-         * Disables a view transition animation.
-         *
-         * @method performWithoutAnimation
-         * @param {Function} functionWithoutAnimation
-         * @ios
-         * @since 4.2.1
-         */
-        performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+		viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+		/**
+		 * Disables a view transition animation.
+		 *
+		 * @method performWithoutAnimation
+		 * @param {Function} functionWithoutAnimation
+		 * @ios
+		 * @since 4.2.1
+		 */
+		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	};
 	/**
 	 * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
@@ -719,8 +729,8 @@ declare namespace View {
 		BOTTOM_LEFT = 0
 	}
 	namespace ios {
-        const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-        const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+		const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	}
 	/**
 	 * iOS Specific Properties.
