@@ -25,6 +25,36 @@ function View(params) {
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
 
+    Object.defineProperty(self, 'accessibilityLabel', {
+        get: function () {
+            return Invocation.invokeInstanceMethod(self.nativeObject, "accessibilityLabel", [], "NSString");
+        },
+        set: function (value) {
+            const nativeAccessibilityLabel = new Invocation.Argument({
+                type: "NSString",
+                value: value
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject, "setAccessibilityLabel:", [accessibilityLabel]);
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(self, 'accessible', {
+        get: function () {
+            return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, "isAccessibilityElement", [], "BOOL");
+        },
+        set: function (value) {
+            const isAccessibility = new Invocation.Argument({
+                type: "BOOL",
+                value: value
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject, "setIsAccessibilityElement:", [isAccessibility]);
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     Object.defineProperty(self.ios, 'shadowOffset', {
         get: function () {
             var size = Invocation.invokeInstanceMethod(self.nativeObject.layer, "shadowOffset", [], "CGSize");

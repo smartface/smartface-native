@@ -25,6 +25,26 @@ export = View;
 declare class View extends NativeComponent {
 	constructor(params?: any);
 	/**
+	 * Gets/sets whether the view is an accessibility element that an assistive app can access.
+	 *
+	 * @property {Boolean} accessible
+	 * @android
+     * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	accessible: boolean;
+	/**
+     * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 *
+	 * @property {String} accessibilityLabel
+	 * @android
+     * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	accessibilityLabel: string;
+	/**
 	 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 	 * This property only supported for api level 23 and above.
 	 *
