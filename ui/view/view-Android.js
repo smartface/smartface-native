@@ -129,6 +129,32 @@ function View(params) {
             enumerable: true,
             configurable: true
         },
+        'accessible': {
+            get: function () {
+                return this.nativeObject.isImportantForAccessibility();
+            },
+            set: function (value) {
+                // IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
+                // IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
+                if(value) {
+                    this.nativeObject.setImportantForAccessibility(1);
+                } else {
+                    this.nativeObject.setImportantForAccessibility(2);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'accessibilityLabel': {
+            get: function () {
+                return this.nativeObject.getContentDescription();
+            },
+            set: function (value) {
+                this.nativeObject.setContentDescription(value);
+            },
+            enumerable: true,
+            configurable: true
+        },
         'borderColor': {
             get: function () {
                 return this._borderColor;

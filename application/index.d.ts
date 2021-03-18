@@ -6,6 +6,7 @@ import RemoteUpdateService = require("./RAU");
 import StatusBar = require("./statusbar");
 import Navigationbar = require("./android/navigationbar");
 import NavigationbarStyle = require("./android/navigationbar/style");
+import SliderDrawer = require('sf-core/ui/sliderdrawer');
 
 /** 
  * @enum {Number} Application.LayoutDirection
@@ -143,8 +144,17 @@ declare const Application: {
  * @ios
  * @since 3.2.0
  */
-	sliderDrawer: typeof import("sf-core/ui/sliderdrawer/sliderdrawer-iOS");
-    rootPage: any;
+	sliderDrawer: SliderDrawer;
+    
+/**
+ * This property allows you to prevent the screen from going to sleep while your app is active.
+ *
+ * @property {Boolean} [keepScreenAwake = false]
+ * @android
+ * @ios
+ * @since 4.3.1
+ */
+    keepScreenAwake: boolean;
 /**
  * Exists the application.
  *
