@@ -136,7 +136,7 @@ function View(params) {
             set: function (value) {
                 // IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
                 // IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
-                if(value) {
+                if (value) {
                     this.nativeObject.setImportantForAccessibility(1);
                 } else {
                     this.nativeObject.setImportantForAccessibility(2);
@@ -284,8 +284,10 @@ View.prototype = {
         return activity.getResources().getResourceEntryName(this.nativeObject.getId());
     },
     set testId(value) {
-        const id = activity.getResources().getIdentifier(value, "id", activity.packageName);
-        this.nativeObject.setId(id);
+        if (this.nativeObject.getId() < 0) {
+            const id = activity.getResources().getIdentifier(value, "id", activity.packageName);
+            this.nativeObject.setId(id);
+        }
     },
     set transitionId(id) {
         SFViewUtil.setTransitionName(this.nativeObject, id);
