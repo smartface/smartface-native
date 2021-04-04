@@ -221,7 +221,7 @@ function TabBarController(params) {
                     });
                 }
                 if (!this.autoCapitalize)
-                    self.setAllCaps(_items, this.tabLayout.nativeObject);
+                    self.setAllCaps(_items, this.tabLayout.nativeObject, this.autoCapitalize);
             },
             enumerable: true,
             configurable: true
