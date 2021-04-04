@@ -21,10 +21,11 @@ const state_unfocused = -16842908;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 MaterialTextbox.prototype = Object.create(View.prototype);
 function MaterialTextbox(params) {
-    View.call(this, params);
     const self = this;
 
     self.nativeObject = new SFMaterialTextBoxWrapper(activity);
+
+    View.call(this);
 
     var sfTextBox = new TextBox();
 
