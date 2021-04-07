@@ -284,8 +284,8 @@ View.prototype = {
         return activity.getResources().getResourceEntryName(this.nativeObject.getId());
     },
     set testId(value) {
-        if (this.nativeObject.getId() < 0) {
-            const id = activity.getResources().getIdentifier(value, "id", activity.packageName);
+        const id = activity.getResourceId(value);
+        if (id > 0) {
             this.nativeObject.setId(id);
         }
     },
