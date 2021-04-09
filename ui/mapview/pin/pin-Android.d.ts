@@ -14,4 +14,5 @@ declare class Pin {
   image: Image;
   visible: boolean;
   onPress: () => void;
+  onInfoWindowPress: () => void;
 }

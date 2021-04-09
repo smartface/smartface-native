@@ -240,6 +240,16 @@ function TabBarController(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        "pagingEnabled": {
+            get: () => {
+                return self.swipeView.pagingEnabled;
+            },
+            set: (value) => {
+                self.swipeView.pagingEnabled = value;
+            },
+            enumerable: true,
+            configurable: true
         }
     });
 

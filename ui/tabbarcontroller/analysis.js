@@ -208,6 +208,17 @@ TabBarController.prototype.iconColor;
  */
 TabBarController.prototype.textColor;
 
+
+/**
+* Enables/Disables paging behavior.
+*
+* @property {Boolean} [pagingEnabled = true]
+* @android
+* @ios
+* @since 4.3.2
+*/
+TabBarController.prototype.pagingEnabled = true;
+
 /**
  * This event called when a tab is chosen by the user.
  * Returns an {@link UI.Page Page} instance based on index.

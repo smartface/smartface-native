@@ -42,6 +42,15 @@ const extend = require('js-base/core/extend');
 function MapView(params) {}
 
 /**
+ * Enables/disables the information view to display on the right side of the callout bubble.
+ *
+ * @property {Boolean} [enableInfoWindow = false]
+ * @ios
+ * @since 4.3.2
+ */
+MapView.prototype.enableInfoWindow;
+
+/**
  * Enables/Disables scroll gestures so that map can be dragged.
  *
  * @property {Boolean} [scrollEnabled = true]
@@ -545,6 +554,17 @@ Pin.prototype.visible;
  * @since 1.1.2
  */
 Pin.prototype.onPress;
+
+
+/**
+ * This event will be fired when the pin's info window is touched.
+ *
+ * @event onInfoWindowPress
+ * @android
+ * @ios
+ * @since 4.3.2
+ */
+Pin.prototype.onInfoWindowPress;
 
 MapView.Pin = Pin;
 

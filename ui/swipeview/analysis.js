@@ -85,6 +85,17 @@ function SwipeView() {
      * @since 1.1.10
      */
     this.currentIndex = -1;
+
+     /**
+     * Enables/Disables paging behavior.
+     *
+     * @property {Boolean} [pagingEnabled = true]
+     * @android
+     * @ios
+     * @since 4.3.2
+     */
+    this.pagingEnabled = true;
+
     /**
      * Swipes to the page inside the index of the array.
      *

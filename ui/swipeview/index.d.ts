@@ -86,7 +86,17 @@ declare class SwipeView extends View {
 	 * @readonly
 	 * @since 1.1.10
 	 */
-	currentIndex: number;
+    currentIndex: number;
+    
+    /**
+     * Enables/Disables paging behavior.
+     *
+     * @property {Boolean} [pagingEnabled = true]
+     * @android
+     * @ios
+     * @since 4.3.2
+     */
+    pagingEnabled: Boolean;
 	/**
 	 * Swipes to the page inside the index of the array.
 	 *

@@ -196,6 +196,18 @@ declare interface TabBarController extends Page {
  * @since 3.2.0
  */
     textColor: Color;
+
+
+/**
+* Enables/Disables paging behavior.
+*
+* @property {Boolean} [pagingEnabled = true]
+* @android
+* @ios
+* @since 4.3.2
+*/
+    pagingEnabled: Boolean;
+
 /**
  * This event called when a tab is chosen by the user.
  * Returns an {@link UI.Page Page} instance based on index.
