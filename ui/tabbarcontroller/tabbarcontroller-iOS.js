@@ -253,6 +253,17 @@ function TabBarController(params) {
             self.nativeObject.setSelectedIndexWithAnimated(index, _animated);
         });
     };
+    
+    Object.defineProperty(self, 'pagingEnabled', {
+        get: function() {
+            return self.nativeObject.pagingEnabled;
+        },
+        set: function(value) {
+            self.nativeObject.pagingEnabled = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
 
     // Assign parameters given in constructor
     if (params) {

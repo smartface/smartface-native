@@ -4,7 +4,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
-const NativeViewPager = requireClass("androidx.viewpager.widget.ViewPager");
+const NativeViewPager = requireClass("io.smartface.android.sfcore.ui.swipeview.SFSwipeView");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("androidx.viewpager.widget.ViewPager$OnPageChangeListener");
 
@@ -131,6 +131,16 @@ function SwipeView(params) {
             value: function(index, animated) {
                 animated = (animated) ? true : false; // not to pass null to native method
                 self.nativeObject.setCurrentItem(index, animated);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        "pagingEnabled": {
+            get: () => {
+                return self.nativeObject.isUserInputEnabled();
+            },
+            set: (value) => {
+                self.nativeObject.setIsUserInputEnabled(value);
             },
             enumerable: true,
             configurable: true

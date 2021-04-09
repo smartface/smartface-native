@@ -128,6 +128,7 @@ function SwipeView(params) {
     var _pageArray = [];
     var _instanceArray = [];
     var _pageNativeObjectArray = [];
+    var _pagingEnabled = true;
     Object.defineProperty(self, 'pages', {
         get: function() {
             return _pageArray;
@@ -186,7 +187,7 @@ function SwipeView(params) {
     self.pageControllerDatasource.viewControllerBeforeViewController = function(e) {
         var index = _pageNativeObjectArray.indexOf(e.viewController);
         transactionIndex = index;
-        if (index > 0) {
+        if (index > 0 && _pagingEnabled) {
             index--;
             return _pageNativeObjectArray[index];
         }
@@ -196,7 +197,7 @@ function SwipeView(params) {
     self.pageControllerDatasource.viewControllerAfterViewController = function(e) {
         var index = _pageNativeObjectArray.indexOf(e.viewController);
         transactionIndex = index;
-        if (index >= 0 && index < _pageNativeObjectArray.length - 1) {
+        if (index >= 0 && index < _pageNativeObjectArray.length - 1 && _pagingEnabled) {
             index++;
             return _pageNativeObjectArray[index];
         }
@@ -314,6 +315,17 @@ function SwipeView(params) {
             } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(self, 'pagingEnabled', {
+        get: function() {
+            return _pagingEnabled;
+        },
+        set: function(value) {
+            _pagingEnabled = value;
         },
         enumerable: true,
         configurable: true
