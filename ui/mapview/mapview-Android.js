@@ -10,6 +10,7 @@ const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.M
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
 const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
+const NativeOnInfoWindowClickListener = NativeGoogleMap.OnInfoWindowClickListener;
 const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
 const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 const NativeOnCameraMoveStartedListener = NativeGoogleMap.OnCameraMoveStartedListener;
@@ -40,7 +41,7 @@ function MapView(params) {
     function asyncMap() {
         const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
         self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
-            onMapReady: function(googleMap) {
+            onMapReady: function (googleMap) {
                 _nativeGoogleMap = googleMap;
 
                 self.nativeObject.onStart();
@@ -48,8 +49,8 @@ function MapView(params) {
 
                 if (!_clusterEnabled) {
                     googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
-                        onMarkerClick: function(marker) {
-                            _pins.forEach(function(pin) {
+                        onMarkerClick: function (marker) {
+                            _pins.forEach(function (pin) {
                                 if (pin.nativeObject.getId() === marker.getId()) {
                                     pin.onPress && pin.onPress();
                                 }
@@ -57,10 +58,21 @@ function MapView(params) {
                             return false;
                         }
                     }));
+
+                    googleMap.setOnInfoWindowClickListener(NativeOnInfoWindowClickListener.implement({
+                        onInfoWindowClick: (marker) => {
+                            _pins.forEach(function (pin) {
+                                if (pin.nativeObject.getId() === marker.getId()) {
+                                    pin.onInfoWindowPress && pin.onInfoWindowPress();
+                                }
+                            });
+                        }
+                    }));
                 }
 
+
                 googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
-                    onMapClick: function(location) {
+                    onMapClick: function (location) {
                         _onPress && _onPress({
                             latitude: location.latitude,
                             longitude: location.longitude,
@@ -69,7 +81,7 @@ function MapView(params) {
                 }));
 
                 googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
-                    onMapLongClick: function(location) {
+                    onMapLongClick: function (location) {
                         _onLongPress && _onLongPress({
                             latitude: location.latitude,
                             longitude: location.longitude
@@ -79,14 +91,14 @@ function MapView(params) {
 
                 var _isMoveStarted = false;
                 googleMap.setOnCameraMoveStartedListener(NativeOnCameraMoveStartedListener.implement({
-                    onCameraMoveStarted: function(reason) {
+                    onCameraMoveStarted: function (reason) {
                         _onCameraMoveStarted && _onCameraMoveStarted();
                         _isMoveStarted = true;
                     }
                 }));
 
                 googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
-                    onCameraIdle: function() {
+                    onCameraIdle: function () {
                         _nativeClusterManager && _nativeClusterManager.onCameraIdle();
                         _zoomLevel = self.zoomLevel; // Current zoom level always kept by those properties
                         _centerLocation = self.centerLocation;
@@ -109,7 +121,7 @@ function MapView(params) {
                 self.locationButtonVisible = _locationButtonVisible;
 
                 _pins = []; // ToDo: Clearing array on map ready should be re-considered while refactoring;
-                _pendingPins.forEach(function(element) {
+                _pendingPins.forEach(function (element) {
                     self.addPin(element);
                 });
                 _pendingPins = [];
@@ -152,12 +164,12 @@ function MapView(params) {
 
     Object.defineProperties(self, {
         'getVisiblePins': {
-            value: function() {
+            value: function () {
                 var result = [];
                 if (_nativeGoogleMap) {
                     var latLongBounds = _nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
 
-                    _pins.forEach(function(itemObj) {
+                    _pins.forEach(function (itemObj) {
                         if (latLongBounds.contains(itemObj.nativeObject.getPosition())) {
                             result.push(itemObj);
                         }
@@ -168,7 +180,7 @@ function MapView(params) {
             enumerable: true
         },
         'centerLocation': {
-            get: function() {
+            get: function () {
                 if (!_nativeGoogleMap)
                     return _centerLocation;
                 var nativeLatLng = _nativeGoogleMap.getCameraPosition().target;
@@ -180,7 +192,7 @@ function MapView(params) {
             enumerable: true
         },
         'setCenterLocationWithZoomLevel': {
-            value: function(location, zoomlevel, animate) {
+            value: function (location, zoomlevel, animate) {
                 if (typeof location === "object")
                     _centerLocation = location;
                 if (typeof zoomlevel === "number")
@@ -202,10 +214,10 @@ function MapView(params) {
             enumerable: true
         },
         'compassEnabled': {
-            get: function() {
+            get: function () {
                 return _compassEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 if (TypeUtil.isBoolean(enabled)) {
                     _compassEnabled = enabled;
                     if (_nativeGoogleMap) {
@@ -216,10 +228,10 @@ function MapView(params) {
             enumerable: true
         },
         'rotateEnabled': {
-            get: function() {
+            get: function () {
                 return _rotateEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 if (TypeUtil.isBoolean(enabled)) {
                     _rotateEnabled = enabled;
 
@@ -231,10 +243,10 @@ function MapView(params) {
             enumerable: true
         },
         'scrollEnabled': {
-            get: function() {
+            get: function () {
                 return _scrollEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 if (TypeUtil.isBoolean(enabled)) {
                     _scrollEnabled = enabled;
 
@@ -246,10 +258,10 @@ function MapView(params) {
             enumerable: true
         },
         'zoomEnabled': {
-            get: function() {
+            get: function () {
                 return _zoomEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 if (TypeUtil.isBoolean(enabled)) {
                     _zoomEnabled = enabled;
 
@@ -261,10 +273,10 @@ function MapView(params) {
             enumerable: true
         },
         'maxZoomLevel': {
-            get: function() {
+            get: function () {
                 return _maxZoomLevel;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _maxZoomLevel = value;
 
@@ -276,10 +288,10 @@ function MapView(params) {
             enumerable: true
         },
         'minZoomLevel': {
-            get: function() {
+            get: function () {
                 return _minZoomLevel;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _minZoomLevel = value;
 
@@ -291,10 +303,10 @@ function MapView(params) {
             enumerable: true
         },
         'zoomLevel': {
-            get: function() {
+            get: function () {
                 return _nativeGoogleMap ? (_nativeGoogleMap.getCameraPosition().zoom - 2) : undefined;
             },
-            set: function(value) {
+            set: function (value) {
                 if (TypeUtil.isNumeric(value)) {
                     _zoomLevel = value;
 
@@ -308,10 +320,10 @@ function MapView(params) {
             enumerable: true
         },
         'userLocationEnabled': {
-            get: function() {
+            get: function () {
                 return _userLocationEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 if (TypeUtil.isBoolean(enabled)) {
                     _userLocationEnabled = enabled;
 
@@ -323,16 +335,16 @@ function MapView(params) {
             enumerable: true
         },
         'clusterEnabled': {
-            get: function() {
+            get: function () {
                 return _clusterEnabled;
             },
-            set: function(value) {
+            set: function (value) {
                 _clusterEnabled = value;
             },
             enumerable: true
         },
         'cluster': {
-            get: function() {
+            get: function () {
                 if (_nativeCustomMarkerRenderer === null) {
                     const Cluster = require("./cluster");
                     _nativeCustomMarkerRenderer = new Cluster();
@@ -342,57 +354,57 @@ function MapView(params) {
             enumerable: true
         },
         'clusterFont': { //cant set after added mapview
-            get: function() {
+            get: function () {
                 return _font;
             },
-            set: function(value) {
+            set: function (value) {
                 if (value instanceof Font)
                     _font = value;
             },
             enumerable: true
         },
         'clusterTextColor': {
-            get: function() {
+            get: function () {
                 return _textColor.nativeObject;
             },
-            set: function(value) {
+            set: function (value) {
                 if (value instanceof Color)
                     _textColor = value;
             }
         },
         'clusterFillColor': { //cant set after added mapview
-            get: function() {
+            get: function () {
                 return _fillColor.nativeObject;
             },
-            set: function(value) {
+            set: function (value) {
                 if (value instanceof Color)
                     _fillColor = value;
             },
             enumerable: true
         },
         'clusterBorderColor': { //cant set after added mapview
-            get: function() {
+            get: function () {
                 return _borderColor.nativeObject;
             },
-            set: function(value) {
+            set: function (value) {
                 if (value instanceof Color)
                     _borderColor = value;
             }
         },
         'onClusterPress': {
-            get: function() {
+            get: function () {
                 return _clusterOnPress;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _clusterOnPress = callback;
             },
             enumerable: true
         },
         'type': {
-            get: function() {
+            get: function () {
                 return _type;
             },
-            set: function(type) {
+            set: function (type) {
                 if (MapView.Type.contains(type)) {
                     _type = type;
                     if (_nativeGoogleMap) {
@@ -405,7 +417,7 @@ function MapView(params) {
             enumerable: true
         },
         'addPin': {
-            value: function(pin) {
+            value: function (pin) {
                 if (pin instanceof MapView.Pin) {
                     if (self.nativeObject && _nativeGoogleMap) {
                         if (!pin.nativeObject) {
@@ -442,7 +454,7 @@ function MapView(params) {
             enumerable: true
         },
         'removePin': {
-            value: function(pin) {
+            value: function (pin) {
                 if (pin instanceof MapView.Pin) {
                     if (self.nativeObject) {
                         if (!_clusterEnabled) {
@@ -470,13 +482,13 @@ function MapView(params) {
             enumerable: true
         },
         'removeAllPins': {
-            value: function() {
+            value: function () {
                 if (_clusterEnabled && _nativeClusterManager) {
                     _nativeClusterManager.clearItems();
                     _nativeClusterManager.cluster();
                     _pins = [];
                 } else if (_pins.length > 0) {
-                    _pins.forEach(function(pin) {
+                    _pins.forEach(function (pin) {
                         pin.nativeObject.remove();
                     });
                     _pins = [];
@@ -485,53 +497,53 @@ function MapView(params) {
             enumerable: true
         },
         'onCreate': {
-            get: function() {
+            get: function () {
                 return _onCreate;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onCreate = callback;
             },
             enumerable: true
         },
         'onPress': {
-            get: function() {
+            get: function () {
                 return _onPress;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onPress = callback;
             },
             enumerable: true
         },
         'onLongPress': {
-            get: function() {
+            get: function () {
                 return _onLongPress;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onLongPress = callback;
             },
             enumerable: true
         },
 
         'onCameraMoveStarted': {
-            get: function() {
+            get: function () {
                 return _onCameraMoveStarted;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onCameraMoveStarted = callback;
             },
             enumerable: true
         },
         'onCameraMoveEnded': {
-            get: function() {
+            get: function () {
                 return _onCameraMoveEnded;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onCameraMoveEnded = callback;
             },
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'MapView';
             },
             enumerable: true,
@@ -541,7 +553,7 @@ function MapView(params) {
 
     Object.defineProperties(this.android, {
         'prepareMap': {
-            value: function() {
+            value: function () {
                 self.nativeObject.onCreate(savedBundles);
                 asyncMap();
             },
@@ -549,17 +561,17 @@ function MapView(params) {
         },
         // TODO: Remove this function future version. prepareMap naming is better than prepareMapAsync.
         'prepareMapAsync': {
-            value: function() {
+            value: function () {
                 self.nativeObject.onCreate(savedBundles);
                 asyncMap();
             },
             enumerable: true
         },
         'locationButtonVisible': {
-            get: function() {
+            get: function () {
                 return _locationButtonVisible;
             },
-            set: function(value) {
+            set: function (value) {
                 if (typeof value === 'boolean') {
                     _locationButtonVisible = value;
                     if (_nativeGoogleMap)
@@ -583,16 +595,23 @@ function MapView(params) {
 
         _nativeClusterManager = new NativeClusterManager(AndroidConfig.activity, _nativeGoogleMap);
         _nativeGoogleMap.setOnMarkerClickListener(_nativeClusterManager);
+        _nativeGoogleMap.setOnInfoWindowClickListener(_nativeClusterManager);
 
         _nativeClusterManager.setOnClusterItemClickListener(NativeClusterManager.OnClusterItemClickListener.implement({
-            onClusterItemClick: function(item) {
+            onClusterItemClick: function (item) {
                 _pinArray[item].onPress && _pinArray[item].onPress();
                 return false;
             }
         }));
 
+        _nativeClusterManager.setOnClusterItemInfoWindowClickListener(NativeClusterManager.OnClusterItemInfoWindowClickListener.implement({
+            onClusterItemInfoWindowClick: function (item) {
+                _pinArray[item].onInfoWindowPress && _pinArray[item].onInfoWindowPress();
+            }
+        }));
+
         _nativeClusterManager.setOnClusterClickListener(NativeClusterManager.OnClusterClickListener.implement({
-            onClusterClick: function(cluster) {
+            onClusterClick: function (cluster) {
                 var pinArray = [];
                 var clusterArray = toJSArray(cluster.getItems().toArray());
                 for (var i = 0; i < clusterArray.length; i++) {
@@ -641,7 +660,7 @@ Object.defineProperties(MapView.Type, {
         enumerable: true
     },
     'contains': {
-        value: function(key) {
+        value: function (key) {
             return (key === MapView.Type.NORMAL) || (key === MapView.Type.SATELLITE) || (key === MapView.Type.HYBRID);
         }
     }

@@ -487,18 +487,28 @@ Object.defineProperty(MapView, 'Pin', {
 
 
 function Pin(params) {
-
     var self = this;
     if (!self.nativeObject) {
         self.nativeObject = __SF_Annotation.createAnnotation();
     }
 
+    this.ios = {};
     Object.defineProperty(self, 'location', {
         get: function() {
             return self.nativeObject.setCoordinate;
         },
         set: function(value) {
             self.nativeObject.setCoordinate = value;
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(self.ios, 'enableInfoWindow', {
+        get: function() {
+            return self.nativeObject.enableInfoWindow;
+        },
+        set: function(value) {
+            self.nativeObject.enableInfoWindow = value;
         },
         enumerable: true
     });
@@ -571,6 +581,16 @@ function Pin(params) {
         },
         set: function(value) {
             self.nativeObject.onPress = value.bind(this);
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(self, 'onInfoWindowPress', {
+        get: function() {
+            return self.nativeObject.onInfoPress;
+        },
+        set: function(value) {
+            self.nativeObject.onInfoPress = value.bind(this);
         },
         enumerable: true
     });
