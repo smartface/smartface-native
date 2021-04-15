@@ -37,7 +37,7 @@ ImageView.prototype._tintColor;
 ImageView.prototype.__newImageLoaded = false;
 Object.defineProperties(ImageView.prototype, {
     'image': {
-        get: function() {
+        get: function () {
             if (!this._image || this.__newImageLoaded) {
                 this.__newImageLoaded = false;
                 let drawable = this.nativeObject.getDrawable();
@@ -47,7 +47,7 @@ Object.defineProperties(ImageView.prototype, {
             } else
                 return this._image;
         },
-        set: function(value) {
+        set: function (value) {
             // We don't use backgroundImage of view. Because, it breaks image fill type.
             if (value instanceof Image) {
                 var image = value;
@@ -68,10 +68,10 @@ Object.defineProperties(ImageView.prototype, {
         enumerable: true
     },
     'tintColor': {
-        get: function() {
+        get: function () {
             return this._tintColor;
         },
-        set: function(tintColor) {
+        set: function (tintColor) {
             const Color = require("sf-core/ui/color");
             if (!tintColor instanceof Color)
                 return;
@@ -86,10 +86,10 @@ Object.defineProperties(ImageView.prototype, {
         enumerable: true
     },
     'imageFillType': {
-        get: function() {
+        get: function () {
             return this._fillType === undefined ? this.nativeObject.getScaleType() : this._fillType;
         },
-        set: function(fillType) {
+        set: function (fillType) {
             if (!(fillType in ImageFillTypeDic)) {
                 fillType = ImageView.FillType.NORMAL;
             }
@@ -104,36 +104,44 @@ Object.defineProperties(ImageView.prototype, {
     }
 });
 
-ImageView.prototype.toString = function() {
+ImageView.prototype.toString = function () {
     return 'ImageView';
 };
 
-ImageView.prototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-    var {
+ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be object this usage is deprecated
+    let {
         url = "",
-            placeholder,
-            fade,
-            onFailure,
-            onSuccess,
-            networkPolicy,
-            memoryPolicy,
-            useHTTPCacheControl
+        headers = {},
+        placeholder,
+        fade,
+        onFailure,
+        onSuccess,
+        networkPolicy,
+        memoryPolicy,
+        useHTTPCacheControl
     } = getLoadFromUrlParams.apply(null, arguments);
-    var callback = null;
+    let callback = null;
     if (onFailure || onSuccess) {
         const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
         callback = NativePicassoCallback.implement({
-            onSuccess: function() {
+            onSuccess: function () {
                 onSuccess && onSuccess();
             },
-            onError: function() {
+            onError: function () {
                 onFailure && onFailure();
             }
         });
     }
-    const NativePicasso = requireClass("com.squareup.picasso.Picasso");
+    const NativeSFPicassoBuilder = requireClass("io.smartface.android.sfcore.ui.imageview.SFPicassoBuilder");
 
-    var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(NativeUri.parse(url));
+    let nativePicassoBuilder = new NativeSFPicassoBuilder(AndroidConfig.activity);
+    for (let [key, value] of Object.entries(headers)) {
+        nativePicassoBuilder.addRequestHeader(key, value);
+    }
+
+    let plainRequestCreator = nativePicassoBuilder.build()
+        .load(NativeUri.parse(url));
+
     plainRequestCreator = setArgsToRequestCreator.call(plainRequestCreator, {
         networkPolicy,
         fade,
@@ -141,7 +149,7 @@ ImageView.prototype.loadFromUrl = function() { //ToDo: Paramters should be objec
         memoryPolicy,
         useHTTPCacheControl
     });
-    var requestCreator = scaleImage(plainRequestCreator);
+    let requestCreator = scaleImage(plainRequestCreator);
     if (callback !== null)
         requestCreator.into(this.nativeObject, callback);
     else
@@ -150,15 +158,15 @@ ImageView.prototype.loadFromUrl = function() { //ToDo: Paramters should be objec
     this.__newImageLoaded = true;
 };
 
-ImageView.prototype.fetchFromUrl = function(params) {
+ImageView.prototype.fetchFromUrl = function (params) {
     const self = this;
     const NativeTarget = requireClass("com.squareup.picasso.Target");
-    const NativePicasso = requireClass("com.squareup.picasso.Picasso");
     const {
         onSuccess,
         onError,
         onFailure,
         url = "",
+        headers = {},
         placeholder,
         android: {
             networkPolicy: networkPolicy,
@@ -167,22 +175,30 @@ ImageView.prototype.fetchFromUrl = function(params) {
         useHTTPCacheControl
     } = params;
     var target = NativeTarget.implement({
-        onBitmapLoaded: function(bitmap, from) {
+        onBitmapLoaded: function (bitmap, from) {
             onSuccess && onSuccess(new Image({
                 bitmap: bitmap
             }), (from && ImageView.CacheType[from.name()]));
         },
-        onBitmapFailed: function(errorDrawable) {
+        onBitmapFailed: function (errorDrawable) {
             // onFailure callback added instead of onError in sf-core 3.2.1
             var onFailed = (onError ? onError : onFailure);
             onFailed && onFailed();
         },
-        onPrepareLoad: function(placeHolderDrawable) {
+        onPrepareLoad: function (placeHolderDrawable) {
             self.nativeObject.setImageDrawable(placeHolderDrawable);
         }
     });
 
-    var requestCreator = NativePicasso.with(AndroidConfig.activity).load(NativeUri.parse(url));
+    const NativeSFPicassoBuilder = requireClass("io.smartface.android.sfcore.ui.imageview.SFPicassoBuilder");
+
+    let nativePicassoBuilder = new NativeSFPicassoBuilder(AndroidConfig.activity);
+    for (let [key, value] of Object.entries(headers)) {
+        nativePicassoBuilder.addRequestHeader(key, value);
+    }
+
+    let requestCreator = nativePicassoBuilder.build()
+        .load(NativeUri.parse(url));
     requestCreator = setArgsToRequestCreator.call(requestCreator, {
         placeholder,
         networkPolicy,
@@ -192,7 +208,7 @@ ImageView.prototype.fetchFromUrl = function(params) {
     requestCreator.into(target);
 };
 
-ImageView.prototype.loadFromFile = function(params) {
+ImageView.prototype.loadFromFile = function (params) {
     var {
         file,
         fade,
@@ -336,6 +352,7 @@ function getLoadFromUrlParams() {
         // onFailure callback added instead of onError in sf-core 3.2.1
         return {
             url: params.url,
+            headers: params.headers,
             placeholder: params.placeholder,
             onFailure: (params.onError ? params.onError : params.onFailure),
             fade: params.fade,
