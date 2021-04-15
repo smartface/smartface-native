@@ -99,9 +99,9 @@ function ImageView(params) {
 		}
 	}
 
-	self.loadFromUrl = function(url, placeholder, fade) {
+	self.loadFromUrl = function(url, placeholder, fade, headers = {}) {
 		if (typeof url === "string") { // Deprecated: Use loadFromUrl(object);
-			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url), placeholder ? placeholder.nativeObject : undefined, undefined, function(innerFade, image, error, cache, url) {
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url), placeholder ? placeholder.nativeObject : undefined, headers, undefined, function(innerFade, image, error, cache, url) {
 				if (!error) {
 					if (cache == ImageCacheType.NONE && innerFade !== false) {
 						var alpha = this.nativeObject.alpha;
@@ -117,10 +117,12 @@ function ImageView(params) {
 			var options;
 			url.ios && url.ios.isRefreshCached && (options = SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
 			url.useHTTPCacheControl && (options = SDWebImageOptions.SDWebImageRefreshCached);
-			
+            
+            const headers = url.headers
 			self.nativeObject.loadFromURL(
 				__SF_NSURL.URLWithString(url.url),
-				url.placeholder ? url.placeholder.nativeObject : undefined,
+                url.placeholder ? url.placeholder.nativeObject : undefined,
+                headers,
 				options ? options : undefined,
 				function(onSuccess, onError, innerFade, image, error, cache, url) {
 					if (!error) {
@@ -153,8 +155,9 @@ function ImageView(params) {
 		var options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
 		object.ios && object.ios.isRefreshCached &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
 		object.useHTTPCacheControl &&  (options = options | SDWebImageOptions.SDWebImageRefreshCached);
-		
-		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
+        
+        const headers = object.headers || {};
+		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url), object.placeholder ? object.placeholder.nativeObject : undefined, headers, options ? options : undefined, function(onSuccess, onError, image, error, cache, url) {
 			if (!error) {
 				if (typeof onSuccess === "function") {
 					__SF_Dispatch.mainAsync(function(innerIndex) {
