@@ -161,7 +161,7 @@ function MaterialTextbox(params) {
                 }
 
                 if (editTextId > 0) {
-                    sfTextBox.setId(id);
+                    sfTextBox.setId(editTextId);
                 }
             },
             enumerable: true
