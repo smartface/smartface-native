@@ -1207,7 +1207,8 @@ function View(params) {
         set: function (value) {
             self.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     // Yoga specific properties, not compatible with flexbox specification

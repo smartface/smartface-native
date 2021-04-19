@@ -117,6 +117,7 @@ function View(params) {
             configurable: true
         }
     });
+
     Object.defineProperties(this, {
         'backgroundColor': {
             get: function () {
@@ -125,6 +126,19 @@ function View(params) {
             set: function (color) {
                 this._backgroundColor = color;
                 this._resetBackground();
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'testId': {
+            get: function () {
+                return activity.getResources().getResourceEntryName(this.nativeObject.getId());
+            },
+            set: function (value) {
+                const id = activity.getResourceId(value);
+                if (id > 0) {
+                    this.nativeObject.setId(id);
+                }
             },
             enumerable: true,
             configurable: true
@@ -279,15 +293,6 @@ function View(params) {
 View.prototype = {
     get transitionId() {
         return SFViewUtil.getTransitionName(this.nativeObject);
-    },
-    get testId() {
-        return activity.getResources().getResourceEntryName(this.nativeObject.getId());
-    },
-    set testId(value) {
-        const id = activity.getResourceId(value);
-        if (id > 0) {
-            this.nativeObject.setId(id);
-        }
     },
     set transitionId(id) {
         SFViewUtil.setTransitionName(this.nativeObject, id);
