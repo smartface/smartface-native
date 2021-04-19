@@ -24,6 +24,17 @@ function MaterialTextbox(params) {
     self.nativeObject.layer.masksToBounds = false;
     self.ios.clearButtonEnabled = false;
 
+    Object.defineProperty(self, 'testId', {
+        get: function () {
+            return self.nativeObject.valueForKey("accessibilityIdentifier");
+        },
+        set: function (value) {
+            self.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
+            self.mdcTextInputControllerUnderline.textInput.setValueForKey(value + "_textBox", 'accessibilityIdentifier');
+        },
+        enumerable: true
+    });
+
     Object.defineProperty(self, 'cursorPosition', {
         get: function() {
             var selectedTextRange = this.valueForKey("selectedTextRange");
