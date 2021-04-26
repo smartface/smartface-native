@@ -369,13 +369,15 @@ function Page(params) {
             return _titleLayout;
         },
         set: function (view) {
-            const ToolbarLayoutParams = requireClass("androidx.appcompat.widget.Toolbar$LayoutParams");
-            var toolbarParams = new ToolbarLayoutParams(1); // Gravity.CENTER
-
             if (_titleLayout)
                 toolbar.removeView(_titleLayout.nativeObject);
-                
-            toolbar.addView(view.nativeObject, toolbarParams);
+
+            if (view) {
+                const ToolbarLayoutParams = requireClass("androidx.appcompat.widget.Toolbar$LayoutParams");
+                let toolbarParams = new ToolbarLayoutParams(8388611); // Gravity.START
+
+                toolbar.addView(view.nativeObject, toolbarParams);
+            }
             _titleLayout = view;
         },
         enumerable: true,

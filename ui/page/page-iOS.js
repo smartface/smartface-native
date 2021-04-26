@@ -397,6 +397,9 @@ function Page(params) {
                 _titleView.nativeObject.sizeToFit();
 
                 self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
+            } else {
+
+                self.nativeObject.navigationItem.titleView = undefined;
             }
         },
         enumerable: true,
@@ -421,6 +424,9 @@ function Page(params) {
                 _titleView.nativeObject.sizeToFit();
 
                 self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
+            } else {
+
+                self.nativeObject.navigationItem.titleView = undefined;
             }
         },
         enumerable: true,
