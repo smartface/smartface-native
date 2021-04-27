@@ -132,7 +132,11 @@ function View(params) {
         },
         'testId': {
             get: function () {
-                return activity.getResources().getResourceEntryName(this.nativeObject.getId());
+                if (!AndroidConfig.isEmulator) {
+                    return activity.getResources().getResourceEntryName(this.nativeObject.getId());
+                } else {
+                    return "";
+                }
             },
             set: function (value) {
                 const id = activity.getResourceId(value);
