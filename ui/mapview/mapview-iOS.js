@@ -399,6 +399,9 @@ function MapView(params) {
             }
             return _zoomLevel;
         },
+        set: function(value) {
+            self.setZoomLevelWithAnimated(self.centerLocation, value + 1, false);
+        },
         enumerable: true
     });
 
