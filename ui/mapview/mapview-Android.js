@@ -191,6 +191,38 @@ function MapView(params) {
             },
             enumerable: true
         },
+        'visibleRegion': {
+            get: () => {
+                if (!_nativeGoogleMap)
+                    return undefined;
+                
+                let visibleRegion = _nativeGoogleMap.getProjection().getVisibleRegion();
+                let farLeft = visibleRegion.farLeft;
+                let farRight = visibleRegion.farRight;
+                let nearLeft = visibleRegion.nearLeft;
+                let nearRight = visibleRegion.nearRight;
+
+                return {
+                    topLeft: {
+                        latitude: farLeft.latitude,
+                        longitude: farLeft.longitude
+                    },
+                    topRight: {
+                        latitude: farRight.latitude,
+                        longitude: farRight.longitude
+                    },
+                    bottomLeft: {
+                        latitude: nearLeft.latitude,
+                        longitude: nearLeft.longitude
+                    },
+                    bottomRight: {
+                        latitude: nearRight.latitude,
+                        longitude: nearRight.longitude
+                    }
+                };
+            },
+            enumerable: true
+        },
         'setCenterLocationWithZoomLevel': {
             value: function (location, zoomlevel, animate) {
                 if (typeof location === "object")
