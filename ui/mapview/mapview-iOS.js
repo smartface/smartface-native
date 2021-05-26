@@ -69,6 +69,23 @@ function MapView(params) {
 
     self.nativeObject.mapViewFinishRender = mapRender;
 
+    Object.defineProperty(self, 'visibleRegion', {
+        get: function() {
+            const topLeft = self.nativeObject.getTopLeftCoordinate();
+            const topRight = self.nativeObject.getTopRightCoordinate();
+            const bottomLeft = self.nativeObject.getBottomLeftCoordinate();
+            const bottomRight = self.nativeObject.getBottomRightCoordinate();
+
+            return {
+                topLeft,
+                topRight,
+                bottomLeft,
+                bottomRight
+            };
+        },
+        enumerable: true
+    });
+
     Object.defineProperty(self, 'type', {
         get: function() {
             return self.nativeObject.mapType;
