@@ -133,7 +133,7 @@ declare class MapView extends View {
 	 * @ios
 	 * @since 3.0.1
 	 */
-	onClusterPress: (pins: Pin) => void;
+	onClusterPress: (pins: Pin[]) => void;
 	/**
 	 * This property sets center location of the map to the given latitude & longitude.
 	 *

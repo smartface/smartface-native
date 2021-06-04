@@ -403,7 +403,7 @@ declare interface ListView extends View {
 	 * @ios
 	 * @since 0.1
 	 */
-	scrollTo(ndex: number, animated: boolean): void;
+	scrollTo(index: number, animated: boolean): void;
 	/**
 	 * Sets/Gets the bounce effect when scrolling.
 	 *

@@ -52,8 +52,8 @@ declare class GifImage extends NativeComponent {
  */
 	static createFromFile(
 		path: string,
-		width: number,
-		height: number
+		width?: number,
+		height?: number
 	): GifImage;
 /**
  * Gets/Sets the loopCount of gifImage. This property is readonly on iOS.

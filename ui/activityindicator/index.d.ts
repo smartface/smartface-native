@@ -1,13 +1,16 @@
 import Color = require("../color");
 import View = require("../view");
-import ActivityIndicatorViewStyle = require("./ios/activityindicatorviewstyle");
+import _ActivityIndicatorViewStyle = require("./ios/activityindicatorviewstyle");
 
 declare class ActivityIndicator extends View {
   color: Color
 }
 
 declare namespace ActivityIndicator {
-  export {ActivityIndicatorViewStyle};
+  namespace iOS {
+    export import ActivityIndicatorViewStyle = _ActivityIndicatorViewStyle;
+    export import SemanticContentAttribute = View.iOS.SemanticContentAttribute;
+  }
 }
 
 export = ActivityIndicator;

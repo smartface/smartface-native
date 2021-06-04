@@ -726,9 +726,9 @@ declare class Multimedia {
          */
         getAllGalleryItems(paras: {
             type: Multimedia.Type;
-            onSuccess: (params: { image: Image; video: File }) => void;
-            onCancel: () => void;
-            onFailure: (e: { message: string }) => void;
+            onSuccess: (params: { image: Image[]; video: File[] }) => void;
+            onCancel?: () => void;
+            onFailure?: (e: { message: string }) => void;
         });
     };
 }
