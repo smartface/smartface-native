@@ -1,1 +1,4 @@
-module.exports = require('./crypto-' + Device.deviceOS);
+module.exports = {
+    RSA: require('./rsa'),
+    AES: require('./aes')
+};;
