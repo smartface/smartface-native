@@ -1,6 +1,6 @@
-import DecelerationRate = require("./decelerationrate");
-import ContentInsetAdjustment = require("./contentinsetadjustment");
-import TextContentType = require("./textcontenttype");
+import DecelerationRate from "./decelerationrate";
+import ContentInsetAdjustment from "./contentinsetadjustment";
+import TextContentType from "./textcontenttype";
 
 declare const _exports : {
   DecelerationRate: DecelerationRate,

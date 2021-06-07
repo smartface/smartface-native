@@ -1,10 +1,10 @@
 /// <reference path="../../.types/typings.d.ts" />
 
-import Color = require("../color");
-import Font = require("../font");
-import TextDirection = require("../android/textdirection");
-import TextAlignment = require("../textalignment");
-import View = require("../view");
+import Color from "../color";
+import Font from "../font";
+import TextDirection from "../android/textdirection";
+import TextAlignment from "../textalignment";
+import View from "../view";
 /**
  * @class UI.Label
  * @since 0.1

@@ -1,4 +1,4 @@
-import Color = require("../color");
+import Color from "../color";
 /**
  * @class UI.MenuItem
  * @since 0.1

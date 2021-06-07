@@ -1,6 +1,6 @@
-import Color = require("../color");
-import FlexLayout = require("../flexlayout");
-import ViewGroup = require("../viewgroup");
+import Color from "../color";
+import FlexLayout from "../flexlayout";
+import ViewGroup from "../viewgroup";
 import { Point2D } from "sf-core/primitive/point2d";
 
 export = View;

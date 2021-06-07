@@ -1,4 +1,4 @@
-import FileStream = require("../filestream");
+import FileStream from "../filestream";
 /**
  * @class IO.File
  * @since 0.1

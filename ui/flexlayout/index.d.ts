@@ -1,4 +1,4 @@
-import ViewGroup = require("../viewgroup");
+import ViewGroup from "../viewgroup";
 /**
  * @class UI.FlexLayout
  * @since 0.1

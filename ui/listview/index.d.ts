@@ -1,12 +1,12 @@
-import ContentInsetAdjustment = require("../ios/contentinsetadjustment");
-import OverScrollMode = require("../android/overscrollmode");
-import ListViewItem = require("../listviewitem");
-import Color = require("../color");
-import ScrollState = require("../android/scrollstate");
-import Image = require("../image");
-import Font = require("../font");
-import SwipeItemKlass = require("./swipeitem");
-import View = require("../view");
+import ContentInsetAdjustment from "../ios/contentinsetadjustment";
+import OverScrollMode from "../android/overscrollmode";
+import ListViewItem from "../listviewitem";
+import Color from "../color";
+import ScrollState from "../android/scrollstate";
+import Image from "../image";
+import Font from "../font";
+import SwipeItemKlass from "./swipeitem";
+import View from "../view";
 import { Point2D } from "sf-core/primitive/point2d";
 
 /**

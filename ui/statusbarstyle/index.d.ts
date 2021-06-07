@@ -1,2 +1,2 @@
-import StatusbarStyle = require("./statusbarstyle");
+import StatusbarStyle from "./statusbarstyle";
 export =  StatusbarStyle;

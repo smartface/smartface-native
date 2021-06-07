@@ -1,8 +1,8 @@
-import View = require("../view");
-import Color = require("../color");
-import Font = require("../font");
-import PinKlass = require("./pin");
-import Pin = require("./pin");
+import View from "../view";
+import Color from "../color";
+import Font from "../font";
+import PinKlass from "./pin";
+import Pin from "./pin";
 /**
  * @class UI.MapView
  * @since 0.1

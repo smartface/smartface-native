@@ -1,5 +1,5 @@
-import GridView = require(".");
-import ViewGroup = require("../viewgroup");
+import GridView from ".";
+import ViewGroup from "../viewgroup";
 
 export = GridViewItem;
 /**

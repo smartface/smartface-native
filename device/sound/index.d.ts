@@ -1,5 +1,5 @@
-import Page = require("sf-core/ui/page");
-import File = require("sf-core/io/file");
+import Page from "sf-core/ui/page";
+import File from "sf-core/io/file";
 
 export =  Sound;/**
  * @class Device.Sound

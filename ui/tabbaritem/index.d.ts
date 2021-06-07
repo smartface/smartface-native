@@ -1,7 +1,7 @@
-import Font = require("../font");
-import Image = require("../image");
-import Badge = require("../badge");
-import AttributedString = require("sf-core/global/attributedstring");
+import Font from "../font";
+import Image from "../image";
+import Badge from "../badge";
+import AttributedString from "sf-core/global/attributedstring";
 /**
  * @class UI.TabBarItem
  * @since 1.1.10

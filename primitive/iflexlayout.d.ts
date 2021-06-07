@@ -1,4 +1,4 @@
-import FlexLayout = require("sf-core/ui/flexlayout");
+import FlexLayout from "sf-core/ui/flexlayout";
 
 export interface IFlexLayout {
   readonly layout: FlexLayout;

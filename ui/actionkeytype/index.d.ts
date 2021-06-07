@@ -1,3 +1,3 @@
-import ActionKeyType = require("./actionkeytype");
+import ActionKeyType from "./actionkeytype";
 
 export =  ActionKeyType;

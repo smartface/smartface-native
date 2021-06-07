@@ -1,3 +1,3 @@
-import TextAlignment = require("./textalignment");
+import TextAlignment from "./textalignment";
 
 export =  TextAlignment;

@@ -1,5 +1,5 @@
-import Color = require("../color");
-import Image = require("../image");
+import Color from "../color";
+import Image from "../image";
 
 export = FloatingMenuItem;
 declare function FloatingMenuItem(params: any): void;

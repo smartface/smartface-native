@@ -1,5 +1,5 @@
-import Blob = require("sf-core/global/blob");
-import Image = require("../image");
+import Blob from "sf-core/global/blob";
+import Image from "../image";
 /**
  * @class UI.GifImage
  * @since 3.2.0

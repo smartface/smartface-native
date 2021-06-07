@@ -1,5 +1,5 @@
-import Page = require("sf-core/ui/page");
-​import Blob = require("sf-core/global/blob");
+import Page from "sf-core/ui/page";
+​import Blob from "sf-core/global/blob";
 
 declare namespace Contacts {
     /**

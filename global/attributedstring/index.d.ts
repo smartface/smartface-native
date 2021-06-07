@@ -1,5 +1,5 @@
-import Color = require("sf-core/ui/color");
-import Font = require("sf-core/ui/font");
+import Color from "sf-core/ui/color";
+import Font from "sf-core/ui/font";
 
 export =  AttributedString
 /**

@@ -1,6 +1,6 @@
-import Page = require("sf-core/ui/page");
-import Image = require("sf-core/ui/image");
-import File = require("sf-core/io/file");
+import Page from "sf-core/ui/page";
+import Image from "sf-core/ui/image";
+import File from "sf-core/io/file";
 /**
  * @class Device.Multimedia
  * @since 0.1

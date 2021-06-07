@@ -1,8 +1,8 @@
-import View = require("../view");
-import FlexLayout = require("../flexlayout");
-import NavigationController = require("../navigationcontroller");
-import StatusBar = require("sf-core/application/statusbar");
-import HeaderBar = require("../headerbar");
+import View from "../view";
+import FlexLayout from "../flexlayout";
+import NavigationController from "../navigationcontroller";
+import StatusBar from "sf-core/application/statusbar";
+import HeaderBar from "../headerbar";
 import { IFlexLayout } from "sf-core/primitive/iflexlayout";
 
 export =  Page;

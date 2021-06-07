@@ -1,7 +1,7 @@
-import TextBox = require("../textbox");
-import Font = require("../font");
-import Color = require("../color");
-import View = require("../view");
+import TextBox from "../textbox";
+import Font from "../font";
+import Color from "../color";
+import View from "../view";
 /**
  * @class UI.MaterialTextBox
  * @since 3.1.2

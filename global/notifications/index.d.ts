@@ -1,4 +1,4 @@
-import Color = require("sf-core/ui/color");
+import Color from "sf-core/ui/color";
 
 export = Notifications;
 /**

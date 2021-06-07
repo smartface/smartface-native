@@ -1,3 +1,3 @@
-import KeyboardType = require("./keyboardtype");
+import KeyboardType from "./keyboardtype";
 
 export = KeyboardType;

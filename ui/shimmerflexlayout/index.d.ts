@@ -1,7 +1,7 @@
-import FlexLayout = require("../flexlayout");
-import Color = require("../color");
+import FlexLayout from "../flexlayout";
+import Color from "../color";
 import { IFlexLayout } from "primitive/iflexlayout";
-import View = require("../view");
+import View from "../view";
 /**
  * @class UI.ShimmerFlexLayout
  * @extends UI.View

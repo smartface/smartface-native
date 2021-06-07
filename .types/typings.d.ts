@@ -1,4 +1,4 @@
-import AlertView = require("sf-core/ui/alertview");
+import AlertView from "sf-core/ui/alertview";
 
 export {};
 

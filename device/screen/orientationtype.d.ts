@@ -1,3 +1,3 @@
-import Screen = require(".");
+import Screen from ".";
 
 export =  Screen.Orientation;

@@ -1,6 +1,6 @@
-import Page = require("../page");
-import View = require("../view");
-import OverScrollMode = require("../android/overscrollmode");
+import Page from "../page";
+import View from "../view";
+import OverScrollMode from "../android/overscrollmode";
 
 /**
  * @class UI.SwipeView

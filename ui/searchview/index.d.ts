@@ -1,11 +1,11 @@
-import View = require("../view");
-import Color = require("../color");
-import Image = require("../image");
-import Page = require("../page");
-import FlexLayout = require("../flexlayout");
-import Font = require("../font");
-import TextAlignment = require("../textalignment");
-import KeyboardAppearance = require("../keyboardappearance");
+import View from "../view";
+import Color from "../color";
+import Image from "../image";
+import Page from "../page";
+import FlexLayout from "../flexlayout";
+import Font from "../font";
+import TextAlignment from "../textalignment";
+import KeyboardAppearance from "../keyboardappearance";
 
 /**
  * @class UI.SearchView

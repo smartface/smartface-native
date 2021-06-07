@@ -1,3 +1,3 @@
-import Blob = require("./global/blob");
+import Blob from "./global/blob";
 
 export = Blob;

@@ -8,6 +8,7 @@
 		"emitDeclarationOnly": true,
 		"outFile": "./dist/types",
 		"target": "ES5",
+		"esModuleInterop": true,
 		"paths": {
 			"sf-core/ui/*": ["./ui/*"],
 			"sf-core/ui": ["./ui/index"],

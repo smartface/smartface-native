@@ -1,4 +1,4 @@
-import FlexLayout = require("../flexlayout");
+import FlexLayout from "../flexlayout";
 import { View } from "..";
 import { IFlexLayout } from "sf-core/primitive/iflexlayout";
 
