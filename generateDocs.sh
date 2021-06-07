@@ -1,3 +1,4 @@
+#!/bin/bash
 # find all analysis files under sf-core folder
 analysisFileArray=()
 while IFS= read -rd '' files; do analysisFileArray+=("$files");  done < <(find . -type f -name 'analysis.js' -print0)

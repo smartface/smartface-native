@@ -1,4 +1,4 @@
-import RemoteUpdateServiceUpdateResult = require("./RemoteUpdateServiceUpdateParamters");
+import RemoteUpdateServiceUpdateResult from "./RemoteUpdateServiceUpdateParamters";
 
 export = RemoteUpdateService;
 

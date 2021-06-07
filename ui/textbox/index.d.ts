@@ -1,12 +1,12 @@
-import View = require("../view");
-import Font = require("../font");
-import TextAlignment = require("../textalignment");
-import Color = require("../color");
-import FlexLayout = require("../flexlayout");
-import KeyboardAppearance = require("../keyboardappearance");
-import TextContentType = require("../textcontenttype");
-import KeyboardType = require("../keyboardtype");
-import ActionKeyType = require("../actionkeytype");
+import View from "../view";
+import Font from "../font";
+import TextAlignment from "../textalignment";
+import Color from "../color";
+import FlexLayout from "../flexlayout";
+import KeyboardAppearance from "../keyboardappearance";
+import TextContentType from "../textcontenttype";
+import KeyboardType from "../keyboardtype";
+import ActionKeyType from "../actionkeytype";
 /**
  * @class UI.TextBox
  * @since 0.1

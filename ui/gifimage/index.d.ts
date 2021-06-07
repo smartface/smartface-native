@@ -1,5 +1,5 @@
-import Blob = require("sf-core/global/blob");
-import Image = require("../image");
+import Blob from "sf-core/global/blob";
+import Image from "../image";
 /**
  * @class UI.GifImage
  * @since 3.2.0
@@ -52,8 +52,8 @@ declare class GifImage extends NativeComponent {
  */
 	static createFromFile(
 		path: string,
-		width: number,
-		height: number
+		width?: number,
+		height?: number
 	): GifImage;
 /**
  * Gets/Sets the loopCount of gifImage. This property is readonly on iOS.

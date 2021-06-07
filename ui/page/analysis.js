@@ -50,6 +50,15 @@ function Page(params) {}
 Page.prototype.onLoad = function() {};
 
 /**
+ * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
+ * @property {String} transitionID
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Page.prototype.transitionID = "";
+
+/**
  * Gets/sets custom transition views. Used with custom transitions to map a {@link UI.View View}
  * from a removed or hidden {@link UI.Page Page} to a {@link UI.View View} from a shown or added {@link UI.Page Page}.
  * 

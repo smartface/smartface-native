@@ -1,4 +1,4 @@
-import File = require("sf-core/io/file");
+import File from "sf-core/io/file";
 
 export =  Database;
 /**

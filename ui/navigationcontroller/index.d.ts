@@ -1,6 +1,6 @@
-import Page = require("../page");
-import HeaderBar = require("../headerbar");
-import BottomTabBarController = require("../bottomtabbarcontroller");
+import Page from "../page";
+import HeaderBar from "../headerbar";
+import BottomTabBarController from "../bottomtabbarcontroller";
 import { AnimationType } from "sf-core/util/Android/transition/fragmenttransition";
 type Controller = Page | BottomTabBarController | NavigationController;
 /**

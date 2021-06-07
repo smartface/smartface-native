@@ -1,3 +1,3 @@
-import ImageCacheType = require("./imagecachetype");
+import ImageCacheType from "./imagecachetype";
 
 export = ImageCacheType;

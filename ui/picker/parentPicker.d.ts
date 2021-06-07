@@ -1,5 +1,5 @@
-import Color = require("../color");
-import Font = require("../font");
+import Color from "../color";
+import Font from "../font";
 
 export = parentPicker;
 declare class parentPicker {

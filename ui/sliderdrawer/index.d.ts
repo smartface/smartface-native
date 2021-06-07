@@ -1,5 +1,5 @@
-import ViewGroup = require("../viewgroup");
-import FlexLayout = require("../flexlayout");
+import ViewGroup from "../viewgroup";
+import FlexLayout from "../flexlayout";
 import { IFlexLayout } from "sf-core/primitive/iflexlayout";
 
 /**

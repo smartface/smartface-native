@@ -1,10 +1,10 @@
-import Label = require("../label");
-import Font = require("../font");
-import Color = require("../color");
-import TextAlignment = require("../textalignment");
-import Image = require("../image");
+import Label from "../label";
+import Font from "../font";
+import Color from "../color";
+import TextAlignment from "../textalignment";
+import Image from "../image";
 import { IButton } from "./ibutton";
-import View = require("../view");
+import View from "../view";
 
 declare class Button extends View  implements IButton {
   constructor(parameters?: Optional<IButton>);

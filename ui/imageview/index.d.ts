@@ -1,9 +1,9 @@
-import View = require("../view");
-import Image = require("../image");
-import Color = require("../color");
-import File = require("sf-core/io/file");
-import ImageCacheType = require("../imagecachetype");
-import policy = require("./Android/policy");
+import View from "../view";
+import Image from "../image";
+import Color from "../color";
+import File from "sf-core/io/file";
+import ImageCacheType from "../imagecachetype";
+import policy from "./Android/policy";
 
 declare const ImageViewMemoryPolicy: typeof policy.ImageViewMemoryPolicy;
 declare const ImageViewNetworkPolicy: typeof policy.ImageViewNetworkPolicy;

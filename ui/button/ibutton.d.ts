@@ -1,7 +1,7 @@
-import Font = require("../font");
-import Color = require("../color");
-import TextAlignment = require("../textalignment");
-import Image = require("../image");
+import Font from "../font";
+import Color from "../color";
+import TextAlignment from "../textalignment";
+import Image from "../image";
 declare interface IButton {
   text: string;
   font: Font;

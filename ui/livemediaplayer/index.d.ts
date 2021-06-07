@@ -1,4 +1,4 @@
-import View = require("sf-core/ui/view");
+import View from "sf-core/ui/view";
 
 /**
  * @class UI.LiveMediaPlayer

@@ -1,5 +1,5 @@
-import NavigationbarStyle = require("./style");
-import Color = require("sf-core/ui/color");
+import NavigationbarStyle from "./style";
+import Color from "sf-core/ui/color";
 /**
  * @class Application.Android.NavigationBar
  *

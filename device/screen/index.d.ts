@@ -1,4 +1,4 @@
-import Image = require("sf-core/ui/image");
+import Image from "sf-core/ui/image";
 
 export =  Screen;
 declare namespace Screen {

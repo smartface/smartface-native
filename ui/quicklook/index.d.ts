@@ -1,6 +1,6 @@
-import Color = require("../color");
-import StatusBar = require("sf-core/application/statusbar");
-import Page = require("../page");
+import Color from "../color";
+import StatusBar from "sf-core/application/statusbar";
+import Page from "../page";
 
 export = QuickLook;
 /**

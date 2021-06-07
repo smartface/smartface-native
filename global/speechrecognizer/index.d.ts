@@ -1,4 +1,4 @@
-import SpeechRecognizerError = require("./error");
+import SpeechRecognizerError from "./error";
 
 export =  SpeechRecognizer;
 /**

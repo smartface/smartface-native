@@ -1,4 +1,4 @@
-import Color = require("sf-core/ui/color");
+import Color from "sf-core/ui/color";
 
 export = Notifications;
 /**
@@ -43,7 +43,7 @@ declare class Notifications {
 	 * @since 0.1
 	 */
 	static registerForPushNotifications(
-		onSuccess: () => void,
+		onSuccess: ({ token: string }) => void,
 		onFailure: () => void
 	): void;
 	static ongoing: boolean;
@@ -70,25 +70,6 @@ declare class Notifications {
 	static getAuthorizationStatus(
 		callback: (status: Notifications.iOS.AuthorizationStatus) => void
 	): void;
-	/**
-	 * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
-	 *
-	 * @property {Number} applicationIconBadgeNumber
-	 * @ios
-	 * @static
-	 * @since 0.1
-	 */
-	static applicationIconBadgeNumber: number;
-	/**
-	 * Gets scheduled local notifications.
-	 *
-	 * @property {Notifications.LocalNotification} [scheduledLocalNotifications = null]
-	 * @ios
-	 * @readonly
-	 * @static
-	 * @since 0.1
-	 */
-	static readonly scheduledLocalNotifications: null | Notifications.LocalNotification;
 	/**
 	 * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
 	 * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
@@ -131,6 +112,32 @@ declare class Notifications {
 	 * @since 4.0.8
 	 */
 	static removeAllDeliveredNotifications(): void;
+
+	public static readonly ios: {
+		/**
+		 * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
+		 *
+		 * @property {Number} applicationIconBadgeNumber
+		 * @ios
+		 * @static
+		 * @since 0.1
+		 */
+		applicationIconBadgeNumber: number;
+		/**
+		 * Gets scheduled local notifications.
+		 *
+		 * @property {Notifications.LocalNotification} [scheduledLocalNotifications = null]
+		 * @ios
+		 * @readonly
+		 * @static
+		 * @since 0.1
+		 */
+		readonly scheduledLocalNotifications: null | Notifications.LocalNotification;
+	}
+	
+	public readonly android: {
+
+	}
 }
 declare namespace Notifications {
 	/**

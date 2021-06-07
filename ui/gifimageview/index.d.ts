@@ -1,8 +1,8 @@
-import ImageView = require("../imageview");
-import GifImage = require("../gifimage");
-import Image = require("../image");
-import Color = require("../color");
-import ImageCacheType = require("../imagecachetype");
+import ImageView from "../imageview";
+import GifImage from "../gifimage";
+import Image from "../image";
+import Color from "../color";
+import ImageCacheType from "../imagecachetype";
 /**
  * @class UI.GifImageView
  * @extends UI.ImageView

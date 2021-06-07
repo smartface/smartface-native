@@ -1,5 +1,5 @@
-import ListView = require("../listview");
-import ViewGroup = require("../viewgroup");
+import ListView from "../listview";
+import ViewGroup from "../viewgroup";
 /**
  * @class UI.ListViewItem
  * @since 0.1

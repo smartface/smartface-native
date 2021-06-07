@@ -1,5 +1,5 @@
-import Page = require("../page");
-import Color = require("../color");
+import Page from "../page";
+import Color from "../color";
 import { WebBrowserParams } from "./webbrowserparams";
 import { WebBrowserOptions } from "./webbrowseroptions";
 /**

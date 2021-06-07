@@ -1,6 +1,6 @@
-import FloatingMenuItem = require("./floatingMenuItem");
-import Image = require("../image");
-import Color = require("../color");
+import FloatingMenuItem from "./floatingMenuItem";
+import Image from "../image";
+import Color from "../color";
 
 export = FloatingMenu;
 declare class FloatingMenu extends NativeComponent {

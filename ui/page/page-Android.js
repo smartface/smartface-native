@@ -120,8 +120,25 @@ function Page(params) {
         },
         onConfigurationChanged: function () {
             const Screen = require("../../device/screen");
+            let tempOrientation;
+            switch (Screen.orientation) {
+                case OrientationType.PORTRAIT:
+                    tempOrientation = Page.Orientation.PORTRAIT;
+                    break;
+                case OrientationType.UPSIDEDOWN:
+                    tempOrientation = Page.Orientation.UPSIDEDOWN;
+                    break;
+                case OrientationType.LANDSCAPELEFT:
+                    tempOrientation = Page.Orientation.LANDSCAPELEFT;
+                    break;
+                case OrientationType.LANDSCAPERIGHT:
+                    tempOrientation = Page.Orientation.LANDSCAPERIGHT;
+                    break;
+                default:
+                    tempOrientation = Page.Orientation.PORTRAIT;
+            }
             _onOrientationChange && _onOrientationChange({
-                orientation: Screen.orientation
+                orientation: tempOrientation
             });
         },
         onCreateContextMenu: function (menu) {

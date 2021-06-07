@@ -1,5 +1,5 @@
-import Color = require("../color");
-import TabBarItem = require("../tabbaritem");
+import Color from "../color";
+import TabBarItem from "../tabbaritem";
 
 export = BottomTabBar;
 /**

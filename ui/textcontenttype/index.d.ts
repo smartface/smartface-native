@@ -1,2 +1,2 @@
-import TextContentType = require("./textcontenttype");
+import TextContentType from "./textcontenttype";
 export = TextContentType;

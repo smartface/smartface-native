@@ -1,6 +1,6 @@
-import FileAndroid = require("sf-core/io/file/file-Android");
-import Blob = require("sf-core/global/blob");
-import Page = require("../page");
+import File from "sf-core/io/file";
+import Blob from "sf-core/global/blob";
+import Page from "../page";
 
 export = EmailComposer;
 /**
@@ -102,7 +102,7 @@ declare class EmailComposer {
  * @method addAttachmentForAndroid
  * @since 3.0.3
  */
-    addAttachmentForAndroid(file: FileAndroid): void;
+    addAttachmentForAndroid(file: File): void;
 /**
  * Attach the given file to email composer.
  * For Images; if you have multiple sizes of image resource (e.g smartface@2x.png, smartface@3x.png); you should give exact path of an image file.

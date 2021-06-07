@@ -1,5 +1,5 @@
-import Color = require("sf-core/ui/color");
-import StatusbarStyle = require("sf-core/ui/statusbarstyle");
+import Color from "sf-core/ui/color";
+import StatusbarStyle from "sf-core/ui/statusbarstyle";
 
 declare type StatusBar = {
   height: number;

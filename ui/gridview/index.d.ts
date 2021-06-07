@@ -1,11 +1,10 @@
-import GridViewItem = require("../gridviewitem");
-import OverScrollMode = require("../android/overscrollmode");
-import ContentInsetAdjustment = require("../ios/contentinsetadjustment");
-import DecelerationRate = require("../ios/decelerationrate");
-import LayoutManager = require("../layoutmanager");
-import { Android } from "sf-core/application/application-iOS";
-import Color = require("../color");
-import View = require("../view");
+import GridViewItem from "../gridviewitem";
+import OverScrollMode from "../android/overscrollmode";
+import ContentInsetAdjustment from "../ios/contentinsetadjustment";
+import DecelerationRate from "../ios/decelerationrate";
+import LayoutManager from "../layoutmanager";
+import Color from "../color";
+import View from "../view";
 import { Point2D } from "sf-core/primitive/point2d";
 
 /**

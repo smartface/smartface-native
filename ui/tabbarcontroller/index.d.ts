@@ -1,7 +1,7 @@
-import TabBarItem = require("../tabbaritem");
-import Color = require("../color");
-import Page = require("../page");
-import OverScrollMode = require("../android/overscrollmode");
+import TabBarItem from "../tabbaritem";
+import Color from "../color";
+import Page from "../page";
+import OverScrollMode from "../android/overscrollmode";
 /**
  * @class UI.TabBarController
  * @extends UI.Page

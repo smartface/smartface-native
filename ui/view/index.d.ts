@@ -1,6 +1,6 @@
-import Color = require("../color");
-import FlexLayout = require("../flexlayout");
-import ViewGroup = require("../viewgroup");
+import Color from "../color";
+import FlexLayout from "../flexlayout";
+import ViewGroup from "../viewgroup";
 import { Point2D } from "sf-core/primitive/point2d";
 
 export = View;
@@ -24,6 +24,14 @@ export = View;
  */
 declare class View extends NativeComponent {
 	constructor(params?: any);
+	/**
+	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
+	 * @property {String} transitionID
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	transitionID: string;
 	/**
 	 * Gets/sets whether the view is an accessibility element that an assistive app can access.
 	 *

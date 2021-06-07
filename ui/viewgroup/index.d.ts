@@ -1,4 +1,4 @@
-import View = require("../view");
+import View from "../view";
 /**
  * @class UI.ViewGroup
  * @since 0.1

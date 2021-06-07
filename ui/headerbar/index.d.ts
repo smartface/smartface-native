@@ -1,10 +1,10 @@
-import AttributedString = require("sf-core/global/attributedstring");
-import Color = require("../color");
-import Font = require("../font");
-import View = require("../view");
-import HeaderBarItem = require("../headerbaritem");
-import Page = require("../page");
-import Image = require("../image");
+import AttributedString from "sf-core/global/attributedstring";
+import Color from "../color";
+import Font from "../font";
+import View from "../view";
+import HeaderBarItem from "../headerbaritem";
+import Page from "../page";
+import Image from "../image";
 
 export =  HeaderBar;
 /**

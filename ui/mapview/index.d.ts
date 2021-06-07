@@ -1,8 +1,8 @@
-import View = require("../view");
-import Color = require("../color");
-import Font = require("../font");
-import PinKlass = require("./pin");
-import Pin = require("./pin");
+import View from "../view";
+import Color from "../color";
+import Font from "../font";
+import PinKlass from "./pin";
+import Pin from "./pin";
 /**
  * @class UI.MapView
  * @since 0.1
@@ -133,7 +133,7 @@ declare class MapView extends View {
 	 * @ios
 	 * @since 3.0.1
 	 */
-	onClusterPress: (pins: Pin) => void;
+	onClusterPress: (pins: Pin[]) => void;
 	/**
 	 * This property sets center location of the map to the given latitude & longitude.
 	 *

@@ -1,4 +1,4 @@
-import Blob = require("sf-core/global/blob");
+import Blob from "sf-core/global/blob";
 export =  FileStream;
 /**
  * @class IO.FileStream

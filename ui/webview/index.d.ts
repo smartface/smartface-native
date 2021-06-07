@@ -1,8 +1,8 @@
-import View = require("../view");
-import OverScrollMode = require("../android/overscrollmode");
-import Page = require("../page");
-import File = require("sf-core/io/file");
-import ContentInsetAdjustment = require("../ios/contentinsetadjustment");
+import View from "../view";
+import OverScrollMode from "../android/overscrollmode";
+import Page from "../page";
+import File from "sf-core/io/file";
+import ContentInsetAdjustment from "../ios/contentinsetadjustment";
 import { Boundary } from "sf-core/primitive/boundary";
 
 /**
