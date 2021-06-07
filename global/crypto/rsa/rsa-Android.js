@@ -10,8 +10,8 @@ RSA.generateKeyPair = function (params = {}) {
     const keyPair = SFCrypto.generateKeyPair(keySize, ENCRYPT_ALGORITHM);
 
     return {
-        publicKey: keyPair.publicKeyBase64,
-        privateKey: keyPair.privateKeyBase64
+        publicKey: keyPair.getPublicKeyBase64(),
+        privateKey: keyPair.getPrivateKeyBase64()
     };
 };
 
