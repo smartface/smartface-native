@@ -16,19 +16,19 @@ declare const Crypto: {
             privateKey: string,
             publicKey: string
         };
-       /**
-        * Used to encrypt the provided content with given public key.
-        * 
-        * @method encrypt
-        * @param {Object} params
-        * @param {string} params.plainText Text to encrypt
-        * @param {string} params.key Public key in base64
-        * @returns {string} Encrypted text which encoded with Base64
-        * @ios
-        * @android
-        * @since 4.4
-        */
-        encrypt(params: { plainText: string, key: string}): string;
+        /**
+         * Used to encrypt the provided content with given public key.
+         * 
+         * @method encrypt
+         * @param {Object} params
+         * @param {string} params.plainText Text to encrypt
+         * @param {string} params.key Public key in base64
+         * @returns {string} Encrypted text which encoded with Base64
+         * @ios
+         * @android
+         * @since 4.4
+         */
+        encrypt(params: { plainText: string, key: string }): string;
         /**
         * Used to decrypt the provided encrypted content with given private key.
         * 
@@ -41,13 +41,14 @@ declare const Crypto: {
         * @android
         * @since 4.4
         */
-        decrypt(params: { encryptedText: string, key: string}): string;
+        decrypt(params: { encryptedText: string, key: string }): string;
         ios: {
             /**
              * On iOS, instead of using getBase64PublicString to retrieve generated public key, using this will yield better result.
+             * @param {String} key RSA public key
              * @ios
              */
-            getExportedPublicKey(): string;
+            getExportedPublicKey(key): string;
         }
     },
 
