@@ -1,10 +1,10 @@
-const FlexLayout = require("sf-core/ui/flexlayout");
+const FlexLayout = require("../../ui/flexlayout");
 const View = require('../view');
-const KeyboardType = require('sf-core/ui/keyboardtype');
-const ActionKeyType = require('sf-core/ui/actionkeytype');
-const Color = require('sf-core/ui/color');
-const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const KeyboardType = require('../../ui/keyboardtype');
+const ActionKeyType = require('../../ui/actionkeytype');
+const Color = require('../../ui/color');
+const KeyboardAnimationDelegate = require("../../util").KeyboardAnimationDelegate;
+const Invocation = require('../../util/iOS/invocation.js');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.

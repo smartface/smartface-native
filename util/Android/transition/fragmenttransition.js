@@ -5,7 +5,7 @@ const DirectionBasedConverter = require("../directionbasedconverter");
 const NativeTransitionInflater = requireClass("androidx.transition.TransitionInflater");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeAndroidR = requireClass("android.R");
-const API_LEVEL = require('sf-core/device/system').android.apiLevel;
+const API_LEVEL = require('../../../device/system').android.apiLevel;
 
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
@@ -188,7 +188,7 @@ FragmentTransaction.dismissTransition = function(page, animation) {
 
 FragmentTransaction.checkBottomTabBarVisible = function(page) {
     // TODO: Beautify visibility setting of bottom tabbar
-    const Application = require("sf-core/application");
+    const Application = require("../../../application");
     if (page.isInsideBottomTabBar) {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
     } else {

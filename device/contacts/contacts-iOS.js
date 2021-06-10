@@ -1,4 +1,4 @@
-const Blob = require('sf-core/blob');
+const Blob = require('../../blob');
 
 var Contacts = {};
 

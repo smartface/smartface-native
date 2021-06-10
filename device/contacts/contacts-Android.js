@@ -4,9 +4,9 @@ const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
 const NativeIntent = requireClass("android.content.Intent");
 const SFContactUtil = requireClass("io.smartface.android.sfcore.device.contacts.SFContactUtil");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-const RequestCodes = require("sf-core/util/Android/requestcodes");
-const Blob = require("sf-core/global/blob");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const RequestCodes = require("../../util/Android/requestcodes");
+const Blob = require("../../global/blob");
 
 var contentProviderOperation;
 var uri;

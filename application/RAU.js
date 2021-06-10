@@ -136,7 +136,7 @@ function addFieldsForUserInfo(body, userInfo) {
     body.user = userInfo;
   }
 
-  const Hardware = require("sf-core/device/hardware");
+  const Hardware = require("../device/hardware");
   body.brand = Hardware.getDeviceModelName();
   body.osVersion = System.OSVersion;
 

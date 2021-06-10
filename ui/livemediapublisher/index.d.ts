@@ -1,4 +1,4 @@
-import View from "sf-core/ui/view";
+import View from "../../ui/view";
 /**
  * @class UI.LiveMediaPublisher
  * @since 4.2.2

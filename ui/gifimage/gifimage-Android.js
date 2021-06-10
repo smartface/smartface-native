@@ -4,7 +4,7 @@ const NativeGifDrawable = requireClass("pl.droidsonroids.gif.GifDrawable");
 const FileStream = require('../../io/filestream');
 const File = require('../../io/file');
 const Blob = require('../../blob');
-const Image = require('sf-core/ui/image');
+const Image = require('../../ui/image');
 
 function GifImage(params) {
     const self = this;

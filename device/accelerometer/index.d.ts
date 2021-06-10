@@ -58,4 +58,4 @@ declare class Accelerometer {
   static accelerometerUpdateInterval: number;
 }
 
-export =  Accelerometer;
+export = Accelerometer;

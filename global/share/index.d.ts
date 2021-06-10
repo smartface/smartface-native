@@ -1,7 +1,7 @@
-import Page from "sf-core/ui/page";
-import Image from "sf-core/ui/image";
-import File from "sf-core/io/file";
-import Contacts from "sf-core/device/contacts";
+import Page from "../../ui/page";
+import Image from "../../ui/image";
+import File from "../../io/file";
+import Contacts from "../../device/contacts";
 
 /**
  * @class Share

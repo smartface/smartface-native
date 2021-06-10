@@ -1,6 +1,6 @@
 import View from "../view";
 import Color from "../color";
-import File from "sf-core/io/file";
+import File from "../../io/file";
 import Page from "../page";
 /**
  * @class UI.VideoView

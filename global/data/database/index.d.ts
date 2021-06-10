@@ -1,6 +1,6 @@
-import File from "sf-core/io/file";
+import File from "../../../io/file";
 
-export =  Database;
+export = Database;
 /**
  * @class Data.Database
  * @since 1.0

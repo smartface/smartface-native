@@ -58,7 +58,7 @@ function Http(params) {
                 url,
                 fileName,
                 function(e) {
-                    const File = require('sf-core/io/file');
+                    const File = require('../../io/file');
                     // Native returns file path first.
                     // Convert to sf-core file object.
                     if (e.file) {
@@ -98,7 +98,7 @@ function Http(params) {
                     // Native returns UIImage instance.
                     // Convert to sf-core Image object.
                     if (e.image) {
-                        const Image = require('sf-core/ui/image');
+                        const Image = require('../../ui/image');
                         e.image = Image.createFromImage(e.image);
                     }
                     if (e.body) {

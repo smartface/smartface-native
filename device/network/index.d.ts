@@ -1,4 +1,4 @@
-export =  Network;
+export = Network;
 
 declare namespace Network {
 /**

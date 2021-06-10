@@ -89,7 +89,7 @@ function Page(params) {
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.hasExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON) === true) {
                         try {
-                            const Notifications = require("sf-core/notifications");
+                            const Notifications = require("../../notifications");
 
                             var notificationJson = spratIntent.getStringExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON);
                             let parsedJson = JSON.parse(notificationJson);
@@ -161,13 +161,13 @@ function Page(params) {
             }
         },
         onActivityResult: function (nativeRequestCode, nativeResultCode, data) {
-            const Contacts = require("sf-core/device/contacts");
-            const RequestCodes = require("sf-core/util/Android/requestcodes");
-            const Multimedia = require("sf-core/device/multimedia");
-            const Sound = require("sf-core/device/sound");
-            const Webview = require('sf-core/ui/webview');
-            const EmailComposer = require('sf-core/ui/emailcomposer');
-            const DocumentPicker = require('sf-core/device/documentpicker');
+            const Contacts = require("../../device/contacts");
+            const RequestCodes = require("../../util/Android/requestcodes");
+            const Multimedia = require("../../device/multimedia");
+            const Sound = require("../../device/sound");
+            const Webview = require('../../ui/webview');
+            const EmailComposer = require('../../ui/emailcomposer');
+            const DocumentPicker = require('../../device/documentpicker');
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -314,7 +314,7 @@ function Page(params) {
                 if (!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
-                const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+                const ViewController = require("../../util/Android/transition/viewcontroller");
                 // TODO: Remove this custom implement to avoid smartafce Router bug!
                 let controller = params;
                 params.__isPopupPage = true;
@@ -332,7 +332,7 @@ function Page(params) {
         },
         'dismiss': {
             value: function (params = {}) {
-                const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
+                const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
                 var fragmentManager = activity.getSupportFragmentManager();
                 if (!self.popUpBackPage)
                     return;

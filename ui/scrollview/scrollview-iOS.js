@@ -1,9 +1,9 @@
 const ViewGroup = require('../viewgroup');
-const ScrollViewAlign = require("sf-core/ui/scrollview/scrollview-align");
-const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Color = require('sf-core/ui/color');
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+const ScrollViewAlign = require("../../ui/scrollview/scrollview-align");
+const ScrollViewEdge = require("../../ui/scrollview/scrollview-edge");
+const FlexLayout = require('../../ui/flexlayout');
+const Color = require('../../ui/color');
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 const ScrollType = {
     vertical: 0,

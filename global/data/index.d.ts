@@ -1,4 +1,4 @@
-export =  Data;
+export = Data;
 /**
  * @class Data
  * @since 0.1

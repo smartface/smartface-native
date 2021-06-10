@@ -1,4 +1,4 @@
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Invocation = require('../../util/iOS/invocation.js');
 
 function Menu(params) {
 

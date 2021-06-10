@@ -1,5 +1,5 @@
 const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
+const View = require('../../ui/view');
 
 
 ShimmerFlexLayout.prototype = Object.create(View.prototype);

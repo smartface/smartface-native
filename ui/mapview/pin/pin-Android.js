@@ -34,7 +34,7 @@ function Pin(params) {
             },
             set: function(color) {
                 _color = color;
-                const Color = require("sf-core/ui/color");
+                const Color = require("../../../ui/color");
                 if (self.nativeObject && !self.isClusterEnabled && (color instanceof Color)) {
                     var colorHUE = hueDic[color.nativeObject];
                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
@@ -61,7 +61,7 @@ function Pin(params) {
             },
             set: function(image) {
                 _image = image;
-                const Image = require("sf-core/ui/image");
+                const Image = require("../../../ui/image");
                 if (self.nativeObject && !self.isClusterEnabled && image instanceof Image) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);

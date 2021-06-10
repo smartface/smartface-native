@@ -1,4 +1,4 @@
-const Blob = require("sf-core/blob");
+const Blob = require("../../blob");
 
 const SRReadyState = {
     SR_CONNECTING: 0,
@@ -33,7 +33,7 @@ var webSocket = function WebSocket(params = {}) {
         nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
 
         if(headers) {
-            const Invocation = require('sf-core/util').Invocation;
+            const Invocation = require('../../util').Invocation;
             var mutableRequest = Invocation.invokeInstanceMethod(nsURLRequest, "mutableCopy", [], "NSObject");
             for(key in headers) {
                 let headerField = getHeaderKeyValue(key, headers[key]);
@@ -241,7 +241,7 @@ var webSocket = function WebSocket(params = {}) {
 };
 
 function getHeaderKeyValue(key, value) {
-    const Invocation = require('sf-core/util').Invocation;
+    const Invocation = require('../../util').Invocation;
     var headerKey = new Invocation.Argument({
         type: "NSString",
         value: key

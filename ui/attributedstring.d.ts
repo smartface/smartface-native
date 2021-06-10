@@ -1,3 +1,3 @@
-import AttributedString from "sf-core/global/attributedstring";
+import AttributedString from "../global/attributedstring";
 
 export = AttributedString

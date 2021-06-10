@@ -1,4 +1,4 @@
-export =  Hardware;
+export = Hardware;
 /**
  * @class Device.Hardware
  * @since 0.1

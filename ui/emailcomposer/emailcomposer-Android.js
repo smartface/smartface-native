@@ -1,5 +1,5 @@
 const TypeUtil = require("../../util/type");
-const RequestCodes = require("sf-core/util/Android/requestcodes");
+const RequestCodes = require("../../util/Android/requestcodes");
 
 const NativeIntent = requireClass("android.content.Intent");
 const NativeUri = requireClass("android.net.Uri");
@@ -90,7 +90,7 @@ function EmailComposer(params) {
     self.android = {};
     Object.defineProperty(self.android, 'addAttachmentForAndroid', {
         value: function(attachment) {
-            const File = require('sf-core/io/file');
+            const File = require('../../io/file');
             if (attachment instanceof File) {
                 var absulotePath = attachment.nativeObject.getAbsolutePath();
                 self.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse("file://" + absulotePath));

@@ -1,6 +1,6 @@
 const SFPhoneStateListener = requireClass("io.smartface.android.sfcore.device.calldetection.SFPhoneStateListener");
 
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';

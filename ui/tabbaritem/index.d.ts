@@ -1,7 +1,7 @@
 import Font from "../font";
 import Image from "../image";
 import Badge from "../badge";
-import AttributedString from "sf-core/global/attributedstring";
+import AttributedString from "../../global/attributedstring";
 /**
  * @class UI.TabBarItem
  * @since 1.1.10

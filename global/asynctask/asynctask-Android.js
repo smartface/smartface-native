@@ -1,5 +1,5 @@
 /*globals array,requireClass */
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("../../util/type");
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
 
 function AsyncTask(params) {

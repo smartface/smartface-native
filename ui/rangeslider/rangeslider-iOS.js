@@ -1,6 +1,6 @@
 const View = require('../view');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
-const Color = require("sf-core/ui/color");
+const UIControlEvents = require("../../util").UIControlEvents;
+const Color = require("../../ui/color");
 
 RangeSlider.prototype = Object.create(View.prototype);
 function RangeSlider(params) {

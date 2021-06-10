@@ -1,12 +1,12 @@
-import ApplicationAndorid = require("./application-Android");
-import ApplicationIOS = require("./application-iOS");
-import Page = require("../ui/page");
-import NavigationController = require("../ui/navigationcontroller");
-import RemoteUpdateService = require("./RAU");
-import StatusBar = require("./statusbar");
-import Navigationbar = require("./android/navigationbar");
-import NavigationbarStyle = require("./android/navigationbar/style");
-import SliderDrawer = require('../ui/sliderdrawer');
+import ApplicationAndorid from "./application-Android";
+import ApplicationIOS from "./application-iOS";
+import Page from "../ui/page";
+import NavigationController from "../ui/navigationcontroller";
+import RemoteUpdateService from "./RAU";
+import StatusBar from "./statusbar";
+import Navigationbar from "./android/navigationbar";
+import NavigationbarStyle from "./android/navigationbar/style";
+import SliderDrawer from '../ui/sliderdrawer';
 
 /** 
  * @enum {Number} Application.LayoutDirection
@@ -910,4 +910,4 @@ declare const Application: {
 	version: string;
 };
 
-export =  Application;
+export = Application;

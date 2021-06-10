@@ -96,4 +96,4 @@ declare class Animator {
 		animFn: () => void
 	): Animator;
 }
-export =  Animator;
+export = Animator;

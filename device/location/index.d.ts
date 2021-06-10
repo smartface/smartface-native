@@ -1,4 +1,4 @@
-export =  Location;
+export = Location;
 /**
  * @class Device.Location
  * @since 0.1

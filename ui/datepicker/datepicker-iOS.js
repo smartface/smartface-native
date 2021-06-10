@@ -1,6 +1,6 @@
-const TypeUtil = require('sf-core/util/type');
-const UIDatePickerMode = require("sf-core/util").UIDatePickerMode;
-const Color = require("sf-core/ui/color");
+const TypeUtil = require('../../util/type');
+const UIDatePickerMode = require("../../util").UIDatePickerMode;
+const Color = require("../../ui/color");
 
 function DatePicker(params) {
     var self = this;

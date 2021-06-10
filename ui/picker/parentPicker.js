@@ -1,5 +1,5 @@
 /*globals requireClass*/
-const Color = require("sf-core/ui/color");
+const Color = require("../../ui/color");
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
@@ -37,7 +37,7 @@ const parentPicker = function(subClass) {
                 return _titleFont;
             },
             set: function(font) {
-                const Font = require('sf-core/ui/font');
+                const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _titleFont = font;
             },
@@ -47,7 +47,7 @@ const parentPicker = function(subClass) {
 
     self.__createTitleView = function() {
         const NativeTextView = requireClass("android.widget.TextView");
-        const Color = require('sf-core/ui/color');
+        const Color = require('../../ui/color');
 
         const CENTER = 17;
 

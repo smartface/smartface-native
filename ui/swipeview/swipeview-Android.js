@@ -204,7 +204,7 @@ function SwipeView(params) {
         },
         onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
             if (self.onPageScrolled) {
-                var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
+                var AndroidUnitConverter = require("../../util/Android/unitconverter");
 
                 var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
                 self.onPageScrolled(position, offsetPixels);

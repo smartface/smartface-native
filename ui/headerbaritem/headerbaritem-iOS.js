@@ -1,8 +1,8 @@
-const Color = require("sf-core/ui/color");
-const Image = require('sf-core/ui/image');
-const Invocation = require('sf-core/util').Invocation;
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Badge = require('sf-core/ui/badge');
+const Color = require("../../ui/color");
+const Image = require('../../ui/image');
+const Invocation = require('../../util').Invocation;
+const FlexLayout = require('../../ui/flexlayout');
+const Badge = require('../../ui/badge');
 
 function HeaderBarItem(params) {
     var _onPress = null;

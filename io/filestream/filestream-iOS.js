@@ -1,4 +1,4 @@
-const Blob = require('sf-core/global/blob');
+const Blob = require('../../global/blob');
 
 FileStream.create = function(path, streamMode, contentMode) {
     var streamModeValue = 0;

@@ -1,6 +1,6 @@
 import FlexLayout from "../flexlayout";
 import { View } from "..";
-import { IFlexLayout } from "sf-core/primitive/iflexlayout";
+import { IFlexLayout } from "../../primitive/iflexlayout";
 
 export = Dialog;
 /**

@@ -1,5 +1,5 @@
 import NavigationbarStyle from "./style";
-import Color from "sf-core/ui/color";
+import Color from "../../../ui/color";
 /**
  * @class Application.Android.NavigationBar
  *
@@ -21,4 +21,4 @@ declare class Navigationbar {
   style: NavigationbarStyle
 }
 
-export =  Navigationbar;
+export = Navigationbar;

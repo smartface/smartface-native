@@ -1,4 +1,4 @@
-export =  AlertView;
+export = AlertView;
 declare class AlertView extends NativeComponent {
 	constructor(params?: any);
 	isShowing(): any;

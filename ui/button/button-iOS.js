@@ -1,7 +1,7 @@
-const View = require("sf-core/ui/view");
-const Color = require("sf-core/ui/color");
-const Image = require("sf-core/ui/image");
-const UIControlEvents = require("sf-core/util").UIControlEvents;
+const View = require("../../ui/view");
+const Color = require("../../ui/color");
+const Image = require("../../ui/image");
+const UIControlEvents = require("../../util").UIControlEvents;
 
 const ButtonState = {
     normal: 0,

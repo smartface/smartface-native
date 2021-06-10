@@ -1,8 +1,8 @@
 /* globals requireClass */
 const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-const RequestCodes = require("sf-core/util/Android/requestcodes");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const RequestCodes = require("../../util/Android/requestcodes");
 
 var _pickParams = {};
 

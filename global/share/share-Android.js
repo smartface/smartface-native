@@ -45,8 +45,8 @@ Object.defineProperties(Share, {
     },
     'share': {
         value: function (params) {
-            const File = require("sf-core/io/file");
-            const Image = require("sf-core/ui/image");
+            const File = require("../../io/file");
+            const Image = require("../../ui/image");
             const Contacts = require("../../device/contacts");
             const NativeArrayList = requireClass("java.util.ArrayList");
 

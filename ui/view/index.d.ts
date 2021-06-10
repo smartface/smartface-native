@@ -1,7 +1,7 @@
 import Color from "../color";
 import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
-import { Point2D } from "sf-core/primitive/point2d";
+import { Point2D } from "../../primitive/point2d";
 
 export = View;
 /**

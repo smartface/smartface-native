@@ -1,6 +1,6 @@
 const View = require('../view');
-const Color = require("sf-core/ui/color");
-const UIControlEvents = require("sf-core/util").UIControlEvents;
+const Color = require("../../ui/color");
+const UIControlEvents = require("../../util").UIControlEvents;
 
 Switch.prototype = Object.create(View.prototype);
 function Switch(params) {

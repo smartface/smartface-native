@@ -1,6 +1,6 @@
 const WebBrowserOptions = function(params) {
 
-    const Color = require('sf-core/ui/color');
+    const Color = require('../../ui/color');
     var _url = "";
     var _barColor = Color.WHITE;
     var _itemColor = Color.create("#00A1F1");

@@ -4,7 +4,7 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
-const RequestCodes = require("sf-core/util/Android/requestcodes");
+const RequestCodes = require("../../util/Android/requestcodes");
 const TypeUtil = require("../../util/type");
 
 const NativeView = requireClass("android.view.View");

@@ -4,4 +4,4 @@ declare enum ScrollState {
     SETTLING
 }
 
-export =  ScrollState;
+export = ScrollState;

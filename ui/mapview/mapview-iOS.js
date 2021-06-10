@@ -1,9 +1,9 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const Image = require("sf-core/ui/image");
-const Color = require('sf-core/ui/color');
-const Location = require('sf-core/device/location');
-const Invocation = require('sf-core/util').Invocation;
+const Image = require("../../ui/image");
+const Color = require('../../ui/color');
+const Location = require('../../device/location');
+const Invocation = require('../../util').Invocation;
 
 MapView.prototype = Object.create(View.prototype);
 function MapView(params) {

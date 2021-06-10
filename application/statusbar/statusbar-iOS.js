@@ -1,4 +1,4 @@
-const Color = require("sf-core/ui/color");
+const Color = require("../../ui/color");
 
 var StatusBar = {};
 StatusBar.ios = {};

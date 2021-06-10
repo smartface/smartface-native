@@ -212,7 +212,7 @@ function HeaderBarItem(params) {
         },
         'badge': {
             get: function() {
-                const Badge = require("sf-core/ui/badge");
+                const Badge = require("../../ui/badge");
                 if (_badgeObj === undefined) {
                     _badgeObj = new Badge();
                     self.isBadgeEnabled = true;

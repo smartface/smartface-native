@@ -1,9 +1,9 @@
-const Accelerometer = require("sf-core/device/accelerometer");
-const Location = require("sf-core/device/location");
+const Accelerometer = require("../device/accelerometer");
+const Location = require("../device/location");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
-const Http = require("sf-core/net/http");
-const Network = require('sf-core/device/network');
+const Http = require("../net/http");
+const Network = require('../device/network');
 
 const NativeSpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");

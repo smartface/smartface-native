@@ -195,8 +195,8 @@ function NavigatonController(params) {
     }
 };
 
-const Color = require('sf-core/ui/color');
-const Image = require('sf-core/ui/image');
+const Color = require('../../ui/color');
+const Image = require('../../ui/image');
 
 function HeaderBar(params) {
 
