@@ -501,7 +501,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
 function createImageFile() {
     var timeStamp = new NativeSimpleDateFormat("yyyyMMdd_HHmmss").format(new NativeDate());
     var imageFileName = "JPEG_" + timeStamp + "_";
-    var storageDir = NativeEnvironment.getExternalStoragePublicDirectory(NativeEnvironment.DIRECTORY_PICTURES);
+    var storageDir = activity.getExternalCacheDir();
     var imageFile = NativeFile.createTempFile(
         imageFileName, /* prefix */
         ".jpg", /* suffix */

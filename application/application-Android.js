@@ -660,6 +660,10 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
         value: 'android.permission.USE_FINGERPRINT',
         enumerable: true
     },
+    'WRITE_APN_SETTINGS': {
+        value: 'android.permission.WRITE_APN_SETTINGS',
+        enumerable: true
+    }
 });
 
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);

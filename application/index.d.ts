@@ -659,7 +659,18 @@ declare const Application: {
  * @readonly
  * @since 1.1.16
  */
-			readonly WRITE_EXTERNAL_STORAGE: any
+            readonly WRITE_EXTERNAL_STORAGE: any,
+            
+
+/**
+ * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+ *
+ * @property WRITE_APN_SETTINGS
+ * @static
+ * @readonly
+ * @since 4.3.2
+ */
+            readonly WRITE_APN_SETTINGS: any;
         };
 /**
  * Application package name.

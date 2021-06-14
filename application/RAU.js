@@ -13,7 +13,7 @@ var zipPath = "";
 if (System.OS === "iOS") {
   zipPath = Path.DataDirectory + "/stage/iOS.zip";
 } else if (System.OS === "Android") {
-  zipPath = Path.android.storages.internal + "/Android/data/AndroidRAU.zip";
+  zipPath = Path.android.storages.internal + "/Android/data/" + Application.android.packageName + "/cache/AndroidRAU.zip";
 }
 
 RemoteUpdateService.checkUpdate = function(callback, userInfo) {
