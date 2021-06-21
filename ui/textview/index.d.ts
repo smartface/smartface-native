@@ -3,7 +3,7 @@ import Color from "../color";
 import Font from "../font";
 import EllipsizeMode from "../ellipsizemode";
 import TextAlignment from "../textalignment";
-import AttributedString from "sf-core/global/attributedstring";
+import AttributedString from "../../global/attributedstring";
 import TextDirection from "../android/textdirection";
 /**
  * @class UI.TextView

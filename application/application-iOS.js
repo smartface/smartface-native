@@ -8,7 +8,7 @@
 }())
 
 const RAU = require("./RAU");
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Invocation = require('../util/iOS/invocation.js');
 
 var _rootPage;
 var _sliderDrawer;
@@ -283,7 +283,7 @@ Object.defineProperty(SFApplication, 'version', {
 });
 
 // function getProjectJsonObject(){
-//     const File = require("sf-core/io/file");
+//     const File = require("../io/file");
 //     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
 
 //     // Publish case
@@ -293,7 +293,7 @@ Object.defineProperty(SFApplication, 'version', {
 
 //     var retval = {};
 //     if(projectFile.exists){
-//         const FileStream = require("sf-core/io/filestream");
+//         const FileStream = require("../io/filestream");
 //         var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
 //         var projectFileContent = projectFileStream.readToEnd();
 //         if (projectFileContent) {
@@ -328,10 +328,10 @@ Application.emulator.globalObjectWillReset = function(state) {
 };
 
 function cancelAllBackgroundJobs() {
-    const Location = require('sf-core/device/location');
-    const Accelerometer = require('sf-core/device/accelerometer');
-    const Network = require('sf-core/device/network');
-    const Timer = require("sf-core/global/timer");
+    const Location = require('../device/location');
+    const Accelerometer = require('../device/accelerometer');
+    const Network = require('../device/network');
+    const Timer = require("../global/timer");
 
     Timer.clearAllTimer();
     

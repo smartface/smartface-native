@@ -5,4 +5,4 @@ declare class SecureData extends NativeComponent {
   readonly key: string;
   readonly service?: string;
 }
-export =  SecureData;
+export = SecureData;

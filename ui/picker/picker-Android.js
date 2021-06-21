@@ -4,8 +4,8 @@ const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const LayoutParams = require("../../util/Android/layoutparams");
 
-const Color = require('sf-core/ui/color');
-const ParentPicker = require("sf-core/ui/picker/parentPicker");
+const Color = require('../../ui/color');
+const ParentPicker = require("../../ui/picker/parentPicker");
 
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
@@ -130,7 +130,7 @@ function Picker(params) {
             },
             set: function(font) {
                 buttonCustomize = true;
-                const Font = require('sf-core/ui/font');
+                const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _okFont = font;
             },
@@ -142,7 +142,7 @@ function Picker(params) {
             },
             set: function(font) {
                 buttonCustomize = true;
-                const Font = require('sf-core/ui/font');
+                const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _cancelFont = font;
             },

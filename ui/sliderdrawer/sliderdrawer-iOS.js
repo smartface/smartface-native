@@ -1,6 +1,6 @@
-const Page = require('sf-core/ui/page');
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Color = require('sf-core/ui/color');
+const Page = require('../../ui/page');
+const FlexLayout = require('../../ui/flexlayout');
+const Color = require('../../ui/color');
 
 const SLIDER_DRAWER_STATE = {
     CLOSE: 0,

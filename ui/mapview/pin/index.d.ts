@@ -1,7 +1,7 @@
 export = Pin;
 
-import Color from "sf-core/ui/color";
-import Image from "sf-core/ui/image";
+import Color from "../../../ui/color";
+import Image from "../../../ui/image";
 declare class Pin {
     location: {
         latitude: number;

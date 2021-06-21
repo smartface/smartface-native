@@ -1,5 +1,5 @@
-const Font = require('sf-core/ui/font');
-const Color = require('sf-core/ui/color');
+const Font = require('../../ui/font');
+const Color = require('../../ui/color');
 
 const AttributedString = function(params) {
 

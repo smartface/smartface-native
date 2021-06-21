@@ -3,7 +3,7 @@ const Label = require('../label');
 const TextAlignment = require("../textalignment");
 const TypeUtil = require("../../util/type");
 
-const unitconverter = require('sf-core/util/Android/unitconverter');
+const unitconverter = require('../../util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");

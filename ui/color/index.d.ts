@@ -1,4 +1,4 @@
-export =  Color;
+export = Color;
 declare class Color extends NativeComponent {
     isGradient?: any;
     colors?: Color[];

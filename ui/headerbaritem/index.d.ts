@@ -1,12 +1,12 @@
-import AttributedString from "sf-core/global/attributedstring";
+import AttributedString from "../../global/attributedstring";
 import Image from "../image";
 import Font from "../font";
 import Color from "../color";
 import Badge from "../badge";
-import { Point2D } from "sf-core/primitive/point2d";
+import { Point2D } from "../../primitive/point2d";
 import View from "../view";
 
-export default HeaderBarItem;
+export = HeaderBarItem;
 
 /**
  * @class UI.HeaderBarItem

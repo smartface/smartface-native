@@ -1,5 +1,5 @@
-const Color = require("sf-core/ui/color");
-const Font = require("sf-core/ui/font");
+const Color = require("../../ui/color");
+const Font = require("../../ui/font");
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");

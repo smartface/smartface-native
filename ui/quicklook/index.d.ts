@@ -1,5 +1,5 @@
 import Color from "../color";
-import StatusBar from "sf-core/application/statusbar";
+import StatusBar from "../../application/statusbar";
 import Page from "../page";
 
 export = QuickLook;

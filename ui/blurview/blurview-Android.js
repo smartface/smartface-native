@@ -1,8 +1,8 @@
 const RenderScriptBlur = requireClass("eightbitlab.com.blurview.RenderScriptBlur");
 const NativeBlurView = requireClass("eightbitlab.com.blurview.BlurView");
 
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-const View = require("sf-core/ui/view");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const View = require("../../ui/view");
 
 BlurView.prototype = Object.create(View.prototype);
 BlurView.iOS = {};

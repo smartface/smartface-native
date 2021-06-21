@@ -1,4 +1,4 @@
-import AttributedString from "sf-core/global/attributedstring";
+import AttributedString from "../../global/attributedstring";
 import Color from "../color";
 import Font from "../font";
 import View from "../view";
@@ -6,7 +6,7 @@ import HeaderBarItem from "../headerbaritem";
 import Page from "../page";
 import Image from "../image";
 
-export =  HeaderBar;
+export = HeaderBar;
 /**
  * @class UI.HeaderBar
  *

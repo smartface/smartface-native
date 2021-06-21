@@ -1,6 +1,6 @@
-const File = require("sf-core/io/file");
-const Color = require("sf-core/ui/color");
-const Application = require("sf-core/application");
+const File = require("../../io/file");
+const Color = require("../../ui/color");
+const Application = require("../../application");
 
 function QuickLook(params) {
     var self = this;

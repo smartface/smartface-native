@@ -1,5 +1,5 @@
-import File from "sf-core/io/file";
-import Blob from "sf-core/global/blob";
+import File from "../../io/file";
+import Blob from "../../global/blob";
 import Page from "../page";
 
 export = EmailComposer;

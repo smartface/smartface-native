@@ -1,5 +1,5 @@
-const Invocation = require('sf-core/util').Invocation;
-const Options = require('sf-core/ui/webbrowser/webbrowseroptions');
+const Invocation = require('../../util').Invocation;
+const Options = require('../../ui/webbrowser/webbrowseroptions');
 
 function WebBrowser() {}
 

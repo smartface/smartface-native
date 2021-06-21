@@ -22,4 +22,4 @@ declare enum ActivityIndicatorViewStyle {
  */
 	NORMAL = 1
 }
-export =  ActivityIndicatorViewStyle;
+export = ActivityIndicatorViewStyle;

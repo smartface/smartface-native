@@ -1,3 +1,3 @@
 import TextAlignment from "./textalignment";
 
-export =  TextAlignment;
+export = TextAlignment;

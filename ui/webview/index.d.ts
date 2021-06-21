@@ -1,9 +1,9 @@
 import View from "../view";
 import OverScrollMode from "../android/overscrollmode";
 import Page from "../page";
-import File from "sf-core/io/file";
+import File from "../../io/file";
 import ContentInsetAdjustment from "../ios/contentinsetadjustment";
-import { Boundary } from "sf-core/primitive/boundary";
+import { Boundary } from "../../primitive/boundary";
 
 /**
  * @class UI.WebView

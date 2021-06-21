@@ -1,7 +1,7 @@
 export = BlurView;
 
-import Color from "sf-core/ui/color";
-import View from "sf-core/ui/view";
+import Color from "../../ui/color";
+import View from "../../ui/view";
 /**
  * @class UI.BlurView
  * @extends UI.View

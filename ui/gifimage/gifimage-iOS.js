@@ -1,8 +1,8 @@
-const File = require('sf-core/io/file');
-const Path = require('sf-core/io/path');
-const FileStream = require('sf-core/io/filestream');
-const Image = require("sf-core/ui/image");
-const Blob = require('sf-core/blob');
+const File = require('../../io/file');
+const Path = require('../../io/path');
+const FileStream = require('../../io/filestream');
+const Image = require("../../ui/image");
+const Blob = require('../../blob');
 
 function GifImage(params) {
     var self = this;

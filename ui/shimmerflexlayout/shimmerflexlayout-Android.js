@@ -1,9 +1,9 @@
 const extend = require('js-base/core/extend');
-const View = require("sf-core/ui/view");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Color = require('sf-core/ui/color');
-const TypeUtil = require("sf-core/util/type");
+const View = require("../../ui/view");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const FlexLayout = require('../../ui/flexlayout');
+const Color = require('../../ui/color');
+const TypeUtil = require("../../util/type");
 
 const NativeShimmerFrameLayout = requireClass("com.facebook.shimmer.ShimmerFrameLayout");
 const NativeShimmer = requireClass("com.facebook.shimmer.Shimmer");

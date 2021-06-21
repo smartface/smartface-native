@@ -5,7 +5,7 @@ import DecelerationRate from "../ios/decelerationrate";
 import LayoutManager from "../layoutmanager";
 import Color from "../color";
 import View from "../view";
-import { Point2D } from "sf-core/primitive/point2d";
+import { Point2D } from "../../primitive/point2d";
 
 /**
  * @class UI.GridView

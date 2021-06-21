@@ -2,7 +2,7 @@ var assert = require("chai").assert;
 
 const Contacts = require("../../device/contacts");
 const PermissionUtil = require('sf-extension-utils').permission;
-const Application = require("sf-core/application");
+const Application = require("../../application");
 
 const Page = require("../../ui/page");
 const Router = require("../../ui/router");

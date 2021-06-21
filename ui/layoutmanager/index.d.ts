@@ -1,5 +1,5 @@
-import { Point2D } from "sf-core/primitive/point2d";
-import { Boundary } from "sf-core/primitive/boundary";
+import { Point2D } from "../../primitive/point2d";
+import { Boundary } from "../../primitive/boundary";
 
 /**
  * @class UI.LayoutManager

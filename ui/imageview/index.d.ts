@@ -1,7 +1,7 @@
 import View from "../view";
 import Image from "../image";
 import Color from "../color";
-import File from "sf-core/io/file";
+import File from "../../io/file";
 import ImageCacheType from "../imagecachetype";
 import policy from "./Android/policy";
 

@@ -854,6 +854,17 @@ Application.Android.Permissions.READ_EXTERNAL_STORAGE;
 Application.Android.Permissions.WRITE_EXTERNAL_STORAGE;
 
 
+/**
+ * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+ *
+ * @property WRITE_APN_SETTINGS
+ * @static
+ * @readonly
+ * @since 4.3.2
+ */
+Application.Android.Permissions.WRITE_APN_SETTINGS;
+
+
 /** 
  * @enum Application.Android.KeyboardMode 
  * @since 3.1.0

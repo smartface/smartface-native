@@ -1,10 +1,10 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const Color = require("sf-core/ui/color");
-const SFTextAlignment = require("sf-core/ui/textalignment");
-const Invocation = require('sf-core/util').Invocation;
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
-const NSLineBreakMode = require('sf-core/util/iOS/nslinebreakmode');
+const Color = require("../../ui/color");
+const SFTextAlignment = require("../../ui/textalignment");
+const Invocation = require('../../util').Invocation;
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
+const NSLineBreakMode = require('../../util/iOS/nslinebreakmode');
 
 const NSUnderlineStyle = {
     None: 0,

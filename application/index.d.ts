@@ -1,12 +1,12 @@
-import ApplicationAndorid = require("./application-Android");
-import ApplicationIOS = require("./application-iOS");
-import Page = require("../ui/page");
-import NavigationController = require("../ui/navigationcontroller");
-import RemoteUpdateService = require("./RAU");
-import StatusBar = require("./statusbar");
-import Navigationbar = require("./android/navigationbar");
-import NavigationbarStyle = require("./android/navigationbar/style");
-import SliderDrawer = require('../ui/sliderdrawer');
+import ApplicationAndorid from "./application-Android";
+import ApplicationIOS from "./application-iOS";
+import Page from "../ui/page";
+import NavigationController from "../ui/navigationcontroller";
+import RemoteUpdateService from "./RAU";
+import StatusBar from "./statusbar";
+import Navigationbar from "./android/navigationbar";
+import NavigationbarStyle from "./android/navigationbar/style";
+import SliderDrawer from '../ui/sliderdrawer';
 
 /** 
  * @enum {Number} Application.LayoutDirection
@@ -659,7 +659,18 @@ declare const Application: {
  * @readonly
  * @since 1.1.16
  */
-			readonly WRITE_EXTERNAL_STORAGE: any
+            readonly WRITE_EXTERNAL_STORAGE: any,
+            
+
+/**
+ * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+ *
+ * @property WRITE_APN_SETTINGS
+ * @static
+ * @readonly
+ * @since 4.3.2
+ */
+            readonly WRITE_APN_SETTINGS: any;
         };
 /**
  * Application package name.
@@ -910,4 +921,4 @@ declare const Application: {
 	version: string;
 };
 
-export =  Application;
+export = Application;

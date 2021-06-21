@@ -233,4 +233,4 @@ declare class File extends NativeComponent {
 	ios: {};
 }
 
-export =  File;
+export = File;

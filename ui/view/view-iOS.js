@@ -1,8 +1,8 @@
-const TypeUtil = require("sf-core/util/type");
-const Exception = require("sf-core/util").Exception;
-const Color = require('sf-core/ui/color');
-const Invocation = require('sf-core/util').Invocation;
-const YGUnit = require('sf-core/util').YogaEnums.YGUnit;
+const TypeUtil = require("../../util/type");
+const Exception = require("../../util").Exception;
+const Color = require('../../ui/color');
+const Invocation = require('../../util').Invocation;
+const YGUnit = require('../../util').YogaEnums.YGUnit;
 
 function View(params) {
 

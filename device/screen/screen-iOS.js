@@ -1,5 +1,5 @@
-const Image = require("sf-core/ui/image");
-const OrientationType = require("sf-core/device/screen/orientationtype");
+const Image = require("../../ui/image");
+const OrientationType = require("../../device/screen/orientationtype");
 
 const orientationArray = [
   "unknown",

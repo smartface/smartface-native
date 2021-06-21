@@ -1,11 +1,11 @@
 import View from "../view";
 import FlexLayout from "../flexlayout";
 import NavigationController from "../navigationcontroller";
-import StatusBar from "sf-core/application/statusbar";
+import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
-import { IFlexLayout } from "sf-core/primitive/iflexlayout";
+import { IFlexLayout } from "../../primitive/iflexlayout";
 
-export =  Page;
+export = Page;
 
 declare enum UIInterfaceOrientation {
 	unknown = 0,

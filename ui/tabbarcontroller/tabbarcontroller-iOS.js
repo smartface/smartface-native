@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const Page = require('sf-core/ui/page');
-const Color = require('sf-core/ui/color');
+const Page = require('../../ui/page');
+const Color = require('../../ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
 
 TabBarController.prototype = Object.create(Page.prototype);

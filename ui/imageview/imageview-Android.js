@@ -72,7 +72,7 @@ Object.defineProperties(ImageView.prototype, {
             return this._tintColor;
         },
         set: function (tintColor) {
-            const Color = require("sf-core/ui/color");
+            const Color = require("../../ui/color");
             if (!tintColor instanceof Color)
                 return;
             this._tintColor = tintColor;

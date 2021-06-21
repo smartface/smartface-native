@@ -1,8 +1,8 @@
 const View = require('../view');
-const Exception = require("sf-core/util").Exception;
-const Page = require("sf-core/ui/page");
-const YGUnit = require('sf-core/util').YogaEnums.YGUnit;
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Exception = require("../../util").Exception;
+const Page = require("../../ui/page");
+const YGUnit = require('../../util').YogaEnums.YGUnit;
+const Invocation = require('../../util/iOS/invocation.js');
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -166,7 +166,7 @@ function SwipeView(params) {
             return _page;
         },
         set: function(value) {
-            if (value instanceof require("sf-core/ui/page")) {
+            if (value instanceof require("../../ui/page")) {
                 _page = value;
                 _page.nativeObject.addChildViewController(self.pageController);
             }

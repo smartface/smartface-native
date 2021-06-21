@@ -1,4 +1,4 @@
-const File = require("sf-core/io/file");
+const File = require("../../io/file");
 /** @type {import('./index')} */
 function Font() {}
 

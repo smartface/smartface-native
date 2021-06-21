@@ -1,5 +1,5 @@
-import Page from "sf-core/ui/page";
-​import Blob from "sf-core/global/blob";
+import Page from "../../ui/page";
+​import Blob from "../../global/blob";
 
 declare namespace Contacts {
     /**
@@ -197,4 +197,4 @@ declare class Contacts {
     }) => void;
 }
 ​
-export =  Contacts;
+export = Contacts;

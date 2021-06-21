@@ -7,7 +7,7 @@ import Image from "../image";
 import Font from "../font";
 import SwipeItemKlass from "./swipeitem";
 import View from "../view";
-import { Point2D } from "sf-core/primitive/point2d";
+import { Point2D } from "../../primitive/point2d";
 
 /**
  * @class UI.ListView

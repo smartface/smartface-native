@@ -1,4 +1,4 @@
-export =  Blob;
+export = Blob;
 /**
  * @class Blob
  * @since 0.1

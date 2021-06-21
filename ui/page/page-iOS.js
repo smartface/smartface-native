@@ -1,12 +1,12 @@
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Image = require("sf-core/ui/image");
-const Color = require('sf-core/ui/color');
-const System = require('sf-core/device/system');
-const Screen = require('sf-core/device/screen');
-const OrientationType = require('sf-core/device/screen/orientationtype');
-const Invocation = require('sf-core/util').Invocation;
-const HeaderBarItem = require('sf-core/ui/headerbaritem');
-const Application = require("sf-core/application");
+const FlexLayout = require('../../ui/flexlayout');
+const Image = require("../../ui/image");
+const Color = require('../../ui/color');
+const System = require('../../device/system');
+const Screen = require('../../device/screen');
+const OrientationType = require('../../device/screen/orientationtype');
+const Invocation = require('../../util').Invocation;
+const HeaderBarItem = require('../../ui/headerbaritem');
+const Application = require("../../application");
 
 const UIInterfaceOrientation = {
     unknown: 0,

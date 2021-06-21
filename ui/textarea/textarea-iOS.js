@@ -1,5 +1,5 @@
 const TextBox = require('../textbox');
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 TextArea.prototype = Object.create(TextBox.prototype);
 function TextArea(params) {

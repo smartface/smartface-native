@@ -1,4 +1,4 @@
-import Blob from "sf-core/global/blob";
+import Blob from "../../global/blob";
 import Image from "../image";
 /**
  * @class UI.GifImage

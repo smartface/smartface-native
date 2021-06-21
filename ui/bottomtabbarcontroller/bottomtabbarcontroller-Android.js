@@ -12,7 +12,7 @@ const activity = AndroidConfig.activity;
 
 function BottomTabBarController(params) {
     // TODO: Beautify this code
-    const Application = require("sf-core/application");
+    const Application = require("../../application");
     Application.tabBar = new BottomTabBar();
 
     var _addedToActivity = false;
@@ -115,7 +115,7 @@ function BottomTabBarController(params) {
         if (!self.__isActive)
             return;
 
-        const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+        const ViewController = require("../../util/Android/transition/viewcontroller");
         ViewController.deactivateController(self.getCurrentController());
 
         // Don't remove this line to top of the page.

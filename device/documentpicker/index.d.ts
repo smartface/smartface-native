@@ -1,5 +1,5 @@
-import File from "sf-core/io/file";
-import Page from "sf-core/ui/page";
+import File from "../../io/file";
+import Page from "../../ui/page";
 
 export = DocumentPicker;
 declare namespace DocumentPicker {

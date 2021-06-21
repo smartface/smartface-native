@@ -1,4 +1,4 @@
-export =  AsyncTask;
+export = AsyncTask;
 /**
  * @class AsyncTask
  * @since 3.1.0

@@ -1,6 +1,6 @@
 const TextBox = require('../textbox');
-const Color = require('sf-core/ui/color');
-const FlexLayout = require('sf-core/ui/flexlayout');
+const Color = require('../../ui/color');
+const FlexLayout = require('../../ui/flexlayout');
 
 // const MaterialTextbox = extend(TextBox)(
 MaterialTextbox.prototype = Object.create(TextBox.prototype);

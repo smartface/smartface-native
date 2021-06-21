@@ -191,7 +191,7 @@ function MaterialTextbox(params) {
                 _rightLayout = params.view;
                 _rightLayoutWidth = params.width !== undefined ? params.width : 30;
 
-                const FlexLayout = require("sf-core/ui/flexlayout");
+                const FlexLayout = require("../../ui/flexlayout");
                 let parentFL = new FlexLayout();
                 self.nativeObject.setRightLayout(_rightLayout.nativeObject, _rightLayout.yogaNode, parentFL.nativeObject, _rightLayoutWidth);
             }

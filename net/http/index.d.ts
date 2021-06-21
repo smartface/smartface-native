@@ -1,6 +1,6 @@
-import Image from "sf-core/ui/image";
-import Blob from "sf-core/global/blob";
-import File from "sf-core/io/file";
+import Image from "../../ui/image";
+import Blob from "../../global/blob";
+import File from "../../io/file";
 
 export = Http;
 

@@ -1,4 +1,4 @@
-export =  CallDetection;
+export = CallDetection;
 /**
  * @class Device.CallDetection
  * @since 4.3.1

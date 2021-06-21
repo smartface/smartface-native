@@ -1,7 +1,7 @@
 const View = require('../view');
-const Image = require("sf-core/ui/image");
-const ImageCacheType = require('sf-core/ui/imagecachetype');
-const Color = require("sf-core/ui/color");
+const Image = require("../../ui/image");
+const ImageCacheType = require('../../ui/imagecachetype');
+const Color = require("../../ui/color");
 
 const FillType = {
     NORMAL: 0,

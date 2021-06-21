@@ -1,8 +1,8 @@
-const Color = require('sf-core/ui/color');
-const Image = require("sf-core/ui/image");
-const TypeUtil = require("sf-core/util/type");
-const Invocation = require('sf-core/util').Invocation;
-const YGUnit = require('sf-core/util').YogaEnums.YGUnit;
+const Color = require('../../ui/color');
+const Image = require("../../ui/image");
+const TypeUtil = require("../../util/type");
+const Invocation = require('../../util').Invocation;
+const YGUnit = require('../../util').YogaEnums.YGUnit;
 
 const FloatyOpenAnimationType = {
     pop: 0,
