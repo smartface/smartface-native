@@ -9,6 +9,7 @@ const {
 } = require('../../util/Android/systemservices');
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
+const OrientationType = require('../../device/screen/orientationtype');
 const NativeView = requireClass('android.view.View');
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("androidx.appcompat.R");
