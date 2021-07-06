@@ -1,6 +1,5 @@
 const FlexLayout = require("../../ui/flexlayout");
 const View = require('../view');
-const extend = require('js-base/core/extend');
 const UIControlEvents = require("../../util").UIControlEvents;
 
 const LayoutManager = require("../layoutmanager");
@@ -11,7 +10,6 @@ const NSIndexPath = SF.requireClass("NSIndexPath");
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 GridView.prototype = Object.create(View.prototype);
-// const GridView = extend(View)(
 function GridView(params) {
     var sfSelf = this;
     sfSelf.registeredIndentifier = [];

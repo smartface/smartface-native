@@ -1,4 +1,4 @@
-const extend = require('js-base/core/extend');
+
 const View = require("../../ui/view");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const FlexLayout = require('../../ui/flexlayout');

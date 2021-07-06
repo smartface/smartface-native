@@ -1,5 +1,5 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
+
 /**
  * @class UI.SwipeView
  * @since 1.1.10

@@ -1,6 +1,6 @@
 /* globals requireClass, array */
 const TextBox = require('../textbox');
-const extend = require('js-base/core/extend');
+
 const View = require("../view");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
