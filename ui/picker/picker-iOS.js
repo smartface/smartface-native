@@ -1,4 +1,4 @@
-const extend = require('js-base/core/extend');
+
 const View = require('../../ui/view');
 const Color = require("../../ui/color");
 

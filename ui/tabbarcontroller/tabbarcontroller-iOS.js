@@ -1,4 +1,4 @@
-const extend = require('js-base/core/extend');
+
 const Page = require('../../ui/page');
 const Color = require('../../ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");

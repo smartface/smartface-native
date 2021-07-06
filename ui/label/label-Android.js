@@ -1,5 +1,5 @@
 /*globals requireClass*/
-const extend = require('js-base/core/extend');
+
 const View = require('../view');
 const Color = require("../color");
 const TextAlignment = require("../textalignment");

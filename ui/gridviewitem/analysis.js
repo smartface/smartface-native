@@ -1,5 +1,5 @@
 const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
+
 /**
  * @class UI.GridViewItem
  * @since 3.0.2

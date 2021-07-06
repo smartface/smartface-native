@@ -1,5 +1,4 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
 /**
  * @class UI.GridView
  * @since 3.0.2

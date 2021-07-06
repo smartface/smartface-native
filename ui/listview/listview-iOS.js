@@ -1,5 +1,5 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
+
 const UIControlEvents = require("../../util").UIControlEvents;
 const Image = require('../../ui/image');
 const Invocation = require('../../util/iOS/invocation.js');
