@@ -31,7 +31,7 @@ const OrientationDictionary = {
     // Page.Orientation.AUTOLANDSCAPE: ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     12: 6,
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
-    15: 10
+    15: 13
 };
 
 function Page(params) {
@@ -693,14 +693,14 @@ function Page(params) {
     var _tag;
     Object.defineProperty(this,
         'tag', {
-            get: function () {
-                return _tag;
-            },
-            set: function (tag) {
-                _tag = tag;
-            },
-            enumerable: true
-        }
+        get: function () {
+            return _tag;
+        },
+        set: function (tag) {
+            _tag = tag;
+        },
+        enumerable: true
+    }
     );
 
     // Implemented for just SearchView
