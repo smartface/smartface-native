@@ -1,7 +1,7 @@
-import Color = require("../color");
-import FlexLayout = require("../flexlayout");
-import ViewGroup = require("../viewgroup");
-import { Point2D } from "sf-core/primitive/point2d";
+import Color from "../color";
+import FlexLayout from "../flexlayout";
+import ViewGroup from "../viewgroup";
+import { Point2D } from "../../primitive/point2d";
 
 export = View;
 /**
@@ -24,6 +24,34 @@ export = View;
  */
 declare class View extends NativeComponent {
 	constructor(params?: any);
+	/**
+	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
+	 * @property {String} transitionID
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	transitionID: string;
+	/**
+	 * Gets/sets whether the view is an accessibility element that an assistive app can access.
+	 *
+	 * @property {Boolean} accessible
+	 * @android
+     * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	accessible: boolean;
+	/**
+     * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 *
+	 * @property {String} accessibilityLabel
+	 * @android
+     * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	accessibilityLabel: string;
 	/**
 	 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 	 * This property only supported for api level 23 and above.
@@ -115,6 +143,16 @@ declare class View extends NativeComponent {
 	 * @since 0.1
 	 */
 	id: string;
+	/**
+	 * Gets/sets test id for view. resource-id for android; accessibilityIdentifier for iOS.
+	 *
+	 * @property {Number} testId
+	 * @android
+	 * @ios
+	 * @member UI.View
+	 * @since 4.3.2
+	 */
+	testId: string;
 	/**
 	 * Gets/sets visibility of view. It is set to true as default.
 	 *
@@ -420,7 +458,7 @@ declare class View extends NativeComponent {
 	 * @since 0.1
 	 */
 	alignSelf: FlexLayout.AlignSelf;
-	applyLayout():void;
+	applyLayout(): void;
 	/**
 	 * This method put a view to the top of other views in z-direction.
 	 *
@@ -625,16 +663,16 @@ declare class View extends NativeComponent {
 		 * @static
 		 * @since 3.1.3
 		 */
-        viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
-        /**
-         * Disables a view transition animation.
-         *
-         * @method performWithoutAnimation
-         * @param {Function} functionWithoutAnimation
-         * @ios
-         * @since 4.2.1
-         */
-        performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+		viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+		/**
+		 * Disables a view transition animation.
+		 *
+		 * @method performWithoutAnimation
+		 * @param {Function} functionWithoutAnimation
+		 * @ios
+		 * @since 4.2.1
+		 */
+		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	};
 	/**
 	 * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
@@ -719,8 +757,8 @@ declare namespace View {
 		BOTTOM_LEFT = 0
 	}
 	namespace ios {
-        const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-        const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+		const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	}
 	/**
 	 * iOS Specific Properties.

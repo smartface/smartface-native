@@ -1,7 +1,7 @@
-export =  BlurView;
+export = BlurView;
 
-import Color = require("sf-core/ui/color");
-import View = require("sf-core/ui/view");
+import Color from "../../ui/color";
+import View from "../../ui/view";
 /**
  * @class UI.BlurView
  * @extends UI.View
@@ -93,5 +93,37 @@ declare namespace BlurView {
             SYSTEMTHICKMATERIALDARK = 19,
             SYSTEMCHROMEMATERIALDARK = 20
         }
+		export enum SemanticContentAttribute {
+			/**
+			 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
+			 *
+			 * @property {Number} AUTO
+			 * @static
+			 * @ios
+			 * @readonly
+			 * @since 3.1.3
+			 */
+			AUTO = 0,
+			/**
+			 * Layout direction is always left to right.
+			 *
+			 * @property {Number} FORCELEFTTORIGHT
+			 * @static
+			 * @ios
+			 * @readonly
+			 * @since 3.1.3
+			 */
+			FORCELEFTTORIGHT = 3,
+			/**
+			 * Layout direction is always right to left.
+			 *
+			 * @property {Number} FORCERIGHTTOLEFT
+			 * @static
+			 * @ios
+			 * @readonly
+			 * @since 3.1.3
+			 */
+			FORCERIGHTTOLEFT = 4
+		}
 	}
 }

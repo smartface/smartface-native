@@ -64,7 +64,7 @@ function TabBarItem(params) {
         },
         'badge': {
             get: function() {
-                const Badge = require("sf-core/ui/badge");
+                const Badge = require("../../ui/badge");
                 if (_badgeObj === undefined)
                     _badgeObj = new Badge();
                 _badgeObj.nativeObject.getParent() === undefined && setBadgeToTabarItem.call(self, _badgeObj);

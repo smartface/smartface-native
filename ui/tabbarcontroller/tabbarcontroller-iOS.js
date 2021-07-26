@@ -1,6 +1,6 @@
-const extend = require('js-base/core/extend');
-const Page = require('sf-core/ui/page');
-const Color = require('sf-core/ui/color');
+
+const Page = require('../../ui/page');
+const Color = require('../../ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
 
 TabBarController.prototype = Object.create(Page.prototype);
@@ -74,9 +74,6 @@ function TabBarController(params) {
         },
         enumerable: true
     });
-
-    self.android = {};
-    self.ios = {};
 
     Object.defineProperty(self.ios, 'barTextTransform', {
         get: function() {
@@ -256,6 +253,17 @@ function TabBarController(params) {
             self.nativeObject.setSelectedIndexWithAnimated(index, _animated);
         });
     };
+    
+    Object.defineProperty(self, 'pagingEnabled', {
+        get: function() {
+            return self.nativeObject.pagingEnabled;
+        },
+        set: function(value) {
+            self.nativeObject.pagingEnabled = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
 
     // Assign parameters given in constructor
     if (params) {

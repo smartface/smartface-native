@@ -1,5 +1,5 @@
 /* global requireClass */
-const AttributedString = require("sf-core/ui/attributedstring");
+const AttributedString = require("../../ui/attributedstring");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
 function AttributedTitle(context) {

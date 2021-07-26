@@ -4,7 +4,7 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
-const RequestCodes = require("sf-core/util/Android/requestcodes");
+const RequestCodes = require("../../util/Android/requestcodes");
 const TypeUtil = require("../../util/type");
 
 const NativeView = requireClass("android.view.View");
@@ -501,7 +501,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
 function createImageFile() {
     var timeStamp = new NativeSimpleDateFormat("yyyyMMdd_HHmmss").format(new NativeDate());
     var imageFileName = "JPEG_" + timeStamp + "_";
-    var storageDir = NativeEnvironment.getExternalStoragePublicDirectory(NativeEnvironment.DIRECTORY_PICTURES);
+    var storageDir = activity.getExternalCacheDir();
     var imageFile = NativeFile.createTempFile(
         imageFileName, /* prefix */
         ".jpg", /* suffix */

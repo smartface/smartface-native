@@ -1,8 +1,8 @@
-import View = require("../view");
-import Color = require("../color");
-import Font = require("../font");
-import PinKlass = require("./pin");
-import Pin = require("./pin");
+import View from "../view";
+import Color from "../color";
+import Font from "../font";
+import PinKlass from "./pin";
+import Pin from "./pin";
 /**
  * @class UI.MapView
  * @since 0.1
@@ -133,7 +133,7 @@ declare class MapView extends View {
 	 * @ios
 	 * @since 3.0.1
 	 */
-	onClusterPress: (pins: Pin) => void;
+	onClusterPress: (pins: Pin[]) => void;
 	/**
 	 * This property sets center location of the map to the given latitude & longitude.
 	 *
@@ -247,7 +247,47 @@ declare class MapView extends View {
 	readonly centerLocation: {
 		latitude: number;
 		longitude: number;
-	};
+    };
+    
+    /**
+     * Contains the four points defining the four-sided polygon that is visible in a map's camera. This polygon can be a trapezoid instead of a rectangle, because a camera can have tilt. If the camera is directly over the center of the camera, the shape is rectangular, but if the camera is tilted, the shape will appear to be a trapezoid whose smallest side is closest to the point of view.
+     *
+     * @property {Object} visibleRegion
+     * @property {Object} visibleRegion.topLeft that defines the top left corner of the camera.
+     * @property {Number} visibleRegion.topLeft.latitude
+     * @property {Number} visibleRegion.topLeft.longitude
+     * @property {Object} visibleRegion.topRight that defines the top right corner of the camera.
+     * @property {Number} visibleRegion.topRight.latitude
+     * @property {Number} visibleRegion.topRight.longitude
+     * @property {Object} visibleRegion.bottomLeft that defines the bottom left corner of the camera.
+     * @property {Number} visibleRegion.bottomLeft.latitude
+     * @property {Number} visibleRegion.bottomLeft.longitude
+     * @property {Object} visibleRegion.bottomRight that defines the bottom right corner of the camera.
+     * @property {Number} visibleRegion.bottomRight.latitude
+     * @property {Number} visibleRegion.bottomRight.longitude
+     * @android
+     * @ios
+     * @readonly
+     * @since 4.3.2
+     */
+    visibleRegion: { 
+        topLeft: {
+			latitude: number;
+			longitude: number;
+		}, 
+        topRight: {
+			latitude: number;
+			longitude: number;
+		},
+        bottomLeft: {
+			latitude: number;
+			longitude: number;
+		},
+        bottomRight: {
+			latitude: number;
+			longitude: number;
+		}
+    };
 	/**
 	 * Get visible pins on MapView.
 	 *

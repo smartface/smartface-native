@@ -1,7 +1,7 @@
-import Color = require("sf-core/ui/color");
-import Font = require("sf-core/ui/font");
+import Color from "../../ui/color";
+import Font from "../../ui/font";
 
-export =  AttributedString
+export = AttributedString
 /**
  * @class AttributedString
  * @since 3.0.0

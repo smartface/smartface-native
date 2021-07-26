@@ -1,6 +1,6 @@
 const TextBox = require('../textbox');
-const Color = require('sf-core/ui/color');
-const FlexLayout = require('sf-core/ui/flexlayout');
+const Color = require('../../ui/color');
+const FlexLayout = require('../../ui/flexlayout');
 
 // const MaterialTextbox = extend(TextBox)(
 MaterialTextbox.prototype = Object.create(TextBox.prototype);
@@ -23,6 +23,17 @@ function MaterialTextbox(params) {
 
     self.nativeObject.layer.masksToBounds = false;
     self.ios.clearButtonEnabled = false;
+
+    Object.defineProperty(self, 'testId', {
+        get: function () {
+            return self.nativeObject.valueForKey("accessibilityIdentifier");
+        },
+        set: function (value) {
+            self.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
+            self.mdcTextInputControllerUnderline.textInput.setValueForKey(value + "_textBox", 'accessibilityIdentifier');
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self, 'cursorPosition', {
         get: function() {

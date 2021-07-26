@@ -1,12 +1,12 @@
 /*globals requireClass*/
 const TypeUtil = require('../../util/type');
-const Color = require("sf-core/ui/color");
+const Color = require("../../ui/color");
 const AndroidConfig = require("../../util/Android/androidconfig");
 
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
-const ParentPicker = require("sf-core/ui/picker/parentPicker");
+const ParentPicker = require("../../ui/picker/parentPicker");
 
 function SelectablePicker(params) {
     var self = this;
@@ -148,7 +148,7 @@ function SelectablePicker(params) {
                 return _cancelButtonFont;
             },
             set: function(font) {
-                const Font = require('sf-core/ui/font');
+                const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _cancelButtonFont = font;
             },
@@ -189,7 +189,7 @@ function SelectablePicker(params) {
                 return _doneButtonFont;
             },
             set: function(font) {
-                const Font = require('sf-core/ui/font');
+                const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _doneButtonFont = font;
             },

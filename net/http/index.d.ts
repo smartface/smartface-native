@@ -1,6 +1,6 @@
-import Image = require("sf-core/ui/image");
-import Blob = require("sf-core/global/blob");
-import File = require("sf-core/io/file");
+import Image from "../../ui/image";
+import Blob from "../../global/blob";
+import File from "../../io/file";
 
 export = Http;
 

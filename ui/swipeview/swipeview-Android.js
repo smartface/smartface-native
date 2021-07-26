@@ -4,7 +4,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
-const NativeViewPager = requireClass("androidx.viewpager.widget.ViewPager");
+const NativeViewPager = requireClass("io.smartface.android.sfcore.ui.swipeview.SFSwipeView");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("androidx.viewpager.widget.ViewPager$OnPageChangeListener");
 
@@ -135,6 +135,16 @@ function SwipeView(params) {
             enumerable: true,
             configurable: true
         },
+        "pagingEnabled": {
+            get: () => {
+                return self.nativeObject.isUserInputEnabled();
+            },
+            set: (value) => {
+                self.nativeObject.setIsUserInputEnabled(value);
+            },
+            enumerable: true,
+            configurable: true
+        },
         "_pageInstances": {
             value: _pageInstances
         },
@@ -194,7 +204,7 @@ function SwipeView(params) {
         },
         onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
             if (self.onPageScrolled) {
-                var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
+                var AndroidUnitConverter = require("../../util/Android/unitconverter");
 
                 var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
                 self.onPageScrolled(position, offsetPixels);

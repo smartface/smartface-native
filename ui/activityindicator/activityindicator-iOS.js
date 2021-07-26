@@ -1,5 +1,5 @@
 const View = require('../view');
-const Color = require("sf-core/ui/color");
+const Color = require("../../ui/color");
 
 ActivityIndicator.prototype = Object.create(View.prototype);
 function ActivityIndicator(params) {

@@ -1,6 +1,6 @@
-import Page = require("../page");
-import View = require("../view");
-import OverScrollMode = require("../android/overscrollmode");
+import Page from "../page";
+import View from "../view";
+import OverScrollMode from "../android/overscrollmode";
 
 /**
  * @class UI.SwipeView
@@ -86,7 +86,17 @@ declare class SwipeView extends View {
 	 * @readonly
 	 * @since 1.1.10
 	 */
-	currentIndex: number;
+    currentIndex: number;
+    
+    /**
+     * Enables/Disables paging behavior.
+     *
+     * @property {Boolean} [pagingEnabled = true]
+     * @android
+     * @ios
+     * @since 4.3.2
+     */
+    pagingEnabled: Boolean;
 	/**
 	 * Swipes to the page inside the index of the array.
 	 *

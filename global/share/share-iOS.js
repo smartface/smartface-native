@@ -1,6 +1,6 @@
-const Image = require("sf-core/ui/image");
-const File = require("sf-core/io/file");
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Image = require("../../ui/image");
+const File = require("../../io/file");
+const Invocation = require('../../util/iOS/invocation.js');
 const UIActivityViewController = SF.requireClass("UIActivityViewController");
 
 const Share = {};

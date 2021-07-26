@@ -1,5 +1,5 @@
-const View = require('sf-core/ui/view');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const View = require('../../ui/view');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const SFLiveMediaPublisherDelegate = requireClass("io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPublisherDelegate")
 const NodeCameraView = requireClass("cn.nodemedia.NodeCameraView");

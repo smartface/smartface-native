@@ -1,6 +1,6 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const Color = require("sf-core/ui/color");
+
+const View = require('../../ui/view');
+const Color = require("../../ui/color");
 
 // const Picker = extend(View)(
 Picker.prototype = Object.create(View.prototype);

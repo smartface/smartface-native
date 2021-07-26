@@ -1,5 +1,5 @@
-const Screen = require('sf-core/device/screen');
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Screen = require('../../device/screen');
+const Invocation = require('../../util/iOS/invocation.js');
 
 KeyboardAnimationDelegate.offsetFromTop = function(self) {
     if (!self.getParentViewController()) {

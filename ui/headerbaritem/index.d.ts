@@ -1,10 +1,12 @@
-import AttributedString = require("sf-core/global/attributedstring");
-import Image = require("../image");
-import Font = require("../font");
-import Color = require("../color");
-import Badge = require("../badge");
-import { Point2D } from "sf-core/primitive/point2d";
-import View = require("../view");
+import AttributedString from "../../global/attributedstring";
+import Image from "../image";
+import Font from "../font";
+import Color from "../color";
+import Badge from "../badge";
+import { Point2D } from "../../primitive/point2d";
+import View from "../view";
+
+export = HeaderBarItem;
 
 /**
  * @class UI.HeaderBarItem
@@ -446,5 +448,3 @@ declare namespace HeaderBarItem {
 		}
 	}
 }
-
-export = HeaderBarItem;

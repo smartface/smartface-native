@@ -165,7 +165,7 @@ function NavigationController() {
     this.dismiss = function(params = {}) {
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
-        const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
+        const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 
         if (!self.popupBackNavigator) {
             return;

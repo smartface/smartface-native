@@ -1,4 +1,4 @@
-const Invocation = require('sf-core/util').Invocation;
+const Invocation = require('../../util').Invocation;
 
 function Badge(params) {
 

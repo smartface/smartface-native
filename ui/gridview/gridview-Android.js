@@ -1,6 +1,5 @@
 /* globals requireClass, array, toJSArray */
 const View = require('../view');
-const extend = require('js-base/core/extend');
 const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -16,7 +15,6 @@ const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 GridView.prototype = Object.create(View.prototype);
-// const GridView = extend(View)(
 function GridView(params) {
     var self = this;
 

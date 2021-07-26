@@ -1,2 +1,2 @@
-import EllipsizeMode = require('./ellipsizemode');
+import EllipsizeMode from './ellipsizemode';
 export = EllipsizeMode

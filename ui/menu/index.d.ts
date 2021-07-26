@@ -1,5 +1,5 @@
-import MenuItem = require("../menuitem");
-import Page = require("../page");
+import MenuItem from "../menuitem";
+import Page from "../page";
 
 export = Menu;
 /**

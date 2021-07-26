@@ -1,9 +1,9 @@
-const Color = require('sf-core/ui/color');
-const Image = require('sf-core/ui/image');
+const Color = require('../../ui/color');
+const Image = require('../../ui/image');
 
 function TabBar(params) {
     const UITabBar = SF.requireClass("UITabBar");
-    const TabBarItem = require('sf-core/ui/tabbaritem');
+    const TabBarItem = require('../../ui/tabbaritem');
 
     var self = this;
 

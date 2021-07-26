@@ -221,7 +221,7 @@ function TabBarController(params) {
                     });
                 }
                 if (!this.autoCapitalize)
-                    self.setAllCaps(_items, this.tabLayout.nativeObject);
+                    self.setAllCaps(_items, this.tabLayout.nativeObject, this.autoCapitalize);
             },
             enumerable: true,
             configurable: true
@@ -237,6 +237,16 @@ function TabBarController(params) {
                     // Call this function after setting title.
                     self.setAllCaps(this.items, this.tabLayout.nativeObject, _autoCapitalize);
                 }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        "pagingEnabled": {
+            get: () => {
+                return self.swipeView.pagingEnabled;
+            },
+            set: (value) => {
+                self.swipeView.pagingEnabled = value;
             },
             enumerable: true,
             configurable: true

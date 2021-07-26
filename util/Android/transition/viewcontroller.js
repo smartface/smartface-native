@@ -1,4 +1,4 @@
-const Page = require("sf-core/ui/page");
+const Page = require("../../../ui/page");
 
 function ViewController() {}
 

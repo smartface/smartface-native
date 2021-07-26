@@ -1,5 +1,5 @@
-import View = require("../view");
-import Color = require("../color");
+import View from "../view";
+import Color from "../color";
 /**
  * @class UI.Switch
  * @since 0.1

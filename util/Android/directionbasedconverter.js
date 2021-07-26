@@ -1,4 +1,4 @@
-const Application = require("sf-core/application");
+const Application = require("../../application");
 
 function DirectionBasedConverter() {}
 

@@ -1,4 +1,4 @@
-import FileStream = require("../filestream");
+import FileStream from "../filestream";
 /**
  * @class IO.File
  * @since 0.1
@@ -233,4 +233,4 @@ declare class File extends NativeComponent {
 	ios: {};
 }
 
-export =  File;
+export = File;

@@ -1,5 +1,5 @@
 const ImageView = require('../imageview');
-const Image = require("sf-core/ui/image");
+const Image = require("../../ui/image");
 
 // const GifImageView = extend(ImageView)(
 GifImageView.prototype = Object.create(ImageView.prototype);

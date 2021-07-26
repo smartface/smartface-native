@@ -85,6 +85,8 @@ Path.DataDirectory;
  * @readonly
  * @android
  * @since 0.1
+ * 
+ * @deprecated The path returned from this method is no longer directly accessible to apps.
  */
 Path.android.storages;
 

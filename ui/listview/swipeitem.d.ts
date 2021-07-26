@@ -1,6 +1,6 @@
-import Color = require("../color");
-import Font = require("../font");
-import Image = require("../image");
+import Color from "../color";
+import Font from "../font";
+import Image from "../image";
 
 declare class SwipeItem {
   constructor(params?: any);
@@ -10,18 +10,22 @@ declare class SwipeItem {
   icon: undefined | Image;
   font: Font;
   onPress: (params: { index: number }) => void;
-  padding: number;
-  threshold: number;
-  paddingTop: number;
-  paddingBottom: number;
-  paddingLeft: number;
-  paddingRight: number;
-  borderBottomLeftRadius: number;
-  borderBottomRightRadius: number;
-  borderTopLeftRadius: number;
-  borderTopRightRadius: number;
-  isAutoHide: boolean;
-  iconTextSpacing: number;
+  public readonly ios: {
+    isAutoHide: boolean;
+    padding: number;
+    iconTextSpacing: number;
+  }
+  public readonly android: {
+    borderBottomLeftRadius: number;
+    borderBottomRightRadius: number;
+    borderTopLeftRadius: number;
+    borderTopRightRadius: number;
+    paddingTop: number;
+    paddingBottom: number;
+    paddingLeft: number;
+    paddingRight: number;
+    threshold: number;
+  }
 }
 
 export = SwipeItem;

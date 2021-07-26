@@ -1,5 +1,6 @@
-const Page = require('sf-core/ui/page');
-const FlexLayout = require('sf-core/ui/flexlayout');
+const Page = require('../../ui/page');
+const FlexLayout = require('../../ui/flexlayout');
+const Color = require('../../ui/color');
 
 const SLIDER_DRAWER_STATE = {
     CLOSE: 0,
@@ -24,11 +25,12 @@ function SliderDrawer(params) {
 
     Page.call(self);
 
-    self.pageView = new FlexLayout();
+    self.pageView = new FlexLayout({
+        backgroundColor: Color.WHITE
+    });
     self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
 
     self.nativeObject.onViewLoad = function() {
-        self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
         return self.pageView.nativeObject;
     };
 
@@ -49,6 +51,15 @@ function SliderDrawer(params) {
     };
 
     Object.defineProperties(this, {
+        'backgroundColor': {
+            get: function() {
+                return self.pageView.backgroundColor;
+            },
+            set: function(value) {
+                self.pageView.backgroundColor = value;
+            },
+            enumerable: true
+        },
         'drawerPosition': {
             get: function() {
                 return _position;

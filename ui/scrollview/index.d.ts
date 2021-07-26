@@ -1,10 +1,10 @@
-import OverScrollMode = require("../android/overscrollmode");
-import ViewGroup = require("../viewgroup");
-import FlexLayout = require("../flexlayout");
-import View = require("../view");
-import ContentInsetAdjustment = require("../ios/contentinsetadjustment");
-import { IFlexLayout } from "sf-core/primitive/iflexlayout";
-import { Point2D } from "sf-core/primitive/point2d";
+import OverScrollMode from "../android/overscrollmode";
+import ViewGroup from "../viewgroup";
+import FlexLayout from "../flexlayout";
+import View from "../view";
+import ContentInsetAdjustment from "../ios/contentinsetadjustment";
+import { IFlexLayout } from "../../primitive/iflexlayout";
+import { Point2D } from "../../primitive/point2d";
 
 /**
  * @class UI.ScrollView

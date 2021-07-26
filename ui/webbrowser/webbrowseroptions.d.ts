@@ -1,4 +1,4 @@
-import Color = require("../color");
+import Color from "../color";
 import { WebBrowserParams } from "./webbrowserparams";
 
 export declare class WebBrowserOptions implements WebBrowserParams {

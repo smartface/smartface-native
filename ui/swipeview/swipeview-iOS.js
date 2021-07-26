@@ -1,8 +1,8 @@
 const View = require('../view');
-const Exception = require("sf-core/util").Exception;
-const Page = require("sf-core/ui/page");
-const YGUnit = require('sf-core/util').YogaEnums.YGUnit;
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Exception = require("../../util").Exception;
+const Page = require("../../ui/page");
+const YGUnit = require('../../util').YogaEnums.YGUnit;
+const Invocation = require('../../util/iOS/invocation.js');
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -128,6 +128,7 @@ function SwipeView(params) {
     var _pageArray = [];
     var _instanceArray = [];
     var _pageNativeObjectArray = [];
+    var _pagingEnabled = true;
     Object.defineProperty(self, 'pages', {
         get: function() {
             return _pageArray;
@@ -165,7 +166,7 @@ function SwipeView(params) {
             return _page;
         },
         set: function(value) {
-            if (value instanceof require("sf-core/ui/page")) {
+            if (value instanceof require("../../ui/page")) {
                 _page = value;
                 _page.nativeObject.addChildViewController(self.pageController);
             }
@@ -186,7 +187,7 @@ function SwipeView(params) {
     self.pageControllerDatasource.viewControllerBeforeViewController = function(e) {
         var index = _pageNativeObjectArray.indexOf(e.viewController);
         transactionIndex = index;
-        if (index > 0) {
+        if (index > 0 && _pagingEnabled) {
             index--;
             return _pageNativeObjectArray[index];
         }
@@ -196,7 +197,7 @@ function SwipeView(params) {
     self.pageControllerDatasource.viewControllerAfterViewController = function(e) {
         var index = _pageNativeObjectArray.indexOf(e.viewController);
         transactionIndex = index;
-        if (index >= 0 && index < _pageNativeObjectArray.length - 1) {
+        if (index >= 0 && index < _pageNativeObjectArray.length - 1 && _pagingEnabled) {
             index++;
             return _pageNativeObjectArray[index];
         }
@@ -314,6 +315,17 @@ function SwipeView(params) {
             } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(self, 'pagingEnabled', {
+        get: function() {
+            return _pagingEnabled;
+        },
+        set: function(value) {
+            _pagingEnabled = value;
         },
         enumerable: true,
         configurable: true

@@ -1,11 +1,11 @@
-import View = require("../view");
-import Color = require("../color");
-import Image = require("../image");
-import Page = require("../page");
-import FlexLayout = require("../flexlayout");
-import Font = require("../font");
-import TextAlignment = require("../textalignment");
-import KeyboardAppearance = require("../keyboardappearance");
+import View from "../view";
+import Color from "../color";
+import Image from "../image";
+import Page from "../page";
+import FlexLayout from "../flexlayout";
+import Font from "../font";
+import TextAlignment from "../textalignment";
+import KeyboardAppearance from "../keyboardappearance";
 
 /**
  * @class UI.SearchView
@@ -91,14 +91,6 @@ declare interface SearchView extends View {
 	 */
 	addToHeaderBar(page: Page): void;
 	/**
-	 * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
-	 *
-	 * @property {Number} [textFieldBorderRadius = 15]
-	 * @android
-	 * @since 3.0.2
-	 */
-	textFieldBorderRadius: number;
-	/**
 	 * Sets/gets border thickness of bounded view. Accepts unsigned
 	 * numbers, 0 means no border. When the searchview is added to header bar,
 	 * the border width of the search view will be 0 on ios.
@@ -149,22 +141,6 @@ declare interface SearchView extends View {
 	 */
 	requestFocus(): void;
 	/**
-	 * This function show loading indicator.
-	 *
-	 * @method showLoading
-	 * @ios
-	 * @since 3.0.2
-	 */
-	showLoading(): void;
-	/**
-	 * This function hide loading indicator.
-	 *
-	 * @method hideLoading
-	 * @ios
-	 * @since 3.0.2
-	 */
-	hideLoading(): void;
-	/**
 	 * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
 	 *
 	 * @method removeFocus
@@ -174,6 +150,22 @@ declare interface SearchView extends View {
 	 */
 	removeFocus(): void;
 	ios: View["ios"] & {
+		/**
+		 * This function show loading indicator.
+		 *
+		 * @method showLoading
+		 * @ios
+		 * @since 3.0.2
+		 */
+		showLoading(): void;
+		/**
+		 * This function hide loading indicator.
+		 *
+		 * @method hideLoading
+		 * @ios
+		 * @since 3.0.2
+		 */
+		hideLoading(): void;
 		/**
 		 * Gets/sets the search view’s style. This property works only for IOS.
 		 *
@@ -222,7 +214,14 @@ declare interface SearchView extends View {
 		 * @event onCancelButtonClicked
 		 * @since 0.1
 		 */
-
+		/**
+		 * Gets/sets the color of the loading indicator.
+		 *
+		 * @property {UI.Color} loadingColor
+		 * @ios
+		 * @since 3.0.2
+		 */
+		loadingColor: Color;
 		onCancelButtonClicked: () => void;
 		keyboardAppearance: KeyboardAppearance;
 	};
@@ -271,24 +270,32 @@ declare interface SearchView extends View {
 		 */
 		leftItem: Image | FlexLayout;
 		/**
-		 * Gets/sets the font of the SearchView.
+		 * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
 		 *
-		 * @property {UI.Font} [font = null]
+		 * @property {Number} [textFieldBorderRadius = 15]
 		 * @android
-		 * @ios
-		 * @since 0.1
+		 * @since 3.0.2
 		 */
-		font: null | Font;
-		/**
-		 * Gets/sets text alignment of the SearchView.
-		 *
-		 * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
-		 * @android
-		 * @ios
-		 * @since 0.1
-		 */
-		textAlignment: TextAlignment;
+		textFieldBorderRadius: number;
 	};
+	/**
+	 * Gets/sets the font of the SearchView.
+	 *
+	 * @property {UI.Font} [font = null]
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	font: null | Font;
+	/**
+	 * Gets/sets text alignment of the SearchView.
+	 *
+	 * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	textAlignment: TextAlignment;
 	/**
 	 * Gets/sets the color of the hint text.
 	 *
@@ -298,14 +305,6 @@ declare interface SearchView extends View {
 	 * @since 0.1
 	 */
 	hintTextColor: Color;
-	/**
-	 * Gets/sets the color of the loading indicator.
-	 *
-	 * @property {UI.Color} loadingColor
-	 * @ios
-	 * @since 3.0.2
-	 */
-	loadingColor: Color;
 	/**
 	 * Gets/sets the color of the textFieldBackgroundColor.
 	 *

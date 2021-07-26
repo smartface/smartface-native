@@ -1,5 +1,5 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
+
 
 /**
  * @class UI.MapView
@@ -40,6 +40,15 @@ const extend = require('js-base/core/extend');
  * 
  */
 function MapView(params) {}
+
+/**
+ * Enables/disables the information view to display on the right side of the callout bubble.
+ *
+ * @property {Boolean} [enableInfoWindow = false]
+ * @ios
+ * @since 4.3.2
+ */
+MapView.prototype.enableInfoWindow;
 
 /**
  * Enables/Disables scroll gestures so that map can be dragged.
@@ -242,6 +251,30 @@ MapView.prototype.android.locationButtonVisible;
  * @since 0.1
  */
 MapView.prototype.centerLocation;
+
+
+/**
+ * Contains the four points defining the four-sided polygon that is visible in a map's camera. This polygon can be a trapezoid instead of a rectangle, because a camera can have tilt. If the camera is directly over the center of the camera, the shape is rectangular, but if the camera is tilted, the shape will appear to be a trapezoid whose smallest side is closest to the point of view.
+ *
+ * @property {Object} visibleRegion
+ * @property {Object} visibleRegion.topLeft that defines the top left corner of the camera.
+ * @property {Number} visibleRegion.topLeft.latitude
+ * @property {Number} visibleRegion.topLeft.longitude
+ * @property {Object} visibleRegion.topRight that defines the top right corner of the camera.
+ * @property {Number} visibleRegion.topRight.latitude
+ * @property {Number} visibleRegion.topRight.longitude
+ * @property {Object} visibleRegion.bottomLeft that defines the bottom left corner of the camera.
+ * @property {Number} visibleRegion.bottomLeft.latitude
+ * @property {Number} visibleRegion.bottomLeft.longitude
+ * @property {Object} visibleRegion.bottomRight that defines the bottom right corner of the camera.
+ * @property {Number} visibleRegion.bottomRight.latitude
+ * @property {Number} visibleRegion.bottomRight.longitude
+ * @android
+ * @ios
+ * @readonly
+ * @since 4.3.2
+ */
+MapView.prototype.visibleRegion;
 
 /**
  * Get visible pins on MapView.
@@ -545,6 +578,17 @@ Pin.prototype.visible;
  * @since 1.1.2
  */
 Pin.prototype.onPress;
+
+
+/**
+ * This event will be fired when the pin's info window is touched.
+ *
+ * @event onInfoWindowPress
+ * @android
+ * @ios
+ * @since 4.3.2
+ */
+Pin.prototype.onInfoWindowPress;
 
 MapView.Pin = Pin;
 

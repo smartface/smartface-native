@@ -1,4 +1,4 @@
-export =  Timer;
+export = Timer;
 /**
  * @class Timer
  * @since 0.1

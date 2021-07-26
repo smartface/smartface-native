@@ -6,12 +6,12 @@ const NativeUCrop = requireClass('com.yalantis.ucrop.UCrop');
 const NativeSFUCropOptions = requireClass('io.smartface.android.sfcore.device.multimedia.crop.SFUCropOptions');
 const NativeSFMultimedia = requireClass("io.smartface.android.sfcore.device.multimedia.SFMultimedia");
 
-const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const AndroidUnitConverter = require('sf-core/util/Android/unitconverter');
-const RequestCodes = require("sf-core/util/Android/requestcodes");
-const File = require("sf-core/io/file");
-const Image = require("sf-core/ui/image");
-const TypeUtil = require("sf-core/util/type");
+const AndroidConfig = require('../../util/Android/androidconfig');
+const AndroidUnitConverter = require('../../util/Android/unitconverter');
+const RequestCodes = require("../../util/Android/requestcodes");
+const File = require("../../io/file");
+const Image = require("../../ui/image");
+const TypeUtil = require("../../util/type");
 
 const Type = {
     IMAGE: 0,

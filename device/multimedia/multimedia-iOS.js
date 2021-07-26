@@ -1,7 +1,7 @@
-const Image = require("sf-core/ui/image");
-const File = require("sf-core/io/file");
-const Page = require('sf-core/ui/page');
-const Invocation = require('sf-core/util').Invocation;
+const Image = require("../../ui/image");
+const File = require("../../io/file");
+const Page = require('../../ui/page');
+const Invocation = require('../../util').Invocation;
 
 const UIImagePickerControllerSourceType = {
     photoLibrary: 0,

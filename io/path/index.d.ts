@@ -74,6 +74,8 @@ declare namespace Path {
  * @readonly
  * @android
  * @since 0.1
+ * 
+ * @deprecated The path returned from this method is no longer directly accessible to apps.
  */
 		const storages: {
 			external: string | null;

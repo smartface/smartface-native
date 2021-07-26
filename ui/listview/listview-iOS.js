@@ -1,9 +1,9 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
-const Image = require('sf-core/ui/image');
-const Invocation = require('sf-core/util/iOS/invocation.js');
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+
+const UIControlEvents = require("../../util").UIControlEvents;
+const Image = require('../../ui/image');
+const Invocation = require('../../util/iOS/invocation.js');
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 const UITableViewRowAnimation = {
     fade: 0,

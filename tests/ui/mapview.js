@@ -80,7 +80,7 @@ salep.test("sf-core/ui/mapview Unit Test", function() {
 });
 
 salep.test("sf-core/ui/mapview Unit Test Full Sample", function() {
-    const FlexLayout = require('sf-core/ui/flexlayout');
+    const FlexLayout = require('../../ui/flexlayout');
 
     var Page1 = extend(Page)(
         function(_super) {

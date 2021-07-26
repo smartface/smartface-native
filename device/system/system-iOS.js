@@ -1,4 +1,4 @@
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Invocation = require('../../util/iOS/invocation.js');
 
 const OSType = require('./ostype');
 
@@ -94,7 +94,7 @@ Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
     enumerable: true
 });
 
-Object.defineProperty(System.ios, 'LAContextBiometricType', {
+Object.defineProperty(System, 'biometricType', {
     get: function() {
         if (parseFloat(System.OSVersion) >= 11.0) {
             var context = new __SF_LAContext();
@@ -107,10 +107,26 @@ Object.defineProperty(System.ios, 'LAContextBiometricType', {
     enumerable: true
 });
 
-Object.defineProperty(System, 'fingerPrintAvailable', {
+// Deprecated
+Object.defineProperty(System.ios, 'LAContextBiometricType', {
+    get: function() {
+        return System.biometricType;
+    },
+    enumerable: true
+});
+
+Object.defineProperty(System, 'biometricsAvailable', {
     get: function() {
         var context = new __SF_LAContext();
         return context.canEvaluatePolicy();
+    },
+    enumerable: true
+});
+
+// Deprecated
+Object.defineProperty(System, 'fingerPrintAvailable', {
+    get: function() {
+        return System.biometricsAvailable;
     },
     enumerable: true
 });
@@ -127,10 +143,18 @@ System.ios.validateFingerPrint = function(params) {
     System.validateFingerPrint(params);
 };
 
-Object.defineProperty(System, 'validateFingerPrint', {
+Object.defineProperty(System, 'validateBiometric', {
     value: function(params) {
         var context = new __SF_LAContext();
         context.evaluatePolicy(params.message, params.onSuccess, params.onError);
+    },
+    enumerable: true
+});
+
+// Deprecated
+Object.defineProperty(System, 'validateFingerPrint', {
+    value: function(params) {
+        System.validateBiometric(params);
     },
     enumerable: true
 });
@@ -144,12 +168,14 @@ System.isApplicationInstalled = function(packageName) {
     }
 };
 
+// Deprecated
 System.ios.LABiometryType = {};
-
 System.ios.LABiometryType.NONE = 0;
-
 System.ios.LABiometryType.TOUCHID = 1;
-
 System.ios.LABiometryType.FACEID = 2;
 
+System.BiometryType = {};
+System.BiometryType.NONE = 0;
+System.BiometryType.TOUCHID = 1;
+System.BiometryType.FACEID = 2;
 module.exports = System;

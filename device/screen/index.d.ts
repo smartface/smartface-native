@@ -1,6 +1,6 @@
-import Image = require("sf-core/ui/image");
+import Image from "../../ui/image";
 
-export =  Screen;
+export = Screen;
 declare namespace Screen {
 	type Orientation =
 		| "portrait"

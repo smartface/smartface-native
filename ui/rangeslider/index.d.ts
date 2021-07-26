@@ -1,7 +1,7 @@
-import View = require("../view");
-import Color = require("../color");
-import Image = require("../image");
-import { Point2D } from "sf-core/primitive/point2d";
+import View from "../view";
+import Color from "../color";
+import Image from "../image";
+import { Point2D } from "../../primitive/point2d";
 
 export = RangeSlider;
 declare interface RangeSliderParams {

@@ -1,3 +1,3 @@
-import KeyboardAppearance = require("./keyboardappearance");
+import KeyboardAppearance from "./keyboardappearance";
 
 export = KeyboardAppearance;

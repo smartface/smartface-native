@@ -1,11 +1,11 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const Image = require('sf-core/ui/image');
-const Color = require('sf-core/ui/color');
-const Screen = require('sf-core/device/screen');
-const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
-const Invocation = require('sf-core/util').Invocation;
-const System = require('sf-core/device/system');
+
+const View = require('../../ui/view');
+const Image = require('../../ui/image');
+const Color = require('../../ui/color');
+const Screen = require('../../device/screen');
+const KeyboardAnimationDelegate = require("../../util").KeyboardAnimationDelegate;
+const Invocation = require('../../util').Invocation;
+const System = require('../../device/system');
 
 const UISearchBarStyle = {
     default: 0,

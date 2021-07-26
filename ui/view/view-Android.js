@@ -62,7 +62,7 @@ function View(params) {
     let _android = {};
     Object.defineProperty(this, 'android', {
         get: () => _android,
-        set: function(value) {
+        set: function (value) {
             Object.assign(this.android, value || {});
         },
         enumerable: true,
@@ -84,10 +84,10 @@ function View(params) {
         _maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT];
     Object.defineProperties(this.android, {
         'zIndex': {
-            get: function() {
+            get: function () {
                 return SFViewUtil.getZ(_nativeObject);
             },
-            set: function(index) {
+            set: function (index) {
                 if (!TypeUtil.isNumeric(index))
                     throw new Error("zIndex value must be a number.");
                 SFViewUtil.setZ(_nativeObject, index);
@@ -96,20 +96,20 @@ function View(params) {
             configurable: true
         },
         'elevation': {
-            get: function() {
+            get: function () {
                 return SFViewUtil.getElevation(_nativeObject);
             },
-            set: function(value) {
+            set: function (value) {
                 SFViewUtil.setElevation(_nativeObject, value);
             },
             enumerable: true,
             configurable: true
         },
         'overScrollMode': {
-            get: function() {
+            get: function () {
                 return _overScrollMode;
             },
-            set: function(mode) {
+            set: function (mode) {
                 _nativeObject.setOverScrollMode(mode);
                 _overScrollMode = mode;
             },
@@ -117,23 +117,67 @@ function View(params) {
             configurable: true
         }
     });
+
     Object.defineProperties(this, {
         'backgroundColor': {
-            get: function() {
+            get: function () {
                 return this._backgroundColor;
             },
-            set: function(color) {
+            set: function (color) {
                 this._backgroundColor = color;
                 this._resetBackground();
             },
             enumerable: true,
             configurable: true
         },
+        'testId': {
+            get: function () {
+                if (!AndroidConfig.isEmulator) {
+                    return activity.getResources().getResourceEntryName(this.nativeObject.getId());
+                } else {
+                    return "";
+                }
+            },
+            set: function (value) {
+                const id = activity.getResourceId(value);
+                if (id > 0) {
+                    this.nativeObject.setId(id);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'accessible': {
+            get: function () {
+                return this.nativeObject.isImportantForAccessibility();
+            },
+            set: function (value) {
+                // IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
+                // IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
+                if (value) {
+                    this.nativeObject.setImportantForAccessibility(1);
+                } else {
+                    this.nativeObject.setImportantForAccessibility(2);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'accessibilityLabel': {
+            get: function () {
+                return this.nativeObject.getContentDescription();
+            },
+            set: function (value) {
+                this.nativeObject.setContentDescription(value);
+            },
+            enumerable: true,
+            configurable: true
+        },
         'borderColor': {
-            get: function() {
+            get: function () {
                 return this._borderColor;
             },
-            set: function(value) {
+            set: function (value) {
                 this._borderColor = value;
 
                 this._resetBackground();
@@ -143,10 +187,10 @@ function View(params) {
             configurable: true
         },
         'borderWidth': {
-            get: function() {
+            get: function () {
                 return this._borderWidth;
             },
-            set: function(value) {
+            set: function (value) {
                 this._borderWidth = value;
 
                 this._resetBackground();
@@ -156,10 +200,10 @@ function View(params) {
             configurable: true
         },
         'borderRadius': {
-            get: function() {
+            get: function () {
                 return this._borderRadius;
             },
-            set: function(value) {
+            set: function (value) {
                 this._borderRadius = value;
                 this._resetBackground();
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
@@ -168,10 +212,10 @@ function View(params) {
             configurable: true
         },
         'maskedBorders': {
-            get: function() {
+            get: function () {
                 return _maskedBorders;
             },
-            set: function(value) {
+            set: function (value) {
                 _maskedBorders = value;
                 this._resetBackground();
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
@@ -188,7 +232,7 @@ function View(params) {
         },
         "_touchCallbacks": {
             value: {
-                'onTouchEnded': function(isInside, x, y) {
+                'onTouchEnded': function (isInside, x, y) {
                     let result, mEvent = {
                         x,
                         y,
@@ -197,7 +241,7 @@ function View(params) {
                     this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
                     return (result === true);
                 }.bind(this),
-                'onTouch': function(x, y) {
+                'onTouch': function (x, y) {
                     let result, mEvent = {
                         x,
                         y
@@ -205,7 +249,7 @@ function View(params) {
                     this._onTouch && (result = this._onTouch(mEvent));
                     return !(result === false);
                 }.bind(this),
-                'onTouchMoved': function(isInside, x, y) {
+                'onTouchMoved': function (isInside, x, y) {
                     let result, mEvent = {
                         x,
                         y,
@@ -214,7 +258,7 @@ function View(params) {
                     this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
                     return (result === true);
                 }.bind(this),
-                'onTouchCancelled': function(x, y) {
+                'onTouchCancelled': function (x, y) {
                     let result, mEvent = {
                         x,
                         y
@@ -269,7 +313,7 @@ View.prototype = {
         return this.nativeObject.getId();
     },
     set id(id) {
-        if (typeof(id) === "number" && !isNaN(id)) {
+        if (typeof (id) === "number" && !isNaN(id)) {
             this.nativeObject.setId(id);
         }
     },
@@ -380,26 +424,26 @@ View.prototype = {
             // View.INVISIBLE is 4
             this.nativeObject.setVisibility(4);
     },
-    getScreenLocation: function() {
+    getScreenLocation: function () {
         var location = toJSArray(SFViewUtil.getLocationOnScreen(this.nativeObject));
         var position = {};
         position.x = PixelToDp(location[0]);
         position.y = PixelToDp(location[1]);
         return position;
     },
-    bringToFront: function() {
+    bringToFront: function () {
         this.nativeObject.bringToFront();
     },
-    flipHorizontally: function() {
+    flipHorizontally: function () {
         this.nativeObject.setScaleX(-1);
     },
-    flipVertically: function() {
+    flipVertically: function () {
         this.nativeObject.setScaleY(-1);
     },
-    getParent: function() {
+    getParent: function () {
         return this.parent ? this.parent : null;
     },
-    getPosition: function() {
+    getPosition: function () {
         return {
             width: this.width,
             height: this.height,
@@ -407,17 +451,17 @@ View.prototype = {
             left: this.left
         };
     },
-    setPosition: function(position) {
+    setPosition: function (position) {
         position.top && (this.top = position.top);
         position.left && (this.left = position.left);
         position.width && (this.width = position.width);
         position.height && (this.height = position.height);
     },
-    applyLayout: function() {
+    applyLayout: function () {
         this.nativeObject.requestLayout();
         this.nativeObject.invalidate();
     },
-    toString: function() {
+    toString: function () {
         return 'View';
     },
     get left() {
@@ -699,12 +743,12 @@ View.prototype = {
     set positionType(position) {
         this.yogaNode.setPositionType(position);
     },
-    'dirty': function() {
+    'dirty': function () {
         this.yogaNode.dirty();
     }
 };
 
-View.prototype.setTouchHandlers = function() {
+View.prototype.setTouchHandlers = function () {
     if (this.didSetTouchHandler) return;
     let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
@@ -714,7 +758,7 @@ View.prototype.setTouchHandlers = function() {
 
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
-View.prototype._resetBackground = function() {
+View.prototype._resetBackground = function () {
     let color = this.backgroundColor;
     let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
     //Provide backward support in case of diff behavior of border radius.
@@ -732,7 +776,7 @@ View.prototype._resetBackground = function() {
 };
 
 //ToDo: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
-View.prototype._setBorderToAllEdges = function() {
+View.prototype._setBorderToAllEdges = function () {
     var borderWidthPx = DpToPixel(this.borderWidth);
     if (!borderWidthPx)
         borderWidthPx = 0; // NaN, undefined etc.
@@ -742,7 +786,7 @@ View.prototype._setBorderToAllEdges = function() {
     this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
 };
 
-View.prototype._setMaskedBorders = function(bitwiseBorders) {
+View.prototype._setMaskedBorders = function (bitwiseBorders) {
     let borderRadiusInDp = DpToPixel(this.borderRadius);
     let borderRadiuses = Array(8).fill(0);
     for (let i = 0; i < 4; i++) {
@@ -782,7 +826,7 @@ View.State = {};
 View.State.STATE_NORMAL = array([
     NativeR.attr.state_enabled, -NativeR.attr.state_pressed, -NativeR.attr.state_selected
 ], "int");
-View.State.STATE_DISABLED = array([-NativeR.attr.state_enabled, ], "int");
+View.State.STATE_DISABLED = array([-NativeR.attr.state_enabled,], "int");
 View.State.STATE_SELECTED = array([
     NativeR.attr.state_enabled,
     NativeR.attr.state_selected

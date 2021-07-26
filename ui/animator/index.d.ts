@@ -1,4 +1,4 @@
-import ViewGroup = require("../viewgroup");
+import ViewGroup from "../viewgroup";
 /**
  * @class UI.Animator
  * @since 0.1
@@ -96,4 +96,4 @@ declare class Animator {
 		animFn: () => void
 	): Animator;
 }
-export =  Animator;
+export = Animator;

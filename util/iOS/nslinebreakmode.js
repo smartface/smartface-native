@@ -1,4 +1,4 @@
-const EllipsizeMode = require("sf-core/ui/ellipsizemode");
+const EllipsizeMode = require("../../ui/ellipsizemode");
 
 const NSLineBreakMode = {};
 NSLineBreakMode.byWordWrapping = 0;

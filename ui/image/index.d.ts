@@ -1,5 +1,5 @@
-import Blob = require("sf-core/global/blob");
-import { Rectangle } from "sf-core/primitive/rectangle";
+import Blob from "../../global/blob";
+import { Rectangle } from "../../primitive/rectangle";
 
 /**
  * @class UI.Image

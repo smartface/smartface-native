@@ -1,4 +1,4 @@
-const extend = require('js-base/core/extend');
+
 const View = require('../view');
 
 /**
@@ -99,6 +99,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @method loadFromUrl
  * @param {Object} object
  * @param {String} object.url
+ * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
  * @param {UI.Image} object.placeholder
  * @param {Boolean} object.fade = true
  * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
@@ -139,6 +140,7 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @method fetchFromUrl
  * @param {Object} object
  * @param {String} object.url
+ * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
  * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
  * @param {UI.Image} object.placeholder
  * @param {Function} object.onSuccess

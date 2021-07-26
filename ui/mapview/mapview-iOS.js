@@ -1,9 +1,9 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
-const Image = require("sf-core/ui/image");
-const Color = require('sf-core/ui/color');
-const Location = require('sf-core/device/location');
-const Invocation = require('sf-core/util').Invocation;
+
+const Image = require("../../ui/image");
+const Color = require('../../ui/color');
+const Location = require('../../device/location');
+const Invocation = require('../../util').Invocation;
 
 MapView.prototype = Object.create(View.prototype);
 function MapView(params) {
@@ -68,6 +68,23 @@ function MapView(params) {
     }
 
     self.nativeObject.mapViewFinishRender = mapRender;
+
+    Object.defineProperty(self, 'visibleRegion', {
+        get: function() {
+            const topLeft = self.nativeObject.getTopLeftCoordinate();
+            const topRight = self.nativeObject.getTopRightCoordinate();
+            const bottomLeft = self.nativeObject.getBottomLeftCoordinate();
+            const bottomRight = self.nativeObject.getBottomRightCoordinate();
+
+            return {
+                topLeft,
+                topRight,
+                bottomLeft,
+                bottomRight
+            };
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self, 'type', {
         get: function() {
@@ -399,6 +416,9 @@ function MapView(params) {
             }
             return _zoomLevel;
         },
+        set: function(value) {
+            self.setZoomLevelWithAnimated(self.centerLocation, value + 1, false);
+        },
         enumerable: true
     });
 
@@ -487,18 +507,28 @@ Object.defineProperty(MapView, 'Pin', {
 
 
 function Pin(params) {
-
     var self = this;
     if (!self.nativeObject) {
         self.nativeObject = __SF_Annotation.createAnnotation();
     }
 
+    this.ios = {};
     Object.defineProperty(self, 'location', {
         get: function() {
             return self.nativeObject.setCoordinate;
         },
         set: function(value) {
             self.nativeObject.setCoordinate = value;
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(self.ios, 'enableInfoWindow', {
+        get: function() {
+            return self.nativeObject.enableInfoWindow;
+        },
+        set: function(value) {
+            self.nativeObject.enableInfoWindow = value;
         },
         enumerable: true
     });
@@ -571,6 +601,16 @@ function Pin(params) {
         },
         set: function(value) {
             self.nativeObject.onPress = value.bind(this);
+        },
+        enumerable: true
+    });
+
+    Object.defineProperty(self, 'onInfoWindowPress', {
+        get: function() {
+            return self.nativeObject.onInfoPress;
+        },
+        set: function(value) {
+            self.nativeObject.onInfoPress = value.bind(this);
         },
         enumerable: true
     });

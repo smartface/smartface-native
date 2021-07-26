@@ -1,5 +1,5 @@
-const Hardware = require("sf-core/device/hardware");
-const Timer = require("sf-core/global/timer");
+const Hardware = require("../../device/hardware");
+const Timer = require("../../global/timer");
 
 const SpeechRecognizer = {};
 

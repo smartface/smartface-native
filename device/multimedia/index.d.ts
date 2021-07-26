@@ -1,6 +1,6 @@
-import Page = require("sf-core/ui/page");
-import Image = require("sf-core/ui/image");
-import File = require("sf-core/io/file");
+import Page from "../../ui/page";
+import Image from "../../ui/image";
+import File from "../../io/file";
 /**
  * @class Device.Multimedia
  * @since 0.1
@@ -48,7 +48,7 @@ import File = require("sf-core/io/file");
  * 
  * 
  */
-export =  Multimedia;
+export = Multimedia;
 declare namespace Multimedia {
 
     /**
@@ -726,9 +726,9 @@ declare class Multimedia {
          */
         getAllGalleryItems(paras: {
             type: Multimedia.Type;
-            onSuccess: (params: { image: Image; video: File }) => void;
-            onCancel: () => void;
-            onFailure: (e: { message: string }) => void;
+            onSuccess: (params: { image: Image[]; video: File[] }) => void;
+            onCancel?: () => void;
+            onFailure?: (e: { message: string }) => void;
         });
     };
 }

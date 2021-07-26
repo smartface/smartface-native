@@ -372,7 +372,7 @@ function SearchView(params) {
             },
             set: function(closeImage) {
                 // If setting null to icon, default search icon will be displayed.
-                if (closeImage == null || closeImage instanceof require("sf-core/ui/image")) {
+                if (closeImage == null || closeImage instanceof require("../../ui/image")) {
                     _closeImage = closeImage;
                     mCloseButton.setImageDrawable(closeImage.nativeObject);
                 }

@@ -212,7 +212,7 @@ function ScrollView(params) {
 }
 
 function calculateScrollViewSize(scrollView) {
-    const ScrollView = require("sf-core/ui/scrollview");
+    const ScrollView = require("../../ui/scrollview");
     var childViews = scrollView.layout.childViews;
     var keys = Object.keys(childViews);
     var arrayLenght = keys.length;

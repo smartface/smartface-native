@@ -1,4 +1,4 @@
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("../../util/type");
 
 function AsyncTask(params) {
     var self = this;

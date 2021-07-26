@@ -1,8 +1,8 @@
 const UITabBarItem = SF.requireClass("UITabBarItem");
-const Invocation = require('sf-core/util').Invocation;
-const Image = require('sf-core/ui/image');
-const FlexLayout = require('sf-core/ui/flexlayout');
-const Badge = require('sf-core/ui/badge');
+const Invocation = require('../../util').Invocation;
+const Image = require('../../ui/image');
+const FlexLayout = require('../../ui/flexlayout');
+const Badge = require('../../ui/badge');
 
 function TabBarItem(params) {
     var self = this;

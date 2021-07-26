@@ -9,4 +9,4 @@ declare enum TextDirection {
 	FIRST_STRONG_RTL,
 }
 
-export =  TextDirection;
+export = TextDirection;

@@ -1,6 +1,6 @@
 /* globals requireClass, array */
 const TextBox = require('../textbox');
-const extend = require('js-base/core/extend');
+
 const View = require("../view");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
@@ -21,10 +21,11 @@ const state_unfocused = -16842908;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 MaterialTextbox.prototype = Object.create(View.prototype);
 function MaterialTextbox(params) {
-    View.call(this, params);
     const self = this;
 
     self.nativeObject = new SFMaterialTextBoxWrapper(activity);
+
+    View.call(this);
 
     var sfTextBox = new TextBox();
 
@@ -44,10 +45,10 @@ function MaterialTextbox(params) {
     var _touchEnable = true;
     Object.defineProperties(self, {
         'hint': {
-            get: function() {
+            get: function () {
                 return self.nativeObject.getHint().toString();
             },
-            set: function(hintText) {
+            set: function (hintText) {
                 //Why are we need to look at the error text ? 
                 var enableHintMessage = (_errorText !== "" ? true : false);
                 self.nativeObject.setHintEnabled(enableHintMessage);
@@ -56,10 +57,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'hintTextColor': {
-            get: function() {
+            get: function () {
                 return _hintTextColor;
             },
-            set: function(hintTextColor) {
+            set: function (hintTextColor) {
                 _hintTextColor = hintTextColor;
 
                 self.nativeObject.changedErrorTextColor(hintTextColorFieldName, _hintTextColor.nativeObject);
@@ -67,10 +68,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'selectedHintTextColor': {
-            get: function() {
+            get: function () {
                 return _hintFocusedTextColor;
             },
-            set: function(hintFocusedTextColor) {
+            set: function (hintFocusedTextColor) {
                 _hintFocusedTextColor = hintFocusedTextColor;
 
                 self.nativeObject.changedErrorTextColor(hintFocusedTextColorFieldName, _hintFocusedTextColor.nativeObject);
@@ -78,10 +79,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'lineColor': {
-            get: function() {
+            get: function () {
                 return _lineColorObj;
             },
-            set: function(lineColorObj) {
+            set: function (lineColorObj) {
                 _lineColorObj = lineColorObj;
 
                 var jsColorArray = [];
@@ -105,28 +106,28 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'lineCount': {
-            get: function() {
+            get: function () {
                 return self.textBoxNativeObject.getMinLines();
             },
-            set: function(value) {
+            set: function (value) {
                 self.textBoxNativeObject.setMinLines(value);
             },
             enumerable: true
         },
         'multiline': {
-            get: function() {
+            get: function () {
                 return !self.textBoxNativeObject.isSingleLine();
             },
-            set: function(value) {
+            set: function (value) {
                 self.textBoxNativeObject.setSingleLine(!value);
             },
             enumerable: true
         },
         'errorColor': {
-            get: function() {
+            get: function () {
                 return _errorColor;
             },
-            set: function(errorColor) {
+            set: function (errorColor) {
 
                 _errorColor = errorColor;
                 if (_enableErrorMessage !== true)
@@ -138,98 +139,119 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'labelsFont': {
-            get: function() {
+            get: function () {
                 return _font;
             },
-            set: function(font) {
+            set: function (font) {
                 _font = font;
                 self.nativeObject.setTypeface(font.nativeObject);
                 self.nativeObject.setExpandedHintTextSize(AndroidUnitConverter.dpToPixel(font.size));
             },
             enumerable: true
         },
+        'testId': {
+            get: () => {
+                if (!AndroidConfig.isEmulator) {
+                    return activity.getResources().getResourceEntryName(this.nativeObject.getId());
+                } else {
+                    return "";
+                }
+            },
+            set: (value) => {
+                const id = activity.getResourceId(value);
+                const editTextId = activity.getResourceId(value + "_textBox");
+                if (id > 0) {
+                    this.nativeObject.setId(id);
+                }
+
+                if (editTextId > 0) {
+                    sfTextBox.nativeObject.setId(editTextId);
+                }
+            },
+            enumerable: true
+        },
         'touchEnabled': {
-            get: function() {
+            get: function () {
                 return _touchEnable;
             },
-            set: function(value) {
+            set: function (value) {
                 _touchEnable = value;
                 sfTextBox.enabled = value;
             },
             enumerable: true
         },
         'rightLayout': {
-            get: function() {
+            get: function () {
                 return {
                     view: _rightLayout,
                     width: _rightLayoutWidth
                 };
             },
-            set: function(params) {
+            set: function (params) {
                 _rightLayout = params.view;
                 _rightLayoutWidth = params.width !== undefined ? params.width : 30;
 
-                const FlexLayout = require("sf-core/ui/flexlayout");
+                const FlexLayout = require("../../ui/flexlayout");
                 let parentFL = new FlexLayout();
                 self.nativeObject.setRightLayout(_rightLayout.nativeObject, _rightLayout.yogaNode, parentFL.nativeObject, _rightLayoutWidth);
             }
         },
         'onTouch': {
-            set: function(onTouch) {
+            set: function (onTouch) {
                 this._onTouch = onTouch.bind(this);
                 this.setTouchHandlers();
                 sfTextBox._onTouch = onTouch.bind(this);
                 sfTextBox.setTouchHandlers();
             },
-            get: function() {
+            get: function () {
                 return this._onTouch;
             },
             enumerable: true
         },
         'onTouchEnded': {
-            set: function(onTouchEnded) {
+            set: function (onTouchEnded) {
                 this._onTouchEnded = onTouchEnded.bind(this);
                 this.setTouchHandlers();
                 sfTextBox._onTouchEnded = onTouchEnded.bind(this);
                 sfTextBox.setTouchHandlers();
             },
 
-            get: function() {
+            get: function () {
                 return this._onTouchEnded;
             },
             enumerable: true
         },
         'onTouchMoved': {
-            set: function(onTouchMoved) {
+            set: function (onTouchMoved) {
                 this._onTouchMoved = onTouchMoved.bind(this);
                 this.setTouchHandlers();
                 sfTextBox._onTouchMoved = onTouchMoved.bind(this);
                 sfTextBox.setTouchHandlers();
             },
-            get: function() {
+            get: function () {
                 return this._onTouchMoved;
             },
             enumerable: true
         },
         'onTouchCancelled': {
-            set: function(onTouchCancelled) {
+            set: function (onTouchCancelled) {
                 this._onTouchCancelled = onTouchCancelled.bind(this);
                 this.setTouchHandlers();
                 sfTextBox._onTouchCancelled = onTouchCancelled.bind(this);
                 sfTextBox.setTouchHandlers();
             },
 
-            get: function() {
+            get: function () {
                 return this._onTouchCancelled;
             },
             enumerable: true
         },
         'errorMessage': {
-            get: function() {
+            get: function () {
                 let error = self.nativeObject.getError();
                 return (error ? error.toString() : "");
             },
-            set: function(errorText) {
+            set: function (errorText) {
                 _errorText = errorText;
 
                 //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
@@ -244,10 +266,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'characterRestriction': {
-            get: function() {
+            get: function () {
                 return self.nativeObject.getCounterMaxLength();
             },
-            set: function(value) {
+            set: function (value) {
                 _enableCounterMaxLength = value;
                 enableCounter = (_enableCounterMaxLength !== 0 ? true : false);
 
@@ -263,10 +285,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'characterRestrictionColor': {
-            get: function() {
+            get: function () {
                 return _characterRestrictionColor;
             },
-            set: function(value) {
+            set: function (value) {
                 _characterRestrictionColor = value;
 
                 if (enableCounter !== true)
@@ -278,10 +300,10 @@ function MaterialTextbox(params) {
             enumerable: true
         },
         'enableCharacterRestriction': {
-            get: function() {
+            get: function () {
                 return _enableCharacterRestriction;
             },
-            set: function(value) {
+            set: function (value) {
                 _enableCharacterRestriction = value;
                 self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
             },
@@ -291,40 +313,40 @@ function MaterialTextbox(params) {
 
     Object.defineProperties(self.android, {
         'labelsFont': {
-            get: function() {
+            get: function () {
                 return _font;
             },
-            set: function(font) {
+            set: function (font) {
                 _font = font;
                 self.nativeObject.setTypeface(font.nativeObject);
             },
             enumerable: true
         },
         'textBoxHeight': {
-            get: function() {
+            get: function () {
                 return nativeTextInputEditText.getHeight();
             },
-            set: function(height) {
+            set: function (height) {
 
                 nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
             },
             enumerable: true
         },
         'textBoxMaxHeight': {
-            get: function() {
+            get: function () {
                 return nativeTextInputEditText.getMaxHeight();
             },
-            set: function(maxHeight) {
+            set: function (maxHeight) {
 
                 nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
             },
             enumerable: true
         },
         'enableErrorMessage': {
-            get: function() {
+            get: function () {
                 return _enableErrorMessage;
             },
-            set: function(value) {
+            set: function (value) {
                 _enableErrorMessage = value;
                 self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 if (value === true && !AndroidConfig.isEmulator) {
@@ -349,10 +371,10 @@ function MaterialTextbox(params) {
     function assignProperty(key) { //Iterates both properties and methods
         if (!self.hasOwnProperty(key) && !View.prototype.hasOwnProperty(key)) {
             Object.defineProperty(this, key, {
-                get: function(param) {
+                get: function (param) {
                     return this[param];
                 }.bind(sfTextBox, key),
-                set: function(param, value) {
+                set: function (param, value) {
                     this[param] = value;
                 }.bind(sfTextBox, key),
                 enumerable: true
@@ -364,10 +386,10 @@ function MaterialTextbox(params) {
         var isViewProperty = View.prototype.android && View.prototype.android.hasOwnProperty('android');
         if (!self.android.hasOwnProperty(key) && !isViewProperty) {
             Object.defineProperty(this.android, key, {
-                get: function(param) {
+                get: function (param) {
                     return this.android[param];
                 }.bind(sfTextBox, key),
-                set: function(param, value) {
+                set: function (param, value) {
                     this.android[param] = value;
                 }.bind(sfTextBox, key),
                 enumerable: true

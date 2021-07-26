@@ -1,7 +1,7 @@
-import View = require("../view");
-import Color = require("../color");
-import File = require("sf-core/io/file");
-import Page = require("../page");
+import View from "../view";
+import Color from "../color";
+import File from "../../io/file";
+import Page from "../page";
 /**
  * @class UI.VideoView
  * @since 0.1

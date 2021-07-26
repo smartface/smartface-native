@@ -1,6 +1,6 @@
-import TextBox = require("../textbox");
-import KeyboardType = require("../keyboardtype");
-import ActionKeyType = require("../actionkeytype");
+import TextBox from "../textbox";
+import KeyboardType from "../keyboardtype";
+import ActionKeyType from "../actionkeytype";
 /**
  * @class UI.TextArea
  * @since 1.1.10

@@ -1,7 +1,7 @@
-const View = require('sf-core/ui/view');
-const File = require('sf-core/io/file');
-const Invocation = require('sf-core/util').Invocation;
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+const View = require('../../ui/view');
+const File = require('../../io/file');
+const Invocation = require('../../util').Invocation;
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 WebView.prototype = Object.create(View.prototype);
 function WebView(params) {

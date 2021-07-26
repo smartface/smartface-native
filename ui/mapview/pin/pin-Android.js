@@ -14,12 +14,15 @@ hueDic[Color.YELLOW.nativeObject] = NativeDescriptorFactory.HUE_YELLOW;
 
 function Pin(params) {
     var self = this;
+    
+    self.ios = {};
 
     self.nativeObject = null;
     self._clusterColor = null;
     var _color,
         _image = null,
-        _location, _onPress;
+        _location, _onPress, 
+        _onInfoWindowPress;
     var _subtitle = "";
     var _title = "";
     var _visible = true;
@@ -31,7 +34,7 @@ function Pin(params) {
             },
             set: function(color) {
                 _color = color;
-                const Color = require("sf-core/ui/color");
+                const Color = require("../../../ui/color");
                 if (self.nativeObject && !self.isClusterEnabled && (color instanceof Color)) {
                     var colorHUE = hueDic[color.nativeObject];
                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
@@ -58,7 +61,7 @@ function Pin(params) {
             },
             set: function(image) {
                 _image = image;
-                const Image = require("sf-core/ui/image");
+                const Image = require("../../../ui/image");
                 if (self.nativeObject && !self.isClusterEnabled && image instanceof Image) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
@@ -132,6 +135,14 @@ function Pin(params) {
             },
             set: function(callback) {
                 _onPress = callback;
+            }
+        },
+        "onInfoWindowPress": {
+            get: function() {
+                return _onInfoWindowPress;
+            },
+            set: function(callback) {
+                _onInfoWindowPress = callback;
             }
         }
     });

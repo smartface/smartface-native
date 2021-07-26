@@ -1,13 +1,13 @@
-import ContentInsetAdjustment = require("../ios/contentinsetadjustment");
-import OverScrollMode = require("../android/overscrollmode");
-import ListViewItem = require("../listviewitem");
-import Color = require("../color");
-import ScrollState = require("../android/scrollstate");
-import Image = require("../image");
-import Font = require("../font");
-import SwipeItemKlass = require("./swipeitem");
-import View = require("../view");
-import { Point2D } from "sf-core/primitive/point2d";
+import ContentInsetAdjustment from "../ios/contentinsetadjustment";
+import OverScrollMode from "../android/overscrollmode";
+import ListViewItem from "../listviewitem";
+import Color from "../color";
+import ScrollState from "../android/scrollstate";
+import Image from "../image";
+import Font from "../font";
+import SwipeItemKlass from "./swipeitem";
+import View from "../view";
+import { Point2D } from "../../primitive/point2d";
 
 /**
  * @class UI.ListView
@@ -403,7 +403,7 @@ declare interface ListView extends View {
 	 * @ios
 	 * @since 0.1
 	 */
-	scrollTo(ndex: number, animated: boolean): void;
+	scrollTo(index: number, animated: boolean): void;
 	/**
 	 * Sets/Gets the bounce effect when scrolling.
 	 *

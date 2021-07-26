@@ -4,7 +4,7 @@ const OkHttpRequestBuilder = requireClass("okhttp3.Request$Builder");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const AndroidConfig = require("../../util/Android/androidconfig");
 const SFHttpCallback = requireClass("io.smartface.android.sfcore.net.SFHttpCallback");
 const SFHttp= requireClass("io.smartface.android.sfcore.net.SFHttp");
 
@@ -133,7 +133,7 @@ http.prototype.requestImage = function(params) {
         throw new Error("Required request parameters.");
 
     var requestOnLoad = params.onLoad;
-    const Image = require("sf-core/ui/image");
+    const Image = require("../../ui/image");
 
     params.onLoad = function(e) {
         if (e && e.body) {
@@ -165,7 +165,7 @@ http.prototype.requestFile = function(params) {
 
     var requestOnLoad = params.onLoad;
     params.onLoad = function(e) {
-        const IO = require("sf-core/io");
+        const IO = require("../../io");
         var cacheDir = activity.getCacheDir().getAbsolutePath();
         var path;
         if (params.fileName)

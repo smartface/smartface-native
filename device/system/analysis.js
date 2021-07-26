@@ -96,14 +96,28 @@ System.OSVersion;
 
 /**
  *
- * Returns the type of biometric authentication supported by the device. Works on iOS 11.0+.
+ * Returns the set of available biometric authentication supported by the device.
  * @property {Device.System.LABiometryType} LAContextBiometricType
  * @readonly
  * @ios
  * @static
  * @since 3.0.2
+ * @deprecated since 4.3.1 Use {@link Device.System#biometricType}
  */
 System.LAContextBiometricType;
+
+
+/**
+ *
+ * Returns the set of available biometric authentication supported by the device.
+ * @property {Device.System.BiometricType} biometricType
+ * @readonly
+ * @ios
+ * @android
+ * @static
+ * @since 4.3.1
+ */
+System.biometricType;
 
 /**
  *
@@ -178,8 +192,21 @@ System.ios.fingerPrintAvaliable;
  * @android
  * @static
  * @since 1.1.13
+ * @deprecated since 4.3.1 Use {@link Device.System#biometricsAvailable}
  */
 System.fingerPrintAvailable;
+
+/**
+ * Returns true if the device supports the biometric feature and at least one the biometric is enrolled by user.
+ * 
+ * @property {Boolean} biometricsAvailable
+ * @readonly
+ * @ios
+ * @android
+ * @static
+ * @since 4.3.1
+ */
+System.biometricsAvailable;
 
 /**
  * clipboard can be used to set a text to the device's clipboard or get a text from it.
@@ -279,8 +306,48 @@ System.ios.validateFingerPrint({
  * @ios
  * @android
  * @since 1.1.13
+ * @deprecated since 4.3.1 Use {@link Device.System#validateBiometric}
  */
 System.validateFingerPrint({
+    onSuccess: function() {},
+    onError: function() {}
+});
+
+/**
+ * Shows the biometric prompt to the user. It will trigger onError callback if the biometric not enabled for iOS and user not enrolled at least one 
+ * for Android or hardware not supported by both of iOS and Android
+ * 
+ *     @example
+ *     System.validateBiometric({
+ *            android: {
+ *                title: "Title",
+ *                cancelButtonText: "Cancel"
+ *            },
+ *            message : "Message",
+ *            onSuccess : function(){
+ *                  console.log("Success");
+ *            },
+ *            onError : function(cancelled, error){
+ *                  console.log("Error");
+ *            }
+ *      });
+ * @method validateBiometric
+ * @param {String} message Sets the message for the biometric. It's required for Android.
+ * @param {Object} android
+ * @param {String} android.title Sets the title for the biometric. It's required for Android.
+ * @param {String} android.subTitle Sets the subtitle for the biometric.
+ * @param {String} [android.cancelButtonText = 'Cancel'] Sets the text for the cancel button on the biometric. It's required for Android.
+ * @param {Boolean} [android.confirmationRequired = true] Sets a system hint for whether to require explicit user confirmation after a passive biometric (e.g. face) has been recognized but before onSuccess is called.
+ * @param {Function} onSuccess
+ * @param {Function} onError
+ * @param {String} onError.cancelled A boolean indicating that if the biometric prompt cancelled. `undefined` in iOS.
+ * @param {String} onError.error A human-readable error string that can be shown on an UI. `undefined` in iOS.
+ * @static
+ * @ios
+ * @android
+ * @since 4.3.1 
+ */
+System.validateBiometric({
     onSuccess: function() {},
     onError: function() {}
 });
@@ -336,13 +403,69 @@ System.OSType.ANDROID;
  */
 System.OSType.IOS;
 
+
+/** 
+ * @enum {Number} Device.System.BiometryType 
+ * @since 4.3.1
+ * @ios
+ * @android
+ * 
+ * The set of available biometric authentication types. 
+ */
+System.BiometryType = {};
+
+/**
+ * No biometry type is supported. Works on iOS 11.0+.
+ * 
+ * @property {Number} NONE
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 4.3.1
+ */
+System.BiometryType.NONE;
+
+/**
+ * The device supports Touch ID. Works on iOS 11.0+.
+ * 
+ * @property {Number} TOUCHID
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.3.1
+ */
+System.BiometryType.TOUCHID;
+
+/**
+ * The device supports Face ID. Works on iOS 11.0+.
+ * 
+ * @property {Number} FACEID
+ * @static
+ * @ios
+ * @readonly
+ * @since 4.3.1
+ */
+System.BiometryType.FACEID;
+
+/**
+ * The device supports the biometrics (e.g. fingerprint, iris, or face).
+ * 
+ * @property {Number} BIOMETRICS
+ * @static
+ * @android
+ * @readonly
+ * @since 4.3.1
+ */
+System.BiometryType.BIOMETRICS;
+
 /** 
  * @enum {Number} Device.System.LABiometryType 
  * @since 3.0.2
  * @ios
  * 
  * The set of available biometric authentication types. Works on iOS 11.0+.
- * 
+ * @deprecated since 4.3.1 Use {@link Device.System#BiometryType}
  */
 System.LABiometryType = {};
 

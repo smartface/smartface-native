@@ -1,5 +1,4 @@
 const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
 /**
  * @class UI.FlexLayout
  * @since 0.1

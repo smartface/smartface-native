@@ -1,4 +1,4 @@
-const View = require('sf-core/ui/view');
+const View = require('../../ui/view');
 
 LiveMediaPlayer.prototype = Object.create(View.prototype)
 

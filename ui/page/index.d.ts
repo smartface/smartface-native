@@ -1,11 +1,11 @@
-import View = require("../view");
-import FlexLayout = require("../flexlayout");
-import NavigationController = require("../navigationcontroller");
-import StatusBar = require("sf-core/application/statusbar");
-import HeaderBar = require("../headerbar");
-import { IFlexLayout } from "sf-core/primitive/iflexlayout";
+import View from "../view";
+import FlexLayout from "../flexlayout";
+import NavigationController from "../navigationcontroller";
+import StatusBar from "../../application/statusbar";
+import HeaderBar from "../headerbar";
+import { IFlexLayout } from "../../primitive/iflexlayout";
 
-export =  Page;
+export = Page;
 
 declare enum UIInterfaceOrientation {
 	unknown = 0,
@@ -136,7 +136,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
  * @readonly
  * @since 3.2.0
  */
-    public transitionViews: View;
+    public transitionViews: View[];
 /**
  * Gets the main layout of Page which is an instance of UI.FlexLayout. You
  * should add views to the layout of the page.

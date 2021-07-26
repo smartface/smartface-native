@@ -1,7 +1,7 @@
-import Page = require("sf-core/ui/page");
-import Image = require("sf-core/ui/image");
-import File = require("sf-core/io/file");
-import Contacts = require("sf-core/device/contacts");
+import Page from "../../ui/page";
+import Image from "../../ui/image";
+import File from "../../io/file";
+import Contacts from "../../device/contacts";
 
 /**
  * @class Share

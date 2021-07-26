@@ -1,6 +1,6 @@
-import Color = require("../color");
-import Font = require("../font");
-import View = require("../view");
+import Color from "../color";
+import Font from "../font";
+import View from "../view";
 /**
  * @class UI.Picker
  * @since 0.1

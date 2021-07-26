@@ -1,6 +1,6 @@
-import Color = require("../color");
-import Image = require("../image");
-import View = require("../view");
+import Color from "../color";
+import Image from "../image";
+import View from "../view";
 /**
  * @class UI.Slider
  * @since 0.1

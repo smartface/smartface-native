@@ -1,3 +1,5 @@
-import DecelerationRate = require("./decelerationrate-iOS");
-
+declare enum DecelerationRate {
+    NORMAL,
+    FAST
+}
 export = DecelerationRate;

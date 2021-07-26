@@ -1,7 +1,7 @@
-const View = require('sf-core/ui/view');
-const File = require("sf-core/io/file");
-const Exception = require("sf-core/util").Exception;
-const TypeUtil = require("sf-core/util/type");
+const View = require('../../ui/view');
+const File = require("../../io/file");
+const Exception = require("../../util").Exception;
+const TypeUtil = require("../../util/type");
 
 // const VideoView = extend(View)(
 VideoView.prototype = Object.create(View.prototype);

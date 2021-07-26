@@ -1,4 +1,4 @@
-import View = require("sf-core/ui/view");
+import View from "../../ui/view";
 /**
  * @class UI.LiveMediaPublisher
  * @since 4.2.2
@@ -98,7 +98,7 @@ import View = require("sf-core/ui/view");
      * @since 4.2.2
      */
     camera: {
-		cameraId: UI.LiveMediaPublisher.Camera;
+		cameraId: LiveMediaPublisher.Camera;
 		cameraFrontMirror: Boolean;
     };
     
@@ -114,7 +114,7 @@ import View = require("sf-core/ui/view");
      */
     audio: {
         bitrate: number;
-		profile: UI.LiveMediaPublisher.AudioProfile;
+		profile: LiveMediaPublisher.AudioProfile;
 		samplerate: number;
     };
 
@@ -131,9 +131,9 @@ import View = require("sf-core/ui/view");
      * @since 4.2.2
      */
     video: {
-        preset: UI.LiveMediaPublisher.Preset;
+        preset: LiveMediaPublisher.VideoPreset;
         bitrate: number;
-		profile: UI.LiveMediaPublisher.VideoProfile;
+		profile: LiveMediaPublisher.VideoProfile;
         fps: number;
         videoFrontMirror: Boolean;
     };

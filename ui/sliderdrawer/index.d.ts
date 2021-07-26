@@ -1,6 +1,6 @@
-import ViewGroup = require("../viewgroup");
-import FlexLayout = require("../flexlayout");
-import { IFlexLayout } from "sf-core/primitive/iflexlayout";
+import ViewGroup from "../viewgroup";
+import FlexLayout from "../flexlayout";
+import { IFlexLayout } from "../../primitive/iflexlayout";
 
 /**
  * @class UI.SliderDrawer

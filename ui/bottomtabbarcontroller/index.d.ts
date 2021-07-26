@@ -1,7 +1,7 @@
-import NavigationController = require("../navigationcontroller");
-import View = require("../view");
-import Page = require("../page");
-import BottomTabBar = require("../bottomtabbar");
+import NavigationController from "../navigationcontroller";
+import View from "../view";
+import Page from "../page";
+import BottomTabBar from "../bottomtabbar";
 
 export = BottomTabBarController;
 /**

@@ -1,7 +1,7 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
-const Color = require("sf-core/ui/color");
+
+const UIControlEvents = require("../../util").UIControlEvents;
+const Color = require("../../ui/color");
 
 const SliderState = {
     normal: 0,

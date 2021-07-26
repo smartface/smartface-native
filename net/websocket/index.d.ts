@@ -1,6 +1,6 @@
-import Blob = require("sf-core/global/blob");
+import Blob from "../../global/blob";
 
-export =  WebSocket;
+export = WebSocket;
 /**
  * 
  * WebSocket creates a web socket client. It connects to a WebSocket server and then sending 

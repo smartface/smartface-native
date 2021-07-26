@@ -5,7 +5,6 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const Label = require("../label");
 const View = require("../view");
 const Color = require("../color");
-const extend = require('js-base/core/extend');
 
 const NativeButton = requireClass("android.widget.Button");
 const NativeView = requireClass("android.view.View");

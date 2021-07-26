@@ -1,6 +1,6 @@
 /*globals requireClass*/
 const FlexLayout = require('../flexlayout');
-const extend = require('js-base/core/extend');
+
 const Application = require('../../application');
 const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');

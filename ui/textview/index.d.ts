@@ -1,10 +1,10 @@
-import View = require("../view");
-import Color = require("../color");
-import Font = require("../font");
-import EllipsizeMode = require("../ellipsizemode");
-import TextAlignment = require("../textalignment");
-import AttributedString = require("sf-core/global/attributedstring");
-import TextDirection = require("../android/textdirection");
+import View from "../view";
+import Color from "../color";
+import Font from "../font";
+import EllipsizeMode from "../ellipsizemode";
+import TextAlignment from "../textalignment";
+import AttributedString from "../../global/attributedstring";
+import TextDirection from "../android/textdirection";
 /**
  * @class UI.TextView
  * @since 3.0.0

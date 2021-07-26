@@ -1,5 +1,5 @@
 const View = require('../view');
-const extend = require('js-base/core/extend');
+
 /**
  * @class UI.ViewGroup
  * @since 0.1

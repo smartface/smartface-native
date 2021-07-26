@@ -1,9 +1,9 @@
-import View = require("../view");
-import Image = require("../image");
-import Color = require("../color");
-import File = require("sf-core/io/file");
-import ImageCacheType = require("../imagecachetype");
-import policy = require("./Android/policy");
+import View from "../view";
+import Image from "../image";
+import Color from "../color";
+import File from "../../io/file";
+import ImageCacheType from "../imagecachetype";
+import policy from "./Android/policy";
 
 declare const ImageViewMemoryPolicy: typeof policy.ImageViewMemoryPolicy;
 declare const ImageViewNetworkPolicy: typeof policy.ImageViewNetworkPolicy;
@@ -104,6 +104,7 @@ declare class ImageView extends View {
 	 * @method loadFromUrl
 	 * @param {Object} object
 	 * @param {String} object.url
+     * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
 	 * @param {UI.Image} object.placeholder
 	 * @param {Boolean} object.fade = true
 	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
@@ -117,7 +118,8 @@ declare class ImageView extends View {
 	 * @since 3.1.3
 	 */
 	loadFromUrl(params: {
-		url: string;
+        url: string;
+        headers?: { [name: string] : string};
 		placeholder?: Image;
 		fade?: boolean;
 		useHTTPCacheControl?: boolean;
@@ -167,6 +169,7 @@ declare class ImageView extends View {
 	 * @method fetchFromUrl
 	 * @param {Object} object
 	 * @param {String} object.url
+     * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
 	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
 	 * @param {UI.Image} object.placeholder
 	 * @param {Function} object.onSuccess
@@ -181,10 +184,11 @@ declare class ImageView extends View {
 	 * @since 3.0.2
 	 */
 	fetchFromUrl(params: {
-		url: string;
+        url: string;
+        headers?: { [name: string] : string};
 		placeholder?: Image;
 		useHTTPCacheControl?: boolean;
-		onSuccess?: (e: { image: Image; cache: ImageCacheType }) => void;
+		onSuccess?: (image: Image, cache: ImageCacheType ) => void;
 		onFailure?: () => void;
 		android?: {
 			networkPolicy?:

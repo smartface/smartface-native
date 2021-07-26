@@ -1,4 +1,4 @@
-const BottomTabBar = require('sf-core/ui/bottomtabbar');
+const BottomTabBar = require('../../ui/bottomtabbar');
 
 function BottomTabBarController(params) {
     var self = this;

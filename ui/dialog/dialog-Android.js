@@ -6,7 +6,7 @@ const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../../util/Andro
 const LayoutParams = require("../../util/Android/layoutparams");
 const Color = require("../color");
 const Flex = require("../flexlayout");
-const Screen = require('sf-core/device/screen');
+const Screen = require('../../device/screen');
 
 
 function Dialog(params) {

@@ -1,4 +1,4 @@
-export =  console;
+export = console;
 /**
  * @class console
  * @since 0.1

@@ -1,17 +1,15 @@
-const FlexLayout = require("sf-core/ui/flexlayout");
+const FlexLayout = require("../../ui/flexlayout");
 const View = require('../view');
-const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
+const UIControlEvents = require("../../util").UIControlEvents;
 
 const LayoutManager = require("../layoutmanager");
 
 //NativeAccess
-const Invocation = require('sf-core/util/iOS/invocation.js');
+const Invocation = require('../../util/iOS/invocation.js');
 const NSIndexPath = SF.requireClass("NSIndexPath");
-const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 
 GridView.prototype = Object.create(View.prototype);
-// const GridView = extend(View)(
 function GridView(params) {
     var sfSelf = this;
     sfSelf.registeredIndentifier = [];
