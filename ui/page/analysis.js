@@ -13,7 +13,7 @@
  *
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var page1 = new extend(Page)(
  *         function(_super,params)
  *         {
@@ -23,7 +23,7 @@
  *                     this.headerBar.title = "Smartface Page";
  *                 },
  *                 onLoad: function(){
- *                     const Button = require('sf-core/ui/button');
+ *                     const Button = require('@smartface/native/ui/button');
  *                     var myButton = new Button({
  *                         width: 150,
  *                         height: 80,
@@ -63,7 +63,7 @@ Page.prototype.transitionID = "";
  * from a removed or hidden {@link UI.Page Page} to a {@link UI.View View} from a shown or added {@link UI.Page Page}.
  * 
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage = new Page({
  *         var page = this;
  *         onShow: function() {
@@ -111,8 +111,8 @@ Page.prototype.layout;
  * It will be better to set headerBar and statusBar properties in this callback.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Application = require('sf-core/application');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Application = require('@smartface/native/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
@@ -184,12 +184,12 @@ Page.prototype.ios.onSafeAreaPaddingChange = function(paddingObject) {};
  * 
  *     @example
  *     const self = this; //Current page 
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('@smartface/native/ui/color');
  *
  *     var popuPage = new Page();
  *     popuPage.layout.backgroundColor = Color.BLUE;
  *
- *     const Button = require('sf-core/ui/button');
+ *     const Button = require('@smartface/native/ui/button');
  *     var myButton = new Button({
  *     width: 150,
  *     height: 80,
@@ -273,7 +273,7 @@ Page.prototype.headerBar;
  * orientation defined in project.json.
  *     
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage1 = new Page({
  *          orientation: Page.Orientation.LANDSCAPELEFT
  *     });

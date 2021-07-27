@@ -7,8 +7,8 @@ import FileStream from "../filestream";
  * 'path' is required property for construction the File object.
  * 
  *     @example
- *     const File = require('sf-core/io/file');
- *     const Path = require('sf-core/io/path');
+ *     const File = require('@smartface/native/io/file');
+ *     const Path = require('@smartface/native/io/path');
  *     var myImage = new File({
  *         path: 'images://smartface.png'
  *     });

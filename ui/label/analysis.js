@@ -7,8 +7,8 @@ const View = require('../view');
  * Label is a view that displays read-only text on the screen.
  *
  *     @example
- *     const Label = require('sf-core/ui/label');
- *     const Color = require('sf-core/ui/color');
+ *     const Label = require('@smartface/native/ui/label');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
@@ -37,8 +37,8 @@ Label.prototype.backgroundColor = UI.Color.TRANSPARENT;
  * It is set to null by default.
  *
  *     @example
- *     const Label = require('sf-core/ui/label');
- *     const Font = require('sf-core/ui/font')
+ *     const Label = require('@smartface/native/ui/label');
+ *     const Font = require('@smartface/native/ui/font')
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
@@ -112,8 +112,8 @@ Label.prototype.text = "";
  * can be used. Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.
  *
  *     @example
- *     const Label = require('sf-core/ui/label');
- *     const TextAlignment = require('sf-core/ui/textalignment');
+ *     const Label = require('@smartface/native/ui/label');
+ *     const TextAlignment = require('@smartface/native/ui/textalignment');
  *     var myLabel = new Label();
  *     myLabel.textAlignment = TextAlignment.MIDCENTER;
  *

@@ -11,7 +11,7 @@ declare class Color extends NativeComponent {
  * passing RGB-ARGB values or hexadecimal string. There are constant and predefined colors as well.
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myRedColor = Color.create(255, 0, 0);
  *     var myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
  *     var myHEXColor = Color.create("#FFAACC");
@@ -184,7 +184,7 @@ declare namespace Color {
      * Creates a new color with RGB-ARGB or hexadecimal parameters
      *
      *     @example
-     *     const Color = require('sf-core/ui/color');
+     *     const Color = require('@smartface/native/ui/color');
      *     var myARGBColor = Color.create(0, 0, 0, 255);
      *     var myRGBColor = Color.create(255, 255, 255);
      *     var myHexColor = Color.create("#ff0000");
@@ -229,7 +229,7 @@ declare namespace Color {
      * Returns the red value of a color instance.
      *
      *     @example
-     *     const Color = require('sf-core/ui/color');
+     *     const Color = require('@smartface/native/ui/color');
      *     var myRGBColor = Color.create(99, 0, 0);
      *     var red = Color.red(myRGBColor);
      *     console.log("" + red);
@@ -247,7 +247,7 @@ declare namespace Color {
      * Returns the green value of a color instance.
      *
      *     @example
-     *     const Color = require('sf-core/ui/color');
+     *     const Color = require('@smartface/native/ui/color');
      *     var myRGBColor = Color.create(0, 171, 0);
      *     var green = Color.green(myRGBColor);
      *     console.log("" + green);
@@ -265,7 +265,7 @@ declare namespace Color {
      * Returns the blue value of a color instance.
      *
      *     @example
-     *     const Color = require('sf-core/ui/color');
+     *     const Color = require('@smartface/native/ui/color');
      *     var myRGBColor = Color.create(0, 0, 155);
      *     var blue = Color.blue(myRGBColor);
      *     console.log("" + blue);
@@ -284,7 +284,7 @@ declare namespace Color {
      * Returns the alpha value of a color instance.
      *
      *     @example
-     *     const Color = require('sf-core/ui/color');
+     *     const Color = require('@smartface/native/ui/color');
      *     var myARGBColor = Color.create(42, 0, 0, 255);
      *     var alpha = Color.alpha(myARGBColor);
      *     console.log(alpha);

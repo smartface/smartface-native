@@ -6,7 +6,7 @@ export = Data;
  * Data is an interface for storing key data on Device like user information, login data or token.
  * 
  *     @example
- *     const Data = require('sf-core/data');
+ *     const Data = require('@smartface/native/data');
  *     
  *     Data.setStringVariable('userName','Smartface');
  *     Data.setStringVariable('userEmail','info@smartface.io');

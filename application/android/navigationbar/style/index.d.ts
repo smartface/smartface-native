@@ -5,7 +5,7 @@
  * Style is an enum. It defines navigation bar appearance style.
  *
  *     @example
- *     const Application = require('sf-core/application');
+ *     const Application = require('@smartface/native/application');
  *     Application.android.navigationBar.style = Application.NavigationBar.Style.DARKCONTENT;
  *
  */

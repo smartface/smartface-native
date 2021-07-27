@@ -11,8 +11,8 @@ export = BottomTabBarController;
  * BottomTabbarController is used for navigating between tab bar items with given tags.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const BottomTabbarController = require('sf-core/ui/bottomtabbarcontroller');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const BottomTabbarController = require('@smartface/native/ui/bottomtabbarcontroller');
  *     
  *     var bottomTabBarController = new BottomTabBarController();
  *     bottomTabBarController.childControllers = [page1, page2, navigationController1, navigationController2];

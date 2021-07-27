@@ -7,8 +7,8 @@
  * to select between two options.
  *
  *     @example
- *     const Switch = require('sf-core/ui/switch');
- *     const Color = require('sf-core/ui/color');
+ *     const Switch = require('@smartface/native/ui/switch');
+ *     const Color = require('@smartface/native/ui/color');
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
@@ -18,7 +18,7 @@ function Switch(params) {}
  * Enables/disables the Switch.
  *
  *     @example
- *     const Switch = require('sf-core/ui/switch');
+ *     const Switch = require('@smartface/native/ui/switch');
  *     var mySwitch = new Switch();
  *     mySwitch.enabled = false;
  *
@@ -95,8 +95,8 @@ Switch.prototype.andorid.thumbImage;
  * by default. This property works only for Android.
  *
  *     @example
- *     const Switch = require('sf-core/ui/switch');
- *     const Color = require('sf-core/ui/color');
+ *     const Switch = require('@smartface/native/ui/switch');
+ *     const Color = require('@smartface/native/ui/color');
  *     var mySwitch = new Switch();
  *     mySwitch.android.toggleOffColor = Color.DARKGRAY;
  *

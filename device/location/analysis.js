@@ -5,8 +5,8 @@
  * Device.Location allows capturing location change events on the device. In Android, ACCESS_FINE_LOCATION permission must be taken on run time for 23 api level and above.
  * 
  *     @example
- *     const Timer    = require("sf-core/timer");
- *     const Location = require('sf-core/device/location'); 
+ *     const Timer    = require("@smartface/native/timer");
+ *     const Location = require('@smartface/native/device/location'); 
  * 
  *     Location.start(Location.Android.Priority.HIGH_ACCURACY);
  *     Location.onLocationChanged = function(event) {

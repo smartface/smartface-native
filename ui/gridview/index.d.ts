@@ -14,16 +14,16 @@ import { Point2D } from "../../primitive/point2d";
  * GridView is a View that presents given items using customizable layouts.
  * 
  *      @example
- *      const Page = require("sf-core/ui/page");
+ *      const Page = require("@smartface/native/ui/page");
  *      const extend = require("js-base/core/extend");
- *      const FlexLayout = require('sf-core/ui/flexlayout');
- *      const Color = require('sf-core/ui/color');
- *      const Label = require('sf-core/ui/label');
- *      const ScrollView = require('sf-core/ui/scrollview');
- *      const GridView = require("sf-core/ui/gridview");
- *      const GridViewItem = require("sf-core/ui/gridviewitem");
- *      const TextAlignment = require('sf-core/ui/textalignment');
- *      const LayoutManager = require('sf-core/ui/layoutmanager');
+ *      const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *      const Color = require('@smartface/native/ui/color');
+ *      const Label = require('@smartface/native/ui/label');
+ *      const ScrollView = require('@smartface/native/ui/scrollview');
+ *      const GridView = require("@smartface/native/ui/gridview");
+ *      const GridViewItem = require("@smartface/native/ui/gridviewitem");
+ *      const TextAlignment = require('@smartface/native/ui/textalignment');
+ *      const LayoutManager = require('@smartface/native/ui/layoutmanager');
  *      
  *      var Page1 = extend(Page)(
  *          function(_super) {

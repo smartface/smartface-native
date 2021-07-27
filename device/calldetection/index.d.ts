@@ -7,7 +7,7 @@ export = CallDetection;
  * Required {@link Application.Android.Permissions-static-property-READ_PHONE_STATE READ_PHONE_STATE} permission for Android.
  *
  *     @example
- *     const CallDetection = require("sf-core/device/calldetection");
+ *     const CallDetection = require("@smartface/native/device/calldetection");
  * 
  *     const callDetection = new CallDetection();
  *     callDetection.onCallStateChanged = (params) => {

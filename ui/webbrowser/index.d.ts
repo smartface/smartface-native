@@ -9,7 +9,7 @@ import { WebBrowserOptions } from "./webbrowseroptions";
  * An object that provides a standard interface for browsing the web.
  *
  *       @example
- *       const WebBrowser = require('sf-core/ui/webbrowser');
+ *       const WebBrowser = require('@smartface/native/ui/webbrowser');
  *       var webOptions = new WebBrowser.Options();
  *       webOptions.url = "https://smartface.io"
  *       webOptions.barColor = Color.RED;

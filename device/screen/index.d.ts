@@ -79,7 +79,7 @@ declare namespace Screen {
  * enabled etc. Also you can capture screen with Device.Screen.capture function.
  * 
  *     @example
- *     const Screen = require('sf-core/device/screen');
+ *     const Screen = require('@smartface/native/device/screen');
  *     console.log("Device.Screen.dpi: "            + Screen.dpi);
  *     console.log("Device.Screen.width: "          + Screen.width);
  *     console.log("Device.Screen.height: "         + Screen.height);

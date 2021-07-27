@@ -6,7 +6,7 @@ export = System;
  * System provides operating system specific information of the device.
  *
  *     @example
- *     const System = require('sf-core/device/system');
+ *     const System = require('@smartface/native/device/system');
  *     console.log("Device.System.OS: "                             + System.OS);
  *     console.log("Device.System.OSVersion: "                      + System.OSVersion);
  *     console.log("Device.System.android.apiLevel: "               + System.android.apiLevel);

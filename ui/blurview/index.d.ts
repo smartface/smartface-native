@@ -10,8 +10,8 @@ import View from "../../ui/view";
  * BlurView that blurs its underlying content.
  *
  *     @example
- *     const BlurView = require('sf-core/ui/blurview');
- *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const BlurView = require('@smartface/native/ui/blurview');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
  *
  *     var myBlurView = new BlurView({
  *         top: 0,

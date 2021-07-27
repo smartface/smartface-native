@@ -10,8 +10,8 @@
  * 
  * 
  *     @example
- *     const File = require("sf-core/io/file");
- *     const Database = require('sf-core/data').Database;
+ *     const File = require("@smartface/native/io/file");
+ *     const Database = require('@smartface/native/data').Database;
  *     
  *     var database = new Database({
  *         file: new File({path: 'assets://database.sqlite'})

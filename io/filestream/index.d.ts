@@ -7,9 +7,9 @@ export = FileStream;
  * FileStream is a class which allows you to making IO operations. 
  * 
  *     @example
- *     const File = require('sf-core/io/file');
- *     const Path = require('sf-core/io/path');
- *     const FileStream = require('sf-core/io/filestream');
+ *     const File = require('@smartface/native/io/file');
+ *     const Path = require('@smartface/native/io/path');
+ *     const FileStream = require('@smartface/native/io/filestream');
  *     var myFile = new File({
  *         path: Path.DataDirectory + '/myFile.txt'
  *     });

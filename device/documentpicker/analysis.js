@@ -5,7 +5,7 @@
  * This class provides access to documents. 
  *
  *     @example
- *     const DocumentPicker = require("sf-core/device/documentpicker");
+ *     const DocumentPicker = require("@smartface/native/device/documentpicker");
  * 
  *     DocumentPicker.pick({
  *      page,

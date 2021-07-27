@@ -1,4 +1,4 @@
-const Color = require("sf-core/ui/color");
+const Color = require("@smartface/native/ui/color");
 
 /**
  * @class UI.QuickLook
@@ -10,7 +10,7 @@ const Color = require("sf-core/ui/color");
  * This class works only for IOS.
  *
  *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
+ *     const QuickLook = require('@smartface/native/ui/quicklook');
  *     var quickLook = new QuickLook();
  *     var testPDF = "assets://test.pdf";
  *     var testImage = "images://test.png";
@@ -25,7 +25,7 @@ function QuickLook(params) {}
  * Gets/sets array of documents(paths) that will be shown on QuickLook.
  *
  *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
+ *     const QuickLook = require('@smartface/native/ui/quicklook');
  *     var quicklook = new QuickLook();
  *     quicklook.document = ["images://.png","assests://.pdf"];
  *
@@ -39,7 +39,7 @@ QuickLook.prototype.document = [];
  * Gets/sets headerBar color of QuickLook View.
  *
  *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
+ *     const QuickLook = require('@smartface/native/ui/quicklook');
  *     var quicklook = new QuickLook();
  *     quicklook.barColor = UI.Color.BLACK;
  *
@@ -54,7 +54,7 @@ QuickLook.prototype.barColor = false;
  * Gets/sets title color of QuickLook View.
  *
  *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
+ *     const QuickLook = require('@smartface/native/ui/quicklook');
  *     var quicklook = new QuickLook();
  *     quicklook.titleColor = UI.Color.GREEN;
  *
@@ -68,7 +68,7 @@ QuickLook.prototype.titleColor = false;
  * Gets/sets color of items on header & footer of QuickLook view.
  *
  *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
+ *     const QuickLook = require('@smartface/native/ui/quicklook');
  *     var quicklook = new QuickLook();
  *     quicklook.itemColor = UI.Color.BLACK;
  *

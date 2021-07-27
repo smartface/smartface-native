@@ -5,7 +5,7 @@
  * TextBox is a UI which users can edit the text.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
+ *     const TextBox = require('@smartface/native/ui/textbox');
  *     var myTextBox = new TextBox({
  *         left:10, top:10, width:200, height:65,
  *         hint: "Your hint text",
@@ -191,8 +191,8 @@ TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
  * Creates a textContentType for ios.
  *
  *     @example
- *     const TextContentType = require("sf-core/ui/ios/textcontenttype");
- *     const System = require('sf-core/device/system');
+ *     const TextContentType = require("@smartface/native/ui/ios/textcontenttype");
+ *     const System = require('@smartface/native/device/system');
  *
  *     if (System.OS == "iOS" && System.OSVersion >= 12){
  *         textbox.ios.textContentType = TextContentType.ONETIMECODE;

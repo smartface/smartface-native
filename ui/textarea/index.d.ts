@@ -8,7 +8,7 @@ import ActionKeyType from "../actionkeytype";
  * TextArea is a UI which users can edit the multiline text.
  *
  *     @example
- *     const TextArea = require('sf-core/ui/textarea');
+ *     const TextArea = require('@smartface/native/ui/textarea');
  *     var myTextArea= new TextArea({
  *         left:10, top:10, width:200, height:200,
  *         borderWidth: 1

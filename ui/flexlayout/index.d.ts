@@ -11,13 +11,13 @@ import ViewGroup from "../viewgroup";
  * fill the available space.
  *
  *     @example
- *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
  *     var myFlexLayout = new FlexLayout({
  *         flexGrow:1
  *     });
  *
- *     const Label = require('sf-core/ui/label');
- *     const Color = require('sf-core/ui/color');
+ *     const Label = require('@smartface/native/ui/label');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myLabel1 = new Label({
  *         width: 100,
  *         height: 50,
@@ -44,7 +44,7 @@ declare class FlexLayout extends ViewGroup {
  * If you set LTR(left to right) objects will be positioned by starting from left edge of the FlexLayout.
  *
  *     @example
- *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
  *     var myFlexLayout = new FlexLayout({
  *         flexGrow : 1
  *         direction: FlexLayout.Direction.RTL

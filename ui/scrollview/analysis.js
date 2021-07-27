@@ -8,10 +8,10 @@
  * than one.
  *    
  *     @example
- *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const ScrollView = require('sf-core/ui/scrollview');
- *     const Button = require('sf-core/ui/button');
- *     const Color = require('sf-core/ui/color');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     const ScrollView = require('@smartface/native/ui/scrollview');
+ *     const Button = require('@smartface/native/ui/button');
+ *     const Color = require('@smartface/native/ui/color');
  *
  *     var scrollView = new ScrollView({
  *        flexGrow: 1,

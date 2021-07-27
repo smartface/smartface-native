@@ -12,8 +12,8 @@ import TextDirection from "../android/textdirection";
  * TextView is a view that displays read-only text on the screen.
  *
  *     @example
- *     const TextView = require('sf-core/ui/textview');
- *     const Color = require('sf-core/ui/color');
+ *     const TextView = require('@smartface/native/ui/textview');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myTextview = new TextView({
  *         text: "This is my textview",
  *         visible: true
@@ -41,7 +41,7 @@ declare class TextView extends View {
  *
  *     @example
  *     // In this example 'This link' text inside TextView will shown underlined.
- *     const TextView = require('sf-core/ui/textview');
+ *     const TextView = require('@smartface/native/ui/textview');
  *     var myTextView = new TextView();
  *     myTextView.htmlText = "<a href='http://www.smartface.io'>This link</a> will redirect you to Smartface website.";
  *
@@ -56,8 +56,8 @@ declare class TextView extends View {
  * It is set to null by default.
  *
  *     @example
- *     const TextView = require('sf-core/ui/textview');
- *     const Font = require('sf-core/ui/font')
+ *     const TextView = require('@smartface/native/ui/textview');
+ *     const Font = require('@smartface/native/ui/font')
  *     var myTextview = new TextView({
  *         text: "This is my textview",
  *         visible: true
@@ -123,8 +123,8 @@ declare class TextView extends View {
  * can be used.
  *
  *     @example
- *     const TextView = require('sf-core/ui/textview');
- *     const TextAlignment = require('sf-core/ui/textalignment');
+ *     const TextView = require('@smartface/native/ui/textview');
+ *     const TextAlignment = require('@smartface/native/ui/textalignment');
  *     var myTextView = new TextView();
  *     myTextView.textAlignment = TextAlignment.MIDCENTER;
  *
@@ -174,11 +174,11 @@ declare class TextView extends View {
  * Gets/sets attributedText on TextView.
  *
  *     @example
- *     const System = require('sf-core/device/system');
- *     const TextView = require('sf-core/ui/textview');
- *     const Color = require('sf-core/ui/color');
- *     const Font = require('sf-core/ui/font');
- *     const AttributedString = require('sf-core/ui/attributedstring');
+ *     const System = require('@smartface/native/device/system');
+ *     const TextView = require('@smartface/native/ui/textview');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const Font = require('@smartface/native/ui/font');
+ *     const AttributedString = require('@smartface/native/ui/attributedstring');
  *  
  *     var textView = new TextView({
  *         flexGrow: 1,
