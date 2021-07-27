@@ -3,7 +3,6 @@ import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
 
-export = View;
 /**
  * @class UI.View
  * @since 0.1
@@ -805,3 +804,5 @@ declare namespace View {
 		}
 	}
 }
+
+export = View;

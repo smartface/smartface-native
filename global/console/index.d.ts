@@ -1,4 +1,3 @@
-export = console;
 /**
  * @class console
  * @since 0.1
@@ -112,3 +111,5 @@ declare const console : {
  */
   timeEnd: (key: string) => void;
 }
+
+export = console;

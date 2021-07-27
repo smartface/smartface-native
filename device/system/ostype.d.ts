@@ -1,4 +1,3 @@
-export = OSType;
 /**
  * @type {{
  *   ANDROID:  "Android"
@@ -9,3 +8,5 @@ declare enum OSType {
     ANDROID= "Android",
     IOS= "iOS"
 }
+
+export = OSType;

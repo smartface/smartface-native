@@ -1,4 +1,3 @@
-export = SpeechRecognizerError;
 // declare const SpeechRecognizerError: SpeechRecognizerErrorType & {android: AndroidErrors}
 declare enum SpeechRecognizerError {
 	INSUFFICIENT_PERMISSIONS = "INSUFFICIENT_PERMISSIONS",
@@ -16,3 +15,5 @@ declare namespace SpeechRecognizerError {
 		RECOGNIZER_BUSY = "RECOGNIZER_BUSY"
 	}
 }
+
+export = SpeechRecognizerError;

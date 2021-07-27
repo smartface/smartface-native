@@ -1,4 +1,3 @@
-export = Exception;
 /**
  * @type {{
  *   TypeError: {
@@ -24,4 +23,6 @@ declare const Exception: {
         readonly FUNCTION: "Parameter type must be function";
         readonly URL: "URL is not valid";
     }
-} ;
+};
+
+export = Exception;

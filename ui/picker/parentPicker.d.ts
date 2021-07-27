@@ -1,9 +1,9 @@
 import Color from "../color";
 import Font from "../font";
-
-export = parentPicker;
-declare class parentPicker {
+declare class ParentPicker {
   title: string;
   titleColor: Color;
   titleFont: Font;
 }
+
+export = ParentPicker;

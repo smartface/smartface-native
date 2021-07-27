@@ -1,15 +1,15 @@
-sf-core 
+@smartface/native
 ===================
 
-Core Modules of Native Libraries. sf-core has implementations of Android and iOS native libraries with Smartface Expose Framework.
+Core Modules of Native Libraries. @smartface/native has implementations of Android and iOS native libraries with Smartface Expose Framework.
 
 # Installation & Usage
 
 * Create workspace on Smartface Cloud
-* Add sf-core to your dependencies in scripts/package.json
-* You're ready to use sf-core library in your workspace
+* Add @smartface/native to your dependencies in scripts/package.json
+* You're ready to use @smartface/native library in your workspace
 ```
-const Label = require('sf-core/ui/label');
+import Label from '@smartface/native/ui/label';
 
 const label = new Label();
 label.text = "Hello World!";
@@ -85,21 +85,3 @@ This step is done automatically on Jenkins. However, in order to observe Doc cha
 2. Launch generateDocs.sh using `bash generateDocs.sh` 
 3. In your parent directory, there will be file named `api-docs.zip`. Unzip it.
 4. Navigate to unzipped file and open `index.html` file.
-
-# Contribution Guide
-
-* Create workspace on Smartface Cloud
-* Download sf-core contribution script and Run it
-```
-    curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/c74448e067f9e2292fff38a1530d6b3124e90479/files/snippet.txt \
-        -o install-dev-sf-core.sh
-    chmod +x install-dev-sf-core.sh
-    ./install-dev-sf-core.sh
-```
-* When script successfully ends you can go to ~/workspace/scripts/node_modules/sf-core and start coding
-```
-    cd ~/workspace/scripts/node_modules/sf-core
-    git status
-```
-* Don't forget to follow git-flow strategy while coding :)

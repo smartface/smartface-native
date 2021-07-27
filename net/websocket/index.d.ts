@@ -1,6 +1,5 @@
 import Blob from "../../global/blob";
 
-export = WebSocket;
 /**
  * 
  * WebSocket creates a web socket client. It connects to a WebSocket server and then sending 
@@ -91,3 +90,5 @@ declare class WebSocket extends NativeComponent {
      */
     onFailure(e: {code: number, message: string}): void;
 }
+
+export = WebSocket;

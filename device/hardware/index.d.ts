@@ -1,4 +1,3 @@
-export = Hardware;
 /**
  * @class Device.Hardware
  * @since 0.1
@@ -93,3 +92,5 @@ declare const Hardware :{
  */
 	readonly brandName: string;
 }
+
+export = Hardware;

@@ -1,3 +1,3 @@
 import Screen from ".";
 
-export = Screen.Orientation;
+export = Screen.OrientationType;

@@ -1,4 +1,3 @@
-export = Color;
 declare class Color extends NativeComponent {
     isGradient?: any;
     colors?: Color[];
@@ -299,3 +298,5 @@ declare namespace Color {
      */
     function alpha(color: Color): Color;
 }
+
+export = Color;

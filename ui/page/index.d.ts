@@ -5,8 +5,6 @@ import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
 import { IFlexLayout } from "../../primitive/iflexlayout";
 
-export = Page;
-
 declare enum UIInterfaceOrientation {
 	unknown = 0,
 	portrait = 1,
@@ -339,3 +337,5 @@ declare class Page extends NativeComponent implements IFlexLayout {
 // 	| Page.Orientation["LANDSCAPERIGHT"]
 // 	| Page.Orientation["PORTRAIT"]
 // 	| Page.Orientation["UPSIDEDOWN"];
+
+export = Page;

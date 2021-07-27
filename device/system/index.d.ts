@@ -1,4 +1,3 @@
-export = System;
 /**
  * @class Device.System
  * @since 0.1
@@ -504,3 +503,5 @@ declare enum LABiometryType {
 	 */
 	FACEID = 2
 }
+
+export = System;

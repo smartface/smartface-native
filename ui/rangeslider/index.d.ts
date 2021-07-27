@@ -2,8 +2,6 @@ import View from "../view";
 import Color from "../color";
 import Image from "../image";
 import { Point2D } from "../../primitive/point2d";
-
-export = RangeSlider;
 declare interface RangeSliderParams {
   android?: {
     thumbSize?: number;
@@ -61,3 +59,5 @@ declare class RangeSlider extends View implements RangeSliderParams {
   isTrackRounded?: boolean;
   onValueChange?: (value: number[]) => void;
 }
+
+export = RangeSlider;

@@ -1,4 +1,3 @@
-export = AlertView;
 declare class AlertView extends NativeComponent {
 	constructor(params?: any);
 	isShowing(): any;
@@ -57,3 +56,4 @@ declare namespace AlertView {
 	}
 }
 
+export = AlertView;

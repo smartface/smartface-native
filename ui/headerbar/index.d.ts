@@ -6,7 +6,6 @@ import HeaderBarItem from "../headerbaritem";
 import Page from "../page";
 import Image from "../image";
 
-export = HeaderBar;
 /**
  * @class UI.HeaderBar
  *
@@ -393,3 +392,4 @@ type HeaderBar = {
   }
 };
 
+export = HeaderBar;

@@ -1,5 +1,5 @@
 import Blob from "../../global/blob";
-export = FileStream;
+
 /**
  * @class IO.FileStream
  * @since 0.1
@@ -209,3 +209,4 @@ declare namespace FileStream {
 	}
 }
 
+export = FileStream;

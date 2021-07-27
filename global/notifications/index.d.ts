@@ -1,6 +1,5 @@
 import Color from "../../ui/color";
 
-export = Notifications;
 /**
  * @class Notifications
  *
@@ -544,3 +543,5 @@ declare namespace Notifications {
 		}
 	}
 }
+
+export = Notifications;

@@ -2,7 +2,6 @@ import File from "../../io/file";
 import Blob from "../../global/blob";
 import Page from "../page";
 
-export = EmailComposer;
 /**
  * @class UI.EmailComposer
  * @since 3.0.3
@@ -146,3 +145,5 @@ declare class EmailComposer {
  */
 	canSendMail(): boolean;
 }
+
+export = EmailComposer;

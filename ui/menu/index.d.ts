@@ -1,7 +1,6 @@
 import MenuItem from "../menuitem";
 import Page from "../page";
 
-export = Menu;
 /**
  * @class UI.Menu
  * @since 0.1
@@ -62,3 +61,5 @@ declare class Menu {
  */
   show(page: Page):void;
 }
+
+export = Menu;

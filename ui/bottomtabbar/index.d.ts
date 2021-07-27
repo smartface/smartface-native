@@ -1,7 +1,6 @@
 import Color from "../color";
 import TabBarItem from "../tabbaritem";
 
-export = BottomTabBar;
 /**
  * @class UI.BottomTabBar
  * @since 1.1.10
@@ -73,3 +72,5 @@ declare class BottomTabBar extends NativeComponent {
 	 */
 	translucent: boolean;
 }
+
+export = BottomTabBar;
