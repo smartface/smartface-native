@@ -1,4 +1,3 @@
-export = Timer;
 /**
  * @class Timer
  * @since 0.1
@@ -73,3 +72,5 @@ declare class Timer extends NativeComponent {
  */
   static clearAllTimer(timer: Timer):void;
 }
+
+export = Timer;

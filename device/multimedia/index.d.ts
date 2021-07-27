@@ -48,7 +48,6 @@ import File from "../../io/file";
  * 
  * 
  */
-export = Multimedia;
 declare namespace Multimedia {
 
     /**
@@ -732,3 +731,5 @@ declare class Multimedia {
         });
     };
 }
+
+export = Multimedia;

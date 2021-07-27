@@ -1,5 +1,3 @@
-export = Network;
-
 declare namespace Network {
 /**
  * @enum {Number} Device.Network.ConnectionType
@@ -189,3 +187,5 @@ declare class Network {
  */
   static createNotifier(): NetworkNotifier;
 }
+
+export = Network;

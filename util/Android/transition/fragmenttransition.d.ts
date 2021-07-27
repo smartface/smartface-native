@@ -1,4 +1,3 @@
-export = FragmentTransaction;
 declare function FragmentTransaction(): void;
 declare namespace FragmentTransaction {
     export const pageCount: number;
@@ -7,3 +6,5 @@ declare namespace FragmentTransaction {
         export const LEFTTORIGHT: string;
     }
 }
+
+export = FragmentTransaction;

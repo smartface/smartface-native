@@ -1,7 +1,6 @@
 import Color from "../../ui/color";
 import Font from "../../ui/font";
 
-export = AttributedString
 /**
  * @class AttributedString
  * @since 3.0.0
@@ -99,3 +98,5 @@ declare class AttributedString {
  */
     underlineColor?: Color;
 }
+
+export = AttributedString

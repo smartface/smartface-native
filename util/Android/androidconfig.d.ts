@@ -1,4 +1,3 @@
-export = AndroidConfig;
 declare function AndroidConfig(): void;
 declare namespace AndroidConfig {
     export const isEmulator: boolean;
@@ -15,3 +14,5 @@ declare namespace AndroidConfig {
 }
 declare const packageName: any;
 declare const SpratAndroidActivity: any;
+
+export = AndroidConfig;

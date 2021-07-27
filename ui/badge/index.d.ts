@@ -1,7 +1,6 @@
 import Color from "../color";
 import Font from "../font";
 
-export = Badge;
 /**
  * @class UI.Badge
  * @since 3.0.0
@@ -87,3 +86,5 @@ declare class Badge {
  */
   move(x: number, y: number):void;
 }
+
+export = Badge;

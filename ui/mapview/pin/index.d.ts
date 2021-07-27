@@ -1,5 +1,3 @@
-export = Pin;
-
 import Color from "../../../ui/color";
 import Image from "../../../ui/image";
 declare class Pin {
@@ -16,3 +14,5 @@ declare class Pin {
     onPress: () => void;
     onInfoWindowPress: () => void;
 }
+
+export = Pin;

@@ -1,8 +1,6 @@
 import FlexLayout from "../flexlayout";
-import { View } from "..";
 import { IFlexLayout } from "../../primitive/iflexlayout";
 
-export = Dialog;
 /**
  * @class UI.Dialog
  * @since 0.1
@@ -180,3 +178,5 @@ declare namespace Dialog {
 		}
 	}
 }
+
+export = Dialog;

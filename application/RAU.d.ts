@@ -1,7 +1,5 @@
 import RemoteUpdateServiceUpdateResult from "./RemoteUpdateServiceUpdateParamters";
 
-export = RemoteUpdateService;
-
 declare const RemoteUpdateService: {
 	firstUrl: string;
 	secondUrl: string;
@@ -13,3 +11,5 @@ declare const RemoteUpdateService: {
 		userInfo: string | null
 	): void;
 };
+
+export = RemoteUpdateService;

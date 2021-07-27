@@ -1,4 +1,3 @@
-export = Data;
 /**
  * @class Data
  * @since 0.1
@@ -162,3 +161,5 @@ declare const Data : {
  */
     removeAllVariables: (key: string) => void;
 }
+
+export = Data;

@@ -1,2 +1,2 @@
 import EllipsizeMode from './ellipsizemode';
-export = EllipsizeMode
+export = EllipsizeMode;

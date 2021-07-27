@@ -3,7 +3,6 @@ import View from "../view";
 import Page from "../page";
 import BottomTabBar from "../bottomtabbar";
 
-export = BottomTabBarController;
 /**
  * @class UI.BottomTabbarController
  * @since 3.2
@@ -81,3 +80,5 @@ declare class BottomTabBarController extends NativeComponent {
      */
 	didSelectByIndex(params: { index: number }): void;
 }
+
+export = BottomTabBarController;

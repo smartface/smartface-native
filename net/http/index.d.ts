@@ -2,8 +2,6 @@ import Image from "../../ui/image";
 import Blob from "../../global/blob";
 import File from "../../io/file";
 
-export = Http;
-
 type RequestOnload<T = {}> = (
 	e: {
 		statusCode: number;
@@ -256,3 +254,5 @@ declare namespace Http {
 		cancel: () => void;
 	}
 }
+
+export = Http;

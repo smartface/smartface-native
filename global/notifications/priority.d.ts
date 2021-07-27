@@ -1,2 +1,3 @@
-export = Priority;
 declare const Priority: {};
+
+export = Priority;

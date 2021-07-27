@@ -1,7 +1,7 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
 
-export = Sound;/**
+/**
  * @class Device.Sound
  * @since 0.1
  * @android
@@ -178,3 +178,5 @@ declare namespace Sound {
     ) => void | undefined;
   }
 }
+
+export = Sound;

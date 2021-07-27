@@ -1,6 +1,5 @@
 import { FontStyle } from "./font-style";
 
-export = Font;
 /**
  * @class UI.Font
  * @since 0.1
@@ -169,3 +168,5 @@ declare namespace Font {
  */
 	const BOLD_ITALIC: 6;
 }
+
+export = Font;

@@ -1,7 +1,6 @@
 import Color from "../color";
 import Font from "../font";
 
-export = DatePicker;
 /**
  * @class UI.DatePicker
  * @since 0.1
@@ -331,3 +330,5 @@ declare namespace DatePicker {
         }
     }
 }
+
+export = DatePicker;

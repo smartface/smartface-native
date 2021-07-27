@@ -1,5 +1,3 @@
-export = BlurView;
-
 import Color from "../../ui/color";
 import View from "../../ui/view";
 /**
@@ -127,3 +125,5 @@ declare namespace BlurView {
 		}
 	}
 }
+
+export = BlurView;

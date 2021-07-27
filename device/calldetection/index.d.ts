@@ -1,4 +1,3 @@
-export = CallDetection;
 /**
  * @class Device.CallDetection
  * @since 4.3.1
@@ -109,3 +108,5 @@ declare namespace CallDetection {
         CONNECTED = "Connected"
     }
 }
+
+export = CallDetection;

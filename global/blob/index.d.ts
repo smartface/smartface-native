@@ -1,4 +1,3 @@
-export = Blob;
 /**
  * @class Blob
  * @since 0.1
@@ -89,3 +88,5 @@ declare class Blob {
  */
     static createFromUTF8String(utf8String: string):Blob;
 }
+
+export = Blob;

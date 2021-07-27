@@ -1,6 +1,4 @@
 import Image from "../../ui/image";
-
-export = Screen;
 declare namespace Screen {
 	type Orientation =
 		| "portrait"
@@ -168,3 +166,5 @@ declare class Screen  {
 		readonly forceTouchAvaliable?: boolean;
 	};
 }
+
+export = Screen;

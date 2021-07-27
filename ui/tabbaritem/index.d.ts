@@ -23,7 +23,6 @@ import AttributedString from "../../global/attributedstring";
  *     });
  *     myTab.add('home', myItem);
  */
-export = TabBarItem;
 declare class TabBarItem extends NativeComponent {
     constructor(params?: any);
     /**
@@ -110,3 +109,5 @@ declare class TabBarItem extends NativeComponent {
         font: Font;
     }
 }
+
+export = TabBarItem;

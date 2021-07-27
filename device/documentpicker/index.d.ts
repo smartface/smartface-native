@@ -1,7 +1,6 @@
 import File from "../../io/file";
 import Page from "../../ui/page";
 
-export = DocumentPicker;
 declare namespace DocumentPicker {
     /**
      * @enum {String} Device.DocumentPicker.Types
@@ -119,3 +118,5 @@ declare class DocumentPicker {
     }): void;
 
 }
+
+export = DocumentPicker;

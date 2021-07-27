@@ -1,4 +1,3 @@
-export = Path;
 /**
  * @class IO.Path
  * @since 0.1
@@ -94,3 +93,5 @@ declare namespace Path {
 		RAU_DRAWABLE = 6
 	}
 }
+
+export = Path;

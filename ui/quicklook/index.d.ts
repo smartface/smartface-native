@@ -2,7 +2,6 @@ import Color from "../color";
 import StatusBar from "../../application/statusbar";
 import Page from "../page";
 
-export = QuickLook;
 /**
  * @class UI.QuickLook
  * @since 0.1
@@ -97,3 +96,5 @@ declare class QuickLook extends NativeComponent {
  */
   show(page: Page): void;
 }
+
+export = QuickLook;
