@@ -8,7 +8,7 @@ export = AttributedString
  * A string that has associated attributes for portions of its text.
  * 
  *     @example
- *     const AttributedString = require("sf-core/ui/attributedstring");
+ *     const AttributedString = require("@smartface/native/ui/attributedstring");
  *     var attributeString = new AttributedString();
  *     attributeString.string = " Third";
  *     attributeString.link = "Third Link";

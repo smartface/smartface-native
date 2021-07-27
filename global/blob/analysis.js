@@ -5,7 +5,7 @@
  * Blob is a binary large object.
  * 
  *     @example
- *     const Blob = require('sf-core/blob');
+ *     const Blob = require('@smartface/native/blob');
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */

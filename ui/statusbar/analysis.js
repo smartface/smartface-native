@@ -10,10 +10,10 @@
  * will overlaps the page for iOS if the HeaderBar is invisible at this moment.
  *
  *     @example
- *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
- *     const Color = require('sf-core/ui/color');
- *     const Application = require('sf-core/application');
- *     const Page = require('sf-core/ui/page');
+ *     const StatusBarStyle = require('@smartface/native/ui/statusbarstyle');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const Application = require('@smartface/native/application');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage = new Page({
  *         onShow: function() {
  *             Application.statusBar.visible = true;
@@ -71,8 +71,8 @@ StatusBar.prototype.backgroundColor = Color.create("#FF757575");
  * you should always use color with alpha channel.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Color = require('sf-core/ui/color');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.statusBar.android.color = Color.RED;
@@ -91,8 +91,8 @@ StatusBar.prototype.android.color = Color.create("#FF757575");
  * Gets/sets status bar style. This property works only for iOS
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const StatusBarStyle = require('@smartface/native/ui/statusbarstyle');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.statusBar.ios.style = StatusBarStyle.DEFAULT;
@@ -112,8 +112,8 @@ StatusBar.prototype.ios.style = StatusBarStyle.DEFAULT;
  * Android support is api level 23 and later.
  * 
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const StatusBarStyle = require('@smartface/native/ui/statusbarstyle');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.statusBar.style = StatusBarStyle.DEFAULT;

@@ -9,8 +9,8 @@ const View = require('../view');
  * ImageView is simply an image container where UI.Image is displayed inside.
  *
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
  *
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({
@@ -28,8 +28,8 @@ function ImageView(params) {}
  * to this property will be beneficial in terms of performance.
  *
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageView');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageView');
  *
  *     var myImage = Image.createFromFile("images://smartface.png");
  *     var myImageView = new ImageView({
@@ -50,10 +50,10 @@ ImageView.prototype.image = null;
  * Gets/sets the tintColor.
  *
  *     @example
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
- *     const Color = require('sf-core/ui/color');
- *     const System = require('sf-core/device/system');
+ *     const ImageView = require('@smartface/native/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const System = require('@smartface/native/device/system');
  *
  *     var image = Image.createFromFile("images://smartface.png");
  *
@@ -73,8 +73,8 @@ ImageView.prototype.tintColor = null;
  * Gets/sets image fill type.
  *
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
  *
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({
@@ -162,8 +162,8 @@ ImageView.prototype.fetchFromUrl = function(object) {};
  * FillType is an enum. It defines the fill type of an UI.Image inside its parent.
  *
  *     @example
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
  *
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({

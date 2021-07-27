@@ -10,7 +10,7 @@ import View from "../view";
  * you can call UI.Picker.show method.
  *
  *     @example
- *     const Picker = require("sf-core/ui/picker");
+ *     const Picker = require("@smartface/native/ui/picker");
  *     var items = [
  *         "item 1",
  *         "item 2",

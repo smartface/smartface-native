@@ -8,9 +8,9 @@ const FlexLayout = require("../flexlayout");
  * inside which you can use for adding views into Dialog.
  *
  *     @example
- *     const Dialog = require("sf-core/ui/dialog");
- *     const Button = require("sf-core/ui/button");
- *     const Color = require("sf-core/ui/color");
+ *     const Dialog = require("@smartface/native/ui/dialog");
+ *     const Button = require("@smartface/native/ui/button");
+ *     const Color = require("@smartface/native/ui/color");
  *     var myDialog = new Dialog();
  *     
  *     var myButton = new Button({
@@ -114,9 +114,9 @@ Dialog.prototype.android.hideKeyboard = function() {};
  * According to your requirements, you should choose of the theme enums.  
  *
  *     @example
- *     const Dialog = require("sf-core/ui/dialog");
- *     const Button = require("sf-core/ui/button");
- *     const Color = require("sf-core/ui/color");
+ *     const Dialog = require("@smartface/native/ui/dialog");
+ *     const Button = require("@smartface/native/ui/button");
+ *     const Color = require("@smartface/native/ui/color");
  *
  *     var myDialog = new Dialog({
  *      android: {

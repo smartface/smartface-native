@@ -8,8 +8,8 @@ type Controller = Page | BottomTabBarController | NavigationController;
  * @since 3.2
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const NavigationController = require('sf-core/ui/navigationcontroller');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const NavigationController = require('@smartface/native/ui/navigationcontroller');
  * 
  *     var page1 = new Page();
  *     var navigationController = new NavigationController(); //// OR IT CAN TAKES a controller object like tabbarcontroller AS AN ARGUMENT

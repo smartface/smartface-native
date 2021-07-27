@@ -8,7 +8,7 @@ const View = require('../view');
  * actions. 
  *
  *     @example
- *     const SwipeView = require('sf-core/ui/swipeview');
+ *     const SwipeView = require('@smartface/native/ui/swipeview');
  *     var swipeView = new SwipeView({
  *       page: currentPage,
  *       width:300, height:300,

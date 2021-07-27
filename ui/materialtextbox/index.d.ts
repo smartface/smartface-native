@@ -9,7 +9,7 @@ import View from "../view";
  * MaterialTextBox is a UI which users can edit the text.
  * 
  *     @example
- *     const MaterialTextBox = require('sf-core/ui/materialtextbox');
+ *     const MaterialTextBox = require('@smartface/native/ui/materialtextbox');
  *     var materialtextbox = new MaterialTextBox({
  *         height : 50,
  *         hint : "Hint"
@@ -281,8 +281,8 @@ declare class MaterialTextBox extends TextBox {
  * In Android, to make hint text size as your given text size assign the font property in constructor.
  *
  *     @example
- *     const Label = require('sf-core/ui/label');
- *     const Font = require('sf-core/ui/font')
+ *     const Label = require('@smartface/native/ui/label');
+ *     const Font = require('@smartface/native/ui/font')
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true

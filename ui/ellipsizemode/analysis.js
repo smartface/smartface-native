@@ -7,9 +7,9 @@
  * EllipsizeMode is an enum. It defines how to text will be truncated.
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
- *     const TextView = require('sf-core/ui/textview');
- *     const EllipsizeMode = require('sf-core/ui/ellipsizemode');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const TextView = require('@smartface/native/ui/textview');
+ *     const EllipsizeMode = require('@smartface/native/ui/ellipsizemode');
  *
  *     var myTextView = new TextView({
  *         hint: "hint",

@@ -10,9 +10,9 @@ import AttributedString from "../../global/attributedstring";
  * UI.TabBarItem.page when the tab bar item is clicked.
  *
  *     @example
- *     const TabBarItem = require('sf-core/ui/tabbaritem');
- *     const BottomTabBar = require('sf-core/ui/bottomtabbar');
- *     const Image = require('sf-core/ui/image');
+ *     const TabBarItem = require('@smartface/native/ui/tabbaritem');
+ *     const BottomTabBar = require('@smartface/native/ui/bottomtabbar');
+ *     const Image = require('@smartface/native/ui/image');
  *     
  *     var myHomeImage = Image.createFromFile("images://home.png");
  *     var myTab = new BottomTabBar();

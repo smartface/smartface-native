@@ -7,7 +7,7 @@ import Font from "../font";
  * SelectablePicker is a dialog where users are able to pick item/items on.
  *
  *     @example
- *     const SelectablePicker = require('sf-core/ui/selectablepicker');
+ *     const SelectablePicker = require('@smartface/native/ui/selectablepicker');
  *     var items = [
  *          "item1",
  *          "item2",

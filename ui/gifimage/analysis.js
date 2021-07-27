@@ -7,8 +7,8 @@
  * GifImage's file should not be in images folder. You can use assets folder.
  * 
  *     @example
- *     const GifImage = require('sf-core/ui/gifimage');
- *     const GifImageView = require('sf-core/ui/gifimageview');
+ *     const GifImage = require('@smartface/native/ui/gifimage');
+ *     const GifImageView = require('@smartface/native/ui/gifimageview');
  *     
  *     var myGifImage = GifImage.createFromFile("assets://smartface.gif")
  *     var myGifImageView = new GifImageView({
@@ -38,7 +38,7 @@ GifImage.createFromBlob = function(blob) {}
  * Creates an GifImage instance from given file path. GifImage's file should not be in images folder. You can use assets folder.
  *  
  *     @example
- *     const GifImage = require('sf-core/ui/gifimage');
+ *     const GifImage = require('@smartface/native/ui/gifimage');
  *     var myGifImage = GifImage.createFromFile("assets://smartface.gif");
  * 
  * @param {String|IO.File} path GifImage file path

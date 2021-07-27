@@ -5,9 +5,9 @@
  * StatusBarStyle is an enum. It defines status bar appearance style.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Application = require('sf-core/application');
- *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Application = require('@smartface/native/application');
+ *     const StatusBarStyle = require('@smartface/native/ui/statusbarstyle');
  *     var myPage = new Page();
  *     Application.statusBar.style = StatusBarStyle.LIGHTCONTENT;
  *

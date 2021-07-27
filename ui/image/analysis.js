@@ -6,8 +6,8 @@
  * It can be set to UI objects' properties (e.g. UI.ImageView.image).
  * 
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
  *     
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({
@@ -137,15 +137,15 @@ Image.prototype.resizableImageWithCapInsetsResizingMode = function(insets, mode)
  * onSuccess and onFailure are optional parameters.
  * 
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView();
  *     myImageView.image = myImage.resize(myImage.width/2, myImage.height/2); // resize example without callback
  * 
  *     
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const ImageView = require('@smartface/native/ui/imageview');
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView();
  *     myImage.resize(myImage.width/2, myImage.height/2, onSuccess); 
@@ -197,7 +197,7 @@ Image.prototype.crop = function(x, y, width, height, onSuccess, onFailure) {};
  * onSuccess and onFailure are optional parameters.
  * 
  *     @example
- *     const Image = require('sf-core/ui/image');
+ *     const Image = require('@smartface/native/ui/image');
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myBlob = myImage.compress(Image.Format.JPEG, 50); 
  *     var myCompressedImage = Image.createFromBlob(myBlob);
@@ -282,7 +282,7 @@ Image.android.createRoundedImage = function(params) {};
  * These parameters are used loading large bitmaps efficiently. If you pass these parameters, the bitmap will scaled down.
  *  
  *     @example
- *     const Image = require('sf-core/ui/image');
+ *     const Image = require('@smartface/native/ui/image');
  *     var myImage = Image.createFromFile("images://smartface.png");
  * 
  * @param {String} path Image file path

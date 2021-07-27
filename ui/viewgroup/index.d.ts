@@ -7,8 +7,8 @@ import View from "../view";
  * ViewGroup is parent class of all layouts. ViewGroup is an abstract class. You can't create instance from it.
  *
  *     @example
- *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const Label = require('sf-core/ui/label');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     const Label = require('@smartface/native/ui/label');
  *     var myFlexLayout = new FlexLayout();
  *     var myLabel = new Label({
  *          text: "Smartface Label"
@@ -80,8 +80,8 @@ declare class ViewGroup extends View {
      * Finds a child view with specified id within the layout.
      *
      *     @example
-     *     const FlexLayout = require('sf-core/ui/flexlayout');
-     *     const Label = require('sf-core/ui/label');
+     *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+     *     const Label = require('@smartface/native/ui/label');
      *     var myFlexLayout = new FlexLayout();
      *     var myLabel = new Label({
      *          text: "Smartface Label",

@@ -5,7 +5,7 @@
  * LiveMediaPublisher is a live streaming publisher. It is used for audio and video playback in RTMP/RTMPT/RTSP/HTTP/TCP/UDP/FILE format.
  * 
  *     @example
- *     const LiveMediaPublisher = require('sf-core/ui/livemediapublisher');
+ *     const LiveMediaPublisher = require('@smartface/native/ui/livemediapublisher');
  *
  *     let liveMediaPublisher = new LiveMediaPublisher({
  *         flexGrow: 1,

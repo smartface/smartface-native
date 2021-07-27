@@ -9,8 +9,8 @@ import View from "../view";
  * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
  *
  *     @example
- *     var Color = require('sf-core/ui/color');
- *     const Slider = require('sf-core/ui/slider');
+ *     var Color = require('@smartface/native/ui/color');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider({
  *         width: 200,
  *         maxValue: 100,
@@ -29,8 +29,8 @@ declare class Slider extends View {
  * Gets/sets color of the thumb.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
- *     var Color = require('sf-core/ui/color');
+ *     const Slider = require('@smartface/native/ui/slider');
+ *     var Color = require('@smartface/native/ui/color');
  *     var mySlider = new Slider();
  *     mySlider.thumbColor = Color.GRAY;
  *
@@ -44,7 +44,7 @@ declare class Slider extends View {
  * Gets/sets image of the thumb.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider();
  *     mySlider.thumbImage = Image.createFromFile("images://smartface.png");
  *
@@ -58,8 +58,8 @@ declare class Slider extends View {
  * Gets/sets color of the thumb's minimum track color.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
- *     var Color = require('sf-core/ui/color');
+ *     const Slider = require('@smartface/native/ui/slider');
+ *     var Color = require('@smartface/native/ui/color');
  *     var mySlider = new Slider();
  *     mySlider.minTrackColor = Color.BLUE;
  *
@@ -73,8 +73,8 @@ declare class Slider extends View {
  * Gets/sets color of the thumb's maximum track color.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
- *     var Color = require('sf-core/ui/color');
+ *     const Slider = require('@smartface/native/ui/slider');
+ *     var Color = require('@smartface/native/ui/color');
  *     var mySlider = new Slider();
  *     mySlider.maxTrackColor = Color.GREEN;
  *
@@ -89,7 +89,7 @@ declare class Slider extends View {
  * greater or equals to minValue.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider();
  *     mySlider.value = 30;
  *
@@ -103,7 +103,7 @@ declare class Slider extends View {
  * Gets/sets minimum value of the slider.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider();
  *     mySlider.minValue = 0;
  *
@@ -117,7 +117,7 @@ declare class Slider extends View {
  * Gets/sets maximum value of the slider.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider();
  *     mySlider.maxValue = 100;
  *
@@ -140,7 +140,7 @@ declare class Slider extends View {
  * This event is called when slider value changes.
  *
  *     @example
- *     const Slider = require('sf-core/ui/slider');
+ *     const Slider = require('@smartface/native/ui/slider');
  *     var mySlider = new Slider();
  *     mySlider.onValueChange = valueChanged;
  *     mySlider.value = 40;

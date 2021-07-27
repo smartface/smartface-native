@@ -9,7 +9,7 @@ export = DatePicker;
  * DatePicker is a dialog where users are able to pick a date on.
  *
  *     @example
- *     const DatePicker = require('sf-core/ui/datepicker');
+ *     const DatePicker = require('@smartface/native/ui/datepicker');
  *     var myDatePicker = new DatePicker();
  *     myDatePicker.onDateSelected = function(date) {
  *         console.log('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
@@ -221,7 +221,7 @@ declare namespace DatePicker {
          * If there is no theme specified then default them style will be applied. Theme enum must be given with constructor.
          *
          *     @example
-         *     const DatePicker = require('sf-core/ui/datepicker');
+         *     const DatePicker = require('@smartface/native/ui/datepicker');
          *     var myDatePicker = new DatePicker({
          *        android: {
          *          style: DatePicker.Android.Style.DEFAULT_DARK

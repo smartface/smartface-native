@@ -13,7 +13,7 @@ function Crypto(params) {}
  * Enables asymmetrical encryption/decryption in the RSA.
  * 
  *     @example
- *     const Crypto = require('sf-core/crypto');
+ *     const Crypto = require('@smartface/native/crypto');
  *     let keyPair = Crypto.RSA.generateKeyPair({ keySize: 1024 });
  *     const publicKey = keyPair.publicKey;
  *     const privateKey = keyPair.privateKey;
@@ -79,7 +79,7 @@ Crypto.RSA.getExportedPublicKey = function() {}
  * Enables to encryption/decryption in the Advanced Encryption Standard (AES). 
  *
  *		@example
- *      import Crypto from 'sf-core/global/crypto';
+ *      import Crypto from '@smartface/native/global/crypto';
  *		let plainText = "Hello World!";
  *      let keyBase64 = Crypto.AES.generateKey(256);
  *      Crypto.AES.encryptGCMAsync({

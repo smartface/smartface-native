@@ -10,8 +10,8 @@ export = Menu;
  *
  *
  *     @example
- *     const Menu = require('sf-core/ui/menu');
- *     const MenuItem = require('sf-core/ui/menuitem');
+ *     const Menu = require('@smartface/native/ui/menu');
+ *     const MenuItem = require('@smartface/native/ui/menuitem');
  *     
  *     var menu = new Menu();
  *     menu.headerTitle = "My Menu Title";

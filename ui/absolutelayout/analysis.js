@@ -8,9 +8,9 @@ const ViewGroup = require('../viewgroup');
  * AbsoluteLayout is a layout that lets you specify the exact positions of its child views.
  *
  *     @example
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     const Label = require('sf-core/ui/label');
- *     const Color = require('sf-core/ui/color');
+ *     const AbsoluteLayout = require('@smartface/native/ui/absolutelayout');
+ *     const Label = require('@smartface/native/ui/label');
+ *     const Color = require('@smartface/native/ui/color');
  *
  *     var myAbsoluteLayout = new AbsoluteLayout({
  *         width: 400,

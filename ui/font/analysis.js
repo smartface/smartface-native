@@ -6,8 +6,8 @@
  * to UI objects holding text property (UI.Label, UI.Button etc).
  *
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('@smartface/native/ui/font');
+ *     const Label = require('@smartface/native/ui/label');
  *
  *     var myLabel = new Label();
  *     myLabel.text = "Bold_Italic Font";
@@ -52,8 +52,8 @@ Font.prototype.sizeOfString = function(string, maxWidth) {}
  * The actual name is same as named of font file in Android.
  *
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('@smartface/native/ui/font');
+ *     const Label = require('@smartface/native/ui/label');
  *     var myLabel = new Label({
  *         font: Font.create("Arial-ItalicMT", 16)
  *     });
@@ -74,8 +74,8 @@ Font.create = function(fontFamily, size, style) {}
  * Creates a font instance with the given file path and size.
  *
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('@smartface/native/ui/font');
+ *     const Label = require('@smartface/native/ui/label');
  *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16)
  *     });
@@ -96,7 +96,7 @@ Font.createFromFile = function(path, size) {}
  * Returns supported font names.
  *
  *     @example
- *     const Font = require('sf-core/ui/font');
+ *     const Font = require('@smartface/native/ui/font');
  *     var fontNames = Font.ios.allFontNames();
  *     for (var index in fontNames) {
  *         console.log(fontNames[index]);

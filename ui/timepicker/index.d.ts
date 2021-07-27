@@ -5,7 +5,7 @@
  * TimePicker is a dialog where users are able to select the time.
  *
  *     @example
- *     const TimePicker = require('sf-core/ui/timepicker');
+ *     const TimePicker = require('@smartface/native/ui/timepicker');
  *     var myTimePicker = new TimePicker();
  *     myTimePicker.onTimeSelected = function(time) {
  *         console.log('Hour: ' + time.hour + ' Minute: ' + time.minute);

@@ -8,7 +8,7 @@ const View = require('../view');
  * ActivityIndicator can be used to indicate a background task.
  *
  *     @example
- *     const ActivityIndicator = require('sf-core/ui/activityindicator');
+ *     const ActivityIndicator = require('@smartface/native/ui/activityindicator');
  *
  *     var myActivityIndicator = new ActivityIndicator({
  *         top: 100,
