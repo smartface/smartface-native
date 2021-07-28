@@ -13,8 +13,8 @@ const Share = {};
  * Shares a text.
  * 
  *     @example
- *     const Share = require('sf-core/share');
- *     Share.shareText("Hello from sf-core", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
+ *     const Share = require('@smartface/native/share');
+ *     Share.shareText("Hello from @smartface/native", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
  *
  * @method shareText
  * @param {String} text
@@ -31,8 +31,8 @@ Share.shareText = function (text, page, blacklist) { };
  * Shares an image.
  *
  *     @example
- *     const Share = require('sf-core/share');
- *     const Image = require('sf-core/ui/image');
+ *     const Share = require('@smartface/native/share');
+ *     const Image = require('@smartface/native/ui/image');
  *    
  *     var image = Image.createFromFile('path to the image');
  *     Share.shareImage(image, myPage, []);
@@ -52,8 +52,8 @@ Share.shareImage = function (image, page, blacklist) { };
  * Shares a file.
  * 
  *     @example
- *     const Share = require('sf-core/share');
- *     const File = require('sf-core/io/file');
+ *     const Share = require('@smartface/native/share');
+ *     const File = require('@smartface/native/io/file');
  *    
  *     var file = new File({path: 'path to the file'});
  *     Share.shareFile(file, myPage, []);
@@ -91,8 +91,8 @@ Share.shareContacts = function(params){};
  * Shares file, image & text.
  * 
  *     @example
- *     const Share = require('sf-core/share');
- *     const File = require('sf-core/io/file');
+ *     const Share = require('@smartface/native/share');
+ *     const File = require('@smartface/native/io/file');
  *    
  *     var myPage = this; // in page scope
  *     var file = new File({

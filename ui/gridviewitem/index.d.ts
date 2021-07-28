@@ -1,7 +1,5 @@
-import GridView from ".";
 import ViewGroup from "../viewgroup";
 
-export = GridViewItem;
 /**
  * @class UI.GridViewItem
  * @since 3.0.2
@@ -17,3 +15,5 @@ declare class GridViewItem extends ViewGroup {
   width: number;
   height: number;
 }
+
+export = GridViewItem;

@@ -2,8 +2,6 @@ import Image from "../../ui/image";
 import Blob from "../../global/blob";
 import File from "../../io/file";
 
-export = Http;
-
 type RequestOnload<T = {}> = (
 	e: {
 		statusCode: number;
@@ -45,7 +43,7 @@ type RequestParams = RequestParamsType<
  * http module allows sending http requests.
  * 
  *     @example
- *     const Http = require("sf-core/net/http");
+ *     const Http = require("@smartface/native/net/http");
  *     var http = new Http();
  *     http.request({
  *         'url':'YOUR_URL_HERE',
@@ -236,7 +234,7 @@ declare namespace Http {
  * Http Request CANNOT be initialized. Use http's request methods instead.
  * 
  *     @example
- *     const Http = require("sf-core/net/http");
+ *     const Http = require("@smartface/native/net/http");
  *
  *     var http = new Http();
  *     var myImageUrl = your-image-url;
@@ -256,3 +254,5 @@ declare namespace Http {
 		cancel: () => void;
 	}
 }
+
+export = Http;

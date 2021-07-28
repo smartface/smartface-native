@@ -11,10 +11,10 @@ import OverScrollMode from "../android/overscrollmode";
  * 
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const TabBarController = require('sf-core/ui/tabbarcontroller');
- *     const Color = require('sf-core/ui/color');
- *     const TabBarItem = require('sf-core/ui/tabbaritem');
- *     const Page = require('sf-core/ui/page');
+ *     const TabBarController = require('@smartface/native/ui/tabbarcontroller');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const TabBarItem = require('@smartface/native/ui/tabbaritem');
+ *     const Page = require('@smartface/native/ui/page');
  *     
  *     const backgroundColors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
  *     const SamplePage = extend(Page)(

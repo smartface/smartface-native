@@ -1,8 +1,6 @@
 import FloatingMenuItem from "./floatingMenuItem";
 import Image from "../image";
 import Color from "../color";
-
-export = FloatingMenu;
 declare class FloatingMenu extends NativeComponent {
   constructor(params?: any);
   yogaNode: any;
@@ -19,3 +17,5 @@ declare class FloatingMenu extends NativeComponent {
   close():void;
   static Item: FloatingMenuItem;
 }
+
+export = FloatingMenu;

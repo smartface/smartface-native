@@ -5,7 +5,7 @@
  * This class provides the functionality of a cryptographic cipher for encryption and decryption. Given key always present until delete method called. In Android, it uses built-in RSA Algorithm.
  * 
  *     @example
- *      const SecureData = require("sf-core/global/securedata");
+ *      const SecureData = require("@smartface/native/global/securedata");
  *      var secure = new SecureData({
  *          ios: {
  *              service: "com.myapp.serviceparameter"

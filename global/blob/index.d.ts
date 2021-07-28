@@ -1,4 +1,3 @@
-export = Blob;
 /**
  * @class Blob
  * @since 0.1
@@ -6,7 +5,7 @@ export = Blob;
  * Blob is a binary large object.
  * 
  *     @example
- *     const Blob = require('sf-core/blob');
+ *     const Blob = require('@smartface/native/blob');
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
@@ -89,3 +88,5 @@ declare class Blob {
  */
     static createFromUTF8String(utf8String: string):Blob;
 }
+
+export = Blob;

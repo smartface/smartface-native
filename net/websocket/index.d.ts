@@ -1,13 +1,12 @@
 import Blob from "../../global/blob";
 
-export = WebSocket;
 /**
  * 
  * WebSocket creates a web socket client. It connects to a WebSocket server and then sending 
  * and receiving data on the connection. {@link Net.WebSocket#url url}  parameter must be passed in constructor.
  * 
  *     @example
- *     const WebSocket = require("sf-core/net/websocket");
+ *     const WebSocket = require("@smartface/native/net/websocket");
  * 
  *     var myWebSocket = new WebSocket({url: "your-server-url"});
  *     myWebSocket.onOpen = function() {
@@ -91,3 +90,5 @@ declare class WebSocket extends NativeComponent {
      */
     onFailure(e: {code: number, message: string}): void;
 }
+
+export = WebSocket;

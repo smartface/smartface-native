@@ -10,7 +10,7 @@ import Pin from "./pin";
  * MapView is a view that shows Apple Maps on iOS and Google Maps on Android.
  *
  *     @example
- *     const MapView = require('sf-core/ui/mapview');
+ *     const MapView = require('@smartface/native/ui/mapview');
  *     var myMapView = new MapView({
  *         flexGrow: 1,
  *         alignSelf: FlexLayout.AlignSelf.STRETCH,
@@ -29,7 +29,7 @@ import Pin from "./pin";
  *                 subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
  *                 color: Color.RED,
  *                 onPress: function() {
- *                     const Application = require('sf-core/application');
+ *                     const Application = require('@smartface/native/application');
  *                     Application.call("geo:" + myPin.location.latitude + ',' + myPin.location.longitude, {
  *                         'hl': 'en',
  *                     });

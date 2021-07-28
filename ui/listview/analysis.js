@@ -7,12 +7,12 @@ const View = require('../view');
  * ListView is a View that displays given items as a one-column vertical list.
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
- *     const ListView = require('sf-core/ui/listview');
- *     const ListViewItem = require('sf-core/ui/listviewitem');
- *     const Label = require('sf-core/ui/label');
- *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const TextAlignment     = require("sf-core/ui/textalignment");
+ *     const Color = require('@smartface/native/ui/color');
+ *     const ListView = require('@smartface/native/ui/listview');
+ *     const ListViewItem = require('@smartface/native/ui/listviewitem');
+ *     const Label = require('@smartface/native/ui/label');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     const TextAlignment     = require("@smartface/native/ui/textalignment");
  *     
  *     var myDataSet = [
  *         {

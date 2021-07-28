@@ -4,8 +4,8 @@
  * Simple floating menu. Its position cannot be changed.
  *
  *     @example
- *     const FloatingMenu = require('sf-core/ui/floatingmenu');
- *     const Color = require("sf-core/ui/color");
+ *     const FloatingMenu = require('@smartface/native/ui/floatingmenu');
+ *     const Color = require("@smartface/native/ui/color");
  *     
  *     var items = [
  *       new FloatingMenu.Item({

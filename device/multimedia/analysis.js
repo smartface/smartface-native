@@ -7,10 +7,10 @@
  * Multimedia manages camera, video and image.
  * 
  *     @example
- *     const Page = require("sf-core/ui/page");
+ *     const Page = require("@smartface/native/ui/page");
  *     const extend = require("js-base/core/extend");
- *     const Button = require('sf-core/ui/button');
- *     const Multimedia = require("sf-core/device/multimedia");
+ *     const Button = require('@smartface/native/ui/button');
+ *     const Multimedia = require("@smartface/native/device/multimedia");
  *     
  *        var Page1 = extend(Page)(
  *            function(_super) {
@@ -161,11 +161,11 @@ Multimedia.recordVideo = function (params) { };
  * Allows pick item from gallery.
  * 
  *     @example
- *     const Image = require("sf-core/ui/image");
- *     const Multimedia = require("sf-core/device/multimedia");
- *     const Page = require("sf-core/ui/page");
+ *     const Image = require("@smartface/native/ui/image");
+ *     const Multimedia = require("@smartface/native/device/multimedia");
+ *     const Page = require("@smartface/native/ui/page");
  *     const extend = require("js-base/core/extend");
- *     const Button = require('sf-core/ui/button');
+ *     const Button = require('@smartface/native/ui/button');
  * 
  *     var Page1 = extend(Page)(
  *        function(_super) {

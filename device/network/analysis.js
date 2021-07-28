@@ -5,7 +5,7 @@
  * Device.Network provides several information about the network connections and adaptors on the device.
  * 
  *     @example
- *     const Network = require('sf-core/device/network');
+ *     const Network = require('@smartface/native/device/network');
  *     console.log("Device.Network.IMSI: "                + Network.IMSI);
  *     console.log("Device.Network.SMSEnabled: "          + Network.SMSEnabled); 
  *     console.log("Device.Network.bluetoothMacAddress: " + Network.bluetoothMacAddress); 
@@ -107,7 +107,7 @@ Network.connectionIP;
  * value could be missed when application is frozen. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
  * 
  *     @example
- *     const Network = require("sf-core/device/network");
+ *     const Network = require("@smartface/native/device/network");
  *     var notifier = new Network.createNotifier();
  * 
  *     notifier.subscribe(function(connectionType) {

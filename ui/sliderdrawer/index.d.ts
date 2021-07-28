@@ -12,10 +12,10 @@ import { IFlexLayout } from "../../primitive/iflexlayout";
  *
  *
  *     @example
- *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
- *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const Button = require('sf-core/ui/button');
- *     const Application = require('sf-core/application');
+ *     const SliderDrawer = require('@smartface/native/ui/sliderdrawer');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     const Button = require('@smartface/native/ui/button');
+ *     const Application = require('@smartface/native/application');
  *
  *     var mySliderDrawer = new SliderDrawer({
  *         width: 200

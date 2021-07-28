@@ -8,7 +8,7 @@ const View = require('../view');
  * MapView is a view that shows Apple Maps on iOS and Google Maps on Android.
  *
  *     @example
- *     const MapView = require('sf-core/ui/mapview');
+ *     const MapView = require('@smartface/native/ui/mapview');
  *     var myMapView = new MapView({
  *         flexGrow: 1,
  *         alignSelf: FlexLayout.AlignSelf.STRETCH,
@@ -27,7 +27,7 @@ const View = require('../view');
  *                 subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
  *                 color: Color.RED,
  *                 onPress: function() {
- *                     const Application = require('sf-core/application');
+ *                     const Application = require('@smartface/native/application');
  *                     Application.call("geo:" + myPin.location.latitude + ',' + myPin.location.longitude, {
  *                         'hl': 'en',
  *                     });
@@ -458,7 +458,7 @@ MapView.prototype.type = UI.MapView.Type.NORMAL;
  * Pin is placed on UI.MapView.
  *
  *     @example
- *     const MapView = require('sf-core/ui/mapview');
+ *     const MapView = require('@smartface/native/ui/mapview');
  *     var myPin = new MapView.Pin({
  *         location: {
  *             latitude: 40.9844753,
@@ -493,7 +493,7 @@ function Pin() {}
  * Pin location on the map. 
  *
  *     @example
- *     const MapView = require('sf-core/ui/mapview');
+ *     const MapView = require('@smartface/native/ui/mapview');
  *     var myPin = new MapView.Pin({
  *         location: {
  *             latitude: 40.9844753,

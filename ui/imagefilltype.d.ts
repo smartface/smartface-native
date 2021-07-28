@@ -1,2 +1,2 @@
-declare const _exports: any;
-export = _exports;
+import ImageView  from "./imageview";
+export = ImageView.FillType;

@@ -11,8 +11,8 @@ import View from "../view";
  *
  *
  *     @example
- *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const Color = require('sf-core/ui/color');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     const Color = require('@smartface/native/ui/color');
  *
  *     var flex = new FlexLayout();
  *     flex.flexGrow = 1;

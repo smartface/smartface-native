@@ -6,8 +6,8 @@
  * GifImageView is simply an gifimage container where UI.GifImage is displayed inside.
  * 
  *     @example
- *     const GifImage = require('sf-core/ui/gifimage');
- *     const GifImageView = require('sf-core/ui/gifimageview');
+ *     const GifImage = require('@smartface/native/ui/gifimage');
+ *     const GifImageView = require('@smartface/native/ui/gifimageview');
  *     
  *     var myGifImage = GifImage.createFromFile("assets://smartface.gif")
  *     var myGifImageView = new GifImageView({

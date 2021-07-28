@@ -7,8 +7,8 @@
  * A button instance consists of text or an icon(or both of them).
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
- *     const Button = require('sf-core/ui/button');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const Button = require('@smartface/native/ui/button');
  *     var myButton = new Button({
  *         width: 100,
  *         height: 80,
@@ -40,8 +40,8 @@ Button.prototype.text = "";
  * It is set to null by default.
  *
  *     @example
- *     const Button = require('sf-core/ui/button');
- *     const Font = require('sf-core/ui/font');
+ *     const Button = require('@smartface/native/ui/button');
+ *     const Font = require('@smartface/native/ui/font');
  *     var myButton = new Button({
  *         text: "Click me!"
  *     });
@@ -69,8 +69,8 @@ Button.prototype.textColor = UI.Color.BLACK;
  * can be used.
  *
  *     @example
- *     const Button = require('sf-core/ui/button');
- *     const TextAlignment = require('sf-core/ui/textalignment');
+ *     const Button = require('@smartface/native/ui/button');
+ *     const TextAlignment = require('@smartface/native/ui/textalignment');
  *     var myButton = new Button();
  *     myButton.textAlignment = TextAlignment.MIDCENTER;
  * 
@@ -85,7 +85,7 @@ Button.prototype.textAlignment = UI.TextAlignment.MIDCENTER;
  * Enables/disables the Button.
  *
  *     @example
- *     const Button = require('sf-core/ui/button');
+ *     const Button = require('@smartface/native/ui/button');
  *     var myButton = new Button();
  *     myButton.enabled = false;
  *
@@ -100,8 +100,8 @@ Button.prototype.enabled = true;
  * Gets/sets background image of a Button.
  *
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const Button = require('sf-core/ui/button');
+ *     const Image = require('@smartface/native/ui/image');
+ *     const Button = require('@smartface/native/ui/button');
  *     var myButton = new Button();
  *     myButton.backgroundImage = {
  *         normal: Image.createFromFile("images://normal.png"),
@@ -131,8 +131,8 @@ Button.prototype.backgroundImage = {};
  * an object that contains colors depending on the state of the button.
  *
  *     @example
- *     const Button = require('sf-core/ui/button');
- *     const Color = require('sf-core/ui/color');
+ *     const Button = require('@smartface/native/ui/button');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myButton = new Button();
  * 
  *     // background color of the button

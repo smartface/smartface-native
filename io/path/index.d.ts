@@ -1,4 +1,3 @@
-export = Path;
 /**
  * @class IO.Path
  * @since 0.1
@@ -6,8 +5,8 @@ export = Path;
  * Path allows you to use Smartface URI scheme and operation system common paths.
  * 
  *     @example
- *     const File = require('sf-core/io/file');
- *     const Path = require('sf-core/io/path');
+ *     const File = require('@smartface/native/io/file');
+ *     const Path = require('@smartface/native/io/path');
  * 
  *     var myImage = new File({
  *         path: Path.ImagesUriScheme + 'smartface.png'
@@ -94,3 +93,5 @@ declare namespace Path {
 		RAU_DRAWABLE = 6
 	}
 }
+
+export = Path;

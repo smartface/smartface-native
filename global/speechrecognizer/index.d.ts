@@ -9,11 +9,11 @@ export = SpeechRecognizer;
  * SpeechRecognizer class provides access to the speech recognition service.
  * 
  *     @example
- *     const TextArea = require('sf-core/ui/textarea');
- *     const SpeechRecognizer = require("sf-core/speechrecognizer");
- *     const Application = require("sf-core/application");
- *     const Button = require('sf-core/ui/button');
- *     const System = require('sf-core/device/system');
+ *     const TextArea = require('@smartface/native/ui/textarea');
+ *     const SpeechRecognizer = require("@smartface/native/speechrecognizer");
+ *     const Application = require("@smartface/native/application");
+ *     const Button = require('@smartface/native/ui/button');
+ *     const System = require('@smartface/native/device/system');
  *     var myButton = new Button({
  *         height: 100,
  *         text: "Start Recording"

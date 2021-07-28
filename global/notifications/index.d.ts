@@ -1,13 +1,12 @@
 import Color from "../../ui/color";
 
-export = Notifications;
 /**
  * @class Notifications
  *
  * Notification is a message belongs to an application.
  *
  *     @example
- *     const Notifications = require("sf-core/notifications");
+ *     const Notifications = require("@smartface/native/notifications");
  *     Notifications.registerForPushNotifications(function(e){
  *         console.log("Successfully registered. The token is: " + e.token);
  *     },function(){
@@ -203,7 +202,7 @@ declare namespace Notifications {
 	 *
 	 *
 	 *     @example
-	 *     const Notifications = require("sf-core/notifications");
+	 *     const Notifications = require("@smartface/native/notifications");
 	 *     var notification = new Notifications.LocalNotification();
 	 *     notification.alertAction = "Notification alertAction";
 	 *     notification.alertBody = "Notification alertBody";
@@ -544,3 +543,5 @@ declare namespace Notifications {
 		}
 	}
 }
+
+export = Notifications;

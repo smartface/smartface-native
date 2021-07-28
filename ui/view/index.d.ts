@@ -3,7 +3,6 @@ import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
 
-export = View;
 /**
  * @class UI.View
  * @since 0.1
@@ -12,8 +11,8 @@ export = View;
  * for event handling. View is the base of all UI classes.
  *
  *     @example
- *     const View = require('sf-core/ui/view');
- *     const Color = require('sf-core/ui/color');
+ *     const View = require('@smartface/native/ui/view');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myView = new View();
  *     myView.width = 300;
  *     myView.height = 500;
@@ -504,8 +503,8 @@ declare class View extends NativeComponent {
 	 * Gets the parent view of a view.
 	 *
 	 *     @example
-	 *     const FlexLayout = require('sf-core/ui/flexlayout');
-	 *     const Label = require('sf-core/ui/label');
+	 *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+	 *     const Label = require('@smartface/native/ui/label');
 	 *
 	 *     var myFlexLayout = new FlexLayout();
 	 *     myFlexLayout.id = 5432;
@@ -805,3 +804,5 @@ declare namespace View {
 		}
 	}
 }
+
+export = View;

@@ -10,7 +10,7 @@ const Android = {};
  * According to operating system button appearance or positions may change.
  *
  *     @example
- *     const AlertView = require('sf-core/ui/alertview');
+ *     const AlertView = require('@smartface/native/ui/alertview');
  *
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",
@@ -69,7 +69,7 @@ ButtonType.NEGATIVE = 2;
  * According to operating system button appearance or positions may change.
  *
  *     @example
- *     const AlertView = require('sf-core/ui/alertview');
+ *     const AlertView = require('@smartface/native/ui/alertview');
  *
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",
@@ -128,7 +128,7 @@ Android.ButtonType.NEGATIVE = 2;
  * has buttons with callbacks that you can take action for each of them separately.
  *
  *     @example
- *     const AlertView = require('sf-core/ui/alertview');
+ *     const AlertView = require('@smartface/native/ui/alertview');
  *
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",

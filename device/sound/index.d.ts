@@ -1,7 +1,7 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
 
-export = Sound;/**
+/**
  * @class Device.Sound
  * @since 0.1
  * @android
@@ -10,7 +10,7 @@ export = Sound;/**
  * Controls sound files.
  * 
  *     @example
- *     const Sound = require("sf-core/device/sound");
+ *     const Sound = require("@smartface/native/device/sound");
  *     var mySound = new Sound();
  *     mySound.onReady = function() {
  *         mySound.play();
@@ -153,7 +153,7 @@ declare namespace Sound {
  * Picks a sound on the device.
  * 
  *     @example
- *     const Sound = require("sf-core/device/sound");
+ *     const Sound = require("@smartface/native/device/sound");
  *     Sound.android.pick({onSuccess: soundPicked});
  * 
  *     function soundPicked(e) {
@@ -178,3 +178,5 @@ declare namespace Sound {
     ) => void | undefined;
   }
 }
+
+export = Sound;

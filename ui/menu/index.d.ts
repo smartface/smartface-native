@@ -1,7 +1,6 @@
 import MenuItem from "../menuitem";
 import Page from "../page";
 
-export = Menu;
 /**
  * @class UI.Menu
  * @since 0.1
@@ -10,8 +9,8 @@ export = Menu;
  *
  *
  *     @example
- *     const Menu = require('sf-core/ui/menu');
- *     const MenuItem = require('sf-core/ui/menuitem');
+ *     const Menu = require('@smartface/native/ui/menu');
+ *     const MenuItem = require('@smartface/native/ui/menuitem');
  *     
  *     var menu = new Menu();
  *     menu.headerTitle = "My Menu Title";
@@ -62,3 +61,5 @@ declare class Menu {
  */
   show(page: Page):void;
 }
+
+export = Menu;

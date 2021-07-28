@@ -6,7 +6,6 @@ import HeaderBarItem from "../headerbaritem";
 import Page from "../page";
 import Image from "../image";
 
-export = HeaderBar;
 /**
  * @class UI.HeaderBar
  *
@@ -24,9 +23,9 @@ export = HeaderBar;
  * behaviour of the {@link UI.StatusBar}.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Color = require('sf-core/ui/color');
- *     const HeaderBarItem = require('sf-core/ui/headerbaritem');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Color = require('@smartface/native/ui/color');
+ *     const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
  *
  *     var myPage = new Page({
  *         onLoad: function() {
@@ -101,8 +100,8 @@ type HeaderBar = {
  * background color depending on device's OS and OS version. For iOS, you should access this property from page.parentController.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Color = require('sf-core/ui/color');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myPage = new Page({
  *         onLoad: function() {
  *             var page = this;
@@ -121,8 +120,8 @@ type HeaderBar = {
  * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Color = require('sf-core/ui/color');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Color = require('@smartface/native/ui/color');
  *     var myPage = new Page({
  *         onLoad: function() {
  *             var page = this;
@@ -141,8 +140,8 @@ type HeaderBar = {
  * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Image = require('sf-core/ui/image');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Image = require('@smartface/native/ui/image');
  *     var myPage = new Page({
  *         onLoad: function() {
  *             var page = this;
@@ -180,8 +179,8 @@ type HeaderBar = {
  * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
  * 
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Font = require("sf-core/ui/font");
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Font = require("@smartface/native/ui/font");
  *     var myPage = new Page({
  *         onLoad: function() {
  *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
@@ -279,8 +278,8 @@ type HeaderBar = {
  * Sets left item of header bar to given item.
  *
  *     @example
- *      const Page = require('sf-core/ui/page');
- *      const HeaderBarItem = require('sf-core/ui/headerbaritem');
+ *      const Page = require('@smartface/native/ui/page');
+ *      const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
  *      var myPage = new Page();
  *      myPage.onLoad = function(e){
  *          var leftItem = new HeaderBarItem();
@@ -300,8 +299,8 @@ type HeaderBar = {
  * This property will work only for Android.
  * 
  *     @example
- *     const Page = require('sf-core/ui/page');
- *     const Image = require('sf-core/ui/image');
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Image = require('@smartface/native/ui/image');
  *     var myPage = new Page();
  *     var myImage = Image.createFromFile('images://icon.png');
  *     myPage.headerBar.android.logoEnabled = true;
@@ -326,7 +325,7 @@ type HeaderBar = {
  * This property will work only for Android.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage = new Page();
  *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
  *
@@ -340,7 +339,7 @@ type HeaderBar = {
  * Gets/sets elevation of the header bar.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage = new Page();
  *     myPage.headerBar.android.elevation = 10;
  *
@@ -361,8 +360,8 @@ type HeaderBar = {
  * This property will work only for iOS.
  *
  *     @example
- *      const HeaderBarItem = require('sf-core/ui/headerbaritem');
- *     const Page = require('sf-core/ui/page');
+ *      const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
+ *     const Page = require('@smartface/native/ui/page');
  *
  *     var myPage = new Page();
  *     var backBarButtonItem = new HeaderBarItem({
@@ -381,7 +380,7 @@ type HeaderBar = {
  * If "prefersLargeTitles" property of navigator is false, this property has no effect and title will display as small title.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('@smartface/native/ui/page');
  *     var myPage = new Page();
  *     myPage.headerBar.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.ALWAYS;
  *
@@ -393,3 +392,4 @@ type HeaderBar = {
   }
 };
 
+export = HeaderBar;

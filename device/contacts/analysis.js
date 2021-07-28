@@ -5,8 +5,8 @@
  * This class allows user to add a contact to contact list or to select a contact from list.
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
- *     const Application = require("sf-core/application"); 
+ *     const Contacts = require("@smartface/native/device/contacts");
+ *     const Application = require("@smartface/native/application"); 
  * 
  *     const READ_CONTACTS_CODE = 1002;
  *     Application.android.requestPermissions(READ_CONTACTS_CODE, Application.Android.Permissions.READ_CONTACTS);
@@ -30,7 +30,7 @@ const Contacts  = function() {}
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  * 
  *          let myContact = new Contacts.Contact({
  *              firstName: 'Smartface',
@@ -73,7 +73,7 @@ Contacts.add = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  *     Contacts.pick({
  *         page : myPage,
  *         onSuccess : function(contact){
@@ -107,7 +107,7 @@ Contacts.pick = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  *     Contacts.pickContact({
  *         page : myPage,
  *         onSuccess : function(contact){
@@ -136,7 +136,7 @@ Contacts.pickContact = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  *     Contacts.getAll({
  *         onSuccess : function(contacts){
  *             var count = contacts.length;
@@ -169,7 +169,7 @@ Contacts.getAll = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  *     Contacts.fetchAll({
  *         onSuccess : function(contacts){
  *             console.log("Contacts object : " , contacts);
@@ -197,7 +197,7 @@ Contacts.fetchAll = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("sf-core/device/contacts");
+ *     const Contacts = require("@smartface/native/device/contacts");
  *     Contacts.getContactsByPhoneNumber("5555555555",{
  *         onSuccess : function(contacts){
  *             console.log("Successfully found ", contacts);

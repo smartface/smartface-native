@@ -1,7 +1,6 @@
 import Color from "../color";
 import Image from "../image";
 
-export = FloatingMenuItem;
 declare function FloatingMenuItem(params: any): void;
 declare class FloatingMenuItem {
   title: string;
@@ -10,3 +9,5 @@ declare class FloatingMenuItem {
   color: Color;
   onClick: () => void;
 }
+
+export = FloatingMenuItem;

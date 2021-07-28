@@ -7,7 +7,7 @@ import View from "../../ui/view";
  * LiveMediaPublisher is a live streaming player. It is used for audio and video playback in RTMP/RTMPT/RTSP/HTTP/TCP/UDP/FILE format.
  * 
  *     @example
- *     const LiveMediaPlayer = require('sf-core/ui/livemediaplayer');
+ *     const LiveMediaPlayer = require('@smartface/native/ui/livemediaplayer');
  *
  *     let liveMediaPlayer = new LiveMediaPlayer({
  *         flexGrow: 1,

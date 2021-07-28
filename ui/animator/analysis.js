@@ -5,12 +5,12 @@
  * Animator is used to change the appearance of the UI objects with animation.
  *
  *     @example
- *     const Color      = require('sf-core/ui/color');
- *     const View       = require('sf-core/ui/view');
- *     const System     = require('sf-core/device/system');
- *     const Button     = require('sf-core/ui/button');
- *     const Animator   = require('sf-core/ui/animator');
- *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Color      = require('@smartface/native/ui/color');
+ *     const View       = require('@smartface/native/ui/view');
+ *     const System     = require('@smartface/native/device/system');
+ *     const Button     = require('@smartface/native/ui/button');
+ *     const Animator   = require('@smartface/native/ui/animator');
+ *     const FlexLayout = require('@smartface/native/ui/flexlayout');
  * 
  *     var myView = new View({
  *         left: 10, top: 10, right: 10, height: 100,

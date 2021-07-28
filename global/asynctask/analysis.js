@@ -4,7 +4,7 @@
  * AsyncTask enables proper and easy use of concurrency to improve speed and performance.
  *
  *     @example
- *     const AsyncTask = require("sf-core/asynctask");
+ *     const AsyncTask = require("@smartface/native/asynctask");
  *     var asynctask = new AsyncTask();
  *     asynctask.task = function () {
  *         // do something

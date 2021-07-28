@@ -1,4 +1,3 @@
-export = Timer;
 /**
  * @class Timer
  * @since 0.1
@@ -6,8 +5,8 @@ export = Timer;
  * Timer allows you to create, start and clear timers.
  * 
  *     @example
- *     const Button = require("sf-core/ui/button")
- *     const Timer = require("sf-core/timer");
+ *     const Button = require("@smartface/native/ui/button")
+ *     const Timer = require("@smartface/native/timer");
  *     var myButton = new Button({
  *         onPress: setTimer
  *     });
@@ -19,7 +18,7 @@ export = Timer;
  *         });
  *     }
  * 
- *     const Color = require("sf-core/ui/color");
+ *     const Color = require("@smartface/native/ui/color");
  *     function changeBackgroundColor() {
  *         myButton.backgroundColor = Color.RED;
  *     }
@@ -73,3 +72,5 @@ declare class Timer extends NativeComponent {
  */
   static clearAllTimer(timer: Timer):void;
 }
+
+export = Timer;

@@ -2,17 +2,16 @@ import File from "../../io/file";
 import Blob from "../../global/blob";
 import Page from "../page";
 
-export = EmailComposer;
 /**
  * @class UI.EmailComposer
  * @since 3.0.3
  * A standard interface for managing, editing, and sending an email message. When email composer is dismiss, page's onShow will be triggered.
  *     
  *     @example
- *     const File = require('sf-core/io/file');
- *     const FileStream = require('sf-core/io/filestream');
- *     const EmailComposer = require('sf-core/ui/emailcomposer');
- *     const System = require('sf-core/device/system');
+ *     const File = require('@smartface/native/io/file');
+ *     const FileStream = require('@smartface/native/io/filestream');
+ *     const EmailComposer = require('@smartface/native/ui/emailcomposer');
+ *     const System = require('@smartface/native/device/system');
  *              
  *     if (EmailComposer.canSendMail()) {
  *         var emailcomposer = new EmailComposer();
@@ -146,3 +145,5 @@ declare class EmailComposer {
  */
 	canSendMail(): boolean;
 }
+
+export = EmailComposer;

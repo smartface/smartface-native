@@ -14,8 +14,8 @@
  * supported with the usage of password.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
- *     const KeyboardType = require('sf-core/ui/keyboardtype');
+ *     const TextBox = require('@smartface/native/ui/textbox');
+ *     const KeyboardType = require('@smartface/native/ui/keyboardtype');
  *     var myTextBox = new TextBox({
  *         height: 75, 
  *         width: 100,

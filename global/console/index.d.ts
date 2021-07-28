@@ -1,4 +1,3 @@
-export = console;
 /**
  * @class console
  * @since 0.1
@@ -9,7 +8,7 @@ export = console;
  * 
  * 
  *     @example
- *     const Hardware = require('sf-core/device/hardware');
+ *     const Hardware = require('@smartface/native/device/hardware');
  * 
  *     console.info("Device.Hardware.IMEI: ", Hardware.android.IMEI);
  *     console.error("Uncaught Exception!");
@@ -28,7 +27,7 @@ declare const console : {
  *     // multiple parameter
  *     console.log(number, text);
  * 
- *     const Label = require('sf-core/ui/label');
+ *     const Label = require('@smartface/native/ui/label');
  *     var myLabel = new Label({
  *         text: "This is my label"
  *     }); 
@@ -112,3 +111,5 @@ declare const console : {
  */
   timeEnd: (key: string) => void;
 }
+
+export = console;
