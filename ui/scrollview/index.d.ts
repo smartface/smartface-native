@@ -102,33 +102,6 @@ declare class ScrollView extends ViewGroup implements IFlexLayout {
 	 */
 	autoSizeEnabled: boolean;
 	/**
-	 * This function adds a child view to a viewgroup.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @param {UI.View} view The child view to add.
-	 * @android
-	 * @ios
-	 * @method addChild
-	 * @since 0.1
-	 */
-	addChild(view: View): void;
-	/**
-	 * Finds a child view with specified id within the layout.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @param {Number} id The specified id of the view.
-	 * @returns {UI.View} Founded view within the layout, or null if view does not exists within the layout.
-	 * @method findChildById
-	 * @android
-	 * @ios
-	 * @since 0.1
-	 */
-	findChildById(id: string): View;
-	/**
 	 * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
 	 *
 	 * @property {Boolean} [scrollEnabled = true]
@@ -153,44 +126,6 @@ declare class ScrollView extends ViewGroup implements IFlexLayout {
 	 */
 	contentInsetAdjustmentBehavior: ContentInsetAdjustment;
 	/**
-	 * Gets the count of children in a viewgroup.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @returns {Number} The number of children in the layout, or 0 if there is no child exists within the layout.
-	 * @method getChildCount
-	 * @android
-	 * @ios
-	 * @since 0.1
-	 */
-	getChildCount(): number;
-	/**
-	 * Removes all child views from viewgroup.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @method removeAll
-	 * @android
-	 * @ios
-	 * @since 0.1
-	 */
-	removeAll(): void;
-	/**
-	 * Remove a child view from viewgroup.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @param {UI.View} view The child view to remove.
-	 * @android
-	 * @ios
-	 * @method removeChild
-	 * @since 0.1
-	 */
-	removeChild(view: View): void;
-	/**
 	 * Immediately scrolls to the edge set.
 	 *
 	 * @method scrollToEdge
@@ -211,31 +146,7 @@ declare class ScrollView extends ViewGroup implements IFlexLayout {
 	 * @since 0.1
 	 */
 	scrollToCoordinate(coordinate: number): void;
-	/**
-	 * This event is called when a view added to this view's hierarchy.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @event onViewAdded
-	 * @android
-	 * @ios
-	 * @since 1.1.8
-	 */
-	onViewAdded: () => void;
-
-	/**
-	 * This event is called when a view removed from this view's hierarchy.
-	 *
-	 * @deprecated 1.1.10
-	 * Use {@link UI.ScrollView#layout} property instead
-	 *
-	 * @event onViewRemoved
-	 * @android
-	 * @ios
-	 * @since 1.1.8
-	 */
-	onViewRemoved: () => void;
+	
 	/**
 	 * This event is called when a ScrollView is scrolled.
 	 * For better performance, don't set any callback if does not
