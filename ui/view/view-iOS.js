@@ -3,11 +3,13 @@ const Exception = require("../../util").Exception;
 const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
+const { EventEmitter } = require("../../core/eventemitter");
+const EventEmitterMixin = require("../../core/eventemitter/mixin");
 
 function View(params) {
 
     var self = this;
-
+    self.emitter = new EventEmitter();
     self.android = {};
     self.ios = {};
 
@@ -1288,6 +1290,7 @@ function View(params) {
 
 }
 
+View.prototype = Object.assign({}, EventEmitterMixin);
 
 View.ios = {};
 
