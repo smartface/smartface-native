@@ -26,10 +26,10 @@ EventEmitter.prototype.off = function (eventName, callback) {
 /**
  * Triggers the event manually.
  * @param {string} event
- * @param {Array<*>} detail - Array of arguments that needs to be passed down
+ * @param {Array<*>} args - Array of arguments that needs to be passed down
  */
-EventEmitter.prototype.emit = function (event, detail = []) {
-    this.emitter.trigger(event, detail);
+EventEmitter.prototype.emit = function (event, ...args) {
+    this.emitter.trigger(event, args);
 }
 
 module.exports = {

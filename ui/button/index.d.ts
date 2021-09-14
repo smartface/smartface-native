@@ -5,6 +5,7 @@ import TextAlignment from "../textalignment";
 import Image from "../image";
 import { IButton } from "./ibutton";
 import View from "../view";
+import IButtonEvents from "./events";
 
 declare class Button extends View  implements IButton {
   constructor(parameters?: Optional<IButton>);
@@ -18,6 +19,7 @@ declare class Button extends View  implements IButton {
   flexGrow: number;
   onPress: () => void;
   onLongPress: () => void;
+  static Events: IButtonEvents
 }
 
 export = Button;

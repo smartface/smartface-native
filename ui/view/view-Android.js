@@ -14,6 +14,7 @@ const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.
 const rippleSuperView = require("./ripple");
 const { EventEmitter } = require("../../core/eventemitter");
 const EventEmitterMixin = require("../../core/eventemitter/mixin");
+const Events = require('./events');
 const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
 function PixelToDp(px) {
@@ -505,6 +506,45 @@ Object.assign(properties, EventEmitterMixin);
 
 View.prototype = properties;
 
+const EventFunctions = {
+  [Events.Touch]: function () {
+    const onTouchHandler = function (e) {
+      console.info('onTouchHandler: ', e);
+      this.setTouchHandlers();
+      this.emitter.emit(Events.Touch, { ...e });
+      return true;
+    };
+    // this._onTouch = onTouchHandler.bind(this);
+    // console.info('there', { x, y });
+    // let result;
+    // const mEvent = { x, y };
+    // this._onTouch && (result = this._onTouch(mEvent));
+    // this.emitter.emit(Events.Touch, mEvent);
+    // return !(result === false);
+  },
+  [Events.TouchCancelled]: function () {
+    let result;
+    const mEvent = { x, y };
+    this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
+    this.emitter.emit(Events.TouchCancelled, mEvent);
+    return (result === true);
+  },
+  [Events.TouchEnded]: function () {
+    let result;
+    const mEvent = { x, y, isInside };
+    this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
+    this.emitter.emit(Events.TouchEnded, mEvent);
+    return (result === true);
+  },
+  [Events.TouchMoved]: function () {
+    let result;
+    const mEvent = { x, y, isInside };
+    this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
+    this.emitter.emit(Events.TouchMoved, mEvent);
+    return (result === true);
+  }
+};
+
 function View(params) {
   params = params || {};
   this.ios = {};
@@ -734,6 +774,19 @@ function View(params) {
     }
   });
 
+  Object.defineProperty(this, 'on', {
+    value: (event, callback) => {
+      try {
+        const eventFunction = EventFunctions[event].bind(this);
+        const func = eventFunction ? eventFunction : callback;
+        this.emitter.on(event, func);
+      } catch (error) {
+        console.error('on-err: ', error);
+      }
+
+    }
+  });
+
   this.didSetTouchHandler = false;
   this.isCloned = false;
   this._touchEnabled = true;
@@ -819,6 +872,8 @@ View.prototype._setMaskedBorders = function (bitwiseBorders) {
   }
   return borderRadiuses;
 };
+
+View.Events = Events;
 
 View.Border = {
   TOP_LEFT: 1 << 0,

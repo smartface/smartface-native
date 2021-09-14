@@ -2,6 +2,7 @@ const View = require("../../ui/view");
 const Color = require("../../ui/color");
 const Image = require("../../ui/image");
 const UIControlEvents = require("../../util").UIControlEvents;
+const Events = require('./events');
 
 const ButtonState = {
     normal: 0,
@@ -26,10 +27,10 @@ function Button(params) {
     // self.nativeObject.setBackgroundColor(Color.create("#00A1F1").nativeObject,ButtonState.normal);
 
     Object.defineProperty(self, 'enabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.setEnabled;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.setEnabled = value;
         },
         enumerable: true
@@ -37,10 +38,10 @@ function Button(params) {
 
     var _text;
     Object.defineProperty(self, 'text', {
-        get: function() {
+        get: function () {
             return _text;
         },
-        set: function(value) {
+        set: function (value) {
             _text = value;
             self.nativeObject.setTitle(value, ButtonState.normal);
         },
@@ -48,10 +49,10 @@ function Button(params) {
     });
 
     Object.defineProperty(self, 'textAlignment', {
-        get: function() {
+        get: function () {
             return self.nativeObject.textAlignmentNumber;
         },
-        set: function(value) {
+        set: function (value) {
             var vertical;
             if (parseInt(value / 3) === 0) {
                 vertical = 1;
@@ -85,10 +86,10 @@ function Button(params) {
     };
 
     Object.defineProperty(this, 'textColor', {
-        get: function() {
+        get: function () {
             return textColorsInitial;
         },
-        set: function(textColor) {
+        set: function (textColor) {
             textColorsInitial = textColor;
             if (textColor.constructor.name !== "Object") {
                 self.nativeObject.setTitleColor(textColor.nativeObject, ButtonState.normal);
@@ -123,10 +124,10 @@ function Button(params) {
     };
 
     Object.defineProperty(this, 'backgroundColor', {
-        get: function() {
+        get: function () {
             return backgroundColorsInitial;
         },
-        set: function(bgColors) {
+        set: function (bgColors) {
             backgroundColorsInitial = bgColors;
             if (bgColors.constructor.name !== "Object") {
                 checkAndSetBackground(backgroundColorsInitial, ButtonState.normal);
@@ -157,7 +158,7 @@ function Button(params) {
         if (background.nativeObject.constructor.name === "CAGradientLayer") {
             if (Object.keys(self.gradientColorObject).length == 0) {
                 self.nativeObject.addFrameObserver();
-                self.nativeObject.frameObserveHandler = function(e) {
+                self.nativeObject.frameObserveHandler = function (e) {
                     if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0) {
                         return;
                     }
@@ -194,10 +195,10 @@ function Button(params) {
 
     var backgroundImagesInitial = {};
     Object.defineProperty(this, 'backgroundImage', {
-        get: function() {
+        get: function () {
             return backgroundImagesInitial;
         },
-        set: function(bgImages) {
+        set: function (bgImages) {
             backgroundImagesInitial = bgImages;
 
             if (bgImages.constructor.name !== "Object") {
@@ -220,10 +221,10 @@ function Button(params) {
 
     var _onPressFunc;
     Object.defineProperty(self, 'onPress', {
-        get: function() {
+        get: function () {
             return _onPressFunc;
         },
-        set: function(value) {
+        set: function (value) {
             _onPressFunc = value;
             self.nativeObject.addJSTarget(value.bind(self), UIControlEvents.touchUpInside);
         },
@@ -231,11 +232,11 @@ function Button(params) {
     });
 
     Object.defineProperty(self, 'font', {
-        get: function() {
+        get: function () {
 
             return self.nativeObject.titleLabel.font;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.titleLabel.font = value;
         },
         enumerable: true
@@ -248,5 +249,11 @@ function Button(params) {
         }
     }
 }
+
+Button.Events = Events;
+console.info('events1: ', Button.Events);
+
+Button.prototype.Events = Events;
+console.info('events2: ', Button.prototype.Events);
 
 module.exports = Button;
