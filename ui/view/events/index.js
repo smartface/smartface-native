@@ -1,8 +1,11 @@
-class ViewEvents {
-  static Touch = 'touch';
-  static TouchCancelled = 'touchCancelled';
-  static TouchEnded = 'touchEnded';
-  static TouchMoved = 'touchMoved';
-}
+var ViewEvents = (function () {
+  function ViewEvents() {
+  }
+  ViewEvents.Touch = 'touch';
+  ViewEvents.TouchCancelled = 'touchCancelled';
+  ViewEvents.TouchEnded = 'touchEnded';
+  ViewEvents.TouchMoved = 'touchMoved';
+  return ViewEvents;
+}());
 
 module.exports = ViewEvents;

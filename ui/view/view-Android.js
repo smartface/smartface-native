@@ -508,19 +508,37 @@ View.prototype = properties;
 
 const EventFunctions = {
   [Events.Touch]: function () {
-    const onTouchHandler = function (e) {
-      console.info('onTouchHandler: ', e);
-      this.setTouchHandlers();
-      this.emitter.emit(Events.Touch, { ...e });
-      return true;
+    const onTouchHandler = function(options) {
+      console.info('onTouchHAndler', options);
+      console.info(Events.Touch);
+      this.emitter.emit(Events.Touch, options);
+      // return callback.call(this);
     };
-    // this._onTouch = onTouchHandler.bind(this);
-    // console.info('there', { x, y });
-    // let result;
-    // const mEvent = { x, y };
-    // this._onTouch && (result = this._onTouch(mEvent));
-    // this.emitter.emit(Events.Touch, mEvent);
-    // return !(result === false);
+    this._onTouch = onTouchHandler.bind(this);
+    this.setTouchHandlers();
+    // const result = typeof this._onTouch === 'function' && this._onTouch.call(this);
+    // return !!result;
+    /**
+     *
+     * 'onTouch': function (x, y) {
+          let result, mEvent = {
+            x,
+            y
+          };
+          this._onTouch && (result = this._onTouch(mEvent));
+          return !(result === false);
+        }.bind(this),
+        ---
+        this.view1.onTouch = () => {
+          //blablabla
+          return true;
+        }
+        ---
+        this.view1.on('touch', () => {
+          //blablabal
+          return true;
+        })
+     */
   },
   [Events.TouchCancelled]: function () {
     let result;
@@ -776,14 +794,8 @@ function View(params) {
 
   Object.defineProperty(this, 'on', {
     value: (event, callback) => {
-      try {
-        const eventFunction = EventFunctions[event].bind(this);
-        const func = eventFunction ? eventFunction : callback;
-        this.emitter.on(event, func);
-      } catch (error) {
-        console.error('on-err: ', error);
-      }
-
+      EventFunctions[event].call(this);
+      this.emitter.on(event, callback);
     }
   });
 

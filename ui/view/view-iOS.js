@@ -492,9 +492,8 @@ function View(params) {
 
     Object.defineProperty(self, 'on', {
         value: (event, callback) => {
-            const eventFunction = EventFunctions[event].call(self);
-            const func = eventFunction ? eventFunction : callback;
-            self.emitter.on(event, func);
+            EventFunctions[event].call(self);
+            self.emitter.on(event, callback);
         }
     });
 

@@ -1,8 +1,8 @@
-declare interface IViewEvents {
-  Touch: 'touch';
-  TouchCancelled: 'touchCancelled';
-  TouchEnded: 'touchEnded';
-  TouchMoved: 'touchMoved';
+declare class IViewEvents {
+  static Touch: string;
+  static TouchCancelled: string;
+  static TouchEnded: string;
+  static TouchMoved: string;
 }
 
 export = IViewEvents;
