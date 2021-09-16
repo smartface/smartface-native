@@ -15,7 +15,6 @@ const ALARM_SERVICE = "alarm";
 const ALARM_MANAGER = "android.app.AlarmManager";
 
 var selectedNotificationIds = [];
-var senderID = null;
 
 function Notifications() { }
 
@@ -288,7 +287,7 @@ Object.defineProperties(Notifications, {
     'registerForPushNotifications': {
         value: function (onSuccess, onFailure) {
             if (!AndroidConfig.isEmulator) {
-            registerPushNotification(onSuccess, onFailure);
+                registerPushNotification(onSuccess, onFailure);
             } else {
                 onFailure && onFailure();
             }
@@ -298,7 +297,7 @@ Object.defineProperties(Notifications, {
     'unregisterForPushNotifications': {
         value: function () {
             if (!AndroidConfig.isEmulator) {
-            unregisterPushNotification();
+                unregisterPushNotification();
             }
         },
         enumerable: true
@@ -348,62 +347,44 @@ function getNewNotificationId() {
 
 
 function unregisterPushNotification() {
-    // Implemented due to COR-1281
-    if (TypeUtil.isString(senderID) && senderID !== "") {
-        const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
-        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
-        NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
-        NativeFCMListenerService.unregisterRemoteNotificationListener();
-    } else {
-        throw Error("Not registered to push notification.");
-    }
+    const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+    const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+    NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
+    NativeFCMListenerService.unregisterRemoteNotificationListener();
 }
 
 function registerPushNotification(onSuccessCallback, onFailureCallback) {
-    // Checking sender id loaded
-    if (!senderID) {
-        readSenderIDFromProjectJson();
-    }
-    if (TypeUtil.isString(senderID) && senderID !== '') {
-        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
-        NativeFCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
-            onSuccess: function (token) {
-                const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
-                NativeFCMListenerService.registerRemoteNotificationListener({
-                    onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
-                        let parsedJson = JSON.parse(data);
-                        if (isReceivedByOnClick) {
-                            Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
-                        } else {
-                            Notifications.onNotificationReceive && Notifications.onNotificationReceive(parsedJson);
-                            Application.onReceivedNotification && Application.onReceivedNotification({
-                                remote: parsedJson
-                            });
-                        }
+
+    const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+    NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
+        onSuccess: function (token) {
+            const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+            NativeFCMListenerService.registerRemoteNotificationListener({
+                onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
+                    let parsedJson = JSON.parse(data);
+                    if (isReceivedByOnClick) {
+                        Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
+                    } else {
+                        Notifications.onNotificationReceive && Notifications.onNotificationReceive(parsedJson);
+                        Application.onReceivedNotification && Application.onReceivedNotification({
+                            remote: parsedJson
+                        });
                     }
-                });
-                onSuccessCallback && onSuccessCallback({
-                    'token': token
-                });
-            },
-            onFailure: function () {
-                onFailureCallback && onFailureCallback();
-            }
-        });
-    } else {
-        onFailureCallback && onFailureCallback();
-    }
+                }
+            });
+            onSuccessCallback && onSuccessCallback({
+                'token': token
+            });
+        },
+        onFailure: function () {
+            onFailureCallback && onFailureCallback();
+        }
+    });
 }
 
 function removeAllNotifications() {
     var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
     notificationManager.cancelAll();
-}
-
-function readSenderIDFromProjectJson() {
-    // get from FCMRegisterUtil due to the project.json encryption
-    const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
-    senderID = NativeFCMRegisterUtil.getSenderID();
 }
 
 function startNotificationIntent(self, params) {
