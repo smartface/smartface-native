@@ -2,7 +2,6 @@ const View = require("../../ui/view");
 const Color = require("../../ui/color");
 const Image = require("../../ui/image");
 const UIControlEvents = require("../../util").UIControlEvents;
-const Events = require('./events');
 
 const ButtonState = {
     normal: 0,
@@ -249,11 +248,5 @@ function Button(params) {
         }
     }
 }
-
-Button.Events = Events;
-console.info('events1: ', Button.Events);
-
-Button.prototype.Events = Events;
-console.info('events2: ', Button.prototype.Events);
 
 module.exports = Button;

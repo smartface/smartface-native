@@ -1,6 +1,5 @@
 const View = require('../view');
 const Color = require("../../ui/color");
-const Events = require('./events');
 
 ActivityIndicator.prototype = Object.create(View.prototype);
 function ActivityIndicator(params) {
@@ -83,7 +82,6 @@ function ActivityIndicator(params) {
     }.bind(this)(params));
 }
 
-ActivityIndicator.Events = Events;
 
 ActivityIndicator.iOS = require("./ios");
 

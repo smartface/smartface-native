@@ -3,7 +3,6 @@ import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
 import { IEventEmitter } from '../../core/eventemitter';
-import IViewEvents from "./events";
 
 /**
  * @class UI.View
@@ -23,11 +22,11 @@ import IViewEvents from "./events";
  *     myView.backgroundColor = Color.RED;
  *
  */
-declare class View extends NativeComponent implements IEventEmitter {
-    constructor(params?: any);
-    emit(event: string, detail?: any[]): void;
-    on(eventName: string, callback: (...args: any) => void): () => void;
-    off(eventName: string, callback?: (...args: any) => void): void;
+declare class View<TEvent = typeof View.Events> extends NativeComponent implements IEventEmitter {
+	constructor(params?: any);
+	on(eventName: string, callback: (...args: any) => void): () => void;
+	off(eventName: string, callback?: (...args: any) => void): void;
+	emit(event: string, detail?: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
 	 * @property {String} transitionID
@@ -531,6 +530,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a touch screen motion event starts.
 	 *
 	 * @event onTouch
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -545,6 +545,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
 	 * @event onTouchEnded
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
 	 * @param {Object} motionEvent
@@ -561,6 +562,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
 	 *
 	 * @event onTouchCancelled
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -571,6 +573,9 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * @since 2.0.10
 	 */
     onTouchCancelled: (point: Point2D) => void;
+		/**
+		 * @deprecated
+		 */
     onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
     android: {
 		/**
@@ -705,7 +710,6 @@ declare class View extends NativeComponent implements IEventEmitter {
         height: number;
     };
 
-    protected static Events: IViewEvents;
 }
 declare namespace View {
 	/**
@@ -810,6 +814,59 @@ declare namespace View {
             FORCERIGHTTOLEFT = 4
         }
     }
+		enum Events {
+				/**
+				 * This event is called when a touch screen motion event starts.
+				 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+				 * @param {Object} motionEvent
+				 * @param {Number} motionEvent.x
+				 * @param {Number} motionEvent.y
+				 * @android
+				 * @ios
+				 * @since 4.3.5
+				 */
+			Touch = "touch",
+				/**
+				 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
+				 *
+				 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+				 * @param {Object} motionEvent
+				 * @param {Number} motionEvent.x
+				 * @param {Number} motionEvent.y
+				 * @android
+				 * @ios
+				 * @since 4.3.5
+				 */
+			TouchCancelled = "touchCancelled",
+			/**
+			 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
+			 *
+			 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+			 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
+			 * @param {Object} motionEvent
+			 * @param {Boolean} motionEvent.isInside
+			 * @param {Number} motionEvent.x
+			 * @param {Number} motionEvent.y
+			 * @android
+			 * @ios
+			 * @since 4.3.5
+			 */
+			TouchEnded = "touchEnded",
+			/**
+			 * This event is called when the touch has changed its point on the screen.
+			 *
+			 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+			 * @param {Object} motionEvent
+			 * @param {Boolean} isInside
+			 * @param {Number} motionEvent.x
+			 * @param {Number} motionEvent.y
+			 * @android
+			 * @ios
+			 * @member UI.View
+			 * @since 4.3.5
+			 */
+			TouchMoved = "touchMoved"
+		}
 }
 
 export = View;
