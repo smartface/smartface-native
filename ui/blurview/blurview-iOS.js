@@ -1,5 +1,6 @@
 const View = require("../../ui/view");
-const Events = require('./events');
+
+BlurView.Events = { ...View.Events };
 
 BlurView.prototype = Object.create(View.prototype);
 function BlurView(params) {

@@ -1,6 +1,5 @@
 import Color from "../../ui/color";
 import View from "../../ui/view";
-import IBlurViewEvents from "./events";
 /**
  * @class UI.BlurView
  * @extends UI.View
@@ -60,8 +59,6 @@ declare class BlurView extends View {
          */
         effectStyle: BlurView.iOS.EffectStyle
     }
-
-    static Events: IBlurViewEvents;
 }
 
 declare namespace BlurView {
