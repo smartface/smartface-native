@@ -1,6 +1,8 @@
 const View = require('../view');
 const Color = require("../../ui/color");
 
+ActivityIndicator.Events = { ...View.Events };
+
 ActivityIndicator.prototype = Object.create(View.prototype);
 function ActivityIndicator(params) {
     var self = this;
