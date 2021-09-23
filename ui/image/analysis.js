@@ -74,7 +74,8 @@ Image.prototype.autoMirrored = false;
 
 
 /**
- * Returns an Image object which built-in icon is created corresponding systemIcon value.
+ * Creates an Image object which built-in icon is created corresponding systemIcon value.
+ * This method is Android only.
  *
  * @android
  * @method createSystemIcon
