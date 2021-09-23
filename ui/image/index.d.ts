@@ -257,7 +257,8 @@ declare class Image extends NativeComponent {
 		onFailure: (e: { message: string }) => void
 	): Image;
 	/**
-	 * Createds an Image object which built-in icon is created corresponding systemIcon value.
+	 * Creates an Image object which built-in icon is created corresponding systemIcon value.
+	 * This method is Android only.
 	 *
 	 * @android
 	 * @static

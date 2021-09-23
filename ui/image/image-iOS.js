@@ -14,7 +14,7 @@ function Image(params) {
     self.android.round = function(radius) {
         return self;
     };
-    self.android.createSystemIcon = function(id) {
+    self.createSystemIcon = function(id) {
         return self
     };
 
