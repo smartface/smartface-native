@@ -757,7 +757,6 @@ function View(params) {
 
   Object.defineProperty(this, 'on', {
     value: (event, callback) => {
-      console.info("View: ", event);
       EventFunctions[event].call(this);
       this.setTouchHandlers();
       this.emitter.on(event, callback);
