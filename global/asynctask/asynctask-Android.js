@@ -1,10 +1,18 @@
 /*globals array,requireClass */
 const TypeUtil = require("../../util/type");
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+
+AsyncTask.prototype = Object.assign({}, EventEmitterMixin);
 function AsyncTask(params) {
 
     const self = this;
+    this.emitter = new EventEmitter();
 
     var callbacks = {
         onPreExecute: function() {
@@ -23,6 +31,23 @@ function AsyncTask(params) {
     this.nativeObject = new SFAsyncTask();
     this.nativeObject.setJsCallback(callbacks);
 
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            _onCancelled = function (state) {
+                this.emitter.emit(Events.CallStateChanged, state);
+            } 
+        },
+        [Events.Complete]: function() {
+            _onComplete = function (state) {
+                this.emitter.emit(Events.CallStateChanged, state);
+            } 
+        },
+        [Events.PreExecute]: function() {
+            _onPreExecute = function (state) {
+                this.emitter.emit(Events.CallStateChanged, state);
+            } 
+        }
+    }
 
     let _onPreExecute, _task, _onComplete, _onCancelled;
     Object.defineProperties(self, {
@@ -69,6 +94,12 @@ function AsyncTask(params) {
         'toString': {
             value: function() {
                 return "AsyncTask";
+            }
+        },
+        'on': { 
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
             }
         }
     });

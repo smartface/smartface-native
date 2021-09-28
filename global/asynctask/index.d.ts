@@ -1,3 +1,5 @@
+import { IEventEmitter } from "core/eventemitter";
+
 export = AsyncTask;
 /**
  * @class AsyncTask
@@ -16,8 +18,11 @@ export = AsyncTask;
  *     
  *     asynctask.run();
  */
-declare class AsyncTask extends NativeComponent {
+declare class AsyncTask extends NativeComponent implements IEventEmitter<typeof AsyncTask.Events> {
   constructor();
+  on(eventName: typeof AsyncTask.Events, callback: (...args: any) => void): () => void;
+  off(eventName: typeof AsyncTask.Events, callback?: (...args: any) => void): void;
+  emit(event: typeof AsyncTask.Events, detail?: any[]): void;
 /**
  * This event describes task of AsyncTask instance.
  *
@@ -33,6 +38,7 @@ declare class AsyncTask extends NativeComponent {
  * @event onComplete
  * @android
  * @ios
+ * @deprecated
  * @since 3.1.0
  */
   onComplete: () => void;
@@ -40,6 +46,7 @@ declare class AsyncTask extends NativeComponent {
  * Runs on the UI thread before onComplete.
  *
  * @method onPreExecute
+ * @deprecated
  * @android
  * @since 3.2.2
  */
@@ -49,6 +56,7 @@ declare class AsyncTask extends NativeComponent {
  *
  * @method onCancelled
  * @android
+ * @deprecated
  * @ios
  * @since 3.2.2
  */
@@ -127,4 +135,33 @@ declare namespace AsyncTask {
 			RUNNING
 		}
 	}
+
+  enum Events {
+    /**
+     * This event invokes when task is completed.
+     *
+     * @event onComplete
+     * @android
+     * @ios
+     * @since 3.1.0
+     */
+    Complete = "complete",
+    /**
+     * Runs on the UI thread after cancel() is invoked
+     *
+     * @method onCancelled
+     * @android
+     * @ios
+     * @since 3.2.2
+     */
+    Cancelled = "cancelled",
+    /**
+     * Runs on the UI thread before onComplete.
+     *
+     * @method onPreExecute
+     * @android
+     * @since 3.2.2
+     */
+    PreExecute = "preExecute"
+  }
 }
