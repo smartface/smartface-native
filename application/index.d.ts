@@ -5,6 +5,7 @@ import StatusBar from "./statusbar";
 import Navigationbar from "./android/navigationbar";
 import NavigationbarStyle from "./android/navigationbar/style";
 import SliderDrawer from "../ui/sliderdrawer";
+import { IEventEmitter } from "../core/eventemitter";
 
 declare enum Events {
   /**
@@ -226,7 +227,10 @@ declare enum KeyboardMode {
  *
  * A set of collection for application based properties and methods.
  */
-declare class Application {
+declare class Application implements IEventEmitter<typeof Events> {
+  on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+  off(eventName: typeof Events, callback?: (...args: any) => void): void;
+  emit(event: typeof Events, detail?: any[]): void;
   /**
    * The received bytes from the application.
    *
