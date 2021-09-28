@@ -33,10 +33,10 @@ declare enum Events {
  *     };
  * 
  */
-declare class Accelerometer implements IEventEmitter<typeof Events> {
-  on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-  off(eventName: typeof Events, callback?: (...args: any) => void): void;
-  emit(event: typeof Events, detail?: any[]): void;
+declare class Accelerometer {
+  static on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+  static off(eventName: typeof Events, callback?: (...args: any) => void): void;
+  static emit(event: typeof Events, detail?: any[]): void;
   /**
    * Starts capturing accelerometer values.
    * 
