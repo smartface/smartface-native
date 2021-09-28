@@ -1,5 +1,11 @@
 const Blob = require("../../blob");
 
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
+const Events = require('./events');
+
 const SRReadyState = {
     SR_CONNECTING: 0,
     SR_OPEN: 1,
@@ -7,10 +13,12 @@ const SRReadyState = {
     SR_CLOSED: 3
 }
 
+WebSocket.prototype = Object.assign({}, EventEmitterMixin);
+
 var webSocket = function WebSocket(params = {}) {
     var self = this;
     let {url, headers} = params;
-
+    self.emitter = new EventEmitter();
     if (!self.nativeObject) {
         var alloc;
         var invocationAlloc = __SF_NSInvocation.createClassInvocationWithSelectorInstance("alloc", "SRWebSocket");
@@ -104,6 +112,36 @@ var webSocket = function WebSocket(params = {}) {
         },
         enumerable: true
     });
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
+
+    const EventFunctions = {
+        [Events.Close]: function() {
+            self.onClose = (e) => {
+                self.emitter.emit(Events.Close, e);
+            }
+        },
+        [Events.Failure]: function() {
+            self.onFailure = (e) => {
+                self.emitter.emit(Events.Failure, e);
+            }
+        },
+        [Events.Message]: function() {
+            self.onMessage = (e) => {
+                self.emitter.emit(Events.Message, e);
+            }
+        },
+        [Events.Open]: function() {
+            self.onOpen = (e) => {
+                self.emitter.emit(Events.Open, e);
+            }
+        }
+    }
 
     self.close = function(params) {
         var readyState;

@@ -3,16 +3,25 @@ const OkHttpRequest = requireClass("okhttp3.Request");
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
 const ByteString = requireClass("okio.ByteString");
 
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
+const Events = require('./events');
+
 const Blob = require("../../blob");
 const AndroidConfig = require("../../util/Android/androidconfig");
 
 const activity = AndroidConfig.activity;
 const Runnable = requireClass("java.lang.Runnable");
 
+WebSocket.prototype = Object.assign({}, EventEmitterMixin);
+
 function WebSocket(params) {
     if (!params || !params.url) {
         throw new Error("url must be initialized.");
     }
+    this.emitter = new EventEmitter();
     var _listener, _request, _client;
     var {url, headers} = params;
 
@@ -21,6 +30,30 @@ function WebSocket(params) {
     this.nativeObject = _client.newWebSocket(_request, _listener);
 
     var _onOpenCallback, _onFailureCallback, _onMessageCallback, _onCloseCallback;
+
+    const EventFunctions = {
+        [Events.Close]: function() {
+            _onCloseCallback = (e) => {
+                this.emitter.emit(Events.Close, e);
+            }
+        },
+        [Events.Failure]: function() {
+            _onFailureCallback = (e) => {
+                this.emitter.emit(Events.Failure, e);
+            }
+        },
+        [Events.Message]: function() {
+            _onMessageCallback = (e) => {
+                this.emitter.emit(Events.Message, e);
+            }
+        },
+        [Events.Open]: function() {
+            _onOpenCallback = (e) => {
+                this.emitter.emit(Events.Open, e);
+            }
+        }
+    }
+
     Object.defineProperty(this, 'url', {
         get: function() {
             return url;
@@ -66,6 +99,13 @@ function WebSocket(params) {
             _onCloseCallback = callback.bind(this);
         },
         enumerable: true
+    });
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     this.close = function(params) {

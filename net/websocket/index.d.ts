@@ -1,4 +1,41 @@
+import { IEventEmitter } from "../../core/eventemitter";
 import Blob from "../../global/blob";
+
+declare enum Events {
+  /**
+   * Invoked when the web socket has been closed.
+   * @param {Object} e 
+   * @param {Number} e.code
+   * @param {String} e.reason
+   * @event
+   * @since 1.1.17
+   */
+  Close = "close",
+  /**
+   * Invoked when an error occured on reading or writing to the network.
+   * @param {Object} e 
+   * @param {String} e.message
+   * @param {Number} e.code
+   * @event
+   * @since 1.1.17
+   */
+  Failure = "failure",
+  /**
+   * Invoked when a message has been received. 
+   * @param {Object} params 
+   * @param {String} params.string
+   * @param {Blob} params.blob
+   * @event
+   * @since 1.1.17
+   */
+  Message = "message",
+   /**
+     * Invoked when a web socket has been accepted by the web socket server.
+     * @event
+     * @since 1.1.17
+     */
+  Open = "open"
+}
 
 /**
  * 
@@ -28,8 +65,11 @@ import Blob from "../../global/blob";
  * @class Net.WebSocket
  * @since 1.1.17
  */
-declare class WebSocket extends NativeComponent {
+declare class WebSocket extends NativeComponent implements IEventEmitter<typeof Events> {
     constructor(params?: any);
+    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof Events, callback?: (...args: any) => void): void;
+    emit(event: typeof Events, detail?: any[]): void;
     /**
      * Gets url of socket connection.
      *
@@ -59,6 +99,7 @@ declare class WebSocket extends NativeComponent {
    /**
      * Invoked when a web socket has been accepted by the web socket server.
      * @event
+     * @deprecated
      * @since 1.1.17
      */
     onOpen():void;
@@ -67,6 +108,7 @@ declare class WebSocket extends NativeComponent {
      * @param {Object} params 
      * @param {String} params.string
      * @param {Blob} params.blob
+     * @deprecated
      * @event
      * @since 1.1.17
      */
@@ -76,6 +118,7 @@ declare class WebSocket extends NativeComponent {
      * @param {Object} e 
      * @param {Number} e.code
      * @param {String} e.reason
+     * @deprecated
      * @event
      * @since 1.1.17
      */
@@ -85,10 +128,13 @@ declare class WebSocket extends NativeComponent {
      * @param {Object} e 
      * @param {String} e.message
      * @param {Number} e.code
+     * @deprecated
      * @event
      * @since 1.1.17
      */
     onFailure(e: {code: number, message: string}): void;
+
+    static Events: Events;
 }
 
 export = WebSocket;
