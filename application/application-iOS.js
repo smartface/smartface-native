@@ -1,3 +1,5 @@
+const EventEmitterMixin = require('../core/eventemitter/mixin');
+
 //Application Direction Manager (RTL Support)
 (function() {
     var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
@@ -15,6 +17,18 @@ var _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
 var SFApplication = {};
+Object.assign(SFApplication, EventEmitterMixin);
+
+Object.defineProperty(SFApplication, 'on', {
+    value: (event, callback) => {
+      EventFunctions[event].call(this);
+      this.setTouchHandlers();
+      this.emitter.on(event, callback);
+    },
+    configurable: true
+  });
+
+Object.defineProperty(SF)
 
 Object.defineProperty(SFApplication, 'byteReceived', {
     get: function() {
