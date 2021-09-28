@@ -1,3 +1,7 @@
+declare enum Events {
+	LocationChanged = 'locationChanged'
+}
+
 export = Location;
 /**
  * @class Device.Location
@@ -20,7 +24,10 @@ export = Location;
  *     });
  * 
  */
-declare class Location {
+declare class Location  {
+	static on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+	static off(eventName: typeof Events, callback?: (...args: any) => void): void;
+	static emit(event: typeof Events, detail?: any[]): void;
 /**
  * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
  * Shows an dialog to open the location service when the location service is off. 

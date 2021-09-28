@@ -2,6 +2,11 @@
 const TypeUtil = require('../../util/type');
 const RequestCodes = require('../../util/Android/requestcodes');
 
+const {
+    EventEmitterMixin,
+    EventEmitter
+} = require("../../core/eventemitter");
+const Events = require('./events');
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
@@ -10,6 +15,14 @@ const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 const Location = {};
 Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
 var _onLocationChanged;
+
+const EventFunctions = {
+    [Events.LocationChanged]: function() {
+        Location.onLocationChanged = function({latitude, longitude}) {
+            Location.emitter.emit(Events.LocationChanged, {latitude, longitude});
+        } 
+    }
+}
 
 const locationCallback = function(latitude, longitude) {
     Location.onLocationChanged && Location.onLocationChanged({
@@ -28,6 +41,9 @@ Location.__onActivityResult = function(resultCode) {
         });
     }
 };
+
+Location.emitter = new EventEmitter();
+Object.assign(Accelerometer, EventEmitterMixin);
 
 Location.__instance = null;
 Location.__getInstance = function() {
@@ -71,6 +87,12 @@ Object.defineProperties(Location, {
                 'onSuccess': onSuccess,
                 'onFailure': onFailure
             });
+        }
+    },
+    'on': {
+        value: (event, callback) => {
+            EventFunctions[event].call(Location);
+            Location.emitter.on(event, callback);
         }
     }
 });

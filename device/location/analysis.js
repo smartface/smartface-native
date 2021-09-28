@@ -381,4 +381,32 @@ Location.Android.SettingsStatusCodes.OTHER = 0;
  */
 Location.Android.SettingsStatusCodes.DENIED = 1;
 
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ Location.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+  Location.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+  Location.emit = function(event, detail) {}
+
 module.exports = Location;

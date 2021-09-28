@@ -1,8 +1,27 @@
 const Invocation = require('../../util').Invocation;
+const {
+    EventEmitterMixin,
+    EventEmitter
+} = require("../../core/eventemitter");
+const Events = require('./events');
 
+const EventFunctions = {
+    [Events.LocationChanged]: function() {
+        Location.onLocationChanged = function({latitude, longitude}) {
+            Location.emitter.emit(Events.LocationChanged, {latitude, longitude});
+        } 
+    }
+}
 function Location() {};
 
 Location.nativeObject = new __SF_CLLocationManager();
+Location.emitter = new EventEmitter();
+Object.assign(Location, EventEmitterMixin);
+
+Location.on = (event, callback) => {
+    EventFunctions[event].call(Location);
+    Location.emitter.on(event, callback);
+};
 
 Location.ios = {};
 Location.ios.native = {};
