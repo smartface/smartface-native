@@ -1,12 +1,27 @@
 const SFPhoneStateListener = requireClass("io.smartface.android.sfcore.device.calldetection.SFPhoneStateListener");
 
 const AndroidConfig = require("../../util/Android/androidconfig");
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
 const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
+const EventFunctions = {
+    [Events.CallStateChanged]: function() {
+        this.onCallStateChanged = function (state) {
+            this.emitter.emit(Events.CallStateChanged, state);
+        } 
+    }
+}
+
+CallDetection.prototype = Object.assign({}, EventEmitterMixin);
 function CallDetection() { 
     const self = this;
+    self.emitter = new EventEmitter();
     const phoneListener = new SFPhoneStateListener(function (state, incomingNumber) {
         self.onCallStateChanged && self.onCallStateChanged({
             state: state,
@@ -25,6 +40,12 @@ function CallDetection() {
                 _onCallStateChanged = callback;
             },
             enumerable: true
+        },
+        'on': {
+            value: (event, callback) => {
+                EventFunctions[event].call(self);
+                self.emitter.on(event, callback);
+            }
         }
     });
 }

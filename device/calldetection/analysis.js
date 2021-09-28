@@ -103,3 +103,31 @@ CallDetection.State.DIALING = "Dialing";
  * @since 4.1.3
  */
 CallDetection.State.CONNECTED = "Connected";
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ CallDetection.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.emit = function(event, detail) {}
