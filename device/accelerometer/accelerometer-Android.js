@@ -1,7 +1,27 @@
 /* globals requireClass */
 const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
+const { EventEmitter, EventEmitterMixin } = require('../../core/eventemitter');
+const Events = require('./events');
 
 const Accelerometer = {};
+Object.assign(Accelerometer, EventEmitterMixin);
+
+Accelerometer.emitter = new EventEmitter();
+
+const EventFunctions = {
+    [Events.Accelerate]: function() {
+        Accelerometer.__getInstance().onAccelerateCallback = function(x, y, z) {
+            Accelerometer.emitter.emit(Events.Accelerate, { x, y, z });
+        }
+    }
+}
+Object.defineProperty(Accelerometer, 'on', {
+    value: (event, callback) => {
+        EventFunctions[event].call(Accelerometer);
+        Accelerometer.emitter.on(event, callback);
+    }
+});
+
 var _callback;
 
 Accelerometer.ios = {};

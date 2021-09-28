@@ -1,4 +1,24 @@
+const { EventEmitter, EventEmitterMixin } = require('../../core/eventemitter');
+const Events = require('./events');
 function Accelerometer() {}
+Object.assign(Accelerometer, EventEmitterMixin);
+
+Accelerometer.emitter = new EventEmitter();
+
+const EventFunctions = {
+    [Events.Accelerate]: function() {
+        Accelerometer.monitonManager.callback = (e) => {
+            Accelerometer.emitter.emit(Events.Accelerate, e);
+        };
+    }
+}
+
+Object.defineProperty(Accelerometer, 'on', {
+    value: (event, callback) => {
+        EventFunctions[event].call(Accelerometer);
+        Accelerometer.emitter.on(event, callback);
+    }
+});
 
 Accelerometer.ios = {};
 Accelerometer.android = {};

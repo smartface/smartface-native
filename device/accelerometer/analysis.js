@@ -48,6 +48,7 @@ Accelerometer.stop = function() {}
  * @param {Number} event.z
  * @android
  * @ios
+ * @deprecated
  */
 Accelerometer.onAccelerate = function(event) {}
 
@@ -59,5 +60,39 @@ Accelerometer.onAccelerate = function(event) {}
  * @since 4.0.2
  */
 Accelerometer.accelerometerUpdateInterval = function() {}
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {Object} callback
+ * @param {Number} callback.x
+ * @param {Number} callback.y
+ * @param {Number} callback.z
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Accelerometer.on = function(event, callback) {}
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {Object} callback
+ * @param {Number} callback.x
+ * @param {Number} callback.y
+ * @param {Number} callback.z
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Accelerometer.off = function(event, callback) {}
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+Accelerometer.emit = function(event, detail) {}
 
 module.exports = Accelerometer;
