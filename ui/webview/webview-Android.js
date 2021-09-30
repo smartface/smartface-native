@@ -6,6 +6,7 @@ const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
 const RequestCodes = require("../../util/Android/requestcodes");
 const TypeUtil = require("../../util/type");
+const Events = require('./events');
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -378,6 +379,76 @@ function WebView(params) {
             configurable: true,
             writable: true
         }
+    });
+
+    const EventFunctions = {
+        [Events.BackButtonPressed]: function() {
+            _onBackButtonPressedCallback = function (state) {
+                this.emitter.emit(Events.BackButtonPressed, state);
+            } 
+        },
+        [Events.ChangedURL]: function() {
+            _onChangedURL = function (state) {
+                this.emitter.emit(Events.ChangedURL, state);
+            } 
+        },
+        [Events.ConsoleMessage]: function() {
+            _onConsoleMessage = function (state) {
+                this.emitter.emit(Events.ConsoleMessage, state);
+            } 
+        },
+        [Events.Error]: function() {
+            _onError = function (state) {
+                this.emitter.emit(Events.Error, state);
+            } 
+        },
+        [Events.Load]: function() {
+            _onLoad = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.OpenNewWindow]: function() {
+            //iOS Only
+        },
+        [Events.Show]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.Touch]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.TouchCancelled]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.TouchEnded]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.TouchMoved]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+    }
+
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     var _page;

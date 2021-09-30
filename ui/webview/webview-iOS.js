@@ -2,6 +2,7 @@ const View = require('../../ui/view');
 const File = require('../../io/file');
 const Invocation = require('../../util').Invocation;
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
+const Events = require('./events');
 
 WebView.prototype = Object.create(View.prototype);
 function WebView(params) {
@@ -153,6 +154,54 @@ function WebView(params) {
             return false;
         }
     }
+
+    const EventFunctions = {
+        [Events.BackButtonPressed]: function() {
+            //Android Only
+        },
+        [Events.ChangedURL]: function() {
+            self.onChangedURL = function(state) {
+                this.emitter.emit(Events.ChangedURL, state);
+            }
+        },
+        [Events.ConsoleMessage]: function() {
+            //Android only
+        },
+        [Events.Error]: function() {
+            self.onError = function (state) {
+                this.emitter.emit(Events.Error, state);
+            } 
+        },
+        [Events.Load]: function() {
+            self.onLoad = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.OpenNewWindow]: function() {
+            self.ios.onOpenNewWindow = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.Show]: function() {
+            self.onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        }
+    }
+
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
 
     Object.defineProperty(self, 'openLinkInside', {
         get: function() {
