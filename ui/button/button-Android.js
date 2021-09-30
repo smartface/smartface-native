@@ -112,6 +112,33 @@ function Button(params) {
         }
     });
 
+    const EventFunctions = {
+        [Events.Press]: function() {
+            this.__onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        },
+        [Events.LongPress]: function() {
+            this.__onLongPress = function (state) {
+                this.emitter.emit(Events.LongPress, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     this.backgroundDrawable = new NativeGradientDrawable();
     this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
 

@@ -5,9 +5,19 @@ import TextAlignment from "../textalignment";
 import Image from "../image";
 import { IButton } from "./ibutton";
 import View from "../view";
-import IButtonEvents from "./events";
+import { Events } from "../viewgroup";
 
-declare class Button extends View  implements IButton {
+declare enum ButtonEvents {
+  Press = 'press',
+  LongPress = 'longPress'
+}
+declare namespace Button {
+  const Events: typeof ButtonEvents & typeof View.Events
+  type Events = typeof Events
+}
+
+
+declare class Button extends View<ButtonEvents> {
   constructor(parameters?: Optional<IButton>);
   text: string;
   font: Font;
@@ -19,7 +29,6 @@ declare class Button extends View  implements IButton {
   flexGrow: number;
   onPress: () => void;
   onLongPress: () => void;
-  static Events: IButtonEvents
 }
 
 export = Button;
