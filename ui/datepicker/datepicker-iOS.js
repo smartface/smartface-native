@@ -1,14 +1,19 @@
 const TypeUtil = require('../../util/type');
 const UIDatePickerMode = require("../../util").UIDatePickerMode;
 const Color = require("../../ui/color");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+
+DatePicker.prototype = Object.assign({}, EventEmitterMixin);
 function DatePicker(params) {
     var self = this;
 
     if (!self.nativeObject) {
         self.nativeObject = new __SF_UIDatePicker();
     }
-
     self.ios = {};
 
     self.onDateSelected = function () { };
@@ -215,6 +220,26 @@ function DatePicker(params) {
             _cancelText = value;
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            self.onCancelled = function (state) {
+                this.emitter.emit(Events.Cancelled, state);
+            } 
+        },
+        [Events.Selected]: function() {
+            self.onDateSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     self.show = function () {

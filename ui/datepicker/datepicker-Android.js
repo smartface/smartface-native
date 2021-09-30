@@ -1,6 +1,13 @@
 /*globals requireClass*/
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+
+DatePicker.prototype = Object.assign({}, EventEmitterMixin);
 
 function DatePicker(params) {
     var activity = AndroidConfig.activity;
@@ -15,6 +22,19 @@ function DatePicker(params) {
                 _onDateSelected && _onDateSelected(new Date(year, month, day));
             }
         }), today.getFullYear(), today.getMonth(), today.getDate());
+    }
+
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            _onCancelled = function (state) {
+                this.emitter.emit(Events.Cancelled, state);
+            } 
+        },
+        [Events.Selected]: function() {
+            _onDateSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
     }
 
     var _onDateSelected;
@@ -88,7 +108,14 @@ function DatePicker(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
         }
+
     });
 
     // Assign parameters given in constructor

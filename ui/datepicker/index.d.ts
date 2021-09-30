@@ -1,5 +1,11 @@
+import { IEventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
+
+declare enum Events {
+    Cancelled = "cancelled",
+    Selected = "selected"
+}
 
 /**
  * @class UI.DatePicker
@@ -16,8 +22,11 @@ import Font from "../font";
  *     myDatePicker.show();
  *
  */
-declare class DatePicker extends NativeComponent {
+declare class DatePicker extends NativeComponent implements IEventEmitter<typeof Events> {
     constructor(params?: any);
+    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof Events, callback?: (...args: any) => void): void;
+    emit(event: typeof Events, detail?: any[]): void;
     ios: {
         /**
          * Gets/sets title of the picker. This property only works with show method. Must set before show method.
