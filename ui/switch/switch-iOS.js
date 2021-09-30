@@ -1,6 +1,7 @@
 const View = require('../view');
 const Color = require("../../ui/color");
 const UIControlEvents = require("../../util").UIControlEvents;
+const Events = require('./events');
 
 Switch.prototype = Object.create(View.prototype);
 function Switch(params) {
@@ -19,6 +20,28 @@ function Switch(params) {
     }
 
     self.nativeObject.layer.masksToBounds = false;
+
+    const EventFunctions = {
+        [Events.ToggleChanged]: function() {
+            _onToggleChanged = function (state) {
+                this.emitter.emit(Events.ToggleChanged, state);
+            } 
+        }
+    }
+    
+        const parentOnFunction = this.on;
+        Object.defineProperty(this, 'on', {
+            value: (event, callback) => {
+                if (typeof EventFunctions[event] === 'function') {
+                    EventFunctions[event].call(this);
+                    this.emitter.on(event, callback);
+                }
+                else {
+                    parentOnFunction(event, callback);
+                }
+            },
+            configurable: true
+        });
 
     Object.defineProperty(self, 'enabled', {
         get: function() {
