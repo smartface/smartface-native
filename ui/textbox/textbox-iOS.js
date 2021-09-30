@@ -5,6 +5,7 @@ const ActionKeyType = require('../../ui/actionkeytype');
 const Color = require('../../ui/color');
 const KeyboardAnimationDelegate = require("../../util").KeyboardAnimationDelegate;
 const Invocation = require('../../util/iOS/invocation.js');
+const Events = require('./events');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -54,6 +55,35 @@ function TextBox(params) {
     View.apply(this);
 
     self.android = {};
+
+
+    const EventFunctions = {
+        [Events.ActionButtonPress]: function() {
+            self.onActionButtonPress = function (state) {
+                this.emitter.emit(Events.ActionButtonPress, state);
+            } 
+        },
+        [Events.ClearButtonPress]: function() {
+            self.ios.onClearButtonPress = function (state) {
+                this.emitter.emit(Events.ActionButtonPress, state);
+            } 
+        },
+        [Events.EditBegins]: function() {
+            self.onEditBegins = function (state) {
+                this.emitter.emit(Events.EditBegins, state);
+            } 
+        },
+        [Events.EditEnds]: function() {
+            self.onEditEnds = function (state) {
+                this.emitter.emit(Events.EditEnds, state);
+            } 
+        },
+        [Events.TextChanged]: function() {
+            self.onTextChanged = function (state) {
+                this.emitter.emit(Events.TextChanged, state);
+            } 
+        }
+    }
 
     self.nativeObject.textBoxDelegate = function(method) {
         if (method.name === "textFieldShouldBeginEditing") {
@@ -382,6 +412,20 @@ function TextBox(params) {
             self.hint = _hint;
         },
         enumerable: true,
+        configurable: true
+    });
+
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
         configurable: true
     });
 

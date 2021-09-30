@@ -5,6 +5,7 @@ const KeyboardType = require('../keyboardtype');
 const ActionKeyType = require('../actionkeytype');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
+const Events = require('./events');
 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -84,6 +85,32 @@ function TextBox(params) {
         self.nativeObject = new SFEditText(activity, callback);
     }
     TextView.apply(this);
+
+    const EventFunctions = {
+        [Events.ActionButtonPress]: function() {
+            _onActionButtonPress = function (state) {
+                this.emitter.emit(Events.ActionButtonPress, state);
+            } 
+        },
+        [Events.ClearButtonPress]: function() {
+            // iOS Only
+        },
+        [Events.EditBegins]: function() {
+            _onEditBegins = function (state) {
+                this.emitter.emit(Events.EditBegins, state);
+            } 
+        },
+        [Events.EditEnds]: function() {
+            _onEditEnds = function (state) {
+                this.emitter.emit(Events.EditEnds, state);
+            } 
+        },
+        [Events.TextChanged]: function() {
+            _onTextChanged = function (state) {
+                this.emitter.emit(Events.TextChanged, state);
+            } 
+        }
+    }
 
     var _touchEnabled = true;
     var _isPassword = false;
@@ -349,6 +376,20 @@ function TextBox(params) {
             configurable: true
         },
 
+    });
+
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     var _hintTextColor;
