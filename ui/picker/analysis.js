@@ -94,6 +94,7 @@ Picker.prototype.currentIndex = 0;
  *
  * @param {Number} index
  * @event onSelected
+ * @deprecated
  * @android
  * @ios
  * @since 0.1

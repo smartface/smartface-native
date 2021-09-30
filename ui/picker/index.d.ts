@@ -1,6 +1,24 @@
 import Color from "../color";
 import Font from "../font";
 import View from "../view";
+
+declare enum PickerEvents {
+  /**
+   * This event is called when scroll ends & an item is selected on a picker.
+   *
+   * @param {Number} index
+   * @event onSelected
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  Selected = "selected"
+}
+declare namespace Picker {
+  const Events: typeof PickerEvents & typeof View.Events
+  type Events = typeof Events
+}
+
 /**
  * @class UI.Picker
  * @since 0.1
@@ -31,7 +49,7 @@ import View from "../view";
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-declare class Picker extends View {
+declare class Picker extends View<PickerEvents> {
 /**
  * Gets/sets items of the picker.
  *

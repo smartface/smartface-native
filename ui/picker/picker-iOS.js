@@ -1,8 +1,8 @@
 
 const View = require('../../ui/view');
 const Color = require("../../ui/color");
+const Events = require('./events');
 
-// const Picker = extend(View)(
 Picker.prototype = Object.create(View.prototype);
 function Picker(params) {
     var self = this;
@@ -46,6 +46,21 @@ function Picker(params) {
             _onSelectedCallback = onSelected;
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onSelectedCallback = function (state) {
+                self.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     //////////////////////////////////////////////////////

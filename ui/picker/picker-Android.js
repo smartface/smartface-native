@@ -6,6 +6,7 @@ const LayoutParams = require("../../util/Android/layoutparams");
 
 const Color = require('../../ui/color');
 const ParentPicker = require("../../ui/picker/parentPicker");
+const Events = require('./events');
 
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
@@ -27,6 +28,15 @@ function Picker(params) {
     var _onSelected;
     var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText, _backgroundColor, _textColor;
     var buttonCustomize = false;
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
     Object.defineProperties(this, {
         'items': {
             get: function() {
@@ -201,6 +211,12 @@ function Picker(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
         }
     });
     Object.defineProperty(this.android, 'enabled', {
