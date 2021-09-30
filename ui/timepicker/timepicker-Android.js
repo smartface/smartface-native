@@ -1,5 +1,12 @@
 /*globals requireClass*/
 const AndroidConfig = require('../../util/Android/androidconfig');
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+
+TimePicker.prototype = Object.assign({}, EventEmitterMixin);
 
 function TimePicker(params) {
     var activity = AndroidConfig.activity;
@@ -11,6 +18,14 @@ function TimePicker(params) {
 
     if (!this.nativeObject) {
         createTimerDialog(this);
+    }
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onTimeSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
     }
 
     Object.defineProperties(this, {
@@ -55,6 +70,12 @@ function TimePicker(params) {
                 return _minutes;
             },
             enumerable: true
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
         }
     });
 

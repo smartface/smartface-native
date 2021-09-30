@@ -1,3 +1,20 @@
+import { IEventEmitter } from "core/eventemitter";
+
+declare enum Events {
+  /**
+   * Triggered when a time is selected on the picker.
+   *
+   * @since 0.1
+   * @param {Object} time
+   * @param {Number} time.hour
+   * @param {Number} time.minute
+   * @event onTimeSelected
+   * @android
+   * @ios
+   */
+  Selected = "selected"
+}
+
 /**
  * @class UI.TimePicker
  * @since 0.1
@@ -14,7 +31,10 @@
  *     myTimePicker.show();
  *
  */
-declare class TimePicker extends NativeComponent {
+declare class TimePicker extends NativeComponent implements IEventEmitter<typeof Events> {
+  on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+  off(eventName: typeof Events, callback?: (...args: any) => void): void;
+  emit(event: typeof Events, detail?: any[]): void;
 /**
  * Sets the time avaliable on the picker.
  *
@@ -54,6 +74,7 @@ declare class TimePicker extends NativeComponent {
  * @param {Object} time
  * @param {Number} time.hour
  * @param {Number} time.minute
+ * @deprecated
  * @event onTimeSelected
  * @android
  * @ios
