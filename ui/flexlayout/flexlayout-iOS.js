@@ -1,9 +1,23 @@
 const ViewGroup = require('../viewgroup');
 const YogaEnums = require('../../util').YogaEnums;
+const Events = require('./events');
 
 FlexLayout.prototype = Object.create(ViewGroup.prototype);
 function FlexLayout(params) {
     ViewGroup.call(this);
+
+    const EventFunctions = {
+        [Events.InterceptTouchEvent]: function() {
+            //Android Only
+        }
+    }
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
 
     // Assign parameters given in constructor
     if (params) {
