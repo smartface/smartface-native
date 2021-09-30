@@ -1,5 +1,21 @@
+import { IEventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
+
+declare enum Events {
+    /**
+     * This event is called when an item is selected/unselected on the SelectablePicker.
+     * If multiSelectEnabled is false, selected will be always true.
+     *
+     * @param {Number} index
+     * @param {Boolean} selected
+     * @event onSelected
+     * @android
+     * @since 4.0.5
+     */
+    Selected = "selected"
+}
+
 /**
  * @class UI.SelectablePicker
  * @since 4.0.5
@@ -30,8 +46,11 @@ import Font from "../font";
  *     }
  *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
-declare class SelectablePicker extends NativeComponent {
+declare class SelectablePicker extends NativeComponent implements IEventEmitter<typeof Events> {
     constructor(params?: any);
+    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof Events, callback?: (...args: any) => void): void;
+    emit(event: typeof Events, detail?: any[]): void;
 /**
  * Gets/sets items of the SelectablePicker.
  *
@@ -47,6 +66,7 @@ declare class SelectablePicker extends NativeComponent {
  * @param {Number} index
  * @param {Boolean} selected
  * @event onSelected
+ * @deprecated
  * @android
  * @since 4.0.5
  */

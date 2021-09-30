@@ -7,6 +7,13 @@ const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 const ParentPicker = require("../../ui/picker/parentPicker");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+
+SelectablePicker.prototype = Object.assign({}, EventEmitterMixin);
 
 function SelectablePicker(params) {
     var self = this;
@@ -32,6 +39,14 @@ function SelectablePicker(params) {
     var _doneButtonFont, _doneButtonColor;
     var _cancelButtonText = "Cancel";
     var _cancelButtonFont, _cancelButtonColor;
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
 
     Object.defineProperties(this, {
         'items': {
@@ -201,6 +216,12 @@ function SelectablePicker(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
         }
     });
 

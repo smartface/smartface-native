@@ -196,4 +196,32 @@ SelectablePicker.prototype.doneButtonFont;
  */
 SelectablePicker.prototype.show = function(done, cancel) {};
 
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ SelectablePicker.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+  SelectablePicker.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+  SelectablePicker.prototype.emit = function(event, detail) {}
+
 module.exports = SelectablePicker;
