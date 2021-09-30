@@ -1,4 +1,11 @@
 const Color = require("../color");
+const {
+    EventEmitterMixin,
+    EventEmitter
+} = require("../../core/eventemitter");
+const Events = require('./events');
+
+FloatingMenuItem.prototype = Object.assign({}, EventEmitterMixin);
 
 function FloatingMenuItem(params) {
     var _title;
@@ -6,6 +13,14 @@ function FloatingMenuItem(params) {
     var _icon;
     var _color = Color.WHITE;
     var _callbackClick;
+    this.emitter = new EventEmitter();
+    const EventFunctions = {
+        [Events.Click]: function() {
+            _callbackClick = (state) => {
+                this.emitter.emit(Events.Click, state);
+            } 
+        }
+    }
 
     Object.defineProperties(this, {
         'title': {
@@ -58,6 +73,12 @@ function FloatingMenuItem(params) {
             },
             set: function(callback) {
                 _callbackClick = callback;
+            }
+        },
+        'on': {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
             }
         }
     });

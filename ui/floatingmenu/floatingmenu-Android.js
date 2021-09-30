@@ -10,7 +10,14 @@ const NativeOnCloseListener = requireClass("uk.co.markormesher.android_fab.Float
 const NativeMenuItem = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
 const Color = require("../color");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+
+FloatingMenu.prototype = Object.assign({}, EventEmitterMixin);
 function FloatingMenu(params) {
     var nativeObject;
     var _items = [];
@@ -20,6 +27,8 @@ function FloatingMenu(params) {
     var _callbackClick;
     var _callbackOpen;
     var _callbackClose;
+
+    this.emitter = new EventEmitter();
 
     const SFSpeedDialAdapter = requireClass("io.smartface.android.sfcore.ui.floatingmenu.SFSpeedDialAdapter");
     var overrideMethods = {
@@ -100,6 +109,25 @@ function FloatingMenu(params) {
 
         nativeObject = this.nativeObject;
     }
+
+    const EventFunctions = {
+        [Events.MenuClose]: function() {
+            _callbackClose = (state) => {
+                this.emitter.emit(Events.MenuClose, state);
+            } 
+        },
+        [Events.MenuOpen]: function() {
+            _callbackOpen = (state) => {
+                this.emitter.emit(Events.MenuOpen, state);
+            } 
+        },
+        [Events.Click]: function() {
+            _callbackClick = (state) => {
+                this.emitter.emit(Events.Click, state);
+            } 
+        }
+    }
+
 
     Object.defineProperties(this, {
         'items': {
@@ -183,6 +211,12 @@ function FloatingMenu(params) {
                 } else {
                     nativeObject.setVisibility(4); // View.INVISIBLE    
                 }
+            }
+        },
+        'on': {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
             }
         }
     });
