@@ -2,6 +2,7 @@
 const Label = require('../label');
 const TextAlignment = require("../textalignment");
 const TypeUtil = require("../../util/type");
+const Events = require('./events');
 
 const unitconverter = require('../../util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
@@ -37,6 +38,14 @@ function TextView(params) {
         _lineSpacing = 0,
         _scrollEnabled = true,
         _htmlText;
+
+    const EventFunctions = {
+        [Events.LinkClick]: function() {
+            _onLinkClick = function (state) {
+                self.emitter.emit(Events.LinkClick, state);
+            } 
+        }
+    }
 
     Object.defineProperties(self, {
         'htmlText': {
@@ -202,6 +211,12 @@ function TextView(params) {
             set: (scrollEnabled) => {
                 _scrollEnabled = scrollEnabled;
                 enableScrollable.call(self, _scrollEnabled);
+            }
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
             }
         }
     });
