@@ -6,15 +6,35 @@ const Exception = require("../../util/exception");
 const NativeSpannable = requireClass("android.text.Spanned");
 const NativeColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
+const {
+    EventEmitterMixin,
+    EventEmitter
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+
+MenuItem.prototype = Object.assign({}, EventEmitterMixin);
+
 
 function MenuItem(params) {
     this.android = {};
     this.ios = {};
     this.android.titleSpanned;
 
+    this.emitter = new EventEmitter();
+
     var _title;
     var _titleColor;
     var _onSelected;
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+    
     Object.defineProperties(this, {
         'title': {
             get: function() {
@@ -46,6 +66,12 @@ function MenuItem(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
         }
     });
 
