@@ -428,4 +428,33 @@ Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
  */
 Page.iOS.LargeTitleDisplayMode.NEVER = 2;
 
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ Page.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+  Page.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+  Page.prototype.emit = function(event, detail) {}
+
+
 module.exports = Page;

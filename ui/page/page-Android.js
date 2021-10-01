@@ -33,7 +33,13 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 13
 };
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+
+Page.prototype = Object.assign({}, EventEmitterMixin);
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -285,6 +291,44 @@ function Page(params) {
                 _transitionViewsCallback = transitionViewsCallback;
             },
             enumerable: true
+        }
+    });
+
+    const EventFunctions = {
+        [Events.Show]: function() {
+            __onShowCallback = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.Load]: function() {
+            onLoadCallback = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.BackButtonPressed]: function() {
+            _onBackButtonPressed = function (state) {
+                this.emitter.emit(Events.BackButtonPressed, state);
+            } 
+        },
+        [Events.OrientationChange]: function() {
+            _onOrientationChange = function (state) {
+                this.emitter.emit(Events.OrientationChange, state);
+            } 
+        },
+        [Events.SafeAreaPaddingChange]: function() {
+            //iOS only
+        },
+        [Events.Hide]: function() {
+            onHideCallback = function (Hide) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
         }
     });
 
