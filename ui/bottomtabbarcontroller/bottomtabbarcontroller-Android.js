@@ -94,6 +94,27 @@ function BottomTabBarController(params) {
         }
     });
 
+    const EventFunctions = {
+        [Events.SelectByIndex]: function() {
+            _didSelectByIndexCallback = (index) => {
+                this.emitter.emit(Events.SelectByIndex, index);
+            } 
+        },
+        [Events.ShouldSelectByIndex]: function() {
+            _shouldSelectByIndexCallback = (index) => {
+                this.emitter.emit(Events.ShouldSelectByIndex, index);
+                return index;
+            } 
+        },
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
+
     this.addTabBarToActivity = function() {
         if (!_disabledShiftingMode) {
             _disabledShiftingMode = disableShiftMode(self.tabBar);

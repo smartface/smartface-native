@@ -2,6 +2,12 @@ import NavigationController from "../navigationcontroller";
 import View from "../view";
 import Page from "../page";
 import BottomTabBar from "../bottomtabbar";
+import { IEventEmitter } from "core/eventemitter";
+
+declare enum Events {
+    SelectByIndex = "selectByIndex",
+    ShouldSelectByIndex = "shouldSelectByIndex"
+}
 
 /**
  * @class UI.BottomTabbarController
@@ -22,8 +28,11 @@ import BottomTabBar from "../bottomtabbar";
  *
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
-declare class BottomTabBarController extends NativeComponent {
+declare class BottomTabBarController extends NativeComponent implements IEventEmitter<typeof Events> {
 	constructor(params?: any);
+    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof Events, callback?: (...args: any) => void): void;
+    emit(event: typeof Events, detail?: any[]): void;
 	getCurrentController: () => NavigationController | Page;
 	shouldSelectViewController: (index: any) => boolean;
     didSelectViewController: (index: any) => void;
