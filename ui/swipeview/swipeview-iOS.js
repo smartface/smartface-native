@@ -277,6 +277,39 @@ function SwipeView(params) {
         }
     }
 
+
+    const EventFunctions = {
+        [Events.PageScrolled]: function() {
+            self.onPageScrolled = function (state) {
+                this.emitter.emit(Events.PageScrolled, state);
+            } 
+        },
+        [Events.PageSelected]: function() {
+            self.onPageSelected = function (state) {
+                this.emitter.emit(Events.PageSelected, state);
+            } 
+        },
+        [Events.StateSelected]: function() {
+            self.onStateChanged = function (state) {
+                this.emitter.emit(Events.StateSelected, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     self.pageControllerDelegate = new __SF_UIPageViewControllerDelegate();
 
     var pendingViewControllerIndex;

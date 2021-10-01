@@ -2,6 +2,7 @@
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
+const Events = require('./events');
 
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("io.smartface.android.sfcore.ui.swipeview.SFSwipeView");
@@ -162,6 +163,38 @@ function SwipeView(params) {
                 page.isSwipeViewPage = true;
             }
         }
+    });
+
+    const EventFunctions = {
+        [Events.PageScrolled]: function() {
+            _callbackOnPageScrolled = function (state) {
+                this.emitter.emit(Events.PageScrolled, state);
+            } 
+        },
+        [Events.PageSelected]: function() {
+            _callbackOnPageSelected = function (state) {
+                this.emitter.emit(Events.PageSelected, state);
+            } 
+        },
+        [Events.StateSelected]: function() {
+            _callbackOnPageStateChanged = function (state) {
+                this.emitter.emit(Events.StateSelected, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     this.getPageInstance = function(position) {
