@@ -4,6 +4,7 @@ const Color = require('../color');
 const TypeUtil = require('../../util/type');
 const Font = require('../font');
 const AndroidConfig = require('../../util/Android/androidconfig');
+const Events = require('./events');
 
 // TODO: [AND-3663] Create a java wrapper class for google map
 const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.MapClusterItem");
@@ -612,6 +613,53 @@ function MapView(params) {
             },
             enumerable: true
         }
+    });
+
+    const EventFunctions = {
+        [Events.CameraMoveEnded]: function() {
+            _onCameraMoveEnded = function (state) {
+                this.emitter.emit(Events.CameraMoveEnded, state);
+            } 
+        },
+        [Events.CameraMoveStarted]: function() {
+            _onCameraMoveStarted = function (state) {
+                this.emitter.emit(Events.CameraMoveStarted, state);
+            } 
+        },
+        [Events.ClusterPress]: function() {
+            _clusterOnPress = function (state) {
+                this.emitter.emit(Events.ClusterPress, state);
+            } 
+        },
+        [Events.Create]: function() {
+            _onCreate = function (state) {
+                this.emitter.emit(Events.Create, state);
+            } 
+        },
+        [Events.LongPress]: function() {
+            _onLongPress = function (state) {
+                this.emitter.emit(Events.LongPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            _onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        },
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     // Assign parameters given in constructor

@@ -3,6 +3,11 @@ const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.
 
 const TypeUtil = require('../../../util/type');
 const Color = require('../../color');
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
 
 const hueDic = {};
 hueDic[Color.BLUE.nativeObject] = NativeDescriptorFactory.HUE_BLUE;
@@ -11,6 +16,8 @@ hueDic[Color.GREEN.nativeObject] = NativeDescriptorFactory.HUE_GREEN;
 hueDic[Color.MAGENTA.nativeObject] = NativeDescriptorFactory.HUE_MAGENTA;
 hueDic[Color.RED.nativeObject] = NativeDescriptorFactory.HUE_RED;
 hueDic[Color.YELLOW.nativeObject] = NativeDescriptorFactory.HUE_YELLOW;
+
+Pin.prototype = Object.assign({}, EventEmitterMixin);
 
 function Pin(params) {
     var self = this;
@@ -27,6 +34,20 @@ function Pin(params) {
     var _title = "";
     var _visible = true;
     var _id = 0;
+
+    const EventFunctions = {
+        [Events.InfoWindowPress]: function() {
+            _onInfoWindowPress = function (state) {
+                this.emitter.emit(Events.InfoWindowPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            _onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        }
+    }
+
     Object.defineProperties(self, {
         'color': {
             get: function() {
@@ -143,6 +164,12 @@ function Pin(params) {
             },
             set: function(callback) {
                 _onInfoWindowPress = callback;
+            }
+        },
+        'on':  {
+            value: (event, callback) => {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
             }
         }
     });

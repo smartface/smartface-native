@@ -4,6 +4,11 @@ const Image = require("../../ui/image");
 const Color = require('../../ui/color');
 const Location = require('../../device/location');
 const Invocation = require('../../util').Invocation;
+const Events = require('./events');
+const PinEvents = require('./pin/events');
+const {
+    EventEmitterMixin
+} = require("../../core/eventemitter");
 
 MapView.prototype = Object.create(View.prototype);
 function MapView(params) {
@@ -493,6 +498,53 @@ function MapView(params) {
         return pinArray;
     }
 
+    const EventFunctions = {
+        [Events.CameraMoveEnded]: function() {
+            _onCameraMoveEnded = function (state) {
+                this.emitter.emit(Events.CameraMoveEnded, state);
+            } 
+        },
+        [Events.CameraMoveStarted]: function() {
+            _onCameraMoveStarted = function (state) {
+                this.emitter.emit(Events.CameraMoveStarted, state);
+            } 
+        },
+        [Events.ClusterPress]: function() {
+            _clusterOnPress = function (state) {
+                this.emitter.emit(Events.ClusterPress, state);
+            } 
+        },
+        [Events.Create]: function() {
+            _onCreate = function (state) {
+                this.emitter.emit(Events.Create, state);
+            } 
+        },
+        [Events.LongPress]: function() {
+            _onLongPress = function (state) {
+                this.emitter.emit(Events.LongPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            _onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        },
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
@@ -614,6 +666,27 @@ function Pin(params) {
         },
         enumerable: true
     });
+
+    const EventFunctions = {
+        [PinEvents.InfoWindowPress]: function() {
+            self.nativeObject.onInfoPress = function (state) {
+                this.emitter.emit(Events.InfoWindowPress, state);
+            } 
+        },
+        [PinEvents.Press]: function() {
+            self.nativeObject.onPress = function (state) {
+                this.emitter.emit(Events.InfoWindowPress, state);
+            } 
+        }
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
+    
 
     if (params) {
         for (var param in params) {
