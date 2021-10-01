@@ -484,6 +484,48 @@ function SearchView(params) {
         enumerable: true
     });
 
+    const EventFunctions = {
+        [Events.CancelButtonClicked]: function() {
+            _onSearchButtonClicked = function (state) {
+                this.emitter.emit(Events.CancelButtonClicked, state);
+            } 
+        },
+        [Events.SearchBegin]: function() {
+            _onSearchBeginCallback = function (state) {
+                this.emitter.emit(Events.SearchBegin, state);
+            } 
+        },
+        [Events.SearchButtonClicked]: function() {
+            _onSearchButtonClickedCallback = function (state) {
+                this.emitter.emit(Events.SearchButtonClicked, state);
+            } 
+        },
+        [Events.SearchEnd]: function() {
+            _onSearchEndCallback = function (state) {
+                this.emitter.emit(Events.SearchEnd, state);
+            } 
+        },
+        [Events.TextChanged]: function() {
+            _onTextChangedCallback = function (state) {
+                this.emitter.emit(Events.TextChanged, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     //////////////////////////////////////////////////////
     // UISearchBarDelegate
     self.searchBarDelegate = new __SF_UISearchBarDelegate();

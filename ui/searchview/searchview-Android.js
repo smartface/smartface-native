@@ -8,6 +8,7 @@ const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const Exception = require("../../util/exception");
+const Events = require('./events');
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
@@ -305,6 +306,47 @@ function SearchView(params) {
             enumerable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.CancelButtonClicked]: function() {
+            //iOS Only
+        },
+        [Events.SearchBegin]: function() {
+            _onSearchBeginCallback = function (state) {
+                this.emitter.emit(Events.SearchBegin, state);
+            } 
+        },
+        [Events.SearchButtonClicked]: function() {
+            _onSearchButtonClickedCallback = function (state) {
+                this.emitter.emit(Events.SearchButtonClicked, state);
+            } 
+        },
+        [Events.SearchEnd]: function() {
+            _onSearchEndCallback = function (state) {
+                this.emitter.emit(Events.SearchEnd, state);
+            } 
+        },
+        [Events.TextChanged]: function() {
+            _onTextChangedCallback = function (state) {
+                this.emitter.emit(Events.TextChanged, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+    
 
     var _hintTextColor = Color.LIGHTGRAY;
     var _keyboardType = KeyboardType.DEFAULT;
