@@ -224,6 +224,7 @@ TabBarController.prototype.pagingEnabled = true;
  * Returns an {@link UI.Page Page} instance based on index.
  *
  * @event onPageCreate
+ * @deprecated
  * @param index
  * @return UI.Page
  * @android
@@ -236,9 +237,38 @@ TabBarController.prototype.onPageCreate;
  * This event called when a tab is chosen by the user.
  *
  * @event onSelected
+ * @deprecated
  * @param index
  * @android
  * @ios
  * @since 3.2.0
  */
 TabBarController.prototype.onSelected;
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ CallDetection.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.emit = function(event, detail) {}

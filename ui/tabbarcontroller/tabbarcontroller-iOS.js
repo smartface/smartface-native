@@ -51,6 +51,43 @@ function TabBarController(params) {
         configurable: true
     });
 
+
+    const EventFunctions = {
+        [Events.PageCreate]: function() {
+            _onPageCreate = (state) => {
+                this.emitter.emit(Events.PageCreate, state);
+            };
+            self.nativeObject.viewControllerForIndex = function(index) {
+                var retval = undefined;
+                retval = _onPageCreate.call(this, index).nativeObject;
+                return retval;
+            }.bind(this);
+        },
+
+        [Events.Selected]: function() {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            } ;
+            self.nativeObject.tabWillSelectAtIndex = function(index) {
+                _onSelected.call(this, index);
+            }.bind(this);
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     // Properties
     var _items = [];
     Object.defineProperty(this, 'items', {

@@ -11,6 +11,7 @@ const Application = require("../../application");
 const Page = require('../page');
 const Color = require('../color');
 const SwipeView = require('../swipeview');
+const Events = require('./events');
 
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
@@ -313,6 +314,34 @@ function TabBarController(params) {
             enumerable: true,
             configurable: true
         },
+    });
+
+    const EventFunctions = {
+        [Events.PageCreate]: function() {
+            _onPageCreateCallback = function (state) {
+                this.emitter.emit(Events.PageCreate, state);
+            } 
+        },
+
+        [Events.Selected]: function() {
+            _onSelectedCallback = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     this.setSelectedIndex = function(index, animated) {
