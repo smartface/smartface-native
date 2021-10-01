@@ -1,7 +1,7 @@
 const View = require('../../ui/view');
-const File = require("../../io/file");
 const Exception = require("../../util").Exception;
 const TypeUtil = require("../../util/type");
+const Events = require('./events');
 
 // const VideoView = extend(View)(
 VideoView.prototype = Object.create(View.prototype);
@@ -219,6 +219,58 @@ function VideoView(params) {
             self.avPlayerViewController.restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = value;
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.Finish]: function() {
+            self.onFinish = function (state) {
+                self.emitter.emit(Events.Finish, state);
+            } 
+        },
+        [Events.Ready]: function() {
+            self.onReady = function (state) {
+                self.emitter.emit(Events.Ready, state);
+            } 
+        },
+        [Events.DidStartPictureInPicture]: function() {
+            self.ios.didStartPictureInPicture = function (state) {
+                self.emitter.emit(Events.DidStartPictureInPicture, state);
+            } 
+        },
+        [Events.DidStopPictureInPicture]: function() {
+            self.ios.didStopPictureInPicture = function (state) {
+                self.emitter.emit(Events.DidStopPictureInPicture, state);
+            } 
+        },
+        [Events.WillStartPictureInPicture]: function() {
+            self.ios.willStartPictureInPicture = function (state) {
+                self.emitter.emit(Events.DidStartPictureInPicture, state);
+            } 
+        },
+        [Events.WillStopPictureInPicture]: function() {
+            self.ios.willStopPictureInPicture = function (state) {
+                self.emitter.emit(Events.DidStartPictureInPicture, state);
+            } 
+        },
+        [Events.RestoreUserInterfaceForPictureInPictureStopWithCompletionHandler]: function() {
+            _restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = function (state) {
+                self.emitter.emit(Events.RestoreUserInterfaceForPictureInPictureStopWithCompletionHandler, state);
+            } 
+        },
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     if (params) {
