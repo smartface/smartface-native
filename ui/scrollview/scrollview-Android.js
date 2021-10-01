@@ -4,6 +4,7 @@ const UnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const scrollableSuper = require("../../util/Android/scrollable");
+const Events = require('./events');
 
 ScrollView.prototype = Object.create(ViewGroup.prototype);
 function ScrollView(params) {
@@ -82,6 +83,43 @@ function ScrollView(params) {
     // var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
     // this.nativeObject.addView(_layout.nativeObject, layoutParams);
     this.nativeObject.addView(_layout.nativeObject);
+
+    const EventFunctions = {
+        [Events.Scroll]: function() {
+            _callbackOnScroll = (state) => {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollBeginDragging]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            //iOS Only
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
 
     _layout.parent = this;
     var _callbackOnScroll = null;

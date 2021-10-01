@@ -4,6 +4,7 @@ const ScrollViewEdge = require("../../ui/scrollview/scrollview-edge");
 const FlexLayout = require('../../ui/flexlayout');
 const Color = require('../../ui/color');
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
+const Events = require('./events');
 
 const ScrollType = {
     vertical: 0,
@@ -217,6 +218,81 @@ function ScrollView(params) {
             self.nativeObject.showsVerticalScrollIndicator = value;
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.Scroll]: function() {
+            self.nativeObject.didScroll = (state) => {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            const onScrollBeginDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDecelerating, contentOffset)
+            };
+            nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
+        },
+        [Events.ScrollBeginDragging]: function() {
+            const onScrollBeginDraggingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDragging, contentOffset)
+            };
+            self.ios.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            const onScrollEndDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDecelerating, contentOffset)
+            };
+            nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            const onScrollEndDraggingWillDecelerateHandler = function(scrollView, decelerate) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset)
+
+            };
+            nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = function(scrollView, velocity, targetContentOffset) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                targetContentOffset.x += +scrollView.contentInsetDictionary.left;
+                targetContentOffset.y += +scrollView.contentInsetDictionary.top;
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset, velocity, targetContentOffset);
+            };
+            nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     var _align = ScrollType.vertical;
