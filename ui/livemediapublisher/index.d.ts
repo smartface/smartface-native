@@ -1,4 +1,20 @@
 import View from "../../ui/view";
+
+declare enum IEvents {
+    /**
+     * Set the event callback.
+     *
+     * @event onChange
+     * @param {Object} params
+     * @param {Number} params.event See more: https://github.com/NodeMedia/NodeMediaClient-Android/blob/2.x/docs/NodePlayer_API_CN.md#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83
+     * @param {String} params.message
+     * @android
+     * @ios
+     * @since 4.2.2
+     */
+    Change = "change"
+}
+
 /**
  * @class UI.LiveMediaPublisher
  * @since 4.2.2
@@ -17,7 +33,7 @@ import View from "../../ui/view";
  *     liveMediaPublisher.start(); // Start streaming
  */
 
- declare class LiveMediaPublisher extends View {
+ declare class LiveMediaPublisher extends View<IEvents> {
     /**
      * The camera starts to preview.
      *
@@ -183,7 +199,8 @@ import View from "../../ui/view";
 
 
 declare namespace LiveMediaPublisher {
-
+    const Events: typeof IEvents & typeof View.Events
+    type Events = typeof Events
    /**
      * //TODO Add definition
      * @enum {Number} UI.LiveMediaPublisher.Camera
