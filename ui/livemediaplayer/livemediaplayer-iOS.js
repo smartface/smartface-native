@@ -1,4 +1,5 @@
 const View = require('../../ui/view');
+const Events = require('./events');
 
 LiveMediaPlayer.prototype = Object.create(View.prototype)
 
@@ -100,6 +101,28 @@ function LiveMediaPlayer(params) {
             enumerable: true,
             configurable: true
         }
+    });
+
+    const EventFunctions = {
+        [Events.Change]: function() {
+            _onChange = function (state) {
+                this.emitter.emit(Events.CallStateChanged, state);
+            } 
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
     });
 
     // Assign parameters given in constructor
