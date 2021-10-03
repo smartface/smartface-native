@@ -2,6 +2,7 @@ const View = require('../view');
 
 const UIControlEvents = require("../../util").UIControlEvents;
 const Color = require("../../ui/color");
+const Events = require('./events');
 
 const SliderState = {
     normal: 0,
@@ -129,6 +130,27 @@ function Slider(params) {
         },
         enumerable: true
     });
+
+    const EventFunctions = {
+		[Events.ValueChange]: function () {
+			_onValueChange = function (state) {
+				this.emitter.emit(Events.ValueChange, state);
+			};
+		},
+	};
+
+	const parentOnFunction = this.on;
+	Object.defineProperty(this, "on", {
+		value: (event, callback) => {
+			if (typeof EventFunctions[event] === "function") {
+				EventFunctions[event].call(this);
+				this.emitter.on(event, callback);
+			} else {
+				parentOnFunction(event, callback);
+			}
+		},
+		configurable: true,
+	});
 
     var _value = 0;
 
