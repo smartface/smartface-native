@@ -148,6 +148,29 @@ function SliderDrawer(params) {
         configurable: true
     });
 
+    const EventFunctions = {
+        [Events.Show]: function() {
+            self.onShow = function (state) {
+                self.emitter.emit(Events.Show, state);
+            } 
+        }
+        //onLoad and onHide comes from the page
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     self.onShow = function(e) {};
 
     this.show = function() {
