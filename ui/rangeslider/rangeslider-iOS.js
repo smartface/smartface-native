@@ -201,6 +201,28 @@ function RangeSlider(params) {
 		enumerable: true
 	});
 
+	const EventFunctions = {
+		[Events.ValueChange]: function() {
+				_onValueChange = function (state) {
+						this.emitter.emit(Events.ValueChange, state);
+				} 
+		}
+}
+
+const parentOnFunction = this.on;
+Object.defineProperty(this, 'on', {
+		value: (event, callback) => {
+				if (typeof EventFunctions[event] === 'function') {
+						EventFunctions[event].call(this);
+						this.emitter.on(event, callback);
+				}
+				else {
+						parentOnFunction(event, callback);
+				}
+		},
+		configurable: true
+});
+
 	Object.defineProperty(self, 'isTrackRounded', {
 		get: function() {
 			return self.nativeObject.hasRoundTrackEnds;
