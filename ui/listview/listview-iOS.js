@@ -501,11 +501,6 @@ function ListView(params) {
             } 
         },
         [Events.ScrollBeginDecelerating]: function() {
-            self.onScroll = function (state) {
-                this.emitter.emit(Events.Scroll, state);
-            } 
-        },
-        [Events.ScrollBeginDecelerating]: function() {
             const onScrollBeginDeceleratingHandler = function(scrollView) {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
