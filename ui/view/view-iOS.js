@@ -3,10 +3,7 @@ const Exception = require("../../util").Exception;
 const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
-const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
+const { EventEmitterCreator } = require("../../core/eventemitter");
 
 const EventList = require('./events');
 
@@ -68,7 +65,7 @@ const EventFunctions = {
 function View(params) {
 
     var self = this;
-    self.emitter = new EventEmitter();
+    EventEmitterCreator(this, View, EventFunctions, EventList);
     self.android = {};
     self.ios = {};
 
@@ -492,14 +489,6 @@ function View(params) {
         var screenOrigin = Invocation.invokeInstanceMethod(self.nativeObject, "convertPoint:toView:", [origin, view], "CGPoint");
         return screenOrigin;
     }
-
-    Object.defineProperty(self, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(self);
-            self.emitter.on(event, callback);
-        },
-        configurable: true
-    });
 
     var _onTouch;
     Object.defineProperty(self, 'onTouch', {
@@ -1349,11 +1338,7 @@ function View(params) {
 
 }
 
-View.prototype = Object.assign({}, EventEmitterMixin);
-
 View.ios = {};
-
-View.Events = { ...EventList };
 
 Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
     get: function () {

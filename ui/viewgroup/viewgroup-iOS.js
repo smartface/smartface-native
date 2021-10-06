@@ -1,21 +1,21 @@
 const View = require('../view');
-const { EventWrapper } = require("../../core/eventemitter");
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const EventList = require('./events');
 
-ViewGroup.Events = { ...View.Events, ...EventList };
+const Events = { ...View.Events, ...EventList };
 
 const EventFunctions = {
     [EventList.ViewAdded]: function (view) {
-      this.onViewAdded = EventWrapper(this, EventList.ViewAdded, null, view);
+      this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null, view);
     },
     [EventList.ViewRemoved]: function (view) {
-      this.onViewRemoved = EventWrapper(this, EventList.ViewRemoved, null, view);
+      this.onViewRemoved = EventEmitterWrapper(this, EventList.ViewRemoved, null, view);
     },
     [EventList.ChildViewAdded]: function (view) {
-      this.onChildViewAdded = EventWrapper(this, EventList.ChildViewAdded, null, view);
+      this.onChildViewAdded = EventEmitterWrapper(this, EventList.ChildViewAdded, null, view);
     },
     [EventList.ChildViewRemoved]: function (view) {
-      this.onChildViewRemoved = EventWrapper(this, EventList.ChildViewRemoved, null, view);
+      this.onChildViewRemoved = EventEmitterWrapper(this, EventList.ChildViewRemoved, null, view);
     },
   };
 
@@ -33,6 +33,7 @@ function ViewGroup(params) {
     self.childs = {};
 
     View.apply(this);
+    EventEmitterCreator(this, View, EventFunctions, Events);
 
     this.addChild = function(view) {
         view.parent = self;

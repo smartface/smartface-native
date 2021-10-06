@@ -1,6 +1,9 @@
 /*globals requireClass*/
 const AndroidConfig = require("../../util/Android/androidconfig");
 const ViewGroup = require('../viewgroup');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const EventsList = require('./events');
+const Events = {...ViewGroup.Events, ... EventsList};
 
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
@@ -27,7 +30,18 @@ function FlexLayout(params) {
         });
     }
 
+    const EventFunctions = {
+        [Events.InterceptTouchEvent] : function() {
+            const handler = function (e) {
+                this.emitter.emit(Events.InterceptTouchEvent);
+            };
+            _onInterceptTouchEvent = handler.bind(this);
+        }
+    }
+
     ViewGroup.call(this);
+    EventEmitterCreator(this, FlexLayout, EventFunctions, Events);
+
 
     let _onInterceptTouchEvent;
     Object.defineProperties(this.android, {

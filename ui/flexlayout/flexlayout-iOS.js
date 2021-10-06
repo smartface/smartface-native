@@ -1,9 +1,13 @@
 const ViewGroup = require('../viewgroup');
 const YogaEnums = require('../../util').YogaEnums;
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const EventsList = require('./events');
+const Events = {...ViewGroup.Events, ... EventsList};
 
 FlexLayout.prototype = Object.create(ViewGroup.prototype);
 function FlexLayout(params) {
     ViewGroup.call(this);
+    EventEmitterCreator(this, FlexLayout, {}, Events);
 
     // Assign parameters given in constructor
     if (params) {
