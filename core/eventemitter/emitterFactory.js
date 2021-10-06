@@ -56,44 +56,27 @@ const { EventEmitter } = require('./emitterClass');
  * @param {*} callback This will be invoked after the relevant eventFunction is called. Will be bound to 'targetInstance' There is no filter.
  */
 function EventEmitterCreator(targetInstance, targetClass, eventFunctions, eventList, eventCallback = () => {}) {
-  const targetEmitter = targetInstance.emitter;
   targetClass.Events = { ...eventList };
-  if (targetEmitter) {
-    //Means this is an inheritance
-    const parentOnFunction = targetInstance.on;
-    Object.defineProperty(targetInstance, 'on', {
-        value: (event, callback) => {
-            if (typeof eventFunctions[event] === 'function') {
-              eventFunctions[event].call(targetInstance);
-              typeof eventCallback === 'function' && eventCallback.call(targetInstance);
-              targetInstance.emitter.on(event, callback);
-              return () => targetInstance.emitter.off(event, callback);
-            }
-            else {
-              if (typeof parentOnFunction === 'function') {
-                return parentOnFunction(event, callback);
-              }
-            }
-        },
-        configurable: true
-    });
-  }
-  else {
-    //Means this is the parent class
-    targetInstance.emitter = new EventEmitter();
-    Object.defineProperty(targetInstance, 'on', {
-      value: (event, callback) => {
-        if (typeof eventFunctions[event] === 'function') {
-          eventFunctions[event].call(targetInstance);
-          typeof eventCallback === 'function' && eventCallback.call(targetInstance);
-          targetInstance.emitter.on(event, callback);
-        }
-          // Don't handle anything if the event isn't there
-        return () => targetInstance.emitter.off(event, callback);
-      },
-      configurable: true
-    });
-  }
+  const parentOnFunction = targetInstance.on;
+  targetInstance.emitter = targetInstance.emitter || new EventEmitter();
+  
+  const onFunction = (event, callback) => {
+    if (typeof eventFunctions[event] === 'function') {
+      eventFunctions[event].call(targetInstance);
+      typeof eventCallback === 'function' && eventCallback.call(targetInstance);
+      targetInstance.emitter.on(event, callback);
+      return () => targetInstance.emitter.off(event, callback);
+    }
+    else {
+      if (typeof parentOnFunction === 'function') {
+        return parentOnFunction(event, callback);
+      }
+    }
+  };
+  Object.defineProperty(targetInstance, 'on', {
+    value: onFunction,
+    configurable: true
+  });
 }
 
 module.exports = {
