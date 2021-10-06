@@ -56,7 +56,8 @@ const EventFunctions = {
     }
 }
 var SFApplication = {};
-EventEmitterCreator(SFApplication, Application, EventFunctions, Events);
+SFApplication.Events = Events;
+EventEmitterCreator(SFApplication, EventFunctions);
 
 Object.defineProperty(SFApplication, 'byteReceived', {
     get: function() {
