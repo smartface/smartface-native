@@ -228,9 +228,9 @@ declare enum KeyboardMode {
  * A set of collection for application based properties and methods.
  */
 declare class Application {
-  static on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-  static off(eventName: typeof Events, callback?: (...args: any) => void): void;
-  static emit(event: typeof Events, detail?: any[]): void;
+  static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static off(eventName: Events, callback?: (...args: any) => void): void;
+  static emit(event: Events, detail?: any[]): void;
   /**
    * The received bytes from the application.
    *
@@ -1042,7 +1042,7 @@ declare class Application {
    * @since 0.1
    */
   static version: string;
-  static Events: Events;
+  static Events: typeof Events;
 }
 
 export = Application;
