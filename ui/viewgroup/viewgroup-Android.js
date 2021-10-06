@@ -2,7 +2,7 @@
 const View = require('../view');
 const TypeUtil = require("../../util/type");
 const NativeViewGroup = requireClass("android.view.ViewGroup");
-const { EventEmitterCreator } = require("../../core/eventemitter");
+const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventemitter");
 const EventList = require('./events');
 
 ViewGroup.prototype = Object.create(View.prototype);
