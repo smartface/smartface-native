@@ -497,7 +497,8 @@ function View(params) {
         value: (event, callback) => {
             EventFunctions[event].call(self);
             self.emitter.on(event, callback);
-        }
+        },
+        configurable: true
     });
 
     var _onTouch;

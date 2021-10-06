@@ -21,6 +21,5 @@
 }
 
 module.exports = {
-  EventClassFactory,
   EventWrapper
 };
