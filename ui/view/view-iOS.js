@@ -62,10 +62,12 @@ const EventFunctions = {
     }
 };
 
+View.Events = { ...EventList }
+
 function View(params) {
 
     var self = this;
-    EventEmitterCreator(this, View, EventFunctions, EventList);
+    EventEmitterCreator(this, EventFunctions);
     self.android = {};
     self.ios = {};
 

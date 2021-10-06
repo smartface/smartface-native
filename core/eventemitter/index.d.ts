@@ -69,14 +69,12 @@ export function EventEmitterWrapper(target: any, callback: (...args: any) => any
  *       setHierarchyChangeListener(this);
  *     }
  *   }
- *   EventEmitterCreator(this, ViewGroup, EventFunctions, Events, emitterCallBack.bind(this));
+ *   EventEmitterCreator(this, EventFunctions, emitterCallBack.bind(this));
  * }
  * 
  * ```
  * @param {*} targetInstance this object
- * @param {*} targetClass The Current Class
  * @param {*} eventFunctions Object of Functions. It will be bound to the current context using targetInstance parameter. If there is no function to inherit, pass empty object.
- * @param {*} eventList If this is an inheritence, please combine them and pass it as parameter.
  * @param {*} callback This will be invoked after the relevant eventFunction is called. Will be bound to 'targetInstance' There is no filter.
  */
-export function EventEmitterCreator(targetInstance: any, targetClass: any, eventFunctions: Record<string, (...args: any) => any>, eventList: Record<string, string>, eventCallback: (...args: any) => any)
+export function EventEmitterCreator(targetInstance: any, eventFunctions: Record<string, (...args: any) => any>, eventCallback: (...args: any) => any)

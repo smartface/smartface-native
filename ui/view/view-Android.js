@@ -523,7 +523,7 @@ View.prototype = properties;
 function View(params) {
   params = params || {};
   this.ios = {};
-  EventEmitterCreator(this, View, EventFunctions, EventList, this.setTouchHandlers);
+  EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
     this.yogaNode = new NativeYogaNode();
