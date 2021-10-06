@@ -12,7 +12,7 @@ const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil"
 const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager");
 
 const rippleSuperView = require("./ripple");
-const { EventEmitterCreator } = require("../../core/eventemitter");
+const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventemitter");
 const EventList = require('./events');
 const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
@@ -518,8 +518,6 @@ const properties = {
     this.yogaNode.dirty();
   }
 };
-
-Object.assign(properties, EventEmitterMixin);
 
 View.prototype = properties;
 function View(params) {
