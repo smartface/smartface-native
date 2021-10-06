@@ -4,7 +4,7 @@ const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("../net/http");
 const Network = require('../device/network');
-const { EventEmitter, EventEmitterMixin } = require('../core/eventemitter');
+const { EventEmitterCreator } = require("../core/eventemitter");
 const Events = require('./events');
 
 const NativeSpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
@@ -13,8 +13,7 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
-Object.assign(ApplicationWrapper, EventEmitterMixin);
-ApplicationWrapper.emitter = new EventEmitter();
+
 
 const EventFunctions = {
     [Events.ApplicationCallReceived]: () => {
@@ -58,6 +57,7 @@ const EventFunctions = {
         };
     }
 }
+EventEmitterCreator(ApplicationWrapper, Application, EventFunctions, Events);
 
 Object.defineProperty(ApplicationWrapper, 'on', {
     value: (event, callback) => {

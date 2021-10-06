@@ -1,5 +1,6 @@
-const { EventEmitter, EventEmitterMixin } = require('../core/eventemitter');
+const { EventEmitterCreator } = require("../core/eventemitter");
 const Events = require('./events');
+
 //Application Direction Manager (RTL Support)
 (function() {
     var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
@@ -55,18 +56,7 @@ const EventFunctions = {
     }
 }
 var SFApplication = {};
-SFApplication.emitter = new EventEmitter();
-Object.assign(SFApplication, EventEmitterMixin);
-
-Object.defineProperty(SFApplication, 'on', {
-    value: (event, callback) => {
-        EventFunctions[event].call(SFApplication);
-        SFApplication.emitter.on(event, callback);
-    },
-    configurable: true
-});
-
-Object.defineProperty(SF)
+EventEmitterCreator(SFApplication, Application, EventFunctions, Events);
 
 Object.defineProperty(SFApplication, 'byteReceived', {
     get: function() {
