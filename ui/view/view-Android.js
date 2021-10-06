@@ -12,11 +12,7 @@ const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil"
 const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager");
 
 const rippleSuperView = require("./ripple");
-const { 
-  EventWrapper,
-  EventEmitterMixin,
-  EventEmitter
-} = require("../../core/eventemitter");
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const EventList = require('./events');
 const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
@@ -24,16 +20,16 @@ View.Events = { ...EventList };
 
 const EventFunctions = {
   [EventList.Touch]: function () {
-    this._onTouch = EventWrapper(this, EventList.Touch, null);
+    this._onTouch = EventEmitterWrapper(this, EventList.Touch, null);
   },
   [EventList.TouchCancelled]: function () {
-    this._onTouchCancelled = EventWrapper(this, EventList.TouchCancelled, null);
+    this._onTouchCancelled = EventEmitterWrapper(this, EventList.TouchCancelled, null);
   },
   [EventList.TouchEnded]: function () {
-    this._onTouchEnded = EventWrapper(this, EventList.TouchEnded, null);
+    this._onTouchEnded = EventEmitterWrapper(this, EventList.TouchEnded, null);
   },
   [EventList.TouchMoved]: function () {
-    this._onTouchMoved = EventWrapper(this, EventList.TouchMoved, null);
+    this._onTouchMoved = EventEmitterWrapper(this, EventList.TouchMoved, null);
   }
 };
 
@@ -529,7 +525,7 @@ View.prototype = properties;
 function View(params) {
   params = params || {};
   this.ios = {};
-  this.emitter = new EventEmitter();
+  EventEmitterCreator(this, View, EventFunctions, EventList);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
     this.yogaNode = new NativeYogaNode();
