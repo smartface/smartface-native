@@ -2,7 +2,7 @@ const View = require('../view');
 const { EventEmitterCreator } = require("../../core/eventemitter");
 const EventList = require('./events');
 
-const Events = { ...View.Events, ...EventList };
+ViewGroup.Events = { ...EventList, ...View.Events };
 
 const EventFunctions = {
     [EventList.ViewAdded]: function (view) {
@@ -33,7 +33,7 @@ function ViewGroup(params) {
     self.childs = {};
 
     View.apply(this);
-    EventEmitterCreator(this, View, EventFunctions, Events);
+    EventEmitterCreator(this, EventFunctions);
 
     this.addChild = function(view) {
         view.parent = self;

@@ -45,18 +45,15 @@ const { EventEmitter } = require('./emitterClass');
  *       setHierarchyChangeListener(this);
  *     }
  *   }
- *   EventEmitterCreator(this, ViewGroup, EventFunctions, Events, emitterCallBack.bind(this));
+ *   EventEmitterCreator(this, EventFunctions, emitterCallBack.bind(this));
  * }
  * 
  * ```
  * @param {*} targetInstance this object
- * @param {*} targetClass The Current Class
  * @param {*} eventFunctions Object of Functions. It will be bound to the current context using targetInstance parameter. If there is no function to inherit, pass empty object.
- * @param {*} eventList If this is an inheritence, please combine them and pass it as parameter.
  * @param {*} callback This will be invoked after the relevant eventFunction is called. Will be bound to 'targetInstance' There is no filter.
  */
-function EventEmitterCreator(targetInstance, targetClass, eventFunctions, eventList, eventCallback = () => {}) {
-  targetClass.Events = { ...eventList };
+function EventEmitterCreator(targetInstance, eventFunctions, eventCallback = () => {}) {
   const parentOnFunction = targetInstance.on;
   targetInstance.emitter = targetInstance.emitter || new EventEmitter();
   

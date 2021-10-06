@@ -6,8 +6,7 @@ const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventem
 const EventList = require('./events');
 
 ViewGroup.prototype = Object.create(View.prototype);
-
-const Events = { ...View.Events, ...EventList };
+ViewGroup.Events = { ...View.Events, ...EventList };
 
 const EventFunctions = {
     [EventList.ViewAdded]: function () {
@@ -34,7 +33,7 @@ function ViewGroup(params) {
             setHierarchyChangeListener(this);
         }
     }
-    EventEmitterCreator(this, ViewGroup, EventFunctions, Events, eventEmitterCallback);
+    EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
 
     Object.defineProperties(this.android, {
         'requestDisallowInterceptTouchEvent': {
