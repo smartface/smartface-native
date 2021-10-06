@@ -523,7 +523,7 @@ View.prototype = properties;
 function View(params) {
   params = params || {};
   this.ios = {};
-  EventEmitterCreator(this, View, EventFunctions, EventList);
+  EventEmitterCreator(this, View, EventFunctions, EventList, this.setTouchHandlers);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
     this.yogaNode = new NativeYogaNode();
@@ -747,15 +747,6 @@ function View(params) {
       configurable: true,
       writable: true
     }
-  });
-
-  Object.defineProperty(this, 'on', {
-    value: (event, callback) => {
-      EventFunctions[event].call(this);
-      this.setTouchHandlers();
-      this.emitter.on(event, callback);
-    },
-    configurable: true
   });
 
   this.didSetTouchHandler = false;
