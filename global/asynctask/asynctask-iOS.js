@@ -8,12 +8,12 @@ function AsyncTask(params) {
     const EventFunctions = {
         [Events.Cancelled]: function() {
             _onCancelled = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
+                this.emitter.emit(Events.Cancelled, state);
             } 
         },
         [Events.Complete]: function() {
             _onComplete = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
+                this.emitter.emit(Events.Complete, state);
             } 
         },
         [Events.PreExecute]: function() {
