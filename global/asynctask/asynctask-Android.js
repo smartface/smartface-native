@@ -1,18 +1,31 @@
 /*globals array,requireClass */
 const TypeUtil = require("../../util/type");
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
-const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
 
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
-
-AsyncTask.prototype = Object.assign({}, EventEmitterMixin);
+AsyncTask.Events = { ...Events };
 function AsyncTask(params) {
-
     const self = this;
-    this.emitter = new EventEmitter();
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            _onCancelled = (state) => {
+                this.emitter.emit(Events.Cancelled, state);
+            } 
+        },
+        [Events.Complete]: function() {
+            _onComplete = (state) =>  {
+                this.emitter.emit(Events.Complete, state);
+            } 
+        },
+        [Events.PreExecute]: function() {
+            _onPreExecute = (state) =>  {
+                this.emitter.emit(Events.PreExecute, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     var callbacks = {
         onPreExecute: function() {
@@ -31,23 +44,6 @@ function AsyncTask(params) {
     this.nativeObject = new SFAsyncTask();
     this.nativeObject.setJsCallback(callbacks);
 
-    const EventFunctions = {
-        [Events.Cancelled]: function() {
-            _onCancelled = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
-            } 
-        },
-        [Events.Complete]: function() {
-            _onComplete = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
-            } 
-        },
-        [Events.PreExecute]: function() {
-            _onPreExecute = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
-            } 
-        }
-    }
 
     let _onPreExecute, _task, _onComplete, _onCancelled;
     Object.defineProperties(self, {
@@ -94,12 +90,6 @@ function AsyncTask(params) {
         'toString': {
             value: function() {
                 return "AsyncTask";
-            }
-        },
-        'on': { 
-            value: (event, callback) => {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
             }
         }
     });

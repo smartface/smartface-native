@@ -1,26 +1,10 @@
 const TypeUtil = require("../../util/type");
-const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
-
-AsyncTask.prototype = Object.assign({}, EventEmitterMixin);
+AsyncTask.Events = { ...Events };
 
 function AsyncTask(params) {
     var self = this;
-
-    self.android = {};
-    self.ios = {};
-    this.emitter = new EventEmitter();
-
-    self.nativeObject = new __SF_NSOperationQueue();
-
-    var _task;
-    var _onComplete;
-    var _onCancelled;
-
     const EventFunctions = {
         [Events.Cancelled]: function() {
             _onCancelled = function (state) {
@@ -36,6 +20,17 @@ function AsyncTask(params) {
             //Android only
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
+    self.android = {};
+    self.ios = {};
+
+    self.nativeObject = new __SF_NSOperationQueue();
+
+    var _task;
+    var _onComplete;
+    var _onCancelled;
+
 
     Object.defineProperties(self, {
         'task': {
@@ -90,12 +85,6 @@ function AsyncTask(params) {
         'cancel': {
             value: function() {
                 self.nativeObject.cancelAllOperations();
-            }
-        },
-        'on': { 
-            value: (event, callback) => {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
             }
         }
     });
