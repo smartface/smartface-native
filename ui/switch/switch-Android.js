@@ -5,6 +5,8 @@ const NativeSwitch = requireClass("io.smartface.android.sfcore.ui.switchview.SFS
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Switch.Events = { ...View.Events, ...Events };
 
 Switch.prototype = Object.create(View.prototype);
 function Switch(params) {
@@ -21,13 +23,13 @@ function Switch(params) {
     View.apply(this);
 
     const EventFunctions = {
-        [Events.ToggleChanged]: function() {
-            _onToggleChangedCallback = function (state) {
+        [Events.ToggleChanged]: function () {
+            _onToggleChangedCallback = (state) => {
                 this.emitter.emit(Events.ToggleChanged, state);
-            } 
+            }
         }
     }
-
+    EventEmitterCreator(this, EventFunctions);
     var _thumbOnColor;
     var _thumbOffColor;
     var _toggleOnColor;
@@ -140,21 +142,6 @@ function Switch(params) {
             enumerable: true
         }
     });
-
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-
 
     // Assign parameters given in constructor
     if (params) {
