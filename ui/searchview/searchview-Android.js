@@ -321,7 +321,8 @@ function SearchView(params) {
         [Events.SearchButtonClicked]: function () {
             _onSearchButtonClickedCallback = (state) => {
                 this.emitter.emit(Events.SearchButtonClicked, state);
-            }
+            } 
+            self.setOnSearchButtonClickedListener();
         },
         [Events.SearchEnd]: function () {
             _onSearchEndCallback = (state) => {
@@ -332,6 +333,7 @@ function SearchView(params) {
             _onTextChangedCallback = (state) => {
                 this.emitter.emit(Events.TextChanged, state);
             }
+            self.setQueryTextListener();
         }
     }
 

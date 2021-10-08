@@ -494,22 +494,22 @@ function SearchView(params) {
             }
         },
         [Events.SearchBegin]: function () {
-            _onSearchBeginCallback = (state) => {
+            _onSearchBegin = (state) => {
                 this.emitter.emit(Events.SearchBegin, state);
             }
         },
         [Events.SearchButtonClicked]: function () {
-            _onSearchButtonClickedCallback = (state) => {
+            _onSearchButtonClicked = (state) => {
                 this.emitter.emit(Events.SearchButtonClicked, state);
             }
         },
         [Events.SearchEnd]: function () {
-            _onSearchEndCallback = (state) => {
+            _onSearchEnd = (state) => {
                 this.emitter.emit(Events.SearchEnd, state);
             }
         },
         [Events.TextChanged]: function () {
-            _onTextChangedCallback = (state) => {
+            _onTextChanged = (state) => {
                 this.emitter.emit(Events.TextChanged, state);
             }
         }
