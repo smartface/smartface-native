@@ -3,7 +3,8 @@ const { EventEmitter } = require(".");
 module.exports = {
   emitter: {
     get() {
-      return this.emitter || new EventEmitter()
+      this.emitter = this.emitter || new EventEmitter();
+      return this.emitter;
     },
     set(value) {
       this.emitter = value;
