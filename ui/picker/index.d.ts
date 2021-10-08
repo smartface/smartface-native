@@ -127,6 +127,7 @@ dialogBackgroundColor: Color;
  *
  * @param {Number} index
  * @event onSelected
+ * @deprecated
  * @android
  * @ios
  * @since 0.1

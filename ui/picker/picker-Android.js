@@ -7,6 +7,8 @@ const LayoutParams = require("../../util/Android/layoutparams");
 const Color = require('../../ui/color');
 const ParentPicker = require("../../ui/picker/parentPicker");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Picker.Events = { ...View.Events, ...Events };
 
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
@@ -30,47 +32,48 @@ function Picker(params) {
     var buttonCustomize = false;
 
     const EventFunctions = {
-        [Events.Selected]: function() {
+        [Events.Selected]: function () {
             _onSelected = (state) => {
                 this.emitter.emit(Events.Selected, state);
-            } 
+            }
         }
     }
+    EventEmitterCreator(this, EventFunctions);
 
     Object.defineProperties(this, {
         'items': {
-            get: function() {
+            get: function () {
                 return _items; // todo: Returns self.nativeObject.getDisplayValues()
             }, // after string problem is solved.
-            set: function(items) {
+            set: function (items) {
                 _items = items;
                 setNumberPicker(this.nativeObject, _items);
             },
             enumerable: true
         },
         'currentIndex': {
-            get: function() {
+            get: function () {
                 return self.nativeObject.getValue();
             },
-            set: function(currentIndex) {
+            set: function (currentIndex) {
                 self.nativeObject.setValue(currentIndex);
             },
             enumerable: true
         },
         'onSelected': {
-            get: function() {
+            get: function () {
                 return _onSelected;
             },
-            set: function(onSelected) {
+            set: function (onSelected) {
                 _onSelected = onSelected;
             },
             enumerable: true
         },
         'okColor': {
-            get: function() {
+            get: function () {
                 return _okColor;
             },
-            set: function(color) {
+            set: function (color) {
                 buttonCustomize = true;
                 if (color instanceof Color)
                     _okColor = color;
@@ -78,32 +81,32 @@ function Picker(params) {
             enumerable: true
         },
         'textColor': {
-            get: function() {
+            get: function () {
                 return _textColor;
             },
-            set: function(color) {
+            set: function (color) {
                 _textColor = color;
                 self.nativeObject.setTextColor(color.nativeObject);
             },
             enumerable: true
         },
         'dialogBackgroundColor': {
-            get: function() {
+            get: function () {
                 return _backgroundColor;
             },
-            set: function(color) {
+            set: function (color) {
                 _backgroundColor = color;
-                if(self.dialogInstance) {
+                if (self.dialogInstance) {
                     self.dialogInstance.getWindow().setBackgroundDrawable(new NativeColorDrawable(_backgroundColor.nativeObject));
                 }
             },
             enumerable: true
         },
         'cancelColor': {
-            get: function() {
+            get: function () {
                 return _cancelColor;
             },
-            set: function(color) {
+            set: function (color) {
                 buttonCustomize = true;
                 if (color instanceof Color)
                     _cancelColor = color;
@@ -111,10 +114,10 @@ function Picker(params) {
             enumerable: true
         },
         'cancelText': {
-            get: function() {
+            get: function () {
                 return _cancelText;
             },
-            set: function(text) {
+            set: function (text) {
                 if (typeof text !== "string")
                     return;
                 buttonCustomize = true;
@@ -123,10 +126,10 @@ function Picker(params) {
             enumerable: true
         },
         'okText': {
-            get: function() {
+            get: function () {
                 return _okText;
             },
-            set: function(text) {
+            set: function (text) {
                 if (typeof text !== "string")
                     return;
                 buttonCustomize = true;
@@ -135,10 +138,10 @@ function Picker(params) {
             enumerable: true
         },
         'okFont': {
-            get: function() {
+            get: function () {
                 return _okFont;
             },
-            set: function(font) {
+            set: function (font) {
                 buttonCustomize = true;
                 const Font = require('../../ui/font');
                 if (font instanceof Font)
@@ -147,10 +150,10 @@ function Picker(params) {
             enumerable: true
         },
         'cancelFont': {
-            get: function() {
+            get: function () {
                 return _cancelFont;
             },
-            set: function(font) {
+            set: function (font) {
                 buttonCustomize = true;
                 const Font = require('../../ui/font');
                 if (font instanceof Font)
@@ -159,18 +162,18 @@ function Picker(params) {
             enumerable: true
         },
         'show': {
-            value: function(done, cancel) {
+            value: function (done, cancel) {
                 var layout = addViewToLayout(this.nativeObject);
 
                 var cancelListener = NativeDialogInterface.OnClickListener.implement({
-                    onClick: function(dialogInterface, i) {
+                    onClick: function (dialogInterface, i) {
                         if (cancel)
                             cancel();
                     }
                 });
 
                 var doneListener = NativeDialogInterface.OnClickListener.implement({
-                    onClick: function(dialogInterface, i) {
+                    onClick: function (dialogInterface, i) {
                         if (done)
                             done({
                                 index: self.currentIndex
@@ -206,24 +209,18 @@ function Picker(params) {
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'Picker';
             },
             enumerable: true,
             configurable: true
-        },
-        'on':  {
-            value: (event, callback) => {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
         }
     });
     Object.defineProperty(this.android, 'enabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.isEnabled();
         },
-        set: function(value) {
+        set: function (value) {
             if (!TypeUtil.isBoolean(value)) {
                 throw new TypeError("Value should be boolean for enabled.");
             }
@@ -234,7 +231,7 @@ function Picker(params) {
 
     if (!this.skipDefaults) {
         self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
-            onScrollStateChange: function(picker, scrollState) {
+            onScrollStateChange: function (picker, scrollState) {
                 if (scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     if (_onSelected)
                         _onSelected(self.currentIndex);

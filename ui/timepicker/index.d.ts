@@ -31,10 +31,11 @@ declare enum Events {
  *     myTimePicker.show();
  *
  */
-declare class TimePicker extends NativeComponent implements IEventEmitter<typeof Events> {
-  on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-  off(eventName: typeof Events, callback?: (...args: any) => void): void;
-  emit(event: typeof Events, detail?: any[]): void;
+declare class TimePicker extends NativeComponent implements IEventEmitter<Events> {
+  static Events: typeof Events;
+  on(eventName: Events, callback: (...args: any) => void): () => void;
+  off(eventName: Events, callback?: (...args: any) => void): void;
+  emit(event: Events, detail?: any[]): void;
 /**
  * Sets the time avaliable on the picker.
  *

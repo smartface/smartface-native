@@ -49,20 +49,6 @@ TimePicker.prototype.is24HourFormat = function() {};
 TimePicker.prototype.show = function() {};
 
 /**
- * Triggered when a time is selected on the picker.
- *
- * @since 0.1
- * @param {Object} time
- * @param {Number} time.hour
- * @param {Number} time.minute
- * @event onTimeSelected
- * @android
- * @ios
- */
-TimePicker.prototype.onTimeSelected = function(time) {};
-
-
-/**
  * Event to be implemented
  * @param {string} event - Event type to be created
  * @param {*} callback
@@ -89,5 +75,33 @@ TimePicker.prototype.onTimeSelected = function(time) {};
   * @ios
   */
   TimePicker.prototype.emit = function(event, detail) {}
+
+
+/**
+ * Triggered when a time is selected on the picker.
+ *
+ * @since 0.1
+ * @param {Object} time
+ * @param {Number} time.hour
+ * @param {Number} time.minute
+ * @deprecated
+ * @event onTimeSelected
+ * @android
+ * @ios
+ */
+TimePicker.prototype.onTimeSelected = function(time) {};
+
+/**
+ * Triggered when a time is selected on the picker.
+ *
+ * @since 0.1
+ * @param {Object} time
+ * @param {Number} time.hour
+ * @param {Number} time.minute
+ * @event onTimeSelected
+ * @android
+ * @ios
+ */
+ TimePicker.Events.Selected = "selected";
 
 module.exports = TimePicker;

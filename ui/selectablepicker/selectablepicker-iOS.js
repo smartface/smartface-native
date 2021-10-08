@@ -1,29 +1,23 @@
 const {
-    EventEmitterMixin
-  } = require("../../core/eventemitter");
+    EventEmitterCreator
+} = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-SelectablePicker.prototype = Object.assign({}, EventEmitterMixin);
+SelectablePicker.Events = { ...Events };
 
 function SelectablePicker(params) {
-    this.onSelectedItems = function(index, selected) {};
-    this.show = function(done, cancel) {};
+    this.onSelectedItems = function (index, selected) { };
+    this.show = function (done, cancel) { };
 
     const EventFunctions = {
-        [Events.Selected]: function() {
+        [Events.Selected]: function () {
             //Android only event
         }
     }
 
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
+    EventEmitterCreator(this, EventFunctions);
 
-    this.toString = function() {
+    this.toString = function () {
         return "SelectablePicker";
     };
 }

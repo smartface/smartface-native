@@ -22,11 +22,12 @@ declare enum Events {
  *     myDatePicker.show();
  *
  */
-declare class DatePicker extends NativeComponent implements IEventEmitter<typeof Events> {
+declare class DatePicker extends NativeComponent implements IEventEmitter<Events> {
     constructor(params?: any);
-    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-    off(eventName: typeof Events, callback?: (...args: any) => void): void;
-    emit(event: typeof Events, detail?: any[]): void;
+    static Events: typeof Events;
+    on(eventName: Events, callback: (...args: any) => void): () => void;
+    off(eventName: Events, callback?: (...args: any) => void): void;
+    emit(event: Events, detail?: any[]): void;
     ios: {
         /**
          * Gets/sets title of the picker. This property only works with show method. Must set before show method.

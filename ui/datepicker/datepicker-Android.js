@@ -2,12 +2,11 @@
 const TypeUtil = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const {
-    EventEmitterMixin
-  } = require("../../core/eventemitter");
+    EventEmitterCreator
+} = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-DatePicker.prototype = Object.assign({}, EventEmitterMixin);
+DatePicker.Events = { ...Events };
 
 function DatePicker(params) {
     var activity = AndroidConfig.activity;
@@ -18,33 +17,20 @@ function DatePicker(params) {
     if (!this.nativeObject) {
         var androidStyle = (params && params.android && params.android.style) || DatePicker.Android.Style.DEFAULT;
         this.nativeObject = new NativeDatePickerDialog(activity, androidStyle, NativeDatePickerDialog.OnDateSetListener.implement({
-            onDateSet: function(datePicker, year, month, day) {
+            onDateSet: function (datePicker, year, month, day) {
                 _onDateSelected && _onDateSelected(new Date(year, month, day));
             }
         }), today.getFullYear(), today.getMonth(), today.getDate());
     }
-
-    const EventFunctions = {
-        [Events.Cancelled]: function() {
-            _onCancelled = function (state) {
-                this.emitter.emit(Events.Cancelled, state);
-            } 
-        },
-        [Events.Selected]: function() {
-            _onDateSelected = function (state) {
-                this.emitter.emit(Events.Selected, state);
-            } 
-        }
-    }
-
     var _onDateSelected;
     var _onCancelled;
+
     Object.defineProperties(this, {
         'onDateSelected': {
-            get: function() {
+            get: function () {
                 return _onDateSelected;
             },
-            set: function(callback) {
+            set: function (callback) {
                 if (TypeUtil.isFunction(callback)) {
                     _onDateSelected = callback;
                 }
@@ -52,17 +38,17 @@ function DatePicker(params) {
             enumerable: true
         },
         'onCancelled': {
-            get: function() {
+            get: function () {
                 return _onCancelled;
             },
-            set: function(callback) {
+            set: function (callback) {
                 if (TypeUtil.isFunction(callback)) {
                     _onCancelled = callback;
 
                     const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
                     this.nativeObject.setOnCancelListener(NativeDialogInterface.OnCancelListener.implement({
-                        onCancel: function(dialogInterface) {
+                        onCancel: function (dialogInterface) {
                             _onCancelled && _onCancelled();
                         }
                     }));
@@ -71,12 +57,12 @@ function DatePicker(params) {
             enumerable: true
         },
         'show': {
-            value: function() {
+            value: function () {
                 this.nativeObject.show();
             }
         },
         'setMinDate': {
-            value: function(date) {
+            value: function (date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
                     var milliTime = date.getTime();
 
@@ -86,7 +72,7 @@ function DatePicker(params) {
             }
         },
         'setMaxDate': {
-            value: function(date) {
+            value: function (date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
                     var milliTime = date.getTime();
 
@@ -96,28 +82,36 @@ function DatePicker(params) {
             }
         },
         'setDate': {
-            value: function(date) {
+            value: function (date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
                     this.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
                 }
             }
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'DatePicker';
             },
             enumerable: true,
             configurable: true
-        },
-        'on':  {
-            value: (event, callback) => {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
         }
 
     });
+    const EventFunctions = {
+        [Events.Cancelled]: function () {
+            _onCancelled = function (state) {
+                this.emitter.emit(Events.Cancelled, state);
+            }
+        },
+        [Events.Selected]: function () {
+            _onDateSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            }
+        }
+    }
 
+
+    EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

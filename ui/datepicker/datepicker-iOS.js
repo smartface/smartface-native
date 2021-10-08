@@ -2,12 +2,10 @@ const TypeUtil = require('../../util/type');
 const UIDatePickerMode = require("../../util").UIDatePickerMode;
 const Color = require("../../ui/color");
 const {
-    EventEmitterMixin
-  } = require("../../core/eventemitter");
-
+    EventEmitterCreator
+} = require("../../core/eventemitter");
 const Events = require('./events');
-
-DatePicker.prototype = Object.assign({}, EventEmitterMixin);
+DatePicker.Events = { ...Events };
 function DatePicker(params) {
     var self = this;
 
@@ -223,24 +221,19 @@ function DatePicker(params) {
     });
 
     const EventFunctions = {
-        [Events.Cancelled]: function() {
+        [Events.Cancelled]: function () {
             self.onCancelled = function (state) {
                 this.emitter.emit(Events.Cancelled, state);
-            } 
+            }
         },
-        [Events.Selected]: function() {
+        [Events.Selected]: function () {
             self.onDateSelected = function (state) {
                 this.emitter.emit(Events.Selected, state);
-            } 
+            }
         }
     }
 
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     self.show = function () {
         self.nativeObject.show(

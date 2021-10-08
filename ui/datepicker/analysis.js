@@ -86,27 +86,6 @@ DatePicker.prototype.setMaxDate = function (date) { };
 DatePicker.prototype.show = function () { };
 
 /**
- * Triggered when a date is selected on the picker.
- *
- * @since 0.1
- * @param {Date} date
- * @event onDateSelected
- * @android
- * @ios
- */
-DatePicker.prototype.onDateSelected = function (date) { };
-
-/**
- * Triggered when click cancel button on the picker.
- *
- * @since 3.1.3
- * @event onCancelled
- * @android
- * @ios
- */
-DatePicker.prototype.onCancelled = function () { };
-
-/**
  * Gets/sets title of the picker. This property only works with show method. Must set before show method.
  *
  * @property {String} title
@@ -362,24 +341,69 @@ DatePicker.Android.Style.MATERIAL_LIGHT;
  * @android
  * @ios
  */
- DatePicker.prototype.on = function(event, callback) {}
- /**
-  * Event to be removed
-  * @param {string} event - Event type to be created
-  * @param {*} callback
-  * @returns {Function} unlistener function. Call it to remove the event
-  * @android
-  * @ios
-  */
-  DatePicker.prototype.off = function(event, callback) {}
- 
- /**
-  * Event to be emitted
-  * @param {string} event - Event type to be triggered
-  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
-  * @android
-  * @ios
-  */
-  DatePicker.prototype.emit = function(event, detail) {}
+DatePicker.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+DatePicker.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+DatePicker.prototype.emit = function (event, detail) { }
+
+/**
+* Triggered when a date is selected on the picker.
+*
+* @since 0.1
+* @param {Date} date
+* @event onDateSelected
+* @deprecated
+* @android
+* @ios
+*/
+DatePicker.prototype.onDateSelected = function (date) { };
+
+/**
+ * Triggered when click cancel button on the picker.
+ *
+ * @since 3.1.3
+ * @event onCancelled
+ * @deprecated
+ * @android
+ * @ios
+ */
+DatePicker.prototype.onCancelled = function () { };
+
+/**
+* Triggered when a date is selected on the picker.
+*
+* @since 0.1
+* @param {Date} date
+* @event onDateSelected
+* @android
+* @ios
+*/
+DatePicker.Events.Selected = "selected";
+
+/**
+ * Triggered when click cancel button on the picker.
+ *
+ * @since 3.1.3
+ * @event onCancelled
+ * @android
+ * @ios
+ */
+DatePicker.Events.Cancelled = "cancelled";
+
 
 module.exports = DatePicker;
