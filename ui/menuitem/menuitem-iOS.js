@@ -35,7 +35,7 @@ function MenuItem(params) {
     const EventFunctions = {
         [Events.Selected]: function() {
             self.onSelected = (state) => {
-                self.emitter.emit(Events.CallStateChanged, state);
+                self.emitter.emit(Events.Selected, state);
             } 
         }
     }
