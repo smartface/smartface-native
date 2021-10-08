@@ -1,5 +1,7 @@
+const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
 const Events = require('./events');
+LiveMediaPlayer.Events = { ...View.Events, ...Events };
 
 LiveMediaPlayer.prototype = Object.create(View.prototype)
 
@@ -11,12 +13,12 @@ function LiveMediaPlayer(params) {
     }
 
     View.apply(this);
-    
+
     this.nodePlayer.playerView = this.nativeObject;
 
     this.playerDelegate = new __SF_NodePlayerDelegateClass();
-    this.playerDelegate.onEventCallbackEventMsg = function(e){
-        _onChange && _onChange({event: e.event, message: e.msg});
+    this.playerDelegate.onEventCallbackEventMsg = function (e) {
+        _onChange && _onChange({ event: e.event, message: e.msg });
     };
     this.nodePlayer.nodePlayerDelegate = this.playerDelegate;
 
@@ -29,12 +31,12 @@ function LiveMediaPlayer(params) {
             },
             set: (callback) => {
                 _onChange = callback;
-                
+
             },
             enumerable: true
         },
         'inputUrl': {
-            get: function() {
+            get: function () {
                 return _inputUrl;
             },
             set: (url) => {
@@ -44,7 +46,7 @@ function LiveMediaPlayer(params) {
             enumerable: true
         },
         'audioEnabled': {
-            get: function() {
+            get: function () {
                 return _audioEnabled;
             },
             set: (isEnabled) => {
@@ -79,14 +81,14 @@ function LiveMediaPlayer(params) {
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'start': {
             value: () => {
                 this.nodePlayer.start();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'stop': {
             value: () => {
                 this.nodePlayer.stop();
@@ -104,26 +106,13 @@ function LiveMediaPlayer(params) {
     });
 
     const EventFunctions = {
-        [Events.Change]: function() {
-            _onChange = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
-            } 
+        [Events.Change]: function () {
+            _onChange = (state) => {
+                this.emitter.emit(Events.Change, state);
+            }
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {
