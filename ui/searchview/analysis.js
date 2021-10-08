@@ -13,7 +13,7 @@
  *     };
  *
  */
-function SearchView() {}
+function SearchView() { }
 
 /**
  * Gets/sets text of SearchView.
@@ -98,7 +98,7 @@ SearchView.prototype.searchIcon;
  * @ios
  * @since 0.1
  */
-SearchView.prototype.addToHeaderBar = function(page) {};
+SearchView.prototype.addToHeaderBar = function (page) { };
 
 /**
  * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
@@ -129,7 +129,7 @@ SearchView.prototype.borderWidth = 1;
  * @ios
  * @since 0.1
  */
-SearchView.prototype.removeFromHeaderBar = function(page) {};
+SearchView.prototype.removeFromHeaderBar = function (page) { };
 
 /**
  * This function shows keyboard.
@@ -140,7 +140,7 @@ SearchView.prototype.removeFromHeaderBar = function(page) {};
  * @since 0.1
  * @deprecated 1.1.8 Use {@link UI.SearchView#requestFocus} instead.
  */
-SearchView.prototype.showKeyboard = function() {};
+SearchView.prototype.showKeyboard = function () { };
 
 /**
  * This function hides keyboard.
@@ -151,7 +151,7 @@ SearchView.prototype.showKeyboard = function() {};
  * @since 0.1
  * @deprecated 1.1.8 Use {@link UI.SearchView#removeFocus} instead.
  */
-SearchView.prototype.hideKeyboard = function() {};
+SearchView.prototype.hideKeyboard = function () { };
 
 /**
  * This function gives focus to the SearchView. When the SearchView gained focus, keyboard will appear.
@@ -161,7 +161,7 @@ SearchView.prototype.hideKeyboard = function() {};
  * @ios
  * @since 1.1.8
  */
-SearchView.prototype.requestFocus = function() {};
+SearchView.prototype.requestFocus = function () { };
 
 /**
  * This function show loading indicator.
@@ -170,7 +170,7 @@ SearchView.prototype.requestFocus = function() {};
  * @ios
  * @since 3.0.2
  */
-SearchView.prototype.showLoading = function() {};
+SearchView.prototype.showLoading = function () { };
 
 /**
  * This function hide loading indicator.
@@ -179,7 +179,7 @@ SearchView.prototype.showLoading = function() {};
  * @ios
  * @since 3.0.2
  */
-SearchView.prototype.hideLoading = function() {};
+SearchView.prototype.hideLoading = function () { };
 
 /**
  * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
@@ -189,7 +189,7 @@ SearchView.prototype.hideLoading = function() {};
  * @ios
  * @since 1.1.8
  */
-SearchView.prototype.removeFocus = function() {};
+SearchView.prototype.removeFocus = function () { };
 
 /**
  * Gets/sets the search view’s style. This property works only for IOS.
@@ -351,9 +351,65 @@ SearchView.prototype.android.closeImage = null;
  *
  * @ios
  * @event onCancelButtonClicked
+ * @deprecated
  * @since 0.1
  */
-SearchView.prototype.ios.onCancelButtonClicked = function() {};
+SearchView.prototype.ios.onCancelButtonClicked = function () { };
+
+/**
+ * This event is called when user focus on the search view by selecting it.
+ *
+ * @event onSearchBegin
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.onSearchBegin = function () { };
+
+/**
+ * This event is called when searchview loses focus.
+ *
+ * @event onSearchEnd
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.onSearchEnd = function () { };
+
+/**
+ * This event is called when user changes the search text.
+ *
+ * @param {String} searchText The current text in the search text view.
+ * @android
+ * @ios
+ * @event onTextChanged
+ * @deprecated
+ * @since 0.1
+ */
+SearchView.prototype.onTextChanged = function (searchText) { };
+
+/**
+ * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
+ *
+ * @event onSearchButtonClicked
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.onSearchButtonClicked = function () { };
+
+
+/**
+ * This event is called when user clicks the cancel button.
+ *
+ * @ios
+ * @event onCancelButtonClicked
+ * @since 0.1
+ */
+SearchView.Events.CancelButtonClicked = "cancelButtonClicked";
 
 /**
  * This event is called when user focus on the search view by selecting it.
@@ -363,7 +419,7 @@ SearchView.prototype.ios.onCancelButtonClicked = function() {};
  * @ios
  * @since 0.1
  */
-SearchView.prototype.onSearchBegin = function() {};
+SearchView.Events.SearchBegin = "searchBegin";
 
 /**
  * This event is called when searchview loses focus.
@@ -373,7 +429,7 @@ SearchView.prototype.onSearchBegin = function() {};
  * @ios
  * @since 0.1
  */
-SearchView.prototype.onSearchEnd = function() {};
+SearchView.Events.SearchEnd = "searchEnd";
 
 /**
  * This event is called when user changes the search text.
@@ -384,7 +440,7 @@ SearchView.prototype.onSearchEnd = function() {};
  * @event onTextChanged
  * @since 0.1
  */
-SearchView.prototype.onTextChanged = function(searchText) {};
+SearchView.Events.TextChanged = "textChanged";
 
 /**
  * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
@@ -394,7 +450,7 @@ SearchView.prototype.onTextChanged = function(searchText) {};
  * @ios
  * @since 0.1
  */
-SearchView.prototype.onSearchButtonClicked = function() {};
+SearchView.Events.SearchButtonClicked = "searchButtonClicked";
 
 /**
  * iOS Specific Properties.
