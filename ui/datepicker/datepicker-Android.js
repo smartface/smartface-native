@@ -102,6 +102,12 @@ function DatePicker(params) {
             _onCancelled = function (state) {
                 this.emitter.emit(Events.Cancelled, state);
             }
+            const NativeDialogInterface = requireClass("android.content.DialogInterface");
+            this.nativeObject.setOnCancelListener(NativeDialogInterface.OnCancelListener.implement({
+                onCancel: function (dialogInterface) {
+                    _onCancelled && _onCancelled();
+                }
+            }));
         },
         [Events.Selected]: function () {
             _onDateSelected = function (state) {
@@ -109,7 +115,6 @@ function DatePicker(params) {
             }
         }
     }
-
 
     EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
