@@ -120,11 +120,13 @@ function Button(params) {
             this.__onPress = (state) => {
                 this.emitter.emit(Events.Press, state);
             }
+            if (!this.__didSetOnClickListener) setOnClickListener(this);
         },
         [Events.LongPress]: function () {
             this.__onLongPress = (state) => {
                 this.emitter.emit(Events.LongPress, state);
             }
+            if (!this.__didSetOnClickListener) setOnClickListener(this);
         }
     }
     EventEmitterCreator(this, EventFunctions);

@@ -234,7 +234,6 @@ function Button(params) {
 
     Object.defineProperty(self, 'font', {
         get: function () {
-
             return self.nativeObject.titleLabel.font;
         },
         set: function (value) {
@@ -246,8 +245,9 @@ function Button(params) {
     const EventFunctions = {
         [Events.Press]: function() {
             _onPressFunc = (state) => {
-                this.emitter.emit(Events.Press, state);
-            } 
+                self.emitter.emit(Events.Press, state);
+            }
+            self.nativeObject.addJSTarget(_onPressFunc, UIControlEvents.touchUpInside);
         },
         [Events.LongPress]: function() {
             // Android Only
