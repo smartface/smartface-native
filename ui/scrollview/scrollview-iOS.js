@@ -236,7 +236,7 @@ function ScrollView(params) {
                 };
                 this.emitter.emit(Events.ScrollBeginDecelerating, contentOffset)
             };
-            self.ios.nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
+            self.nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
         },
         [Events.ScrollBeginDragging]: function() {
             const onScrollBeginDraggingHandler = (scrollView) => {
@@ -246,7 +246,7 @@ function ScrollView(params) {
                 };
                 this.emitter.emit(Events.ScrollBeginDragging, contentOffset)
             };
-            self.ios.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
+            self.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
         },
         [Events.ScrollEndDecelerating]: function() {
             const onScrollEndDeceleratingHandler = (scrollView) => {
@@ -256,7 +256,7 @@ function ScrollView(params) {
                 };
                 this.emitter.emit(Events.ScrollEndDecelerating, contentOffset)
             };
-            self.ios.nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
+            self.nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
         },
         [Events.ScrollEndDraggingWillDecelerate]: function() {
             const onScrollEndDraggingWillDecelerateHandler = (scrollView, decelerate) => {
@@ -267,7 +267,7 @@ function ScrollView(params) {
                 this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset)
 
             };
-            self.ios.nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
+            self.nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
         },
         [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
             const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = (scrollView, velocity, targetContentOffset) => {
@@ -277,9 +277,9 @@ function ScrollView(params) {
                 };
                 targetContentOffset.x += +scrollView.contentInsetDictionary.left;
                 targetContentOffset.y += +scrollView.contentInsetDictionary.top;
-                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset, velocity, targetContentOffset);
+                this.emitter.emit(Events.ScrollEndDraggingWithVelocityTargetContentOffset, contentOffset, velocity, targetContentOffset);
             };
-            self.ios.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
+            self.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
         }
     }
 
