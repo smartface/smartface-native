@@ -42,7 +42,7 @@ declare class Pin implements IEventEmitter<PinEvets> {
      * @deprecated
      */
     onInfoWindowPress: () => void;
-    static Events: PinEvets
+    static Events: typeof PinEvets
 }
 
 export = Pin;

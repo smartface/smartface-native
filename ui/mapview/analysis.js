@@ -39,7 +39,7 @@ const View = require('../view');
  *     myPage.layout.addChild(myMapView);
  * 
  */
-function MapView(params) {}
+function MapView(params) { }
 
 /**
  * Enables/disables the information view to display on the right side of the callout bubble.
@@ -168,17 +168,6 @@ MapView.prototype.clusterSize;
 MapView.prototype.clusterPadding;
 
 /**
- * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
- *
- * @event onClusterPress
- * @param {Array<UI.MapView.Pin>} pins
- * @android
- * @ios
- * @since 3.0.1
- */
-MapView.prototype.onClusterPress;
-
-/**
  * This property sets center location of the map to the given latitude & longitude.
  *
  * @method setCenterLocationWithZoomLevel
@@ -191,7 +180,7 @@ MapView.prototype.onClusterPress;
  * @ios
  * @since 3.2.1
  */
-MapView.prototype.setCenterLocationWithZoomLevel = function(centerLocation, zoomLevel, animated) {};
+MapView.prototype.setCenterLocationWithZoomLevel = function (centerLocation, zoomLevel, animated) { };
 
 
 /**
@@ -285,7 +274,7 @@ MapView.prototype.visibleRegion;
  * @method getVisiblePins
  * @since 2.0.7
  */
-MapView.prototype.getVisiblePins = function() {};
+MapView.prototype.getVisiblePins = function () { };
 
 
 /**
@@ -297,7 +286,7 @@ MapView.prototype.getVisiblePins = function() {};
  * @deprecated
  * @since 2.0.10
  */
-MapView.prototype.android.prepareMapAsync = function() {};
+MapView.prototype.android.prepareMapAsync = function () { };
 
 
 /**
@@ -307,7 +296,7 @@ MapView.prototype.android.prepareMapAsync = function() {};
  * @method prepareMap
  * @since 3.1.0
  */
-MapView.prototype.android.prepareMap = function() {};
+MapView.prototype.android.prepareMap = function () { };
 
 /**
  * Adds a UI.MapView.Pin on the map.
@@ -318,7 +307,7 @@ MapView.prototype.android.prepareMap = function() {};
  * @method addPin
  * @since 0.1
  */
-MapView.prototype.addPin = function() {};
+MapView.prototype.addPin = function () { };
 
 /**
  * Removes the UI.MapView.Pin from the map.
@@ -329,7 +318,7 @@ MapView.prototype.addPin = function() {};
  * @ios
  * @since 0.1
  */
-MapView.prototype.removePin = function() {};
+MapView.prototype.removePin = function () { };
 
 /**
  * Removes all pins from the map.
@@ -339,54 +328,7 @@ MapView.prototype.removePin = function() {};
  * @ios
  * @since 3.1.1
  */
-MapView.prototype.removeAllPins = function() {};
-
-/**
- * Triggered when pressed on the map and sends the location pressed on the map.
- *
- * @event onPress
- * @param {Object} location
- * @param {Number} location.latitude
- * @param {Number} location.longitude
- * @android
- * @ios
- * @since 1.1.3
- */
-MapView.prototype.onPress;
-
-/**
- * Gets/sets callback for dragging start.
- *
- * @event onCameraMoveStarted
- * @android
- * @ios
- * @since 2.0.9
- */
-MapView.prototype.onCameraMoveStarted;
-
-/**
- * Gets/sets callback for dragging end.
- *
- * @event onCameraMoveEnded
- * @android
- * @ios
- * @since 2.0.9
- */
-MapView.prototype.onCameraMoveEnded;
-
-/**
- * Triggered when long pressed on the map and sends the location pressed on the map.
- *
- * @event onLongPress
- * @param {Object} location
- * @param {Number} location.latitude
- * @param {Number} location.longitude
- * @android
- * @ios
- * @since 1.1.3
- */
-MapView.prototype.onLongPress;
-
+MapView.prototype.removeAllPins = function () { };
 
 /**
  * onTouch event
@@ -432,15 +374,152 @@ MapView.prototype.onTouchCancelled;
  */
 MapView.prototype.onTouchMoved;
 
+
+
+/**
+ * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
+ *
+ * @event onClusterPress
+ * @deprecated
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.onClusterPress;
+
+/**
+ * Triggered when pressed on the map and sends the location pressed on the map.
+ *
+ * @event onPress
+ * @deprecated
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onPress;
+
+/**
+ * Gets/sets callback for dragging start.
+ *
+ * @event onCameraMoveStarted
+ * @deprecated
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.onCameraMoveStarted;
+
+/**
+ * Gets/sets callback for dragging end.
+ *
+ * @event onCameraMoveEnded
+ * @deprecated
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.onCameraMoveEnded;
+
+/**
+ * Triggered when long pressed on the map and sends the location pressed on the map.
+ *
+ * @event onLongPress
+ * @deprecated
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onLongPress;
+
 /**
  * This event is called when map is ready to be used.
  *
  * @since 0.1
  * @event onCreate
+ * @deprecated
  * @android
  * @ios
  */
-MapView.prototype.onCreate = function onCreate() {};
+MapView.prototype.onCreate = function onCreate() { };
+
+
+
+
+
+/**
+ * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
+ *
+ * @event onClusterPress
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.Events.ClusterPress = "clusterPress";
+
+
+/**
+ * Triggered when pressed on the map and sends the location pressed on the map.
+ *
+ * @event onPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.Events.Press = "Press";
+
+/**
+ * Gets/sets callback for dragging start.
+ *
+ * @event onCameraMoveStarted
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.Events.CameraMoveStarted = "cameraMoveStarted";
+
+/**
+ * Gets/sets callback for dragging end.
+ *
+ * @event onCameraMoveEnded
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.Events.CameraMoveEnded = "cameraMoveEnded";
+
+/**
+ * Triggered when long pressed on the map and sends the location pressed on the map.
+ *
+ * @event onLongPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.Events.LongPress = "longPress";
+
+/**
+* This event is called when map is ready to be used.
+*
+* @since 0.1
+* @event onCreate
+* @android
+* @ios
+*/
+MapView.Events.Create = "create";
 
 /**
  * Gets/Sets map type
@@ -487,7 +566,7 @@ MapView.prototype.type = UI.MapView.Type.NORMAL;
  *     });
  *     myPage.layout.addChild(myMapView);
  */
-function Pin() {}
+function Pin() { }
 
 /**
  * Pin location on the map. 
@@ -573,6 +652,7 @@ Pin.prototype.visible;
  * This event will be fired when the pin is touched.
  *
  * @event onPress
+ * @deprecated
  * @android
  * @ios
  * @since 1.1.2
@@ -584,11 +664,33 @@ Pin.prototype.onPress;
  * This event will be fired when the pin's info window is touched.
  *
  * @event onInfoWindowPress
+ * @deprecated
  * @android
  * @ios
  * @since 4.3.2
  */
 Pin.prototype.onInfoWindowPress;
+
+/**
+ * This event will be fired when the pin is touched.
+ *
+ * @event onPress
+ * @android
+ * @ios
+ * @since 1.1.2
+ */
+Pin.Events.Press = "press";
+
+
+/**
+ * This event will be fired when the pin's info window is touched.
+ *
+ * @event onInfoWindowPress
+ * @android
+ * @ios
+ * @since 4.3.2
+ */
+Pin.Events.InfoWindowPress = "infoWindowPress";
 
 MapView.Pin = Pin;
 

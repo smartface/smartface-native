@@ -7,8 +7,9 @@ const Invocation = require('../../util').Invocation;
 const Events = require('./events');
 const PinEvents = require('./pin/events');
 const {
-    EventEmitterMixin
+    EventEmitterCreator
 } = require("../../core/eventemitter");
+MapView.Events = {...View.Events, ...Events};
 
 MapView.prototype = Object.create(View.prototype);
 function MapView(params) {
@@ -500,50 +501,38 @@ function MapView(params) {
 
     const EventFunctions = {
         [Events.CameraMoveEnded]: function() {
-            _onCameraMoveEnded = function (state) {
+            _onCameraMoveEnded = (state) => {
                 this.emitter.emit(Events.CameraMoveEnded, state);
             } 
         },
         [Events.CameraMoveStarted]: function() {
-            _onCameraMoveStarted = function (state) {
+            _onCameraMoveStarted = (state) => {
                 this.emitter.emit(Events.CameraMoveStarted, state);
             } 
         },
         [Events.ClusterPress]: function() {
-            _clusterOnPress = function (state) {
+            _clusterOnPress = (state) => {
                 this.emitter.emit(Events.ClusterPress, state);
             } 
         },
         [Events.Create]: function() {
-            _onCreate = function (state) {
+            _onCreate = (state) => {
                 this.emitter.emit(Events.Create, state);
             } 
         },
         [Events.LongPress]: function() {
-            _onLongPress = function (state) {
+            _onLongPress = (state) => {
                 this.emitter.emit(Events.LongPress, state);
             } 
         },
         [Events.Press]: function() {
-            _onPress = function (state) {
+            _onPress = (state) => {
                 this.emitter.emit(Events.Press, state);
             } 
         },
     }
     
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     if (params) {
         for (var param in params) {
@@ -669,23 +658,18 @@ function Pin(params) {
 
     const EventFunctions = {
         [PinEvents.InfoWindowPress]: function() {
-            self.nativeObject.onInfoPress = function (state) {
+            self.nativeObject.onInfoPress = (state) => {
                 this.emitter.emit(Events.InfoWindowPress, state);
             } 
         },
         [PinEvents.Press]: function() {
-            self.nativeObject.onPress = function (state) {
-                this.emitter.emit(Events.InfoWindowPress, state);
+            self.nativeObject.onPress = (state) => {
+                this.emitter.emit(Events.Press, state);
             } 
         }
     }
     
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
+    EventEmitterCreator(this, EventFunctions);
     
 
     if (params) {
