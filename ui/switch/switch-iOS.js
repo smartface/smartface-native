@@ -26,8 +26,9 @@ function Switch(params) {
     const EventFunctions = {
         [Events.ToggleChanged]: function () {
             _onToggleChanged = (state) => {
-                this.emitter.emit(Events.ToggleChanged, state);
-            }
+                self.emitter.emit(Events.ToggleChanged, state);
+            };
+            self.nativeObject.addJSTarget(() => _onToggleChanged(self.toggle), UIControlEvents.valueChanged);
         }
     }
 
