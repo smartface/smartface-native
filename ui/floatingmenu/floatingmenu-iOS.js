@@ -4,11 +4,11 @@ const TypeUtil = require("../../util/type");
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const {
-    EventEmitterMixin,
-    EventEmitter
+    EventEmitterCreator
   } = require("../../core/eventemitter");
 
 const Events = require('./events');
+FloatingMenu.Events = {...Events};
 
 const FloatyOpenAnimationType = {
     pop: 0,
@@ -24,12 +24,9 @@ const UIUserInterfaceLayoutDirection = {
     rightToLeft: 1
 }
 
-FloatingMenu.prototype = Object.assign({}, EventEmitterMixin);
-
 function FloatingMenu(params) {
 
     var self = this;
-    self.emitter = new EventEmitter();
     if (!self.nativeObject) {
         self.nativeObject = new __SF_Floaty();
     }
@@ -173,28 +170,23 @@ function FloatingMenu(params) {
 
     const EventFunctions = {
         [Events.MenuClose]: function() {
-            this.onMenuClose = function (state) {
+            this.onMenuClose = (state) => {
                 self.emitter.emit(Events.MenuClose, state);
             } 
         },
         [Events.MenuOpen]: function() {
-            self.onMenuOpen = function (state) {
+            self.onMenuOpen = (state) => {
                 self.emitter.emit(Events.MenuOpen, state);
             } 
         },
         [Events.Click]: function() {
-            self.nativeObject.onSelected = function (state) {
+            self.nativeObject.onSelected = (state) => {
                 self.emitter.emit(Events.Click, state);
             } 
         }
     }
 
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

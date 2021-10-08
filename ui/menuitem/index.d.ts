@@ -21,11 +21,12 @@ declare enum Events {
  * MenuItem is used to add row and action to the UI.Menu 
  *
  */
-declare class MenuItem implements IEventEmitter<typeof Events> {
+declare class MenuItem implements IEventEmitter<Events> {
 	constructor(params?: { [key: string]: any });
-	on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-	off(eventName: typeof Events, callback?: (...args: any) => void): void;
-	emit(event: typeof Events, detail?: any[]): void;
+	static Events: typeof Events;
+	on(eventName: Events, callback: (...args: any) => void): () => void;
+	off(eventName: Events, callback?: (...args: any) => void): void;
+	emit(event: Events, detail?: any[]): void;
 
 /**
  * Gets/sets the title of a menu item.

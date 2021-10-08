@@ -11,13 +11,11 @@ const NativeMenuItem = requireClass("uk.co.markormesher.android_fab.SpeedDialMen
 const Color = require("../color");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
+    EventEmitterCreator
+} = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-FloatingMenu.prototype = Object.assign({}, EventEmitterMixin);
+FloatingMenu.Events = { ...Events };
 function FloatingMenu(params) {
     var nativeObject;
     var _items = [];
@@ -28,14 +26,13 @@ function FloatingMenu(params) {
     var _callbackOpen;
     var _callbackClose;
 
-    this.emitter = new EventEmitter();
 
     const SFSpeedDialAdapter = requireClass("io.smartface.android.sfcore.ui.floatingmenu.SFSpeedDialAdapter");
     var overrideMethods = {
-        getCount: function() {
+        getCount: function () {
             return _items.length;
         },
-        getViews: function(position) {
+        getViews: function (position) {
             position = reposition(position, _items.length);
 
             var item = new NativeMenuItem();
@@ -52,39 +49,39 @@ function FloatingMenu(params) {
             }
             return item;
         },
-        getBackgroundColour: function(position) {
+        getBackgroundColour: function (position) {
             position = reposition(position, _items.length);
 
             var color = Color.GRAY;
             (_items[position].color) && (color = _items[position].color);
             return color.nativeObject;
         },
-        onMenuItemClick: function(position) {
+        onMenuItemClick: function (position) {
             position = reposition(position, _items.length);
 
             _items[position].onClick && _items[position].onClick();
             return true;
         },
-        rotateFab: function() {
+        rotateFab: function () {
             return _items.length > 0 && _rotateEnabled;
         }
     };
     var menuAdapter = new SFSpeedDialAdapter(overrideMethods);
 
     var clickListener = NativeClickListener.implement({
-        onClick: function(view) {
+        onClick: function (view) {
             _callbackClick && _callbackClick();
         }
     });
 
     var openListener = NativeOnOpenListener.implement({
-        onOpen: function(button) {
+        onOpen: function (button) {
             _callbackOpen && _callbackOpen();
         }
     });
 
     var closeListener = NativeOnCloseListener.implement({
-        onClose: function(button) {
+        onClose: function (button) {
             _callbackClose && _callbackClose();
         }
     });
@@ -111,43 +108,43 @@ function FloatingMenu(params) {
     }
 
     const EventFunctions = {
-        [Events.MenuClose]: function() {
+        [Events.MenuClose]: function () {
             _callbackClose = (state) => {
                 this.emitter.emit(Events.MenuClose, state);
-            } 
+            }
         },
-        [Events.MenuOpen]: function() {
+        [Events.MenuOpen]: function () {
             _callbackOpen = (state) => {
                 this.emitter.emit(Events.MenuOpen, state);
-            } 
+            }
         },
-        [Events.Click]: function() {
+        [Events.Click]: function () {
             _callbackClick = (state) => {
                 this.emitter.emit(Events.Click, state);
-            } 
+            }
         }
     }
-
+    EventEmitterCreator(this, EventFunctions);
 
     Object.defineProperties(this, {
         'items': {
-            get: function() {
+            get: function () {
                 return _items;
             },
-            set: function(items) {
+            set: function (items) {
                 try {
                     _items = items;
                     this.nativeObject.rebuildSpeedDialMenu();
 
-                } catch (e) {}
+                } catch (e) { }
 
             }
         },
         'icon': {
-            get: function() {
+            get: function () {
                 return _icon;
             },
-            set: function(image) {
+            set: function (image) {
                 if (image && image.nativeObject && (image instanceof require("../image"))) {
                     _icon = image;
                     nativeObject.setIcon(image.nativeObject);
@@ -157,10 +154,10 @@ function FloatingMenu(params) {
             }
         },
         'color': {
-            get: function() {
+            get: function () {
                 return _color;
             },
-            set: function(color) {
+            set: function (color) {
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
                     _color = color; // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
@@ -170,62 +167,56 @@ function FloatingMenu(params) {
             }
         },
         'rotateEnabled': {
-            get: function() {
+            get: function () {
                 return _rotateEnabled;
             },
-            set: function(enabled) {
+            set: function (enabled) {
                 _rotateEnabled = enabled;
             }
         },
         'onClick': {
-            get: function() {
+            get: function () {
                 return _callbackClick;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _callbackClick = callback;
             }
         },
         'onMenuOpen': {
-            get: function() {
+            get: function () {
                 return _callbackOpen;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _callbackOpen = callback;
             }
         },
         'onMenuClose': {
-            get: function() {
+            get: function () {
                 return _callbackClose;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _callbackClose = callback;
             }
         },
         'visible': {
-            get: function() {
+            get: function () {
                 return (nativeObject.getVisibility() === 0); // View.VISIBLE
             },
-            set: function(visibility) {
+            set: function (visibility) {
                 if (visibility === true) {
                     nativeObject.setVisibility(0); // View.VISIBLE
                 } else {
                     nativeObject.setVisibility(4); // View.INVISIBLE    
                 }
             }
-        },
-        'on': {
-            value: (event, callback) => {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
         }
     });
 
-    this.open = function() {
+    this.open = function () {
         nativeObject.openSpeedDialMenu();
     };
 
-    this.close = function() {
+    this.close = function () {
         nativeObject.closeSpeedDialMenu();
     };
 

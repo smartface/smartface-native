@@ -1,23 +1,13 @@
 const {
-    EventEmitterMixin,
+    EventEmitterCreator,
     EventEmitter
   } = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-MenuItem.prototype = Object.assign({}, EventEmitterMixin);
+MenuItem.Events = {...Events};
 
 function MenuItem(params) {
     var self = this;
-    self.emitter = new EventEmitter();
-
-    const EventFunctions = {
-        [Events.Selected]: function() {
-            self.onSelected = function (state) {
-                self.emitter.emit(Events.CallStateChanged, state);
-            } 
-        }
-    }
 
     var _title = "";
     Object.defineProperty(this, 'title', {
@@ -40,6 +30,17 @@ function MenuItem(params) {
     self.android = {};
 
     var _style = 0;
+
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            self.onSelected = (state) => {
+                self.emitter.emit(Events.CallStateChanged, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
     Object.defineProperty(self.ios, 'style', {
         get: function() {
             return _style;
@@ -48,13 +49,6 @@ function MenuItem(params) {
             _style = value;
         },
         enumerable: true
-    });
-
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
     });
 
     // Assign parameters given in constructor
