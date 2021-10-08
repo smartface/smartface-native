@@ -99,7 +99,7 @@ function DatePicker(params) {
     });
     const EventFunctions = {
         [Events.Cancelled]: function () {
-            _onCancelled = function (state) {
+            _onCancelled = (state) => {
                 this.emitter.emit(Events.Cancelled, state);
             }
             const NativeDialogInterface = requireClass("android.content.DialogInterface");
@@ -110,7 +110,7 @@ function DatePicker(params) {
             }));
         },
         [Events.Selected]: function () {
-            _onDateSelected = function (state) {
+            _onDateSelected = (state) => {
                 this.emitter.emit(Events.Selected, state);
             }
         }
