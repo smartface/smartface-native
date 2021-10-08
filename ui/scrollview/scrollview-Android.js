@@ -5,6 +5,8 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const scrollableSuper = require("../../util/Android/scrollable");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+ScrollView.Events = {...ViewGroup.Events, ...Events};
 
 ScrollView.prototype = Object.create(ViewGroup.prototype);
 function ScrollView(params) {
@@ -106,20 +108,7 @@ function ScrollView(params) {
             //iOS Only
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     _layout.parent = this;
     var _callbackOnScroll = null;

@@ -5,6 +5,8 @@ const FlexLayout = require('../../ui/flexlayout');
 const Color = require('../../ui/color');
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+ScrollView.Events = {...ViewGroup.Events, ...Events};
 
 const ScrollType = {
     vertical: 0,
@@ -227,17 +229,17 @@ function ScrollView(params) {
             } 
         },
         [Events.ScrollBeginDecelerating]: function() {
-            const onScrollBeginDeceleratingHandler = function(scrollView) {
+            const onScrollBeginDeceleratingHandler = (scrollView) => {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
                 };
                 this.emitter.emit(Events.ScrollBeginDecelerating, contentOffset)
             };
-            nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
+            self.ios.nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
         },
         [Events.ScrollBeginDragging]: function() {
-            const onScrollBeginDraggingHandler = function(scrollView) {
+            const onScrollBeginDraggingHandler = (scrollView) => {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
@@ -247,17 +249,17 @@ function ScrollView(params) {
             self.ios.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
         },
         [Events.ScrollEndDecelerating]: function() {
-            const onScrollEndDeceleratingHandler = function(scrollView) {
+            const onScrollEndDeceleratingHandler = (scrollView) => {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
                 };
                 this.emitter.emit(Events.ScrollEndDecelerating, contentOffset)
             };
-            nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
+            self.ios.nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
         },
         [Events.ScrollEndDraggingWillDecelerate]: function() {
-            const onScrollEndDraggingWillDecelerateHandler = function(scrollView, decelerate) {
+            const onScrollEndDraggingWillDecelerateHandler = (scrollView, decelerate) => {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
@@ -265,10 +267,10 @@ function ScrollView(params) {
                 this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset)
 
             };
-            nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
+            self.ios.nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
         },
         [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
-            const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = function(scrollView, velocity, targetContentOffset) {
+            const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = (scrollView, velocity, targetContentOffset) => {
                 const contentOffset = {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
@@ -277,23 +279,11 @@ function ScrollView(params) {
                 targetContentOffset.y += +scrollView.contentInsetDictionary.top;
                 this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset, velocity, targetContentOffset);
             };
-            nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
+            self.ios.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+
+    EventEmitterCreator(this, EventFunctions);
 
     var _align = ScrollType.vertical;
     Object.defineProperty(self, 'align', {

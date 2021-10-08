@@ -258,7 +258,7 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 		velocity: Point2D,
 		targetContentOffset: Point2D
 	) => void;
-	static Events: ScrollViewEvents
+	static Events: typeof ScrollViewEvents;
 }
 declare namespace ScrollView {
 	enum Align {
