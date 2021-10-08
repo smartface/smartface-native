@@ -5,6 +5,9 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const Label = require("../label");
 const View = require("../view");
 const Color = require("../color");
+const Events = require("./events");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+Button.Events = { ...View.Events, ...Events };
 
 const NativeButton = requireClass("android.widget.Button");
 const NativeView = requireClass("android.view.View");
@@ -50,10 +53,10 @@ function Button(params) {
 
     Object.defineProperties(this, {
         'backgroundColor': {
-            get: function() {
+            get: function () {
                 return this._backgroundColor;
             },
-            set: function(backgroundColor) {
+            set: function (backgroundColor) {
                 this._backgroundColor = backgroundColor;
                 this.setBackgroundColor();
             },
@@ -61,10 +64,10 @@ function Button(params) {
             configurable: true
         },
         'backgroundImage': {
-            get: function() {
+            get: function () {
                 return this.__backgroundImages;
             },
-            set: function(backgroundImage) {
+            set: function (backgroundImage) {
                 this.__backgroundImages = backgroundImage;
                 this.setBackgroundImage();
             },
@@ -72,10 +75,10 @@ function Button(params) {
             configurable: true
         },
         'borderWidth': {
-            get: function() {
+            get: function () {
                 return this._borderWidth;
             },
-            set: function(borderWidth) {
+            set: function (borderWidth) {
                 this._borderWidth = borderWidth;
                 this._setBorderToAllEdges();
                 this.setBorder();
@@ -84,10 +87,10 @@ function Button(params) {
             configurable: true
         },
         'borderRadius': {
-            get: function() {
+            get: function () {
                 return AndroidUnitConverter.pixelToDp(this._borderRadius);
             },
-            set: function(borderRadius) {
+            set: function (borderRadius) {
                 this._borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
                 this.setBorder();
                 if (this.__backgroundImages) {
@@ -100,10 +103,10 @@ function Button(params) {
             configurable: true
         },
         'borderColor': {
-            get: function() {
+            get: function () {
                 return this._borderColor;
             },
-            set: function(value) {
+            set: function (value) {
                 this._borderColor = value;
                 this.setBorder();
             },
@@ -113,31 +116,18 @@ function Button(params) {
     });
 
     const EventFunctions = {
-        [Events.Press]: function() {
-            this.__onPress = function (state) {
+        [Events.Press]: function () {
+            this.__onPress = (state) => {
                 this.emitter.emit(Events.Press, state);
-            } 
+            }
         },
-        [Events.LongPress]: function() {
-            this.__onLongPress = function (state) {
+        [Events.LongPress]: function () {
+            this.__onLongPress = (state) => {
                 this.emitter.emit(Events.LongPress, state);
-            } 
+            }
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     this.backgroundDrawable = new NativeGradientDrawable();
     this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
@@ -150,7 +140,7 @@ function Button(params) {
     this._borderColor = Color.BLACK;
     this._borderWidth = 0;
 
-    this.setBackgroundImage = function() {
+    this.setBackgroundImage = function () {
         var resources = AndroidConfig.activityResources;
         const NativeRoundedBitmapFactory = requireClass("androidx.core.graphics.drawable.RoundedBitmapDrawableFactory");
         const Image = require("../image");
@@ -207,7 +197,7 @@ function Button(params) {
         }
     };
 
-    this.setBackgroundColor = function() {
+    this.setBackgroundColor = function () {
         if (this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
             // release(this.backgroundDrawable);
             this.backgroundDrawable = this._backgroundColor.nativeObject;
@@ -276,7 +266,7 @@ function Button(params) {
         this.setBackground(0);
     };
 
-    this.setBorder = function() {
+    this.setBorder = function () {
         var borderWidth_px = AndroidUnitConverter.dpToPixel(this.borderWidth);
         // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
         // so we should use created drawables.
@@ -286,7 +276,7 @@ function Button(params) {
         }
     };
 
-    this.setBackground = function(layerIndex) {
+    this.setBackground = function (layerIndex) {
         var constantStateForCopy = this.nativeObject.getBackground().getConstantState();
         var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
         switch (layerIndex) {
@@ -322,10 +312,10 @@ function Button(params) {
 }
 Object.defineProperties(Button.prototype, {
     'textAlignment': {
-        get: function() {
+        get: function () {
             return this._textAlignment;
         },
-        set: function(textAlignment) {
+        set: function (textAlignment) {
             if (textAlignment in TextAlignmentDic) {
                 this._textAlignment = textAlignment;
             } else {
@@ -336,27 +326,27 @@ Object.defineProperties(Button.prototype, {
         enumerable: true
     },
     'onPress': {
-        get: function() {
+        get: function () {
             return this.__onPress;
         },
-        set: function(onPress) {
+        set: function (onPress) {
             this.__onPress = onPress.bind(this);
             if (!this.__didSetOnClickListener) setOnClickListener(this);
         },
         enumerable: true
     },
     'onLongPress': {
-        get: function() {
+        get: function () {
             return this.__onLongPress;
         },
-        set: function(onLongPress) {
+        set: function (onLongPress) {
             this.__onLongPress = onLongPress.bind(this);
             if (!this.__didSetOnLongClickListener) setOnLongClickListener(this);
         },
         enumerable: true
     },
     'toString': {
-        value: function() {
+        value: function () {
             return 'Button';
         },
         enumerable: true,
@@ -366,7 +356,7 @@ Object.defineProperties(Button.prototype, {
 
 function setOnClickListener(object) {
     object.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
-        onClick: function(view) {
+        onClick: function (view) {
             this.__onPress && this.__onPress();
         }.bind(object)
     }));
@@ -375,7 +365,7 @@ function setOnClickListener(object) {
 
 function setOnLongClickListener(object) {
     object.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-        onLongClick: function(view) {
+        onLongClick: function (view) {
             if (this.__onLongPress) {
                 this.__onLongPress();
             }

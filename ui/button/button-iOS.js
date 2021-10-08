@@ -3,7 +3,8 @@ const Color = require("../../ui/color");
 const Image = require("../../ui/image");
 const UIControlEvents = require("../../util").UIControlEvents;
 const Events = require('./events');
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
+Button.Events = {...View.Events, ...Events};
 const ButtonState = {
     normal: 0,
     disabled: 1,
@@ -244,7 +245,7 @@ function Button(params) {
 
     const EventFunctions = {
         [Events.Press]: function() {
-            _onPressFunc = function (state) {
+            _onPressFunc = (state) => {
                 this.emitter.emit(Events.Press, state);
             } 
         },
@@ -253,21 +254,7 @@ function Button(params) {
         }
     }
     
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-    
-
+    EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
