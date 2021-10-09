@@ -385,9 +385,24 @@ function WebView(params) {
 
     const EventFunctions = {
         [Events.BackButtonPressed]: function() {
+            if (_onBackButtonPressedCallback === undefined) {
+                self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                    onKey: function(view, keyCode, keyEvent) {
+                        // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                        if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                            typeof _onBackButtonPressedCallback === "function" &&
+                                _onBackButtonPressedCallback();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }));
+            } 
             _onBackButtonPressedCallback = (state) => {
                 this.emitter.emit(Events.BackButtonPressed, state);
-            } 
+            };
+            
         },
         [Events.ChangedURL]: function() {
             _onChangedURL = (state) => {

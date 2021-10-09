@@ -4,7 +4,7 @@ const Invocation = require('../../util').Invocation;
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 const Events = require('./events');
 const { EventEmitterCreator } = require('../../core/eventemitter');
-WebView.Events = {...View.Events, ...Events};
+WebView.Events = { ...View.Events, ...Events };
 
 WebView.prototype = Object.create(View.prototype);
 function WebView(params) {

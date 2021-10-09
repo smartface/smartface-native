@@ -5,9 +5,5 @@ module.exports = {
   "Error": "error",
   "Load": "load",
   "OpenNewWindow": "openNewWindow",
-  "Show": "show",
-  "Touch": "touch",
-  "TouchCancelled": "touchCancelled",
-  "TouchEnded": "touchEnded",
-  "TouchMoved": "touchMoved"
+  "Show": "show"
 }
