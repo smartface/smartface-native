@@ -501,32 +501,41 @@ function MapView(params) {
 
     const EventFunctions = {
         [Events.CameraMoveEnded]: function() {
-            _onCameraMoveEnded = (state) => {
+            self.onCameraMoveEnded = (state) => {
                 this.emitter.emit(Events.CameraMoveEnded, state);
             } 
         },
         [Events.CameraMoveStarted]: function() {
-            _onCameraMoveStarted = (state) => {
+            self.onCameraMoveStarted = (state) => {
                 this.emitter.emit(Events.CameraMoveStarted, state);
             } 
         },
         [Events.ClusterPress]: function() {
             _clusterOnPress = (state) => {
                 this.emitter.emit(Events.ClusterPress, state);
-            } 
+            }
+
+            var _onPressHandler = function(e) {
+                var pinArray = [];
+                for (var i in e.memberAnnotations) {
+                    pinArray.push(_pinArray[e.memberAnnotations[i].uuid]);
+                }
+                _clusterOnPress.call(this, pinArray);
+            };
+            self.cluster.nativeObject.onPress = _onPressHandler.bind(this);
         },
         [Events.Create]: function() {
-            _onCreate = (state) => {
+            self.onCreate = (state) => {
                 this.emitter.emit(Events.Create, state);
             } 
         },
         [Events.LongPress]: function() {
-            _onLongPress = (state) => {
+            self.onLongPress = (state) => {
                 this.emitter.emit(Events.LongPress, state);
             } 
         },
         [Events.Press]: function() {
-            _onPress = (state) => {
+            self.nativeObject.onPress = (state) => {
                 this.emitter.emit(Events.Press, state);
             } 
         },
