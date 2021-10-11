@@ -1,8 +1,5 @@
 const Invocation = require('../../util').Invocation;
-const {
-    EventEmitterMixin,
-    EventEmitter
-} = require("../../core/eventemitter");
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
 const EventFunctions = {
@@ -14,14 +11,10 @@ const EventFunctions = {
 }
 function Location() {};
 
-Location.nativeObject = new __SF_CLLocationManager();
-Location.emitter = new EventEmitter();
-Object.assign(Location, EventEmitterMixin);
+Location.Events = { ...Events };
 
-Location.on = (event, callback) => {
-    EventFunctions[event].call(Location);
-    Location.emitter.on(event, callback);
-};
+Location.nativeObject = new __SF_CLLocationManager();
+EventEmitterCreator(Location, EventFunctions);
 
 Location.ios = {};
 Location.ios.native = {};
