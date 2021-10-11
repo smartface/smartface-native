@@ -283,13 +283,13 @@ function SwipeView(params) {
 
     const EventFunctions = {
         [Events.PageScrolled]: function() {
-            self.onPageScrolled = (state) => {
-                this.emitter.emit(Events.PageScrolled, state);
+            self.onPageScrolled = (index, offset) => {
+                this.emitter.emit(Events.PageScrolled, index, offset);
             } 
         },
         [Events.PageSelected]: function() {
-            self.onPageSelected = (state) => {
-                this.emitter.emit(Events.PageSelected, state);
+            self.onPageSelected = (index, page) => {
+                this.emitter.emit(Events.PageSelected, index, page);
             } 
         },
         [Events.StateChanged]: function() {
