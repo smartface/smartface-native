@@ -29,11 +29,11 @@ declare enum Events {
    * @since 1.1.17
    */
   Message = "message",
-   /**
-     * Invoked when a web socket has been accepted by the web socket server.
-     * @event
-     * @since 1.1.17
-     */
+  /**
+    * Invoked when a web socket has been accepted by the web socket server.
+    * @event
+    * @since 1.1.17
+    */
   Open = "open"
 }
 
@@ -65,76 +65,76 @@ declare enum Events {
  * @class Net.WebSocket
  * @since 1.1.17
  */
-declare class WebSocket extends NativeComponent implements IEventEmitter<typeof Events> {
-    constructor(params?: any);
-    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-    off(eventName: typeof Events, callback?: (...args: any) => void): void;
-    emit(event: typeof Events, detail?: any[]): void;
-    /**
-     * Gets url of socket connection.
-     *
-     * @property {String} url
-     * @readonly
-     * @android
-     * @ios
-     * @since 1.1.17
-     */
-    url: string;
-    /**
-     * Close the web socket.
-     * @param {Object} params 
-     * @param {Number} params.code
-     * @param {String} [params.reason]
-     * @since 1.1.17
-     */
-    close(params: {code: number, reason?: string}): void;
-    /**
-     * Send data to a web socket server.
-     * @param {Object} params 
-     * @param {String|Blob} params.data
-     * @return {Boolean}
-     * @since 1.1.17
-     */
-    send(params: {data: string| Blob}): boolean;
-   /**
-     * Invoked when a web socket has been accepted by the web socket server.
-     * @event
-     * @deprecated
-     * @since 1.1.17
-     */
-    onOpen():void;
-    /**
-     * Invoked when a message has been received. 
-     * @param {Object} params 
-     * @param {String} params.string
-     * @param {Blob} params.blob
-     * @deprecated
-     * @event
-     * @since 1.1.17
-     */
-    onMessage(e: {string: string, blob: Blob}): void;
-    /**
-     * Invoked when the web socket has been closed.
-     * @param {Object} e 
-     * @param {Number} e.code
-     * @param {String} e.reason
-     * @deprecated
-     * @event
-     * @since 1.1.17
-     */
-    onClose(e: {code: number, reason: string}): void;
-    /**
-     * Invoked when an error occured on reading or writing to the network.
-     * @param {Object} e 
-     * @param {String} e.message
-     * @param {Number} e.code
-     * @deprecated
-     * @event
-     * @since 1.1.17
-     */
-    onFailure(e: {code: number, message: string}): void;
+declare class WebSocket extends NativeComponent implements IEventEmitter<Events> {
+  constructor(params?: any);
+  on(eventName: Events, callback: (...args: any) => void): () => void;
+  off(eventName: Events, callback?: (...args: any) => void): void;
+  emit(event: Events, detail?: any[]): void;
+  /**
+   * Gets url of socket connection.
+   *
+   * @property {String} url
+   * @readonly
+   * @android
+   * @ios
+   * @since 1.1.17
+   */
+  url: string;
+  /**
+   * Close the web socket.
+   * @param {Object} params 
+   * @param {Number} params.code
+   * @param {String} [params.reason]
+   * @since 1.1.17
+   */
+  close(params: { code: number, reason?: string }): void;
+  /**
+   * Send data to a web socket server.
+   * @param {Object} params 
+   * @param {String|Blob} params.data
+   * @return {Boolean}
+   * @since 1.1.17
+   */
+  send(params: { data: string | Blob }): boolean;
+  /**
+    * Invoked when a web socket has been accepted by the web socket server.
+    * @event
+    * @deprecated
+    * @since 1.1.17
+    */
+  onOpen(): void;
+  /**
+   * Invoked when a message has been received. 
+   * @param {Object} params 
+   * @param {String} params.string
+   * @param {Blob} params.blob
+   * @deprecated
+   * @event
+   * @since 1.1.17
+   */
+  onMessage(e: { string: string, blob: Blob }): void;
+  /**
+   * Invoked when the web socket has been closed.
+   * @param {Object} e 
+   * @param {Number} e.code
+   * @param {String} e.reason
+   * @deprecated
+   * @event
+   * @since 1.1.17
+   */
+  onClose(e: { code: number, reason: string }): void;
+  /**
+   * Invoked when an error occured on reading or writing to the network.
+   * @param {Object} e 
+   * @param {String} e.message
+   * @param {Number} e.code
+   * @deprecated
+   * @event
+   * @since 1.1.17
+   */
+  onFailure(e: { code: number, message: string }): void;
 
-    static Events: Events;
+  static Events: typeof Events;
 }
 
 export = WebSocket;

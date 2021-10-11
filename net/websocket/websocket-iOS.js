@@ -1,9 +1,8 @@
 const Blob = require("../../blob");
 
 const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
+    EventEmitterCreator
+} = require("../../core/eventemitter");
 const Events = require('./events');
 
 const SRReadyState = {
@@ -12,13 +11,11 @@ const SRReadyState = {
     SR_CLOSING: 2,
     SR_CLOSED: 3
 }
+WebSocket.Events = {...Events};
 
-WebSocket.prototype = Object.assign({}, EventEmitterMixin);
-
-var webSocket = function WebSocket(params = {}) {
+function WebSocket(params = {}) {
     var self = this;
-    let {url, headers} = params;
-    self.emitter = new EventEmitter();
+    let { url, headers } = params;
     if (!self.nativeObject) {
         var alloc;
         var invocationAlloc = __SF_NSInvocation.createClassInvocationWithSelectorInstance("alloc", "SRWebSocket");
@@ -33,24 +30,24 @@ var webSocket = function WebSocket(params = {}) {
 
         var nsURL;
         var nsURLRequest;
-        if(!url) {
+        if (!url) {
             throw new Error('invalid arguments');
         }
-        
+
         nsURL = __SF_NSURL.URLWithString(url);
         nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
 
-        if(headers) {
+        if (headers) {
             const Invocation = require('../../util').Invocation;
             var mutableRequest = Invocation.invokeInstanceMethod(nsURLRequest, "mutableCopy", [], "NSObject");
-            for(key in headers) {
+            for (key in headers) {
                 let headerField = getHeaderKeyValue(key, headers[key]);
                 Invocation.invokeInstanceMethod(mutableRequest, "setValue:forHTTPHeaderField:", headerField);
             }
-        
+
             nsURLRequest = Invocation.invokeInstanceMethod(mutableRequest, "copy", [], "NSObject");
         }
-        
+
         var socket;
         var invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance("initWithURLRequest:", alloc);
         if (invocationInit) {
@@ -65,7 +62,7 @@ var webSocket = function WebSocket(params = {}) {
         self.nativeObject = socket;
     }
 
-    self.open = function() {
+    self.open = function () {
         var readyState;
         var invocationReadyState = __SF_NSInvocation.createInvocationWithSelectorInstance("readyState", self.nativeObject);
         if (invocationReadyState) {
@@ -93,7 +90,7 @@ var webSocket = function WebSocket(params = {}) {
     self.open();
 
     Object.defineProperty(self, 'url', {
-        get: function() {
+        get: function () {
             var url;
             var invocationUrl = __SF_NSInvocation.createInvocationWithSelectorInstance("url", self.nativeObject);
             if (invocationUrl) {
@@ -113,37 +110,31 @@ var webSocket = function WebSocket(params = {}) {
         enumerable: true
     });
 
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
-
     const EventFunctions = {
-        [Events.Close]: function() {
+        [Events.Close]: function () {
             self.onClose = (e) => {
                 self.emitter.emit(Events.Close, e);
             }
         },
-        [Events.Failure]: function() {
+        [Events.Failure]: function () {
             self.onFailure = (e) => {
                 self.emitter.emit(Events.Failure, e);
             }
         },
-        [Events.Message]: function() {
+        [Events.Message]: function () {
             self.onMessage = (e) => {
                 self.emitter.emit(Events.Message, e);
             }
         },
-        [Events.Open]: function() {
+        [Events.Open]: function () {
             self.onOpen = (e) => {
                 self.emitter.emit(Events.Open, e);
             }
         }
     }
-
-    self.close = function(params) {
+    EventEmitterCreator(this, EventFunctions);
+    
+    self.close = function (params) {
         var readyState;
         var invocationReadyState = __SF_NSInvocation.createInvocationWithSelectorInstance("readyState", self.nativeObject);
         if (invocationReadyState) {
@@ -193,7 +184,7 @@ var webSocket = function WebSocket(params = {}) {
         }
     };
 
-    self.send = function(params) {
+    self.send = function (params) {
         var error;
         if (params && (params.data instanceof Blob)) {
             var invocationSendData = __SF_NSInvocation.createInvocationWithSelectorInstance("sendData:", self.nativeObject);
@@ -222,19 +213,19 @@ var webSocket = function WebSocket(params = {}) {
     };
 
     var WebSocketDelegate = SF.defineClass("WebSocketControllerDelegate : NSObject <SRWebSocketDelegate>", {
-        webSocketDidOpen: function(webSocket) {
+        webSocketDidOpen: function (webSocket) {
             if (typeof self.onOpen === 'function') {
                 self.onOpen();
             }
         },
-        webSocketDidReceiveMessageWithString: function(webSocket, string) {
+        webSocketDidReceiveMessageWithString: function (webSocket, string) {
             if (typeof self.onMessage === 'function') {
                 self.onMessage({
                     string: string
                 });
             }
         },
-        webSocketDidReceiveMessageWithData: function(webSocket, data) {
+        webSocketDidReceiveMessageWithData: function (webSocket, data) {
             if (typeof self.onMessage === 'function') {
                 var blob = new Blob(data);
                 self.onMessage({
@@ -242,7 +233,7 @@ var webSocket = function WebSocket(params = {}) {
                 });
             }
         },
-        webSocketDidFailWithError: function(webSocket, error) {
+        webSocketDidFailWithError: function (webSocket, error) {
             if (typeof self.onFailure === 'function') {
                 self.onFailure({
                     code: error.code,
@@ -250,7 +241,7 @@ var webSocket = function WebSocket(params = {}) {
                 });
             }
         },
-        webSocketDidCloseWithCodeReasonWasClean: function(webSocket, code, reason, wasClean) {
+        webSocketDidCloseWithCodeReasonWasClean: function (webSocket, code, reason, wasClean) {
             var tempReason;
             if (reason !== "undefined") {
                 tempReason = reason;
@@ -291,4 +282,4 @@ function getHeaderKeyValue(key, value) {
     return [headerValue, headerKey];
 }
 
-module.exports = webSocket;
+module.exports = WebSocket;
