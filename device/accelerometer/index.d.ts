@@ -34,9 +34,9 @@ declare enum Events {
  * 
  */
 declare class Accelerometer {
-  static on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-  static off(eventName: typeof Events, callback?: (...args: any) => void): void;
-  static emit(event: typeof Events, detail?: any[]): void;
+  static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static off(eventName: Events, callback?: (...args: any) => void): void;
+  static emit(event: Events, detail?: any[]): void;
   /**
    * Starts capturing accelerometer values.
    * 
@@ -78,7 +78,7 @@ declare class Accelerometer {
    * @since 4.0.2
    */
   static accelerometerUpdateInterval: number;
-  static Events: Events;
+  static Events: typeof Events;
 }
 
 export = Accelerometer;

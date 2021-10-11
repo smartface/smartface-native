@@ -25,7 +25,7 @@ const Accelerometer = {};
  * @ios
  * @since 0.1
  */
-Accelerometer.start = function() {}
+Accelerometer.start = function () { }
 
 /**
  * Stops capturing.
@@ -35,22 +35,7 @@ Accelerometer.start = function() {}
  * @ios
  * @since 0.1
  */
-Accelerometer.stop = function() {}
-
-/**
- * Callback to capture accelerometer events.
- * 
- * @since 0.1
- * @event onAccelerate
- * @param {Object} event
- * @param {Number} event.x
- * @param {Number} event.y
- * @param {Number} event.z
- * @android
- * @ios
- * @deprecated
- */
-Accelerometer.onAccelerate = function(event) {}
+Accelerometer.stop = function () { }
 
 /**
  * The interval, in millisecond, for providing accelerometer updates to the block handler.
@@ -59,7 +44,7 @@ Accelerometer.onAccelerate = function(event) {}
  * @ios
  * @since 4.0.2
  */
-Accelerometer.accelerometerUpdateInterval = function() {}
+Accelerometer.accelerometerUpdateInterval = function () { }
 
 /**
  * Event to be implemented
@@ -72,7 +57,7 @@ Accelerometer.accelerometerUpdateInterval = function() {}
  * @android
  * @ios
  */
-Accelerometer.on = function(event, callback) {}
+Accelerometer.on = function (event, callback) { }
 /**
  * Event to be removed
  * @param {string} event - Event type to be created
@@ -84,7 +69,7 @@ Accelerometer.on = function(event, callback) {}
  * @android
  * @ios
  */
-Accelerometer.off = function(event, callback) {}
+Accelerometer.off = function (event, callback) { }
 
 /**
  * Event to be emitted
@@ -93,6 +78,36 @@ Accelerometer.off = function(event, callback) {}
  * @android
  * @ios
  */
-Accelerometer.emit = function(event, detail) {}
+Accelerometer.emit = function (event, detail) { }
+
+/**
+ * Callback to capture accelerometer events.
+ * 
+ * @since 0.1
+ * @event onAccelerate
+ * @deprecated
+ * @param {Object} event
+ * @param {Number} event.x
+ * @param {Number} event.y
+ * @param {Number} event.z
+ * @android
+ * @ios
+ */
+Accelerometer.onAccelerate = function (event) { }
+
+/**
+* Callback to capture accelerometer events.
+* 
+* @since 0.1
+* @event onAccelerate
+* @param {Object} event
+* @param {Number} event.x
+* @param {Number} event.y
+* @param {Number} event.z
+* @android
+* @ios
+*/
+Accelerometer.Events.Accelerate = "accelerate";
+
 
 module.exports = Accelerometer;
