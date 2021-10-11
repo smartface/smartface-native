@@ -3,6 +3,9 @@ const Exception = require("../../util").Exception;
 const Page = require("../../ui/page");
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const Invocation = require('../../util/iOS/invocation.js');
+const Events = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+SwipeView.Events = { ...View.Events, ...Events };
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -280,35 +283,23 @@ function SwipeView(params) {
 
     const EventFunctions = {
         [Events.PageScrolled]: function() {
-            self.onPageScrolled = function (state) {
+            self.onPageScrolled = (state) => {
                 this.emitter.emit(Events.PageScrolled, state);
             } 
         },
         [Events.PageSelected]: function() {
-            self.onPageSelected = function (state) {
+            self.onPageSelected = (state) => {
                 this.emitter.emit(Events.PageSelected, state);
             } 
         },
-        [Events.StateSelected]: function() {
-            self.onStateChanged = function (state) {
-                this.emitter.emit(Events.StateSelected, state);
+        [Events.StateChanged]: function() {
+            self.onStateChanged = (state) => {
+                this.emitter.emit(Events.StateChanged, state);
             } 
         }
-    }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    };
+
+    EventEmitterCreator(this, EventFunctions);
 
     self.pageControllerDelegate = new __SF_UIPageViewControllerDelegate();
 

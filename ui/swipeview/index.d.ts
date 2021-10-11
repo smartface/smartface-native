@@ -36,7 +36,7 @@ declare enum SwipeViewEvents {
 	 * @ios
 	 * @since 1.1.10
 	 */
-  StateSelected = "stateSelected"
+  StateChanged = "stateChanged"
 }
 
 /**

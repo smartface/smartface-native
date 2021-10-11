@@ -3,7 +3,8 @@ const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 const Events = require('./events');
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
+SwipeView.Events = { ...View.Events, ...Events };
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("io.smartface.android.sfcore.ui.swipeview.SFSwipeView");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
@@ -19,12 +20,12 @@ function SwipeView(params) {
 
     if (!self.nativeObject) {
         var callbacks = {
-            getCount: function() {
+            getCount: function () {
                 if (self.pageCount != null)
                     return self.pageCount;
                 return self.pages.length;
             },
-            getItem: function(position) {
+            getItem: function (position) {
                 let pageNativeObject = self.getPageInstance(position);
                 return pageNativeObject;
             }
@@ -48,36 +49,36 @@ function SwipeView(params) {
     var _pageCount;
     Object.defineProperties(self, {
         "page": {
-            get: function() {
+            get: function () {
                 return _page;
             },
-            set: function(page) {
+            set: function (page) {
                 _page = page;
             }
         },
         "onPageCreate": {
-            get: function() {
+            get: function () {
                 return _onPageCreateCallback;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onPageCreateCallback = callback;
             },
             enumerable: true,
             configurable: true
         },
         "pageCount": {
-            get: function() {
+            get: function () {
                 return _pageCount;
             },
-            set: function(count) {
+            set: function (count) {
                 _pageCount = count;
             }
         },
         "pages": {
-            get: function() {
+            get: function () {
                 return _pages;
             },
-            set: function(pages) {
+            set: function (pages) {
                 if (pages instanceof Array) {
                     if (pages.length < 1) {
                         throw new TypeError("Array parameter cannot be empty.");
@@ -90,10 +91,10 @@ function SwipeView(params) {
             configurable: true
         },
         "onPageSelected": {
-            get: function() {
+            get: function () {
                 return _callbackOnPageSelected;
             },
-            set: function(callback) {
+            set: function (callback) {
                 if (typeof callback === "function") {
                     _callbackOnPageSelected = callback;
                 }
@@ -102,10 +103,10 @@ function SwipeView(params) {
             configurable: true
         },
         "onPageScrolled": {
-            get: function() {
+            get: function () {
                 return _callbackOnPageScrolled;
             },
-            set: function(callback) {
+            set: function (callback) {
                 if (typeof callback === "function") {
                     _callbackOnPageScrolled = callback;
                 }
@@ -114,22 +115,22 @@ function SwipeView(params) {
             configurable: true
         },
         "onStateChanged": {
-            get: function() {
+            get: function () {
                 return _callbackOnPageStateChanged;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _callbackOnPageStateChanged = callback;
             }
         },
         "currentIndex": {
-            get: function() {
+            get: function () {
                 return self.nativeObject.getCurrentItem();
             },
             enumerable: true,
             configurable: true
         },
         "swipeToIndex": {
-            value: function(index, animated) {
+            value: function (index, animated) {
                 animated = (animated) ? true : false; // not to pass null to native method
                 self.nativeObject.setCurrentItem(index, animated);
             },
@@ -150,12 +151,12 @@ function SwipeView(params) {
             value: _pageInstances
         },
         "_bypassPageSpecificProperties": {
-            value: function(page) {
+            value: function (page) {
                 page.headerBar.visible = false;
-                Object.keys(page.headerBar).forEach(function(key) {
+                Object.keys(page.headerBar).forEach(function (key) {
                     Object.defineProperty(page.headerBar, key, {
-                        set: function() {},
-                        get: function() {
+                        set: function () { },
+                        get: function () {
                             return {};
                         },
                     });
@@ -166,38 +167,26 @@ function SwipeView(params) {
     });
 
     const EventFunctions = {
-        [Events.PageScrolled]: function() {
-            _callbackOnPageScrolled = function (state) {
+        [Events.PageScrolled]: function () {
+            _callbackOnPageScrolled = (state) => {
                 this.emitter.emit(Events.PageScrolled, state);
-            } 
+            }
         },
-        [Events.PageSelected]: function() {
-            _callbackOnPageSelected = function (state) {
+        [Events.PageSelected]: function () {
+            _callbackOnPageSelected = (state) => {
                 this.emitter.emit(Events.PageSelected, state);
-            } 
+            }
         },
-        [Events.StateSelected]: function() {
-            _callbackOnPageStateChanged = function (state) {
-                this.emitter.emit(Events.StateSelected, state);
-            } 
+        [Events.StateChanged]: function () {
+            _callbackOnPageStateChanged = (state) => {
+                this.emitter.emit(Events.StateChanged, state);
+            }
         }
-    }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    };
 
-    this.getPageInstance = function(position) {
+    EventEmitterCreator(this, EventFunctions);
+
+    this.getPageInstance = function (position) {
         var pageInstance;
         if (this.onPageCreate) {
             pageInstance = this.onPageCreate(position);
@@ -225,17 +214,17 @@ function SwipeView(params) {
     // Use setAdapter method after constructor's parameters are assigned.
     self.nativeObject.setAdapter(self.pagerAdapter);
     var listener = NativeOnPageChangeListener.implement({
-        onPageScrollStateChanged: function(state) {
+        onPageScrollStateChanged: function (state) {
             if (state === 0) { // SCROLL_STATE_IDLE
                 self.onStateChanged && self.onStateChanged(SwipeView.State.IDLE);
             } else if (state === 1) { // SCROLL_STATE_DRAGGING
                 self.onStateChanged && self.onStateChanged(SwipeView.State.DRAGGING);
             }
         },
-        onPageSelected: function(position) {
+        onPageSelected: function (position) {
             self.onPageSelected && self.onPageSelected(position, _pageInstances[position]);
         },
-        onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
+        onPageScrolled: function (position, positionOffset, positionOffsetPixels) {
             if (self.onPageScrolled) {
                 var AndroidUnitConverter = require("../../util/Android/unitconverter");
 

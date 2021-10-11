@@ -46,13 +46,50 @@ function SwipeView() {
      * Gets/Sets the callback triggered when a page is selected after a swipe action.
      *
      * @event onPageSelected
+     * @deprecated
      * @param index
      * @param page Selected page instance
      * @android
      * @ios
      * @since 1.1.10
      */
-    this.onPageSelected = function(index, page) {};
+    this.onPageSelected = function (index, page) { };
+    /**
+     * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
+     * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
+     *
+     * @event onPageScrolled
+     * @deprecated
+     * @param index  Index of the first page from the left that is currently visible.
+     * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
+     * @android
+     * @ios
+     * @since 2.0.9
+     */
+    this.onPageScrolled = function (index, offset) { };
+    /**
+     * Gets/Sets the callback triggered during swipe actions.
+     *
+     * @event onStateChanged
+     * @deprecated
+     * @param {UI.SwipeView.State} state
+     * @android
+     * @ios
+     * @since 1.1.10
+     */
+    this.onStateChanged = function (state) { };
+
+    /**
+     * Gets/Sets the callback triggered when a page is selected after a swipe action.
+     *
+     * @event onPageSelected
+     * @param index
+     * @param page Selected page instance
+     * @android
+     * @ios
+     * @since 1.1.10
+     */
+    this.Events.PageSelected = "pageSelected";
     /**
      * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
      * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
@@ -64,7 +101,7 @@ function SwipeView() {
      * @ios
      * @since 2.0.9
      */
-    this.onPageScrolled = function(index, offset) {};
+    this.Events.PageScrolled = "pageScrolled";
     /**
      * Gets/Sets the callback triggered during swipe actions.
      *
@@ -74,7 +111,8 @@ function SwipeView() {
      * @ios
      * @since 1.1.10
      */
-    this.onStateChanged = function(state) {};
+    this.Events.StateChanged = "stateChanged";
+
     /**
      * Gets the currently displayed page's index inside the page array.
      *
@@ -86,14 +124,14 @@ function SwipeView() {
      */
     this.currentIndex = -1;
 
-     /**
-     * Enables/Disables paging behavior.
-     *
-     * @property {Boolean} [pagingEnabled = true]
-     * @android
-     * @ios
-     * @since 4.3.2
-     */
+    /**
+    * Enables/Disables paging behavior.
+    *
+    * @property {Boolean} [pagingEnabled = true]
+    * @android
+    * @ios
+    * @since 4.3.2
+    */
     this.pagingEnabled = true;
 
     /**
@@ -106,7 +144,7 @@ function SwipeView() {
      * @ios
      * @since 1.1.10
      */
-    this.swipeToIndex = function(index, animated) {};
+    this.swipeToIndex = function (index, animated) { };
 };
 
 
