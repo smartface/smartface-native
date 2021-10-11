@@ -8,7 +8,6 @@ declare enum SwipeViewEvents {
 	 *
 	 * @event onPageSelected
 	 * @param index
-	 * @deprecated
 	 * @param page Selected page instance
 	 * @android
 	 * @ios
