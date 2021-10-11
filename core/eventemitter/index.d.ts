@@ -1,4 +1,4 @@
-import wolfy87emitter from 'wolfy87-eventemitter';
+import Events from 'events';
 
 export interface IEventEmitter<TEvent = string> {
   /**
@@ -19,17 +19,17 @@ export interface IEventEmitter<TEvent = string> {
    /**
     * Triggers the event manually.
     * @param {string} event 
-    * @param {Array<*>} detail - Array of arguments that needs to be passed down
+    * @param {*} args - Arguments that needs to be passed down
     */
-   emit(event: TEvent, detail?: any[]): void;
+   emit(event: TEvent, ...args: any[]): void;
 }
  
 export class EventEmitter implements IEventEmitter {
-  private emitter: wolfy87emitter;
-  on(eventName: string, callback: (...args: any) => void): () => void;
-  off(eventName: string, callback?: (...args: any) => void): void;
-  emit(event: string, detail?: any[]): void;
-    /**
+  private emitter: Events;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+  emit(event: string, ...args: any[]): void;
+  /**
    * Events of the Module in key-value notation.
    * Key means the Enum name
    * Value means the parameter to be passed to the EventEmitter
@@ -41,7 +41,7 @@ export class EventEmitter implements IEventEmitter {
 export class EventEmitterMixin {
   static on: (eventName: string, callback: (...args: any) => any) => any;
   static off: (eventName: string, callback: (...args: any) => any) => any;
-  static emit: (eventName: string, callback: (...args: any) => any) => any
+  static emit: (eventName: string, ...args: any[]) => any
 }
 
 export function EventClassFactory(parentClass: any, events: Record<string, string>): any;
