@@ -1,9 +1,10 @@
 const { EventEmitter } = require('./emitterClass');
 const EventEmitterMixin = require('./mixin');
-const { EventWrapper } = require('./emitterFactory');
+const { EventEmitterCreator, EventEmitterWrapper } = require('./emitterFactory');
 
 module.exports = {
-    EventWrapper,
+    EventEmitterCreator,
+    EventEmitterWrapper,
     EventEmitterMixin,
     EventEmitter
 };
