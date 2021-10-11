@@ -3,19 +3,29 @@ const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const RequestCodes = require("../../util/Android/requestcodes");
-const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
 var _pickParams = {};
 
-Sound.prototype = Object.assign({}, EventEmitterMixin);
+Sound.Events = { ...Events };
 function Sound(params) {
     this.nativeObject = new NativeMediaPlayer();
-    this.emitter = new EventEmitter();
+
+    const EventFunctions = {
+        [Events.Ready]: () => {
+            _onReadyCallback = function (state) {
+                this.emitter.emit(Events.Ready, state);
+            }
+        },
+        [Events.Finish]: () => {
+            _onFinishCallback = function (state) {
+                this.emitter.emit(Events.Finish, state);
+            }
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
+
     var _volume = 1.0;
     Object.defineProperty(this, 'volume', {
         get: function() {
@@ -99,13 +109,6 @@ function Sound(params) {
         enumerable: true
     });
 
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
-
     this.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
         onPrepared: function(view) {
             _onReadyCallback && _onReadyCallback();
@@ -127,19 +130,6 @@ function Sound(params) {
         this.nativeObject.setDataSource(url);
         this.nativeObject.prepare();
     };
-
-    const EventFunctions = {
-        [Events.Ready]: function() {
-            _onReadyCallback = function (state) {
-                this.emitter.emit(Events.Ready, state);
-            }
-        },
-        [Events.Finish]: function() {
-            _onFinishCallback = function (state) {
-                this.emitter.emit(Events.Finish, state);
-            }
-        }
-    }
 
     // Assign parameters given in constructor
     if (params) {

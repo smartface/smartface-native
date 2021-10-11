@@ -1,29 +1,25 @@
 const File = require("../../io/file");
-const {
-    EventEmitterMixin,
-    EventEmitter
-  } = require("../../core/eventemitter");
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
-const EventFunctions = {
-    [Events.Ready]: function() {
-        this.onReady = function (state) {
-            this.emitter.emit(Events.Ready, state);
-        }
-    },
-    [Events.Finish]: function() {
-        this.onFinish = function (state) {
-            this.emitter.emit(Events.Finish, state);
+
+
+function Sound() {
+    var self = this;
+
+    const EventFunctions = {
+        [Events.Ready]: () => {
+            this.onReady = function (state) {
+                this.emitter.emit(Events.Ready, state);
+            }
+        },
+        [Events.Finish]: () => {
+            this.onFinish = function (state) {
+                this.emitter.emit(Events.Finish, state);
+            }
         }
     }
-}
-
-Sound.prototype = Object.assign({}, EventEmitterMixin);
-function Sound() {
-
-    var self = this;
-    self.emitter = new EventEmitter();
+    EventEmitterCreator(this, EventFunctions);
     self.android = {};
 
     self.loadURL = function(value) {
