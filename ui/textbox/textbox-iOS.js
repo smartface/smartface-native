@@ -1,3 +1,5 @@
+ 
+
 const FlexLayout = require("../../ui/flexlayout");
 const View = require('../view');
 const KeyboardType = require('../../ui/keyboardtype');
@@ -6,6 +8,8 @@ const Color = require('../../ui/color');
 const KeyboardAnimationDelegate = require("../../util").KeyboardAnimationDelegate;
 const Invocation = require('../../util/iOS/invocation.js');
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TextBox.Events = {...View.Events, ...Events};
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -59,31 +63,32 @@ function TextBox(params) {
 
     const EventFunctions = {
         [Events.ActionButtonPress]: function() {
-            self.onActionButtonPress = function (state) {
+            self.onActionButtonPress = (state) => {
                 this.emitter.emit(Events.ActionButtonPress, state);
-            } 
+            }
         },
         [Events.ClearButtonPress]: function() {
-            self.ios.onClearButtonPress = function (state) {
-                this.emitter.emit(Events.ActionButtonPress, state);
-            } 
+            self.ios.onClearButtonPress = (state) => {
+                this.emitter.emit(Events.ClearButtonPress, state);
+            }
         },
         [Events.EditBegins]: function() {
-            self.onEditBegins = function (state) {
+            self.onEditBegins = (state) => {
                 this.emitter.emit(Events.EditBegins, state);
-            } 
+            }
         },
         [Events.EditEnds]: function() {
-            self.onEditEnds = function (state) {
+            self.onEditEnds = (state) => {
                 this.emitter.emit(Events.EditEnds, state);
-            } 
+            }
         },
         [Events.TextChanged]: function() {
-            self.onTextChanged = function (state) {
+            self.onTextChanged = (state) => {
                 this.emitter.emit(Events.TextChanged, state);
-            } 
+            }
         }
     }
+    EventEmitterCreator(this, EventFunctions);
 
     self.nativeObject.textBoxDelegate = function(method) {
         if (method.name === "textFieldShouldBeginEditing") {
@@ -415,20 +420,6 @@ function TextBox(params) {
         configurable: true
     });
 
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-
     Object.defineProperty(self, 'autoCapitalize', {
         get: function() {
             return Invocation.invokeInstanceMethod(self.nativeObject, "autocapitalizationType", [], "NSInteger");
@@ -480,11 +471,11 @@ function TextBox(params) {
                 self.nativeObject.setValueForKey(undefined, "inputAccessoryView");
                 return;
             }
-            
+
             if (typeof value === "object") {
                 _keyboardLayout = value;
                 _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
-                
+
                 // Bug : IOS-2601
                 var oldOntouch = value.onTouch;
                 value.onTouch = function() {
@@ -519,7 +510,7 @@ function TextBox(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this.ios, 'textContentType', {
         get: function() {
             return self.nativeObject.textContentType;
@@ -699,7 +690,7 @@ function TextBox(params) {
                     _inputViewMain.nativeObject.yoga.applyLayoutPreservingOrigin(true);
                 });
         }
-        
+
         if (_keyboardLayout) {
             __SF_UIView.performWithoutAnimationWrapper(
                 function(){
@@ -709,16 +700,16 @@ function TextBox(params) {
 
         self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight, e);
     }
-    
+
     self.nativeObject.addObserver(function() {
         _keyboardLayout && _keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
         _inputViewMain && _inputViewMain.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     }, __SF_UIDeviceOrientationDidChangeNotification);
-    
+
     self.nativeObject.onHideKeyboard = function(e) {
         self.keyboardanimationdelegate.keyboardHideAnimation(e);
     }
-    
+
     var _inputView = undefined;
     var _inputViewMain;
     Object.defineProperty(self.ios, 'inputView', {
@@ -727,12 +718,12 @@ function TextBox(params) {
         },
         set: function(object) {
             _inputView = object;
-            
+
             if (_inputView === undefined) {
                 self.nativeObject.setValueForKey(undefined,"inputView");
                 return;
             }
-            
+
             if (!_inputViewMain) {
                 var flexMain = new FlexLayout();
                 flexMain.nativeObject.frame = {
@@ -748,7 +739,7 @@ function TextBox(params) {
                     _inputViewMain.removeChild(childs[i]);
                 }
             }
-            
+
             // Bug : IOS-2601
             var oldOntouch = object.view.onTouch;
             object.view.onTouch = function() {
@@ -756,14 +747,14 @@ function TextBox(params) {
                 return (typeof returnValue) === "undefined" ? true : returnValue;
             };
             //////////////////
-                
+
             _inputViewMain.addChild(object.view);
 
             self.nativeObject.setValueForKey(_inputViewMain.nativeObject,"inputView");
         },
         enumerable: true
     });
-    
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];

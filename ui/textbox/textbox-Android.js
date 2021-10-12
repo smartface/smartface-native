@@ -1,3 +1,5 @@
+ 
+
 /*globals requireClass*/
 const TextView = require('../textview');
 const TypeUtil = require('../../util/type');
@@ -6,6 +8,8 @@ const ActionKeyType = require('../actionkeytype');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TextBox.Events = {...TextView.Events, ...Events};
 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -24,28 +28,28 @@ const TYPE_TEXT_VARIATION_PASSWORD = 128;
 const TYPE_NUMBER_VARIATION_PASSWORD = 16;
 
 const NativeKeyboardType = [
-    1, // TYPE_CLASS_TEXT															
-    2, // TYPE_CLASS_NUMBER														
-    2 | 8192, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL								
-    3, // TYPE_CLASS_PHONE															
-    1 | 16, // TYPE_TEXT_VARIATION_URI													
-    1, // TYPE_CLASS_TEXT															
-    160, // TYPE_TEXT_VARIATION_WEB_EDIT_TEXT										
-    4, // TYPE_CLASS_DATETIME														
-    2 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_SIGNED	   							
-    2 | 8192 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL | TYPE_NUMBER_FLAG_SIGNED	
-    65536, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_COMPLETE					
-    32768, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_CORRECT	    		
-    4096, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_CHARACTERS     DEPRECATED						
-    16384, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_SENTENCES	 DEPRECATED					
+    1, // TYPE_CLASS_TEXT
+    2, // TYPE_CLASS_NUMBER
+    2 | 8192, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL
+    3, // TYPE_CLASS_PHONE
+    1 | 16, // TYPE_TEXT_VARIATION_URI
+    1, // TYPE_CLASS_TEXT
+    160, // TYPE_TEXT_VARIATION_WEB_EDIT_TEXT
+    4, // TYPE_CLASS_DATETIME
+    2 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_SIGNED
+    2 | 8192 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL | TYPE_NUMBER_FLAG_SIGNED
+    65536, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_COMPLETE
+    32768, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_CORRECT
+    4096, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_CHARACTERS     DEPRECATED
+    16384, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_SENTENCES	 DEPRECATED
     8192, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_WORDS		     DEPRECATED
-    1 | 48, // TYPE_TEXT_VARIATION_EMAIL_SUBJECT										
-    1 | 80, // TYPE_TEXT_VARIATION_LONG_MESSAGE											
-    524288, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_NO_SUGGESTIONS						
-    1 | 96, // TYPE_TEXT_VARIATION_PERSON_NAME		 								
-    1 | 64, // TYPE_TEXT_VARIATION_SHORT_MESSAGE										
-    4 | 32, // TYPE_DATETIME_VARIATION_TIME				
-    1 | 32, // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
+    1 | 48, // TYPE_TEXT_VARIATION_EMAIL_SUBJECT
+    1 | 80, // TYPE_TEXT_VARIATION_LONG_MESSAGE
+    524288, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_NO_SUGGESTIONS
+    1 | 96, // TYPE_TEXT_VARIATION_PERSON_NAME
+    1 | 64, // TYPE_TEXT_VARIATION_SHORT_MESSAGE
+    4 | 32, // TYPE_DATETIME_VARIATION_TIME
+    1 | 32, // TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 ];
 
 var NativeAutoCapitalize = [
@@ -77,9 +81,9 @@ function TextBox(params) {
                 if (keyCode === 4 && keyEventAction === 1) {
                     self.nativeObject.clearFocus();
                 }
-                // TODO: Below code moved to SFEditText class implementation. 
+                // TODO: Below code moved to SFEditText class implementation.
                 // But, I am not sure this implementation doesn't causes unexpected touch handling.
-                // return false; 
+                // return false;
             }
         };
         self.nativeObject = new SFEditText(activity, callback);
@@ -88,29 +92,72 @@ function TextBox(params) {
 
     const EventFunctions = {
         [Events.ActionButtonPress]: function() {
-            _onActionButtonPress = function (state) {
+            _onActionButtonPress = (state) => {
                 this.emitter.emit(Events.ActionButtonPress, state);
-            } 
+            }
+            if (this.__didSetOnEditorActionListener)
+            return;
+
+        self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
+            onEditorAction: function(textView, actionId, event) {
+                if (actionId === NativeActionKeyType[_actionKeyType]) {
+                    _onActionButtonPress && _onActionButtonPress({
+                        actionKeyType: _actionKeyType
+                    });
+                }
+                return false;
+            }
+        }));
+
+        this.__didSetOnEditorActionListener = true;
         },
         [Events.ClearButtonPress]: function() {
             // iOS Only
         },
         [Events.EditBegins]: function() {
-            _onEditBegins = function (state) {
+            _onEditBegins = (state) => {
                 this.emitter.emit(Events.EditBegins, state);
-            } 
+            }
+            this.nativeObject.setOnEditBegins(_onEditBegins);
         },
         [Events.EditEnds]: function() {
-            _onEditEnds = function (state) {
+            _onEditEnds = (state) => {
                 this.emitter.emit(Events.EditEnds, state);
-            } 
+            }
+            this.nativeObject.setOnEditEnds(_onEditEnds);
         },
         [Events.TextChanged]: function() {
-            _onTextChanged = function (state) {
+            _onTextChanged = (state) => {
                 this.emitter.emit(Events.TextChanged, state);
-            } 
+            }
+            if (!this.__didAddTextChangedListener) {
+                this.__didAddTextChangedListener = true;
+                this.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
+                    // todo: Control insertedText after resolving story/AND-2508 issue.
+                    onTextChanged: function(charSequence, start, before, count) {
+                        if (!_hasEventsLocked) {
+                            var insertedText = "";
+                            if (before == 0) {
+                                insertedText = charSequence.subSequence(start, start + count).toString();
+                            } else if (before <= count) {
+                                insertedText = charSequence.subSequence(before, count).toString();
+                            }
+                            if (_onTextChanged) {
+                                _onTextChanged({
+                                    location: (insertedText === "") ? Math.abs(start + before) - 1 : Math.abs(start + before),
+                                    insertedText: insertedText
+                                });
+                            }
+                        }
+                    }.bind(this),
+                    beforeTextChanged: function(charSequence, start, count, after) {},
+                    afterTextChanged: function(editable) {}
+                }));
+            }
         }
-    }
+    };
+
+    EventEmitterCreator(this, EventFunctions);
 
     var _touchEnabled = true;
     var _isPassword = false;
@@ -378,20 +425,6 @@ function TextBox(params) {
 
     });
 
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-
     var _hintTextColor;
     Object.defineProperty(this, 'hintTextColor', {
         get: function() {
@@ -421,7 +454,7 @@ function TextBox(params) {
     });
 
     // Don't use self.multiline = false due to AND-2725 bug.
-    // setMovementMethod in label-Android.js file removes the textbox cursor. 
+    // setMovementMethod in label-Android.js file removes the textbox cursor.
     self.nativeObject.setSingleLine(true);
 
     /* Override the onTouch and make default returning false to prevent bug in other listener.*/
