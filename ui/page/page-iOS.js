@@ -8,12 +8,11 @@ const Invocation = require('../../util').Invocation;
 const HeaderBarItem = require('../../ui/headerbaritem');
 const Application = require("../../application");
 const {
-    EventEmitterMixin
+    EventEmitterCreator
   } = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-Page.prototype = Object.assign({}, EventEmitterMixin);
+Page.Events = {...Events};
 
 const UIInterfaceOrientation = {
     unknown: 0,
@@ -261,12 +260,12 @@ function Page(params) {
 
     const EventFunctions = {
         [Events.Show]: function() {
-            _onShow = function (state) {
+            _onShow = (state) => {
                 this.emitter.emit(Events.Show, state);
             } 
         },
         [Events.Load]: function() {
-            _onLoad = function (state) {
+            _onLoad = (state) => {
                 this.emitter.emit(Events.Load, state);
             } 
         },
@@ -274,29 +273,24 @@ function Page(params) {
             //Android only
         },
         [Events.OrientationChange]: function() {
-            _onOrientationChange = function (state) {
+            _onOrientationChange = (state) => {
                 this.emitter.emit(Events.OrientationChange, state);
             } 
         },
         [Events.SafeAreaPaddingChange]: function() {
-            self.ios.onSafeAreaPaddingChange = function (state) {
+            self.ios.onSafeAreaPaddingChange = (state) => {
                 this.emitter.emit(Events.SafeAreaPaddingChange, state)
             }
         },
         [Events.Hide]: function() {
-            self.onHide = function (Hide) {
-                this.emitter.emit(Events.Show, state);
+            self.onHide = (state) => {
+                this.emitter.emit(Events.Hide, state);
             } 
         },
     }
     
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
-
+    EventEmitterCreator(this, EventFunctions);
+    
     Object.defineProperty(this, 'currentOrientation', {
         get: function() {
             var tempOrientation;
