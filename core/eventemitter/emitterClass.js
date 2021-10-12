@@ -1,7 +1,7 @@
-const wolfy87emitter = require("wolfy87-eventemitter");
+const Events = require("events");
 
 function EventEmitter() {
-    this.emitter = new wolfy87emitter();
+    this.emitter = new Events();
 }
 /**
 * Creates an event emitter instance to listen for the actions
@@ -26,10 +26,10 @@ EventEmitter.prototype.off = function (eventName, callback) {
 /**
  * Triggers the event manually.
  * @param {string} event
- * @param {Array<*>} args - Array of arguments that needs to be passed down
+ * @param {Array<*>} args - Arguments that needs to be passed down
  */
 EventEmitter.prototype.emit = function (event, ...args) {
-    return this.emitter.trigger(event, args);
+    this.emitter.emit(event, ...args);
 }
 
 module.exports = {
