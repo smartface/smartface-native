@@ -5,6 +5,8 @@ const Application = require('../../application');
 const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+SliderDrawer.Events = {...FlexLayout.Events, ...Events};
 
 // const SliderDrawer = extend(FlexLayout)(
 SliderDrawer.prototype = Object.create(FlexLayout.prototype);
@@ -152,35 +154,23 @@ function SliderDrawer(params) {
 
     const EventFunctions = {
         [Events.Show]: function() {
-            _onShow = function (state) {
+            _onShow = (state) => {
                 this.emitter.emit(Events.Show, state);
             } 
         },
         [Events.Load]: function() {
-            _onLoad = function (state) {
+            _onLoad = (state) => {
                 this.emitter.emit(Events.Load, state);
             } 
         },
         [Events.Hide]: function() {
-            _onHide = function (state) {
+            _onHide = (state) => {
                 this.emitter.emit(Events.Hide, state);
             } 
         }
-    }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    };
+    EventEmitterCreator(this, EventFunctions);
+   
 
     this.drawerListener = NativeDrawerLayout.DrawerListener.implement({
         onDrawerClosed: function(drawerView) {

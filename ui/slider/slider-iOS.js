@@ -3,7 +3,8 @@ const View = require('../view');
 const UIControlEvents = require("../../util").UIControlEvents;
 const Color = require("../../ui/color");
 const Events = require('./events');
-
+const { EventEmitterCreator } = require("../../core/eventemitter");
+Slider.Events = {...View.Events, ...Events};
 const SliderState = {
     normal: 0,
     disabled: 1,
@@ -133,24 +134,13 @@ function Slider(params) {
 
     const EventFunctions = {
 		[Events.ValueChange]: function () {
-			_onValueChange = function (state) {
+			_onValueChange = (state) => {
 				this.emitter.emit(Events.ValueChange, state);
 			};
+            self.nativeObject.addJSTarget(handleValueChange, UIControlEvents.valueChanged);
 		},
 	};
-
-	const parentOnFunction = this.on;
-	Object.defineProperty(this, "on", {
-		value: (event, callback) => {
-			if (typeof EventFunctions[event] === "function") {
-				EventFunctions[event].call(this);
-				this.emitter.on(event, callback);
-			} else {
-				parentOnFunction(event, callback);
-			}
-		},
-		configurable: true,
-	});
+    EventEmitterCreator(this, EventFunctions);
 
     var _value = 0;
 

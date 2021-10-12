@@ -31,7 +31,7 @@ const ViewGroup = require('../viewgroup');
  *     Application.sliderDrawer = mySliderDrawer;
  *
  */
-function SliderDrawer(params) {}
+function SliderDrawer(params) { }
 
 /**
  * Gets/sets position of the SliderDrawer.
@@ -83,7 +83,7 @@ SliderDrawer.prototype.enabled = true;
  * @ios
  * @since 0.1
  */
-SliderDrawer.prototype.show = function() {};
+SliderDrawer.prototype.show = function () { };
 
 /**
  * This function allows you to hide SliderDrawer if it is on the screen.
@@ -93,37 +93,7 @@ SliderDrawer.prototype.show = function() {};
  * @ios
  * @since 0.1
  */
-SliderDrawer.prototype.hide = function() {};
-
-/**
- * This event is called user opens the SliderDrawer.
- *
- * @event onShow
- * @android
- * @ios
- * @since 0.1
- */
-SliderDrawer.prototype.onShow = null;
-
-/**
- * This event is called when user closes the SliderDrawer.
- *
- * @event onHide
- * @android
- * @ios
- * @since 0.1
- */
-SliderDrawer.prototype.onHide = null;
-
-/**
- * This event is called when SliderDrawer begins to load.
- *
- * @event onLoad
- * @android
- * @ios
- * @since 0.1
- */
-SliderDrawer.prototype.onLoad = null;
+SliderDrawer.prototype.hide = function () { };
 
 /**
  * @enum {Number} UI.SliderDrawer.Position
@@ -220,24 +190,87 @@ SliderDrawer.State.DRAGGED = 2;
  * @android
  * @ios
  */
- SliderDrawer.prototype.on = function(event, callback) {}
- /**
-  * Event to be removed
-  * @param {string} event - Event type to be created
-  * @param {*} callback
-  * @returns {Function} unlistener function. Call it to remove the event
-  * @android
-  * @ios
-  */
-  SliderDrawer.prototype.off = function(event, callback) {}
- 
- /**
-  * Event to be emitted
-  * @param {string} event - Event type to be triggered
-  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
-  * @android
-  * @ios
-  */
-  SliderDrawer.prototype.emit = function(event, detail) {}
+SliderDrawer.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+SliderDrawer.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+SliderDrawer.prototype.emit = function (event, detail) { }
+
+/**
+ * This event is called user opens the SliderDrawer.
+ *
+ * @event onShow
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onShow = null;
+
+/**
+ * This event is called when user closes the SliderDrawer.
+ *
+ * @event onHide
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onHide = null;
+
+/**
+ * This event is called when SliderDrawer begins to load.
+ *
+ * @event onLoad
+ * @deprecated
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onLoad = null;
+
+/**
+* This event is called user opens the SliderDrawer.
+*
+* @event onShow
+* @android
+* @ios
+* @since 0.1
+*/
+SliderDrawer.Events.Show = 'show';
+
+/**
+ * This event is called when user closes the SliderDrawer.
+ *
+ * @event onHide
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.Events.Hide = 'hide';
+
+/**
+ * This event is called when SliderDrawer begins to load.
+ *
+ * @event onLoad
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.Events.Load = 'load';
 
 module.exports = SliderDrawer;

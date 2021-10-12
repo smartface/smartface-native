@@ -1,6 +1,10 @@
 const Page = require('../../ui/page');
 const FlexLayout = require('../../ui/flexlayout');
 const Color = require('../../ui/color');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+SliderDrawer.Events = {...Page.Events, ...Events};
+
 
 const SLIDER_DRAWER_STATE = {
     CLOSE: 0,
@@ -150,26 +154,14 @@ function SliderDrawer(params) {
 
     const EventFunctions = {
         [Events.Show]: function() {
-            self.onShow = function (state) {
+            self.onShow = (state) => {
                 self.emitter.emit(Events.Show, state);
             } 
         }
         //onLoad and onHide comes from the page
     }
     
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     self.onShow = function(e) {};
 
