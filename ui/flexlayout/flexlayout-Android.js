@@ -32,7 +32,7 @@ function FlexLayout(params) {
 
     const EventFunctions = {
         [EventsList.InterceptTouchEvent] : function() {
-            const handler = function (e) {
+            const handler = (e) => {
                 this.emitter.emit(Events.InterceptTouchEvent);
             };
             _onInterceptTouchEvent = handler.bind(this);
@@ -42,7 +42,7 @@ function FlexLayout(params) {
     ViewGroup.call(this);
     EventEmitterCreator(this, EventFunctions);
 
-
+    
     let _onInterceptTouchEvent;
     Object.defineProperties(this.android, {
         'onInterceptTouchEvent': {
