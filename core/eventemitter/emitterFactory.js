@@ -74,6 +74,16 @@ function EventEmitterCreator(targetInstance, eventFunctions, eventCallback = () 
     value: onFunction,
     configurable: true
   });
+
+  Object.defineProperty(targetInstance, 'off', {
+    value: (event, callback) => targetInstance.emitter.off(event, callback),
+    configurable: true
+  });
+
+  Object.defineProperty(targetInstance, 'emit', {
+    value: (event, ...args) => targetInstance.emitter.emit(event, ...args),
+    configurable: true
+  });
 }
 
 module.exports = {
