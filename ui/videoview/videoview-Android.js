@@ -7,7 +7,7 @@ const NativeVideoView = requireClass('io.smartface.android.sfcore.ui.videoview.S
 const NativePlayer = requireClass('com.google.android.exoplayer2.Player');
 const Events = require('./events');
 const { EventEmitterCreator } = require('../../core/eventemitter');
-VideoView.Events = {...View.Events, ...Events};
+VideoView.Events = {...View.Events, ...Events };
 
 VideoView.prototype = Object.create(View);
 function VideoView(params) {
@@ -296,12 +296,14 @@ function VideoView(params) {
         [Events.Finish]: function() {
             _onFinish = (state) => {
                 this.emitter.emit(Events.Finish, state);
-            } 
+            }
+            this.nativeInner.setOnFinish(_onFinish);
         },
         [Events.Ready]: function() {
             _onReady = (state) => {
                 this.emitter.emit(Events.Ready, state);
             } 
+            this.nativeInner.setOnReady(_onReady);
         },
         [Events.DidStartPictureInPicture]: function() {
             //iOS Only
