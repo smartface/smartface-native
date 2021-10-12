@@ -27,7 +27,7 @@
  *   
  */
 
-function RangeSlider(params) {}
+function RangeSlider(params) { }
 
 /**
  * Gets/Sets size of the thumbs.
@@ -216,7 +216,7 @@ RangeSlider.prototype.ios.thumbShadowOffset = {
  * @method applyThumbViewChanges
  * @ios
  */
-RangeSlider.prototype.applyThumbViewChanges = function() {};
+RangeSlider.prototype.applyThumbViewChanges = function () { };
 
 /**
  * This property enables / disables haptic feedback when sliding over snap values.
@@ -251,11 +251,26 @@ RangeSlider.prototype.isTrackRounded;
  * This event is called when RangeSlider value changes.
  *
  * @event onValueChange
+ * @deprecated
  * @param {Number[]} value
  * @android
  * @ios
  * @since 4.1.5
  */
-RangeSlider.prototype.onValueChange = function(value) {};
+RangeSlider.prototype.onValueChange = function (value) { };
+
+
+
+/**
+ * This event is called when RangeSlider value changes.
+ *
+ * @event onValueChange
+ * @param {Number[]} value
+ * @android
+ * @ios
+ * @since 4.1.5
+ */
+RangeSlider.Events.ValueChange = "valueChange";
+
 
 module.exports = RangeSlider;
