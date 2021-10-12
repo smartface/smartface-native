@@ -6,6 +6,8 @@ const Invocation = require('../../util').Invocation;
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 const NSLineBreakMode = require('../../util/iOS/nslinebreakmode');
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TextView.Events = {...View.Events, ...Events};
 
 const NSUnderlineStyle = {
     None: 0,
@@ -36,11 +38,12 @@ function TextView(params) {
     
     const EventFunctions = {
         [Events.LinkClick]: function() {
-            _onLinkClick = function (state) {
+            _onLinkClick = (state) => {
                 self.emitter.emit(Events.LinkClick, state);
             } 
         }
-    }
+    };
+    EventEmitterCreator(this, EventFunctions);
     Object.defineProperty(self, 'attributedText', {
         get: function() {
             return _attributedText;
@@ -347,13 +350,6 @@ function TextView(params) {
             self.nativeObject.textContainer.maximumNumberOfLines = value;
         },
         enumerable: true
-    });
-
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
     });
 
     if (params) {

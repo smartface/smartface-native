@@ -13,7 +13,71 @@
  *     myPage.layout.addChild(materialtextbox);
  *
  */
-function MaterialTextBox(params) {}
+function MaterialTextBox(params) { }
+/**
+ * This event is called when positioning rightLayout. This event can be called multiple times.
+ *
+ *     @example
+ *     mtbTextbox.ios.onRightLayoutRectForBounds: function(bounds, defaultRect){
+ *         defaultRect.x = defaultRect.x + 20;
+ *         defaultRect.y = defaultRect.y - 20;
+ *      return defaultRect;
+ *     };
+ *
+ * @param {Object} bounds MaterialTextBox bounds.
+ * @param {Number} bounds.x
+ * @param {Number} bounds.y
+ * @param {Number} bounds.width
+ * @param {Number} bounds.height
+ * @param {Object} defaultRect
+ * @param {Number} defaultRect.x
+ * @param {Number} defaultRect.y
+ * @param {Number} defaultRect.width
+ * @param {Number} defaultRect.height
+ * @return {Object} Rect
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @return {Number} return.width
+ * @return {Number} return.height
+ * @deprecated
+ * @event onRightLayoutRectForBounds
+ * @ios
+ * @since 4.3.0
+ */
+MaterialTextBox.prototype.onRightLayoutRectForBounds = function (e) { };
+
+/**
+ * This event is called when positioning leftLayout. This event can be called multiple times.
+ *
+ *     @example
+ *     mtbTextbox.ios.onLeftLayoutRectForBounds: function(bounds, defaultRect){
+ *         defaultRect.x = defaultRect.x + 20;
+ *         defaultRect.y = defaultRect.y - 20;
+ *      return defaultRect;
+ *     };
+ *
+ * @param {Object} bounds MaterialTextBox bounds.
+ * @param {Number} bounds.x
+ * @param {Number} bounds.y
+ * @param {Number} bounds.width
+ * @param {Number} bounds.height
+ * @param {Object} defaultRect
+ * @param {Number} defaultRect.x
+ * @param {Number} defaultRect.y
+ * @param {Number} defaultRect.width
+ * @param {Number} defaultRect.height
+ * @return {Object} Rect
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @return {Number} return.width
+ * @return {Number} return.height
+ * @deprecated
+ * @event onLeftLayoutRectForBounds
+ * @ios
+ * @since 4.3.0
+ */
+MaterialTextBox.prototype.onLeftLayoutRectForBounds = function (e) { };
+
 /**
  * This event is called when positioning rightLayout. This event can be called multiple times.
  *
@@ -43,7 +107,7 @@ function MaterialTextBox(params) {}
  * @ios
  * @since 4.3.0
  */
-MaterialTextBox.prototype.onRightLayoutRectForBounds = function(e) {};
+MaterialTextBox.Events.RightLayoutRectForBounds = 'rightLayoutRectForBounds';
 
 /**
  * This event is called when positioning leftLayout. This event can be called multiple times.
@@ -74,7 +138,7 @@ MaterialTextBox.prototype.onRightLayoutRectForBounds = function(e) {};
  * @ios
  * @since 4.3.0
  */
-MaterialTextBox.prototype.onLeftLayoutRectForBounds = function(e) {};
+MaterialTextBox.Events.LeftLayoutRectForBounds = 'leftLayoutRectForBounds';
 
 /**
  * Gets/sets the rightLayoutLeftPadding of the MaterialTextBox.
