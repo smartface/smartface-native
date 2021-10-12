@@ -220,6 +220,34 @@ TabBarController.prototype.textColor;
 TabBarController.prototype.pagingEnabled = true;
 
 /**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ TabBarController.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+TabBarController.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+TabBarController.prototype.emit = function(event, detail) {}
+
+/**
  * This event called when a tab is chosen by the user.
  * Returns an {@link UI.Page Page} instance based on index.
  *
@@ -231,44 +259,42 @@ TabBarController.prototype.pagingEnabled = true;
  * @ios
  * @since 3.2.0
  */
-TabBarController.prototype.onPageCreate;
+ TabBarController.prototype.onPageCreate;
 
-/**
+ /**
+  * This event called when a tab is chosen by the user.
+  *
+  * @event onSelected
+  * @deprecated
+  * @param index
+  * @android
+  * @ios
+  * @since 3.2.0
+  */
+ TabBarController.prototype.onSelected;
+
+
+ /**
  * This event called when a tab is chosen by the user.
+ * Returns an {@link UI.Page Page} instance based on index.
  *
- * @event onSelected
- * @deprecated
+ * @event onPageCreate
  * @param index
+ * @return UI.Page
  * @android
  * @ios
  * @since 3.2.0
  */
-TabBarController.prototype.onSelected;
+  TabBarController.Events.PageCreate = 'pageCreate';
 
-/**
- * Event to be implemented
- * @param {string} event - Event type to be created
- * @param {*} callback
- * @returns {Function} unlistener function. Call it to remove the event
- * @android
- * @ios
- */
- CallDetection.prototype.on = function(event, callback) {}
- /**
-  * Event to be removed
-  * @param {string} event - Event type to be created
-  * @param {*} callback
-  * @returns {Function} unlistener function. Call it to remove the event
-  * @android
-  * @ios
-  */
-CallDetection.prototype.off = function(event, callback) {}
- 
- /**
-  * Event to be emitted
-  * @param {string} event - Event type to be triggered
-  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
-  * @android
-  * @ios
-  */
-CallDetection.prototype.emit = function(event, detail) {}
+  /**
+   * This event called when a tab is chosen by the user.
+   *
+   * @event onSelected
+   * @param index
+   * @android
+   * @ios
+   * @since 3.2.0
+   */
+  TabBarController.Events.Selected = 'selected';
+  

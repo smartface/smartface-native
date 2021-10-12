@@ -1,11 +1,10 @@
 const BottomTabBar = require('../../ui/bottomtabbar');
 const {
-    EventEmitterMixin
+    EventEmitterCreator
   } = require("../../core/eventemitter");
 
 const Events = require('./events');
-
-BottomTabBarController.prototype = Object.assign({}, EventEmitterMixin);
+BottomTabBarController.Events = {...Events};
 
 function BottomTabBarController(params) {
     var self = this;
@@ -179,13 +178,7 @@ function BottomTabBarController(params) {
         },
     }
     
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
-    
+    EventEmitterCreator(this, EventFunctions);
 
     //////////////////////////////////////////////////////////////////////////
 

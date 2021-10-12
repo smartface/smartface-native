@@ -12,6 +12,8 @@ const Page = require('../page');
 const Color = require('../color');
 const SwipeView = require('../swipeview');
 const Events = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter/index.js");
+TabBarController.Events = {...Page.Events, ...Events};
 
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
@@ -318,32 +320,20 @@ function TabBarController(params) {
 
     const EventFunctions = {
         [Events.PageCreate]: function() {
-            _onPageCreateCallback = function (state) {
+            _onPageCreateCallback = (state) => {
                 this.emitter.emit(Events.PageCreate, state);
             } 
         },
 
         [Events.Selected]: function() {
-            _onSelectedCallback = function (state) {
+            _onSelectedCallback = (state) => {
                 this.emitter.emit(Events.Selected, state);
             } 
         }
     }
     
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-
+    EventEmitterCreator(this, EventFunctions);
+   
     this.setSelectedIndex = function(index, animated) {
         self.swipeView.swipeToIndex(index, animated);
     };

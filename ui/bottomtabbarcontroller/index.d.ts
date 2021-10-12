@@ -28,11 +28,11 @@ declare enum Events {
  *
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
-declare class BottomTabBarController extends NativeComponent implements IEventEmitter<typeof Events> {
+declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
 	constructor(params?: any);
-    on(eventName: typeof Events, callback: (...args: any) => void): () => void;
-    off(eventName: typeof Events, callback?: (...args: any) => void): void;
-    emit(event: typeof Events, detail?: any[]): void;
+    on(eventName: Events, callback: (...args: any) => void): () => void;
+    off(eventName: Events, callback?: (...args: any) => void): void;
+    emit(event: Events, detail?: any[]): void;
 	getCurrentController: () => NavigationController | Page;
 	shouldSelectViewController: (index: any) => boolean;
     didSelectViewController: (index: any) => void;
@@ -88,6 +88,8 @@ declare class BottomTabBarController extends NativeComponent implements IEventEm
      * @since 3.2.0
      */
 	didSelectByIndex(params: { index: number }): void;
+
+    static Events: typeof Events;
 }
 
 export = BottomTabBarController;

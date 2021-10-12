@@ -2,7 +2,9 @@
 const Page = require('../../ui/page');
 const Color = require('../../ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
-
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TabBarController.Events = {...Page.Events, ...Events};
 TabBarController.prototype = Object.create(Page.prototype);
 function TabBarController(params) {
 
@@ -73,20 +75,7 @@ function TabBarController(params) {
             }.bind(this);
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     // Properties
     var _items = [];
