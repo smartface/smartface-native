@@ -2,25 +2,24 @@
 const View = require('../view');
 const TypeUtil = require("../../util/type");
 const NativeViewGroup = requireClass("android.view.ViewGroup");
-const { EventWrapper } = require("../../core/eventemitter");
+const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventemitter");
 const EventList = require('./events');
 
 ViewGroup.prototype = Object.create(View.prototype);
-
 ViewGroup.Events = { ...View.Events, ...EventList };
 
 const EventFunctions = {
     [EventList.ViewAdded]: function () {
-      this.onViewAdded = EventWrapper(this, EventList.ViewAdded, null);
+      this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null);
     },
     [EventList.ViewRemoved]: function () {
-      this.onViewRemoved = EventWrapper(this, EventList.ViewRemoved, null);
+      this.onViewRemoved = EventEmitterWrapper(this, EventList.ViewRemoved, null);
     },
     [EventList.ChildViewAdded]: function () {
-      this.onChildViewAdded = EventWrapper(this, EventList.ChildViewAdded, null);
+      this.onChildViewAdded = EventEmitterWrapper(this, EventList.ChildViewAdded, null);
     },
     [EventList.ChildViewRemoved]: function () {
-      this.onChildViewRemoved = EventWrapper(this, EventList.ChildViewRemoved, null);
+      this.onChildViewRemoved = EventEmitterWrapper(this, EventList.ChildViewRemoved, null);
     },
   };
 function ViewGroup(params) {
@@ -29,6 +28,12 @@ function ViewGroup(params) {
     }
     this.childViews = {};
     View.call(this);
+    const eventEmitterCallback = () => {
+        if (!this.didSetHierarchyChangeListener) {
+            setHierarchyChangeListener(this);
+        }
+    }
+    EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
 
     Object.defineProperties(this.android, {
         'requestDisallowInterceptTouchEvent': {
@@ -53,22 +58,22 @@ function ViewGroup(params) {
             this.nativeObject.addView(view.nativeObject, view.yogaNode);
         }
     }
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                if (!this.didSetHierarchyChangeListener) {
-                    setHierarchyChangeListener(this);
-                }
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    // const parentOnFunction = this.on;
+    // Object.defineProperty(this, 'on', {
+    //     value: (event, callback) => {
+    //         if (typeof EventFunctions[event] === 'function') {
+    //             EventFunctions[event].call(this);
+    //             if (!this.didSetHierarchyChangeListener) {
+    //                 setHierarchyChangeListener(this);
+    //             }
+    //             this.emitter.on(event, callback);
+    //         }
+    //         else {
+    //             parentOnFunction(event, callback);
+    //         }
+    //     },
+    //     configurable: true
+    // });
 }
 ViewGroup.prototype._onViewAdded = null;
 ViewGroup.prototype._onViewRemoved = null;
