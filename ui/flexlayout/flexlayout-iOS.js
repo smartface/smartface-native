@@ -1,23 +1,20 @@
 const ViewGroup = require('../viewgroup');
 const YogaEnums = require('../../util').YogaEnums;
-const Events = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const EventsList = require('./events');
 
+FlexLayout.Events = { ...ViewGroup.Events, ...EventsList };
 FlexLayout.prototype = Object.create(ViewGroup.prototype);
+
 function FlexLayout(params) {
     ViewGroup.call(this);
+    EventEmitterCreator(this, {});
 
     const EventFunctions = {
-        [Events.InterceptTouchEvent]: function() {
+        [EventsList.InterceptTouchEvent]: function() {
             //Android Only
         }
     }
-
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            EventFunctions[event].call(this);
-            this.emitter.on(event, callback);
-        }
-    });
 
     // Assign parameters given in constructor
     if (params) {
