@@ -7,6 +7,13 @@ const OrientationType = require('../../device/screen/orientationtype');
 const Invocation = require('../../util').Invocation;
 const HeaderBarItem = require('../../ui/headerbaritem');
 const Application = require("../../application");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+
+Page.prototype = Object.assign({}, EventEmitterMixin);
 
 const UIInterfaceOrientation = {
     unknown: 0,
@@ -251,6 +258,44 @@ function Page(params) {
         }
 
     };
+
+    const EventFunctions = {
+        [Events.Show]: function() {
+            _onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.Load]: function() {
+            _onLoad = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.BackButtonPressed]: function() {
+            //Android only
+        },
+        [Events.OrientationChange]: function() {
+            _onOrientationChange = function (state) {
+                this.emitter.emit(Events.OrientationChange, state);
+            } 
+        },
+        [Events.SafeAreaPaddingChange]: function() {
+            self.ios.onSafeAreaPaddingChange = function (state) {
+                this.emitter.emit(Events.SafeAreaPaddingChange, state)
+            }
+        },
+        [Events.Hide]: function() {
+            self.onHide = function (Hide) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
 
     Object.defineProperty(this, 'currentOrientation', {
         get: function() {

@@ -55,6 +55,7 @@ function BottomTabbarController() {
      * Return true if you want the item to be displayed as the selected index.
      *
      * @event shouldSelectByIndex
+     * @deprecated
      * @param params
      * @param Number params.index
      * @return Boolean
@@ -62,7 +63,33 @@ function BottomTabbarController() {
      * @ios
      * @since 3.2.0
      */
-    this.shouldSelectByIndex = function(params) {};
+    this.shouldSelectByIndex = function (params) { };
+
+    /**
+     *  Called when an item in the bottom tabbar item is selected.
+     *
+     * @event didSelectByIndex
+     * @deprecated
+     * @param params
+     * @param Number params.index
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.didSelectByIndex = function (params) { };
+
+    /**
+     * Return true if you want the item to be displayed as the selected index.
+     *
+     * @event shouldSelectByIndex
+     * @param params
+     * @param Number params.index
+     * @return Boolean
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.Events.ShouldSelectByIndex = 'shouldSelectByIndex';
 
     /**
      *  Called when an item in the bottom tabbar item is selected.
@@ -74,5 +101,33 @@ function BottomTabbarController() {
      * @ios
      * @since 3.2.0
      */
-    this.didSelectByIndex = function(params) {};
+    this.Events.SelectByIndex = 'selectByIndex';
 }
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+BottomTabbarController.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+BottomTabbarController.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+BottomTabbarController.prototype.emit = function (event, detail) { }
