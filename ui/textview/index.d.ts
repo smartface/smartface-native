@@ -5,6 +5,31 @@ import EllipsizeMode from "../ellipsizemode";
 import TextAlignment from "../textalignment";
 import AttributedString from "../../global/attributedstring";
 import TextDirection from "../android/textdirection";
+
+declare enum TextViewEvents {
+  /**
+   * This event is called when user click link string. onLinkClick just work with attributedText.
+   *
+   *     @example
+   *     myTextView.on(Events.LinkClick, function(string) {
+   *         console.log(string);
+   *     });
+   *
+   * @param {String} string
+   * @event onLinkClick
+   * @android
+   * @deprecated
+   * @ios
+   * @since 3.0.0
+   */
+  LinkClick = "linkClick"
+}
+
+declare namespace TextView {
+  const Events: typeof TextViewEvents & typeof View.Events
+  type Events = typeof Events
+}
+
 /**
  * @class UI.TextView
  * @since 3.0.0
@@ -24,7 +49,7 @@ import TextDirection from "../android/textdirection";
  *     myTextview.left = 20,
  *     myTextview.backgroundColor = Color.GRAY;
  */
-declare class TextView extends View {
+declare class TextView extends View<TextView.Events> {
 /**
  * Gets/sets background color of a view. It allows setting background
  * color with UI.Color instance.
@@ -248,6 +273,7 @@ declare class TextView extends View {
  * @param {String} string
  * @event onLinkClick
  * @android
+ * @deprecated
  * @ios
  * @since 3.0.0
  */
