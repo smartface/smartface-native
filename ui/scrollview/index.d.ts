@@ -1,10 +1,18 @@
 import OverScrollMode from "../android/overscrollmode";
 import ViewGroup from "../viewgroup";
 import FlexLayout from "../flexlayout";
-import View from "../view";
 import ContentInsetAdjustment from "../ios/contentinsetadjustment";
 import { IFlexLayout } from "../../primitive/iflexlayout";
 import { Point2D } from "../../primitive/point2d";
+
+declare enum ScrollViewEvents {
+	Scroll = "scroll",
+  ScrollBeginDecelerating = "scrollBeginDecelerating",
+  ScrollBeginDragging = "scrollBeginDragging",
+  ScrollEndDecelerating = "scrollEndDecelerating",
+  ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate",
+  ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset"
+}
 
 /**
  * @class UI.ScrollView
@@ -52,7 +60,7 @@ import { Point2D } from "../../primitive/point2d";
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
  */
-declare class ScrollView extends ViewGroup implements IFlexLayout {
+declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLayout {
 	/**
 	 * Gets/sets over-scroll mode for this view.
 	 *
@@ -250,6 +258,7 @@ declare class ScrollView extends ViewGroup implements IFlexLayout {
 		velocity: Point2D,
 		targetContentOffset: Point2D
 	) => void;
+	static Events: typeof ScrollViewEvents;
 }
 declare namespace ScrollView {
 	enum Align {
