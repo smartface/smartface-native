@@ -1,5 +1,8 @@
 /*globals requireClass*/
 const AndroidConfig = require('../../util/Android/androidconfig');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+const Events = require('./events');
+TimePicker.Events = {...Events};
 
 function TimePicker(params) {
     var activity = AndroidConfig.activity;
@@ -12,6 +15,16 @@ function TimePicker(params) {
     if (!this.nativeObject) {
         createTimerDialog(this);
     }
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onTimeSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     Object.defineProperties(this, {
         'show': {

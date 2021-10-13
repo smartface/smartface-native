@@ -2,6 +2,36 @@ import ViewGroup from "../viewgroup";
 import FlexLayout from "../flexlayout";
 import { IFlexLayout } from "../../primitive/iflexlayout";
 
+declare enum SliderDrawerEvents {
+	/**
+	 * This event is called when user closes the SliderDrawer.
+	 *
+	 * @event onHide
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	Hide = "hide",
+	/**
+	 * This event is called when SliderDrawer begins to load.
+	 *
+	 * @event onLoad
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	Load = "load",
+	/**
+	 * This event is called user opens the SliderDrawer.
+	 *
+	 * @event onShow
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	Show = "show"
+}
+
 /**
  * @class UI.SliderDrawer
  * @since 0.1
@@ -33,7 +63,7 @@ import { IFlexLayout } from "../../primitive/iflexlayout";
  *     Application.sliderDrawer = mySliderDrawer;
  *
  */
-declare class SliderDrawer extends ViewGroup implements IFlexLayout {
+declare class SliderDrawer extends ViewGroup<SliderDrawerEvents> implements IFlexLayout {
 	/**
 	 * Gets/sets position of the SliderDrawer.
 	 *
@@ -94,6 +124,7 @@ declare class SliderDrawer extends ViewGroup implements IFlexLayout {
 	 * This event is called user opens the SliderDrawer.
 	 *
 	 * @event onShow
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -103,6 +134,7 @@ declare class SliderDrawer extends ViewGroup implements IFlexLayout {
 	 * This event is called when user closes the SliderDrawer.
 	 *
 	 * @event onHide
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -112,6 +144,7 @@ declare class SliderDrawer extends ViewGroup implements IFlexLayout {
 	 * This event is called when SliderDrawer begins to load.
 	 *
 	 * @event onLoad
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -120,6 +153,8 @@ declare class SliderDrawer extends ViewGroup implements IFlexLayout {
 }
 
 declare namespace SliderDrawer {
+  const Events: typeof SliderDrawerEvents & typeof ViewGroup.Events
+  type Events = typeof Events
 	/**
 	 * @enum {Number} UI.SliderDrawer.Position
 	 * @static

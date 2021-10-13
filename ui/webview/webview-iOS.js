@@ -2,6 +2,9 @@ const View = require('../../ui/view');
 const File = require('../../io/file');
 const Invocation = require('../../util').Invocation;
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+WebView.Events = { ...View.Events, ...Events };
 
 WebView.prototype = Object.create(View.prototype);
 function WebView(params) {
@@ -154,6 +157,40 @@ function WebView(params) {
         }
     }
 
+    const EventFunctions = {
+        [Events.BackButtonPressed]: function() {
+            //Android Only
+        },
+        [Events.ChangedURL]: function() {
+            self.onChangedURL = function(state) {
+                this.emitter.emit(Events.ChangedURL, state);
+            }
+        },
+        [Events.ConsoleMessage]: function() {
+            //Android only
+        },
+        [Events.Error]: function() {
+            self.onError = function (state) {
+                this.emitter.emit(Events.Error, state);
+            } 
+        },
+        [Events.Load]: function() {
+            self.onLoad = function (state) {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.OpenNewWindow]: function() {
+            self.ios.onOpenNewWindow = function (state) {
+                this.emitter.emit(Events.OpenNewWindow, state);
+            } 
+        },
+        [Events.Show]: function() {
+            self.onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            } 
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
     Object.defineProperty(self, 'openLinkInside', {
         get: function() {
             return self.nativeObject.openLinkInside;

@@ -55,6 +55,7 @@ function FlexLayout(params) {
             enumerable: true
         }
     });
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

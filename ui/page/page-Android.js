@@ -33,7 +33,12 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 13
 };
+const {
+    EventEmitterCreator
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+Page.Events = {...Events};
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -287,6 +292,39 @@ function Page(params) {
             enumerable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.Show]: function() {
+            __onShowCallback = (state) => {
+                this.emitter.emit(Events.Show, state);
+            } 
+        },
+        [Events.Load]: function() {
+            onLoadCallback = (state) => {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.BackButtonPressed]: function() {
+            _onBackButtonPressed = (state) => {
+                this.emitter.emit(Events.BackButtonPressed, state);
+            } 
+        },
+        [Events.OrientationChange]: function() {
+            _onOrientationChange = (state) => {
+                this.emitter.emit(Events.OrientationChange, state);
+            } 
+        },
+        [Events.SafeAreaPaddingChange]: function() {
+            //iOS only
+        },
+        [Events.Hide]: function() {
+            onHideCallback = (state) => {
+                this.emitter.emit(Events.Hide, state);
+            } 
+        },
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
 
     var _isShown;
     Object.defineProperty(self, 'isShown', {

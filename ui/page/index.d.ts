@@ -4,6 +4,77 @@ import NavigationController from "../navigationcontroller";
 import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
 import { IFlexLayout } from "../../primitive/iflexlayout";
+import { IEventEmitter } from "core/eventemitter";
+
+declare enum PageEvents {
+	/**
+	 * This event will be triggered when user clicks back button on the Device.
+	 *
+	 * @event onBackButtonPressed
+	 * @android
+	 * @since 0.1
+	 */
+  BackButtonPressed = "backButtonPressed",
+	/**
+	 * This event is called when a page disappears from the screen.
+	 *
+	 * @event onHide
+	 * @android
+	 * @ios
+	 */
+  Hide = "hide",
+	/**
+	 * This event is called once when page is created.
+	 * You can create views and add them to page in this callback.
+	 *
+	 * @event onLoad
+	 * @android
+	 * @ios
+	 */
+  Load = "load",
+	/**
+	* This event is called when a page appears on the screen (everytime).
+	* It will be better to set headerBar and statusBar properties in this callback.
+	*
+	*     @example
+	*     const Page = require('@smartface/native/ui/page');
+	*     const Application = require('@smartface/native/application');
+	*     var myPage = new Page({
+	*         onShow: function() {
+	*             this.headerBar.visible = true;
+	*         }
+	*         Application.statusBar.visible = true;
+	*     });
+	*
+	* @event onShow
+	* @param {Object} parameters Parameters passed from Router.go function
+	* @android
+	* @ios
+	*/
+  Show = "show",
+	/**
+	 * This event will be called when orientation of the Page changes.
+	 * iOS fires this event before orientation changed but Android fires after changed.
+	 * 
+	 *
+	 * @event onOrientationChange
+	 * @param {Object} e
+	 * @param {UI.Page.Orientation} e.orientation 
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  OrientationChange = "orientationChange",
+	/**
+	 * This event will be triggered when padding values of layout changed.
+	 *
+	 * @event onSafeAreaPaddingChange
+	 * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
+	 * @ios
+	 * @since 0.1
+	 */
+  SafeAreaPaddingChange = "safeAreaPaddingChange"
+}
 
 declare enum UIInterfaceOrientation {
 	unknown = 0,
@@ -86,19 +157,26 @@ declare namespace Page {
 			PARTIALCURL = 3
 		}
 	}
+
+  const Events: typeof PageEvents & typeof View.Events
+  type Events = typeof Events
 }
 
 
-declare class Page extends NativeComponent implements IFlexLayout {
-    constructor(params?: any);
-/**
- * This event is called once when page is created.
- * You can create views and add them to page in this callback.
- *
- * @event onLoad
- * @android
- * @ios
- */
+declare class Page extends NativeComponent implements IFlexLayout, IEventEmitter<PageEvents> {
+	constructor(params?: any);
+	on(eventName: PageEvents, callback: (...args: any) => void): () => void;
+	off(eventName: PageEvents, callback?: (...args: any) => void): void;
+	emit(event: PageEvents, detail?: any[]): void;
+	/**
+	 * This event is called once when page is created.
+	 * You can create views and add them to page in this callback.
+	 *
+	 * @event onLoad
+	 * @deprecated
+	 * @android
+	 * @ios
+	 */
     public onLoad(): void;
 /**
  * Gets/sets custom transition views. Used with custom transitions to map a {@link UI.View View}
@@ -162,6 +240,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
  *     });
  *
  * @event onShow
+ * @deprecated
  * @param {Object} parameters Parameters passed from Router.go function
  * @android
  * @ios
@@ -170,6 +249,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
 /**
  * This event is called when a page disappears from the screen.
  *
+ * @deprecated
  * @event onHide
  * @android
  * @ios
@@ -180,6 +260,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
  * This event will be triggered when user clicks back button on the Device.
  *
  * @event onBackButtonPressed
+ * @deprecated
  * @android
  * @since 0.1
  */
@@ -202,6 +283,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
  * This event will be triggered when padding values of layout changed.
  *
  * @event onSafeAreaPaddingChange
+ * @deprecated
  * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
  * @ios
  * @since 0.1
@@ -320,6 +402,7 @@ declare class Page extends NativeComponent implements IFlexLayout {
  * 
  *
  * @event onOrientationChange
+ * @deprecated
  * @param {Object} e
  * @param {UI.Page.Orientation} e.orientation 
  * @android

@@ -2,6 +2,17 @@ import TextBox from "../textbox";
 import Font from "../font";
 import Color from "../color";
 import View from "../view";
+
+declare enum MaterialTextBoxEvents {
+  LeftLayoutRectForBounds = "leftLayoutRectForBounds",
+  RightLayoutRectForBounds = "RightLayoutRectForBounds"
+}
+
+declare namespace MaterialTextBox {
+  const Events: typeof MaterialTextBoxEvents & typeof TextBox.Events
+  type Events = typeof Events
+}
+
 /**
  * @class UI.MaterialTextBox
  * @since 3.1.2

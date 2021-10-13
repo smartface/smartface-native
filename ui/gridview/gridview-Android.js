@@ -7,7 +7,8 @@ const GridViewLayoutManager = require('../layoutmanager');
 const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
@@ -17,6 +18,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 GridView.prototype = Object.create(View.prototype);
 function GridView(params) {
     var self = this;
+    EventEmitterCreator(this, EventFunctions);
 
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
@@ -481,6 +483,82 @@ function GridView(params) {
     };
 
     this.nativeInner.setAdapter(this.nativeDataAdapter);
+
+    const EventFunctions = {
+        [Events.AttachedToWindow]: function() {
+            self.android.onAttachedToWindow = function (state) {
+                this.emitter.emit(Events.AttachedToWindow, state);
+            } 
+        },
+        [Events.DetachedFromWindow]: function() {
+            self.android.onDetachedFromWindow = function (state) {
+                this.emitter.emit(Events.DetachedFromWindow, state);
+            } 
+        },
+        [Events.Gesture]: function() {
+            self.android.onGesture = function (state) {
+                this.emitter.emit(Events.Gesture, state);
+            } 
+        },
+        [Events.PullRefresh]: function() {
+            _onPullRefresh = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.ItemBind]: function() {
+            _onItemBind = function (state) {
+                this.emitter.emit(Events.ItemBind, state);
+            } 
+        },
+        [Events.ItemCanMove]: function() {
+            _onItemCanMove = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.ItemCreate]: function() {
+            _onItemCreate = function (state) {
+                this.emitter.emit(Events.ItemCreate, state);
+            } 
+        },
+        [Events.ItemLongSelected]: function() {
+            self.android.onItemLongSelected = function (state) {
+                this.emitter.emit(Events.ItemLongSelected, state);
+            } 
+        },
+        [Events.ItemSelected]: function() {
+            _onItemSelected = function (state) {
+                this.emitter.emit(Events.ItemSelected, state);
+            } 
+        },
+        [Events.ItemType]: function() {
+            _onItemType = function (state) {
+                this.emitter.emit(Events.ItemType, state);
+            } 
+        },
+        [Events.Scroll]: function() {
+            _onScroll = function (state) {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollBeginDragging]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            //iOS Only
+        },
+        [Events.ScrollStateChanged]: function() {
+            //iOS Only
+        }
+    }
 
     if (params) {
         for (var param in params) {

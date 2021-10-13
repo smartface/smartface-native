@@ -3,7 +3,12 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeItemDecoration = requireClass("androidx.recyclerview.widget.RecyclerView$ItemDecoration");
 const NativeSFStaggeredGridLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager");
 const LayoutChangeListener = requireClass("android.view.View$OnLayoutChangeListener");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
 
+const Events = require('./events');
+LayoutManager.prototype = Object.assign({}, EventEmitterMixin);
 function LayoutManager(params) {
     var self = this;
     self.ios = {};
@@ -111,6 +116,29 @@ function LayoutManager(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
     }
+
+    const EventFunctions = {
+        [Events.FullSpan]: function() {
+            _onFullSpanCallback = (state) => {
+                this.emitter.emit(Events.FullSpan, state);
+            } 
+        },
+        [Events.ItemLength]: function() {
+            _onItemLength = function (state) {
+                this.emitter.emit(Events.ItemLength, state);
+            } 
+        },
+        [Events.TargetContentOffset]: function() {
+            // iOS ONly
+        }
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
+    });
 
     if (params) {
         for (var param in params) {

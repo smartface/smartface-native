@@ -7,6 +7,16 @@ import KeyboardAppearance from "../keyboardappearance";
 import TextContentType from "../textcontenttype";
 import KeyboardType from "../keyboardtype";
 import ActionKeyType from "../actionkeytype";
+import TextView from "../textview";
+
+declare enum TextBoxEvents {
+  ActionButtonPress ="actionButtonPress",
+  ClearButtonPress = "clearButtonPress",
+  EditBegins = "editBegins",
+  EditEnds = "editEnds",
+  TextChanged = "textChanged"
+}
+
 /**
  * @class UI.TextBox
  * @since 0.1
@@ -24,7 +34,7 @@ import ActionKeyType from "../actionkeytype";
  *
  */
 
-declare class TextBox extends View {
+declare class TextBox extends View<TextBoxEvents> {
 	/**
 	 * Gets/sets the font of the TextBox.
 	 * @property {UI.Font} [font = null]
@@ -318,5 +328,8 @@ declare class TextBox extends View {
 
 declare namespace TextBox {
 	enum AutoCapitalize {}
+  const Events: typeof TextBoxEvents & typeof TextView.Events
+  type Events = typeof Events
+
 }
 export = TextBox;
