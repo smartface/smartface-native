@@ -6,6 +6,9 @@ const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 const AndroidConfig = require("../../util/Android/androidconfig");
 
 ActivityIndicator.prototype = Object.create(View.prototype);
+
+ActivityIndicator.Events = { ...View.Events };
+
 function ActivityIndicator(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeProgressBar(AndroidConfig.activity);
@@ -26,10 +29,10 @@ ActivityIndicator.prototype.__color = null;
 
 Object.defineProperties(ActivityIndicator.prototype, {
     'color': {
-        get: function() {
+        get: function () {
             return this.__color;
         },
-        set: function(color) {
+        set: function (color) {
             if (this.__color !== color) {
                 this.__color = color;
                 this.nativeObject.getIndeterminateDrawable().setColorFilter(this.__color.nativeObject, NativePorterDuff.Mode.SRC_IN);
@@ -39,7 +42,7 @@ Object.defineProperties(ActivityIndicator.prototype, {
     }
 });
 
-ActivityIndicator.prototype.toString = function() {
+ActivityIndicator.prototype.toString = function () {
     return 'ActivityIndicator';
 };
 

@@ -6,6 +6,12 @@ const Exception = require("../../util/exception");
 const NativeSpannable = requireClass("android.text.Spanned");
 const NativeColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
+const {
+    EventEmitterCreator
+} = require("../../core/eventemitter");
+
+const Events = require('./events');
+MenuItem.Events = { ...Events };
 
 function MenuItem(params) {
     this.android = {};
@@ -15,12 +21,23 @@ function MenuItem(params) {
     var _title;
     var _titleColor;
     var _onSelected;
+
+    const EventFunctions = {
+        [Events.Selected]: function () {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            }
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     Object.defineProperties(this, {
         'title': {
-            get: function() {
+            get: function () {
                 return _title;
             },
-            set: function(title) {
+            set: function (title) {
                 if (!TypeUtil.isString(title)) {
                     throw new TypeError(Exception.TypeError.STRING);
                 }
@@ -29,10 +46,10 @@ function MenuItem(params) {
             enumerable: true
         },
         'onSelected': {
-            get: function() {
+            get: function () {
                 return _onSelected;
             },
-            set: function(callback) {
+            set: function (callback) {
                 if (!TypeUtil.isFunction(callback)) {
                     throw new TypeError(Exception.TypeError.FUNCTION);
                 }
@@ -41,7 +58,7 @@ function MenuItem(params) {
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'MenuItem';
             },
             enumerable: true,
@@ -51,10 +68,10 @@ function MenuItem(params) {
 
     Object.defineProperties(this.android, {
         'titleColor': {
-            get: function() {
+            get: function () {
                 return _titleColor;
             },
-            set: function(color) {
+            set: function (color) {
                 if (color instanceof Color) {
                     _titleColor = color;
                 }
@@ -62,7 +79,7 @@ function MenuItem(params) {
             enumerable: true
         },
         'spanTitle': {
-            value: function() {
+            value: function () {
                 var spannableStringBuilder = new NativeSpannableStringBuilder("");
                 if (_title) {
                     spannableStringBuilder = new NativeSpannableStringBuilder(_title);

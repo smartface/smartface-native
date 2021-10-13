@@ -28,7 +28,7 @@
  *     }
  *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
-function SelectablePicker(params) {}
+function SelectablePicker(params) { }
 
 /**
  * Gets/sets items of the SelectablePicker.
@@ -38,18 +38,6 @@ function SelectablePicker(params) {}
  * @since 4.0.5
  */
 SelectablePicker.prototype.items = [];
-
-/**
- * This event is called when an item is selected/unselected on the SelectablePicker.
- * If multiSelectEnabled is false, selected will be always true.
- *
- * @param {Number} index
- * @param {Boolean} selected
- * @event onSelected
- * @android
- * @since 4.0.5
- */
-SelectablePicker.prototype.onSelected = function onSelected(index, selected) {};
 
 /**
  * Gets/sets title of the SelectablePicker. 
@@ -194,6 +182,59 @@ SelectablePicker.prototype.doneButtonFont;
  * @android
  * @since 4.0.5
  */
-SelectablePicker.prototype.show = function(done, cancel) {};
+SelectablePicker.prototype.show = function (done, cancel) { };
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+SelectablePicker.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+SelectablePicker.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+SelectablePicker.prototype.emit = function (event, detail) { }
+
+/**
+* This event is called when an item is selected/unselected on the SelectablePicker.
+* If multiSelectEnabled is false, selected will be always true.
+*
+* @param {Number} index
+* @param {Boolean} selected
+* @deprecated
+* @event onSelected
+* @android
+* @since 4.0.5
+*/
+SelectablePicker.prototype.onSelected = function onSelected(index, selected) { };
+
+/**
+ * This event is called when an item is selected/unselected on the SelectablePicker.
+ * If multiSelectEnabled is false, selected will be always true.
+ *
+ * @param {Number} index
+ * @param {Boolean} selected
+ * @event onSelected
+ * @android
+ * @since 4.0.5
+ */
+SelectablePicker.Events.Selected = "selected";
 
 module.exports = SelectablePicker;

@@ -2,9 +2,30 @@
 const TypeUtil = require("../../util/type");
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
 
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
+AsyncTask.Events = { ...Events };
 function AsyncTask(params) {
-
     const self = this;
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            _onCancelled = (state) => {
+                this.emitter.emit(Events.Cancelled, state);
+            } 
+        },
+        [Events.Complete]: function() {
+            _onComplete = (state) =>  {
+                this.emitter.emit(Events.Complete, state);
+            } 
+        },
+        [Events.PreExecute]: function() {
+            _onPreExecute = (state) =>  {
+                this.emitter.emit(Events.PreExecute, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     var callbacks = {
         onPreExecute: function() {

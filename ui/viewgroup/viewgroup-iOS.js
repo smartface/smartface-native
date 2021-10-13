@@ -1,4 +1,23 @@
 const View = require('../view');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const EventList = require('./events');
+
+ViewGroup.Events = { ...EventList, ...View.Events };
+
+const EventFunctions = {
+    [EventList.ViewAdded]: function (view) {
+      this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null, view);
+    },
+    [EventList.ViewRemoved]: function (view) {
+      this.onViewRemoved = EventEmitterWrapper(this, EventList.ViewRemoved, null, view);
+    },
+    [EventList.ChildViewAdded]: function (view) {
+      this.onChildViewAdded = EventEmitterWrapper(this, EventList.ChildViewAdded, null, view);
+    },
+    [EventList.ChildViewRemoved]: function (view) {
+      this.onChildViewRemoved = EventEmitterWrapper(this, EventList.ChildViewRemoved, null, view);
+    },
+  };
 
 /**
  * @class UI.ViewGroup
@@ -14,6 +33,7 @@ function ViewGroup(params) {
     self.childs = {};
 
     View.apply(this);
+    EventEmitterCreator(this, EventFunctions);
 
     this.addChild = function(view) {
         view.parent = self;
@@ -101,6 +121,21 @@ function ViewGroup(params) {
 
     //Android spec methods
     self.android.requestDisallowInterceptTouchEvent = () => {};
+
+
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
 }
 
 module.exports = ViewGroup;

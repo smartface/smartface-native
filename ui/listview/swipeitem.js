@@ -1,5 +1,12 @@
 const Color = require("../../ui/color");
 const Font = require("../../ui/font");
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = {
+    "Press": "press"
+}
 
 function SwipeItem(params) {
 
@@ -105,6 +112,21 @@ function SwipeItem(params) {
             _ios_isAutoHide = value;
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.Press]: function() {
+            _onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        }
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     let _android_threshold = 0.5,

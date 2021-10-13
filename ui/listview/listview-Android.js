@@ -6,6 +6,8 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
@@ -16,7 +18,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 ListView.prototype = Object.create(View.prototype);
 function ListView(params) {
     var self = this;
-
+    EventEmitterCreator(this, EventFunctions);
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
     }
@@ -600,6 +602,107 @@ function ListView(params) {
     this.ios.swipeItem = function(title, action) {
         return {};
     };
+
+    const EventFunctions = {
+        [Events.AttachedToWindow]: function() {
+            self.android.onAttachedToWindow = function (state) {
+                this.emitter.emit(Events.AttachedToWindow, state);
+            } 
+        },
+        [Events.DetachedFromWindow]: function() {
+            self.android.onDetachedFromWindow = function (state) {
+                this.emitter.emit(Events.DetachedFromWindow, state);
+            } 
+        },
+        [Events.Gesture]: function() {
+            self.android.onGesture = function (state) {
+                this.emitter.emit(Events.Gesture, state);
+            } 
+        },
+        [Events.PullRefresh]: function() {
+            _onPullRefresh = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.RowBind]: function() {
+            _onRowBind = function (state) {
+                this.emitter.emit(Events.RowBind, state);
+            } 
+        },
+        [Events.RowCanMove]: function() {
+            _onRowCanMove = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.RowCanSwipe]: function() {
+            _onRowCanSwipe = function (state) {
+                this.emitter.emit(Events.RowCanSwipe, state);
+            } 
+        },
+        [Events.RowCreate]: function() {
+            _onRowCreate = function (state) {
+                this.emitter.emit(Events.RowCreate, state);
+            } 
+        },
+        [Events.RowHeight]: function() {
+            _onRowHeight = function (state) {
+                this.emitter.emit(Events.RowHeight, state);
+            } 
+        },
+        [Events.RowLongSelected]: function() {
+            self.android.onRowLongSelected = function (state) {
+                this.emitter.emit(Events.RowLongSelected, state);
+            } 
+        },
+        [Events.RowMove]: function() {
+            _onRowMove = function (state) {
+                this.emitter.emit(Events.RowMove, state);
+            } 
+        },
+        [Events.RowMoved]: function() {
+            _onRowMoved = function (state) {
+                this.emitter.emit(Events.RowMoved, state);
+            } 
+        },
+        [Events.RowSelected]: function() {
+            _onRowSelected = function (state) {
+                this.emitter.emit(Events.RowSelected, state);
+            } 
+        },
+        [Events.RowSwipe]: function() {
+            self.onRowSwipe = function (state) {
+                this.emitter.emit(Events.RowSwipe, state);
+            } 
+        },
+        [Events.RowType]: function() {
+            _onRowType = function (state) {
+                this.emitter.emit(Events.RowType, state);
+            } 
+        },
+        [Events.Scroll]: function() {
+            _onScroll = function (state) {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollBeginDragging]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            //iOS Only
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            //iOS Only
+        },
+        [Events.ScrollStateChanged]: function() {
+            //iOS Only
+        }
+    }
 
     this.nativeInner.setAdapter(self.nativeDataAdapter);
 

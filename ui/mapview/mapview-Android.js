@@ -4,6 +4,9 @@ const Color = require('../color');
 const TypeUtil = require('../../util/type');
 const Font = require('../font');
 const AndroidConfig = require('../../util/Android/androidconfig');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+MapView.Events = {...View.Events, ...Events};
 
 // TODO: [AND-3663] Create a java wrapper class for google map
 const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.MapClusterItem");
@@ -614,6 +617,40 @@ function MapView(params) {
         }
     });
 
+    const EventFunctions = {
+        [Events.CameraMoveEnded]: function() {
+            _onCameraMoveEnded = (state) => {
+                this.emitter.emit(Events.CameraMoveEnded, state);
+            } 
+        },
+        [Events.CameraMoveStarted]: function() {
+            _onCameraMoveStarted = (state) => {
+                this.emitter.emit(Events.CameraMoveStarted, state);
+            } 
+        },
+        [Events.ClusterPress]: function() {
+            _clusterOnPress = (state) => {
+                this.emitter.emit(Events.ClusterPress, state);
+            } 
+        },
+        [Events.Create]: function() {
+            _onCreate = (state) => {
+                this.emitter.emit(Events.Create, state);
+            } 
+        },
+        [Events.LongPress]: function() {
+            _onLongPress = (state) => {
+                this.emitter.emit(Events.LongPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            _onPress = (state) => {
+                this.emitter.emit(Events.Press, state);
+            } 
+        },
+    }
+    EventEmitterCreator(this, EventFunctions);
+    
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

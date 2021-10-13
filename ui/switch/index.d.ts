@@ -1,5 +1,24 @@
 import View from "../view";
 import Color from "../color";
+
+declare enum SwichEvents {
+    /**
+     * This event is called when the state of switch changes from ON to OFF or vice versa.
+     *
+     * @event onToggleChanged
+     * @param {Boolean} state
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    ToggleChanged = "toggleChanged"
+}
+
+declare namespace Switch {
+    const Events: typeof SwichEvents & typeof View.Events
+    type Events = typeof Events
+  }
+
 /**
  * @class UI.Switch
  * @since 0.1
@@ -14,7 +33,7 @@ import Color from "../color";
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
-declare class Switch extends View {
+declare class Switch extends View<SwichEvents> {
     constructor(params?: any);
 /**
  * Enables/disables the Switch.
@@ -117,6 +136,7 @@ declare class Switch extends View {
  *
  * @event onToggleChanged
  * @param {Boolean} state
+ * @deprecated
  * @android
  * @ios
  * @since 0.1

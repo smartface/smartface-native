@@ -2,6 +2,9 @@
 const Label = require('../label');
 const TextAlignment = require("../textalignment");
 const TypeUtil = require("../../util/type");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TextView.Events = {...Label.Events, ...Events};
 
 const unitconverter = require('../../util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
@@ -37,6 +40,16 @@ function TextView(params) {
         _lineSpacing = 0,
         _scrollEnabled = true,
         _htmlText;
+
+    const EventFunctions = {
+        [Events.LinkClick]: function() {
+            _onLinkClick = (state) => {
+                self.emitter.emit(Events.LinkClick, state);
+            } 
+        }
+    };
+
+    EventEmitterCreator(this, EventFunctions);
 
     Object.defineProperties(self, {
         'htmlText': {

@@ -6,6 +6,9 @@ const Screen = require('../../device/screen');
 const KeyboardAnimationDelegate = require("../../util").KeyboardAnimationDelegate;
 const Invocation = require('../../util').Invocation;
 const System = require('../../device/system');
+const Events = require("./events");
+const { EventEmitterCreator } = require('../../core/eventemitter');
+SearchView.Events = { ...View.Events, ...Events };
 
 const UISearchBarStyle = {
     default: 0,
@@ -59,7 +62,7 @@ function SearchView(params) {
         nativeObject: self.nativeObject
     });
 
-    self.textfield.onShowKeyboard = function(e) {
+    self.textfield.onShowKeyboard = function (e) {
         if (_isAddedHeaderBar) {
             return;
         }
@@ -68,7 +71,7 @@ function SearchView(params) {
         }
     }
 
-    self.textfield.onHideKeyboard = function(e) {
+    self.textfield.onHideKeyboard = function (e) {
         if (_isAddedHeaderBar) {
             return;
         }
@@ -78,12 +81,12 @@ function SearchView(params) {
     }
 
     Object.defineProperty(this, 'textFieldBackgroundColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: self.nativeObject.valueForKey("searchField").valueForKey("backgroundColor")
             });
         },
-        set: function(color) {
+        set: function (color) {
             self.nativeObject.valueForKey("searchField").setValueForKey(color.nativeObject, "backgroundColor");
         },
         enumerable: true
@@ -91,21 +94,21 @@ function SearchView(params) {
     this.textFieldBackgroundColor = Color.create(222, 222, 222);
 
     Object.defineProperty(this, 'font', {
-        get: function() {
+        get: function () {
             return self.textfield.valueForKey("font");
         },
-        set: function(value) {
+        set: function (value) {
             self.textfield.setValueForKey(value, "font");
         },
         enumerable: true
     });
-    
+
     var _textAligment = 3;
     Object.defineProperty(this, 'textAlignment', {
-        get: function() {
+        get: function () {
             return _textAligment;
         },
-        set: function(value) {
+        set: function (value) {
             _textAligment = value;
 
             var vertical;
@@ -134,10 +137,10 @@ function SearchView(params) {
     });
 
     Object.defineProperty(this, 'text', {
-        get: function() {
+        get: function () {
             return self.nativeObject.text;
         },
-        set: function(text) {
+        set: function (text) {
             if (self.nativeObject.activityIndicatorTrailingConstraint) {
                 var constant;
                 (text === "") ? (constant = 0) : (constant = -20)
@@ -157,10 +160,10 @@ function SearchView(params) {
 
     var _hint = "";
     Object.defineProperty(this, 'hint', {
-        get: function() {
+        get: function () {
             return _hint;
         },
-        set: function(hint) {
+        set: function (hint) {
             _hint = hint;
             var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString", "alloc", [], "id");
 
@@ -183,10 +186,10 @@ function SearchView(params) {
 
     var _hintTextColor = Color.LIGHTGRAY;
     Object.defineProperty(this, 'hintTextColor', {
-        get: function() {
+        get: function () {
             return _hintTextColor;
         },
-        set: function(color) {
+        set: function (color) {
             _hintTextColor = color;
             self.hint = _hint;
         },
@@ -195,12 +198,12 @@ function SearchView(params) {
 
     var _textColor = self.nativeObject.textColor;
     Object.defineProperty(this, 'textColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: _textColor
             });
         },
-        set: function(textColor) {
+        set: function (textColor) {
             _textColor = textColor.nativeObject;
             self.nativeObject.textColor = _textColor;
         },
@@ -209,12 +212,12 @@ function SearchView(params) {
 
     var _backgroundColor = self.nativeObject.barTintColor;
     Object.defineProperty(this, 'backgroundColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: _backgroundColor
             });
         },
-        set: function(backgroundColor) {
+        set: function (backgroundColor) {
             _backgroundColor = backgroundColor.nativeObject;
             self.nativeObject.barTintColor = _backgroundColor;
             if (self.borderWidth === 0) {
@@ -229,10 +232,10 @@ function SearchView(params) {
 
     var _borderWidth = 0;
     Object.defineProperty(self, 'borderWidth', {
-        get: function() {
+        get: function () {
             return _borderWidth;
         },
-        set: function(value) {
+        set: function (value) {
             _borderWidth = value;
             // Native object's layer must be updated!
             // Yoga's borderWidth property only effects positioning of its child view.
@@ -251,10 +254,10 @@ function SearchView(params) {
 
     var _backgroundImage;
     Object.defineProperty(this, 'backgroundImage', {
-        get: function() {
+        get: function () {
             return _backgroundImage;
         },
-        set: function(backgroundImage) {
+        set: function (backgroundImage) {
             _backgroundImage = backgroundImage;
             self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject, 0);
         },
@@ -263,10 +266,10 @@ function SearchView(params) {
 
     var _iconImage;
     Object.defineProperty(this, 'iconImage', { //Depracted use searchIcon
-        get: function() {
+        get: function () {
             return _iconImage;
         },
-        set: function(iconImage) {
+        set: function (iconImage) {
             _iconImage = iconImage;
             self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
         },
@@ -275,10 +278,10 @@ function SearchView(params) {
 
     var _searchIcon;
     Object.defineProperty(this, 'searchIcon', {
-        get: function() {
+        get: function () {
             return _searchIcon;
         },
-        set: function(searchIcon) {
+        set: function (searchIcon) {
             _searchIcon = searchIcon;
             self.nativeObject.setIconImage(_searchIcon.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
         },
@@ -287,7 +290,7 @@ function SearchView(params) {
 
     var searchContainerView; // Workaround For iOS 13, increase height navbar issue
     var _isAddedHeaderBar = false;
-    this.addToHeaderBar = function(page) {
+    this.addToHeaderBar = function (page) {
         self.nativeObject.layer.borderWidth = 0;
         self.nativeObject.yoga.borderWidth = 0;
         _isAddedHeaderBar = true;
@@ -296,13 +299,13 @@ function SearchView(params) {
                 searchContainerView = __SF_SearchBarContainerView.createWithSearchBar(self.nativeObject);
             }
             page.nativeObject.navigationItem.titleView = searchContainerView;
-        }else{
+        } else {
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         }
-        
+
     };
 
-    this.removeFromHeaderBar = function(page) {
+    this.removeFromHeaderBar = function (page) {
         _isAddedHeaderBar = false;
         self.removeFocus();
         if (parseInt(System.OSVersion) >= 13) {
@@ -312,47 +315,47 @@ function SearchView(params) {
         page.nativeObject.navigationItem.titleView = undefined;
     };
 
-    this.showKeyboard = function() {
+    this.showKeyboard = function () {
         self.nativeObject.becomeFirstResponder();
     };
 
-    this.hideKeyboard = function() {
+    this.hideKeyboard = function () {
         self.nativeObject.resignFirstResponder();
     };
 
-    this.requestFocus = function() {
+    this.requestFocus = function () {
         self.nativeObject.becomeFirstResponder();
     };
 
-    this.removeFocus = function() {
+    this.removeFocus = function () {
         self.nativeObject.resignFirstResponder();
     };
 
     Object.defineProperty(this.ios, 'keyboardAppearance', {
-        get: function() {
+        get: function () {
             return self.nativeObject.valueForKey("keyboardAppearance");
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.setValueForKey(value, "keyboardAppearance");
         },
         enumerable: true
     });
-    
-    self.ios.showLoading = function() {
+
+    self.ios.showLoading = function () {
         self.nativeObject.activityIndicator.startAnimating();
     };
 
-    self.ios.hideLoading = function() {
+    self.ios.hideLoading = function () {
         self.nativeObject.activityIndicator.stopAnimating();
     };
 
     Object.defineProperty(this.ios, 'loadingColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: self.nativeObject.activityIndicator.color
             });
         },
-        set: function(color) {
+        set: function (color) {
             self.nativeObject.activityIndicator.color = color.nativeObject;
         },
         enumerable: true
@@ -360,10 +363,10 @@ function SearchView(params) {
 
     var _searchViewStyle = UISearchBarStyle.default;
     Object.defineProperty(this.ios, 'searchViewStyle', {
-        get: function() {
+        get: function () {
             return _searchViewStyle;
         },
-        set: function(searchViewStyle) {
+        set: function (searchViewStyle) {
             _searchViewStyle = searchViewStyle;
             self.nativeObject.searchBarStyle = _searchViewStyle;
         },
@@ -372,12 +375,12 @@ function SearchView(params) {
 
     // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
     Object.defineProperty(this.ios, 'cursorColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: self.textfield.valueForKey("tintColor")
             });
         },
-        set: function(color) {
+        set: function (color) {
             self.textfield.setValueForKey(color.nativeObject, "tintColor");
         },
         enumerable: true
@@ -385,34 +388,34 @@ function SearchView(params) {
 
     // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
     Object.defineProperty(this, 'cursorColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: self.textfield.valueForKey("tintColor")
             });
         },
-        set: function(color) {
+        set: function (color) {
             self.textfield.setValueForKey(color.nativeObject, "tintColor");
         },
         enumerable: true
     });
 
     Object.defineProperty(this.ios, 'cancelButtonColor', {
-        get: function() {
+        get: function () {
             return new Color({
                 color: self.nativeObject.valueForKey("tintColor")
             });
         },
-        set: function(color) {
+        set: function (color) {
             self.nativeObject.setValueForKey(color.nativeObject, "tintColor");
         },
         enumerable: true
     });
 
     Object.defineProperty(this.ios, 'cancelButtonText', {
-        get: function() {
+        get: function () {
             return self.nativeObject.valueForKey("cancelButtonText");
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.setValueForKey(value, "cancelButtonText");
         },
         enumerable: true
@@ -420,10 +423,10 @@ function SearchView(params) {
 
     var _showsCancelButton = false;
     Object.defineProperty(this.ios, 'showsCancelButton', {
-        get: function() {
+        get: function () {
             return _showsCancelButton;
         },
-        set: function(showsCancelButton) {
+        set: function (showsCancelButton) {
             _showsCancelButton = showsCancelButton;
         },
         enumerable: true
@@ -431,10 +434,10 @@ function SearchView(params) {
 
     var _onCancelButtonClicked;
     Object.defineProperty(this.ios, 'onCancelButtonClicked', {
-        get: function() {
+        get: function () {
             return _onCancelButtonClicked;
         },
-        set: function(onCancelButtonClicked) {
+        set: function (onCancelButtonClicked) {
             _onCancelButtonClicked = onCancelButtonClicked;
         },
         enumerable: true
@@ -442,10 +445,10 @@ function SearchView(params) {
 
     var _onSearchBegin;
     Object.defineProperty(this, 'onSearchBegin', {
-        get: function() {
+        get: function () {
             return _onSearchBegin;
         },
-        set: function(onSearchBegin) {
+        set: function (onSearchBegin) {
             _onSearchBegin = onSearchBegin;
         },
         enumerable: true
@@ -453,10 +456,10 @@ function SearchView(params) {
 
     var _onSearchEnd;
     Object.defineProperty(this, 'onSearchEnd', {
-        get: function() {
+        get: function () {
             return _onSearchEnd;
         },
-        set: function(onSearchEnd) {
+        set: function (onSearchEnd) {
             _onSearchEnd = onSearchEnd;
         },
         enumerable: true
@@ -464,10 +467,10 @@ function SearchView(params) {
 
     var _onTextChanged;
     Object.defineProperty(this, 'onTextChanged', {
-        get: function() {
+        get: function () {
             return _onTextChanged;
         },
-        set: function(onTextChanged) {
+        set: function (onTextChanged) {
             _onTextChanged = onTextChanged;
         },
         enumerable: true
@@ -475,24 +478,54 @@ function SearchView(params) {
 
     var _onSearchButtonClicked;
     Object.defineProperty(this, 'onSearchButtonClicked', {
-        get: function() {
+        get: function () {
             return _onSearchButtonClicked;
         },
-        set: function(onSearchButtonClicked) {
+        set: function (onSearchButtonClicked) {
             _onSearchButtonClicked = onSearchButtonClicked;
         },
         enumerable: true
     });
 
+    const EventFunctions = {
+        [Events.CancelButtonClicked]: function () {
+            _onCancelButtonClicked = (state) => {
+                this.emitter.emit(Events.CancelButtonClicked, state);
+            }
+        },
+        [Events.SearchBegin]: function () {
+            _onSearchBegin = (state) => {
+                this.emitter.emit(Events.SearchBegin, state);
+            }
+        },
+        [Events.SearchButtonClicked]: function () {
+            _onSearchButtonClicked = (state) => {
+                this.emitter.emit(Events.SearchButtonClicked, state);
+            }
+        },
+        [Events.SearchEnd]: function () {
+            _onSearchEnd = (state) => {
+                this.emitter.emit(Events.SearchEnd, state);
+            }
+        },
+        [Events.TextChanged]: function () {
+            _onTextChanged = (state) => {
+                this.emitter.emit(Events.TextChanged, state);
+            }
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     //////////////////////////////////////////////////////
     // UISearchBarDelegate
     self.searchBarDelegate = new __SF_UISearchBarDelegate();
-    self.searchBarDelegate.cancelButtonClicked = function(e) {
+    self.searchBarDelegate.cancelButtonClicked = function (e) {
         if (typeof _onCancelButtonClicked === "function") {
             _onCancelButtonClicked();
         }
     };
-    self.searchBarDelegate.didBeginEditing = function() {
+    self.searchBarDelegate.didBeginEditing = function () {
         if (self.ios.showsCancelButton) {
             self.nativeObject.setShowsCancelButtonAnimated(true, true);
         }
@@ -501,7 +534,7 @@ function SearchView(params) {
             _onSearchBegin();
         }
     };
-    self.searchBarDelegate.didEndEditing = function() {
+    self.searchBarDelegate.didEndEditing = function () {
         if (self.ios.showsCancelButton) {
             self.nativeObject.setShowsCancelButtonAnimated(false, true);
         }
@@ -512,7 +545,7 @@ function SearchView(params) {
     };
 
     var _constant = 0;
-    self.searchBarDelegate.textDidChange = function(searchText) {
+    self.searchBarDelegate.textDidChange = function (searchText) {
         if (self.nativeObject.activityIndicatorTrailingConstraint) {
             var constant;
             (searchText === "") ? (constant = 0) : (constant = -20)
@@ -529,7 +562,7 @@ function SearchView(params) {
             _onTextChanged(searchText);
         }
     };
-    self.searchBarDelegate.searchButtonClicked = function() {
+    self.searchBarDelegate.searchButtonClicked = function () {
         if (typeof _onSearchButtonClicked === "function") {
             _onSearchButtonClicked();
         }
@@ -550,17 +583,17 @@ function SearchView(params) {
 SearchView.iOS = {};
 SearchView.iOS.Style = {};
 Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
-    get: function() {
+    get: function () {
         return UISearchBarStyle.default;
     },
 });
 Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
-    get: function() {
+    get: function () {
         return UISearchBarStyle.prominent;
     },
 });
 Object.defineProperty(SearchView.iOS.Style, 'MINIMAL', {
-    get: function() {
+    get: function () {
         return UISearchBarStyle.minimal;
     },
 });

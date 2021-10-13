@@ -3,11 +3,28 @@ const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const RequestCodes = require("../../util/Android/requestcodes");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
 
 var _pickParams = {};
 
+Sound.Events = { ...Events };
 function Sound(params) {
     this.nativeObject = new NativeMediaPlayer();
+
+    const EventFunctions = {
+        [Events.Ready]: () => {
+            _onReadyCallback = function (state) {
+                this.emitter.emit(Events.Ready, state);
+            }
+        },
+        [Events.Finish]: () => {
+            _onFinishCallback = function (state) {
+                this.emitter.emit(Events.Finish, state);
+            }
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     var _volume = 1.0;
     Object.defineProperty(this, 'volume', {

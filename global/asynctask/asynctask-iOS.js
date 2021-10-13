@@ -1,8 +1,27 @@
 const TypeUtil = require("../../util/type");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
+AsyncTask.Events = { ...Events };
 
 function AsyncTask(params) {
     var self = this;
+    const EventFunctions = {
+        [Events.Cancelled]: function() {
+            _onCancelled = function (state) {
+                this.emitter.emit(Events.Cancelled, state);
+            } 
+        },
+        [Events.Complete]: function() {
+            _onComplete = function (state) {
+                this.emitter.emit(Events.Complete, state);
+            } 
+        },
+        [Events.PreExecute]: function() {
+            //Android only
+        }
+    }
 
+    EventEmitterCreator(this, EventFunctions);
     self.android = {};
     self.ios = {};
 
@@ -11,6 +30,7 @@ function AsyncTask(params) {
     var _task;
     var _onComplete;
     var _onCancelled;
+
 
     Object.defineProperties(self, {
         'task': {

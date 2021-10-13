@@ -1,5 +1,7 @@
 const View = require("../../ui/view");
 
+BlurView.Events = { ...View.Events };
+
 BlurView.prototype = Object.create(View.prototype);
 function BlurView(params) {
     var self = this;
@@ -28,6 +30,8 @@ function BlurView(params) {
         }
     }
 }
+
+BlurView.Events = Events;
 
 const iOS = {};
 iOS.EffectStyle = {

@@ -5,7 +5,7 @@
  * MenuItem is used to add row and action to the UI.Menu 
  *
  */
-function MenuItem(params) {}
+function MenuItem(params) { }
 
 /**
  * Gets/sets the title of a menu item.
@@ -36,16 +36,6 @@ MenuItem.prototype.ios = {};
  * @since 1.1.8
  */
 MenuItem.prototype.ios.style = "";
-
-/**
- * This event is called when user selects a menu item.
- *
- * @since 0.1
- * @event onSelected
- * @android
- * @ios
- */
-MenuItem.prototype.onSelected = function onSelected() {};
 
 MenuItem.ios = {};
 
@@ -90,5 +80,55 @@ MenuItem.ios.Style.CANCEL;
  * @since 1.1.8
  */
 MenuItem.ios.Style.DESTRUCTIVE;
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+MenuItem.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+MenuItem.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+MenuItem.prototype.emit = function (event, detail) { }
+
+
+/**
+ * This event is called when user selects a menu item.
+ *
+ * @since 0.1
+ * @event onSelected
+ * @deprecated
+ * @android
+ * @ios
+ */
+MenuItem.prototype.onSelected = function onSelected() { };
+
+/**
+ * This event is called when user selects a menu item.
+ *
+ * @since 0.1
+ * @event onSelected
+ * @android
+ * @ios
+ */
+MenuItem.Events.Selected = "selected";
 
 module.exports = MenuItem;

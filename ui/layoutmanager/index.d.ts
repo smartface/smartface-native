@@ -1,6 +1,70 @@
 import { Point2D } from "../../primitive/point2d";
 import { Boundary } from "../../primitive/boundary";
 
+declare enum Events {
+/**
+ * This event used to define specified gridview item  to fully occupy width/height  based on direction. According to direction return value must be either desired height or width of gridview item. If the direction
+ * is {@link UI.LayoutManager.ScrollDirection#VERTICAL VERTICAL} then return value must be height or vice versa. Returning undefined indicates that
+ * the gridview item will not modified. 
+ *
+ * @param {Number} itemType
+ * @event onFullSpan
+ * @android
+ * @ios
+ * @return {Number} height/width
+ * @since 4.0.1
+ */
+  FullSpan = "fullSpan",
+  /**
+   * User must return a length value for scrollDirection that user lays out the objects.
+   * If vertical, length value will be height of item. If horizontal, length value will be width of item.
+   *
+   * @param {Number} itemLength
+   * @event onItemLength
+   * @android
+   * @ios
+   * @return {Number} itemLength
+   * @since 3.0.2
+   */
+  ItemLength = "itemLength",
+  /**
+   * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
+   * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.For Android, you can use {@link UI.GridView#snapToAlignment}.
+   *
+   *      @example
+   *      //For Left Span 
+   *      layoutManager.ios.targetContentOffset = function(proposedContentOffset, velocity){
+   *          var positionX = gridView.contentOffset.x / ITEM_LENGHT;
+   *          var decimalPositionX = parseInt(positionX);
+   *          var precisionPositionX = positionX % 1;
+   *
+   *          if (Math.abs(velocity.x) <= 0.5 && precisionPositionX >= 0.5) {
+   *              decimalPositionX++;
+   *          }
+   *          else if (velocity.x > 0) {
+   *              decimalPositionX++;
+   *          }
+   *          
+   *          return { x: decimalPositionX * ITEM_LENGHT, y: 0 };
+   *      };
+   * 
+   * 
+   * @param {Object} proposedContentOffset This is the value at which scrolling would naturally stop if no adjustments were made.
+   * @param {Number} proposedContentOffset.x
+   * @param {Number} proposedContentOffset.y
+   * @param {Object} velocity The current scrolling velocity along both the horizontal and vertical axes. This value is measured in points per second.
+   * @param {Number} velocity.x
+   * @param {Number} velocity.y
+   * @event targetContentOffset
+   * @ios
+   * @return {Object} The content offset that you want to use instead. The default implementation of this method returns the value in the proposedContentOffset parameter.
+   * @return {Number} return.x
+   * @return {Number} return.y
+   * @since 3.2.0
+   */
+  TargetContentOffset = "targetContentOffset"
+}
+
 /**
  * @class UI.LayoutManager
  * @since 3.0.2
@@ -70,6 +134,7 @@ declare class LayoutManager extends NativeComponent {
      *
      * @param {Number} itemLength
      * @event onItemLength
+     * @deprecated
      * @android
      * @ios
      * @return {Number} itemLength
@@ -83,6 +148,7 @@ declare class LayoutManager extends NativeComponent {
      *
      * @param {Number} itemType
      * @event onFullSpan
+     * @deprecated
      * @android
      * @ios
      * @return {Number} height/width
@@ -118,6 +184,7 @@ declare class LayoutManager extends NativeComponent {
      * @since 3.0.2
      */
     scrollDirection: LayoutManager.ScrollDirection;
+    static Events: Events;
 }
 
 declare namespace LayoutManager {

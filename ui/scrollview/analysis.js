@@ -44,7 +44,7 @@
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
  */
-function ScrollView() {}
+function ScrollView() { }
 
 /**
  * Gets/sets over-scroll mode for this view.
@@ -135,7 +135,7 @@ ScrollView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustm
  * @param {UI.ScrollView.Edge} edge
  * @since 0.1
  */
-ScrollView.prototype.scrollToEdge = function() {};
+ScrollView.prototype.scrollToEdge = function () { };
 
 /**
  * Immediately scrolls to the given coordinate. Coordinate is X position for horizontal alignment and
@@ -147,7 +147,115 @@ ScrollView.prototype.scrollToEdge = function() {};
  * @param {Number} coordinate
  * @since 0.1
  */
-ScrollView.prototype.scrollToCoordinate = function(coordinate) {};
+ScrollView.prototype.scrollToCoordinate = function (coordinate) { };
+
+
+
+/**
+ * Gets contentOffset of the ScrollView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 1.1.13
+ */
+ScrollView.prototype.contentOffset = {};
+
+/**
+ * This event is called when a ScrollView is scrolled.
+ * For better performance, don't set any callback if does not
+ * necessary.
+ *
+ * @event onScroll
+ * @deprecated
+ * @param {Object} params
+ * @param {Object} params.translation
+ * @param {Number} params.translation.x
+ * @param {Number} params.translation.y
+ * @param {Object} params.contentOffset
+ * @param {Number} params.contentOffset.x
+ * @param {Number} params.contentOffset.y
+ * @android
+ * @ios
+ * @since 1.1.13
+ */
+ScrollView.prototype.onScroll = function onScroll() { };
+
+/**
+ * This event is called when the scroll view is about to start scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDragging
+ * @deprecated
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDragging = function (contentOffset) { };
+
+/**
+ * This event is called when the scroll view is starting to decelerate the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDecelerating
+ * @deprecated
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDecelerating = function (contentOffset) { };
+
+/**
+ * This event is called when the scroll view has ended decelerating the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollEndDecelerating
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDecelerating = function (contentOffset) { };
+
+/**
+ * This event is called when dragging ended in the scroll view.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Boolean} decelerate
+ * @event onScrollEndDraggingWillDecelerate
+ * @deprecated
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDraggingWillDecelerate = function (contentOffset, decelerate) { };
+
+/**
+ * This event is called when the user finishes scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Object} velocity
+ * @param {Number} velocity.x
+ * @param {Number} velocity.y
+ * @param {Object} targetContentOffset
+ * @param {Number} targetContentOffset.x
+ * @param {Number} targetContentOffset.y
+ * @event onScrollEndDraggingWithVelocityTargetContentOffset
+ * @deprecated
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function (contentOffset, velocity, targetContentOffset) { };
+
 
 /**
  * This event is called when a ScrollView is scrolled.
@@ -166,21 +274,7 @@ ScrollView.prototype.scrollToCoordinate = function(coordinate) {};
  * @ios
  * @since 1.1.13
  */
-ScrollView.prototype.onScroll = function onScroll() {};
-
-/**
- * Gets contentOffset of the ScrollView.
- * 
- * @property contentOffset
- * @android
- * @ios
- * @readonly
- * @return {Object}
- * @return {Number} return.x
- * @return {Number} return.y
- * @since 1.1.13
- */
-ScrollView.prototype.contentOffset = {};
+ScrollView.Events.Scroll = "scroll";
 
 /**
  * This event is called when the scroll view is about to start scrolling the content.
@@ -192,7 +286,7 @@ ScrollView.prototype.contentOffset = {};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollBeginDragging = function(contentOffset) {};
+ScrollView.Events.ScrollBeginDragging = "scrollBeginDragging";
 
 /**
  * This event is called when the scroll view is starting to decelerate the scrolling movement.
@@ -204,7 +298,7 @@ ScrollView.prototype.onScrollBeginDragging = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
+ScrollView.Events.ScrollBeginDecelerating = "scrollBeginDecelerating";
 
 /**
  * This event is called when the scroll view has ended decelerating the scrolling movement.
@@ -216,7 +310,7 @@ ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDecelerating = function(contentOffset) {};
+ScrollView.Events.ScrollEndDecelerating = "scrollEndDecelerating";
 
 /**
  * This event is called when dragging ended in the scroll view.
@@ -229,7 +323,7 @@ ScrollView.prototype.onScrollEndDecelerating = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate) {};
+ScrollView.Events.ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate";
 
 /**
  * This event is called when the user finishes scrolling the content.
@@ -247,7 +341,7 @@ ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset,
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset) {};
+ScrollView.Events.ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset";
 
 /**
  * @enum UI.ScrollView.Edge

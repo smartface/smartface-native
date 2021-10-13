@@ -3,6 +3,9 @@
 const View = require('../view');
 const Color = require('../color');
 const AndroidConfig = require('../../util/Android/androidconfig');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Slider.Events = {...View.Events, ...Events};
 
 const SDK_VERSION = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
@@ -135,6 +138,16 @@ function Slider(params) {
             configurable: true
         }
     });
+
+    const EventFunctions = {
+		[Events.ValueChange]: function () {
+			_onValueChange = (state) => {
+				this.emitter.emit(Events.ValueChange, state);
+			};
+		},
+	};
+
+    EventEmitterCreator(this, EventFunctions);
 
     if (!this.skipDefaults) {
         // SET DEFAULTS

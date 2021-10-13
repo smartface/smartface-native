@@ -1,6 +1,9 @@
 const TextBox = require('../textbox');
 const Color = require('../../ui/color');
 const FlexLayout = require('../../ui/flexlayout');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+MaterialTextbox.Events = {...TextBox.Events, ...Events};
 
 // const MaterialTextbox = extend(TextBox)(
 MaterialTextbox.prototype = Object.create(TextBox.prototype);
@@ -590,6 +593,21 @@ function MaterialTextbox(params) {
             this[param] = params[param];
         }
     }
+
+    const EventFunctions = {
+        [Events.LeftLayoutRectForBounds]: function() {
+            _onLeftViewRectForBounds = (state) => {
+                self.emitter.emit(Events.LeftLayoutRectForBounds, state);
+            } 
+        },
+
+        [Events.RightLayoutRectForBounds]: function() {
+            _onRightViewRectForBounds = (state) => {
+                self.emitter.emit(Events.RightLayoutRectForBounds, state);
+            } 
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     //Handle android specific properties
     self.android = {};

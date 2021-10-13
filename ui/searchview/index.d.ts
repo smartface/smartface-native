@@ -7,6 +7,54 @@ import Font from "../font";
 import TextAlignment from "../textalignment";
 import KeyboardAppearance from "../keyboardappearance";
 
+declare enum SearchViewEvents {
+	/**
+	 * This event is called when user clicks the cancel button.
+	 *
+	 * @ios
+	 * @event onCancelButtonClicked
+	 * @since 0.1
+	 */
+  CancelButtonClicked = "cancelButtonClicked",
+	/**
+	 * This event is called when user focus on the search view by selecting it.
+	 *
+	 * @event onSearchBegin
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  SearchBegin = "searchBegin",
+	/**
+	 * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
+	 *
+	 * @event onSearchButtonClicked
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  SearchButtonClicked = "searchButtonClicked",
+	/**
+	 * This event is called when searchview loses focus.
+	 *
+	 * @event onSearchEnd
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  SearchEnd = "searchEnd",
+	/**
+	 * This event is called when user changes the search text.
+	 *
+	 * @param {String} searchText The current text in the search text view.
+	 * @android
+	 * @ios
+	 * @event onTextChanged
+	 * @since 0.1
+	 */
+  TextChanged = "textChanged"
+}
+
 /**
  * @class UI.SearchView
  * @extends UI.View
@@ -17,7 +65,7 @@ import KeyboardAppearance from "../keyboardappearance";
  *     @example
  *     const SearchView = require('@smartface/native/ui/searchview');
  *     var searchBar = new SearchView();
- *     searchBar.onTextChanged = function(searchText){
+ *     searchBar.on(SearchView.Events.TextChanged, function(searchText){
  *         console.log("searched text : " + searchText);
  *     };
  *
@@ -211,9 +259,11 @@ declare interface SearchView extends View {
 		 * This event is called when user clicks the cancel button.
 		 *
 		 * @ios
+		 * @deprecated
 		 * @event onCancelButtonClicked
 		 * @since 0.1
 		 */
+		 onCancelButtonClicked: () => void;
 		/**
 		 * Gets/sets the color of the loading indicator.
 		 *
@@ -222,7 +272,6 @@ declare interface SearchView extends View {
 		 * @since 3.0.2
 		 */
 		loadingColor: Color;
-		onCancelButtonClicked: () => void;
 		keyboardAppearance: KeyboardAppearance;
 	};
 	android: View["android"] & {
@@ -318,16 +367,17 @@ declare interface SearchView extends View {
 	 * This event is called when user focus on the search view by selecting it.
 	 *
 	 * @event onSearchBegin
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
 	 */
-
 	onSearchBegin: () => void;
 	/**
 	 * This event is called when searchview loses focus.
 	 *
 	 * @event onSearchEnd
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -340,6 +390,7 @@ declare interface SearchView extends View {
 	 * @param {String} searchText The current text in the search text view.
 	 * @android
 	 * @ios
+	 * @deprecated
 	 * @event onTextChanged
 	 * @since 0.1
 	 */
@@ -348,6 +399,7 @@ declare interface SearchView extends View {
 	 * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
 	 *
 	 * @event onSearchButtonClicked
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -397,5 +449,8 @@ declare namespace SearchView {
 			MINIMAL = 2
 		}
 	}
+
+  const Events: typeof SearchViewEvents & typeof View.Events
+  type Events = typeof Events
 }
 export = SearchView;
