@@ -1,4 +1,9 @@
 const Color = require("../color");
+const {
+    EventEmitterCreator
+} = require("../../core/eventemitter");
+const Events = require('./events');
+FloatingMenuItem.Events = {...Events};
 
 function FloatingMenuItem(params) {
     var _title;
@@ -6,6 +11,14 @@ function FloatingMenuItem(params) {
     var _icon;
     var _color = Color.WHITE;
     var _callbackClick;
+    const EventFunctions = {
+        [Events.Click]: function() {
+            _callbackClick = (state) => {
+                this.emitter.emit(Events.Click, state);
+            } 
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     Object.defineProperties(this, {
         'title': {

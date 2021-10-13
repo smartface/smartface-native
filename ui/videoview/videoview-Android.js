@@ -5,6 +5,9 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 const NativeVideoView = requireClass('io.smartface.android.sfcore.ui.videoview.SFVideoView')
 const NativePlayer = requireClass('com.google.android.exoplayer2.Player');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+VideoView.Events = {...View.Events, ...Events };
 
 VideoView.prototype = Object.create(View);
 function VideoView(params) {
@@ -288,6 +291,37 @@ function VideoView(params) {
             }
         }
     })
+
+    const EventFunctions = {
+        [Events.Finish]: function() {
+            _onFinish = (state) => {
+                this.emitter.emit(Events.Finish, state);
+            }
+            this.nativeInner.setOnFinish(_onFinish);
+        },
+        [Events.Ready]: function() {
+            _onReady = (state) => {
+                this.emitter.emit(Events.Ready, state);
+            } 
+            this.nativeInner.setOnReady(_onReady);
+        },
+        [Events.DidStartPictureInPicture]: function() {
+            //iOS Only
+        },
+        [Events.DidStopPictureInPicture]: function() {
+            //iOS Only
+        },
+        [Events.WillStartPictureInPicture]: function() {
+            //iOS Only
+        },
+        [Events.WillStopPictureInPicture]: function() {
+            //iOS Only
+        },
+        [Events.RestoreUserInterfaceForPictureInPictureStopWithCompletionHandler]: function() {
+            //iOS Only
+        },
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

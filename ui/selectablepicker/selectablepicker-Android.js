@@ -7,6 +7,12 @@ const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 const ParentPicker = require("../../ui/picker/parentPicker");
+const {
+    EventEmitterCreator
+} = require("../../core/eventemitter");
+
+const Events = require('./events');
+SelectablePicker.Events = { ...Events };
 
 function SelectablePicker(params) {
     var self = this;
@@ -33,43 +39,53 @@ function SelectablePicker(params) {
     var _cancelButtonText = "Cancel";
     var _cancelButtonFont, _cancelButtonColor;
 
+    const EventFunctions = {
+        [Events.Selected]: function () {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            }
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     Object.defineProperties(this, {
         'items': {
-            get: function() {
+            get: function () {
                 return _items;
             },
-            set: function(items) {
+            set: function (items) {
                 if (TypeUtil.isArray(items))
                     _items = items;
             },
             enumerable: true
         },
         'multiSelectEnabled': {
-            get: function() {
+            get: function () {
                 return _multiSelectEnabled;
             },
-            set: function(multiSelectEnabled) {
+            set: function (multiSelectEnabled) {
                 if (TypeUtil.isBoolean(multiSelectEnabled) && !_isShowed)
                     _multiSelectEnabled = multiSelectEnabled;
             },
             enumerable: true
         },
         'cancelable': {
-            get: function() {
+            get: function () {
                 return _cancelable;
             },
-            set: function(cancelable) {
+            set: function (cancelable) {
                 if (TypeUtil.isBoolean(cancelable))
                     _cancelable = cancelable;
             },
             enumerable: true
         },
         'checkedItems': {
-            get: function() {
+            get: function () {
                 if (_multiSelectEnabled) return _checkedItems;
                 else return _checkedItem;
             },
-            set: function(checkedItems) {
+            set: function (checkedItems) {
                 if (_multiSelectEnabled && TypeUtil.isArray(checkedItems)) {
                     _checkedItems = checkedItems;
                 } else if (TypeUtil.isNumeric(checkedItems) && (checkedItems > -1)) {
@@ -79,27 +95,27 @@ function SelectablePicker(params) {
             enumerable: true
         },
         'backgroundColor': {
-            get: function() {
+            get: function () {
                 return _backgroundColor;
             },
-            set: function(color) {
+            set: function (color) {
                 if (color instanceof Color)
                     _backgroundColor = color;
             },
             enumerable: true
         },
         'onSelected': {
-            get: function() {
+            get: function () {
                 return _onSelected;
             },
-            set: function(onSelected) {
+            set: function (onSelected) {
                 if (TypeUtil.isFunction(onSelected))
                     _onSelected = onSelected;
             },
             enumerable: true
         },
         'show': {
-            value: function(doneCallback, cancelCallback) {
+            value: function (doneCallback, cancelCallback) {
                 var checkedItemsBoolean = Array(_items.length).fill(false);
                 var doneButtonListener = createDoneButtonListener(doneCallback);
                 var cancelButtonListener = createCancelButtonListener(cancelCallback);
@@ -134,20 +150,20 @@ function SelectablePicker(params) {
             enumerable: true
         },
         'cancelButtonColor': {
-            get: function() {
+            get: function () {
                 return _cancelButtonColor;
             },
-            set: function(color) {
+            set: function (color) {
                 if (color instanceof Color)
                     _cancelButtonColor = color;
             },
             enumerable: true
         },
         'cancelButtonFont': {
-            get: function() {
+            get: function () {
                 return _cancelButtonFont;
             },
-            set: function(font) {
+            set: function (font) {
                 const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _cancelButtonFont = font;
@@ -155,40 +171,40 @@ function SelectablePicker(params) {
             enumerable: true
         },
         'cancelButtonText': {
-            get: function() {
+            get: function () {
                 return _cancelButtonText;
             },
-            set: function(text) {
+            set: function (text) {
                 if (TypeUtil.isString(text))
                     _cancelButtonText = text;
             },
             enumerable: true
         },
         'doneButtonColor': {
-            get: function() {
+            get: function () {
                 return _doneButtonColor;
             },
-            set: function(color) {
+            set: function (color) {
                 if (color instanceof Color)
                     _doneButtonColor = color;
             },
             enumerable: true
         },
         'doneButtonText': {
-            get: function() {
+            get: function () {
                 return _doneButtonText;
             },
-            set: function(text) {
+            set: function (text) {
                 if (TypeUtil.isString(text))
                     _doneButtonText = text;
             },
             enumerable: true
         },
         'doneButtonFont': {
-            get: function() {
+            get: function () {
                 return _doneButtonFont;
             },
-            set: function(font) {
+            set: function (font) {
                 const Font = require('../../ui/font');
                 if (font instanceof Font)
                     _doneButtonFont = font;
@@ -196,7 +212,7 @@ function SelectablePicker(params) {
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'SelectablePicker';
             },
             enumerable: true,
@@ -205,7 +221,7 @@ function SelectablePicker(params) {
     });
 
 
-    self.__makeCustomizeButton = function(negativeButton, positiveButton) {
+    self.__makeCustomizeButton = function (negativeButton, positiveButton) {
         self.cancelButtonText && negativeButton.setText(self.cancelButtonText);
         self.doneButtonText && positiveButton.setText(self.doneButtonText);
         self.cancelButtonColor && negativeButton.setTextColor(self.cancelButtonColor.nativeObject);
@@ -227,7 +243,7 @@ function SelectablePicker(params) {
     function createCancelButtonListener(cancelCallback) {
         if (!_listeners['cancelButtonListener']) {
             _listeners['cancelButtonListener'] = NativeDialogInterface.OnClickListener.implement({
-                onClick: function(dialogInterface, i) {
+                onClick: function (dialogInterface, i) {
                     cancelCallback && cancelCallback();
                 }
             });
@@ -238,7 +254,7 @@ function SelectablePicker(params) {
     function createDoneButtonListener(doneCallback) {
         if (!_listeners['doneButtonListener']) {
             _listeners['doneButtonListener'] = NativeDialogInterface.OnClickListener.implement({
-                onClick: function(dialogInterface, i) {
+                onClick: function (dialogInterface, i) {
                     let items = _multiSelectEnabled ? _selectedItems : _selectedItems[0];
                     doneCallback && doneCallback({
                         items: items
@@ -252,7 +268,7 @@ function SelectablePicker(params) {
     function createSingleSelectListener() {
         if (!_listeners["singleSelectListener"]) {
             _listeners['singleSelectListener'] = NativeDialogInterface.OnClickListener.implement({
-                onClick: function(dialogInterface, i) {
+                onClick: function (dialogInterface, i) {
                     _onSelected && _onSelected(i, true);
                     _selectedItems[0] = i;
                 }
@@ -264,7 +280,7 @@ function SelectablePicker(params) {
     function createMultiSelectListener() {
         if (!_listeners["multiSelectListener"]) {
             _listeners['multiSelectListener'] = NativeDialogInterface.OnMultiChoiceClickListener.implement({
-                onClick: function(dialogInterface, i, selected) {
+                onClick: function (dialogInterface, i, selected) {
                     _onSelected && _onSelected(i, selected);
                     if (selected) {
                         _selectedItems.push(i);

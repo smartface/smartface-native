@@ -5,6 +5,9 @@ const View = require("../view");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+MaterialTextbox.Events = {...View.Events, ...Events};
 
 const SFMaterialTextBoxWrapper = requireClass("io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
@@ -357,6 +360,17 @@ function MaterialTextbox(params) {
             enumerable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.LeftLayoutRectForBounds]: function() {
+            //iOS Only
+        },
+
+        [Events.RightLayoutRectForBounds]: function() {
+            //iOS Only
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     for (var key in sfTextBox) { //Overrides the textbox properties & methods
         if (key !== "android") {

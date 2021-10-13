@@ -290,7 +290,7 @@ function Page(params) {
     }
     
     EventEmitterCreator(this, EventFunctions);
-    
+
     Object.defineProperty(this, 'currentOrientation', {
         get: function() {
             var tempOrientation;

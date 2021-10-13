@@ -43,7 +43,7 @@
  *     page.layout.addChild(floatingMenu);
  * 
  */
-function FloatingMenu(params) {};
+function FloatingMenu(params) { };
 
 /**
  * Gets/sets array of UI.FloatingMenu.Item of the menu.
@@ -96,36 +96,6 @@ FloatingMenu.prototype.color;
 FloatingMenu.prototype.visible;
 
 /**
- * Gets/sets click event callback function. This function is fired when items array is empty.
- *
- * @since 1.1.10
- * @event onClick
- * @android
- * @ios
- */
-FloatingMenu.prototype.onClick = function() {};
-
-/**
- * Gets/sets open event callback.
- *
- * @since 1.1.10
- * @event onMenuOpen
- * @android
- * @ios
- */
-FloatingMenu.prototype.onMenuOpen = function() {};
-
-/**
- * Gets/sets onMenuClose event callback.
- *
- * @since 1.1.10
- * @event onMenuClose
- * @android
- * @ios
- */
-FloatingMenu.prototype.onMenuClose = function() {};
-
-/**
  * Opens the menu.
  *
  * @since 1.1.10
@@ -133,7 +103,7 @@ FloatingMenu.prototype.onMenuClose = function() {};
  * @android
  * @ios
  */
-FloatingMenu.prototype.open = function() {};
+FloatingMenu.prototype.open = function () { };
 
 /**
  * Closes the menu.
@@ -143,13 +113,13 @@ FloatingMenu.prototype.open = function() {};
  * @android
  * @ios
  */
-FloatingMenu.prototype.close = function() {};
+FloatingMenu.prototype.close = function () { };
 
 /**
  * @class UI.FloatingMenu.Item
  * @since 1.1.10
  */
-FloatingMenu.Item = function() {};
+FloatingMenu.Item = function () { };
 
 /**
  * Gets/sets title.
@@ -182,16 +152,6 @@ FloatingMenu.Item.prototype.icon;
 FloatingMenu.Item.prototype.color;
 
 /**
- * Gets/sets the click callback function. This event will be fired when the item is touched.
- *
- * @event onClick
- * @android
- * @ios
- * @since 1.1.10
- */
-FloatingMenu.Item.prototype.onClick = function() {};
-
-/**
  * Gets/sets color of the title.
  *
  * @property {UI.Color} titleColor
@@ -200,5 +160,117 @@ FloatingMenu.Item.prototype.onClick = function() {};
  * @since 1.1.10
  */
 FloatingMenu.Item.prototype.titleColor;
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+FloatingMenu.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+FloatingMenu.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+FloatingMenu.prototype.emit = function (event, detail) { }
+
+/**
+* Gets/sets the click callback function. This event will be fired when the item is touched.
+*
+* @event onClick
+* @deprecated
+* @android
+* @ios
+* @since 1.1.10
+*/
+FloatingMenu.Item.prototype.onClick = function () { };
+
+/**
+* Gets/sets click event callback function. This function is fired when items array is empty.
+*
+* @since 1.1.10
+* @event onClick
+* @deprecated
+* @android
+* @ios
+*/
+FloatingMenu.prototype.onClick = function () { };
+
+/**
+ * Gets/sets open event callback.
+ *
+ * @since 1.1.10
+ * @event onMenuOpen
+ * @deprecated
+ * @android
+ * @ios
+ */
+FloatingMenu.prototype.onMenuOpen = function () { };
+
+/**
+ * Gets/sets onMenuClose event callback.
+ *
+ * @since 1.1.10
+ * @event onMenuClose
+ * @deprecated
+ * @android
+ * @ios
+ */
+FloatingMenu.prototype.onMenuClose = function () { };
+
+/**
+ * Gets/sets the click callback function. This event will be fired when the item is touched.
+ *
+ * @event onClick
+ * @android
+ * @ios
+ * @since 1.1.10
+ */
+FloatingMenu.Item.Events.Click = "click";
+
+/**
+ * Gets/sets click event callback function. This function is fired when items array is empty.
+ *
+ * @since 1.1.10
+ * @event onClick
+ * @android
+ * @ios
+ */
+FloatingMenu.Events.Click = "click";
+
+/**
+ * Gets/sets open event callback.
+ *
+ * @since 1.1.10
+ * @event onMenuOpen
+ * @android
+ * @ios
+ */
+FloatingMenu.Events.MenuOpen = "menuOpen";
+
+/**
+ * Gets/sets onMenuClose event callback.
+ *
+ * @since 1.1.10
+ * @event onMenuClose
+ * @android
+ * @ios
+ */
+FloatingMenu.Events.MenuClose = "menuClose";
 
 module.exports = FloatingMenu;

@@ -1,5 +1,20 @@
 import View from "../../ui/view";
 
+declare enum IEvents {
+    /**
+     * Set the event callback.
+     *
+     * @event onChange
+     * @param {Object} params
+     * @param {Number} params.event See more: https://github.com/NodeMedia/NodeMediaClient-Android/blob/2.x/docs/NodePlayer_API_CN.md#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83
+     * @param {String} params.message
+     * @android
+     * @ios
+     * @since 4.2.2
+     */
+    Change = "change"
+}
+
 /**
  * @class UI.LiveMediaPlayer
  * @since 4.2.2
@@ -19,7 +34,7 @@ import View from "../../ui/view";
  * 
  */
 
- declare class LiveMediaPlayer extends View {
+ declare class LiveMediaPlayer extends View<IEvents> {
     /**
      * Set whether video is enabled
      *
@@ -114,6 +129,7 @@ import View from "../../ui/view";
      * Set the event callback.
      *
      * @event onChange
+     * @deprecated
      * @param {Object} params
      * @param {Number} params.event See more: https://github.com/NodeMedia/NodeMediaClient-Android/blob/2.x/docs/NodePlayer_API_CN.md#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83
      * @param {String} params.message
@@ -126,7 +142,8 @@ import View from "../../ui/view";
 
 
 declare namespace LiveMediaPlayer {
-
+    const Events: typeof IEvents & typeof View.Events
+    type Events = typeof Events
     /**
      * @enum {Number} UI.LiveMediaPlayer.ScaleType
      * 
