@@ -1,3 +1,11 @@
+const {
+    EventEmitterCreator,
+    EventEmitter
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+MenuItem.Events = {...Events};
+
 function MenuItem(params) {
     var self = this;
 
@@ -22,6 +30,17 @@ function MenuItem(params) {
     self.android = {};
 
     var _style = 0;
+
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            self.onSelected = (state) => {
+                self.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
     Object.defineProperty(self.ios, 'style', {
         get: function() {
             return _style;
