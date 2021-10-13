@@ -21,6 +21,7 @@ const CallDetection  = function() {}
  *
  * @since 4.3.1
  * @event onCallStateChanged
+ * @deprecated
  * @param {Object} params
  * @param {Device.CallDetection.State} state
  * @param {String} incomingNumber Android only parameter
@@ -103,3 +104,44 @@ CallDetection.State.DIALING = "Dialing";
  * @since 4.1.3
  */
 CallDetection.State.CONNECTED = "Connected";
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+ CallDetection.prototype.on = function(event, callback) {}
+ /**
+  * Event to be removed
+  * @param {string} event - Event type to be created
+  * @param {*} callback
+  * @returns {Function} unlistener function. Call it to remove the event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.off = function(event, callback) {}
+ 
+ /**
+  * Event to be emitted
+  * @param {string} event - Event type to be triggered
+  * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+  * @android
+  * @ios
+  */
+CallDetection.prototype.emit = function(event, detail) {}
+
+/**
+ * Triggers when device call state changes.
+ *
+ * @since 4.3.1
+ * @event onCallStateChanged
+ * @param {Object} params
+ * @param {Device.CallDetection.State} state
+ * @param {String} incomingNumber Android only parameter
+ * @android
+ * @ios
+ */
+ CallDetection.Events.CallStateChanged = function onCallStateChanged(params) {}

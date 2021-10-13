@@ -1,5 +1,6 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
+import { IEventEmitter } from "core/eventemitter";
 
 /**
  * @class Device.Sound
@@ -19,8 +20,11 @@ import File from "../../io/file";
  *     mySound.loadURL(your-url);
  * 
  */
-declare class Sound extends NativeComponent {
+declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events> {
     constructor(params?: any);
+    on(eventName: typeof Sound.Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof Sound.Events, callback?: (...args: any) => void): void;
+    emit(event: typeof Sound.Events, detail?: any[]): void;
 /**
  * Checks whether the sound is playing.
  *
@@ -76,6 +80,7 @@ declare class Sound extends NativeComponent {
  * @since 0.1
  * @android
  * @ios
+ * @deprecated
  * @event onReady
  */
     public onReady: () => void;
@@ -86,6 +91,7 @@ declare class Sound extends NativeComponent {
  * @event onFinish
  * @android
  * @ios
+ * @deprecated
  * @since 0.1
  */
 	public onFinish: () => void;
@@ -148,6 +154,27 @@ declare class Sound extends NativeComponent {
 	public loadURL(url: string): void;
 }
 declare namespace Sound {
+    enum Events {
+        /**
+         * Triggered when the sound is ready for playing.
+         * 
+         * @since 0.1
+         * @android
+         * @ios
+         * @event onReady
+         */
+        Ready = "ready",
+        /**
+         * 
+         * Triggered when the sound complited playing.
+         *
+         * @event onFinish
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        Finish = "finish"
+    }
 	export namespace android {
 /**
  * Picks a sound on the device.

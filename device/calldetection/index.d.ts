@@ -1,3 +1,5 @@
+import { IEventEmitter } from "../../core/eventemitter";
+
 /**
  * @class Device.CallDetection
  * @since 4.3.1
@@ -14,7 +16,10 @@
  *     };
  *
  */
-declare class CallDetection {
+declare class CallDetection implements IEventEmitter<typeof CallDetection.Events> {
+    on(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof CallDetection.Events, callback?: (...args: any) => void): void;
+    emit(event: typeof CallDetection.Events, detail?: any[]): void;
     
     /**
      * Triggers when device call state changes.
@@ -26,6 +31,7 @@ declare class CallDetection {
      * @param {String} incomingNumber Android only parameter
      * @android
      * @ios
+     * @deprecated
      */
     onCallStateChanged: (params: { state: CallDetection.State; incomingNumber: string }) => void;
 }
@@ -106,6 +112,21 @@ declare namespace CallDetection {
          * @since 4.1.3
          */
         CONNECTED = "Connected"
+    }
+
+    enum Events {
+        /**
+         * Triggers when device call state changes.
+         *
+         * @since 4.3.1
+         * @event onCallStateChanged
+         * @param {Object} params
+         * @param {Device.CallDetection.State} state
+         * @param {String} incomingNumber Android only parameter
+         * @android
+         * @ios
+         */
+        CallStateChanged = "callStateChanged"
     }
 }
 

@@ -2,6 +2,8 @@ const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Application = require("../../application");
 const Color = require("../../ui/color");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat = requireClass("androidx.core.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
@@ -16,7 +18,25 @@ const ALARM_MANAGER = "android.app.AlarmManager";
 
 var selectedNotificationIds = [];
 
+Notifications.Events = { ...Events };
+
+const EventFunctions = {
+	[Events.NoficationClick]: function () {
+        _onNotificationClick = function (state) {
+			this.emitter.emit(Events.NoficationClick, state);
+		};
+	},
+	[Events.NotificationReceive]: function () {
+        _onNotificationReceive = function (state) {
+			this.emitter.emit(Events.NoficationClick, state);
+		};
+	}
+};
+
+
 function Notifications() { }
+
+EventEmitterCreator(Notifications, EventFunctions);
 
 Notifications.LocalNotification = function (params) {
     var self = this;
