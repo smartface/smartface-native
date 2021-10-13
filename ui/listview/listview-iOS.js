@@ -425,6 +425,149 @@ function ListView(params) {
         }
         self.nativeObject.actionRowRange(2, object.positionStart, object.itemCount, animation);
     };
+
+    const EventFunctions = {
+        [Events.AttachedToWindow]: function() {
+            //Android Only
+
+        },
+        [Events.DetachedFromWindow]: function() {
+            //Android Only
+        },
+        [Events.Gesture]: function() {
+            //Android Only
+        },
+        [Events.PullRefresh]: function() {
+            _onPullRefresh = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.RowBind]: function() {
+            self.onRowBind = function (state) {
+                this.emitter.emit(Events.RowBind, state);
+            } 
+        },
+        [Events.RowCanMove]: function() {
+            _onRowCanMove = function (state) {
+                this.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.RowCanSwipe]: function() {
+            self.onRowCanSwipe = function (state) {
+                this.emitter.emit(Events.RowCanSwipe, state);
+            } 
+        },
+        [Events.RowCreate]: function() {
+            self.onRowCreate = function (state) {
+                this.emitter.emit(Events.RowCreate, state);
+            } 
+        },
+        [Events.RowHeight]: function() {
+            self.onRowHeight = function (state) {
+                this.emitter.emit(Events.RowHeight, state);
+            } 
+        },
+        [Events.RowLongSelected]: function() {
+            //Android Only
+        },
+        [Events.RowMove]: function() {
+            _onRowMove = function (state) {
+                this.emitter.emit(Events.RowMove, state);
+            } 
+        },
+        [Events.RowMoved]: function() {
+            _onRowMoved = function (state) {
+                this.emitter.emit(Events.RowMoved, state);
+            } 
+        },
+        [Events.RowSelected]: function() {
+            self.onRowSelected = function (state) {
+                this.emitter.emit(Events.RowSelected, state);
+            } 
+        },
+        [Events.RowSwipe]: function() {
+            self.onRowSwipe = function (state) {
+                this.emitter.emit(Events.RowSwipe, state);
+            } 
+        },
+        [Events.RowType]: function() {
+            self.onRowType = function (state) {
+                this.emitter.emit(Events.RowType, state);
+            } 
+        },
+        [Events.Scroll]: function() {
+            self.onScroll = function (state) {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            const onScrollBeginDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDecelerating, contentOffset)
+            };
+            nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
+        },
+        [Events.ScrollBeginDragging]: function() {
+            const onScrollBeginDraggingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDragging, contentOffset)
+            };
+            self.ios.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            const onScrollEndDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDecelerating, contentOffset)
+            };
+            nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            const onScrollEndDraggingWillDecelerateHandler = function(scrollView, decelerate) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset)
+
+            };
+            nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = function(scrollView, velocity, targetContentOffset) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                targetContentOffset.x += +scrollView.contentInsetDictionary.left;
+                targetContentOffset.y += +scrollView.contentInsetDictionary.top;
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset, velocity, targetContentOffset);
+            };
+            nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
     
     if (params) {
         for (var param in params) {
