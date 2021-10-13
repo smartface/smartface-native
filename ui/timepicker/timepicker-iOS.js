@@ -1,5 +1,8 @@
 const TypeUtil = require('../../util/type');
 const UIDatePickerMode = require("../../util").UIDatePickerMode;
+const { EventEmitterCreator } = require('../../core/eventemitter');
+const Events = require('./events');
+TimePicker.Events = {...Events};
 
 function TimePicker(params) {
     var self = this;
@@ -19,6 +22,16 @@ function TimePicker(params) {
             minute: time.getMinutes()
         });
     };
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            self.onTimeSelected = function (state) {
+                this.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
 
     self.nativeObject.onSelected = self.onTimeSelectedListener;
 
