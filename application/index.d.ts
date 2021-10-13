@@ -5,6 +5,122 @@ import StatusBar from "./statusbar";
 import Navigationbar from "./android/navigationbar";
 import NavigationbarStyle from "./android/navigationbar/style";
 import SliderDrawer from "../ui/sliderdrawer";
+import { IEventEmitter } from "../core/eventemitter";
+
+declare enum Events {
+  /**
+   * Triggered before exiting application.
+   *
+   * @since 0.1
+   * @event onExit
+   * @android
+   * @ios
+   * @static
+   * @since 0.1
+   */
+  Exit = "exit",
+  /**
+   * Triggered after application bring to foreground state. In Android, it triggered even the user is leaving another activity(even the activities launched by your app).
+   * That means Permissions & derived from Dialog components are makes this callback to triggered.
+   *
+   * @since 0.1
+   * @event onMaximize
+   * @android
+   * @ios
+   * @static
+   * @since 0.1
+   */
+  Maximize = "maximize",
+  /**
+   * Triggered after application bring to background state. Background state means that user is in another app or on the home screen. In Android, it triggered even the user is launching another activity(even the activities launched by your app).
+   * That means Permissions & derived from Dialog components are make this callback to triggered.
+   *
+   * @since 0.1
+   * @event onMinimize
+   * @android
+   * @ios
+   * @static
+   * @since 0.1
+   */
+  Minimize = "minimize",
+  /**
+   * Triggered after a push (remote) notification recieved. This event will be
+   * fired only if application is active and running.
+   *
+   * @event onReceivedNotification
+   * @param {Object} data
+   * @param {Object} data.remote
+   * @param {Object} data.local
+   * @android
+   * @ios
+   * @static
+   * @since 0.1
+   */
+  ReceivedNotification = "receivedNotification",
+  /**
+   * Triggered when unhandelled error occurs.
+   *
+   * @since 1.2
+   * @event onUnhandledError
+   * @param {Object} error
+   * @param {String} error.message
+   * @param {String} error.stack
+   * @android
+   * @ios
+   * @static
+   * @since 1.2
+   */
+  UnhandledError = "unhandledError",
+  /**
+   * Triggered when application is called by another application.
+   * For Android, onApplicationCallReceived will be triggered when
+   * the application started from System Launcher. For this reason,
+   * if data does not contain key that you can handle, you should ignore this call.
+   *
+   * @event onApplicationCallReceived
+   * @param {Object} e
+   * @param {Object} e.data Data sent by application.
+   * @param {String} e.eventType Can be "call" or "callback".
+   * This parameter is available only for Android. For iOS this always returns "call".
+   * For example; Application A calls application B, eventType becomes "call" for application B.
+   * When application B is done its job and application A comes foreground and eventType becomes
+   * "callback" for Android.
+   * @param {Number} e.result This parameter is available only for Android and when eventType is
+   * "callback". Returns Android Activity result code.
+   * @see https://developer.android.com/training/basics/intents/result.html
+   *
+   * @android
+   * @ios
+   * @static
+   * @since 1.1.13
+   * @see https://developer.android.com/training/sharing/receive.html
+   */
+  ApplicationCallReceived = "applicationCallReceived",
+  /**
+   * Triggered when user press back key. The default implementation finishes the application,
+   * but you can override this to do whatever you want.
+   *
+   * @event onBackButtonPressed
+   * @android
+   * @static
+   * @since 3.2.0
+   */
+  BackButtonPressed = "backButtonPressed",
+  /**
+   * This event is called after Application.requestPermissions function. This event is
+   * fired asynchronous way, there is no way to make sure which request is answered.
+   *
+   * @since 1.2
+   * @event onRequestPermissionsResult
+   * @param {Object} e
+   * @param {Number} e.requestCode
+   * @param {Boolean} e.result
+   * @android
+   * @static
+   * @since 1.2
+   */
+  RequestPermissionResult = "requestPermissionResult"
+}
 
 /**
  * @enum {Number} Application.LayoutDirection
@@ -111,7 +227,10 @@ declare enum KeyboardMode {
  *
  * A set of collection for application based properties and methods.
  */
-declare const Application: {
+declare class Application {
+  static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static off(eventName: Events, callback?: (...args: any) => void): void;
+  static emit(event: Events, detail?: any[]): void;
   /**
    * The received bytes from the application.
    *
@@ -122,7 +241,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  byteReceived: number;
+  static byteReceived: number;
   /**
    * The sent bytes from the application
    *
@@ -133,7 +252,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  byteSent: number;
+  static byteSent: number;
   /**
    * Gets/sets sliderDrawer of the Application.
    *
@@ -142,7 +261,7 @@ declare const Application: {
    * @ios
    * @since 3.2.0
    */
-  sliderDrawer: SliderDrawer;
+  static sliderDrawer: SliderDrawer;
 
   /**
    * This property allows you to prevent the screen from going to sleep while your app is active.
@@ -152,7 +271,7 @@ declare const Application: {
    * @ios
    * @since 4.3.1
    */
-  keepScreenAwake: boolean;
+  static keepScreenAwake: boolean;
   /**
    * Exists the application.
    *
@@ -162,7 +281,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  exit: () => void;
+  static exit: () => void;
   /**
    * Restarts the application.
    *
@@ -172,7 +291,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  restart: () => void;
+  static restart: () => void;
 
   /**
    * Set root controller of the application.
@@ -186,7 +305,7 @@ declare const Application: {
    * @static
    * @since 3.2.0
    */
-  setRootController: (controller: Page | NavigationController) => void;
+  static setRootController: (controller: Page | NavigationController) => void;
   /**
    * Launches another application and passes data. For Android, you can open application chooser with
    * isShowChooser parameter and set chooser dialog title with chooserTitle.
@@ -249,7 +368,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  call: (params: {
+  static call: (params: {
     uriScheme?: string;
     data?: {};
     onSuccess?: () => void;
@@ -258,7 +377,7 @@ declare const Application: {
     chooserTitle?: string;
     action?: string;
   }) => void;
-  ios: {
+  static ios: {
     /**
      * The event is called when a user taps a universal link.
      *
@@ -325,9 +444,9 @@ declare const Application: {
    * @readonly
    * @since 3.2.0
    */
-  statusBar: StatusBar;
-  LayoutDirection: LayoutDirection;
-  android: {
+  static statusBar: StatusBar;
+  static LayoutDirection: LayoutDirection;
+  static android: {
     /**
      * Triggered when user press back key. The default implementation finishes the application,
      * but you can override this to do whatever you want.
@@ -335,6 +454,7 @@ declare const Application: {
      * @event onBackButtonPressed
      * @android
      * @static
+     * @deprecated
      * @since 3.2.0
      */
     onBackButtonPressed: () => void;
@@ -365,6 +485,7 @@ declare const Application: {
      * @param {Number} e.requestCode
      * @param {Boolean} e.result
      * @android
+     * @deprecated
      * @static
      * @since 1.2
      */
@@ -414,7 +535,7 @@ declare const Application: {
     packageName: string;
     keyboardMode: KeyboardMode;
   };
-  Android: {
+  static Android: {
     KeyboardMode: typeof KeyboardMode;
     NavigationBar: {
       Style: NavigationbarStyle;
@@ -720,7 +841,7 @@ declare const Application: {
    * @static
    * @since 4.0.2
    */
-  setAppTheme: (theme: string) => void;
+  static setAppTheme: (theme: string) => void;
   /**
    * Checks if there is a new update.
    *
@@ -768,7 +889,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  checkUpdate: typeof RemoteUpdateService.checkUpdate;
+  static checkUpdate: typeof RemoteUpdateService.checkUpdate;
   /**
    * Triggered when unhandelled error occurs.
    *
@@ -777,12 +898,13 @@ declare const Application: {
    * @param {Object} error
    * @param {String} error.message
    * @param {String} error.stack
+   * @deprecated
    * @android
    * @ios
    * @static
    * @since 1.2
    */
-  onUnhandledError: (error: UnhandledError) => void;
+  static onUnhandledError: (error: UnhandledError) => void;
   /**
    * Triggered before exiting application.
    *
@@ -791,9 +913,10 @@ declare const Application: {
    * @android
    * @ios
    * @static
+   * @deprecated
    * @since 0.1
    */
-  onExit(): void;
+  static onExit(): void;
   /**
    * Triggered after a push (remote) notification recieved. This event will be
    * fired only if application is active and running.
@@ -805,9 +928,10 @@ declare const Application: {
    * @android
    * @ios
    * @static
+   * @deprecated
    * @since 0.1
    */
-  onReceivedNotification: (data: {
+  static onReceivedNotification: (data: {
     remote: { [key: string]: any };
     local: { [key: string]: any };
   }) => void;
@@ -832,10 +956,11 @@ declare const Application: {
    * @android
    * @ios
    * @static
+   * @deprecated
    * @since 1.1.13
    * @see https://developer.android.com/training/sharing/receive.html
    */
-  onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
+  static onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
   /**
    * Triggered after application bring to foreground state. In Android, it triggered even the user is leaving another activity(even the activities launched by your app).
    * That means Permissions & derived from Dialog components are makes this callback to triggered.
@@ -845,9 +970,10 @@ declare const Application: {
    * @android
    * @ios
    * @static
+   * @deprecated
    * @since 0.1
    */
-  onMaximize: () => void;
+  static onMaximize: () => void;
   /**
    * Triggered after application bring to background state. Background state means that user is in another app or on the home screen. In Android, it triggered even the user is launching another activity(even the activities launched by your app).
    * That means Permissions & derived from Dialog components are make this callback to triggered.
@@ -857,9 +983,10 @@ declare const Application: {
    * @android
    * @ios
    * @static
+   * @deprecated
    * @since 0.1
    */
-  onMinimize: () => void;
+  static onMinimize: () => void;
   /**
    * This function hides keyboard.
    *
@@ -869,7 +996,7 @@ declare const Application: {
    * @static
    * @since 3.0.1
    */
-  hideKeyboard: () => void;
+  static hideKeyboard: () => void;
   /**
    * The specified release channel within project.json.
    *
@@ -880,7 +1007,7 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  currentReleaseChannel: string;
+  static currentReleaseChannel: string;
   /**
    * The application name within project.json
    *
@@ -892,7 +1019,7 @@ declare const Application: {
    * @deprecated
    * @since 0.1
    */
-  smartfaceAppName: string;
+  static smartfaceAppName: string;
   /**
    * The application name within project.json
    *
@@ -903,7 +1030,7 @@ declare const Application: {
    * @static
    * @since 4.0.7
    */
-  appName: string;
+  static appName: string;
   /**
    * The application version within project.json
    *
@@ -914,7 +1041,8 @@ declare const Application: {
    * @static
    * @since 0.1
    */
-  version: string;
-};
+  static version: string;
+  static Events: typeof Events;
+}
 
 export = Application;
