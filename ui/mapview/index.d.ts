@@ -3,6 +3,16 @@ import Color from "../color";
 import Font from "../font";
 import PinKlass from "./pin";
 import Pin from "./pin";
+
+declare enum MapViewEvents {
+	CameraMoveEnded = "cameraMoveEnded",
+  CameraMoveStarted = "cameraMoveStarted",
+  ClusterPress = "clusterPress",
+  Create = "create",
+  LongPress = "longPress",
+  Press = "press"
+}
+
 /**
  * @class UI.MapView
  * @since 0.1
@@ -41,7 +51,7 @@ import Pin from "./pin";
  *     myPage.layout.addChild(myMapView);
  *
  */
-declare class MapView extends View {
+declare class MapView extends View<MapViewEvents> {
 	/**
 	 * Enables/Disables scroll gestures so that map can be dragged.
 	 *
@@ -364,6 +374,7 @@ declare class MapView extends View {
 	 * @param {Object} location
 	 * @param {Number} location.latitude
 	 * @param {Number} location.longitude
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 1.1.3
@@ -373,48 +384,9 @@ declare class MapView extends View {
 		longitude: number;
 	}) => void;
 	/**
-	 * onTouch event
-	 *
-	 * @event onTouch
-	 * @android
-	 * @ios
-	 * @removed
-	 * @since 2.0.9
-	 */
-	onTouch: () => void;
-	/**
-	 * onTouchEnded event
-	 *
-	 * @event onTouchEnded
-	 * @android
-	 * @ios
-	 * @removed
-	 * @since 2.0.9
-	 */
-	onTouchEnded: () => void;
-	/**
-	 * onTouchCancelled event
-	 *
-	 * @event onTouchCancelled
-	 * @android
-	 * @ios
-	 * @removed
-	 * @since 2.0.9
-	 */
-	onTouchCancelled: () => void;
-	/**
-	 * onTouchMoved event
-	 *
-	 * @event onTouchMoved
-	 * @android
-	 * @ios
-	 * @removed
-	 * @since 2.0.9
-	 */
-	onTouchMoved: () => void;
-	/**
 	 * This event is called when map is ready to be used.
 	 *
+	 * @deprecated
 	 * @since 0.1
 	 * @event onCreate
 	 * @android
@@ -424,6 +396,7 @@ declare class MapView extends View {
 	/**
 	 * Gets/Sets map type
 	 *
+	 * @deprecated
 	 * @property {UI.MapView.Type} [type = UI.MapView.Type.NORMAL]
 	 * @android
 	 * @ios
@@ -433,14 +406,8 @@ declare class MapView extends View {
 }
 
 declare namespace MapView {
-	/**
-	 * This event will be fired when the pin is touched.
-	 *
-	 * @event onPress
-	 * @android
-	 * @ios
-	 * @since 1.1.2
-	 */
+	const Events: typeof MapViewEvents & typeof View.Events
+  type Events = typeof Events
 	class Pin extends PinKlass { 
 		constructor(params?: { location?: { latitude: number, longitude: number }, title?: string })
 	}

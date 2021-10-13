@@ -228,6 +228,7 @@ WebView.prototype.evaluateJS = function(javascript, onReceive) {};
  * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
  *
  * @event onChangedURL
+ * @deprecated
  * @param {Object} event
  * @param {String} event.url
  * @return {Boolean}
@@ -243,6 +244,7 @@ WebView.prototype.onChangedURL = function(event) {};
  * navigating back to pervious web pages.
  *
  * @event onBackButtonPressed
+ * @deprecated
  * @android
  * @since 3.2.1
  */
@@ -253,6 +255,7 @@ WebView.prototype.onBackButtonPressed = function() {};
  * framesets will call onLoad one time for the main frame. 
  *
  * @event onLoad
+ * @deprecated
  * @param {Object} event
  * @param {String} event.url
  * @android
@@ -270,6 +273,7 @@ WebView.prototype.onLoad = function(event) {};
  *     };
  * 
  * @event onOpenNewWindow
+ * @deprecated
  * @param {Object} event
  * @param {String} event.url
  * @ios
@@ -281,6 +285,7 @@ WebView.prototype.onOpenNewWindow = function(event) {};
  * Callback triggered when an error occured while loading a web page.
  *
  * @event onError
+ * @deprecated
  * @param {Object} event
  * @param {String} event.url
  * @param {Number} event.code
@@ -296,6 +301,7 @@ WebView.prototype.onError = function(event) {};
  * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point. 
  *
  * @event onShow
+ * @deprecated
  * @param {Object} event
  * @param {String} event.url
  * @android
@@ -309,6 +315,7 @@ WebView.prototype.onShow = function(event) {};
  * Report a JavaScript console message to the host application.
  *
  * @event onConsoleMessage
+ * @deprecated
  * @param {Object} params
  * @param {Number} params.sourceId     The name of the source file that caused the error.
  * @param {String} params.message      The error message to report.
@@ -318,6 +325,104 @@ WebView.prototype.onShow = function(event) {};
  * @since 4.0.4
  */
 WebView.prototype.onConsoleMessage = function(params) {};
+
+
+/**
+ * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
+ *
+ * @event onChangedURL
+ * @param {Object} event
+ * @param {String} event.url
+ * @return {Boolean}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ WebView.Events.ChangedURL = "changedURL";
+
+ /**
+  * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
+  * event begin to trigger. The purpose of using this event might be
+  * navigating back to pervious web pages.
+  *
+  * @event onBackButtonPressed
+  * @android
+  * @since 3.2.1
+  */
+ WebView.Events.BackButtonPressed = "backButtonPressed";
+ 
+ /**
+  * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or 
+  * framesets will call onLoad one time for the main frame. 
+  *
+  * @event onLoad
+  * @param {Object} event
+  * @param {String} event.url
+  * @android
+  * @ios
+  * @since 0.1
+  */
+ WebView.Events.Load = "load";
+ 
+ /**
+  * Callback triggered when the target equals to _blank. That means open new window.
+  *
+  *     @example
+  *     myWebView.ios.onOpenNewWindow = function(event) {
+  *         myWebView.loadURL(event.url);
+  *     };
+  * 
+  * @event onOpenNewWindow
+  * @param {Object} event
+  * @param {String} event.url
+  * @ios
+  * @since 4.0.1
+  */
+ WebView.Events.OpenNewWindow = "openNewWindow";
+ 
+ /**
+  * Callback triggered when an error occured while loading a web page.
+  *
+  * @event onError
+  * @param {Object} event
+  * @param {String} event.url
+  * @param {Number} event.code
+  * @param {String} event.message
+  * @android
+  * @ios
+  * @since 0.1
+  */
+ WebView.Events.Error = "error";
+ 
+ /**
+  * Callback triggered when a web page has finished loading. In Android, this method is called only for main frame. Receiving an onShow callback
+  * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point. 
+  *
+  * @event onShow
+  * @param {Object} event
+  * @param {String} event.url
+  * @android
+  * @ios
+  * @since 0.1
+  */
+ WebView.Events.Show = "show";
+ 
+ 
+ /**
+  * Report a JavaScript console message to the host application.
+  *
+  * @event onConsoleMessage
+  * @param {Object} params
+  * @param {Number} params.sourceId     The name of the source file that caused the error.
+  * @param {String} params.message      The error message to report.
+  * @param {String} params.lineNumber   The line number of the error.
+  * @param {String} params.messageLevel The message level of the report
+  * @android
+  * @since 4.0.4
+  */
+ WebView.Events.ConsoleMessage = "consoleMessage";
+ 
+
 
 /**
  * Clears the resource cache.

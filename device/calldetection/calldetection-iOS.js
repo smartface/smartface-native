@@ -1,5 +1,17 @@
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
+
+CallDetection.Events = { ...Events };
 function CallDetection() { 
     const self = this;
+    const EventFunctions = {
+        [Events.CallStateChanged]: function() {
+            this.onCallStateChanged = function (state) {
+                this.emitter.emit(Events.CallStateChanged, state);
+            } 
+        }
+    };
+    EventEmitterCreator(this, EventFunctions);
     this.callObserverDelegate = new __SF_CallObserverDelegate();
     this.callObserverDelegate.callObserverCallChanged = (observer, call) => {
         let state;

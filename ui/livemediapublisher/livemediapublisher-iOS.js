@@ -1,6 +1,7 @@
+const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
 const Events = require('./events');
-
+LiveMediaPublisher.Events = {...View.Events, ...Events};
 LiveMediaPublisher.prototype = Object.create(View.prototype)
 
 function LiveMediaPublisher(params) {
@@ -196,26 +197,12 @@ function LiveMediaPublisher(params) {
 
     const EventFunctions = {
         [Events.Change]: function() {
-            _onChange = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
+            _onChange = (state) => {
+                this.emitter.emit(Events.Change, state);
             } 
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-    
+    EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

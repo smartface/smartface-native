@@ -1,6 +1,8 @@
+const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Events = require('./events');
+LiveMediaPublisher.Events = { ...View.Events, ...Events };
 
 const SFLiveMediaPublisherDelegate = requireClass("io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPublisherDelegate")
 const NodeCameraView = requireClass("cn.nodemedia.NodeCameraView");
@@ -22,10 +24,10 @@ function LiveMediaPublisher(params) {
     // set default values for video property.
     // If the this.nodePublisher.setVideoParam method is not called,  video streaming does not start.
     this.nodePublisher.setVideoParam(12, 400000, 1, 15, false);
-    
+
     this.nodePublisher.setNodePublisherDelegate(new SFLiveMediaPublisherDelegate({
         onEventCallback: function (event, message) {
-            _onChange && _onChange({event, message});
+            _onChange && _onChange({ event, message });
         }
     }));
 
@@ -38,7 +40,7 @@ function LiveMediaPublisher(params) {
             },
             set: (callback) => {
                 _onChange = callback;
-                
+
             },
             enumerable: true
         },
@@ -68,7 +70,7 @@ function LiveMediaPublisher(params) {
             },
             set: (options) => {
                 _videoOptions = options;
-                let {preset = 12, bitrate = 400000, profile = 1, fps = 15, videoFrontMirror = false} = options;
+                let { preset = 12, bitrate = 400000, profile = 1, fps = 15, videoFrontMirror = false } = options;
                 this.nodePublisher.setVideoParam(preset, fps, bitrate, profile, videoFrontMirror);
             },
             enumerable: true
@@ -79,7 +81,7 @@ function LiveMediaPublisher(params) {
             },
             set: (options) => {
                 _cameraOptions = options;
-                let {cameraId = 1, cameraFrontMirror = true} = options;
+                let { cameraId = 1, cameraFrontMirror = true } = options;
                 this.nodePublisher.setCameraPreview(this.nativeObject, cameraId, cameraFrontMirror);
             },
             enumerable: true
@@ -90,13 +92,13 @@ function LiveMediaPublisher(params) {
             },
             set: (options) => {
                 _audioOptions = options;
-                let {bitrate= 32000, profile= 1, samplerate= 44100} = options;
+                let { bitrate = 32000, profile = 1, samplerate = 44100 } = options;
                 this.nodePublisher.setAudioParam(bitrate, profile, samplerate);
             },
             enumerable: true
         },
         'outputUrl': {
-            get: function() {
+            get: function () {
                 return _outputUrl;
             },
             set: (url) => {
@@ -106,7 +108,7 @@ function LiveMediaPublisher(params) {
             enumerable: true
         },
         'flashEnabled': {
-            get: function() {
+            get: function () {
                 return _flashEnabled;
             },
             set: (value) => {
@@ -116,42 +118,42 @@ function LiveMediaPublisher(params) {
             enumerable: true
         },
         'start': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.start();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'stop': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.stop();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'release': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.release();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'startPreview': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.startPreview();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'stopPreview': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.stopPreview();
             },
             enumerable: true,
             configurable: true
-        }, 
+        },
         'switchCamera': {
-            value: function() {
+            value: function () {
                 this.nodePublisher.switchCamera();
             },
             enumerable: true,
@@ -160,27 +162,13 @@ function LiveMediaPublisher(params) {
     });
 
     const EventFunctions = {
-        [Events.Change]: function() {
+        [Events.Change]: function () {
             _onChange = function (state) {
-                this.emitter.emit(Events.CallStateChanged, state);
-            } 
+                this.emitter.emit(Events.Change, state);
+            }
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-    
+    EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

@@ -4,12 +4,70 @@ const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("../net/http");
 const Network = require('../device/network');
+const { EventEmitterCreator } = require("../core/eventemitter");
+const Events = require('./events');
 
 const NativeSpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
+
+
+
+const EventFunctions = {
+    [Events.ApplicationCallReceived]: () => {
+        Application.onApplicationCallReceived = (e) => {
+            ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
+        };
+    },
+    [Events.BackButtonPressed]: () => {
+        _onBackButtonPressed = (e) => {
+            ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
+        }
+    },
+    [Events.Exit]: () => {
+        _onExit = (e) => {
+            ApplicationWrapper.emitter.emit(Events.Exit, e);
+        };
+    },
+    [Events.Maximize]: () => {
+        _onMaximize = (e) => {
+            ApplicationWrapper.emitter.emit(Events.Maximize, e);
+        };
+    },
+    [Events.Minimize]: () => {
+        _onMinimize = (e) => {
+            ApplicationWrapper.emitter.emit(Events.Minimize, e);
+        };
+    },
+    [Events.ReceivedNotification]: () => {
+        _onReceivedNotification = (e) => {
+            ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
+        };
+    },
+    [Events.RequestPermissionResult]: () => {
+        _onRequestPermissionsResult = (e) => {
+            ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
+        }
+    },
+    [Events.UnhandledError]: () => {
+        Application.onUnhandledError = (e) => {
+            ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
+        };
+    }
+}
+
+ApplicationWrapper.Events = { ...Events };
+EventEmitterCreator(ApplicationWrapper, EventFunctions);
+
+Object.defineProperty(ApplicationWrapper, 'on', {
+    value: (event, callback) => {
+        EventFunctions[event].call(ApplicationWrapper);
+        ApplicationWrapper.emitter.on(event, callback);
+    },
+    configurable: true
+});
 
 //InputMethodManager to close softinput keyboard
 const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../util/Android/systemservices');

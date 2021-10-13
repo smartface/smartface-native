@@ -375,6 +375,119 @@ function GridView(params) {
         enumerable: true
     });
 
+    const EventFunctions = {
+        [Events.AttachedToWindow]: function() {
+            //Android Only
+
+        },
+        [Events.DetachedFromWindow]: function() {
+            //Android Only
+        },
+        [Events.Gesture]: function() {
+            //Android Only
+        },
+        [Events.PullRefresh]: function() {
+            sfSelf.onPullRefresh = function (state) {
+                sfSelf.emitter.emit(Events.PullRefresh, state);
+            } 
+        },
+        [Events.ItemBind]: function() {
+            sfSelf.onItemBind = function (state) {
+                sfSelf.emitter.emit(Events.ItemBind, state);
+            } 
+        },
+        [Events.ItemCreate]: function() {
+            sfSelf.onItemCreate = function (state) {
+                sfSelf.emitter.emit(Events.ItemCreate, state);
+            } 
+        },
+        [Events.ItemLongSelected]: function() {
+            //Android Only
+        },
+        [Events.ItemSelected]: function() {
+            _onItemSelected = function (state) {
+                this.emitter.emit(Events.ItemSelected, state);
+            } 
+        },
+        [Events.ItemType]: function() {
+            sfSelf.onItemType = function (state) {
+                sfSelf.emitter.emit(Events.ItemType, state);
+            } 
+        },
+        [Events.Scroll]: function() {
+            sfSelf.onScroll = function (state) {
+                this.emitter.emit(Events.Scroll, state);
+            } 
+        },
+        [Events.ScrollBeginDecelerating]: function() {
+            const onScrollBeginDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDecelerating, contentOffset)
+            };
+            nativeObject.onScrollBeginDecelerating = onScrollBeginDeceleratingHandler;
+        },
+        [Events.ScrollBeginDragging]: function() {
+            const onScrollBeginDraggingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollBeginDragging, contentOffset)
+            };
+            self.ios.nativeObject.onScrollViewWillBeginDragging = onScrollBeginDraggingHandler;
+        },
+        [Events.ScrollEndDecelerating]: function() {
+            const onScrollEndDeceleratingHandler = function(scrollView) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDecelerating, contentOffset)
+            };
+            nativeObject.onScrollEndDecelerating = onScrollEndDeceleratingHandler;
+        },
+        [Events.ScrollEndDraggingWillDecelerate]: function() {
+            const onScrollEndDraggingWillDecelerateHandler = function(scrollView, decelerate) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset)
+
+            };
+            nativeObject.onScrollViewDidEndDraggingWillDecelerate = onScrollEndDraggingWillDecelerateHandler;
+        },
+        [Events.ScrollEndDraggingWithVelocityTargetContentOffset]: function() {
+            const onScrollEndDraggingWithVelocityTargetContentOffsetHandler = function(scrollView, velocity, targetContentOffset) {
+                const contentOffset = {
+                    x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+                    y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+                };
+                targetContentOffset.x += +scrollView.contentInsetDictionary.left;
+                targetContentOffset.y += +scrollView.contentInsetDictionary.top;
+                this.emitter.emit(Events.ScrollEndDraggingWillDecelerate, contentOffset, velocity, targetContentOffset);
+            };
+            nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
+        }
+    }
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            if (typeof EventFunctions[event] === 'function') {
+                EventFunctions[event].call(this);
+                this.emitter.on(event, callback);
+            }
+            else {
+                parentOnFunction(event, callback);
+            }
+        },
+        configurable: true
+    });
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if (params) {

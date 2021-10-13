@@ -28,7 +28,7 @@
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-function Picker() {}
+function Picker() { }
 
 /**
  * Gets/sets items of the picker.
@@ -94,11 +94,23 @@ Picker.prototype.currentIndex = 0;
  *
  * @param {Number} index
  * @event onSelected
+ * @deprecated
  * @android
  * @ios
  * @since 0.1
  */
 Picker.prototype.onSelected = function onSelected(index) {};
+
+/**
+ * This event is called when scroll ends & an item is selected on a picker.
+ *
+ * @param {Number} index
+ * @event onSelected
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.Events.Selected = "selected";
 
 /**
  * This function shows picker in a dialog.
@@ -112,7 +124,7 @@ Picker.prototype.onSelected = function onSelected(index) {};
  * @ios
  * @since 0.1
  */
-Picker.prototype.show = function(ok, cancel) {};
+Picker.prototype.show = function (ok, cancel) { };
 
 /**
  * Gets/sets title of the picker. This property only works with show method. Must set before show method.

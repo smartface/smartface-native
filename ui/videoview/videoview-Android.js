@@ -6,6 +6,8 @@ const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 const NativeVideoView = requireClass('io.smartface.android.sfcore.ui.videoview.SFVideoView')
 const NativePlayer = requireClass('com.google.android.exoplayer2.Player');
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+VideoView.Events = {...View.Events, ...Events };
 
 VideoView.prototype = Object.create(View);
 function VideoView(params) {
@@ -294,12 +296,14 @@ function VideoView(params) {
         [Events.Finish]: function() {
             _onFinish = (state) => {
                 this.emitter.emit(Events.Finish, state);
-            } 
+            }
+            this.nativeInner.setOnFinish(_onFinish);
         },
         [Events.Ready]: function() {
             _onReady = (state) => {
                 this.emitter.emit(Events.Ready, state);
             } 
+            this.nativeInner.setOnReady(_onReady);
         },
         [Events.DidStartPictureInPicture]: function() {
             //iOS Only
@@ -317,20 +321,7 @@ function VideoView(params) {
             //iOS Only
         },
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

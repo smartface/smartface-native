@@ -1,3 +1,6 @@
+const { EventEmitterCreator } = require("../core/eventemitter");
+const Events = require('./events');
+
 //Application Direction Manager (RTL Support)
 (function() {
     var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
@@ -14,7 +17,47 @@ var _rootPage;
 var _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
+const EventFunctions = {
+    [Events.ApplicationCallReceived]: () => {
+        Application.onApplicationCallReceived = (e) => {
+            SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+        };
+    },
+    [Events.BackButtonPressed]: () => {
+        // Android only
+    },
+    [Events.Exit]: () => {
+        Application.onExit = (e) => {
+            SFApplication.emitter.emit(Events.Exit, e);
+        };
+    },
+    [Events.Maximize]: () => {
+        Application.onMaximize = (e) => {
+            SFApplication.emitter.emit(Events.Maximize, e);
+        };
+    },
+    [Events.Minimize]: () => {
+        Application.onMinimize = (e) => {
+            SFApplication.emitter.emit(Events.Minimize, e);
+        };
+    },
+    [Events.ReceivedNotification]: () => {
+        Application.onReceivedNotification = (e) => {
+            SFApplication.emitter.emit(Events.ReceivedNotification, e);
+        };
+    },
+    [Events.RequestPermissionResult]: () => {
+        // Android only
+    },
+    [Events.UnhandledError]: () => {
+        Application.onUnhandledError = (e) => {
+            SFApplication.emitter.emit(Events.UnhandledError, e);
+        };
+    }
+}
 var SFApplication = {};
+SFApplication.Events = { ...Events };
+EventEmitterCreator(SFApplication, EventFunctions);
 
 Object.defineProperty(SFApplication, 'byteReceived', {
     get: function() {

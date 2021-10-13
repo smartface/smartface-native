@@ -7,6 +7,25 @@ import Color from "../color";
 import View from "../view";
 import { Point2D } from "../../primitive/point2d";
 
+declare enum GridViewEvents {
+  AttachedToWindow = "attachedToWindow",
+  DetachedFromWindow = "detachedFromWindow",
+  Gesture = "gesture",
+  PullRefresh = "pullRefresh",
+  ItemBind = "itemBind",
+  ItemCreate = "itemCreate",
+  ItemLongSelected = "itemLongSelected",
+  ItemSelected = "itemSelected",
+  ItemType = "itemType",
+  Scroll = "scroll",
+  ScrollBeginDecelerating = "scrollBeginDecelerating",
+  ScrollBeginDragging = "scrollBeginDragging",
+  ScrollEndDecelerating = "scrollEndDecelerating",
+  ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate",
+  ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset",
+  ScrollStateChanged = "scrollStateChanged"
+}
+
 /**
  * @class UI.GridView
  * @since 3.0.2
@@ -486,6 +505,8 @@ declare class GridView extends View {
 
 
 declare namespace GridView {
+    const Events: typeof GridViewEvents & typeof View.Events
+    type Events = typeof Events
     /**
      * Android Specific Properties.
      * @class UI.GridView.Android

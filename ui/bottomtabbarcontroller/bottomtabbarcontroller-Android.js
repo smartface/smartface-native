@@ -3,6 +3,12 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
 const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 const BottomTabBar = require("../../ui/bottomtabbar");
+const {
+    EventEmitterCreator
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+BottomTabBarController.Events = {...Events};
 
 const NativeBottomNavigationView = requireClass("com.google.android.material.bottomnavigation.BottomNavigationView");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
@@ -93,6 +99,22 @@ function BottomTabBarController(params) {
             enumerable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.SelectByIndex]: function() {
+            _didSelectByIndexCallback = (index) => {
+                this.emitter.emit(Events.SelectByIndex, index);
+            } 
+        },
+        [Events.ShouldSelectByIndex]: function() {
+            _shouldSelectByIndexCallback = (index) => {
+                this.emitter.emit(Events.ShouldSelectByIndex, index);
+                return index;
+            } 
+        },
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
 
     this.addTabBarToActivity = function() {
         if (!_disabledShiftingMode) {
