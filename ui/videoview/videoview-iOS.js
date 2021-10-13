@@ -4,6 +4,7 @@ const TypeUtil = require("../../util/type");
 const Events = require('./events');
 const { EventEmitterCreator } = require('../../core/eventemitter');
 VideoView.Events = { ...View.Events, ...Events };
+
 // const VideoView = extend(View)(
 VideoView.prototype = Object.create(View.prototype);
 function VideoView(params) {

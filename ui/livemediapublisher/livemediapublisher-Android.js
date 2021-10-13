@@ -169,7 +169,6 @@ function LiveMediaPublisher(params) {
         }
     }
     EventEmitterCreator(this, EventFunctions);
-
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

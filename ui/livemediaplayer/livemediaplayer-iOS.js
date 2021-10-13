@@ -1,6 +1,7 @@
 const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
 const Events = require('./events');
+
 LiveMediaPlayer.Events = { ...View.Events, ...Events };
 
 LiveMediaPlayer.prototype = Object.create(View.prototype)

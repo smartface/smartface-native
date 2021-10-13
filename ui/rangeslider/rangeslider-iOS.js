@@ -1,6 +1,9 @@
 const View = require('../view');
 const UIControlEvents = require("../../util").UIControlEvents;
 const Color = require("../../ui/color");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+RangeSlider.Events = {...View.Events, ...Events};
 
 RangeSlider.prototype = Object.create(View.prototype);
 function RangeSlider(params) {
@@ -200,6 +203,15 @@ function RangeSlider(params) {
 		},
 		enumerable: true
 	});
+
+	const EventFunctions = {
+		[Events.ValueChange]: function() {
+				_onValueChange = (state) => {
+					this.emitter.emit(Events.ValueChange, state);
+				} 
+		}
+	}
+	EventEmitterCreator(this, EventFunctions);
 
 	Object.defineProperty(self, 'isTrackRounded', {
 		get: function() {

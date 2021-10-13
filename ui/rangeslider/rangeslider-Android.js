@@ -3,6 +3,9 @@ const View = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+RangeSlider.Events = {...View.Events, ...Events};
 
 RangeSlider.prototype = Object.create(View.prototype);
 function RangeSlider(params) {
@@ -120,6 +123,21 @@ function RangeSlider(params) {
             }
         }
     });
+
+    const EventFunctions = {
+        [Events.ValueChange]: function() {
+            _onValueChange = (state) => {
+                this.emitter.emit(Events.ValueChange, state);
+            }
+            this.nativeObject.setOnValueChange({
+                onValueChange: function(leftPinValue, rightPinValue){
+                    let param = _rangeEnabled ? [leftPinValue, rightPinValue] : [rightPinValue];
+                    _onValueChange && _onValueChange(param);
+                }
+            });
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     let _thumbSize = 5, _thumbColor, _thumbBorderColor,
         _thumbBorderWidth, _trackColor, _outerTrackColor,

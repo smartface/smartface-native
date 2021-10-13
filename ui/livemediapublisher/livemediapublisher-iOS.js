@@ -197,13 +197,12 @@ function LiveMediaPublisher(params) {
 
     const EventFunctions = {
         [Events.Change]: function() {
-            _onChange = function (state) {
+            _onChange = (state) => {
                 this.emitter.emit(Events.Change, state);
             } 
         }
     }
     EventEmitterCreator(this, EventFunctions);
-
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
