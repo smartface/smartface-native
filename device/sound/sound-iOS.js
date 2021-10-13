@@ -1,9 +1,25 @@
 const File = require("../../io/file");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
+
+
 
 function Sound() {
-
     var self = this;
 
+    const EventFunctions = {
+        [Events.Ready]: () => {
+            this.onReady = function (state) {
+                this.emitter.emit(Events.Ready, state);
+            }
+        },
+        [Events.Finish]: () => {
+            this.onFinish = function (state) {
+                this.emitter.emit(Events.Finish, state);
+            }
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
     self.android = {};
 
     self.loadURL = function(value) {
@@ -89,6 +105,13 @@ function Sound() {
             self.nativeObject.volume = value;
         },
         enumerable: true
+    });
+
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     self.addCallbackFunction = function() {

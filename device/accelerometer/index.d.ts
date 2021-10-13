@@ -1,3 +1,21 @@
+import { IEventEmitter } from "../../core/eventemitter";
+
+declare enum Events {
+  /**
+   * Callback to capture accelerometer events.
+   * 
+   * @since 0.1
+   * @event onAccelerate
+   * @param {Object} event
+   * @param {Number} event.x
+   * @param {Number} event.y
+   * @param {Number} event.z
+   * @android
+   * @ios
+   */
+  Accelerate = 'accelerate'
+}
+
 /**
  * @class Device.Accelerometer
  * @since 0.1
@@ -16,46 +34,51 @@
  * 
  */
 declare class Accelerometer {
-/**
- * Starts capturing accelerometer values.
- * 
- * @method start
- * @android
- * @ios
- * @since 0.1
- */
+  static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static off(eventName: Events, callback?: (...args: any) => void): void;
+  static emit(event: Events, detail?: any[]): void;
+  /**
+   * Starts capturing accelerometer values.
+   * 
+   * @method start
+   * @android
+   * @ios
+   * @since 0.1
+   */
   static start: () => void;
-/**
- * Stops capturing.
- * 
- * @method stop
- * @android
- * @ios
- * @since 0.1
- */
+  /**
+   * Stops capturing.
+   * 
+   * @method stop
+   * @android
+   * @ios
+   * @since 0.1
+   */
   static stop: () => void;
-/**
- * Callback to capture accelerometer events.
- * 
- * @since 0.1
- * @event onAccelerate
- * @param {Object} event
- * @param {Number} event.x
- * @param {Number} event.y
- * @param {Number} event.z
- * @android
- * @ios
- */
+  /**
+   * Callback to capture accelerometer events.
+   * 
+   * @since 0.1
+   * @event onAccelerate
+   * @param {Object} event
+   * @param {Number} event.x
+   * @param {Number} event.y
+   * @param {Number} event.z
+   * @android
+   * @ios
+   * @deprecated
+   */
   static onAccelerate: (e: {x:number, y: number, z: number}) => void;
 
-/**
- * The interval, in millisecond, for providing accelerometer updates to the block handler.
- * 
- * @property {Number} [accelerometerUpdateInterval = 100]
- * @ios
- * @since 4.0.2
- */
+  /**
+   * The interval, in millisecond, for providing accelerometer updates to the block handler.
+   * 
+   * @property {Number} [accelerometerUpdateInterval = 100]
+   * @ios
+   * @since 4.0.2
+   */
   static accelerometerUpdateInterval: number;
+  static Events: typeof Events;
 }
 
 export = Accelerometer;

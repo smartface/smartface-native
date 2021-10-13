@@ -3,9 +3,9 @@
  * @since 0.1
  * @android
  * @ios
- * 
+ *
  * Controls sound files.
- * 
+ *
  *     @example
  *     const Sound = require("@smartface/native/device/sound");
  *     var mySound = new Sound();
@@ -14,7 +14,7 @@
  *     };
  *     mySound.isLooping = true;
  *     mySound.loadURL(your-url);
- * 
+ *
  */
 function Sound() {}
 
@@ -72,7 +72,6 @@ Sound.prototype.totalDuration;
  */
 Sound.prototype.currentDuration;
 
-
 /**
  * Loads the source. {@link Application.Android.Permissions#READ_EXTERNAL_STORAGE} permission is required to load local files.
  *
@@ -82,7 +81,7 @@ Sound.prototype.currentDuration;
  * @ios
  * @since 0.1
  */
-Sound.prototype.loadFile = function(file) {};
+Sound.prototype.loadFile = function (file) {};
 
 /**
  * Loads the source.
@@ -93,7 +92,7 @@ Sound.prototype.loadFile = function(file) {};
  * @ios
  * @since 0.1
  */
-Sound.prototype.loadURL = function(url) {};
+Sound.prototype.loadURL = function (url) {};
 
 /**
  * Seeks to specified time position.
@@ -104,7 +103,7 @@ Sound.prototype.loadURL = function(url) {};
  * @ios
  * @since 0.1
  */
-Sound.prototype.seekTo = function(milliseconds) {};
+Sound.prototype.seekTo = function (milliseconds) {};
 
 /**
  * plays the sound.
@@ -114,7 +113,7 @@ Sound.prototype.seekTo = function(milliseconds) {};
  * @ios
  * @since 0.1
  */
-Sound.prototype.play = function() {};
+Sound.prototype.play = function () {};
 
 /**
  * Pauses the sound.
@@ -124,7 +123,7 @@ Sound.prototype.play = function() {};
  * @ios
  * @since 0.1
  */
-Sound.prototype.pause = function() {};
+Sound.prototype.pause = function () {};
 
 /**
  * Stops the sound.
@@ -134,12 +133,13 @@ Sound.prototype.pause = function() {};
  * @ios
  * @since 0.1
  */
-Sound.prototype.stop = function() {};
+Sound.prototype.stop = function () {};
 
 /**
  * Triggered when the sound is ready for playing.
- * 
+ *
  * @since 0.1
+ * @deprecated
  * @android
  * @ios
  * @event onReady
@@ -147,10 +147,11 @@ Sound.prototype.stop = function() {};
 Sound.prototype.onReady = function onReady() {};
 
 /**
- * 
+ *
  * Triggered when the sound complited playing.
  *
  * @event onFinish
+ * @deprecated
  * @android
  * @ios
  * @since 0.1
@@ -161,11 +162,11 @@ Sound.android = {};
 
 /**
  * Picks a sound on the device.
- * 
+ *
  *     @example
  *     const Sound = require("@smartface/native/device/sound");
  *     Sound.android.pick({onSuccess: soundPicked});
- * 
+ *
  *     function soundPicked(e) {
  *         if(!e.sound.isPlaying)
  *             e.sound.play();
@@ -175,14 +176,62 @@ Sound.android = {};
  * @param {Object} params Object describing function parameters.
  * @param {UI.Page} params.page (required since 1.1.8)
  * @param {Function} params.onSuccess Callback for success situation.
- * @param {Object} params.onSuccess.param 
- * @param {Device.Sound} params.onSuccess.param.sound 
+ * @param {Object} params.onSuccess.param
+ * @param {Device.Sound} params.onSuccess.param.sound
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @static
  * @android
  * @since 1.1.8
  */
-Sound.android.pick = function(params) {};
+Sound.android.pick = function (params) {};
 
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Sound.prototype.on = function (event, callback) {};
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Sound.prototype.off = function (event, callback) {};
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+Sound.prototype.emit = function (event, detail) {};
+
+/**
+ * Triggered when the sound is ready for playing.
+ *
+ * @since 0.1
+ * @android
+ * @ios
+ * @event onReady
+ */
+Sound.Events.Ready = function onReady() {};
+
+/**
+ *
+ * Triggered when the sound complited playing.
+ *
+ * @event onFinish
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Sound.Events.Finish = function onFinish(e) {};
 
 module.exports = Sound;
