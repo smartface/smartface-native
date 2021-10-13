@@ -1,4 +1,6 @@
 const View = require('../view');
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const UIControlEvents = require("../../util").UIControlEvents;
 const Image = require('../../ui/image');
@@ -30,6 +32,7 @@ function ListView(params) {
     }
 
     View.apply(this);
+    EventEmitterCreator(this, EventFunctions);
 
     UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 

@@ -7,6 +7,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
@@ -17,7 +18,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 ListView.prototype = Object.create(View.prototype);
 function ListView(params) {
     var self = this;
-
+    EventEmitterCreator(this, EventFunctions);
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
     }
