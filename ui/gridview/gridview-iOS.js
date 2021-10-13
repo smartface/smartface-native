@@ -1,6 +1,8 @@
 const FlexLayout = require("../../ui/flexlayout");
 const View = require('../view');
 const UIControlEvents = require("../../util").UIControlEvents;
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const LayoutManager = require("../layoutmanager");
 
@@ -12,6 +14,7 @@ const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 GridView.prototype = Object.create(View.prototype);
 function GridView(params) {
     var sfSelf = this;
+    EventEmitterCreator(this, EventFunctions);
     sfSelf.registeredIndentifier = [];
 
     var defaultflowLayout;
@@ -473,20 +476,6 @@ function GridView(params) {
             nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

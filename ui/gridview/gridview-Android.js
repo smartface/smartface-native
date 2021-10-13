@@ -8,6 +8,7 @@ const scrollableSuper = require("../../util/Android/scrollable");
 const LayoutParams = require("../../util/Android/layoutparams");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("androidx.swiperefreshlayout.widget.SwipeRefreshLayout");
@@ -17,6 +18,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 GridView.prototype = Object.create(View.prototype);
 function GridView(params) {
     var self = this;
+    EventEmitterCreator(this, EventFunctions);
 
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
@@ -557,20 +559,6 @@ function GridView(params) {
             //iOS Only
         }
     }
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
 
     if (params) {
         for (var param in params) {

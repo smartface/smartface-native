@@ -558,20 +558,6 @@ function ListView(params) {
         }
     }
     
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-        value: (event, callback) => {
-            if (typeof EventFunctions[event] === 'function') {
-                EventFunctions[event].call(this);
-                this.emitter.on(event, callback);
-            }
-            else {
-                parentOnFunction(event, callback);
-            }
-        },
-        configurable: true
-    });
-    
     if (params) {
         for (var param in params) {
             this[param] = params[param];
