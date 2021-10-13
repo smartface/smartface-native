@@ -2,7 +2,9 @@ const View = require("../../ui/view");
 const Color = require("../../ui/color");
 const Image = require("../../ui/image");
 const UIControlEvents = require("../../util").UIControlEvents;
-
+const Events = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+Button.Events = {...View.Events, ...Events};
 const ButtonState = {
     normal: 0,
     disabled: 1,
@@ -232,7 +234,6 @@ function Button(params) {
 
     Object.defineProperty(self, 'font', {
         get: function () {
-
             return self.nativeObject.titleLabel.font;
         },
         set: function (value) {
@@ -241,6 +242,19 @@ function Button(params) {
         enumerable: true
     });
 
+    const EventFunctions = {
+        [Events.Press]: function() {
+            _onPressFunc = (state) => {
+                self.emitter.emit(Events.Press, state);
+            }
+            self.nativeObject.addJSTarget(_onPressFunc, UIControlEvents.touchUpInside);
+        },
+        [Events.LongPress]: function() {
+            // Android Only
+        }
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

@@ -4,6 +4,9 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeSwitch = requireClass("io.smartface.android.sfcore.ui.switchview.SFSwitch");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Switch.Events = { ...View.Events, ...Events };
 
 Switch.prototype = Object.create(View.prototype);
 function Switch(params) {
@@ -19,6 +22,14 @@ function Switch(params) {
     }
     View.apply(this);
 
+    const EventFunctions = {
+        [Events.ToggleChanged]: function () {
+            _onToggleChangedCallback = (state) => {
+                this.emitter.emit(Events.ToggleChanged, state);
+            }
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
     var _thumbOnColor;
     var _thumbOffColor;
     var _toggleOnColor;
