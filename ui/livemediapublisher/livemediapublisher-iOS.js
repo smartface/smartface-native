@@ -1,5 +1,7 @@
+const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
-
+const Events = require('./events');
+LiveMediaPublisher.Events = {...View.Events, ...Events};
 LiveMediaPublisher.prototype = Object.create(View.prototype)
 
 function LiveMediaPublisher(params) {
@@ -192,7 +194,16 @@ function LiveMediaPublisher(params) {
             configurable: true
         }
     });
-    
+
+    const EventFunctions = {
+        [Events.Change]: function() {
+            _onChange = function (state) {
+                this.emitter.emit(Events.Change, state);
+            } 
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

@@ -15,7 +15,7 @@
  *     liveMediaPublisher.startPreview(); 
  *     liveMediaPublisher.start(); // Start streaming
  */
-function LiveMediaPublisher() {}
+function LiveMediaPublisher() { }
 
 /**
  * The camera starts to preview.
@@ -25,7 +25,7 @@ function LiveMediaPublisher() {}
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.startPreview = function() {};
+LiveMediaPublisher.prototype.startPreview = function () { };
 
 /**
  * The camera stops to preview.
@@ -35,7 +35,7 @@ LiveMediaPublisher.prototype.startPreview = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.stopPreview = function() {};
+LiveMediaPublisher.prototype.stopPreview = function () { };
 
 /**
  * Switch between rear and front camera.
@@ -45,7 +45,7 @@ LiveMediaPublisher.prototype.stopPreview = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.switchCamera = function() {};
+LiveMediaPublisher.prototype.switchCamera = function () { };
 
 /**
  * Set whether to keep audio is turned on.
@@ -81,6 +81,7 @@ LiveMediaPublisher.prototype.flashEnabled = false;
  * Set the event callback 
  *
  * @event onChange
+ * @deprecated
  * @param {Object} params
  * @param {Number} params.event Event status code
  * @param {String} params.message Event message
@@ -88,7 +89,20 @@ LiveMediaPublisher.prototype.flashEnabled = false;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.onChange = function() {};
+LiveMediaPublisher.prototype.onChange = function () { };
+
+/**
+ * Set the event callback 
+ *
+ * @event onChange
+ * @param {Object} params
+ * @param {Number} params.event Event status code
+ * @param {String} params.message Event message
+ * @android
+ * @ios
+ * @since 4.2.2
+ */
+LiveMediaPublisher.Events.Change = "change";
 
 /**
  * Set output adress. Supported protocols: RTMP/RTMPT/HTTP/FLV
@@ -145,7 +159,7 @@ LiveMediaPublisher.prototype.video = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.start = function() {};
+LiveMediaPublisher.prototype.start = function () { };
 
 /**
  * Release the underlying resources.
@@ -154,7 +168,7 @@ LiveMediaPublisher.prototype.start = function() {};
  * @android
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.release = function() {};
+LiveMediaPublisher.prototype.release = function () { };
 
 /**
  * Stop stream.
@@ -164,7 +178,7 @@ LiveMediaPublisher.prototype.release = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.stop = function() {};
+LiveMediaPublisher.prototype.stop = function () { };
 
 /**
  * 
@@ -185,7 +199,7 @@ LiveMediaPublisher.Camera = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.Camera.FRONT=1;
+LiveMediaPublisher.Camera.FRONT = 1;
 
 /**
  * @property {Number} BACK
@@ -197,7 +211,7 @@ LiveMediaPublisher.Camera.FRONT=1;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.Camera.BACK=0;
+LiveMediaPublisher.Camera.BACK = 0;
 
 /**
  * 
@@ -218,7 +232,7 @@ LiveMediaPublisher.VideoPreset = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_270=0;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_270 = 0;
 
 /**
  * @property {Number} PRESET_16X9_360
@@ -230,7 +244,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_270=0;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_360=1;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_360 = 1;
 
 /**
  * @property {Number} PRESET_16X9_480
@@ -242,7 +256,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_360=1;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_480=2;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_480 = 2;
 
 /**
  * @property {Number} PRESET_16X9_540
@@ -254,7 +268,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_480=2;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_540=3;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_540 = 3;
 
 /**
  * @property {Number} PRESET_16X9_720
@@ -266,7 +280,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_540=3;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_720=4;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_720 = 4;
 
 /**
  * @property {Number} PRESET_16X9_1080
@@ -278,7 +292,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_720=4;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_1080=5;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_1080 = 5;
 
 /**
  * @property {Number} PRESET_4X3_270
@@ -290,7 +304,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_1080=5;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_270=10;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_270 = 10;
 
 /**
  * @property {Number} PRESET_4X3_360
@@ -302,7 +316,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_270=10;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_360=11;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_360 = 11;
 
 /**
  * @property {Number} PRESET_4X3_480
@@ -314,7 +328,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_360=11;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_480=12;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_480 = 12;
 
 /**
  * @property {Number} PRESET_4X3_540
@@ -326,7 +340,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_480=12;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_540=13;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_540 = 13;
 
 /**
  * @property {Number} PRESET_4X3_720
@@ -338,7 +352,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_540=13;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_720=14;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_720 = 14;
 
 /**
  * @property {Number} PRESET_1X1_270
@@ -350,7 +364,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_720=14;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_270=20;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_270 = 20;
 
 /**
  * @property {Number} PRESET_1X1_360
@@ -362,7 +376,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_270=20;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_360=21;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_360 = 21;
 
 /**
  * @property {Number} PRESET_1X1_480
@@ -374,7 +388,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_360=21;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_480=22;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_480 = 22;
 
 /**
  * @property {Number} PRESET_1X1_540
@@ -386,7 +400,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_480=22;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_540=23;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_540 = 23;
 
 /**
  * @property {Number} PRESET_1X1_720
@@ -398,7 +412,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_540=23;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_720=24;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_720 = 24;
 
 /**
  * 
@@ -419,7 +433,7 @@ LiveMediaPublisher.VideoProfile = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoProfile.BASELINE=0;
+LiveMediaPublisher.VideoProfile.BASELINE = 0;
 
 /**
  * @property {Number} MAIN
@@ -431,7 +445,7 @@ LiveMediaPublisher.VideoProfile.BASELINE=0;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoProfile.MAIN=1;
+LiveMediaPublisher.VideoProfile.MAIN = 1;
 
 /**
  * @property {Number} HIGH
@@ -443,7 +457,7 @@ LiveMediaPublisher.VideoProfile.MAIN=1;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoProfile.HIGH=2;
+LiveMediaPublisher.VideoProfile.HIGH = 2;
 
 
 /**
@@ -465,7 +479,7 @@ LiveMediaPublisher.AudioProfile = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.AudioProfile.HEAAC=1;
+LiveMediaPublisher.AudioProfile.HEAAC = 1;
 
 /**
  * @property {Number} LCAAC
@@ -477,7 +491,7 @@ LiveMediaPublisher.AudioProfile.HEAAC=1;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.AudioProfile.LCAAC=0;
+LiveMediaPublisher.AudioProfile.LCAAC = 0;
 
 /**
  * 
@@ -498,7 +512,7 @@ LiveMediaPublisher.VideoPreset = {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_270=0;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_270 = 0;
 
 /**
  * @property {Number} PRESET_16X9_360
@@ -510,7 +524,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_270=0;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_360=1;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_360 = 1;
 
 /**
  * @property {Number} PRESET_16X9_480
@@ -522,7 +536,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_360=1;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_480=2;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_480 = 2;
 
 /**
  * @property {Number} PRESET_16X9_540
@@ -534,7 +548,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_480=2;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_540=3;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_540 = 3;
 
 /**
  * @property {Number} PRESET_16X9_720
@@ -546,7 +560,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_540=3;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_720=4;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_720 = 4;
 
 /**
  * @property {Number} PRESET_16X9_1080
@@ -558,7 +572,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_720=4;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_16X9_1080=5;
+LiveMediaPublisher.VideoPreset.PRESET_16X9_1080 = 5;
 
 /**
  * @property {Number} PRESET_4X3_270
@@ -570,7 +584,7 @@ LiveMediaPublisher.VideoPreset.PRESET_16X9_1080=5;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_270=10;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_270 = 10;
 
 /**
  * @property {Number} PRESET_4X3_360
@@ -582,7 +596,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_270=10;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_360=11;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_360 = 11;
 
 /**
  * @property {Number} PRESET_4X3_480
@@ -594,7 +608,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_360=11;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_480=12;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_480 = 12;
 
 /**
  * @property {Number} PRESET_4X3_540
@@ -606,7 +620,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_480=12;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_540=13;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_540 = 13;
 
 /**
  * @property {Number} PRESET_4X3_720
@@ -618,7 +632,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_540=13;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_4X3_720=14;
+LiveMediaPublisher.VideoPreset.PRESET_4X3_720 = 14;
 
 /**
  * @property {Number} PRESET_1X1_270
@@ -630,7 +644,7 @@ LiveMediaPublisher.VideoPreset.PRESET_4X3_720=14;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_270=20;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_270 = 20;
 
 /**
  * @property {Number} PRESET_1X1_360
@@ -642,7 +656,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_270=20;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_360=21;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_360 = 21;
 
 /**
  * @property {Number} PRESET_1X1_480
@@ -654,7 +668,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_360=21;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_480=22;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_480 = 22;
 
 /**
  * @property {Number} PRESET_1X1_540
@@ -666,7 +680,7 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_480=22;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_540=23;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_540 = 23;
 
 /**
  * @property {Number} PRESET_1X1_720
@@ -678,4 +692,4 @@ LiveMediaPublisher.VideoPreset.PRESET_1X1_540=23;
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.VideoPreset.PRESET_1X1_720=24;
+LiveMediaPublisher.VideoPreset.PRESET_1X1_720 = 24;
