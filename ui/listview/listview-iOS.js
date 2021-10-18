@@ -32,7 +32,6 @@ function ListView(params) {
     }
 
     View.apply(this);
-    EventEmitterCreator(this, EventFunctions);
 
     UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
@@ -557,6 +556,9 @@ function ListView(params) {
             nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
+
     
     if (params) {
         for (var param in params) {

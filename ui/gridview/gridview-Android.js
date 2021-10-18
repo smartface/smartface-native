@@ -18,7 +18,6 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 GridView.prototype = Object.create(View.prototype);
 function GridView(params) {
     var self = this;
-    EventEmitterCreator(this, EventFunctions);
 
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
@@ -559,6 +558,9 @@ function GridView(params) {
             //iOS Only
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
+
 
     if (params) {
         for (var param in params) {

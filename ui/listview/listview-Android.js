@@ -18,7 +18,6 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 ListView.prototype = Object.create(View.prototype);
 function ListView(params) {
     var self = this;
-    EventEmitterCreator(this, EventFunctions);
     if (!this.nativeObject) {
         this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
     }
@@ -703,6 +702,9 @@ function ListView(params) {
             //iOS Only
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
+
 
     this.nativeInner.setAdapter(self.nativeDataAdapter);
 

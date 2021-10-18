@@ -14,7 +14,6 @@ const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
 GridView.prototype = Object.create(View.prototype);
 function GridView(params) {
     var sfSelf = this;
-    EventEmitterCreator(this, EventFunctions);
     sfSelf.registeredIndentifier = [];
 
     var defaultflowLayout;
@@ -476,6 +475,9 @@ function GridView(params) {
             nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
