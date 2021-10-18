@@ -227,7 +227,7 @@ var Http = function(params) {
      * 
      * @property {Array}    sslPinning   
      * @property {String}   sslPinning.host
-     * @property {Array}    sslPinning.certificates
+     * @property {Array}    sslPinning.certificates Only DER format accepted.
      * @property {Boolean}  [sslPinning.validateCertificateChain=true]
      * @property {Boolean}  [sslPinning.validateHost=true]
      * @ios
