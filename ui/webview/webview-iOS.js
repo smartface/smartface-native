@@ -231,24 +231,26 @@ function WebView(params) {
             get: function () {
                 return _sslPinning;
             },
-            set: function (value) {
-                _sslPinning = value;
-                const { certificates, host, validateCertificateChain, validateHost } = value;
+            set: function (values) {
+                _sslPinning = values;
 
-                let nSURLCertificates = certificates.map(function (path, index) {
-                    let certFile = new File({
-                        path: path
-                    });
-                    return certFile.ios.getNSURL();
-                })
+                self.nativeObject.serverTrustPolicies = values.map(value => {
 
-                self.nativeObject.serverTrustPolicies = [
-                    __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
+                    const { certificates, host, validateCertificateChain, validateHost } = value;
+
+                    let nSURLCertificates = certificates.map(function (path, index) {
+                        let certFile = new File({
+                            path: path
+                        });
+                        return certFile.ios.getNSURL();
+                    })
+                    return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
                         host,
                         nSURLCertificates,
                         validateCertificateChain,
                         validateHost
-                    )];
+                    );
+                })
             },
             enumerable: true
         }

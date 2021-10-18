@@ -41,26 +41,26 @@ function Http(params) {
         get: function () {
             return _sslPinning;
         },
-        set: function (value) {
-            _sslPinning = value;
-            const { certificates, host, validateCertificateChain, validateHost } = value;
+        set: function (values) {
+            _sslPinning = values;
 
-            console.log(value);
+            self.nativeObject.serverTrustPolicies = values.map(value => {
 
-            let nSURLCertificates = certificates.map(function (path, index) {
-                let certFile = new File({
-                    path: path
+                const { certificates, host, validateCertificateChain, validateHost } = value;
+
+                let nSURLCertificates = certificates.map(function (path, index) {
+                    let certFile = new File({
+                        path: path
                 });
-                return certFile.ios.getNSURL();
-            })
-
-            self.nativeObject.serverTrustPolicies = [
-                __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
+                    return certFile.ios.getNSURL();
+                })
+                return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
                     host,
                     nSURLCertificates,
                     validateCertificateChain,
                     validateHost
-                )];
+                );
+            })
         },
         enumerable: true
     });
