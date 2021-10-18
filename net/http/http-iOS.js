@@ -34,7 +34,7 @@ function Http(params) {
         enumerable: true
     });
 
-    var _ios = {};
+    let _ios = {};
     Object.defineProperty(self, 'ios', {
         get: function() {
             return _ios;

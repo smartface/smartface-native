@@ -211,6 +211,19 @@ function WebView(params) {
         enumerable: true
     });
 
+    let _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function() {
+            return _ios;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                Object.assign(_ios, value);
+            }
+        },
+        enumerable: true
+    });
+
     let _safeAreaInsets, _sslPinning;
     Object.defineProperties(self.ios, {
         'safeAreaInsets': {
