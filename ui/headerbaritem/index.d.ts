@@ -27,9 +27,9 @@ export = HeaderBarItem;
  *     });
  *     myPage.headerBar.setItems([myItem]);
  */
-declare class HeaderBarItem {
+declare class HeaderBarItem extends NativeComponent {
 	constructor(params?: any);
-
+	nativeObject: any;
 	/**
 	 * Gets/sets title of header bar item. If image is not set, title will be
 	 * shown in the header bar.
@@ -198,6 +198,64 @@ declare class HeaderBarItem {
 	 * @since 3.0.0
 	 */
 	badge: Badge;
+	ios: {
+		/**
+		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
+		 * @ios
+		 * @default false
+		 */
+		translucent: boolean;
+		/**
+		 * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
+		 */
+		titleFont: Font;
+		/**
+		 * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance. 
+		 * This change can be observed only on the pages that added to navigator style router. 
+		 * Default value is undefined, it gets title value from previous page's header bar title property. 
+		 * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour. 
+		 * This property will work only for iOS. You should access this property from page.parentController
+		 */
+		 backBarButtonItem: HeaderBarItem;
+	}
+	android: {
+		/**
+		 * Gets/sets elevation of the header bar.
+		 * @android
+		 * @example
+		 * ```const Page = require('@smartface/native/ui/page');
+					const myPage = new Page();
+					myPage.headerBar.android.elevation = 10;
+					```
+		 */
+		elevation: number;
+		/**
+		 * Gets/sets the content inset of headerbar. Minimum API Level 21 required. 
+		 * The content inset affects the valid area for Headerbar content other than the navigation button and menu. 
+		 * Insets define the minimum margin for these custom views like titleLayout and can be used to effectively align HeaderBar content along well-known gridlines.
+		 */
+		contentInset: { left: number; right: number; };
+		/**
+		 * Gets/sets the logo visibility of the HeaderBar. If logo is disable, logo image will newer shown. This property will work only for Android.
+		 * @default false
+		 * @android
+		 */
+		logoEnabled: boolean;
+		/**
+		 * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
+		 * @example
+		 * ```const Page = require('@smartface/native/ui/page');
+				const myPage = new Page();
+				myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
+				```
+		 */
+		subtitle: string;
+		/**
+		 * Gets/sets titleFont of header bar subtitle.
+		 * @android
+		 */
+		subtitleFont: Font;
+	}
 }
 
 declare namespace HeaderBarItem {

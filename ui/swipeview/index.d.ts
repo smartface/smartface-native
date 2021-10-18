@@ -79,7 +79,7 @@ declare class SwipeView extends View {
 	 * @ios
 	 * @since 1.1.10
 	 */
-	pages: Page[];
+	pages: (typeof Page)[];
 	/**
 	 * Gets/Sets the callback triggered when a page is selected after a swipe action.
 	 *

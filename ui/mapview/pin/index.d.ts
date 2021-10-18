@@ -15,6 +15,7 @@ declare enum PinEvets {
     Press = "press"
 }
 declare class Pin implements IEventEmitter<PinEvets> {
+    constructor(params?: Partial<Pin>);
     on(eventName: PinEvets, callback: (...args: any) => void): () => void;
     off(eventName: PinEvets, callback?: (...args: any) => void): void;
     emit(event: PinEvets, detail?: any[]): void;
