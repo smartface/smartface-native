@@ -34,8 +34,19 @@ function Http(params) {
         enumerable: true
     });
 
+    var _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function() {
+            return _ios;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                Object.assign(_ios, value);
+            }
+        },
+        enumerable: true
+    });
 
-    self.ios = {};
     let _sslPinning;
     Object.defineProperty(self.ios, "sslPinning", {
         get: function () {
@@ -46,7 +57,7 @@ function Http(params) {
 
             self.nativeObject.serverTrustPolicies = values.map(value => {
 
-                const { certificates, host, validateCertificateChain, validateHost } = value;
+                const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
 
                 let nSURLCertificates = certificates.map(function (path, index) {
                     let certFile = new File({
@@ -67,6 +78,7 @@ function Http(params) {
 
     if (params) {
         for (var param in params) {
+    
             this[param] = params[param];
         }
     }

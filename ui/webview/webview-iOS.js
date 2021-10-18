@@ -236,7 +236,7 @@ function WebView(params) {
 
                 self.nativeObject.serverTrustPolicies = values.map(value => {
 
-                    const { certificates, host, validateCertificateChain, validateHost } = value;
+                    const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
 
                     let nSURLCertificates = certificates.map(function (path, index) {
                         let certFile = new File({

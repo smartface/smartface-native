@@ -228,8 +228,8 @@ var Http = function(params) {
      * @property {Array}    sslPinning   
      * @property {String}   sslPinning.host
      * @property {Array}    sslPinning.certificates
-     * @property {Boolean}  sslPinning.validateCertificateChain
-     * @property {Boolean}  sslPinning.validateHost
+     * @property {Boolean}  [sslPinning.validateCertificateChain=true]
+     * @property {Boolean}  [sslPinning.validateHost=true]
      * @ios
      * @since 4.3.4
      */
