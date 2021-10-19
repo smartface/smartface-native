@@ -22,10 +22,10 @@ function FlexLayout(params) {
     var self = this;
     if (!this.nativeObject) {
         this.nativeObject = new NativeYogaLayout(activity, {
-            onInterceptTouchEvent: function(event) {
-                if(self.android.onInterceptTouchEvent) {
+            onInterceptTouchEvent: function (event) {
+                if (self.android.onInterceptTouchEvent) {
                     return self.android.onInterceptTouchEvent();
-                } 
+                }
             }
         });
     }
@@ -49,7 +49,7 @@ function FlexLayout(params) {
             get: () => {
                 return _onInterceptTouchEvent;
             },
-            set: function(callback) {
+            set: function (callback) {
                 _onInterceptTouchEvent = callback;
             },
             enumerable: true
@@ -67,60 +67,60 @@ FlexLayout.prototype._flexWrap = null;
 Object.defineProperties(FlexLayout.prototype, {
     // direction values same as native
     'direction': {
-        get: function() {
+        get: function () {
             return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), FlexLayout.Direction);
         },
-        set: function(direction) {
+        set: function (direction) {
             this.yogaNode.setDirection(direction);
         },
         enumerable: true
     },
     // flexDirection values same as native
     'flexDirection': {
-        get: function() {
+        get: function () {
             return convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), FlexLayout.FlexDirection);
         },
-        set: function(flexDirection) {
+        set: function (flexDirection) {
             this.yogaNode.setFlexDirection(flexDirection);
         },
         enumerable: true
     },
     // justifyContent values same as native
     'justifyContent': {
-        get: function() {
+        get: function () {
             return convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), FlexLayout.JustifyContent);
         },
-        set: function(justifyContent) {
+        set: function (justifyContent) {
             this.yogaNode.setJustifyContent(justifyContent);
         },
         enumerable: true
     },
     // alignContent values same as native
     'alignContent': {
-        get: function() {
+        get: function () {
             return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), FlexLayout.AlignContent);
         },
-        set: function(alignContent) {
+        set: function (alignContent) {
             this.yogaNode.setAlignContent(alignContent);
         },
         enumerable: true
     },
     // alignItems values same as native    
     'alignItems': {
-        get: function() {
+        get: function () {
             return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), FlexLayout.AlignItems);
         },
-        set: function(alignItems) {
+        set: function (alignItems) {
             this.yogaNode.setAlignItems(alignItems);
         },
         enumerable: true
     },
     // flexWrap values same as native 
     'flexWrap': {
-        get: function() {
+        get: function () {
             return this._flexWrap;
         },
-        set: function(flexWrap) {
+        set: function (flexWrap) {
             this._flexWrap = flexWrap;
             this.yogaNode.setWrap(flexWrap);
         },
@@ -128,7 +128,7 @@ Object.defineProperties(FlexLayout.prototype, {
     }
 });
 
-FlexLayout.prototype.toString = function() {
+FlexLayout.prototype.toString = function () {
     return 'FlexLayout';
 };
 
