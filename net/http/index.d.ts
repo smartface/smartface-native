@@ -96,7 +96,28 @@ declare class Http {
 	 * @android
 	 * @ios
 	 */
-	headers: { [key: string]: string };
+    headers: { [key: string]: string };
+    ios: {
+        /**
+        * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
+        * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
+        * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
+        * 
+        * @property {Array}    sslPinning   
+        * @property {String}   sslPinning.host
+        * @property {Array}    sslPinning.certificates Only DER format accepted.
+        * @property {Boolean}  [sslPinning.validateCertificateChain=true]
+        * @property {Boolean}  [sslPinning.validateHost=true]
+        * @ios
+        * @since 4.3.4
+        */
+        sslPinning: [{
+            host: string,
+            certificates: Array<string>,
+            validateCertificateChain?: boolean,
+            validateHost?: boolean
+        }] | undefined;
+    }
 	/**
 	 * Cancels all requests.
 	 *

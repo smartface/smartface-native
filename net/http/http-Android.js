@@ -66,6 +66,7 @@ function http(params) {
     });
 
     self.android = {};
+    self.ios = {};
 
     var _cookiePersistenceEnabled = false;
     Object.defineProperty(self, 'cookiePersistenceEnabled', {
