@@ -1,15 +1,16 @@
+import Color from "../color";
 import ViewGroup from "../viewgroup";
 
 declare enum FlexLayoutEvents {
-  /**
-   * Allows you to watch events as they are dispatched to your children,
-   * and take ownership of the current gesture at any point.
-   *
-   * @return {Boolean} Return true to steal motion events from the children
-   * @android
-   * @member UI.FlexLayout
-   * @since 4.3.5
-   */
+	/**
+	 * Allows you to watch events as they are dispatched to your children,
+	 * and take ownership of the current gesture at any point.
+	 *
+	 * @return {Boolean} Return true to steal motion events from the children
+	 * @android
+	 * @member UI.FlexLayout
+	 * @since 4.3.5
+	 */
 	InterceptTouchEvent = "interceptTouchEvent",
 }
 
@@ -138,6 +139,35 @@ declare class FlexLayout extends ViewGroup {
 	 */
 	applyLayout(): void;
 	android: {
+		/**
+		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+		 * This property only supported for api level 23 and above.
+		 *
+		 * @property {Boolean} [useForeground = false]
+		 * @android
+		 * @member UI.View
+		 * @since 4.0.2
+		 */
+		useForeground: boolean;
+		/**
+		 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+		 * to see the effect.
+		 *
+		 * @property {Boolean} [rippleEnabled = false]
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleEnabled: boolean;
+		/**
+		 * Gets/sets ripple effect color for view.
+		 *
+		 * @property {UI.Color} rippleColor
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleColor: Color;
 		/**
 		 * Allows you to watch events as they are dispatched to your children,
 		 * and take ownership of the current gesture at any point.
@@ -557,7 +587,7 @@ declare namespace FlexLayout {
 		ABSOLUTE = 1,
 	}
 
-  const Events: typeof FlexLayoutEvents & typeof ViewGroup.Events
-  type Events = typeof Events
+	const Events: typeof FlexLayoutEvents & typeof ViewGroup.Events;
+	type Events = typeof Events;
 }
 export = FlexLayout;
