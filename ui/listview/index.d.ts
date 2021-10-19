@@ -17,7 +17,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.0.2
 	 */
-  AttachedToWindow = "attachedToWindow",
+	AttachedToWindow = "attachedToWindow",
 	/**
 	 * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
 	 *
@@ -25,7 +25,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.0.2
 	 */
-  DetachedFromWindow = "detachedFromWindow",
+	DetachedFromWindow = "detachedFromWindow",
 	/**
 	 * This event is called when a scroll occurs.
 	 *
@@ -37,7 +37,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.0.0
 	 */
-  Gesture = "gesture",
+	Gesture = "gesture",
 	/**
 	 * This event is called when user pulls down and releases a ListView
 	 * when scroll position is on the top.
@@ -47,7 +47,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  PullRefresh = "pullRefresh",
+	PullRefresh = "pullRefresh",
 	/**
 	 * This event is called when a UI.ListViewItem created at specified row index.
 	 * You can bind your data to row items inside this callback.
@@ -59,7 +59,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  RowBind = "rowBind",
+	RowBind = "rowBind",
 	/**
 	 * By default all the items are draggable if {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
 	 * by specific condition.
@@ -71,7 +71,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.1.4
 	 */
-  RowCanMove = "rowCanMove",
+	RowCanMove = "rowCanMove",
 	/**
 	 * By default all the items are swipeable if {@link UI.ListView#swipeEnabled swipeEnabled} is true, to restrict some rows set this method and change return value
 	 * by specific condition. For iOS, this callback is triggered twice consecutively.
@@ -83,7 +83,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.1.4
 	 */
-  RowCanSwipe = "rowCanSwipe",
+	RowCanSwipe = "rowCanSwipe",
 	/**
 	 * This event is called when a ListView starts to create a ListViewItem.
 	 * You can customize your UI(not data-binding) inside this callback.
@@ -95,7 +95,7 @@ declare enum ListViewEvents {
 	 * @return {UI.ListViewItem}
 	 * @since 0.1
 	 */
-  RowCreate = "rowCreate",
+	RowCreate = "rowCreate",
 	/**
 	 * This event is called when a ListView starts to create a ListViewItem.
 	 * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
@@ -107,7 +107,7 @@ declare enum ListViewEvents {
 	 * @return {Number}
 	 * @since 1.1.18
 	 */
-  RowHeight = "rowHeight",
+	RowHeight = "rowHeight",
 	/**
 	 * This event is called when user long selects a row at specific index.
 	 *
@@ -117,7 +117,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 2.0.4
 	 */
-  RowLongSelected = "rowLongSelected",
+	RowLongSelected = "rowLongSelected",
 	/**
 	 * This event is called when dragged item reordered in the list view.
 	 *
@@ -128,7 +128,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.1.4
 	 */
-  RowMoved = "rowMoved",
+	RowMoved = "rowMoved",
 	/**
 	 * This event is called when dragged item before reordered in the list view.
 	 *
@@ -140,7 +140,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 4.1.4
 	 */
-  RowMove = "rowMove",
+	RowMove = "rowMove",
 	/**
 	 * This event is called when user selects a row at specific index.
 	 *
@@ -152,8 +152,8 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  RowSelected = "rowSelected",
-		/**
+	RowSelected = "rowSelected",
+	/**
 	 * This event is called when ListViewItem about to swipe. For iOS, this callback is triggered twice consecutively.
 	 *
 	 *     @example
@@ -210,7 +210,7 @@ declare enum ListViewEvents {
 	 *
 	 *
 	 */
-  RowSwipe = "rowSwipe",
+	RowSwipe = "rowSwipe",
 	/**
 	 * This event is called before onRowCreate callback. Returns item type you should use based on position.
 	 *
@@ -221,7 +221,7 @@ declare enum ListViewEvents {
 	 * @return {Number}
 	 * @since 3.0.2
 	 */
-  RowType = "rowType",
+	RowType = "rowType",
 	/**
 	 * This event is called when a ListView is scrolling. To remove this evet, set null.
 	 * For better performance, don't set any callback if does not
@@ -239,7 +239,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  Scroll = "scroll",
+	Scroll = "scroll",
 	/**
 	 * This event is called when the list view is starting to decelerate the scrolling movement.
 	 *
@@ -250,7 +250,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 3.2.1
 	 */
-  ScrollBeginDecelerating = "scrollBeginDecelerating",
+	ScrollBeginDecelerating = "scrollBeginDecelerating",
 	/**
 	 * This event is called when the list view is about to start scrolling the content.
 	 *
@@ -261,7 +261,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 3.2.1
 	 */
-  ScrollBeginDragging = "scrollBeginDragging",
+	ScrollBeginDragging = "scrollBeginDragging",
 	/**
 	 * This event is called when the list view has ended decelerating the scrolling movement.
 	 *
@@ -272,7 +272,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 3.2.1
 	 */
-  ScrollEndDecelerating = "scrollEndDecelerating",
+	ScrollEndDecelerating = "scrollEndDecelerating",
 	/**
 	 * This event is called when dragging ended in the list view.
 	 *
@@ -284,7 +284,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 3.2.1
 	 */
-  ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate",
+	ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate",
 	/**
 	 * This event is called when the user finishes scrolling the content.
 	 *
@@ -301,7 +301,7 @@ declare enum ListViewEvents {
 	 * @ios
 	 * @since 3.2.1
 	 */
-  ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset",
+	ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset",
 	/**
 	 * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
 	 * For better performance, don't set any callback if does not
@@ -315,7 +315,7 @@ declare enum ListViewEvents {
 	 * @android
 	 * @since 3.2.1
 	 */
-  ScrollStateChanged = "scrollStateChanged"
+	ScrollStateChanged = "scrollStateChanged",
 }
 
 /**
@@ -476,20 +476,7 @@ declare interface ListView extends View<ListViewEvents> {
 	 * @ios
 	 * @since 0.1
 	 */
-	onRowBind: (item:ListViewItem, index: number) => void;
-	/**
-	 * This event is called when a scroll occurs.
-	 *
-	 * @deprecated
-	 * @param {Object} params
-	 * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
-	 * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
-	 * @return {Boolean} Return true if the event is consumed.
-	 * @event onGesture
-	 * @android
-	 * @since 4.0.0
-	 */
-	onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
+	onRowBind: (item: ListViewItem, index: number) => void;
 	/**
 	 * This event is called when user selects a row at specific index.
 	 *
@@ -774,14 +761,11 @@ declare interface ListView extends View<ListViewEvents> {
 	 * @ios
 	 * @since 0.1
 	 */
-	onScroll: (params?: {
-		translation: Point2D;
-		contentOffset: Point2D;
-	}) => void;
+	onScroll: (params?: { translation: Point2D; contentOffset: Point2D }) => void;
 	/**
 	 * This event is called when user pulls down and releases a ListView
 	 * when scroll position is on the top.
-	 * 
+	 *
 	 * @deprecated
 	 * @event onPullRefresh
 	 * @android
@@ -939,6 +923,19 @@ declare interface ListView extends View<ListViewEvents> {
 	};
 	android: View["android"] & {
 		/**
+		 * This event is called when a scroll occurs.
+		 *
+		 * @deprecated
+		 * @param {Object} params
+		 * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+		 * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+		 * @return {Boolean} Return true if the event is consumed.
+		 * @event onGesture
+		 * @android
+		 * @since 4.0.0
+		 */
+		onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
+		/**
 		 * Called when the ListView should save its layout state. This is a good time to save your scroll position,
 		 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
 		 *
@@ -976,7 +973,7 @@ declare interface ListView extends View<ListViewEvents> {
 			newState?: ScrollState,
 			contentOffset?: Point2D
 		) => void;
-	}
+	};
 	/**
  * 
  * This method is create swipe item
@@ -1219,8 +1216,8 @@ declare class ListView implements ListView {
 }
 
 declare namespace ListView {
-  const Events: typeof ListViewEvents & typeof View.Events
-  type Events = typeof Events
+	const Events: typeof ListViewEvents & typeof View.Events;
+	type Events = typeof Events;
 	/**
 	 * @class UI.ListView.SwipeItem
 	 * @since 4.1.4
@@ -1258,7 +1255,7 @@ declare namespace ListView {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-		RIGHTTOLEFT = 1
+		RIGHTTOLEFT = 1,
 	}
 	/**
 	 * iOS Specific Properties.
@@ -1337,7 +1334,7 @@ declare namespace ListView {
 			 * @readonly
 			 * @since 4.1.4
 			 */
-			AUTOMATIC = 100
+			AUTOMATIC = 100,
 		}
 	}
 }

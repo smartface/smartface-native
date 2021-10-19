@@ -2,7 +2,7 @@ import Color from "../color";
 import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
-import { IEventEmitter } from '../../core/eventemitter';
+import { IEventEmitter } from "../../core/eventemitter";
 
 /**
  * @class UI.View
@@ -22,7 +22,10 @@ import { IEventEmitter } from '../../core/eventemitter';
  *     myView.backgroundColor = Color.RED;
  *
  */
-declare class View<TEvent = typeof View.Events> extends NativeComponent implements IEventEmitter {
+declare class View<TEvent = typeof View.Events>
+	extends NativeComponent
+	implements IEventEmitter
+{
 	constructor(params?: any);
 	on(eventName: string, callback: (...args: any) => void): () => void;
 	off(eventName: string, callback?: (...args: any) => void): void;
@@ -34,56 +37,27 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    transitionID: string;
+	transitionID: string;
 	/**
 	 * Gets/sets whether the view is an accessibility element that an assistive app can access.
 	 *
 	 * @property {Boolean} accessible
 	 * @android
-		 * @ios
+	 * @ios
 	 * @member UI.View
 	 * @since 4.3.2
 	 */
-    accessible: boolean;
+	accessible: boolean;
 	/**
-		 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
 	 *
 	 * @property {String} accessibilityLabel
 	 * @android
-		 * @ios
+	 * @ios
 	 * @member UI.View
 	 * @since 4.3.2
 	 */
-    accessibilityLabel: string;
-	/**
-	 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
-	 * This property only supported for api level 23 and above.
-	 *
-	 * @property {Boolean} [useForeground = false]
-	 * @android
-	 * @member UI.View
-	 * @since 4.0.2
-	 */
-    useForeground: boolean;
-	/**
-	 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
-	 * to see the effect.
-	 *
-	 * @property {Boolean} [rippleEnabled = false]
-	 * @android
-	 * @member UI.View
-	 * @since 3.2.1
-	 */
-    rippleEnabled: boolean;
-	/**
-	 * Gets/sets ripple effect color for view.
-	 *
-	 * @property {UI.Color} rippleColor
-	 * @android
-	 * @member UI.View
-	 * @since 3.2.1
-	 */
-    rippleColor: Color;
+	accessibilityLabel: string;
 	/**
 	 * Defines the opacity of a view. The value of this property is a float number
 	 * between 0.0 and 1.0. 0 represents view is completely transparent and 1
@@ -95,7 +69,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    alpha: number;
+	alpha: number;
 	/**
 	 * Gets/sets background color of a view. It allows setting background
 	 * color with UI.Color instance.
@@ -106,7 +80,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    backgroundColor: Color;
+	backgroundColor: Color;
 	/**
 	 * Sets/gets border color of bounded view.
 	 *
@@ -115,7 +89,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    borderColor: Color;
+	borderColor: Color;
 	/**
 	 * Sets/gets border thickness of bounded view. Accepts unsigned
 	 * numbers, 0 means no border.
@@ -125,7 +99,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    borderWidth: number;
+	borderWidth: number;
 	/**
 	 * Sets/gets corner radius of a view. BorderRadius maximum value must be half of the shortest edge.
 	 *
@@ -134,7 +108,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    borderRadius: number;
+	borderRadius: number;
 	/**
 	 * Gets/sets id of a view. It should be unique number for each object
 	 * inside page. Id will be generated unique by default.
@@ -145,7 +119,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    id: string;
+	id: string;
 	/**
 	 * Gets/sets test id for view. resource-id for android; accessibilityIdentifier for iOS.
 	 *
@@ -155,7 +129,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 4.3.2
 	 */
-    testId: string;
+	testId: string;
 	/**
 	 * Gets/sets visibility of view. It is set to true as default.
 	 *
@@ -165,7 +139,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    visible: boolean;
+	visible: boolean;
 	/**
 	 * Gets/sets the degrees that the view is rotated around the pivot point.
 	 *
@@ -175,7 +149,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 1.1.10
 	 */
-    rotation: number;
+	rotation: number;
 	/**
 	 * Gets/sets the degrees that the view is rotated around the horizontal axis through the pivot point.
 	 * RotationX works different for iOS and Android. Android gives perpective to the view but iOS doesn't.
@@ -187,7 +161,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 1.1.10
 	 */
-    rotationX: number;
+	rotationX: number;
 	/**
 	 * Gets/sets the degrees that the view is rotated around the vertical axis through the pivot point.
 	 * RotationY works different for iOS and Android. Android gives perpective to the view but iOS doesn't.
@@ -199,7 +173,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 1.1.10
 	 */
-    rotationY: number;
+	rotationY: number;
 	/**
 	 * Enables/disables touches to view. When set to false events
 	 * related to touches won't fire. It is set to true as default.
@@ -210,7 +184,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    touchEnabled: boolean;
+	touchEnabled: boolean;
 	/**
 	 * Gets/sets left position of a view relative to its parent.
 	 *
@@ -219,7 +193,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    left: number;
+	left: number;
 	/**
 	 * Gets/sets top position of a view relative to its parent.
 	 *
@@ -228,7 +202,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    top: number;
+	top: number;
 	/**
 	 * Gets/sets right position of a view relative to its parent. This property works only if
 	 * view's positionType is UI.FlexLayout.PositionType.ABSOLUTE.
@@ -238,7 +212,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    right: number;
+	right: number;
 	/**
 	 * Gets/sets bottom position of a view relative to its parent. This property works only if
 	 * view's positionType is UI.FlexLayout.PositionType.ABSOLUTE.
@@ -248,7 +222,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    bottom: number;
+	bottom: number;
 	/**
 	 * Gets/sets height of a view.
 	 *
@@ -257,7 +231,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    height: number;
+	height: number;
 	/**
 	 * Gets/sets width of a view.
 	 *
@@ -266,7 +240,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    width: number;
+	width: number;
 	/**
 	 * Gets/sets minimum width of a view.
 	 *
@@ -275,7 +249,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    minWidth: number;
+	minWidth: number;
 	/**
 	 * Gets/sets minimum height of a view.
 	 *
@@ -284,7 +258,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    minHeight: number;
+	minHeight: number;
 	/**
 	 * Gets/sets maximum width of a view.
 	 *
@@ -293,7 +267,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    maxWidth: number;
+	maxWidth: number;
 	/**
 	 * Gets/sets maximum height of a view.
 	 *
@@ -302,7 +276,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    maxHeight: number;
+	maxHeight: number;
 	/**
 	 * Gets/Sets the padding space on the top side of a view.
 	 *
@@ -311,7 +285,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    paddingTop: number;
+	paddingTop: number;
 	/**
 	 * Gets/Sets the padding space on the bottom side of a view.
 	 *
@@ -320,7 +294,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    paddingBottom: number;
+	paddingBottom: number;
 	/**
 	 * Gets/Sets the padding space on the left side of a view.
 	 *
@@ -329,7 +303,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    paddingLeft: number;
+	paddingLeft: number;
 	/**
 	 * Gets/Sets the padding space on the right side of a view.
 	 *
@@ -338,7 +312,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    paddingRight: number;
+	paddingRight: number;
 	/**
 	 * Gets/Sets the padding space on the all sides of a view.
 	 *
@@ -347,7 +321,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    padding: number;
+	padding: number;
 	/**
 	 * Gets/Sets the margin space on the top side of a view.
 	 *
@@ -356,7 +330,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    marginTop: number;
+	marginTop: number;
 	/**
 	 * Gets/Sets the margin space on the bottom side of a view.
 	 *
@@ -365,7 +339,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    marginBottom: number;
+	marginBottom: number;
 	/**
 	 * Gets/Sets the margin space on the left side of a view.
 	 *
@@ -374,7 +348,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    marginLeft: number;
+	marginLeft: number;
 	/**
 	 * Gets/Sets the margin space required on the right side of a view.
 	 *
@@ -383,7 +357,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    marginRight: number;
+	marginRight: number;
 	/**
 	 * Gets/Sets the margin space required on the all sides of a view.
 	 *
@@ -392,7 +366,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    margin: number;
+	margin: number;
 	/**
 	 * This property specifies the type of positioning method used for a view.
 	 * To position a view relative to its parent with top,left,right and bottom
@@ -403,7 +377,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    positionType: FlexLayout.PositionType;
+	positionType: FlexLayout.PositionType;
 	/**
 	 * This property specifies how much a view will grow relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.
 	 *
@@ -412,7 +386,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    flexGrow: number;
+	flexGrow: number;
 	/**
 	 * AspectRatio keeps the ratio between the width and the height of a view. AspectRatio has higher priority than {@link UI.View#flexGrow flexGrow}.
 	 *
@@ -421,7 +395,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    aspectRatio: number;
+	aspectRatio: number;
 	/**
 	 * This property specifies how much a view will shrink relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.
 	 *
@@ -430,7 +404,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    flexShrink: number;
+	flexShrink: number;
 	/**
 	 * This property specifies the initial length of a view in a {@link UI.FlexLayout FlexLayout}.
 	 *
@@ -439,7 +413,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    flexBasis: number;
+	flexBasis: number;
 	/**
 	 * This property sets the amount that the view is scaled in X & Y around the pivot point, as a proportion of the view's unscaled width. A value of 1 means that no scaling is applied.
 	 * Actually {@link UI.flipVertically flipVertically} & {@link UI.flipHorizontally flipHorizontally} functions are assignes -1 to X & Y to mirror the view. So while using scale, need to
@@ -450,7 +424,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 4.0.1
 	 */
-    scale: Point2D;
+	scale: Point2D;
 	/**
 	 * This property specifies how a child view aligns in the cross-axis.
 	 * It overrides the {@link UI.FlexLayout.AlignItems FlexLayout.AlignItems} property of the parent.
@@ -460,8 +434,8 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    alignSelf: FlexLayout.AlignSelf;
-    applyLayout(): void;
+	alignSelf: FlexLayout.AlignSelf;
+	applyLayout(): void;
 	/**
 	 * This method put a view to the top of other views in z-direction.
 	 *
@@ -470,7 +444,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    bringToFront(): void;
+	bringToFront(): void;
 	/**
 	 * This method flips the view horizontally.
 	 *
@@ -479,7 +453,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 3.1.3
 	 */
-    flipHorizontally(): void;
+	flipHorizontally(): void;
 	/**
 	 * This method flips the view vertically.
 	 *
@@ -488,7 +462,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 3.1.3
 	 */
-    flipVertically(): void;
+	flipVertically(): void;
 	/**
 	 * This method returns an object that defines view location on screen.
 	 * Do not use this method for invisible views in {@link UI.ListView ListView} and {@link UI.GridView GridView}.
@@ -502,7 +476,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @since 3.2.0
 	 */
 
-    getScreenLocation(): Point2D;
+	getScreenLocation(): Point2D;
 	/**
 	 * Gets the parent view of a view.
 	 *
@@ -525,7 +499,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @ios
 	 * @since 0.1
 	 */
-    getParent(): ViewGroup;
+	getParent(): ViewGroup;
 	/**
 	 * This event is called when a touch screen motion event starts.
 	 *
@@ -540,7 +514,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    onTouch: (point: Point2D) => void;
+	onTouch: (point: Point2D) => void;
 	/**
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
@@ -557,7 +531,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 0.1
 	 */
-    onTouchEnded: (isInside: boolean, point: Point2D) => void;
+	onTouchEnded: (isInside: boolean, point: Point2D) => void;
 	/**
 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
 	 *
@@ -572,12 +546,41 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @member UI.View
 	 * @since 2.0.10
 	 */
-    onTouchCancelled: (point: Point2D) => void;
+	onTouchCancelled: (point: Point2D) => void;
+	/**
+	 * @deprecated
+	 */
+	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
+	android: {
 		/**
-		 * @deprecated
+		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+		 * This property only supported for api level 23 and above.
+		 *
+		 * @property {Boolean} [useForeground = false]
+		 * @android
+		 * @member UI.View
+		 * @since 4.0.2
 		 */
-    onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
-    android: {
+		useForeground: boolean;
+		/**
+		 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+		 * to see the effect.
+		 *
+		 * @property {Boolean} [rippleEnabled = false]
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleEnabled: boolean;
+		/**
+		 * Gets/sets ripple effect color for view.
+		 *
+		 * @property {UI.Color} rippleColor
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleColor: Color;
 		/**
 		 * Gets/Sets the elevation of the view. For the views that has
 		 * StateListAnimator natively like Button, will lost its own
@@ -591,7 +594,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
 		 * @since 1.1.12
 		 */
-        elevation: number;
+		elevation: number;
 		/**
 		 * Gets/sets the depth location of the view relative to its elevation. To put view over button,
 		 * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
@@ -602,9 +605,9 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @member UI.View
 		 * @since 2.0.8
 		 */
-        zIndex: number;
-    };
-    ios: {
+		zIndex: number;
+	};
+	ios: {
 		/**
 		 * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
 		 * The default value of this property is false
@@ -613,7 +616,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 2.0.10
 		 */
-        exclusiveTouch: boolean;
+		exclusiveTouch: boolean;
 		/**
 		 * A Boolean value that determines whether subviews are confined to the bounds of the view.
 		 *
@@ -621,7 +624,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 1.1.15
 		 */
-        clipsToBounds: number;
+		clipsToBounds: number;
 		/**
 		 * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
 		 *
@@ -638,7 +641,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 2.0.6
 		 */
-        shadowOffset: Point2D;
+		shadowOffset: Point2D;
 		/**
 		 * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
 		 *
@@ -646,7 +649,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 2.0.6
 		 */
-        shadowRadius: number;
+		shadowRadius: number;
 		/**
 		 * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
 		 *
@@ -654,7 +657,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 2.0.6
 		 */
-        shadowOpacity: number;
+		shadowOpacity: number;
 		/**
 		 * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
 		 *
@@ -662,7 +665,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 2.0.6
 		 */
-        shadowColor: Color;
+		shadowColor: Color;
 		/**
 		 *
 		 * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
@@ -672,7 +675,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @static
 		 * @since 3.1.3
 		 */
-        viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+		viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
 		/**
 		 * Disables a view transition animation.
 		 *
@@ -681,8 +684,8 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 		 * @ios
 		 * @since 4.2.1
 		 */
-        performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-    };
+		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+	};
 	/**
 	 * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
 	 * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
@@ -692,7 +695,7 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @android
 	 * @since 4.1.4
 	 */
-    masksToBounds: boolean;
+	masksToBounds: boolean;
 	/**
 	 * Specified enums indicates that which corner of View will have radius.
 	 *
@@ -701,15 +704,14 @@ declare class View<TEvent = typeof View.Events> extends NativeComponent implemen
 	 * @android
 	 * @since 4.1.4
 	 */
-    maskedBorders: View.Border[];
+	maskedBorders: View.Border[];
 
-    getPosition: () => {
-        left: number;
-        top: number;
-        width: number;
-        height: number;
-    };
-
+	getPosition: () => {
+		left: number;
+		top: number;
+		width: number;
+		height: number;
+	};
 }
 declare namespace View {
 	/**
@@ -720,7 +722,7 @@ declare namespace View {
 	 *
 	 * Includes enums of View's borders.
 	 */
-    enum Border {
+	enum Border {
 		/**
 		 * View's top-left border.
 		 *
@@ -731,7 +733,7 @@ declare namespace View {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-        TOP_LEFT = 0,
+		TOP_LEFT = 0,
 		/**
 		 * View's top-right border.
 		 *
@@ -742,7 +744,7 @@ declare namespace View {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-        TOP_RIGHT = 2,
+		TOP_RIGHT = 2,
 		/**
 		 * View's bottom-right border.
 		 *
@@ -753,7 +755,7 @@ declare namespace View {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-        BOTTOM_RIGHT = 4,
+		BOTTOM_RIGHT = 4,
 		/**
 		 * View's bottom-left border.
 		 *
@@ -764,24 +766,24 @@ declare namespace View {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-        BOTTOM_LEFT = 0
-    }
-    namespace ios {
-        const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-        const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-    }
+		BOTTOM_LEFT = 0,
+	}
+	namespace ios {
+		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+		const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+	}
 	/**
 	 * iOS Specific Properties.
 	 * @class UI.View.iOS
 	 * @since 3.1.3
 	 */
-    namespace iOS {
+	namespace iOS {
 		/**
 		 * @enum {Number} UI.View.iOS.SemanticContentAttribute
 		 * @since 3.1.3
 		 * @ios
 		 */
-        enum SemanticContentAttribute {
+		enum SemanticContentAttribute {
 			/**
 			 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
 			 *
@@ -791,7 +793,7 @@ declare namespace View {
 			 * @readonly
 			 * @since 3.1.3
 			 */
-            AUTO = 0,
+			AUTO = 0,
 			/**
 			 * Layout direction is always left to right.
 			 *
@@ -801,7 +803,7 @@ declare namespace View {
 			 * @readonly
 			 * @since 3.1.3
 			 */
-            FORCELEFTTORIGHT = 3,
+			FORCELEFTTORIGHT = 3,
 			/**
 			 * Layout direction is always right to left.
 			 *
@@ -811,62 +813,62 @@ declare namespace View {
 			 * @readonly
 			 * @since 3.1.3
 			 */
-            FORCERIGHTTOLEFT = 4
-        }
-    }
-		enum Events {
-				/**
-				 * This event is called when a touch screen motion event starts.
-				 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-				 * @param {Object} motionEvent
-				 * @param {Number} motionEvent.x
-				 * @param {Number} motionEvent.y
-				 * @android
-				 * @ios
-				 * @since 4.3.5
-				 */
-			Touch = "touch",
-				/**
-				 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
-				 *
-				 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-				 * @param {Object} motionEvent
-				 * @param {Number} motionEvent.x
-				 * @param {Number} motionEvent.y
-				 * @android
-				 * @ios
-				 * @since 4.3.5
-				 */
-			TouchCancelled = "touchCancelled",
-			/**
-			 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
-			 *
-			 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-			 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
-			 * @param {Object} motionEvent
-			 * @param {Boolean} motionEvent.isInside
-			 * @param {Number} motionEvent.x
-			 * @param {Number} motionEvent.y
-			 * @android
-			 * @ios
-			 * @since 4.3.5
-			 */
-			TouchEnded = "touchEnded",
-			/**
-			 * This event is called when the touch has changed its point on the screen.
-			 *
-			 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-			 * @param {Object} motionEvent
-			 * @param {Boolean} isInside
-			 * @param {Number} motionEvent.x
-			 * @param {Number} motionEvent.y
-			 * @android
-			 * @ios
-			 * @member UI.View
-			 * @since 4.3.5
-			 */
-			TouchMoved = "touchMoved"
+			FORCERIGHTTOLEFT = 4,
 		}
+	}
+	enum Events {
+		/**
+		 * This event is called when a touch screen motion event starts.
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		Touch = "touch",
+		/**
+		 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		TouchCancelled = "touchCancelled",
+		/**
+		 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
+		 * @param {Object} motionEvent
+		 * @param {Boolean} motionEvent.isInside
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		TouchEnded = "touchEnded",
+		/**
+		 * This event is called when the touch has changed its point on the screen.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Boolean} isInside
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @member UI.View
+		 * @since 4.3.5
+		 */
+		TouchMoved = "touchMoved",
+	}
 }
 
 export = View;
