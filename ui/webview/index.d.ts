@@ -504,7 +504,7 @@ declare class WebView extends View<WebViewEvents> {
             certificates: Array<string>,
             validateCertificateChain?: boolean,
             validateHost?: boolean
-        }];
+        }] | undefined;
 	}
 }
 declare namespace WebView {

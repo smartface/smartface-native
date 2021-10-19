@@ -36,10 +36,10 @@ function Http(params) {
 
     let _ios = {};
     Object.defineProperty(self, 'ios', {
-        get: function() {
+        get: function () {
             return _ios;
         },
-        set: function(value) {
+        set: function (value) {
             if (typeof value === 'object') {
                 Object.assign(_ios, value);
             }
@@ -55,14 +55,14 @@ function Http(params) {
         set: function (values) {
             _sslPinning = values;
 
-            self.nativeObject.serverTrustPolicies = values.map(value => {
+            let trustPolicies = values ? values.map(value => {
 
                 const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
 
-                let nSURLCertificates = certificates.map(function (path, index) {
+                let nSURLCertificates = certificates.map(function (path) {
                     let certFile = new File({
                         path: path
-                });
+                    });
                     return certFile.ios.getNSURL();
                 })
                 return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
@@ -71,14 +71,16 @@ function Http(params) {
                     validateCertificateChain,
                     validateHost
                 );
-            })
+            }) : undefined;
+
+            self.nativeObject.serverTrustPolicies = trustPolicies;
         },
         enumerable: true
     });
 
     if (params) {
         for (var param in params) {
-    
+
             this[param] = params[param];
         }
     }

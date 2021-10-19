@@ -124,7 +124,7 @@ declare class Http {
             certificates: Array<string>,
             validateCertificateChain?: boolean,
             validateHost?: boolean
-        }];
+        }] | undefined;
     }
     cancelAll: () => void;
     /**

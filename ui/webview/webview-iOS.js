@@ -213,10 +213,10 @@ function WebView(params) {
 
     let _ios = {};
     Object.defineProperty(self, 'ios', {
-        get: function() {
+        get: function () {
             return _ios;
         },
-        set: function(value) {
+        set: function (value) {
             if (typeof value === 'object') {
                 Object.assign(_ios, value);
             }
@@ -247,11 +247,11 @@ function WebView(params) {
             set: function (values) {
                 _sslPinning = values;
 
-                self.nativeObject.serverTrustPolicies = values.map(value => {
+                let trustPolicies = values ? values.map(value => {
 
                     const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
 
-                    let nSURLCertificates = certificates.map(function (path, index) {
+                    let nSURLCertificates = certificates.map(function (path) {
                         let certFile = new File({
                             path: path
                         });
@@ -263,7 +263,9 @@ function WebView(params) {
                         validateCertificateChain,
                         validateHost
                     );
-                })
+                }) : undefined;
+
+                self.nativeObject.serverTrustPolicies = trustPolicies;
             },
             enumerable: true
         }
