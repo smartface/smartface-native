@@ -8,6 +8,9 @@ const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const Exception = require("../../util/exception");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+SearchView.Events = { ...View.Events, ...Events };
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
@@ -66,7 +69,7 @@ function SearchView(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeSearchView(AndroidConfig.activity);
         // Prevent gain focus when SearchView appear.
-        this.nativeObject.clearFocus(); 
+        this.nativeObject.clearFocus();
     }
 
     var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
@@ -94,10 +97,10 @@ function SearchView(params) {
 
     Object.defineProperties(this, {
         'text': {
-            get: function() {
+            get: function () {
                 return mSearchSrcTextView.getText().toString();
             },
-            set: function(text) {
+            set: function (text) {
                 if (typeof text === "string") {
                     mSearchSrcTextView.setText("" + text);
                 }
@@ -105,10 +108,10 @@ function SearchView(params) {
             enumerable: true
         },
         'hint': {
-            get: function() {
+            get: function () {
                 return _hint;
             },
-            set: function(hint) {
+            set: function (hint) {
                 if (hint) {
                     _hint = "" + hint;
                     updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
@@ -117,10 +120,10 @@ function SearchView(params) {
             enumerable: true
         },
         'hintTextColor': { // Added this property after sf-core 3.0.2 version.
-            get: function() {
+            get: function () {
                 return _hintTextColor;
             },
-            set: function(hintTextColor) {
+            set: function (hintTextColor) {
                 if (!(hintTextColor instanceof Color)) {
                     throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                 }
@@ -130,10 +133,10 @@ function SearchView(params) {
             enumerable: true
         },
         'textColor': {
-            get: function() {
+            get: function () {
                 return _textColor;
             },
-            set: function(textColor) {
+            set: function (textColor) {
                 if (!(textColor instanceof Color)) {
                     throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                 }
@@ -143,10 +146,10 @@ function SearchView(params) {
             enumerable: true
         },
         "iconImage": {
-            get: function() {
+            get: function () {
                 return _searchIcon;
             },
-            set: function(iconImage) {
+            set: function (iconImage) {
                 _searchIconAssigned = true;
                 // If setting null to icon, default search icon will be displayed.
                 if (iconImage == null || iconImage instanceof require("../image")) {
@@ -157,10 +160,10 @@ function SearchView(params) {
             enumerable: true
         },
         'textFieldBackgroundColor': {
-            get: function() {
+            get: function () {
                 return _textFieldBackgroundColor;
             },
-            set: function(value) {
+            set: function (value) {
                 if (!(value instanceof Color)) {
                     throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                 }
@@ -171,7 +174,7 @@ function SearchView(params) {
         },
         // methods
         'addToHeaderBar': {
-            value: function(page) {
+            value: function (page) {
                 if (page) {
                     page.headerBar.addViewToHeaderBar(this);
                 }
@@ -179,7 +182,7 @@ function SearchView(params) {
             enumerable: true
         },
         'removeFromHeaderBar': {
-            value: function(page) {
+            value: function (page) {
                 if (page) {
                     page.headerBar.removeViewFromHeaderBar(this);
                 }
@@ -187,32 +190,32 @@ function SearchView(params) {
             enumerable: true
         },
         'showKeyboard': {
-            value: function() {
+            value: function () {
                 this.requestFocus();
             },
             enumerable: true
         },
         'hideKeyboard': {
-            value: function() {
+            value: function () {
                 this.removeFocus();
             },
             enumerable: true
         },
         'requestFocus': {
-            value: function() {
+            value: function () {
                 this.nativeObject.requestFocus();
             },
-            enumerable: true 
+            enumerable: true
         },
         'removeFocus': {
-            value: function() {
+            value: function () {
                 this.nativeObject.clearFocus();
                 mSearchSrcTextView.clearFocus();
             },
             enumerable: true
         },
         'toString': {
-            value: function() {
+            value: function () {
                 return 'SearchView';
             },
             enumerable: true,
@@ -220,48 +223,48 @@ function SearchView(params) {
         },
         // events
         'onSearchBegin': {
-            get: function() {
+            get: function () {
                 return _onSearchBeginCallback;
             },
-            set: function(onSearchBegin) {
+            set: function (onSearchBegin) {
                 _onSearchBeginCallback = onSearchBegin.bind(this);
             },
             enumerable: true
         },
         'onSearchEnd': {
-            get: function() {
+            get: function () {
                 return _onSearchEndCallback;
             },
-            set: function(onSearchEnd) {
+            set: function (onSearchEnd) {
                 _onSearchEndCallback = onSearchEnd.bind(this);
             },
             enumerable: true
         },
         'onTextChanged': {
-            get: function() {
+            get: function () {
                 return _onTextChangedCallback;
             },
-            set: function(onTextChanged) {
+            set: function (onTextChanged) {
                 _onTextChangedCallback = onTextChanged.bind(self);
                 self.setQueryTextListener();
             },
             enumerable: true
         },
         'onSearchButtonClicked': {
-            get: function() {
+            get: function () {
                 return _onSearchButtonClickedCallback;
             },
-            set: function(onSearchButtonClicked) {
+            set: function (onSearchButtonClicked) {
                 _onSearchButtonClickedCallback = onSearchButtonClicked.bind(self);
                 self.setOnSearchButtonClickedListener();
             },
             enumerable: true
         },
         'font': {
-            get: function() {
+            get: function () {
                 return _font;
             },
-            set: function(font) {
+            set: function (font) {
                 if (font instanceof Font) {
                     _font = font;
                     mSearchSrcTextView.setTypeface(font.nativeObject);
@@ -271,30 +274,30 @@ function SearchView(params) {
             enumerable: true
         },
         'textalignment': {
-            get: function() {
+            get: function () {
                 return _textalignment;
             },
-            set: function(textalignment) {
+            set: function (textalignment) {
                 _textalignment = textalignment;
                 mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
             },
             enumerable: true
         },
         'cursorColor': {
-            get: function() {
+            get: function () {
                 return _textViewCursorColor;
             },
-            set: function(color) {
+            set: function (color) {
                 _textViewCursorColor = color;
                 SFEditText.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
             },
             enumerable: true
         },
         'searchIcon': {
-            get: function() {
+            get: function () {
                 return _searchIcon;
             },
-            set: function(value) {
+            set: function (value) {
                 _searchIcon = value;
                 _searchIconAssigned = true;
                 // If setting null to icon, default search icon will be displayed.
@@ -305,6 +308,36 @@ function SearchView(params) {
             enumerable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.CancelButtonClicked]: function () {
+            //iOS Only
+        },
+        [Events.SearchBegin]: function () {
+            _onSearchBeginCallback = (state) => {
+                this.emitter.emit(Events.SearchBegin, state);
+            }
+        },
+        [Events.SearchButtonClicked]: function () {
+            _onSearchButtonClickedCallback = (state) => {
+                this.emitter.emit(Events.SearchButtonClicked, state);
+            } 
+            self.setOnSearchButtonClickedListener();
+        },
+        [Events.SearchEnd]: function () {
+            _onSearchEndCallback = (state) => {
+                this.emitter.emit(Events.SearchEnd, state);
+            }
+        },
+        [Events.TextChanged]: function () {
+            _onTextChangedCallback = (state) => {
+                this.emitter.emit(Events.TextChanged, state);
+            }
+            self.setQueryTextListener();
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     var _hintTextColor = Color.LIGHTGRAY;
     var _keyboardType = KeyboardType.DEFAULT;
@@ -321,10 +354,10 @@ function SearchView(params) {
 
     Object.defineProperties(this.android, {
         'hintTextColor': {
-            get: function() {
+            get: function () {
                 return _hintTextColor;
             },
-            set: function(hintTextColor) {
+            set: function (hintTextColor) {
                 if (!(hintTextColor instanceof Color)) {
                     throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                 }
@@ -334,20 +367,20 @@ function SearchView(params) {
             enumerable: true
         },
         'keyboardType': {
-            get: function() {
+            get: function () {
                 return _keyboardType;
             },
-            set: function(keyboardType) {
+            set: function (keyboardType) {
                 _keyboardType = keyboardType;
                 this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
             }.bind(this),
             enumerable: true
         },
         'font': {
-            get: function() {
+            get: function () {
                 return _font;
             },
-            set: function(font) {
+            set: function (font) {
                 if (font instanceof Font) {
                     _font = font;
                     mSearchSrcTextView.setTypeface(font.nativeObject);
@@ -357,20 +390,20 @@ function SearchView(params) {
             enumerable: true
         },
         'textalignment': {
-            get: function() {
+            get: function () {
                 return _textalignment;
             },
-            set: function(textalignment) {
+            set: function (textalignment) {
                 _textalignment = textalignment;
                 mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
             },
             enumerable: true
         },
         "closeImage": {
-            get: function() {
+            get: function () {
                 return _closeImage;
             },
-            set: function(closeImage) {
+            set: function (closeImage) {
                 // If setting null to icon, default search icon will be displayed.
                 if (closeImage == null || closeImage instanceof require("../../ui/image")) {
                     _closeImage = closeImage;
@@ -380,39 +413,39 @@ function SearchView(params) {
             enumerable: true
         },
         'textFieldBorderRadius': {
-            get: function() {
+            get: function () {
                 return _textFieldBorderRadius;
             },
-            set: function(value) {
+            set: function (value) {
                 _textFieldBorderRadius = value;
                 self.setTextFieldBackgroundDrawable();
             }
         },
         'searchButtonIcon': {
-            get: function() {
+            get: function () {
                 return _searchButtonIcon;
             },
-            set: function(value) {
+            set: function (value) {
                 _searchButtonIcon = value;
                 mSearchButton.setImageDrawable(_searchButtonIcon.nativeObject);
             },
             enumerable: true
         },
         'closeIcon': {
-            get: function() {
+            get: function () {
                 return _closeIcon;
             },
-            set: function(value) {
+            set: function (value) {
                 _closeIcon = value;
                 mCloseButton.setImageDrawable(_closeIcon.nativeObject);
             },
             enumerable: true
         },
         'leftItem': {
-            get: function() {
+            get: function () {
                 return _leftItem;
             },
-            set: function(value) {
+            set: function (value) {
                 _leftItem = value;
                 if (_leftItem instanceof Image) {
                     mCompatImageView.setImageDrawable(_leftItem.nativeObject);
@@ -429,10 +462,10 @@ function SearchView(params) {
             enumerable: true
         },
         'iconifiedByDefault': {
-            get: function() {
+            get: function () {
                 return _iconifiedByDefault;
             },
-            set: function(value) {
+            set: function (value) {
                 _iconifiedByDefault = value;
                 self.nativeObject.setIconifiedByDefault(_iconifiedByDefault);
             },
@@ -442,7 +475,7 @@ function SearchView(params) {
 
     const GradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
     var textFieldBackgroundDrawable = new GradientDrawable();
-    this.setTextFieldBackgroundDrawable = function() {
+    this.setTextFieldBackgroundDrawable = function () {
         textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
         textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
         mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
@@ -453,10 +486,10 @@ function SearchView(params) {
         if (_isNotSetQueryTextListener)
             return;
         this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-            onQueryTextSubmit: function(query) {
+            onQueryTextSubmit: function (query) {
                 return false;
             },
-            onQueryTextChange: function(newText) {
+            onQueryTextChange: function (newText) {
                 _onTextChangedCallback && _onTextChangedCallback(newText);
                 return false;
             }
@@ -473,7 +506,7 @@ function SearchView(params) {
         if (_isClicklistenerAdded)
             return;
         mSearchSrcTextView.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
-            onEditorAction: function(textView, actionId, event) {
+            onEditorAction: function (textView, actionId, event) {
                 _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
                 return true;
             }
@@ -482,8 +515,8 @@ function SearchView(params) {
     };
 
     // Handling ios specific properties
-    this.ios.showLoading = function() {};
-    this.ios.hideLoading = function() {};
+    this.ios.showLoading = function () { };
+    this.ios.hideLoading = function () { };
 
     if (!this.skipDefaults) {
         const NativePorterDuff = requireClass('android.graphics.PorterDuff');
@@ -491,8 +524,8 @@ function SearchView(params) {
         mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);
 
         mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-            onFocusChange: function(view, hasFocus) {
-                if (hasFocus) { 
+            onFocusChange: function (view, hasFocus) {
+                if (hasFocus) {
                     let inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     inputManager.showSoftInput(view, 0);
                     _onSearchBeginCallback && _onSearchBeginCallback();

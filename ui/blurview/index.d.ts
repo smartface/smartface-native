@@ -23,10 +23,10 @@ import View from "../../ui/view";
  *
  *     page.layout.addChild(myBlurView);
  */
-declare class BlurView extends View  {
+declare class BlurView extends View {
     constructor(params?: any);
-    
-	android: View['android'] & {
+
+    android: View['android'] & {
         /**
          * Gets/sets the blur radius. The value range is between (0, 25].
          * @property {Number} [blurRadius=16]
@@ -50,7 +50,7 @@ declare class BlurView extends View  {
         overlayColor: Color;
     }
 
-	ios: View['ios'] & { 
+    ios: View['ios'] & {
         /**
          * Gets/sets blur style.
          * @property {UI.BlurView.iOS.EffectStyle} effectStyle
@@ -62,7 +62,7 @@ declare class BlurView extends View  {
 }
 
 declare namespace BlurView {
-	namespace iOS {
+    namespace iOS {
         /**
          * Blur styles
          * @enum {Number} UI.BlurView.iOS.EffectStyle
@@ -91,39 +91,39 @@ declare namespace BlurView {
             SYSTEMTHICKMATERIALDARK = 19,
             SYSTEMCHROMEMATERIALDARK = 20
         }
-		export enum SemanticContentAttribute {
-			/**
-			 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
-			 *
-			 * @property {Number} AUTO
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			AUTO = 0,
-			/**
-			 * Layout direction is always left to right.
-			 *
-			 * @property {Number} FORCELEFTTORIGHT
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			FORCELEFTTORIGHT = 3,
-			/**
-			 * Layout direction is always right to left.
-			 *
-			 * @property {Number} FORCERIGHTTOLEFT
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			FORCERIGHTTOLEFT = 4
-		}
-	}
+        export enum SemanticContentAttribute {
+            /**
+             * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
+             *
+             * @property {Number} AUTO
+             * @static
+             * @ios
+             * @readonly
+             * @since 3.1.3
+             */
+            AUTO = 0,
+            /**
+             * Layout direction is always left to right.
+             *
+             * @property {Number} FORCELEFTTORIGHT
+             * @static
+             * @ios
+             * @readonly
+             * @since 3.1.3
+             */
+            FORCELEFTTORIGHT = 3,
+            /**
+             * Layout direction is always right to left.
+             *
+             * @property {Number} FORCERIGHTTOLEFT
+             * @static
+             * @ios
+             * @readonly
+             * @since 3.1.3
+             */
+            FORCERIGHTTOLEFT = 4
+        }
+    }
 }
 
 export = BlurView;

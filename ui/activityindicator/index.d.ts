@@ -3,7 +3,7 @@ import View from "../view";
 import _ActivityIndicatorViewStyle from "./ios/activityindicatorviewstyle";
 
 declare class ActivityIndicator extends View {
-  color: Color
+  color: Color;
 }
 
 declare namespace ActivityIndicator {

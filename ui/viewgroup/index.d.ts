@@ -1,4 +1,17 @@
+import { IEventEmitter } from "core/eventemitter";
 import View from "../view";
+
+declare enum ViewGroupEvents {
+    ViewAdded = "viewAdded",
+    ViewRemoved = "viewRemoved",
+    ChildViewAdded = "childViewAdded",
+    ChildViewRemoved = "childViewRemoved"
+}
+declare namespace ViewGroup {
+    const Events: typeof ViewGroupEvents & typeof View.Events
+    type Events = typeof Events
+}
+
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -15,7 +28,10 @@ import View from "../view";
  *     });
  *     myFlexLayout.addChild(myLabel);
  */
-declare class ViewGroup extends View {
+declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents> {
+	on(eventName: string, callback: (...args: any) => void): () => void;
+	off(eventName: string, callback?: (...args: any) => void): void;
+	emit(event: string, detail?: any[]): void;
     constructor(params?: any)
     /**
      * This function adds a child view to a viewgroup.
@@ -119,5 +135,6 @@ declare class ViewGroup extends View {
      */
     onViewRemoved: (view: View) => void;
 }
+
 
 export = ViewGroup;

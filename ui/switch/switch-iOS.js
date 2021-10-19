@@ -1,6 +1,9 @@
 const View = require('../view');
 const Color = require("../../ui/color");
 const UIControlEvents = require("../../util").UIControlEvents;
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Switch.Events = { ...View.Events, ...Events };
 
 Switch.prototype = Object.create(View.prototype);
 function Switch(params) {
@@ -20,18 +23,29 @@ function Switch(params) {
 
     self.nativeObject.layer.masksToBounds = false;
 
+    const EventFunctions = {
+        [Events.ToggleChanged]: function () {
+            _onToggleChanged = (state) => {
+                self.emitter.emit(Events.ToggleChanged, state);
+            };
+            self.nativeObject.addJSTarget(() => _onToggleChanged(self.toggle), UIControlEvents.valueChanged);
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     Object.defineProperty(self, 'enabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.setEnabled;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.setEnabled = value;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'thumbOnColor', {
-        get: function() {
+        get: function () {
             if (self.nativeObject.thumbTintColor === undefined) {
                 return null;
             } else {
@@ -40,7 +54,7 @@ function Switch(params) {
                 });
             }
         },
-        set: function(value) {
+        set: function (value) {
             if (value === null || value === undefined) {
                 self.nativeObject.thumbTintColor = undefined;
             } else {
@@ -52,10 +66,10 @@ function Switch(params) {
 
     var _toggleOnColor = Color.GREEN;
     Object.defineProperty(self, 'toggleOnColor', {
-        get: function() {
+        get: function () {
             return _toggleOnColor;
         },
-        set: function(value) {
+        set: function (value) {
             _toggleOnColor = value;
             self.nativeObject.onTintColor = value.nativeObject;
         },
@@ -63,10 +77,10 @@ function Switch(params) {
     });
 
     Object.defineProperty(self, 'toggle', {
-        get: function() {
+        get: function () {
             return self.nativeObject.isOn;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.setOnAnimated(value, true);
         },
         enumerable: true
@@ -74,12 +88,12 @@ function Switch(params) {
 
     var _onToggleChanged;
     Object.defineProperty(self, 'onToggleChanged', {
-        get: function() {
+        get: function () {
             return _onToggleChanged;
         },
-        set: function(value) {
+        set: function (value) {
             _onToggleChanged = value.bind(this);
-            var onToggleChangedHandler = function() {
+            var onToggleChangedHandler = function () {
                 if (typeof _onToggleChanged === 'function') {
                     var state = self.toggle;
                     _onToggleChanged(state);

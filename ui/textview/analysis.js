@@ -19,7 +19,7 @@ const View = require('../view');
  *     myTextview.left = 20,
  *     myTextview.backgroundColor = Color.GRAY;
  */
-function TextView(params) {}
+function TextView(params) { }
 
 /**
  * Gets/sets background color of a view. It allows setting background
@@ -243,7 +243,7 @@ TextView.prototype.attributedText = "";
  * @return {Number} return.height
  * @since 3.2.1
  */
-TextView.prototype.getAttributeTextSize = function(object) {};
+TextView.prototype.getAttributeTextSize = function (object) { };
 
 /**
  * This event is called when user click link string. onClick just work with attributedText.
@@ -260,7 +260,24 @@ TextView.prototype.getAttributeTextSize = function(object) {};
  * @since 3.0.0
  * @removed since 3.2.1, you should use UI.TextView#onLinkClick instead
  */
-TextView.prototype.onClick = function(string) {};
+TextView.prototype.onClick = function (string) { };
+
+/**
+ * This event is called when user click link string. onLinkClick just work with attributedText.
+ *
+ *     @example
+ *     myTextView.onLinkClick = function(string) {
+ *         console.log(string);
+ *     };
+ *
+ * @param {String} string
+ * @event onLinkClick
+ * @deprecated
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+TextView.prototype.onLinkClick = function (string) { };
 
 /**
  * This event is called when user click link string. onLinkClick just work with attributedText.
@@ -276,7 +293,7 @@ TextView.prototype.onClick = function(string) {};
  * @ios
  * @since 3.0.0
  */
-TextView.prototype.onLinkClick = function(string) {};
+TextView.Events.LinkClick = 'linkClick';
 
 /**
  * Gets/sets letterSpacing on TextView. letterSpacing just work with attributedText.

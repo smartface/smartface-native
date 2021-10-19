@@ -2,6 +2,9 @@ const View = require('../../ui/view');
 const File = require('../../io/file');
 const Invocation = require('../../util').Invocation;
 const UIScrollViewInheritance = require('../../util').UIScrollViewInheritance;
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+WebView.Events = { ...View.Events, ...Events };
 
 WebView.prototype = Object.create(View.prototype);
 function WebView(params) {
@@ -16,28 +19,28 @@ function WebView(params) {
     UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
     self.nativeObject.scrollView.setValueForKey(4, "contentInsetAdjustmentBehavior");
 
-    self.android.clearHistory = function() {};
-    self.android.clearFormData = function() {};
+    self.android.clearHistory = function () { };
+    self.android.clearFormData = function () { };
 
     self.nativeObject.setValueForKey(false, "opaque");
 
     Object.defineProperty(self, 'loadURL', {
-        value: function(value) {
+        value: function (value) {
             var nsURL = __SF_NSURL.URLWithString(value);
             var nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
             self.nativeObject.load(nsURLRequest);
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'userAgent', {
-        get: function() {
+        get: function () {
             return self.nativeObject.valueForKey("customUserAgent");
         },
-        set: function(value) {
+        set: function (value) {
             if (value) {
                 self.nativeObject.setValueForKey(value, "customUserAgent");
-            }else{
+            } else {
                 self.nativeObject.setValueForKey("", "customUserAgent");
             }
         },
@@ -45,7 +48,7 @@ function WebView(params) {
     });
 
     Object.defineProperty(self, 'loadFile', {
-        value: function(value) {
+        value: function (value) {
             var actualPath = value.nativeObject.getActualPath();
             var fileURL = __SF_NSURL.fileURLWithPath(actualPath);
 
@@ -73,47 +76,47 @@ function WebView(params) {
     });
 
     Object.defineProperty(self, 'loadHTML', {
-        value: function(value) {
+        value: function (value) {
             self.nativeObject.loadHTMLStringBaseURL(value, undefined);
         },
         enumerable: true
     });
 
-    self.onLoad = function() {}
-    self.nativeObject.onLoad = function(e) {
+    self.onLoad = function () { }
+    self.nativeObject.onLoad = function (e) {
         self.onLoad({
             url: e.url.absoluteString
         });
     }
 
-    self.onShow = function() {}
-    self.nativeObject.onShow = function(e) {
+    self.onShow = function () { }
+    self.nativeObject.onShow = function (e) {
         self.onShow({
             url: e.url.absoluteString
         });
     }
 
-    self.onError = function() {}
-    self.nativeObject.onError = function(e) {
+    self.onError = function () { }
+    self.nativeObject.onError = function (e) {
         self.onError({
             code: e.error.code,
             message: e.error.localizedDescription
         });
     }
 
-    self.refresh = function() {
+    self.refresh = function () {
         self.nativeObject.reload();
     }
 
-    self.ios.onOpenNewWindow = function() {};
-    self.nativeObject.onOpenNewWindow = function(e) {
+    self.ios.onOpenNewWindow = function () { };
+    self.nativeObject.onOpenNewWindow = function (e) {
         var urlString = e.request.URL ? e.request.URL.absoluteString : undefined;
         self.ios.onOpenNewWindow({
             url: urlString
         });
     };
 
-    self.evaluateJS = function(javascript, callback) {
+    self.evaluateJS = function (javascript, callback) {
         function result(e) {
             if (callback) {
                 var error;
@@ -130,20 +133,20 @@ function WebView(params) {
         self.nativeObject.evaluateJavaScript(javascript, result);
     }
 
-    self.goBack = function() {
+    self.goBack = function () {
         if (self.nativeObject.canGoBack) {
             self.nativeObject.goBack();
         }
     }
 
-    self.goForward = function() {
+    self.goForward = function () {
         if (self.nativeObject.canGoForward) {
             self.nativeObject.goForward();
         }
     }
 
-    self.onChangedURL = function() {}
-    self.nativeObject.onChangedURL = function(e) {
+    self.onChangedURL = function () { }
+    self.nativeObject.onChangedURL = function (e) {
         var check = self.onChangedURL({
             url: e.url.absoluteString
         })
@@ -154,57 +157,135 @@ function WebView(params) {
         }
     }
 
+    const EventFunctions = {
+        [Events.BackButtonPressed]: function () {
+            //Android Only
+        },
+        [Events.ChangedURL]: function () {
+            self.onChangedURL = function (state) {
+                this.emitter.emit(Events.ChangedURL, state);
+            }
+        },
+        [Events.ConsoleMessage]: function () {
+            //Android only
+        },
+        [Events.Error]: function () {
+            self.onError = function (state) {
+                this.emitter.emit(Events.Error, state);
+            }
+        },
+        [Events.Load]: function () {
+            self.onLoad = function (state) {
+                this.emitter.emit(Events.Load, state);
+            }
+        },
+        [Events.OpenNewWindow]: function () {
+            self.ios.onOpenNewWindow = function (state) {
+                this.emitter.emit(Events.OpenNewWindow, state);
+            }
+        },
+        [Events.Show]: function () {
+            self.onShow = function (state) {
+                this.emitter.emit(Events.Show, state);
+            }
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
     Object.defineProperty(self, 'openLinkInside', {
-        get: function() {
+        get: function () {
             return self.nativeObject.openLinkInside;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.openLinkInside = value;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'zoomEnabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.zoomEnabled;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.zoomEnabled = value;
         },
         enumerable: true
     });
 
-    var _safeAreaInsets;
-    Object.defineProperty(self.ios, 'safeAreaInsets', {
-        get: function() {
-            return _safeAreaInsets;
+    let _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function () {
+            return _ios;
         },
-        set: function(value) {
-            if (typeof value === 'function') {
-                _safeAreaInsets = value;
-                self.nativeObject.safeAreaInsetsCallback = value;
-            } else {
-                throw new Error("safeAreaInsets must be function");
+        set: function (value) {
+            if (typeof value === 'object') {
+                Object.assign(_ios, value);
             }
         },
         enumerable: true
     });
 
+    let _safeAreaInsets, _sslPinning;
+    Object.defineProperties(self.ios, {
+        'safeAreaInsets': {
+            get: function () {
+                return _safeAreaInsets;
+            },
+            set: function (value) {
+                if (typeof value === 'function') {
+                    _safeAreaInsets = value;
+                    self.nativeObject.safeAreaInsetsCallback = value;
+                } else {
+                    throw new Error("safeAreaInsets must be function");
+                }
+            },
+            enumerable: true
+        },
+        "sslPinning": {
+            get: function () {
+                return _sslPinning;
+            },
+            set: function (values) {
+                _sslPinning = values;
+
+                let trustPolicies = values ? values.map(value => {
+
+                    const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
+
+                    let nSURLCertificates = certificates.map(function (path) {
+                        let certFile = new File({
+                            path: path
+                        });
+                        return certFile.ios.getNSURL();
+                    })
+                    return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
+                        host,
+                        nSURLCertificates,
+                        validateCertificateChain,
+                        validateHost
+                    );
+                }) : undefined;
+
+                self.nativeObject.serverTrustPolicies = trustPolicies;
+            },
+            enumerable: true
+        }
+    });
+
     Object.defineProperty(self, 'scrollEnabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.scrollView.valueForKey("scrollEnabled");
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.scrollView.setValueForKey(value, "scrollEnabled");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'bounceEnabled', {
-        get: function() {
+        get: function () {
             return self.nativeObject.scrollView.valueForKey("bounces");
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.scrollView.setValueForKey(value, "bounces");
         },
         enumerable: true
@@ -212,10 +293,10 @@ function WebView(params) {
 
     var _scrollBarEnabled = true;
     Object.defineProperty(self, 'scrollBarEnabled', {
-        get: function() {
+        get: function () {
             return _scrollBarEnabled;
         },
-        set: function(value) {
+        set: function (value) {
             if (typeof value === 'boolean') {
                 self.nativeObject.scrollView.setValueForKey(value, "showsVerticalScrollIndicator");
                 self.nativeObject.scrollView.setValueForKey(value, "showsHorizontalScrollIndicator");
@@ -225,7 +306,7 @@ function WebView(params) {
         enumerable: true
     });
 
-    self.clearCache = function(deleteDiskFiles) {
+    self.clearCache = function (deleteDiskFiles) {
         var dataTypes = ["WKWebsiteDataTypeMemoryCache"];
         if (deleteDiskFiles) {
             dataTypes.push("WKWebsiteDataTypeDiskCache");
@@ -234,13 +315,13 @@ function WebView(params) {
         removeDataOfTypes(nsSetDataTypes);
     }
 
-    self.clearCookie = function() {
+    self.clearCookie = function () {
         var dataTypes = ["WKWebsiteDataTypeCookies"];
         var nsSetDataTypes = dataTypesToNSSet(dataTypes);
         removeDataOfTypes(nsSetDataTypes);
     }
 
-    self.clearAllData = function() {
+    self.clearAllData = function () {
         WebView.removeAllData();
     }
 
@@ -285,7 +366,7 @@ function WebView(params) {
                 invocationFetchDataRecordsOfTypes.setSelectorWithString("fetchDataRecordsOfTypes:completionHandler:");
                 invocationFetchDataRecordsOfTypes.retainArguments();
                 invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
-                invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function(result) {}, 3);
+                invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function (result) { }, 3);
 
                 invocationFetchDataRecordsOfTypes.invoke();
             }
@@ -300,7 +381,7 @@ function WebView(params) {
                 invocationRemoveDataOfTypes.retainArguments();
                 invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
                 invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate, 3);
-                invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function() {}, 4);
+                invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function () { }, 4);
 
                 invocationRemoveDataOfTypes.invoke();
             }
@@ -315,7 +396,7 @@ function WebView(params) {
     }
 }
 
-WebView.removeAllData = function() {
+WebView.removeAllData = function () {
 
     var allWebsiteDataTypes;
     var invocationWebsiteDataTypes = __SF_NSInvocation.createClassInvocationWithSelectorInstance("allWebsiteDataTypes", "WKWebsiteDataStore");
@@ -359,7 +440,7 @@ WebView.removeAllData = function() {
             invocationFetchDataRecordsOfTypes.setSelectorWithString("fetchDataRecordsOfTypes:completionHandler:");
             invocationFetchDataRecordsOfTypes.retainArguments();
             invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes, 2);
-            invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function(result) {}, 3);
+            invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function (result) { }, 3);
 
             invocationFetchDataRecordsOfTypes.invoke();
         }
@@ -374,7 +455,7 @@ WebView.removeAllData = function() {
             invocationRemoveDataOfTypes.retainArguments();
             invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes, 2);
             invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate, 3);
-            invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function() {}, 4);
+            invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function () { }, 4);
 
             invocationRemoveDataOfTypes.invoke();
         }
@@ -386,6 +467,6 @@ WebView.Android = {};
 WebView.Android.ConsoleMessageLevel = {};
 
 WebView.android = {};
-WebView.android.setWebContentsDebuggingEnabled = function(enabled) {};
+WebView.android.setWebContentsDebuggingEnabled = function (enabled) { };
 
 module.exports = WebView;

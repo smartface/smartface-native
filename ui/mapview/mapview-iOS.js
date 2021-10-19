@@ -4,6 +4,12 @@ const Image = require("../../ui/image");
 const Color = require('../../ui/color');
 const Location = require('../../device/location');
 const Invocation = require('../../util').Invocation;
+const Events = require('./events');
+const PinEvents = require('./pin/events');
+const {
+    EventEmitterCreator
+} = require("../../core/eventemitter");
+MapView.Events = {...View.Events, ...Events};
 
 MapView.prototype = Object.create(View.prototype);
 function MapView(params) {
@@ -493,6 +499,50 @@ function MapView(params) {
         return pinArray;
     }
 
+    const EventFunctions = {
+        [Events.CameraMoveEnded]: function() {
+            self.onCameraMoveEnded = (state) => {
+                this.emitter.emit(Events.CameraMoveEnded, state);
+            } 
+        },
+        [Events.CameraMoveStarted]: function() {
+            self.onCameraMoveStarted = (state) => {
+                this.emitter.emit(Events.CameraMoveStarted, state);
+            } 
+        },
+        [Events.ClusterPress]: function() {
+            _clusterOnPress = (state) => {
+                this.emitter.emit(Events.ClusterPress, state);
+            }
+
+            var _onPressHandler = function(e) {
+                var pinArray = [];
+                for (var i in e.memberAnnotations) {
+                    pinArray.push(_pinArray[e.memberAnnotations[i].uuid]);
+                }
+                _clusterOnPress.call(this, pinArray);
+            };
+            self.cluster.nativeObject.onPress = _onPressHandler.bind(this);
+        },
+        [Events.Create]: function() {
+            self.onCreate = (state) => {
+                this.emitter.emit(Events.Create, state);
+            } 
+        },
+        [Events.LongPress]: function() {
+            self.onLongPress = (state) => {
+                this.emitter.emit(Events.LongPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            self.nativeObject.onPress = (state) => {
+                this.emitter.emit(Events.Press, state);
+            } 
+        },
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
@@ -614,6 +664,22 @@ function Pin(params) {
         },
         enumerable: true
     });
+
+    const EventFunctions = {
+        [PinEvents.InfoWindowPress]: function() {
+            self.nativeObject.onInfoPress = (state) => {
+                this.emitter.emit(Events.InfoWindowPress, state);
+            } 
+        },
+        [PinEvents.Press]: function() {
+            self.nativeObject.onPress = (state) => {
+                this.emitter.emit(Events.Press, state);
+            } 
+        }
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
+    
 
     if (params) {
         for (var param in params) {

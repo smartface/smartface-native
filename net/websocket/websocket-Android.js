@@ -3,6 +3,12 @@ const OkHttpRequest = requireClass("okhttp3.Request");
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
 const ByteString = requireClass("okio.ByteString");
 
+const {
+    EventEmitterCreator
+} = require("../../core/eventemitter");
+const Events = require('./events');
+WebSocket.Events = { ...Events };
+
 const Blob = require("../../blob");
 const AndroidConfig = require("../../util/Android/androidconfig");
 
@@ -14,61 +20,87 @@ function WebSocket(params) {
         throw new Error("url must be initialized.");
     }
     var _listener, _request, _client;
-    var {url, headers} = params;
+    var { url, headers } = params;
 
     createClientAndRequest();
     createWebSocketListener();
     this.nativeObject = _client.newWebSocket(_request, _listener);
 
     var _onOpenCallback, _onFailureCallback, _onMessageCallback, _onCloseCallback;
+
+    const EventFunctions = {
+        [Events.Close]: function () {
+            _onCloseCallback = (e) => {
+                this.emitter.emit(Events.Close, e);
+            }
+        },
+        [Events.Failure]: function () {
+            _onFailureCallback = (e) => {
+                this.emitter.emit(Events.Failure, e);
+            }
+        },
+        [Events.Message]: function () {
+            _onMessageCallback = (e) => {
+                this.emitter.emit(Events.Message, e);
+            }
+        },
+        [Events.Open]: function () {
+            _onOpenCallback = (e) => {
+                this.emitter.emit(Events.Open, e);
+            }
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     Object.defineProperty(this, 'url', {
-        get: function() {
+        get: function () {
             return url;
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'onOpen', {
-        get: function() {
+        get: function () {
             return _onOpenCallback;
         },
-        set: function(callback) {
+        set: function (callback) {
             _onOpenCallback = callback.bind(this);
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'onFailure', {
-        get: function() {
+        get: function () {
             return _onFailureCallback;
         },
-        set: function(callback) {
+        set: function (callback) {
             _onFailureCallback = callback.bind(this);
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'onMessage', {
-        get: function() {
+        get: function () {
             return _onMessageCallback;
         },
-        set: function(callback) {
+        set: function (callback) {
             _onMessageCallback = callback.bind(this);
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'onClose', {
-        get: function() {
+        get: function () {
             return _onCloseCallback;
         },
-        set: function(callback) {
+        set: function (callback) {
             _onCloseCallback = callback.bind(this);
         },
         enumerable: true
     });
 
-    this.close = function(params) {
+    this.close = function (params) {
         if (!params || !params.code)
             throw new Error("code parameter is required.");
         if (this.nativeObject) {
@@ -78,13 +110,13 @@ function WebSocket(params) {
                 this.nativeObject.close(params.code, null);
         }
     };
-    this.send = function(params) {
+    this.send = function (params) {
         if (this.nativeObject && params) {
             if ((params.data) instanceof Blob) {
                 var bytes = params.data.parts;
                 var byteString = ByteString.of(bytes, 0, arrayLength(bytes));
                 return this.nativeObject.send(byteString);
-            } else if (typeof(params.data) === "string") {
+            } else if (typeof (params.data) === "string") {
                 return this.nativeObject.send(params.data);
             } else {
                 throw new Error("WebSocket can send string or Blob.");
@@ -98,7 +130,7 @@ function WebSocket(params) {
 
         var requestBuilder = new OkHttpRequest.Builder().url(url);
 
-        for(key in headers) {
+        for (key in headers) {
             requestBuilder.addHeader(key, headers[key]);
         }
         _request = requestBuilder.build();
@@ -106,11 +138,11 @@ function WebSocket(params) {
 
     function createWebSocketListener() {
         var overrideMethods = {
-            onOpen: function() {
+            onOpen: function () {
                 _onOpenCallback && _onOpenCallback();
             },
-            onMessage: function(data) {
-                if (typeof(data) === "string" || !data) {
+            onMessage: function (data) {
+                if (typeof (data) === "string" || !data) {
                     _onMessageCallback && _onMessageCallback({
                         string: data
                     });
@@ -124,13 +156,13 @@ function WebSocket(params) {
                     });
                 }
             },
-            onClosing: function(code, reason) {
+            onClosing: function (code, reason) {
                 _onCloseCallback && _onCloseCallback({
                     code: code,
                     reason: reason
                 });
             },
-            onFailure: function(throwableMessage, responseCode) {
+            onFailure: function (throwableMessage, responseCode) {
                 var code = responseCode;
                 var reason = throwableMessage;
                 _onFailureCallback && _onFailureCallback({

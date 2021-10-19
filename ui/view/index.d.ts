@@ -2,7 +2,7 @@ import Color from "../color";
 import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
-import { IEventEmitter } from '../../core/eventemitter';
+import { IEventEmitter } from "../../core/eventemitter";
 
 /**
  * @class UI.View
@@ -22,11 +22,14 @@ import { IEventEmitter } from '../../core/eventemitter';
  *     myView.backgroundColor = Color.RED;
  *
  */
-declare class View extends NativeComponent implements IEventEmitter {
+declare class View<TEvent = typeof View.Events>
+	extends NativeComponent
+	implements IEventEmitter
+{
 	constructor(params?: any);
-	emit(event: string, detail?: any[]): void;
 	on(eventName: string, callback: (...args: any) => void): () => void;
 	off(eventName: string, callback?: (...args: any) => void): void;
+	emit(event: string, ...args: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
 	 * @property {String} transitionID
@@ -40,50 +43,21 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 *
 	 * @property {Boolean} accessible
 	 * @android
-     * @ios
+	 * @ios
 	 * @member UI.View
 	 * @since 4.3.2
 	 */
 	accessible: boolean;
 	/**
-     * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
 	 *
 	 * @property {String} accessibilityLabel
 	 * @android
-     * @ios
+	 * @ios
 	 * @member UI.View
 	 * @since 4.3.2
 	 */
 	accessibilityLabel: string;
-	/**
-	 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
-	 * This property only supported for api level 23 and above.
-	 *
-	 * @property {Boolean} [useForeground = false]
-	 * @android
-	 * @member UI.View
-	 * @since 4.0.2
-	 */
-	useForeground: boolean;
-	/**
-	 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
-	 * to see the effect.
-	 *
-	 * @property {Boolean} [rippleEnabled = false]
-	 * @android
-	 * @member UI.View
-	 * @since 3.2.1
-	 */
-	rippleEnabled: boolean;
-	/**
-	 * Gets/sets ripple effect color for view.
-	 *
-	 * @property {UI.Color} rippleColor
-	 * @android
-	 * @member UI.View
-	 * @since 3.2.1
-	 */
-	rippleColor: Color;
 	/**
 	 * Defines the opacity of a view. The value of this property is a float number
 	 * between 0.0 and 1.0. 0 represents view is completely transparent and 1
@@ -530,6 +504,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a touch screen motion event starts.
 	 *
 	 * @event onTouch
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -544,6 +519,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
 	 * @event onTouchEnded
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
 	 * @param {Object} motionEvent
@@ -560,6 +536,7 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
 	 *
 	 * @event onTouchCancelled
+	 * @deprecated
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -570,8 +547,40 @@ declare class View extends NativeComponent implements IEventEmitter {
 	 * @since 2.0.10
 	 */
 	onTouchCancelled: (point: Point2D) => void;
+	/**
+	 * @deprecated
+	 */
 	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
 	android: {
+		/**
+		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+		 * This property only supported for api level 23 and above.
+		 *
+		 * @property {Boolean} [useForeground = false]
+		 * @android
+		 * @member UI.View
+		 * @since 4.0.2
+		 */
+		useForeground: boolean;
+		/**
+		 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+		 * to see the effect.
+		 *
+		 * @property {Boolean} [rippleEnabled = false]
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleEnabled: boolean;
+		/**
+		 * Gets/sets ripple effect color for view.
+		 *
+		 * @property {UI.Color} rippleColor
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleColor: Color;
 		/**
 		 * Gets/Sets the elevation of the view. For the views that has
 		 * StateListAnimator natively like Button, will lost its own
@@ -757,7 +766,7 @@ declare namespace View {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-		BOTTOM_LEFT = 0
+		BOTTOM_LEFT = 0,
 	}
 	namespace ios {
 		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
@@ -804,8 +813,61 @@ declare namespace View {
 			 * @readonly
 			 * @since 3.1.3
 			 */
-			FORCERIGHTTOLEFT = 4
+			FORCERIGHTTOLEFT = 4,
 		}
+	}
+	enum Events {
+		/**
+		 * This event is called when a touch screen motion event starts.
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		Touch = "touch",
+		/**
+		 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		TouchCancelled = "touchCancelled",
+		/**
+		 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
+		 * @param {Object} motionEvent
+		 * @param {Boolean} motionEvent.isInside
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @since 4.3.5
+		 */
+		TouchEnded = "touchEnded",
+		/**
+		 * This event is called when the touch has changed its point on the screen.
+		 *
+		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+		 * @param {Object} motionEvent
+		 * @param {Boolean} isInside
+		 * @param {Number} motionEvent.x
+		 * @param {Number} motionEvent.y
+		 * @android
+		 * @ios
+		 * @member UI.View
+		 * @since 4.3.5
+		 */
+		TouchMoved = "touchMoved",
 	}
 }
 

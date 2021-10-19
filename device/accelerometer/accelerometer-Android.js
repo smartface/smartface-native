@@ -1,7 +1,20 @@
 /* globals requireClass */
 const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+const Events = require('./events');
 
 const Accelerometer = {};
+Accelerometer.Events = { ...Events };
+
+const EventFunctions = {
+    [Events.Accelerate]: function () {
+        Accelerometer.__getInstance().onAccelerateCallback = function (x, y, z) {
+            Accelerometer.emitter.emit(Events.Accelerate, { x, y, z });
+        }
+    }
+}
+EventEmitterCreator(Accelerometer, EventFunctions);
+
 var _callback;
 
 Accelerometer.ios = {};
@@ -11,7 +24,7 @@ Accelerometer.__instance = null;
 Accelerometer.__isSetCallback = false;
 Accelerometer.__isStarted = false;
 
-Accelerometer.__getInstance = function() {
+Accelerometer.__getInstance = function () {
     if (!Accelerometer.__instance)
         Accelerometer.__instance = new NativeSFAccelerometerListener();
     return Accelerometer.__instance;
@@ -19,29 +32,29 @@ Accelerometer.__getInstance = function() {
 
 Object.defineProperties(Accelerometer, {
     'start': {
-        value: function() {
+        value: function () {
             if (Accelerometer.__isStarted) return;
             Accelerometer.__isStarted = true;
             Accelerometer.__getInstance().startListener();
         }
     },
     'stop': {
-        value: function() {
+        value: function () {
             if (!Accelerometer.__isStarted) return;
             Accelerometer.__isStarted = false;
             Accelerometer.__getInstance().stopListener();
         }
     },
     'onAccelerate': {
-        get: function() {
+        get: function () {
             return _callback;
         },
-        set: function(callback) {
+        set: function (callback) {
             _callback = callback;
-            if (typeof(callback) === "function") {
+            if (typeof (callback) === "function") {
                 if (Accelerometer.__isSetCallback) return;
                 Accelerometer.__isSetCallback = true;
-                Accelerometer.__getInstance().onAccelerateCallback = function(x, y, z) {
+                Accelerometer.__getInstance().onAccelerateCallback = function (x, y, z) {
                     _callback && _callback({
                         x,
                         y,

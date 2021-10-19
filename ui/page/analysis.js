@@ -37,17 +37,7 @@
  * 
  * @see https://github.com/smartface/router#push-a-new-page
  */
-function Page(params) {}
-
-/**
- * This event is called once when page is created.
- * You can create views and add them to page in this callback.
- *
- * @event onLoad
- * @android
- * @ios
- */
-Page.prototype.onLoad = function() {};
+function Page(params) { }
 
 /**
  * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
@@ -106,45 +96,7 @@ Page.prototype.transitionViews;
  */
 Page.prototype.layout;
 
-/**
- * This event is called when a page appears on the screen (everytime).
- * It will be better to set headerBar and statusBar properties in this callback.
- *
- *     @example
- *     const Page = require('@smartface/native/ui/page');
- *     const Application = require('@smartface/native/application');
- *     var myPage = new Page({
- *         onShow: function() {
- *             this.headerBar.visible = true;
- *         }
- *         Application.statusBar.visible = true;
- *     });
- *
- * @event onShow
- * @param {Object} parameters Parameters passed from Router.go function
- * @android
- * @ios
- */
-Page.prototype.onShow = function(parameters) {};
-
-/**
- * This event is called when a page disappears from the screen.
- *
- * @event onHide
- * @android
- * @ios
- */
-Page.prototype.onHide = function() {};
-
 Page.prototype.android = {};
-/**
- * This event will be triggered when user clicks back button on the Device.
- *
- * @event onBackButtonPressed
- * @android
- * @since 0.1
- */
-Page.prototype.android.onBackButtonPressed = function() {};
 
 /**
  * Adds a callback to transition views which will be triggered through the life  of an animation such as start and end. This callback must be assigned in constructor.
@@ -167,16 +119,6 @@ Page.prototype.ios = {};
  * @since 0.1
  */
 Page.prototype.ios.safeAreaLayoutMode = false;
-
-/**
- * This event will be triggered when padding values of layout changed.
- *
- * @event onSafeAreaPaddingChange
- * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
- * @ios
- * @since 0.1
- */
-Page.prototype.ios.onSafeAreaPaddingChange = function(paddingObject) {};
 
 
 /**
@@ -224,7 +166,7 @@ Page.prototype.ios.onSafeAreaPaddingChange = function(paddingObject) {};
  * @since 3.1.1
  *
  */
-Page.prototype.present = function(params) {};
+Page.prototype.present = function (params) { };
 
 
 /**
@@ -238,7 +180,7 @@ Page.prototype.present = function(params) {};
  * @since 3.1.1
  * @deprecated
  */
-Page.prototype.dismiss = function(params) {};
+Page.prototype.dismiss = function (params) { };
 
 /**
  * Gets status bar object. This property is readonly, you can not set
@@ -284,20 +226,6 @@ Page.prototype.headerBar;
  * @since 0.1
  */
 Page.prototype.orientation = UI.Page.Orientation.PORTRAIT;
-
-/**
- * This event will be called when orientation of the Page changes.
- * iOS fires this event before orientation changed but Android fires after changed.
- * 
- *
- * @event onOrientationChange
- * @param {Object} e
- * @param {UI.Page.Orientation} e.orientation 
- * @android
- * @ios
- * @since 0.1
- */
-Page.prototype.onOrientationChange = function(e) {};
 
 /**
  * @enum {Number} UI.Page.Orientation
@@ -427,5 +355,190 @@ Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
  * @readonly
  */
 Page.iOS.LargeTitleDisplayMode.NEVER = 2;
+
+/**
+ * Event to be implemented
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Page.prototype.on = function (event, callback) { }
+/**
+ * Event to be removed
+ * @param {string} event - Event type to be created
+ * @param {*} callback
+ * @returns {Function} unlistener function. Call it to remove the event
+ * @android
+ * @ios
+ */
+Page.prototype.off = function (event, callback) { }
+
+/**
+ * Event to be emitted
+ * @param {string} event - Event type to be triggered
+ * @param {*} detail - Pass appropiate parameter to invoke the relevant event
+ * @android
+ * @ios
+ */
+Page.prototype.emit = function (event, detail) { }
+
+
+/**
+ * This event is called once when page is created.
+ * You can create views and add them to page in this callback.
+ *
+ * @event onLoad
+ * @deprecated
+ * @android
+ * @ios
+ */
+Page.prototype.onLoad = function () { };
+
+
+/**
+ * This event is called when a page appears on the screen (everytime).
+ * It will be better to set headerBar and statusBar properties in this callback.
+ *
+ *     @example
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Application = require('@smartface/native/application');
+ *     var myPage = new Page({
+ *         onShow: function() {
+ *             this.headerBar.visible = true;
+ *         }
+ *         Application.statusBar.visible = true;
+ *     });
+ *
+ * @event onShow
+ * @deprecated
+ * @param {Object} parameters Parameters passed from Router.go function
+ * @android
+ * @ios
+ */
+Page.prototype.onShow = function (parameters) { };
+
+/**
+ * This event is called when a page disappears from the screen.
+ *
+ * @event onHide
+ * @deprecated
+ * @android
+ * @ios
+ */
+Page.prototype.onHide = function () { };
+
+
+/**
+ * This event will be called when orientation of the Page changes.
+ * iOS fires this event before orientation changed but Android fires after changed.
+ * 
+ *
+ * @event onOrientationChange
+ * @deprecated
+ * @param {Object} e
+ * @param {UI.Page.Orientation} e.orientation 
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Page.prototype.onOrientationChange = function (e) { };
+
+/**
+ * This event will be triggered when padding values of layout changed.
+ *
+ * @event onSafeAreaPaddingChange
+ * @deprecated
+ * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
+ * @ios
+ * @since 0.1
+ */
+Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject) { };
+
+/**
+* This event will be triggered when user clicks back button on the Device.
+*
+* @event onBackButtonPressed
+* @deprecated
+* @android
+* @since 0.1
+*/
+Page.prototype.android.onBackButtonPressed = function () { };
+
+/**
+ * This event is called once when page is created.
+ * You can create views and add them to page in this callback.
+ *
+ * @event onLoad
+ * @android
+ * @ios
+ */
+Page.Events.Load = 'load';
+
+
+/**
+ * This event is called when a page appears on the screen (everytime).
+ * It will be better to set headerBar and statusBar properties in this callback.
+ *
+ *     @example
+ *     const Page = require('@smartface/native/ui/page');
+ *     const Application = require('@smartface/native/application');
+ *     var myPage = new Page({
+ *         onShow: function() {
+ *             this.headerBar.visible = true;
+ *         }
+ *         Application.statusBar.visible = true;
+ *     });
+ *
+ * @event onShow
+ * @param {Object} parameters Parameters passed from Router.go function
+ * @android
+ * @ios
+ */
+Page.Events.Show = 'show';
+
+/**
+ * This event is called when a page disappears from the screen.
+ *
+ * @event onHide
+ * @android
+ * @ios
+ */
+Page.Events.Hide = 'hide';
+
+
+/**
+ * This event will be called when orientation of the Page changes.
+ * iOS fires this event before orientation changed but Android fires after changed.
+ * 
+ *
+ * @event onOrientationChange
+ * @param {Object} e
+ * @param {UI.Page.Orientation} e.orientation 
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Page.Events.OrientationChange = 'orientationChange';
+
+/**
+ * This event will be triggered when padding values of layout changed.
+ *
+ * @event onSafeAreaPaddingChange
+ * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
+ * @ios
+ * @since 0.1
+ */
+Page.Events.SafeAreaPaddingChange = 'safeAreaPaddingChange';
+
+/**
+* This event will be triggered when user clicks back button on the Device.
+*
+* @event onBackButtonPressed
+* @android
+* @since 0.1
+*/
+Page.Events.BackButtonPressed = 'backButtonPressed';
 
 module.exports = Page;

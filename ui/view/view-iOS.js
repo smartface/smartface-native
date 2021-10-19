@@ -3,13 +3,71 @@ const Exception = require("../../util").Exception;
 const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
-const { EventEmitter } = require("../../core/eventemitter");
-const EventEmitterMixin = require("../../core/eventemitter/mixin");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+
+const EventList = require('./events');
+
+function isInside(frame, point) {
+    var x = point.x;
+    var y = point.y;
+    var w = frame.width;
+    var h = frame.height;
+    return !(x > w || x < 0 || y > h || y < 0);
+}
+
+const EventFunctions = {
+    [EventList.Touch]: function () {
+        const onTouchHandler = function (e) {
+            const options = {
+                x: e && e.point ? e.point.x : null,
+                y: e && e.point ? e.point.y : null
+            };
+            this.emitter.emit(EventList.Touch, options);
+        };
+        this.nativeObject.onTouch = onTouchHandler.bind(this);
+    },
+    [EventList.TouchCancelled]: function () {
+        const onTouchCancelledHandler = function (e) {
+            const options = {
+                x: e && e.point ? e.point.x : null,
+                y: e && e.point ? e.point.y : null
+            };
+            this.emitter.emit(EventList.TouchCancelled, options);
+        };
+        this.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
+    },
+    [EventList.TouchEnded]: function () {
+        const onTouchEndedHandler = function (e) {
+            const inside = isInside(this.nativeObject.frame, e.point);
+            const options = {
+                x: e && e.point ? e.point.x : null,
+                y: e && e.point ? e.point.y : null,
+                isInside: inside
+            };
+            this.emitter.emit(EventList.TouchEnded, options);
+        };
+        this.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
+    },
+    [EventList.TouchMoved]: function () {
+        const onTouchMoveHandler = function (e) {
+            const inside = isInside(this.nativeObject.frame, e.point);
+            const options = {
+                x: e && e.point ? e.point.x : null,
+                y: e && e.point ? e.point.y : null,
+                isInside: inside
+            };
+            this.emitter.emit(EventList.TouchMoved, options);
+        };
+        this.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
+    }
+};
+
+View.Events = { ...EventList }
 
 function View(params) {
 
     var self = this;
-    self.emitter = new EventEmitter();
+    EventEmitterCreator(this, EventFunctions);
     self.android = {};
     self.ios = {};
 
@@ -543,14 +601,6 @@ function View(params) {
         enumerable: true,
         configurable: true
     });
-
-    function isInside(frame, point) {
-        var x = point.x;
-        var y = point.y;
-        var w = frame.width;
-        var h = frame.height;
-        return !(x > w || x < 0 || y > h || y < 0);
-    }
 
     function guid() {
         function s4() {
@@ -1289,8 +1339,6 @@ function View(params) {
     }
 
 }
-
-View.prototype = Object.assign({}, EventEmitterMixin);
 
 View.ios = {};
 

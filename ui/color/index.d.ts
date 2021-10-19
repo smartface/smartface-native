@@ -241,7 +241,7 @@ declare namespace Color {
      * @ios
      * @since 0.1
      */
-    function red(color: Color): Color;
+    function red(color: Color): number;
     /**
      * Returns the green value of a color instance.
      *
@@ -259,7 +259,7 @@ declare namespace Color {
      * @ios
      * @since 0.1
      */
-    function green(color: Color): Color;
+    function green(color: Color): number;
     /**
      * Returns the blue value of a color instance.
      *
@@ -277,7 +277,7 @@ declare namespace Color {
      * @ios
      * @since 0.1
      */
-    function blue(color: Color): Color;
+    function blue(color: Color): number;
 
     /**
      * Returns the alpha value of a color instance.
@@ -296,7 +296,7 @@ declare namespace Color {
      * @ios
      * @since 0.1
      */
-    function alpha(color: Color): Color;
+    function alpha(color: Color): number;
 }
 
 export = Color;

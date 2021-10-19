@@ -3,6 +3,12 @@ const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.
 
 const TypeUtil = require('../../../util/type');
 const Color = require('../../color');
+const {
+    EventEmitterCreator
+  } = require("../../../core/eventemitter");
+
+const Events = require('./events');
+Pin.Events = {...Events};
 
 const hueDic = {};
 hueDic[Color.BLUE.nativeObject] = NativeDescriptorFactory.HUE_BLUE;
@@ -27,6 +33,22 @@ function Pin(params) {
     var _title = "";
     var _visible = true;
     var _id = 0;
+
+    const EventFunctions = {
+        [Events.InfoWindowPress]: function() {
+            _onInfoWindowPress = function (state) {
+                this.emitter.emit(Events.InfoWindowPress, state);
+            } 
+        },
+        [Events.Press]: function() {
+            _onPress = function (state) {
+                this.emitter.emit(Events.Press, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
+
     Object.defineProperties(self, {
         'color': {
             get: function() {

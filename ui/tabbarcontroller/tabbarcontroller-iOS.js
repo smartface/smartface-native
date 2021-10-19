@@ -2,7 +2,9 @@
 const Page = require('../../ui/page');
 const Color = require('../../ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
-
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+TabBarController.Events = {...Page.Events, ...Events};
 TabBarController.prototype = Object.create(Page.prototype);
 function TabBarController(params) {
 
@@ -50,6 +52,30 @@ function TabBarController(params) {
         enumerable: true,
         configurable: true
     });
+
+
+    const EventFunctions = {
+        [Events.PageCreate]: function() {
+            _onPageCreate = (state) => {
+                this.emitter.emit(Events.PageCreate, state);
+            };
+            self.nativeObject.viewControllerForIndex = function(index) {
+                var retval = undefined;
+                retval = _onPageCreate.call(this, index).nativeObject;
+                return retval;
+            }.bind(this);
+        },
+
+        [Events.Selected]: function() {
+            _onSelected = (state) => {
+                this.emitter.emit(Events.Selected, state);
+            } ;
+            self.nativeObject.tabWillSelectAtIndex = function(index) {
+                _onSelected.call(this, index);
+            }.bind(this);
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     // Properties
     var _items = [];

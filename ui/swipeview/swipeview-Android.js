@@ -2,11 +2,15 @@
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("io.smartface.android.sfcore.ui.swipeview.SFSwipeView");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("androidx.viewpager.widget.ViewPager$OnPageChangeListener");
+
+SwipeView.Events = { ...View.Events, ...Events };
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
 
@@ -16,6 +20,25 @@ function SwipeView(params) {
     var _pages = [];
     var _lastIndex = -1;
 
+    const EventFunctions = {
+        [Events.PageScrolled]: function() {
+            _callbackOnPageScrolled = function (state) {
+                this.emitter.emit(Events.PageScrolled, state);
+            } 
+        },
+        [Events.PageSelected]: function() {
+            _callbackOnPageSelected = function (state) {
+                this.emitter.emit(Events.PageSelected, state);
+            } 
+        },
+        [Events.StateChanged]: function() {
+            _callbackOnPageStateChanged = function (state) {
+                this.emitter.emit(Events.StateChanged, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
     if (!self.nativeObject) {
         var callbacks = {
             getCount: function() {

@@ -2,6 +2,15 @@ import View from "../view";
 import Color from "../color";
 import Image from "../image";
 import { Point2D } from "../../primitive/point2d";
+
+declare enum RangeSliderEvents {
+  ValueChange = "valueChange"
+}
+declare namespace RangeSlider {
+  const Events: typeof RangeSliderEvents & typeof View.Events
+  type Events = typeof Events
+}
+
 declare interface RangeSliderParams {
   android?: {
     thumbSize?: number;
@@ -31,7 +40,7 @@ declare interface RangeSliderParams {
   isTrackRounded?: boolean;
   onValueChange?: (value: number[]) => void;
 }
-declare class RangeSlider extends View implements RangeSliderParams {
+declare class RangeSlider extends View<RangeSliderEvents> implements RangeSliderParams {
   android: {
     thumbSize?: number;
     thumbColor?: Color;
