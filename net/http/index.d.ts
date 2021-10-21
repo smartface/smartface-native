@@ -111,7 +111,7 @@ declare class Http {
         * @ios
         * @since 4.3.4
         */
-        sslPinning: [{
+        sslPinning?: [{
             host: string,
             certificates: Array<string>,
             validateCertificateChain?: boolean,
