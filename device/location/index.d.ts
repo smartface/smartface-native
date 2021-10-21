@@ -48,7 +48,7 @@ declare class Location {
 		 */
 		checkSettings(handlers: {
 			onSuccess: () => void;
-			onFailure: (statusCode: Location.Android.SettingsStatusCodes) => void;
+			onFailure: (e: { statusCode: Location.Android.SettingsStatusCodes }) => void;
 		}): void;
 	};
 	/**
