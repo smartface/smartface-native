@@ -445,7 +445,7 @@ declare class Application {
 	 * @since 3.2.0
 	 */
 	static statusBar: StatusBar;
-	static LayoutDirection: LayoutDirection;
+	static LayoutDirection: typeof LayoutDirection;
 	static android: {
 		/**
 		 * Set/Get the layout direction from a Locale.
