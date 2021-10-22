@@ -1,5 +1,5 @@
 const Blob = require("../../global/blob");
-
+const File = require("../../io/file");
 /**
  * 
  * @constructor
