@@ -1,5 +1,5 @@
 const Blob = require("../../global/blob");
-
+const File = require("../../io/file");
 /**
  * 
  * @constructor
@@ -55,7 +55,7 @@ function Http(params) {
         set: function (values) {
             _sslPinning = values;
 
-            let trustPolicies = values ? values.map(value => {
+            let trustPolicies = Array.isArray(values) && values.length > 0 ? values.map(value => {
 
                 const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
 

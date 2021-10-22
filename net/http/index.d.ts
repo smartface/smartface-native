@@ -37,6 +37,59 @@ type RequestParams = RequestParamsType<
 	},
 	{ body?: Blob }
 >;
+
+interface IConstructorParams {
+	/**
+	 * Sets cookiePersistenceEnabled of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
+	 * with every request. This property must be given in contructor.
+	 *
+	 * @property {Boolean} cookiePersistenceEnabled
+	 * @android
+	 * @default false
+	 * @ios
+	 * @since 3.1.2
+	 */
+	 cookiePersistenceEnabled?: boolean;
+	 /**
+		* Gets/sets request timeout. Time elapsed in millisecond. This parameter must be given in constructor.
+		*
+		* @property {Number} timeout
+		* @default 60000
+		* @android
+		* @ios
+		*/
+	 timeout?: number;
+	 /**
+		* Gets/sets request headers.
+		*
+		* @property {Object} headers
+		* @android
+		* @ios
+		*/
+	 headers?: { [key: string]: string };
+	 ios?: {
+			 /**
+			 * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
+			 * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
+			 * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
+			 * 
+			 * @property {Array}    sslPinning   
+			 * @property {String}   sslPinning.host
+			 * @property {Array}    sslPinning.certificates Only DER format accepted.
+			 * @property {Boolean}  [sslPinning.validateCertificateChain=true]
+			 * @property {Boolean}  [sslPinning.validateHost=true]
+			 * @ios
+			 * @since 4.3.4
+			 */
+			 sslPinning?: {
+				host: string,
+				certificates: string[],
+				validateCertificateChain?: boolean,
+				validateHost?: boolean
+			}[];
+	 }
+}
+
 /**
  * @class Net.Http
  *
@@ -69,55 +122,32 @@ type RequestParams = RequestParamsType<
  *         }
  *     });
  */
-declare class Http {
-	constructor(params?: any);
-	/**
-	 * Sets cookiePersistenceEnabled of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
-	 * with every request. This property must be given in contructor.
-	 *
-	 * @property {Boolean} cookiePersistenceEnabled
-	 * @android
-	 * @ios
-	 * @since 3.1.2
-	 */
+declare class Http implements IConstructorParams {
+	constructor(params?: IConstructorParams);
 	cookiePersistenceEnabled: boolean;
-	/**
-	 * Gets/sets request timeout. Time elapsed in millisecond. This parameter must be given in constructor.
-	 *
-	 * @property {Number} timeout
-	 * @android
-	 * @ios
-	 */
 	timeout: number;
-	/**
-	 * Gets/sets request headers.
-	 *
-	 * @property {Object} headers
-	 * @android
-	 * @ios
-	 */
-    headers: { [key: string]: string };
-    ios: {
-        /**
-        * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
-        * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
-        * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
-        * 
-        * @property {Array}    sslPinning   
-        * @property {String}   sslPinning.host
-        * @property {Array}    sslPinning.certificates Only DER format accepted.
-        * @property {Boolean}  [sslPinning.validateCertificateChain=true]
-        * @property {Boolean}  [sslPinning.validateHost=true]
-        * @ios
-        * @since 4.3.4
-        */
-        sslPinning: [{
-            host: string,
-            certificates: Array<string>,
-            validateCertificateChain?: boolean,
-            validateHost?: boolean
-        }] | undefined;
-    }
+	headers: { [key: string]: string; };
+	ios: {
+		/**
+		 * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
+		 * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
+		 * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
+		 * 
+		 * @property {Array}    sslPinning   
+		 * @property {String}   sslPinning.host
+		 * @property {Array}    sslPinning.certificates Only DER format accepted.
+		 * @property {Boolean}  [sslPinning.validateCertificateChain=true]
+		 * @property {Boolean}  [sslPinning.validateHost=true]
+		 * @ios
+		 * @since 4.3.4
+		 */
+		sslPinning?: {
+			host: string,
+			certificates: string[],
+			validateCertificateChain?: boolean,
+			validateHost?: boolean
+		}[];
+	};
 	/**
 	 * Cancels all requests.
 	 *
