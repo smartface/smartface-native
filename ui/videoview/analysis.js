@@ -21,7 +21,7 @@
  *     myPage.layout.addChild(myVideoView);
  *
  */
-function VideoView(params) {}
+function VideoView(params) { }
 
 /**
  * Gets/sets background color of a view. It allows setting background
@@ -77,7 +77,7 @@ VideoView.prototype.borderRadius = 0;
  * @ios
  * @since 0.1
  */
-VideoView.prototype.play = function() {};
+VideoView.prototype.play = function () { };
 
 /**
  * This function pauses the video clip.
@@ -87,7 +87,7 @@ VideoView.prototype.play = function() {};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.pause = function() {};
+VideoView.prototype.pause = function () { };
 
 /**
  * This function stops the video clip by seeking to the initial position of the video.
@@ -97,7 +97,7 @@ VideoView.prototype.pause = function() {};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.stop = function() {};
+VideoView.prototype.stop = function () { };
 
 /**
  * This function returns status of the video, if the video clip is played or not.
@@ -108,7 +108,7 @@ VideoView.prototype.stop = function() {};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.isPlaying = function() {};
+VideoView.prototype.isPlaying = function () { };
 
 /**
  * This function puts the video clip in loop.
@@ -119,7 +119,7 @@ VideoView.prototype.isPlaying = function() {};
  * @param {Boolean} enabled
  * @since 0.1
  */
-VideoView.prototype.setLoopEnabled = function(enabled) {};
+VideoView.prototype.setLoopEnabled = function (enabled) { };
 
 /**
  * This function loads the video clip from the given URL.
@@ -130,7 +130,7 @@ VideoView.prototype.setLoopEnabled = function(enabled) {};
  * @param {String} url
  * @since 0.1
  */
-VideoView.prototype.loadURL = function(url) {};
+VideoView.prototype.loadURL = function (url) { };
 
 /**
  * This function loads the video clip from the local file.
@@ -141,7 +141,31 @@ VideoView.prototype.loadURL = function(url) {};
  * @param {IO.File} file
  * @since 0.1
  */
-VideoView.prototype.loadFile = function(file) {};
+VideoView.prototype.loadFile = function (file) { };
+
+/**
+ * This event is called when the video clip is ready to be played.
+ *
+ * @event onReady
+ * @deprecated
+ * @android
+ * @ios
+ * @param {Function} callback
+ * @since 0.1
+ */
+VideoView.prototype.onReady = function () { };
+
+/**
+ * This event is called when the video clip completed playing.
+ *
+ * @event onFinish
+ * @deprecated
+ * @android
+ * @ios
+ * @param {Function} callback
+ * @since 0.1
+ */
+VideoView.prototype.onFinish = function () { };
 
 /**
  * This event is called when the video clip is ready to be played.
@@ -152,7 +176,7 @@ VideoView.prototype.loadFile = function(file) {};
  * @param {Function} callback
  * @since 0.1
  */
-VideoView.prototype.onReady = function() {};
+VideoView.Events.Ready = "ready";
 
 /**
  * This event is called when the video clip completed playing.
@@ -163,7 +187,7 @@ VideoView.prototype.onReady = function() {};
  * @param {Function} callback
  * @since 0.1
  */
-VideoView.prototype.onFinish = function() {};
+VideoView.Events.Finish = "finish";
 
 /**
  * This function seeks to desired position of the video.
@@ -174,7 +198,7 @@ VideoView.prototype.onFinish = function() {};
  * @param {Number} milliseconds
  * @since 0.1
  */
-VideoView.prototype.seekTo = function(milliseconds) {};
+VideoView.prototype.seekTo = function (milliseconds) { };
 
 /**
  * This function returns the total duration of the video.
@@ -217,7 +241,7 @@ VideoView.prototype.backgroundModeEnabled;
  * @param {Number} volume
  * @since 0.1
  */
-VideoView.prototype.setVolume = function(volume) {};
+VideoView.prototype.setVolume = function (volume) { };
 
 /**
  * This function sets the visibility of video controller
@@ -228,7 +252,63 @@ VideoView.prototype.setVolume = function(volume) {};
  * @param {Boolean} enabled
  * @since 0.1
  */
-VideoView.prototype.setControllerEnabled = function(enabled) {};
+VideoView.prototype.setControllerEnabled = function (enabled) { };
+
+/**
+ * Picture in Picture has stopped.
+ *
+ * @event didStopPictureInPicture
+ * @deprecated
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.didStopPictureInPicture = function () { };
+
+/**
+ * Picture in Picture has started.
+ *
+ * @event didStartPictureInPicture
+ * @deprecated
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.didStartPictureInPicture = function () { };
+
+/**
+ * Picture in Picture is about to stop.
+ *
+ * @event willStopPictureInPicture
+ * @deprecated
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.willStopPictureInPicture = function () { };
+
+/**
+ * Picture in Picture is about to start.
+ *
+ * @event willStartPictureInPicture
+ * @deprecated
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.1
+ */
+VideoView.prototype.willStartPictureInPicture = function () { };
+
+/**
+ * Tells the delegate when Picture in Picture is about to stop, to give your app an opportunity to restore its video playback user interface.
+ *
+ * @event restoreUserInterfaceForPictureInPictureStopWithCompletionHandler
+ * @deprecated
+ * @ios
+ * @param {Function} callback
+ * @param {Boolean} callback.parameter To allow the system to finish restoring your user interface, you must call the completion handler with a value of true.
+ * @since 4.3.1
+ */
+VideoView.prototype.restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = function () { };
 
 /**
  * Picture in Picture has stopped.
@@ -238,7 +318,7 @@ VideoView.prototype.setControllerEnabled = function(enabled) {};
  * @param {Function} callback
  * @since 4.3.1
  */
-VideoView.prototype.didStopPictureInPicture = function() {};
+VideoView.Events.DidStopPictureInPicture = "didStopPictureInPicture";
 
 /**
  * Picture in Picture has started.
@@ -248,7 +328,7 @@ VideoView.prototype.didStopPictureInPicture = function() {};
  * @param {Function} callback
  * @since 4.3.1
  */
-VideoView.prototype.didStartPictureInPicture = function() {};
+VideoView.Events.DidStartPictureInPicture = "didStartPictureInPicture";
 
 /**
  * Picture in Picture is about to stop.
@@ -258,7 +338,7 @@ VideoView.prototype.didStartPictureInPicture = function() {};
  * @param {Function} callback
  * @since 4.3.1
  */
-VideoView.prototype.willStopPictureInPicture = function() {};
+VideoView.Events.WillStopPictureInPicture = "willStopPictureInPicture";
 
 /**
  * Picture in Picture is about to start.
@@ -268,7 +348,7 @@ VideoView.prototype.willStopPictureInPicture = function() {};
  * @param {Function} callback
  * @since 4.3.1
  */
-VideoView.prototype.willStartPictureInPicture = function() {};
+VideoView.Events.WillStartPictureInPicture = "willStartPictureInPicture";
 
 /**
  * Tells the delegate when Picture in Picture is about to stop, to give your app an opportunity to restore its video playback user interface.
@@ -279,7 +359,7 @@ VideoView.prototype.willStartPictureInPicture = function() {};
  * @param {Boolean} callback.parameter To allow the system to finish restoring your user interface, you must call the completion handler with a value of true.
  * @since 4.3.1
  */
-VideoView.prototype.restoreUserInterfaceForPictureInPictureStopWithCompletionHandler = function() {};
+VideoView.Events.RestoreUserInterfaceForPictureInPictureStopWithCompletionHandler = "restoreUserInterfaceForPictureInPictureStopWithCompletionHandler";
 
 /**
  * Asks the delegate whether the player view controller should automatically dismiss when Picture in Picture starts.
@@ -289,7 +369,7 @@ VideoView.prototype.restoreUserInterfaceForPictureInPictureStopWithCompletionHan
  * @since 4.3.1
  */
 VideoView.prototype.ios.shouldAutomaticallyDismissAtPictureInPictureStart = false;
-    
+
 /**
  * Gets/Sets the page where the videoview is put. In Android, Page is mandatory to release video resources based on your configurations. 
  *
@@ -369,7 +449,7 @@ VideoView.prototype.backgroundColor;
  * @android
  * @since 4.3.1
  */
-VideoView.prototype.onFullScreenModeChanged = function(isFullScreen) {};
+VideoView.prototype.onFullScreenModeChanged = function (isFullScreen) { };
 
 
 /**

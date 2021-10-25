@@ -6,6 +6,9 @@ const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
 const RequestCodes = require("../../util/Android/requestcodes");
 const TypeUtil = require("../../util/type");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+WebView.Events = {...View.Events, ...Events};
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -379,6 +382,59 @@ function WebView(params) {
             writable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.BackButtonPressed]: function() {
+            if (_onBackButtonPressedCallback === undefined) {
+                self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                    onKey: function(view, keyCode, keyEvent) {
+                        // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                        if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                            typeof _onBackButtonPressedCallback === "function" &&
+                                _onBackButtonPressedCallback();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }));
+            } 
+            _onBackButtonPressedCallback = (state) => {
+                this.emitter.emit(Events.BackButtonPressed, state);
+            };
+            
+        },
+        [Events.ChangedURL]: function() {
+            _onChangedURL = (state) => {
+                this.emitter.emit(Events.ChangedURL, state);
+            } 
+        },
+        [Events.ConsoleMessage]: function() {
+            _onConsoleMessage = (state) => {
+                this.emitter.emit(Events.ConsoleMessage, state);
+            } 
+        },
+        [Events.Error]: function() {
+            _onError = (state) => {
+                this.emitter.emit(Events.Error, state);
+            } 
+        },
+        [Events.Load]: function() {
+            _onLoad = (state) => {
+                this.emitter.emit(Events.Load, state);
+            } 
+        },
+        [Events.OpenNewWindow]: function() {
+            //iOS Only
+        },
+        [Events.Show]: function() {
+            _onShow = (state) => {
+                this.emitter.emit(Events.Show, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     var _page;
     // android-only properties

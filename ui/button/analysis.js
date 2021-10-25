@@ -23,7 +23,7 @@
  *     });
  *
  */
-function Button(params) {}
+function Button(params) { }
 
 /**
  * Gets/sets text of button view.
@@ -163,10 +163,33 @@ Button.prototype.backgroundColor = {};
  *
  * @since 0.1
  * @event onPress
+ * @deprecated
  * @android
  * @ios
  */
-Button.prototype.onPress = function onPress() {}
+Button.prototype.onPress = function onPress() { }
+
+/**
+ * Gets/sets long press event callback for a Button. This property only
+ * works for Android devices.
+ *
+ * @since 0.1
+ * @event onLongPress
+ * @deprecated
+ * @android
+ */
+Button.prototype.onLongPress = function onLongPress() { }
+
+/**
+ * Gets/sets press event callback for a Button.
+ * If you set button's onTouch() or onTouchEnded() events, onPress() event does not work on Android.
+ *
+ * @since 0.1
+ * @event onPress
+ * @android
+ * @ios
+ */
+Button.Events.Press = "press";
 
 /**
  * Gets/sets long press event callback for a Button. This property only
@@ -176,6 +199,6 @@ Button.prototype.onPress = function onPress() {}
  * @event onLongPress
  * @android
  */
-Button.prototype.onLongPress = function onLongPress() {}
+Button.Events.LongPress = "longPress";
 
 module.exports = Button;

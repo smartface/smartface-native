@@ -1,6 +1,8 @@
 const View = require('../view');
 const Color = require("../../ui/color");
 
+ActivityIndicator.Events = { ...View.Events };
+
 ActivityIndicator.prototype = Object.create(View.prototype);
 function ActivityIndicator(params) {
     var self = this;
@@ -18,10 +20,10 @@ function ActivityIndicator(params) {
     var _color = Color.create("#00A1F1");
     self.nativeObject.color = _color.nativeObject; // Set Default
     Object.defineProperty(this, 'color', {
-        get: function() {
+        get: function () {
             return _color;
         },
-        set: function(color) {
+        set: function (color) {
             _color = color;
             self.nativeObject.color = color.nativeObject;
         },
@@ -29,10 +31,10 @@ function ActivityIndicator(params) {
     });
 
     Object.defineProperty(this, 'visible', {
-        get: function() {
+        get: function () {
             return self.nativeObject.visible;
         },
-        set: function(value) {
+        set: function (value) {
             if (value) {
                 self.nativeObject.startAnimating();
             } else {
@@ -43,10 +45,10 @@ function ActivityIndicator(params) {
     });
 
     Object.defineProperty(self.ios, 'type', { //Deprecated 3.2.1
-        get: function() {
+        get: function () {
             return self.nativeObject.activityIndicatorViewStyle;
         },
-        set: function(type) {
+        set: function (type) {
             self.nativeObject.activityIndicatorViewStyle = type;
             self.nativeObject.color = _color.nativeObject;
         },
@@ -54,10 +56,10 @@ function ActivityIndicator(params) {
     });
 
     Object.defineProperty(self.ios, 'activityIndicatorViewStyle', {
-        get: function() {
+        get: function () {
             return self.nativeObject.activityIndicatorViewStyle;
         },
-        set: function(type) {
+        set: function (type) {
             self.nativeObject.activityIndicatorViewStyle = type;
             self.nativeObject.color = _color.nativeObject;
         },
@@ -65,7 +67,7 @@ function ActivityIndicator(params) {
     });
 
     // Assign parameters given in constructor
-    (function(params) {
+    (function (params) {
         for (var param in params) {
             if (param === "ios" || param === "android") {
                 setOSSpecificParams.call(this, params[param], param);
@@ -81,6 +83,7 @@ function ActivityIndicator(params) {
         }
     }.bind(this)(params));
 }
+
 
 ActivityIndicator.iOS = require("./ios");
 

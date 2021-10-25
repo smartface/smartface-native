@@ -1,9 +1,16 @@
+import { IEventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
 import Image from "../image";
 
-declare class SwipeItem {
+declare enum Events {
+  Press = "press"
+}
+declare class SwipeItem implements IEventEmitter<typeof Events> {
   constructor(params?: any);
+  on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+  off(eventName: typeof Events, callback?: (...args: any) => void): void;
+  emit(event: typeof Events, detail?: any[]): void;
   text: string;
   backgroundColor: Color;
   textColor: Color;
@@ -26,6 +33,7 @@ declare class SwipeItem {
     paddingRight: number;
     threshold: number;
   }
+  static Events: Events;
 }
 
 export = SwipeItem;

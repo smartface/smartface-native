@@ -3,6 +3,9 @@ const Exception = require("../../util").Exception;
 const Page = require("../../ui/page");
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const Invocation = require('../../util/iOS/invocation.js');
+const Events = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+SwipeView.Events = { ...View.Events, ...Events };
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -276,6 +279,27 @@ function SwipeView(params) {
             }
         }
     }
+
+
+    const EventFunctions = {
+        [Events.PageScrolled]: function() {
+            self.onPageScrolled = (index, offset) => {
+                this.emitter.emit(Events.PageScrolled, index, offset);
+            } 
+        },
+        [Events.PageSelected]: function() {
+            self.onPageSelected = (index, page) => {
+                this.emitter.emit(Events.PageSelected, index, page);
+            } 
+        },
+        [Events.StateChanged]: function() {
+            self.onStateChanged = (state) => {
+                this.emitter.emit(Events.StateChanged, state);
+            } 
+        }
+    };
+
+    EventEmitterCreator(this, EventFunctions);
 
     self.pageControllerDelegate = new __SF_UIPageViewControllerDelegate();
 

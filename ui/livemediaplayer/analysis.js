@@ -17,7 +17,7 @@
  *     liveMediaPlayer.start();
  * 
  */
-function LiveMediaPlayer() {}
+function LiveMediaPlayer() { }
 
 /**
  * Start playing.
@@ -27,7 +27,7 @@ function LiveMediaPlayer() {}
  * @ios
  * @since 4.2.2
  */
-LiveMediaPlayer.prototype.start = function() {};
+LiveMediaPlayer.prototype.start = function () { };
 
 /**
  * Pause playback.
@@ -37,7 +37,7 @@ LiveMediaPlayer.prototype.start = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPlayer.prototype.pause = function() {};
+LiveMediaPlayer.prototype.pause = function () { };
 
 /**
  * Returns whether it is currently playing.
@@ -47,7 +47,7 @@ LiveMediaPlayer.prototype.pause = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPlayer.prototype.isPlaying = function() {};
+LiveMediaPlayer.prototype.isPlaying = function () { };
 
 /**
  * Release the underlying resources.
@@ -57,7 +57,21 @@ LiveMediaPlayer.prototype.isPlaying = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPlayer.prototype.release = function() {};
+LiveMediaPlayer.prototype.release = function () { };
+
+/**
+ * Set the event callback 
+ *
+ * @event onChange
+ * @deprecated
+ * @param {Object} params
+ * @param {Number} params.event Event status code
+ * @param {String} params.message Event message
+ * @android
+ * @ios
+ * @since 4.2.2
+ */
+LiveMediaPublisher.prototype.onChange = function () { };
 
 /**
  * Set the event callback 
@@ -70,7 +84,7 @@ LiveMediaPlayer.prototype.release = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPublisher.prototype.onChange = function() {};
+LiveMediaPublisher.Events.Change = "change";
 
 /**
  * Stop playing.
@@ -80,7 +94,7 @@ LiveMediaPublisher.prototype.onChange = function() {};
  * @ios
  * @since 4.2.2
  */
-LiveMediaPlayer.prototype.stop = function() {};
+LiveMediaPlayer.prototype.stop = function () { };
 
 /**
  * Set input stream adress. Supported protocols: RTMP/RTMPT/RTSP/HTTP/TCP/UDP/FILE

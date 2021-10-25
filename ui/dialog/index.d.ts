@@ -87,16 +87,6 @@ declare class Dialog extends NativeComponent implements IFlexLayout {
  * @since 4.0.2
  */
     cancelable: boolean,
-/**
- * This function hides keyboard.
- *
- * @method hideKeyboard
- * @android
- * @static
- * @deprecated 4.0.2 Use {@link Application#hideKeyboard} instead.
- * @since 3.0.1
- */
-    hideKeyboard():void;
   }
 }
 declare namespace Dialog {

@@ -1,8 +1,7 @@
 import Page from "../page";
 import HeaderBar from "../headerbar";
-import BottomTabBarController from "../bottomtabbarcontroller";
 import { AnimationType } from "../../util/Android/transition/fragmenttransition";
-type Controller = Page | BottomTabBarController | NavigationController;
+type Controller = Page | NavigationController;
 /**
  * @class UI.NavigationController
  * @since 3.2
@@ -66,7 +65,7 @@ declare class NavigationController {
      * @ios
      * @since 3.2.0
      */
-    push(params: { controller: Controller }, animated?: boolean): void;
+    push(params: { controller: Controller, animated?: boolean } ): void;
     /**
      * Pop the last page from the navigation controller's page back stack. 
      *

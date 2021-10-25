@@ -1,5 +1,8 @@
+const { EventEmitterCreator } = require('../../core/eventemitter');
 const View = require('../../ui/view');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const Events = require('./events');
+LiveMediaPlayer.Events = {...View.Events, ...Events};
 
 const SFLiveMediaPlayerDelegate = requireClass("io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPlayerDelegate")
 
@@ -112,6 +115,16 @@ function LiveMediaPlayer(params) {
             configurable: true
         }
     });
+
+    const EventFunctions = {
+        [Events.Change]: function() {
+            _onChange = (state) => {
+                this.emitter.emit(Events.Change, state);
+            } 
+        }
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

@@ -8,6 +8,8 @@ BlurView.prototype = Object.create(View.prototype);
 BlurView.iOS = {};
 BlurView.iOS.EffectStyle = {};
 
+BlurView.Events = { ...View.Events };
+
 function BlurView(params) {
     var self = this;
     if (!this.nativeObject) {
@@ -19,37 +21,37 @@ function BlurView(params) {
     let blurRender = new RenderScriptBlur(AndroidConfig.activity);
 
     // BlurController.DEFAULT_BLUR_RADIUS
-    let _overlayColor, _rootView, 
+    let _overlayColor, _rootView,
         _blurRadius = 16;
     Object.defineProperties(self.android, {
         'overlayColor': {
-            get: function() {
+            get: function () {
                 return _overlayColor;
             },
-            set: function(color) {
+            set: function (color) {
                 _overlayColor = color;
                 self.__refreshBlurView();
             },
             enumerable: true
         },
         'rootView': {
-            get: function() {
+            get: function () {
                 return _rootView;
             },
-            set: function(view) {
+            set: function (view) {
                 _rootView = view;
                 self.__refreshBlurView();
             },
             enumerable: true
         },
         'blurRadius': {
-            get: function() {
+            get: function () {
                 return _blurRadius;
             },
-            set: function(radius) {
+            set: function (radius) {
                 // maximum radius value is 25.
                 // If you give a larger number than 25, the app will crash.
-                if(radius < 0 || radius > 25) {
+                if (radius < 0 || radius > 25) {
                     return;
                 }
 
@@ -61,13 +63,13 @@ function BlurView(params) {
     });
 
     this.__refreshBlurView = () => {
-        if(!_rootView) {
+        if (!_rootView) {
             return;
         }
         let blurViewFacade = self.nativeObject.setupWith(_rootView.nativeObject).setBlurAlgorithm(blurRender);
         blurViewFacade.setBlurRadius(_blurRadius);
 
-        if(_overlayColor) {
+        if (_overlayColor) {
             blurViewFacade.setOverlayColor(_overlayColor.nativeObject);
         }
     };

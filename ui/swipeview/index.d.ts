@@ -2,6 +2,42 @@ import Page from "../page";
 import View from "../view";
 import OverScrollMode from "../android/overscrollmode";
 
+declare enum SwipeViewEvents {
+	/**
+	 * Gets/Sets the callback triggered when a page is selected after a swipe action.
+	 *
+	 * @event onPageSelected
+	 * @param index
+	 * @param page Selected page instance
+	 * @android
+	 * @ios
+	 * @since 1.1.10
+	 */
+	PageSelected = "pageSelected",
+	/**
+	 * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
+	 * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
+	 *
+	 * @event onPageScrolled
+	 * @param index  Index of the first page from the left that is currently visible.
+	 * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
+	 * @android
+	 * @ios
+	 * @since 2.0.9
+	 */
+  PageScrolled = "pageScrolled",
+	/**
+	 * Gets/Sets the callback triggered during swipe actions.
+	 *
+	 * @event onStateChanged
+	 * @param {UI.SwipeView.State} state
+	 * @android
+	 * @ios
+	 * @since 1.1.10
+	 */
+  StateChanged = "stateChanged"
+}
+
 /**
  * @class UI.SwipeView
  * @since 1.1.10
@@ -43,12 +79,13 @@ declare class SwipeView extends View {
 	 * @ios
 	 * @since 1.1.10
 	 */
-	pages: Page[];
+	pages: (typeof Page)[];
 	/**
 	 * Gets/Sets the callback triggered when a page is selected after a swipe action.
 	 *
 	 * @event onPageSelected
 	 * @param index
+	 * @deprecated
 	 * @param page Selected page instance
 	 * @android
 	 * @ios
@@ -62,6 +99,7 @@ declare class SwipeView extends View {
 	 * @event onPageScrolled
 	 * @param index  Index of the first page from the left that is currently visible.
 	 * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 2.0.9
@@ -72,6 +110,7 @@ declare class SwipeView extends View {
 	 *
 	 * @event onStateChanged
 	 * @param {UI.SwipeView.State} state
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 1.1.10
@@ -112,6 +151,8 @@ declare class SwipeView extends View {
 }
 
 declare namespace SwipeView {
+  const Events: typeof SwipeViewEvents & typeof View.Events
+  type Events = typeof Events
 	/**
 	 * @enum UI.SwipeView.State
 	 * @static

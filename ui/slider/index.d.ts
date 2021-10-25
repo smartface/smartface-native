@@ -1,6 +1,16 @@
 import Color from "../color";
 import Image from "../image";
 import View from "../view";
+
+declare enum SliderEvents {
+  ValueChange = "valueChange"
+}
+declare namespace Slider {
+  const Events: typeof SliderEvents & typeof View.Events
+  type Events = typeof Events
+}
+
+
 /**
  * @class UI.Slider
  * @since 0.1

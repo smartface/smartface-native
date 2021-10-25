@@ -3,6 +3,12 @@ const Image = require("../../ui/image");
 const TypeUtil = require("../../util/type");
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
+const {
+    EventEmitterCreator
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+FloatingMenu.Events = {...Events};
 
 const FloatyOpenAnimationType = {
     pop: 0,
@@ -21,7 +27,6 @@ const UIUserInterfaceLayoutDirection = {
 function FloatingMenu(params) {
 
     var self = this;
-
     if (!self.nativeObject) {
         self.nativeObject = new __SF_Floaty();
     }
@@ -162,6 +167,26 @@ function FloatingMenu(params) {
         },
         enumerable: true
     });
+
+    const EventFunctions = {
+        [Events.MenuClose]: function() {
+            this.onMenuClose = (state) => {
+                self.emitter.emit(Events.MenuClose, state);
+            } 
+        },
+        [Events.MenuOpen]: function() {
+            self.onMenuOpen = (state) => {
+                self.emitter.emit(Events.MenuOpen, state);
+            } 
+        },
+        [Events.Click]: function() {
+            self.nativeObject.onSelected = (state) => {
+                self.emitter.emit(Events.Click, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

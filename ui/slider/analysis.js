@@ -21,7 +21,7 @@
  *     });
  *
  */
-function Slider(params) {}
+function Slider(params) { }
 
 /**
  * Gets/sets color of the thumb.
@@ -156,10 +156,32 @@ Slider.prototype.enabled = true;
  *     }
  *
  * @event onValueChange
+ * @deprecated
  * @android
  * @ios
  * @since 0.1
  */
-Slider.prototype.onValueChange = function() {};
+Slider.prototype.onValueChange = function () { };
+
+/**
+ * This event is called when slider value changes.
+ *
+ *     @example
+ *     const Slider = require('@smartface/native/ui/slider');
+ *     var mySlider = new Slider();
+ *     mySlider.onValueChange = valueChanged;
+ *     mySlider.value = 40;
+ *
+ *     function valueChanged() {
+ *         console.log("New value is: " + mySlider.value);
+ *     }
+ *
+ * @event onValueChange
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Slider.Events.ValueChange = 'valueChange';
+
 
 module.exports = Slider;

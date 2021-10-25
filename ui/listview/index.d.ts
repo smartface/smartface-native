@@ -9,6 +9,315 @@ import SwipeItemKlass from "./swipeitem";
 import View from "../view";
 import { Point2D } from "../../primitive/point2d";
 
+declare enum ListViewEvents {
+	/**
+	 * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing.
+	 *
+	 * @event onAttachedToWindow
+	 * @android
+	 * @since 4.0.2
+	 */
+	AttachedToWindow = "attachedToWindow",
+	/**
+	 * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+	 *
+	 * @event onDetachedFromWindow
+	 * @android
+	 * @since 4.0.2
+	 */
+	DetachedFromWindow = "detachedFromWindow",
+	/**
+	 * This event is called when a scroll occurs.
+	 *
+	 * @param {Object} params
+	 * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+	 * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+	 * @return {Boolean} Return true if the event is consumed.
+	 * @event onGesture
+	 * @android
+	 * @since 4.0.0
+	 */
+	Gesture = "gesture",
+	/**
+	 * This event is called when user pulls down and releases a ListView
+	 * when scroll position is on the top.
+	 *
+	 * @event onPullRefresh
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	PullRefresh = "pullRefresh",
+	/**
+	 * This event is called when a UI.ListViewItem created at specified row index.
+	 * You can bind your data to row items inside this callback.
+	 *
+	 * @param {UI.ListViewItem} listViewItem
+	 * @param {Number} index
+	 * @event onRowBind
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	RowBind = "rowBind",
+	/**
+	 * By default all the items are draggable if {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
+	 * by specific condition.
+	 *
+	 * @param {Number} index
+	 * @event onRowCanMove
+	 * @return {Boolean} Return true if index can be draggable
+	 * @ios
+	 * @android
+	 * @since 4.1.4
+	 */
+	RowCanMove = "rowCanMove",
+	/**
+	 * By default all the items are swipeable if {@link UI.ListView#swipeEnabled swipeEnabled} is true, to restrict some rows set this method and change return value
+	 * by specific condition. For iOS, this callback is triggered twice consecutively.
+	 *
+	 * @param {Number} index
+	 * @event onRowCanSwipe
+	 * @return {UI.ListView.SwipeDirection[]} Return allowed swipe direction in array.
+	 * @ios
+	 * @android
+	 * @since 4.1.4
+	 */
+	RowCanSwipe = "rowCanSwipe",
+	/**
+	 * This event is called when a ListView starts to create a ListViewItem.
+	 * You can customize your UI(not data-binding) inside this callback.
+	 *
+	 * @event onRowCreate
+	 * @param {Number} rowType
+	 * @android
+	 * @ios
+	 * @return {UI.ListViewItem}
+	 * @since 0.1
+	 */
+	RowCreate = "rowCreate",
+	/**
+	 * This event is called when a ListView starts to create a ListViewItem.
+	 * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
+	 *
+	 * @param {Number} index
+	 * @event onRowHeight
+	 * @android
+	 * @ios
+	 * @return {Number}
+	 * @since 1.1.18
+	 */
+	RowHeight = "rowHeight",
+	/**
+	 * This event is called when user long selects a row at specific index.
+	 *
+	 * @param {UI.ListViewItem} listViewItem
+	 * @param {Number} index
+	 * @event onRowLongSelected
+	 * @android
+	 * @since 2.0.4
+	 */
+	RowLongSelected = "rowLongSelected",
+	/**
+	 * This event is called when dragged item reordered in the list view.
+	 *
+	 * @param {Number} source
+	 * @param {Number} destination
+	 * @event onRowMoved
+	 * @ios
+	 * @android
+	 * @since 4.1.4
+	 */
+	RowMoved = "rowMoved",
+	/**
+	 * This event is called when dragged item before reordered in the list view.
+	 *
+	 * @param {Number} source
+	 * @param {Number} destination
+	 * @event onRowMove
+	 * @return {Boolean} Return true if source index can be reordered by destination index.
+	 * @ios
+	 * @android
+	 * @since 4.1.4
+	 */
+	RowMove = "rowMove",
+	/**
+	 * This event is called when user selects a row at specific index.
+	 *
+	 * @deprecated
+	 * @param {UI.ListViewItem} listViewItem
+	 * @param {Number} index
+	 * @event onRowSelected
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	RowSelected = "rowSelected",
+	/**
+	 * This event is called when ListViewItem about to swipe. For iOS, this callback is triggered twice consecutively.
+	 *
+	 *     @example
+	 *     myListView.onRowSwipe = function (e) {
+	 *      if (e.direction == ListView.SwipeDirection.LEFTTORIGHT) {
+	 *          e.ios.expansionSettings.buttonIndex = -1;
+	 *          var archiveItem = new ListView.SwipeItem();
+	 *          archiveItem.text = "ARCHIVE " + e.index;
+	 *          archiveItem.backgroundColor = Color.GREEN;
+	 *          archiveItem.textColor = Color.BLACK;
+	 *          archiveItem.font = Font.create("Arial-ItalicMT", 8);
+	 *          archiveItem.ios.padding = 40;
+	 *
+	 *          archiveItem.ios.isAutoHide = false;
+	 *          archiveItem.onPress = function (e) {
+	 *              console.log("Archive : " + e.index);
+	 *          };
+	 *          return [archiveItem];
+	 *      }
+	 *      else if (e.direction == ListView.SwipeDirection.RIGHTTOLEFT) {
+	 *          e.ios.expansionSettings.buttonIndex = 0;
+	 *          e.ios.expansionSettings.threshold = 1.5;
+	 *          var deleteItem = new ListView.SwipeItem();
+	 *          deleteItem.text = "DELETE " + e.index;
+	 *          deleteItem.backgroundColor = Color.RED;
+	 *          deleteItem.textColor = Color.YELLOW;
+	 *          deleteItem.icon = Image.createFromFile("images://smartface.png");
+	 *          deleteItem.ios.iconTextSpacing = 10;
+	 *          deleteItem.onPress = function (e) {
+	 *              console.log("Delete Index : " + e.index);
+	 *          };
+	 *          var moreItem = new ListView.SwipeItem();
+	 *          moreItem.text = "MORE";
+	 *          moreItem.onPress = function (e) {
+	 *              console.log("More : " + e.index);
+	 *          };
+	 *          return [deleteItem, moreItem];
+	 *      }
+	 *     }
+	 *
+	 * @param {Object} params
+	 * @param {Number} params.index
+	 * @param {UI.ListView.SwipeDirection} params.direction
+	 * @param {Object} params.ios iOS specific
+	 * @param {Object} params.ios.expansionSettings
+	 * @param {Number} params.ios.expansionSettings.buttonIndex Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+	 * @param {Boolean} params.ios.expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+	 * @param {Number} params.ios.expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+	 * @event onRowSwipe
+	 * @return {UI.ListView.SwipeItem[]} Return set of swipe items. Android always just consider first index.
+	 * @ios
+	 * @android
+	 * @since 4.1.4
+	 *
+	 *
+	 */
+	RowSwipe = "rowSwipe",
+	/**
+	 * This event is called before onRowCreate callback. Returns item type you should use based on position.
+	 *
+	 * @event onRowType
+	 * @param {Number} index
+	 * @android
+	 * @ios
+	 * @return {Number}
+	 * @since 3.0.2
+	 */
+	RowType = "rowType",
+	/**
+	 * This event is called when a ListView is scrolling. To remove this evet, set null.
+	 * For better performance, don't set any callback if does not
+	 * necessary
+	 *
+	 * @event onScroll
+	 * @param {Object} params
+	 * @param {Object} params.translation
+	 * @param {Number} params.translation.x
+	 * @param {Number} params.translation.y
+	 * @param {Object} params.contentOffset
+	 * @param {Number} params.contentOffset.x
+	 * @param {Number} params.contentOffset.y
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	Scroll = "scroll",
+	/**
+	 * This event is called when the list view is starting to decelerate the scrolling movement.
+	 *
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @event onScrollBeginDecelerating
+	 * @ios
+	 * @since 3.2.1
+	 */
+	ScrollBeginDecelerating = "scrollBeginDecelerating",
+	/**
+	 * This event is called when the list view is about to start scrolling the content.
+	 *
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @event onScrollBeginDragging
+	 * @ios
+	 * @since 3.2.1
+	 */
+	ScrollBeginDragging = "scrollBeginDragging",
+	/**
+	 * This event is called when the list view has ended decelerating the scrolling movement.
+	 *
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @event onScrollEndDecelerating
+	 * @ios
+	 * @since 3.2.1
+	 */
+	ScrollEndDecelerating = "scrollEndDecelerating",
+	/**
+	 * This event is called when dragging ended in the list view.
+	 *
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @param {Boolean} decelerate
+	 * @event onScrollEndDraggingWillDecelerate
+	 * @ios
+	 * @since 3.2.1
+	 */
+	ScrollEndDraggingWillDecelerate = "scrollEndDraggingWillDecelerate",
+	/**
+	 * This event is called when the user finishes scrolling the content.
+	 *
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @param {Object} velocity
+	 * @param {Number} velocity.x
+	 * @param {Number} velocity.y
+	 * @param {Object} targetContentOffset
+	 * @param {Number} targetContentOffset.x
+	 * @param {Number} targetContentOffset.y
+	 * @event onScrollEndDraggingWithVelocityTargetContentOffset
+	 * @ios
+	 * @since 3.2.1
+	 */
+	ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset",
+	/**
+	 * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
+	 * For better performance, don't set any callback if does not
+	 * necessary
+	 *
+	 * @event onScrollStateChanged
+	 * @param {UI.Android.ScrollState} newState
+	 * @param {Object} contentOffset
+	 * @param {Number} contentOffset.x
+	 * @param {Number} contentOffset.y
+	 * @android
+	 * @since 3.2.1
+	 */
+	ScrollStateChanged = "scrollStateChanged",
+}
+
 /**
  * @class UI.ListView
  * @since 0.1
@@ -79,13 +388,14 @@ import { Point2D } from "../../primitive/point2d";
  *
  *
  */
-declare interface ListView extends View {
+declare interface ListView extends View<ListViewEvents> {
 	width: number;
 	height: number;
 	/**
 	 * This event is called before onRowCreate callback. Returns item type you should use based on position.
 	 *
 	 * @event onRowType
+	 * @deprecated
 	 * @param {Number} index
 	 * @android
 	 * @ios
@@ -98,6 +408,7 @@ declare interface ListView extends View {
 	 * You can customize your UI(not data-binding) inside this callback.
 	 *
 	 * @event onRowCreate
+	 * @deprecated
 	 * @param {Number} rowType
 	 * @android
 	 * @ios
@@ -126,6 +437,7 @@ declare interface ListView extends View {
 	 * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
 	 *
 	 * @param {Number} index
+	 * @deprecated
 	 * @event onRowHeight
 	 * @android
 	 * @ios
@@ -158,27 +470,17 @@ declare interface ListView extends View {
 	 *
 	 * @param {UI.ListViewItem} listViewItem
 	 * @param {Number} index
+	 * @deprecated
 	 * @event onRowBind
 	 * @android
 	 * @ios
 	 * @since 0.1
 	 */
-	onRowBind: (item:ListViewItem, index: number) => void;
-	/**
-	 * This event is called when a scroll occurs.
-	 *
-	 * @param {Object} params
-	 * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
-	 * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
-	 * @return {Boolean} Return true if the event is consumed.
-	 * @event onGesture
-	 * @android
-	 * @since 4.0.0
-	 */
-	onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
+	onRowBind: (item: ListViewItem, index: number) => void;
 	/**
 	 * This event is called when user selects a row at specific index.
 	 *
+	 * @deprecated
 	 * @param {UI.ListViewItem} listViewItem
 	 * @param {Number} index
 	 * @event onRowSelected
@@ -190,6 +492,7 @@ declare interface ListView extends View {
 	/**
 	 * This event is called when user long selects a row at specific index.
 	 *
+	 * @deprecated
 	 * @param {UI.ListViewItem} listViewItem
 	 * @param {Number} index
 	 * @event onRowLongSelected
@@ -445,6 +748,7 @@ declare interface ListView extends View {
 	 * For better performance, don't set any callback if does not
 	 * necessary
 	 *
+	 * @deprecated
 	 * @event onScroll
 	 * @param {Object} params
 	 * @param {Object} params.translation
@@ -457,14 +761,12 @@ declare interface ListView extends View {
 	 * @ios
 	 * @since 0.1
 	 */
-	onScroll: (params?: {
-		translation: Point2D;
-		contentOffset: Point2D;
-	}) => void;
+	onScroll: (params?: { translation: Point2D; contentOffset: Point2D }) => void;
 	/**
 	 * This event is called when user pulls down and releases a ListView
 	 * when scroll position is on the top.
 	 *
+	 * @deprecated
 	 * @event onPullRefresh
 	 * @android
 	 * @ios
@@ -547,6 +849,7 @@ declare interface ListView extends View {
 		/**
 		 * This event is called when the list view is about to start scrolling the content.
 		 *
+		 * @deprecated
 		 * @param {Object} contentOffset
 		 * @param {Number} contentOffset.x
 		 * @param {Number} contentOffset.y
@@ -558,6 +861,7 @@ declare interface ListView extends View {
 		/**
 		 * This event is called when the list view is starting to decelerate the scrolling movement.
 		 *
+		 * @deprecated
 		 * @param {Object} contentOffset
 		 * @param {Number} contentOffset.x
 		 * @param {Number} contentOffset.y
@@ -569,6 +873,7 @@ declare interface ListView extends View {
 		/**
 		 * This event is called when the list view has ended decelerating the scrolling movement.
 		 *
+		 * @deprecated
 		 * @param {Object} contentOffset
 		 * @param {Number} contentOffset.x
 		 * @param {Number} contentOffset.y
@@ -580,6 +885,7 @@ declare interface ListView extends View {
 		/**
 		 * This event is called when dragging ended in the list view.
 		 *
+		 * @deprecated
 		 * @param {Object} contentOffset
 		 * @param {Number} contentOffset.x
 		 * @param {Number} contentOffset.y
@@ -595,6 +901,7 @@ declare interface ListView extends View {
 		/**
 		 * This event is called when the user finishes scrolling the content.
 		 *
+		 * @deprecated
 		 * @param {Object} contentOffset
 		 * @param {Number} contentOffset.x
 		 * @param {Number} contentOffset.y
@@ -615,6 +922,19 @@ declare interface ListView extends View {
 		) => void;
 	};
 	android: View["android"] & {
+		/**
+		 * This event is called when a scroll occurs.
+		 *
+		 * @deprecated
+		 * @param {Object} params
+		 * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+		 * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+		 * @return {Boolean} Return true if the event is consumed.
+		 * @event onGesture
+		 * @android
+		 * @since 4.0.0
+		 */
+		onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
 		/**
 		 * Called when the ListView should save its layout state. This is a good time to save your scroll position,
 		 * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
@@ -640,6 +960,7 @@ declare interface ListView extends View {
 		 * For better performance, don't set any callback if does not
 		 * necessary
 		 *
+		 * @deprecated
 		 * @event onScrollStateChanged
 		 * @param {UI.Android.ScrollState} newState
 		 * @param {Object} contentOffset
@@ -652,7 +973,7 @@ declare interface ListView extends View {
 			newState?: ScrollState,
 			contentOffset?: Point2D
 		) => void;
-	}
+	};
 	/**
  * 
  * This method is create swipe item
@@ -755,6 +1076,7 @@ declare interface ListView extends View {
 	 * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing.
 	 *
 	 * @event onAttachedToWindow
+	 * @deprecated
 	 * @android
 	 * @since 4.0.2
 	 */
@@ -763,6 +1085,7 @@ declare interface ListView extends View {
 	 * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
 	 *
 	 * @event onDetachedFromWindow
+	 * @deprecated
 	 * @android
 	 * @since 4.0.2
 	 */
@@ -770,6 +1093,7 @@ declare interface ListView extends View {
 	/**
 	 * This event is called when dragged item reordered in the list view.
 	 *
+	 * @deprecated
 	 * @param {Number} source
 	 * @param {Number} destination
 	 * @event onRowMoved
@@ -849,6 +1173,7 @@ declare interface ListView extends View {
 	/**
 	 * This event is called when dragged item before reordered in the list view.
 	 *
+	 * @deprecated
 	 * @param {Number} source
 	 * @param {Number} destination
 	 * @event onRowMove
@@ -862,6 +1187,7 @@ declare interface ListView extends View {
 	 * By default all the items are draggable if {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
 	 * by specific condition.
 	 *
+	 * @deprecated
 	 * @param {Number} index
 	 * @event onRowCanMove
 	 * @return {Boolean} Return true if index can be draggable
@@ -874,6 +1200,7 @@ declare interface ListView extends View {
 	 * By default all the items are swipeable if {@link UI.ListView#swipeEnabled swipeEnabled} is true, to restrict some rows set this method and change return value
 	 * by specific condition. For iOS, this callback is triggered twice consecutively.
 	 *
+	 * @deprecated
 	 * @param {Number} index
 	 * @event onRowCanSwipe
 	 * @return {UI.ListView.SwipeDirection[]} Return allowed swipe direction in array.
@@ -889,6 +1216,8 @@ declare class ListView implements ListView {
 }
 
 declare namespace ListView {
+	const Events: typeof ListViewEvents & typeof View.Events;
+	type Events = typeof Events;
 	/**
 	 * @class UI.ListView.SwipeItem
 	 * @since 4.1.4
@@ -926,7 +1255,7 @@ declare namespace ListView {
 		 * @readonly
 		 * @since 4.1.4
 		 */
-		RIGHTTOLEFT = 1
+		RIGHTTOLEFT = 1,
 	}
 	/**
 	 * iOS Specific Properties.
@@ -1005,7 +1334,7 @@ declare namespace ListView {
 			 * @readonly
 			 * @since 4.1.4
 			 */
-			AUTOMATIC = 100
+			AUTOMATIC = 100,
 		}
 	}
 }

@@ -5,6 +5,96 @@ import File from "../../io/file";
 import ContentInsetAdjustment from "../ios/contentinsetadjustment";
 import { Boundary } from "../../primitive/boundary";
 
+declare enum WebViewEvents { 
+		/**
+		 * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
+		 * event begin to trigger. The purpose of using this event might be
+		 * navigating back to pervious web pages.
+		 *
+		 * @event onBackButtonPressed
+		 * @android
+		 * @since 3.2.1
+		 */
+	BackButtonPressed = "backButtonPressed",
+		/**
+	 * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
+	 *
+	 * @event onChangedURL
+	 * @param {Object} event
+	 * @param {String} event.url
+	 * @return {Boolean}
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  ChangedURL = "changedURL",
+	/**
+	 * Report a JavaScript console message to the host application.
+	 *
+	 * @event onConsoleMessage
+	 * @param {Object} params
+	 * @param {Number} params.sourceId     The name of the source file that caused the error.
+	 * @param {String} params.message      The error message to report.
+	 * @param {String} params.lineNumber   The line number of the error.
+	 * @param {String} params.messageLevel The message level of the report
+	 * @android
+	 * @since 4.0.4
+	 */
+  ConsoleMessage = "consoleMessage",
+	/**
+	 * Callback triggered when an error occured while loading a web page.
+	 *
+	 * @event onError
+	 * @param {Object} event
+	 * @param {String} event.url
+	 * @param {Number} event.code
+	 * @param {String} event.message
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  Error = "error",
+	/**
+	 * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or
+	 * framesets will call onLoad one time for the main frame.
+	 *
+	 * @event onLoad
+	 * @param {Object} event
+	 * @param {String} event.url
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  Load = "load",
+	/**
+	 * Callback triggered when the target equals to _blank. That means open new window.
+	 *
+	 *     @example
+	 *     myWebView.ios.onOpenNewWindow = function(event) {
+	 *         myWebView.loadURL(event.url);
+	 *     };
+	 *
+	 * @event onOpenNewWindow
+	 * @param {Object} event
+	 * @param {String} event.url
+	 * @ios
+	 * @since 4.0.1
+	 */
+  OpenNewWindow = "openNewWindow",
+	/**
+	 * Callback triggered when a web page has finished loading. In Android, this method is called only for main frame. Receiving an onShow callback
+	 * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point.
+	 *
+	 * @event onShow
+	 * @param {Object} event
+	 * @param {String} event.url
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+  Show = "show"
+}
+
 /**
  * @class UI.WebView
  * @since 0.1
@@ -37,7 +127,7 @@ import { Boundary } from "../../primitive/boundary";
  *     myWebView.loadURL('https://www.google.com');
  *
  */
-declare class WebView extends View {
+declare class WebView extends View<WebViewEvents> {
 	/**
 	 * Indicates whether the links clicked on the webview will be rendered inside the webview or not.
 	 * Otherwise, the default browser of the device will handle that link.
@@ -197,6 +287,7 @@ declare class WebView extends View {
 	 * @param {Object} event
 	 * @param {String} event.url
 	 * @return {Boolean}
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 0.1
@@ -210,6 +301,7 @@ declare class WebView extends View {
 	 * @param {Object} event
 	 * @param {String} event.url
 	 * @android
+	 * @deprecated
 	 * @ios
 	 * @since 0.1
 	 */
@@ -223,6 +315,7 @@ declare class WebView extends View {
 	 *     };
 	 *
 	 * @event onOpenNewWindow
+	 * @deprecated
 	 * @param {Object} event
 	 * @param {String} event.url
 	 * @ios
@@ -233,6 +326,7 @@ declare class WebView extends View {
 	 * Callback triggered when an error occured while loading a web page.
 	 *
 	 * @event onError
+	 * @deprecated
 	 * @param {Object} event
 	 * @param {String} event.url
 	 * @param {Number} event.code
@@ -247,6 +341,7 @@ declare class WebView extends View {
 	 * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point.
 	 *
 	 * @event onShow
+	 * @deprecated
 	 * @param {Object} event
 	 * @param {String} event.url
 	 * @android
@@ -305,6 +400,7 @@ declare class WebView extends View {
 		 * navigating back to pervious web pages.
 		 *
 		 * @event onBackButtonPressed
+		 * @deprecated
 		 * @android
 		 * @since 3.2.1
 		 */
@@ -313,6 +409,7 @@ declare class WebView extends View {
 		 * Report a JavaScript console message to the host application.
 		 *
 		 * @event onConsoleMessage
+		 * @deprecated
 		 * @param {Object} params
 		 * @param {Number} params.sourceId     The name of the source file that caused the error.
 		 * @param {String} params.message      The error message to report.
@@ -388,7 +485,26 @@ declare class WebView extends View {
 		 * @ios
 		 * @since 4.0.0
 		 */
-		contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+        contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+        /**
+        * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
+        * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
+        * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
+        * 
+        * @property {Array}    sslPinning   
+        * @property {String}   sslPinning.host
+        * @property {Array}    sslPinning.certificates Only DER format accepted.
+        * @property {Boolean}  [sslPinning.validateCertificateChain=true]
+        * @property {Boolean}  [sslPinning.validateHost=true]
+        * @ios
+        * @since 4.3.4
+        */
+        sslPinning: [{
+            host: string,
+            certificates: Array<string>,
+            validateCertificateChain?: boolean,
+            validateHost?: boolean
+        }] | undefined;
 	}
 }
 declare namespace WebView {
@@ -450,5 +566,8 @@ declare namespace WebView {
 			WARNING = "WARNING"
 		}
 	}
+
+  const Events: typeof WebViewEvents & typeof View.Events
+  type Events = typeof Events
 }
 export = WebView;

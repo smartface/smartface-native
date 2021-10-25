@@ -1,5 +1,11 @@
 //NativeAccess
 const Invocation = require('../../util/iOS/invocation.js');
+const {
+    EventEmitterMixin
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+LayoutManager.prototype = Object.assign({}, EventEmitterMixin);
 
 function LayoutManager(params) {
     var sfSelf = this;
@@ -252,6 +258,31 @@ function LayoutManager(params) {
             }
         },
         enumerable: true
+    });
+
+    const EventFunctions = {
+        [Events.FullSpan]: function() {
+            sfSelf.onFullSpan = (state) => {
+                this.emitter.emit(Events.FullSpan, state);
+            } 
+        },
+        [Events.ItemLength]: function() {
+            sfSelf.onItemLength = function (state) {
+                this.emitter.emit(Events.ItemLength, state);
+            } 
+        },
+        [Events.TargetContentOffset]: function() {
+            sfSelf.ios.targetContentOffset = function (state) {
+                this.emitter.emit(Events.TargetContentOffset, state);
+            }
+        }
+    }
+    
+    Object.defineProperty(this, 'on', {
+        value: (event, callback) => {
+            EventFunctions[event].call(this);
+            this.emitter.on(event, callback);
+        }
     });
 
     // LOGIC

@@ -1,4 +1,10 @@
 const BottomTabBar = require('../../ui/bottomtabbar');
+const {
+    EventEmitterCreator
+  } = require("../../core/eventemitter");
+
+const Events = require('./events');
+BottomTabBarController.Events = {...Events};
 
 function BottomTabBarController(params) {
     var self = this;
@@ -157,6 +163,23 @@ function BottomTabBarController(params) {
             });
         }
     };
+
+    const EventFunctions = {
+        [Events.SelectByIndex]: function() {
+            this.didSelectByIndex = (index) => {
+                this.emitter.emit(Events.SelectByIndex, index);
+            } 
+        },
+        [Events.ShouldSelectByIndex]: function() {
+            this.shouldSelectByIndex = (index) => {
+                this.emitter.emit(Events.ShouldSelectByIndex, index);
+                return index;
+            } 
+        },
+    }
+    
+    EventEmitterCreator(this, EventFunctions);
+
     //////////////////////////////////////////////////////////////////////////
 
     params && (Object.assign(this, params));

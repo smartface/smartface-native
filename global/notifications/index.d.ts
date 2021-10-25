@@ -1,5 +1,38 @@
 import Color from "../../ui/color";
 
+declare enum Events {
+		/**
+		 * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
+		 * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
+		 *
+		 *     @example
+		 *     Notifications.onNotificationReceive = function(e){
+		 *      console.log("willPresentNotification", e);
+		 *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
+		 *     };
+		 *
+		 * @event onNotificationReceive
+		 * @param {Object} data
+		 * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
+		 * @ios
+		 * @android
+		 * @static
+		 * @since 4.0.3
+		 */
+		 NotificationReceive = "notificationReceive",
+		/**
+		 * This event triggered when clicked on notification alert
+		 *
+		 * @event onNotificationClick
+		 * @param {Object} data
+		 * @ios
+		 * @android
+		 * @static
+		 * @since 4.0.3
+		 */
+		 NotificationClick = "notificationClick"
+}
+
 /**
  * @class Notifications
  *
@@ -15,6 +48,10 @@ import Color from "../../ui/color";
  *
  */
 declare class Notifications {
+	static on(eventName: Events, callback: (...args: any) => void): () => void;
+	static off(eventName: Events, callback?: (...args: any) => void): void;
+	static emit(event: Events, ...args: any[]): void;
+	static Events: Events;
 	/**
 	 * Cancel all presented or scheduled local notifications.
 	 *
@@ -80,6 +117,7 @@ declare class Notifications {
 	 *     };
 	 *
 	 * @event onNotificationReceive
+	 * @deprecated
 	 * @param {Object} data
 	 * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
 	 * @ios
@@ -94,6 +132,7 @@ declare class Notifications {
 	 * This event triggered when clicked on notification alert
 	 *
 	 * @event onNotificationClick
+	 * @deprecated
 	 * @param {Object} data
 	 * @ios
 	 * @android

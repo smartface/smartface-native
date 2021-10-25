@@ -124,16 +124,6 @@ declare class Image extends NativeComponent {
 		): Image;
 	}
 	/**
-	 * Returns an Image object which built-in icon is created corresponding systemIcon value.
-	 *
-	 * @android
-	 * @method createSystemIcon
-	 * @param {Number | String} systemIcon
-	 * @see https://developer.android.com/reference/android/R.drawable
-	 * @since 4.0.2
-	 */
-	createSystemIcon(icon: number | string): void;
-	/**
 	 * Returns a Blob instance.
 	 *
 	 * @android
@@ -266,7 +256,18 @@ declare class Image extends NativeComponent {
 		onSuccess: (e: { image: Image }) => void,
 		onFailure: (e: { message: string }) => void
 	): Image;
-
+	/**
+	 * Creates an Image object which built-in icon is created corresponding systemIcon value.
+	 * This method is Android only.
+	 *
+	 * @android
+	 * @static
+	 * @method createSystemIcon
+	 * @param {Number | String} systemIcon
+	 * @see https://developer.android.com/reference/android/R.drawable
+	 * @since 4.0.2
+	 */
+	static createSystemIcon(icon: number | string): Image;
 	/**
 	 * Creates an image object from given a blob. 
 	 *

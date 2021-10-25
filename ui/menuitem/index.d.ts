@@ -1,4 +1,19 @@
+import { IEventEmitter } from "core/eventemitter";
 import Color from "../color";
+
+declare enum Events {
+	/**
+	 * This event is called when user selects a menu item.
+	 *
+	 * @since 0.1
+	 * @event onSelected
+	 * @android
+	 * @deprecated
+	 * @ios
+	 */
+	Selected = "selected"
+}
+
 /**
  * @class UI.MenuItem
  * @since 0.1
@@ -6,8 +21,12 @@ import Color from "../color";
  * MenuItem is used to add row and action to the UI.Menu 
  *
  */
-declare class MenuItem {
+declare class MenuItem implements IEventEmitter<Events> {
 	constructor(params?: { [key: string]: any });
+	static Events: typeof Events;
+	on(eventName: Events, callback: (...args: any) => void): () => void;
+	off(eventName: Events, callback?: (...args: any) => void): void;
+	emit(event: Events, detail?: any[]): void;
 
 /**
  * Gets/sets the title of a menu item.
@@ -44,6 +63,7 @@ declare class MenuItem {
  * @since 0.1
  * @event onSelected
  * @android
+ * @deprecated
  * @ios
  */
 	onSelected: () => void;

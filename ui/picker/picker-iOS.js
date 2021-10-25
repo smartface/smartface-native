@@ -1,8 +1,11 @@
 
 const View = require('../../ui/view');
 const Color = require("../../ui/color");
+const Events = require('./events');
+const { EventEmitterCreator } = require('../../core/eventemitter');
+Picker.Events = { ...Events };
+Picker.Events = { ...View.Events, ...Events };
 
-// const Picker = extend(View)(
 Picker.prototype = Object.create(View.prototype);
 function Picker(params) {
     var self = this;
@@ -47,6 +50,16 @@ function Picker(params) {
         },
         enumerable: true
     });
+
+    const EventFunctions = {
+        [Events.Selected]: function() {
+            _onSelectedCallback = function (state) {
+                self.emitter.emit(Events.Selected, state);
+            } 
+        }
+    }
+
+    EventEmitterCreator(this, EventFunctions);
 
     //////////////////////////////////////////////////////
     // UIPickerViewDataSource

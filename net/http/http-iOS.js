@@ -1,5 +1,5 @@
 const Blob = require("../../global/blob");
-
+const File = require("../../io/file");
 /**
  * 
  * @constructor
@@ -15,38 +15,83 @@ function Http(params) {
     ////////////////////////////////////////////////////////////////////////
     // Properties
     Object.defineProperty(self, 'timeout', {
-        get: function() {
+        get: function () {
             return self.nativeObject.timeoutIntervalForRequest * 1000;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.timeoutIntervalForRequest = value / 1000;
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'headers', {
-        get: function() {
+        get: function () {
             return self.nativeObject.defaultHTTPHeaders;
         },
-        set: function(value) {
+        set: function (value) {
             self.nativeObject.defaultHTTPHeaders = value;
+        },
+        enumerable: true
+    });
+
+    let _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function () {
+            return _ios;
+        },
+        set: function (value) {
+            if (typeof value === 'object') {
+                Object.assign(_ios, value);
+            }
+        },
+        enumerable: true
+    });
+
+    let _sslPinning;
+    Object.defineProperty(self.ios, "sslPinning", {
+        get: function () {
+            return _sslPinning;
+        },
+        set: function (values) {
+            _sslPinning = values;
+
+            let trustPolicies = Array.isArray(values) && values.length > 0 ? values.map(value => {
+
+                const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
+
+                let nSURLCertificates = certificates.map(function (path) {
+                    let certFile = new File({
+                        path: path
+                    });
+                    return certFile.ios.getNSURL();
+                })
+                return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
+                    host,
+                    nSURLCertificates,
+                    validateCertificateChain,
+                    validateHost
+                );
+            }) : undefined;
+
+            self.nativeObject.serverTrustPolicies = trustPolicies;
         },
         enumerable: true
     });
 
     if (params) {
         for (var param in params) {
+
             this[param] = params[param];
         }
     }
 
     ////////////////////////////////////////////////////////////////////////
     // Functions
-    this.cancelAll = function() {
+    this.cancelAll = function () {
         self.nativeObject.cancelAll();
     };
 
-    this.requestFile = function(params) {
+    this.requestFile = function (params) {
 
         var url = params.url;
         var fileName = params.fileName;
@@ -57,7 +102,7 @@ function Http(params) {
             self.nativeObject.requestFile(
                 url,
                 fileName,
-                function(e) {
+                function (e) {
                     const File = require('../../io/file');
                     // Native returns file path first.
                     // Convert to sf-core file object.
@@ -73,7 +118,7 @@ function Http(params) {
                         onLoad(e);
                     }
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -85,7 +130,7 @@ function Http(params) {
         );
     };
 
-    this.requestImage = function(params) {
+    this.requestImage = function (params) {
 
         var url = params.url;
         var onLoad = params.onLoad;
@@ -94,7 +139,7 @@ function Http(params) {
         return new Http.Request(
             self.nativeObject.requestImage(
                 url,
-                function(e) {
+                function (e) {
                     // Native returns UIImage instance.
                     // Convert to sf-core Image object.
                     if (e.image) {
@@ -109,7 +154,7 @@ function Http(params) {
                     }
 
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -121,7 +166,7 @@ function Http(params) {
         );
     };
 
-    this.requestString = function(params) {
+    this.requestString = function (params) {
 
         var url = params.url;
         var onLoad = params.onLoad;
@@ -130,7 +175,7 @@ function Http(params) {
         return new Http.Request(
             self.nativeObject.requestString(
                 url,
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -138,7 +183,7 @@ function Http(params) {
                         onLoad(e);
                     }
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -150,7 +195,7 @@ function Http(params) {
         );
     };
 
-    this.requestJSON = function(params) {
+    this.requestJSON = function (params) {
 
         var url = params.url;
         var onLoad = params.onLoad;
@@ -159,7 +204,7 @@ function Http(params) {
         return new Http.Request(
             self.nativeObject.requestJSON(
                 url,
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -167,7 +212,7 @@ function Http(params) {
                         onLoad(e);
                     }
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -179,7 +224,7 @@ function Http(params) {
         );
     };
 
-    this.request = function(params) {
+    this.request = function (params) {
 
         var onLoad = params.onLoad;
         var onError = params.onError;
@@ -187,7 +232,7 @@ function Http(params) {
         return new Http.Request(
             self.nativeObject.request(
                 params,
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -195,7 +240,7 @@ function Http(params) {
                         onLoad(e);
                     }
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -207,7 +252,7 @@ function Http(params) {
         );
     };
 
-    this.upload = function(params) {
+    this.upload = function (params) {
         var onLoad = params.onLoad;
         var onError = params.onError;
 
@@ -223,7 +268,7 @@ function Http(params) {
         return new Http.Request(
             self.nativeObject.upload(
                 params,
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -231,7 +276,7 @@ function Http(params) {
                         onLoad(e);
                     }
                 },
-                function(e) {
+                function (e) {
                     if (e.body) {
                         e.body = new Blob(e.body);
                     }
@@ -253,19 +298,19 @@ function Request(nativeObject) {
         self.nativeObject = nativeObject;
     }
 
-    this.suspend = function() {
+    this.suspend = function () {
         if (self.nativeObject) {
             self.nativeObject.suspend();
         }
     };
 
-    this.resume = function() {
+    this.resume = function () {
         if (self.nativeObject) {
             self.nativeObject.resume();
         }
     };
 
-    this.cancel = function() {
+    this.cancel = function () {
         if (self.nativeObject) {
             self.nativeObject.cancel();
         }
