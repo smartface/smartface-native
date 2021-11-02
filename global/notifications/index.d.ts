@@ -557,7 +557,7 @@ declare namespace Notifications {
 			 * @readonly
 			 * @since 4.0.3
 			 */
-			BADGEL = 1 << 0,
+			BADGE = 1 << 0,
 
 			/**
 			 * Play the sound associated with the notification.
