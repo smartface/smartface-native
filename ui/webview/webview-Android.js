@@ -478,6 +478,18 @@ function WebView(params) {
         enumerable: true,
         configurable: true
     });
+    
+    // android-only properties
+    Object.defineProperty(this.android, 'displayZoomControls', {
+        get: function() {
+            return self.nativeObject.getDisplayZoomControls();
+        },
+        set: function(displayZoomControls) {
+            self.nativeObject.setDisplayZoomControls(displayZoomControls);
+        },
+        enumerable: true,
+        configurable: true
+    });     
 
     // android-only properties
     let _onConsoleMessage;
