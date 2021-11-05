@@ -331,7 +331,7 @@ function disableShiftMode(bottomTabBar) {
     /* This is workarround to solve bug of material component https://github.com/material-components/material-components-android/issues/139 */
     for (var i = 0; i < childCount; i++) {
         var menuViewItem = menuView.getChildAt(i);
-        var activeLabel = menuViewItem.findViewById(NativeSFR.id.largeLabel);
+        var activeLabel = menuViewItem.findViewById(NativeSFR.id.navigation_bar_item_large_label_view);
         if (activeLabel) {
             activeLabel.setPadding(0, 0, 0, 0);
         }
