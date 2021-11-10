@@ -98,11 +98,11 @@ function SearchView(params) {
     Object.defineProperties(this, {
         'text': {
             get: function () {
-                return mSearchSrcTextView.getText().toString();
+                return this.nativeObject.getQuery().toString();
             },
             set: function (text) {
                 if (typeof text === "string") {
-                    mSearchSrcTextView.setText("" + text);
+                    this.nativeObject.setQuery("" + text, false);
                 }
             },
             enumerable: true

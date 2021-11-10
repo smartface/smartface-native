@@ -414,7 +414,7 @@ declare class Page
 	 */
 	public onOrientationChange(e: { orientation: Page.Orientation }): void;
 
-	readonly parentController: HeaderBar;
+	readonly parentController: { headerBar: HeaderBar };
 }
 
 // declare type OrientationType =

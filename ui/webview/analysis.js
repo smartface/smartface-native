@@ -155,6 +155,15 @@ WebView.prototype.goForward = function() {};
 WebView.prototype.zoomEnabled = true;
 
 /**
+ * Sets/Gets the visibility of zoom controls.
+ *
+ * @property {Boolean} displayZoomControls
+ * @android
+ * @since 4.3.4
+ */
+WebView.prototype.displayZoomControls = true;
+
+/**
  * Loads the web page provided via the url.
  *
  * @method loadURL
