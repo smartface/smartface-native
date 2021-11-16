@@ -3,7 +3,7 @@ const NativeClickListener = requireClass("android.view.View$OnClickListener");
 const NativeSpannableString = requireClass("android.text.SpannableString");
 const NativeForegroundColor = requireClass("android.text.style.ForegroundColorSpan");
 const NativeTextView = requireClass("android.widget.TextView");
-const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
+const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
 const NativeFloatingButton = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
 const NativeOnOpenListener = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
 const NativeOnCloseListener = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
@@ -90,7 +90,7 @@ function FloatingMenu(params) {
         const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
         const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
 
-        this.yogaNode = new NativeYogaNode();
+        this.yogaNode = NativeYogaNodeFactory.create();
         this.yogaNode.setPositionType(NativeYogaPositionType.ABSOLUTE);
         this.yogaNode.setPosition(NativeYogaEdge.TOP, 0);
         this.yogaNode.setPosition(NativeYogaEdge.LEFT, 0);

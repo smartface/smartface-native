@@ -5,7 +5,7 @@ const TypeUtil = require("../../util/type");
 const Color = require("../color");
 const NativeR = requireClass("android.R");
 const NativeView = requireClass("android.view.View");
-const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
+const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 
 const SFViewUtil = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
@@ -526,12 +526,12 @@ function View(params) {
   EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
-    this.yogaNode = new NativeYogaNode();
+    this.yogaNode =  NativeYogaNodeFactory.create();
   } else {
     if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
       this.yogaNode = this.nativeObject.getYogaNode();
     } else {
-      this.yogaNode = new NativeYogaNode();
+      this.yogaNode = NativeYogaNodeFactory.create();
     }
   }
 

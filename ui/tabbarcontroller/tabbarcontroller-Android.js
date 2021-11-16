@@ -1,7 +1,7 @@
 /* globals requireClass */
 const NativeTabLayout = requireClass("com.google.android.material.tabs.TabLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
-const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
+const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 
@@ -47,7 +47,7 @@ function TabBarController(params) {
 
     this.tabLayout = {};
     this.tabLayout.nativeObject = new NativeTabLayout(AndroidConfig.activity);
-    this.tabLayout.yogaNode = new NativeYogaNode();
+    this.tabLayout.yogaNode = NativeYogaNodeFactory.create();
     this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
     this.divider = this.tabLayout.nativeObject.getChildAt(0);
     //Todo: When Google fixed its issue (https://issuetracker.google.com/issues/36973591), remove this line.
