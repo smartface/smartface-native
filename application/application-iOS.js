@@ -281,7 +281,7 @@ Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
         SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
             var returnValue = true;
             if (typeof value === 'function') {
-                var innerReturnValue = value(shortcutItem.userInfo);
+                var innerReturnValue = value({data : shortcutItem.userInfo});
                 if (typeof innerReturnValue == "boolean") {
                     returnValue = innerReturnValue;
                 };
