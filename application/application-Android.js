@@ -13,7 +13,20 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
+function checkIsAppShortcut(e) {
+    return e && e.data && e.data.hasOwnProperty("AppShortcutType");
+}
 
+Application.onApplicationCallReceived = (e) => {
+    if (checkIsAppShortcut(e)) {
+        if (ApplicationWrapper.__onAppShortcutReceived)
+            ApplicationWrapper.__onAppShortcutReceived(e)
+    }
+    else {
+        if (ApplicationWrapper.__onApplicationCallReceived)
+            ApplicationWrapper.__onApplicationCallReceived(e)
+    }
+}
 
 const EventFunctions = {
     [Events.ApplicationCallReceived]: () => {
@@ -379,12 +392,23 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'onApplicationCallReceived': {
-        get: function() {
-            return Application.onApplicationCallReceived;
+        get: function () {
+            return this.__onApplicationCallReceived;
         },
-        set: function(_onApplicationCallReceived) {
-            if (TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null) {
-                Application.onApplicationCallReceived = _onApplicationCallReceived;
+        set: function (callback) {
+            if (TypeUtil.isFunction(callback) || callback === null) {
+                this.__onApplicationCallReceived = callback;
+            }
+        },
+        enumerable: true
+    },
+    'onAppShortcutReceived': {
+        get: function () {
+            return this.__onAppShortcutReceived;
+        },
+        set: function (callback) {
+            if (TypeUtil.isFunction(callback) || callback === null) {
+                this.__onAppShortcutReceived = callback;
             }
         },
         enumerable: true

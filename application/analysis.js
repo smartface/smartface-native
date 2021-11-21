@@ -540,6 +540,26 @@ Application.onReceivedNotification = function (data) {};
 Application.onApplicationCallReceived = function (e) {};
 
 /**
+	 * Triggered when application is opened by an app shortcut.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+	 * or UserInfo of app shortcut in iOS.
+	 * 
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @android
+	 * @ios
+	 * @static
+	 * @deprecated
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 */
+Application.onAppShortcutReceived = function (e) {};
+
+/**
  * The event is called when a user taps a universal link.
  *
  * @event onUserActivityWithBrowsingWeb

@@ -963,6 +963,27 @@ declare class Application {
 		data: { [key: string]: any };
 	}) => void;
 	/**
+	 * Triggered when application is opened by an app shortcut.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+	 * or UserInfo of app shortcut in iOS.
+	 * 
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @android
+	 * @ios
+	 * @static
+	 * @deprecated
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 */
+	 static onAppShortcutReceived: (e: {
+		data: { [key: string]: any };
+	}) => void;
+	/**
 	 * Triggered after application bring to foreground state. In Android, it triggered even the user is leaving another activity(even the activities launched by your app).
 	 * That means Permissions & derived from Dialog components are makes this callback to triggered.
 	 *

@@ -275,6 +275,27 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     enumerable: true
 });
 
+Application.onAppShortcutReceive = function () { };
+Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
+    set: function (value) {
+        SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
+            var returnValue = true;
+            if (typeof value === 'function') {
+                var innerReturnValue = value(shortcutItem.userInfo);
+                if (typeof innerReturnValue == "boolean") {
+                    returnValue = innerReturnValue;
+                };
+            };
+            return returnValue;
+        };
+        Application.onAppShortcutReceive = value;
+    },
+    get: function () {
+        return Application.onAppShortcutReceive;
+    },
+    enumerable: true
+});
+
 Application.onMaximize = function() {};
 Object.defineProperty(SFApplication, 'onMaximize', {
     set: function(value) {
