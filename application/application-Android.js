@@ -19,20 +19,25 @@ function checkIsAppShortcut(e) {
 
 Application.onApplicationCallReceived = (e) => {
     if (checkIsAppShortcut(e)) {
-        if (ApplicationWrapper.__onAppShortcutReceived)
-            ApplicationWrapper.__onAppShortcutReceived(e)
+        if (_onAppShortcutReceived)
+            _onAppShortcutReceived(e)
     }
     else {
-        if (ApplicationWrapper.__onApplicationCallReceived)
-            ApplicationWrapper.__onApplicationCallReceived(e)
+        if (_onApplicationCallReceived)
+            _onApplicationCallReceived(e)
     }
 }
 
 const EventFunctions = {
     [Events.ApplicationCallReceived]: () => {
-        Application.onApplicationCallReceived = (e) => {
+        _onApplicationCallReceived = (e) => {
             ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
-        };
+        }
+    },
+    [Events.AppShortcutReceived]: () => {
+        _onAppShortcutReceived = (e) => {
+            ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
+        }
     },
     [Events.BackButtonPressed]: () => {
         _onBackButtonPressed = (e) => {
@@ -90,7 +95,7 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
-var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
+var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed, _onApplicationCallReceived, _onAppShortcutReceived,
     _onReceivedNotification, _onRequestPermissionsResult, _keepScreenAwake = false,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
     spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
@@ -393,22 +398,22 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'onApplicationCallReceived': {
         get: function () {
-            return this.__onApplicationCallReceived;
+            return _onApplicationCallReceived;
         },
         set: function (callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                this.__onApplicationCallReceived = callback;
+                _onApplicationCallReceived = callback;
             }
         },
         enumerable: true
     },
     'onAppShortcutReceived': {
         get: function () {
-            return this.__onAppShortcutReceived;
+            return _onAppShortcutReceived;
         },
         set: function (callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                this.__onAppShortcutReceived = callback;
+                _onAppShortcutReceived = callback;
             }
         },
         enumerable: true

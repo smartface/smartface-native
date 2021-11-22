@@ -12,16 +12,37 @@ const Events = require('./events');
 
 const RAU = require("./RAU");
 const Invocation = require('../util/iOS/invocation.js');
+const { isEmulator } = require("../util/Android/androidconfig");
 
 var _rootPage;
 var _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
+
+function listenAppShortcut(callback) {
+    if(!isEmulator){
+        SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
+            var returnValue = true;
+            if (typeof callback === 'function') {
+                var innerReturnValue = callback({ data : shortcutItem.userInfo });
+                if (typeof innerReturnValue == "boolean") {
+                    returnValue = innerReturnValue;
+                };
+            };
+            return returnValue;
+        };
+    }
+}
 
 const EventFunctions = {
     [Events.ApplicationCallReceived]: () => {
         Application.onApplicationCallReceived = (e) => {
             SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
         };
+    },
+    [Events.AppShortcutReceived]: () => {
+        listenAppShortcut((e) => {
+            SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+        });
     },
     [Events.BackButtonPressed]: () => {
         // Android only
@@ -278,16 +299,7 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
 Application.onAppShortcutReceive = function () { };
 Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
     set: function (value) {
-        SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
-            var returnValue = true;
-            if (typeof value === 'function') {
-                var innerReturnValue = value({data : shortcutItem.userInfo});
-                if (typeof innerReturnValue == "boolean") {
-                    returnValue = innerReturnValue;
-                };
-            };
-            return returnValue;
-        };
+        listenAppShortcut(value);
         Application.onAppShortcutReceive = value;
     },
     get: function () {
