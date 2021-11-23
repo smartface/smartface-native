@@ -5,6 +5,7 @@ module.exports = {
   "ReceivedNotification": "receivedNotification",
   "UnhandledError": "unhandledError",
   "ApplicationCallReceived": "applicationCallReceived",
+  "AppShortcutReceived": "appShortcutReceived",
   "BackButtonPressed": "backButtonPressed",
   "RequestPermissionResult": "requestPermissionResult",
 }

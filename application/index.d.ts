@@ -97,6 +97,24 @@ declare enum Events {
 	 */
 	ApplicationCallReceived = "applicationCallReceived",
 	/**
+	 * Triggered when application is opened by an app shortcut.
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android
+	 * or UserInfo of app shortcut in iOS.
+	 * 
+	 * @android
+	 * @ios
+	 * @static
+	 * @deprecated
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 */
+	 AppShortcutReceived = "AppShortcutReceived",
+	/**
 	 * Triggered when user press back key. The default implementation finishes the application,
 	 * but you can override this to do whatever you want.
 	 *
@@ -960,6 +978,26 @@ declare class Application {
 	 * @see https://developer.android.com/training/sharing/receive.html
 	 */
 	static onApplicationCallReceived: (e: {
+		data: { [key: string]: any };
+	}) => void;
+	/**
+	 * Triggered when application is opened by an app shortcut.
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+	 * or UserInfo of app shortcut in iOS.
+	 *
+	 * @android
+	 * @ios
+	 * @static
+	 * @deprecated
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 */
+	 static onAppShortcutReceived: (e: {
 		data: { [key: string]: any };
 	}) => void;
 	/**

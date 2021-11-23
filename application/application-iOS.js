@@ -17,11 +17,32 @@ var _rootPage;
 var _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
+function listenAppShortcut(callback) {
+    //TODO: Check isEmulator
+    if(!SMFApplication.sharedInstance) return;
+    
+    SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
+        var returnValue = true;
+        if (typeof callback === 'function') {
+            var innerReturnValue = callback({ data : shortcutItem.userInfo });
+            if (typeof innerReturnValue == "boolean") {
+                returnValue = innerReturnValue;
+            };
+        };
+        return returnValue;
+    };
+}
+
 const EventFunctions = {
     [Events.ApplicationCallReceived]: () => {
         Application.onApplicationCallReceived = (e) => {
             SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
         };
+    },
+    [Events.AppShortcutReceived]: () => {
+        listenAppShortcut((e) => {
+            SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+        });
     },
     [Events.BackButtonPressed]: () => {
         // Android only
@@ -271,6 +292,18 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     },
     get: function() {
         return Application.onApplicationCallReceived;
+    },
+    enumerable: true
+});
+
+Application.onAppShortcutReceive = function () { };
+Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
+    set: function (value) {
+        listenAppShortcut(value);
+        Application.onAppShortcutReceive = value;
+    },
+    get: function () {
+        return Application.onAppShortcutReceive;
     },
     enumerable: true
 });
