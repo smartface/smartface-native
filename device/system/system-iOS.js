@@ -1,6 +1,5 @@
 const Invocation = require('../../util/iOS/invocation.js');
 const OSType = require('./ostype');
-const Application = require("../../application");
 
 function System() { }
 
@@ -88,7 +87,10 @@ Object.defineProperty(System, 'clipboard', {
 });
 
 Object.defineProperty(System, 'isEmulator', {
-    get: () => Application.ios.bundleIdentifier === "io.smartface.SmartfaceEnterpriseApp",
+    get: () => {
+        const Application = require("../../application");
+        return Application.ios.bundleIdentifier === "io.smartface.SmartfaceEnterpriseApp"
+    },
     enumerable: true
 });
 
