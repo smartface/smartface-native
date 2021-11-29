@@ -161,7 +161,7 @@ ImageView.prototype.fetchFromUrl = function (params) {
         useHTTPCacheControl = false,
         android: {
             useDiskCache = useDiskCache,
-            useMemoryCache: useMemoryCache,
+            useMemoryCache = useMemoryCache,
         } = { useMemoryCache: true, useDiskCache: true }
     } = params;
 

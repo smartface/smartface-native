@@ -134,7 +134,7 @@ declare class ImageView extends View {
 	 * @param {Number} object.width
 	 * @param {Number} object.height
 	 * @param {Object} object.android Android specific argument
-	 * @param {useMemoryCache?: boolean} object.android.memoryPolicy Designates the policy to use for memory cache.
+	 * @param {useMemoryCache?: boolean} object.android.useMemoryCache Designates the using of memory cache.
 	 * @android
 	 * @ios
 	 * @since 3.1.0
@@ -346,17 +346,6 @@ declare namespace ImageView {
 			 * @since 0.1
 			 */
 			BOTTOMRIGHT = 12
-		}
-	}
-	namespace Android {
-		enum MemoryPolicy {
-			NO_CACHE = 1,
-			NO_STORE = 2
-		}
-		enum NetworkPolicy {
-			NO_CACHE = 1,
-			NO_STORE = 2,
-			OFFLINE = 3
 		}
 	}
 }
