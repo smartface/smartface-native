@@ -89,7 +89,8 @@ Object.defineProperty(System, 'clipboard', {
 Object.defineProperty(System, 'isEmulator', {
     get: () => {
         const Application = require("../../application");
-        return Application.ios.bundleIdentifier === "io.smartface.SmartfaceEnterpriseApp"
+        const isBundleIdEmulator = Application.ios.bundleIdentifier === "io.smartface.SmartfaceEnterpriseApp";
+        return SMFApplication && typeof SMFApplication.isEmulator === 'function' ? SMFApplication.isEmulator() : isBundleIdEmulator;
     },
     enumerable: true
 });
