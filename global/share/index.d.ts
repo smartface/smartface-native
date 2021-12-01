@@ -27,7 +27,6 @@ declare const Share: {
 	 * @ios
 	 * @android
 	 * @since 0.1
-	 * @deprecated 4.0.2 Use {@link Share#share} instead.
 	 */
 	shareText(text: string, page: Page, blacklist: string[]): void;
 	/**
@@ -47,7 +46,6 @@ declare const Share: {
 	 * @android
 	 * @ios
 	 * @since 0.1
-	 * @deprecated 4.0.2 Use {@link Share#share} instead.
 	 */
 	shareImage(image: Image, page: Page, blacklist: string[]): void;
 	/**
@@ -67,7 +65,6 @@ declare const Share: {
 	 * @ios
 	 * @android
 	 * @since 0.1
-	 * @deprecated 4.0.2 Use {@link Share#share} instead.
 	 */
     shareFile(image: File, page: Page, blacklist: string[]): void;
     /**
