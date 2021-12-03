@@ -31,8 +31,6 @@ function BlurView(params) {
     }
 }
 
-BlurView.Events = Events;
-
 const iOS = {};
 iOS.EffectStyle = {
     EXTRALIGHT: 0,

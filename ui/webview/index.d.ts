@@ -395,6 +395,14 @@ declare class WebView extends View<WebViewEvents> {
 		 */
 		page: Page | undefined;
 		/**
+		 * Sets/Gets the visibility of zoom controls.
+		 *
+		 * @property {Boolean} displayZoomControls
+		 * @android
+		 * @since 4.3.4
+		 */
+		displayZoomControls: boolean;
+		/**
 		 * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
 		 * event begin to trigger. The purpose of using this event might be
 		 * navigating back to pervious web pages.

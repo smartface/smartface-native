@@ -1,11 +1,10 @@
 const Invocation = require('../../util/iOS/invocation.js');
-
 const OSType = require('./ostype');
 
-function System() {}
+function System() { }
 
 System.android = {}
-System.android.isApplicationInstalled = function() {}
+System.android.isApplicationInstalled = function () { }
 
 System.ios = {}
 
@@ -17,7 +16,7 @@ const UIDeviceBatteryState = {
 }
 
 Object.defineProperty(System, 'region', {
-    get: function() {
+    get: function () {
         var argCountryCode = new Invocation.Argument({
             type: "NSString",
             value: "kCFLocaleCountryCodeKey"
@@ -28,7 +27,7 @@ Object.defineProperty(System, 'region', {
 });
 
 Object.defineProperty(System, 'language', {
-    get: function() {
+    get: function () {
         var argLanguageCode = new Invocation.Argument({
             type: "NSString",
             value: "kCFLocaleLanguageCodeKey"
@@ -39,7 +38,7 @@ Object.defineProperty(System, 'language', {
 });
 
 Object.defineProperty(System, 'batteryLevel', {
-    get: function() {
+    get: function () {
         __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
         return __SF_UIDevice.currentDevice().batteryLevel;
     },
@@ -47,7 +46,7 @@ Object.defineProperty(System, 'batteryLevel', {
 });
 
 Object.defineProperty(System, 'isBatteryCharged', {
-    get: function() {
+    get: function () {
         __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
         if (__SF_UIDevice.currentDevice().batteryState === 2 || __SF_UIDevice.currentDevice().batteryState === 3) {
             return true;
@@ -78,24 +77,33 @@ Object.defineProperty(System, 'OSType', {
 });
 
 Object.defineProperty(System, 'clipboard', {
-    get: function() {
+    get: function () {
         return __SF_UIPasteboard.generalPasteboard().string;
     },
-    set: function(value) {
+    set: function (value) {
         __SF_UIPasteboard.generalPasteboard().string = value;
     },
     enumerable: true
 });
 
+Object.defineProperty(System, 'isEmulator', {
+    get: () => {
+        const Application = require("../../application");
+        const isBundleIdEmulator = Application.ios.bundleIdentifier === "io.smartface.SmartfaceEnterpriseApp";
+        return SMFApplication && typeof SMFApplication.isEmulator === 'function' ? SMFApplication.isEmulator() : isBundleIdEmulator;
+    },
+    enumerable: true
+});
+
 Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
-    get: function() {
+    get: function () {
         return System.fingerPrintAvailable;
     },
     enumerable: true
 });
 
 Object.defineProperty(System, 'biometricType', {
-    get: function() {
+    get: function () {
         if (parseFloat(System.OSVersion) >= 11.0) {
             var context = new __SF_LAContext();
             context.canEvaluatePolicy();
@@ -109,14 +117,14 @@ Object.defineProperty(System, 'biometricType', {
 
 // Deprecated
 Object.defineProperty(System.ios, 'LAContextBiometricType', {
-    get: function() {
+    get: function () {
         return System.biometricType;
     },
     enumerable: true
 });
 
 Object.defineProperty(System, 'biometricsAvailable', {
-    get: function() {
+    get: function () {
         var context = new __SF_LAContext();
         return context.canEvaluatePolicy();
     },
@@ -125,26 +133,26 @@ Object.defineProperty(System, 'biometricsAvailable', {
 
 // Deprecated
 Object.defineProperty(System, 'fingerPrintAvailable', {
-    get: function() {
+    get: function () {
         return System.biometricsAvailable;
     },
     enumerable: true
 });
 
 Object.defineProperty(System, 'vibrate', {
-    value: function() {
+    value: function () {
         __SF_UIDevice.vibrate();
     },
     writable: false,
     enumerable: true
 });
 
-System.ios.validateFingerPrint = function(params) {
+System.ios.validateFingerPrint = function (params) {
     System.validateFingerPrint(params);
 };
 
 Object.defineProperty(System, 'validateBiometric', {
-    value: function(params) {
+    value: function (params) {
         var context = new __SF_LAContext();
         context.evaluatePolicy(params.message, params.onSuccess, params.onError);
     },
@@ -153,13 +161,13 @@ Object.defineProperty(System, 'validateBiometric', {
 
 // Deprecated
 Object.defineProperty(System, 'validateFingerPrint', {
-    value: function(params) {
+    value: function (params) {
         System.validateBiometric(params);
     },
     enumerable: true
 });
 
-System.isApplicationInstalled = function(packageName) {
+System.isApplicationInstalled = function (packageName) {
     var url = __SF_NSURL.URLWithString(packageName);
     if (__SF_UIApplication.sharedApplication().canOpenURL(url)) {
         return true;
