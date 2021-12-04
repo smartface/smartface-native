@@ -38,6 +38,8 @@ Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
 Multimedia.CropImage.RESULT_OK = -1;
 Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
 Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
+Multimedia.PICK_MULTIPLE_FROM_GALLERY = RequestCodes.Multimedia.PICK_MULTIPLE_FROM_GALLERY;
+
 
 Object.defineProperties(Multimedia, {
     'Type': {
@@ -136,7 +138,7 @@ Multimedia.pickFromGallery = function (params = {}) {
     _captureParams = {};
     _pickParams = params;
     var intent = new NativeIntent();
-    var type = Type.ALL;
+    var type = Type.IMAGE;
     if (params.type !== undefined)
         type = params.type;
     intent.setType(_types[type]);
@@ -199,6 +201,52 @@ Multimedia.android.getAllGalleryItems = function (params = {}) {
 
 };
 
+/*
+- create a method to  multiple pick 
+- what if video seleceted ?
+- in onSuccess, return array of
+- consider videos for multiple
+*/
+Multimedia.android.launchCropper = function (params) {
+    const {
+        page,
+        aspectRatio = {},
+        asset,
+        android: {
+            cropShape: cropShape = CropShape.RECTANGLE,
+            rotateText: rotateText,
+            scaleText: scaleText,
+            cropText: cropText,
+            headerBarTitle: headerBarTitle,
+            maxResultSize: maxResultSize = {}, 
+            hideBottomControls: hideBottomControls = false, 
+            enableFreeStyleCrop: enableFreeStyleCrop = false 
+        } = {}
+    } = params;
+
+    if (!asset || !(asset instanceof File))
+        throw new TypeError("Asset parameter must be typeof File");
+
+    _captureParams = {};
+    _pickParams = params;
+    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+};
+
+Multimedia.pickMultipleFromGallery = function (params = {}) {
+    if (!(params.page instanceof require("../../ui/page"))) {
+        throw new TypeError('Page parameter required');
+    }
+    _captureParams = {};
+    _pickParams = params;
+    let intent = new NativeIntent();
+    let type = params.type !== undefined ? params.type : Type.IMAGE;
+    intent.setType(_types[type]);
+    intent.setAction(NativeIntent.ACTION_GET_CONTENT);
+
+    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+};
+
+
 Multimedia.onActivityResult = function (requestCode, resultCode, data) {
     if (requestCode === Multimedia.CAMERA_REQUEST) {
         getCameraData(resultCode, data);
@@ -208,6 +256,8 @@ Multimedia.onActivityResult = function (requestCode, resultCode, data) {
         cropCameraData(resultCode, data);
     } else if (requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
         cropGalleryData(resultCode, data);
+    } else if(requestCode === Multimedia.PICK_MULTIPLE_FROM_GALLERY){
+        pickMultipleFromGallery(requestCode, data);
     }
 };
 
@@ -232,7 +282,7 @@ function startRecordVideoWithExtraField() {
 function cropCameraData(resultCode, data) {
     const {
         onSuccess, onCancel,
-        onFailure, allowsEditing,
+        onFailure,
         android: {
             fixOrientation: fixOrientation = false,
             maxImageSize: maxImageSize = -1
@@ -247,11 +297,10 @@ function cropCameraData(resultCode, data) {
                 let croppedImage = new Image({
                     bitmap
                 });
-                if (allowsEditing) {
-                    onSuccess && onSuccess({
-                        image: croppedImage
-                    });
-                }
+                onSuccess && onSuccess({
+                    image: croppedImage
+                });
+
             },
             onFailure: (err) => {
                 onFailure && onFailure({
@@ -267,7 +316,7 @@ function cropCameraData(resultCode, data) {
 function cropGalleryData(resultCode, data) {
     const {
         onSuccess, onFailure,
-        onCancel, allowsEditing,
+        onCancel,
         android: {
             fixOrientation: fixOrientation = false,
             maxImageSize: maxImageSize = -1
@@ -283,11 +332,9 @@ function cropGalleryData(resultCode, data) {
                 let croppedImage = new Image({
                     bitmap
                 });
-                if (allowsEditing) {
-                    onSuccess && onSuccess({
-                        image: croppedImage
-                    });
-                }
+                onSuccess && onSuccess({
+                    image: croppedImage
+                });
             },
             onFailure: (err) => {
                 onFailure && onFailure({
@@ -302,11 +349,11 @@ function cropGalleryData(resultCode, data) {
 
 function startCropActivity(params) {
     const {
-        requestCode, uri, page, cropShape, aspectRatio,
+        requestCode, asset, page, cropShape, aspectRatio,
         rotateText, scaleText, cropText, headerBarTitle,
         maxResultSize, hideBottomControls, enableFreeStyleCrop
     } = params;
-    if (!uri) return;
+    if (!asset) return;
     let { x, y } = aspectRatio;
     let { width, height } = maxResultSize;
     let uCropOptions = new NativeSFUCropOptions();
@@ -335,7 +382,61 @@ function startCropActivity(params) {
     uCropOptions.setHideBottomControls(hideBottomControls);
     uCropOptions.setFreeStyleCropEnabled(enableFreeStyleCrop);
 
-    NativeSFMultimedia.startCropActivity(uri, activity, page.nativeObject, uCropOptions, requestCode);
+    NativeSFMultimedia.startCropActivity(asset, activity, page.nativeObject, uCropOptions, requestCode);
+}
+
+function pickMultipleFromGallery(resultCode, data) {
+    const {
+        onFailure,
+        onSuccess,
+        onCancel,
+        type,
+        page
+    } = _pickParams;
+
+    if (resultCode === -1) { // -1 = Activity.RESULT_OK
+        try {
+            var uri = data.getData();
+            var realPath = getRealPathFromURI(uri);
+        } catch (err) {
+            onFailure && onFailure({
+                message: err
+            });
+            return;
+        }
+
+        if (onSuccess) {
+            if (type === Multimedia.Type.IMAGE) {
+                if (!allowsEditing) {
+                    NativeSFMultimedia.getBitmapFromUri(activity, uri, maxImageSize, fixOrientation, {
+                        onCompleted: (bitmap) => {
+                            let image = new Image({
+                                bitmap
+                            });
+                            onSuccess({
+                                image
+                            });
+                        },
+                        onFailure: (err) => {
+                            onFailure && onFailure({
+                                message: err
+                            });
+                        }
+                    });
+                } else {
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+                }
+            } else {
+                onSuccess({
+                    video: new File({
+                        path: realPath
+                    })
+                });
+            }
+        }
+    } else {
+        onCancel && onCancel();
+    }
 }
 
 function pickFromGallery(resultCode, data) {
@@ -390,7 +491,7 @@ function pickFromGallery(resultCode, data) {
                         }
                     });
                 } else {
-                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 }
             } else {
                 onSuccess({
@@ -459,7 +560,7 @@ function getCameraData(resultCode, data) {
         if (!failure && onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 if (allowsEditing) {
-                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, uri: _imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE, asset: _imageFileUri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
                 } else {
                     NativeSFMultimedia.getBitmapFromUri(activity, _imageFileUri, maxImageSize, fixOrientation, {
                         onCompleted: (bitmap) => {

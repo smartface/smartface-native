@@ -231,6 +231,69 @@ Multimedia.recordVideo = function (params) { };
  */
 Multimedia.pickFromGallery = function (e) { };
 
+
+
+/**
+ * @method launchCropper
+ * 
+ * Launches cropper.
+ * 
+ * @param {Object} params Object describing parameters for the function.
+ * @param {UI.Page} params.page
+ * @param {IO.File} params.asset Image file which suppose to cropped.
+ * @param {Object} params.aspectRatio This property affects only on android.
+ * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
+ * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
+ * @param {Object} params.android Android specific argument
+ * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+ * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+ * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+ * @param {String} params.android.cropText specifies the text of crop button in the crop window
+ * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
+ * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+ * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+ * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
+ * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+ * @param {Number} params.android.maxResultSize.height max cropped image height
+ * @param {Number} params.android.maxResultSize.width max cropped image width 
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {UI.Image} params.onSuccess.params.image Captured image
+ * @param {Function} [params.onCancel] Callback for cancellation situation.
+ * @param {Function} [params.onFailure] Callback for failure situation.
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
+ * @ios
+ * @since 4.3.4
+ */
+Multimedia.launchCropper = function (e) { };
+
+
+
+/**
+ * @method pickMultipleFromGallery
+ * 
+ * Allows multiple pick item from gallery.
+ * 
+ * @param {Object} params Object describing parameters for the function.
+ * @param {UI.Page} params.page
+ * @param {Device.Multimedia.Type} params.type Data type.
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {IO.File[]} params.onSuccess.params.images Captured image
+ * @param {IO.File[]} params.onSuccess.params.videos Captured video
+ * @param {Function} [params.onCancel] Callback for cancellation situation.
+ * @param {Function} [params.onFailure] Callback for failure situation.
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
+ * @ios
+ * @since 4.3.4
+ */
+Multimedia.pickMultipleFromGallery = function (e) { };
+
 /**
  * @method requestGalleryAuthorization
  * 
