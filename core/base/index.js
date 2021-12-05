@@ -1,4 +1,5 @@
 module.exports = {
   alert: require('./alert'),
-  polyfill: require('./polyfill')
+  polyfill: require('./polyfill'),
+  timers: require('./timers')
 };
