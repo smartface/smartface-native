@@ -59,4 +59,17 @@ declare class Linking {
    *```
    */
   static openNavigation(options: MapsOptions): Promise<string>
+
+  /**
+   * Opens application settings menu
+   * @static
+   * @method
+   * @returns {Promise}
+   * @example
+   * ```
+   * import Linking from '@smartface/native/application/linking';
+   * Linking.openSettings();
+   *```
+   */
+  static openSettings(): Promise<void>;
 }

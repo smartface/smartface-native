@@ -113,4 +113,16 @@ Linking.openNavigation = (options) => {
     });
     menu.items.length ? menu.show(page) : appleMapsOnSelected();
   });
-}
+};
+
+Linking.openSettings = () => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      uriScheme: 'app-settings:',
+      onSuccess: () => resolve(),
+      onFailure: () => reject(),
+      action: ""
+    };
+    Application.call(options);
+  });
+};

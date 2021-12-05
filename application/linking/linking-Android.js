@@ -27,3 +27,15 @@ Linking.openNavigation = (options) => {
     });
   });
 };
+
+Linking.openSettings = () => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      uriScheme: "package:" + Application.android.packageName,
+      onSuccess: () => resolve(),
+      onFailure: () => reject(),
+      action: "android.settings.APPLICATION_DETAILS_SETTINGS"
+    };
+    Application.call(options);
+  });
+}
