@@ -126,3 +126,5 @@ Linking.openSettings = () => {
     Application.call(options);
   });
 };
+
+module.exports = Linking;
