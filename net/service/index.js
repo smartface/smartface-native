@@ -17,7 +17,7 @@ const BASE_HEADERS = Object.freeze({
 const DEFAULT_TIMEOUT = 60000;
 
 class HttpService {
-	constructor(options) {
+	constructor(options = {}) {
 		this.baseUrl = options.baseUrl;
 		this.logEnabled = !!options.logEnabled;
 		const httpOptions = {
@@ -83,8 +83,12 @@ class HttpService {
 		}
 	}
 
+    static request(options) {
+		return (new HttpService(options)).request(options.url, options);
+	}
+
 	request(endpointPath, options) {
-		const url = `${this._baseUrl}${endpointPath}`;
+		const url = `${this.baseUrl}${endpointPath}`;
 		if (!reHTTPUrl.test(url)) {
 			throw Error(`URL is not valid for http(s) request: ${url}`);
 		}
@@ -93,6 +97,7 @@ class HttpService {
 			logEnabled: !!this.logEnabled, 
 			...options
 		}
+
 		
 		let { fullResponse = false } = requestOptions;
 		let query = requestOptions.q || requestOptions.query;
