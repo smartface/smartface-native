@@ -28,3 +28,9 @@ type MapsOptions = {
 }
 
 export const MapList: Record<MapTypes, MapBody>;
+
+export enum TransportTypes {
+  DRIVING = 'd',
+  WALKING = 'w',
+  CYCLING = 'b'
+}

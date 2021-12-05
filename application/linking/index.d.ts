@@ -41,4 +41,22 @@ declare class Linking {
    *```
    */
   static openMap(options: MapsOptions): Promise<string>
+
+  /**
+   * Prompts a menu to choose which navigation app to handle the location.
+   * It sets the starting point to your current location, if the permission is granted.
+   * @example
+   * ```
+   * import Linking from '@smartface/native/application/linking';
+   * Linking.openNavigation({
+   *      page,
+   *      transportType: ,
+   *      location: {
+   *          latitude: 37.4488259,
+   *          longitude: -122.1600047
+   *      }
+   *  });
+   *```
+   */
+  static openNavigation(options: MapsOptions): Promise<string>
 }
