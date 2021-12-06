@@ -1,5 +1,14 @@
+import Page from '../../ui/page';
+
 declare enum Events {
 	LocationChanged = "locationChanged",
+}
+
+declare type MapsOptions = {
+	page: Page;
+	location: Location;
+	name: string;
+	transportType?: string;
 }
 
 export = Location;
@@ -103,6 +112,44 @@ declare class Location {
 		onSuccess: (e: { latitude: number; longitude: number }) => void,
 		onFailure: () => void
 	): void;
+	/**
+ * Smartface Location module
+ * @module location
+ * @type {object}
+ * @author Ozcan Ovunc <ozcan.ovunc@smartface.io>
+ * @author Furkan Arabacı <furkan.arabaci@smartface.io>
+ * @author Alim Öncül <alim.oncul@smartface.io>
+ * @copyright Smartface 2021
+ */
+
+	/**
+	 * Gets location latitude and longitude. Handles permissions by itself.
+	 * @example
+	 * ```
+	 * import Location from '@smartface/native/device/location';
+	 *
+	 * Location.getLocation()
+	 *     .then(location => {
+	 *         let requestOptions = {
+	 *             'url': 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.latitude + ',' + location.longitude + '&sensor=true',
+	 *             'method': 'GET'
+	 *         };
+	 *     })
+	 *     .catch(e => {
+	 *         // e parameter can be one of these values:
+	 *         // "RESTRICTED" / iOS specific, this is returned if authorization status is Location.iOS.AuthorizationStatus.RESTRICTED
+	 *         // "OTHER" / Android specific, this is returned if the operation failed with no more detailed information
+	 *         // "DENIED" / Returned for all other cases
+	 *         console.log("Location cannot be retrieved");
+	 *     });
+	 * ```
+	 */
+	static getLocation(
+		callback?: (...args: any) => void,
+		showSettingsAlert?: boolean,
+		permissionText?: string,
+		permissionTitle?: string
+	): Promise<MapsOptions['location']>;
 	static ios: {
 		/**
 		 * Callback to capture authorization status changes.
