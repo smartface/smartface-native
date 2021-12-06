@@ -1,3 +1,5 @@
+const { isConnected } = require('./network');
+
 const Network = {};
 
 Network.ConnectionType = {};
@@ -10,7 +12,7 @@ Network.ConnectionType.NONE = 0;
 Network.ConnectionType.MOBILE = 1;
 
 Object.defineProperty(Network, 'carrier', {
-    get: function() {
+    get: function () {
         var info = new __SF_CTTelephonyNetworkInfo();
         return info.subscriberCellularProvider.carrierName;
     },
@@ -18,20 +20,20 @@ Object.defineProperty(Network, 'carrier', {
 });
 
 Object.defineProperty(Network, 'connectionType', {
-    get: function() {
+    get: function () {
         return __SF_UIDevice.currentReachabilityStatus();
     },
     enumerable: true
 });
 
 Object.defineProperty(Network, 'connectionIP', {
-    get: function() {
+    get: function () {
         return __SF_UIDevice.getIFAddresses()[0];
     },
     enumerable: true
 });
 
-Network.createNotifier = function(params) {
+Network.createNotifier = function (params) {
     var self = this;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ Network.createNotifier = function(params) {
     ////////////////////////////////////////////////////////////////////////////////
     // LOGIC
     if (self.nativeObject) {
-        self.nativeObject.reachabilityChangedCallback = function() {
+        self.nativeObject.reachabilityChangedCallback = function () {
             var sfStatus;
             var status = self.nativeObject.currentReachabilityStatus();
             switch (status) {
@@ -78,10 +80,10 @@ Network.createNotifier = function(params) {
 
     var _connectionTypeChanged = null;
     Object.defineProperty(self, 'connectionTypeChanged', {
-        get: function() {
+        get: function () {
             return _connectionTypeChanged;
         },
-        set: function(value) {
+        set: function (value) {
             if (typeof value === "function") {
                 _connectionTypeChanged = value;
                 self.nativeObject.startNotifier();
@@ -93,11 +95,11 @@ Network.createNotifier = function(params) {
         enumerable: true
     });
 
-    self.subscribe = function(callback) {
+    self.subscribe = function (callback) {
         self.connectionTypeChanged = callback;
     }
 
-    self.unsubscribe = function() {
+    self.unsubscribe = function () {
         self.connectionTypeChanged = null;
     }
 
@@ -109,9 +111,9 @@ Network.createNotifier = function(params) {
 
     //Android specs
     self.android = {};
-    self.android.isInitialStickyNotification = () => {};
+    self.android.isInitialStickyNotification = () => { };
 }
 
-
+Network.isConnected = isConnected;
 
 module.exports = Network;
