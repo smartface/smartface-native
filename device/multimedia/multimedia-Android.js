@@ -33,9 +33,9 @@ const VideoQuality = {
     LOW: 0
 };
 
+const MULTIMEDIA_ACTIVITY_RESULT_OK = -1;
 function Multimedia() { }
 Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
-Multimedia.Acitvity.RESULT_OK = -1;
 Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
 Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
 Multimedia.PICK_MULTIPLE_FROM_GALLERY = RequestCodes.Multimedia.PICK_MULTIPLE_FROM_GALLERY;
@@ -242,6 +242,7 @@ Multimedia.pickMultipleFromGallery = function (params = {}) {
     let type = params.type !== undefined ? params.type : Type.IMAGE;
     intent.setType(_types[type]);
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
+    intent.putExtra(NativeIntent.EXTRA_ALLOW_MULTIPLE, true)
 
     params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_MULTIPLE_FROM_GALLERY);
 };
@@ -289,7 +290,7 @@ function cropCameraData(resultCode, data) {
         } = {}
     } = _captureParams;
 
-    if (resultCode === Multimedia.Acitvity.RESULT_OK) {
+    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
         let resultUri = NativeUCrop.getOutput(data);
         //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
         NativeSFMultimedia.getBitmapFromUri(activity, resultUri, maxImageSize, fixOrientation, {
@@ -323,7 +324,7 @@ function cropGalleryData(resultCode, data) {
         } = {}
     } = _pickParams;
 
-    if (resultCode === Multimedia.Acitvity.RESULT_OK) {
+    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
 
         let resultUri = NativeUCrop.getOutput(data);
         //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
@@ -394,7 +395,7 @@ function pickMultipleFromGallery(resultCode, data) {
         page
     } = _pickParams;
 
-    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
+    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
 
         try {
             let uris = [];
@@ -470,7 +471,7 @@ function pickFromGallery(resultCode, data) {
             maxImageSize: maxImageSize = -1
         } = {}
     } = _pickParams;
-    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
+    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
         try {
             var uri = data.getData();
             var realPath = getRealPathFromURI(uri);
@@ -554,7 +555,7 @@ function getCameraData(resultCode, data) {
             maxImageSize: maxImageSize = -1
         } = {}
     } = _captureParams;
-    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
+    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
         try {
             if (_action !== ActionType.IMAGE_CAPTURE) {
                 var uri = data.getData();
