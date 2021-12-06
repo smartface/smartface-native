@@ -114,7 +114,7 @@ Network.createNotifier = function (params) {
     self.android.isInitialStickyNotification = () => { };
 }
 
-Network.isConnected = function () {
+Network.isConnected = function (checkUrl = "https://www.google.com") {
     return new Promise((resolve, reject) => {
         const noConnection = Network.connectionType === Network.ConnectionType.NONE;
         if (noConnection) {
@@ -122,7 +122,7 @@ Network.isConnected = function () {
         }
         const http = new Http();
         http.request({
-            url: "https://www.google.com",
+            url: checkUrl,
             onLoad: (e) => {
                 resolve(e);
             },
