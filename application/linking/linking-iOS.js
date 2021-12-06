@@ -127,4 +127,17 @@ Linking.openSettings = () => {
   });
 };
 
+Linking.canOpenURL = (url) => {
+  return SMFApplication.canOpenUrl(url);
+};
+
+Linking.openURL = (options) => {
+  const { uriScheme, data, onSuccess, onFailure } = options;
+  if (Object.keys(uriScheme).indexOf('uriScheme') === -1) {
+    SMFApplication.call(uriScheme, data, onSuccess, onFailure);
+  } else {
+    SMFApplication.call(uriScheme.uriScheme, uriScheme.data, uriScheme.onSuccess, uriScheme.onFailure);
+  }
+};
+
 module.exports = Linking;
