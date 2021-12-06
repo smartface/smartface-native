@@ -35,7 +35,7 @@ const VideoQuality = {
 
 function Multimedia() { }
 Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
-Multimedia.CropImage.RESULT_OK = -1;
+Multimedia.Acitvity.RESULT_OK = -1;
 Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
 Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
 Multimedia.PICK_MULTIPLE_FROM_GALLERY = RequestCodes.Multimedia.PICK_MULTIPLE_FROM_GALLERY;
@@ -207,7 +207,7 @@ Multimedia.android.getAllGalleryItems = function (params = {}) {
 - in onSuccess, return array of
 - consider videos for multiple
 */
-Multimedia.android.launchCropper = function (params) {
+Multimedia.launchCropper = function (params) {
     const {
         page,
         aspectRatio = {},
@@ -218,9 +218,9 @@ Multimedia.android.launchCropper = function (params) {
             scaleText: scaleText,
             cropText: cropText,
             headerBarTitle: headerBarTitle,
-            maxResultSize: maxResultSize = {}, 
-            hideBottomControls: hideBottomControls = false, 
-            enableFreeStyleCrop: enableFreeStyleCrop = false 
+            maxResultSize: maxResultSize = {},
+            hideBottomControls: hideBottomControls = false,
+            enableFreeStyleCrop: enableFreeStyleCrop = false
         } = {}
     } = params;
 
@@ -243,7 +243,7 @@ Multimedia.pickMultipleFromGallery = function (params = {}) {
     intent.setType(_types[type]);
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
 
-    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_MULTIPLE_FROM_GALLERY);
 };
 
 
@@ -256,7 +256,7 @@ Multimedia.onActivityResult = function (requestCode, resultCode, data) {
         cropCameraData(resultCode, data);
     } else if (requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
         cropGalleryData(resultCode, data);
-    } else if(requestCode === Multimedia.PICK_MULTIPLE_FROM_GALLERY){
+    } else if (requestCode === Multimedia.PICK_MULTIPLE_FROM_GALLERY) {
         pickMultipleFromGallery(requestCode, data);
     }
 };
@@ -289,7 +289,7 @@ function cropCameraData(resultCode, data) {
         } = {}
     } = _captureParams;
 
-    if (resultCode === Multimedia.CropImage.RESULT_OK) {
+    if (resultCode === Multimedia.Acitvity.RESULT_OK) {
         let resultUri = NativeUCrop.getOutput(data);
         //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
         NativeSFMultimedia.getBitmapFromUri(activity, resultUri, maxImageSize, fixOrientation, {
@@ -323,7 +323,7 @@ function cropGalleryData(resultCode, data) {
         } = {}
     } = _pickParams;
 
-    if (resultCode === Multimedia.CropImage.RESULT_OK) {
+    if (resultCode === Multimedia.Acitvity.RESULT_OK) {
 
         let resultUri = NativeUCrop.getOutput(data);
         //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
@@ -394,45 +394,54 @@ function pickMultipleFromGallery(resultCode, data) {
         page
     } = _pickParams;
 
-    if (resultCode === -1) { // -1 = Activity.RESULT_OK
+    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
+
         try {
-            var uri = data.getData();
-            var realPath = getRealPathFromURI(uri);
+            let uris = [];
+            let clipData = data.getClipData();
+            if (clipData == null) {
+                uris.push(data.getData());
+            } else {
+                let count = clipData.getItemCount();
+                for (let i = 0; i < count; i++) {
+                    uris.push(clipData.getItemAt(i).getUri());
+                }
+            }
+
+            if (onSuccess) {
+
+                NativeSFMultimedia.getRealPathAsync(activity, array(uris, 'android.net.Uri'), type, {
+                    onCompleted: (realPaths) => {
+
+                        let files = realPaths.map(realPath =>
+                            new File({
+                                path: realPath
+                            })
+                        );
+
+                        onSuccess(
+                            type === Multimedia.Type.IMAGE ?
+                                {
+                                    images: files
+                                } :
+                                {
+                                    videos: files
+                                }
+                        );
+                    },
+                    onFailure: (err) => {
+                        onFailure && onFailure({
+                            message: err
+                        });
+                    }
+                });
+            }
+
         } catch (err) {
             onFailure && onFailure({
                 message: err
             });
             return;
-        }
-
-        if (onSuccess) {
-            if (type === Multimedia.Type.IMAGE) {
-                if (!allowsEditing) {
-                    NativeSFMultimedia.getBitmapFromUri(activity, uri, maxImageSize, fixOrientation, {
-                        onCompleted: (bitmap) => {
-                            let image = new Image({
-                                bitmap
-                            });
-                            onSuccess({
-                                image
-                            });
-                        },
-                        onFailure: (err) => {
-                            onFailure && onFailure({
-                                message: err
-                            });
-                        }
-                    });
-                } else {
-                    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: uri, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
-                }
-            } else {
-                onSuccess({
-                    video: new File({
-                        path: realPath
-                    })
-                });
-            }
         }
     } else {
         onCancel && onCancel();
@@ -461,7 +470,7 @@ function pickFromGallery(resultCode, data) {
             maxImageSize: maxImageSize = -1
         } = {}
     } = _pickParams;
-    if (resultCode === -1) { // -1 = Activity.RESULT_OK
+    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
         try {
             var uri = data.getData();
             var realPath = getRealPathFromURI(uri);
@@ -505,7 +514,7 @@ function pickFromGallery(resultCode, data) {
         onCancel && onCancel();
     }
 }
-
+//TODO: java tarafina tasindi 
 function getRealPathFromURI(uri) {
     var projection = [
         "_data" //NativeMediaStore.MediaColumns.DATA
@@ -545,7 +554,7 @@ function getCameraData(resultCode, data) {
             maxImageSize: maxImageSize = -1
         } = {}
     } = _captureParams;
-    if (resultCode === -1) { // -1 = Activity.RESULT_OK
+    if (resultCode === Multimedia.Acitvity.RESULT_OK) { // -1 = Activity.RESULT_OK
         try {
             if (_action !== ActionType.IMAGE_CAPTURE) {
                 var uri = data.getData();
