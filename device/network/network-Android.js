@@ -1,5 +1,6 @@
 const AndroidConfig = require('../../util/Android/androidconfig');
-const Http = require('../../net/http');
+const { isConnected } = require('./network');
+
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');
@@ -174,28 +175,7 @@ Network.__cancelAll = function () {
     }
 };
 
-Network.isConnected = function (checkUrl = "https://www.google.com") {
-    return new Promise((resolve, reject) => {
-        const noConnection = Network.ConnectionType === Network.ConnectionType.NONE;
-        if (noConnection) {
-            return reject();
-        }
-        const http = new Http();
-        http.request({
-            url: checkUrl,
-            onLoad: (e) => {
-                resolve(e);
-            },
-            onError: (e) => {
-                if (typeof e.statusCode === "undefined") {
-                    reject(e);
-                } else {
-                    resolve(e);
-                }
-            },
-        });
-    });
-}
+Network.isConnected = isConnected;
 
 function getConnectionTypeEnum(type) {
     let connectionType = Network.ConnectionType.NONE;

@@ -1,4 +1,4 @@
-const Http = require('../../net/http')
+const { isConnected } = require('./network');
 
 const Network = {};
 
@@ -114,29 +114,6 @@ Network.createNotifier = function (params) {
     self.android.isInitialStickyNotification = () => { };
 }
 
-Network.isConnected = function (checkUrl = "https://www.google.com") {
-    return new Promise((resolve, reject) => {
-        const noConnection = Network.connectionType === Network.ConnectionType.NONE;
-        if (noConnection) {
-            return reject();
-        }
-        const http = new Http();
-        http.request({
-            url: checkUrl,
-            onLoad: (e) => {
-                resolve(e);
-            },
-            onError: (e) => {
-                if (typeof e.statusCode === "undefined") {
-                    reject(e);
-                } else {
-                    resolve(e);
-                }
-            },
-        });
-    });
-}
-
-
+Network.isConnected = isConnected;
 
 module.exports = Network;
