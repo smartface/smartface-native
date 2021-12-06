@@ -189,12 +189,13 @@ declare class Network {
 
   /**
    * @function
+   * @param checkUrl Used URL for check the internet
    * @return {Promise<Object>} - Resolves if the internet connectivity is available,
    * rejects o/w
    * @example
    * ```
    * import network from '@smartface/extension-utils/lib/network';
-   * network.isConnected()
+   * network.isConnected("myprivatenetwork.com")
    *     .then(() => {
    *         console.info("Connected to internet");
    *     })
@@ -203,7 +204,7 @@ declare class Network {
    *     });
    * ```
    */
-  static isConnected(): Promise<{ [key: string]: any }>;
+  static isConnected(checkUrl?: string): Promise<{ [key: string]: any }>;
 }
 
 export = Network;
