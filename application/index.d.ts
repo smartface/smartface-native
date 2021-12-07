@@ -113,7 +113,7 @@ declare enum Events {
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
 	 */
-	 AppShortcutReceived = "AppShortcutReceived",
+	AppShortcutReceived = "AppShortcutReceived",
 	/**
 	 * Triggered when user press back key. The default implementation finishes the application,
 	 * but you can override this to do whatever you want.
@@ -395,6 +395,47 @@ declare class Application {
 		chooserTitle?: string;
 		action?: string;
 	}) => void;
+	/**
+	 * Checks URL's scheme can be handled or not by some app that installed on the device.
+ 	 *
+ 	 * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
+ 	 * and AndroidManifest.xml file for Android.
+ 	 *
+ 	 *     @example for Google Maps 
+ 	 * 
+ 	 *		(Info.plist entry)
+ 	 *      <key>LSApplicationQueriesSchemes</key>
+ 	 *      <array>
+ 	 *          <string>comgooglemaps</string>
+ 	 *      </array>
+ 	 *
+ 	 *      After entry add on, urlScheme can be check;
+	 * 	 	const Application = require("@smartface/native/application");
+ 	 *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+ 	 * 
+ 	 * 		(AndroidManifest.xml entry)
+ 	 * 		<manifest ...>
+ 	 * 			...
+ 	 * 			<queries>
+ 	 *  			<intent>
+ 	 *					<action android:name="android.intent.action.VIEW" />
+ 	 *  				<data android:scheme="geo"/>
+ 	 *				</intent>
+ 	 * 			</queries>
+ 	 * 		</manifest>
+ 	 * 
+	 * 	 	const Application = require("@smartface/native/application");
+ 	 *      var isAppAvaible = Application.canOpenUrl("geo://");
+ 	 *
+	 * @method canOpenUrl
+	 * @param {String} url
+	 * @return {Boolean}
+	 * @ios
+	 * @android
+	 * @static
+	 * @since 4.3.7
+	 */
+	static canOpenUrl: (url: string) => boolean;
 	static ios: {
 		/**
 		 * The event is called when a user taps a universal link.
@@ -427,30 +468,6 @@ declare class Application {
 		 * @since 3.1.3
 		 */
 		userInterfaceLayoutDirection: any;
-		/**
-		 * Checks URL's scheme can be handled or not by some app that installed on the device.
-		 *
-		 * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
-		 *
-		 *     @example for Google Maps (Info.plist entry)
-		 *
-		 *      <key>LSApplicationQueriesSchemes</key>
-		 *      <array>
-		 *          <string>comgooglemaps</string>
-		 *      </array>
-		 *
-		 *      After entry add on, urlScheme can be check;
-		 *      const Application = require("@smartface/native/application");
-		 *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
-		 *
-		 * @method canOpenUrl
-		 * @param {String} url
-		 * @return {Boolean}
-		 * @ios
-		 * @static
-		 * @since 3.0.1
-		 */
-		canOpenUrl: (url: string) => boolean;
 	};
 	/**
 	 * Gets status bar object. This property is readonly, you can not set
@@ -997,7 +1014,7 @@ declare class Application {
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
 	 */
-	 static onAppShortcutReceived: (e: {
+	static onAppShortcutReceived: (e: {
 		data: { [key: string]: any };
 	}) => void;
 	/**

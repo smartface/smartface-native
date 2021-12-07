@@ -104,6 +104,10 @@ SFApplication.call = function(uriScheme, data, onSuccess, onFailure) {
     }
 };
 
+SFApplication.canOpenUrl = function(url) {
+    return SMFApplication.canOpenUrl(url);
+}
+
 SFApplication.exit = function() {
     Application.onExit();
     SMFApplication.exit();
@@ -192,9 +196,6 @@ function configureSliderDrawer(rootPage, sliderDrawer) {
 };
 
 SFApplication.ios = {};
-SFApplication.ios.canOpenUrl = function(url) {
-    return SMFApplication.canOpenUrl(url);
-}
 
 Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     get: function() {
