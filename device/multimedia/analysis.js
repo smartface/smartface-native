@@ -282,8 +282,12 @@ Multimedia.launchCropper = function (e) { };
  * @param {Device.Multimedia.Type} params.type Data type.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
- * @param {IO.File[]} params.onSuccess.params.images Captured image
- * @param {IO.File[]} params.onSuccess.params.videos Captured video
+ * @param {Object} params.onSuccess.params.images Captured images
+ * @param {IO.File[]} params.onSuccess.params.images.file Image file
+ * @param {String} params.onSuccess.params.images.uri Image uri
+ * @param {Object} params.onSuccess.params.videos Captured videos
+ * @param {IO.File[]} params.onSuccess.params.videos.file Video file
+ * @param {String} params.onSuccess.params.videos.uri Video uri
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @param {Object} params.onFailure.params 
