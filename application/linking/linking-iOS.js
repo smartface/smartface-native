@@ -1,3 +1,5 @@
+const TypeUtil = require('../../util/type');
+
 function Linking() { }
 
 Linking.openSettings = () => {
@@ -13,6 +15,14 @@ Linking.openSettings = () => {
 };
 
 Linking.canOpenURL = (url) => {
+  if (!url) {
+    console.error(new Error("url parameter can't be empty."));
+    return;
+  }
+  if (!TypeUtil.isString(url)) {
+    console.error(new Error("url parameter must be string."));
+    return;
+  }
   return SMFApplication.canOpenUrl(url);
 };
 

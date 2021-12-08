@@ -94,6 +94,7 @@ declare class Linking {
    * @param {String} url
    * @return {Boolean}
    * @ios
+   * @android
    * @static
    * @since 3.0.1
    */
