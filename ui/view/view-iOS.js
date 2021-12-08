@@ -1291,6 +1291,10 @@ function View(params) {
         self.nativeObject.yoga.applyLayoutPreservingOrigin(false);
     }
 
+    this.addPressEvent = function (event, options) {
+        addPressEvent(this, event, options)
+    }
+
     /*
      Returns the size of the view if no constraints were given. This could equivalent to calling [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
      */

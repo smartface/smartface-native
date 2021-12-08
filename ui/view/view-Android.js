@@ -14,6 +14,7 @@ const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.
 const rippleSuperView = require("./ripple");
 const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventemitter");
 const EventList = require('./events');
+const { addPressEvent } = require('./touchconfiguration')
 const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
 View.Events = { ...EventList };
@@ -516,6 +517,9 @@ const properties = {
   },
   'dirty': function () {
     this.yogaNode.dirty();
+  },
+  addPressEvent: function (event, options) {
+    addPressEvent(this, event, options)
   }
 };
 
@@ -526,7 +530,7 @@ function View(params) {
   EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
-    this.yogaNode =  NativeYogaNodeFactory.create();
+    this.yogaNode = NativeYogaNodeFactory.create();
   } else {
     if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
       this.yogaNode = this.nativeObject.getYogaNode();
