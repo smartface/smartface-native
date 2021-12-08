@@ -298,6 +298,31 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
+    'canOpenUrl': {
+        value: function (url) {
+            if (!url) {
+                console.error(new Error("url parameter can't be empty."));
+                return;
+            }
+            if (!TypeUtil.isString(url)) {
+                console.error(new Error("url parameter must be string."));
+                return;
+            }
+            const NativeIntent = requireClass("android.content.Intent");
+            const NativeUri = requireClass("android.net.Uri");
+            const launchIntent = new NativeIntent(NativeIntent.ACTION_VIEW);
+            launchIntent.setData(NativeUri.parse(url));
+            const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
+            const componentName = launchIntent.resolveActivity(packageManager);
+            if (componentName == null) {
+                return false;
+            } else {
+                const fallback = "{com.android.fallback/com.android.fallback.Fallback}";
+                return !(fallback === componentName.toShortString());
+            }
+        },
+        enumerable: true
+    },
     'exit': {
         value: function() {
             activity.finish();
@@ -479,7 +504,6 @@ function detachSliderDrawer(sliderDrawer) {
 ApplicationWrapper.statusBar = require("./statusbar");
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
