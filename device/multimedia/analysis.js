@@ -280,18 +280,19 @@ Multimedia.launchCropper = function (e) { };
  * @param {Object} params Object describing parameters for the function.
  * @param {UI.Page} params.page
  * @param {Device.Multimedia.Type} params.type Data type.
+ * @param {Object} params.android Android specific argument
+ * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+ * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
- * @param {Object} params.onSuccess.params.images Captured images
- * @param {IO.File[]} params.onSuccess.params.images.file Image file
- * @param {String} params.onSuccess.params.images.uri Image uri
- * @param {Object} params.onSuccess.params.videos Captured videos
- * @param {IO.File[]} params.onSuccess.params.videos.file Video file
- * @param {String} params.onSuccess.params.videos.uri Video uri
+ * @param {UI.Image[]} params.onSuccess.params.images Captured images
+ * @param {IO.File[]|null} params.onSuccess.params.videos Video file
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
- * @param {Object} params.onFailure.params 
+ * @param {Object[]} params.onFailure.params 
  * @param {String} params.onFailure.params.message Failure message
+ * @param {String|null} params.onFailure.params.fileName File name of the selected file or null if the selected file has unkown issue or pointed to a remote resource.
+ * @param {String} params.onFailure.params.uri Uri of the selected file
  * @android
  * @ios
  * @since 4.3.4

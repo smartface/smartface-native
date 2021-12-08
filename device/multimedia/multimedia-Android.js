@@ -201,12 +201,6 @@ Multimedia.android.getAllGalleryItems = function (params = {}) {
 
 };
 
-/*
-- create a method to  multiple pick 
-- what if video seleceted ?
-- in onSuccess, return array of
-- consider videos for multiple
-*/
 Multimedia.launchCropper = function (params) {
     const {
         page,
@@ -229,7 +223,7 @@ Multimedia.launchCropper = function (params) {
 
     _captureParams = {};
     _pickParams = params;
-    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: asset.nativeObject, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
 };
 
 Multimedia.pickMultipleFromGallery = function (params = {}) {
@@ -244,7 +238,7 @@ Multimedia.pickMultipleFromGallery = function (params = {}) {
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
     intent.putExtra(NativeIntent.EXTRA_ALLOW_MULTIPLE, true)
 
-    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_MULTIPLE_FROM_GALLERY);
+    params.page.nativeObject.startActivityForResult(NativeIntent.createChooser(intent, null), Multimedia.PICK_MULTIPLE_FROM_GALLERY);
 };
 
 
@@ -258,7 +252,7 @@ Multimedia.onActivityResult = function (requestCode, resultCode, data) {
     } else if (requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
         cropGalleryData(resultCode, data);
     } else if (requestCode === Multimedia.PICK_MULTIPLE_FROM_GALLERY) {
-        pickMultipleFromGallery(requestCode, data);
+        pickMultipleFromGallery(resultCode, data);
     }
 };
 
@@ -392,6 +386,10 @@ function pickMultipleFromGallery(resultCode, data) {
         onSuccess,
         onCancel,
         type,
+        android: {
+            fixOrientation: fixOrientation = false,
+            maxImageSize: maxImageSize = -1
+        } = {},
         page
     } = _pickParams;
 
@@ -411,31 +409,61 @@ function pickMultipleFromGallery(resultCode, data) {
 
             if (onSuccess) {
 
-                NativeSFMultimedia.getRealPathAsync(activity, array(uris, 'android.net.Uri'), type, {
-                    onCompleted: (realPaths) => {
+                if (type === Multimedia.Type.IMAGE) {
 
-                        let files = realPaths.map(realPath =>
-                            new File({
-                                path: realPath
-                            })
-                        );
+                    NativeSFMultimedia.getBitmapsFromUrisAsync(activity, array(uris, 'android.net.Uri'), maxImageSize, fixOrientation, {
+                        onCompleted: (bitmaps) => {
 
-                        onSuccess(
-                            type === Multimedia.Type.IMAGE ?
-                                {
-                                    images: files
-                                } :
-                                {
-                                    videos: files
+                            const images = toJSArray(bitmaps).map(bitmap => {
+                                return new Image({
+                                    bitmap
+                                });
+                            });
+
+                            onSuccess({
+                                images
+                            });
+                        },
+                        onFailure: (errors) => {
+
+                            const errorObject = toJSArray(errors).map(error => {
+                                return {
+                                    message: error.message,
+                                    fileName: error.fileName,
+                                    uri: error.uri
                                 }
-                        );
-                    },
-                    onFailure: (err) => {
-                        onFailure && onFailure({
-                            message: err
-                        });
-                    }
-                });
+                            })
+                            onFailure && onFailure(errorObject);
+                        }
+                    });
+                } else {
+
+                    NativeSFMultimedia.getVideoAssetsFromUrisAsync(activity, array(uris, 'android.net.Uri'), {
+                        onCompleted: (videoAssets) => {
+
+                            let videos = toJSArray(videoAssets).map(videoAsset => {
+                                return new File({
+                                    path: videoAsset.realPath
+                                });
+                            });
+
+                            onSuccess({
+                                videos
+                            });
+                        },
+                        onFailure: (errors) => {
+
+                            const errorObject = toJSArray(errors).map(error => {
+                                return {
+                                    message: error.message,
+                                    fileName: error.fileName,
+                                    uri: error.uri
+                                }
+                            })
+                            onFailure && onFailure(errorObject);
+                        }
+                    });
+                }
             }
 
         } catch (err) {
@@ -485,7 +513,7 @@ function pickFromGallery(resultCode, data) {
         if (onSuccess) {
             if (type === Multimedia.Type.IMAGE) {
                 if (!allowsEditing) {
-                    NativeSFMultimedia.getBitmapFromUri(activity, uri, maxImageSize, fixOrientation, {
+                    NativeSFMultimedia.getBitmapFromUriAsync(activity, uri, maxImageSize, fixOrientation, {
                         onCompleted: (bitmap) => {
                             let image = new Image({
                                 bitmap
@@ -515,7 +543,8 @@ function pickFromGallery(resultCode, data) {
         onCancel && onCancel();
     }
 }
-//TODO: java tarafina tasindi 
+
+//TODO: user method in the java (SFMultimedia.java)
 function getRealPathFromURI(uri) {
     var projection = [
         "_data" //NativeMediaStore.MediaColumns.DATA
