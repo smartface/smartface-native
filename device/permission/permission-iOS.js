@@ -1,6 +1,7 @@
 const AlertView = require('../../ui/alertview');
 const Multimedia = require('../multimedia');
 const Location = require('../location');
+const Linking = require('../../application/linking');
 
 const PERMISSION_STATUS = {
   GRANTED: "GRANTED",
@@ -117,7 +118,7 @@ function showAlertAndRedirectToSettings(permissionText = '', permissionTitle = '
       {
         text: global.lang.goToSettings || "Go to Settings",
         type: AlertView.Android.ButtonType.POSITIVE,
-        onClick: () => { }// Linking.openSettings()
+        onClick: () => Linking.openSettings()
       },
       {
         text: global.lang.cancel || "Cancel",

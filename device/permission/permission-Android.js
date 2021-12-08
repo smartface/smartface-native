@@ -1,5 +1,6 @@
 const Application = require('../../application');
 const AlertView = require('../../ui/alertview');
+const Linking = require('../../application/linking');
 
 const PERMISSION_STATUS = {
   GRANTED: "GRANTED",
@@ -45,7 +46,6 @@ function getPermission(options) {
       resolve('');
     } else {
       Application.android.onRequestPermissionsResult = (e) => {
-        //@ts-ignore
         const currentPermissionRationale = Application.android.shouldShowRequestPermissionRationale(
           options.androidPermission
         );
@@ -83,7 +83,7 @@ function showAlertAndRedirectToSettings(permissionText = '', permissionTitle = '
       {
         text: global.lang.goToSettings || "Go to Settings",
         type: AlertView.Android.ButtonType.POSITIVE,
-        onClick: () => { }// Linking.openSettings()
+        onClick: () => Linking.openSettings()
       },
       {
         text: global.lang.cancel || "Cancel",
