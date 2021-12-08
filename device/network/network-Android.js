@@ -1,5 +1,5 @@
 const AndroidConfig = require('../../util/Android/androidconfig');
-const { isConnected } = require('./network');
+const { isConnected, ConnectionType } = require('./network');
 
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager = requireClass('android.telephony.TelephonyManager');
@@ -15,13 +15,7 @@ const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
 const Network = {};
-Network.ConnectionType = {};
-Network.ConnectionType.None = 0;
-Network.ConnectionType.Mobile = 1;
-Network.ConnectionType.WIFI = 2;
-
-Network.ConnectionType.NONE = 0;
-Network.ConnectionType.MOBILE = 1;
+Network.ConnectionType = ConnectionType;
 
 const MARSHMALLOW = 23;
 
@@ -175,7 +169,7 @@ Network.__cancelAll = function () {
     }
 };
 
-Network.isConnected = isConnected;
+Network.isConnected = checkUrl => isConnected({ checkUrl, connectionType: Network.connectionType });
 
 function getConnectionTypeEnum(type) {
     let connectionType = Network.ConnectionType.NONE;
