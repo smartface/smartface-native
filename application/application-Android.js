@@ -306,8 +306,7 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'canOpenUrl': {
-        value: function () {
-            const url = arguments[0];
+        value: function (url) {
             if (!url) {
                 console.error(new Error("url parameter can't be empty."));
                 return;

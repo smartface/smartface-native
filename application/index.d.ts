@@ -433,7 +433,7 @@ declare class Application {
 	 * @ios
 	 * @android
 	 * @static
-	 * @since 4.3.7
+	 * @since 4.3.6
 	 * @see https://developer.android.com/training/package-visibility
 	 */
 	static canOpenUrl: (url: string) => boolean;
