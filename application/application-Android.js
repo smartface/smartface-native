@@ -277,31 +277,24 @@ Object.defineProperties(ApplicationWrapper, {
                     uriObject = NativeUri.parse(uriScheme);
             }
             uriObject && intent.setData(uriObject);
-
-            let packageManager = activity.getPackageManager();
-            let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if (activitiesCanHandle.size() > 0) {
-                if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                    let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    let chooserIntent = NativeIntent.createChooser(intent, title);
-                    try {
-                        activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
-                } else {
-                    try {
-                        activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
+            if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
+                let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                let chooserIntent = NativeIntent.createChooser(intent, title);
+                try {
+                    activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
                 }
-                onSuccess && onSuccess();
-                return;
+            } else {
+                try {
+                    activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
+                }
             }
-            onFailure && onFailure();
+            onSuccess && onSuccess();
         },
         enumerable: true
     },
