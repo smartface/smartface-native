@@ -90,8 +90,6 @@ Object.defineProperty(ApplicationWrapper, 'on', {
 //InputMethodManager to close softinput keyboard
 const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../util/Android/systemservices');
 
-// Intent.ACTION_VIEW
-const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
@@ -230,97 +228,6 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'Android': {
         value: {},
-        enumerable: true
-    },
-    'call': {
-        /* ToDo : Multiple parameter is deprected.*/
-        value: function() {
-            if (arguments.length === 1 && (typeof arguments[0] === "object"))
-                var {
-                    uriScheme,
-                    data,
-                    onSuccess,
-                    onFailure,
-                    isShowChooser,
-                    chooserTitle,
-                    action = ACTION_VIEW
-                } = arguments[0];
-            else
-                var [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
-
-            if (!TypeUtil.isString(uriScheme)) {
-                throw new TypeError('uriScheme must be string');
-            }
-
-            const NativeIntent = requireClass("android.content.Intent");
-            const NativeUri = requireClass("android.net.Uri");
-
-            let intent = new NativeIntent(action);
-            let uriObject;
-            if (TypeUtil.isObject(data) && Object.keys(data).length > 0) {
-                // we should use intent.putExtra but it causes native crash.
-                let params = Object.keys(data).map(function(k) {
-                    return k + '=' + data[k];
-                }).join('&');
-
-                if (uriScheme.indexOf("|") !== -1) {
-                    configureIntent.call(intent, uriScheme);
-                    uriObject = NativeUri.parse(params);
-                } else {
-                    let uri = uriScheme + "?" + params;
-                    uriObject = NativeUri.parse(uri);
-                }
-            } else {
-                if (uriScheme.indexOf("|") !== -1)
-                    configureIntent.call(intent, uriScheme);
-                else
-                    uriObject = NativeUri.parse(uriScheme);
-            }
-            uriObject && intent.setData(uriObject);
-            if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                let chooserIntent = NativeIntent.createChooser(intent, title);
-                try {
-                    activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                } catch (e) {
-                    onFailure && onFailure();
-                    return;
-                }
-            } else {
-                try {
-                    activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                } catch (e) {
-                    onFailure && onFailure();
-                    return;
-                }
-            }
-            onSuccess && onSuccess();
-        },
-        enumerable: true
-    },
-    'canOpenUrl': {
-        value: function (url) {
-            if (!url) {
-                console.error(new Error("url parameter can't be empty."));
-                return;
-            }
-            if (!TypeUtil.isString(url)) {
-                console.error(new Error("url parameter must be string."));
-                return;
-            }
-            const NativeIntent = requireClass("android.content.Intent");
-            const NativeUri = requireClass("android.net.Uri");
-            const launchIntent = new NativeIntent(NativeIntent.ACTION_VIEW);
-            launchIntent.setData(NativeUri.parse(url));
-            const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
-            const componentName = launchIntent.resolveActivity(packageManager);
-            if (componentName == null) {
-                return false;
-            } else {
-                const fallback = "{com.android.fallback/com.android.fallback.Fallback}";
-                return !(fallback === componentName.toShortString());
-            }
-        },
         enumerable: true
     },
     'exit': {

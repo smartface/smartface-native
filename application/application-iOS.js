@@ -96,18 +96,6 @@ Object.defineProperty(SFApplication, 'byteSent', {
     enumerable: true
 });
 
-SFApplication.call = function(uriScheme, data, onSuccess, onFailure) {
-    if (Object.keys(uriScheme).indexOf('uriScheme') === -1) {
-        SMFApplication.call(uriScheme, data, onSuccess, onFailure);
-    } else {
-        SMFApplication.call(uriScheme.uriScheme, uriScheme.data, uriScheme.onSuccess, uriScheme.onFailure);
-    }
-};
-
-SFApplication.canOpenUrl = function(url) {
-    return SMFApplication.canOpenUrl(url);
-}
-
 SFApplication.exit = function() {
     Application.onExit();
     SMFApplication.exit();
