@@ -144,43 +144,7 @@ Object.defineProperties(Location.android, {
     }
 });
 
-Location.getLocation = (callback, showSettingsAlert = true, permissionText = '', permissionTitle = '') => {
-    const getLocationPromise = async () => {
-        await getPermission({
-            androidPermission: Application.Android.Permissions.ACCESS_FINE_LOCATION,
-            showSettingsAlert,
-            permissionText,
-            permissionTitle,
-        });
-        return getLocationActionForAndroid();
-    }
-
-    if (callback) {
-        try {
-            const location = await getLocationPromise();
-            callback(null, location);
-        } catch (e) {
-            callback(e);
-        } finally {
-            return getLocationPromise();
-        }
-    } else {
-        return await getLocationPromise();
-    }
-};
-
-function getLocationAction() {
-    return new Promise((resolve) => {
-        Location.start(Location.Android.Priority.HIGH_ACCURACY, 1000);
-        Location.onLocationChanged = (location) => {
-            Location.onLocationChanged = () => { };
-            Location.stop();
-            resolve(location);
-        };
-    });
-}
-
-function getLocationActionForAndroid() {
+Location.getLocation = () => {
     return new Promise((resolve, reject) => {
         Location.android.checkSettings({
             onSuccess: () => {
@@ -191,6 +155,17 @@ function getLocationActionForAndroid() {
                 reject(isFailureReasonDeny ? "DENIED" : "OTHER");
             },
         });
+    });
+};
+
+function getLocationAction() {
+    return new Promise((resolve) => {
+        Location.start(Location.Android.Priority.HIGH_ACCURACY, 1000);
+        Location.onLocationChanged = (location) => {
+            Location.onLocationChanged = () => { };
+            Location.stop();
+            resolve(location);
+        };
     });
 }
 

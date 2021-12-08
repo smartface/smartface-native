@@ -1,5 +1,4 @@
 const Invocation = require('../../util').Invocation;
-const System = require("../system");
 const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
@@ -116,41 +115,16 @@ Location.getLastKnownLocation = function (onSuccess, onFailure) {
 
 Location.onLocationChanged = function onLocationChanged(event) { }
 
-Location.getLocation = (callback, showSettingsAlert = true, permissionText = '', permissionTitle = '') => {
-    const getLocationPromise = async () => {
-        await getPermission({
-            iosPermission: IOS_PERMISSIONS.LOCATION,
-            showSettingsAlert,
-            permissionText,
-            permissionTitle,
-        });
-        return getLocationAction();
-    }
-
-    if (callback) {
-        try {
-            const location = await getLocationPromise();
-            callback(null, location);
-        } catch (e) {
-            callback(e);
-        } finally {
-            return getLocationPromise();
-        }
-    } else {
-        return await getLocationPromise();
-    }
+Location.getLocation = () => {
+    return new Promise((resolve) => {
+        Location.start(Location.Android.Priority.HIGH_ACCURACY, 1000);
+        Location.onLocationChanged = (location) => {
+            Location.onLocationChanged = () => { };
+            Location.stop();
+            resolve(location);
+        };
+    });
 };
-
-function getLocationAction() {
-	return new Promise((resolve) => {
-		Location.start(Location.Android.Priority.HIGH_ACCURACY, 1000);
-		Location.onLocationChanged = (location) => {
-			Location.onLocationChanged = () => {};
-			Location.stop();
-			resolve(location);
-		};
-	});
-}
 
 Location.android = {};
 Location.android.checkSettings = function () { };
