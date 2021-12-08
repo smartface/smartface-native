@@ -14,11 +14,11 @@ import { MapsOptions } from "./shared/map";
  * ```
  * <dict>
  * ...
- * 	<key>LSApplicationQueriesSchemes</key>
- *	    <array>
- *		    <string>comgooglemaps</string>
- *		    <string>yandexmaps</string>
- *	    </array>
+ *  <key>LSApplicationQueriesSchemes</key>
+ *      <array>
+ *        <string>comgooglemaps</string>
+ *        <string>yandexmaps</string>
+ *      </array>
  * </dict>
  * ```
  */
@@ -86,8 +86,8 @@ declare class Linking {
    *      </array>
    *
    *      After entry add on, urlScheme can be check;
-   *      import Linking from '@smartface/native/application/linking';
    * 
+   *      import Linking from '@smartface/native/application/linking';
    *      const isAppAvaible = Linking.canOpenURL("comgooglemaps://");
    *
    * @method canOpenURL
@@ -97,7 +97,7 @@ declare class Linking {
    * @static
    * @since 3.0.1
    */
-   canOpenURL: (url: string) => boolean;
+   static canOpenURL: (url: string) => boolean;
 
   /**
   * Launches another application and passes data. For Android, you can open application chooser with
@@ -173,3 +173,5 @@ declare class Linking {
     action?: string;
   }) => void;
 }
+
+export = Linking;

@@ -1,35 +1,13 @@
 const Application = require("../../application");
+const TypeUtil = require("../../util/type");
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 // Intent.ACTION_VIEW
 const ACTION_VIEW = "android.intent.action.VIEW";
 
+const activity = AndroidConfig.activity;
+
 function Linking() { }
-
-Linking.openMap = (options) => {
-  return new Promise((resolve, reject) => {
-    const { latitude, longitude } = options.location;
-    Application.call({
-      uriScheme: `geo:${latitude},${longitude}?q=${encodeURIComponent(options.name)}`,
-      chooserTitle: global.lang.chooseMapsApp || "Choose Maps App",
-      onSuccess: (e) => resolve(e),
-      onFailure: (e) => reject(e),
-      isShowChooser: true
-    });
-  });
-};
-
-Linking.openNavigation = (options) => {
-  return new Promise((resolve, reject) => {
-    const { latitude, longitude } = options.location;
-    Application.call({
-      uriScheme: `geo:${latitude},${longitude}?q=${latitude},${longitude}&mode=${options.transportType}`,
-      chooserTitle: global.lang.chooseMapsApp || "Choose Maps App",
-      onSuccess: (e) => resolve(e),
-      onFailure: (e) => reject(e),
-      isShowChooser: true,
-    });
-  });
-};
 
 Linking.openSettings = () => {
   return new Promise((resolve, reject) => {
@@ -39,11 +17,11 @@ Linking.openSettings = () => {
       onFailure: () => reject(),
       action: "android.settings.APPLICATION_DETAILS_SETTINGS"
     };
-    Application.call(options);
+    Linking.openURL(options);
   });
-}
+};
 
-Linking.canOpenURL = () => { }
+Linking.canOpenURL = () => { };
 
 Linking.openURL = (options) => {
   const {
@@ -110,6 +88,6 @@ Linking.openURL = (options) => {
     return;
   }
   onFailure && onFailure();
-}
+};
 
 module.exports = Linking;
