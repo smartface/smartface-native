@@ -1,15 +1,8 @@
-const { isConnected } = require('./network');
+const { isConnected, ConnectionType } = require('./network');
 
 const Network = {};
 
-Network.ConnectionType = {};
-
-Network.ConnectionType.None = 0;
-Network.ConnectionType.Mobile = 1;
-Network.ConnectionType.WIFI = 2;
-
-Network.ConnectionType.NONE = 0;
-Network.ConnectionType.MOBILE = 1;
+Network.ConnectionType = ConnectionType;
 
 Object.defineProperty(Network, 'carrier', {
     get: function () {
@@ -114,6 +107,6 @@ Network.createNotifier = function (params) {
     self.android.isInitialStickyNotification = () => { };
 }
 
-Network.isConnected = isConnected;
+Network.isConnected = checkUrl => isConnected({ checkUrl, connectionType: Network.connectionType });
 
 module.exports = Network;

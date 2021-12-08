@@ -1,8 +1,19 @@
-const Network = require("./network-" + Device.deviceOS);
+const Http = require('../../net/http');
 
-function isConnected(checkUrl = "https://www.google.com") {
+const ConnectionType = {
+  None: 0,
+  NONE: 0,
+  Mobile: 1,
+  MOBILE: 1,
+  WIFI: 2
+};
+
+const isConnected = async options => {
+  const connectionType = options.connectionType;
+  const checkUrl = options.checkUrl || "https://www.google.com";
+
   return new Promise((resolve, reject) => {
-    const noConnection = Network.connectionType === Network.ConnectionType.NONE;
+    const noConnection = connectionType === ConnectionType.NONE;
     if (noConnection) {
       return reject();
     }
@@ -24,5 +35,6 @@ function isConnected(checkUrl = "https://www.google.com") {
 }
 
 module.exports = {
-  isConnected
+  isConnected,
+  ConnectionType
 }
