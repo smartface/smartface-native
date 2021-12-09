@@ -41,3 +41,9 @@ const TransportTypes = {
   WALKING: 'w',
   CYCLING: 'b'
 };
+
+module.exports = {
+  MapTypes,
+  MapList,
+  TransportTypes
+}

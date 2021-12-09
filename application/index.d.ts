@@ -113,7 +113,7 @@ declare enum Events {
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
 	 */
-	 AppShortcutReceived = "AppShortcutReceived",
+	AppShortcutReceived = "AppShortcutReceived",
 	/**
 	 * Triggered when user press back key. The default implementation finishes the application,
 	 * but you can override this to do whatever you want.
@@ -902,7 +902,7 @@ declare class Application {
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
 	 */
-	 static onAppShortcutReceived: (e: {
+	static onAppShortcutReceived: (e: {
 		data: { [key: string]: any };
 	}) => void;
 	/**
