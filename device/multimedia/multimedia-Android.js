@@ -14,8 +14,8 @@ const Image = require("../../ui/image");
 const TypeUtil = require("../../util/type");
 
 const Type = {
-    IMAGE: 0,
-    VIDEO: 1
+    IMAGE: NativeSFMultimedia.TYPE_IMAGE,
+    VIDEO: NativeSFMultimedia.TYPE_VIDEO
 };
 
 const ActionType = {
@@ -322,7 +322,7 @@ function cropGalleryData(resultCode, data) {
 
         let resultUri = NativeUCrop.getOutput(data);
         //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
-        NativeSFMultimedia.getBitmapFromUri(activity, resultUri, maxImageSize, fixOrientation, {
+        NativeSFMultimedia.getBitmapFromUriAsync(activity, resultUri, maxImageSize, fixOrientation, {
             onCompleted: (bitmap) => {
                 let croppedImage = new Image({
                     bitmap
@@ -409,61 +409,43 @@ function pickMultipleFromGallery(resultCode, data) {
 
             if (onSuccess) {
 
-                if (type === Multimedia.Type.IMAGE) {
+                NativeSFMultimedia.getMultimediaAssetsFromUrisAsync(activity, array(uris, 'android.net.Uri'), type, maxImageSize, fixOrientation, {
+                    onCompleted: (mAssets) => {
 
-                    NativeSFMultimedia.getBitmapsFromUrisAsync(activity, array(uris, 'android.net.Uri'), maxImageSize, fixOrientation, {
-                        onCompleted: (bitmaps) => {
+                        const assets = toJSArray(mAssets).map(asset => {
 
-                            const images = toJSArray(bitmaps).map(bitmap => {
-                                return new Image({
-                                    bitmap
-                                });
-                            });
-
-                            onSuccess({
-                                images
-                            });
-                        },
-                        onFailure: (errors) => {
-
-                            const errorObject = toJSArray(errors).map(error => {
-                                return {
-                                    message: error.message,
-                                    fileName: error.fileName,
-                                    uri: error.uri
+                            return type === Multimedia.Type.IMAGE ?
+                                {
+                                    image: new Image({
+                                        bitmap: asset.bitmap
+                                    }),
+                                    file: new File({
+                                        path: asset.realPath
+                                    })
+                                } :
+                                {
+                                    file: new File({
+                                        path: asset.realPath
+                                    })
                                 }
-                            })
-                            onFailure && onFailure(errorObject);
-                        }
-                    });
-                } else {
+                        });
 
-                    NativeSFMultimedia.getVideoAssetsFromUrisAsync(activity, array(uris, 'android.net.Uri'), {
-                        onCompleted: (videoAssets) => {
+                        onSuccess({
+                            assets
+                        });
+                    },
+                    onFailure: (errors) => {
 
-                            let videos = toJSArray(videoAssets).map(videoAsset => {
-                                return new File({
-                                    path: videoAsset.realPath
-                                });
-                            });
-
-                            onSuccess({
-                                videos
-                            });
-                        },
-                        onFailure: (errors) => {
-
-                            const errorObject = toJSArray(errors).map(error => {
-                                return {
-                                    message: error.message,
-                                    fileName: error.fileName,
-                                    uri: error.uri
-                                }
-                            })
-                            onFailure && onFailure(errorObject);
-                        }
-                    });
-                }
+                        const errorObject = toJSArray(errors).map(error => {
+                            return {
+                                message: error.message,
+                                fileName: error.fileName,
+                                uri: error.uri
+                            }
+                        })
+                        onFailure && onFailure(errorObject);
+                    }
+                });
             }
 
         } catch (err) {

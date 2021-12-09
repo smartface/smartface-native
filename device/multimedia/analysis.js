@@ -266,7 +266,7 @@ Multimedia.pickFromGallery = function (e) { };
  * @param {String} params.onFailure.params.message Failure message
  * @android
  * @ios
- * @since 4.3.4
+ * @since 4.3.6
  */
 Multimedia.launchCropper = function (e) { };
 
@@ -285,8 +285,9 @@ Multimedia.launchCropper = function (e) { };
  * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
- * @param {UI.Image[]} params.onSuccess.params.images Captured images
- * @param {IO.File[]|null} params.onSuccess.params.videos Video file
+ * @param {Object[]} params.onSuccess.params.assets
+ * @param {IO.File} params.onSuccess.params.assets.file Captured image or video file depends on the given type. In iOS, if the given type is image then it returns undefined.
+ * @param {UI.Image} params.onSuccess.params.assets.image Captured images
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @param {Object[]} params.onFailure.params 
@@ -295,7 +296,7 @@ Multimedia.launchCropper = function (e) { };
  * @param {String} params.onFailure.params.uri Uri of the selected file
  * @android
  * @ios
- * @since 4.3.4
+ * @since 4.3.6
  */
 Multimedia.pickMultipleFromGallery = function (e) { };
 
