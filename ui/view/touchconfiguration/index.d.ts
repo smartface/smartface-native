@@ -20,12 +20,17 @@ import View from "../../view";
  * @params {UI.Color} [options.fadeColor=Color.create("#d8d8d8")] - Sets the color to fade effect. This option specfic to iOS
  * @params {number} [options.fadeDuration=200] - Sets duration to fade effect. This option specfic to iOS. Default 0.2
  * @params {number} [options.fadeMaxOpacity=0.3] - Sets maximum opacity to fade effect. This option specfic to iOS. Default 0.3
- * @example
- * import touch from '@smartface/extension-utils/lib/touch'
+ * * @example
+ * ```
+ * import { addPressEvent } from '@smartface/native/ui/view/touchconfiguration'
  * //inside page.onLoad
- * touch.addPressEvent(this.flBtn, () => {
- *     alert("Pressed");
+ * addPressEvent(this.flex, () => alert('Pressed'), {
+ *   rippleColor: Color.create(23,200,23),
+ *   fadeColor: Color.create(23,200,23),
+ *   fadeDuration: 200,
+ *   fadeMaxOpacity: 1
  * });
+ * ```
  */
 export function addPressEvent(
     target: View,
