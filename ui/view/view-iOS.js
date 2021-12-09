@@ -4,7 +4,6 @@ const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const { EventEmitterCreator } = require("../../core/eventemitter");
-const { addPressEvent } = require('./touchconfiguration')
 const EventList = require('./events');
 
 function isInside(frame, point) {
@@ -1289,10 +1288,6 @@ function View(params) {
      */
     this.applyLayout = function () {
         self.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-    }
-
-    this.addPressEvent = function (event, options) {
-        addPressEvent(this, event, options)
     }
 
     /*
