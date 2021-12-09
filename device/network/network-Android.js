@@ -1,4 +1,6 @@
 const AndroidConfig = require('../../util/Android/androidconfig');
+const { isConnected, ConnectionType } = require('./network');
+
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');
@@ -13,31 +15,25 @@ const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
 const Network = {};
-Network.ConnectionType = {};
-Network.ConnectionType.None = 0;
-Network.ConnectionType.Mobile = 1;
-Network.ConnectionType.WIFI = 2;
-
-Network.ConnectionType.NONE = 0;
-Network.ConnectionType.MOBILE = 1;
+Network.ConnectionType = ConnectionType;
 
 const MARSHMALLOW = 23;
 
 Object.defineProperties(Network, {
     'IMSI': {
-        get: function() {
+        get: function () {
             return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
         },
         configurable: false
     },
     'SMSEnabled': {
-        get: function() {
+        get: function () {
             return getTelephonyManager().getDataState() === NativeTelephonyManager.DATA_CONNECTED;
         },
         configurable: false
     },
     'bluetoothMacAddress': {
-        get: function() {
+        get: function () {
             var bluetoothAdapter = NativeBluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter === null) {
                 return "null";
@@ -48,13 +44,13 @@ Object.defineProperties(Network, {
         configurable: false
     },
     'carrier': {
-        get: function() {
+        get: function () {
             return getTelephonyManager().getNetworkOperatorName();
         },
         configurable: false
     },
     'connectionType': {
-        get: function() {
+        get: function () {
             //Deprecated in API level 29
             var activeInternet = getActiveInternet();
             if (activeInternet == null) // undefined or null
@@ -67,7 +63,7 @@ Object.defineProperties(Network, {
         configurable: false
     },
     'connectionIP': {
-        get: function() {
+        get: function () {
             if (Network.connectionType === Network.ConnectionType.WIFI) {
                 var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
@@ -83,7 +79,7 @@ Object.defineProperties(Network, {
         configurable: false
     },
     'wirelessMacAddress': {
-        get: function() {
+        get: function () {
             var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
             var wifiInfo = wifiManager.getConnectionInfo();
             return wifiInfo.getMacAddress();
@@ -93,18 +89,18 @@ Object.defineProperties(Network, {
 });
 
 var _instanceCollection = [];
-Network.createNotifier = function(params) {
+Network.createNotifier = function (params) {
     const SFNetworkNotifier = requireClass("io.smartface.android.sfcore.device.network.SFNetworkNotifier");
 
     const self = this;
     if (!self.nativeObject) {
         let callback = {
-            onConnectionTypeChanged: function(connectionType) {
+            onConnectionTypeChanged: function (connectionType) {
                 if (!self.connectionTypeChanged) return;
                 let cTypeEnum = getConnectionTypeEnum(connectionType),
                     isInitialStickyNotification = self.android.isInitialStickyNotification();
 
-                if(!self.android.initialCacheEnabled && isInitialStickyNotification)
+                if (!self.android.initialCacheEnabled && isInitialStickyNotification)
                     return;
 
                 self.connectionTypeChanged(cTypeEnum);
@@ -116,10 +112,10 @@ Network.createNotifier = function(params) {
     var isReceiverCreated = false,
         _connectionTypeChanged;
     Object.defineProperty(self, 'connectionTypeChanged', {
-        get: function() {
+        get: function () {
             return _connectionTypeChanged;
         },
-        set: function(value) {
+        set: function (value) {
             _connectionTypeChanged = value;
             if (typeof value === 'function') {
                 if (!isReceiverCreated) {
@@ -152,11 +148,11 @@ Network.createNotifier = function(params) {
     });
 
     _instanceCollection.push(this);
-    self.subscribe = function(callback) {
+    self.subscribe = function (callback) {
         self.connectionTypeChanged = callback;
     };
 
-    self.unsubscribe = function() {
+    self.unsubscribe = function () {
         self.connectionTypeChanged = null;
     };
 
@@ -167,11 +163,13 @@ Network.createNotifier = function(params) {
     }
 };
 
-Network.__cancelAll = function() {
+Network.__cancelAll = function () {
     for (let i = 0; i < _instanceCollection.length; i++) {
         _instanceCollection[i].unsubscribe();
     }
 };
+
+Network.isConnected = checkUrl => isConnected({ checkUrl, connectionType: Network.connectionType });
 
 function getConnectionTypeEnum(type) {
     let connectionType = Network.ConnectionType.NONE;
