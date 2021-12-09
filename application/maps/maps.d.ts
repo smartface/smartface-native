@@ -6,4 +6,10 @@ export declare function getMapOptions(options: {
   transportType?: TransportTypes,
   mapType: MapTypes,
   location: Location
-}): any;
+}): {
+  type: MapTypes,
+  data: any,
+  scheme: string,
+  errorText: string,
+  successText: string
+};
