@@ -4,7 +4,7 @@ const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const { EventEmitterCreator } = require("../../core/eventemitter");
-
+const { addPressEvent } = require('./touchconfiguration')
 const EventList = require('./events');
 
 function isInside(frame, point) {
