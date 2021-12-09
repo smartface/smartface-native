@@ -27,6 +27,17 @@ const DEFAULT_TOUCH_EFFECT = Object.freeze({
 });
 const CurrentDefault = Object.assign({}, DEFAULTS);
 
+function applyRippleEffect(
+    view,
+    useForeground,
+    rippleColor
+) {
+    if (view.android.rippleEnabled) return;
+    view.android.rippleEnabled = true;
+    view.android.useForeground = useForeground;
+    view.android.rippleColor = rippleColor;
+}
+
 function defaultAddPressEffect(view) {
     const TICKS = 1000 / CurrentDefault.fps;
     const ELEVATION_CHANGE_PER_FRAME =
