@@ -704,6 +704,7 @@ declare class View<TEvent = typeof View.Events>
 	 * @since 4.1.4
 	 */
 	maskedBorders: View.Border[];
+
 	getPosition: () => {
 		left: number;
 		top: number;
