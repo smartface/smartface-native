@@ -259,7 +259,7 @@ Multimedia.pickFromGallery = function (e) { };
  * @param {Number} params.android.maxResultSize.width max cropped image width 
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
- * @param {UI.Image} params.onSuccess.params.image Captured image
+ * @param {UI.Image} params.onSuccess.params.image Cropped image
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @param {Object} params.onFailure.params 
@@ -286,8 +286,8 @@ Multimedia.launchCropper = function (e) { };
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {Object[]} params.onSuccess.params.assets
- * @param {IO.File} params.onSuccess.params.assets.file Captured image or video file depends on the given type. In iOS, if the given type is image then it returns undefined.
- * @param {UI.Image} params.onSuccess.params.assets.image Captured images
+ * @param {IO.File} params.onSuccess.params.assets.file Selected image or video file depends on the given type. In iOS, if the given type is image then it returns undefined.
+ * @param {UI.Image} params.onSuccess.params.assets.image Selected images
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @param {Object[]} params.onFailure.params 
