@@ -155,6 +155,13 @@ declare class MaterialTextBox extends TextBox {
          * @since 3.1.2
          */
         selectedLineHeight: number;
+        /**
+         * Gets/sets the expandsOnOverflow of the MaterialTextBox. 
+         * @property {Boolean} expandsOnOverflow
+         * @ios
+         * @since 4.3.6
+         */
+        expandsOnOverflow: boolean;
     }
     android: TextBox['android'] & {
         /**
@@ -191,6 +198,15 @@ declare class MaterialTextBox extends TextBox {
          * @deprecated 3.2.1 TextBox grows as its wrapper
          */
         textBoxHeight: number;
+        /**
+         * Gets/sets the maxLines of the MaterialTextBox. 
+         * Setting this value overrides previous maximum height configurations.
+         * 
+         * @property {Number} maxLines
+         * @android
+         * @since 4.3.6
+         */
+        maxLines: number;
     }
 /**
  * Gets/sets the lineCount of the MaterialTextBox. You can use this property when multiline is true.

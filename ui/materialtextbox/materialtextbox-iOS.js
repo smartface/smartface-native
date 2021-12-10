@@ -588,6 +588,16 @@ function MaterialTextbox(params) {
         configurable: true
     });
 
+    Object.defineProperty(self.ios, 'expandsOnOverflow', {
+        get: function () {
+            return self.mdcTextInputControllerUnderline.expandsOnOverflow;
+        },
+        set: function (value) {
+            self.mdcTextInputControllerUnderline.expandsOnOverflow = value;
+        },
+        enumerable: true
+    });
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
