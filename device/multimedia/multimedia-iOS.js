@@ -198,6 +198,70 @@ Multimedia.pickFromGallery = function (e) {
     }
 };
 
+Multimedia.pickMultipleFromGallery = function (e) {
+    let type = e.type;
+    let onSuccess = e.onSuccess;
+    let onCancel = e.onCancel;
+
+    let libraryMediaType = (type == Multimedia.Type.VIDEO) ? 1 : 0;
+
+    let ypImagePickerConfig = new __SF_YPImagePickerConfiguration();
+
+    ypImagePickerConfig.showsPhotoFilters = false;
+    ypImagePickerConfig.startOnScreen = 0;
+    ypImagePickerConfig.hidesStatusBar = false;
+    ypImagePickerConfig.libraryItemOverlayType = 1;
+    ypImagePickerConfig.screens = [0];
+    ypImagePickerConfig.showsVideoTrimmer = false;
+    ypImagePickerConfig.videoCompression = "AVAssetExportPresetPassthrough";
+    ypImagePickerConfig.galleryHidesRemoveButton = false;
+    ypImagePickerConfig.librarySkipSelectionsGallery = true;
+    ypImagePickerConfig.videoLibraryTimeLimit = 500.0;
+
+    // 0 = photo, 1 = video, 2 = photoAndVideo, default = photo 
+    ypImagePickerConfig.libraryMediaType = libraryMediaType;
+    ypImagePickerConfig.maxNumberOfItems = Number.MAX_SAFE_INTEGER;
+
+    let ypImagePicker = new __SF_YPImagePicker(ypImagePickerConfig);
+
+    ypImagePicker.didFinishPicking = function (data) {
+        ypImagePicker.picker.dismissViewController(function () {
+
+            if (data.cancelled) {
+                onCancel && onCancel();
+                return;
+            }
+
+            let imageAssets = data.photos.map(function (image) {
+                return {
+                    image: Image.createFromImage(image.originalImage)
+                };
+            });
+
+            let videoAssets = data.videos.map(function (video) {
+                return {
+                    file: new File({
+                        path: video.url.path
+                    })
+                };
+            });
+
+
+            onSuccess && onSuccess({
+                assets: type == Multimedia.Type.IMAGE ?
+                    imageAssets :
+                    videoAssets
+            });
+        }, true);
+    }
+
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(ypImagePicker.picker);
+    } else {
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
+};
+
 Multimedia.VideoQuality = {};
 Multimedia.VideoQuality.iOS = {};
 Multimedia.VideoQuality.LOW = 0;
@@ -246,7 +310,7 @@ Multimedia.ios._fixVideoOrientation = function (e) {
     var onFailure = e.onFailure;
     var url = file.ios.getNSURL();
 
-    __SF_UIImagePickerController.fixVideoOrientation(url,function(e){
+    __SF_UIImagePickerController.fixVideoOrientation(url, function (e) {
         if (e.filePath && typeof onCompleted == 'function') {
             var video = new File({
                 path: e.filePath
