@@ -194,7 +194,7 @@ declare class Network {
    * rejects o/w
    * @example
    * ```
-   * import network from '@smartface/extension-utils/lib/network';
+   * import network from '@smartface/native/device/network';
    * network.isConnected("myprivatenetwork.com")
    *     .then(() => {
    *         console.info("Connected to internet");
