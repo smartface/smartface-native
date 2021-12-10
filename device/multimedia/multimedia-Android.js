@@ -206,6 +206,7 @@ Multimedia.launchCropper = function (params) {
         page,
         aspectRatio = {},
         asset,
+        onFailure,
         android: {
             cropShape: cropShape = CropShape.RECTANGLE,
             rotateText: rotateText,
@@ -218,12 +219,18 @@ Multimedia.launchCropper = function (params) {
         } = {}
     } = params;
 
-    if (!asset || !(asset instanceof File))
-        throw new TypeError("Asset parameter must be typeof File");
+    if (!asset || (!(asset instanceof File) && !(asset instanceof Image)))
+        throw new TypeError("Asset parameter must be typeof File or Image");
 
     _captureParams = {};
     _pickParams = params;
-    startCropActivity({ requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: asset.nativeObject, page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize, hideBottomControls, enableFreeStyleCrop });
+    let startCropActivityParams = Object.assign({
+        requestCode: Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE, asset: asset.nativeObject,
+        page, cropShape, aspectRatio, rotateText, scaleText, cropText, headerBarTitle, maxResultSize,
+        hideBottomControls, enableFreeStyleCrop
+    }, (asset instanceof Image) ? { onFailure } : {});
+
+    startCropActivity(startCropActivityParams);
 };
 
 Multimedia.pickMultipleFromGallery = function (params = {}) {
@@ -346,8 +353,10 @@ function startCropActivity(params) {
     const {
         requestCode, asset, page, cropShape, aspectRatio,
         rotateText, scaleText, cropText, headerBarTitle,
-        maxResultSize, hideBottomControls, enableFreeStyleCrop
+        maxResultSize, hideBottomControls, enableFreeStyleCrop,
+        onFailure
     } = params;
+
     if (!asset) return;
     let { x, y } = aspectRatio;
     let { width, height } = maxResultSize;
@@ -377,7 +386,16 @@ function startCropActivity(params) {
     uCropOptions.setHideBottomControls(hideBottomControls);
     uCropOptions.setFreeStyleCropEnabled(enableFreeStyleCrop);
 
-    NativeSFMultimedia.startCropActivity(asset, activity, page.nativeObject, uCropOptions, requestCode);
+    if (onFailure)
+        NativeSFMultimedia.startCropActivity(asset, activity, page.nativeObject, uCropOptions, requestCode, {
+            onFailure: (err) => {
+                onFailure({
+                    message: err
+                });
+            }
+        });
+    else
+        NativeSFMultimedia.startCropActivity(asset, activity, page.nativeObject, uCropOptions, requestCode);
 }
 
 function pickMultipleFromGallery(resultCode, data) {

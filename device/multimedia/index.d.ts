@@ -684,7 +684,8 @@ declare class Multimedia {
     * 
     * @param {Object} params Object describing parameters for the function.
     * @param {UI.Page} params.page
-    * @param {IO.File} params.asset Image file which suppose to cropped.
+    * @param {IO.File|UI.Image} params.asset Image or image file which suppose to cropped. Note that providing Image caueses to launch the Cropper with the delay which depends on size of the Image in Android.
+    * Thus, providing File is always a better option. At least to decrease the delay, provide smaller images.
     * @param {Object} params.aspectRatio This property affects only on android.
     * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
     * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
@@ -714,7 +715,7 @@ declare class Multimedia {
     */
    static launchCropper(params: {
     page: Page;
-    asset: File;
+    asset: File|Image;
     aspectRatio?: { x: number; y: number };
     android?: {
         cropShape?: Multimedia.Android.CropShape;
