@@ -190,6 +190,10 @@ Object.defineProperties(System, {
             params && params.onError && params.onError();
         },
         enumerable: true
+    },
+    'isEmulator': {
+        get: () => AndroidConfig.isEmulator,
+        enumerable: true
     }
 });
 

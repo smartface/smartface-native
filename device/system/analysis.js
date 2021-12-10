@@ -20,7 +20,7 @@
  *     console.log("Device.System.fingerPrintAvailable: "           + System.fingerPrintAvailable);
  * 
  */
-function System() {}
+function System() { }
 
 /**
  *
@@ -220,6 +220,18 @@ System.biometricsAvailable;
 System.clipboard;
 
 /**
+ * Determine if the current running platform is Smartface Emulator or published application
+ *
+ * @property {String} isEmulator
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 4.4.0
+ */
+System.isEmulator;
+
+/**
  * Returns the package version of an app on the device.
  *     
  *     @example
@@ -243,8 +255,8 @@ System.clipboard;
  */
 System.android.getPackageVersion({
     packageName: null,
-    onSuccess: function(versionName) {},
-    onError: function(error) {}
+    onSuccess: function (versionName) { },
+    onError: function (error) { }
 });
 
 /**
@@ -272,8 +284,8 @@ System.android.getPackageVersion({
  * @since 0.1
  */
 System.ios.validateFingerPrint({
-    onSuccess: function() {},
-    onError: function() {}
+    onSuccess: function () { },
+    onError: function () { }
 });
 
 /**
@@ -309,8 +321,8 @@ System.ios.validateFingerPrint({
  * @deprecated since 4.3.1 Use {@link Device.System#validateBiometric}
  */
 System.validateFingerPrint({
-    onSuccess: function() {},
-    onError: function() {}
+    onSuccess: function () { },
+    onError: function () { }
 });
 
 /**
@@ -348,8 +360,8 @@ System.validateFingerPrint({
  * @since 4.3.1 
  */
 System.validateBiometric({
-    onSuccess: function() {},
-    onError: function() {}
+    onSuccess: function () { },
+    onError: function () { }
 });
 
 /**
@@ -363,7 +375,7 @@ System.validateBiometric({
  * @static
  * @since 0.1
  */
-System.vibrate = function() {};
+System.vibrate = function () { };
 
 /**
  * Checks if an app is installed or not.
@@ -374,7 +386,7 @@ System.vibrate = function() {};
  * @static
  * @since 0.1
  */
-System.isApplicationInstalled = function(packageName) {};
+System.isApplicationInstalled = function (packageName) { };
 
 /**
  * @enum {String} Device.System.OSType

@@ -277,31 +277,49 @@ Object.defineProperties(ApplicationWrapper, {
                     uriObject = NativeUri.parse(uriScheme);
             }
             uriObject && intent.setData(uriObject);
-
-            let packageManager = activity.getPackageManager();
-            let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if (activitiesCanHandle.size() > 0) {
-                if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                    let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    let chooserIntent = NativeIntent.createChooser(intent, title);
-                    try {
-                        activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
-                } else {
-                    try {
-                        activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
+            if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
+                let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                let chooserIntent = NativeIntent.createChooser(intent, title);
+                try {
+                    activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
                 }
-                onSuccess && onSuccess();
+            } else {
+                try {
+                    activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
+                }
+            }
+            onSuccess && onSuccess();
+        },
+        enumerable: true
+    },
+    'canOpenUrl': {
+        value: function (url) {
+            if (!url) {
+                console.error(new Error("url parameter can't be empty."));
                 return;
             }
-            onFailure && onFailure();
+            if (!TypeUtil.isString(url)) {
+                console.error(new Error("url parameter must be string."));
+                return;
+            }
+            const NativeIntent = requireClass("android.content.Intent");
+            const NativeUri = requireClass("android.net.Uri");
+            const launchIntent = new NativeIntent(NativeIntent.ACTION_VIEW);
+            launchIntent.setData(NativeUri.parse(url));
+            const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
+            const componentName = launchIntent.resolveActivity(packageManager);
+            if (componentName == null) {
+                return false;
+            } else {
+                const fallback = "{com.android.fallback/com.android.fallback.Fallback}";
+                return !(fallback === componentName.toShortString());
+            }
         },
         enumerable: true
     },
@@ -486,7 +504,6 @@ function detachSliderDrawer(sliderDrawer) {
 ApplicationWrapper.statusBar = require("./statusbar");
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
