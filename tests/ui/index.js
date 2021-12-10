@@ -7,7 +7,6 @@ require("./color");
 require("./datepicker");
 require("./dialog");
 require("./flexlayout");
-require("./floatingmenu");
 require("./font");
 require("./headerbar");
 require("./headerbaritem");
