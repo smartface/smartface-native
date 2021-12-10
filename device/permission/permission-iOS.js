@@ -1,7 +1,6 @@
-const AlertView = require('../../ui/alertview');
 const Multimedia = require('../multimedia');
 const Location = require('../location');
-const Linking = require('../../application/linking');
+const { alertWrapper } = require('./permission');
 
 const PERMISSION_STATUS = {
   GRANTED: "GRANTED",
@@ -25,8 +24,12 @@ const ALERT_TIMEOUT = 500;
  * getPermission({
  *         androidPermission: Application.Android.Permissions.CAMERA,
  *         iosPermission: IOS_PERMISSIONS.CAMERA,
- *         permissionText: 'Please go to the settings and grant permission',
- *         permissionTitle: 'Info'
+ *         requestTexts: {
+ *            permissionTitle: 'Info',
+ *            permissionText: 'Please go to the settings and grant permission',
+ *            goToSettingsText: global.lang.goToSettings || 'Go to settings',
+ *            cancelText: global.lang.ignore || 'Ignore'
+ *         }
  *     })
  *     .then(() => {
  *         console.info('Permission granted');
@@ -38,6 +41,7 @@ const ALERT_TIMEOUT = 500;
  */
 function getPermission(options) {
   return new Promise((resolve, reject) => {
+    const requestTexts = options?.requestTexts || {};
     if (options.iosPermission === IOS_PERMISSIONS.CAMERA) {
       if (
         Multimedia.ios.getCameraAuthorizationStatus() !==
@@ -50,7 +54,7 @@ function getPermission(options) {
             } else {
               setTimeout(() => {
                 if (options.showSettingsAlert) {
-                  alertWrapper(options.permissionText, options.permissionTitle);
+                  alertWrapper(requestTexts);
                 }
               }, ALERT_TIMEOUT);
               reject(PERMISSION_STATUS.DENIED);
@@ -71,7 +75,7 @@ function getPermission(options) {
       ) {
         setTimeout(() => {
           if (options.showSettingsAlert) {
-            alertWrapper(options.permissionText, options.permissionTitle);
+            alertWrapper(requestTexts);
           }
         }, ALERT_TIMEOUT);
         reject(PERMISSION_STATUS.DENIED);
@@ -86,7 +90,7 @@ function getPermission(options) {
           } else {
             setTimeout(() => {
               if (options.showSettingsAlert) {
-                alertWrapper(options.permissionText, options.permissionTitle);
+                alertWrapper(requestTexts);
               }
             }, ALERT_TIMEOUT);
             reject(PERMISSION_STATUS.DENIED);
@@ -101,31 +105,6 @@ function getPermission(options) {
       // Hardcoded logic for iOS to pass
       resolve('');
     }
-  });
-}
-
-function alertWrapper(permissionText = "", permissionTitle = "") {
-  __SF_Dispatch.mainAsync(() => {
-    showAlertAndRedirectToSettings(permissionText, permissionTitle);
-  });
-}
-
-function showAlertAndRedirectToSettings(permissionText = '', permissionTitle = '') {
-  const alertView = global.alert({
-    title: permissionTitle || global.lang.permissionRequiredTitle || "Permissions required",
-    message: permissionText || global.lang.permissionRequiredMessage || "Please grant related permissions for application to work properly",
-    buttons: [
-      {
-        text: global.lang.goToSettings || "Go to Settings",
-        type: AlertView.Android.ButtonType.POSITIVE,
-        onClick: () => Linking.openSettings()
-      },
-      {
-        text: global.lang.cancel || "Cancel",
-        type: AlertView.Android.ButtonType.NEGATIVE,
-        onClick: () => alertView.dismiss(),
-      },
-    ],
   });
 }
 
