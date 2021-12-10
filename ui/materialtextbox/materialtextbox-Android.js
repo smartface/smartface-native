@@ -358,6 +358,15 @@ function MaterialTextbox(params) {
                 }
             },
             enumerable: true
+        },
+        'maxLines': {
+            get: function () {
+                return self.textBoxNativeObject.getMaxLines();
+            },
+            set: function (value) {
+                self.textBoxNativeObject.setMaxLines(value);
+            },
+            enumerable: true
         }
     });
 
