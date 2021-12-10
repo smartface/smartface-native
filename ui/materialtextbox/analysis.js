@@ -373,4 +373,23 @@ MaterialTextBox.prototype.font;
  */
 MaterialTextBox.prototype.textBoxMaxHeight;
 
+/**
+ * Gets/sets the maxLines of the MaterialTextBox. 
+ * Setting this value overrides previous maximum height configurations.
+ * 
+ * @property {Number} maxLines
+ * @android
+ * @since 4.3.6
+ */
+MaterialTextBox.prototype.maxLines;
+
+/**
+ * Gets/sets the expandsOnOverflow of the MaterialTextBox.
+ * 
+ * @property {Boolean} expandsOnOverflow
+ * @ios
+ * @since 4.3.6
+ */
+MaterialTextBox.prototype.expandsOnOverflow;
+
 module.exports = MaterialTextBox;

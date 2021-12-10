@@ -179,27 +179,45 @@ Application.version;
 /**
  * Checks URL's scheme can be handled or not by some app that installed on the device.
  *
- * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
+ * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
+ * and AndroidManifest.xml file for Android.
  *
- *     @example for Google Maps (Info.plist entry)
- *
+ *     @example for Google Maps 
+ * 
+ *      (Info.plist entry)
  *      <key>LSApplicationQueriesSchemes</key>
  *      <array>
  *          <string>comgooglemaps</string>
  *      </array>
  *
- *      After entry add on, urlScheme can be check;
+ *      After entry add on, urlScheme can be check
  *      const Application = require("@smartface/native/application");
- *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
+ *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+ * 
+ *      (AndroidManifest.xml entry)
+ *      <manifest ...>
+ *          ...
+ *          <queries>
+ *              <intent>
+ *                  <action android:name="android.intent.action.VIEW" />
+ *                  <data android:scheme="geo"/>
+ *              </intent>
+ *          </queries>
+ *      </manifest>
+ *
+ *      const Application = require("@smartface/native/application");
+ *      var isAppAvaible = Application.canOpenUrl("geo://");
  *
  * @method canOpenUrl
  * @param {String} url
  * @return {Boolean}
  * @ios
+ * @android
  * @static
- * @since 3.0.1
+ * @since 4.3.6
+ * @see https://developer.android.com/training/package-visibility
  */
-Application.ios.canOpenUrl = function (url) {};
+Application.canOpenUrl = function (url) {};
 
 /**
  * Launches another application and passes data. For Android, you can open application chooser with

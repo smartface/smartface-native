@@ -23,7 +23,6 @@ const Share = {};
  * @ios
  * @android
  * @since 0.1
- * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareText = function (text, page, blacklist) { };
 
@@ -44,7 +43,6 @@ Share.shareText = function (text, page, blacklist) { };
  * @android
  * @ios
  * @since 0.1
- * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareImage = function (image, page, blacklist) { };
 
@@ -65,7 +63,6 @@ Share.shareImage = function (image, page, blacklist) { };
  * @ios
  * @android
  * @since 0.1
- * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareFile = function (file, page, blacklist) { };
 

@@ -147,7 +147,7 @@ function RangeSlider(params) {
             get: () => _thumbSize,
             set: (value) => {
                 _thumbSize = value;
-                this.nativeObject.setSelectorSize(AndroidUnitConverter.dpToPixel(_thumbSize));
+                this.nativeObject.setThumbSize(AndroidUnitConverter.dpToPixel(_thumbSize));
             },
             enumerable: true
         },
@@ -155,7 +155,7 @@ function RangeSlider(params) {
             get: () => _thumbColor,
             set: (value) => {
                 _thumbColor = value;
-                this.nativeObject.setSelectorColor(_thumbColor.nativeObject);
+                this.nativeObject.setThumbColor(_thumbColor.nativeObject);
             },
             enumerable: true
         },
@@ -163,7 +163,7 @@ function RangeSlider(params) {
             get: () => _thumbBorderColor,
             set: (value) => {
                 _thumbBorderColor = value;
-                this.nativeObject.setSelectorBoundaryColor(_thumbBorderColor.nativeObject);
+                this.nativeObject.setThumbBoundaryColor(_thumbBorderColor.nativeObject);
             },
             enumerable: true
         },
@@ -171,7 +171,7 @@ function RangeSlider(params) {
             get: () => _thumbBorderWidth,
             set: (value) => {
                 _thumbBorderWidth = value;
-                this.nativeObject.setSelectorBoundarySize(AndroidUnitConverter.dpToPixel(_thumbBorderWidth));
+                this.nativeObject.setThumbBoundarySize(AndroidUnitConverter.dpToPixel(_thumbBorderWidth));
             },
             enumerable: true
         },
