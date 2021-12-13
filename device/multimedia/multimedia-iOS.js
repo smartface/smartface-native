@@ -253,14 +253,127 @@ Multimedia.pickMultipleFromGallery = function (e) {
                     videoAssets
             });
         }, true);
+        ypImagePicker = undefined;
     }
-
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(ypImagePicker.picker);
     } else {
         throw new TypeError("Parameter type mismatch. params.page must be Page instance");
     }
 };
+
+Multimedia.launchCropper = function (e) {
+
+    let croppingStyle = e.cropShape != undefined ? e.cropShape : 0;
+    let title = e.headerBarTitle ? e.headerBarTitle : "";
+    let aspectRatio = e.aspectRatio ? e.aspectRatio : { x: 1, y: 1 };
+    let enableFreeStyleCrop = e.enableFreeStyleCrop != undefined ? e.enableFreeStyleCrop : false;
+
+    let aspectRatioPickerButtonHidden = true;
+    let resetAspectRatioEnabled = false;
+    let resetButtonHidden = false;
+    let aspectRatioLockDimensionSwapEnabled = true;
+    let rotateButtonsHidden = false;
+    let showOnlyIcons = false;
+
+    let onSuccess = e.onSuccess;
+    let onCancel = e.onCancel;
+
+    if (e.ios) {
+        let ios = e.ios;
+        aspectRatioPickerButtonHidden = ios.aspectRatioPickerButtonHidden != undefined ? ios.aspectRatioPickerButtonHidden : aspectRatioPickerButtonHidden;
+        resetAspectRatioEnabled = ios.resetAspectRatioEnabled != undefined ? ios.resetAspectRatioEnabled : resetAspectRatioEnabled;
+        resetButtonHidden = ios.resetButtonHidden != undefined ? ios.resetButtonHidden : resetButtonHidden;
+        aspectRatioLockDimensionSwapEnabled = ios.aspectRatioLockDimensionSwapEnabled != undefined ? ios.aspectRatioLockDimensionSwapEnabled : aspectRatioLockDimensionSwapEnabled;
+        rotateButtonsHidden = ios.rotateButtonsHidden != undefined ? ios.rotateButtonsHidden : rotateButtonsHidden;
+        showOnlyIcons = ios.showOnlyIcons != undefined ? ios.showOnlyIcons : showOnlyIcons;
+    }
+
+    var image;
+    if (e.asset instanceof File) {
+        image = new Image({
+            "path": e.asset.nativeObject.getActualPath()
+        });
+    } else if (e.asset instanceof Image) {
+        image = e.asset
+    } else {
+        throw new TypeError("Parameter type mismatch. params.asset must be File or Image instance");
+    }
+
+    let toCropViewController = __SF_TOCropViewController.createWithCroppingStyleImage(
+        croppingStyle,
+        image.nativeObject
+        );
+    toCropViewController.title = title;
+    
+    toCropViewController.setCustomAspect({
+        width: aspectRatio.x,
+        height: aspectRatio.y
+    })
+
+
+    toCropViewController.aspectRatioLockEnabled = !enableFreeStyleCrop;
+    toCropViewController.aspectRatioPickerButtonHidden = aspectRatioPickerButtonHidden;
+    toCropViewController.resetAspectRatioEnabled = resetAspectRatioEnabled;
+    toCropViewController.aspectRatioLockDimensionSwapEnabled = aspectRatioLockDimensionSwapEnabled;
+    toCropViewController.resetButtonHidden = resetButtonHidden;
+    toCropViewController.rotateButtonsHidden = rotateButtonsHidden;
+    toCropViewController.showOnlyIcons = showOnlyIcons;
+
+    if (e.ios && e.ios.doneButtonTitle) {
+        toCropViewController.doneButtonTitle = e.ios.doneButtonTitle;
+    }
+    
+    if (e.ios && e.ios.cancelButtonTitle) {
+        toCropViewController.cancelButtonTitle = e.ios.cancelButtonTitle;
+    }
+    
+    if (e.ios && e.ios.doneButtonColor) {
+        toCropViewController.doneButtonColor = e.ios.doneButtonColor.nativeObject;
+    }
+    
+    if (e.ios && e.ios.cancelButtonColor) {
+        toCropViewController.cancelButtonColor = e.ios.cancelButtonColor.nativeObject;
+    }
+    
+    let delegate = new __SF_TOCropViewControllerDelegate();
+    delegate.didCropToImage = function(data) {
+        toCropViewController.dismissViewController(function() {
+            let image = Image.createFromImage(data.image);
+            onSuccess && onSuccess({ image: image });
+        }, true);
+        toCropViewController = undefined;
+    };
+
+    delegate.didCropToCircularImage = function(data) {
+        toCropViewController.dismissViewController(function() {
+            let image = Image.createFromImage(data.image);
+            onSuccess && onSuccess({ image: image });
+        }, true);
+        toCropViewController = undefined;
+    };
+    
+
+    delegate.didFinishCancelled = function(cancelled) {
+        toCropViewController.dismissViewController(function() {
+            onCancel && onCancel();
+        }, true);
+        toCropViewController = undefined;
+    }
+
+    toCropViewController.delegate = delegate;
+    toCropViewController.delegateStrong = delegate;
+
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(toCropViewController);
+    } else {
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
+};
+
+Multimedia.CropShape = {};
+Multimedia.CropShape.RECTANGLE = 0;
+Multimedia.CropShape.OVAL = 1;
 
 Multimedia.VideoQuality = {};
 Multimedia.VideoQuality.iOS = {};
