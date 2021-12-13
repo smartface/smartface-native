@@ -377,7 +377,7 @@ declare type MultimediaParams = {
         cameraDevice?: Multimedia.iOS.CameraDevice;
     };
     android?: {
-        cropShape?: Multimedia.Android.CropShape;
+        cropShape?: Multimedia.CropShape;
         rotateText?: string;
         scaleText?: string;
         cropText?: string;
@@ -500,7 +500,7 @@ declare class Multimedia {
      * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
      * @param {Device.Multimedia.iOS.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
      * @param {Object} params.android Android specific argument
-     * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+     * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
      * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
      * @param {String} params.android.scaleText specifies the text of scale button in the crop window
      * @param {String} params.android.cropText specifies the text of crop button in the crop window
@@ -541,7 +541,7 @@ declare class Multimedia {
     * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
     * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
     * @param {Object} params.android Android specific argument
-    * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+    * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
     * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
     * @param {String} params.android.scaleText specifies the text of scale button in the crop window
     * @param {String} params.android.cropText specifies the text of crop button in the crop window
@@ -651,7 +651,7 @@ declare class Multimedia {
      * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
      * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
      * @param {Object} params.android Android specific argument
-     * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+     * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
      * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
      * @param {String} params.android.scaleText specifies the text of scale button in the crop window
      * @param {String} params.android.cropText specifies the text of crop button in the crop window
