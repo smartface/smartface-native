@@ -254,7 +254,7 @@ Multimedia.pickMultipleFromGallery = function (e) {
             });
         }, true);
         ypImagePicker = undefined;
-    }
+    }git
 
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(ypImagePicker.picker);

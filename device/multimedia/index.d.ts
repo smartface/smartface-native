@@ -724,8 +724,8 @@ declare class Multimedia {
     * @param {UI.Page} params.page
     * @param {IO.File|UI.Image} params.asset Image or image file which suppose to cropped. Note that providing Image caueses to launch the Cropper with the delay which depends on size of the Image in Android.
     * Thus, providing File is always a better option. At least to decrease the delay, provide smaller images.
-    * @param {Device.Multimedia.CropShape} params.cropShape specifies the crop window shape
-    * @param {Boolean} params.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+    * @param {Device.Multimedia.CropShape} [params.cropShape=Device.Multimedia.CropShape.RECTANGLE] specifies the crop window shape
+    * @param {Boolean} [params.enableFreeStyleCrop=false] set to true to let user resize crop bounds (disabled by default)
     * @param {String} params.headerBarTitle specifies the title of header bar in the crop window
     * @param {Object} params.aspectRatio This property affects only on android.
     * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
