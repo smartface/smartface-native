@@ -1,6 +1,7 @@
 import Page from "../../ui/page";
 import Image from "../../ui/image";
 import File from "../../io/file";
+import Color from "../../ui/color";
 /**
  * @class Device.Multimedia
  * @since 0.1
@@ -739,6 +740,19 @@ declare class Multimedia {
     * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
     * @param {Number} params.android.maxResultSize.height max cropped image height
     * @param {Number} params.android.maxResultSize.width max cropped image width 
+    * @param {Object} params.ios iOS specific argument
+    * @param {Boolean} [params.ios.aspectRatioPickerButtonHidden=true] When enabled, hides the 'Aspect Ratio Picker' button on the toolbar.
+    * @param {Boolean} [params.ios.resetButtonHidden=false] When enabled, hides the 'Reset' button on the toolbar.
+    * @param {Boolean} [params.ios.resetAspectRatioEnabled=false] If true, tapping the reset button will also reset the aspect ratio back to the image 
+    * default ratio. Otherwise, the reset will just zoom out to the current aspect ratio.
+    * @param {Boolean} [params.ios.aspectRatioLockDimensionSwapEnabled=true] If true, a custom aspect ratio is set, and the aspectRatioLockEnabled is set to YES, the crop box 
+    * will swap it's dimensions depending on portrait or landscape sized images. This value also controls whether the dimensions can swap when the image is rotated.
+    * @param {Boolean} [params.ios.rotateButtonsHidden=false] When enabled, hides the rotation button.
+    * @param {Boolean} [params.ios.showOnlyIcons=false] If true, button icons are visible in portairt instead button text.
+    * @param {String}  params.ios.doneButtonTitle Title for the 'Done' button. Setting this will override the Default which is a localized string for "Done".
+    * @param {String}  params.ios.cancelButtonTitle Title for the 'Cancel' button. Setting this will override the Default which is a localized string for "Cancel".
+    * @param {UI.Color}  params.ios.doneButtonColor
+    * @param {UI.Color}  params.ios.cancelButtonColor
     * @param {Function} params.onSuccess Callback for success situation.
     * @param {Object} params.onSuccess.params 
     * @param {UI.Image} params.onSuccess.params.image Cropped image
@@ -768,6 +782,18 @@ declare class Multimedia {
         };
         fixOrientation?: boolean;
         maxImageSize?: number;
+    };
+    ios?: {
+        aspectRatioPickerButtonHidden: boolean;
+        resetButtonHidden?: boolean;
+        resetAspectRatioEnabled?: boolean;
+        aspectRatioLockDimensionSwapEnabled?: boolean;
+        rotateButtonsHidden?: boolean;
+        showOnlyIcons?: boolean;
+        doneButtonTitle?: string;
+        cancelButtonTitle?: string;
+        doneButtonColor?: Color;
+        cancelButtonColor?: Color;        
     };
     onSuccess: (params: { image?: Image; }) => void;
     onCancel?: () => void;
