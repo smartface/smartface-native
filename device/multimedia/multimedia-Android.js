@@ -56,6 +56,11 @@ Object.defineProperties(Multimedia, {
         value: VideoQuality,
         writable: false,
         enumerable: true
+    },
+    'CropShape': {
+        value: CropShape,
+        writable: false,
+        enumerable: true
     }
 });
 
@@ -206,16 +211,16 @@ Multimedia.launchCropper = function (params) {
         page,
         aspectRatio = {},
         asset,
+        cropShape = CropShape.RECTANGLE,
+        headerBarTitle,
+        enableFreeStyleCrop = false,
         onFailure,
         android: {
-            cropShape: cropShape = CropShape.RECTANGLE,
             rotateText: rotateText,
             scaleText: scaleText,
             cropText: cropText,
-            headerBarTitle: headerBarTitle,
             maxResultSize: maxResultSize = {},
-            hideBottomControls: hideBottomControls = false,
-            enableFreeStyleCrop: enableFreeStyleCrop = false
+            hideBottomControls: hideBottomControls = false
         } = {}
     } = params;
 
@@ -365,7 +370,7 @@ function startCropActivity(params) {
     if (TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y))
         uCropOptions.withAspectRatio(x, y);
 
-    if (cropShape === Multimedia.Android.CropShape.OVAL)
+    if (cropShape === Multimedia.CropShape.OVAL)
         uCropOptions.setCircleDimmedLayer(true);
 
     if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height))

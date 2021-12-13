@@ -253,6 +253,7 @@ Multimedia.pickMultipleFromGallery = function (e) {
                     videoAssets
             });
         }, true);
+        ypImagePicker = undefined;
     }
 
     if (e.page && (e.page instanceof Page)) {

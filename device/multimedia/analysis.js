@@ -233,43 +233,43 @@ Multimedia.pickFromGallery = function (e) { };
 
 
 
-// /**
-//  * @method launchCropper
-//  * 
-//  * Launches cropper.
-//  * 
-//  * @param {Object} params Object describing parameters for the function.
-//  * @param {UI.Page} params.page
-//  * @param {IO.File|UI.Image} params.asset Image or image file which suppose to cropped. Note that providing Image caueses to launch the Cropper with the delay which depends on size of the Image in Android.
-//  * Thus, providing File is always a better option. At least to decrease the delay, provide smaller images.
-//  * @param {Object} params.aspectRatio This property affects only on android.
-//  * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
-//  * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
-//  * @param {Object} params.android Android specific argument
-//  * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
-//  * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
-//  * @param {String} params.android.scaleText specifies the text of scale button in the crop window
-//  * @param {String} params.android.cropText specifies the text of crop button in the crop window
-//  * @param {String} params.android.headerBarTitle specifies the title of header bar in the crop window
-//  * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
-//  * @param {Boolean} params.android.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
-//  * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
-//  * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
-//  * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
-//  * @param {Number} params.android.maxResultSize.height max cropped image height
-//  * @param {Number} params.android.maxResultSize.width max cropped image width 
-//  * @param {Function} params.onSuccess Callback for success situation.
-//  * @param {Object} params.onSuccess.params 
-//  * @param {UI.Image} params.onSuccess.params.image Cropped image
-//  * @param {Function} [params.onCancel] Callback for cancellation situation.
-//  * @param {Function} [params.onFailure] Callback for failure situation.
-//  * @param {Object} params.onFailure.params 
-//  * @param {String} params.onFailure.params.message Failure message
-//  * @android
-//  * @ios
-//  * @since 4.3.6
-//  */
-// Multimedia.launchCropper = function (e) { };
+/**
+ * @method launchCropper
+ * 
+ * Launches cropper.
+ * 
+ * @param {Object} params Object describing parameters for the function.
+ * @param {UI.Page} params.page
+ * @param {IO.File|UI.Image} params.asset Image or image file which suppose to cropped. Note that providing Image caueses to launch the Cropper with the delay which depends on size of the Image in Android.
+ * Thus, providing File is always a better option. At least to decrease the delay, provide smaller images.
+ * @param {Device.Multimedia.CropShape} params.cropShape specifies the crop window shape
+ * @param {Boolean} params.enableFreeStyleCrop set to true to let user resize crop bounds (disabled by default)
+ * @param {String} params.headerBarTitle specifies the title of header bar in the crop window
+ * @param {Object} params.aspectRatio This property affects only on android.
+ * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
+ * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
+ * @param {Object} params.android Android specific argument
+ * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+ * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+ * @param {String} params.android.cropText specifies the text of crop button in the crop window
+ * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+ * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+ * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
+ * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+ * @param {Number} params.android.maxResultSize.height max cropped image height
+ * @param {Number} params.android.maxResultSize.width max cropped image width 
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {UI.Image} params.onSuccess.params.image Cropped image
+ * @param {Function} [params.onCancel] Callback for cancellation situation.
+ * @param {Function} [params.onFailure] Callback for failure situation.
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
+ * @ios
+ * @since 4.3.6
+ */
+Multimedia.launchCropper = function (e) { };
 
 
 
@@ -649,6 +649,44 @@ Multimedia.VideoQuality.iOS.TYPEIFRAME1280x720 = 102;
  */
 Multimedia.VideoQuality.iOS.TYPEIFRAME960x540 = 103;
 
+
+
+/** 
+ * These enums used to specify shape of crop window.
+ * 
+ * @enum {Number} Device.Multimedia.CropShape
+ * @since 4.3.6
+ * @android
+ * @ios
+ */
+Multimedia.CropShape = {};
+
+
+/**
+ * Specifies that crop window shape is oval.
+ * 
+ * @property {Number} OVAL
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 4.3.6
+ */
+Multimedia.CropShape.OVAL = 2;
+
+
+/**
+ * Specifies that crop window shape is rectangle.
+ * 
+ * @property {Number} RECTANGLE
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 4.3.6
+ */
+Multimedia.CropShape.RECTANGLE = 1;
+
 /**
  * Android Specific Properties.
  * @class Device.Multimedia.Android
@@ -656,13 +694,13 @@ Multimedia.VideoQuality.iOS.TYPEIFRAME960x540 = 103;
  */
 Multimedia.Android = {};
 
-
 /** 
  * These enums used to specify shape of crop window.
  * 
  * @enum {Number} Device.Multimedia.Android.CropShape
  * @since 4.1.5
  * @android
+ * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape}
  */
 Multimedia.Android.CropShape = {};
 
@@ -675,6 +713,7 @@ Multimedia.Android.CropShape = {};
  * @android
  * @readonly
  * @since 4.1.5
+ * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.OVAL}
  */
 Multimedia.Android.CropShape.OVAL = 2;
 
@@ -687,6 +726,7 @@ Multimedia.Android.CropShape.OVAL = 2;
  * @android
  * @readonly
  * @since 4.1.5
+ * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.RECTANGLE}
  */
 Multimedia.Android.CropShape.RECTANGLE = 1;
 
