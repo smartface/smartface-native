@@ -108,7 +108,7 @@ ImageView.prototype.toString = function () {
 
 ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be object this usage is deprecated
     let {
-        url = "",
+        url = null,
         headers = {},
         placeholder = null,
         fade = true,
@@ -118,6 +118,11 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
         useDiskCache = true,
         useMemoryCache = true,
     } = getLoadFromUrlParams.apply(null, arguments);
+    if(!url){
+        console.error("Url cannot be empty!");
+        onFailure && onFailure();
+        return;
+    }
     let glideRequestListener = null;
     if (onFailure || onSuccess) {
         const GlideRequestListener = requireClass("io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener");
@@ -147,13 +152,18 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
         useHTTPCacheControl ? false : useDiskCache,
         useMemoryCache,
     );
-    SFGlide.loadFromUrl(loadFromUrlParameters);
+    try {
+        SFGlide.loadFromUrl(loadFromUrlParameters);
+    } catch (error) {
+        console.error(error);
+        onFailure && onFailure();
+    }
 };
 
 ImageView.prototype.fetchFromUrl = function (params) {
     const self = this;
     const {
-        url = "",
+        url = null,
         headers = {},
         placeholder = null,
         onSuccess = null,
@@ -164,7 +174,11 @@ ImageView.prototype.fetchFromUrl = function (params) {
             useMemoryCache = useMemoryCache,
         } = { useMemoryCache: true, useDiskCache: true }
     } = params;
-
+    if(!url){
+        console.error("Url cannot be empty!");
+        onFailure && onFailure();
+        return;
+    }
     let glideTarget = null;
     if (onSuccess) {
         const GlideTarget = requireClass("io.smartface.android.sfcore.ui.imageview.listeners.GlideTarget");
@@ -214,7 +228,12 @@ ImageView.prototype.fetchFromUrl = function (params) {
         useMemoryCache,
         glideTarget
     );
-    SFGlide.fetchFromUrl(parameters);
+    try {
+        SFGlide.fetchFromUrl(parameters);
+    } catch (error) {
+        console.error(error);
+        onFailure && onFailure();
+    }
 };
 
 ImageView.prototype.loadFromFile = function (params) {
