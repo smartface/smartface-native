@@ -683,7 +683,7 @@ declare class Multimedia {
     * 
     * @param {Object} params Object describing parameters for the function.
     * @param {UI.Page} params.page
-    * @param {Device.Multimedia.Type} params.type Data type.
+    * @param {Device.Multimedia.Type} [params.type=Device.Multimedia.Type.IMAGE] Data type.
     * @param {Object} params.android Android specific argument
     * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
     * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
