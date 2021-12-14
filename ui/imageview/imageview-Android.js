@@ -119,7 +119,6 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
         useMemoryCache = true,
     } = getLoadFromUrlParams.apply(null, arguments);
     if(!url){
-        console.error("Url cannot be empty!");
         onFailure && onFailure();
         return;
     }
@@ -155,7 +154,6 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
     try {
         SFGlide.loadFromUrl(loadFromUrlParameters);
     } catch (error) {
-        console.error(error);
         onFailure && onFailure();
     }
 };
@@ -175,7 +173,6 @@ ImageView.prototype.fetchFromUrl = function (params) {
         } = { useMemoryCache: true, useDiskCache: true }
     } = params;
     if(!url){
-        console.error("Url cannot be empty!");
         onFailure && onFailure();
         return;
     }
@@ -231,7 +228,6 @@ ImageView.prototype.fetchFromUrl = function (params) {
     try {
         SFGlide.fetchFromUrl(parameters);
     } catch (error) {
-        console.error(error);
         onFailure && onFailure();
     }
 };
