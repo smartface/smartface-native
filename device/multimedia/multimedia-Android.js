@@ -408,7 +408,7 @@ function pickMultipleFromGallery(resultCode, data) {
         onFailure,
         onSuccess,
         onCancel,
-        type,
+        type = Multimedia.Type.IMAGE,
         android: {
             fixOrientation: fixOrientation = false,
             maxImageSize: maxImageSize = -1
