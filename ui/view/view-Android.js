@@ -526,7 +526,7 @@ function View(params) {
   EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
   if (!this.nativeObject) {
     this.nativeObject = new NativeView(activity);
-    this.yogaNode =  NativeYogaNodeFactory.create();
+    this.yogaNode = NativeYogaNodeFactory.create();
   } else {
     if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
       this.yogaNode = this.nativeObject.getYogaNode();

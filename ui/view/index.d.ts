@@ -24,8 +24,7 @@ import { IEventEmitter } from "../../core/eventemitter";
  */
 declare class View<TEvent = typeof View.Events>
 	extends NativeComponent
-	implements IEventEmitter
-{
+	implements IEventEmitter {
 	constructor(params?: any);
 	on(eventName: string, callback: (...args: any) => void): () => void;
 	off(eventName: string, callback?: (...args: any) => void): void;
