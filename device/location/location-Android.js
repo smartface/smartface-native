@@ -17,14 +17,14 @@ Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
 var _onLocationChanged;
 
 const EventFunctions = {
-    [Events.LocationChanged]: function() {
-        Location.onLocationChanged = function({latitude, longitude}) {
-            Location.emitter.emit(Events.LocationChanged, {latitude, longitude});
-        } 
+    [Events.LocationChanged]: function () {
+        Location.onLocationChanged = function ({ latitude, longitude }) {
+            Location.emitter.emit(Events.LocationChanged, { latitude, longitude });
+        }
     }
 }
 
-const locationCallback = function(latitude, longitude) {
+const locationCallback = function (latitude, longitude) {
     Location.onLocationChanged && Location.onLocationChanged({
         latitude,
         longitude
@@ -32,7 +32,7 @@ const locationCallback = function(latitude, longitude) {
 };
 
 var _onFailureCallback, _onSucessCallback;
-Location.__onActivityResult = function(resultCode) {
+Location.__onActivityResult = function (resultCode) {
     if (resultCode === -1) { // -1 = OK
         _onSucessCallback && _onSucessCallback();
     } else {
@@ -45,7 +45,7 @@ Location.__onActivityResult = function(resultCode) {
 EventEmitterCreator(Location, EventFunctions);
 
 Location.__instance = null;
-Location.__getInstance = function() {
+Location.__getInstance = function () {
     if (!Location.__instance)
         Location.__instance = new SFLocationCallback(locationCallback);
     return Location.__instance;
@@ -61,27 +61,27 @@ Object.defineProperties(Location, {
         enumerable: true
     },
     'start': {
-        value: function(priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
+        value: function (priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
             Location.__getInstance().start(priority, interval);
         }
     },
     'stop': {
-        value: function() {
+        value: function () {
             Location.__getInstance().stop();
         }
     },
     'onLocationChanged': {
-        get: function() {
+        get: function () {
             return _onLocationChanged;
         },
-        set: function(callback) {
+        set: function (callback) {
             if (TypeUtil.isFunction(callback)) {
                 _onLocationChanged = callback;
             }
         }
     },
     'getLastKnownLocation': {
-        value: function(onSuccess, onFailure) {
+        value: function (onSuccess, onFailure) {
             Location.__getInstance().getLastKnownLocation({
                 'onSuccess': onSuccess,
                 'onFailure': onFailure
@@ -126,15 +126,15 @@ Object.assign(Location.android.Provider, Location.Android.Provider); //ToDo: Dep
 
 Object.defineProperties(Location.android, {
     'checkSettings': {
-        value: function(params = {}) {
+        value: function (params = {}) {
             params.onSuccess && (_onSucessCallback = params.onSuccess);
             params.onFailure && (_onFailureCallback = params.onFailure);
 
             Location.__getInstance().checkSettings({
-                onSuccess: function() {
+                onSuccess: function () {
                     _onSucessCallback && _onSucessCallback();
                 },
-                onFailure: function(reason) {
+                onFailure: function (reason) {
                     _onFailureCallback && _onFailureCallback({
                         statusCode: reason
                     });
@@ -144,11 +144,37 @@ Object.defineProperties(Location.android, {
     }
 });
 
+Location.getLocation = () => {
+    return new Promise((resolve, reject) => {
+        Location.android.checkSettings({
+            onSuccess: () => {
+                getLocationAction().then(resolve);
+            },
+            onFailure: (e) => {
+                const isFailureReasonDeny = e.statusCode === Location.Android.SettingsStatusCodes.DENIED;
+                reject(isFailureReasonDeny ? "DENIED" : "OTHER");
+            },
+        });
+    });
+};
+
+function getLocationAction() {
+    return new Promise((resolve) => {
+        Location.start(Location.Android.Priority.HIGH_ACCURACY, 1000);
+        Location.onLocationChanged = (location) => {
+            Location.onLocationChanged = () => { };
+            Location.stop();
+            resolve(location);
+        };
+    });
+}
+
 //iOS specific methods & properies
 Location.ios = {};
 Location.iOS = {};
-Location.ios.locationServicesEnabled = function() {};
-Location.ios.getAuthorizationStatus = function() {};
+Location.ios.locationServicesEnabled = function () { };
+Location.ios.getAuthorizationStatus = function () { };
+
 Location.ios.authorizationStatus = {};
 Location.Android.SettingsStatusCodes = {
     DENIED: "DENIED",
