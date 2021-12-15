@@ -1,5 +1,4 @@
 module.exports = {
-  "BackButtonPressed": "backButtonPressed",
   "Hide": "hide",
   "Load": "load",
   "Show": "show",
