@@ -1,7 +1,6 @@
 /*globals requireClass, array*/
 const AndroidConfig = require("../../util/Android/androidconfig");
 const View = require('../view');
-const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
 const File = require('../../io/file');
@@ -11,6 +10,8 @@ const SFGlide = requireClass("io.smartface.android.sfcore.ui.imageview.SFGlide")
 const LoadFromUrlParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.LoadFromUrlParameters");
 const FetchFromUrlParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.FetchFromUrlParameters");
 const LoadFromFileParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.LoadFromFileParameters");
+
+ImageView.Events = { ...View.Events };
 
 ImageView.prototype = Object.create(View.prototype)
 function ImageView(params) {

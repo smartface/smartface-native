@@ -2,6 +2,7 @@ const View = require('../view');
 const Image = require("../../ui/image");
 const ImageCacheType = require('../../ui/imagecachetype');
 const Color = require("../../ui/color");
+ImageView.Events = { ...View.Events };
 
 const FillType = {
     NORMAL: 0,
