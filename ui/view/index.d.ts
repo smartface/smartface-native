@@ -504,7 +504,7 @@ declare class View<TEvent = typeof View.Events>
 	 * This event is called when a touch screen motion event starts.
 	 *
 	 * @event onTouch
-	 * @deprecated
+	 * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -513,13 +513,29 @@ declare class View<TEvent = typeof View.Events>
 	 * @ios
 	 * @member UI.View
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import View from '@smartface/native/ui/view';
+	 * import FlexLayout from '@smartface/native/ui/flexlayout';
+	 * import Button from '@smartface/native/ui/button';
+	 * 
+	 * this.view1.on(View.Events.Touch, (point) => {
+	 * 	console.info('view onTouch', point);
+	 * });
+	 * this.flexLayout1.on(FlexLayout.Events.Touch, (point) => {
+	 * 	console.info('flexLayout onTouch', point);
+	 * });
+	 * this.button1.on(Button.Events.Touch, (point) => {
+	 * 	console.info('button onTouch', point);
+	 * });
+	 * ````
 	 */
 	onTouch: (point: Point2D) => void;
 	/**
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
 	 * @event onTouchEnded
-	 * @deprecated
+	 * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
 	 * @param {Object} motionEvent
@@ -530,13 +546,17 @@ declare class View<TEvent = typeof View.Events>
 	 * @ios
 	 * @member UI.View
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * view example burasi
+	 * ````
 	 */
 	onTouchEnded: (isInside: boolean, point: Point2D) => void;
 	/**
 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
 	 *
 	 * @event onTouchCancelled
-	 * @deprecated
+	 * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
 	 * @param {Object} motionEvent
 	 * @param {Number} motionEvent.x
@@ -548,7 +568,7 @@ declare class View<TEvent = typeof View.Events>
 	 */
 	onTouchCancelled: (point: Point2D) => void;
 	/**
-	 * @deprecated
+	 * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
 	 */
 	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
 	android: {
