@@ -10,17 +10,28 @@
 
 import Application from "../../application";
 
+export type RequestTexts = {
+  permissionTitle?: string;
+  permissionText?: string;
+  goToSettingsText?: string;
+  cancelText?: string;
+}
+
 /**
  * Run-time permission requests for Android if needed. iOS only supports camera, others automatically succeeds.
  * Permission request numbers starts from 2000 and incremented on each requestPermission
  * @example
  * ```
- * import permissionUtil from '@smartface/extension-utils/lib/permission';
- * permissionUtil.getPermission({
+ * import { getPermission, IOS_PERMISSIONS } from '@smartface/native/device/permission';
+ * getPermission({
  *         androidPermission: Application.Android.Permissions.CAMERA,
- *         iosPermission: permissionUtil.IOS_PERMISSIONS.CAMERA,
- *         permissionText: 'Please go to the settings and grant permission',
- *         permissionTitle: 'Info'
+ *         iosPermission: IOS_PERMISSIONS.CAMERA,
+ *         requestTexts: {
+ *            permissionTitle: 'Info',
+ *            permissionText: 'Please go to the settings and grant permission',
+ *            goToSettingsText: global.lang.goToSettings || 'Go to settings',
+ *            cancelText: global.lang.ignore || 'Ignore'
+ *         }
  *     })
  *     .then(() => {
  *         console.info('Permission granted');
@@ -31,10 +42,9 @@ import Application from "../../application";
  * ```
  */
 export declare const getPermission: (options?: {
-  permissionTitle?: string;
   androidPermission: keyof typeof Application.Android.Permissions;
-  permissionText: string;
   iosPermission?: keyof typeof IOS_PERMISSIONS;
+  requestTexts?: RequestTexts;
   showSettingsAlert?: boolean;
 }) => Promise<string>;
 

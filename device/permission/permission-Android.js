@@ -1,5 +1,5 @@
 const Application = require('../../application');
-const AlertView = require('../../ui/alertview');
+const { alertWrapper } = require('./permission');
 
 const PERMISSION_STATUS = {
   GRANTED: "GRANTED",
@@ -24,8 +24,12 @@ const ALERT_TIMEOUT = 500;
  * getPermission({
  *         androidPermission: Application.Android.Permissions.CAMERA,
  *         iosPermission: IOS_PERMISSIONS.CAMERA,
- *         permissionText: 'Please go to the settings and grant permission',
- *         permissionTitle: 'Info'
+ *         requestTexts: {
+ *            permissionTitle: 'Info',
+ *            permissionText: 'Please go to the settings and grant permission',
+ *            goToSettingsText: global.lang.goToSettings || 'Go to settings',
+ *            cancelText: global.lang.ignore || 'Ignore'
+ *         }
  *     })
  *     .then(() => {
  *         console.info('Permission granted');
@@ -38,6 +42,7 @@ const ALERT_TIMEOUT = 500;
 function getPermission(options) {
   return new Promise((resolve, reject) => {
     const requestPermissionCode = lastRequestPermissionCode++;
+    const requestTexts = options?.requestTexts || {};
     const prevPermissionRationale = Application.android.shouldShowRequestPermissionRationale(
       options.androidPermission
     );
@@ -45,7 +50,6 @@ function getPermission(options) {
       resolve('');
     } else {
       Application.android.onRequestPermissionsResult = (e) => {
-        //@ts-ignore
         const currentPermissionRationale = Application.android.shouldShowRequestPermissionRationale(
           options.androidPermission
         );
@@ -58,7 +62,7 @@ function getPermission(options) {
         ) {
           setTimeout(() => {
             if (options.showSettingsAlert) {
-              alertWrapper(options.permissionText, options.permissionTitle);
+              alertWrapper(requestTexts);
             }
           }, ALERT_TIMEOUT);
           reject(PERMISSION_STATUS.NEVER_ASK_AGAIN);
@@ -68,29 +72,6 @@ function getPermission(options) {
       };
       Application.android.requestPermissions(requestPermissionCode, options.androidPermission);
     }
-  });
-}
-
-function alertWrapper(permissionText = "", permissionTitle = "") {
-  showAlertAndRedirectToSettings(permissionText, permissionTitle);
-}
-
-function showAlertAndRedirectToSettings(permissionText = '', permissionTitle = '') {
-  const alertView = global.alert({
-    title: permissionTitle || global.lang.permissionRequiredTitle || "Permissions required",
-    message: permissionText || global.lang.permissionRequiredMessage || "Please grant related permissions for application to work properly",
-    buttons: [
-      {
-        text: global.lang.goToSettings || "Go to Settings",
-        type: AlertView.Android.ButtonType.POSITIVE,
-        onClick: () => { }// Linking.openSettings()
-      },
-      {
-        text: global.lang.cancel || "Cancel",
-        type: AlertView.Android.ButtonType.NEGATIVE,
-        onClick: () => alertView.dismiss(),
-      },
-    ],
   });
 }
 
