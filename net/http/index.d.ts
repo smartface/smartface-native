@@ -8,7 +8,7 @@ type RequestOnload<T = {}> = (
 		headers: { [key: string]: string };
 	} & T
 ) => void;
-type RequestMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+type RequestMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
 type RequestParamsType<B = {}, L = {}> = {
 	url: string;
 } & B & {
@@ -31,7 +31,7 @@ type JSONRequestParams = RequestParamsType<{}, { JSON: JSONType }>;
 type RequestParams = RequestParamsType<
 	{
 		method: RequestMethod;
-		headers?: { [key: string]: string };
+		headers?: { [key: string]: any };
 		user?: string;
 		password?: string;
 	},
