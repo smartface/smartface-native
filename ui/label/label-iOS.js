@@ -5,9 +5,11 @@ const SFTextAlignment = require("../../ui/textalignment");
 const Invocation = require('../../util').Invocation;
 const NSLineBreakMode = require('../../util/iOS/nslinebreakmode');
 
+Label.Events = { ...ViewGroup.Events, ...EventsList };
 Label.prototype = Object.create(View.prototype);
 function Label(params) {
     var self = this;
+    EventEmitterCreator(this, {});
 
     if (!self.nativeObject) {
         self.nativeObject = new __SF_SMFUILabel();

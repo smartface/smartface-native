@@ -10,12 +10,6 @@ function FlexLayout(params) {
     ViewGroup.call(this);
     EventEmitterCreator(this, {});
 
-    const EventFunctions = {
-        [EventsList.InterceptTouchEvent]: function() {
-            //Android Only
-        }
-    }
-
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

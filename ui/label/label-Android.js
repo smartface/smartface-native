@@ -32,6 +32,7 @@ const INT_17 = 17;
 const MAX_VALUE = 2147483647;
 const AUTO_SIZE_TEXT_TYPE_NONE = 0;
 
+Label.Events = { ...ViewGroup.Events, ...EventsList };
 Label.prototype = Object.create(View.prototype);
 // const Label = extend(View)(
 function Label(params) {
@@ -93,6 +94,16 @@ function Label(params) {
         NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize,
             maximumTextSize, this.android.adjustableFontSizeStep, COMPLEX_UNIT_DIP);
     }
+
+    const EventFunctions = {
+        [EventsList.InterceptTouchEvent] : function() {
+            const handler = (e) => {
+                this.emitter.emit(Events.InterceptTouchEvent);
+            };
+            _onInterceptTouchEvent = handler.bind(this);
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {

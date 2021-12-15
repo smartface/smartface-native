@@ -22,6 +22,7 @@ FillType.ios = {
     BOTTOMRIGHT: 12
 };
 
+ImageView.Events = { ...ViewGroup.Events, ...EventsList };
 ImageView.prototype = Object.create(View.prototype);
 function ImageView(params) {
 	var self = this;
@@ -209,6 +210,8 @@ function ImageView(params) {
 		},
 		enumerable: true
 	});
+
+    EventEmitterCreator(this, {});
 
 	if (params) {
 		for (var param in params) {

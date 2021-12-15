@@ -12,12 +12,23 @@ const LoadFromUrlParameters = requireClass("io.smartface.android.sfcore.ui.image
 const FetchFromUrlParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.FetchFromUrlParameters");
 const LoadFromFileParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.LoadFromFileParameters");
 
+ImageView.Events = { ...ViewGroup.Events, ...EventsList };
 ImageView.prototype = Object.create(View.prototype)
 function ImageView(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeImageView(AndroidConfig.activity);
     }
     View.apply(this);
+
+    const EventFunctions = {
+        [EventsList.InterceptTouchEvent] : function() {
+            const handler = (e) => {
+                this.emitter.emit(Events.InterceptTouchEvent);
+            };
+            _onInterceptTouchEvent = handler.bind(this);
+        }
+    }
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {
