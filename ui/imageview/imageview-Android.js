@@ -6,6 +6,8 @@ const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
 const File = require('../../io/file');
 const Path = require('../../io/path');
+const ViewGroup = require('../viewgroup');
+const EventsList = require('./events');
 
 const SFGlide = requireClass("io.smartface.android.sfcore.ui.imageview.SFGlide");
 const LoadFromUrlParameters = requireClass("io.smartface.android.sfcore.ui.imageview.models.LoadFromUrlParameters");

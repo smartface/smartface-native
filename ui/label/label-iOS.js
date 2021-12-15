@@ -1,11 +1,11 @@
 const View = require('../view');
-
+const ViewGroup = require('../viewgroup');
 const Color = require("../../ui/color");
 const SFTextAlignment = require("../../ui/textalignment");
 const Invocation = require('../../util').Invocation;
 const NSLineBreakMode = require('../../util/iOS/nslinebreakmode');
 
-Label.Events = { ...ViewGroup.Events, ...EventsList };
+Label.Events = { ...ViewGroup.Events };
 Label.prototype = Object.create(View.prototype);
 function Label(params) {
     var self = this;

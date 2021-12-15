@@ -2,6 +2,7 @@ const View = require('../view');
 const Image = require("../../ui/image");
 const ImageCacheType = require('../../ui/imagecachetype');
 const Color = require("../../ui/color");
+const ViewGroup = require('../viewgroup');
 
 const FillType = {
     NORMAL: 0,
@@ -22,7 +23,7 @@ FillType.ios = {
     BOTTOMRIGHT: 12
 };
 
-ImageView.Events = { ...ViewGroup.Events, ...EventsList };
+ImageView.Events = { ...ViewGroup.Events };
 ImageView.prototype = Object.create(View.prototype);
 function ImageView(params) {
 	var self = this;
