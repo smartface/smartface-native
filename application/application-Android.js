@@ -43,6 +43,10 @@ const EventFunctions = {
         _onBackButtonPressed = (e) => {
             ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
         }
+        spratAndroidActivityInstance.attachBackPressedListener({
+            onBackPressed: function() {
+                _onBackButtonPressed && _onBackButtonPressed();
+            }
     },
     [Events.Exit]: () => {
         _onExit = (e) => {
