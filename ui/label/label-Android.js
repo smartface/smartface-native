@@ -10,6 +10,7 @@ const { COMPLEX_UNIT_DIP } = require("../../util/Android/typevalue.js");
 const EllipsizeMode = require("../ellipsizemode");
 const ViewGroup = require('../viewgroup');
 const EventsList = require('./events');
+const { EventEmitterCreator } = require("../../core/eventemitter");
 const NativeTextView = requireClass("androidx.appcompat.widget.AppCompatTextView");
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");

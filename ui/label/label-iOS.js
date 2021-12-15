@@ -4,6 +4,7 @@ const Color = require("../../ui/color");
 const SFTextAlignment = require("../../ui/textalignment");
 const Invocation = require('../../util').Invocation;
 const NSLineBreakMode = require('../../util/iOS/nslinebreakmode');
+const { EventEmitterCreator } = require("../../core/eventemitter");
 
 Label.Events = { ...ViewGroup.Events };
 Label.prototype = Object.create(View.prototype);

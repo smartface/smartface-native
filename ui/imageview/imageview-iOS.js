@@ -3,6 +3,7 @@ const Image = require("../../ui/image");
 const ImageCacheType = require('../../ui/imagecachetype');
 const Color = require("../../ui/color");
 const ViewGroup = require('../viewgroup');
+const { EventEmitterCreator } = require("../../core/eventemitter");
 
 const FillType = {
     NORMAL: 0,
