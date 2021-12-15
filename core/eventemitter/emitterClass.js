@@ -12,7 +12,19 @@ function EventEmitter() {
 EventEmitter.prototype.on = function (eventName, callback) {
     this.emitter.on(eventName, callback);
     return () => this.off(eventName, callback);
-}
+};
+
+/**
+ * Adds a one-time `callback` function to the event emitter.
+ * @param {string} eventName
+ * @param {Function} callback
+ */
+EventEmitter.prototype.once = function (eventName, callback) {
+    this.emitter.on(eventName, () => {
+        callback();
+        this.emitter.removeListener(eventName, callback);
+    });
+};
 
 /**
  * Removes the specified event and invokes the callback after it is removed
@@ -21,7 +33,7 @@ EventEmitter.prototype.on = function (eventName, callback) {
  */
 EventEmitter.prototype.off = function (eventName, callback) {
     this.emitter.removeListener(eventName, callback);
-}
+};
 
 /**
  * Triggers the event manually.
@@ -30,7 +42,7 @@ EventEmitter.prototype.off = function (eventName, callback) {
  */
 EventEmitter.prototype.emit = function (event, ...args) {
     this.emitter.emit(event, ...args);
-}
+};
 
 module.exports = {
     EventEmitter

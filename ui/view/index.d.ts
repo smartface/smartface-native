@@ -29,6 +29,7 @@ declare class View<TEvent = typeof View.Events>
 	constructor(params?: any);
 	on(eventName: string, callback: (...args: any) => void): () => void;
 	off(eventName: string, callback?: (...args: any) => void): void;
+	once(eventName: string, callback?: (...args: any) => void): void;
 	emit(event: string, ...args: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information

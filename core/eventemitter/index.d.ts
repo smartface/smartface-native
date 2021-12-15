@@ -15,6 +15,13 @@ export interface IEventEmitter<TEvent = string> {
     * @param {Function} callback 
     */
    off(eventName: TEvent, callback?: (...args: any) => void): void;
+
+  /**
+   * Adds a one-time `callback` function to the event emitter.
+   * @param {string} eventName
+   * @param {Function} callback
+   */
+   once(eventName: TEvent, callback?: (...args: any) => void): void;
  
    /**
     * Triggers the event manually.
@@ -28,6 +35,7 @@ export class EventEmitter implements IEventEmitter {
   private emitter: Events;
   on(eventName: string, callback: (...args: any[]) => void): () => void;
   off(eventName: string, callback: (...args: any[]) => void): void;
+  once(eventName: string, callback: (...args: any[]) => void): void;
   emit(event: string, ...args: any[]): void;
   /**
    * Events of the Module in key-value notation.
@@ -41,6 +49,7 @@ export class EventEmitter implements IEventEmitter {
 export class EventEmitterMixin {
   static on: (eventName: string, callback: (...args: any) => any) => any;
   static off: (eventName: string, callback: (...args: any) => any) => any;
+  static once: (eventName: string, callback: (...args: any) => any) => any;
   static emit: (eventName: string, ...args: any[]) => any
 }
 

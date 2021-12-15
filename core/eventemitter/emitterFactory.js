@@ -80,6 +80,11 @@ function EventEmitterCreator(targetInstance, eventFunctions, eventCallback = () 
     configurable: true
   });
 
+  Object.defineProperty(targetInstance, 'once', {
+    value: (event, callback) => targetInstance.emitter.once(event, callback),
+    configurable: true
+  });
+
   Object.defineProperty(targetInstance, 'emit', {
     value: (event, ...args) => targetInstance.emitter.emit(event, ...args),
     configurable: true
