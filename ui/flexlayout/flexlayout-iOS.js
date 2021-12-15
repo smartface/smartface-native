@@ -8,13 +8,14 @@ FlexLayout.prototype = Object.create(ViewGroup.prototype);
 
 function FlexLayout(params) {
     ViewGroup.call(this);
-    EventEmitterCreator(this, {});
 
     const EventFunctions = {
         [EventsList.InterceptTouchEvent]: function() {
             //Android Only
         }
     }
+
+    EventEmitterCreator(this, EventFunctions);
 
     // Assign parameters given in constructor
     if (params) {
