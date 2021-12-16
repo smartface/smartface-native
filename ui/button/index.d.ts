@@ -36,7 +36,7 @@ declare class Button extends View<ButtonEvents> {
    * 
    * this.button1.on(Button.Events.Press, () => {
    *  console.info('Button pressed');
-   * })
+   * });
    * ````
    */
   onPress: () => void;

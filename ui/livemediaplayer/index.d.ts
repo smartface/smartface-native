@@ -34,7 +34,7 @@ declare enum IEvents {
  * 
  */
 
- declare class LiveMediaPlayer extends View<IEvents> {
+declare class LiveMediaPlayer extends View<IEvents> {
     /**
      * Set whether video is enabled
      *
@@ -44,7 +44,7 @@ declare enum IEvents {
      * @since 4.2.2
      */
     videoEnabled: boolean;
-    
+
     /**
      * Set input stream adress. Supported protocols: RTMP/RTMPT/RTSP/HTTP/TCP/UDP/FILE
      *
@@ -83,7 +83,7 @@ declare enum IEvents {
      * @ios
      * @since 4.2.2
      */
-    start () : void;
+    start(): void;
 
     /**
      * Pause playback.
@@ -93,7 +93,7 @@ declare enum IEvents {
      * @ios
      * @since 4.2.2
      */
-    pause () : void;
+    pause(): void;
 
     /**
      * Returns whether it is currently playing.
@@ -103,7 +103,7 @@ declare enum IEvents {
      * @ios
      * @since 4.2.2
      */
-    isPlaying () : boolean;
+    isPlaying(): boolean;
 
     /**
      * Release the underlying resources.
@@ -113,7 +113,7 @@ declare enum IEvents {
      * @ios
      * @since 4.2.2
      */
-    release () : void;
+    release(): void;
 
     /**
      * Stop playing.
@@ -123,7 +123,7 @@ declare enum IEvents {
      * @ios
      * @since 4.2.2
      */
-    stop () : void;
+    stop(): void;
 
     /**
      * Set the event callback.
@@ -136,9 +136,18 @@ declare enum IEvents {
      * @android
      * @ios
      * @since 4.2.2
+     * @example
+     * ````
+     * import LiveMediaPlayer from '@smartface/native/ui/livemediaplayer';
+     * 
+     * const liveMediaPlayer = new LiveMediaPlayer();
+     * liveMediaPlayer.on(LiveMediaPlayer.Events.Change, (params) => {
+     *  console.info('onChange', params);
+     * });
+     * ````
      */
     onChange: (params: { event: number; message: string }) => void;
- }
+}
 
 
 declare namespace LiveMediaPlayer {
@@ -187,6 +196,6 @@ declare namespace LiveMediaPlayer {
          * @since 4.2.2
          */
         ASPECTFILL = 2
-	}
+    }
 }
 export = LiveMediaPlayer;

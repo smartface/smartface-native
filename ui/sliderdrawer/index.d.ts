@@ -128,6 +128,15 @@ declare class SliderDrawer extends ViewGroup<SliderDrawerEvents> implements IFle
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
+	 * 
+	 * const sliderDrawer = new SliderDrawer();
+	 * sliderDrawer.on(SliderDrawer.Events.Show, () => {
+	 * 	console.info('onShow');
+	 * });
+	 * ````
 	 */
 	onShow: () => void | null;
 	/**
@@ -138,6 +147,15 @@ declare class SliderDrawer extends ViewGroup<SliderDrawerEvents> implements IFle
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
+	 * 
+	 * const sliderDrawer = new SliderDrawer();
+	 * sliderDrawer.on(SliderDrawer.Events.Hide, () => {
+	 * 	console.info('onHide');
+	 * });
+	 * ````
 	 */
 	onHide: () => void | null;
 	/**
@@ -148,6 +166,15 @@ declare class SliderDrawer extends ViewGroup<SliderDrawerEvents> implements IFle
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
+	 * 
+	 * const sliderDrawer = new SliderDrawer();
+	 * sliderDrawer.on(SliderDrawer.Events.Load, () => {
+	 * 	console.info('onLoad');
+	 * });
+	 * ````
 	 */
 	onLoad: () => void | null;
 }

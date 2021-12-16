@@ -131,6 +131,15 @@ dialogBackgroundColor: Color;
  * @android
  * @ios
  * @since 0.1
+ * @example
+ * ````
+ * import Picker from '@smartface/native/ui/picker';
+ * 
+ * const picker = new Picker();
+ * picker.on(Picker.Events.Selected, (params) => {
+ *  console.info('onSelected', params);
+ * });
+ * ````
  */
   onSelected: (index: number) => void;
 /**

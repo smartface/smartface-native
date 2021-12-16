@@ -187,12 +187,22 @@ declare enum IEvents {
      * Set the event callback.
      *
      * @event onChange
+     * @deprecated
      * @param {Object} params
      * @param {Number} params.event See more: https://github.com/NodeMedia/NodeMediaClient-Android/blob/2.x/docs/NodePlayer_API_CN.md#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83
      * @param {String} params.message
      * @android
      * @ios
      * @since 4.2.2
+     * @example
+     * ````
+     * import LiveMediaPublisher from '@smartface/native/ui/livemediapublisher';
+     * 
+     * const liveMediaPublisher = new LiveMediaPublisher();
+     * liveMediaPublisher.on(LiveMediaPublisher.Events.Change, (params) => {
+     *  console.info('onChange', params);
+     * });
+     * ````
      */
     onChange: (params: { event: number; message: string }) => void;
  }

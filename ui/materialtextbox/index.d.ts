@@ -48,14 +48,6 @@ declare class MaterialTextBox extends TextBox {
         };
         /**
          * This event is called when positioning leftLayout. This event can be called multiple times.
-         *
-         *     @example
-         *     mtbTextbox.ios.onLeftLayoutRectForBounds: function(bounds, defaultRect){
-         *         defaultRect.x = defaultRect.x + 20;
-         *         defaultRect.y = defaultRect.y - 20;
-         *      return defaultRect;
-         *     };
-         *
          * @param {Object} bounds MaterialTextBox bounds.
          * @param {Number} bounds.x
          * @param {Number} bounds.y
@@ -72,20 +64,22 @@ declare class MaterialTextBox extends TextBox {
          * @return {Number} return.width
          * @return {Number} return.height
          * @event onLeftLayoutRectForBounds
+         * @deprecated
          * @ios
          * @since 4.3.0
+         * @example
+         * ````
+         * import MaterialTextBox from '@smartface/native/ui/materialtextbox';
+         * 
+         * const materialTextBox = new MaterialTextBox();
+         * materialTextBox.on(MaterialTextBox.Events.LeftLayoutRectForBounds, (params) => {
+         *  console.info('onLeftLayoutRectForBounds', params);
+         * });
+         * ````
          */
             onLeftLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
         /**
          * This event is called when positioning rightLayout. This event can be called multiple times.
-         *
-         *     @example
-         *     mtbTextbox.ios.onRightLayoutRectForBounds: function(bounds, defaultRect){
-         *         defaultRect.x = defaultRect.x + 20;
-         *         defaultRect.y = defaultRect.y - 20;
-         *      return defaultRect;
-         *     };
-         *
          * @param {Object} bounds MaterialTextBox bounds.
          * @param {Number} bounds.x
          * @param {Number} bounds.y
@@ -102,8 +96,18 @@ declare class MaterialTextBox extends TextBox {
          * @return {Number} return.width
          * @return {Number} return.height
          * @event onRightLayoutRectForBounds
+         * @deprecated
          * @ios
          * @since 4.3.0
+         * @example
+         * ````
+         * import MaterialTexBox from '@smartface/native/ui/materialtextbox';
+         * 
+         * const materialTextBox = new MaterialTextBox();
+         * materialTextBox.on(MaterialTextBox.Events.RightLayoutRectForBounds, (params) => {
+         *  console.info('onRightLayoutRectForBounds', params);
+         * });
+         * ````
          */
             onRightLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
         /**

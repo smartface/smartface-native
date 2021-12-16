@@ -29,9 +29,9 @@ declare namespace ViewGroup {
  *     myFlexLayout.addChild(myLabel);
  */
 declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents> {
-	on(eventName: string, callback: (...args: any) => void): () => void;
-	off(eventName: string, callback?: (...args: any) => void): void;
-	emit(event: string, detail?: any[]): void;
+    on(eventName: string, callback: (...args: any) => void): () => void;
+    off(eventName: string, callback?: (...args: any) => void): void;
+    emit(event: string, detail?: any[]): void;
     constructor(params?: any)
     /**
      * This function adds a child view to a viewgroup.
@@ -122,6 +122,16 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @android
      * @ios
      * @since 1.1.8
+     * @deprecated
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewAdded, (params) => {
+     *  console.info('onViewAdded', params);
+     * });
+     * ````
      */
     onViewAdded: (view: View) => void;
     /**
@@ -132,6 +142,15 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @android
      * @ios
      * @since 1.1.8
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewRemoved, (params) => {
+     *  console.info('onViewRemoved', params);
+     * });
+     * ````
      */
     onViewRemoved: (view: View) => void;
 }
