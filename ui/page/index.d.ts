@@ -8,14 +8,6 @@ import { IEventEmitter } from "core/eventemitter";
 
 declare enum PageEvents {
 	/**
-	 * This event will be triggered when user clicks back button on the Device.
-	 *
-	 * @event onBackButtonPressed
-	 * @android
-	 * @since 0.1
-	 */
-	BackButtonPressed = "backButtonPressed",
-	/**
 	 * This event is called when a page disappears from the screen.
 	 *
 	 * @event onHide

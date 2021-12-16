@@ -89,7 +89,7 @@ function Page(params) {
                     Application.registOnItemSelectedListener();
 
                     if (!self.isSwipeViewPage) {
-                        self.__onShowCallback && self.__onShowCallback();
+                        onShowCallback && onShowCallback();
                     }
 
                     var spratIntent = AndroidConfig.activity.getIntent();
@@ -223,13 +223,13 @@ function Page(params) {
         enumerable: true
     });
 
-    self.__onShowCallback;
+    var onShowCallback
     Object.defineProperty(this, 'onShow', {
         get: function () {
-            return self.__onShowCallback;
+            return onShowCallback;
         },
         set: function (onShow) {
-            self.__onShowCallback = (function () {
+            onShowCallback = (function () {
                 if (onShow instanceof Function) {
                     onShow.call(this, this.__pendingParameters);
                     delete this.__pendingParameters;
@@ -295,7 +295,7 @@ function Page(params) {
 
     const EventFunctions = {
         [Events.Show]: function() {
-            __onShowCallback = (state) => {
+            onShowCallback = (state) => {
                 this.emitter.emit(Events.Show, state);
             } 
         },

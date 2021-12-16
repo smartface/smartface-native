@@ -28,10 +28,7 @@ declare namespace ViewGroup {
  *     });
  *     myFlexLayout.addChild(myLabel);
  */
-declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents> {
-    on(eventName: string, callback: (...args: any) => void): () => void;
-    off(eventName: string, callback?: (...args: any) => void): void;
-    emit(event: string, detail?: any[]): void;
+declare class ViewGroup<Tevents = ViewGroupEvents> extends View<Tevents> {
     constructor(params?: any)
     /**
      * This function adds a child view to a viewgroup.
