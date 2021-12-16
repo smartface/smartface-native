@@ -101,6 +101,15 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
     * @event
     * @deprecated
     * @since 1.1.17
+    * @example
+    * ````
+    * import WebSocket from '@smartface/native/net/websocket';
+    * 
+    * const webSocket = new WebSocket();
+    * webSocket.on(WebSocket.Events.Open, () => {
+    *  console.info('onOpen');
+    * });
+    * ````
     */
   onOpen(): void;
   /**
@@ -111,6 +120,15 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * @deprecated
    * @event
    * @since 1.1.17
+   * @example
+   * ````
+   * import WebSocket from '@smartface/native/net/websocket';
+   * 
+   * const webSocket = new WebSocket();
+   * webSocket.on(WebSocket.Events.Message, (params) => {
+   *  console.info('onMessage', params);
+   * });
+   * ````
    */
   onMessage(e: { string: string, blob: Blob }): void;
   /**
@@ -121,6 +139,15 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * @deprecated
    * @event
    * @since 1.1.17
+   * @example
+   * ````
+   * import WebSocket from '@smartface/native/net/websocket';
+   * 
+   * const webSocket = new WebSocket();
+   * webSocket.on(WebSocket.Events.Close, (params) => {
+   *  console.info('onClose', params);
+   * });
+   * ````
    */
   onClose(e: { code: number, reason: string }): void;
   /**
@@ -131,6 +158,15 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * @deprecated
    * @event
    * @since 1.1.17
+   * @example
+   * ````
+   * import WebSocket from '@smartface/native/net/websocket';
+   * 
+   * const webSocket = new WebSocket();
+   * webSocket.on(WebSocket.Events.Failure, (params) => {
+   *  console.info('onFailure', params);
+   * });
+   * ````
    */
   onFailure(e: { code: number, message: string }): void;
 
