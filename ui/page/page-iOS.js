@@ -244,7 +244,7 @@ function Page(params) {
         }
 
     };
-    
+
     self.ios.onSafeAreaPaddingChange = (state) => {
         this.emitter.emit(Events.SafeAreaPaddingChange, state)
     }
@@ -305,8 +305,8 @@ function Page(params) {
     };
 
     self.nativeObject.onHide = () => {
-        __SF_UIView.animation(0, 0, function() {
-            this.layout.nativeObject.endEditing(true);
+        __SF_UIView.animation(0, 0, () => {
+            this.layout.nativeObject && this.layout.nativeObject.endEditing(true);
         }, {});
 
         if (typeof this.onHide === "function") {
