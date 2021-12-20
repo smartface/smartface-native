@@ -1,4 +1,4 @@
-import { IEventEmitter } from "core/eventemitter";
+import { EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
 
@@ -46,12 +46,9 @@ declare enum Events {
  *     }
  *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
-declare class SelectablePicker extends NativeComponent implements IEventEmitter<Events> {
+declare class SelectablePicker extends EventEmitterNativeComponent<Events, any> {
     constructor(params?: any);
     static Events: typeof Events;
-    on(eventName: Events, callback: (...args: any) => void): () => void;
-    off(eventName: Events, callback?: (...args: any) => void): void;
-    emit(event: Events, detail?: any[]): void;
     /**
      * Gets/sets items of the SelectablePicker.
      *

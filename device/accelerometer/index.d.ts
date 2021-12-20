@@ -1,5 +1,3 @@
-import { IEventEmitter } from "../../core/eventemitter";
-
 declare enum Events {
   /**
    * Callback to capture accelerometer events.

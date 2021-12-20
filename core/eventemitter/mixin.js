@@ -13,6 +13,9 @@ module.exports = {
   on(eventName, callback) {
     return this.emitter.on(eventName, callback);
   },
+  once(eventName, callback) {
+    return this.emitter.once(eventName, callback);
+  },
   off(eventName, callback) {
     return this.emitter.off(eventName, callback);
   },

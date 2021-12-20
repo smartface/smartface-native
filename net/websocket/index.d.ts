@@ -1,4 +1,4 @@
-import { IEventEmitter } from "../../core/eventemitter";
+import { EventEmitterNativeComponent, IEventEmitter } from "../../core/eventemitter";
 import Blob from "../../global/blob";
 
 declare enum Events {
@@ -65,11 +65,8 @@ declare enum Events {
  * @class Net.WebSocket
  * @since 1.1.17
  */
-declare class WebSocket extends NativeComponent implements IEventEmitter<Events> {
+declare class WebSocket extends EventEmitterNativeComponent<Events, any> {
   constructor(params?: any);
-  on(eventName: Events, callback: (...args: any) => void): () => void;
-  off(eventName: Events, callback?: (...args: any) => void): void;
-  emit(event: Events, detail?: any[]): void;
   /**
    * Gets url of socket connection.
    *

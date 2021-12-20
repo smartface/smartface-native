@@ -18,6 +18,7 @@ import { IEventEmitter } from "../../core/eventemitter";
  */
 declare class CallDetection implements IEventEmitter<typeof CallDetection.Events> {
     on(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
+    once(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
     off(eventName: typeof CallDetection.Events, callback?: (...args: any) => void): void;
     emit(event: typeof CallDetection.Events, detail?: any[]): void;
     

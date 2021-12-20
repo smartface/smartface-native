@@ -9,6 +9,14 @@ export interface IEventEmitter<TEvent = string> {
    */
    on(eventName: TEvent, callback: (...args: any) => void): () => void;
 
+  /**
+   * Creates an event emitter instance to listen for the actions
+   * @param {string} eventName 
+   * @param {Function} callback - Gets as any arguments as it needs
+   * @returns {Function} Call the function to remove the event
+   */
+   once(eventName: TEvent, callback: (...args: any) => void): () => void;
+
    /**
     * Removes the specified event and invokes the callback after it is removed
     * @param {string} eventName 
@@ -24,11 +32,29 @@ export interface IEventEmitter<TEvent = string> {
    emit(event: TEvent, ...args: any[]): void;
 }
  
-export class EventEmitter implements IEventEmitter {
-  private emitter: Events;
-  on(eventName: string, callback: (...args: any[]) => void): () => void;
-  off(eventName: string, callback: (...args: any[]) => void): void;
-  emit(event: string, ...args: any[]): void;
+export class EventEmitter<TEvent> implements IEventEmitter<TEvent> {
+  protected emitter: Events;
+
+  on(eventName: TEvent, callback: (...args: any) => void): () => void;
+  once(eventName: TEvent, callback: (...args: any) => void): () => void;
+  off(eventName: TEvent, callback?: (...args: any) => void): void;
+  emit(event: TEvent, ...args: any[]): void;
+
+  /**
+   * Events of the Module in key-value notation.
+   * Key means the Enum name
+   * Value means the parameter to be passed to the EventEmitter
+   */
+  static Events: { [key: string]: string };
+  // static Events: any;
+}
+
+export class EventEmitterNativeComponent<TEvent, TNative> extends NativeComponent<TNative> implements IEventEmitter<TEvent> {
+  protected emitter: Events;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  emit(event: TEvent, ...args: any[]): void;
   /**
    * Events of the Module in key-value notation.
    * Key means the Enum name
@@ -40,6 +66,7 @@ export class EventEmitter implements IEventEmitter {
 
 export class EventEmitterMixin {
   static on: (eventName: string, callback: (...args: any) => any) => any;
+  static once: (eventName: string, callback: (...args: any) => any) => any;
   static off: (eventName: string, callback: (...args: any) => any) => any;
   static emit: (eventName: string, ...args: any[]) => any
 }

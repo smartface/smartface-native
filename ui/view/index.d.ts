@@ -2,7 +2,7 @@ import Color from "../color";
 import FlexLayout from "../flexlayout";
 import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
-import { IEventEmitter } from "../../core/eventemitter";
+import { EventEmitterNativeComponent, IEventEmitter } from "../../core/eventemitter";
 
 /**
  * @class UI.View
@@ -23,13 +23,9 @@ import { IEventEmitter } from "../../core/eventemitter";
  *
  */
 declare class View<TEvent = typeof View.Events>
-	extends NativeComponent
-	implements IEventEmitter
+	extends EventEmitterNativeComponent<TEvent, any>
 {
 	constructor(params?: any);
-	on(eventName: string, callback: (...args: any) => void): () => void;
-	off(eventName: string, callback?: (...args: any) => void): void;
-	emit(event: string, ...args: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
 	 * @property {String} transitionID

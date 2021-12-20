@@ -31,6 +31,7 @@ declare enum Events {
 declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
 	constructor(params?: any);
     on(eventName: Events, callback: (...args: any) => void): () => void;
+    once(eventName: Events, callback: (...args: any) => void): () => void;
     off(eventName: Events, callback?: (...args: any) => void): void;
     emit(event: Events, detail?: any[]): void;
 	getCurrentController: () => NavigationController | Page;
