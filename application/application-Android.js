@@ -47,6 +47,7 @@ const EventFunctions = {
             onBackPressed: function() {
                 _onBackButtonPressed && _onBackButtonPressed();
             }
+        })
     },
     [Events.Exit]: () => {
         _onExit = (e) => {
