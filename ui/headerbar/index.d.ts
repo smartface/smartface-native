@@ -220,7 +220,8 @@ type HeaderBar = {
  * @ios
  * @since 3.2.1
  */
-    titleLayout: View;
+    // TODO: if it can be only FlexLayout its type must be FlexLayout instead of View
+    titleLayout: View<any>;
 /**
  * Gets/sets title of the header bar.
  *

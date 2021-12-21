@@ -23,9 +23,15 @@ import { EventEmitterNativeComponent, IEventEmitter } from "../../core/eventemit
  *
  */
 declare class View<TEvent = typeof View.Events>
-	extends EventEmitterNativeComponent<TEvent, any>
+	extends NativeComponent
+    implements IEventEmitter<TEvent>
 {
-	constructor(params?: any);
+	constructor(params?: Record<string, any>);
+    protected emitter: TEvent;
+    on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+    once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+    off(eventName: TEvent, callback: (...args: any[]) => void): void;
+    emit(event: TEvent, ...args: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
 	 * @property {String} transitionID

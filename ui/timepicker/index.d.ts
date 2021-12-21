@@ -1,4 +1,4 @@
-import { EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
+import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
 
 declare enum Events {
   /**
@@ -31,9 +31,14 @@ declare enum Events {
  *     myTimePicker.show();
  *
  */
-declare class TimePicker extends EventEmitterNativeComponent<Events, any> implements IEventEmitter<Events> {
+declare class TimePicker extends NativeComponent implements IEventEmitter<Events> {
   static Events: typeof Events;
-
+  
+  protected emitter: EventEmitter<Events>;
+  on(eventName: Events, callback: (...args: any[]) => void): () => void;
+  once(eventName: Events, callback: (...args: any[]) => void): () => void;
+  off(eventName: Events, callback: (...args: any[]) => void): void;
+  emit(event: Events, ...args: any[]): void;
 /**
  * Sets the time avaliable on the picker.
  *

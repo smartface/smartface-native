@@ -1,6 +1,6 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
-import { EventEmitterNativeComponent } from "core/eventemitter";
+import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
 
 /**
  * @class Device.Sound
@@ -20,8 +20,15 @@ import { EventEmitterNativeComponent } from "core/eventemitter";
  *     mySound.loadURL(your-url);
  * 
  */
-declare class Sound extends EventEmitterNativeComponent<typeof Sound.Events, any> {
+declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events>{    
     constructor(params?: any);
+
+    protected emitter: EventEmitter<typeof Sound.Events>;
+    on(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;
+    once(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;
+    off(eventName: typeof Sound.Events, callback: (...args: any[]) => void): void;
+    emit(event: typeof Sound.Events, ...args: any[]): void;
+
 /**
  * Checks whether the sound is playing.
  *

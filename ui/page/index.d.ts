@@ -4,7 +4,7 @@ import NavigationController from "../navigationcontroller";
 import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
 import { IFlexLayout } from "../../primitive/iflexlayout";
-import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from "core/eventemitter";
 
 declare enum PageEvents {
 	/**
@@ -152,14 +152,25 @@ declare namespace Page {
 
 	const Events: typeof PageEvents & typeof View.Events;
 	type Events = typeof Events;
+
+    type Page = typeof PageKlass;
 }
 
-declare class Page
-	extends EventEmitterNativeComponent<PageEvents, any>
-	implements IFlexLayout
-{
+declare class Page extends PageKlass {
+}
+
+declare class PageKlass
+	extends NativeComponent
+	implements IFlexLayout, IEventEmitter<PageEvents>
+    {
 	constructor(params?: any);
-	readonly nativeObject: any;
+
+    protected emitter: EventEmitter<PageEvents>;
+    on(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    once(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    off(eventName: PageEvents, callback: (...args: any[]) => void): void;
+    emit(event: PageEvents, ...args: any[]): void;
+
 	/**
 	 * This event is called once when page is created.
 	 * You can create views and add them to page in this callback.

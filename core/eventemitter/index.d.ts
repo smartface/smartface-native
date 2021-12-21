@@ -33,7 +33,7 @@ export interface IEventEmitter<TEvent = string> {
 }
  
 export class EventEmitter<TEvent> implements IEventEmitter<TEvent> {
-  protected emitter: Events;
+  protected emitter: Events.EventEmitter;
 
   on(eventName: TEvent, callback: (...args: any) => void): () => void;
   once(eventName: TEvent, callback: (...args: any) => void): () => void;
@@ -49,19 +49,13 @@ export class EventEmitter<TEvent> implements IEventEmitter<TEvent> {
   // static Events: any;
 }
 
-export class EventEmitterNativeComponent<TEvent, TNative> extends NativeComponent<TNative> implements IEventEmitter<TEvent> {
-  protected emitter: Events;
+export abstract class EventEmitterNativeComponent<TEvent, TNative> extends NativeComponent<TNative> implements IEventEmitter<TEvent> {
+  constructor();
+  protected emitter: Events.EventEmitter;
   on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
   once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
   off(eventName: TEvent, callback: (...args: any[]) => void): void;
   emit(event: TEvent, ...args: any[]): void;
-  /**
-   * Events of the Module in key-value notation.
-   * Key means the Enum name
-   * Value means the parameter to be passed to the EventEmitter
-   */
-  static Events: { [key: string]: string };
-  // static Events: any;
 }
 
 export class EventEmitterMixin {
