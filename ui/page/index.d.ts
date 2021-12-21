@@ -152,14 +152,9 @@ declare namespace Page {
 
 	const Events: typeof PageEvents & typeof View.Events;
 	type Events = typeof Events;
-
-    type Page = typeof PageKlass;
 }
 
-declare class Page extends PageKlass {
-}
-
-declare class PageKlass
+declare class Page
 	extends NativeComponent
 	implements IFlexLayout, IEventEmitter<PageEvents>
     {
