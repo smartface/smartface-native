@@ -89,7 +89,8 @@ Object.defineProperties(ViewGroup.prototype, {
             }
             view.parent = undefined;
         },
-        enumerable: true
+        enumerable: true,
+        writable: true
     },
     'removeAll': {
         value: function() {
