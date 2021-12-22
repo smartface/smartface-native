@@ -492,7 +492,7 @@ function SearchView(params) {
         mSearchSrcTextView.addTextChangedListener(NativeTextWatcher.implement({
             onTextChanged: function (charSequence, start, before, count) {
                 if (!_hasEventsLocked) {
-                    _onTextChangedCallback && _onTextChangedCallback(charSequence);
+                    _onTextChangedCallback && _onTextChangedCallback(charSequence.toString());
                 }
             }.bind(this),
             beforeTextChanged: function (charSequence, start, count, after) { },
