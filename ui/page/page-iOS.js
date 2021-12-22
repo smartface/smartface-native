@@ -1,12 +1,9 @@
 const FlexLayout = require('../../ui/flexlayout');
-const Image = require("../../ui/image");
-const Color = require('../../ui/color');
-const System = require('../../device/system');
 const Screen = require('../../device/screen');
 const OrientationType = require('../../device/screen/orientationtype');
 const Invocation = require('../../util').Invocation;
 const HeaderBarItem = require('../../ui/headerbaritem');
-const Application = require("../../application");
+
 const {
     EventEmitterCreator
   } = require("../../core/eventemitter");
