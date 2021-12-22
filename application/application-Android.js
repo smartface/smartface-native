@@ -27,59 +27,45 @@ Application.onApplicationCallReceived = (e) => {
             _onApplicationCallReceived(e)
     }
 }
-
-const EventFunctions = {
-    [Events.ApplicationCallReceived]: () => {
-        _onApplicationCallReceived = (e) => {
-            ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
-        }
-    },
-    [Events.AppShortcutReceived]: () => {
-        _onAppShortcutReceived = (e) => {
-            ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
-        }
-    },
-    [Events.BackButtonPressed]: () => {
-        _onBackButtonPressed = (e) => {
-            ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
-        }
-        spratAndroidActivityInstance.attachBackPressedListener({
-            onBackPressed: function() {
-                _onBackButtonPressed && _onBackButtonPressed();
-            }
-        })
-    },
-    [Events.Exit]: () => {
-        _onExit = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Exit, e);
-        };
-    },
-    [Events.Maximize]: () => {
-        _onMaximize = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Maximize, e);
-        };
-    },
-    [Events.Minimize]: () => {
-        _onMinimize = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Minimize, e);
-        };
-    },
-    [Events.ReceivedNotification]: () => {
-        _onReceivedNotification = (e) => {
-            ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
-        };
-    },
-    [Events.RequestPermissionResult]: () => {
-        _onRequestPermissionsResult = (e) => {
-            ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
-        }
-    },
-    [Events.UnhandledError]: () => {
-        Application.onUnhandledError = (e) => {
-            ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
-        };
-    }
+_onApplicationCallReceived = (e) => {
+    ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
 }
+
+_onAppShortcutReceived = (e) => {
+    ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
+}
+
+_onBackButtonPressed = (e) => {
+    ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
+}
+
+spratAndroidActivityInstance.attachBackPressedListener({
+    onBackPressed: function() {
+        _onBackButtonPressed && _onBackButtonPressed();
+    }
+})
+
+_onExit = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Exit, e);
+};
+
+_onMaximize = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Maximize, e);
+};
+
+_onMinimize = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Minimize, e);
+};
+
+_onReceivedNotification = (e) => {
+    ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
+};
+
+_onRequestPermissionsResult = (e) => {
+    ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
+}
+
+const EventFunctions = {}
 
 ApplicationWrapper.Events = { ...Events };
 EventEmitterCreator(ApplicationWrapper, EventFunctions);
@@ -368,9 +354,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onExit;
         },
         set: function(onExit) {
-            if (TypeUtil.isFunction(onExit) || onExit === null) {
-                _onExit = onExit;
-            }
+            _onExit = (e) => {
+                onExit && onExit(e)
+                ApplicationWrapper.emitter.emit(Events.Exit, e);
+            };
         },
         enumerable: true
     },
@@ -379,9 +366,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMaximize;
         },
         set: function(onMaximize) {
-            if (TypeUtil.isFunction(onMaximize) || onMaximize === null) {
-                _onMaximize = onMaximize;
-            }
+            _onMaximize = (e) => {
+                onMaximize && onMaximize(e);
+                ApplicationWrapper.emitter.emit(Events.Maximize, e);
+            };
         },
         enumerable: true
     },
@@ -390,9 +378,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMinimize;
         },
         set: function(onMinimize) {
-            if (TypeUtil.isFunction(onMinimize) || onMinimize === null) {
-                _onMinimize = onMinimize;
-            }
+            _onMinimize = (e) => {
+                _onMinimize && _onMinimize(e)
+                ApplicationWrapper.emitter.emit(Events.Minimize, e);
+            };
         },
         enumerable: true
     },
@@ -402,7 +391,10 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                _onReceivedNotification = callback;
+                _onReceivedNotification = (e) => {
+                    callback && callback(e);
+                    ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
+                };
             }
         },
         enumerable: true
@@ -414,7 +406,10 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(onUnhandledError) {
             if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-                Application.onUnhandledError = onUnhandledError;
+                Application.onUnhandledError = (e) => {
+                    onUnhandledError(e);
+                    ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
+                };
             }
         },
         enumerable: true
@@ -424,8 +419,9 @@ Object.defineProperties(ApplicationWrapper, {
             return _onApplicationCallReceived;
         },
         set: function (callback) {
-            if (TypeUtil.isFunction(callback) || callback === null) {
-                _onApplicationCallReceived = callback;
+            _onApplicationCallReceived = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
             }
         },
         enumerable: true
@@ -435,9 +431,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onAppShortcutReceived;
         },
         set: function (callback) {
-            if (TypeUtil.isFunction(callback) || callback === null) {
-                _onAppShortcutReceived = callback;
-            }
+            _onAppShortcutReceived = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
+            };
         },
         enumerable: true
     },
@@ -530,7 +527,10 @@ Object.defineProperties(ApplicationWrapper.android, {
             return _onBackButtonPressed;
         },
         set: function(callback) {
-            _onBackButtonPressed = callback;
+            _onBackButtonPressed = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
+            };
             spratAndroidActivityInstance.attachBackPressedListener({
                 onBackPressed: function() {
                     _onBackButtonPressed && _onBackButtonPressed();
@@ -591,7 +591,10 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         set: function(callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                _onRequestPermissionsResult = callback;
+                _onRequestPermissionsResult = (e) => {
+                    callback && callback(e)
+                    ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
+                }
             }
         }
 
