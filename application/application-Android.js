@@ -39,11 +39,7 @@ _onBackButtonPressed = (e) => {
     ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
 }
 
-spratAndroidActivityInstance.attachBackPressedListener({
-    onBackPressed: function() {
-        _onBackButtonPressed && _onBackButtonPressed();
-    }
-})
+
 
 _onExit = (e) => {
     ApplicationWrapper.emitter.emit(Events.Exit, e);
@@ -90,6 +86,12 @@ var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed, _onApplicationCallR
     _onReceivedNotification, _onRequestPermissionsResult, _keepScreenAwake = false,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
     spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
+
+spratAndroidActivityInstance.attachBackPressedListener({
+    onBackPressed: function() {
+        _onBackButtonPressed && _onBackButtonPressed();
+    }
+})
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
