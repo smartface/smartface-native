@@ -22,7 +22,7 @@ import { EventEmitterNativeComponent, IEventEmitter } from "../../core/eventemit
  *     myView.backgroundColor = Color.RED;
  *
  */
-declare class View<TEvent = typeof View.Events>
+declare class View<TEvent = any>
 	extends NativeComponent
     implements IEventEmitter<TEvent>
 {
