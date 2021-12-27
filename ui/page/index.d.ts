@@ -170,7 +170,6 @@ declare class Page
 	 * This event is called once when page is created.
 	 * You can create views and add them to page in this callback.
 	 *
-	 * @deprecated
 	 * @android
 	 * @ios
 	 */

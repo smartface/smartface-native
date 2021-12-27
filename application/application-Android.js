@@ -68,7 +68,7 @@ EventEmitterCreator(ApplicationWrapper, EventFunctions);
 
 Object.defineProperty(ApplicationWrapper, 'on', {
     value: (event, callback) => {
-        EventFunctions[event].call(ApplicationWrapper);
+        // EventFunctions[event].call(ApplicationWrapper);
         ApplicationWrapper.emitter.on(event, callback);
     },
     configurable: true
@@ -381,7 +381,7 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(onMinimize) {
             _onMinimize = (e) => {
-                _onMinimize && _onMinimize(e)
+                onMinimize && onMinimize(e)
                 ApplicationWrapper.emitter.emit(Events.Minimize, e);
             };
         },
