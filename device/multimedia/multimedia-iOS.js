@@ -217,6 +217,7 @@ Multimedia.pickMultipleFromGallery = function (e) {
     ypImagePickerConfig.galleryHidesRemoveButton = false;
     ypImagePickerConfig.librarySkipSelectionsGallery = true;
     ypImagePickerConfig.videoLibraryTimeLimit = 500.0;
+    ypImagePickerConfig.isSquareByDefault = false;
 
     // 0 = photo, 1 = video, 2 = photoAndVideo, default = photo 
     ypImagePickerConfig.libraryMediaType = libraryMediaType;

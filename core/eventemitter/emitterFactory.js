@@ -57,21 +57,20 @@ function EventEmitterCreator(targetInstance, eventFunctions, eventCallback = () 
   const parentOnFunction = targetInstance.on;
   targetInstance.emitter = targetInstance.emitter || new EventEmitter();
   
-  const onFunction = (event, callback) => {
-    if (typeof eventFunctions[event] === 'function') {
-      eventFunctions[event].call(targetInstance);
-      typeof eventCallback === 'function' && eventCallback.call(targetInstance);
-      targetInstance.emitter.on(event, callback);
-      return () => targetInstance.emitter.off(event, callback);
-    }
-    else {
-      if (typeof parentOnFunction === 'function') {
-        return parentOnFunction(event, callback);
-      }
-    }
+  const onFunction = (once = false) => (event, callback) => {
+    eventFunctions[event] && eventFunctions[event].call(targetInstance);
+    typeof eventCallback === 'function' && eventCallback.call(targetInstance);
+    var method = once ? targetInstance.emitter.once : targetInstance.emitter.on;
+    method.call(targetInstance.emitter, event, callback);
+    return () => targetInstance.emitter.off(event, callback);
   };
   Object.defineProperty(targetInstance, 'on', {
-    value: onFunction,
+    value: onFunction(false),
+    configurable: true
+  });
+
+  Object.defineProperty(targetInstance, 'once', {
+    value: onFunction(true),
     configurable: true
   });
 

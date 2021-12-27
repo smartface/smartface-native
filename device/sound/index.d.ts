@@ -1,6 +1,6 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
-import { IEventEmitter } from "core/eventemitter";
+import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
 
 /**
  * @class Device.Sound
@@ -20,20 +20,23 @@ import { IEventEmitter } from "core/eventemitter";
  *     mySound.loadURL(your-url);
  * 
  */
-declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events> {
+declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events>{    
     constructor(params?: any);
-    on(eventName: typeof Sound.Events, callback: (...args: any) => void): () => void;
-    off(eventName: typeof Sound.Events, callback?: (...args: any) => void): void;
-    emit(event: typeof Sound.Events, detail?: any[]): void;
-    /**
-     * Checks whether the sound is playing.
-     *
-     * @property {Boolean} isPlaying
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
+    protected emitter: EventEmitter<typeof Sound.Events>;
+    on(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;
+    once(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;
+    off(eventName: typeof Sound.Events, callback: (...args: any[]) => void): void;
+    emit(event: typeof Sound.Events, ...args: any[]): void;
+
+  /**
+   * Checks whether the sound is playing.
+   *
+   * @property {Boolean} isPlaying
+   * @readonly
+   * @android
+   * @ios
+   * @since 0.1
+   */
     public readonly isPlaying: boolean;
     /**
      * Gets/sets whether the sound is looping or non-looping.

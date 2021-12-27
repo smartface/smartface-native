@@ -27,6 +27,10 @@ declare class AsyncTask
 		eventName: AsyncTask.Events,
 		callback: (...args: any) => void
 	): () => void;
+	once(
+		eventName: AsyncTask.Events,
+		callback: (...args: any) => void
+	): () => void;
 	off(
 		eventName: AsyncTask.Events,
 		callback?: (...args: any) => void

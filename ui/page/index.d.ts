@@ -4,7 +4,7 @@ import NavigationController from "../navigationcontroller";
 import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
 import { IFlexLayout } from "../../primitive/iflexlayout";
-import { IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from "core/eventemitter";
 
 declare enum PageEvents {
 	/**
@@ -157,18 +157,19 @@ declare namespace Page {
 declare class Page
 	extends NativeComponent
 	implements IFlexLayout, IEventEmitter<PageEvents>
-{
+    {
 	constructor(params?: any);
-	readonly nativeObject: any;
-	on(eventName: PageEvents, callback: (...args: any) => void): () => void;
-	off(eventName: PageEvents, callback?: (...args: any) => void): void;
-	emit(event: PageEvents, detail?: any[]): void;
+
+    protected emitter: EventEmitter<PageEvents>;
+    on(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    once(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    off(eventName: PageEvents, callback: (...args: any[]) => void): void;
+    emit(event: PageEvents, ...args: any[]): void;
+
 	/**
 	 * This event is called once when page is created.
 	 * You can create views and add them to page in this callback.
 	 *
-	 * @event onLoad
-	 * @deprecated
 	 * @android
 	 * @ios
 	 * @example
@@ -243,8 +244,6 @@ declare class Page
 	 *         Application.statusBar.visible = true;
 	 *     });
 	 *
-	 * @event onShow
-	 * @deprecated
 	 * @param {Object} parameters Parameters passed from Router.go function
 	 * @android
 	 * @ios
@@ -258,7 +257,7 @@ declare class Page
 	 * });
 	 * ````
 	 */
-	public onShow(): void;
+	public onShow(params?: any): void;
 	/**
 	 * This event is called when a page disappears from the screen.
 	 *

@@ -9,6 +9,7 @@ declare enum Events {
 declare class SwipeItem implements IEventEmitter<typeof Events> {
   constructor(params?: any);
   on(eventName: typeof Events, callback: (...args: any) => void): () => void;
+  once(eventName: typeof Events, callback: (...args: any) => void): () => void;
   off(eventName: typeof Events, callback?: (...args: any) => void): void;
   emit(event: typeof Events, detail?: any[]): void;
   text: string;

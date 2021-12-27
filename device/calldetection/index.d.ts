@@ -31,11 +31,12 @@ declare enum Events {
  *     };
  *
  */
-declare class CallDetection implements IEventEmitter<Events> {
-    on(eventName: Events, callback: (...args: any) => void): () => void;
-    off(eventName: Events, callback?: (...args: any) => void): void;
-    emit(event: Events, detail?: any[]): void;
 
+declare class CallDetection implements IEventEmitter<typeof CallDetection.Events> {
+    on(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
+    once(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
+    off(eventName: typeof CallDetection.Events, callback?: (...args: any) => void): void;
+    emit(event: typeof CallDetection.Events, detail?: any[]): void;
     /**
      * Triggers when device call state changes.
      *

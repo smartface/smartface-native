@@ -26,6 +26,7 @@ declare class DatePicker extends NativeComponent implements IEventEmitter<Events
     constructor(params?: any);
     static Events: typeof Events;
     on(eventName: Events, callback: (...args: any) => void): () => void;
+    once(eventName: Events, callback: (...args: any) => void): () => void;
     off(eventName: Events, callback?: (...args: any) => void): void;
     emit(event: Events, detail?: any[]): void;
     ios: {

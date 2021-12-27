@@ -33,48 +33,25 @@ function listenAppShortcut(callback) {
     };
 }
 
+
+listenAppShortcut((e) => {
+    SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+});
+
 const EventFunctions = {
-    [Events.ApplicationCallReceived]: () => {
-        Application.onApplicationCallReceived = (e) => {
-            SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
-        };
-    },
-    [Events.AppShortcutReceived]: () => {
-        listenAppShortcut((e) => {
-            SFApplication.emitter.emit(Events.AppShortcutReceived, e);
-        });
-    },
-    [Events.BackButtonPressed]: () => {
-        // Android only
-    },
-    [Events.Exit]: () => {
-        Application.onExit = (e) => {
-            SFApplication.emitter.emit(Events.Exit, e);
-        };
-    },
-    [Events.Maximize]: () => {
-        Application.onMaximize = (e) => {
-            SFApplication.emitter.emit(Events.Maximize, e);
-        };
-    },
-    [Events.Minimize]: () => {
-        Application.onMinimize = (e) => {
-            SFApplication.emitter.emit(Events.Minimize, e);
-        };
-    },
-    [Events.ReceivedNotification]: () => {
-        Application.onReceivedNotification = (e) => {
-            SFApplication.emitter.emit(Events.ReceivedNotification, e);
-        };
-    },
-    [Events.RequestPermissionResult]: () => {
-        // Android only
-    },
-    [Events.UnhandledError]: () => {
-        Application.onUnhandledError = (e) => {
-            SFApplication.emitter.emit(Events.UnhandledError, e);
-        };
-    }
+    // [Events.ApplicationCallReceived]: () => {
+    //     Application.onApplicationCallReceived = (e) => {
+    //         SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+    //     };
+    // },
+    // [Events.AppShortcutReceived]: () => {
+    //     listenAppShortcut((e) => {
+    //         SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+    //     });
+    // },
+    // [Events.BackButtonPressed]: () => {
+    //     // Android only
+    // },
 }
 var SFApplication = {};
 SFApplication.Events = { ...Events };
@@ -233,11 +210,16 @@ SFApplication.Android.NavigationBar = {
 SFApplication.Android.Permissions = {};
 SFApplication.android.Permissions = {};
 SFApplication.android.navigationBar = {};
-SFApplication.android.setAppTheme = function() {};
+SFApplication.android.setAppTheme = function() {
+    SFApplication.emitter.emit(Events.UnhandledError, e);
+};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set: function(value) {
-        Application.onUnhandledError = value;
+        Application.onUnhandledError = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.UnhandledError, e);
+        };
     },
     get: function() {
         return Application.onUnhandledError;
@@ -245,10 +227,15 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-Application.onExit = function() {};
+Application.onExit = function() {
+    SFApplication.emitter.emit(Events.Exit, e);
+};
 Object.defineProperty(SFApplication, 'onExit', {
     set: function(value) {
-        Application.onExit = value;
+        Application.onExit = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Exit, e);
+        };
     },
     get: function() {
         return Application.onExit;
@@ -256,10 +243,15 @@ Object.defineProperty(SFApplication, 'onExit', {
     enumerable: true
 });
 
-Application.onReceivedNotification = function() {};
+Application.onReceivedNotification = function() {
+    SFApplication.emitter.emit(Events.ReceivedNotification, e);
+};
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
     set: function(value) {
-        Application.onReceivedNotification = value;
+        Application.onReceivedNotification = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.ReceivedNotification, e);
+        };
     },
     get: function() {
         return Application.onReceivedNotification;
@@ -286,10 +278,15 @@ Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
     enumerable: true
 });
 
-Application.onApplicationCallReceived = function() {};
+Application.onApplicationCallReceived = function() {
+    SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+};
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     set: function(value) {
-        Application.onApplicationCallReceived = value;
+        Application.onApplicationCallReceived = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+        };;
     },
     get: function() {
         return Application.onApplicationCallReceived;
@@ -309,10 +306,15 @@ Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
     enumerable: true
 });
 
-Application.onMaximize = function() {};
+Application.onMaximize = function() {
+    SFApplication.emitter.emit(Events.Maximize, e);
+};
 Object.defineProperty(SFApplication, 'onMaximize', {
     set: function(value) {
-        Application.onMaximize = value;
+        Application.onMaximize = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Maximize, e);
+        };
     },
     get: function() {
         return Application.onMaximize;
@@ -320,10 +322,15 @@ Object.defineProperty(SFApplication, 'onMaximize', {
     enumerable: true
 });
 
-Application.onMinimize = function() {};
+Application.onMinimize = function() {
+    SFApplication.emitter.emit(Events.Minimize, e);
+};
 Object.defineProperty(SFApplication, 'onMinimize', {
     set: function(value) {
-        Application.onMinimize = value;
+        Application.onMinimize = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Minimize, e);
+        };
     },
     get: function() {
         return Application.onMinimize;

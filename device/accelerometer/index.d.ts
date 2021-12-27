@@ -1,5 +1,3 @@
-import { IEventEmitter } from "../../core/eventemitter";
-
 declare enum Events {
   /**
    * Callback to capture accelerometer events.
@@ -35,6 +33,7 @@ declare enum Events {
  */
 declare class Accelerometer {
   static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static once(eventName: Events, callback: (...args: any) => void): () => void;
   static off(eventName: Events, callback?: (...args: any) => void): void;
   static emit(event: Events, detail?: any[]): void;
   /**

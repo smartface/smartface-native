@@ -1,12 +1,9 @@
 const FlexLayout = require('../../ui/flexlayout');
-const Image = require("../../ui/image");
-const Color = require('../../ui/color');
-const System = require('../../device/system');
 const Screen = require('../../device/screen');
 const OrientationType = require('../../device/screen/orientationtype');
 const Invocation = require('../../util').Invocation;
 const HeaderBarItem = require('../../ui/headerbaritem');
-const Application = require("../../application");
+
 const {
     EventEmitterCreator
   } = require("../../core/eventemitter");
@@ -183,16 +180,12 @@ function Page(params) {
         }
     }
 
-    var _onOrientationChange;
-    Object.defineProperty(this, 'onOrientationChange', {
-        get: function() {
-            return _onOrientationChange;
-        },
-        set: function(onOrientationChange) {
-            _onOrientationChange = onOrientationChange.bind(this);
-        },
-        enumerable: true
-    });
+    var onOrientationChange = (params) => {
+        if(typeof this.onOrientationChange === "function"){
+            this.onOrientationChange(params);
+        }
+        this.emitter.emit(Events.OrientationChange, params);
+    };
 
     self.onOrientationChangeHandler = function() {
         if (typeof self.onOrientationChange === "function") {
@@ -213,7 +206,7 @@ function Page(params) {
                 default:
                     tempOrientation = Page.Orientation.PORTRAIT;
             }
-            self.onOrientationChange({
+            onOrientationChange({
                 orientation: tempOrientation
             });
         }
@@ -232,21 +225,12 @@ function Page(params) {
         self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     }
 
-    var _onLoad = function() {}.bind(this);
-    Object.defineProperty(self, 'onLoad', {
-        get: function() {
-            return _onLoad;
-        },
-        set: function(value) {
-            _onLoad = value;
-            self.nativeObject.onLoad = function() {
-                if (_onLoad instanceof Function) {
-                    _onLoad.call(this);
-                }
-            }.bind(this);
-        },
-        enumerable: true
-    });
+    self.nativeObject.onLoad = () => {
+        if (this.onLoad instanceof Function) {
+            this.onLoad();
+        }
+        this.emitter.emit(Events.Load);
+    }
 
     self.checkOrientation = function() {
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
@@ -258,35 +242,14 @@ function Page(params) {
 
     };
 
+    self.ios.onSafeAreaPaddingChange = (state) => {
+        this.emitter.emit(Events.SafeAreaPaddingChange, state)
+    }
+
     const EventFunctions = {
-        [Events.Show]: function() {
-            _onShow = (state) => {
-                this.emitter.emit(Events.Show, state);
-            } 
-        },
-        [Events.Load]: function() {
-            _onLoad = (state) => {
-                this.emitter.emit(Events.Load, state);
-            } 
-        },
         [Events.BackButtonPressed]: function() {
             //Android only
-        },
-        [Events.OrientationChange]: function() {
-            _onOrientationChange = (state) => {
-                this.emitter.emit(Events.OrientationChange, state);
-            } 
-        },
-        [Events.SafeAreaPaddingChange]: function() {
-            self.ios.onSafeAreaPaddingChange = (state) => {
-                this.emitter.emit(Events.SafeAreaPaddingChange, state)
-            }
-        },
-        [Events.Hide]: function() {
-            self.onHide = (state) => {
-                this.emitter.emit(Events.Hide, state);
-            } 
-        },
+        }
     }
     
     EventEmitterCreator(this, EventFunctions);
@@ -326,40 +289,28 @@ function Page(params) {
     });
 
     self.orientation = [UIInterfaceOrientation.portrait]; // Default Portrait
-
-    var _onShow = undefined;
-    Object.defineProperty(self, 'onShow', {
-        get: function() {
-            return _onShow;
-        },
-        set: function(value) {
-            _onShow = value;
-            self.nativeObject.onShow = function() {
-                __SF_UIView.animation(0, 0, function() {
-                    self.layout.nativeObject.endEditing(true);
-                }, {});
-                self.checkOrientation();
-                if (_onShow instanceof Function) {
-                    _onShow.call(this, this.__pendingParameters);
-                    delete this.__pendingParameters;
-                }
-            }.bind(this);
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    self.onHideHandler = function() {
+    self.nativeObject.onShow = () => {
         __SF_UIView.animation(0, 0, function() {
             self.layout.nativeObject.endEditing(true);
         }, {});
-
-        if (typeof self.onHide === "function") {
-            self.onHide();
+        self.checkOrientation();
+        if (typeof this.onShow === 'function') {
+            this.onShow(this.__pendingParameters);
         }
-    }
+        this.emitter.emit(Events.Show, this.__pendingParameters);
+        delete this.__pendingParameters;
+    };
 
-    self.nativeObject.onHide = self.onHideHandler;
+    self.nativeObject.onHide = () => {
+        __SF_UIView.animation(0, 0, () => {
+            this.layout.nativeObject && this.layout.nativeObject.endEditing(true);
+        }, {});
+
+        if (typeof this.onHide === "function") {
+            this.onHide();
+        }
+        this.emitter.emit(Events.Hide);
+    };
 
     function getParentViewController(controller) {
         var parent = Invocation.invokeInstanceMethod(controller, "parentViewController", [], "NSObject");

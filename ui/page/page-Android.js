@@ -114,7 +114,7 @@ function Page(params) {
             }));
         },
         onPause: function () {
-            self.onHide && self.onHide();
+            onHide();
         },
         onCreateOptionsMenu: function (menu) {
             if (!optionsMenu)
@@ -212,52 +212,35 @@ function Page(params) {
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};
-    var onLoadCallback;
-    Object.defineProperty(this, 'onLoad', {
-        get: function () {
-            return onLoadCallback;
-        },
-        set: function (onLoad) {
-            onLoadCallback = onLoad.bind(this);
-        },
-        enumerable: true
-    });
+    var onLoadCallback = () => {
+        if (typeof this.onLoad === "function") {
+            this.onLoad();
+        }
+        this.emitter.emit(Events.Load);
+    } 
 
-    var onShowCallback
-    Object.defineProperty(this, 'onShow', {
-        get: function () {
-            return onShowCallback;
-        },
-        set: function (onShow) {
-            onShowCallback = (function () {
-                if (onShow instanceof Function) {
-                    onShow.call(this, this.__pendingParameters);
-                    delete this.__pendingParameters;
-                }
-            }).bind(this);
-        },
-        enumerable: true
-    });
-    var onHideCallback;
-    Object.defineProperty(this, 'onHide', {
-        get: function () {
-            return onHideCallback;
-        },
-        set: function (onHide) {
-            onHideCallback = onHide.bind(this);
-        },
-        enumerable: true
-    });
-    var _onOrientationChange;
-    Object.defineProperty(this, 'onOrientationChange', {
-        get: function () {
-            return _onOrientationChange;
-        },
-        set: function (onOrientationChange) {
-            _onOrientationChange = onOrientationChange.bind(this);
-        },
-        enumerable: true
-    });
+    var onShowCallback = () => {
+        if (typeof this.onShow === "function") {
+            this.onShow(this.__pendingParameters);
+        }
+        this.emitter.emit(Events.Show, this.__pendingParameters);
+        delete this.__pendingParameters;
+    } 
+
+    var onHide = () => {
+        if(typeof this.onHide === "function"){
+            this.onHide();
+        }
+        this.emitter.emit(Events.Hide);
+    } ;
+
+    var _onOrientationChange = (state) => {
+        if(typeof this.onOrientationChange === 'function'){
+            this.onOrientationChange(state);
+        }
+        this.emitter.emit(Events.OrientationChange, state);
+    };
+
     var _orientation = Page.Orientation.PORTRAIT;
     Object.defineProperty(this, 'orientation', {
         get: function () {
@@ -294,34 +277,14 @@ function Page(params) {
     });
 
     const EventFunctions = {
-        [Events.Show]: function() {
-            onShowCallback = (state) => {
-                this.emitter.emit(Events.Show, state);
-            } 
-        },
-        [Events.Load]: function() {
-            onLoadCallback = (state) => {
-                this.emitter.emit(Events.Load, state);
-            } 
-        },
         [Events.BackButtonPressed]: function() {
             _onBackButtonPressed = (state) => {
                 this.emitter.emit(Events.BackButtonPressed, state);
             } 
         },
-        [Events.OrientationChange]: function() {
-            _onOrientationChange = (state) => {
-                this.emitter.emit(Events.OrientationChange, state);
-            } 
-        },
         [Events.SafeAreaPaddingChange]: function() {
             //iOS only
-        },
-        [Events.Hide]: function() {
-            onHideCallback = (state) => {
-                this.emitter.emit(Events.Hide, state);
-            } 
-        },
+        }
     }
     
     EventEmitterCreator(this, EventFunctions);
