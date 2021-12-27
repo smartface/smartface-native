@@ -381,7 +381,7 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(onMinimize) {
             _onMinimize = (e) => {
-                _onMinimize && _onMinimize(e)
+                onMinimize && onMinimize(e)
                 ApplicationWrapper.emitter.emit(Events.Minimize, e);
             };
         },
