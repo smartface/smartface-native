@@ -91,25 +91,6 @@ declare class LayoutManager extends NativeComponent {
         /**
          * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
          * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.For Android, you can use {@link UI.GridView#snapToAlignment}.
-         *
-         *      @example
-         *      //For Left Span 
-         *      layoutManager.ios.targetContentOffset = function(proposedContentOffset, velocity){
-         *          var positionX = gridView.contentOffset.x / ITEM_LENGHT;
-         *          var decimalPositionX = parseInt(positionX);
-         *          var precisionPositionX = positionX % 1;
-         *
-         *          if (Math.abs(velocity.x) <= 0.5 && precisionPositionX >= 0.5) {
-         *              decimalPositionX++;
-         *          }
-         *          else if (velocity.x > 0) {
-         *              decimalPositionX++;
-         *          }
-         *          
-         *          return { x: decimalPositionX * ITEM_LENGHT, y: 0 };
-         *      };
-         * 
-         * 
          * @param {Object} proposedContentOffset This is the value at which scrolling would naturally stop if no adjustments were made.
          * @param {Number} proposedContentOffset.x
          * @param {Number} proposedContentOffset.y
@@ -117,11 +98,21 @@ declare class LayoutManager extends NativeComponent {
          * @param {Number} velocity.x
          * @param {Number} velocity.y
          * @event targetContentOffset
+         * @deprecated
          * @ios
          * @return {Object} The content offset that you want to use instead. The default implementation of this method returns the value in the proposedContentOffset parameter.
          * @return {Number} return.x
          * @return {Number} return.y
          * @since 3.2.0
+         * @example
+         * ````
+         * import LayoutManager from '@smartface/native/ui/layoutmanager';
+         * 
+         * const layoutManager = new LayoutManager();
+         * layoutManager.on(LayoutManager.Events.TargetContentOffset, (params) => {
+         *  console.info('targetContentOffset', params);
+         * });
+         * ````
          */
         targetContentOffset: (
             proposedContentOffset: Point2D,
@@ -139,6 +130,15 @@ declare class LayoutManager extends NativeComponent {
      * @ios
      * @return {Number} itemLength
      * @since 3.0.2
+     * @example
+     * ````
+     * import LayoutManager from '@smartface/native/ui/layoutmanager';
+     * 
+     * const layoutManager = new LayoutManager();
+     * layoutManager.on(LayoutManager.Events.ItemLength, (params) => {
+     *  console.info('onItemLength', params);
+     * });
+     * ````
      */
     onItemLength: (length: number) => number;
     /**
@@ -153,6 +153,15 @@ declare class LayoutManager extends NativeComponent {
      * @ios
      * @return {Number} height/width
      * @since 4.0.1
+     * @example
+     * ````
+     * import LayoutManager from '@smartface/native/ui/layoutmanager';
+     * 
+     * const layoutManager = new LayoutManager();
+     * layoutManager.on(LayoutManager.Events.FullSpan, (params) => {
+     *  console.info('onFullSpan', params);
+     * });
+     * ````
      */
     onFullSpan: (type: number) => number;
 

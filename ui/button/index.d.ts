@@ -27,8 +27,30 @@ declare class Button extends View<ButtonEvents> {
   backgroundImage: Image;
   backgroundColor: Color;
   flexGrow: number;
+
+  /**
+   * @deprecated
+   * @example
+   * ````
+   * import Button from '@smartface/native/ui/button';
+   * 
+   * this.button1.on(Button.Events.Press, () => {
+   *  console.info('Button pressed');
+   * });
+   * ````
+   */
   onPress: () => void;
+
+  /**
+   * @deprecated
+   * @example
+   * ````
+   * import Button from '@smartface/native/ui/button';
+   * 
+   * this.button1.on(Button.Events.LongPress, () => {
+   *  console.info('Button long pressed');
+   * });
+   * ````
+   */
   onLongPress: () => void;
 }
-
-export = Button;

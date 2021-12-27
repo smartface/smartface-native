@@ -85,6 +85,16 @@ declare class TextBox extends View<TextBoxEvents> {
 	 * @android
 	 * @ios
 	 * @since 2.0.8
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import TextBox from '@smartface/native/ui/textbox';
+	 * 
+	 * const textBox = new TextBox();
+	 * textBox.on(TextBox.Events.EditBegins, (params) => {
+	 * 	console.info('onEditBegins', params);
+	 * });
+	 * ````
 	 */
 	cursorPosition: {
 		start: number;
@@ -279,12 +289,6 @@ declare class TextBox extends View<TextBoxEvents> {
 	removeFocus(): void;
 	/**
 	 * This event is called when user inserts or removes a character from TextBox.
-	 *
-	 *     @example
-	 *     myTextBox.onTextChanged: function(e) {
-	 *         console.log(e.insertedText);
-	 *     };
-	 *
 	 * @param {Object} e Event arguments.
 	 * @param {String} e.insertedText The text that inserted into TextBox.
 	 * @param {Number} e.location Index of inserted text.
@@ -292,6 +296,16 @@ declare class TextBox extends View<TextBoxEvents> {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import TextBox from '@smartface/native/ui/textbox';
+	 * 
+	 * const textBox = new TextBox();
+	 * textBox.on(TextBox.Events.TextChanged, (params) => {
+	 * 	console.info('onTextChanged', params);
+	 * });
+	 * ````
 	 */
 	onTextChanged: (e?: { insertedText: string; location: number }) => void;
 	/**
@@ -301,6 +315,16 @@ declare class TextBox extends View<TextBoxEvents> {
 	 * @event onClearButtonPress
 	 * @ios
 	 * @since 4.0.2
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import TextBox from '@smartface/native/ui/textbox';
+	 * 
+	 * const textBox = new TextBox();
+	 * textBox.on(TextBox.Events.ClearButtonPress, () => {
+	 * 	console.info('onClearButtonPress');
+	 * });
+	 * ````
 	 */
 	onClearButtonPress: () => void;
 	/**
@@ -311,6 +335,16 @@ declare class TextBox extends View<TextBoxEvents> {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import TextBox from '@smartface/native/ui/textbox';
+	 * 
+	 * const textBox = new TextBox();
+	 * textBox.on(TextBox.Events.EditEnds, () => {
+	 * 	console.info('onEditEnds');
+	 * });
+	 * ````
 	 */
 	onEditEnds: () => void;
 	/**
@@ -322,6 +356,16 @@ declare class TextBox extends View<TextBoxEvents> {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import TextBox from '@smartface/native/ui/textbox';
+	 * 
+	 * const textBox = new TextBox();
+	 * textBox.on(TextBox.Events.ActionButtonPress, (params) => {
+	 * 	console.info('onActionButtonPress', params);
+	 * });
+	 * ````
 	 */
 	onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 }

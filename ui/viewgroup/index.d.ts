@@ -119,6 +119,16 @@ declare class ViewGroup<TEvents = ViewGroupEvents> extends View<TEvents> {
      * @android
      * @ios
      * @since 1.1.8
+     * @deprecated
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewAdded, (params) => {
+     *  console.info('onViewAdded', params);
+     * });
+     * ````
      */
     onViewAdded: (view: View<any>) => void;
     /**
@@ -129,6 +139,15 @@ declare class ViewGroup<TEvents = ViewGroupEvents> extends View<TEvents> {
      * @android
      * @ios
      * @since 1.1.8
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewRemoved, (params) => {
+     *  console.info('onViewRemoved', params);
+     * });
+     * ````
      */
     onViewRemoved: (view: View<any>) => void;
 }

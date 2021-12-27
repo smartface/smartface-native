@@ -108,7 +108,6 @@ declare enum Events {
 	 * @android
 	 * @ios
 	 * @static
-	 * @deprecated
 	 * @since 4.3.6
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
@@ -535,6 +534,14 @@ declare class Application {
 		 * @static
 		 * @deprecated
 		 * @since 3.2.0
+		 * @example
+		 * ````
+		 * import Application from '@smartface/native/application';
+		 * 
+		 * Application.on(Application.Events.BackButtonPressed, () => {
+		 * 	console.info('onBackButtonPressed');
+		 * });
+		 * ````
 		 */
 		onBackButtonPressed: () => void;
 		/**
@@ -939,6 +946,14 @@ declare class Application {
 	 * @ios
 	 * @static
 	 * @since 1.2
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.UnhandledError, (error) => {
+	 * 	console.info('onUnhandledError', error);
+	 * });
+	 * ````
 	 */
 	static onUnhandledError: (error: UnhandledError) => void;
 	/**
@@ -951,6 +966,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Exit, () => {
+	 * 	console.info('onExit');
+	 * });
+	 * ````
 	 */
 	static onExit(): void;
 	/**
@@ -966,6 +989,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.ReceivedNotification, (params) => {
+	 * 	console.info('onReceivedNotification', params);
+	 * });
+	 * ````
 	 */
 	static onReceivedNotification: (data: {
 		remote: { [key: string]: any };
@@ -988,13 +1019,20 @@ declare class Application {
 	 * @param {Number} e.result This parameter is available only for Android and when eventType is
 	 * "callback". Returns Android Activity result code.
 	 * @see https://developer.android.com/training/basics/intents/result.html
-	 *
 	 * @android
 	 * @ios
 	 * @static
 	 * @deprecated
 	 * @since 1.1.13
 	 * @see https://developer.android.com/training/sharing/receive.html
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.ApplicationCallReceived, (params) => {
+	 * 	console.info('onApplicationCallReceived', params);
+	 * });
+	 * ````
 	 */
 	static onApplicationCallReceived: (e: {
 		data: { [key: string]: any };
@@ -1015,6 +1053,14 @@ declare class Application {
 	 * @since 4.3.6
 	 * @see https://developer.android.com/guide/topics/ui/shortcuts
 	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.AppShortcutReceived, (params) => {
+	 * 	console.info('onAppShortcutReceived', params);
+	 * });
+	 * ````
 	 */
 	static onAppShortcutReceived: (e: {
 		data: { [key: string]: any };
@@ -1030,6 +1076,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Maximize, () => {
+	 * 	console.info('onMaximize');
+	 * });
+	 * ````
 	 */
 	static onMaximize: () => void;
 	/**
@@ -1043,6 +1097,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Minimize, () => {
+	 * 	console.info('onMinimize');
+	 * });
+	 * ````
 	 */
 	static onMinimize: () => void;
 	/**

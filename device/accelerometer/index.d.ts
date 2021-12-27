@@ -66,6 +66,14 @@ declare class Accelerometer {
    * @android
    * @ios
    * @deprecated
+   * @example
+   * ````
+   * import AcceleroMeter from '@smartface/native/device/accelerometer';
+   * 
+   * AcceleroMeter.on(AcceleroMeter.Events.Accelerate, (params) => {
+   *  console.info('onAccelerate', params);
+   * });
+   * ````
    */
   static onAccelerate: (e: {x:number, y: number, z: number}) => void;
 

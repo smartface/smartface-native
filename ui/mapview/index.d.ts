@@ -6,11 +6,11 @@ import Pin from "./pin";
 
 declare enum MapViewEvents {
 	CameraMoveEnded = "cameraMoveEnded",
-  CameraMoveStarted = "cameraMoveStarted",
-  ClusterPress = "clusterPress",
-  Create = "create",
-  LongPress = "longPress",
-  Press = "press"
+	CameraMoveStarted = "cameraMoveStarted",
+	ClusterPress = "clusterPress",
+	Create = "create",
+	LongPress = "longPress",
+	Press = "press"
 }
 
 /**
@@ -138,10 +138,20 @@ declare class MapView extends View<MapViewEvents> {
 	 * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
 	 *
 	 * @event onClusterPress
+	 * @deprecated
 	 * @param {Array<UI.MapView.Pin>} pins
 	 * @android
 	 * @ios
 	 * @since 3.0.1
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.ClusterPress, (params) => {
+	 * 	console.info('onClusterPress', params);
+	 * });
+	 * ````
 	 */
 	onClusterPress: (pins: Pin[]) => void;
 	/**
@@ -257,47 +267,47 @@ declare class MapView extends View<MapViewEvents> {
 	readonly centerLocation: {
 		latitude: number;
 		longitude: number;
-    };
-    
-    /**
-     * Contains the four points defining the four-sided polygon that is visible in a map's camera. This polygon can be a trapezoid instead of a rectangle, because a camera can have tilt. If the camera is directly over the center of the camera, the shape is rectangular, but if the camera is tilted, the shape will appear to be a trapezoid whose smallest side is closest to the point of view.
-     *
-     * @property {Object} visibleRegion
-     * @property {Object} visibleRegion.topLeft that defines the top left corner of the camera.
-     * @property {Number} visibleRegion.topLeft.latitude
-     * @property {Number} visibleRegion.topLeft.longitude
-     * @property {Object} visibleRegion.topRight that defines the top right corner of the camera.
-     * @property {Number} visibleRegion.topRight.latitude
-     * @property {Number} visibleRegion.topRight.longitude
-     * @property {Object} visibleRegion.bottomLeft that defines the bottom left corner of the camera.
-     * @property {Number} visibleRegion.bottomLeft.latitude
-     * @property {Number} visibleRegion.bottomLeft.longitude
-     * @property {Object} visibleRegion.bottomRight that defines the bottom right corner of the camera.
-     * @property {Number} visibleRegion.bottomRight.latitude
-     * @property {Number} visibleRegion.bottomRight.longitude
-     * @android
-     * @ios
-     * @readonly
-     * @since 4.3.2
-     */
-    visibleRegion: { 
-        topLeft: {
-			latitude: number;
-			longitude: number;
-		}, 
-        topRight: {
+	};
+
+	/**
+	 * Contains the four points defining the four-sided polygon that is visible in a map's camera. This polygon can be a trapezoid instead of a rectangle, because a camera can have tilt. If the camera is directly over the center of the camera, the shape is rectangular, but if the camera is tilted, the shape will appear to be a trapezoid whose smallest side is closest to the point of view.
+	 *
+	 * @property {Object} visibleRegion
+	 * @property {Object} visibleRegion.topLeft that defines the top left corner of the camera.
+	 * @property {Number} visibleRegion.topLeft.latitude
+	 * @property {Number} visibleRegion.topLeft.longitude
+	 * @property {Object} visibleRegion.topRight that defines the top right corner of the camera.
+	 * @property {Number} visibleRegion.topRight.latitude
+	 * @property {Number} visibleRegion.topRight.longitude
+	 * @property {Object} visibleRegion.bottomLeft that defines the bottom left corner of the camera.
+	 * @property {Number} visibleRegion.bottomLeft.latitude
+	 * @property {Number} visibleRegion.bottomLeft.longitude
+	 * @property {Object} visibleRegion.bottomRight that defines the bottom right corner of the camera.
+	 * @property {Number} visibleRegion.bottomRight.latitude
+	 * @property {Number} visibleRegion.bottomRight.longitude
+	 * @android
+	 * @ios
+	 * @readonly
+	 * @since 4.3.2
+	 */
+	visibleRegion: {
+		topLeft: {
 			latitude: number;
 			longitude: number;
 		},
-        bottomLeft: {
+		topRight: {
 			latitude: number;
 			longitude: number;
 		},
-        bottomRight: {
+		bottomLeft: {
+			latitude: number;
+			longitude: number;
+		},
+		bottomRight: {
 			latitude: number;
 			longitude: number;
 		}
-    };
+	};
 	/**
 	 * Get visible pins on MapView.
 	 *
@@ -341,30 +351,60 @@ declare class MapView extends View<MapViewEvents> {
 	 * Triggered when pressed on the map and sends the location pressed on the map.
 	 *
 	 * @event onPress
+	 * @deprecated
 	 * @param {Object} location
 	 * @param {Number} location.latitude
 	 * @param {Number} location.longitude
 	 * @android
 	 * @ios
 	 * @since 1.1.3
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.Press, (params) => {
+	 * 	console.info('onPress', params);
+	 * });
+	 * ````
 	 */
 	onPress: (location: { latitude: number; longitude: number }) => void;
 	/**
 	 * Gets/sets callback for dragging start.
 	 *
 	 * @event onCameraMoveStarted
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 2.0.9
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.CameraMoveStarted, () => {
+	 * 	console.info('onCameraMoveStarted');
+	 * });
+	 * ````
 	 */
 	onCameraMoveStarted: () => void;
 	/**
 	 * Gets/sets callback for dragging end.
 	 *
 	 * @event onCameraMoveEnded
+	 * @deprecated
 	 * @android
 	 * @ios
 	 * @since 2.0.9
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.CameraMoveEnded, () => {
+	 * 	console.info('onCameraMoveEnded');
+	 * });
+	 * ````
 	 */
 	onCameraMoveEnded: () => void;
 	/**
@@ -378,6 +418,15 @@ declare class MapView extends View<MapViewEvents> {
 	 * @android
 	 * @ios
 	 * @since 1.1.3
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.LongPress, (params) => {
+	 * 	console.info('onLongPress', params);
+	 * });
+	 * ````
 	 */
 	onLongPress: (location: {
 		latitude: number;
@@ -391,6 +440,15 @@ declare class MapView extends View<MapViewEvents> {
 	 * @event onCreate
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import MapView from '@smartface/native/ui/mapview';
+	 * 
+	 * const mapView = new MapView();
+	 * mapView.on(MapView.Events.Create, () => {
+	 * 	console.info('onCreate');
+	 * });
+	 * ````
 	 */
 	onCreate: () => void;
 	/**
@@ -407,11 +465,11 @@ declare class MapView extends View<MapViewEvents> {
 
 declare namespace MapView {
 	const Events: typeof MapViewEvents & typeof View.Events
-  type Events = typeof Events
-	class Pin extends PinKlass { 
+	type Events = typeof Events
+	class Pin extends PinKlass {
 		constructor(params?: { location?: { latitude: number, longitude: number }, title?: string })
 	}
-	
+
 	/**
 	 * @enum UI.MapView.Type
 	 * @static

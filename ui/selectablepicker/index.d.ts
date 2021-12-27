@@ -74,6 +74,15 @@ declare class SelectablePicker extends NativeComponent {
      * @deprecated
      * @android
      * @since 4.0.5
+     * @example
+     * ````
+     * import SelectablePicker from '@smartface/native/ui/selectablepicker';
+     * 
+     * const selectablePicker = new SelectablePicker();
+     * selectablePicker.on(SelectablePicker.Events.Selected, (params) => {
+     *  console.info('onSelected', params);
+     * });
+     * ````
      */
     onSelected: (index: boolean, selected: boolean) => void;
     /**

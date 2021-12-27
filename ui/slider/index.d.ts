@@ -163,6 +163,16 @@ declare class Slider extends View {
  * @android
  * @ios
  * @since 0.1
+ * @deprecated
+ * @example
+ * ````
+ * import Slider from '@smartface/native/ui/slider';
+ * 
+ * const slider = new Slider();
+ * slider.on(Slider.Events.ValueChange, () => {
+ *  console.info('valueChange');
+ * });
+ * ````
  */
   onValueChange: () => void;
 }
