@@ -225,7 +225,13 @@ function Page(params) {
         }
         this.emitter.emit(Events.Show, this.__pendingParameters);
         delete this.__pendingParameters;
-    } 
+    }
+
+    /**
+     * This is a workaround solution for swipeView-Android. The source is:
+     * _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
+     */
+    this.__onShowCallback = onShowCallback;
 
     var onHide = () => {
         if(typeof this.onHide === "function"){
