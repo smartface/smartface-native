@@ -7,6 +7,10 @@ export type MapOptions = {
   mapType?: keyof typeof MapTypes | MapTypes;
   name?: string;
   location: Location;
+  /**
+   * @android
+   */
+  chooserTitle?: string;
 };
 
 export type NavigationOptions = {
@@ -16,7 +20,11 @@ export type NavigationOptions = {
   mapType?: keyof typeof MapTypes | MapTypes;
   name?: string;
   location: Location;
-  transportType: TransportTypes
+  transportType: TransportTypes;
+  /**
+   * @android
+   */
+  chooserTitle?: string;
 }
 
 /**
