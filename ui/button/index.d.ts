@@ -54,3 +54,5 @@ declare class Button extends View<ButtonEvents> {
    */
   onLongPress: () => void;
 }
+
+export = Button;

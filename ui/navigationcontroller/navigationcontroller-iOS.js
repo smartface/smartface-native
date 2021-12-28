@@ -444,6 +444,12 @@ function HeaderBar(params) {
                 // General use
                 self.ios.backIndicatorTransitionMaskImage = value;
             }
+            else {
+                /**
+                 * Setting the image property as false in order to bring back the default.
+                 */
+                self.ios.backIndicatorTransitionMaskImage = false;
+            }
         },
         enumerable: true,
         configurable: true
