@@ -4,7 +4,7 @@ const openMaps = (options) => {
   return new Promise((resolve, reject) => {
     const { latitude, longitude } = options.location;
     const locationName = options.name || '';
-    const chooserTitle = options.chooserTitle || '';
+    const chooserTitle = options.chooserTitle || 'Choose Map';
     Linking.openURL({
       uriScheme: `geo:${latitude},${longitude}?q=${encodeURIComponent(locationName)}`,
       chooserTitle,
