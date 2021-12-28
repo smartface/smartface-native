@@ -66,6 +66,15 @@ declare class MenuItem implements IEventEmitter<Events> {
  * @android
  * @deprecated
  * @ios
+ * @example
+ * ````
+ * import MenuItem from '@smartface/native/ui/menuitem';
+ * 
+ * const menuItem = new MenuItem();
+ * menuItem.on(MenuItem.Events.Selected, () => {
+ * 	console.info('onSelected');
+ * });
+ * ````
  */
 	onSelected: () => void;
 }

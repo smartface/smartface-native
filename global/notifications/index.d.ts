@@ -125,6 +125,14 @@ declare class Notifications {
 	 * @android
 	 * @static
 	 * @since 4.0.3
+	 * @example
+	 * ````
+	 * import Notifications from '@smartface/native/global/natifications';
+	 * 
+	 * Notifications.on(Notifications.Events.NotificationReceive, (params) => {
+	 * 	console.info('onNotificationReceive', params);
+	 * });
+	 * ````
 	 */
 	static onNotificationReceive(
 		data: any
@@ -139,6 +147,14 @@ declare class Notifications {
 	 * @android
 	 * @static
 	 * @since 4.0.3
+	 * @example
+	 * ````
+	 * import Notifications from '@smartface/native/global/natifications';
+	 * 
+	 * Notifications.on(Notifications.Events.NoficationClick, (params) => {
+	 * 	console.info('onNotificationClick', params);
+	 * });
+	 * ````
 	 */
 	static onNotificationClick: (data: any) => void;
 	/**

@@ -82,6 +82,15 @@ declare class TimePicker extends NativeComponent implements IEventEmitter<Events
  * @event onTimeSelected
  * @android
  * @ios
+ * @example
+ * ````
+ * import TimePicker from '@smartface/native/ui/timepicker';
+ * 
+ * const timePicker = new TimePicker();
+ * timePicker.on(TimePicker.Events.Selected, (params) => {
+ *  console.info('onTimeSelected', params);
+ * });
+ * ````
  */
   onTimeSelected: (e: {
     hour: number,

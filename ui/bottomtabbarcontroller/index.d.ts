@@ -29,13 +29,13 @@ declare enum Events {
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
 declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
-	constructor(params?: any);
+    constructor(params?: any);
     on(eventName: Events, callback: (...args: any) => void): () => void;
     once(eventName: Events, callback: (...args: any) => void): () => void;
     off(eventName: Events, callback?: (...args: any) => void): void;
     emit(event: Events, detail?: any[]): void;
-	getCurrentController: () => NavigationController | Page;
-	shouldSelectViewController: (index: any) => boolean;
+    getCurrentController: () => NavigationController | Page;
+    shouldSelectViewController: (index: any) => boolean;
     didSelectViewController: (index: any) => void;
     /**
      * Gets/sets child controllers of BottomTabbarController instance.
@@ -70,25 +70,45 @@ declare class BottomTabBarController extends NativeComponent implements IEventEm
      * Return true if you want the item to be displayed as the selected index.
      *
      * @event shouldSelectByIndex
+     * @deprecated
      * @param params
      * @param Number params.index
      * @return Boolean
      * @android
      * @ios
      * @since 3.2.0
+     * @example
+     * ````
+     * import BottomTabbarController from '@smartface/native/ui/bottomtabbarcontroller';
+     * 
+     * const bottomTabbarController = new BottomTabbarController();
+     * bottomTabbarController.on(BottomTabBarController.Events.ShouldSelectByIndex, (params) => {
+     *  console.info('shouldSelectByIndex', params);
+     * });
+     * ````
      */
     shouldSelectByIndex(params: { index: number }): boolean;
     /**
      *  Called when an item in the bottom tabbar item is selected.
      *
      * @event didSelectByIndex
+     * @deprecated
      * @param params
      * @param Number params.index
      * @android
      * @ios
      * @since 3.2.0
+     * @example
+     * ````
+     * import BottomTabBarController from "./bottomtabbarcontroller";
+     * 
+     * const bottomTabBarController = new BottomTabBarController();
+     * bottomTabBarController.on(BottomTabBarController.Events.SelectByIndex, (params) => {
+     *  console.info('selectByIndex', params);
+     * });
+     * ````
      */
-	didSelectByIndex(params: { index: number }): void;
+    didSelectByIndex(params: { index: number }): void;
 
     static Events: typeof Events;
 }

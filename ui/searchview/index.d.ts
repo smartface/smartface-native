@@ -15,7 +15,7 @@ declare enum SearchViewEvents {
 	 * @event onCancelButtonClicked
 	 * @since 0.1
 	 */
-  CancelButtonClicked = "cancelButtonClicked",
+	CancelButtonClicked = "cancelButtonClicked",
 	/**
 	 * This event is called when user focus on the search view by selecting it.
 	 *
@@ -24,7 +24,7 @@ declare enum SearchViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  SearchBegin = "searchBegin",
+	SearchBegin = "searchBegin",
 	/**
 	 * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
 	 *
@@ -33,7 +33,7 @@ declare enum SearchViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  SearchButtonClicked = "searchButtonClicked",
+	SearchButtonClicked = "searchButtonClicked",
 	/**
 	 * This event is called when searchview loses focus.
 	 *
@@ -42,7 +42,7 @@ declare enum SearchViewEvents {
 	 * @ios
 	 * @since 0.1
 	 */
-  SearchEnd = "searchEnd",
+	SearchEnd = "searchEnd",
 	/**
 	 * This event is called when user changes the search text.
 	 *
@@ -52,7 +52,7 @@ declare enum SearchViewEvents {
 	 * @event onTextChanged
 	 * @since 0.1
 	 */
-  TextChanged = "textChanged"
+	TextChanged = "textChanged"
 }
 
 /**
@@ -262,8 +262,17 @@ declare interface SearchView extends View {
 		 * @deprecated
 		 * @event onCancelButtonClicked
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import SearchView from '@smartface/native/ui/searchview';
+		 * 
+		 * const searchView = new SearchView();
+		 * searchView.on(SearchView.Events.CancelButtonClicked, () => {
+		 * 	console.info('onCancelButtonClicked');
+		 * });
+		 * ````
 		 */
-		 onCancelButtonClicked: () => void;
+		onCancelButtonClicked: () => void;
 		/**
 		 * Gets/sets the color of the loading indicator.
 		 *
@@ -371,6 +380,15 @@ declare interface SearchView extends View {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SearchView from '@smartface/native/ui/searchview';
+	 * 
+	 * const searchView = new SearchView();
+	 * searchView.on(SearchView.Events.SearchBegin, () => {
+	 * 	console.info('onSearchBegin');
+	 * });
+	 * ````
 	 */
 	onSearchBegin: () => void;
 	/**
@@ -381,6 +399,15 @@ declare interface SearchView extends View {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SearchView from '@smartface/native/ui/searchview';
+	 * 
+	 * const searchView = new SearchView();
+	 * searchView.on(SearchView.Events.SearchEnd, () => {
+	 * 	console.info('onSearchEnd');
+	 * });
+	 * ````
 	 */
 	onSearchEnd: () => void;
 
@@ -393,6 +420,15 @@ declare interface SearchView extends View {
 	 * @deprecated
 	 * @event onTextChanged
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SearchView from '@smartface/native/ui/searchview';
+	 * 
+	 * const searchView = new SearchView();
+	 * searchView.on(SearchView.Events.TextChanged, (params) => {
+	 * 	console.info('onTextChanged', params);
+	 * });
+	 * ````
 	 */
 	onTextChanged: (searchText: string) => void;
 	/**
@@ -403,6 +439,15 @@ declare interface SearchView extends View {
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import SearchView from '@smartface/native/ui/searchview';
+	 * 
+	 * const searchView = new SearchView();
+	 * searchView.on(SearchView.Events.SearchButtonClicked, (params) => {
+	 * 	console.info('onSearchButtonClicked');
+	 * });
+	 * ````
 	 */
 	onSearchButtonClicked: () => void;
 }
@@ -450,7 +495,7 @@ declare namespace SearchView {
 		}
 	}
 
-  const Events: typeof SearchViewEvents & typeof View.Events
-  type Events = typeof Events
+	const Events: typeof SearchViewEvents & typeof View.Events
+	type Events = typeof Events
 }
 export = SearchView;

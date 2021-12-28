@@ -172,6 +172,15 @@ declare class Page
 	 *
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Load, () => {
+	 * 	console.info('onLoad');
+	 * });
+	 * ````
 	 */
 	public onLoad(): void;
 	/**
@@ -238,6 +247,15 @@ declare class Page
 	 * @param {Object} parameters Parameters passed from Router.go function
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Show, () => {
+	 * 	console.info('onShow');
+	 * });
+	 * ````
 	 */
 	public onShow(params?: any): void;
 	/**
@@ -247,6 +265,15 @@ declare class Page
 	 * @event onHide
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Hide, () => {
+	 * 	console.info('onHide');
+	 * });
+	 * ````
 	 */
 	public onHide(): void;
 	public readonly android: {
@@ -257,6 +284,15 @@ declare class Page
 		 * @deprecated
 		 * @android
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import Page from '@smartface/native/ui/page';
+		 * 
+		 * const page = new Page();
+		 * page.on(Page.Events.BackButtonPressed, () => {
+		 * 	console.info('backButtonPressed);
+		 * });
+		 * ````
 		 */
 		onBackButtonPressed?(): void;
 		transitionViewsCallback?: {
@@ -281,6 +317,15 @@ declare class Page
 		 * @param {Object} paddingObject Includes top,left,right and bottom padding values.
 		 * @ios
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import Page from '@smartface/native/ui/page';
+		 * 
+		 * const page = new Page();
+		 * page.on(Page.Events.SafeAreaPaddingChange, () => {
+		 * 	console.info('onSafeAreaPaddingChange');
+		 * });
+		 * ````
 		 */
 		onSafeAreaPaddingChange?(padding: {
 			left: number;
@@ -402,6 +447,15 @@ declare class Page
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.OrientationChange, (params) => {
+	 * 	console.info('onOrientationChange', params);
+	 * });
+	 * ````
 	 */
 	public onOrientationChange(e: { orientation: Page.Orientation }): void;
 

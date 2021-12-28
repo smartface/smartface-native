@@ -90,6 +90,15 @@ declare class SwipeView extends View {
 	 * @android
 	 * @ios
 	 * @since 1.1.10
+	 * @example
+	 * ````
+	 * import SwipeView from '@smartface/native/ui/swipeview';
+	 * 
+	 * const swipeView = new SwipeView();
+	 * swipeView.on(SwipeView.Events.PageSelected, (params) => {
+	 * 	console.info('onPageSelected', params);
+	 * });
+	 * ````
 	 */
 	onPageSelected: (index: number, page: Page) => void;
 	/**
@@ -103,6 +112,15 @@ declare class SwipeView extends View {
 	 * @android
 	 * @ios
 	 * @since 2.0.9
+	 * @example
+	 * ````
+	 * import SwipeView from '@smartface/native/ui/swipeview';
+	 * 
+	 * const swipeView = new SwipeView();
+	 * swipeView.on(SwipeView.Events.PageScrolled, (params) => {
+	 * 	console.info('onPageScrolled', params);
+	 * });
+	 * ````
 	 */
 	onPageScrolled: (index: number, offset: number) => void;
 	/**
@@ -114,6 +132,15 @@ declare class SwipeView extends View {
 	 * @android
 	 * @ios
 	 * @since 1.1.10
+	 * @example
+	 * ````
+	 * import SwipeView from '@smartface/native/ui/swipeview';
+	 * 
+	 * const swipeView = new SwipeView();
+	 * swipeView.on(SwipeView.Events.StateChanged, (params) => {
+	 * 	console.info('onStateChanged', params);
+	 * });
+	 * ````
 	 */
 	onStateChanged: (state: SwipeView.State) => void;
 	/**

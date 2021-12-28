@@ -1,5 +1,20 @@
 import { IEventEmitter } from "../../core/eventemitter";
 
+declare enum Events {
+    /**
+     * Triggers when device call state changes.
+     *
+     * @since 4.3.1
+     * @event onCallStateChanged
+     * @param {Object} params
+     * @param {Device.CallDetection.State} state
+     * @param {String} incomingNumber Android only parameter
+     * @android
+     * @ios
+     */
+    CallStateChanged = "callStateChanged"
+}
+
 /**
  * @class Device.CallDetection
  * @since 4.3.1
@@ -16,12 +31,12 @@ import { IEventEmitter } from "../../core/eventemitter";
  *     };
  *
  */
+
 declare class CallDetection implements IEventEmitter<typeof CallDetection.Events> {
     on(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
     once(eventName: typeof CallDetection.Events, callback: (...args: any) => void): () => void;
     off(eventName: typeof CallDetection.Events, callback?: (...args: any) => void): void;
     emit(event: typeof CallDetection.Events, detail?: any[]): void;
-    
     /**
      * Triggers when device call state changes.
      *
@@ -33,8 +48,18 @@ declare class CallDetection implements IEventEmitter<typeof CallDetection.Events
      * @android
      * @ios
      * @deprecated
+     * @example
+     * ````
+     * import CallDetection from '@smartface/native/device/calldetection';
+     * 
+     * const callDetection1 = new CallDetection();
+     * callDetection1.on(CallDetection.Events.CallStateChanged, (params) => {
+     *  console.info('onCallStateChanged', params);
+     * });
+     * ````
      */
     onCallStateChanged: (params: { state: CallDetection.State; incomingNumber: string }) => void;
+    static Events: typeof Events;
 }
 
 declare namespace CallDetection {
@@ -113,21 +138,6 @@ declare namespace CallDetection {
          * @since 4.1.3
          */
         CONNECTED = "Connected"
-    }
-
-    enum Events {
-        /**
-         * Triggers when device call state changes.
-         *
-         * @since 4.3.1
-         * @event onCallStateChanged
-         * @param {Object} params
-         * @param {Device.CallDetection.State} state
-         * @param {String} incomingNumber Android only parameter
-         * @android
-         * @ios
-         */
-        CallStateChanged = "callStateChanged"
     }
 }
 
