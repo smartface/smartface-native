@@ -1,35 +1,14 @@
 import { Location, MapTypes, TransportTypes } from "../linking/shared/map";
-
-export type MapOptions = {
-  /**
-   * @iOS
-   */
-  mapType?: keyof typeof MapTypes | MapTypes;
-  name?: string;
-  location: Location;
-  /**
-   * @android
-   */
-  chooserTitle?: string;
-};
-
-export type NavigationOptions = {
-  /**
-   * @iOS
-   */
-  mapType?: keyof typeof MapTypes | MapTypes;
-  name?: string;
-  location: Location;
-  transportType: TransportTypes;
-  /**
-   * @android
-   */
-  chooserTitle?: string;
-};
-
 /**
  * It sets the starting point to your current location, if the permission is granted.
  * @function
+ * @param {object} options is the config parameter for openMaps function.
+ * @param {MapTypes} options.mapType is an iOS only parameter to choose the map's type. (e.g. "GOOGLE_MAPS").
+ * @param {string} [options.name]
+ * @param {Location} options.location
+ * @param {string} [options.chooserTitle] is Android only property.
+ * @async
+ * @returns {Promise<String>}
  * @example
  * ````
  * import { openMaps } from "@smartface/native/application/maps";
@@ -44,11 +23,19 @@ export type NavigationOptions = {
  * });
  * ````
  */
-export declare function openMaps(options: MapOptions): Promise<String>;
+function openMaps(options);
 
 /**
  * It sets the starting point to your current location, if the permission is granted.
  * @function
+ * @param {object} options is the config parameter for openNavigation function.
+ * @param {MapTypes} options.mapType is an iOS only parameter to choose the map's type. (e.g. "GOOGLE_MAPS").
+ * @param {string} [options.name]
+ * @param {Location} options.location
+ * @param {TransportTypes} options.transportType
+ * @param {string} [options.chooserTitle] is Android only property.
+ * @async
+ * @returns {Promise<String>}
  * @example
  * ````
  * import { openNavigation } from "@smartface/native/application/maps";
@@ -65,6 +52,12 @@ export declare function openMaps(options: MapOptions): Promise<String>;
  * });
  * ````
  */
-export declare function openNavigation(
-  options: NavigationOptions
-): Promise<String>;
+function openNavigation(
+  options
+);
+
+
+module.exports = {
+  openMaps,
+  openNavigation
+}

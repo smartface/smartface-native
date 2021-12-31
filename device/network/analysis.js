@@ -1,21 +1,21 @@
 /**
  * @class Device.Network
  * @since 0.1
- * 
+ *
  * Device.Network provides several information about the network connections and adaptors on the device.
- * 
+ *
  *     @example
  *     const Network = require('@smartface/native/device/network');
  *     console.log("Device.Network.IMSI: "                + Network.IMSI);
- *     console.log("Device.Network.SMSEnabled: "          + Network.SMSEnabled); 
- *     console.log("Device.Network.bluetoothMacAddress: " + Network.bluetoothMacAddress); 
- *     console.log("Device.Network.carrier: "             + Network.carrier); 
- *     console.log("Device.Network.connectionType: "      + Network.connectionType); 
- *     console.log("Device.Network.roamingEnabled: "      + Network.roamingEnabled); 
- *     console.log("Device.Network.connectionIP: "        + Network.connectionIP); 
+ *     console.log("Device.Network.SMSEnabled: "          + Network.SMSEnabled);
+ *     console.log("Device.Network.bluetoothMacAddress: " + Network.bluetoothMacAddress);
+ *     console.log("Device.Network.carrier: "             + Network.carrier);
+ *     console.log("Device.Network.connectionType: "      + Network.connectionType);
+ *     console.log("Device.Network.roamingEnabled: "      + Network.roamingEnabled);
+ *     console.log("Device.Network.connectionIP: "        + Network.connectionIP);
  *     console.log("Device.Network.wirelessMacAddress: "  + Network.wirelessMacAddress);
- * 
- * 
+ *
+ *
  */
 const Network = {};
 
@@ -103,36 +103,53 @@ Network.connectionIP;
  * @class Device.Network.createNotifier
  * @since 3.0.1
  *
- * Provides an event to notify in case of connection is changed. In Android, notifier fires the subscribed event with cached value at the first launch. That enables to not miss any changes. Such as, changed 
+ * Provides an event to notify in case of connection is changed. In Android, notifier fires the subscribed event with cached value at the first launch. That enables to not miss any changes. Such as, changed
  * value could be missed when application is frozen. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
- * 
+ *
  *     @example
  *     const Network = require("@smartface/native/device/network");
  *     var notifier = new Network.createNotifier();
- * 
+ *
  *     notifier.subscribe(function(connectionType) {
  *      console.log("ConnectionType is " + connectionType);
  *     });
  *
  */
-Network.createNotifier = function() {};
+Network.createNotifier = function () {};
 
- 
-Network.createNotifier.subscribe = function(connectionType) {};
-
+Network.createNotifier.subscribe = function (connectionType) {};
 
 /**
- * Returns true if the notifier is currently processing the initial value which is currently held in the sticky cache, 
- * so this is not directly the result of a notifier right now. 
- * 
+ * Returns true if the notifier is currently processing the initial value which is currently held in the sticky cache,
+ * so this is not directly the result of a notifier right now.
+ *
  * @method isInitialStickyNotification
  * @return {Boolean}
  * @android
  * @deprecated Use {@link Device.Network.createNotifier#initialCacheEnabled} instead
  * @since 4.0.8
  */
-Network.createNotifier.isInitialStickyNotification = function() {};
+Network.createNotifier.isInitialStickyNotification = function () {};
 
+/**
+ * @method
+ * @static
+ * @param checkUrl Used URL for check the internet
+ * @return {Promise<Object>} - Resolves if the internet connectivity is available,
+ * rejects o/w
+ * @example
+ * ```
+ * import Network from '@smartface/native/device/network';
+ * Network.isConnected("myprivatenetwork.com")
+ *     .then(() => {
+ *         console.info("Connected to internet");
+ *     })
+ *     .catch(() => {
+ *         console.error("Not connected to internet");
+ *     });
+ * ```
+ */
+Network.isConnected = function (checkUrl) {};
 
 /**
  * Assigning false to this property means that ignore the held value in the sticky cache. Thus, subscribed function won't fire at the initial time.
@@ -145,13 +162,13 @@ Network.createNotifier.initialCacheEnabled = false;
 
 /**
  * This method stops receiving subcribed callback.
- * 
+ *
  * @method unsubscribe
  * @ios
  * @android
  * @since 3.0.1
  */
-Network.createNotifier.unsubscribe = function() {};
+Network.createNotifier.unsubscribe = function () {};
 
 /**
  * @enum {Number} Device.Network.ConnectionType
@@ -160,7 +177,7 @@ Network.createNotifier.unsubscribe = function() {};
 Network.ConnectionType = {};
 
 /**
- * @deprecated Use {@link Device.Network.ConnectionType#NONE} instead 
+ * @deprecated Use {@link Device.Network.ConnectionType#NONE} instead
  * @property {Number} None
  * @readonly
  * @static
@@ -187,7 +204,7 @@ Network.ConnectionType.WIFI = 2;
  *
  * @property {Number} MOBILE
  * @readonly
- * @static 
+ * @static
  * @since 2.0.4
  */
 Network.ConnectionType.MOBILE = 1;
@@ -195,10 +212,9 @@ Network.ConnectionType.MOBILE = 1;
  *
  * @property {Number} NONE
  * @readonly
- * @static 
+ * @static
  * @since 2.0.4
  */
 Network.ConnectionType.NONE = 0;
-
 
 module.exports = Network;

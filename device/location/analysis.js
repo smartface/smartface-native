@@ -92,6 +92,41 @@ Location.onLocationChanged = function onLocationChanged(event) {};
 Location.getLastKnownLocation = function (onSuccess, onFailure) {};
 
 /**
+ * Gets location latitude and longitude. Handles permissions by itself.
+ * @method getLocation
+ * @author Ozcan Ovunc <ozcan.ovunc@smartface.io>
+ * @author Furkan Arabacı <furkan.arabaci@smartface.io>
+ * @author Alim Öncül <alim.oncul@smartface.io>
+ * @android
+ * @ios
+ * @static
+ * @copyright Smartface 2021
+ */
+
+/**
+ * @example
+ * ```
+ * import Location from '@smartface/native/device/location';
+ *
+ * Location.getLocation()
+ *     .then(location => {
+ *         let requestOptions = {
+ *             'url': 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.latitude + ',' + location.longitude + '&sensor=true',
+ *             'method': 'GET'
+ *         };
+ *     })
+ *     .catch(e => {
+ *         // e parameter can be one of these values:
+ *         // "RESTRICTED" / iOS specific, this is returned if authorization status is Location.iOS.AuthorizationStatus.RESTRICTED
+ *         // "OTHER" / Android specific, this is returned if the operation failed with no more detailed information
+ *         // "DENIED" / Returned for all other cases
+ *         console.log("Location cannot be retrieved");
+ *     });
+ * ```
+ */
+Location.getLocation = async function () {};
+
+/**
  * Callback to capture authorization status changes.
  * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
  *
@@ -101,7 +136,7 @@ Location.getLastKnownLocation = function (onSuccess, onFailure) {};
  * @since 2.0.11
  */
 Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(
-	status
+  status
 ) {};
 
 /**

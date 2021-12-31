@@ -1,49 +1,26 @@
-import { MapsOptions } from "./shared/map";
-
-/**
- * @module map
- * @type {Object}
- * @author Furkan Arabacı <furkan.arabaci@smartface.io>
- * @copyright Smartface 2021
- *
- * Map utility to cover the most popular map applications on both platforms.
- * It will pin the given location in the chosen map app
- * It will prompt a menu to choose apps from on iOS and works out of the box on Android.
- * For this utility to work correctly, you need to publish the application.
- * You also need to add this key to your info.plist file, for the app to be able to decect them.
- * ```
- * <dict>
- * ...
- *  <key>LSApplicationQueriesSchemes</key>
- *      <array>
- *        <string>comgooglemaps</string>
- *        <string>yandexmaps</string>
- *      </array>
- * </dict>
- * ```
- */
-declare class Linking {
+class Linking {
   /**
    * Opens application settings menu
    * @static
-   * @method
-   * @returns {Promise}
+   * @method canOpenURL
+   * @async
+   * @returns {Promise<void>}
    * @example
    * ```
    * import Linking from '@smartface/native/application/linking';
    * Linking.openSettings();
    *```
    */
-  static openSettings(): Promise<void>;
+  static openSettings();
 
   /**
    * Checks URL's scheme can be handled or not by some app that installed on the device.
    *
-   * To pass this method, URL schemes must be declared into "Info.plist" file for iOS
+   * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
    * and AndroidManifest.xml file for Android.
    *
-   *     @example for Google Maps
-   *
+   *     @example for Google Maps 
+   * 
    *		(Info.plist entry)
    *      <key>LSApplicationQueriesSchemes</key>
    *      <array>
@@ -53,7 +30,7 @@ declare class Linking {
    *      After entry add on, urlScheme can be check;
    * 	 	  const Application = require("@smartface/native/application");
    *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
-   *
+   * 
    * 		(AndroidManifest.xml entry)
    * 		<manifest ...>
    * 			...
@@ -64,20 +41,20 @@ declare class Linking {
    *				</intent>
    * 			</queries>
    * 		</manifest>
-   *
-   *	const Application = require("@smartface/native/application");
-   *    const isAppAvaible = Application.canOpenUrl("geo://");
+   * 
+   *	  import Linking from '@smartface/native/application/linking';
+   *    const isAppAvaible = Linking.canOpenUrl("geo://");
    *
    * @method canOpenUrl
    * @param {String} url
-   * @return {Boolean}
+   * @returns {Boolean}
    * @ios
    * @android
    * @static
    * @since 4.3.6
    * @see https://developer.android.com/training/package-visibility
    */
-  static canOpenURL: (url: string) => boolean;
+  static canOpenURL(url);
 
   /**
    * Launches another application and passes data. For Android, you can open application chooser with
@@ -128,30 +105,22 @@ declare class Linking {
    *     });
    *
    *
-   * @method call
+   * @method openURL
    * @param {Object} options
-   * @param {String} options.uriScheme
-   * @param {Object} options.data parameter should be url encoded if necessary.
-   * @param {Function} options.onSuccess Added in 1.1.13.
-   * @param {Function} options.onFailure Added in 1.1.13.
-   * @param {Boolean} options.isShowChooser Added in 1.1.13.
-   * @param {String} options.chooserTitle Added in 1.1.13.
-   * @param {String} options.action  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
+   * @param {String} [options.uriScheme]
+   * @param {Object} [options.data] parameter should be url encoded if necessary.
+   * @param {Function} [options.onSuccess] Added in 1.1.13.
+   * @param {Function} [options.onFailure] Added in 1.1.13.
+   * @param {Boolean} [options.isShowChooser] Added in 1.1.13.
+   * @param {String} [options.chooserTitle] Added in 1.1.13.
+   * @param {String} [options.action]  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
    * @readonly
    * @android
    * @ios
    * @static
    * @since 0.1
    */
-  static openURL: (options: {
-    uriScheme?: string;
-    data?: {};
-    onSuccess?: (value?: any) => void;
-    onFailure?: (value?: any) => void;
-    isShowChooser?: boolean;
-    chooserTitle?: string;
-    action?: string;
-  }) => void;
+  static openURL(options);
 }
 
-export = Linking;
+module.exports = Linking;
