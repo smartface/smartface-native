@@ -351,7 +351,7 @@ type HeaderBar = {
 		elevation?: number;
 
 		/**
-	 	 * Gets/sets the space between navigation button and title of headerbar. Minimum API Level 24 required.
+	 	 * Gets/sets the space between left item and title of headerbar. Minimum API Level 24 required.
 	 	 *
 	 	 * @property {Number} [contentInsetStartWithNavigation = 0]
 	 	 * @android
@@ -372,7 +372,7 @@ type HeaderBar = {
 		 * @android
 		 * @since 4.3.6
 		 */
-		padding: Object;
+		padding:  { top : Number, left : Number, right : Number, bottom : Number };
 	};
 	ios: {
 		/**
