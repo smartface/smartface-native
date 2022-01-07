@@ -233,6 +233,30 @@ HeaderBar.prototype.android.logoEnabled = null;
 
 
 /**
+ * Gets/Sets the padding space on the all sides of a headerbar.
+ *
+ * @property {Object} [padding = { top : 0, left : 0, right : 4, bottom : 0 }]
+ * @property {Number} padding.top padding space on the top side of a headerbar
+ * @property {Number} padding.left padding space on the left side of a headerbar
+ * @property {Number} padding.right padding space on the right side of a headerbar
+ * @property {Number} padding.bottom padding space on the bottom side of a headerbar
+ * 
+ * @android
+ * @since 4.3.6
+ */
+HeaderBar.prototype.android.padding = { top : 0, left : 0, right : 4, bottom : 0 };
+
+/**
+ * Gets/sets the space between left item and title of headerbar. Minimum API Level 24 required.
+ * 
+ * @property {Number} [contentInsetStartWithNavigation = 0]
+ * @android
+ * @since 4.3.6
+ * @see https://material.io/components/app-bars-top#specs
+ */
+HeaderBar.prototype.android.contentInsetStartWithNavigation = 0;
+
+/**
  * Gets/sets the title layout of the HeaderBar. Title layout allows you to assign custom view.
  * For iOS, layouts are centered on the header bar and may be resized to fit.
  *
