@@ -248,7 +248,6 @@ HeaderBar.prototype.android.padding = { top : 0, left : 0, right : 4, bottom : 0
 
 /**
  * Gets/sets the space between navigation button and title of headerbar. Minimum API Level 24 required.
- * Note : Space between navigation button and title has a minimum value.
  * 
  * @property {Number} [contentInsetStartWithNavigation = 0]
  * @android
