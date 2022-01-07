@@ -17,6 +17,7 @@ const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
+const LayoutParams = require("../../util/Android/layoutparams");
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -638,7 +639,34 @@ function Page(params) {
         },
         enumerable: true
     });
+    Object.defineProperty(self.headerBar.android, 'contentInsetStartWithNavigation', {
+        get: function () {
+            return AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStartWithNavigation());
+        },
+        set: function (value) { // API Level 24+
+            toolbar.setContentInsetStartWithNavigation(AndroidUnitConverter.dpToPixel(value));
+        },
+        enumerable: true
+    });
 
+    Object.defineProperty(self.headerBar.android, 'padding', {
+        get: function () {
+            const top = AndroidUnitConverter.pixelToDp(toolbar.getPaddingTop());
+            const left = AndroidUnitConverter.pixelToDp(toolbar.getPaddingLeft());
+            const right = AndroidUnitConverter.pixelToDp(toolbar.getPaddingRight());
+            const bottom = AndroidUnitConverter.pixelToDp(toolbar.getPaddingBottom());
+            return { top, left, right, bottom };
+        },
+        set: function (value) {
+            let { top, left, right, bottom } = value;
+            top = AndroidUnitConverter.dpToPixel(top | 0);
+            left = AndroidUnitConverter.dpToPixel(left | 0);
+            right = AndroidUnitConverter.dpToPixel(right | 0);
+            bottom = AndroidUnitConverter.dpToPixel(bottom | 0);
+            toolbar.setPadding(left, top, right, bottom);
+        },
+        enumerable: true
+    });
 
     var _attributedTitle, _attributedSubtitle, _attributedTitleBuilder, _attributedSubtitleBuilder;
     Object.defineProperty(self.headerBar.android, 'attributedTitle', {
@@ -742,7 +770,6 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const WRAP_CONTENT = -2;
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -753,7 +780,7 @@ function Page(params) {
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
             } else {
-                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
                 if (item.customView) {
@@ -843,6 +870,8 @@ function Page(params) {
             self.headerBar.titleColor = Color.WHITE;
             self.headerBar.android.subtitleColor = Color.WHITE;
             self.headerBar.visible = true;
+            self.headerBar.android.padding = { top : 0, bottom : 0, left : 0, right : 4 };
+            self.headerBar.android.contentInsetStartWithNavigation = 0;
         }
     };
 
