@@ -8,6 +8,7 @@ const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
+const LayoutParams = require("../../util/Android/layoutparams");
 const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 
 function PixelToDp(px) {
@@ -269,9 +270,8 @@ function HeaderBarItem(params) {
         const NativeView = requireClass('android.view.View');
 
         const ALIGN_END = 19;
-        const WRAP_CONTENT = -2;
 
-        var layoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        var layoutParams = new NativeRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         self.nativeObject.setId(NativeView.generateViewId());
         layoutParams.addRule(ALIGN_END, self.nativeObject.getId());
 

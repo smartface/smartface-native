@@ -349,6 +349,31 @@ type HeaderBar = {
 		 * @since 3.2.2
 		 */
 		elevation?: number;
+
+		/**
+	 	 * Gets/sets the space between navigation button and title of headerbar. Minimum API Level 24 required.
+		 * Note : Space between navigation button and title has a minimum value.
+	 	 *
+	 	 * @property {Number} [contentInsetStartWithNavigation = 0]
+	 	 * @android
+	 	 * @since 4.3.6
+		 * @see https://material.io/components/app-bars-top#specs
+	 	 */
+		contentInsetStartWithNavigation : Number;
+
+		/**
+		 * Gets/Sets the padding space on the all sides of a headerbar.
+		 *
+		 * @property {Object} [padding = { top : 0, left : 0, right : 4, bottom : 0 }]
+		 * @property {Number} padding.top padding space on the top side of a headerbar
+ 		 * @property {Number} padding.left padding space on the left side of a headerbar
+		 * @property {Number} padding.right padding space on the right side of a headerbar
+		 * @property {Number} padding.bottom padding space on the bottom side of a headerbar
+		 * 
+		 * @android
+		 * @since 4.3.6
+		 */
+		padding: Object;
 	};
 	ios: {
 		/**
