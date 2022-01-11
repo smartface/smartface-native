@@ -76,6 +76,41 @@ function KeyboardAnimationDelegate(params) {
         return undefined;
     }
 
+    self.parent = function() {
+        let navigationController = self.getParentViewController().navigationController;
+        var parent = undefined;
+
+        if (self.parentDialog) {
+            parent = self.parentDialog;
+        } else {
+            parent = self.parentView;
+
+            if (navigationController) {
+                var subView = navigationController.view.subviews[0];
+    
+                if (subView) {
+                    var wrapperView = subView.subviews[0];
+
+                    if (wrapperView) {
+                        parent = subView;
+                    }
+                }
+            }
+        }
+
+        return parent;
+    };
+
+    self.defaultTopPosition = function() {
+        var top = KeyboardAnimationDelegate.offsetFromTop(self);
+
+        if (self.parent().constructor.name === "UINavigationTransitionView") {
+            top = 0;
+        }
+
+        return top;
+    };
+
     var _top = 0;
 
     function getViewTop(view) {
@@ -83,49 +118,49 @@ function KeyboardAnimationDelegate(params) {
             if (view.superview.constructor.name === "SMFUIView") {
                 _top += view.frame.y;
             } else if (view.superview.constructor.name === "SMFUIScrollView") {
-            	_top += view.frame.y;
-            	if (_top + self.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
-            		var newTop = _top - view.superview.frame.height + self.nativeObject.frame.height;
-            		view.superview.setContentOffsetAnimated({
-	                    x: 0,
-	                    y: newTop
-	                }, true);
-	                _top -= newTop;
-            	}else if(view.superview.contentOffset.y > _top){
-	        		view.superview.setContentOffsetAnimated({
-	                    x: 0,
-	                    y: _top
-	                }, true);
-	                _top -= (_top);
-            	}else{
-            		_top -= view.superview.contentOffset.y;
-            	}
+                _top += view.frame.y;
+                if (_top + self.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
+                    var newTop = _top - view.superview.frame.height + self.nativeObject.frame.height;
+                    view.superview.setContentOffsetAnimated({
+                        x: 0,
+                        y: newTop
+                    }, true);
+                    _top -= newTop;
+                }else if(view.superview.contentOffset.y > _top){
+                    view.superview.setContentOffsetAnimated({
+                        x: 0,
+                        y: _top
+                    }, true);
+                    _top -= (_top);
+                }else{
+                    _top -= view.superview.contentOffset.y;
+                }
             }else if(view.superview.constructor.name === "SMFUITableView"){
-            	if (view.constructor.name === "SMFUITableViewCell") {
-            		var cell = view;
-            		var tableView = view.superview;
-	            	var indexPath = tableView.indexPathForCell(cell);
-	            	var rect = tableView.rectForRowAtIndexPath(indexPath);
-            		
-            		_top += rect.y;
-            		
-            		if (_top + self.nativeObject.frame.height > tableView.contentOffset.y + tableView.frame.height) {
-            			var newTop =  _top - tableView.frame.height + self.nativeObject.frame.height;
-	            		tableView.setContentOffsetAnimated({
-		                    x: 0,
-		                    y: newTop
-		                }, true);
-		                _top -= newTop;
-	            	}else if(tableView.contentOffset.y > _top){
-		        		tableView.setContentOffsetAnimated({
-		                    x: 0,
-		                    y: _top
-		                }, true);
-		                _top -= (_top);
-	            	}else{
-	            		_top -= tableView.contentOffset.y;
-	            	}
-            	}
+                if (view.constructor.name === "SMFUITableViewCell") {
+                    var cell = view;
+                    var tableView = view.superview;
+                    var indexPath = tableView.indexPathForCell(cell);
+                    var rect = tableView.rectForRowAtIndexPath(indexPath);
+                    
+                    _top += rect.y;
+                    
+                    if (_top + self.nativeObject.frame.height > tableView.contentOffset.y + tableView.frame.height) {
+                        var newTop =  _top - tableView.frame.height + self.nativeObject.frame.height;
+                        tableView.setContentOffsetAnimated({
+                            x: 0,
+                            y: newTop
+                        }, true);
+                        _top -= newTop;
+                    }else if(tableView.contentOffset.y > _top){
+                        tableView.setContentOffsetAnimated({
+                            x: 0,
+                            y: _top
+                        }, true);
+                        _top -= (_top);
+                    }else{
+                        _top -= tableView.contentOffset.y;
+                    }
+                }
             }
 
             if (view.superview.constructor.name === "UIWindow") { // Check Dialog
@@ -163,10 +198,9 @@ function KeyboardAnimationDelegate(params) {
 
         if (self.getParentViewController() || self.parentDialog) {
             controlValue = top + height;
-
             if (controlValue + KeyboardAnimationDelegate.offsetFromTop(self) > Screen.height - keyboardHeight) {
                 _isKeyboadAnimationCompleted = false;
-                _topDistance = controlValue - (Screen.height - keyboardHeight);
+                _topDistance = controlValue + KeyboardAnimationDelegate.offsetFromTop(self) - (Screen.height - keyboardHeight);
 
                 if (!self.parentDialog) {
                     if (self.getParentViewController().tabBarController) {
@@ -180,7 +214,10 @@ function KeyboardAnimationDelegate(params) {
                     }
                 }
 
-
+                if (_topDistance < 0) {
+                    _topDistance = 0;
+                }
+                
                 if (e && e.userInfo) {
                     var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
                     var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
@@ -195,7 +232,7 @@ function KeyboardAnimationDelegate(params) {
                         invocationAnimation.setDoubleArgumentAtIndex(0, 3);
                         invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
                         invocationAnimation.setVoidBlockArgumentAtIndex(function() {
-                            var parent = self.parentDialog ? self.parentDialog : self.parentView;
+                            var parent = self.parent();
                             var frame = parent.frame;
                             frame.y = -_topDistance;
                             parent.frame = frame;
@@ -207,7 +244,7 @@ function KeyboardAnimationDelegate(params) {
                         _isKeyboadAnimationCompleted = true; // bug id : IOS-2763
                     }
                 } else {
-                    var parent = self.parentDialog ? self.parentDialog : self.parentView;
+                    var parent = self.parent();
                     var frame = parent.frame;
                     frame.y = -_topDistance;
                     parent.frame = frame;
@@ -277,9 +314,9 @@ function KeyboardAnimationDelegate(params) {
                         invocationAnimation.setDoubleArgumentAtIndex(0, 3);
                         invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
                         invocationAnimation.setVoidBlockArgumentAtIndex(function() {
-                            var parent = self.parentDialog ? self.parentDialog : self.parentView;
+                            var parent = self.parent();
                             var frame = parent.frame;
-                            frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
+                            frame.y = self.defaultTopPosition();
                             parent.frame = frame;
                         }, 5);
                         invocationAnimation.setBoolBlockArgumentAtIndex(function(e) {
@@ -288,9 +325,9 @@ function KeyboardAnimationDelegate(params) {
                         invocationAnimation.invoke();
                     }
                 } else {
-                    var parent = self.parentDialog ? self.parentDialog : self.parentView;
+                    var parent = self.parent();
                     var frame = parent.frame;
-                    frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
+                    frame.y = self.defaultTopPosition();
                     parent.frame = frame;
                 }
 
