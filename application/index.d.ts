@@ -1163,6 +1163,17 @@ declare class Application {
 	 */
 	static version: string;
 	static Events: typeof Events;
+	/**
+	 * Indicates whether the voiceover is enabled. Voiceover is also called a screen reader on Android.
+	 *
+	 * @property {Boolean} isVoiceOverEnabled
+	 * @readonly
+	 * @android
+	 * @ios
+	 * @static
+	 * @since 4.3.6
+	 */
+	static isVoiceOverEnabled: Boolean;
 }
 
 export = Application;

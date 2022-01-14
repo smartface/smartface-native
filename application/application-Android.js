@@ -440,6 +440,22 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
+    'isVoiceOverEnabled': {
+        get: function () {
+            const NativeAccessibilityServiceInfo = requireClass("android.accessibilityservice.AccessibilityServiceInfo");
+            const NativeContext = requireClass("android.content.Context");
+            const context = AndroidConfig.activity;
+            const accessibilityManager = context.getSystemService(NativeContext.ACCESSIBILITY_SERVICE);
+            if (accessibilityManager != null && accessibilityManager.isEnabled()) {
+                const serviceInfoList = accessibilityManager
+                    .getEnabledAccessibilityServiceList(NativeAccessibilityServiceInfo.FEEDBACK_SPOKEN);
+                if (!serviceInfoList.isEmpty())
+                    return true;
+                }
+            return false;
+        },
+        enumerable: true
+    },
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
