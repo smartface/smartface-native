@@ -365,6 +365,19 @@ Multimedia.requestCameraAuthorization = function (callback) { };
  */
 Multimedia.convertToMp4 = function (params) { };
 
+/**
+ * Indicates whether the device has camera feature.
+ * 
+ * @property hasCameraFeature
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @return {Boolean}
+ * @since 4.3.6
+ */
+Multimedia.hasCameraFeature;
+
 Multimedia.android = {};
 
 /**
