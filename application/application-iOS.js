@@ -366,6 +366,13 @@ Object.defineProperty(SFApplication, 'version', {
     enumerable: true
 });
 
+Object.defineProperty(SFApplication, 'isVoiceOverEnabled', {
+    get: function () {
+        return __SF_UIAccessibility.isVoiceOverRunning()
+    },
+    enumerable: true
+});
+
 // function getProjectJsonObject(){
 //     const File = require("../io/file");
 //     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
