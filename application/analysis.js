@@ -177,6 +177,18 @@ Application.appName;
 Application.version;
 
 /**
+ * Indicates whether the voiceover is enabled. Voiceover is also called a screen reader on Android.
+ *
+ * @property {Boolean} isVoiceOverEnabled
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 4.3.6
+ */
+Application.isVoiceOverEnabled;
+
+/**
  * Checks URL's scheme can be handled or not by some app that installed on the device.
  *
  * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
