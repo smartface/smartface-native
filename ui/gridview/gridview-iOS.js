@@ -95,6 +95,18 @@ function GridView(params) {
     sfSelf.android.saveInstanceState = function() {};
     sfSelf.android.restoreInstanceState = function() {};
 
+    sfSelf.insertRowRange = ({positionStart, itemCount}) => {
+        sfSelf.nativeObject.actionRowRange(0, positionStart, itemCount);
+    };
+
+    sfSelf.deleteRowRange = ({positionStart, itemCount}) => {
+        sfSelf.nativeObject.actionRowRange(1, positionStart, itemCount);
+    };
+
+    sfSelf.refreshRowRange = ({positionStart, itemCount}) => {
+        sfSelf.nativeObject.actionRowRange(2, positionStart, itemCount);
+    };
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PROPERTIES
 
