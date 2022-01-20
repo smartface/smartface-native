@@ -174,7 +174,7 @@ Multimedia.android = {};
 
 Multimedia.android.getAllGalleryItems = function (params = {}) {
     try {
-        var projection = array([NativeMediaStore.MediaColumns.DATA], "int");
+        var projection = array([NativeMediaStore.MediaColumns.DATA], "java.lang.String");
         var result = {};
         var uri;
         if (params.type === Multimedia.Type.VIDEO) {
