@@ -73,10 +73,11 @@ Object.defineProperty(Multimedia.Android, 'CropShape', {
 
 Object.defineProperty(Multimedia, 'hasCameraFeature', {
     get : function () {
-        const NativePackageManager = requireClass("android.content.pm.PackageManager");
+        const NativeContext = requireClass("android.content.Context");
         const context = AndroidConfig.activity;
-        const packageManager = context.getPackageManager();
-        return packageManager.hasSystemFeature(NativePackageManager.FEATURE_CAMERA);
+        const cameraManager = context.getSystemService(NativeContext.CAMERA_SERVICE);
+        const cameraIdList = toJSArray(cameraManager.getCameraIdList());
+        return cameraIdList.length > 0;
     },
     enumerable : true
 });
