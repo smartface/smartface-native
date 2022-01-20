@@ -383,6 +383,7 @@ Multimedia.android = {};
  * @param {Object} params.onFailure.params 
  * @param {String} params.onFailure.params.message Failure message
  * @android
+ * @deprecated
  * @since 0.1
  */
 Multimedia.android.getAllGalleryItems = function (e) { };
