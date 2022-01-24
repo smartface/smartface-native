@@ -27,7 +27,7 @@ declare class View<TEvent = any>
     implements IEventEmitter<TEvent>
 {
 	constructor(params?: Record<string, any>);
-    emitter: TEvent;
+    protected emitter: TEvent;
     on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
     once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
     off(eventName: TEvent, callback: (...args: any[]) => void): void;
