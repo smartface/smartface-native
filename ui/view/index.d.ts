@@ -617,6 +617,15 @@ declare class View<TEvent = any>
 	 * ````
 	 */
 	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
+	/**
+	 * This method marks the view as needs relayout.
+	 *
+	 * @method dirty
+	 * @android
+	 * @ios
+	 * @since 4.3.6
+	 */
+	dirty(): void;
 	android: {
 		/**
 		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.

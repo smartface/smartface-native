@@ -831,6 +831,19 @@ declare class Multimedia {
     */
     static convertToMp4(params: { videoFile: File, outputFileName: String, onCompleted: ( params: { video: File }) => void,  onFailure?: () => void}): void;
 
+    /**
+    * Indicates whether the device has camera feature.
+    * 
+    * @property hasCameraFeature
+    * @readonly
+    * @android
+    * @ios
+    * @static
+    * @return {Boolean}
+    * @since 4.3.6
+    */
+    static hasCameraFeature: Boolean;
+
     static ios: {
 
         /**
@@ -886,6 +899,7 @@ declare class Multimedia {
          * @param {Object} params.onFailure.params 
          * @param {String} params.onFailure.params.message Failure message
          * @android
+         * @deprecated
          * @since 0.1
          */
         getAllGalleryItems(paras: {

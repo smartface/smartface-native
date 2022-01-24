@@ -71,6 +71,17 @@ Object.defineProperty(Multimedia.Android, 'CropShape', {
     enumerable: true
 });
 
+Object.defineProperty(Multimedia, 'hasCameraFeature', {
+    get : function () {
+        const NativeContext = requireClass("android.content.Context");
+        const context = AndroidConfig.activity;
+        const cameraManager = context.getSystemService(NativeContext.CAMERA_SERVICE);
+        const cameraIdList = toJSArray(cameraManager.getCameraIdList());
+        return cameraIdList.length > 0;
+    },
+    enumerable : true
+});
+
 const _types = [
     "image/*",
     "video/*",
@@ -174,7 +185,7 @@ Multimedia.android = {};
 
 Multimedia.android.getAllGalleryItems = function (params = {}) {
     try {
-        var projection = array([NativeMediaStore.MediaColumns.DATA], "int");
+        var projection = array([NativeMediaStore.MediaColumns.DATA], "java.lang.String");
         var result = {};
         var uri;
         if (params.type === Multimedia.Type.VIDEO) {
