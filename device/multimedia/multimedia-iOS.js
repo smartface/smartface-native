@@ -392,7 +392,6 @@ Multimedia.VideoQuality.iOS.TYPEIFRAME960x540 = 103;
 
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function () { };
 Multimedia.Android = {};
 Multimedia.Android.CropShape = {};
 
