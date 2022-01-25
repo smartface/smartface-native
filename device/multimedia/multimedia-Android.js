@@ -183,40 +183,6 @@ Multimedia.convertToMp4 = function (params) {
 
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function (params = {}) {
-    try {
-        var projection = array([NativeMediaStore.MediaColumns.DATA], "java.lang.String");
-        var result = {};
-        var uri;
-        if (params.type === Multimedia.Type.VIDEO) {
-            uri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            var videos = getAllMediaFromUri({
-                uri: uri,
-                projection: projection,
-                type: params.type
-            });
-            result.videos = videos;
-        } else if (params.type === Multimedia.Type.IMAGE) {
-            uri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            var images = getAllMediaFromUri({
-                uri: uri,
-                projection: projection,
-                type: params.type
-            });
-            result.images = images;
-        } else {
-            throw new Error("Unexpected value " + params.type);
-        }
-
-        params.onSuccess && params.onSuccess(result);
-    } catch (err) {
-        params.onFailure && params.onFailure({
-            message: err
-        });
-    }
-
-};
-
 Multimedia.launchCropper = function (params) {
     const {
         page,
