@@ -372,10 +372,9 @@ Multimedia.launchCropper = function (e) {
     }
 };
 
-Multimedia.hasCameraFeature = function () {
-    return Invocation.invokeClassMethod("UIImagePickerController", "isCameraDeviceAvailable:", 0, "BOOL") ||
-        Invocation.invokeClassMethod("UIImagePickerController", "isCameraDeviceAvailable:", 1, "BOOL")
-}
+Multimedia.hasCameraFeature = Invocation.invokeClassMethod("UIImagePickerController", "isCameraDeviceAvailable:", 0, "BOOL") ||
+    Invocation.invokeClassMethod("UIImagePickerController", "isCameraDeviceAvailable:", 1, "BOOL")
+
 
 Multimedia.CropShape = {};
 Multimedia.CropShape.RECTANGLE = 0;
