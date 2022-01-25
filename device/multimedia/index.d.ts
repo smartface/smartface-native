@@ -881,34 +881,6 @@ declare class Multimedia {
          */
         getCameraAuthorizationStatus(): Multimedia.iOS.CameraAuthorizationStatus;
     }
-
-    static readonly android: {
-        /**
-         * @method getAllGalleryItems
-         * 
-         * Gets an object array contains gallery items.
-         * 
-         * @param {Object} params Object describing parameters for the function.
-         * @param {Device.Multimedia.Type} params.type Data type.
-         * @param {Function} params.onSuccess Callback for success situation.
-         * @param {Object} params.onSuccess.params 
-         * @param {Array.<UI.Image>} params.onSuccess.params.images 
-         * @param {Array.<IO.File>} params.onSuccess.params.videos 
-         * @param {Function} [params.onCancel] Callback for cancellation situation.
-         * @param {Function} [params.onFailure] Callback for failure situation.
-         * @param {Object} params.onFailure.params 
-         * @param {String} params.onFailure.params.message Failure message
-         * @android
-         * @deprecated
-         * @since 0.1
-         */
-        getAllGalleryItems(paras: {
-            type: Multimedia.Type;
-            onSuccess: (params: { image: Image[]; video: File[] }) => void;
-            onCancel?: () => void;
-            onFailure?: (e: { message: string }) => void;
-        });
-    };
 }
 
 export = Multimedia;

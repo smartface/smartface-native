@@ -26,8 +26,4 @@ salep.test("sf-core/device/multimedia Unit Test", function() {
     this.case("[pickFromGallery] function.", function() {
         assert.doesNotThrow(function(){ Multimedia.pickFromGallery({page: pageInstance}); }, Error);
     });
-    
-    this.case("[android.getAllGalleryItems] function.", function() {
-        assert.doesNotThrow(function(){ Multimedia.android.getAllGalleryItems({page: pageInstance, type: Multimedia.Type.IMAGE }); }, Error);
-    });
 });
