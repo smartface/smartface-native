@@ -315,6 +315,47 @@ GridView.prototype.getLastVisibleIndex = function() {};
  * @since 3.0.2
  */
 GridView.prototype.setPullRefreshColors = function(colors) {};
+/**
+ * This method notify the GridView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.GridView#performBatchUpdates performBatchUpdates}.
+ *
+ * @method deleteRowRange
+ * @param {Object} params
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be removed from the data set
+ * @android
+ * @ios
+ * @since 4.3.6
+ */
+GridView.prototype.deleteRowRange = function(params) {};
+
+/**
+ * This method notify the GridView  that given range of items inserted. Must set the itemCount value to a changed number before calling this function.
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.GridView#performBatchUpdates performBatchUpdates}.
+ *
+ * @method insertRowRange
+ * @param {Object} params
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be inserted from the data set
+ * @android
+ * @ios
+ * @since 4.3.6
+ */
+GridView.prototype.insertRowRange = function(params) {};
+
+/**
+ * This method notify the GridView  that given range of items changed.
+ * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.GridView#performBatchUpdates performBatchUpdates}.
+ *
+ * @method refreshRowRange
+ * @param {Object} params
+ * @param {Number} params.positionStart Position of start item
+ * @param {Number} params.itemCount  Number of items to be changed from the data set
+ * @android
+ * @ios
+ * @since 4.3.6
+ */
+GridView.prototype.refreshRowRange = function(params) {};
 
 /**
  * This method notify GridView for data changes. After this method is called
