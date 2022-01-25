@@ -658,11 +658,15 @@ function Page(params) {
             return { top, left, right, bottom };
         },
         set: function (value) {
+            const _top = toolbar.getPaddingTop();
+            const _left = toolbar.getPaddingLeft();
+            const _right = toolbar.getPaddingRight();
+            const _bottom = toolbar.getPaddingBottom();
             let { top, left, right, bottom } = value;
-            top = AndroidUnitConverter.dpToPixel(top | 0);
-            left = AndroidUnitConverter.dpToPixel(left | 0);
-            right = AndroidUnitConverter.dpToPixel(right | 0);
-            bottom = AndroidUnitConverter.dpToPixel(bottom | 0);
+            top = top ? AndroidUnitConverter.dpToPixel(top) : _top;
+            left = left ? AndroidUnitConverter.dpToPixel(left) : _left;
+            right = right ? AndroidUnitConverter.dpToPixel(right) : _right;
+            bottom = bottom ? AndroidUnitConverter.dpToPixel(bottom) : _bottom
             toolbar.setPadding(left, top, right, bottom);
         },
         enumerable: true
