@@ -29,6 +29,7 @@ function VideoView(params) {
 
     let _onReady,
         _onFinish,
+        _onFailure,
         _page;
     Object.defineProperties(this, {
         'play': {
@@ -88,6 +89,15 @@ function VideoView(params) {
             set: function (callback) {
                 _onFinish = callback
                 this.nativeInner.setOnFinish(_onFinish);
+            }
+        },
+        'onFailure': {
+            get: function () {
+                return _onFailure
+            },
+            set: function (callback) {
+                _onFailure = callback
+                this.nativeInner.setOnFailure(_onFailure);
             }
         },
         'seekTo': {
@@ -304,6 +314,12 @@ function VideoView(params) {
                 this.emitter.emit(Events.Ready, state);
             } 
             this.nativeInner.setOnReady(_onReady);
+        },
+        [Events.Ready]: function() {
+            _onFailure = (state) => {
+                this.emitter.emit(Events.Failure, state);
+            } 
+            this.nativeInner.setOnFailure(_onFailure);
         },
         [Events.DidStartPictureInPicture]: function() {
             //iOS Only
