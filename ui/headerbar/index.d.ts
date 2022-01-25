@@ -358,7 +358,7 @@ type HeaderBar = {
 	 	 * @since 4.3.6
 		 * @see https://material.io/components/app-bars-top#specs
 	 	 */
-		contentInsetStartWithNavigation : Number;
+		contentInsetStartWithNavigation? : Number;
 
 		/**
 		 * Gets/Sets the padding space on the all sides of a headerbar.
@@ -372,7 +372,7 @@ type HeaderBar = {
 		 * @android
 		 * @since 4.3.6
 		 */
-		padding:  { top : Number, left : Number, right : Number, bottom : Number };
+		padding?:  { top? : Number, left? : Number, right? : Number, bottom? : Number };
 	};
 	ios: {
 		/**
