@@ -372,7 +372,7 @@ type HeaderBar = {
 		 * @android
 		 * @since 4.3.6
 		 */
-		padding:  { top? : Number, left? : Number, right? : Number, bottom? : Number };
+		padding?:  { top? : Number, left? : Number, right? : Number, bottom? : Number };
 	};
 	ios: {
 		/**
