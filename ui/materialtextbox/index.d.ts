@@ -48,14 +48,6 @@ declare class MaterialTextBox extends TextBox {
         };
         /**
          * This event is called when positioning leftLayout. This event can be called multiple times.
-         *
-         *     @example
-         *     mtbTextbox.ios.onLeftLayoutRectForBounds: function(bounds, defaultRect){
-         *         defaultRect.x = defaultRect.x + 20;
-         *         defaultRect.y = defaultRect.y - 20;
-         *      return defaultRect;
-         *     };
-         *
          * @param {Object} bounds MaterialTextBox bounds.
          * @param {Number} bounds.x
          * @param {Number} bounds.y
@@ -72,20 +64,22 @@ declare class MaterialTextBox extends TextBox {
          * @return {Number} return.width
          * @return {Number} return.height
          * @event onLeftLayoutRectForBounds
+         * @deprecated
          * @ios
          * @since 4.3.0
+         * @example
+         * ````
+         * import MaterialTextBox from '@smartface/native/ui/materialtextbox';
+         * 
+         * const materialTextBox = new MaterialTextBox();
+         * materialTextBox.on(MaterialTextBox.Events.LeftLayoutRectForBounds, (params) => {
+         *  console.info('onLeftLayoutRectForBounds', params);
+         * });
+         * ````
          */
             onLeftLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
         /**
          * This event is called when positioning rightLayout. This event can be called multiple times.
-         *
-         *     @example
-         *     mtbTextbox.ios.onRightLayoutRectForBounds: function(bounds, defaultRect){
-         *         defaultRect.x = defaultRect.x + 20;
-         *         defaultRect.y = defaultRect.y - 20;
-         *      return defaultRect;
-         *     };
-         *
          * @param {Object} bounds MaterialTextBox bounds.
          * @param {Number} bounds.x
          * @param {Number} bounds.y
@@ -102,8 +96,18 @@ declare class MaterialTextBox extends TextBox {
          * @return {Number} return.width
          * @return {Number} return.height
          * @event onRightLayoutRectForBounds
+         * @deprecated
          * @ios
          * @since 4.3.0
+         * @example
+         * ````
+         * import MaterialTexBox from '@smartface/native/ui/materialtextbox';
+         * 
+         * const materialTextBox = new MaterialTextBox();
+         * materialTextBox.on(MaterialTextBox.Events.RightLayoutRectForBounds, (params) => {
+         *  console.info('onRightLayoutRectForBounds', params);
+         * });
+         * ````
          */
             onRightLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
         /**
@@ -155,6 +159,13 @@ declare class MaterialTextBox extends TextBox {
          * @since 3.1.2
          */
         selectedLineHeight: number;
+        /**
+         * Gets/sets the expandsOnOverflow of the MaterialTextBox. 
+         * @property {Boolean} expandsOnOverflow
+         * @ios
+         * @since 4.3.6
+         */
+        expandsOnOverflow: boolean;
     }
     android: TextBox['android'] & {
         /**
@@ -191,6 +202,15 @@ declare class MaterialTextBox extends TextBox {
          * @deprecated 3.2.1 TextBox grows as its wrapper
          */
         textBoxHeight: number;
+        /**
+         * Gets/sets the maxLines of the MaterialTextBox. 
+         * Setting this value overrides previous maximum height configurations.
+         * 
+         * @property {Number} maxLines
+         * @android
+         * @since 4.3.6
+         */
+        maxLines: number;
     }
 /**
  * Gets/sets the lineCount of the MaterialTextBox. You can use this property when multiline is true.

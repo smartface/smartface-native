@@ -36,6 +36,7 @@ Sound.PICK_SOUND = 1004;
 const Multimedia = {};
 Multimedia.CAMERA_REQUEST = 1002;
 Multimedia.PICK_FROM_GALLERY = 1003;
+Multimedia.PICK_MULTIPLE_FROM_GALLERY = 1006;
 
 Multimedia.CropImage = {
     CROP_CAMERA_DATA_REQUEST_CODE : 203,

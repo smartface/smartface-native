@@ -97,6 +97,23 @@ declare enum Events {
 	 */
 	ApplicationCallReceived = "applicationCallReceived",
 	/**
+	 * Triggered when application is opened by an app shortcut.
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android
+	 * or UserInfo of app shortcut in iOS.
+	 * 
+	 * @android
+	 * @ios
+	 * @static
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 */
+	AppShortcutReceived = "AppShortcutReceived",
+	/**
 	 * Triggered when user press back key. The default implementation finishes the application,
 	 * but you can override this to do whatever you want.
 	 *
@@ -229,6 +246,7 @@ declare enum KeyboardMode {
  */
 declare class Application {
 	static on(eventName: Events, callback: (...args: any) => void): () => void;
+	static once(eventName: Events, callback: (...args: any) => void): () => void;
 	static off(eventName: Events, callback?: (...args: any) => void): void;
 	static emit(event: Events, detail?: any[]): void;
 	/**
@@ -377,6 +395,48 @@ declare class Application {
 		chooserTitle?: string;
 		action?: string;
 	}) => void;
+	/**
+	 * Checks URL's scheme can be handled or not by some app that installed on the device.
+ 	 *
+ 	 * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
+ 	 * and AndroidManifest.xml file for Android.
+ 	 *
+ 	 *     @example for Google Maps 
+ 	 * 
+ 	 *		(Info.plist entry)
+ 	 *      <key>LSApplicationQueriesSchemes</key>
+ 	 *      <array>
+ 	 *          <string>comgooglemaps</string>
+ 	 *      </array>
+ 	 *
+ 	 *      After entry add on, urlScheme can be check;
+	 * 	 	const Application = require("@smartface/native/application");
+ 	 *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+ 	 * 
+ 	 * 		(AndroidManifest.xml entry)
+ 	 * 		<manifest ...>
+ 	 * 			...
+ 	 * 			<queries>
+ 	 *  			<intent>
+ 	 *					<action android:name="android.intent.action.VIEW" />
+ 	 *  				<data android:scheme="geo"/>
+ 	 *				</intent>
+ 	 * 			</queries>
+ 	 * 		</manifest>
+ 	 * 
+	 * 	 	const Application = require("@smartface/native/application");
+ 	 *      var isAppAvaible = Application.canOpenUrl("geo://");
+ 	 *
+	 * @method canOpenUrl
+	 * @param {String} url
+	 * @return {Boolean}
+	 * @ios
+	 * @android
+	 * @static
+	 * @since 4.3.6
+	 * @see https://developer.android.com/training/package-visibility
+	 */
+	static canOpenUrl: (url: string) => boolean;
 	static ios: {
 		/**
 		 * The event is called when a user taps a universal link.
@@ -409,30 +469,6 @@ declare class Application {
 		 * @since 3.1.3
 		 */
 		userInterfaceLayoutDirection: any;
-		/**
-		 * Checks URL's scheme can be handled or not by some app that installed on the device.
-		 *
-		 * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
-		 *
-		 *     @example for Google Maps (Info.plist entry)
-		 *
-		 *      <key>LSApplicationQueriesSchemes</key>
-		 *      <array>
-		 *          <string>comgooglemaps</string>
-		 *      </array>
-		 *
-		 *      After entry add on, urlScheme can be check;
-		 *      const Application = require("@smartface/native/application");
-		 *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
-		 *
-		 * @method canOpenUrl
-		 * @param {String} url
-		 * @return {Boolean}
-		 * @ios
-		 * @static
-		 * @since 3.0.1
-		 */
-		canOpenUrl: (url: string) => boolean;
 	};
 	/**
 	 * Gets status bar object. This property is readonly, you can not set
@@ -498,6 +534,14 @@ declare class Application {
 		 * @static
 		 * @deprecated
 		 * @since 3.2.0
+		 * @example
+		 * ````
+		 * import Application from '@smartface/native/application';
+		 * 
+		 * Application.on(Application.Events.BackButtonPressed, () => {
+		 * 	console.info('onBackButtonPressed');
+		 * });
+		 * ````
 		 */
 		onBackButtonPressed: () => void;
 		/**
@@ -902,6 +946,14 @@ declare class Application {
 	 * @ios
 	 * @static
 	 * @since 1.2
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.UnhandledError, (error) => {
+	 * 	console.info('onUnhandledError', error);
+	 * });
+	 * ````
 	 */
 	static onUnhandledError: (error: UnhandledError) => void;
 	/**
@@ -914,6 +966,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Exit, () => {
+	 * 	console.info('onExit');
+	 * });
+	 * ````
 	 */
 	static onExit(): void;
 	/**
@@ -929,6 +989,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.ReceivedNotification, (params) => {
+	 * 	console.info('onReceivedNotification', params);
+	 * });
+	 * ````
 	 */
 	static onReceivedNotification: (data: {
 		remote: { [key: string]: any };
@@ -951,15 +1019,50 @@ declare class Application {
 	 * @param {Number} e.result This parameter is available only for Android and when eventType is
 	 * "callback". Returns Android Activity result code.
 	 * @see https://developer.android.com/training/basics/intents/result.html
-	 *
 	 * @android
 	 * @ios
 	 * @static
 	 * @deprecated
 	 * @since 1.1.13
 	 * @see https://developer.android.com/training/sharing/receive.html
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.ApplicationCallReceived, (params) => {
+	 * 	console.info('onApplicationCallReceived', params);
+	 * });
+	 * ````
 	 */
 	static onApplicationCallReceived: (e: {
+		data: { [key: string]: any };
+	}) => void;
+	/**
+	 * Triggered when application is opened by an app shortcut.
+	 * App shortcuts is also named Home Screen Quick Actions in iOS.
+	 *
+	 * @event onAppShortcutReceived
+	 * @param {Object} e
+	 * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+	 * or UserInfo of app shortcut in iOS.
+	 *
+	 * @android
+	 * @ios
+	 * @static
+	 * @deprecated
+	 * @since 4.3.6
+	 * @see https://developer.android.com/guide/topics/ui/shortcuts
+	 * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.AppShortcutReceived, (params) => {
+	 * 	console.info('onAppShortcutReceived', params);
+	 * });
+	 * ````
+	 */
+	static onAppShortcutReceived: (e: {
 		data: { [key: string]: any };
 	}) => void;
 	/**
@@ -973,6 +1076,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Maximize, () => {
+	 * 	console.info('onMaximize');
+	 * });
+	 * ````
 	 */
 	static onMaximize: () => void;
 	/**
@@ -986,6 +1097,14 @@ declare class Application {
 	 * @static
 	 * @deprecated
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Application from '@smartface/native/application';
+	 * 
+	 * Application.on(Application.Events.Minimize, () => {
+	 * 	console.info('onMinimize');
+	 * });
+	 * ````
 	 */
 	static onMinimize: () => void;
 	/**
@@ -1044,6 +1163,17 @@ declare class Application {
 	 */
 	static version: string;
 	static Events: typeof Events;
+	/**
+	 * Indicates whether the voiceover is enabled. Voiceover is also called a screen reader on Android.
+	 *
+	 * @property {Boolean} isVoiceOverEnabled
+	 * @readonly
+	 * @android
+	 * @ios
+	 * @static
+	 * @since 4.3.6
+	 */
+	static isVoiceOverEnabled: Boolean;
 }
 
 export = Application;

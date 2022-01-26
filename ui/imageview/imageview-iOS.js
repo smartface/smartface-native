@@ -2,6 +2,7 @@ const View = require('../view');
 const Image = require("../../ui/image");
 const ImageCacheType = require('../../ui/imagecachetype');
 const Color = require("../../ui/color");
+ImageView.Events = { ...View.Events };
 
 const FillType = {
     NORMAL: 0,
@@ -394,12 +395,5 @@ const SDWebImageOptions = {
      */
     SDWebImageForceTransition: 1 << 16
 };
-
-ImageView.Android = {}
-ImageView.Android.NetworkPolicy = {};
-ImageView.Android.NetworkPolicy.NO_CACHE = 1;
-ImageView.Android.NetworkPolicy.NO_STORE = 2;
-ImageView.Android.NetworkPolicy.OFFLINE = 3;
-ImageView.Android.MemoryPolicy = {};
 
 module.exports = ImageView;

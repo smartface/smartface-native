@@ -12,34 +12,22 @@ var ButtonType = {
 };
 
 const MethodNames = {
-    didDismissWithButtonIndex: "didDismissWithButtonIndex"
+    onDismiss: "onDismiss"
 };
-
-const UIAlertViewStyle = {
-	DEFAULT: 0,
-	SECURETEXTINPUT:1,
-	PLAINTEXTINPUT:2,
-	LOGINANDPASSWORDINPUT:3
-}
 
 function AlertView(params) {
     var self = this;
 
     var delegate = function(method) {
         switch (method.name) {
-            case MethodNames.didDismissWithButtonIndex:
-                if (method.buttonIndex !== -1) {
-                    if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
-                        _buttonArray[method.buttonIndex].onClick();
-                    }
-                }
+            case MethodNames.onDismiss:
                 self.onDismiss(self);
                 break;
             default:
         }
     };
 
-    this.nativeObject = new __SF_UIAlertView(delegate);
+    this.nativeObject = __SF_UIAlertController.createAlertController(1);
     self.nativeObject.title = "";
 
     // Handling android specific properties
@@ -70,62 +58,37 @@ function AlertView(params) {
     });
 
     this.show = function() {
-		if (_textBoxArray.length == 1){
-			self.nativeObject.alertViewStyle = UIAlertViewStyle.PLAINTEXTINPUT;
-			var textfield = self.nativeObject.textFieldAtIndex(0);
-			_bindTextFieldProperties(textfield,_textBoxArray[0]);
-    	}else if (_textBoxArray.length == 2){
-    		self.nativeObject.alertViewStyle = UIAlertViewStyle.LOGINANDPASSWORDINPUT;
-			var textfield = self.nativeObject.textFieldAtIndex(0);
-			_bindTextFieldProperties(textfield,_textBoxArray[0]);
-			var textfield2 = self.nativeObject.textFieldAtIndex(1);
-			_bindTextFieldProperties(textfield2,_textBoxArray[1]);
-    	}
-        self.nativeObject.show();
+        __SF_UIAlertController.present(self.nativeObject)
     };
-	
-	function _bindTextFieldProperties(textfield,object){
-		var internalObject = object ? object : {};
-		textfield.setValueForKey(internalObject.text ? internalObject.text : "","text");
-		textfield.setValueForKey(internalObject.hint ? internalObject.hint : "","placeholder");
-		textfield.setValueForKey(internalObject.isPassword ? true : false,"isSecure");
-	}
 	
     this.dismiss = function() {
-        self.nativeObject.dismissWithClickedButtonIndexAnimated(-1, true);
+        __SF_UIAlertController.dismissAlert(self.nativeObject, delegate);
     };
 
-    var _buttonArray = [];
-    this.addButton = function(params) {
-        _buttonArray.push(params);
-        self.nativeObject.addButtonWithTitle(params.text);
+    this.addButton = function({text, index, onClick}) {
+        var action = __SF_UIAlertAction.createAction(text, index, onClick);
+        self.nativeObject.addAction(action)
+
     };
 
     Object.defineProperty(this, 'isShowing', {
         get: function() {
-            return self.nativeObject.isVisible;
+            return self.nativeObject.isBeingPresented;
         },
         enumerable: true
     });
 	
     Object.defineProperty(this, 'textBoxes', {
         get: function() {
-        	var textfield1 = self.nativeObject.textFieldAtIndex(0);
-        	var textfield2 = self.nativeObject.textFieldAtIndex(1);
-        	
-        	var returnArray = [];
-        	
-        	if (textfield1) {
-        		returnArray.push({
-        			text: textfield1.valueForKey("text")
-        		});
-        	}
-        	
-        	if (textfield2) {
-        		returnArray.push({
-        			text: textfield2.valueForKey("text")
-        		});
-        	}
+        	var returnArray = []
+
+            if (Array.isArray(self.nativeObject.textFields)) {
+                self.nativeObject.textFields.forEach(textfield => {
+                    returnArray.push({
+                        text: textfield.valueForKey("text")
+                    })
+                });
+            }
 
             return returnArray;
         },
@@ -134,13 +97,8 @@ function AlertView(params) {
     
     this.onDismiss = function(AlertView) {};
 	
-	var _textBoxArray = [];
 	this.addTextBox = function(object){
-		if (_textBoxArray.length == 2) {
-			throw new Error('More than two textboxes cannot be added to AlertView.');
-		}else{
-			_textBoxArray.push(object);
-		}
+        __SF_UIAlertController.addTextFieldArea(self.nativeObject, object.text, object.hint, object.isPassword)
 	};
 	
     // Assign parameters given in constructor

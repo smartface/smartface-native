@@ -28,11 +28,8 @@ declare namespace ViewGroup {
  *     });
  *     myFlexLayout.addChild(myLabel);
  */
-declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents> {
-	on(eventName: string, callback: (...args: any) => void): () => void;
-	off(eventName: string, callback?: (...args: any) => void): void;
-	emit(event: string, detail?: any[]): void;
-    constructor(params?: any)
+declare class ViewGroup<TEvents = ViewGroupEvents> extends View<TEvents> {
+    constructor(...params: any[])
     /**
      * This function adds a child view to a viewgroup.
      *
@@ -42,7 +39,7 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @method addChild
      * @since 0.1
      */
-    addChild(view: View): void;
+    addChild(view: View<any>): void;
     /**
      * Remove a child view from viewgroup.
      *
@@ -52,7 +49,7 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @method removeChild
      * @since 0.1
      */
-    removeChild(view: View): void;
+    removeChild(view: View<any>): void;
     /**
      * Removes all child views from viewgroup.
      *
@@ -81,7 +78,7 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @ios
      * @since 3.1.3
      */
-    getChildList(): View[];
+    getChildList(): View<any>[];
     /**
      * Called when a child does not want this parent and its ancestors to intercept touch events .
      * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
@@ -122,8 +119,18 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @android
      * @ios
      * @since 1.1.8
+     * @deprecated
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewAdded, (params) => {
+     *  console.info('onViewAdded', params);
+     * });
+     * ````
      */
-    onViewAdded: (view: View) => void;
+    onViewAdded: (view: View<any>) => void;
     /**
      * This event is called when a view removed from this view's hierarchy.
      *
@@ -132,8 +139,17 @@ declare class ViewGroup<Tevents = ViewGroupEvents> extends View<ViewGroupEvents>
      * @android
      * @ios
      * @since 1.1.8
+     * @example
+     * ````
+     * import ViewGroup from '@smartface/native/ui/viewgroup';
+     * 
+     * const viewGroup = new ViewGroup();
+     * viewGroup.on(ViewGroup.Events.ViewRemoved, (params) => {
+     *  console.info('onViewRemoved', params);
+     * });
+     * ````
      */
-    onViewRemoved: (view: View) => void;
+    onViewRemoved: (view: View<any>) => void;
 }
 
 

@@ -1,6 +1,7 @@
 import Page from "../../ui/page";
 import Image from "../../ui/image";
 import File from "../../io/file";
+import Color from "../../ui/color";
 /**
  * @class Device.Multimedia
  * @since 0.1
@@ -292,6 +293,40 @@ declare namespace Multimedia {
         }
     }
 
+
+    /** 
+     * These enums used to specify shape of crop window.
+     * 
+     * @enum {Number} Device.Multimedia.CropShape
+     * @since 4.3.6
+     * @android
+     * @ios
+     */
+    enum CropShape {
+        /**
+        * Specifies that crop window shape is oval.
+        * 
+        * @property {Number} OVAL
+        * @static
+        * @android
+        * @ios
+        * @readonly
+        * @since 4.3.6
+        */
+        OVAL = 2,
+        /**
+        * Specifies that crop window shape is rectangle.
+        * 
+        * @property {Number} RECTANGLE
+        * @static
+        * @android
+        * @ios
+        * @readonly
+        * @since 4.3.6
+        */
+        RECTANGLE = 1
+    }
+
     namespace Android {
 
         /** 
@@ -300,6 +335,7 @@ declare namespace Multimedia {
         * @enum {Number} Device.Multimedia.Android.CropShape
         * @since 4.1.5
         * @android
+        * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape}
         */
         enum CropShape {
 
@@ -311,6 +347,7 @@ declare namespace Multimedia {
             * @android
             * @readonly
             * @since 4.1.5
+            * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.OVAL}
             */
             OVAL = 2,
 
@@ -322,6 +359,7 @@ declare namespace Multimedia {
             * @android
             * @readonly
             * @since 4.1.5
+            * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.RECTANGLE}
             */
             RECTANGLE = 1
         }
@@ -339,7 +377,7 @@ declare type MultimediaParams = {
         cameraDevice?: Multimedia.iOS.CameraDevice;
     };
     android?: {
-        cropShape?: Multimedia.Android.CropShape;
+        cropShape?: Multimedia.CropShape;
         rotateText?: string;
         scaleText?: string;
         cropText?: string;
@@ -357,6 +395,7 @@ declare type MultimediaParams = {
     onCancel?: () => void;
     onFailure?: (e: { message: string }) => void;
 };
+
 
 declare class Multimedia {
 
@@ -461,7 +500,7 @@ declare class Multimedia {
      * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
      * @param {Device.Multimedia.iOS.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
      * @param {Object} params.android Android specific argument
-     * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+     * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
      * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
      * @param {String} params.android.scaleText specifies the text of scale button in the crop window
      * @param {String} params.android.cropText specifies the text of crop button in the crop window
@@ -502,7 +541,7 @@ declare class Multimedia {
     * @param {Device.Multimedia.iOS.CameraFlashMode} params.ios.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
     * @param {Device.Multimedia.iOS.CameraDevice} params.ios.cameraDevice Constants that specify the camera to use for image or movie capture.The default value is Multimedia.iOS.CameraDevice.REAR.
     * @param {Object} params.android Android specific argument
-    * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+    * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
     * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
     * @param {String} params.android.scaleText specifies the text of scale button in the crop window
     * @param {String} params.android.cropText specifies the text of crop button in the crop window
@@ -612,7 +651,7 @@ declare class Multimedia {
      * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
      * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
      * @param {Object} params.android Android specific argument
-     * @param {Device.Multimedia.Android.CropShape} params.android.cropShape specifies the crop window shape
+     * @param {Device.Multimedia.CropShape} params.android.cropShape specifies the crop window shape
      * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
      * @param {String} params.android.scaleText specifies the text of scale button in the crop window
      * @param {String} params.android.cropText specifies the text of crop button in the crop window
@@ -635,6 +674,132 @@ declare class Multimedia {
      * @since 0.1
      */
     static pickFromGallery(params: MultimediaParams): void;
+
+
+    /**
+    * @method pickMultipleFromGallery
+    * 
+    * Allows multiple pick item from gallery.
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {UI.Page} params.page
+    * @param {Device.Multimedia.Type} [params.type=Device.Multimedia.Type.IMAGE] Data type.
+    * @param {Object} params.android Android specific argument
+    * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+    * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
+    * @param {Function} params.onSuccess Callback for success situation.
+    * @param {Object} params.onSuccess.params 
+    * @param {Object[]} params.onSuccess.params.assets
+    * @param {IO.File} params.onSuccess.params.assets.file Selected image or video file depends on the given type. In iOS, if the given type is image then it returns undefined.
+    * @param {UI.Image} params.onSuccess.params.assets.image Selected images
+    * @param {Function} [params.onCancel] Callback for cancellation situation.
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @param {Object[]} params.onFailure.params 
+    * @param {String} params.onFailure.params.message Failure message
+    * @param {String|null} params.onFailure.params.fileName File name of the selected file or null if the selected file has unkown issue or pointed to a remote resource.
+    * @param {String} params.onFailure.params.uri Uri of the selected file
+    * @android
+    * @ios
+    * @since 4.3.6
+    */
+    static pickMultipleFromGallery(params: {
+        type?: Multimedia.Type;
+        page: Page;
+        android?: {
+            fixOrientation?: boolean;
+            maxImageSize?: number;
+        };
+        onSuccess: (params: { assets: [{ image?: Image; file?: File|null }]}) => void;
+        onCancel?: () => void;
+        onFailure?: (e: [{ message: string, fileName: string|null, uri: string }]) => void;
+    }): void;
+
+
+    /**
+    * @method launchCropper
+    * 
+    * Launches cropper.
+    * 
+    * @param {Object} params Object describing parameters for the function.
+    * @param {UI.Page} params.page
+    * @param {IO.File|UI.Image} params.asset Image or image file which suppose to cropped. Note that providing Image caueses to launch the Cropper with the delay which depends on size of the Image in Android.
+    * Thus, providing File is always a better option. At least to decrease the delay, provide smaller images.
+    * @param {Device.Multimedia.CropShape} [params.cropShape=Device.Multimedia.CropShape.RECTANGLE] specifies the crop window shape
+    * @param {Boolean} [params.enableFreeStyleCrop=false] set to true to let user resize crop bounds (disabled by default)
+    * @param {String} params.headerBarTitle specifies the title of header bar in the crop window
+    * @param {Object} params.aspectRatio This property affects only on android.
+    * @param {Number} params.aspectRatio.x The X value of aspect ratio of cropping window
+    * @param {Number} params.aspectRatio.y The Y value of aspect ratio of cropping window
+    * @param {Object} params.android Android specific argument
+    * @param {String} params.android.rotateText specifies the text of rotate button in the crop window
+    * @param {String} params.android.scaleText specifies the text of scale button in the crop window
+    * @param {String} params.android.cropText specifies the text of crop button in the crop window
+    * @param {Boolean} params.android.hideBottomControls set to true to hide the bottom controls  in the crop window (shown by default)
+    * @param {Boolean} params.android.fixOrientation fixes incorrect image orientation. The fixing takes time if image resolution is high. So it's strictly recommended to use with maxImageSize in order to reduce performance issues.
+    * @param {Number} params.android.maxImageSize specifies the max size for both width and height of image
+    * @param {Object} params.android.maxResultSize set maximum size for result cropped image.
+    * @param {Number} params.android.maxResultSize.height max cropped image height
+    * @param {Number} params.android.maxResultSize.width max cropped image width 
+    * @param {Object} params.ios iOS specific argument
+    * @param {Boolean} [params.ios.aspectRatioPickerButtonHidden=true] When enabled, hides the 'Aspect Ratio Picker' button on the toolbar.
+    * @param {Boolean} [params.ios.resetButtonHidden=false] When enabled, hides the 'Reset' button on the toolbar.
+    * @param {Boolean} [params.ios.resetAspectRatioEnabled=false] If true, tapping the reset button will also reset the aspect ratio back to the image 
+    * default ratio. Otherwise, the reset will just zoom out to the current aspect ratio.
+    * @param {Boolean} [params.ios.aspectRatioLockDimensionSwapEnabled=true] If true, a custom aspect ratio is set, and the aspectRatioLockEnabled is set to YES, the crop box 
+    * will swap it's dimensions depending on portrait or landscape sized images. This value also controls whether the dimensions can swap when the image is rotated.
+    * @param {Boolean} [params.ios.rotateButtonsHidden=false] When enabled, hides the rotation button.
+    * @param {Boolean} [params.ios.showOnlyIcons=false] If true, button icons are visible in portairt instead button text.
+    * @param {String}  params.ios.doneButtonTitle Title for the 'Done' button. Setting this will override the Default which is a localized string for "Done".
+    * @param {String}  params.ios.cancelButtonTitle Title for the 'Cancel' button. Setting this will override the Default which is a localized string for "Cancel".
+    * @param {UI.Color}  params.ios.doneButtonColor
+    * @param {UI.Color}  params.ios.cancelButtonColor
+    * @param {Function} params.onSuccess Callback for success situation.
+    * @param {Object} params.onSuccess.params 
+    * @param {UI.Image} params.onSuccess.params.image Cropped image
+    * @param {Function} [params.onCancel] Callback for cancellation situation.
+    * @param {Function} [params.onFailure] Callback for failure situation.
+    * @param {Object} params.onFailure.params 
+    * @param {String} params.onFailure.params.message Failure message
+    * @android
+    * @ios
+    * @since 4.3.6
+    */
+   static launchCropper(params: {
+    page: Page;
+    asset: File|Image;
+    aspectRatio?: { x: number; y: number };
+    cropShape?: Multimedia.CropShape;
+    headerBarTitle?: string;
+    enableFreeStyleCrop?: boolean;
+    android?: {
+        rotateText?: string;
+        scaleText?: string;
+        cropText?: string;
+        hideBottomControls?: boolean;
+        maxResultSize?: {
+            height: number;
+            width: number;
+        };
+        fixOrientation?: boolean;
+        maxImageSize?: number;
+    };
+    ios?: {
+        aspectRatioPickerButtonHidden: boolean;
+        resetButtonHidden?: boolean;
+        resetAspectRatioEnabled?: boolean;
+        aspectRatioLockDimensionSwapEnabled?: boolean;
+        rotateButtonsHidden?: boolean;
+        showOnlyIcons?: boolean;
+        doneButtonTitle?: string;
+        cancelButtonTitle?: string;
+        doneButtonColor?: Color;
+        cancelButtonColor?: Color;        
+    };
+    onSuccess: (params: { image?: Image; }) => void;
+    onCancel?: () => void;
+    onFailure?: (e: { message: string }) => void;
+    }): void;
+
 
     /**
     * @method convertToMp4
@@ -665,6 +830,19 @@ declare class Multimedia {
     * @since 4.2.2
     */
     static convertToMp4(params: { videoFile: File, outputFileName: String, onCompleted: ( params: { video: File }) => void,  onFailure?: () => void}): void;
+
+    /**
+    * Indicates whether the device has camera feature.
+    * 
+    * @property hasCameraFeature
+    * @readonly
+    * @android
+    * @ios
+    * @static
+    * @return {Boolean}
+    * @since 4.3.6
+    */
+    static hasCameraFeature: Boolean;
 
     static ios: {
 
@@ -703,33 +881,6 @@ declare class Multimedia {
          */
         getCameraAuthorizationStatus(): Multimedia.iOS.CameraAuthorizationStatus;
     }
-
-    static readonly android: {
-        /**
-         * @method getAllGalleryItems
-         * 
-         * Gets an object array contains gallery items.
-         * 
-         * @param {Object} params Object describing parameters for the function.
-         * @param {Device.Multimedia.Type} params.type Data type.
-         * @param {Function} params.onSuccess Callback for success situation.
-         * @param {Object} params.onSuccess.params 
-         * @param {Array.<UI.Image>} params.onSuccess.params.images 
-         * @param {Array.<IO.File>} params.onSuccess.params.videos 
-         * @param {Function} [params.onCancel] Callback for cancellation situation.
-         * @param {Function} [params.onFailure] Callback for failure situation.
-         * @param {Object} params.onFailure.params 
-         * @param {String} params.onFailure.params.message Failure message
-         * @android
-         * @since 0.1
-         */
-        getAllGalleryItems(paras: {
-            type: Multimedia.Type;
-            onSuccess: (params: { image: Image[]; video: File[] }) => void;
-            onCancel?: () => void;
-            onFailure?: (e: { message: string }) => void;
-        });
-    };
 }
 
 export = Multimedia;

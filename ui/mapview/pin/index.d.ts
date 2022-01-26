@@ -17,6 +17,7 @@ declare enum PinEvets {
 declare class Pin implements IEventEmitter<PinEvets> {
     constructor(params?: Partial<Pin>);
     on(eventName: PinEvets, callback: (...args: any) => void): () => void;
+    once(eventName: PinEvets, callback: (...args: any) => void): () => void;
     off(eventName: PinEvets, callback?: (...args: any) => void): void;
     emit(event: PinEvets, detail?: any[]): void;
     location: {
@@ -29,6 +30,7 @@ declare class Pin implements IEventEmitter<PinEvets> {
     id: number;
     image: Image;
     visible: boolean;
+
 	/**
 	 * This event will be fired when the pin is touched.
 	 *
@@ -37,10 +39,29 @@ declare class Pin implements IEventEmitter<PinEvets> {
 	 * @android
 	 * @ios
 	 * @since 1.1.2
+     * @example
+     * ````
+     * import Pin from '@smartface/native/ui/mapview/pin';
+     * 
+     * const pin = new Pin();
+     * pin.on(Pin.Events.Press, () => {
+     *  console.info('onPress');
+     * });
+     * ```` 
 	 */
     onPress: () => void;
+
     /**
      * @deprecated
+     * @example
+     * ````
+     * import Pin from '@smartface/native/ui/mapview/pin';
+     * 
+     * const pin = new Pin();
+     * pin.on(Pin.Events.InfoWindowPress, () => {
+     *  console.info('onInfoWindowPress');
+     * });
+     * ````
      */
     onInfoWindowPress: () => void;
     static Events: typeof PinEvets

@@ -27,6 +27,10 @@ declare class AsyncTask
 		eventName: AsyncTask.Events,
 		callback: (...args: any) => void
 	): () => void;
+	once(
+		eventName: AsyncTask.Events,
+		callback: (...args: any) => void
+	): () => void;
 	off(
 		eventName: AsyncTask.Events,
 		callback?: (...args: any) => void
@@ -49,6 +53,15 @@ declare class AsyncTask
 	 * @ios
 	 * @deprecated
 	 * @since 3.1.0
+	 * @example
+	 * ````
+	 * import AsyncTask from '@smartface/native/global/asynctask';
+	 * 
+	 * const task = new AsyncTask();
+	 * task.on(AsyncTask.Events.Complete, () => {
+	 * 	console.info('onComplete');
+	 * });
+	 * ````
 	 */
 	onComplete: () => void;
 	/**
@@ -58,6 +71,15 @@ declare class AsyncTask
 	 * @deprecated
 	 * @android
 	 * @since 3.2.2
+	 * @example
+	 * ````
+	 * import AsyncTask from '@smartface/native/global/asynctask';
+	 * 
+	 * const task = new AsyncTask();
+	 * task.on(AsyncTask.Events.PreExecute, () => {
+	 * 	console.info('onPreExecute');
+	 * });
+	 * ````
 	 */
 	onPreExecute: () => void;
 	/**
@@ -68,6 +90,15 @@ declare class AsyncTask
 	 * @deprecated
 	 * @ios
 	 * @since 3.2.2
+	 * @example
+	 * ````
+	 * import AsyncTask from '@smartface/native/global/asynctask';
+	 * 
+	 * const task = new AsyncTask();
+	 * task.on(AsyncTask.Events.Cancelled, () => {
+	 * 	console.info('onCancelled');
+	 * });
+	 * ````
 	 */
 	onCancelled: () => void;
 	/**

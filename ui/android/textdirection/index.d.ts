@@ -4,7 +4,7 @@ declare enum TextDirection {
 	ANY_RTL,
 	LTR,
 	RTL,
-    LOCALE,
+	LOCALE,
 	FIRST_STRONG_LTR,
 	FIRST_STRONG_RTL,
 }

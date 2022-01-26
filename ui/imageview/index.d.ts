@@ -3,12 +3,6 @@ import Image from "../image";
 import Color from "../color";
 import File from "../../io/file";
 import ImageCacheType from "../imagecachetype";
-import policy from "./Android/policy";
-
-declare const ImageViewMemoryPolicy: typeof policy.ImageViewMemoryPolicy;
-declare const ImageViewNetworkPolicy: typeof policy.ImageViewNetworkPolicy;
-declare const MemoryPolicy: typeof policy.MemoryPolicy;
-declare const NetworkPolicy: typeof policy.NetworkPolicy;
 
 /**
  * @class UI.ImageView
@@ -107,12 +101,12 @@ declare class ImageView extends View {
      * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
 	 * @param {UI.Image} object.placeholder
 	 * @param {Boolean} object.fade = true
-	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
+	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the useDiskCache argument.
 	 * @param {Function} object.onSuccess
 	 * @param {Function} object.onFailure
 	 * @param {Object} object.android Android specific argument
-	 * @param {UI.ImageView.Android.NetworkPolicy | Array} object.android.networkPolicy Designates the policy to use for network requests.
-	 * @param {UI.ImageView.Android.MemoryPolicy | Array} object.android.memoryPolicy Designates the policy to use for memory cache.
+	 * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
+	 * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
 	 * @android
 	 * @ios
 	 * @since 3.1.3
@@ -126,12 +120,8 @@ declare class ImageView extends View {
 		onSuccess?: () => void;
 		onFailure?: () => void;
 		android?: {
-			networkPolicy?:
-				| ImageView.Android.NetworkPolicy
-				| ImageView.Android.NetworkPolicy[];
-			memoryPolicy?:
-				| ImageView.Android.MemoryPolicy
-				| ImageView.Android.MemoryPolicy[];
+			useDiskCache?: boolean;
+			useMemoryCache?: boolean;
 		};
 	}): void;
 	/**
@@ -144,7 +134,7 @@ declare class ImageView extends View {
 	 * @param {Number} object.width
 	 * @param {Number} object.height
 	 * @param {Object} object.android Android specific argument
-	 * @param {UI.ImageView.Android.MemoryPolicy | Array} object.android.memoryPolicy Designates the policy to use for memory cache.
+	 * @param {useMemoryCache?: boolean} object.android.useMemoryCache Designates the using of memory cache.
 	 * @android
 	 * @ios
 	 * @since 3.1.0
@@ -155,9 +145,7 @@ declare class ImageView extends View {
 		width?: number;
 		height?: number;
 		android?: {
-			memoryPolicy:
-				| ImageView.Android.MemoryPolicy
-				| ImageView.Android.MemoryPolicy[];
+			useMemoryCache?: boolean;
 		};
 	}): void;
 	/**
@@ -170,15 +158,15 @@ declare class ImageView extends View {
 	 * @param {Object} object
 	 * @param {String} object.url
      * @param {Object} object.headers Headers to load the image with. e.g. { Authorization: 'someAuthToken' }.
-	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the networkPolicy & memoryPolicy arguments.
+	 * @param {Boolean} object.useHTTPCacheControl  if it is true then enables http cache control mechanism  and behaves as given directives of Cache-Control header in response. This argument overrides the useDiskCache argument.
 	 * @param {UI.Image} object.placeholder
 	 * @param {Function} object.onSuccess
 	 * @param {UI.Image} object.onSuccess.image
 	 * @param {UI.ImageCacheType} object.onSuccess.cache
 	 * @param {Function} object.onFailure
 	 * @param {Object} object.android Android specific argument
-	 * @param {UI.ImageView.Android.NetworkPolicy | Array} object.android.networkPolicy Designates the policy to use for network requests.
-	 * @param {UI.ImageView.Android.MemoryPolicy | Array} object.android.memoryPolicy Designates the policy to use for memory cache.
+	 * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
+	 * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
 	 * @android
 	 * @ios
 	 * @since 3.0.2
@@ -191,12 +179,8 @@ declare class ImageView extends View {
 		onSuccess?: (image: Image, cache: ImageCacheType ) => void;
 		onFailure?: () => void;
 		android?: {
-			networkPolicy?:
-				| ImageView.Android.NetworkPolicy
-				| ImageView.Android.NetworkPolicy[];
-			memoryPolicy?:
-				| ImageView.Android.MemoryPolicy
-				| ImageView.Android.MemoryPolicy[];
+			useDiskCache?: boolean;
+			useMemoryCache?: boolean;
 		};
 	}): void;
 }
@@ -362,17 +346,6 @@ declare namespace ImageView {
 			 * @since 0.1
 			 */
 			BOTTOMRIGHT = 12
-		}
-	}
-	namespace Android {
-		enum MemoryPolicy {
-			NO_CACHE = 1,
-			NO_STORE = 2
-		}
-		enum NetworkPolicy {
-			NO_CACHE = 1,
-			NO_STORE = 2,
-			OFFLINE = 3
 		}
 	}
 }

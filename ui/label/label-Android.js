@@ -25,6 +25,7 @@ NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTextUtils.TruncateAt.MIDDLE;
 NativeEllipsizeMode[EllipsizeMode.END] = NativeTextUtils.TruncateAt.END;
 NativeEllipsizeMode[EllipsizeMode.NONE] = null;
 
+Label.Events = { ...View.Events };
 
 const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;

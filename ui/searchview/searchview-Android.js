@@ -94,16 +94,19 @@ function SearchView(params) {
         _searchIconAssigned = false;
     var _font = null;
     var _textalignment = TextAlignment.MIDLEFT;
+    var _hasEventsLocked = false;
 
     Object.defineProperties(this, {
         'text': {
             get: function () {
-                return mSearchSrcTextView.getText().toString();
+                return this.nativeObject.getQuery().toString();
             },
             set: function (text) {
+                _hasEventsLocked = true;
                 if (typeof text === "string") {
-                    mSearchSrcTextView.setText("" + text);
+                    this.nativeObject.setQuery("" + text, false);
                 }
+                _hasEventsLocked = false;
             },
             enumerable: true
         },
@@ -246,7 +249,7 @@ function SearchView(params) {
             },
             set: function (onTextChanged) {
                 _onTextChangedCallback = onTextChanged.bind(self);
-                self.setQueryTextListener();
+                self.setTextWatcher();
             },
             enumerable: true
         },
@@ -333,7 +336,7 @@ function SearchView(params) {
             _onTextChangedCallback = (state) => {
                 this.emitter.emit(Events.TextChanged, state);
             }
-            self.setQueryTextListener();
+            self.setTextWatcher();
         }
     }
 
@@ -481,20 +484,21 @@ function SearchView(params) {
         mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
     };
 
-    let _isNotSetQueryTextListener = false;
-    this.setQueryTextListener = () => {
-        if (_isNotSetQueryTextListener)
+    let _isNotSetTextWatcher = false;
+    this.setTextWatcher = () => {
+        if (_isNotSetTextWatcher)
             return;
-        this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-            onQueryTextSubmit: function (query) {
-                return false;
-            },
-            onQueryTextChange: function (newText) {
-                _onTextChangedCallback && _onTextChangedCallback(newText);
-                return false;
-            }
+        const NativeTextWatcher = requireClass("android.text.TextWatcher");
+        mSearchSrcTextView.addTextChangedListener(NativeTextWatcher.implement({
+            onTextChanged: function (charSequence, start, before, count) {
+                if (!_hasEventsLocked) {
+                    _onTextChangedCallback && _onTextChangedCallback(charSequence.toString());
+                }
+            }.bind(this),
+            beforeTextChanged: function (charSequence, start, count, after) { },
+            afterTextChanged: function (editable) { }
         }));
-        _isNotSetQueryTextListener = true;
+        _isNotSetTextWatcher = true;
     };
 
     let _isClicklistenerAdded = false;

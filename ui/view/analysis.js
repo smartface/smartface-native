@@ -628,6 +628,16 @@ View.prototype.onTouchMoved = function onTouchMoved(isInside, motionEvent) { };
 View.prototype.onTouchCancelled = function onTouchCancelled(motionEvent) { };
 
 /**
+ * This method marks the view as needs relayout.
+ *
+ * @method dirty
+ * @android
+ * @ios
+ * @since 4.3.6
+ */
+View.prototype.dirty = function () { };
+
+/**
  * Gets/Sets the elevation of the view. For the views that has 
  * StateListAnimator natively like Button, will lost its own 
  * StateListAnimation when elevation value changed.

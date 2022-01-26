@@ -1,4 +1,4 @@
-import { IEventEmitter } from "core/eventemitter";
+import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
 
@@ -46,12 +46,16 @@ declare enum Events {
  *     }
  *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
-declare class SelectablePicker extends NativeComponent implements IEventEmitter<Events> {
+declare class SelectablePicker extends NativeComponent {
     constructor(params?: any);
     static Events: typeof Events;
-    on(eventName: Events, callback: (...args: any) => void): () => void;
-    off(eventName: Events, callback?: (...args: any) => void): void;
-    emit(event: Events, detail?: any[]): void;
+
+    protected emitter: EventEmitter<Events>;
+    on(eventName: Events, callback: (...args: any[]) => void): () => void;
+    once(eventName: Events, callback: (...args: any[]) => void): () => void;
+    off(eventName: Events, callback: (...args: any[]) => void): void;
+    emit(event: Events, ...args: any[]): void;
+  
     /**
      * Gets/sets items of the SelectablePicker.
      *
@@ -70,6 +74,15 @@ declare class SelectablePicker extends NativeComponent implements IEventEmitter<
      * @deprecated
      * @android
      * @since 4.0.5
+     * @example
+     * ````
+     * import SelectablePicker from '@smartface/native/ui/selectablepicker';
+     * 
+     * const selectablePicker = new SelectablePicker();
+     * selectablePicker.on(SelectablePicker.Events.Selected, (params) => {
+     *  console.info('onSelected', params);
+     * });
+     * ````
      */
     onSelected: (index: boolean, selected: boolean) => void;
     /**

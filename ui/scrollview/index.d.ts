@@ -161,6 +161,7 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * necessary.
 	 *
 	 * @event onScroll
+	 * @deprecated
 	 * @param {Object} params
 	 * @param {Object} params.translation
 	 * @param {Number} params.translation.x
@@ -171,6 +172,15 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @android
 	 * @ios
 	 * @since 1.1.13
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.Scroll, (params) => {
+	 * 	console.info('onScroll', params);
+	 * });
+	 * ````
 	 */
 	onScroll: (params: {
 		translation: Point2D;
@@ -198,6 +208,16 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @event onScrollBeginDragging
 	 * @ios
 	 * @since 3.2.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.ScrollBeginDragging, (params) => {
+	 * 	console.info('onScrollBeginDragging', params);
+	 * });
+	 * ````
 	 */
 	onScrollBeginDragging: (contentOffset: Point2D) => void;
 	/**
@@ -209,6 +229,16 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @event onScrollBeginDecelerating
 	 * @ios
 	 * @since 3.2.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.ScrollBeginDecelerating, (params) => {
+	 * 	console.info('onScrollBeginDecelerating', params);
+	 * });
+	 * ````
 	 */
 	onScrollBeginDecelerating: (contentOffset: Point2D) => void;
 	/**
@@ -220,6 +250,16 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @event onScrollEndDecelerating
 	 * @ios
 	 * @since 3.2.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.ScrollEndDecelerating, (params) => {
+	 * 	console.info('onScrollEndDecelerating', params);
+	 * });
+	 * ````
 	 */
 	onScrollEndDecelerating: (contentOffset: Point2D) => void;
 	/**
@@ -232,6 +272,16 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @event onScrollEndDraggingWillDecelerate
 	 * @ios
 	 * @since 3.2.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.ScrollEndDraggingWillDecelerate, (params) => {
+	 * 	console.info('onScrollEndDraggingWillDecelerate', params);
+	 * });
+	 * ````
 	 */
 	onScrollEndDraggingWillDecelerate: (
 		contentOffset: Point2D,
@@ -252,6 +302,16 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 	 * @event onScrollEndDraggingWithVelocityTargetContentOffset
 	 * @ios
 	 * @since 3.2.1
+	 * @deprecated
+	 * @example
+	 * ````
+	 * import ScrollView from '@smartface/native/ui/scrollview';
+	 * 
+	 * const scrollView = new ScrollView();
+	 * scrollView.on(ScrollView.Events.ScrollEndDraggingWithVelocityTargetContentOffset, (params) => {
+	 * 	console.info('onScrollEndDraggingWithVelocityTargetContentOffset', params);
+	 * });
+	 * ````
 	 */
 	onScrollEndDraggingWithVelocityTargetContentOffset: (
 		contentOffset: Point2D,

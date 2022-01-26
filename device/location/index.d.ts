@@ -25,12 +25,9 @@ export = Location;
  *
  */
 declare class Location {
-	static on(
-		eventName: typeof Events,
-		callback: (...args: any) => void
-	): () => void;
-	static off(eventName: typeof Events, callback?: (...args: any) => void): void;
-	static emit(event: typeof Events, detail?: any[]): void;
+	static on(eventName: Events, callback: (...args: any) => void): () => void;
+	static off(eventName: Events, callback?: (...args: any) => void): void;
+	static emit(event: Events, detail?: any[]): void;
 	static android: {
 		/**
 		 * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
@@ -78,12 +75,21 @@ declare class Location {
 	 * Callback to capture location events.
 	 *
 	 * @event onLocationChanged
+	 * @deprecated
 	 * @param {Object} event
 	 * @param {Number} event.latitude
 	 * @param {Number} event.longitude
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Location from '@smartface/native/device/location';
+	 * 
+	 * Location.on(Location.Events.LocationChanged, (params) => {
+	 * 	console.info('onLocationChanged', params);
+	 * });
+	 * ````
 	 */
 	static onLocationChanged(e: { latitude: number; longitude: number }): void;
 	/**
@@ -135,6 +141,7 @@ declare class Location {
 		 */
 		locationServicesEnabled(): boolean;
 	};
+	static Events: typeof Events;
 }
 
 declare namespace Location {

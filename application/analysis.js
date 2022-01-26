@@ -177,29 +177,59 @@ Application.appName;
 Application.version;
 
 /**
+ * Indicates whether the voiceover is enabled. Voiceover is also called a screen reader on Android.
+ *
+ * @property {Boolean} isVoiceOverEnabled
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 4.3.6
+ */
+Application.isVoiceOverEnabled;
+
+/**
  * Checks URL's scheme can be handled or not by some app that installed on the device.
  *
- * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
+ * To pass this method, URL schemes must be declared into "Info.plist" file for iOS 
+ * and AndroidManifest.xml file for Android.
  *
- *     @example for Google Maps (Info.plist entry)
- *
+ *     @example for Google Maps 
+ * 
+ *      (Info.plist entry)
  *      <key>LSApplicationQueriesSchemes</key>
  *      <array>
  *          <string>comgooglemaps</string>
  *      </array>
  *
- *      After entry add on, urlScheme can be check;
+ *      After entry add on, urlScheme can be check
  *      const Application = require("@smartface/native/application");
- *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
+ *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+ * 
+ *      (AndroidManifest.xml entry)
+ *      <manifest ...>
+ *          ...
+ *          <queries>
+ *              <intent>
+ *                  <action android:name="android.intent.action.VIEW" />
+ *                  <data android:scheme="geo"/>
+ *              </intent>
+ *          </queries>
+ *      </manifest>
+ *
+ *      const Application = require("@smartface/native/application");
+ *      var isAppAvaible = Application.canOpenUrl("geo://");
  *
  * @method canOpenUrl
  * @param {String} url
  * @return {Boolean}
  * @ios
+ * @android
  * @static
- * @since 3.0.1
+ * @since 4.3.6
+ * @see https://developer.android.com/training/package-visibility
  */
-Application.ios.canOpenUrl = function (url) {};
+Application.canOpenUrl = function (url) {};
 
 /**
  * Launches another application and passes data. For Android, you can open application chooser with
@@ -540,6 +570,25 @@ Application.onReceivedNotification = function (data) {};
 Application.onApplicationCallReceived = function (e) {};
 
 /**
+ * Triggered when application is opened by an app shortcut.
+ * App shortcuts is also named Home Screen Quick Actions in iOS.
+ *
+ * @event onAppShortcutReceived
+ * @param {Object} e
+ * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+ * or UserInfo of app shortcut in iOS.
+ *
+ * @android
+ * @ios
+ * @static
+ * @deprecated
+ * @since 4.3.6
+ * @see https://developer.android.com/guide/topics/ui/shortcuts
+ * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+ */
+Application.onAppShortcutReceived = function (e) {};
+
+/**
  * The event is called when a user taps a universal link.
  *
  * @event onUserActivityWithBrowsingWeb
@@ -678,7 +727,25 @@ Application.onUnhandledError = function (error) {};
   * @see https://developer.android.com/training/sharing/receive.html
   */
  Application.Events.ApplicationCallReceived = "applicationCallReceived";
- 
+
+ /**
+  * Triggered when application is opened by an app shortcut. 
+  * App shortcuts is also named Home Screen Quick Actions in iOS.
+  *
+  * @param {Object} e
+  * @param {Object} e.data Data comes from extras of app shortcut intent in Android 
+  * or UserInfo of app shortcut in iOS.
+  *
+  * @android
+  * @ios
+  * @static
+  * @deprecated
+  * @since 4.3.6
+  * @see https://developer.android.com/guide/topics/ui/shortcuts
+  * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
+  */
+ Application.Events.AppShortcutReceived = "appShortcutReceived";
+
  /**
   * The event is called when a user taps a universal link.
   *

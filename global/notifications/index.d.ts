@@ -49,6 +49,7 @@ declare enum Events {
  */
 declare class Notifications {
 	static on(eventName: Events, callback: (...args: any) => void): () => void;
+	static once(eventName: Events, callback: (...args: any) => void): () => void;
 	static off(eventName: Events, callback?: (...args: any) => void): void;
 	static emit(event: Events, ...args: any[]): void;
 	static Events: Events;
@@ -124,6 +125,14 @@ declare class Notifications {
 	 * @android
 	 * @static
 	 * @since 4.0.3
+	 * @example
+	 * ````
+	 * import Notifications from '@smartface/native/global/natifications';
+	 * 
+	 * Notifications.on(Notifications.Events.NotificationReceive, (params) => {
+	 * 	console.info('onNotificationReceive', params);
+	 * });
+	 * ````
 	 */
 	static onNotificationReceive(
 		data: any
@@ -138,6 +147,14 @@ declare class Notifications {
 	 * @android
 	 * @static
 	 * @since 4.0.3
+	 * @example
+	 * ````
+	 * import Notifications from '@smartface/native/global/natifications';
+	 * 
+	 * Notifications.on(Notifications.Events.NoficationClick, (params) => {
+	 * 	console.info('onNotificationClick', params);
+	 * });
+	 * ````
 	 */
 	static onNotificationClick: (data: any) => void;
 	/**
@@ -557,7 +574,7 @@ declare namespace Notifications {
 			 * @readonly
 			 * @since 4.0.3
 			 */
-			BADGEL = 1 << 0,
+			BADGE = 1 << 0,
 
 			/**
 			 * Play the sound associated with the notification.

@@ -19,11 +19,11 @@ declare interface RangeSliderParams {
     thumbBorderWidth?: number;
   }
   ios: {
-      thumbShadowColor?: Color;
-      thumbShadowOpacity?: number;
-      thumbShadowRadius?: number;
-      thumbShadowOffset?: Point2D;
-      applyThumbViewChanges: () => void;
+    thumbShadowColor?: Color;
+    thumbShadowOpacity?: number;
+    thumbShadowRadius?: number;
+    thumbShadowOffset?: Point2D;
+    applyThumbViewChanges: () => void;
   }
   trackColor?: Color;
   outerTrackColor?: Color;
@@ -38,6 +38,18 @@ declare interface RangeSliderParams {
   isHapticSnap?: boolean;
   showsThumbImageShadow?: boolean;
   isTrackRounded?: boolean;
+  /**
+   * @deprecated
+   * @example
+   * ````
+   * import RangeSlider from '@smartface/native/ui/rangeslider';
+   * 
+   * const rangeSlider = new RangeSlider();
+   * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
+   *  console.info('onValueChange', params);
+   * });
+   * ````
+   */
   onValueChange?: (value: number[]) => void;
 }
 declare class RangeSlider extends View<RangeSliderEvents> implements RangeSliderParams {
@@ -48,13 +60,13 @@ declare class RangeSlider extends View<RangeSliderEvents> implements RangeSlider
     thumbBorderWidth?: number;
   } & View['android'];
   ios: {
-      thumbShadowColor?: Color;
-      thumbShadowOpacity?: number;
-      thumbShadowRadius?: number;
-      thumbShadowOffset?: Point2D;
-      applyThumbViewChanges: () => void;
+    thumbShadowColor?: Color;
+    thumbShadowOpacity?: number;
+    thumbShadowRadius?: number;
+    thumbShadowOffset?: Point2D;
+    applyThumbViewChanges: () => void;
   } & View['ios'];
-  trackColor?: Color;  outerTrackColor?: Color;
+  trackColor?: Color; outerTrackColor?: Color;
   outerTrackWeight?: number;
   trackWeight?: number;
   rangeEnabled?: boolean;
@@ -66,6 +78,18 @@ declare class RangeSlider extends View<RangeSliderEvents> implements RangeSlider
   isHapticSnap?: boolean;
   showsThumbImageShadow?: boolean;
   isTrackRounded?: boolean;
+  /**
+   * @deprecated
+   * @example
+   * ````
+   * import RangeSlider from '@smartface/native/ui/rangeslider';
+   * 
+   * const rangeSlider = new RangeSlider();
+   * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
+   *  console.info('onValueChange', params);
+   * });
+   * ````
+   */
   onValueChange?: (value: number[]) => void;
 }
 

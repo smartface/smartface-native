@@ -28,6 +28,7 @@ declare type Sound = {
 declare type Multimedia = {
     CAMERA_REQUEST: 1002;
     PICK_FROM_GALLERY: 1003;
+    PICK_MULTIPLE_FROM_GALLERY: 1006;
     CropImage: {
         CROP_CAMERA_DATA_REQUEST_CODE: 203;
         CROP_GALLERY_DATA_REQUEST_CODE: 205;

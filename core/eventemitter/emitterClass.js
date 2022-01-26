@@ -1,8 +1,21 @@
+/** @type {import("events").EventEmitter} */
 const Events = require("events");
 
 function EventEmitter() {
+    /** @type {import("events").EventEmitter} */
     this.emitter = new Events();
 }
+/**
+* Creates an event emitter instance to listen for the actions
+* @param {string} eventName
+* @param {Function} callback - Gets as any arguments as it needs
+* @returns {Function} Call the function to remove the event
+*/
+EventEmitter.prototype.once = function (eventName, callback) {
+    this.emitter.once(eventName, callback);
+    return () => this.off(eventName, callback);
+}
+
 /**
 * Creates an event emitter instance to listen for the actions
 * @param {string} eventName

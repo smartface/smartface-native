@@ -17,6 +17,7 @@ const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
+const LayoutParams = require("../../util/Android/layoutparams");
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -89,7 +90,7 @@ function Page(params) {
                     Application.registOnItemSelectedListener();
 
                     if (!self.isSwipeViewPage) {
-                        self.__onShowCallback && self.__onShowCallback();
+                        onShowCallback && onShowCallback();
                     }
 
                     var spratIntent = AndroidConfig.activity.getIntent();
@@ -114,7 +115,7 @@ function Page(params) {
             }));
         },
         onPause: function () {
-            self.onHide && self.onHide();
+            onHide();
         },
         onCreateOptionsMenu: function (menu) {
             if (!optionsMenu)
@@ -182,11 +183,11 @@ function Page(params) {
             // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
             if (RequestCodes.Contacts.PICK_REQUEST_CODE === requestCode || RequestCodes.Contacts.PICKFROM_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
-            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE || requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE) {
+            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || 
+                requestCode === Multimedia.CropImage.CROP_CAMERA_DATA_REQUEST_CODE || requestCode === Multimedia.CropImage.CROP_GALLERY_DATA_REQUEST_CODE || requestCode === Multimedia.PICK_MULTIPLE_FROM_GALLERY) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);
-
             } else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
             } else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
@@ -212,52 +213,41 @@ function Page(params) {
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};
-    var onLoadCallback;
-    Object.defineProperty(this, 'onLoad', {
-        get: function () {
-            return onLoadCallback;
-        },
-        set: function (onLoad) {
-            onLoadCallback = onLoad.bind(this);
-        },
-        enumerable: true
-    });
+    var onLoadCallback = () => {
+        if (typeof this.onLoad === "function") {
+            this.onLoad();
+        }
+        this.emitter.emit(Events.Load);
+    } 
 
-    self.__onShowCallback;
-    Object.defineProperty(this, 'onShow', {
-        get: function () {
-            return self.__onShowCallback;
-        },
-        set: function (onShow) {
-            self.__onShowCallback = (function () {
-                if (onShow instanceof Function) {
-                    onShow.call(this, this.__pendingParameters);
-                    delete this.__pendingParameters;
-                }
-            }).bind(this);
-        },
-        enumerable: true
-    });
-    var onHideCallback;
-    Object.defineProperty(this, 'onHide', {
-        get: function () {
-            return onHideCallback;
-        },
-        set: function (onHide) {
-            onHideCallback = onHide.bind(this);
-        },
-        enumerable: true
-    });
-    var _onOrientationChange;
-    Object.defineProperty(this, 'onOrientationChange', {
-        get: function () {
-            return _onOrientationChange;
-        },
-        set: function (onOrientationChange) {
-            _onOrientationChange = onOrientationChange.bind(this);
-        },
-        enumerable: true
-    });
+    var onShowCallback = () => {
+        if (typeof this.onShow === "function") {
+            this.onShow(this.__pendingParameters);
+        }
+        this.emitter.emit(Events.Show, this.__pendingParameters);
+        delete this.__pendingParameters;
+    }
+
+    /**
+     * This is a workaround solution for swipeView-Android. The source is:
+     * _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
+     */
+    this.__onShowCallback = onShowCallback;
+
+    var onHide = () => {
+        if(typeof this.onHide === "function"){
+            this.onHide();
+        }
+        this.emitter.emit(Events.Hide);
+    } ;
+
+    var _onOrientationChange = (state) => {
+        if(typeof this.onOrientationChange === 'function'){
+            this.onOrientationChange(state);
+        }
+        this.emitter.emit(Events.OrientationChange, state);
+    };
+
     var _orientation = Page.Orientation.PORTRAIT;
     Object.defineProperty(this, 'orientation', {
         get: function () {
@@ -294,34 +284,14 @@ function Page(params) {
     });
 
     const EventFunctions = {
-        [Events.Show]: function() {
-            __onShowCallback = (state) => {
-                this.emitter.emit(Events.Show, state);
-            } 
-        },
-        [Events.Load]: function() {
-            onLoadCallback = (state) => {
-                this.emitter.emit(Events.Load, state);
-            } 
-        },
         [Events.BackButtonPressed]: function() {
             _onBackButtonPressed = (state) => {
                 this.emitter.emit(Events.BackButtonPressed, state);
             } 
         },
-        [Events.OrientationChange]: function() {
-            _onOrientationChange = (state) => {
-                this.emitter.emit(Events.OrientationChange, state);
-            } 
-        },
         [Events.SafeAreaPaddingChange]: function() {
             //iOS only
-        },
-        [Events.Hide]: function() {
-            onHideCallback = (state) => {
-                this.emitter.emit(Events.Hide, state);
-            } 
-        },
+        }
     }
     
     EventEmitterCreator(this, EventFunctions);
@@ -669,7 +639,38 @@ function Page(params) {
         },
         enumerable: true
     });
+    Object.defineProperty(self.headerBar.android, 'contentInsetStartWithNavigation', {
+        get: function () {
+            return AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStartWithNavigation());
+        },
+        set: function (value) { // API Level 24+
+            toolbar.setContentInsetStartWithNavigation(AndroidUnitConverter.dpToPixel(value));
+        },
+        enumerable: true
+    });
 
+    Object.defineProperty(self.headerBar.android, 'padding', {
+        get: function () {
+            const top = AndroidUnitConverter.pixelToDp(toolbar.getPaddingTop());
+            const left = AndroidUnitConverter.pixelToDp(toolbar.getPaddingLeft());
+            const right = AndroidUnitConverter.pixelToDp(toolbar.getPaddingRight());
+            const bottom = AndroidUnitConverter.pixelToDp(toolbar.getPaddingBottom());
+            return { top, left, right, bottom };
+        },
+        set: function (value) {
+            const _top = toolbar.getPaddingTop();
+            const _left = toolbar.getPaddingLeft();
+            const _right = toolbar.getPaddingRight();
+            const _bottom = toolbar.getPaddingBottom();
+            let { top, left, right, bottom } = value;
+            top = top ? AndroidUnitConverter.dpToPixel(top) : _top;
+            left = left ? AndroidUnitConverter.dpToPixel(left) : _left;
+            right = right ? AndroidUnitConverter.dpToPixel(right) : _right;
+            bottom = bottom ? AndroidUnitConverter.dpToPixel(bottom) : _bottom
+            toolbar.setPadding(left, top, right, bottom);
+        },
+        enumerable: true
+    });
 
     var _attributedTitle, _attributedSubtitle, _attributedTitleBuilder, _attributedSubtitleBuilder;
     Object.defineProperty(self.headerBar.android, 'attributedTitle', {
@@ -773,7 +774,6 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const WRAP_CONTENT = -2;
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -784,7 +784,7 @@ function Page(params) {
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
             } else {
-                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
                 if (item.customView) {
@@ -874,6 +874,8 @@ function Page(params) {
             self.headerBar.titleColor = Color.WHITE;
             self.headerBar.android.subtitleColor = Color.WHITE;
             self.headerBar.visible = true;
+            self.headerBar.android.padding = { top : 0, bottom : 0, left : 0, right : 4 };
+            self.headerBar.android.contentInsetStartWithNavigation = 0;
         }
     };
 

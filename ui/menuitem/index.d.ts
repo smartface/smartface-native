@@ -25,6 +25,7 @@ declare class MenuItem implements IEventEmitter<Events> {
 	constructor(params?: { [key: string]: any });
 	static Events: typeof Events;
 	on(eventName: Events, callback: (...args: any) => void): () => void;
+	once(eventName: Events, callback: (...args: any) => void): () => void;
 	off(eventName: Events, callback?: (...args: any) => void): void;
 	emit(event: Events, detail?: any[]): void;
 
@@ -65,6 +66,15 @@ declare class MenuItem implements IEventEmitter<Events> {
  * @android
  * @deprecated
  * @ios
+ * @example
+ * ````
+ * import MenuItem from '@smartface/native/ui/menuitem';
+ * 
+ * const menuItem = new MenuItem();
+ * menuItem.on(MenuItem.Events.Selected, () => {
+ * 	console.info('onSelected');
+ * });
+ * ````
  */
 	onSelected: () => void;
 }

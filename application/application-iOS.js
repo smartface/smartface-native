@@ -17,43 +17,41 @@ var _rootPage;
 var _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
+function listenAppShortcut(callback) {
+    //TODO: Check isEmulator
+    if(!SMFApplication.sharedInstance) return;
+    
+    SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
+        var returnValue = true;
+        if (typeof callback === 'function') {
+            var innerReturnValue = callback({ data : shortcutItem.userInfo });
+            if (typeof innerReturnValue == "boolean") {
+                returnValue = innerReturnValue;
+            };
+        };
+        return returnValue;
+    };
+}
+
+
+listenAppShortcut((e) => {
+    SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+});
+
 const EventFunctions = {
-    [Events.ApplicationCallReceived]: () => {
-        Application.onApplicationCallReceived = (e) => {
-            SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
-        };
-    },
-    [Events.BackButtonPressed]: () => {
-        // Android only
-    },
-    [Events.Exit]: () => {
-        Application.onExit = (e) => {
-            SFApplication.emitter.emit(Events.Exit, e);
-        };
-    },
-    [Events.Maximize]: () => {
-        Application.onMaximize = (e) => {
-            SFApplication.emitter.emit(Events.Maximize, e);
-        };
-    },
-    [Events.Minimize]: () => {
-        Application.onMinimize = (e) => {
-            SFApplication.emitter.emit(Events.Minimize, e);
-        };
-    },
-    [Events.ReceivedNotification]: () => {
-        Application.onReceivedNotification = (e) => {
-            SFApplication.emitter.emit(Events.ReceivedNotification, e);
-        };
-    },
-    [Events.RequestPermissionResult]: () => {
-        // Android only
-    },
-    [Events.UnhandledError]: () => {
-        Application.onUnhandledError = (e) => {
-            SFApplication.emitter.emit(Events.UnhandledError, e);
-        };
-    }
+    // [Events.ApplicationCallReceived]: () => {
+    //     Application.onApplicationCallReceived = (e) => {
+    //         SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+    //     };
+    // },
+    // [Events.AppShortcutReceived]: () => {
+    //     listenAppShortcut((e) => {
+    //         SFApplication.emitter.emit(Events.AppShortcutReceived, e);
+    //     });
+    // },
+    // [Events.BackButtonPressed]: () => {
+    //     // Android only
+    // },
 }
 var SFApplication = {};
 SFApplication.Events = { ...Events };
@@ -82,6 +80,10 @@ SFApplication.call = function(uriScheme, data, onSuccess, onFailure) {
         SMFApplication.call(uriScheme.uriScheme, uriScheme.data, uriScheme.onSuccess, uriScheme.onFailure);
     }
 };
+
+SFApplication.canOpenUrl = function(url) {
+    return SMFApplication.canOpenUrl(url);
+}
 
 SFApplication.exit = function() {
     Application.onExit();
@@ -171,9 +173,6 @@ function configureSliderDrawer(rootPage, sliderDrawer) {
 };
 
 SFApplication.ios = {};
-SFApplication.ios.canOpenUrl = function(url) {
-    return SMFApplication.canOpenUrl(url);
-}
 
 Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     get: function() {
@@ -211,11 +210,16 @@ SFApplication.Android.NavigationBar = {
 SFApplication.Android.Permissions = {};
 SFApplication.android.Permissions = {};
 SFApplication.android.navigationBar = {};
-SFApplication.android.setAppTheme = function() {};
+SFApplication.android.setAppTheme = function() {
+    SFApplication.emitter.emit(Events.UnhandledError, e);
+};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set: function(value) {
-        Application.onUnhandledError = value;
+        Application.onUnhandledError = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.UnhandledError, e);
+        };
     },
     get: function() {
         return Application.onUnhandledError;
@@ -223,10 +227,15 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-Application.onExit = function() {};
+Application.onExit = function() {
+    SFApplication.emitter.emit(Events.Exit, e);
+};
 Object.defineProperty(SFApplication, 'onExit', {
     set: function(value) {
-        Application.onExit = value;
+        Application.onExit = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Exit, e);
+        };
     },
     get: function() {
         return Application.onExit;
@@ -234,10 +243,15 @@ Object.defineProperty(SFApplication, 'onExit', {
     enumerable: true
 });
 
-Application.onReceivedNotification = function() {};
+Application.onReceivedNotification = function() {
+    SFApplication.emitter.emit(Events.ReceivedNotification, e);
+};
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
     set: function(value) {
-        Application.onReceivedNotification = value;
+        Application.onReceivedNotification = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.ReceivedNotification, e);
+        };
     },
     get: function() {
         return Application.onReceivedNotification;
@@ -264,10 +278,15 @@ Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
     enumerable: true
 });
 
-Application.onApplicationCallReceived = function() {};
+Application.onApplicationCallReceived = function() {
+    SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+};
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     set: function(value) {
-        Application.onApplicationCallReceived = value;
+        Application.onApplicationCallReceived = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
+        };;
     },
     get: function() {
         return Application.onApplicationCallReceived;
@@ -275,10 +294,27 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     enumerable: true
 });
 
-Application.onMaximize = function() {};
+Application.onAppShortcutReceive = function () { };
+Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
+    set: function (value) {
+        listenAppShortcut(value);
+        Application.onAppShortcutReceive = value;
+    },
+    get: function () {
+        return Application.onAppShortcutReceive;
+    },
+    enumerable: true
+});
+
+Application.onMaximize = function() {
+    SFApplication.emitter.emit(Events.Maximize, e);
+};
 Object.defineProperty(SFApplication, 'onMaximize', {
     set: function(value) {
-        Application.onMaximize = value;
+        Application.onMaximize = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Maximize, e);
+        };
     },
     get: function() {
         return Application.onMaximize;
@@ -286,10 +322,15 @@ Object.defineProperty(SFApplication, 'onMaximize', {
     enumerable: true
 });
 
-Application.onMinimize = function() {};
+Application.onMinimize = function() {
+    SFApplication.emitter.emit(Events.Minimize, e);
+};
 Object.defineProperty(SFApplication, 'onMinimize', {
     set: function(value) {
-        Application.onMinimize = value;
+        Application.onMinimize = (e) => {
+            value && value(e);
+            SFApplication.emitter.emit(Events.Minimize, e);
+        };
     },
     get: function() {
         return Application.onMinimize;
@@ -321,6 +362,13 @@ Object.defineProperty(SFApplication, 'appName', {
 Object.defineProperty(SFApplication, 'version', {
     get: function() {
         return Application.version;
+    },
+    enumerable: true
+});
+
+Object.defineProperty(SFApplication, 'isVoiceOverEnabled', {
+    get: function () {
+        return __SF_UIAccessibility.isVoiceOverRunning()
     },
     enumerable: true
 });

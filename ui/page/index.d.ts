@@ -4,17 +4,9 @@ import NavigationController from "../navigationcontroller";
 import StatusBar from "../../application/statusbar";
 import HeaderBar from "../headerbar";
 import { IFlexLayout } from "../../primitive/iflexlayout";
-import { IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from "core/eventemitter";
 
 declare enum PageEvents {
-	/**
-	 * This event will be triggered when user clicks back button on the Device.
-	 *
-	 * @event onBackButtonPressed
-	 * @android
-	 * @since 0.1
-	 */
-	BackButtonPressed = "backButtonPressed",
 	/**
 	 * This event is called when a page disappears from the screen.
 	 *
@@ -165,20 +157,30 @@ declare namespace Page {
 declare class Page
 	extends NativeComponent
 	implements IFlexLayout, IEventEmitter<PageEvents>
-{
+    {
 	constructor(params?: any);
-	readonly nativeObject: any;
-	on(eventName: PageEvents, callback: (...args: any) => void): () => void;
-	off(eventName: PageEvents, callback?: (...args: any) => void): void;
-	emit(event: PageEvents, detail?: any[]): void;
+
+    protected emitter: EventEmitter<PageEvents>;
+    on(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    once(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+    off(eventName: PageEvents, callback: (...args: any[]) => void): void;
+    emit(event: PageEvents, ...args: any[]): void;
+
 	/**
 	 * This event is called once when page is created.
 	 * You can create views and add them to page in this callback.
 	 *
-	 * @event onLoad
-	 * @deprecated
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Load, () => {
+	 * 	console.info('onLoad');
+	 * });
+	 * ````
 	 */
 	public onLoad(): void;
 	/**
@@ -242,13 +244,20 @@ declare class Page
 	 *         Application.statusBar.visible = true;
 	 *     });
 	 *
-	 * @event onShow
-	 * @deprecated
 	 * @param {Object} parameters Parameters passed from Router.go function
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Show, () => {
+	 * 	console.info('onShow');
+	 * });
+	 * ````
 	 */
-	public onShow(): void;
+	public onShow(params?: any): void;
 	/**
 	 * This event is called when a page disappears from the screen.
 	 *
@@ -256,6 +265,15 @@ declare class Page
 	 * @event onHide
 	 * @android
 	 * @ios
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.Hide, () => {
+	 * 	console.info('onHide');
+	 * });
+	 * ````
 	 */
 	public onHide(): void;
 	public readonly android: {
@@ -266,6 +284,15 @@ declare class Page
 		 * @deprecated
 		 * @android
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import Page from '@smartface/native/ui/page';
+		 * 
+		 * const page = new Page();
+		 * page.on(Page.Events.BackButtonPressed, () => {
+		 * 	console.info('backButtonPressed);
+		 * });
+		 * ````
 		 */
 		onBackButtonPressed?(): void;
 		transitionViewsCallback?: {
@@ -290,6 +317,15 @@ declare class Page
 		 * @param {Object} paddingObject Includes top,left,right and bottom padding values.
 		 * @ios
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import Page from '@smartface/native/ui/page';
+		 * 
+		 * const page = new Page();
+		 * page.on(Page.Events.SafeAreaPaddingChange, () => {
+		 * 	console.info('onSafeAreaPaddingChange');
+		 * });
+		 * ````
 		 */
 		onSafeAreaPaddingChange?(padding: {
 			left: number;
@@ -411,10 +447,19 @@ declare class Page
 	 * @android
 	 * @ios
 	 * @since 0.1
+	 * @example
+	 * ````
+	 * import Page from '@smartface/native/ui/page';
+	 * 
+	 * const page = new Page();
+	 * page.on(Page.Events.OrientationChange, (params) => {
+	 * 	console.info('onOrientationChange', params);
+	 * });
+	 * ````
 	 */
 	public onOrientationChange(e: { orientation: Page.Orientation }): void;
 
-	readonly parentController: HeaderBar;
+	readonly parentController: { headerBar: HeaderBar };
 }
 
 // declare type OrientationType =

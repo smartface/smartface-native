@@ -26,6 +26,7 @@ declare class DatePicker extends NativeComponent implements IEventEmitter<Events
     constructor(params?: any);
     static Events: typeof Events;
     on(eventName: Events, callback: (...args: any) => void): () => void;
+    once(eventName: Events, callback: (...args: any) => void): () => void;
     off(eventName: Events, callback?: (...args: any) => void): void;
     emit(event: Events, detail?: any[]): void;
     ios: {
@@ -205,8 +206,18 @@ declare class DatePicker extends NativeComponent implements IEventEmitter<Events
      * @since 0.1
      * @param {Date} date
      * @event onDateSelected
+     * @deprecated
      * @android
      * @ios
+     * @example
+     * ````
+     * import DatePicker from '@smartface/native/ui/datepicker';
+     * 
+     * const datePicker = new DatePicker();
+     * datePicker.on(DatePicker.Events.Selected, (params) => {
+     *  console.info('onDateSelected', params);
+     * });
+     * ````
      */
     onDateSelected: (date: Date) => void;
     /**
@@ -214,8 +225,18 @@ declare class DatePicker extends NativeComponent implements IEventEmitter<Events
      *
      * @since 3.1.3
      * @event onCancelled
+     * @deprecated
      * @android
      * @ios
+     * @example
+     * ````
+     * import DatePicker from '@smartface/native/ui/datepicker';
+     * 
+     * const datePicker = new DatePicker();
+     * datePicker.on(DatePicker.Events.Cancelled, () => {
+     *  console.info('onCancelled');
+     * });
+     * ````
      */
     onCancelled: () => void;
 }

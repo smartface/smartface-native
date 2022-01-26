@@ -1,5 +1,3 @@
-import { IEventEmitter } from "../../core/eventemitter";
-
 declare enum Events {
   /**
    * Callback to capture accelerometer events.
@@ -35,6 +33,7 @@ declare enum Events {
  */
 declare class Accelerometer {
   static on(eventName: Events, callback: (...args: any) => void): () => void;
+  static once(eventName: Events, callback: (...args: any) => void): () => void;
   static off(eventName: Events, callback?: (...args: any) => void): void;
   static emit(event: Events, detail?: any[]): void;
   /**
@@ -67,6 +66,14 @@ declare class Accelerometer {
    * @android
    * @ios
    * @deprecated
+   * @example
+   * ````
+   * import AcceleroMeter from '@smartface/native/device/accelerometer';
+   * 
+   * AcceleroMeter.on(AcceleroMeter.Events.Accelerate, (params) => {
+   *  console.info('onAccelerate', params);
+   * });
+   * ````
    */
   static onAccelerate: (e: {x:number, y: number, z: number}) => void;
 

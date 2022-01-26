@@ -71,7 +71,7 @@ const View = require('../view');
  *
  */
 
-function ListView(params) {}
+function ListView(params) { }
 
 /**
  * This event is called before onRowCreate callback. Returns item type you should use based on position.
@@ -83,7 +83,7 @@ function ListView(params) {}
  * @return {Number}
  * @since 3.0.2
  */
-ListView.prototype.onRowType = function onRowType(index) {};
+ListView.prototype.onRowType = function onRowType(index) { };
 
 /**
  * This event is called when a ListView starts to create a ListViewItem.
@@ -96,7 +96,7 @@ ListView.prototype.onRowType = function onRowType(index) {};
  * @return {UI.ListViewItem}
  * @since 0.1
  */
-ListView.prototype.onRowCreate = function onRowCreate(type) {};
+ListView.prototype.onRowCreate = function onRowCreate(type) { };
 
 /**
  * The behavior for determining the adjusted content offsets.
@@ -127,7 +127,7 @@ ListView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @return {Number}
  * @since 1.1.18
  */
-ListView.prototype.onRowHeight = function onRowHeight(index) {};
+ListView.prototype.onRowHeight = function onRowHeight(index) { };
 
 /**
  * Animates multiple insert, delete and refresh operations as a group.
@@ -144,7 +144,7 @@ ListView.prototype.onRowHeight = function onRowHeight(index) {};
  * @ios
  * @since 4.1.4
  */
-ListView.prototype.performBatchUpdates = function performBatchUpdates(updates, completion) {};
+ListView.prototype.performBatchUpdates = function performBatchUpdates(updates, completion) { };
 
 /**
  * This event is called when a UI.ListViewItem created at specified row index.
@@ -157,7 +157,7 @@ ListView.prototype.performBatchUpdates = function performBatchUpdates(updates, c
  * @ios
  * @since 0.1
  */
-ListView.prototype.onRowBind = function onRowBind(listViewItem, index) {};
+ListView.prototype.onRowBind = function onRowBind(listViewItem, index) { };
 
 /**
  * This event is called when a scroll occurs. 
@@ -170,7 +170,7 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index) {};
  * @android
  * @since 4.0.0
  */
-ListView.prototype.onGesture = function onGesture(params) {};
+ListView.prototype.onGesture = function onGesture(params) { };
 
 /**
  * This event is called when user selects a row at specific index.
@@ -182,7 +182,7 @@ ListView.prototype.onGesture = function onGesture(params) {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index) {};
+ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index) { };
 
 /**
  * This event is called when user long selects a row at specific index.
@@ -193,7 +193,7 @@ ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index) {
  * @android
  * @since 2.0.4
  */
-ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index) {};
+ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index) { };
 
 /**
  * Gets/sets the number of rows that will be shown in a ListView.
@@ -284,7 +284,7 @@ ListView.prototype.longPressDragEnabled = true;
  * @ios
  * @since 0.1
  */
-ListView.prototype.getFirstVisibleIndex = function() {};
+ListView.prototype.getFirstVisibleIndex = function () { };
 
 /**
  * This method returns the index of row which is visible at
@@ -296,7 +296,7 @@ ListView.prototype.getFirstVisibleIndex = function() {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.getLastVisibleIndex = function() {};
+ListView.prototype.getLastVisibleIndex = function () { };
 
 /**
  * Sets the colors used in the refresh animation. On Android the first color
@@ -309,7 +309,7 @@ ListView.prototype.getLastVisibleIndex = function() {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.setPullRefreshColors = function(colors) {};
+ListView.prototype.setPullRefreshColors = function (colors) { };
 
 /**
  * This method notify ListView for data changes. After this method is called
@@ -321,7 +321,7 @@ ListView.prototype.setPullRefreshColors = function(colors) {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.refreshData = function() {};
+ListView.prototype.refreshData = function () { };
 
 
 /**
@@ -333,7 +333,7 @@ ListView.prototype.refreshData = function() {};
  * @android
  * @since 4.1.3
  */
-ListView.prototype.startDrag = function(listViewItem) {};
+ListView.prototype.startDrag = function (listViewItem) { };
 
 
 /**
@@ -350,7 +350,7 @@ ListView.prototype.startDrag = function(listViewItem) {};
  * @ios
  * @since 4.1.4
  */
-ListView.prototype.deleteRowRange = function(params) {};
+ListView.prototype.deleteRowRange = function (params) { };
 
 
 /**
@@ -367,7 +367,7 @@ ListView.prototype.deleteRowRange = function(params) {};
  * @ios
  * @since 4.1.4
  */
-ListView.prototype.insertRowRange = function(params) {};
+ListView.prototype.insertRowRange = function (params) { };
 
 
 /**
@@ -384,7 +384,7 @@ ListView.prototype.insertRowRange = function(params) {};
  * @ios
  * @since 4.1.4
  */
-ListView.prototype.refreshRowRange = function(params) {};
+ListView.prototype.refreshRowRange = function (params) { };
 
 
 
@@ -397,7 +397,7 @@ ListView.prototype.refreshRowRange = function(params) {};
  * @return {Object}
  * @since 4.0.2
  */
-ListView.prototype.saveInstanceState = function() {};
+ListView.prototype.saveInstanceState = function () { };
 
 
 /**
@@ -409,7 +409,7 @@ ListView.prototype.saveInstanceState = function() {};
  * @android
  * @since 4.0.2
  */
-ListView.prototype.restoreInstanceState = function(state) {};
+ListView.prototype.restoreInstanceState = function (state) { };
 
 /**
  * This method scrolls ListView to a specific index.
@@ -421,7 +421,7 @@ ListView.prototype.restoreInstanceState = function(state) {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.scrollTo = function(index, animated) {};
+ListView.prototype.scrollTo = function (index, animated) { };
 
 /**
  * Sets/Gets the bounce effect when scrolling.
@@ -443,7 +443,7 @@ ListView.prototype.bounces = true;
  * @ios
  * @since 0.1
  */
-ListView.prototype.stopRefresh = function() {};
+ListView.prototype.stopRefresh = function () { };
 
 /**
  * Gets contentOffset of the ListView.
@@ -476,7 +476,7 @@ ListView.prototype.contentOffset = {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.onScroll = function onScroll() {}
+ListView.prototype.onScroll = function onScroll() { }
 
 
 /**
@@ -492,7 +492,7 @@ ListView.prototype.onScroll = function onScroll() {}
  * @android
  * @since 3.2.1
  */
-ListView.prototype.onScrollStateChanged = function onScrollStateChanged() {}
+ListView.prototype.onScrollStateChanged = function onScrollStateChanged() { }
 
 /**
  * This event is called when user pulls down and releases a ListView
@@ -503,7 +503,7 @@ ListView.prototype.onScrollStateChanged = function onScrollStateChanged() {}
  * @ios
  * @since 0.1
  */
-ListView.prototype.onPullRefresh = function onPullRefresh() {}
+ListView.prototype.onPullRefresh = function onPullRefresh() { }
 
 /**
  * This event is called when user swipe listview row
@@ -552,7 +552,7 @@ ListView.prototype.onPullRefresh = function onPullRefresh() {}
  * @deprecated 4.1.4  Use {@link UI.ListView#onRowSwipe} instead.
  * 
  */
-ListView.prototype.ios.onRowSwiped = function(swipeDirection, expansionSettings, index) {}
+ListView.prototype.ios.onRowSwiped = function (swipeDirection, expansionSettings, index) { }
 
 /**
  * Gets/Sets contentInset of the ListView.
@@ -624,7 +624,7 @@ ListView.prototype.swipeEnabled = false;
  * 
  
  */
-ListView.createSwipeItem = function(title, color, padding, action, isAutoHide) {};
+ListView.createSwipeItem = function (title, color, padding, action, isAutoHide) { };
 
 /**
  * 
@@ -650,7 +650,7 @@ ListView.createSwipeItem = function(title, color, padding, action, isAutoHide) {
  * 
  
  */
-ListView.createSwipeItemWithIcon = function(title, icon, color, padding, action, isAutoHide) {};
+ListView.createSwipeItemWithIcon = function (title, icon, color, padding, action, isAutoHide) { };
 
 /**
  * This method returns ListViewItem
@@ -662,7 +662,7 @@ ListView.createSwipeItemWithIcon = function(title, icon, color, padding, action,
  * @ios
  * @since 0.1
  */
-ListView.prototype.listViewItemByIndex = function(index) {};
+ListView.prototype.listViewItemByIndex = function (index) { };
 
 
 /**
@@ -675,7 +675,7 @@ ListView.prototype.listViewItemByIndex = function(index) {};
  * @ios
  * @since 4.1.4
  */
-ListView.prototype.indexByListViewItem = function(listViewItem) {};
+ListView.prototype.indexByListViewItem = function (listViewItem) { };
 
 /**
  * This event is called when the list view is about to start scrolling the content.
@@ -687,7 +687,7 @@ ListView.prototype.indexByListViewItem = function(listViewItem) {};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollBeginDragging = function(contentOffset) {};
+ListView.prototype.onScrollBeginDragging = function (contentOffset) { };
 
 /**
  * This event is called when the list view is starting to decelerate the scrolling movement.
@@ -699,7 +699,7 @@ ListView.prototype.onScrollBeginDragging = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
+ListView.prototype.onScrollBeginDecelerating = function (contentOffset) { };
 
 /**
  * This event is called when the list view has ended decelerating the scrolling movement.
@@ -711,7 +711,7 @@ ListView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDecelerating = function(contentOffset) {};
+ListView.prototype.onScrollEndDecelerating = function (contentOffset) { };
 
 /**
  * This event is called when dragging ended in the list view.
@@ -724,7 +724,7 @@ ListView.prototype.onScrollEndDecelerating = function(contentOffset) {};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate) {};
+ListView.prototype.onScrollEndDraggingWillDecelerate = function (contentOffset, decelerate) { };
 
 /**
  * This event is called when the user finishes scrolling the content.
@@ -742,7 +742,7 @@ ListView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, d
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset) {};
+ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function (contentOffset, velocity, targetContentOffset) { };
 
 
 /**
@@ -752,7 +752,7 @@ ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function
  * @android
  * @since 4.0.2
  */
-ListView.prototype.onAttachedToWindow = function() {};
+ListView.prototype.onAttachedToWindow = function () { };
 
 /**
  * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
@@ -761,7 +761,7 @@ ListView.prototype.onAttachedToWindow = function() {};
  * @android
  * @since 4.0.2
  */
-ListView.prototype.onDetachedFromWindow = function() {};
+ListView.prototype.onDetachedFromWindow = function () { };
 
 
 
@@ -775,7 +775,7 @@ ListView.prototype.onDetachedFromWindow = function() {};
  * @android
  * @since 4.1.4
  */
-ListView.prototype.onRowMoved = function(source, destination) {};
+ListView.prototype.onRowMoved = function (source, destination) { };
 
 /**
  * This event is called when ListViewItem about to swipe. For iOS, this callback is triggered twice consecutively.
@@ -834,7 +834,7 @@ ListView.prototype.onRowMoved = function(source, destination) {};
  * 
  * 
  */
-ListView.prototype.onRowSwipe = function(params) {};
+ListView.prototype.onRowSwipe = function (params) { };
 
 
 /**
@@ -848,7 +848,7 @@ ListView.prototype.onRowSwipe = function(params) {};
  * @android
  * @since 4.1.4
  */
-ListView.prototype.onRowMove = function(source, destination) {};
+ListView.prototype.onRowMove = function (source, destination) { };
 
 
 /**
@@ -862,7 +862,7 @@ ListView.prototype.onRowMove = function(source, destination) {};
  * @android
  * @since 4.1.4
  */
-ListView.prototype.onRowCanMove = function(index) {};
+ListView.prototype.onRowCanMove = function (index) { };
 
 
 /**
@@ -876,18 +876,14 @@ ListView.prototype.onRowCanMove = function(index) {};
  * @android
  * @since 4.1.4
  */
-ListView.prototype.onRowCanSwipe = function(index) {};
-
-
+ListView.prototype.onRowCanSwipe = function (index) { };
 
 /**
  * @class UI.ListView.SwipeItem
  * @since 4.1.4
- * 
  * ListView.SwipeItem contains set of properties that define appearance of SwipeItem while drawing on swipe action.
  */
-
-ListView.SwipeItem = function(params) {};
+ListView.SwipeItem = function (params) { };
 
 
 
@@ -955,7 +951,7 @@ ListView.SwipeItem.prototype.font = UI.Font.Default;
  * @ios
  * @since 4.1.4
  */
-ListView.SwipeItem.prototype.onPress = function(params) {};
+ListView.SwipeItem.prototype.onPress = function (params) { };
 
 
 /**
@@ -1050,13 +1046,32 @@ ListView.SwipeItem.prototype.borderTopRightRadius = 0;
 
 
 /**
+ * Set false to doesn't autohide the SwipeItem. Default true.
  * @property {Boolean} isAutoHide = true
  * @ios
  * @since 4.1.4
  */
 ListView.SwipeItem.prototype.isAutoHide = true;
 
+/**
+ * @property {Object} expansionSettings
+ * @property {Number} expansionSettings.buttonIndex Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+ * @property {Boolean} expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+ * @property {Number} expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+ */
+ListView.SwipeItem.prototype.ios.expansionSettings = {
+    buttonIndex: -1,
+    fillOnTrigger: false,
+    threshold: 1.5
+};
 
+// /**
+//  * @property {Object} ListView.SwipeItem.prototype.ios.expansionSettings 
+//  * @property {Number} ListView.SwipeItem.prototype.ios.expansionSettings Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+//  * @property {Boolean} expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+//  * @property {Number} expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+//  */
+// ListView.SwipeItem.prototype.ios.expansionSettings = {};
 
 /**
  * @property {Number} [iconTextSpacing = 3] Space between icon and text.

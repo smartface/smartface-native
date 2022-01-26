@@ -173,10 +173,20 @@ declare class FlexLayout extends ViewGroup {
 		 * and take ownership of the current gesture at any point.
 		 *
 		 * @event onInterceptTouchEvent
+		 * @deprecated
 		 * @return {Boolean} Return true to steal motion events from the children
 		 * @android
 		 * @member UI.FlexLayout
 		 * @since 0.1
+		 * @example
+		 * ````
+		 * import FlexLayout from '@smartface/native/ui/flexlayout';
+		 * 
+		 * const flexLayout = new FlexLayout();
+		 * flexLayout.on(FlexLayout.Events.InterceptTouchEvent, () => {
+		 * 	console.info('onInterceptTouchEvent');
+		 * });
+		 * ````
 		 */
 		onInterceptTouchEvent: () => boolean;
 

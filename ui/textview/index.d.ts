@@ -264,18 +264,21 @@ declare class TextView extends View<TextView.Events> {
   };
 /**
  * This event is called when user click link string. onLinkClick just work with attributedText.
- *
- *     @example
- *     myTextView.onLinkClick = function(string) {
- *         console.log(string);
- *     };
- *
  * @param {String} string
  * @event onLinkClick
  * @android
  * @deprecated
  * @ios
  * @since 3.0.0
+ * @example
+ * ````
+ * import TextView from '@smartface/native/ui/textview';
+ * 
+ * const textView = new TextView();
+ * textView.on(TextView.Events.LinkClick, (params) => {
+ *  console.info('onLinkClick', params);
+ * });
+ * ````
  */
   onLinkClick: (e: string) => void;
 /**

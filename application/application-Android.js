@@ -13,57 +13,62 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
+function checkIsAppShortcut(e) {
+    return e && e.data && e.data.hasOwnProperty("AppShortcutType");
+}
 
-
-const EventFunctions = {
-    [Events.ApplicationCallReceived]: () => {
-        Application.onApplicationCallReceived = (e) => {
-            ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
-        };
-    },
-    [Events.BackButtonPressed]: () => {
-        _onBackButtonPressed = (e) => {
-            ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
-        }
-    },
-    [Events.Exit]: () => {
-        _onExit = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Exit, e);
-        };
-    },
-    [Events.Maximize]: () => {
-        _onMaximize = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Maximize, e);
-        };
-    },
-    [Events.Minimize]: () => {
-        _onMinimize = (e) => {
-            ApplicationWrapper.emitter.emit(Events.Minimize, e);
-        };
-    },
-    [Events.ReceivedNotification]: () => {
-        _onReceivedNotification = (e) => {
-            ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
-        };
-    },
-    [Events.RequestPermissionResult]: () => {
-        _onRequestPermissionsResult = (e) => {
-            ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
-        }
-    },
-    [Events.UnhandledError]: () => {
-        Application.onUnhandledError = (e) => {
-            ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
-        };
+Application.onApplicationCallReceived = (e) => {
+    if (checkIsAppShortcut(e)) {
+        if (_onAppShortcutReceived)
+            _onAppShortcutReceived(e)
+    }
+    else {
+        if (_onApplicationCallReceived)
+            _onApplicationCallReceived(e)
     }
 }
+_onApplicationCallReceived = (e) => {
+    ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
+}
+
+_onAppShortcutReceived = (e) => {
+    ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
+}
+
+_onBackButtonPressed = (e) => {
+    ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
+}
+
+
+
+_onExit = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Exit, e);
+};
+
+_onMaximize = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Maximize, e);
+};
+
+_onMinimize = (e) => {
+    ApplicationWrapper.emitter.emit(Events.Minimize, e);
+};
+
+_onReceivedNotification = (e) => {
+    ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
+};
+
+_onRequestPermissionsResult = (e) => {
+    ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
+}
+
+const EventFunctions = {}
 
 ApplicationWrapper.Events = { ...Events };
 EventEmitterCreator(ApplicationWrapper, EventFunctions);
 
 Object.defineProperty(ApplicationWrapper, 'on', {
     value: (event, callback) => {
-        EventFunctions[event].call(ApplicationWrapper);
+        // EventFunctions[event].call(ApplicationWrapper);
         ApplicationWrapper.emitter.on(event, callback);
     },
     configurable: true
@@ -77,10 +82,16 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
-var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed,
+var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed, _onApplicationCallReceived, _onAppShortcutReceived,
     _onReceivedNotification, _onRequestPermissionsResult, _keepScreenAwake = false,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
     spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
+
+spratAndroidActivityInstance.attachBackPressedListener({
+    onBackPressed: function() {
+        _onBackButtonPressed && _onBackButtonPressed();
+    }
+})
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
@@ -259,31 +270,49 @@ Object.defineProperties(ApplicationWrapper, {
                     uriObject = NativeUri.parse(uriScheme);
             }
             uriObject && intent.setData(uriObject);
-
-            let packageManager = activity.getPackageManager();
-            let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if (activitiesCanHandle.size() > 0) {
-                if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
-                    let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    let chooserIntent = NativeIntent.createChooser(intent, title);
-                    try {
-                        activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
-                } else {
-                    try {
-                        activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    } catch (e) {
-                        onFailure && onFailure();
-                        return;
-                    }
+            if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
+                let title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                let chooserIntent = NativeIntent.createChooser(intent, title);
+                try {
+                    activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
                 }
-                onSuccess && onSuccess();
+            } else {
+                try {
+                    activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+                } catch (e) {
+                    onFailure && onFailure();
+                    return;
+                }
+            }
+            onSuccess && onSuccess();
+        },
+        enumerable: true
+    },
+    'canOpenUrl': {
+        value: function (url) {
+            if (!url) {
+                console.error(new Error("url parameter can't be empty."));
                 return;
             }
-            onFailure && onFailure();
+            if (!TypeUtil.isString(url)) {
+                console.error(new Error("url parameter must be string."));
+                return;
+            }
+            const NativeIntent = requireClass("android.content.Intent");
+            const NativeUri = requireClass("android.net.Uri");
+            const launchIntent = new NativeIntent(NativeIntent.ACTION_VIEW);
+            launchIntent.setData(NativeUri.parse(url));
+            const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
+            const componentName = launchIntent.resolveActivity(packageManager);
+            if (componentName == null) {
+                return false;
+            } else {
+                const fallback = "{com.android.fallback/com.android.fallback.Fallback}";
+                return !(fallback === componentName.toShortString());
+            }
         },
         enumerable: true
     },
@@ -327,9 +356,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onExit;
         },
         set: function(onExit) {
-            if (TypeUtil.isFunction(onExit) || onExit === null) {
-                _onExit = onExit;
-            }
+            _onExit = (e) => {
+                onExit && onExit(e)
+                ApplicationWrapper.emitter.emit(Events.Exit, e);
+            };
         },
         enumerable: true
     },
@@ -338,9 +368,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMaximize;
         },
         set: function(onMaximize) {
-            if (TypeUtil.isFunction(onMaximize) || onMaximize === null) {
-                _onMaximize = onMaximize;
-            }
+            _onMaximize = (e) => {
+                onMaximize && onMaximize(e);
+                ApplicationWrapper.emitter.emit(Events.Maximize, e);
+            };
         },
         enumerable: true
     },
@@ -349,9 +380,10 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMinimize;
         },
         set: function(onMinimize) {
-            if (TypeUtil.isFunction(onMinimize) || onMinimize === null) {
-                _onMinimize = onMinimize;
-            }
+            _onMinimize = (e) => {
+                onMinimize && onMinimize(e)
+                ApplicationWrapper.emitter.emit(Events.Minimize, e);
+            };
         },
         enumerable: true
     },
@@ -361,7 +393,10 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                _onReceivedNotification = callback;
+                _onReceivedNotification = (e) => {
+                    callback && callback(e);
+                    ApplicationWrapper.emitter.emit(Events.ReceivedNotification, e);
+                };
             }
         },
         enumerable: true
@@ -373,19 +408,51 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(onUnhandledError) {
             if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-                Application.onUnhandledError = onUnhandledError;
+                Application.onUnhandledError = (e) => {
+                    onUnhandledError(e);
+                    ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
+                };
             }
         },
         enumerable: true
     },
     'onApplicationCallReceived': {
-        get: function() {
-            return Application.onApplicationCallReceived;
+        get: function () {
+            return _onApplicationCallReceived;
         },
-        set: function(_onApplicationCallReceived) {
-            if (TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null) {
-                Application.onApplicationCallReceived = _onApplicationCallReceived;
+        set: function (callback) {
+            _onApplicationCallReceived = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
             }
+        },
+        enumerable: true
+    },
+    'onAppShortcutReceived': {
+        get: function () {
+            return _onAppShortcutReceived;
+        },
+        set: function (callback) {
+            _onAppShortcutReceived = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.AppShortcutReceived, e);
+            };
+        },
+        enumerable: true
+    },
+    'isVoiceOverEnabled': {
+        get: function () {
+            const NativeAccessibilityServiceInfo = requireClass("android.accessibilityservice.AccessibilityServiceInfo");
+            const NativeContext = requireClass("android.content.Context");
+            const context = AndroidConfig.activity;
+            const accessibilityManager = context.getSystemService(NativeContext.ACCESSIBILITY_SERVICE);
+            if (accessibilityManager != null && accessibilityManager.isEnabled()) {
+                const serviceInfoList = accessibilityManager
+                    .getEnabledAccessibilityServiceList(NativeAccessibilityServiceInfo.FEEDBACK_SPOKEN);
+                if (!serviceInfoList.isEmpty())
+                    return true;
+                }
+            return false;
         },
         enumerable: true
     },
@@ -457,7 +524,6 @@ function detachSliderDrawer(sliderDrawer) {
 ApplicationWrapper.statusBar = require("./statusbar");
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
@@ -479,7 +545,10 @@ Object.defineProperties(ApplicationWrapper.android, {
             return _onBackButtonPressed;
         },
         set: function(callback) {
-            _onBackButtonPressed = callback;
+            _onBackButtonPressed = (e) => {
+                callback && callback(e);
+                ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
+            };
             spratAndroidActivityInstance.attachBackPressedListener({
                 onBackPressed: function() {
                     _onBackButtonPressed && _onBackButtonPressed();
@@ -540,7 +609,10 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         set: function(callback) {
             if (TypeUtil.isFunction(callback) || callback === null) {
-                _onRequestPermissionsResult = callback;
+                _onRequestPermissionsResult = (e) => {
+                    callback && callback(e)
+                    ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
+                }
             }
         }
 
