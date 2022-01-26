@@ -5,6 +5,7 @@ const NativeRunnable = requireClass("java.lang.Runnable");
 const NUMBER = "number";
 
 function Timer(params) {
+    const self = this;
     this.repeat = params.repeat;
 
     if (params) {
@@ -15,16 +16,16 @@ function Timer(params) {
         }
 
         this.nativeObject = NativeRunnable.implement({
-            run: runnableTask.bind(this)
+            run: runnableTask
         });
         Timer.handler.postDelayed(this.nativeObject, long(this.delay));
     }
-}
 
-function runnableTask() {
-    this.task();
-    if (this.repeat) {
-        Timer.handler.postDelayed(this.nativeObject, long(this.delay));
+    function runnableTask() {
+        self.task();
+        if (self.repeat) {
+            Timer.handler.postDelayed(self.nativeObject, long(self.delay));
+        }
     }
 }
 
