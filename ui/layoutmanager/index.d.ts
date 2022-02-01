@@ -86,7 +86,7 @@ declare enum Events {
  *
  */
 declare class LayoutManager extends NativeComponent {
-    constructor(params?: any)
+    constructor(params?: Partial<LayoutManager>)
     ios: {
         /**
          * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 

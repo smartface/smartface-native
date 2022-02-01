@@ -29,7 +29,7 @@ declare enum Events {
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
 declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
-    constructor(params?: any);
+    constructor(params?: Partial<BottomTabBarController>);
     on(eventName: Events, callback: (...args: any) => void): () => void;
     once(eventName: Events, callback: (...args: any) => void): () => void;
     off(eventName: Events, callback?: (...args: any) => void): void;

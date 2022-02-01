@@ -1,5 +1,5 @@
 declare class AlertView extends NativeComponent {
-	constructor(params?: any);
+	constructor(params?: Partial<AlertView>);
 	isShowing(): any;
 	show(): void;
 	dismiss(): void;

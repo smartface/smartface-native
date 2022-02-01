@@ -17,7 +17,7 @@ import Font from "../../ui/font";
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
 declare class AttributedString {
-	constructor(params?: any);
+	constructor(params?: Partial<AttributedString>);
 	/**
 	 * Gets/sets backgroundColor on AttributedString.
 	 *

@@ -107,7 +107,7 @@ declare enum GridViewEvents {
  *      module.exports = Page1;
  */
 declare class GridView extends View {
-    constructor(params: any);
+    constructor(params: Partial<GridView>);
 
     android: View['android'] & {
         /**

@@ -28,7 +28,7 @@ export = HeaderBarItem;
  *     myPage.headerBar.setItems([myItem]);
  */
 declare class HeaderBarItem extends NativeComponent {
-	constructor(params?: any);
+	constructor(params?: Partial<HeaderBarItem>);
 	nativeObject: any;
 	/**
 	 * Gets/sets title of header bar item. If image is not set, title will be

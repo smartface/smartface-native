@@ -11,7 +11,7 @@ import TabBarItem from "../tabbaritem";
  *
  */
 declare class BottomTabBar extends NativeComponent {
-    constructor(params?: any);
+    constructor(params?: Partial<BottomTabBar>);
 /**
  * Gets/sets background color of the tab bar items. 
  *

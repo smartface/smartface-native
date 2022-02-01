@@ -1212,7 +1212,7 @@ declare interface ListView extends View<ListViewEvents> {
 }
 
 declare class ListView implements ListView {
-	constructor(params?: any);
+	constructor(params?: Partial<ListView>);
 }
 
 declare namespace ListView {

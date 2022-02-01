@@ -23,7 +23,7 @@ declare enum Events {
  *
  */
 declare class DatePicker extends NativeComponent implements IEventEmitter<Events> {
-    constructor(params?: any);
+    constructor(params?: Partial<DatePicker>);
     static Events: typeof Events;
     on(eventName: Events, callback: (...args: any) => void): () => void;
     once(eventName: Events, callback: (...args: any) => void): () => void;

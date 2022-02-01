@@ -3,9 +3,7 @@ import Font from "../font";
 import Color from "../color";
 import TextAlignment from "../textalignment";
 import Image from "../image";
-import { IButton } from "./ibutton";
 import View from "../view";
-import { Events } from "../viewgroup";
 
 declare enum ButtonEvents {
   Press = 'press',
@@ -17,8 +15,8 @@ declare namespace Button {
 }
 
 
-declare class Button extends View<ButtonEvents> {
-  constructor(parameters?: Optional<IButton>);
+declare class Button<TEvents = ButtonEvents> extends View<TEvents> {
+  constructor(parameters?: Partial<Button>);
   text: string;
   font: Font;
   textColor: Color;

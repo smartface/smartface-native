@@ -26,7 +26,7 @@ declare class View<TEvent = any>
 	extends NativeComponent
     implements IEventEmitter<TEvent>
 {
-	constructor(params?: Record<string, any>);
+	constructor(params?: Partial<View>);
     protected emitter: TEvent;
     on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
     once(eventName: TEvent, callback: (...args: any[]) => void): () => void;

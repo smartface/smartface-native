@@ -158,7 +158,7 @@ declare class Page
 	extends NativeComponent
 	implements IFlexLayout, IEventEmitter<PageEvents>
     {
-	constructor(params?: any);
+	constructor(params?: Partial<Page>);
 
     protected emitter: EventEmitter<PageEvents>;
     on(eventName: PageEvents, callback: (...args: any[]) => void): () => void;

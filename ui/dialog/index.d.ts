@@ -30,7 +30,7 @@ import { IFlexLayout } from "../../primitive/iflexlayout";
  *
  */
 declare class Dialog extends NativeComponent implements IFlexLayout {
-	constructor(params?: any);
+	constructor(params?: Partial<Dialog>);
 	nativeObject: any;
     setShowListener: () => void;
 /**

@@ -7,7 +7,7 @@ declare enum Events {
   Press = "press"
 }
 declare class SwipeItem implements IEventEmitter<typeof Events> {
-  constructor(params?: any);
+  constructor(params?: Partial<SwipeItem>);
   on(eventName: typeof Events, callback: (...args: any) => void): () => void;
   once(eventName: typeof Events, callback: (...args: any) => void): () => void;
   off(eventName: typeof Events, callback?: (...args: any) => void): void;

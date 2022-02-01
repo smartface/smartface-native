@@ -24,7 +24,7 @@ import AttributedString from "../../global/attributedstring";
  *     myTab.add('home', myItem);
  */
 declare class TabBarItem extends NativeComponent {
-    constructor(params?: any);
+    constructor(params?: Partial<TabBarItem>);
     /**
      * Gets/sets the title of tab item. 
      *

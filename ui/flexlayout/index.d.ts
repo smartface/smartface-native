@@ -52,7 +52,7 @@ declare enum FlexLayoutEvents {
  *
  */
 declare class FlexLayout extends ViewGroup {
-	constructor(params?: any);
+	constructor(params?: Partial<FlexLayout>);
 	/**
 	 * This property specifies where items will start to be positioned.
 	 * If you set RTL(right to left) objects will be positioned by starting from right edge of the FlexLayout.

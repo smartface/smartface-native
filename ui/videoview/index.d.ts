@@ -97,7 +97,7 @@ declare enum VideoViewEvents {
  *
  */
 declare class VideoView extends View {
-	constructor(params?: any);
+	constructor(params?: Partial<VideoView>);
 	/**
 	 * Gets/sets background color of a view. It allows setting background
 	 * color with UI.Color instance.

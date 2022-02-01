@@ -22,7 +22,7 @@ declare enum Events {
  *
  */
 declare class MenuItem implements IEventEmitter<Events> {
-	constructor(params?: { [key: string]: any });
+	constructor(params?: Partial<MenuItem>);
 	static Events: typeof Events;
 	on(eventName: Events, callback: (...args: any) => void): () => void;
 	once(eventName: Events, callback: (...args: any) => void): () => void;
