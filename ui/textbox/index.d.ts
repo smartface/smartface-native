@@ -35,6 +35,7 @@ declare enum TextBoxEvents {
  */
 
 declare class TextBox extends View<TextBoxEvents> {
+  constructor(params?: Partial<TextBox>);
 	/**
 	 * Gets/sets the font of the TextBox.
 	 * @property {UI.Font} [font = null]
