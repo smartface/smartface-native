@@ -292,7 +292,7 @@ type HeaderBar = {
 	 * @param {UI.HeaderBarItem} item HeaderBarItem to add.
 	 */
 	setLeftItem: (item: HeaderBarItem) => void;
-	android: {
+	android: Partial<{
 		/**
 		 * Gets/sets the logo of the HeaderBar image which will shown left
 		 * side of the left item. You should enable the logo with logoEnabled.
@@ -373,8 +373,8 @@ type HeaderBar = {
 		 * @since 4.3.6
 		 */
 		padding?:  { top? : Number, left? : Number, right? : Number, bottom? : Number };
-	};
-	ios: {
+	}>;
+	ios: Partial<{
 		/**
 		 * Gets/sets backBarButtonItem of the header bar.
 		 * When it set, it will change the next page's back button appearance.
@@ -459,7 +459,7 @@ type HeaderBar = {
 		 * @since 0.1
 		 */
 		prefersLargeTitles?: boolean;
-	};
+	}>;
 };
 
 export = HeaderBar;

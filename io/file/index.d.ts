@@ -230,7 +230,7 @@ declare class File extends NativeComponent {
  * @since 0.1
  */
 	readonly writable: boolean;
-	ios: {};
+	ios: Partial<{}>;
 }
 
 export = File;

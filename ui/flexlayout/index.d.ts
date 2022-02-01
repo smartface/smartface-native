@@ -138,7 +138,7 @@ declare class FlexLayout extends ViewGroup {
 	 * @ios
 	 */
 	applyLayout(): void;
-	android: {
+	android: Partial<{
 		/**
 		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 		 * This property only supported for api level 23 and above.
@@ -215,7 +215,7 @@ declare class FlexLayout extends ViewGroup {
 		 * @since 2.0.8
 		 */
 		zIndex: number;
-	};
+	}>;
 }
 declare namespace FlexLayout {
 	/**

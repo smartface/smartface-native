@@ -626,7 +626,7 @@ declare class View<TEvent = any>
 	 * @since 4.3.6
 	 */
 	dirty(): void;
-	android: {
+	android: Partial<{
 		/**
 		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 		 * This property only supported for api level 23 and above.
@@ -681,8 +681,8 @@ declare class View<TEvent = any>
 		 * @since 2.0.8
 		 */
 		zIndex: number;
-	};
-	ios: {
+	}>;
+	ios: Partial<{
 		/**
 		 * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
 		 * The default value of this property is false
@@ -760,7 +760,7 @@ declare class View<TEvent = any>
 		 * @since 4.2.1
 		 */
 		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-	};
+	}>;
 	/**
 	 * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
 	 * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.

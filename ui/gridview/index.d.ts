@@ -526,7 +526,7 @@ declare class GridView extends View {
      * @ios
      * @since 3.1.3
      */
-    onScroll: (e: {contentOffset: Point2D, android: { translation: {x: Number, y: Number}}}) => void;
+    onScroll: (e: {contentOffset: Point2D, android?: { translation: {x: Number, y: Number}}}) => void;
 
     /**
      * This event is called when user pulls down and releases a GridView

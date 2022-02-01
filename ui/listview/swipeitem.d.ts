@@ -18,12 +18,12 @@ declare class SwipeItem implements IEventEmitter<typeof Events> {
   icon: undefined | Image;
   font: Font;
   onPress: (params: { index: number }) => void;
-  public readonly ios: {
+  public readonly ios: Partial<{
     isAutoHide: boolean;
     padding: number;
     iconTextSpacing: number;
-  }
-  public readonly android: {
+  }>
+  public readonly android: Partial<{
     borderBottomLeftRadius: number;
     borderBottomRightRadius: number;
     borderTopLeftRadius: number;
@@ -33,7 +33,7 @@ declare class SwipeItem implements IEventEmitter<typeof Events> {
     paddingLeft: number;
     paddingRight: number;
     threshold: number;
-  }
+  }>
   static Events: Events;
 }
 
