@@ -198,7 +198,7 @@ declare class HeaderBarItem extends NativeComponent {
 	 * @since 3.0.0
 	 */
 	badge: Badge;
-	ios: {
+	ios: Partial<{
 		/**
 		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
 		 * @ios
@@ -217,8 +217,8 @@ declare class HeaderBarItem extends NativeComponent {
 		 * This property will work only for iOS. You should access this property from page.parentController
 		 */
 		 backBarButtonItem: HeaderBarItem;
-	}
-	android: {
+	}>
+	android: Partial<{
 		/**
 		 * Gets/sets elevation of the header bar.
 		 * @android
@@ -255,7 +255,7 @@ declare class HeaderBarItem extends NativeComponent {
 		 * @android
 		 */
 		subtitleFont: Font;
-	}
+	}>
 }
 
 declare namespace HeaderBarItem {

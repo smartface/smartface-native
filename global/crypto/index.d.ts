@@ -42,14 +42,14 @@ declare const Crypto: {
         * @since 4.4
         */
         decrypt(params: { encryptedText: string, key: string }): string;
-        ios: {
+        ios: Partial<{
             /**
              * On iOS, instead of using getBase64PublicString to retrieve generated public key, using this will yield better result.
              * @param {String} key RSA public key
              * @ios
              */
             getExportedPublicKey(key): string;
-        }
+        }>
     },
 
     AES: {

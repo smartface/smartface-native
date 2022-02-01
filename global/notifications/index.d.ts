@@ -1,36 +1,36 @@
 import Color from "../../ui/color";
 
 declare enum Events {
-		/**
-		 * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
-		 * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
-		 *
-		 *     @example
-		 *     Notifications.onNotificationReceive = function(e){
-		 *      console.log("willPresentNotification", e);
-		 *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
-		 *     };
-		 *
-		 * @event onNotificationReceive
-		 * @param {Object} data
-		 * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
-		 * @ios
-		 * @android
-		 * @static
-		 * @since 4.0.3
-		 */
-		 NotificationReceive = "notificationReceive",
-		/**
-		 * This event triggered when clicked on notification alert
-		 *
-		 * @event onNotificationClick
-		 * @param {Object} data
-		 * @ios
-		 * @android
-		 * @static
-		 * @since 4.0.3
-		 */
-		 NotificationClick = "notificationClick"
+	/**
+	 * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
+	 * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
+	 *
+	 *     @example
+	 *     Notifications.onNotificationReceive = function(e){
+	 *      console.log("willPresentNotification", e);
+	 *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
+	 *     };
+	 *
+	 * @event onNotificationReceive
+	 * @param {Object} data
+	 * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
+	 * @ios
+	 * @android
+	 * @static
+	 * @since 4.0.3
+	 */
+	NotificationReceive = "notificationReceive",
+	/**
+	 * This event triggered when clicked on notification alert
+	 *
+	 * @event onNotificationClick
+	 * @param {Object} data
+	 * @ios
+	 * @android
+	 * @static
+	 * @since 4.0.3
+	 */
+	NotificationClick = "notificationClick",
 }
 
 /**
@@ -128,7 +128,7 @@ declare class Notifications {
 	 * @example
 	 * ````
 	 * import Notifications from '@smartface/native/global/natifications';
-	 * 
+	 *
 	 * Notifications.on(Notifications.Events.NotificationReceive, (params) => {
 	 * 	console.info('onNotificationReceive', params);
 	 * });
@@ -150,7 +150,7 @@ declare class Notifications {
 	 * @example
 	 * ````
 	 * import Notifications from '@smartface/native/global/natifications';
-	 * 
+	 *
 	 * Notifications.on(Notifications.Events.NoficationClick, (params) => {
 	 * 	console.info('onNotificationClick', params);
 	 * });
@@ -168,7 +168,7 @@ declare class Notifications {
 	 */
 	static removeAllDeliveredNotifications(): void;
 
-	public static readonly ios: {
+	public static readonly ios: Partial<{
 		/**
 		 * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
 		 *
@@ -188,11 +188,9 @@ declare class Notifications {
 		 * @since 0.1
 		 */
 		readonly scheduledLocalNotifications: null | Notifications.LocalNotification;
-	}
-	
-	public readonly android: {
+	}>;
 
-	}
+	public readonly android: {};
 }
 declare namespace Notifications {
 	/**
@@ -243,7 +241,7 @@ declare namespace Notifications {
 		 * @since 0.1
 		 * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#MAX} instead.
 		 */
-		MAX = 2
+		MAX = 2,
 	}
 	/**
 	 * @class Notifications.LocalNotification
@@ -399,7 +397,7 @@ declare namespace Notifications {
 			 */
 			subText: string;
 		};
-		ios: {
+		ios: Partial<{
 			/**
 			 * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
 			 *
@@ -427,7 +425,7 @@ declare namespace Notifications {
 			 * @since 0.1
 			 */
 			userInfo: any;
-		};
+		}>;
 		/**
 		 * Schedules this notification by {@link Notifications.LocalNotification#fireDate} and {@link Notifications.LocalNotification#repeatInterval}.
 		 *
@@ -506,7 +504,7 @@ declare namespace Notifications {
 			 * @readonly
 			 * @since 1.1.18
 			 */
-			MAX = 2
+			MAX = 2,
 		}
 	}
 	/**
@@ -555,7 +553,7 @@ declare namespace Notifications {
 			 * @readonly
 			 * @since 3.1.1
 			 */
-			AUTHORIZED = 2
+			AUTHORIZED = 2,
 		}
 		/**
 		 * Constants indicating how to present a notification in a foreground app.
@@ -595,7 +593,7 @@ declare namespace Notifications {
 			 * @readonly
 			 * @since 4.0.3
 			 */
-			ALERT = 1 << 2
+			ALERT = 1 << 2,
 		}
 	}
 }

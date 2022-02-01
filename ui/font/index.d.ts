@@ -91,7 +91,7 @@ declare class Font extends NativeComponent {
  *
  * @static
  */
-    static ios: { allFontNames(): string[] };
+    static ios: Partial<{ allFontNames(): string[] }>;
 /**
  * This method returns the string size
  *

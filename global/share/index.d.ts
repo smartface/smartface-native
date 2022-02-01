@@ -109,7 +109,7 @@ declare const Share: {
 	 * @since 4.0.2
 	 */
     share(params: { items: any[]; page: Page; blacklist: string[] }): void;
-	ios: {
+	ios: Partial<{
 		/**
 		 * @property {String} AirDrop
 		 * @static
@@ -158,7 +158,7 @@ declare const Share: {
 		 * @since 0.1
 		 */
 		readonly Vimeo: string;
-	};
+	}>;
 };
 
 export = Share;

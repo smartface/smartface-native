@@ -82,7 +82,7 @@ declare class AttributedString {
 	 * @since 3.0.0
 	 */
 	underline: boolean;
-	ios: {
+	ios: Partial<{
 		/**
 		 * Gets/sets underlineColor on AttributedString.
 		 *
@@ -99,7 +99,7 @@ declare class AttributedString {
 		 * @since 3.2.1
 		 */
 		strikethroughColor?: Color;
-	};
+	}>;
 }
 
 export = AttributedString;
