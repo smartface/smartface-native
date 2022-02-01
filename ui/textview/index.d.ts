@@ -50,6 +50,7 @@ declare namespace TextView {
  *     myTextview.backgroundColor = Color.GRAY;
  */
 declare class TextView extends View<TextView.Events> {
+  constructor(params?: Partial<TextView>)
 /**
  * Gets/sets background color of a view. It allows setting background
  * color with UI.Color instance.

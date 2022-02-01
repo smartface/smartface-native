@@ -53,6 +53,7 @@ declare interface RangeSliderParams {
   onValueChange?: (value: number[]) => void;
 }
 declare class RangeSlider extends View<RangeSliderEvents> implements RangeSliderParams {
+  constructor(params?: Partial<RangeSlider>);
   android: Partial<{
     thumbSize: number;
     thumbColor: Color;
