@@ -315,7 +315,7 @@ function VideoView(params) {
             } 
             this.nativeInner.setOnReady(_onReady);
         },
-        [Events.Ready]: function() {
+        [Events.Failure]: function() {
             _onFailure = (state) => {
                 this.emitter.emit(Events.Failure, state);
             } 
