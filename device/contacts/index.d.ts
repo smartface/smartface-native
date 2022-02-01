@@ -11,7 +11,7 @@ declare namespace Contacts {
      *
      */
     export class Contact{
-        constructor(params?: any);
+        constructor(params?: Partial<Contact>);
         phoneNumbers?: number[] | string[];
         emailAddresses?: string[];
         addresses?: string[];

@@ -77,7 +77,7 @@ import View from "../view";
  *
  */
 declare class ShimmerFlexLayout extends View {
-	constructor(params?: any);
+	constructor(params?: Partial<ShimmerFlexLayout>);
 	/**
 	 * Starts the shimmer animation
 	 *

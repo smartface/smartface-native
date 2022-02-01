@@ -66,7 +66,7 @@ declare enum Events {
  * @since 1.1.17
  */
 declare class WebSocket extends NativeComponent implements IEventEmitter<Events>{
-  constructor(params?: any);
+  constructor(params?: Partial<WebSocket>);
   protected emitter: EventEmitter<Events>;
   on(eventName: Events, callback: (...args: any[]) => void): () => void;
   once(eventName: Events, callback: (...args: any[]) => void): () => void;

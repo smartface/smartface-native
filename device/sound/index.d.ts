@@ -21,7 +21,7 @@ import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/e
  * 
  */
 declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events>{    
-    constructor(params?: any);
+    constructor(params?: Partial<Sound>);
     protected emitter: EventEmitter<typeof Sound.Events>;
     on(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;
     once(eventName: typeof Sound.Events, callback: (...args: any[]) => void): () => void;

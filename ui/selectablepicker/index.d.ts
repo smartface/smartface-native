@@ -47,7 +47,7 @@ declare enum Events {
  *     mySelectablePicker.show(doneCallback,cancelCallback);
  */
 declare class SelectablePicker extends NativeComponent {
-    constructor(params?: any);
+    constructor(params?: Partial<SelectablePicker>);
     static Events: typeof Events;
 
     protected emitter: EventEmitter<Events>;

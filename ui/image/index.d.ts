@@ -52,7 +52,7 @@ declare class Image extends NativeComponent {
 	 * @since 3.1.3
 	 */
 	autoMirrored: boolean;
-	android: {
+	android: Partial<{
 		/**
 		 * Returns an image with rounded corners. This method returns the original image for iOS.
 		 * 
@@ -64,8 +64,8 @@ declare class Image extends NativeComponent {
 		 */
 		round(radius: number): Image;
 		systemIcon: Image;
-	}
-	ios: {
+	}>
+	ios: Partial<{
 		/**
 		 * Determines how an image is rendered.
 		 *
@@ -122,7 +122,7 @@ declare class Image extends NativeComponent {
 			insets: Rectangle,
 			mode: number
 		): Image;
-	}
+	}>
 	/**
 	 * Returns a Blob instance.
 	 *

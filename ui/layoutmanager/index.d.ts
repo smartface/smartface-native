@@ -86,8 +86,8 @@ declare enum Events {
  *
  */
 declare class LayoutManager extends NativeComponent {
-    constructor(params?: any)
-    ios: {
+    constructor(params?: Partial<LayoutManager>)
+    ios: Partial<{
         /**
          * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
          * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.For Android, you can use {@link UI.GridView#snapToAlignment}.
@@ -118,7 +118,7 @@ declare class LayoutManager extends NativeComponent {
             proposedContentOffset: Point2D,
             velocity: Point2D
         ) => Point2D;
-    }
+    }>
     /**
      * User must return a length value for scrollDirection that user lays out the objects.
      * If vertical, length value will be height of item. If horizontal, length value will be width of item.

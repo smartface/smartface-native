@@ -87,9 +87,9 @@ declare class System {
 	* @static
 	* @since 4.3.1
 	*/
-	static biometricType: BiometryType;
+	static biometricType: typeof System.BiometryType;
 
-	static android: {
+	static android: Partial<{
 		/**
 		 *
 		 * Returns the api level of the Android system.
@@ -157,8 +157,8 @@ declare class System {
 			onSuccess: (versionName: string) => void;
 			onError: (error: ErrorType) => void;
 		}): void;
-	};
-	static ios: {
+	}>;
+	static ios: Partial<{
 		/** 
 		* @enum {Number} Device.System.LABiometryType 
 		* @since 3.0.2
@@ -221,7 +221,7 @@ declare class System {
 			onSuccess: () => void;
 			onError: () => void;
 		}): void;
-	};
+	}>;
 	/**
 	 * Checks if the provided finger print matches with the system's finger print.
 	 * Will be false if TouchID not enabled for iOS and user not enrolled at least one
@@ -255,9 +255,9 @@ declare class System {
 	 * @deprecated since 4.3.1 Use {@link Device.System#validateBiometric}
 	 */
 	static validateFingerPrint(params: {
-		android: {
+		android: Partial<{
 			title: string;
-		};
+		}>;
 		message: string;
 		onSuccess: () => void;
 		onError: () => void;

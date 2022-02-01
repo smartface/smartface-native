@@ -10,7 +10,7 @@
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
 declare class Blob {
-    constructor(parts: any[], properties: {type: string});
+    constructor(parts: string[], properties: {type: string});
 /**
  * Returns the type of Blob data.
  *
