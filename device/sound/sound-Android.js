@@ -122,11 +122,13 @@ function Sound(params) {
     }));
 
     this.loadFile = function(file) {
+        this.nativeObject.reset();
         this.nativeObject.setDataSource(file.fullPath);
         this.nativeObject.prepare();
     };
 
     this.loadURL = function(url) {
+        this.nativeObject.reset();
         this.nativeObject.setDataSource(url);
         this.nativeObject.prepare();
     };
