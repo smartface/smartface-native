@@ -26,7 +26,7 @@ function HeaderBarItem(params) {
         _image = null,
         _enabled = true,
         _onPress = null,
-        _color = null,
+        _color = HeaderBarItem.itemColor,
         _searchView = null,
         _imageButton = false,
         _menuItem = null,
