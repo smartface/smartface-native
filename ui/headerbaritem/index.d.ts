@@ -198,6 +198,16 @@ declare class HeaderBarItem extends NativeComponent {
 	 * @since 3.0.0
 	 */
 	badge: Badge;
+	/**
+	 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 *
+	 * @property {String} accessibilityLabel
+	 * @android
+	 * @ios
+	 * @member UI.HeaderBarItem
+	 * @since 4.4.0
+	 */
+	accessibilityLabel: string;
 	ios: Partial<{
 		/**
 		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.

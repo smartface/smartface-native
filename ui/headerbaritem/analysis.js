@@ -197,6 +197,17 @@ HeaderBarItem.prototype.color = null;
 HeaderBarItem.prototype.badge;
 
 /**
+ * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+ *
+ * @property {String} accessibilityLabel
+ * @android
+ * @ios
+ * @member UI.HeaderBarItem
+ * @since 4.4.0
+ */
+HeaderBarItem.accessibilityLabel = null;
+
+/**
  * iOS Specific Properties.
  * @class UI.HeaderBarItem.iOS
  * @since 3.2.1

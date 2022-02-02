@@ -32,7 +32,9 @@ function HeaderBarItem(params) {
         _menuItem = null,
         _badgeObj = undefined,
         _systemIcon,
-        _customView = undefined;
+        _customView = undefined,
+        isLeftItem = false,
+        actionBar = null;
 
 
     this.ios = {};
@@ -230,6 +232,22 @@ function HeaderBarItem(params) {
             },
             set: function(view) {
                 _customView = view;
+            },
+            enumerable: true
+        },
+        'accessibilityLabel': {
+            get: function () {
+              return self._contentDescription;
+            },
+            set: function (value) {
+                self._contentDescription = value;
+                if(self.isLeftItem && self.actionBar){
+                    self.actionBar.setHomeActionContentDescription(self._contentDescription);
+                    console.log(self._contentDescription);
+                }{
+                    self.nativeObject && self.nativeObject.setContentDescription(self._contentDescription);
+                    console.log(self._contentDescription);
+                }
             },
             enumerable: true
         }
