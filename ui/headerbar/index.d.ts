@@ -52,22 +52,6 @@ import Image from "../image";
  */
 type HeaderBar = {
 	/**
-	 * Gets/sets attributed title of the header bar.
-	 *
-	 * @property {UI.AttributedString} attributedTitle
-	 * @android
-	 * @since 4.0.0
-	 */
-	attributedTitle?: AttributedString;
-	/**
-	 * Gets/sets attributed subtitle of the header bar.
-	 *
-	 * @property {UI.AttributedString} attributedSubtitle
-	 * @android
-	 * @since 4.0.0
-	 */
-	attributedSubtitle?: AttributedString;
-	/**
 	 * Defines the opacity of a view. The value of this property is a float number between 0.0 and 1.0. For iOS, you should access this property from page.parentController.
 	 * 0 represents view is completely transparent and 1 represents view is completely opaque.
 	 *
@@ -167,31 +151,7 @@ type HeaderBar = {
 	 * @since 0.1
 	 */
 	leftItemEnabled: boolean;
-	/**
-	 * Gets/sets titleFont of header bar subtitle.
-	 *
-	 * @property {UI.Font} subtitleFont
-	 * @android
-	 * @since 4.0.0
-	 */
-	subtitleFont?: Font;
-	/**
-	 * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
-	 *
-	 *     @example
-	 *     const Page = require('@smartface/native/ui/page');
-	 *     const Font = require("@smartface/native/ui/font");
-	 *     var myPage = new Page({
-	 *         onLoad: function() {
-	 *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
-	 *         }
-	 *     });
-	 *
-	 * @property {UI.Font} titleFont
-	 * @ios
-	 * @since 4.0.0
-	 */
-	titleFont?: Font;
+
 	/**
 	 * Gets the height of the header bar. Height is a read only property and
 	 * its value may change depending on device and screen density. For iOS, you should access this property from page.parentController.
@@ -203,14 +163,6 @@ type HeaderBar = {
 	 * @since 0.1
 	 */
 	height: number;
-	/**
-	 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
-	 *
-	 * @property {Boolean} translucent
-	 * @ios
-	 * @since 4.0.2
-	 */
-	translucent: boolean;
 	/**
 	 * Gets/sets the title layout of the HeaderBar. Title layout allows you to assign custom view.
 	 * For iOS, layouts are centered on the header bar and may be resized to fit.
@@ -240,21 +192,6 @@ type HeaderBar = {
 	 * @since 0.1
 	 */
 	titleColor: Color;
-	/**
-	 * Gets/sets the content inset of headerbar. Minimum API Level 21 required. The content inset affects the valid area for Headerbar content other than
-	 * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar#titleLayout titleLayout}  and
-	 * can be used to effectively align HeaderBar content along well-known gridlines.
-	 *
-	 * @property {Object} contentInset
-	 * @property {Number} contentInset.left
-	 * @property {Number} contentInset.right
-	 * @android
-	 * @since 3.2.1
-	 */
-	contentInset: {
-		left: number;
-		right: number;
-	};
 	/**
 	 * Gets/sets visibility of the header bar. For iOS, you should access this property from page.parentController.
 	 *
@@ -293,6 +230,47 @@ type HeaderBar = {
 	 */
 	setLeftItem: (item: HeaderBarItem) => void;
 	android: Partial<{
+		/**
+		 * Gets/sets attributed title of the header bar.
+		 *
+		 * @property {UI.AttributedString} attributedTitle
+		 * @android
+		 * @since 4.0.0
+		 */
+		attributedTitle?: AttributedString;
+		/**
+		 * Gets/sets attributed subtitle of the header bar.
+		 *
+		 * @property {UI.AttributedString} attributedSubtitle
+		 * @android
+		 * @since 4.0.0
+		 */
+		attributedSubtitle?: AttributedString;
+
+		/**
+		 * Gets/sets titleFont of header bar subtitle.
+		 *
+		 * @property {UI.Font} subtitleFont
+		 * @android
+		 * @since 4.0.0
+		 */
+		subtitleFont?: Font;
+
+		/**
+		 * Gets/sets the content inset of headerbar. Minimum API Level 21 required. The content inset affects the valid area for Headerbar content other than
+		 * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar#titleLayout titleLayout}  and
+		 * can be used to effectively align HeaderBar content along well-known gridlines.
+		 *
+		 * @property {Object} contentInset
+		 * @property {Number} contentInset.left
+		 * @property {Number} contentInset.right
+		 * @android
+		 * @since 3.2.1
+		 */
+		contentInset: {
+			left: number;
+			right: number;
+		};
 		/**
 		 * Gets/sets the logo of the HeaderBar image which will shown left
 		 * side of the left item. You should enable the logo with logoEnabled.
@@ -351,30 +329,55 @@ type HeaderBar = {
 		elevation?: number;
 
 		/**
-	 	 * Gets/sets the space between left item and title of headerbar. Minimum API Level 24 required.
-	 	 *
-	 	 * @property {Number} [contentInsetStartWithNavigation = 0]
-	 	 * @android
-	 	 * @since 4.3.6
+		 * Gets/sets the space between left item and title of headerbar. Minimum API Level 24 required.
+		 *
+		 * @property {Number} [contentInsetStartWithNavigation = 0]
+		 * @android
+		 * @since 4.3.6
 		 * @see https://material.io/components/app-bars-top#specs
-	 	 */
-		contentInsetStartWithNavigation? : Number;
+		 */
+		contentInsetStartWithNavigation?: Number;
 
 		/**
 		 * Gets/Sets the padding space on the all sides of a headerbar.
 		 *
 		 * @property {Object} [padding = { top : 0, left : 0, right : 4, bottom : 0 }]
 		 * @property {Number} padding.top padding space on the top side of a headerbar
- 		 * @property {Number} padding.left padding space on the left side of a headerbar
+		 * @property {Number} padding.left padding space on the left side of a headerbar
 		 * @property {Number} padding.right padding space on the right side of a headerbar
 		 * @property {Number} padding.bottom padding space on the bottom side of a headerbar
-		 * 
+		 *
 		 * @android
 		 * @since 4.3.6
 		 */
-		padding?:  { top? : Number, left? : Number, right? : Number, bottom? : Number };
+		padding?: { top?: Number; left?: Number; right?: Number; bottom?: Number };
 	}>;
 	ios: Partial<{
+		/**
+		 * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
+		 *
+		 *     @example
+		 *     const Page = require('@smartface/native/ui/page');
+		 *     const Font = require("@smartface/native/ui/font");
+		 *     var myPage = new Page({
+		 *         onLoad: function() {
+		 *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
+		 *         }
+		 *     });
+		 *
+		 * @property {UI.Font} titleFont
+		 * @ios
+		 * @since 4.0.0
+		 */
+		titleFont?: Font;
+		/**
+		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
+		 *
+		 * @property {Boolean} translucent
+		 * @ios
+		 * @since 4.0.2
+		 */
+		translucent: boolean;
 		/**
 		 * Gets/sets backBarButtonItem of the header bar.
 		 * When it set, it will change the next page's back button appearance.
@@ -416,8 +419,8 @@ type HeaderBar = {
 
 		/**
 		 * Used to add a different Image in place of iOS default back action on NavigationController
-       * Setting this will also set backIndicatorTransitionMaskImage as true.
-       * Setting this as something else(like null) will set the backIndicatorTransitionMaskImage as false.
+		 * Setting this will also set backIndicatorTransitionMaskImage as true.
+		 * Setting this as something else(like null) will set the backIndicatorTransitionMaskImage as false.
 		 *
 		 * @example
 		 *     const Page = require('@smartface/native/ui/page');
@@ -431,7 +434,7 @@ type HeaderBar = {
 		backIndicatorImage?: Image;
 		/**
 		 * The image used as a mask for content during push and pop transitions.
-       * This property will be set automatically if backIndicatorImage is set as a valid image.
+		 * This property will be set automatically if backIndicatorImage is set as a valid image.
 		 *
 		 * @example
 		 *     const Page = require('@smartface/native/ui/page');
