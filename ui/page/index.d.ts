@@ -50,6 +50,7 @@ declare enum PageEvents {
 	 *
 	 *
 	 * @event onOrientationChange
+	 * @deprecated
 	 * @param {Object} e
 	 * @param {UI.Page.Orientation} e.orientation
 	 * @android
