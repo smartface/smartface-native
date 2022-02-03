@@ -125,7 +125,6 @@ declare class LayoutManager extends NativeComponent {
      *
      * @param {Number} itemLength
      * @event onItemLength
-     * @deprecated
      * @android
      * @ios
      * @return {Number} itemLength
@@ -148,7 +147,6 @@ declare class LayoutManager extends NativeComponent {
      *
      * @param {Number} itemType
      * @event onFullSpan
-     * @deprecated
      * @android
      * @ios
      * @return {Number} height/width
