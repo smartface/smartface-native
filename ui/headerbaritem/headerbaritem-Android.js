@@ -320,6 +320,9 @@ function HeaderBarItem(params) {
         }
     };
 
+    //set the inital color if there is HeaderBarItem.itemColor
+    params.color = params.color || _color
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
