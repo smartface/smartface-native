@@ -29,6 +29,7 @@
 function WebSocket(params) {
   /**
    * Gets url of socket connection.
+   * If you want to change the url, you have to call the constructor again (create a new instance).
    *
    * @property {String} url
    * @readonly
@@ -37,6 +38,18 @@ function WebSocket(params) {
    * @since 1.1.17
    */
   this.url;
+
+  /**
+	 * Gets headers of socket connection.
+   * If you want to change the headers, you have to call the constructor again (create a new instance).
+	 *
+	 * @property {Object} headers
+	 * @readonly
+	 * @android
+	 * @ios
+	 * @since 1.1.17
+	 */
+  this.headers = {};
 
   /**
    * Close the web socket.
