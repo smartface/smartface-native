@@ -16,7 +16,7 @@ function TabBar(params) {
         self.nativeObject = params.nativeObject;
 
         // Xcode 13.1 background bug fixes [NTVE-398]
-        if (parseInt(System.OSVersion) >= 13) {
+        if (parseInt(System.OSVersion) >= 15) {
             self.appearance = new __SF_UITabBarAppearance();
             
             self.appearance.configureWithOpaqueBackground();
@@ -155,7 +155,7 @@ function TabBar(params) {
         },
         set: function(value) {
             // Xcode 13.1 background bug fixes [NTVE-398]
-            if (parseInt(System.OSVersion) >= 13) { 
+            if (parseInt(System.OSVersion) >= 15) { 
                 self.appearance.backgroundColor = value.nativeObject
         
                 self.nativeObject.standardAppearance = self.appearance
