@@ -118,6 +118,7 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
         useHTTPCacheControl = false,
         useDiskCache = true,
         useMemoryCache = true,
+        cacheSignature = null
     } = getLoadFromUrlParams.apply(null, arguments);
     if(!url){
         onFailure && onFailure();
@@ -151,6 +152,7 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
         useHTTPCacheControl,
         useHTTPCacheControl ? false : useDiskCache,
         useMemoryCache,
+        cacheSignature
     );
     try {
         SFGlide.loadFromUrl(loadFromUrlParameters);
@@ -161,7 +163,7 @@ ImageView.prototype.loadFromUrl = function () { //ToDo: Paramters should be obje
 
 ImageView.prototype.fetchFromUrl = function (params) {
     const self = this;
-    const {
+    var {
         url = null,
         headers = {},
         placeholder = null,
@@ -169,9 +171,10 @@ ImageView.prototype.fetchFromUrl = function (params) {
         onFailure = null,
         useHTTPCacheControl = false,
         android: {
-            useDiskCache = useDiskCache,
-            useMemoryCache = useMemoryCache,
-        } = { useMemoryCache: true, useDiskCache: true }
+            useDiskCache: useDiskCache,
+            useMemoryCache: useMemoryCache,
+            cacheSignature: cacheSignature
+        } = { useMemoryCache: true, useDiskCache: true, cacheSignature: null }
     } = params;
     if(!url){
         onFailure && onFailure();
@@ -224,7 +227,8 @@ ImageView.prototype.fetchFromUrl = function (params) {
         useHTTPCacheControl,
         useHTTPCacheControl ? false : useDiskCache,
         useMemoryCache,
-        glideTarget
+        glideTarget,
+        cacheSignature
     );
     try {
         SFGlide.fetchFromUrl(parameters);
@@ -242,7 +246,8 @@ ImageView.prototype.loadFromFile = function (params) {
         height = -1,
         android: {
             useMemoryCache: useMemoryCache,
-        } = { useMemoryCache: true }
+            cacheSignature : cacheSignature
+        } = { useMemoryCache: true, cacheSignature : null }
     } = params;
     if (file instanceof File) {
         const parameters = new LoadFromFileParameters(
@@ -253,7 +258,8 @@ ImageView.prototype.loadFromFile = function (params) {
             fade,
             useMemoryCache,
             width,
-            height
+            height,
+            cacheSignature
         );
         var resolvedPath = file.resolvedPath;
         if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
@@ -285,7 +291,8 @@ function getLoadFromUrlParams() {
             onSuccess: params.onSuccess,
             useMemoryCache: params.android ? params.android.useMemoryCache : true,
             useDiskCache: params.android ? params.android.useDiskCache : true,
-            useHTTPCacheControl: params.useHTTPCacheControl
+            useHTTPCacheControl: params.useHTTPCacheControl,
+            cacheSignature: params.android ? params.android.cacheSignature : null
         };
     } else {
         return {
