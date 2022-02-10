@@ -113,12 +113,12 @@ HeaderBar.prototype.backgroundColor = Color.create("#00A1F1");
  *         }
  *     });
  *
- * @property {UI.Color} [itemColor = Color.WHITE]
+ * @property {UI.Color} [itemColor]
  * @android
  * @ios
  * @since 0.1
  */
-HeaderBar.prototype.itemColor = Color.WHITE;
+HeaderBar.prototype.itemColor = null;
 
 /**
  * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.

@@ -514,7 +514,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _leftItemColor = Color.WHITE;
+    var _leftItemColor = null;
     Object.defineProperty(self.headerBar, 'leftItemColor', {
         get: function () {
             return _leftItemColor;
@@ -530,7 +530,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _itemColor = Color.WHITE;
+    var _itemColor = null;
     Object.defineProperty(self.headerBar, 'itemColor', {
         get: function () {
             return _itemColor;

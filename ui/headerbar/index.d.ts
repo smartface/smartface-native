@@ -130,7 +130,7 @@ type HeaderBar = {
 	 *         }
 	 *     });
 	 *
-	 * @property {UI.Color} [itemColor = Color.WHITE]
+	 * @property {UI.Color} [itemColor]
 	 * @android
 	 * @ios
 	 * @since 0.1
