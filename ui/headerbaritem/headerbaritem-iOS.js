@@ -134,6 +134,19 @@ function HeaderBarItem(params) {
                 } : undefined;
             },
             enumerable: true
+        },
+        'accessibilityLabel': {
+            get: function() {
+                return Invocation.invokeInstanceMethod(self.nativeObject, "accessibilityLabel", [], "NSString");
+            },
+            set: function(value) {
+                const nativeAccessibilityLabel = new Invocation.Argument({
+                    type: "NSString",
+                    value: value
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject, "setAccessibilityLabel:", [nativeAccessibilityLabel]);
+            },
+            enumerable: true
         }
     });
 
