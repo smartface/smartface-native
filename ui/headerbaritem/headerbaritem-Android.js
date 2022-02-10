@@ -37,6 +37,18 @@ function HeaderBarItem(params) {
 
     this.ios = {};
 
+    this.updateColor = (color) => {
+        if (this.nativeObject && color) {
+            if (this.image || this.android.systemIcon) {
+                let imageCopy = this.nativeObject.getDrawable().mutate();
+                imageCopy.setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+                this.nativeObject.setImageDrawable(imageCopy);
+            } else {
+                this.nativeObject.setTextColor(color.nativeObject);
+            }
+        }
+    }
+
 
     self.isBadgeEnabled = false;
     Object.defineProperties(this, {
@@ -52,15 +64,7 @@ function HeaderBarItem(params) {
                     throw new TypeError("color must be Color instance");
                 }
                 _color = value;
-                if (this.nativeObject) {
-                    if (this.image || this.android.systemIcon) {
-                        let imageCopy = this.nativeObject.getDrawable().mutate();
-                        imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-                        this.nativeObject.setImageDrawable(imageCopy);
-                    } else {
-                        this.nativeObject.setTextColor(_color.nativeObject);
-                    }
-                }
+                this.updateColor(_color);
             },
             enumerable: true
         },
