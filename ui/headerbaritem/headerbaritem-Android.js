@@ -32,15 +32,23 @@ function HeaderBarItem(params) {
         _menuItem = null,
         _badgeObj = undefined,
         _systemIcon,
-        _customView = undefined,
-        isLeftItem = false,
-        actionBar = null;
+        _customView = undefined;
 
+    this.isLeftItem = false;
+    this.actionBar = null;
 
     this.ios = {};
 
-
     self.isBadgeEnabled = false;
+
+    this.updateAccessibilityLabel = (accessibilityLabel) => {
+        if(this.isLeftItem && this.actionBar){
+            this.actionBar.setHomeActionContentDescription(accessibilityLabel);
+        } else {
+            this.nativeObject && this.nativeObject.setContentDescription(accessibilityLabel);
+        }
+    }
+
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -106,6 +114,7 @@ function HeaderBarItem(params) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = createNativeImageButton.call(this);
+                        self.updateAccessibilityLabel(self._accessibilityLabel);
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
@@ -237,15 +246,11 @@ function HeaderBarItem(params) {
         },
         'accessibilityLabel': {
             get: function () {
-              return self._contentDescription;
+              return self._accessibilityLabel;
             },
             set: function (value) {
-                self._contentDescription = value;
-                if(self.isLeftItem && self.actionBar){
-                    self.actionBar.setHomeActionContentDescription(self._contentDescription);
-                } else {
-                    self.nativeObject && self.nativeObject.setContentDescription(self._contentDescription);
-                }
+                self._accessibilityLabel = value;
+                self.updateAccessibilityLabel(self._accessibilityLabel);
             },
             enumerable: true
         }
@@ -269,8 +274,10 @@ function HeaderBarItem(params) {
             set: function(systemIcon) {
                 _systemIcon = systemIcon;
 
-                if (!self.nativeObject || (self.nativeObject && !self.imageButton))
+                if (!self.nativeObject || (self.nativeObject && !self.imageButton)){
                     self.nativeObject = createNativeImageButton.call(self);
+                    self.updateAccessibilityLabel(self._accessibilityLabel);
+                }
 
                 self.nativeObject && (self.nativeObject.setImageResource(Image.systemDrawableId(_systemIcon)));
             },
@@ -317,6 +324,7 @@ function HeaderBarItem(params) {
 
         if (!self.nativeObject || self.imageButton) {
             self.nativeObject = new NativeTextButton(activity);
+            self.updateAccessibilityLabel(self._accessibilityLabel);
             self.nativeObject.setText(itemTitle);
             self.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
             self.nativeObject.setPaddingRelative(
