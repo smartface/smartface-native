@@ -243,10 +243,8 @@ function HeaderBarItem(params) {
                 self._contentDescription = value;
                 if(self.isLeftItem && self.actionBar){
                     self.actionBar.setHomeActionContentDescription(self._contentDescription);
-                    console.log(self._contentDescription);
-                }{
+                } else {
                     self.nativeObject && self.nativeObject.setContentDescription(self._contentDescription);
-                    console.log(self._contentDescription);
                 }
             },
             enumerable: true
