@@ -641,9 +641,9 @@ declare interface ListView extends View<ListViewEvents> {
 	deleteRowRange(params: {
 		positionStart: number;
 		itemCount: number;
-		ios: {
+		ios: Partial<{
 			animation: ListView.iOS.RowAnimation;
-		};
+		}>;
 	}): void;
 	/**
 	 * This method notify the ListView  that given range of items inserted. Must set the itemCount value to a changed number before calling this function.
@@ -662,9 +662,9 @@ declare interface ListView extends View<ListViewEvents> {
 	insertRowRange(params: {
 		positionStart: number;
 		itemCount: number;
-		ios: {
+		ios: Partial<{
 			animation: ListView.iOS.RowAnimation;
-		};
+		}>;
 	}): void;
 	/**
 	 * This method notify the ListView  that given range of items changed.
@@ -1162,13 +1162,13 @@ declare interface ListView extends View<ListViewEvents> {
 	onRowSwipe: (e: {
 		index: number;
 		direction: ListView.SwipeDirection;
-		ios: {
+		ios: Partial<{
 			expansionSettings: {
 				buttonIndex: number;
 				fillOnTrigger: boolean;
 				threshold: number;
 			};
-		};
+		}>;
 	}) => void;
 	/**
 	 * This event is called when dragged item before reordered in the list view.
@@ -1212,7 +1212,7 @@ declare interface ListView extends View<ListViewEvents> {
 }
 
 declare class ListView implements ListView {
-	constructor(params?: any);
+	constructor(params?: Partial<ListView>);
 }
 
 declare namespace ListView {

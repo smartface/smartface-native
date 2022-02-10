@@ -52,6 +52,7 @@ declare enum MapViewEvents {
  *
  */
 declare class MapView extends View<MapViewEvents> {
+	constructor(params?: Partial<MapView>);
 	/**
 	 * Enables/Disables scroll gestures so that map can be dragged.
 	 *
@@ -467,7 +468,7 @@ declare namespace MapView {
 	const Events: typeof MapViewEvents & typeof View.Events
 	type Events = typeof Events
 	class Pin extends PinKlass {
-		constructor(params?: { location?: { latitude: number, longitude: number }, title?: string })
+		constructor(params?: Partial<PinKlass> )
 	}
 
 	/**

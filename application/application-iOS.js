@@ -214,6 +214,9 @@ SFApplication.android.setAppTheme = function() {
     SFApplication.emitter.emit(Events.UnhandledError, e);
 };
 
+Application.onUnhandledError = (e) => {
+    SFApplication.emitter.emit(Events.UnhandledError, e);
+}
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set: function(value) {
         Application.onUnhandledError = (e) => {
@@ -227,7 +230,7 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-Application.onExit = function() {
+Application.onExit = function(e) {
     SFApplication.emitter.emit(Events.Exit, e);
 };
 Object.defineProperty(SFApplication, 'onExit', {
@@ -243,7 +246,7 @@ Object.defineProperty(SFApplication, 'onExit', {
     enumerable: true
 });
 
-Application.onReceivedNotification = function() {
+Application.onReceivedNotification = function(e) {
     SFApplication.emitter.emit(Events.ReceivedNotification, e);
 };
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
@@ -278,7 +281,7 @@ Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
     enumerable: true
 });
 
-Application.onApplicationCallReceived = function() {
+Application.onApplicationCallReceived = function(e) {
     SFApplication.emitter.emit(Events.ApplicationCallReceived, e);
 };
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
@@ -294,7 +297,7 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     enumerable: true
 });
 
-Application.onAppShortcutReceive = function () { };
+Application.onAppShortcutReceive = function (e) { };
 Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
     set: function (value) {
         listenAppShortcut(value);
@@ -306,7 +309,7 @@ Object.defineProperty(SFApplication, 'onAppShortcutReceived', {
     enumerable: true
 });
 
-Application.onMaximize = function() {
+Application.onMaximize = function(e) {
     SFApplication.emitter.emit(Events.Maximize, e);
 };
 Object.defineProperty(SFApplication, 'onMaximize', {
@@ -322,7 +325,7 @@ Object.defineProperty(SFApplication, 'onMaximize', {
     enumerable: true
 });
 
-Application.onMinimize = function() {
+Application.onMinimize = function(e) {
     SFApplication.emitter.emit(Events.Minimize, e);
 };
 Object.defineProperty(SFApplication, 'onMinimize', {

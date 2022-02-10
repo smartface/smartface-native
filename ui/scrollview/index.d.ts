@@ -14,6 +14,8 @@ declare enum ScrollViewEvents {
   ScrollEndDraggingWithVelocityTargetContentOffset = "scrollEndDraggingWithVelocityTargetContentOffset"
 }
 
+type ScrollViewEvent = ScrollViewEvents & ViewGroup.Events;
+
 /**
  * @class UI.ScrollView
  * @extends UI.ViewGroup
@@ -60,7 +62,8 @@ declare enum ScrollViewEvents {
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
  */
-declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLayout {
+declare class ScrollView extends ViewGroup<ScrollViewEvent> implements IFlexLayout {
+  constructor(params?: Partial<ScrollView>)
 	/**
 	 * Gets/sets over-scroll mode for this view.
 	 *
@@ -318,7 +321,7 @@ declare class ScrollView extends ViewGroup<ScrollViewEvents> implements IFlexLay
 		velocity: Point2D,
 		targetContentOffset: Point2D
 	) => void;
-	static Events: typeof ScrollViewEvents;
+	static Events: ScrollViewEvent;
 }
 declare namespace ScrollView {
 	enum Align {

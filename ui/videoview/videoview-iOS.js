@@ -31,25 +31,42 @@ function VideoView(params) {
 
     self.loadURL = function (value) {
         if (TypeUtil.isURL(value)) {
-            self.avPlayerViewController.removeObserver();
+            if (self.avPlayer) {
+                self.avPlayer.removeObserver();
+            }
             var url = __SF_NSURL.URLWithString(value);
             self.avPlayer = __SF_AVPlayer.createFromURL(url);
             self.avPlayerViewController.player = self.avPlayer;
             self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
-            self.avPlayerViewController.addObserver();
+            self.avPlayer.addObserver();
+            self.addCallbackFunction();
         } else {
             throw new TypeError(Exception.TypeError.URL);
         }
     };
 
     self.loadFile = function (value) {
-        self.avPlayerViewController.removeObserver();
+        if (self.avPlayer) {
+            self.avPlayer.removeObserver();
+        }
         var url = value.ios.getNSURL();
         self.avPlayer = __SF_AVPlayer.createFromURL(url);
         self.avPlayerViewController.player = self.avPlayer;
         self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
-        self.avPlayerViewController.addObserver();
+        self.avPlayer.addObserver();
+        self.addCallbackFunction();
+
     }
+
+    self.addCallbackFunction = () => {
+        self.avPlayer.onItemFailed = () => {
+            if (typeof self.onFailure === 'function') {
+                self.onFailure();
+            }
+        }
+    }
+
+
 
     self.play = function () {
         self.avPlayer && self.avPlayer.play();
@@ -69,6 +86,8 @@ function VideoView(params) {
             self.onReady();
         }
     }
+
+
 
     var _loopEnabled = false;
     self.setLoopEnabled = function (value) {

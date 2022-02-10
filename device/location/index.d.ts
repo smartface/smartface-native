@@ -28,7 +28,7 @@ declare class Location {
 	static on(eventName: Events, callback: (...args: any) => void): () => void;
 	static off(eventName: Events, callback?: (...args: any) => void): void;
 	static emit(event: Events, detail?: any[]): void;
-	static android: {
+	static android: Partial<{
 		/**
 		 * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
 		 * Shows an dialog to open the location service when the location service is off.
@@ -47,7 +47,7 @@ declare class Location {
 			onSuccess: () => void;
 			onFailure: (e: { statusCode: Location.Android.SettingsStatusCodes }) => void;
 		}): void;
-	};
+	}>;
 	/**
 	 * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;
 	 * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
@@ -109,7 +109,7 @@ declare class Location {
 		onSuccess: (e: { latitude: number; longitude: number }) => void,
 		onFailure: () => void
 	): void;
-	static ios: {
+	static ios: Partial<{
 		/**
 		 * Callback to capture authorization status changes.
 		 * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
@@ -140,7 +140,7 @@ declare class Location {
 		 * @since 2.0.11
 		 */
 		locationServicesEnabled(): boolean;
-	};
+	}>;
 	static Events: typeof Events;
 }
 

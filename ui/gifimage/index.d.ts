@@ -22,7 +22,7 @@ import Image from "../image";
  *     
  */
 declare class GifImage extends NativeComponent {
-    constructor(params?: any);
+    constructor(params?: Partial<GifImage>);
 /**
  * Creates an gifImage object from given a blob. 
  *

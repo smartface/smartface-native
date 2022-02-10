@@ -212,7 +212,7 @@ function HeaderBar(params) {
         self.nativeObject = params.navigationController.view.nativeObject.navigationBar;
 
         // Xcode 13.1 background bug fixes [NTVE-398]
-        if (parseInt(System.OSVersion) >= 13) {
+        if (parseInt(System.OSVersion) >= 15) {
             self.appearance = new __SF_UINavigationBarAppearance();
 
             self.appearance.configureWithOpaqueBackground();
@@ -330,7 +330,7 @@ function HeaderBar(params) {
         _titleFont && (titleTextAttributes["NSFont"] = _titleFont);
 
         // Xcode 13.1 background bug fixes [NTVE-398]
-        if (parseInt(System.OSVersion) >= 13) {
+        if (parseInt(System.OSVersion) >= 15) {
             self.appearance.titleTextAttributes = titleTextAttributes;
 
             self.nativeObject.standardAppearance = self.appearance
@@ -387,7 +387,7 @@ function HeaderBar(params) {
         set: function(value) {
             if (value) {
                 // Xcode 13.1 background bug fixes [NTVE-398]
-                if (parseInt(System.OSVersion) >= 13) {
+                if (parseInt(System.OSVersion) >= 15) {
                     self.appearance.backgroundColor = value.nativeObject
                     self.nativeObject.standardAppearance = self.appearance
                     self.nativeObject.scrollEdgeAppearance = self.appearance

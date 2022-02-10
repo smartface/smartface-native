@@ -17,7 +17,7 @@ import Font from "../../ui/font";
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
 declare class AttributedString {
-	constructor(params?: any);
+	constructor(params?: Partial<AttributedString>);
 	/**
 	 * Gets/sets backgroundColor on AttributedString.
 	 *
@@ -82,7 +82,7 @@ declare class AttributedString {
 	 * @since 3.0.0
 	 */
 	underline: boolean;
-	ios: {
+	ios: Partial<{
 		/**
 		 * Gets/sets underlineColor on AttributedString.
 		 *
@@ -99,7 +99,7 @@ declare class AttributedString {
 		 * @since 3.2.1
 		 */
 		strikethroughColor?: Color;
-	};
+	}>;
 }
 
 export = AttributedString;

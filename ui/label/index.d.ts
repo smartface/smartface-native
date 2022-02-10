@@ -25,7 +25,7 @@ import View from "../view";
  *     myLabel.backgroundColor = Color.GRAY;
  */
 declare class Label extends View implements Label {
-    constructor(params?: any);
+    constructor(params?: Partial<Label>);
 /**
  * Gets/sets background color of a view. It allows setting background
  * color with UI.Color instance.

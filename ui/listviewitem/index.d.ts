@@ -12,7 +12,7 @@ import ViewGroup from "../viewgroup";
  *
  */
 declare class ListViewItem extends ViewGroup {
-  constructor(params?: any);
+  constructor(params?: Partial<ListViewItem>);
 /**
  * This method manually performs an expansion scroll.
  *

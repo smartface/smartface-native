@@ -20,8 +20,7 @@ import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/e
  *     mySound.loadURL(your-url);
  * 
  */
-
-declare class Sound extends NativeComponent implements IEventEmitter{    
+declare class Sound extends NativeComponent implements IEventEmitter<typeof Sound.Events>{    
     constructor(params?: Partial<Sound>);
     protected emitter: EventEmitter<typeof Sound.Events>;
     on(eventName: Sound.Events, callback: (...args: any[]) => void): () => void;
