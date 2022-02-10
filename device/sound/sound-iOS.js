@@ -2,6 +2,7 @@ const File = require("../../io/file");
 const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
+Sound.Events = { ...Events };
 
 
 function Sound() {
