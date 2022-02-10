@@ -205,7 +205,7 @@ declare class HeaderBarItem extends NativeComponent {
 	 * @android
 	 * @ios
 	 * @member UI.HeaderBarItem
-	 * @since 4.4.0
+	 * @since 4.4.1
 	 */
 	accessibilityLabel: string;
 	ios: Partial<{

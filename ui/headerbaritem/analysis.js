@@ -203,7 +203,7 @@ HeaderBarItem.prototype.badge;
  * @android
  * @ios
  * @member UI.HeaderBarItem
- * @since 4.4.0
+ * @since 4.4.1
  */
 HeaderBarItem.accessibilityLabel = null;
 
