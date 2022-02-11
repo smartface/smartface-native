@@ -4,6 +4,13 @@ Hardware.android = {}
 Hardware.ios = {}
 Hardware.ios.microphone = {}
 
+
+const DEVICE_TYPES = {
+    unspecified: -1,
+    phone: 0,
+    tablet: 1
+}
+
 Object.defineProperty(Hardware, 'UID', {
     value: __SF_UIDevice.currentDevice().UUID,
     writable: false,
@@ -22,6 +29,29 @@ Object.defineProperty(Hardware, 'brandModel', {
         return __SF_UIDevice.modelName()
     },
     // writable: false,
+    enumerable: true
+});
+
+Object.defineProperty(Hardware, 'deviceType', {
+    get: function() {
+        var type;
+        const keys = Object.keys(DEVICE_TYPES);
+        switch (__SF_UIDevice.currentDevice().userInterfaceIdiom) {
+            case DEVICE_TYPES.unspecified:
+                type = keys[0]
+                break;
+            case DEVICE_TYPES.phone:
+                type = keys[1]
+                break;
+            case DEVICE_TYPES.tablet:
+                type = keys[2]
+                break
+            default:
+                type = keys[0];
+                break
+        }
+        return type;
+    },
     enumerable: true
 });
 
