@@ -1,3 +1,9 @@
+declare enum DEVICE_TYPES {
+	UNSPECIFIED = "unspecified",
+	PHONE = "phone",
+	TABLET = "tablet"
+}
+
 /**
  * @class Device.Hardware
  * @since 0.1
@@ -95,7 +101,7 @@ declare const Hardware: {
 	/**
 	 *
 	 * Returns the device type.
-	 * @property {String} deviceType
+	 * @property {string} deviceType
 	 * @android
 	 * @ios
 	 * @readonly
@@ -103,6 +109,21 @@ declare const Hardware: {
 	 * @since 4.4.1
 	 */
 	readonly deviceType: string;
+
+  /**
+   * Defines the available device types
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 4.4.1
+   * @example
+   * ```
+   * Hardware.deviceType === Hardware.DeviceType.PHONE; // determines if the current device is a mobile phone
+	 * Hardware.deviceType === "phone";
+   * ```
+   */
+  readonly DeviceType: typeof DEVICE_TYPES;
 };
 
 export default Hardware
