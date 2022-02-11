@@ -11,6 +11,7 @@
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
  *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
+ *     console.log("Device.Hardware.deviceType: "   + Hardware.android.deviceType);
  *
  */
 declare const Hardware: {
@@ -91,6 +92,18 @@ declare const Hardware: {
 	 * @since 0.1
 	 */
 	readonly brandName: string;
+	/**
+	 *
+	 * Returns the device type.
+	 * @property {String} deviceType
+	 * @android
+	 * @ios
+	 * @readonly
+	 * @static
+	 * @since 4.4.1
+	 */
+	readonly deviceType: string;
 };
 
-export = Hardware;
+export default Hardware
+
