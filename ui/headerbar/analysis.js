@@ -100,7 +100,7 @@ HeaderBar.prototype.borderVisibility = true;
 HeaderBar.prototype.backgroundColor = Color.create("#00A1F1");
 
 /**
- * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
+ * Gets/sets item color of the header bar. This property will change color of the unassigned color values of left item and all header bar items. For iOS, you should access this property from page.parentController.
  *
  *     @example
  *     const Page = require('@smartface/native/ui/page');

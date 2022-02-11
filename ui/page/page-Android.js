@@ -521,6 +521,7 @@ function Page(params) {
         },
         set: function (color) {
             if (color instanceof Color) {
+                _leftItemColor = color;
                 var drawable = toolbar.getNavigationIcon();
                 if (drawable)
                     drawable.setColorFilter(color.nativeObject, PorterDuff.Mode.SRC_ATOP);
@@ -537,11 +538,10 @@ function Page(params) {
         },
         set: function (color) {
             if (color instanceof Color) {
-                self.headerBar.leftItemColor = color;
+                _itemColor = color;
+                self.headerBar.leftItemColor = self._headerBarLeftItem && self._headerBarLeftItem.color || color;
                 for (var i = 0; i < _headerBarItems.length; i++)
-                    _headerBarItems[i].color = color;
-                const HeaderBarItem = require("../headerbaritem");
-                HeaderBarItem.itemColor = color;
+                    _headerBarItems[i].updateColor(_headerBarItems[i].color || color);
             }
         },
         enumerable: true,
@@ -824,6 +824,7 @@ function Page(params) {
 
                 item.menuItem.setActionView(itemView);
             }
+            item.updateColor(item.color || _itemColor);
         });
     };
     self._headerBarLeftItem = null;
@@ -839,6 +840,7 @@ function Page(params) {
             self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
+        self.headerBar.leftItemColor = leftItem.color || _itemColor;
     };
 
     // Added to solve AND-2713 bug.
