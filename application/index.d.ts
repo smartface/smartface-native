@@ -248,7 +248,7 @@ declare class Application {
 	static on(eventName: Events, callback: (...args: any) => void): () => void;
 	static once(eventName: Events, callback: (...args: any) => void): () => void;
 	static off(eventName: Events, callback?: (...args: any) => void): void;
-	static emit(event: Events, detail?: any[]): void;
+	static emit(event: Events, ...detail: any[]): void;
 	/**
 	 * The received bytes from the application.
 	 *
