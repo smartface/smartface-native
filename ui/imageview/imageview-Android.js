@@ -169,9 +169,9 @@ ImageView.prototype.fetchFromUrl = function (params) {
         onFailure = null,
         useHTTPCacheControl = false,
         android: {
-            useDiskCache = useDiskCache,
-            useMemoryCache = useMemoryCache,
-        } = { useMemoryCache: true, useDiskCache: true }
+            useDiskCache = true,
+            useMemoryCache = true,
+        } = {}
     } = params;
     if(!url){
         onFailure && onFailure();
