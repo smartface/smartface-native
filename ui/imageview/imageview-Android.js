@@ -171,10 +171,10 @@ ImageView.prototype.fetchFromUrl = function (params) {
         onFailure = null,
         useHTTPCacheControl = false,
         android: {
-            useDiskCache: useDiskCache,
-            useMemoryCache: useMemoryCache,
-            cacheSignature: cacheSignature
-        } = { useMemoryCache: true, useDiskCache: true, cacheSignature: null }
+            useDiskCache = true,
+            useMemoryCache = true,
+            cacheSignature = null
+        } = {}
     } = params;
     if(!url){
         onFailure && onFailure();
@@ -245,9 +245,9 @@ ImageView.prototype.loadFromFile = function (params) {
         width = -1,
         height = -1,
         android: {
-            useMemoryCache: useMemoryCache,
-            cacheSignature : cacheSignature
-        } = { useMemoryCache: true, cacheSignature : null }
+            useMemoryCache = true,
+            cacheSignature = null
+        } = {}
     } = params;
     if (file instanceof File) {
         const parameters = new LoadFromFileParameters(
