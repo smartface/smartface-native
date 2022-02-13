@@ -17,7 +17,7 @@ declare enum DEVICE_TYPES {
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
  *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
- *     console.log("Device.Hardware.deviceType: "   + Hardware.android.deviceType);
+ *     console.log("Device.Hardware.deviceType: "   + Hardware.deviceType);
  *
  */
 declare const Hardware: {
