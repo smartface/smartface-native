@@ -12,4 +12,4 @@ declare type StatusBar = {
   style: StatusBarStyle;
 };
 
-export = StatusBar;
+export default require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default as StatusBar;
