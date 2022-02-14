@@ -1,5 +1,5 @@
 import Color from '../../../ui/color';
-import { NavigationBarStyle } from './navigationbar-Android';
+import { NavigationBarStyle } from './navigationbar.android';
 /**
  * @class Application.Android.NavigationBar
  *
@@ -22,4 +22,5 @@ declare class Navigationbar {
 	style: NavigationBarStyle;
 }
 
-export = Navigationbar;
+export default require(`./navigationbar.${Device.deviceOS.toLowerCase()}`)
+	.default as typeof Navigationbar;
