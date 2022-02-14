@@ -1,2 +1,2 @@
-import ImageView  from "./imageview";
+import ImageView from './imageview';
 export = ImageView.FillType;

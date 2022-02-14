@@ -13,16 +13,16 @@
  * }}
  */
 declare const Exception: {
-    readonly TypeError: {
-        readonly DEFAULT: "Parameter type must be ";
-        readonly NUMBER: "Parameter type must be number";
-        readonly STRING: "Parameter type must be string";
-        readonly BOOLEAN: "Parameter type must be boolean";
-        readonly OBJECT: "Parameter type must be object";
-        readonly ARRAY: "Parameter type must be array";
-        readonly FUNCTION: "Parameter type must be function";
-        readonly URL: "URL is not valid";
-    }
+  readonly TypeError: {
+    readonly DEFAULT: 'Parameter type must be ';
+    readonly NUMBER: 'Parameter type must be number';
+    readonly STRING: 'Parameter type must be string';
+    readonly BOOLEAN: 'Parameter type must be boolean';
+    readonly OBJECT: 'Parameter type must be object';
+    readonly ARRAY: 'Parameter type must be array';
+    readonly FUNCTION: 'Parameter type must be function';
+    readonly URL: 'URL is not valid';
+  };
 };
 
 export = Exception;

@@ -1,6 +1,5 @@
-import { EventEmitter } from "stream";
-import { INativeComponent } from "./inative-component";
-
+import { EventEmitter } from 'stream';
+import { INativeComponent } from './inative-component';
 
 export default class NativeEventEmitterComponent extends EventEmitter implements INativeComponent {
   protected _nativeObject: any;

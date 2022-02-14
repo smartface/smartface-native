@@ -1,4 +1,4 @@
 declare function UIScrollViewInheritance(): void;
-declare namespace UIScrollViewInheritance { }
+declare namespace UIScrollViewInheritance {}
 
 export = UIScrollViewInheritance;

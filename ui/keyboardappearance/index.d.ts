@@ -1,3 +1,3 @@
-import KeyboardAppearance from "./keyboardappearance";
+import KeyboardAppearance from './keyboardappearance';
 
 export = KeyboardAppearance;

@@ -1,2 +1,2 @@
-import TextContentType from "./textcontenttype";
+import TextContentType from './textcontenttype';
 export = TextContentType;

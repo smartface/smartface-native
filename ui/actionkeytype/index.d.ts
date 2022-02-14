@@ -1,3 +1,3 @@
-import ActionKeyType from "./actionkeytype";
+import ActionKeyType from './actionkeytype';
 
 export = ActionKeyType;

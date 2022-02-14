@@ -1,4 +1,4 @@
 declare function TypeUtil(): void;
-declare namespace TypeUtil { }
+declare namespace TypeUtil {}
 
 export = TypeUtil;

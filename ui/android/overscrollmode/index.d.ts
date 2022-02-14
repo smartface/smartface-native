@@ -1,7 +1,7 @@
 declare enum OverScrollMode {
-	ALWAYS,
-	AUTO,
-	NEVER
+  ALWAYS,
+  AUTO,
+  NEVER
 }
 
 export = OverScrollMode;

@@ -1,5 +1,5 @@
 import { EventEmitter, EventListenerCallback, IEventEmitter } from './EventEmitter';
-import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
+import { ConstructorOf } from '@smartface/core/lib/ConstructorOf';
 
 /**
  * This callback will be executed after the handler function is set.
@@ -15,10 +15,10 @@ import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
  * @param  {Object} args - This might take multiple parameters and can get anything.
  * @returns {Function} - The function to be used on the native parts as event handler.
  */
- export function EventEmitterWrapper(target, event, callback, ...args) {
-  const handler = function(...args) {
+export function EventEmitterWrapper(target, event, callback, ...args) {
+  const handler = function (...args) {
     return target.emitter.emit(event, ...args);
-  }
+  };
   typeof callback === 'function' && callback();
   return handler.bind(target, ...args);
 }
@@ -38,8 +38,8 @@ import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
  *   [EventsList.ViewAdded]: function() {
  *     this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null);
  *   }
- * } 
- * 
+ * }
+ *
  * function ViewGroup() {
  *   function emitterCallBack() {
  *     if (!this.didSetHierarchyChangeListener) {
@@ -48,7 +48,7 @@ import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
  *   }
  *   EventEmitterCreator(this, EventFunctions, emitterCallBack.bind(this));
  * }
- * 
+ *
  * ```
  * @param {*} targetInstance this object
  * @param {*} eventFunctions Object of Functions. It will be bound to the current context using targetInstance parameter. If there is no function to inherit, pass empty object.
@@ -57,7 +57,7 @@ import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
 export function withEventEmitter<TEvent extends string | symbol>(TargetClass: ConstructorOf<any>, eventFunctions, eventCallback = () => {}) {
   // const parentOnFunction = targetInstance.on;
   // targetInstance.emitter = targetInstance.emitter || new EventEmitter();
-  
+
   // const onFunction = (once = false) => (event, callback) => {
   //   eventFunctions[event] && eventFunctions[event].call(targetInstance);
   //   typeof eventCallback === 'function' && eventCallback.call(targetInstance);
@@ -102,7 +102,7 @@ export function withEventEmitter<TEvent extends string | symbol>(TargetClass: Co
     emit(event: TEvent, ...args: any[]) {
       this.emitter.emit(event, ...args);
     }
-  }
+  };
 }
 
 // module.exports = {

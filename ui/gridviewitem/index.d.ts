@@ -1,4 +1,4 @@
-import ViewGroup from "../viewgroup";
+import ViewGroup from '../viewgroup';
 
 /**
  * @class UI.GridViewItem
@@ -6,12 +6,12 @@ import ViewGroup from "../viewgroup";
  * @extends UI.ViewGroup
  *
  * GridViewItem class can used for a item layout of the GridView.
- * 
+ *
  * For example usage you can look {@link UI.GridViewItem}.
  *
  */
 declare class GridViewItem extends ViewGroup {
-  constructor(params?:any);
+  constructor(params?: any);
   width: number;
   height: number;
 }

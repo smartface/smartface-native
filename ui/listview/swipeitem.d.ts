@@ -1,10 +1,10 @@
-import { IEventEmitter } from "core/eventemitter";
-import Color from "../color";
-import Font from "../font";
-import Image from "../image";
+import { IEventEmitter } from 'core/eventemitter';
+import Color from '../color';
+import Font from '../font';
+import Image from '../image';
 
 declare enum Events {
-  Press = "press"
+  Press = 'press'
 }
 declare class SwipeItem implements IEventEmitter<typeof Events> {
   constructor(params?: Partial<SwipeItem>);
@@ -22,7 +22,7 @@ declare class SwipeItem implements IEventEmitter<typeof Events> {
     isAutoHide: boolean;
     padding: number;
     iconTextSpacing: number;
-  }>
+  }>;
   public readonly android: Partial<{
     borderBottomLeftRadius: number;
     borderBottomRightRadius: number;
@@ -33,7 +33,7 @@ declare class SwipeItem implements IEventEmitter<typeof Events> {
     paddingLeft: number;
     paddingRight: number;
     threshold: number;
-  }>
+  }>;
   static Events: Events;
 }
 
