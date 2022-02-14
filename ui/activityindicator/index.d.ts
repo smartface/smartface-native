@@ -1,6 +1,6 @@
-import Color from "../color";
-import View from "../view";
-import _ActivityIndicatorViewStyle from "./ios/activityindicatorviewstyle";
+import Color from '../color';
+import View from '../view';
+import _ActivityIndicatorViewStyle from './ios/activityindicatorviewstyle';
 
 declare class ActivityIndicator extends View {
   color: Color;

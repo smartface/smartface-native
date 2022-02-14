@@ -1,3 +1,3 @@
-import AttributedString from "../global/attributedstring";
+import AttributedString from '../global/attributedstring';
 
-export = AttributedString
+export = AttributedString;

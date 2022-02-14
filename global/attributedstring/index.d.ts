@@ -1,5 +1,5 @@
-import Color from "../../ui/color";
-import Font from "../../ui/font";
+import Color from '../../ui/color';
+import Font from '../../ui/font';
 
 /**
  * @class AttributedString
@@ -17,89 +17,89 @@ import Font from "../../ui/font";
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
 declare class AttributedString {
-	constructor(params?: Partial<AttributedString>);
-	/**
-	 * Gets/sets backgroundColor on AttributedString.
-	 *
-	 * @property {UI.Color} backgroundColor
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	backgroundColor: Color;
-	/**
-	 * Gets/sets string on AttributedString.
-	 *
-	 * @property {String} [string = ""]
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	string: string;
-	/**
-	 * Gets/sets font on AttributedString.
-	 *
-	 * @property {UI.Font} [font = null]
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	font: Font;
+  constructor(params?: Partial<AttributedString>);
+  /**
+   * Gets/sets backgroundColor on AttributedString.
+   *
+   * @property {UI.Color} backgroundColor
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  backgroundColor: Color;
+  /**
+   * Gets/sets string on AttributedString.
+   *
+   * @property {String} [string = ""]
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  string: string;
+  /**
+   * Gets/sets font on AttributedString.
+   *
+   * @property {UI.Font} [font = null]
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  font: Font;
 
-	/**
-	 * Gets/sets foregroundColor on AttributedString.
-	 *
-	 * @property {UI.Color} foregroundColor
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	foregroundColor: Color;
-	/**
-	 * Gets/sets link on AttributedString. If you want handle label click method, must set link string.
-	 *
-	 * @property {String} link
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	link: string;
-	/**
-	 * Gets/sets strikethrough on AttributedString.
-	 *
-	 * @property {boolean} [strikethrough = false]
-	 * @android
-	 * @ios
-	 * @since 3.2.1
-	 */
-	strikethrough: boolean;
-	/**
-	 * Gets/sets underline on AttributedString.
-	 *
-	 * @property {boolean} [underline = false]
-	 * @android
-	 * @ios
-	 * @since 3.0.0
-	 */
-	underline: boolean;
-	ios: Partial<{
-		/**
-		 * Gets/sets underlineColor on AttributedString.
-		 *
-		 * @property {UI.Color} underlineColor
-		 * @ios
-		 * @since 3.0.0
-		 */
-		underlineColor?: Color;
-		/**
-		 * Gets/sets strikethroughColor on AttributedString.
-		 *
-		 * @property {UI.Color} strikethroughColor
-		 * @ios
-		 * @since 3.2.1
-		 */
-		strikethroughColor?: Color;
-	}>;
+  /**
+   * Gets/sets foregroundColor on AttributedString.
+   *
+   * @property {UI.Color} foregroundColor
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  foregroundColor: Color;
+  /**
+   * Gets/sets link on AttributedString. If you want handle label click method, must set link string.
+   *
+   * @property {String} link
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  link: string;
+  /**
+   * Gets/sets strikethrough on AttributedString.
+   *
+   * @property {boolean} [strikethrough = false]
+   * @android
+   * @ios
+   * @since 3.2.1
+   */
+  strikethrough: boolean;
+  /**
+   * Gets/sets underline on AttributedString.
+   *
+   * @property {boolean} [underline = false]
+   * @android
+   * @ios
+   * @since 3.0.0
+   */
+  underline: boolean;
+  ios: Partial<{
+    /**
+     * Gets/sets underlineColor on AttributedString.
+     *
+     * @property {UI.Color} underlineColor
+     * @ios
+     * @since 3.0.0
+     */
+    underlineColor?: Color;
+    /**
+     * Gets/sets strikethroughColor on AttributedString.
+     *
+     * @property {UI.Color} strikethroughColor
+     * @ios
+     * @since 3.2.1
+     */
+    strikethroughColor?: Color;
+  }>;
 }
 
 export = AttributedString;

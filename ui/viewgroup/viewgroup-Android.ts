@@ -1,10 +1,10 @@
 /*globals array,requireClass,release */
 
-const TypeUtil = require("../../util/type");
-const NativeViewGroup = requireClass("android.view.ViewGroup");
-import { ViewGroupEvents } from ".";
-import { EventEmitterWrapper } from "../../core/eventemitter";
-import { View } from "../view/view-Android";
+const TypeUtil = require('../../util/type');
+const NativeViewGroup = requireClass('android.view.ViewGroup');
+import { ViewGroupEvents } from '.';
+import { EventEmitterWrapper } from '../../core/eventemitter';
+import { View } from '../view/view-Android';
 
 export class ViewGroup extends View {
   static Events = { ...View.Events, ...ViewGroupEvents };
@@ -19,9 +19,7 @@ export class ViewGroup extends View {
   constructor(params) {
     super(params);
     if (!this.nativeObject) {
-      throw new Error(
-        "Can't create instance from ViewGroup. It is an abstract class."
-      );
+      throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
     View.call(this);
     const eventEmitterCallback = () => {
@@ -32,33 +30,17 @@ export class ViewGroup extends View {
 
     const EventFunctions = {
       [ViewGroupEvents.ViewAdded]: function () {
-        this.onViewAdded = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ViewAdded,
-          null
-        );
+        this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null);
       },
       [ViewGroupEvents.ViewRemoved]: function () {
-        this.onViewRemoved = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ViewRemoved,
-          null
-        );
+        this.onViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ViewRemoved, null);
       },
       [ViewGroupEvents.ChildViewAdded]: function () {
-        this.onChildViewAdded = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ChildViewAdded,
-          null
-        );
+        this.onChildViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ChildViewAdded, null);
       },
       [ViewGroupEvents.ChildViewRemoved]: function () {
-        this.onChildViewRemoved = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ChildViewRemoved,
-          null
-        );
-      },
+        this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null);
+      }
     };
     EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
 
@@ -67,8 +49,8 @@ export class ViewGroup extends View {
         value: (disallow) => {
           this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
         },
-        enumerable: true,
-      },
+        enumerable: true
+      }
     });
 
     // Assign parameters given in constructor
@@ -82,7 +64,7 @@ export class ViewGroup extends View {
   addChild = function (view) {
     view.parent = this;
     this.childViews[view.id] = view;
-    if (this instanceof require("../flexlayout")) {
+    if (this instanceof require('../flexlayout')) {
       this.nativeObject.addView(view.nativeObject, view.yogaNode);
     }
   };
@@ -144,8 +126,7 @@ export class ViewGroup extends View {
   set onViewAdded(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onViewAdded = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   get onChildViewAdded() {
@@ -155,8 +136,7 @@ export class ViewGroup extends View {
   set onChildViewAdded(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onChildViewAdded = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
 
@@ -166,8 +146,7 @@ export class ViewGroup extends View {
   set onViewRemoved(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onViewRemoved = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   get onChildViewRemoved() {
@@ -176,49 +155,44 @@ export class ViewGroup extends View {
   set onChildViewRemoved(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onChildViewRemoved = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   toString() {
-    return "ViewGroup";
+    return 'ViewGroup';
   }
 
   private setHierarchyChangeListener() {
     this.nativeObject.setOnHierarchyChangeListener(
       NativeViewGroup.OnHierarchyChangeListener.implement({
         onChildViewAdded: (parent, child) => {
-          this.onChildViewAdded &&
-            this.onChildViewAdded(this.childViews[child.getId()]);
+          this.onChildViewAdded && this.onChildViewAdded(this.childViews[child.getId()]);
           this.onViewAdded && this._onViewAdded(this.childViews[child.getId()]);
         },
         onChildViewRemoved: (parent, child) => {
-          this.onChildViewRemoved &&
-            this.onChildViewRemoved(this.childViews[child.getId()]);
-          this.onViewRemoved &&
-            this.onViewRemoved(this.childViews[child.getId()]);
-        },
+          this.onChildViewRemoved && this.onChildViewRemoved(this.childViews[child.getId()]);
+          this.onViewRemoved && this.onViewRemoved(this.childViews[child.getId()]);
+        }
       })
     );
 
     this.didSetHierarchyChangeListener = true;
   }
 
-    // This method is needed to respect border radius of the view.
-    private getRippleMask(borderRadius) {
-        const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-        const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
+  // This method is needed to respect border radius of the view.
+  private getRippleMask(borderRadius) {
+    const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
+    const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 
-        var outerRadii = [];
-        outerRadii.length = 8;
-        outerRadii.fill(borderRadius);
+    var outerRadii = [];
+    outerRadii.length = 8;
+    outerRadii.fill(borderRadius);
 
-        var roundRectShape = new NativeRoundRectShape(array(outerRadii, "float"), null, null);
-        var shapeDrawable = new NativeShapeDrawable(roundRectShape);
+    var roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
+    var shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
-        return shapeDrawable;
-    }
-
+    return shapeDrawable;
+  }
 }
 
 module.exports = ViewGroup;

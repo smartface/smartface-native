@@ -1,3 +1,3 @@
-import KeyboardType from "./keyboardtype";
+import KeyboardType from './keyboardtype';
 
 export = KeyboardType;

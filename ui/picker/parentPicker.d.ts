@@ -1,5 +1,5 @@
-import Color from "../color";
-import Font from "../font";
+import Color from '../color';
+import Font from '../font';
 declare class ParentPicker {
   title: string;
   titleColor: Color;

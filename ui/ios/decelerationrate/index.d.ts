@@ -1,5 +1,5 @@
 declare enum DecelerationRate {
-    NORMAL,
-    FAST
+  NORMAL,
+  FAST
 }
 export = DecelerationRate;
