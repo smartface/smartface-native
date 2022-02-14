@@ -24,7 +24,7 @@ import View from "../../ui/view";
  *     page.layout.addChild(myBlurView);
  */
 declare class BlurView extends View {
-    constructor(params?: any);
+    constructor(params?: Partial<BlurView>);
 
     android: View['android'] & {
         /**

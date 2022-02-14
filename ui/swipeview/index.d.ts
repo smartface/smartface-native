@@ -71,6 +71,9 @@ declare enum SwipeViewEvents {
  *
  */
 declare class SwipeView extends View {
+	constructor(params?: Partial<SwipeView>);
+	page: Page | View;
+
 	/**
 	 * Gets/Sets the array of the page classes will be displayed inside SwipeView. Pages parameter cannot be empty.
 	 *

@@ -39,7 +39,9 @@ _onBackButtonPressed = (e) => {
     ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
 }
 
-
+Application.onUnhandledError = (e) => {
+    ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
+};
 
 _onExit = (e) => {
     ApplicationWrapper.emitter.emit(Events.Exit, e);

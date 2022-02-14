@@ -1,3 +1,5 @@
+const System = require('../../device/system');
+
 function NavigatonController(params) {
     var self = this;
 
@@ -205,8 +207,19 @@ function HeaderBar(params) {
     self.android = {};
 
     self.nativeObject = undefined;
+    self.appearance = undefined
     if (params.navigationController) {
         self.nativeObject = params.navigationController.view.nativeObject.navigationBar;
+
+        // Xcode 13.1 background bug fixes [NTVE-398]
+        if (parseInt(System.OSVersion) >= 15) {
+            self.appearance = new __SF_UINavigationBarAppearance();
+
+            self.appearance.configureWithOpaqueBackground();
+
+            self.nativeObject.standardAppearance = self.appearance
+            self.nativeObject.scrollEdgeAppearance = self.appearance
+        }
     }
 
     self.navigationController = params.navigationController;
@@ -316,7 +329,16 @@ function HeaderBar(params) {
         _titleColor && (titleTextAttributes["NSColor"] = _titleColor.nativeObject);
         _titleFont && (titleTextAttributes["NSFont"] = _titleFont);
 
-        self.nativeObject.titleTextAttributes = titleTextAttributes;
+        // Xcode 13.1 background bug fixes [NTVE-398]
+        if (parseInt(System.OSVersion) >= 15) {
+            self.appearance.titleTextAttributes = titleTextAttributes;
+
+            self.nativeObject.standardAppearance = self.appearance
+            self.nativeObject.scrollEdgeAppearance = self.appearance
+
+        } else {
+            self.nativeObject.titleTextAttributes = titleTextAttributes;
+        }
     };
 
     var _visible = true;
@@ -364,10 +386,17 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (value) {
-                if (self.transparent) {
-                    self.nativeObject.backgroundColor = value.nativeObject;
+                // Xcode 13.1 background bug fixes [NTVE-398]
+                if (parseInt(System.OSVersion) >= 15) {
+                    self.appearance.backgroundColor = value.nativeObject
+                    self.nativeObject.standardAppearance = self.appearance
+                    self.nativeObject.scrollEdgeAppearance = self.appearance
                 } else {
-                    self.nativeObject.barTintColor = value.nativeObject;
+                    if (self.transparent) {
+                        self.nativeObject.backgroundColor = value.nativeObject;
+                    } else {
+                        self.nativeObject.barTintColor = value.nativeObject;
+                    }
                 }
             }
         },

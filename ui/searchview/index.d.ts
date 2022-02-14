@@ -453,7 +453,7 @@ declare interface SearchView extends View {
 }
 
 declare class SearchView implements SearchView {
-	constructor(params?: any);
+	constructor(params?: Partial<SearchView>);
 }
 
 declare namespace SearchView {

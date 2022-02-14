@@ -77,7 +77,7 @@ declare enum WebViewEvents {
 	 * @event onOpenNewWindow
 	 * @param {Object} event
 	 * @param {String} event.url
-	 * @ios
+	 * @iosx
 	 * @since 4.0.1
 	 */
 	OpenNewWindow = "openNewWindow",
@@ -128,6 +128,7 @@ declare enum WebViewEvents {
  *
  */
 declare class WebView extends View<WebViewEvents> {
+	constructor(params?: Partial<WebView>);
 	/**
 	 * Indicates whether the links clicked on the webview will be rendered inside the webview or not.
 	 * Otherwise, the default browser of the device will handle that link.
@@ -422,7 +423,7 @@ declare class WebView extends View<WebViewEvents> {
 	 * @since 2.0.7
 	 */
 	clearAllData(): void;
-	android: View['android'] & {
+	android: View['android'] & Partial<{
 		/**
 		 * Gets/sets over-scroll mode for this view.
 		 *
@@ -521,8 +522,8 @@ declare class WebView extends View<WebViewEvents> {
 		 * @since 4.0.6
 		 */
 		setWebContentsDebuggingEnabled(enabled: boolean): void;
-	}
-	ios: View['ios'] & {
+	}>
+	ios: View['ios'] & Partial<{
 		/**
 		 * Sets/Gets the bounce effect when scrolling.
 		 *
@@ -576,7 +577,7 @@ declare class WebView extends View<WebViewEvents> {
 			validateCertificateChain?: boolean,
 			validateHost?: boolean
 		}] | undefined;
-	}
+	}>
 }
 declare namespace WebView {
 	namespace Android {

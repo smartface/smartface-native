@@ -248,7 +248,7 @@ declare class Application {
 	static on(eventName: Events, callback: (...args: any) => void): () => void;
 	static once(eventName: Events, callback: (...args: any) => void): () => void;
 	static off(eventName: Events, callback?: (...args: any) => void): void;
-	static emit(event: Events, detail?: any[]): void;
+	static emit(event: Events, ...detail: any[]): void;
 	/**
 	 * The received bytes from the application.
 	 *
@@ -437,7 +437,7 @@ declare class Application {
 	 * @see https://developer.android.com/training/package-visibility
 	 */
 	static canOpenUrl: (url: string) => boolean;
-	static ios: {
+	static ios: Partial<{
 		/**
 		 * The event is called when a user taps a universal link.
 		 *
@@ -469,7 +469,7 @@ declare class Application {
 		 * @since 3.1.3
 		 */
 		userInterfaceLayoutDirection: any;
-	};
+	}>;
 	/**
 	 * Gets status bar object. This property is readonly, you can not set
 	 * status bar but you can change properties of status bar of application.
@@ -482,7 +482,7 @@ declare class Application {
 	 */
 	static statusBar: StatusBar;
 	static LayoutDirection: typeof LayoutDirection;
-	static android: {
+	static android: Partial<{
 		/**
 		 * Set/Get the layout direction from a Locale.
 		 *
@@ -619,8 +619,8 @@ declare class Application {
 			permission: string
 		) => void;
 		keyboardMode: KeyboardMode;
-	};
-	static Android: {
+	}>;
+	static Android: Partial<{
 		KeyboardMode: typeof KeyboardMode;
 		NavigationBar: {
 			Style: NavigationbarStyle;
@@ -874,7 +874,7 @@ declare class Application {
 			 */
 			readonly WRITE_APN_SETTINGS: any;
 		};
-	};
+	}>;
 	/**
 	 * Set the configure the native theme.
 	 *

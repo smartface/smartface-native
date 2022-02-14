@@ -12,19 +12,19 @@ declare namespace RangeSlider {
 }
 
 declare interface RangeSliderParams {
-  android?: {
-    thumbSize?: number;
-    thumbColor?: Color;
-    thumbBorderColor?: Color;
-    thumbBorderWidth?: number;
-  }
-  ios: {
-    thumbShadowColor?: Color;
-    thumbShadowOpacity?: number;
-    thumbShadowRadius?: number;
-    thumbShadowOffset?: Point2D;
+  android?: Partial<{
+    thumbSize: number;
+    thumbColor: Color;
+    thumbBorderColor: Color;
+    thumbBorderWidth: number;
+  }>;
+  ios: Partial<{
+    thumbShadowColor: Color;
+    thumbShadowOpacity: number;
+    thumbShadowRadius: number;
+    thumbShadowOffset: Point2D;
     applyThumbViewChanges: () => void;
-  }
+  }>;
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;
@@ -53,19 +53,20 @@ declare interface RangeSliderParams {
   onValueChange?: (value: number[]) => void;
 }
 declare class RangeSlider extends View<RangeSliderEvents> implements RangeSliderParams {
-  android: {
-    thumbSize?: number;
-    thumbColor?: Color;
-    thumbBorderColor?: Color;
-    thumbBorderWidth?: number;
-  } & View['android'];
-  ios: {
-    thumbShadowColor?: Color;
-    thumbShadowOpacity?: number;
-    thumbShadowRadius?: number;
-    thumbShadowOffset?: Point2D;
+  constructor(params?: Partial<RangeSlider>);
+  android: Partial<{
+    thumbSize: number;
+    thumbColor: Color;
+    thumbBorderColor: Color;
+    thumbBorderWidth: number;
+  }> & View['android'];
+  ios: Partial<{
+    thumbShadowColor: Color;
+    thumbShadowOpacity: number;
+    thumbShadowRadius: number;
+    thumbShadowOffset: Point2D;
     applyThumbViewChanges: () => void;
-  } & View['ios'];
+  }> & View['ios'];
   trackColor?: Color; outerTrackColor?: Color;
   outerTrackWeight?: number;
   trackWeight?: number;

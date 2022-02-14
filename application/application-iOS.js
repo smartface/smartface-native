@@ -214,6 +214,9 @@ SFApplication.android.setAppTheme = function() {
     SFApplication.emitter.emit(Events.UnhandledError, e);
 };
 
+Application.onUnhandledError = (e) => {
+    SFApplication.emitter.emit(Events.UnhandledError, e);
+}
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set: function(value) {
         Application.onUnhandledError = (e) => {

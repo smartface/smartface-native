@@ -50,6 +50,7 @@ declare enum PageEvents {
 	 *
 	 *
 	 * @event onOrientationChange
+	 * @deprecated
 	 * @param {Object} e
 	 * @param {UI.Page.Orientation} e.orientation
 	 * @android
@@ -276,7 +277,7 @@ declare class Page
 	 * ````
 	 */
 	public onHide(): void;
-	public readonly android: {
+	public readonly android: Partial<{
 		/**
 		 * This event will be triggered when user clicks back button on the Device.
 		 *
@@ -299,8 +300,8 @@ declare class Page
 			onTransitionStart: () => void;
 			onTransitionEnd: () => void;
 		};
-	};
-	public readonly ios: {
+	}>;
+	public readonly ios: Partial<{
 		/**
 		 * Sets padding values to page's layout.
 		 * This will override padding values of its layout. Padding values are defined by Apple for each orientation.
@@ -334,7 +335,7 @@ declare class Page
 			bottom: number;
 		}): void;
 		present?(): void;
-	};
+	}>;
 	/**
 	 * This function shows up the pop-up page. Pop-up pages behave exactly as UI.Page .
 	 *

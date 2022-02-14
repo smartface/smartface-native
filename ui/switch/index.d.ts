@@ -34,7 +34,7 @@ declare namespace Switch {
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
 declare class Switch extends View<SwichEvents> {
-    constructor(params?: any);
+    constructor(params?: Partial<Switch>);
 /**
  * Enables/disables the Switch.
  *

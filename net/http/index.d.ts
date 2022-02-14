@@ -127,7 +127,7 @@ declare class Http implements IConstructorParams {
 	cookiePersistenceEnabled: boolean;
 	timeout: number;
 	headers: { [key: string]: string; };
-	ios: {
+	ios: Partial<{
 		/**
 		 * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
 		 * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
@@ -147,7 +147,7 @@ declare class Http implements IConstructorParams {
 			validateCertificateChain?: boolean,
 			validateHost?: boolean
 		}[];
-	};
+	}>;
 	/**
 	 * Cancels all requests.
 	 *

@@ -1,5 +1,6 @@
 const Color = require('../../ui/color');
 const Image = require('../../ui/image');
+const System = require('../../device/system');
 
 function TabBar(params) {
     const UITabBar = SF.requireClass("UITabBar");
@@ -10,8 +11,19 @@ function TabBar(params) {
     self.android = {};
 
     self.nativeObject = undefined;
+    self.appearance = undefined;
     if (params.nativeObject) {
         self.nativeObject = params.nativeObject;
+
+        // Xcode 13.1 background bug fixes [NTVE-398]
+        if (parseInt(System.OSVersion) >= 15) {
+            self.appearance = new __SF_UITabBarAppearance();
+            
+            self.appearance.configureWithOpaqueBackground();
+
+            self.nativeObject.standardAppearance = self.appearance
+            self.nativeObject.scrollEdgeAppearance = self.nativeObject.standardAppearance
+        }
     }
 
     self.nativeObject.translucent = false;
@@ -142,7 +154,16 @@ function TabBar(params) {
             });
         },
         set: function(value) {
-            self.nativeObject.barTintColor = value.nativeObject;
+            // Xcode 13.1 background bug fixes [NTVE-398]
+            if (parseInt(System.OSVersion) >= 15) { 
+                self.appearance.backgroundColor = value.nativeObject
+        
+                self.nativeObject.standardAppearance = self.appearance
+                self.nativeObject.scrollEdgeAppearance = self.appearance    
+
+            } else {
+                self.nativeObject.barTintColor = value.nativeObject;
+            }
         },
         enumerable: true,
         configurable: true

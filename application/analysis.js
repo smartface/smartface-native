@@ -592,7 +592,6 @@ Application.onAppShortcutReceived = function (e) {};
  * The event is called when a user taps a universal link.
  *
  * @event onUserActivityWithBrowsingWeb
- * @deprecated
  * @param {String} url Universal link.
  * @return {Boolean} YES to indicate that your app handled the activity or NO to let iOS know that your app did not handle the activity.
  * @ios

@@ -19,7 +19,7 @@ import Blob from "../../global/blob";
  * 
  */
 declare class FileStream {
-    constructor(params?: any);
+    constructor(params?: Partial<FileStream>);
 /**
  * Closes the FileStream instance. FileStream have to be closed when its job is done.
  *

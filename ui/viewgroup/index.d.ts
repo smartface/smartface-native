@@ -29,7 +29,7 @@ declare namespace ViewGroup {
  *     myFlexLayout.addChild(myLabel);
  */
 declare class ViewGroup<TEvents = ViewGroupEvents> extends View<TEvents> {
-    constructor(...params: any[])
+    constructor(params?: Partial<ViewGroup>)
     /**
      * This function adds a child view to a viewgroup.
      *

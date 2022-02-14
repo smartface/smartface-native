@@ -1,5 +1,5 @@
 declare class AlertView extends NativeComponent {
-	constructor(params?: any);
+	constructor(params?: Partial<AlertView>);
 	isShowing(): any;
 	show(): void;
 	dismiss(): void;
@@ -27,7 +27,7 @@ declare class AlertView extends NativeComponent {
 		text: string;
 		hint: string;
 		isPassword: boolean;
-		android: {
+		android: Partial<{
 			width: number;
 			height: number;
 			viewSpacings: {
@@ -36,7 +36,7 @@ declare class AlertView extends NativeComponent {
 				right: number;
 				bottom: number;
 			};
-		};
+		}>;
 		onDismiss(alertView: AlertView): void;
 		show(): void;
 	}): void;
