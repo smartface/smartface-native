@@ -41,5 +41,3 @@ export default class NavigationBar {
 		}
 	}
 }
-
-NavigationBar.style = NavigationBar.Styles.DARKCONTENT;
