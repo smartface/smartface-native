@@ -4,7 +4,24 @@ declare class __SF_UIColor {
   constructor(a: number, r: number, g: number, b: number);
 }
 
-declare class __SF_UIView {}
+declare class __SF_UIImage {
+  constructor(fileName: string);
+  static createName(fileName: string): void;
+  static createNSData(obj: any);
+}
+declare class __SF_NSInvocation {
+  static createInvocationWithSelectorInstance(name: string, obj: any);
+}
+
+declare class __SF_UIView {
+  static viewAppearanceSemanticContentAttribute: any;
+  static performWithoutAnimationWrapper(param: any): any;
+}
+declare class __SF_NSUserDefaults {
+  setObjectForKey(value: any, key: string): any;
+  synchronize(): any
+  constructor(param: string);
+}
 declare class __SF_FILE {}
 
 declare class __SF_UIFont {

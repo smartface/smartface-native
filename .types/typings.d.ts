@@ -9,6 +9,7 @@ declare global {
 		static deviceOS: DeviceOS;
 	}
 
+	function array(outerRadii: any, type: string): any[];
 	function alert(
 		params:
 			| string
@@ -31,10 +32,6 @@ declare global {
 		static getRequestBody: () => string;
 		static setUpdateResponse: (response: string) => void;
 		static updateAll: () => void;
-	}
-
-	abstract class NativeComponent<T = any> {
-		readonly nativeObject: T;
 	}
 
 	interface ErrorType {
@@ -60,12 +57,12 @@ declare global {
 
 	interface UnhandledError extends Error {}
 
-	namespace console {
-		function info(...params: any[]): void;
-		function log(...params: any[]): void;
-		function error(...params: any[]): void;
-		function warn(...params: any[]): void;
-	}
+	// namespace console {
+	// 	function info(...params: any[]): void;
+	// 	function log(...params: any[]): void;
+	// 	function error(...params: any[]): void;
+	// 	function warn(...params: any[]): void;
+	// }
 
 	function setTimeout(fn: () => void, time: number): Timeout;
 	function setInterval(fn: () => void, time: number): Timeout;

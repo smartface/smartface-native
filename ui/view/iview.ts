@@ -22,16 +22,9 @@ import { IEventEmitter } from "../../core/eventemitter/EventEmitter";
  *     myView.backgroundColor = Color.RED;
  *
  */
-declare class View<TEvent = any>
-	extends NativeComponent
-    implements IEventEmitter<TEvent>
+export interface IView<TEvent = any>
+	extends NativeComponent, IEventEmitter<TEvent>
 {
-	constructor(params?: Partial<View>);
-    protected emitter: TEvent;
-    on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
-    once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
-    off(eventName: TEvent, callback: (...args: any[]) => void): void;
-    emit(event: TEvent, ...args: any[]): void;
 	/**
 	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
 	 * @property {String} transitionID
@@ -532,7 +525,7 @@ declare class View<TEvent = any>
 	 * });
 	 * ````
 	 */
-	onTouch: (point: Point2D) => void;
+	onTouch: (point: Point2D) => void | boolean;
 	/**
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
@@ -565,7 +558,7 @@ declare class View<TEvent = any>
 	 * });
 	 * ````
 	 */
-	onTouchEnded: (isInside: boolean, point: Point2D) => void;
+	onTouchEnded: (isInside: boolean, point: Point2D) => void | boolean;
 	/**
 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
 	 *
@@ -596,7 +589,7 @@ declare class View<TEvent = any>
 	 * });
 	 * ````
 	 */
-	onTouchCancelled: (point: Point2D) => void;
+	onTouchCancelled: (point: Point2D) => void | boolean;
 	/**
 	 * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
 	 * @example
@@ -616,7 +609,7 @@ declare class View<TEvent = any>
 	 * });
 	 * ````
 	 */
-	onTouchMoved: (e: { isInside: boolean }, point?: Point2D) => void;
+	onTouchMoved: (e: { isInside: boolean } | boolean, point?: Point2D) => void | boolean;
 	/**
 	 * This method marks the view as needs relayout.
 	 *
@@ -945,5 +938,3 @@ declare namespace View {
 		TouchMoved = "touchMoved",
 	}
 }
-
-export = View;

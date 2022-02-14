@@ -1,4 +1,4 @@
-import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from "core/eventemitter";
 
 declare enum Events {
   /**

@@ -5,7 +5,7 @@ import StatusBar from "./statusbar";
 import Navigationbar from "./android/navigationbar";
 import NavigationbarStyle from "./android/navigationbar/style";
 import SliderDrawer from "../ui/sliderdrawer";
-import { IEventEmitter } from "../core/eventemitter";
+import { IEventEmitter } from "../core/eventemitter/EventEmitter";
 
 declare enum Events {
 	/**

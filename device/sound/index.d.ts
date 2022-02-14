@@ -1,6 +1,6 @@
 import Page from "../../ui/page";
 import File from "../../io/file";
-import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from "core/eventemitter";
 
 /**
  * @class Device.Sound

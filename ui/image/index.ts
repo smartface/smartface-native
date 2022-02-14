@@ -1,3 +1,4 @@
+import { INativeComponent } from "core/inative-component";
 import Blob from "../../global/blob";
 import { Rectangle } from "../../primitive/rectangle";
 
@@ -21,7 +22,8 @@ import { Rectangle } from "../../primitive/rectangle";
  *     myPage.layout.addChild(myImageView);
  *     
  */
-declare class Image extends NativeComponent {
+declare class Image implements INativeComponent {
+	nativeObject: any;
 	/**
 	 * Gets the height of image in pixels.
 	 *
@@ -392,4 +394,6 @@ declare namespace Image {
 	}
 }
 
-export = Image;
+export default require(`./image.${Device.deviceOS.toLowerCase()}`)
+  .default as typeof Image;
+

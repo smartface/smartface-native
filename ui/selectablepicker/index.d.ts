@@ -1,8 +1,8 @@
-import { EventEmitter, EventEmitterNativeComponent, IEventEmitter } from "core/eventemitter";
+import { EventEmitter } from "core/eventemitter";
 import Color from "../color";
 import Font from "../font";
 
-declare enum Events {
+    declare enum Events {
     /**
      * This event is called when an item is selected/unselected on the SelectablePicker.
      * If multiSelectEnabled is false, selected will be always true.
