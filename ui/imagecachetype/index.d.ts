@@ -1,3 +1,3 @@
-import ImageCacheType from "./imagecachetype";
+import ImageCacheType from './imagecachetype';
 
 export = ImageCacheType;

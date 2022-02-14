@@ -1,4 +1,4 @@
-import { EventEmitter, IEventEmitter } from "core/eventemitter";
+import { EventEmitter, IEventEmitter } from 'core/eventemitter';
 
 declare enum Events {
   /**
@@ -12,7 +12,7 @@ declare enum Events {
    * @android
    * @ios
    */
-  Selected = "selected"
+  Selected = 'selected'
 }
 
 /**
@@ -33,68 +33,62 @@ declare enum Events {
  */
 declare class TimePicker extends NativeComponent implements IEventEmitter<Events> {
   static Events: typeof Events;
-  
+
   protected emitter: EventEmitter<Events>;
   on(eventName: Events, callback: (...args: any[]) => void): () => void;
   once(eventName: Events, callback: (...args: any[]) => void): () => void;
   off(eventName: Events, callback: (...args: any[]) => void): void;
   emit(event: Events, ...args: any[]): void;
-/**
- * Sets the time avaliable on the picker.
- *
- * @method setTime
- * @android
- * @ios
- * @param {Object} time
- * @param {Number} time.hour
- * @param {Number} time.minute
- * @since 0.1
- */
-    setTime(params: {
-    hour: number,
-    minute: number
-  }):void;
-/**
- * Sets whether time is 24-hour or AM/PM mode.
- *
- * @property {Boolean} is24HourFormat
- * @android
- * @since 0.1
- */
+  /**
+   * Sets the time avaliable on the picker.
+   *
+   * @method setTime
+   * @android
+   * @ios
+   * @param {Object} time
+   * @param {Number} time.hour
+   * @param {Number} time.minute
+   * @since 0.1
+   */
+  setTime(params: { hour: number; minute: number }): void;
+  /**
+   * Sets whether time is 24-hour or AM/PM mode.
+   *
+   * @property {Boolean} is24HourFormat
+   * @android
+   * @since 0.1
+   */
   is24HourFormat: boolean;
-/**
- * Makes the picker appear on the screen.
- *
- * @method show
- * @android
- * @ios
- * @since 0.1
- */
+  /**
+   * Makes the picker appear on the screen.
+   *
+   * @method show
+   * @android
+   * @ios
+   * @since 0.1
+   */
   show(): void;
-/**
- * Triggered when a time is selected on the picker.
- *
- * @since 0.1
- * @param {Object} time
- * @param {Number} time.hour
- * @param {Number} time.minute
- * @deprecated
- * @event onTimeSelected
- * @android
- * @ios
- * @example
- * ````
- * import TimePicker from '@smartface/native/ui/timepicker';
- * 
- * const timePicker = new TimePicker();
- * timePicker.on(TimePicker.Events.Selected, (params) => {
- *  console.info('onTimeSelected', params);
- * });
- * ````
- */
-  onTimeSelected: (e: {
-    hour: number,
-    minute: number
-  }) => void;
+  /**
+   * Triggered when a time is selected on the picker.
+   *
+   * @since 0.1
+   * @param {Object} time
+   * @param {Number} time.hour
+   * @param {Number} time.minute
+   * @deprecated
+   * @event onTimeSelected
+   * @android
+   * @ios
+   * @example
+   * ````
+   * import TimePicker from '@smartface/native/ui/timepicker';
+   *
+   * const timePicker = new TimePicker();
+   * timePicker.on(TimePicker.Events.Selected, (params) => {
+   *  console.info('onTimeSelected', params);
+   * });
+   * ````
+   */
+  onTimeSelected: (e: { hour: number; minute: number }) => void;
 }
 export = TimePicker;

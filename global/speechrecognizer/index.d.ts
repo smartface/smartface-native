@@ -1,4 +1,4 @@
-import SpeechRecognizerError from "./error";
+import SpeechRecognizerError from './error';
 
 export = SpeechRecognizer;
 /**
@@ -63,58 +63,53 @@ export = SpeechRecognizer;
  *
  */
 declare const SpeechRecognizer: {
-	/**
-	 * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
-	 *
-	 * @param {Object} params Object describing callbacks
-	 * @param {String} [params.locale] IETF language tag for example "en_US"
-	 * @param {Function} params.onResult Triggers when partial recognition results are available.
-	 * @param {String} params.onResult.result
-	 * @param {Function} params.onFinish Triggers when recognition result is ready.
-	 * @param {String} params.onFinish.result
-	 * @param {Function} params.onError This event is called after getting errors.
-	 * @param {SpeechRecognizer.Error} params.onError.error
-	 * @method start
-	 * @android
-	 * @ios
-	 * @since 1.1.13
-	 */
-	start(params: {
-		locale: string;
-		onResult: (result: any) => void;
-		onFinish: (result: any) => void;
-		onError: (error: SpeechRecognizerError) => void;
-	}): void;
-	/**
-	 * Stop speech recognition service.
-	 *
-	 * @method stop
-	 * @android
-	 * @ios
-	 * @since 1.1.13
-	 */
-	stop(): void;
-	/**
-	 * Returns whether speech recognition service runs or not.
-	 *
-	 * @method isRunning
-	 * @return {Boolean}
-	 * @android
-	 * @ios
-	 * @since 1.1.13
-	 */
-	isRunning(): boolean;
-	ios: Partial<{
-		/**
-		 * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
-		 *
-		 * @param {String} IETF language tag for example "en_US"
-		 * @method isLocaleSupported
-		 * @return {Boolean}
-		 * @ios
-		 * @since 1.1.16
-		 */
-		isLocaleSupported(locale: string): boolean;
-	}>;
-	Error: typeof SpeechRecognizerError;
+  /**
+   * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
+   *
+   * @param {Object} params Object describing callbacks
+   * @param {String} [params.locale] IETF language tag for example "en_US"
+   * @param {Function} params.onResult Triggers when partial recognition results are available.
+   * @param {String} params.onResult.result
+   * @param {Function} params.onFinish Triggers when recognition result is ready.
+   * @param {String} params.onFinish.result
+   * @param {Function} params.onError This event is called after getting errors.
+   * @param {SpeechRecognizer.Error} params.onError.error
+   * @method start
+   * @android
+   * @ios
+   * @since 1.1.13
+   */
+  start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void;
+  /**
+   * Stop speech recognition service.
+   *
+   * @method stop
+   * @android
+   * @ios
+   * @since 1.1.13
+   */
+  stop(): void;
+  /**
+   * Returns whether speech recognition service runs or not.
+   *
+   * @method isRunning
+   * @return {Boolean}
+   * @android
+   * @ios
+   * @since 1.1.13
+   */
+  isRunning(): boolean;
+  ios: Partial<{
+    /**
+     * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
+     *
+     * @param {String} IETF language tag for example "en_US"
+     * @method isLocaleSupported
+     * @return {Boolean}
+     * @ios
+     * @since 1.1.16
+     */
+    isLocaleSupported(locale: string): boolean;
+  }>;
+  Error: typeof SpeechRecognizerError;
 };

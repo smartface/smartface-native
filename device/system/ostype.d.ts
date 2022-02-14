@@ -5,8 +5,8 @@
  * }}
  */
 declare enum OSType {
-    ANDROID= "Android",
-    IOS= "iOS"
+  ANDROID = 'Android',
+  IOS = 'iOS'
 }
 
 export = OSType;

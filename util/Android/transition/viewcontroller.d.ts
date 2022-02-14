@@ -1,4 +1,4 @@
 declare function ViewController(): void;
-declare namespace ViewController { }
+declare namespace ViewController {}
 
 export = ViewController;

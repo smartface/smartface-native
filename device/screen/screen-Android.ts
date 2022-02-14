@@ -1,13 +1,13 @@
-const AndroidConfig = require("../../util/Android/androidconfig");
-const UnitConverter = require("../../util/Android/unitconverter");
-const Image = require("../../ui/image");
-const OrientationType = require("./orientationtype");
-const NativeBitmap = requireClass("android.graphics.Bitmap");
-const NativeR = requireClass("android.R");
-const NativeDisplayMetrics = requireClass("android.util.DisplayMetrics");
+const AndroidConfig = require('../../util/Android/androidconfig');
+const UnitConverter = require('../../util/Android/unitconverter');
+const Image = require('../../ui/image');
+const OrientationType = require('./orientationtype');
+const NativeBitmap = requireClass('android.graphics.Bitmap');
+const NativeR = requireClass('android.R');
+const NativeDisplayMetrics = requireClass('android.util.DisplayMetrics');
 
-const WINDOW_SERVICE = "window";
-const WINDOW_MANAGER = "android.view.WindowManager";
+const WINDOW_SERVICE = 'window';
+const WINDOW_MANAGER = 'android.view.WindowManager';
 export default class Screen {
   private constructor() {}
   static get dpi() {
@@ -27,7 +27,7 @@ export default class Screen {
 
   static get touchSupported() {
     var packageManager = AndroidConfig.activity.getPackageManager();
-    return packageManager.hasSystemFeature("android.hardware.touchscreen");
+    return packageManager.hasSystemFeature('android.hardware.touchscreen');
   }
 
   static get orientation() {
@@ -45,23 +45,15 @@ export default class Screen {
     rootView.setDrawingCacheEnabled(false);
 
     return new Image({
-      bitmap: bitmap,
+      bitmap: bitmap
     });
   };
 }
 
 // Screen.ios = {};
 
-const orientationArray = [
-  OrientationType.PORTRAIT,
-  OrientationType.LANDSCAPERIGHT,
-  OrientationType.UPSIDEDOWN,
-  OrientationType.LANDSCAPELEFT,
-] as const;
+const orientationArray = [OrientationType.PORTRAIT, OrientationType.LANDSCAPERIGHT, OrientationType.UPSIDEDOWN, OrientationType.LANDSCAPELEFT] as const;
 
-const windowManager = AndroidConfig.getSystemService(
-  WINDOW_SERVICE,
-  WINDOW_MANAGER
-);
+const windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
 const display = windowManager.getDefaultDisplay();
 const metrics = new NativeDisplayMetrics();

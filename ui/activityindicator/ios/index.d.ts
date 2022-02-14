@@ -1,7 +1,7 @@
-import ActivityIndicatorViewStyle from "./activityindicatorviewstyle";
+import ActivityIndicatorViewStyle from './activityindicatorviewstyle';
 
 declare const _exports: {
-  ActivityIndicatorViewStyle: ActivityIndicatorViewStyle
+  ActivityIndicatorViewStyle: ActivityIndicatorViewStyle;
 };
 
 export = _exports;

@@ -1,2 +1,2 @@
-import StatusbarStyle from "./statusbarstyle";
+import StatusbarStyle from './statusbarstyle';
 export = StatusbarStyle;

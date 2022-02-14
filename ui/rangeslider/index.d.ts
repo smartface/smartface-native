@@ -1,14 +1,14 @@
-import View from "../view";
-import Color from "../color";
-import Image from "../image";
-import { Point2D } from "../../primitive/point2d";
+import View from '../view';
+import Color from '../color';
+import Image from '../image';
+import { Point2D } from '../../primitive/point2d';
 
 declare enum RangeSliderEvents {
-  ValueChange = "valueChange"
+  ValueChange = 'valueChange'
 }
 declare namespace RangeSlider {
-  const Events: typeof RangeSliderEvents & typeof View.Events
-  type Events = typeof Events
+  const Events: typeof RangeSliderEvents & typeof View.Events;
+  type Events = typeof Events;
 }
 
 declare interface RangeSliderParams {
@@ -43,7 +43,7 @@ declare interface RangeSliderParams {
    * @example
    * ````
    * import RangeSlider from '@smartface/native/ui/rangeslider';
-   * 
+   *
    * const rangeSlider = new RangeSlider();
    * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
    *  console.info('onValueChange', params);
@@ -59,15 +59,18 @@ declare class RangeSlider extends View<RangeSliderEvents> implements RangeSlider
     thumbColor: Color;
     thumbBorderColor: Color;
     thumbBorderWidth: number;
-  }> & View['android'];
+  }> &
+    View['android'];
   ios: Partial<{
     thumbShadowColor: Color;
     thumbShadowOpacity: number;
     thumbShadowRadius: number;
     thumbShadowOffset: Point2D;
     applyThumbViewChanges: () => void;
-  }> & View['ios'];
-  trackColor?: Color; outerTrackColor?: Color;
+  }> &
+    View['ios'];
+  trackColor?: Color;
+  outerTrackColor?: Color;
   outerTrackWeight?: number;
   trackWeight?: number;
   rangeEnabled?: boolean;
@@ -84,7 +87,7 @@ declare class RangeSlider extends View<RangeSliderEvents> implements RangeSlider
    * @example
    * ````
    * import RangeSlider from '@smartface/native/ui/rangeslider';
-   * 
+   *
    * const rangeSlider = new RangeSlider();
    * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
    *  console.info('onValueChange', params);

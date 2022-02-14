@@ -1,5 +1,4 @@
-import { INativeComponent } from "./inative-component";
-
+import { INativeComponent } from './inative-component';
 
 export default class NativeComponent implements INativeComponent {
   protected _nativeObject: any;
@@ -12,5 +11,3 @@ export default class NativeComponent implements INativeComponent {
     this._nativeObject = value;
   }
 }
-
-

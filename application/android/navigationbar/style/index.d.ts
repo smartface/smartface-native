@@ -10,24 +10,24 @@
  *
  */
 declare enum NavigationbarStyle {
-/**
- * @property {Number} DARKCONTENT
- * Navigation bar default dark theme.
- * @android
- * @static
- * @readonly
- * @since 4.0.0
- */
-  DARKCONTENT= 0,
   /**
- * @property {Number} LIGHTCONTENT
- * Navigation bar light theme.
- * @android
- * @static
- * @readonly
- * @since 4.0.0
- */
-  LIGHTCONTENT= 1
+   * @property {Number} DARKCONTENT
+   * Navigation bar default dark theme.
+   * @android
+   * @static
+   * @readonly
+   * @since 4.0.0
+   */
+  DARKCONTENT = 0,
+  /**
+   * @property {Number} LIGHTCONTENT
+   * Navigation bar light theme.
+   * @android
+   * @static
+   * @readonly
+   * @since 4.0.0
+   */
+  LIGHTCONTENT = 1
 }
 
 export = NavigationbarStyle;
