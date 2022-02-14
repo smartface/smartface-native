@@ -810,6 +810,7 @@ function Page(params) {
                 itemView = nativeBadgeContainer;
                 item.itemView = itemView;
                 item.setValues();
+                item.nativeObject.setContentDescription(item.accessibilityLabel);
             }
             if (itemView) {
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
@@ -834,9 +835,17 @@ function Page(params) {
 
         if (leftItem && leftItem.image) {
             self._headerBarLeftItem = leftItem;
+            self._headerBarLeftItem.isLeftItem = true;
+            self._headerBarLeftItem.actionBar = actionBar;
             actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
+            actionBar.setHomeActionContentDescription(self._headerBarLeftItem.accessibilityLabel);
         } else { // null or undefined
+            if(self._headerBarLeftItem){
+                self._headerBarLeftItem.isLeftItem = false;
+                self._headerBarLeftItem.actionBar = null;
+            }
             self._headerBarLeftItem = null;
+            actionBar.setHomeActionContentDescription(null);
             actionBar.setHomeAsUpIndicator(null);
         }
     };

@@ -69,157 +69,167 @@ declare class HeaderBarItem extends NativeComponent {
    */
   attributedTitle: AttributedString;
 
-  /**
-   * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
-   *
-   *     @example
-   *     var myItem = new HeaderBarItem({
-   *         android: {
-   *             systemIcon: 17301545   // OR 'ic_dialog_email'
-   *         },
-   *         color: Color.RED,
-   *         onPress: function() {
-   *             console.log("You pressed Done item!");
-   *         }
-   *     });
-   *     this.headerBar.setItems([myItem]);
-   *
-   * @property {Number | String} systemIcon
-   * @android
-   * @see https://developer.android.com/reference/android/R.drawable
-   * @since 4.0.2
-   */
-  systemIcon: number | string;
-  /**
-   * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
-   *
-   *     @example
-   *     var myItem = new HeaderBarItem({
-   *         ios:{
-   *             systemItem : HeaderBarItem.iOS.SystemItem.TRASH
-   *         },
-   *         onPress: function() {
-   *             console.log("You pressed TRASH item!");
-   *         }
-   *     });
-   *     this.headerBar.setItems([myItem]);
-   *
-   * @property {UI.HeaderBarItem.iOS.SystemItem} systemItem
-   * @readonly
-   * @ios
-   * @since 3.2.1
-   */
-  systemItem: HeaderBarItem.iOS.SystemItem;
-  /**
-   * Gets/sets Image Object or Image Path of header bar item. Image is set to null as default.
-   *
-   * If image is already set on HeaderBarItem, title should not be set for some native behaviours.
-   *
-   * @property {UI.Image | String} image
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  image: Image | string;
-  /**
-   * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}.
-   * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
-   *
-   * @property {UI.View} customView
-   * @android
-   * @ios
-   * @since 4.1.5
-   */
-  customView: View;
-  /**
-   * Gets/sets enabled status of header bar item. Enabled is set to true as
-   * default.
-   *
-   * @property {Boolean} enabled
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  enabled: boolean;
-  /**
-   * Gets/sets font of header bar item.
-   *
-   * @property {UI.Font} font
-   * @ios
-   * @since 4.0.0
-   */
-  font: Font;
-  /**
-   * This method returns an object that defines view location on screen.
-   *
-   * @method getScreenLocation
-   * @return {Object} location
-   * @return {Number} location.x
-   * @return {Number} location.y
-   * @android
-   * @ios
-   * @since 3.2.0
-   */
-  getScreenLocation(): Point2D;
-  /**
-   * Gets/sets callback for press event. If enabled property is set to false
-   * press callback won't be called.
-   *
-   * @property {Function} onPress
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  onPress: (() => void) | null;
-  /**
-   * Gets/sets color of the item's text/image.
-   *
-   * @property {UI.Color} color
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  color: Color | null;
-  /**
-   * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge should not be given in constructor. In Android,
-   * badge does not appear when assigned to {@link UI.HeaderBar#setLeftItem left item} of HeaderBar.
-   *
-   *     @example
-   *     var headerBarItem = new HeaderBarItem();
-   *     headerBarItem.title = "Item";
-   *     headerBarItem.badge.text = "5";
-   *     headerBarItem.badge.visible = true;
-   *     page.headerBar.setItems([headerBarItem]);
-   *
-   * @property {UI.Badge} badge
-   * @android
-   * @ios
-   * @readonly
-   * @since 3.0.0
-   */
-  badge: Badge;
-  ios: Partial<{
-    /**
-     * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
-     * @ios
-     * @default false
-     */
-    translucent: boolean;
-    /**
-     * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
-     */
-    titleFont: Font;
-    /**
-     * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance.
-     * This change can be observed only on the pages that added to navigator style router.
-     * Default value is undefined, it gets title value from previous page's header bar title property.
-     * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour.
-     * This property will work only for iOS. You should access this property from page.parentController
-     */
-    backBarButtonItem: HeaderBarItem;
-  }>;
-  android: Partial<{
-    /**
+	/**
+	 * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
+	 *
+	 *     @example
+	 *     var myItem = new HeaderBarItem({
+	 *         android: {
+	 *             systemIcon: 17301545   // OR 'ic_dialog_email'
+	 *         },
+	 *         color: Color.RED,
+	 *         onPress: function() {
+	 *             console.log("You pressed Done item!");
+	 *         }
+	 *     });
+	 *     this.headerBar.setItems([myItem]);
+	 *
+	 * @property {Number | String} systemIcon
+	 * @android
+	 * @see https://developer.android.com/reference/android/R.drawable
+	 * @since 4.0.2
+	 */
+	systemIcon: number | string;
+	/**
+	 * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
+	 *
+	 *     @example
+	 *     var myItem = new HeaderBarItem({
+	 *         ios:{
+	 *             systemItem : HeaderBarItem.iOS.SystemItem.TRASH
+	 *         },
+	 *         onPress: function() {
+	 *             console.log("You pressed TRASH item!");
+	 *         }
+	 *     });
+	 *     this.headerBar.setItems([myItem]);
+	 *
+	 * @property {UI.HeaderBarItem.iOS.SystemItem} systemItem
+	 * @readonly
+	 * @ios
+	 * @since 3.2.1
+	 */
+	systemItem: HeaderBarItem.iOS.SystemItem;
+	/**
+	 * Gets/sets Image Object or Image Path of header bar item. Image is set to null as default.
+	 *
+	 * If image is already set on HeaderBarItem, title should not be set for some native behaviours.
+	 *
+	 * @property {UI.Image | String} image
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	image: Image | string;
+	/**
+	 * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}. 
+	 * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
+	 * 
+	 * @property {UI.View} customView
+	 * @android
+	 * @ios
+	 * @since 4.1.5
+	 */
+	customView: View;
+	/**
+	 * Gets/sets enabled status of header bar item. Enabled is set to true as
+	 * default.
+	 *
+	 * @property {Boolean} enabled
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	enabled: boolean;
+	/**
+	 * Gets/sets font of header bar item.
+	 *
+	 * @property {UI.Font} font
+	 * @ios
+	 * @since 4.0.0
+	 */
+	font: Font;
+	/**
+	 * This method returns an object that defines view location on screen.
+	 *
+	 * @method getScreenLocation
+	 * @return {Object} location
+	 * @return {Number} location.x
+	 * @return {Number} location.y
+	 * @android
+	 * @ios
+	 * @since 3.2.0
+	 */
+	getScreenLocation(): Point2D;
+	/**
+	 * Gets/sets callback for press event. If enabled property is set to false
+	 * press callback won't be called.
+	 *
+	 * @property {Function} onPress
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	onPress: (() => void) | null;
+	/**
+	 * Gets/sets color of the item's text/image.
+	 *
+	 * @property {UI.Color} color
+	 * @android
+	 * @ios
+	 * @since 0.1
+	 */
+	color: Color | null;
+	/**
+	 * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge should not be given in constructor. In Android,
+	 * badge does not appear when assigned to {@link UI.HeaderBar#setLeftItem left item} of HeaderBar.
+	 *
+	 *     @example
+	 *     var headerBarItem = new HeaderBarItem();
+	 *     headerBarItem.title = "Item";
+	 *     headerBarItem.badge.text = "5";
+	 *     headerBarItem.badge.visible = true;
+	 *     page.headerBar.setItems([headerBarItem]);
+	 *
+	 * @property {UI.Badge} badge
+	 * @android
+	 * @ios
+	 * @readonly
+	 * @since 3.0.0
+	 */
+	badge: Badge;
+	/**
+	 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 *
+	 * @property {String} accessibilityLabel
+	 * @android
+	 * @ios
+	 * @member UI.HeaderBarItem
+	 * @since 4.4.1
+	 */
+	accessibilityLabel: string;
+	ios: Partial<{
+		/**
+		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
+		 * @ios
+		 * @default false
+		 */
+		translucent: boolean;
+		/**
+		 * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
+		 */
+		titleFont: Font;
+		/**
+		 * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance. 
+		 * This change can be observed only on the pages that added to navigator style router. 
+		 * Default value is undefined, it gets title value from previous page's header bar title property. 
+		 * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour. 
+		 * This property will work only for iOS. You should access this property from page.parentController
+		 */
+		 backBarButtonItem: HeaderBarItem;
+	}>
+	android: Partial<{
+		/**
 		 * Gets/sets elevation of the header bar.
 		 * @android
 		 * @example
