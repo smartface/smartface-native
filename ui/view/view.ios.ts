@@ -71,53 +71,6 @@ export default class ViewIOS<TEvent extends EventType = EventType> extends ViewB
     };
     private gradientColor: any;
     private _parent: View;
-    // private EventFunctions = {
-    //     // [ViewEvents.Touch]: () => {
-    //     //     const onTouchHandler = (e) => {
-    //     //         const options = {
-    //     //             x: e && e.point ? e.point.x : null,
-    //     //             y: e && e.point ? e.point.y : null
-    //     //         };
-    //     //         this.emitter.emit(ViewEvents.Touch, options);
-    //     //     };
-    //     //     this.nativeObject.onTouch = onTouchHandler;
-    //     // },
-    //     // [ViewEvents.TouchCancelled]: () => {
-    //     //     const onTouchCancelledHandler = (e) => {
-    //     //         const options = {
-    //     //             x: e && e.point ? e.point.x : null,
-    //     //             y: e && e.point ? e.point.y : null
-    //     //         };
-    //     //         this.emitter.emit(ViewEvents.TouchCancelled, options);
-    //     //     };
-    //     //     this.nativeObject.onTouchCancelled = onTouchCancelledHandler;
-    //     // },
-    //     // [ViewEvents.TouchEnded]: () => {
-    //     //     const onTouchEndedHandler = (e) => {
-    //     //         const inside = isInside(this.nativeObject.frame, e.point);
-    //     //         const options = {
-    //     //             x: e && e.point ? e.point.x : null,
-    //     //             y: e && e.point ? e.point.y : null,
-    //     //             isInside: inside
-    //     //         };
-    //     //         this.emitter.emit(ViewEvents.TouchEnded, options);
-    //     //     };
-    //     //     this.nativeObject.onTouchEnded = onTouchEndedHandler;
-    //     // },
-    //     // [ViewEvents.TouchMoved]: () => {
-    //     //     const onTouchMoveHandler = (e) => {
-    //     //         const inside = isInside(this.nativeObject.frame, e.point);
-    //     //         const options = {
-    //     //             x: e && e.point ? e.point.x : null,
-    //     //             y: e && e.point ? e.point.y : null,
-    //     //             isInside: inside
-    //     //         };
-    //     //         this.emitter.emit(ViewEvents.TouchMoved, options);
-    //     //     };
-    //     //     this.nativeObject.onTouchMoved = onTouchMoveHandler;
-    //     // }
-    // };
-
     static Border = {
         TOP_LEFT: 1 << 0,
         TOP_RIGHT: 1 << 1,

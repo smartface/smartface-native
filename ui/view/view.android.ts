@@ -150,8 +150,6 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   constructor(params) {
     super();
     params = params || {};
-    // this.ios = {};
-    // EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
     if (!this._nativeObject) {
       this._nativeObject = new NativeView(activity);
       this.yogaNode = NativeYogaNodeFactory.create();
@@ -190,188 +188,188 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   }
 
   //ToDo: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
-  private _setBorderToAllEdges() {
-    var borderWidthPx = DpToPixel(this.borderWidth);
-    if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
-    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
-  }
+	private _setBorderToAllEdges() {
+		var borderWidthPx = DpToPixel(this.borderWidth);
+		if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
+		this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+		this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+		this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+		this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
+	}
 
-  private _setMaskedBorders(bitwiseBorders) {
-    let borderRadiusInDp = DpToPixel(this.borderRadius);
-    let borderRadiuses = Array(8).fill(0);
-    for (let i = 0; i < 4; i++) {
-      let borderEnum = 1 << i;
-      if (bitwiseBorders & borderEnum) {
-        bitwiseBorders &= ~borderEnum;
-        switch (borderEnum) {
-          case ViewAndroid.Border.TOP_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 0, 3);
-            break;
-          case ViewAndroid.Border.TOP_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 2, 4);
-            break;
-          case ViewAndroid.Border.BOTTOM_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 4, 6);
-            break;
-          case ViewAndroid.Border.BOTTOM_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 6, 8);
-            break;
-        }
-      }
-    }
-    return borderRadiuses;
-  }
-  private _resetBackground = function () {
-    let color = this.backgroundColor;
-    let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
-    //Provide backward support in case of diff behavior of border radius.
-    let borderRadiuses =
-      bitwiseBorders !== ViewAndroid.Border.ALL
-        ? this._setMaskedBorders(bitwiseBorders)
-        : [DpToPixel(this.borderRadius)];
-    let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-    let borderColor = this.borderColor.nativeObject;
-    let backgroundColor = this.backgroundColor.nativeObject;
+	private _setMaskedBorders(bitwiseBorders) {
+		let borderRadiusInDp = DpToPixel(this.borderRadius);
+		let borderRadiuses = Array(8).fill(0);
+		for (let i = 0; i < 4; i++) {
+		let borderEnum = 1 << i;
+		if (bitwiseBorders & borderEnum) {
+			bitwiseBorders &= ~borderEnum;
+			switch (borderEnum) {
+			case ViewAndroid.Border.TOP_LEFT:
+				borderRadiuses.fill(borderRadiusInDp, 0, 3);
+				break;
+			case ViewAndroid.Border.TOP_RIGHT:
+				borderRadiuses.fill(borderRadiusInDp, 2, 4);
+				break;
+			case ViewAndroid.Border.BOTTOM_RIGHT:
+				borderRadiuses.fill(borderRadiusInDp, 4, 6);
+				break;
+			case ViewAndroid.Border.BOTTOM_LEFT:
+				borderRadiuses.fill(borderRadiusInDp, 6, 8);
+				break;
+			}
+		}
+		}
+		return borderRadiuses;
+	}
+	private _resetBackground = function () {
+		let color = this.backgroundColor;
+		let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
+		//Provide backward support in case of diff behavior of border radius.
+		let borderRadiuses =
+		bitwiseBorders !== ViewAndroid.Border.ALL
+			? this._setMaskedBorders(bitwiseBorders)
+			: [DpToPixel(this.borderRadius)];
+		let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
+		let borderColor = this.borderColor.nativeObject;
+		let backgroundColor = this.backgroundColor.nativeObject;
 
-    if (color.isGradient) {
-      let colors = array(color.colors, 'int');
-      SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
-    } else {
-      SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
-    }
-  };
+		if (color.isGradient) {
+		let colors = array(color.colors, 'int');
+		SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
+		} else {
+		SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
+		}
+  	};
 
-  get android() {
-    return this._android;
-  }
-  get nativeObject() {
-    return this._nativeObject;
-  }
+	get android() {
+		return this._android;
+	}
+	get nativeObject() {
+		return this._nativeObject;
+	}
 
-  // android
-  get zIndex() {
-    return SFViewUtil.getZ(this._nativeObject);
-  }
-  set zIndex(index: number) {
-    if (!TypeUtil.isNumeric(index)) throw new Error('zIndex value must be a number.');
-    SFViewUtil.setZ(this._nativeObject, index);
-  }
+	// android
+	get zIndex() {
+		return SFViewUtil.getZ(this._nativeObject);
+	}
+	set zIndex(index: number) {
+		if (!TypeUtil.isNumeric(index)) throw new Error('zIndex value must be a number.');
+		SFViewUtil.setZ(this._nativeObject, index);
+	}
 
-  // android
-  get elevation() {
-    return SFViewUtil.getElevation(this._nativeObject);
-  }
-  set elevation(value) {
-    SFViewUtil.setElevation(this._nativeObject, value);
-  }
+	// android
+	get elevation() {
+		return SFViewUtil.getElevation(this._nativeObject);
+	}
+	set elevation(value) {
+		SFViewUtil.setElevation(this._nativeObject, value);
+	}
 
-  get aspectRatio() {
-    return null;
-  }
+	get aspectRatio() {
+		return null;
+	}
 
-  set aspectRatio(value) {}
+	set aspectRatio(value) {}
 
-  // android
-  get overScrollMode() {
-    return this._overScrollMode;
-  }
-  set overScrollMode(mode) {
-    this._nativeObject.setOverScrollMode(mode);
-    this._overScrollMode = mode;
-  }
+	// android
+	get overScrollMode() {
+		return this._overScrollMode;
+	}
+	set overScrollMode(mode) {
+		this._nativeObject.setOverScrollMode(mode);
+		this._overScrollMode = mode;
+	}
 
-  get backgroundColor() {
-    return this._backgroundColor;
-  }
-  set backgroundColor(color: Color) {
-    this._backgroundColor = color;
-    this._resetBackground();
-  }
+	get backgroundColor() {
+		return this._backgroundColor;
+	}
+	set backgroundColor(color: Color) {
+		this._backgroundColor = color;
+		this._resetBackground();
+	}
 
-  get testId() {
-    if (!AndroidConfig.isEmulator) {
-      return activity.getResources().getResourceEntryName(this._nativeObject.getId());
-    } else {
-      return '';
-    }
-  }
-  set testId(value) {
-    const id = activity.getResourceId(value);
-    if (id > 0) {
-      this._nativeObject.setId(id);
-    }
-  }
+	get testId() {
+		if (!AndroidConfig.isEmulator) {
+			return activity.getResources().getResourceEntryName(this._nativeObject.getId());
+		} else {
+			return '';
+		}
+	}
+	set testId(value) {
+		const id = activity.getResourceId(value);
+		if (id > 0) {
+			this._nativeObject.setId(id);
+		}
+	}
 
-  get accessible() {
-    return this._nativeObject.isImportantForAccessibility();
-  }
-  set accessible(value) {
-    // IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
-    // IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
-    if (value) {
-      this._nativeObject.setImportantForAccessibility(1);
-    } else {
-      this._nativeObject.setImportantForAccessibility(2);
-    }
-  }
+	get accessible() {
+		return this._nativeObject.isImportantForAccessibility();
+	}
+	set accessible(value) {
+		// IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
+		// IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
+		if (value) {
+			this._nativeObject.setImportantForAccessibility(1);
+		} else {
+			this._nativeObject.setImportantForAccessibility(2);
+		}
+	}
 
-  get accessibilityLabel() {
-    return this._nativeObject.getContentDescription();
-  }
-  set accessibilityLabel(value) {
-    this._nativeObject.setContentDescription(value);
-  }
-  get borderColor() {
-    return this._borderColor;
-  }
-  set borderColor(value) {
-    this._borderColor = value;
+	get accessibilityLabel() {
+		return this._nativeObject.getContentDescription();
+	}
+	set accessibilityLabel(value) {
+		this._nativeObject.setContentDescription(value);
+	}
+	get borderColor() {
+		return this._borderColor;
+	}
+	set borderColor(value) {
+		this._borderColor = value;
 
-    this._resetBackground();
-    this._setBorderToAllEdges();
-  }
+		this._resetBackground();
+		this._setBorderToAllEdges();
+	}
 
-  get borderWidth() {
-    return this._borderWidth;
-  }
-  set borderWidth(value) {
-    this._borderWidth = value;
+	get borderWidth() {
+		return this._borderWidth;
+	}
+	set borderWidth(value) {
+		this._borderWidth = value;
 
-    this._resetBackground();
-    this._setBorderToAllEdges();
-  }
+		this._resetBackground();
+		this._setBorderToAllEdges();
+	}
 
-  get borderRadius() {
-    return this._borderRadius;
-  }
+	get borderRadius() {
+		return this._borderRadius;
+	}
 
-  set borderRadius(value) {
-    this._borderRadius = value;
-    this._resetBackground();
-    this._android.updateRippleEffectIfNeeded &&
-      this._android.updateRippleEffectIfNeeded();
-  }
+	set borderRadius(value) {
+		this._borderRadius = value;
+		this._resetBackground();
+		this._android.updateRippleEffectIfNeeded &&
+		this._android.updateRippleEffectIfNeeded();
+	}
 
-  get maskedBorders() {
-    return this._maskedBorders;
-  }
-  set maskedBorders(value) {
-    this._maskedBorders = value;
-    this._resetBackground();
-    this._android.updateRippleEffectIfNeeded &&
-      this._android.updateRippleEffectIfNeeded();
-  }
+	get maskedBorders() {
+		return this._maskedBorders;
+	}
+	set maskedBorders(value) {
+		this._maskedBorders = value;
+		this._resetBackground();
+		this._android.updateRippleEffectIfNeeded &&
+		this._android.updateRippleEffectIfNeeded();
+	}
 
-  get masksToBounds() {
-    return this._masksToBounds;
-  }
-  set masksToBounds(value) {
-    this._masksToBounds = value;
-    this._nativeObject.setClipToOutline(this._masksToBounds);
-  }
+	get masksToBounds() {
+		return this._masksToBounds;
+	}
+	set masksToBounds(value) {
+		this._masksToBounds = value;
+		this._nativeObject.setClipToOutline(this._masksToBounds);
+	}
 
   private _touchCallbacks = {
     onTouchEnded: (isInside: boolean, x: number, y: number) => {
@@ -910,8 +908,8 @@ export class ViewAndroid<TEvent extends EventType = EventType>
         AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
       ) {
         /*
-					Only supported for api level 23 and above
-					*/
+		Only supported for api level 23 and above
+		*/
         let currentBackground = this.nativeObject.getForeground();
         let rippleDrawableForegorund = new NativeRippleDrawable(
           colorStateList,
