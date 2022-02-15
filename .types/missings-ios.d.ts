@@ -1,23 +1,43 @@
+import ActivityIndicator from "../ui/activityindicator";
 import DocumentPicker from "../device/documentpicker";
 
 declare class __SF_UIColor {
   static hexColor: (hex: String) => __SF_UIColor;
+  static blackColor(): __SF_UIColor;
+  static blueColor(): __SF_UIColor;
+  static cyanColor(): __SF_UIColor;
+  static darkGrayColor(): __SF_UIColor;
+  static greenColor(): __SF_UIColor;
+  static lightGrayColor(): __SF_UIColor;
+  static magentaColor(): __SF_UIColor;
+  static clearColor(): __SF_UIColor;
+  static yellowColor(): __SF_UIColor;
+  static whiteColor(): __SF_UIColor;
   constructor(r: number, g: number, b: number);
   constructor(a: number, r: number, g: number, b: number);
+  layerToImage(): __SF_UIImage;
+  frame: unknown;
 }
 
 declare class __SF_UIImage {
   constructor(fileName: string);
   static createName(fileName: string): void;
   static createNSData(obj: any);
+  getInstance(): __SF_UIImage;
 }
 declare class __SF_NSInvocation {
   static createInvocationWithSelectorInstance(name: string, obj: any);
 }
 
+declare class __SF_Dispatch {
+  static mainAsyncAfter: () => void;
+  static mainAsync: () => void;
+}
+
 declare class __SF_UIView {
-  static viewAppearanceSemanticContentAttribute: any;
+  static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
+  static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
 }
 declare class __SF_NSUserDefaults {
   setObjectForKey(value: any, key: string): any;
@@ -38,7 +58,11 @@ declare class UIFont {
 }
 
 declare class __SF_CAGradientLayer {
-  static createGradient(...args: any[]): __SF_CAGradientLayer;
+  static createGradient(startColor: __SF_UIColor, endColor: __SF_UIColor, pointStart: { x: number, y: number}, pointEnd: { x: number, y: number }): __SF_CAGradientLayer;
+  addFrameObserver(): void;
+  frameObserveHandler(handler: (e: { frame: unknown }) => void): void;
+  setBackgroundImage(image: __SF_UIImage, state: unknown);
+  setBackgroundColor(color: __SF_UIColor, state: unknown);
 }
 
 declare class __SF_Label {
@@ -51,6 +75,7 @@ declare class __SF_UIApplication {
     valueForKey: (str: string) => any;
     sf_statusBarStyle: any;
     sf_statusBarHidden: boolean;
+    userInterfaceLayoutDirection: number;
   };
 }
 
@@ -174,3 +199,50 @@ declare class __SF_UIDocumentPickerViewControllerDelegate {
   didPickDocumentsAtURLs(urls: string[]): void;
   documentPickerWasCancelled(): void;
 }
+
+declare class __SF_UIActivityIndicatorView {
+  constructor(style: ActivityIndicator.iOS.ActivityIndicatorViewStyle);
+  startAnimating(): void;
+  color: __SF_UIColor; //TODO: Add nativeobject of color
+  visible: boolean;
+  activityIndicatorViewStyle: ActivityIndicator.iOS.ActivityIndicatorViewStyle;
+}
+
+declare class __SF_UIAlertController {
+  static createAlertController(style: number);
+  static present(view: __SF_UIAlertControllerView);
+  static dismissAlert(view: __SF_UIAlertControllerView, delegate: any /* TODO: Add delegate type */);
+  static addTextFieldArea(view: __SF_UIAlertControllerView, text: string, hint: string, isPassword: boolean);
+
+}
+
+export class __SF_UIAlertControllerView {
+  title: string;
+  message: string;
+  addAction(action: __SF_UIAlertAction);
+}
+
+declare class __SF_UIAlertAction {
+  static createAction(text: string, index: number, onClick: () => void): __SF_UIAlertAction;
+}
+
+declare class __SF_SMFVisualEffectView {
+  constructor(style: number);
+  setBlurStyle(style: number): void;
+}
+
+declare class __SF_UITabBarAppearance {
+  configureWithOpaqueBackground(): void;
+  backgroundColor: __SF_UIColor;
+}
+
+declare class __SF_UIButton {
+  setEnabled: boolean;
+  textAlignmentNumber: number;
+  contentVerticalAlignment: number;
+  contentHorizontalAlignment: number;
+  setTitleColor(textColor: __SF_UIColor, buttonState: number /*TODO: Use ButtonState enum when button is converted*/);
+  removeFrameObserver();
+  addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */);
+}
+
