@@ -1,3 +1,5 @@
+import DocumentPicker from "../device/documentpicker";
+
 declare class __SF_UIColor {
   static hexColor: (hex: String) => __SF_UIColor;
   constructor(r: number, g: number, b: number);
@@ -66,7 +68,7 @@ declare class __SF_CallObserverDelegate {
 }
 
 declare class __SF_CNMutableContact {
-  static new: () => __SF_CNMutableContactObject;
+  static new(): __SF_CNMutableContactObject;
 }
 
 export class __SF_CNMutableContactObject {
@@ -126,15 +128,17 @@ export class ContactNative {
 
 declare class __SF_CNContactPickerDelegate {
   contactPickerDidSelectContact: (contact: ContactNative) => void;
+  contactPickerDidCancel(): void;
 }
 
 declare class __SF_CNContactStore {
-  static new: () => __SF_CNContactStoreObject;
+  static new(): __SF_CNContactStoreObject;
 }
 
 export class __SF_CNContactStoreObject {
   requestAccess: (value: () => void) => void;
   fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void) => void;
+  executeSave(saveRequest: __SF_CNSaveRequestObject): void;
 }
 
 declare class __SF_CNPhoneNumber {
@@ -142,10 +146,31 @@ declare class __SF_CNPhoneNumber {
 }
 
 declare class __SF_CNContactViewControllerDelegate {
-
+  didCompleteWithContact: (contact: ContactNative) => void;
 }
 
 declare class __SF_CNContactViewController {
   static viewControllerForNewContact(contact: ContactNative);
   contactStore: __SF_CNContactStoreObject;
+  allowActions: boolean;
+  delegate: __SF_CNContactViewControllerDelegate;
+}
+
+declare class __SF_CNSaveRequest {
+  static new(): __SF_CNSaveRequestObject;
+}
+declare class __SF_CNSaveRequestObject {
+  addContact(contact: ContactNative): void;
+}
+
+declare class __SF_UIDocumentPickerViewController {
+  constructor(type: DocumentPicker.Types[], number: number);
+  documentDelegate: __SF_UIDocumentPickerViewControllerDelegate;
+  delegate: __SF_UIDocumentPickerViewControllerDelegate;
+}
+
+declare class __SF_UIDocumentPickerViewControllerDelegate {
+  constructor();
+  didPickDocumentsAtURLs(urls: string[]): void;
+  documentPickerWasCancelled(): void;
 }
