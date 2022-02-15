@@ -228,6 +228,47 @@ function Page(params) {
         delete this.__pendingParameters;
     }
 
+    const NativeActionBar = requireClass("android.app.ActionBar");
+    const showLeftItemWithImage = () => actionBar.setDisplayOptions(NativeActionBar.DISPLAY_HOME_AS_UP);
+    const showLeftItemWithTitle = () => actionBar.setDisplayOptions(NativeActionBar.DISPLAY_SHOW_TITLE);
+    const hideLeftItem = () => actionBar.setDisplayOptions(0);
+    const markHeaderBarItemAsLeftItem = (params) => {
+        const { item, isLeftItem, actionBar } = params;
+        if(!item) return; 
+        item.isLeftItem = isLeftItem;
+        item.actionBar = actionBar;
+    }
+    const updateLeftItemColor = (color) => {
+        const colorNativeObject = color && color.nativeObject || null;
+        if(colorNativeObject){
+            const drawable = toolbar.getNavigationIcon();
+            drawable && drawable.setColorFilter(colorNativeObject, PorterDuff.Mode.SRC_ATOP);
+            toolbar.setTitleTextColor(colorNativeObject);
+        }
+    }
+    const updateLeftItem = (params) => {
+        const { enabled, image, title, color, accessibilityLabel } = params;
+        //if the left item has a title, has no image and is enabled
+        if(enabled && title && !image) {
+            showLeftItemWithTitle();
+        }else if(enabled) {
+            showLeftItemWithImage();
+        } else {
+            hideLeftItem();
+        }
+        actionBar.setHomeAsUpIndicator(image && image.nativeObject || null);
+        actionBar.setTitle(title);
+        actionBar.setHomeActionContentDescription(accessibilityLabel);
+        updateLeftItemColor(color);
+    }
+    const clearLeftItem = () => {
+        actionBar.setHomeAsUpIndicator(null);
+        actionBar.setTitle(null);
+        actionBar.setHomeActionContentDescription(null);
+        markHeaderBarItemAsLeftItem({item : self._headerBarLeftItem, isLeftItem : false, actionBar : null});
+        self._headerBarLeftItem = null;
+    }
+
     /**
      * This is a workaround solution for swipeView-Android. The source is:
      * _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
@@ -471,7 +512,9 @@ function Page(params) {
         set: function (leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
+                const { image, title, accessibilityLabel } = self._headerBarLeftItem || {};
+                const color = self._headerBarLeftItem && self._headerBarLeftItem.color || _leftItemColor;
+                updateLeftItem({ enabled : leftItemEnabled, image, title, color, accessibilityLabel });
             }
         },
         enumerable: true,
@@ -521,9 +564,8 @@ function Page(params) {
         },
         set: function (color) {
             if (color instanceof Color) {
-                var drawable = toolbar.getNavigationIcon();
-                if (drawable)
-                    drawable.setColorFilter(color.nativeObject, PorterDuff.Mode.SRC_ATOP);
+                const { image, title, accessibilityLabel } = self._headerBarLeftItem || {};
+                updateLeftItem({ enabled : _leftItemEnabled, image, title, color, accessibilityLabel });
             }
         },
         enumerable: true,
@@ -832,21 +874,14 @@ function Page(params) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
-
-        if (leftItem && leftItem.image) {
+        if (leftItem) {
             self._headerBarLeftItem = leftItem;
-            self._headerBarLeftItem.isLeftItem = true;
-            self._headerBarLeftItem.actionBar = actionBar;
-            actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
-            actionBar.setHomeActionContentDescription(self._headerBarLeftItem.accessibilityLabel);
-        } else { // null or undefined
-            if(self._headerBarLeftItem){
-                self._headerBarLeftItem.isLeftItem = false;
-                self._headerBarLeftItem.actionBar = null;
-            }
-            self._headerBarLeftItem = null;
-            actionBar.setHomeActionContentDescription(null);
-            actionBar.setHomeAsUpIndicator(null);
+            markHeaderBarItemAsLeftItem({item : leftItem, isLeftItem: true, actionBar });
+            const { image, title, accessibilityLabel } = leftItem;
+            const color = leftItem.color || _itemColor;
+            updateLeftItem({ enabled : _leftItemEnabled, image, title, color, accessibilityLabel });
+        } else {
+            clearLeftItem();
         }
     };
 
