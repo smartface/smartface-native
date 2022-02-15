@@ -1,7 +1,7 @@
 declare enum ScrollState {
-    IDLE,
-    DRAGGING,
-    SETTLING
+  IDLE,
+  DRAGGING,
+  SETTLING
 }
 
 export = ScrollState;

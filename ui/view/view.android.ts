@@ -30,18 +30,14 @@ const EventFunctions = {
     this._onTouch = EventEmitterWrapper(this, ViewEvents.Touch, null);
   },
   [ViewEvents.TouchCancelled]: function () {
-    this._onTouchCancelled = EventEmitterWrapper(
-      this,
-      ViewEvents.TouchCancelled,
-      null
-    );
+    this._onTouchCancelled = EventEmitterWrapper(this, ViewEvents.TouchCancelled, null);
   },
   [ViewEvents.TouchEnded]: function () {
     this._onTouchEnded = EventEmitterWrapper(this, ViewEvents.TouchEnded, null);
   },
   [ViewEvents.TouchMoved]: function () {
     this._onTouchMoved = EventEmitterWrapper(this, ViewEvents.TouchMoved, null);
-  },
+  }
 };
 
 function PixelToDp(px) {
@@ -70,7 +66,7 @@ const YogaEdge = {
   END: NativeYogaEdge.END,
   HORIZONTAL: NativeYogaEdge.HORIZONTAL,
   VERTICAL: NativeYogaEdge.VERTICAL,
-  ALL: NativeYogaEdge.ALL,
+  ALL: NativeYogaEdge.ALL
 };
 
 function getRippleMask(borderRadius) {
@@ -106,30 +102,14 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     TOP_RIGHT: 1 << 1,
     BOTTOM_RIGHT: 1 << 2,
     BOTTOM_LEFT: 1 << 3,
-    ALL: (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3),
+    ALL: (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3)
   } as const;
   static readonly State = {
-    STATE_NORMAL: array(
-      [
-        NativeR.attr.state_enabled,
-        -NativeR.attr.state_pressed,
-        -NativeR.attr.state_selected,
-      ],
-      "int"
-    ),
-    STATE_DISABLED: array([-NativeR.attr.state_enabled], "int"),
-    STATE_SELECTED: array(
-      [NativeR.attr.state_enabled, NativeR.attr.state_selected],
-      "int"
-    ),
-    STATE_PRESSED: array(
-      [NativeR.attr.state_pressed, NativeR.attr.state_enabled],
-      "int"
-    ),
-    STATE_FOCUSED: array(
-      [NativeR.attr.state_focused, NativeR.attr.state_enabled],
-      "int"
-    ),
+    STATE_NORMAL: array([NativeR.attr.state_enabled, -NativeR.attr.state_pressed, -NativeR.attr.state_selected], 'int'),
+    STATE_DISABLED: array([-NativeR.attr.state_enabled], 'int'),
+    STATE_SELECTED: array([NativeR.attr.state_enabled, NativeR.attr.state_selected], 'int'),
+    STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
+    STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
   readonly ios = {} as const;
   protected uniqueId: string;
@@ -141,7 +121,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   private _rotationY: number = 0;
   private _scale: Point2D = {
     x: 1.0,
-    y: 1.0,
+    y: 1.0
   };
   private _nativeObject: any;
   private _borderColor: Color;
@@ -176,7 +156,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
       this._nativeObject = new NativeView(activity);
       this.yogaNode = NativeYogaNodeFactory.create();
     } else {
-      if (this._nativeObject.toString().indexOf("YogaLayout") !== -1) {
+      if (this._nativeObject.toString().indexOf('YogaLayout') !== -1) {
         this.yogaNode = this._nativeObject.getYogaNode();
       } else {
         this.yogaNode = NativeYogaNodeFactory.create();
@@ -203,9 +183,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
 
   private setTouchHandlers() {
     if (this.didSetTouchHandler) return;
-    let touchableView = this.__isRecyclerView
-      ? this.nativeInner
-      : this.nativeObject;
+    let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
@@ -248,10 +226,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   }
   private _resetBackground = function () {
     let color = this.backgroundColor;
-    let bitwiseBorders = this.maskedBorders.reduce(
-      (acc, cValue) => acc | cValue,
-      0
-    );
+    let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
     //Provide backward support in case of diff behavior of border radius.
     let borderRadiuses =
       bitwiseBorders !== ViewAndroid.Border.ALL
@@ -262,23 +237,10 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     let backgroundColor = this.backgroundColor.nativeObject;
 
     if (color.isGradient) {
-      let colors = array(color.colors, "int");
-      SFViewUtil.setBackground(
-        this.nativeObject,
-        colors,
-        color.direction,
-        borderColor,
-        borderWidth,
-        array(borderRadiuses, "float")
-      );
+      let colors = array(color.colors, 'int');
+      SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
     } else {
-      SFViewUtil.setBackground(
-        this.nativeObject,
-        backgroundColor,
-        borderColor,
-        borderWidth,
-        array(borderRadiuses, "float")
-      );
+      SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
     }
   };
 
@@ -294,8 +256,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     return SFViewUtil.getZ(this._nativeObject);
   }
   set zIndex(index: number) {
-    if (!TypeUtil.isNumeric(index))
-      throw new Error("zIndex value must be a number.");
+    if (!TypeUtil.isNumeric(index)) throw new Error('zIndex value must be a number.');
     SFViewUtil.setZ(this._nativeObject, index);
   }
 
@@ -332,11 +293,9 @@ export class ViewAndroid<TEvent extends EventType = EventType>
 
   get testId() {
     if (!AndroidConfig.isEmulator) {
-      return activity
-        .getResources()
-        .getResourceEntryName(this._nativeObject.getId());
+      return activity.getResources().getResourceEntryName(this._nativeObject.getId());
     } else {
-      return "";
+      return '';
     }
   }
   set testId(value) {
@@ -420,7 +379,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
         mEvent = {
           x,
           y,
-          isInside,
+          isInside
         };
       this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
       return result === true;
@@ -429,7 +388,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
       let result,
         mEvent = {
           x,
-          y,
+          y
         };
       this._onTouch && (result = this._onTouch(mEvent));
       return !(result === false);
@@ -439,22 +398,20 @@ export class ViewAndroid<TEvent extends EventType = EventType>
         mEvent = {
           x,
           y,
-          isInside,
+          isInside
         };
       // this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
-      return this._onTouchMoved
-        ? !!this._onTouchMoved(isInside, mEvent)
-        : false;
+      return this._onTouchMoved ? !!this._onTouchMoved(isInside, mEvent) : false;
     },
     onTouchCancelled: (x: number, y: number) => {
       let result,
         mEvent = {
           x,
-          y,
+          y
         };
       this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
       return result === true;
-    },
+    }
   };
 
   get transitionId() {
@@ -475,7 +432,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     return this._nativeObject.getId();
   }
   set id(id) {
-    if (typeof id === "number" && !isNaN(id)) {
+    if (typeof id === 'number' && !isNaN(id)) {
       this._nativeObject.setId(id);
     }
   }
@@ -514,7 +471,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   get scale() {
     return {
       x: this._nativeObject.getScaleX(),
-      y: this._nativeObject.getScaleY(),
+      y: this._nativeObject.getScaleY()
     };
   }
   set scale(value) {
@@ -609,7 +566,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
       width: this.width,
       height: this.height,
       top: this.top,
-      left: this.left,
+      left: this.left
     };
   }
   setPosition(position: Rectangle) {
@@ -623,7 +580,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     this._nativeObject.invalidate();
   }
   toString() {
-    return "View";
+    return 'View';
   }
   get left() {
     return PixelToDp(this._nativeObject.getLeft());
@@ -668,11 +625,8 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    const ScrollView = require("../scrollview");
-    if (
-      this._parent instanceof ScrollView &&
-      this._parent.align === ScrollView.Align.HORIZONTAL
-    ) {
+    const ScrollView = require('../scrollview');
+    if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.HORIZONTAL) {
       var layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
@@ -684,11 +638,8 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     this.yogaNode.setWidth(DpToPixel(width));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    const ScrollView = require("../scrollview");
-    if (
-      this._parent instanceof ScrollView &&
-      this._parent.align === ScrollView.Align.VERTICAL
-    ) {
+    const ScrollView = require('../scrollview');
+    if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.VERTICAL) {
       var layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.width = -2);
     }

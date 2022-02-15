@@ -1,4 +1,4 @@
-import Color from "../color";
+import Color from '../color';
 export declare type WebBrowserParams = {
   url: string;
   barColor: Color;

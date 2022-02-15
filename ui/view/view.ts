@@ -776,12 +776,12 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 	 */
 	maskedBorders: Border[];
 
-	getPosition: () => {
-		left: number;
-		top: number;
-		width: number;
-		height: number;
-	};
+  getPosition: () => {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  };
 }
 
 /**

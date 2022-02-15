@@ -14,83 +14,83 @@
  *
  */
 declare const Hardware: {
-	/**
-	 *
-	 * Returns the unique id of the device. The value may change if the device is formatted.
-	 * @property {String} UID
-	 * @android
-	 * @ios
-	 * @readonly
-	 * @static
-	 * @since 0.1
-	 */
-	readonly UID: string;
-	/**
-	 *
-	 * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
-	 * @property {String} IMEI
-	 * @android
-	 * @readonly
-	 * @static
-	 * @since 0.1
-	 */
-	readonly IMEI?: string;
-	readonly android: Partial<{
-		// TODO: discuss why IMEI is in android
-		readonly IMEI?: string;
-		/**
-		 *
-		 * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
-		 * @property {Number} vendorID
-		 * @android
-		 * @readonly
-		 * @static
-		 * @since 0.1
-		 */
-		readonly vendorID?: number;
-	}>;
-	ios: Partial<{
-		microphone?: {
-			/**
-			 *
-			 * Checks to see if calling process has permission to record audio. The callback will be called
-			 * immediately if permission has already been granted or denied.  Otherwise, it presents a dialog to notify
-			 * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
-			 * indicates whether permission has been granted.
-			 *
-			 * @param {Function} callback for permission situation.
-			 * @method requestRecordPermission
-			 * @ios
-			 * @readonly
-			 * @static
-			 * @since 1.1.12
-			 */
-			requestRecordPermission?: (callback: () => void) => void;
-		};
-		modelName?: string;
-	}>;
-	/**
-	 *
-	 * Returns the model name of the device.
-	 * @property {String} brandModel
-	 * @android
-	 * @ios
-	 * @readonly
-	 * @static
-	 * @since 0.1
-	 */
-	readonly brandModel: string;
-	/**
-	 *
-	 * Returns the brand name of the device.
-	 * @property {String} brandName
-	 * @android
-	 * @ios
-	 * @readonly
-	 * @static
-	 * @since 0.1
-	 */
-	readonly brandName: string;
+  /**
+   *
+   * Returns the unique id of the device. The value may change if the device is formatted.
+   * @property {String} UID
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly UID: string;
+  /**
+   *
+   * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+   * @property {String} IMEI
+   * @android
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly IMEI?: string;
+  readonly android: Partial<{
+    // TODO: discuss why IMEI is in android
+    readonly IMEI?: string;
+    /**
+     *
+     * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+     * @property {Number} vendorID
+     * @android
+     * @readonly
+     * @static
+     * @since 0.1
+     */
+    readonly vendorID?: number;
+  }>;
+  ios: Partial<{
+    microphone?: {
+      /**
+       *
+       * Checks to see if calling process has permission to record audio. The callback will be called
+       * immediately if permission has already been granted or denied.  Otherwise, it presents a dialog to notify
+       * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
+       * indicates whether permission has been granted.
+       *
+       * @param {Function} callback for permission situation.
+       * @method requestRecordPermission
+       * @ios
+       * @readonly
+       * @static
+       * @since 1.1.12
+       */
+      requestRecordPermission?: (callback: () => void) => void;
+    };
+    modelName?: string;
+  }>;
+  /**
+   *
+   * Returns the model name of the device.
+   * @property {String} brandModel
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly brandModel: string;
+  /**
+   *
+   * Returns the brand name of the device.
+   * @property {String} brandName
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly brandName: string;
 };
 
 export = Hardware;

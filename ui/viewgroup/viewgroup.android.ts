@@ -23,9 +23,7 @@ export class ViewGroup<
   constructor(params) {
     super(params);
     if (!this.nativeObject) {
-      throw new Error(
-        "Can't create instance from ViewGroup. It is an abstract class."
-      );
+      throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
     const eventEmitterCallback = () => {
       if (!this.didSetHierarchyChangeListener) {
@@ -35,33 +33,17 @@ export class ViewGroup<
 
     const EventFunctions = {
       [ViewGroupEvents.ViewAdded]: function () {
-        this.onViewAdded = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ViewAdded,
-          null
-        );
+        this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null);
       },
       [ViewGroupEvents.ViewRemoved]: function () {
-        this.onViewRemoved = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ViewRemoved,
-          null
-        );
+        this.onViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ViewRemoved, null);
       },
       [ViewGroupEvents.ChildViewAdded]: function () {
-        this.onChildViewAdded = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ChildViewAdded,
-          null
-        );
+        this.onChildViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ChildViewAdded, null);
       },
       [ViewGroupEvents.ChildViewRemoved]: function () {
-        this.onChildViewRemoved = EventEmitterWrapper(
-          this,
-          ViewGroupEvents.ChildViewRemoved,
-          null
-        );
-      },
+        this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null);
+      }
     };
     // EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
 
@@ -70,8 +52,8 @@ export class ViewGroup<
         value: (disallow) => {
           this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
         },
-        enumerable: true,
-      },
+        enumerable: true
+      }
     });
 
     // Assign parameters given in constructor
@@ -85,7 +67,7 @@ export class ViewGroup<
   addChild = function (view) {
     view.parent = this;
     this.childViews[view.id] = view;
-    if (this instanceof require("../flexlayout")) {
+    if (this instanceof require('../flexlayout')) {
       this.nativeObject.addView(view.nativeObject, view.yogaNode);
     }
   };
@@ -147,8 +129,7 @@ export class ViewGroup<
   set onViewAdded(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onViewAdded = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   get onChildViewAdded() {
@@ -158,8 +139,7 @@ export class ViewGroup<
   set onChildViewAdded(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onChildViewAdded = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
 
@@ -169,8 +149,7 @@ export class ViewGroup<
   set onViewRemoved(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onViewRemoved = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   get onChildViewRemoved() {
@@ -179,28 +158,24 @@ export class ViewGroup<
   set onChildViewRemoved(callback) {
     if (TypeUtil.isFunction(callback)) {
       this._onChildViewRemoved = callback;
-      if (!this.didSetHierarchyChangeListener)
-        this.setHierarchyChangeListener();
+      if (!this.didSetHierarchyChangeListener) this.setHierarchyChangeListener();
     }
   }
   toString() {
-    return "ViewGroup";
+    return 'ViewGroup';
   }
 
   private setHierarchyChangeListener() {
     this.nativeObject.setOnHierarchyChangeListener(
       NativeViewGroup.OnHierarchyChangeListener.implement({
         onChildViewAdded: (parent, child) => {
-          this.onChildViewAdded &&
-            this.onChildViewAdded(this.childViews[child.getId()]);
+          this.onChildViewAdded && this.onChildViewAdded(this.childViews[child.getId()]);
           this.onViewAdded && this._onViewAdded(this.childViews[child.getId()]);
         },
         onChildViewRemoved: (parent, child) => {
-          this.onChildViewRemoved &&
-            this.onChildViewRemoved(this.childViews[child.getId()]);
-          this.onViewRemoved &&
-            this.onViewRemoved(this.childViews[child.getId()]);
-        },
+          this.onChildViewRemoved && this.onChildViewRemoved(this.childViews[child.getId()]);
+          this.onViewRemoved && this.onViewRemoved(this.childViews[child.getId()]);
+        }
       })
     );
 

@@ -1,6 +1,6 @@
 declare enum ScrollViewAlign {
-  VERTICAL = "verticall",
-  HORIZONTAL = "horizontal"
+  VERTICAL = 'verticall',
+  HORIZONTAL = 'horizontal'
 }
 
 export = ScrollViewAlign;

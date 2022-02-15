@@ -6,7 +6,7 @@
 //     EventEmitterCreator,
 //     EventEmitterWrapper,
 //     EventEmitterMixin,
-//     EventEmitter: 
+//     EventEmitter:
 // };
 
 export * from './event-emitter';

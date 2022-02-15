@@ -7,17 +7,17 @@ import { EventType } from "core/eventemitter/EventType";
 const Exception = require("../../util").Exception;
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
-const { EventEmitterCreator } = require("../../core/eventemitter");
+const { EventEmitterCreator } = require('../../core/eventemitter');
 
 declare const myLabelTitle: any;
 
 
 function isInside(frame, point) {
-    var x = point.x;
-    var y = point.y;
-    var w = frame.width;
-    var h = frame.height;
-    return !(x > w || x < 0 || y > h || y < 0);
+  var x = point.x;
+  var y = point.y;
+  var w = frame.width;
+  var h = frame.height;
+  return !(x > w || x < 0 || y > h || y < 0);
 }
 
 type ViewIOSParams = {};
@@ -525,705 +525,705 @@ export default class ViewIOS<TEvent extends EventType = EventType> extends ViewB
             x: this.nativeObject.bounds.x,
             y: this.nativeObject.bounds.y
         };
-        var origin = new Invocation.Argument({
-            type: "CGPoint",
-            value: viewOrigin
-        });
+    var origin = new Invocation.Argument({
+      type: 'CGPoint',
+      value: viewOrigin
+    });
 
-        var view = new Invocation.Argument({
-            type: "id",
-            value: undefined
-        });
+    var view = new Invocation.Argument({
+      type: 'id',
+      value: undefined
+    });
 
-        var screenOrigin = Invocation.invokeInstanceMethod(this.nativeObject, "convertPoint:toView:", [origin, view], "CGPoint");
-        return screenOrigin;
-    }
+    var screenOrigin = Invocation.invokeInstanceMethod(this.nativeObject, 'convertPoint:toView:', [origin, view], 'CGPoint');
+    return screenOrigin;
+  }
 
-    get onTouch() {        
-        return this._onTouch;
+  get onTouch() {
+    return this._onTouch;
+  }
+  set onTouch(value) {
+    if (typeof value !== 'function') {
+      return;
     }
-    set onTouch(value) {
-        if (typeof value !== 'function') {
-            return;
+    this._onTouch = value;
+    var onTouchHandler = function (e) {
+      if (e && e.point) {
+        var object = {
+          x: e.point.x,
+          y: e.point.y
         };
-        this._onTouch = value;
-        var onTouchHandler = function (e) {
-            if (e && e.point) {
-                var object = {
-                    x: e.point.x,
-                    y: e.point.y
-                };
-                return value.call(this, object);
-            } else {
-                return value.call(this);
-            }
-        };
-        this.nativeObject.onTouch = onTouchHandler.bind(this);
-    }
+        return value.call(this, object);
+      } else {
+        return value.call(this);
+      }
+    };
+    this.nativeObject.onTouch = onTouchHandler.bind(this);
+  }
 
-    get onTouchEnded() {
-        return this._onTouchEnded;
-    }
-    
-    set onTouchEnded(value) {
-        if (typeof value !== 'function') {
-            return;
-        };
-        this._onTouchEnded = value;
-        var onTouchEndedHandler = function (e) {
-            if (e && e.point) {
-                var inside = isInside(this.nativeObject.frame, e.point);
-                var object = {
-                    isInside: inside,
-                    x: e.point.x,
-                    y: e.point.y
-                };
-                return value.call(this, inside, object);
-            } else {
-                return value.call(this);
-            }
-        };
-        this.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
-    }
+  get onTouchEnded() {
+    return this._onTouchEnded;
+  }
 
-    get onTouchMoved() {
-        return this._onTouchMoved;
+  set onTouchEnded(value) {
+    if (typeof value !== 'function') {
+      return;
     }
-    set onTouchMoved(value) {
-        if (typeof value !== 'function') {
-            return;
+    this._onTouchEnded = value;
+    var onTouchEndedHandler = function (e) {
+      if (e && e.point) {
+        var inside = isInside(this.nativeObject.frame, e.point);
+        var object = {
+          isInside: inside,
+          x: e.point.x,
+          y: e.point.y
         };
-        var onTouchMoveHandler = function (e) {
-            if (e && e.point) {
-                var inside = isInside(this.nativeObject.frame, e.point);
-                var object = {
-                    isInside: inside,
-                    x: e.point.x,
-                    y: e.point.y
-                };
-                return value.call(this, inside, object);
-            } else {
-                return value.call(this);
-            }
-        };
-        this.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
-    }
-    get onTouchCancelled() {
-        return this._onTouchCancelled;
-    }
-    set onTouchCancelled(value) {
-        if (typeof value !== 'function') {
-            return;
-        };
-        var onTouchCancelledHandler = function (e) {
-            if (e && e.point) {
-                var object = {
-                    x: e.point.x,
-                    y: e.point.y
-                };
-                return value.call(this, object);
-            } else {
-                value.call(this);
-            }
-        };
-        this.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
-    }
+        return value.call(this, inside, object);
+      } else {
+        return value.call(this);
+      }
+    };
+    this.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
+  }
 
+  get onTouchMoved() {
+    return this._onTouchMoved;
+  }
+  set onTouchMoved(value) {
+    if (typeof value !== 'function') {
+      return;
+    }
+    var onTouchMoveHandler = function (e) {
+      if (e && e.point) {
+        var inside = isInside(this.nativeObject.frame, e.point);
+        var object = {
+          isInside: inside,
+          x: e.point.x,
+          y: e.point.y
+        };
+        return value.call(this, inside, object);
+      } else {
+        return value.call(this);
+      }
+    };
+    this.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
+  }
+  get onTouchCancelled() {
+    return this._onTouchCancelled;
+  }
+  set onTouchCancelled(value) {
+    if (typeof value !== 'function') {
+      return;
+    }
+    var onTouchCancelledHandler = function (e) {
+      if (e && e.point) {
+        var object = {
+          x: e.point.x,
+          y: e.point.y
+        };
+        return value.call(this, object);
+      } else {
+        value.call(this);
+      }
+    };
+    this.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
+  }
 
-    //////////////////////////////////////////////////////////////////////////
-    // YOGA STUFF START
-    //////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  // YOGA STUFF START
+  //////////////////////////////////////////////////////////////////////////
 
-    /*
+  /*
      The property that decides if we should include this view when calculating layout. Defaults to YES.
      */
-    get isIncludedInLayout() {
-        return this.nativeObject.yoga.isIncludedInLayout;
-    }
-    set isIncludedInLayout(value) {
-        this.nativeObject.yoga.isIncludedInLayout = value;
-    }
+  get isIncludedInLayout() {
+    return this.nativeObject.yoga.isIncludedInLayout;
+  }
+  set isIncludedInLayout(value) {
+    this.nativeObject.yoga.isIncludedInLayout = value;
+  }
 
-    /*
+  /*
      The property that decides during layout/sizing whether or not styling properties should be applied. Defaults to NO.
      */
-    get flexEnabled() {
-        return this.nativeObject.yoga.isEnabled;
-    }
-    set flexEnabled(value) {
-        this.nativeObject.yoga.isEnabled = value;
-    }
+  get flexEnabled() {
+    return this.nativeObject.yoga.isEnabled;
+  }
+  set flexEnabled(value) {
+    this.nativeObject.yoga.isEnabled = value;
+  }
 
-    get direction() {
-        return this.nativeObject.yoga.direction;
-    }
-    set direction(value) {
-        this.nativeObject.yoga.direction = value;
-    }
+  get direction() {
+    return this.nativeObject.yoga.direction;
+  }
+  set direction(value) {
+    this.nativeObject.yoga.direction = value;
+  }
 
-    get flexDirection() {
-        return this.nativeObject.yoga.flexDirection;
-    }
+  get flexDirection() {
+    return this.nativeObject.yoga.flexDirection;
+  }
 
-    set flexDirection(value) {
-        this.nativeObject.yoga.flexDirection = value;
-    }
+  set flexDirection(value) {
+    this.nativeObject.yoga.flexDirection = value;
+  }
 
-    get justifyContent() {
-        return this.nativeObject.yoga.justifyContent;
-    }
+  get justifyContent() {
+    return this.nativeObject.yoga.justifyContent;
+  }
 
-    set justifyContent(value) {
-        this.nativeObject.yoga.justifyContent = value;
-    }
+  set justifyContent(value) {
+    this.nativeObject.yoga.justifyContent = value;
+  }
 
-    get alignContent() {
-        return this.nativeObject.yoga.alignContent;
-    }
+  get alignContent() {
+    return this.nativeObject.yoga.alignContent;
+  }
 
-    set alignContent(value) {
-        this.nativeObject.yoga.alignContent = value;
-    }
+  set alignContent(value) {
+    this.nativeObject.yoga.alignContent = value;
+  }
 
-    get alignItems() {
-        return this.nativeObject.yoga.alignItems;
-    }
+  get alignItems() {
+    return this.nativeObject.yoga.alignItems;
+  }
 
-    set alignItems(value) {
-        this.nativeObject.yoga.alignItems = value;
-    }
+  set alignItems(value) {
+    this.nativeObject.yoga.alignItems = value;
+  }
 
-    get alignSelf() {
-        return this.nativeObject.yoga.alignSelf;
-    }
+  get alignSelf() {
+    return this.nativeObject.yoga.alignSelf;
+  }
 
-    set alignSelf(value) {
-        this.nativeObject.yoga.alignSelf = value;
-    }
+  set alignSelf(value) {
+    this.nativeObject.yoga.alignSelf = value;
+  }
 
-    get positionType() {
-        return this.nativeObject.yoga.position;
-    }
+  get positionType() {
+    return this.nativeObject.yoga.position;
+  }
 
-    set positionType(value) {
-        this.nativeObject.yoga.position = value;
-    }
+  set positionType(value) {
+    this.nativeObject.yoga.position = value;
+  }
 
-    get flexWrap() {
-        return this.nativeObject.yoga.flexWrap;
-    }
+  get flexWrap() {
+    return this.nativeObject.yoga.flexWrap;
+  }
 
-    set flexWrap(value) {
-        this.nativeObject.yoga.flexWrap = value;
-    }
+  set flexWrap(value) {
+    this.nativeObject.yoga.flexWrap = value;
+  }
 
-    get display() {
-        return this.nativeObject.yoga.display;
-    }
-    
-    set display(value) {
-        this.nativeObject.yoga.display = value;
-    }
-    get flexGrow() {
-        return this.nativeObject.yoga.flexGrow;
-    }
+  get display() {
+    return this.nativeObject.yoga.display;
+  }
 
-    set flexGrow(value) {
-        this.nativeObject.yoga.flexGrow = value;
-        if (value > 0) {
-            this.flexBasis = 1;
-        } else if (value === 0) { // Workaround Bug iOS / IOS-2406
-            this.flexBasis = NaN;
-            if (this.nativeObject.superview && this.nativeObject.superview.yoga.isEnabled) {
-                if (this.nativeObject.superview.yoga.flexDirection === 0 || this.nativeObject.superview.yoga.flexDirection === 1) {
-                    var height = this.nativeObject.yoga.getYGValueForKey("height");
-                    if (isNaN(height)) {
-                        this.nativeObject.frame = {
-                            x: this.left,
-                            y: this.top,
-                            width: this.width,
-                            height: 0
-                        };
-                    }
-                } else {
-                    var width = this.nativeObject.yoga.getYGValueForKey("width");
-                    if (isNaN(width)) {
-                        this.nativeObject.frame = {
-                            x: this.left,
-                            y: this.top,
-                            width: 0,
-                            height: this.height
-                        };
-                    }
-                }
-            }
+  set display(value) {
+    this.nativeObject.yoga.display = value;
+  }
+  get flexGrow() {
+    return this.nativeObject.yoga.flexGrow;
+  }
+
+  set flexGrow(value) {
+    this.nativeObject.yoga.flexGrow = value;
+    if (value > 0) {
+      this.flexBasis = 1;
+    } else if (value === 0) {
+      // Workaround Bug iOS / IOS-2406
+      this.flexBasis = NaN;
+      if (this.nativeObject.superview && this.nativeObject.superview.yoga.isEnabled) {
+        if (this.nativeObject.superview.yoga.flexDirection === 0 || this.nativeObject.superview.yoga.flexDirection === 1) {
+          var height = this.nativeObject.yoga.getYGValueForKey('height');
+          if (isNaN(height)) {
+            this.nativeObject.frame = {
+              x: this.left,
+              y: this.top,
+              width: this.width,
+              height: 0
+            };
+          }
         } else {
-            this.flexBasis = NaN;
+          var width = this.nativeObject.yoga.getYGValueForKey('width');
+          if (isNaN(width)) {
+            this.nativeObject.frame = {
+              x: this.left,
+              y: this.top,
+              width: 0,
+              height: this.height
+            };
+          }
         }
+      }
+    } else {
+      this.flexBasis = NaN;
     }
+  }
 
-    get flexShrink() {
-        return this.nativeObject.yoga.flexShrink;
-    }
-    
-    set flexShrink(value) {
-        this.nativeObject.yoga.flexShrink = value;
-    }
+  get flexShrink() {
+    return this.nativeObject.yoga.flexShrink;
+  }
 
-    get flexBasis() {
-        return this.nativeObject.yoga.getYGValueForKey("flexBasis");
-    }
+  set flexShrink(value) {
+    this.nativeObject.yoga.flexShrink = value;
+  }
 
-    set flexBasis(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "flexBasis");
-    }
+  get flexBasis() {
+    return this.nativeObject.yoga.getYGValueForKey('flexBasis');
+  }
 
-    /*
+  set flexBasis(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'flexBasis');
+  }
+
+  /*
     // Left and Top can delete or added after tests
     */
 
-    get left() {
-        return this.nativeObject.frame.x;
+  get left() {
+    return this.nativeObject.frame.x;
+  }
+  set left(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'left');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
-    set left(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "left");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  }
 
-    get top() {
-        return this.nativeObject.frame.y;
-    }
-    
-    set top(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "top");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
-    get right() {
-        return this.nativeObject.yoga.getYGValueForKey("right");
-    }
-    set right(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "right");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  get top() {
+    return this.nativeObject.frame.y;
+  }
 
-    get bottom() {
-        return this.nativeObject.yoga.getYGValueForKey("bottom");
+  set top(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'top');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
-
-    set bottom(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "bottom");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  }
+  get right() {
+    return this.nativeObject.yoga.getYGValueForKey('right');
+  }
+  set right(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'right');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginLeft() {
-        return this.nativeObject.yoga.getYGValueForKey("marginLeft");
+  get bottom() {
+    return this.nativeObject.yoga.getYGValueForKey('bottom');
+  }
+
+  set bottom(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'bottom');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set marginLeft(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginLeft");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get marginLeft() {
+    return this.nativeObject.yoga.getYGValueForKey('marginLeft');
+  }
+
+  set marginLeft(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginLeft');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginTop() {
-        return this.nativeObject.yoga.getYGValueForKey("marginTop");
+  get marginTop() {
+    return this.nativeObject.yoga.getYGValueForKey('marginTop');
+  }
+
+  set marginTop(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginTop');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set marginTop(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginTop");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get marginRight() {
+    return this.nativeObject.yoga.getYGValueForKey('marginRight');
+  }
+
+  set marginRight(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginRight');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginRight() {
-        return this.nativeObject.yoga.getYGValueForKey("marginRight");
+  get marginBottom() {
+    return this.nativeObject.yoga.getYGValueForKey('marginBottom');
+  }
+
+  set marginBottom(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginBottom');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set marginRight(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginRight");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get marginStart() {
+    return this.nativeObject.yoga.getYGValueForKey('marginStart');
+  }
+
+  set marginStart(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginStart');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginBottom() {
-        return this.nativeObject.yoga.getYGValueForKey("marginBottom");
+  get marginEnd() {
+    return this.nativeObject.yoga.getYGValueForKey('marginEnd');
+  }
+
+  set marginEnd(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginEnd');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set marginBottom(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginBottom");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get marginHorizontal() {
+    return this.nativeObject.yoga.getYGValueForKey('marginHorizontal');
+  }
+
+  set marginHorizontal(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginHorizontal');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginStart() {
-        return this.nativeObject.yoga.getYGValueForKey("marginStart");
+  get marginVertical() {
+    return this.nativeObject.yoga.getYGValueForKey('marginVertical');
+  }
+
+  set marginVertical(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'marginVertical');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set marginStart(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginStart");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get margin() {
+    return this.nativeObject.yoga.getYGValueForKey('margin');
+  }
+
+  set margin(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'margin');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get marginEnd() {
-        return this.nativeObject.yoga.getYGValueForKey("marginEnd");
-    }
+  get paddingLeft() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingLeft');
+  }
 
-    set marginEnd(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginEnd");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }   
+  set paddingLeft(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingLeft');
+  }
 
-    get marginHorizontal() {
-        return this.nativeObject.yoga.getYGValueForKey("marginHorizontal");
-    }
+  get paddingTop() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingTop');
+  }
 
-    set marginHorizontal(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginHorizontal");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  set paddingTop(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingTop');
+  }
 
-    get marginVertical() {
-        return this.nativeObject.yoga.getYGValueForKey("marginVertical");
-    }
+  get paddingRight() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingRight');
+  }
 
-    set marginVertical(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginVertical");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  set paddingRight(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingRight');
+  }
 
-    get margin() {
-        return this.nativeObject.yoga.getYGValueForKey("margin");
-    }
+  get paddingBottom() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingBottom');
+  }
 
-    set margin(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "margin");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  set paddingBottom(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingBottom');
+  }
 
-    get paddingLeft() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingLeft");
-    }
+  get paddingStart() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingStart');
+  }
 
-    set paddingLeft(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingLeft");
-    }
+  set paddingStart(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingStart');
+  }
 
-    get paddingTop() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingTop");
-    }
+  get paddingEnd() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingEnd');
+  }
 
-    set paddingTop(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingTop");
-    }
+  set paddingEnd(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingEnd');
+  }
 
-    get paddingRight() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingRight");
-    }
+  get paddingHorizontal() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingHorizontal');
+  }
 
-    set paddingRight(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingRight");
-    }
+  set paddingHorizontal(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingHorizontal');
+  }
 
-    get paddingBottom() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingBottom");
-    }
+  get paddingVertical() {
+    return this.nativeObject.yoga.getYGValueForKey('paddingVertical');
+  }
 
-    set paddingBottom(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingBottom");
-    }
+  set paddingVertical(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingVertical');
+  }
 
-    get paddingStart() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingStart");
-    }
+  get padding() {
+    return this.nativeObject.yoga.getYGValueForKey('padding');
+  }
 
-    set paddingStart(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingStart");
-    }
+  set padding(value) {
+    this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'padding');
+  }
 
-    get paddingEnd() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingEnd");
-    }
+  get borderLeftWidth() {
+    return this.nativeObject.yoga.borderLeftWidth;
+  }
 
-    set paddingEnd(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingEnd");
-    }
+  set borderLeftWidth(value) {
+    this.nativeObject.yoga.borderLeftWidth = value;
+  }
 
-    get paddingHorizontal() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingHorizontal");
-    }
+  get borderTopWidth() {
+    return this.nativeObject.yoga.borderTopWidth;
+  }
 
-    set paddingHorizontal(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingHorizontal");
-    }
+  set borderTopWidth(value) {
+    this.nativeObject.yoga.borderTopWidth = value;
+  }
 
-    get paddingVertical() {
-        return this.nativeObject.yoga.getYGValueForKey("paddingVertical");
-    }
+  get borderRightWidth() {
+    return this.nativeObject.yoga.borderRightWidth;
+  }
 
-    set paddingVertical(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingVertical");
-    }
+  set borderRightWidth(value) {
+    this.nativeObject.yoga.borderRightWidth = value;
+  }
 
-    get padding() {
-        return this.nativeObject.yoga.getYGValueForKey("padding");
-    }
+  get borderBottomWidth() {
+    return this.nativeObject.yoga.borderBottomWidth;
+  }
 
-    set padding(value) {
-        this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "padding");
-    }
+  set borderBottomWidth(value) {
+    this.nativeObject.yoga.borderBottomWidth = value;
+  }
 
-    get borderLeftWidth() {
-        return this.nativeObject.yoga.borderLeftWidth;
-    }
+  get borderStartWidth() {
+    return this.nativeObject.yoga.borderStartWidth;
+  }
 
-    set borderLeftWidth(value) {
-        this.nativeObject.yoga.borderLeftWidth = value;
-    }
+  set borderStartWidth(value) {
+    this.nativeObject.yoga.borderStartWidth = value;
+  }
 
-    get borderTopWidth() {
-        return this.nativeObject.yoga.borderTopWidth;
-    }
+  get borderEndWidth() {
+    return this.nativeObject.yoga.borderEndWidth;
+  }
 
-    set borderTopWidth(value) {
-        this.nativeObject.yoga.borderTopWidth = value;
-    }
+  set borderEndWidth(value) {
+    this.nativeObject.yoga.borderEndWidth = value;
+  }
 
-    get borderRightWidth() {
-        return this.nativeObject.yoga.borderRightWidth;
-    }
+  get borderWidth() {
+    return this.nativeObject.yoga.borderWidth;
+  }
 
-    set borderRightWidth(value) {
-        this.nativeObject.yoga.borderRightWidth = value;
-    }
+  set borderWidth(value) {
+    // Native object's layer must be updated!
+    // Yoga's borderWidth property only effects positioning of its child view.
+    this.nativeObject.layer.borderWidth = value;
+    this.nativeObject.yoga.borderWidth = value;
+  }
 
-    get borderBottomWidth() {
-        return this.nativeObject.yoga.borderBottomWidth;
-    }
-
-    set borderBottomWidth(value) {
-        this.nativeObject.yoga.borderBottomWidth = value;
-    }
-
-    get borderStartWidth() {
-        return this.nativeObject.yoga.borderStartWidth;
-    }
-
-    set borderStartWidth(value) {
-        this.nativeObject.yoga.borderStartWidth = value;
-    }
-
-    get borderEndWidth() {
-        return this.nativeObject.yoga.borderEndWidth;
-    }
-
-    set borderEndWidth(value) {
-        this.nativeObject.yoga.borderEndWidth = value;
-    }
-
-    get borderWidth() {
-        return this.nativeObject.yoga.borderWidth;
-    }
-
-    set borderWidth(value) {
-        // Native object's layer must be updated!
-        // Yoga's borderWidth property only effects positioning of its child view.
-        this.nativeObject.layer.borderWidth = value;
-        this.nativeObject.yoga.borderWidth = value;
-    }
-
-    /*
+  /*
     // Width and Height can delete or added after tests
     */
 
-    get width() {
-        return this.nativeObject.frame.width;
-    }
-    
-    set width(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "width");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  get width() {
+    return this.nativeObject.frame.width;
+  }
 
-    get height() {
-        return this.nativeObject.frame.height;
+  set width(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'width');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set height(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "height");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  get height() {
+    return this.nativeObject.frame.height;
+  }
 
-    get minWidth() {
-        return this.nativeObject.yoga.getYGValueForKey("minWidth");
+  set height(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'height');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
-    set minWidth(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "minWidth");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  }
 
-    get minHeight() {
-        return this.nativeObject.yoga.getYGValueForKey("minHeight");
+  get minWidth() {
+    return this.nativeObject.yoga.getYGValueForKey('minWidth');
+  }
+  set minWidth(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'minWidth');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set minHeight(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "minHeight");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get minHeight() {
+    return this.nativeObject.yoga.getYGValueForKey('minHeight');
+  }
+
+  set minHeight(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'minHeight');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get maxWidth() {
-        return this.nativeObject.yoga.getYGValueForKey("maxWidth");
+  get maxWidth() {
+    return this.nativeObject.yoga.getYGValueForKey('maxWidth');
+  }
+
+  set maxWidth(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'maxWidth');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    set maxWidth(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "maxWidth");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
+  get maxHeight() {
+    return this.nativeObject.yoga.getYGValueForKey('maxHeight');
+  }
+
+  set maxHeight(value) {
+    if (typeof value === 'number') {
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'maxHeight');
+    } else {
+      throw new TypeError(Exception.TypeError.NUMBER);
     }
+  }
 
-    get maxHeight() {
-        return this.nativeObject.yoga.getYGValueForKey("maxHeight");
-    }
+  get testId() {
+    return this.nativeObject.valueForKey('accessibilityIdentifier');
+  }
 
-    set maxHeight(value) {
-        if (typeof value === "number") {
-            this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "maxHeight");
-        } else {
-            throw new TypeError(Exception.TypeError.NUMBER);
-        }
-    }
+  set testId(value) {
+    this.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
+  }
 
-    get testId() {
-        return this.nativeObject.valueForKey("accessibilityIdentifier");
-    }
+  // Yoga specific properties, not compatible with flexbox specification
+  get aspectRatio() {
+    return this.nativeObject.yoga.aspectRatio;
+  }
 
-    set testId(value) {
-        this.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
-    }
+  set aspectRatio(value) {
+    this.nativeObject.yoga.aspectRatio = value;
+  }
 
-    // Yoga specific properties, not compatible with flexbox specification
-    get aspectRatio() {
-        return this.nativeObject.yoga.aspectRatio;
-    }
-
-    set aspectRatio(value) {
-        this.nativeObject.yoga.aspectRatio = value;
-    }
-
-    /*
+  /*
      Get the resolved direction of this node. This won't be YGDirectionInherit
      */
-    get resolvedDirection() {
-        return this.nativeObject.yoga.resolvedDirection;
-    }
+  get resolvedDirection() {
+    return this.nativeObject.yoga.resolvedDirection;
+  }
 
-    /*
+  /*
      Perform a layout calculation and update the frames of the views in the hierarchy with the results
      */
-    applyLayout() {
-        this.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-    }
+  applyLayout() {
+    this.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+  }
 
-    /*
+  /*
      Returns the size of the view if no constraints were given. This could equivalent to calling [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
      */
-    get intrinsicSize() {
-        return this.nativeObject.yoga.intrinsicSize;
-    }
+  get intrinsicSize() {
+    return this.nativeObject.yoga.intrinsicSize;
+  }
 
-    /*
+  /*
      Returns the number of children that are using Flexbox.
      */
-    get numberOfChildren() {
-        return this.nativeObject.yoga.numberOfChildren;
-    }
+  get numberOfChildren() {
+    return this.nativeObject.yoga.numberOfChildren;
+  }
 
-    /*
+  /*
      Return a BOOL indiciating whether or not we this node contains any subviews that are included in Yoga's layout.
      */
-    get isLeaf() {
-        return this.nativeObject.yoga.isLeaf;
-    }
+  get isLeaf() {
+    return this.nativeObject.yoga.isLeaf;
+  }
 
-    /*
+  /*
      Mark that a view's layout needs to be recalculated. Only works for leaf views.
      */
-    dirty(){
-        this.nativeObject.yoga.markDirty();
-    }
+  dirty() {
+    this.nativeObject.yoga.markDirty();
+  }
 
-    //////////////////////////////////////////////////////////////////////////
-    // YOGA STUFF END
-    //////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  // YOGA STUFF END
+  //////////////////////////////////////////////////////////////////////////
 
-    static readonly ios = {
-        get viewAppearanceSemanticContentAttribute(){
-            return __SF_UIView.viewAppearanceSemanticContentAttribute();
-        },
-        set viewAppearanceSemanticContentAttribute(value) {
-            var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); // For application-iOS.js Application Direction Manager
-            userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
-            userDefaults.synchronize();
-    
-            // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
-        },
-        performWithoutAnimation(functionWithoutAnimation) {
-            __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
-        }
-    };
-    static readonly iOS = {
-        SemanticContentAttribute: {
-            AUTO: 0,
-            FORCELEFTTORIGHT: 3,
-            FORCERIGHTTOLEFT: 4
-        } as const
+  static readonly ios = {
+    get viewAppearanceSemanticContentAttribute() {
+      return __SF_UIView.viewAppearanceSemanticContentAttribute();
+    },
+    set viewAppearanceSemanticContentAttribute(value) {
+      var userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); // For application-iOS.js Application Direction Manager
+      userDefaults.setObjectForKey(value, 'smartface.ios.viewAppearanceSemanticContentAttribute');
+      userDefaults.synchronize();
+
+      // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
+    },
+    performWithoutAnimation(functionWithoutAnimation) {
+      __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
     }
+  };
+  static readonly iOS = {
+    SemanticContentAttribute: {
+      AUTO: 0,
+      FORCELEFTTORIGHT: 3,
+      FORCERIGHTTOLEFT: 4
+    } as const
+  };
 }

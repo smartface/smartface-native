@@ -1,6 +1,6 @@
-import TextBox from "../textbox";
-import KeyboardType from "../keyboardtype";
-import ActionKeyType from "../actionkeytype";
+import TextBox from '../textbox';
+import KeyboardType from '../keyboardtype';
+import ActionKeyType from '../actionkeytype';
 /**
  * @class UI.TextArea
  * @since 1.1.10
@@ -18,32 +18,32 @@ import ActionKeyType from "../actionkeytype";
  */
 declare class TextArea extends TextBox {
   android: TextBox['android'] & {
-/**
- * Gets/sets hint text that will be displayed when TextBox is empty.
- *
- * @property {String} [hint = ""]
- * @android
- * @since 1.1.10
- */
+    /**
+     * Gets/sets hint text that will be displayed when TextBox is empty.
+     *
+     * @property {String} [hint = ""]
+     * @android
+     * @since 1.1.10
+     */
     hint: string;
-  }
+  };
   ios: TextBox['ios'] & {
-/**
- * Get/set showScrollBar property
- *
- * @property {Boolean} [showScrollBar = false]
- * @ios
- * @since 1.1.10
- */
+    /**
+     * Get/set showScrollBar property
+     *
+     * @property {Boolean} [showScrollBar = false]
+     * @ios
+     * @since 1.1.10
+     */
     showScrollBar: boolean;
-  }
-/**
- * Sets/Gets the bounce effect when scrolling.
- *
- * @property {Boolean} bounces
- * @ios
- * @since 3.2.1
- */
+  };
+  /**
+   * Sets/Gets the bounce effect when scrolling.
+   *
+   * @property {Boolean} bounces
+   * @ios
+   * @since 3.2.1
+   */
   bounces: true;
 }
 export = TextArea;

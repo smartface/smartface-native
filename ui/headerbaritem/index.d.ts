@@ -1,10 +1,10 @@
-import AttributedString from "../../global/attributedstring";
-import Image from "../image";
-import Font from "../font";
-import Color from "../color";
-import Badge from "../badge";
-import { Point2D } from "../../primitive/point2d";
-import View from "../view";
+import AttributedString from '../../global/attributedstring';
+import Image from '../image';
+import Font from '../font';
+import Color from '../color';
+import Badge from '../badge';
+import { Point2D } from '../../primitive/point2d';
+import View from '../view';
 
 export = HeaderBarItem;
 
@@ -28,46 +28,46 @@ export = HeaderBarItem;
  *     myPage.headerBar.setItems([myItem]);
  */
 declare class HeaderBarItem extends NativeComponent {
-	constructor(params?: Partial<HeaderBarItem>);
-	nativeObject: any;
-	/**
-	 * Gets/sets title of header bar item. If image is not set, title will be
-	 * shown in the header bar.
-	 *
-	 * Title won't show if item is set as left item to header bar.
-	 *
-	 * @property {String} title
-	 * @android
-	 * @ios
-	 * @since 0.1
-	 */
-	title: string;
-	/**
-	 * Gets/sets size of header bar item. Size must be obtained life cycle of page. Otherwise returning value will be undefined.
-	 *
-	 * @property {Object} size
-	 * @property {Number} size.width
-	 * @property {Number} size.height
-	 * @readonly
-	 * @android
-	 * @ios
-	 * @since 4.0.1
-	 */
-	readonly size: {
-		readonly width: number;
-		readonly height: number;
-	};
-	/**
-	 * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
-	 * shown in the header bar.
-	 *
-	 * Attributed title won't show if item is set as left item to header bar.
-	 *
-	 * @property {UI.AttributedString} attributedTitle
-	 * @android
-	 * @since 4.0.0
-	 */
-	attributedTitle: AttributedString;
+  constructor(params?: Partial<HeaderBarItem>);
+  nativeObject: any;
+  /**
+   * Gets/sets title of header bar item. If image is not set, title will be
+   * shown in the header bar.
+   *
+   * Title won't show if item is set as left item to header bar.
+   *
+   * @property {String} title
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  title: string;
+  /**
+   * Gets/sets size of header bar item. Size must be obtained life cycle of page. Otherwise returning value will be undefined.
+   *
+   * @property {Object} size
+   * @property {Number} size.width
+   * @property {Number} size.height
+   * @readonly
+   * @android
+   * @ios
+   * @since 4.0.1
+   */
+  readonly size: {
+    readonly width: number;
+    readonly height: number;
+  };
+  /**
+   * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
+   * shown in the header bar.
+   *
+   * Attributed title won't show if item is set as left item to header bar.
+   *
+   * @property {UI.AttributedString} attributedTitle
+   * @android
+   * @since 4.0.0
+   */
+  attributedTitle: AttributedString;
 
 	/**
 	 * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
@@ -198,6 +198,16 @@ declare class HeaderBarItem extends NativeComponent {
 	 * @since 3.0.0
 	 */
 	badge: Badge;
+	/**
+	 * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
+	 *
+	 * @property {String} accessibilityLabel
+	 * @android
+	 * @ios
+	 * @member UI.HeaderBarItem
+	 * @since 4.4.1
+	 */
+	accessibilityLabel: string;
 	ios: Partial<{
 		/**
 		 * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
@@ -228,20 +238,20 @@ declare class HeaderBarItem extends NativeComponent {
 					myPage.headerBar.android.elevation = 10;
 					```
 		 */
-		elevation: number;
-		/**
-		 * Gets/sets the content inset of headerbar. Minimum API Level 21 required. 
-		 * The content inset affects the valid area for Headerbar content other than the navigation button and menu. 
-		 * Insets define the minimum margin for these custom views like titleLayout and can be used to effectively align HeaderBar content along well-known gridlines.
-		 */
-		contentInset: { left: number; right: number; };
-		/**
-		 * Gets/sets the logo visibility of the HeaderBar. If logo is disable, logo image will newer shown. This property will work only for Android.
-		 * @default false
-		 * @android
-		 */
-		logoEnabled: boolean;
-		/**
+    elevation: number;
+    /**
+     * Gets/sets the content inset of headerbar. Minimum API Level 21 required.
+     * The content inset affects the valid area for Headerbar content other than the navigation button and menu.
+     * Insets define the minimum margin for these custom views like titleLayout and can be used to effectively align HeaderBar content along well-known gridlines.
+     */
+    contentInset: { left: number; right: number };
+    /**
+     * Gets/sets the logo visibility of the HeaderBar. If logo is disable, logo image will newer shown. This property will work only for Android.
+     * @default false
+     * @android
+     */
+    logoEnabled: boolean;
+    /**
 		 * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
 		 * @example
 		 * ```const Page = require('@smartface/native/ui/page');
@@ -249,260 +259,260 @@ declare class HeaderBarItem extends NativeComponent {
 				myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
 				```
 		 */
-		subtitle: string;
-		/**
-		 * Gets/sets titleFont of header bar subtitle.
-		 * @android
-		 */
-		subtitleFont: Font;
-	}>
+    subtitle: string;
+    /**
+     * Gets/sets titleFont of header bar subtitle.
+     * @android
+     */
+    subtitleFont: Font;
+  }>;
 }
 
 declare namespace HeaderBarItem {
-	/**
-	 * iOS Specific Properties.
-	 * @class UI.HeaderBarItem.iOS
-	 * @since 3.2.1
-	 */
-	namespace iOS {
-		/**
-		 * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
-		 *
-		 * @enum {Number} UI.HeaderBarItem.iOS.SystemItem
-		 * @since 3.2.1
-		 * @ios
-		 */
-		enum SystemItem {
-			/**
-			 * The system Done button. Localized.
-			 *
-			 * @property {Number} DONE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			DONE = 0,
-			/**
-			 * The system Cancel button. Localized.
-			 *
-			 * @property {Number} CANCEL
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			CANCEL = 1,
-			/**
-			 * The system Edit button. Localized.
-			 *
-			 * @property {Number} EDIT
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			EDIT = 2,
-			/**
-			 * The system Save button. Localized.
-			 *
-			 * @property {Number} SAVE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			SAVE = 3,
-			/**
-			 * The system plus button containing an icon of a plus sign.
-			 *
-			 * @property {Number} ADD
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			ADD = 4,
-			/**
-			 * Blank space to add between other items. The space is distributed equally between the other items. Other item properties are ignored when this value is set.
-			 *
-			 * @property {Number} FLEXIBLESPACE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			FLEXIBLESPACE = 5,
-			/**
-			 * Blank space to add between other items. Only the width property is used when this value is set.
-			 *
-			 * @property {Number} FIXEDSPACE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			FIXEDSPACE = 6,
-			/**
-			 * The system compose button.
-			 *
-			 * @property {Number} COMPOSE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			COMPOSE = 7,
-			/**
-			 * The system reply button.
-			 *
-			 * @property {Number} REPLY
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			REPLY = 8,
-			/**
-			 * The system action button.
-			 *
-			 * @property {Number} ACTION
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			ACTION = 9,
-			/**
-			 * The system organize button.
-			 *
-			 * @property {Number} ORGANIZE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			ORGANIZE = 10,
-			/**
-			 * The system bookmarks button.
-			 *
-			 * @property {Number} BOOKMARKS
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			BOOKMARKS = 11,
-			/**
-			 * The system search button.
-			 *
-			 * @property {Number} SEARCH
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			SEARCH = 12,
-			/**
-			 * The system refresh button.
-			 *
-			 * @property {Number} REFRESH
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			REFRESH = 13,
-			/**
-			 * The system stop button.
-			 *
-			 * @property {Number} STOP
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			STOP = 14,
-			/**
-			 * The system camera button.
-			 *
-			 * @property {Number} CAMERA
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			CAMERA = 15,
-			/**
-			 * The system trash button.
-			 *
-			 * @property {Number} TRASH
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			TRASH = 16,
-			/**
-			 * The system play button.
-			 *
-			 * @property {Number} PLAY
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			PLAY = 17,
-			/**
-			 * The system pause button.
-			 *
-			 * @property {Number} PAUSE
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			PAUSE = 18,
-			/**
-			 * The system rewind button.
-			 *
-			 * @property {Number} REWIND
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			REWIND = 19,
-			/**
-			 * The system fast forward button.
-			 *
-			 * @property {Number} FASTFORWARD
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			FASTFORWARD = 20,
-			/**
-			 * The system undo button.
-			 *
-			 * @property {Number} UNDO
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			UNDO = 21,
-			/**
-			 * The system redo button.
-			 *
-			 * @property {Number} REDO
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.2.1
-			 */
-			RED = 22
-		}
-	}
+  /**
+   * iOS Specific Properties.
+   * @class UI.HeaderBarItem.iOS
+   * @since 3.2.1
+   */
+  namespace iOS {
+    /**
+     * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
+     *
+     * @enum {Number} UI.HeaderBarItem.iOS.SystemItem
+     * @since 3.2.1
+     * @ios
+     */
+    enum SystemItem {
+      /**
+       * The system Done button. Localized.
+       *
+       * @property {Number} DONE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      DONE = 0,
+      /**
+       * The system Cancel button. Localized.
+       *
+       * @property {Number} CANCEL
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      CANCEL = 1,
+      /**
+       * The system Edit button. Localized.
+       *
+       * @property {Number} EDIT
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      EDIT = 2,
+      /**
+       * The system Save button. Localized.
+       *
+       * @property {Number} SAVE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      SAVE = 3,
+      /**
+       * The system plus button containing an icon of a plus sign.
+       *
+       * @property {Number} ADD
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      ADD = 4,
+      /**
+       * Blank space to add between other items. The space is distributed equally between the other items. Other item properties are ignored when this value is set.
+       *
+       * @property {Number} FLEXIBLESPACE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      FLEXIBLESPACE = 5,
+      /**
+       * Blank space to add between other items. Only the width property is used when this value is set.
+       *
+       * @property {Number} FIXEDSPACE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      FIXEDSPACE = 6,
+      /**
+       * The system compose button.
+       *
+       * @property {Number} COMPOSE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      COMPOSE = 7,
+      /**
+       * The system reply button.
+       *
+       * @property {Number} REPLY
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      REPLY = 8,
+      /**
+       * The system action button.
+       *
+       * @property {Number} ACTION
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      ACTION = 9,
+      /**
+       * The system organize button.
+       *
+       * @property {Number} ORGANIZE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      ORGANIZE = 10,
+      /**
+       * The system bookmarks button.
+       *
+       * @property {Number} BOOKMARKS
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      BOOKMARKS = 11,
+      /**
+       * The system search button.
+       *
+       * @property {Number} SEARCH
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      SEARCH = 12,
+      /**
+       * The system refresh button.
+       *
+       * @property {Number} REFRESH
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      REFRESH = 13,
+      /**
+       * The system stop button.
+       *
+       * @property {Number} STOP
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      STOP = 14,
+      /**
+       * The system camera button.
+       *
+       * @property {Number} CAMERA
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      CAMERA = 15,
+      /**
+       * The system trash button.
+       *
+       * @property {Number} TRASH
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      TRASH = 16,
+      /**
+       * The system play button.
+       *
+       * @property {Number} PLAY
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      PLAY = 17,
+      /**
+       * The system pause button.
+       *
+       * @property {Number} PAUSE
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      PAUSE = 18,
+      /**
+       * The system rewind button.
+       *
+       * @property {Number} REWIND
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      REWIND = 19,
+      /**
+       * The system fast forward button.
+       *
+       * @property {Number} FASTFORWARD
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      FASTFORWARD = 20,
+      /**
+       * The system undo button.
+       *
+       * @property {Number} UNDO
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      UNDO = 21,
+      /**
+       * The system redo button.
+       *
+       * @property {Number} REDO
+       * @static
+       * @ios
+       * @readonly
+       * @since 3.2.1
+       */
+      RED = 22
+    }
+  }
 }

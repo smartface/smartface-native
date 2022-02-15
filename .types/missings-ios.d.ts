@@ -19,7 +19,7 @@ declare class __SF_UIView {
 }
 declare class __SF_NSUserDefaults {
   setObjectForKey(value: any, key: string): any;
-  synchronize(): any
+  synchronize(): any;
   constructor(param: string);
 }
 declare class __SF_FILE {}
@@ -41,4 +41,13 @@ declare class __SF_CAGradientLayer {
 
 declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
+}
+
+declare class __SF_UIApplication {
+  static sharedApplication(): {
+    statusBarFrame: { height: number };
+    valueForKey: (str: string) => any;
+    sf_statusBarStyle: any;
+    sf_statusBarHidden: boolean;
+  };
 }
