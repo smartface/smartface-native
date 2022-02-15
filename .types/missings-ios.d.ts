@@ -51,3 +51,101 @@ declare class __SF_UIApplication {
     sf_statusBarHidden: boolean;
   };
 }
+
+declare class __SF_CMMotionManager {
+  constructor();
+  accelerometerUpdateInterval: number;
+  startAccelerometerUpdates(): void;
+  stopAccelerometerUpdates(): void;
+  callback: () => void;
+}
+
+declare class __SF_CallObserverDelegate {
+  constructor();
+  callObserverCallChanged: (observer: unknown, call: { hasEnded: boolean, hasConnected: boolean, isOutgoing: boolean } ) => void;
+}
+
+declare class __SF_CNMutableContact {
+  static new: () => __SF_CNMutableContactObject;
+}
+
+export class __SF_CNMutableContactObject {
+  constructor();
+  namePrefix: string;
+  givenName: string;
+  familyName: string;
+  middleName: string;
+  nameSuffix: string;
+  jobTitle: string;
+  organizationName: string;
+  departmentName: string;
+  nickname: string;
+  imageData: string[];
+  phoneNumbers: { value: { stringValue: string }}[];
+  urlAddresses: { value: string }[];
+  emailAddresses: { value: string }[];
+  addresses: { value: Partial<__SF_CNMutablePostalAddressObject> }[];
+
+}
+
+declare class __SF_CNMutablePostalAddress {
+  static new: () => __SF_CNMutablePostalAddressObject
+}
+
+export class __SF_CNMutablePostalAddressObject {
+  constructor();
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
+
+declare class __SF_CNLabeledValue {
+  constructor(instance: __SF_CNLabelParent, value: any);
+}
+
+// This is not to be used directly
+export class __SF_CNLabelParent {
+  constructor();
+}
+declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {
+
+}
+declare class __SF_CNLabelHome extends __SF_CNLabelParent {
+
+}
+declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {
+
+}
+
+export class ContactNative {
+  private constructor();
+  mutableCopy: () => any
+} 
+
+declare class __SF_CNContactPickerDelegate {
+  contactPickerDidSelectContact: (contact: ContactNative) => void;
+}
+
+declare class __SF_CNContactStore {
+  static new: () => __SF_CNContactStoreObject;
+}
+
+export class __SF_CNContactStoreObject {
+  requestAccess: (value: () => void) => void;
+  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void) => void;
+}
+
+declare class __SF_CNPhoneNumber {
+  static phoneNumberWithStringValue(string): any;
+}
+
+declare class __SF_CNContactViewControllerDelegate {
+
+}
+
+declare class __SF_CNContactViewController {
+  static viewControllerForNewContact(contact: ContactNative);
+  contactStore: __SF_CNContactStoreObject;
+}
