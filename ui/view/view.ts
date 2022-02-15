@@ -1,9 +1,11 @@
 import Color from "../color";
 import FlexLayout from "../flexlayout";
-import ViewGroup from "../viewgroup";
 import { Point2D } from "../../primitive/point2d";
-import { IEventEmitter } from "../../core/eventemitter/EventEmitter";
-
+import { EventEmitter, EventEmitterMixin, IEventEmitter } from "core/eventemitter";
+import { INativeComponent } from "core/inative-component";
+import { ExtractEventValues } from "core/eventemitter/extract-event-values";
+import { EventType } from "../../core/eventemitter/EventType";
+import NativeComponent from "core/native-component";
 /**
  * @class UI.View
  * @since 0.1
@@ -22,17 +24,17 @@ import { IEventEmitter } from "../../core/eventemitter/EventEmitter";
  *     myView.backgroundColor = Color.RED;
  *
  */
-export interface IView<TEvent = any>
-	extends NativeComponent, IEventEmitter<TEvent>
+export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewEvents>>
+	extends IEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<typeof ViewEvents>>, INativeComponent
 {
 	/**
-	 * Gets/sets the transitionID to be used for transitionViews. See transitionViews for more information
-	 * @property {String} transitionID
+	 * Gets/sets the transitionId to be used for transitionViews. See transitionViews for more information
+	 * @property {String} transitionId
 	 * @android
 	 * @ios
 	 * @since 0.1
 	 */
-	transitionID: string;
+	transitionId: string;
 	/**
 	 * Gets/sets whether the view is an accessibility element that an assistive app can access.
 	 *
@@ -494,7 +496,7 @@ export interface IView<TEvent = any>
 	 * @ios
 	 * @since 0.1
 	 */
-	getParent(): ViewGroup;
+	getParent(): View;
 	/**
 	 * This event is called when a touch screen motion event starts.
 	 *
@@ -525,7 +527,7 @@ export interface IView<TEvent = any>
 	 * });
 	 * ````
 	 */
-	onTouch: (point: Point2D) => void | boolean;
+	onTouch: (e: Point2D) => void | boolean;
 	/**
 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
 	 *
@@ -743,7 +745,7 @@ export interface IView<TEvent = any>
 		 * @static
 		 * @since 3.1.3
 		 */
-		viewAppearanceSemanticContentAttribute: View.iOS.SemanticContentAttribute;
+		viewAppearanceSemanticContentAttribute: SemanticContentAttribute;
 		/**
 		 * Disables a view transition animation.
 		 *
@@ -772,7 +774,7 @@ export interface IView<TEvent = any>
 	 * @android
 	 * @since 4.1.4
 	 */
-	maskedBorders: View.Border[];
+	maskedBorders: Border[];
 
 	getPosition: () => {
 		left: number;
@@ -781,8 +783,8 @@ export interface IView<TEvent = any>
 		height: number;
 	};
 }
-declare namespace View {
-	/**
+
+/**
 	 * @enum {Number} UI.View.Border
 	 * @since 4.1.4
 	 * @ios
@@ -790,151 +792,168 @@ declare namespace View {
 	 *
 	 * Includes enums of View's borders.
 	 */
-	enum Border {
-		/**
-		 * View's top-left border.
-		 *
-		 * @property {Number} TOP_LEFT
-		 * @android
-		 * @ios
-		 * @static
-		 * @readonly
-		 * @since 4.1.4
-		 */
-		TOP_LEFT = 0,
-		/**
-		 * View's top-right border.
-		 *
-		 * @property {Number} TOP_RIGHT
-		 * @android
-		 * @ios
-		 * @static
-		 * @readonly
-		 * @since 4.1.4
-		 */
-		TOP_RIGHT = 2,
-		/**
-		 * View's bottom-right border.
-		 *
-		 * @property {Number} BOTTOM_RIGHT
-		 * @android
-		 * @ios
-		 * @static
-		 * @readonly
-		 * @since 4.1.4
-		 */
-		BOTTOM_RIGHT = 4,
-		/**
-		 * View's bottom-left border.
-		 *
-		 * @property {Number} BOTTOM_LEFT
-		 * @android
-		 * @ios
-		 * @static
-		 * @readonly
-		 * @since 4.1.4
-		 */
-		BOTTOM_LEFT = 0,
-	}
-	namespace ios {
-		const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-		const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-	}
+ export enum Border {
+	/**
+	 * View's top-left border.
+	 *
+	 * @property {Number} TOP_LEFT
+	 * @android
+	 * @ios
+	 * @static
+	 * @readonly
+	 * @since 4.1.4
+	 */
+	TOP_LEFT = 0,
+	/**
+	 * View's top-right border.
+	 *
+	 * @property {Number} TOP_RIGHT
+	 * @android
+	 * @ios
+	 * @static
+	 * @readonly
+	 * @since 4.1.4
+	 */
+	TOP_RIGHT = 2,
+	/**
+	 * View's bottom-right border.
+	 *
+	 * @property {Number} BOTTOM_RIGHT
+	 * @android
+	 * @ios
+	 * @static
+	 * @readonly
+	 * @since 4.1.4
+	 */
+	BOTTOM_RIGHT = 4,
+	/**
+	 * View's bottom-left border.
+	 *
+	 * @property {Number} BOTTOM_LEFT
+	 * @android
+	 * @ios
+	 * @static
+	 * @readonly
+	 * @since 4.1.4
+	 */
+	BOTTOM_LEFT = 0,
+}
+
+/**
+ * @enum {Number} UI.View.iOS.SemanticContentAttribute
+ * @since 3.1.3
+ * @ios
+ */
+ export enum SemanticContentAttribute {
+	/**
+	 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
+	 *
+	 * @property {Number} AUTO
+	 * @static
+	 * @ios
+	 * @readonly
+	 * @since 3.1.3
+	 */
+	AUTO = 0,
+	/**
+	 * Layout direction is always left to right.
+	 *
+	 * @property {Number} FORCELEFTTORIGHT
+	 * @static
+	 * @ios
+	 * @readonly
+	 * @since 3.1.3
+	 */
+	FORCELEFTTORIGHT = 3,
+	/**
+	 * Layout direction is always right to left.
+	 *
+	 * @property {Number} FORCERIGHTTOLEFT
+	 * @static
+	 * @ios
+	 * @readonly
+	 * @since 3.1.3
+	 */
+	FORCERIGHTTOLEFT = 4,
+}
+export enum ViewEvents {
+	/**
+	 * This event is called when a touch screen motion event starts.
+	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+	 * @param {Object} motionEvent
+	 * @param {Number} motionEvent.x
+	 * @param {Number} motionEvent.y
+	 * @android
+	 * @ios
+	 * @since 4.3.5
+	 */
+	Touch = "touch",
+	/**
+	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
+	 *
+	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+	 * @param {Object} motionEvent
+	 * @param {Number} motionEvent.x
+	 * @param {Number} motionEvent.y
+	 * @android
+	 * @ios
+	 * @since 4.3.5
+	 */
+	TouchCancelled = "touchCancelled",
+	/**
+	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
+	 *
+	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
+	 * @param {Object} motionEvent
+	 * @param {Boolean} motionEvent.isInside
+	 * @param {Number} motionEvent.x
+	 * @param {Number} motionEvent.y
+	 * @android
+	 * @ios
+	 * @since 4.3.5
+	 */
+	TouchEnded = "touchEnded",
+	/**
+	 * This event is called when the touch has changed its point on the screen.
+	 *
+	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+	 * @param {Object} motionEvent
+	 * @param {Boolean} isInside
+	 * @param {Number} motionEvent.x
+	 * @param {Number} motionEvent.y
+	 * @android
+	 * @ios
+	 * @member UI.View
+	 * @since 4.3.5
+	 */
+	TouchMoved = "touchMoved",
+}
+
+const NativeEventEmitter = EventEmitterMixin(NativeComponent);
+
+export class ViewBase<TEvent extends EventType = EventType>
+extends NativeEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<ViewEvents>> {
+	
+	// export namespace ios {
+	// 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+	// 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+	// }
 	/**
 	 * iOS Specific Properties.
 	 * @class UI.View.iOS
 	 * @since 3.1.3
 	 */
-	namespace iOS {
-		/**
-		 * @enum {Number} UI.View.iOS.SemanticContentAttribute
-		 * @since 3.1.3
-		 * @ios
-		 */
-		enum SemanticContentAttribute {
-			/**
-			 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
-			 *
-			 * @property {Number} AUTO
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			AUTO = 0,
-			/**
-			 * Layout direction is always left to right.
-			 *
-			 * @property {Number} FORCELEFTTORIGHT
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			FORCELEFTTORIGHT = 3,
-			/**
-			 * Layout direction is always right to left.
-			 *
-			 * @property {Number} FORCERIGHTTOLEFT
-			 * @static
-			 * @ios
-			 * @readonly
-			 * @since 3.1.3
-			 */
-			FORCERIGHTTOLEFT = 4,
-		}
+	static iOS = {
+		SemanticContentAttribute
 	}
-	enum Events {
-		/**
-		 * This event is called when a touch screen motion event starts.
-		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-		 * @param {Object} motionEvent
-		 * @param {Number} motionEvent.x
-		 * @param {Number} motionEvent.y
-		 * @android
-		 * @ios
-		 * @since 4.3.5
-		 */
-		Touch = "touch",
-		/**
-		 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
-		 *
-		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-		 * @param {Object} motionEvent
-		 * @param {Number} motionEvent.x
-		 * @param {Number} motionEvent.y
-		 * @android
-		 * @ios
-		 * @since 4.3.5
-		 */
-		TouchCancelled = "touchCancelled",
-		/**
-		 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
-		 *
-		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-		 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
-		 * @param {Object} motionEvent
-		 * @param {Boolean} motionEvent.isInside
-		 * @param {Number} motionEvent.x
-		 * @param {Number} motionEvent.y
-		 * @android
-		 * @ios
-		 * @since 4.3.5
-		 */
-		TouchEnded = "touchEnded",
-		/**
-		 * This event is called when the touch has changed its point on the screen.
-		 *
-		 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-		 * @param {Object} motionEvent
-		 * @param {Boolean} isInside
-		 * @param {Number} motionEvent.x
-		 * @param {Number} motionEvent.y
-		 * @android
-		 * @ios
-		 * @member UI.View
-		 * @since 4.3.5
-		 */
-		TouchMoved = "touchMoved",
-	}
+	static Events = ViewEvents;
+	static Border = Border;
+
+	protected _onTouch: View['onTouch'];
+	protected _onTouchEnded: View['onTouchEnded'];
+	protected _onTouchCancelled: View['onTouchCancelled'];
+	protected _onTouchMoved: View['onTouchMoved'];
 }
+
+export default View;

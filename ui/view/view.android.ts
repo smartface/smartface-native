@@ -1,13 +1,12 @@
 /*globals array, requireClass, toJSArray */
-
-import { EventEmitter } from "core/eventemitter";
 import { Point2D } from "sf-core/primitive/point2d";
 import { Rectangle } from "sf-core/primitive/rectangle";
 import { INativeComponent } from "../../core/inative-component";
 import Color from "../color";
-import ViewGroup from "../viewgroup";
-import { ViewEvents } from "./event";
-import { IView } from "./iview";
+import { ViewEvents } from "./view-event";
+import View, { ViewBase } from "./view";
+import { EventType } from "core/eventemitter/EventType";
+
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");
@@ -21,16 +20,8 @@ const SFViewUtil = requireClass(
 const SFOnTouchViewManager = requireClass(
   "io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager"
 );
-const rippleSuperView = require("./ripple");
 
-declare function array(arr: any[], type: string): any[];
-declare function toJSArray(val: any): any[];
-declare function float(val: any): number;
-
-const {
-  EventEmitterCreator,
-  EventEmitterWrapper,
-} = require("../../core/eventemitter");
+import { EventEmitterWrapper } from "../../core/eventemitter";
 const LOLLIPOP_AND_LATER =
   AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
@@ -82,11 +73,33 @@ const YogaEdge = {
   ALL: NativeYogaEdge.ALL,
 };
 
+function getRippleMask(borderRadius) {
+  const NativeRoundRectShape = requireClass(
+    "android.graphics.drawable.shapes.RoundRectShape"
+  );
+  const NativeShapeDrawable = requireClass(
+    "android.graphics.drawable.ShapeDrawable"
+  );
+
+  var outerRadii = [];
+  outerRadii.length = 8;
+  outerRadii.fill(borderRadius);
+
+  var roundRectShape = new NativeRoundRectShape(
+    array(outerRadii, "float"),
+    null,
+    null
+  );
+  var shapeDrawable = new NativeShapeDrawable(roundRectShape);
+
+  return shapeDrawable;
+}
+
 const activity = AndroidConfig.activity;
 
-export class View<TEvent extends string | symbol = string>
-  extends EventEmitter<TEvent>
-  implements INativeComponent
+export class ViewAndroid<TEvent extends EventType = EventType>
+  extends ViewBase<TEvent>
+  implements INativeComponent, View<TEvent>
 {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
@@ -118,10 +131,10 @@ export class View<TEvent extends string | symbol = string>
       "int"
     ),
   };
-  static readonly Events = { ...ViewEvents } as const;
+  readonly ios = {} as const;
   protected uniqueId: string;
   protected _maskedBorders = [];
-  protected _masksToBounds = [];
+  protected _masksToBounds: boolean = true;
   private _parent?: View & { align?: any };
   private _rotation: number = 0;
   private _rotationX: number = 0;
@@ -130,10 +143,6 @@ export class View<TEvent extends string | symbol = string>
     x: 1.0,
     y: 1.0,
   };
-  private _onTouch: IView["onTouch"];
-  private _onTouchEnded: IView["onTouchEnded"];
-  private _onTouchCancelled: IView["onTouchCancelled"];
-  private _onTouchMoved: IView["onTouchMoved"];
   private _nativeObject: any;
   private _borderColor: Color;
   private _borderWidth: number;
@@ -146,12 +155,23 @@ export class View<TEvent extends string | symbol = string>
   private __isRecyclerView: any;
   private nativeInner: any;
   private _touchEnabled: boolean = false;
+  private _rippleEnabled = false;
+  private _rippleColor = null;
+  private _useForeground = false;
+  private _android = {
+    updateRippleEffectIfNeeded: () => {
+      this._rippleEnabled &&
+        this._rippleColor &&
+        (this._android.rippleColor = this._rippleColor);
+    },
+    rippleColor: null,
+  };
 
   constructor(params) {
     super();
     params = params || {};
     // this.ios = {};
-    EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
+    // EventEmitterCreator(this, EventFunctions, this.setTouchHandlers);
     if (!this._nativeObject) {
       this._nativeObject = new NativeView(activity);
       this.yogaNode = NativeYogaNodeFactory.create();
@@ -165,13 +185,13 @@ export class View<TEvent extends string | symbol = string>
 
     this._nativeObject.setId(NativeView.generateViewId());
 
-    rippleSuperView(this);
     // Assign parameters given in constructor
     if (params) {
       for (var param in params) {
         this[param] = params[param];
       }
     }
+    this._sfOnTouchViewManager = new SFOnTouchViewManager();
   }
 
   get parent() {
@@ -209,16 +229,16 @@ export class View<TEvent extends string | symbol = string>
       if (bitwiseBorders & borderEnum) {
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
-          case View.Border.TOP_LEFT:
+          case ViewAndroid.Border.TOP_LEFT:
             borderRadiuses.fill(borderRadiusInDp, 0, 3);
             break;
-          case View.Border.TOP_RIGHT:
+          case ViewAndroid.Border.TOP_RIGHT:
             borderRadiuses.fill(borderRadiusInDp, 2, 4);
             break;
-          case View.Border.BOTTOM_RIGHT:
+          case ViewAndroid.Border.BOTTOM_RIGHT:
             borderRadiuses.fill(borderRadiusInDp, 4, 6);
             break;
-          case View.Border.BOTTOM_LEFT:
+          case ViewAndroid.Border.BOTTOM_LEFT:
             borderRadiuses.fill(borderRadiusInDp, 6, 8);
             break;
         }
@@ -234,7 +254,7 @@ export class View<TEvent extends string | symbol = string>
     );
     //Provide backward support in case of diff behavior of border radius.
     let borderRadiuses =
-      bitwiseBorders !== View.Border.ALL
+      bitwiseBorders !== ViewAndroid.Border.ALL
         ? this._setMaskedBorders(bitwiseBorders)
         : [DpToPixel(this.borderRadius)];
     let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
@@ -263,12 +283,12 @@ export class View<TEvent extends string | symbol = string>
   };
 
   get android() {
-	  return {}
+    return this._android;
   }
   get nativeObject() {
     return this._nativeObject;
   }
-  
+
   // android
   get zIndex() {
     return SFViewUtil.getZ(this._nativeObject);
@@ -286,6 +306,12 @@ export class View<TEvent extends string | symbol = string>
   set elevation(value) {
     SFViewUtil.setElevation(this._nativeObject, value);
   }
+
+  get aspectRatio() {
+    return null;
+  }
+
+  set aspectRatio(value) {}
 
   // android
   get overScrollMode() {
@@ -366,8 +392,8 @@ export class View<TEvent extends string | symbol = string>
   set borderRadius(value) {
     this._borderRadius = value;
     this._resetBackground();
-    this.android.updateRippleEffectIfNeeded &&
-      this.android.updateRippleEffectIfNeeded();
+    this._android.updateRippleEffectIfNeeded &&
+      this._android.updateRippleEffectIfNeeded();
   }
 
   get maskedBorders() {
@@ -376,8 +402,8 @@ export class View<TEvent extends string | symbol = string>
   set maskedBorders(value) {
     this._maskedBorders = value;
     this._resetBackground();
-    this.android.updateRippleEffectIfNeeded &&
-      this.android.updateRippleEffectIfNeeded();
+    this._android.updateRippleEffectIfNeeded &&
+      this._android.updateRippleEffectIfNeeded();
   }
 
   get masksToBounds() {
@@ -889,4 +915,69 @@ export class View<TEvent extends string | symbol = string>
   dirty() {
     this.yogaNode.dirty();
   }
+  // Ripple Effect
+  get rippleEnabled() {
+    return this._rippleEnabled;
+  }
+  set rippleEnabled(value) {
+    this._rippleEnabled = value;
+    if (this.rippleEnabled) {
+      this.nativeObject.setClickable(true);
+    }
+  }
+  get useForeground() {
+    return this._useForeground;
+  }
+  set useForeground(value) {
+    this._useForeground = value;
+  }
+  get rippleColor() {
+    return this._rippleColor;
+  }
+  set rippleColor(value) {
+    this._rippleColor = value;
+
+    if (
+      this.rippleEnabled &&
+      AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP
+    ) {
+      var states = array([array([], "int")]);
+      var colors = array([this._rippleColor.nativeObject], "int");
+
+      const NativeColorStateList = requireClass(
+        "android.content.res.ColorStateList"
+      );
+      const NativeRippleDrawable = requireClass(
+        "android.graphics.drawable.RippleDrawable"
+      );
+      var colorStateList = new NativeColorStateList(states, colors);
+
+      var mask = getRippleMask(DpToPixel(this.borderRadius));
+
+      if (
+        this._useForeground === true &&
+        AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
+      ) {
+        /*
+					Only supported for api level 23 and above
+					*/
+        let currentBackground = this.nativeObject.getForeground();
+        let rippleDrawableForegorund = new NativeRippleDrawable(
+          colorStateList,
+          currentBackground,
+          mask
+        );
+        this.nativeObject.setForeground(rippleDrawableForegorund);
+      } else {
+        let currentBackground = this.nativeObject.getBackground();
+        let rippleDrawableBackgorund = new NativeRippleDrawable(
+          colorStateList,
+          currentBackground,
+          mask
+        );
+        this.nativeObject.setBackground(rippleDrawableBackgorund);
+      }
+    }
+  }
+  // End of Ripple Effect
 }

@@ -1,4 +1,4 @@
-import { EventEmitter, IEventEmitter } from "../../core/eventemitter/EventEmitter";
+import { EventEmitter, IEventEmitter } from "../../core/eventemitter/event-emitter";
 import Blob from "../../global/blob";
 
 declare enum Events {

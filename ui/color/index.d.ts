@@ -1,4 +1,7 @@
+import NativeComponent from "core/native-component";
+
 declare class Color extends NativeComponent {
+    constructor(params: {color: any});
     isGradient?: any;
     colors?: Color[];
     direction: Color.GradientDirection;

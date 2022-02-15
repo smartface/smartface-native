@@ -13,7 +13,7 @@ const SFOnTouchViewManager = requireClass("io.smartface.android.sfcore.ui.touch.
 
 const rippleSuperView = require("./ripple");
 const { EventEmitterCreator, EventEmitterWrapper } = require("../../core/eventemitter");
-const EventList = require('./event');
+const EventList = require('./view-event');
 const LOLLIPOP_AND_LATER = (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP);
 
 View.Events = { ...EventList };

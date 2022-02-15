@@ -1,8 +1,8 @@
-import { EventEmitter } from "stream";
+import { EventEmitter } from "./eventemitter";
 import { INativeComponent } from "./inative-component";
 
 
-export default class NativeEventEmitterComponent extends EventEmitter implements INativeComponent {
+export default class NativeEventEmitterComponent<TEvent> extends EventEmitter<TEvent> implements INativeComponent<TEvent> {
   protected _nativeObject: any;
 
   get nativeObject(): any {
@@ -13,3 +13,4 @@ export default class NativeEventEmitterComponent extends EventEmitter implements
     this._nativeObject = value;
   }
 }
+

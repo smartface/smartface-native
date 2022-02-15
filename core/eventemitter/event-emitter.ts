@@ -2,7 +2,7 @@ import Events from 'events';
 
 export type EventListenerCallback = (...args: any) => void;
 
-export interface IEventEmitter<TEvent = string> {
+export interface IEventEmitter<TEvent extends string = string> {
   /**
    * Creates an event emitter instance to listen for the actions
    * @param {string} eventName 
@@ -34,7 +34,7 @@ export interface IEventEmitter<TEvent = string> {
    emit(event: TEvent, ...args: any[]): void;
 }
  
-export class EventEmitter<TEvent extends string | symbol> implements IEventEmitter<TEvent> {
+export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent> {
   protected emitter: Events.EventEmitter = new Events();
 
   on(eventName: TEvent, callback: EventListenerCallback) {

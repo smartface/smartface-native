@@ -1,4 +1,4 @@
-import { IEventEmitter } from "../../core/eventemitter/EventEmitter";
+import { IEventEmitter } from "../../core/eventemitter/event-emitter";
 
 declare enum Events {
     /**

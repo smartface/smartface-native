@@ -1,4 +1,5 @@
 import NativeComponent from "../../core/native-component";
+import { ImageBase } from "./image";
 const File = require("../../io/file");
 const TypeUtil = require("../../util/type");
 const Blob = require("../../blob");
@@ -8,7 +9,7 @@ enum Format {
   PNG
 };
 
-class Image extends NativeComponent {
+class ImageiOS extends ImageBase {
   static createFromFile = function (path) {
     const imageFile = new File({
       path: path,
@@ -17,29 +18,27 @@ class Image extends NativeComponent {
     if (typeof imageFile.nativeObject.getActualPath() === "undefined") {
       retval = null;
     } else {
-      retval = new Image({
+      retval = new ImageiOS({
         path: imageFile.nativeObject.getActualPath(),
       });
     }
     return retval;
   };
 
-  static readonly Format = Format;
-
-  static createFromName = function (name) {
-    return new Image({
+  static createFromName = function (name: string) {
+    return new ImageiOS({
       name: name,
     });
   };
 
-  static createFromImage(image) {
-    return new Image({
+  static createFromImage(image: string) {
+    return new ImageiOS({
       image: image,
     });
   }
 
-  static createFromBlob = function (blob) {
-    return new Image({
+  static createFromBlob = function (blob: string) {
+    return new ImageiOS({
       blob: blob,
     });
   };
@@ -47,14 +46,6 @@ class Image extends NativeComponent {
   static readandroid = {
     createRoundedImage: function () {},
   };
-
-  static readonly iOS = {
-    RenderingMode: {
-      AUTOMATIC: 0,
-      ORIGINAL: 1,
-      TEMPLATE: 2,
-    },
-  } as const;
 
   private _flippedImage;
   private _nativeImage;
@@ -94,9 +85,10 @@ class Image extends NativeComponent {
   }
 
   get android() {
+    const self = this;
     return {
-      round: (radius) => {
-        return this;
+      round: (radius: number) => {
+        return;
       },
     };
   }
@@ -123,15 +115,15 @@ class Image extends NativeComponent {
           invocationResizeable.invoke();
           image = invocationResizeable.getReturnValue();
         }
-        return Image.createFromImage(image);
+        return ImageiOS.createFromImage(image);
       },
       imageWithRenderingMode(value) {
-        return Image.createFromImage(
+        return ImageiOS.createFromImage(
           this.nativeObject.imageWithRenderingMode(value)
         );
       },
       imageFlippedForRightToLeftLayoutDirection() {
-        return Image.createFromImage(
+        return ImageiOS.createFromImage(
           self.nativeObject.imageFlippedForRightToLeftLayoutDirection()
         );
       },
@@ -154,7 +146,7 @@ class Image extends NativeComponent {
   ) {
     if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)) {
       // TODO: Recheck new Image.createFromImage(...)
-      const resizedImage = Image.createFromImage(
+      const resizedImage = ImageiOS.createFromImage(
         this.nativeObject.resizeImage({
           width: width,
           height: height,
@@ -188,7 +180,7 @@ class Image extends NativeComponent {
       TypeUtil.isNumeric(x) &&
       TypeUtil.isNumeric(y)
     ) {
-      const resizedImage = Image.createFromImage(
+      const resizedImage = ImageiOS.createFromImage(
         this.nativeObject.cropToBounds({
           x: x,
           y: y,
@@ -217,7 +209,7 @@ class Image extends NativeComponent {
   ) {
     if (TypeUtil.isNumeric(angle)) {
       // TODO: Recheck usage of new Image.createFromImage(...)
-      const resizedImage = Image.createFromImage(
+      const resizedImage = ImageiOS.createFromImage(
         this.nativeObject.imageRotatedByDegrees(angle, false)
       );
       if (onSuccess) {
@@ -285,4 +277,4 @@ class Image extends NativeComponent {
   }
 }
 
-module.exports = Image;
+export default ImageiOS;

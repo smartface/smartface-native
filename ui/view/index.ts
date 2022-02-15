@@ -1,10 +1,6 @@
-// if (Device.deviceOS === "iOS") {
-//     module.exports = require('./view-iOS');
-// } else if (Device.deviceOS === "Android") {
-import { IView } from "./iview";
+import { ConstructorOf } from "../../core/constructorof";
+import { View } from "./view";
 
-//@ts-ignore
-import View from `./view-${Device.deviceOS}`;
-// }
+const View: ConstructorOf<View, Partial<View>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
 
-export default View as IView;
+export default View;

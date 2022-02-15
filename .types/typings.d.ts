@@ -9,7 +9,10 @@ declare global {
 		static deviceOS: DeviceOS;
 	}
 
-	function array(outerRadii: any, type: string): any[];
+	function array(outerRadii: any, type?: string): any[];
+	function toJSArray(val: any): any[];
+	function float(val: any): number;
+
 	function alert(
 		params:
 			| string

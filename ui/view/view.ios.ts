@@ -1,21 +1,17 @@
-import { EventEmitter } from "core/eventemitter";
 import { Point2D } from "sf-core/primitive/point2d";
-import { ViewEvents } from "./event";
-import { IView } from "./iview";
+import Color from "../color";
+import { ViewEvents } from "./view-event";
+import View, {ViewBase} from "./view";
+import { EventType } from "core/eventemitter/EventType";
 
-const TypeUtil = require("../../util/type");
 const Exception = require("../../util").Exception;
-const Color = require('../../ui/color');
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const { EventEmitterCreator } = require("../../core/eventemitter");
 
 declare const myLabelTitle: any;
 
-const EventList = require('./events');
 
-
-const image : ImageView
 function isInside(frame, point) {
     var x = point.x;
     var y = point.y;
@@ -24,10 +20,12 @@ function isInside(frame, point) {
     return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewiOS<TEvent extends string | symbol = string | symbol> extends EventEmitter<TEvent> implements NativeComponent {
-    protected android: {[key: string]: any} = {};
+type ViewIOSParams = {};
+
+export default class ViewIOS<TEvent extends EventType = EventType> extends ViewBase<TEvent> implements View<TEvent> {
+    android: {[key: string]: any} = {};
     protected _uniqueId: string;
-    protected _maskedBorders = [ViewiOS.Border.TOP_LEFT, ViewiOS.Border.TOP_RIGHT, ViewiOS.Border.BOTTOM_LEFT, ViewiOS.Border.BOTTOM_RIGHT];
+    protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
     private _rotation: number = 0;
     private _rotationX: number = 0;
     private _rotationY: number = 0;
@@ -35,61 +33,91 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
         x: 1.0,
         y: 1.0
     };
-    private _onTouch: IView['onTouch'];
-    private _onTouchEnded: IView['onTouchEnded'];
-    private _onTouchCancelled: IView['onTouchCancelled'];
-    private _onTouchMoved: IView['onTouchMoved'];
-    private _nativeObject: any;
-    private gradientColor: any;
-    private _parent: IView;
-    private EventFunctions = {
-        [EventList.Touch]: () => {
-            const onTouchHandler = (e) => {
-                const options = {
-                    x: e && e.point ? e.point.x : null,
-                    y: e && e.point ? e.point.y : null
-                };
-                this.emitter.emit(EventList.Touch, options);
-            };
-            this.nativeObject.onTouch = onTouchHandler;
-        },
-        [EventList.TouchCancelled]: () => {
-            const onTouchCancelledHandler = (e) => {
-                const options = {
-                    x: e && e.point ? e.point.x : null,
-                    y: e && e.point ? e.point.y : null
-                };
-                this.emitter.emit(EventList.TouchCancelled, options);
-            };
-            this.nativeObject.onTouchCancelled = onTouchCancelledHandler;
-        },
-        [EventList.TouchEnded]: () => {
-            const onTouchEndedHandler = (e) => {
-                const inside = isInside(this.nativeObject.frame, e.point);
-                const options = {
-                    x: e && e.point ? e.point.x : null,
-                    y: e && e.point ? e.point.y : null,
-                    isInside: inside
-                };
-                this.emitter.emit(EventList.TouchEnded, options);
-            };
-            this.nativeObject.onTouchEnded = onTouchEndedHandler;
-        },
-        [EventList.TouchMoved]: () => {
-            const onTouchMoveHandler = (e) => {
-                const inside = isInside(this.nativeObject.frame, e.point);
-                const options = {
-                    x: e && e.point ? e.point.x : null,
-                    y: e && e.point ? e.point.y : null,
-                    isInside: inside
-                };
-                this.emitter.emit(EventList.TouchMoved, options);
-            };
-            this.nativeObject.onTouchMoved = onTouchMoveHandler;
-        }
+    onTouchHandler = (e: {point: Point2D}) => {
+        const point = {
+            x: e ? e.point.x : null,
+            y: e ? e.point.y : null
+        };
+        this._onTouch?.(point);
+        this.emitter.emit(ViewEvents.Touch, point);
     };
+    onTouchEndedHandler = (e: {point: Point2D}) => {
+        const inside = isInside(this.nativeObject.frame, e.point);
+        const event = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null,
+            isInside: inside
+        };
+        this._onTouchEnded?.(inside, event);
+        this.emitter.emit(ViewEvents.TouchEnded, event);
+    };
+    onTouchCancelledHandler = (e: {point: Point2D}) => {
+        const point = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null
+        };
+        this._onTouchCancelled?.(point);
+        this.emitter.emit(ViewEvents.TouchCancelled, point);
+    }
+    onTouchMovedHandler = (e: {point: Point2D}) => {
+        const inside = isInside(this.nativeObject.frame, e.point);
+        const event = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null,
+            isInside: inside
+        };
+        this._onTouchMoved?.(inside, event)
+        this.emitter.emit(ViewEvents.TouchMoved, event);
+    };
+    private gradientColor: any;
+    private _parent: View;
+    // private EventFunctions = {
+    //     // [ViewEvents.Touch]: () => {
+    //     //     const onTouchHandler = (e) => {
+    //     //         const options = {
+    //     //             x: e && e.point ? e.point.x : null,
+    //     //             y: e && e.point ? e.point.y : null
+    //     //         };
+    //     //         this.emitter.emit(ViewEvents.Touch, options);
+    //     //     };
+    //     //     this.nativeObject.onTouch = onTouchHandler;
+    //     // },
+    //     // [ViewEvents.TouchCancelled]: () => {
+    //     //     const onTouchCancelledHandler = (e) => {
+    //     //         const options = {
+    //     //             x: e && e.point ? e.point.x : null,
+    //     //             y: e && e.point ? e.point.y : null
+    //     //         };
+    //     //         this.emitter.emit(ViewEvents.TouchCancelled, options);
+    //     //     };
+    //     //     this.nativeObject.onTouchCancelled = onTouchCancelledHandler;
+    //     // },
+    //     // [ViewEvents.TouchEnded]: () => {
+    //     //     const onTouchEndedHandler = (e) => {
+    //     //         const inside = isInside(this.nativeObject.frame, e.point);
+    //     //         const options = {
+    //     //             x: e && e.point ? e.point.x : null,
+    //     //             y: e && e.point ? e.point.y : null,
+    //     //             isInside: inside
+    //     //         };
+    //     //         this.emitter.emit(ViewEvents.TouchEnded, options);
+    //     //     };
+    //     //     this.nativeObject.onTouchEnded = onTouchEndedHandler;
+    //     // },
+    //     // [ViewEvents.TouchMoved]: () => {
+    //     //     const onTouchMoveHandler = (e) => {
+    //     //         const inside = isInside(this.nativeObject.frame, e.point);
+    //     //         const options = {
+    //     //             x: e && e.point ? e.point.x : null,
+    //     //             y: e && e.point ? e.point.y : null,
+    //     //             isInside: inside
+    //     //         };
+    //     //         this.emitter.emit(ViewEvents.TouchMoved, options);
+    //     //     };
+    //     //     this.nativeObject.onTouchMoved = onTouchMoveHandler;
+    //     // }
+    // };
 
-    static Events = ViewEvents;
     static Border = {
         TOP_LEFT: 1 << 0,
         TOP_RIGHT: 1 << 1,
@@ -97,10 +125,10 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
         BOTTOM_RIGHT: 1 << 3
     } as const;
     
-    constructor(params?: Partial<IView>) {
+    constructor(params?: Partial<View>) {
         super();
 
-        EventEmitterCreator(this, this.EventFunctions);
+        // EventEmitterCreator(this, this.EventFunctions);
         if (!this.nativeObject) {
             if (params && params.nativeObject) {
                 this._nativeObject = params.nativeObject;
@@ -117,7 +145,12 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
         this.nativeObject.layer.rotationZ = 0;
         this.nativeObject.layer.rotationX = 0;
         this.nativeObject.layer.rotationY = 0;
-    
+
+        this.nativeObject.onTouch = this.onTouchHandler;
+        this.nativeObject.onTouchCancelled = this.onTouchCancelledHandler;
+        this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
+        this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
@@ -133,7 +166,7 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
         return this._parent;
     }
 
-    set parent(view: IView){
+    set parent(view: View){
         this._parent = view;
     }
 
@@ -173,22 +206,34 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
         const self = this;
         return {
             get shadowOffset() {
-                return  self.getShadowOffset()
+                return  self.shadowOffset;
             },
             set shadowOffset(shadowOffset: Point2D) {
-                self.setShadowOffset(shadowOffset);
+                self.shadowOffset  = shadowOffset;
             },
             get shadowRadius() {
                 return  self.shadowRadius;
             },
-            set shadowRadius(shadowOffset: Point2D) {
-                self.shadowRadius = shadowOffset;
+            set shadowRadius(shadowRadius: number) {
+                self.shadowRadius = shadowRadius;
+            },
+            get shadowOpacity() {
+                return  self.shadowRadius;
+            },
+            set shadowOpacity(shadowOpacity: number) {
+                self.shadowOpacity = shadowOpacity;
+            },
+            get shadowColor() {
+                return  self.shadowRadius;
+            },
+            set shadowColor(shadowColor: Color) {
+                self.shadowColor = shadowColor;
             },
         }
     };
 
     // ios
-    private getShadowOffset = () => {
+    private get shadowOffset() {
         this.ios.shadowOffset = {x: 10, y: 10};
         var size = Invocation.invokeInstanceMethod(this.nativeObject.layer, "shadowOffset", [], "CGSize");
         return {
@@ -196,7 +241,7 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
             y: size.height
         };
     }
-    private setShadowOffset = (shadowOffset: Point2D) => {
+    private set shadowOffset(shadowOffset: Point2D) {
         var argShadowOffset = new Invocation.Argument({
             type: "CGSize",
             value: {
@@ -238,7 +283,7 @@ export default class ViewiOS<TEvent extends string | symbol = string | symbol> e
             color: color
         });
     }
-    private set shadowColor(shadowColor) {
+    private set shadowColor(shadowColor: Color) {
         var argShadowColor = new Invocation.Argument({
             type: "CGColor",
             value: shadowColor.nativeObject
