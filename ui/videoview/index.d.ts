@@ -24,6 +24,16 @@ declare enum VideoViewEvents {
 	 * @since 0.1
 	 */
 	Ready = "ready",
+	/**
+	 * This event is called when the video player failed.
+	 *
+	 * @event onFailure
+	 * @android
+	 * @ios
+	 * @param {Function} callback
+	 * @since 4.3.6
+	 */
+	Failure = "failure",
 
 	/**
 	 * Tells the delegate when Picture in Picture is about to stop, to give your app an opportunity to restore its video playback user interface.
@@ -96,7 +106,7 @@ declare enum VideoViewEvents {
  *     myPage.layout.addChild(myVideoView);
  *
  */
-declare class VideoView extends View {
+declare class VideoView extends View<VideoViewEvents> {
 	constructor(params?: Partial<VideoView>);
 	/**
 	 * Gets/sets background color of a view. It allows setting background
@@ -247,6 +257,26 @@ declare class VideoView extends View {
 	 * ````
 	 */
 	onFinish: () => void;
+	/**
+	 * This event is called when the video player is failed.
+	 *
+	 * @event onFailure
+	 * @deprecated
+	 * @android
+	 * @ios
+	 * @param {Function} callback
+	 * @since 4.3.6
+	 * @example
+	 * ````
+	 * import VideoView from '@smartface/native/ui/videoview';
+	 * 
+	 * const videoView = new VideoView();
+	 * videoView.on(VideoView.Events.Failure, () => {
+	 * 	console.info('onFailure');
+	 * });
+	 * ````
+	 */
+	onFailure: () => void;
 	/**
 	 * This function seeks to desired position of the video.
 	 *

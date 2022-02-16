@@ -168,6 +168,18 @@ VideoView.prototype.onReady = function () { };
 VideoView.prototype.onFinish = function () { };
 
 /**
+ * This event is called when the video player failed.
+ *
+ * @event onFailure
+ * @deprecated
+ * @android
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.6
+ */
+VideoView.prototype.onFailure = function () { };
+
+/**
  * This event is called when the video clip is ready to be played.
  *
  * @event onReady
@@ -188,6 +200,17 @@ VideoView.Events.Ready = "ready";
  * @since 0.1
  */
 VideoView.Events.Finish = "finish";
+
+/**
+ * This event is called when the video player failed.
+ *
+ * @event onFailure
+ * @android
+ * @ios
+ * @param {Function} callback
+ * @since 4.3.6
+ */
+VideoView.Events.Failure = "failure";
 
 /**
  * This function seeks to desired position of the video.

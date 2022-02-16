@@ -2,6 +2,7 @@ const File = require("../../io/file");
 const { EventEmitterCreator } = require("../../core/eventemitter");
 const Events = require('./events');
 
+Sound.Events = { ...Events };
 
 
 function Sound() {
@@ -115,7 +116,7 @@ function Sound() {
     });
 
     self.addCallbackFunction = function() {
-        self.nativeObject.onReady = function() {
+        self.nativeObject.onItemReady = function() {
             if (typeof self.onReady === "function") {
                 self.onReady();
             }

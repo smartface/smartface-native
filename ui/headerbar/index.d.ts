@@ -210,7 +210,7 @@ type HeaderBar = {
 	 * @param {Array<UI.HeaderBarItem>} items Array of HeaderBarItem objects to add
 	 * @since 0.1
 	 */
-	setItems: (items: HeaderBarItem[]) => void;
+	setItems(items: HeaderBarItem[]): void;
 
 	/**
 	 * Sets left item of header bar to given item.
@@ -228,7 +228,7 @@ type HeaderBar = {
 	 * @method setLeftItem
 	 * @param {UI.HeaderBarItem} item HeaderBarItem to add.
 	 */
-	setLeftItem: (item: HeaderBarItem) => void;
+	setLeftItem(item: HeaderBarItem): void;
 	android: Partial<{
 		/**
 		 * Gets/sets attributed title of the header bar.
