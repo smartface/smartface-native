@@ -41,8 +41,7 @@
 	"files": [
 		".types/typings.d.ts",
 		".types/missings-android.d.ts",
-		".types/missings-ios.d.ts",
-    "./core/eventemitter/EventType.ts"
+		".types/missings-ios.d.ts"
 	],
 	"exclude": [".dist", "./ui/scrollview", "node_modules", "**/*.test.js", "**/analysis.js"]
 }

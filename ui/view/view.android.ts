@@ -187,7 +187,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     this.didSetTouchHandler = true;
   }
 
-  //ToDo: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
+  //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
 	private _setBorderToAllEdges() {
 		var borderWidthPx = DpToPixel(this.borderWidth);
 		if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.

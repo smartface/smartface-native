@@ -2,6 +2,7 @@ import { INativeComponent } from "core/inative-component";
 import NativeComponent from "core/native-component";
 import Blob from "../../global/blob";
 import { Rectangle } from "../../primitive/rectangle";
+import ViewIOS from "../view/view.ios";
 
 /**
  * @class UI.Image
@@ -326,7 +327,7 @@ export enum RenderingMode {
    */
   TEMPLATE = 2,
 }
-export class ImageBase extends NativeComponent {
+export class ImageBase extends ViewIOS {
   /**
    * Creates an Image object which built-in icon is created corresponding systemIcon value.
    * This method is Android only.
@@ -394,6 +395,12 @@ export class ImageBase extends NativeComponent {
     RenderingMode,
     Format,
   };
+
+  get ios() {
+    return {
+      ...this.ios
+    }
+  }
 }
 
 export default Image;

@@ -2,7 +2,7 @@ import { EventEmitter } from "./eventemitter";
 import { INativeComponent } from "./inative-component";
 
 
-export default class NativeEventEmitterComponent<TEvent> extends EventEmitter<TEvent> implements INativeComponent<TEvent> {
+export default class NativeEventEmitterComponent<TEvent extends string> extends EventEmitter<TEvent> implements INativeComponent<TEvent> {
   protected _nativeObject: any;
 
   get nativeObject(): any {

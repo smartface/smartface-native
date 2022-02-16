@@ -67,7 +67,7 @@ function ActivityIndicator(params) {
     });
 
     // Assign parameters given in constructor
-    (function (params) {
+    ((params)  => {
         for (var param in params) {
             if (param === "ios" || param === "android") {
                 setOSSpecificParams.call(this, params[param], param);
@@ -81,7 +81,7 @@ function ActivityIndicator(params) {
                 this[key][param] = params[param];
             }
         }
-    }.bind(this)(params));
+    })(params);
 }
 
 
