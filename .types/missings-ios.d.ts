@@ -1,5 +1,5 @@
-import ActivityIndicator from "../ui/activityindicator";
-import DocumentPicker from "../device/documentpicker";
+import ActivityIndicator from '../ui/activityindicator';
+import DocumentPicker from '../device/documentpicker';
 
 declare class __SF_UIColor {
   static hexColor: (hex: String) => __SF_UIColor;
@@ -34,6 +34,12 @@ declare class __SF_Dispatch {
   static mainAsync: () => void;
 }
 
+declare class __SF_UIScreen {
+  mainScreen: () => { bounds: { width: number; heigth: number }; scale: number };
+}
+
+declare class __SF_UIApplicationDidChangeStatusBarOrientationNotification {}
+
 declare class __SF_UIView {
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
@@ -58,7 +64,7 @@ declare class UIFont {
 }
 
 declare class __SF_CAGradientLayer {
-  static createGradient(startColor: __SF_UIColor, endColor: __SF_UIColor, pointStart: { x: number, y: number}, pointEnd: { x: number, y: number }): __SF_CAGradientLayer;
+  static createGradient(startColor: __SF_UIColor, endColor: __SF_UIColor, pointStart: { x: number; y: number }, pointEnd: { x: number; y: number }): __SF_CAGradientLayer;
   addFrameObserver(): void;
   frameObserveHandler(handler: (e: { frame: unknown }) => void): void;
   setBackgroundImage(image: __SF_UIImage, state: unknown);
@@ -76,6 +82,8 @@ declare class __SF_UIApplication {
     sf_statusBarStyle: any;
     sf_statusBarHidden: boolean;
     userInterfaceLayoutDirection: number;
+    statusBarOrientationAnimationDuration: number;
+    keyWindow: { addSubView(view: __SF_UIView): void };
   };
 }
 
@@ -89,7 +97,7 @@ declare class __SF_CMMotionManager {
 
 declare class __SF_CallObserverDelegate {
   constructor();
-  callObserverCallChanged: (observer: unknown, call: { hasEnded: boolean, hasConnected: boolean, isOutgoing: boolean } ) => void;
+  callObserverCallChanged: (observer: unknown, call: { hasEnded: boolean; hasConnected: boolean; isOutgoing: boolean }) => void;
 }
 
 declare class __SF_CNMutableContact {
@@ -108,15 +116,14 @@ export class __SF_CNMutableContactObject {
   departmentName: string;
   nickname: string;
   imageData: string[];
-  phoneNumbers: { value: { stringValue: string }}[];
+  phoneNumbers: { value: { stringValue: string } }[];
   urlAddresses: { value: string }[];
   emailAddresses: { value: string }[];
   addresses: { value: Partial<__SF_CNMutablePostalAddressObject> }[];
-
 }
 
 declare class __SF_CNMutablePostalAddress {
-  static new: () => __SF_CNMutablePostalAddressObject
+  static new: () => __SF_CNMutablePostalAddressObject;
 }
 
 export class __SF_CNMutablePostalAddressObject {
@@ -136,20 +143,14 @@ declare class __SF_CNLabeledValue {
 export class __SF_CNLabelParent {
   constructor();
 }
-declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {
-
-}
-declare class __SF_CNLabelHome extends __SF_CNLabelParent {
-
-}
-declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {
-
-}
+declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {}
+declare class __SF_CNLabelHome extends __SF_CNLabelParent {}
+declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {}
 
 export class ContactNative {
   private constructor();
-  mutableCopy: () => any
-} 
+  mutableCopy: () => any;
+}
 
 declare class __SF_CNContactPickerDelegate {
   contactPickerDidSelectContact: (contact: ContactNative) => void;
@@ -213,7 +214,6 @@ declare class __SF_UIAlertController {
   static present(view: __SF_UIAlertControllerView);
   static dismissAlert(view: __SF_UIAlertControllerView, delegate: any /* TODO: Add delegate type */);
   static addTextFieldArea(view: __SF_UIAlertControllerView, text: string, hint: string, isPassword: boolean);
-
 }
 
 export class __SF_UIAlertControllerView {
@@ -241,8 +241,33 @@ declare class __SF_UIButton {
   textAlignmentNumber: number;
   contentVerticalAlignment: number;
   contentHorizontalAlignment: number;
-  setTitleColor(textColor: __SF_UIColor, buttonState: number /*TODO: Use ButtonState enum when button is converted*/);
-  removeFrameObserver();
-  addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */);
+  titleLabel: { font: __SF_UIFont /*TODO: This might not be this font type, check */ };
+  setTitleColor(textColor: __SF_UIColor, buttonState: number /*TODO: Use ButtonState enum when button is converted*/): void;
+  removeFrameObserver(): void;
+  addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */): void;
 }
 
+declare class __SF_UIDatePicker {
+  onSelected: (e: { date: Date }) => void;
+  onCancelled: () => void;
+  defaultDate: Date;
+  minimumDate: Date;
+  maximumDate: Date;
+  textColor: __SF_UIColor;
+  dialogBackgroundColor: __SF_UIColor;
+  dialogLineColor: __SF_UIColor;
+  datePickerMode: boolean;
+  show(
+    title: string | undefined,
+    titleColor: __SF_UIColor | undefined,
+    titleFont: __SF_UIFont | undefined,
+    cancelColor: __SF_UIColor | undefined,
+    cancelHighlightedColor: __SF_UIColor | undefined,
+    cancelFont: __SF_UIFont | undefined,
+    okColor: __SF_UIColor | undefined,
+    okHighlightedColor: __SF_UIColor | undefined,
+    okFont: __SF_UIFont | undefined,
+    okText: string | undefined,
+    cancelText: string | undefined
+  ): void;
+}
