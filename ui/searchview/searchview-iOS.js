@@ -218,8 +218,14 @@ function SearchView(params) {
             });
         },
         set: function (backgroundColor) {
+            if (!self.nativeObject.backgroundImage) {
+                var emptyImage = __SF_UIImage.getInstance();
+                self.nativeObject.backgroundImage = emptyImage
+            }
+
             _backgroundColor = backgroundColor.nativeObject;
             self.nativeObject.barTintColor = _backgroundColor;
+            self.nativeObject.backgroundColor = _backgroundColor
             if (self.borderWidth === 0) {
                 self.borderColor = backgroundColor;
             }
