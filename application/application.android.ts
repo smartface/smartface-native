@@ -73,10 +73,10 @@ class ApplicationWrapper extends EventEmitter<string> {
   private _keyboardMode: any;
   private _secureWindowContent: any;
   private __mDrawerLayout: any;
-  LayoutDirection = {
+  readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
-  };
+  } as const;
   Events = { ...Events };
   constructor() {
     super();

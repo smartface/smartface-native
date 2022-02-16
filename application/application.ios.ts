@@ -6,18 +6,19 @@ import Timer from '../global/timer';
 import { Invocation } from '../util';
 import Events from './events';
 import { EventEmitter } from 'core/eventemitter';
+import { INativeComponent } from 'core/inative-component';
 
 //Application Direction Manager (RTL Support)
 (function () {
-  var userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
-  var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
+  let userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
+  let viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
   if (viewAppearanceSemanticContentAttribute != undefined) {
     __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
   }
 })();
 
-var _rootPage;
-var _sliderDrawer;
+let _rootPage;
+let _sliderDrawer;
 const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
 function listenAppShortcut(callback) {
@@ -25,9 +26,9 @@ function listenAppShortcut(callback) {
   if (!SMFApplication.sharedInstance) return;
 
   SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
-    var returnValue = true;
+    let returnValue = true;
     if (typeof callback === 'function') {
-      var innerReturnValue = callback({ data: shortcutItem.userInfo });
+      let innerReturnValue = callback({ data: shortcutItem.userInfo });
       if (typeof innerReturnValue == 'boolean') {
         returnValue = innerReturnValue;
       }
@@ -61,10 +62,10 @@ class SFApplication extends EventEmitter<string> {
   private _onUserActivityWithBrowsingWeb;
   // TODO: typescript error
   public statusBar = StatusBar;
-  LayoutDirection = {
+  readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
-  };
+  } as const;
   canOpenUrl(url) {
     // TODO define SMFApplication globally
     return SMFApplication.canOpenUrl(url);
@@ -80,7 +81,7 @@ class SFApplication extends EventEmitter<string> {
     // TODO define SMFApplication globally
     SMFApplication.restart();
   }
-  setRootController(params) {
+  setRootController(params: { controller: INativeComponent }) {
     if (params && params.controller) {
       this.rootPage = params.controller;
       keyWindow.rootViewController = params.controller.nativeObject;
@@ -92,7 +93,17 @@ class SFApplication extends EventEmitter<string> {
     sliderDrawer.nativeObject.Pages = rootPage;
     sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, _sliderDrawer.nativeObject);
   }
-  call(uriScheme, data, onSuccess, onFailure) {
+  call(
+    uriScheme: {
+      uriScheme: string;
+      data?: {};
+      onSuccess?: (value?: any) => void;
+      onFailure?: (value?: any) => void;
+    },
+    data?: {},
+    onSuccess?: (value?: any) => void,
+    onFailure?: (value?: any) => void
+  ) {
     if (Object.keys(uriScheme).indexOf('uriScheme') === -1) {
       SMFApplication.call(uriScheme, data, onSuccess, onFailure);
     } else {
@@ -123,7 +134,7 @@ class SFApplication extends EventEmitter<string> {
     return Invocation.invokeInstanceMethod(sharedApp, 'isIdleTimerDisabled', [], 'BOOL');
   }
   set keepScreenAwake(value) {
-    var idletimerdisabled = new Invocation.Argument({
+    const idletimerdisabled = new Invocation.Argument({
       type: 'BOOL',
       value: value
     });
@@ -192,8 +203,8 @@ class SFApplication extends EventEmitter<string> {
     this._onUserActivityWithBrowsingWeb = value;
     // TODO: Application Global
     Application.onUserActivityCallback = function (e) {
-      var url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
-      var type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
+      const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
+      const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
       if (url && type === 'NSUserActivityTypeBrowsingWeb' && typeof value === 'function') {
         return value(url.absoluteString);
       }
@@ -312,14 +323,14 @@ class SFApplication extends EventEmitter<string> {
 // }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const EmulatorResetState = {
-  scan: 0,
-  update: 1,
-  clear: 2
-};
+enum EmulatorResetState {
+  scan,
+  update,
+  clear
+}
 
 Application.emulator = {};
-Application.emulator.globalObjectWillReset = function (state) {
+Application.emulator.globalObjectWillReset = function (state: EmulatorResetState) {
   cancelAllBackgroundJobs();
   switch (state) {
     case EmulatorResetState.scan:

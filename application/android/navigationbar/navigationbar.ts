@@ -22,4 +22,4 @@ declare class Navigationbar {
   style: NavigationBarStyle;
 }
 
-export = Navigationbar;
+export default Navigationbar;
