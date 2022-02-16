@@ -1,13 +1,12 @@
-import { Point2D } from "sf-core/primitive/point2d";
+import { Point2D } from "../../primitive/point2d";
 import Color from "../color";
 import { ViewEvents } from "./view-event";
 import View, {ViewBase} from "./view";
-import { EventType } from "core/eventemitter/EventType";
+import { EventType } from "../../core/eventemitter/EventType";
 
 const Exception = require("../../util").Exception;
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
-const { EventEmitterCreator } = require('../../core/eventemitter');
 
 declare const myLabelTitle: any;
 
@@ -26,6 +25,7 @@ export default class ViewIOS<TEvent extends EventType = EventType> extends ViewB
     android: {[key: string]: any} = {};
     protected _uniqueId: string;
     protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
+    protected _nativeObject: any;
     private _rotation: number = 0;
     private _rotationX: number = 0;
     private _rotationY: number = 0;

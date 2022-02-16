@@ -1,11 +1,11 @@
 /*globals array, requireClass, toJSArray */
-import { Point2D } from "sf-core/primitive/point2d";
-import { Rectangle } from "sf-core/primitive/rectangle";
+import { Point2D } from "../../primitive/point2d";
+import { Rectangle } from "../../primitive/rectangle";
 import { INativeComponent } from "../../core/inative-component";
 import Color from "../color";
 import { ViewEvents } from "./view-event";
 import View, { ViewBase } from "./view";
-import { EventType } from "core/eventemitter/EventType";
+import { EventType } from "../../core/eventemitter/EventType";
 
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
