@@ -1,6 +1,3 @@
-import ActivityIndicator from '../ui/activityindicator';
-import DocumentPicker from '../device/documentpicker';
-
 declare class __SF_UIColor {
   static hexColor: (hex: String) => __SF_UIColor;
   static blackColor(): __SF_UIColor;
@@ -237,7 +234,7 @@ declare class __SF_CNMutableContact {
   static new(): __SF_CNMutableContactObject;
 }
 
-export class __SF_CNMutableContactObject {
+declare class __SF_CNMutableContactObject {
   constructor();
   namePrefix: string;
   givenName: string;
@@ -259,7 +256,7 @@ declare class __SF_CNMutablePostalAddress {
   static new: () => __SF_CNMutablePostalAddressObject;
 }
 
-export class __SF_CNMutablePostalAddressObject {
+declare class __SF_CNMutablePostalAddressObject {
   constructor();
   street: string;
   city: string;
@@ -273,14 +270,14 @@ declare class __SF_CNLabeledValue {
 }
 
 // This is not to be used directly
-export class __SF_CNLabelParent {
+declare class __SF_CNLabelParent {
   constructor();
 }
 declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {}
 declare class __SF_CNLabelHome extends __SF_CNLabelParent {}
 declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {}
 
-export class ContactNative {
+declare class ContactNative {
   private constructor();
   mutableCopy: () => any;
 }
@@ -294,7 +291,7 @@ declare class __SF_CNContactStore {
   static new(): __SF_CNContactStoreObject;
 }
 
-export class __SF_CNContactStoreObject {
+declare class __SF_CNContactStoreObject {
   requestAccess: (value: () => void) => void;
   fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void) => void;
   executeSave(saveRequest: __SF_CNSaveRequestObject): void;
@@ -323,7 +320,7 @@ declare class __SF_CNSaveRequestObject {
 }
 
 declare class __SF_UIDocumentPickerViewController {
-  constructor(type: DocumentPicker.Types[], number: number);
+  constructor(type: any[], number: number);
   documentDelegate: __SF_UIDocumentPickerViewControllerDelegate;
   delegate: __SF_UIDocumentPickerViewControllerDelegate;
 }
@@ -335,24 +332,24 @@ declare class __SF_UIDocumentPickerViewControllerDelegate {
 }
 
 declare class __SF_UIActivityIndicatorView {
-  constructor(style: ActivityIndicator.iOS.ActivityIndicatorViewStyle);
+  constructor(style: any /**TODO: ActivityIndicatiorStyle*/);
   startAnimating(): void;
   color: __SF_UIColor; //TODO: Add nativeobject of color
   visible: boolean;
-  activityIndicatorViewStyle: ActivityIndicator.iOS.ActivityIndicatorViewStyle;
+  activityIndicatorViewStyle: any; //TODO: ActivityIndicatorStyle;
 }
 
 declare class __SF_UIAlertController {
-  static createAlertController(style: number);
-  static present(view: __SF_UIAlertControllerView);
-  static dismissAlert(view: __SF_UIAlertControllerView, delegate: any /* TODO: Add delegate type */);
-  static addTextFieldArea(view: __SF_UIAlertControllerView, text: string, hint: string, isPassword: boolean);
+  static createAlertController(style: number): any;
+  static present(view: __SF_UIAlertControllerView): any;
+  static dismissAlert(view: __SF_UIAlertControllerView, delegate: any /* TODO: Add delegate type */): any;
+  static addTextFieldArea(view: __SF_UIAlertControllerView, text: string, hint: string, isPassword: boolean): any;
 }
 
-export class __SF_UIAlertControllerView {
+declare class __SF_UIAlertControllerView {
   title: string;
   message: string;
-  addAction(action: __SF_UIAlertAction);
+  addAction(action: __SF_UIAlertAction): any;
 }
 
 declare class __SF_UIAlertAction {
