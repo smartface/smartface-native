@@ -23,10 +23,35 @@ declare class __SF_UIImage {
   constructor(fileName: string);
   static createName(fileName: string): void;
   static createNSData(obj: any);
+  imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
+}
+
+declare class __SF_UIImageView {
+  setValueForKey(value: any, key: string); /*TODO: Add this as a base class. This can be on every view. */
+  contentMode: number; /**TODO: After FillType is typed */
+  image: any;
+  loadImage(image: __SF_UIImage): void;
+  getActualPath(): any;
+  alpha: number;
+  tintColor: __SF_UIColor;
+  loadFromURL(url: any, placeholder: __SF_UIImage, headers: any, onSuccess: (innerFade: boolean, image: __SF_UIImage, error: any, cache: any /**TODO: ImageCacheType */, url: any) => void): void;
 }
 declare class __SF_NSInvocation {
   static createInvocationWithSelectorInstance(name: string, obj: any);
+}
+
+declare class __SF_SMFUILabel {
+  font: __SF_UIFont;
+  minimumFontSize: number;
+  adjustsFontSizeToFitWidth: boolean;
+  baselineAdjustment: number;
+  minimumScaleFactor: number;
+  lineBreakMode: number;
+  numberOfLines: number;
+  text: string;
+  textAlignment: number;
+  textColor: __SF_UIColor;
 }
 
 declare class __SF_Dispatch {
@@ -55,7 +80,115 @@ declare class __SF_FILE {}
 declare class __SF_UIFont {
   // TODO: it must be fontNamesByFamilyName
   static systemFontOfSize(size: number): number;
+  static boldSystemFontOfSize(size: number): number;
   static fontWithNameSize(fontFamily: string, size: number): any;
+  static italicSystemFontOfSize(size: number): number;
+  static createFromFileWithFilenameStringSize(actualPath: string, size: number): any; /*TODO: change the typing when you are doing font.createFromFile */
+}
+
+declare class __SF_NSData {
+  static base64Encoded(base64: string): unknown; /** return type of blob.createfrombase64 */
+  static dataFromUTF8String(utf8: string): unknown; /** return type of blob.createFromUTF8String */
+}
+
+declare class __SF_FLAnimatedImage {
+  static animatedImageWithGIFData(blob: unknown): __SF_FLAnimatedImage;
+}
+
+declare class __SF_FLAnimatedImageView {
+  animatedImage: __SF_FLAnimatedImage;
+  currentFrame: number;
+  animating: boolean;
+  startAnimating(): void;
+  stopAnimating(): void;
+  setLoopCompletionBlockWithJSValue(handler: (...args: any) => void): void;
+}
+
+declare class __SF_NSIndexPath {}
+
+declare class __SF_UIRefreshControl {
+  removeFromSuperview(): void;
+  endRefreshing(): void;
+  tintColor: __SF_UIColor;
+  addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */): void;
+}
+
+declare class __SF_UITableView {
+  addSubView(refreshControl: __SF_UIRefreshControl): void;
+  separatorStyle: number;
+  showsVerticalScrollIndicator: boolean;
+  leftToRightSwipeEnabled: boolean;
+  rightToLeftSwipeEnabled: boolean;
+  onRowSwiped: (e: Record<string, any>) => any[];
+  itemCount: number;
+  valueForKey(key: string): any;
+  setValueForKey(value: any, key: string): void;
+  tableRowHeight: number;
+  heightForRowAtIndex: (e: Record<string, any>) => number;
+  cellForRowAt: (e: Record<string, any>) => void;
+  cellIdentifierWithIndexPath: (e: Record<string, any>) => string;
+  getUUIDByIndex: (index: number) => string;
+  indexPathForCell(nativeCell: __SF_UICollectionViewCell): any;
+  didSelectRowAt: (e: Record<string, any>) => void;
+  reloadData(): void;
+  deleteRowIndexAnimation(index: number, animation: any /**TODO: UITableViewRowAnimation */): void;
+  getVisibleIndexArray(): number[];
+  getVisibleIndexArray(): number[];
+  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: __SF_NSIndexPath, style: number, animated?: boolean): void;
+  contentOffset: { x: number; y: number };
+  didScroll: boolean;
+  isEditing: boolean;
+  canMoveRowAt?: (value: any, e: any) => any;
+  moveRowAt?: (value: any, e: any) => any;
+  targetIndexPathForMoveFromRowAt?: (value: any, e: any) => any;
+  js_performBatchUpdates(updates: any, completion: any): void;
+  actionRowRange(style: number, positionStart: number, itemCount: number, animation?: boolean): void;
+  onScrollBeginDecelerating: (scrollView: any) => void;
+  onScrollViewWillBeginDragging: (scrollView: any) => void;
+  onScrollEndDecelerating: (scrollView: any) => void;
+  onScrollViewDidEndDraggingWillDecelerate: (scrollView: any, decelerate?: any) => void;
+  onScrollViewWillEndDraggingWithVelocityTargetContentOffset: (scrollView: any, velocity: number, targetContentOffset: any) => void;
+}
+
+declare class __SF_UICollectionView {
+  constructor(layoutManager: __SF_UICollectionViewFlowLayout);
+  numberOfSectionsCallback: (collectionView: any) => number;
+  cellForItemAtIndexPath(indexPath: __SF_NSIndexPath): any;
+  numberOfItemsInSectionCallback: (collectionView: any, section: any) => any;
+  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
+  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
+  registerClassForCellWithReuseIdentifier(cell: __SF_UICollectionViewCell, type: any): void;
+  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: __SF_NSIndexPath): __SF_UICollectionViewCell;
+  superview: any;
+}
+
+declare class __SF_UICollectionViewCell {
+  contentView: any;
+  uuid: string;
+  reuseIdentifier: any;
+  row: any;
+}
+
+declare class __SF_UIBarButtonItem {
+  createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
+  target: __SF_UIBarButtonItem;
+  containerView: any;
+  title: string;
+  image: any;
+  tintColor: __SF_UIColor;
+  enabled: boolean;
+  frame: {
+    width: number;
+    heigth: number;
+  };
+  addJSAction(action: (...args: any) => any): void;
+  setValueForKey(customView: any, key: string): void;
+  setTitleTextAttributesForState(font: { NSFont: any }, uiControlState: number /**TODO: Add after UIControlState is there */);
+}
+
+declare class __SF_UICollectionViewFlowLayout {
+  prepareLayoutCallback: () => void;
+  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x: number; y: number }, velocity: number) => number;
 }
 
 declare class UIFont {
@@ -270,4 +403,21 @@ declare class __SF_UIDatePicker {
     okText: string | undefined,
     cancelText: string | undefined
   ): void;
+}
+
+declare class __SF_MFMailComposeViewController {
+  constructor();
+  canSendMail(): boolean;
+  setCcRecipients(cc: any): void;
+  setBccRecipients(bcc: any): void;
+  setToRecipients(to: any): void;
+  setMessageBodyIsHTML(message: string, isHtmlText: boolean): void;
+  setSubject(subject: any): void;
+  addAttachmentDataMimeTypeFileName(blob: any /*TODO: Blob */, mimeType: string, fileName: string): void;
+  dismissViewController(callback: () => void): void;
+  mailComposeDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
+}
+
+declare class __SF_SMFMFMailComposeViewControllerDelegate {
+  didFinishWithResult: (e: unknown) => void;
 }
