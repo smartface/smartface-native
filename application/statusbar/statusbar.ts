@@ -1,4 +1,4 @@
-import Color from 'sf-core/ui/color';
+import Color from '../../ui/color';
 
 declare enum StatusBarStyle {
   DEFAULT,
