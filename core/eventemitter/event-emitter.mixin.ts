@@ -1,5 +1,7 @@
-import { EventEmitter, EventListenerCallback, IEventEmitter } from './EventEmitter';
-import { ConstructorOf } from '@smartface/core/lib/ConstructorOf';
+import { EventEmitter, EventListenerCallback, IEventEmitter } from './event-emitter';
+import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
+import { EventType } from './EventType';
+import { ExtractEventValues } from './extract-event-values';
 
 /**
  * This callback will be executed after the handler function is set.
@@ -54,7 +56,7 @@ export function EventEmitterWrapper(target, event, callback, ...args) {
  * @param {*} eventFunctions Object of Functions. It will be bound to the current context using targetInstance parameter. If there is no function to inherit, pass empty object.
  * @param {*} callback This will be invoked after the relevant eventFunction is called. Will be bound to 'targetInstance' There is no filter.
  */
-export function withEventEmitter<TEvent extends string | symbol>(TargetClass: ConstructorOf<any>, eventFunctions, eventCallback = () => {}) {
+export function EventEmitterMixin(TargetClass: ConstructorOf<any>) {
   // const parentOnFunction = targetInstance.on;
   // targetInstance.emitter = targetInstance.emitter || new EventEmitter();
 
@@ -85,8 +87,10 @@ export function withEventEmitter<TEvent extends string | symbol>(TargetClass: Co
   //   configurable: true
   // });
 
-  return class extends TargetClass implements IEventEmitter<TEvent> {
-    protected emitter: EventEmitter<TEvent> = new EventEmitter();
+    
+    return class NativeEmitter<TEvent extends string = string> extends TargetClass implements IEventEmitter<TEvent> {
+
+    readonly emitter: EventEmitter<TEvent> = new EventEmitter();
 
     on(eventName: TEvent, callback: EventListenerCallback) {
       this.emitter.on(eventName, callback);
@@ -104,8 +108,3 @@ export function withEventEmitter<TEvent extends string | symbol>(TargetClass: Co
     }
   };
 }
-
-// module.exports = {
-//   EventEmitterWrapper,
-//   EventEmitterCreator
-// };

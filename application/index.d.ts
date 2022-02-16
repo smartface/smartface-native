@@ -1,11 +1,11 @@
-import Page from '../ui/page';
-import NavigationController from '../ui/navigationcontroller';
-import RemoteUpdateService from './RAU';
-import StatusBar from './statusbar';
-import Navigationbar from './android/navigationbar';
-import NavigationbarStyle from './android/navigationbar/style';
-import SliderDrawer from '../ui/sliderdrawer';
-import { IEventEmitter } from '../core/eventemitter/EventEmitter';
+import Page from "../ui/page";
+import NavigationController from "../ui/navigationcontroller";
+import RemoteUpdateService from "./RAU";
+import StatusBar from "./statusbar";
+import Navigationbar from "./android/navigationbar";
+import NavigationbarStyle from "./android/navigationbar/style";
+import SliderDrawer from "../ui/sliderdrawer";
+import { IEventEmitter } from "../core/eventemitter/event-emitter";
 
 declare enum Events {
   /**

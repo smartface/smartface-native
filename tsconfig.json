@@ -27,8 +27,7 @@
 		".types/typings.d.ts",
 		".types/missings-android.d.ts",
 		".types/missings-ios.d.ts",
-        "./ui/viewgroup/IViewGroup.d.ts",
-        "./core/NativeEventEmitterComponent.ts"
+    "./core/eventemitter/EventType.ts"
 	],
 	"exclude": [".dist", "./ui/scrollview", "node_modules", "**/*.test.js", "**/analysis.js"]
 }
