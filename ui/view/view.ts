@@ -1,11 +1,11 @@
 import Color from "../color";
-import FlexLayout from "../flexlayout";
 import { Point2D } from "../../primitive/point2d";
-import { EventEmitter, EventEmitterMixin, IEventEmitter } from "core/eventemitter";
+import {  EventEmitterMixin, IEventEmitter } from "core/eventemitter";
 import { INativeComponent } from "core/inative-component";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
 import { EventType } from "../../core/eventemitter/EventType";
 import NativeComponent from "core/native-component";
+import Flex from "core/flex";
 /**
  * @class UI.View
  * @since 0.1
@@ -24,7 +24,7 @@ import NativeComponent from "core/native-component";
  *     myView.backgroundColor = Color.RED;
  *
  */
-export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewEvents>>
+interface IView<TEvent extends EventType = ExtractEventValues<typeof ViewEvents>, TIOS extends {[key: string]: any} = {[key: string]: any} , TAND extends {[key: string]: any} = {[key: string]: any} >
 	extends IEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<typeof ViewEvents>>, INativeComponent
 {
 	/**
@@ -374,7 +374,7 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 	 * @ios
 	 * @since 0.1
 	 */
-	positionType: FlexLayout.PositionType;
+	positionType: Flex.PositionType;
 	/**
 	 * This property specifies how much a view will grow relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.
 	 *
@@ -431,7 +431,7 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 	 * @ios
 	 * @since 0.1
 	 */
-	alignSelf: FlexLayout.AlignSelf;
+	alignSelf: Flex.AlignSelf;
 	applyLayout(): void;
 	/**
 	 * This method put a view to the top of other views in z-direction.
@@ -496,7 +496,7 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 	 * @ios
 	 * @since 0.1
 	 */
-	getParent(): View;
+	getParent(): IView;
 	/**
 	 * This event is called when a touch screen motion event starts.
 	 *
@@ -621,7 +621,7 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 	 * @since 4.3.6
 	 */
 	dirty(): void;
-	android: Partial<{
+	android: TAND & Partial<{
 		/**
 		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 		 * This property only supported for api level 23 and above.
@@ -677,7 +677,7 @@ export interface View<TEvent extends EventType = ExtractEventValues<typeof ViewE
 		 */
 		zIndex: number;
 	}>;
-	ios: Partial<{
+	ios: TIOS & Partial<{
 		/**
 		 * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
 		 * The default value of this property is false
@@ -950,10 +950,10 @@ extends NativeEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<ViewE
 	static Events = ViewEvents;
 	static Border = Border;
 
-	protected _onTouch: View['onTouch'];
-	protected _onTouchEnded: View['onTouchEnded'];
-	protected _onTouchCancelled: View['onTouchCancelled'];
-	protected _onTouchMoved: View['onTouchMoved'];
+	protected _onTouch: IView['onTouch'];
+	protected _onTouchEnded: IView['onTouchEnded'];
+	protected _onTouchCancelled: IView['onTouchCancelled'];
+	protected _onTouchMoved: IView['onTouchMoved'];
 }
 
-export default View;
+export default IView;

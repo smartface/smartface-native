@@ -20,11 +20,11 @@ import { ViewGroupEvents } from "./viewgroup-events";
  *     myFlexLayout.addChild(myLabel);
  */
 
-export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEvents>
+export declare interface IViewGroup<TEvent extends EventType = typeof ViewGroupEvents, TIOS = {}, TAND = {}>
   extends View<
     TEvent extends string
       ? TEvent | ExtractEventValues<typeof ViewGroupEvents>
-      : TEvent & typeof ViewGroupEvents
+      : TEvent & typeof ViewGroupEvents, TIOS, TAND
   > {
   /**
    * This function adds a child view to a viewgroup.

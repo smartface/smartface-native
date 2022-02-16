@@ -1,7 +1,7 @@
 import { EventEmitterWrapper } from "core/eventemitter";
 import { EventType } from "core/eventemitter/EventType";
 import View from "../view/view.ios";
-import { ViewGroup as ViewGroup } from "./viewgroup";
+import { IViewGroup } from "./viewgroup";
 
 const EventList = require('./events');
 
@@ -20,11 +20,11 @@ function getKeyByValue(object, value) {
  * ViewGroup is an abstract class. You can't create instance from it.
  */
 // ViewGroup.prototype = Object.create(View.prototype);
-export default class ViewGroupIOS<TEvent extends EventType = EventType> extends View<TEvent> {
+export default class ViewGroupIOS<TEvent extends EventType = EventType, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<TEvent, TNative> {
     static Events = { ...EventList, ...View.Events };
     private _children = {};
 
-    constructor(params: Partial<ViewGroup>){
+    constructor(params: Partial<IViewGroup>){
         super();
 
         const EventFunctions = {

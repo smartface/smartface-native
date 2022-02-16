@@ -10,8 +10,8 @@ const Events = { ...ViewAndroid.Events, ...ViewGroupEvents };
 type EventsType = ExtractEventValues<typeof Events>;
 
 export class ViewGroup<
-  TEvent extends string | { [key: string]: string } = string
-> extends ViewAndroid<EventsType & ExtractEventValues<TEvent>> {
+  TEvent extends string | { [key: string]: string } = string, TNative = {}
+> extends ViewAndroid<EventsType | ExtractEventValues<TEvent>, TNative> {
   static Events = Events;
   private _onViewAdded = null;
   private _onViewRemoved = null;

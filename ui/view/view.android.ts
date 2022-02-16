@@ -93,7 +93,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends EventType = EventType>
+export class ViewAndroid<TEvent extends EventType = EventType, TNative extends {[key: string]: any} = {[key: string]: any}>
   extends ViewBase<TEvent>
   implements INativeComponent, View<TEvent>
 {
@@ -128,7 +128,6 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   private _borderWidth: number;
   private _borderRadius: number;
   private _backgroundColor: Color = Color.TRANSPARENT;
-  private yogaNode: any;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -138,14 +137,15 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   private _rippleEnabled = false;
   private _rippleColor = null;
   private _useForeground = false;
-  private _android = {
+  protected yogaNode: any;
+  protected _android = {
     updateRippleEffectIfNeeded: () => {
       this._rippleEnabled &&
         this._rippleColor &&
         (this._android.rippleColor = this._rippleColor);
     },
     rippleColor: null,
-  };
+  } as {updateRippleEffectIfNeeded: () => void, rippleColor: Color | null, [key: string]: any} & TNative;
 
   constructor(params) {
     super();
@@ -170,6 +170,7 @@ export class ViewAndroid<TEvent extends EventType = EventType>
       }
     }
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
+    this.setTouchHandlers();
   }
 
   get parent() {
@@ -506,28 +507,24 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   }
   set onTouch(onTouch) {
     this._onTouch = onTouch;
-    this.setTouchHandlers();
   }
   get onTouchEnded() {
     return this._onTouchEnded;
   }
   set onTouchEnded(onTouchEnded) {
     this._onTouchEnded = onTouchEnded;
-    this.setTouchHandlers();
   }
   get onTouchMoved() {
     return this._onTouchMoved;
   }
   set onTouchMoved(onTouchMoved) {
     this._onTouchMoved = onTouchMoved;
-    this.setTouchHandlers();
   }
   get onTouchCancelled() {
     return this._onTouchCancelled;
   }
   set onTouchCancelled(onTouchCancelled) {
     this._onTouchCancelled = onTouchCancelled.bind(this);
-    this.setTouchHandlers();
   }
   get visible() {
     // View.VISIBLE is 0

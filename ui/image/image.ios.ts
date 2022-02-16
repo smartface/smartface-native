@@ -1,4 +1,3 @@
-import NativeComponent from "../../core/native-component";
 import { ImageBase } from "./image";
 const File = require("../../io/file");
 const TypeUtil = require("../../util/type");
