@@ -9,5 +9,5 @@
 //     EventEmitter:
 // };
 
-export * from './EventEmitter';
-export * from './withEventEmitter';
+export * from './event-emitter';
+export * from './event-emitter.mixin';

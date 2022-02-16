@@ -248,6 +248,11 @@ function VideoView(params) {
                 self.emitter.emit(Events.Finish, state);
             }
         },
+        [Events.Failure]: function () {
+            self.onFailure = (state) => {
+                self.emitter.emit(Events.Failure, state);
+            }
+        },
         [Events.Ready]: function () {
             self.onReady = (state) => {
                 self.emitter.emit(Events.Ready, state);

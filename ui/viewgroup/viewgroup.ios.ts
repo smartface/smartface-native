@@ -1,6 +1,7 @@
-import { EventEmitterWrapper } from 'core/eventemitter';
-import View from '../view/view-iOS';
-import { IViewGroup } from './IViewGroup';
+import { EventEmitterWrapper } from "core/eventemitter";
+import { EventType } from "core/eventemitter/EventType";
+import View from "../view/view.ios";
+import { ViewGroup as ViewGroup } from "./viewgroup";
 
 const EventList = require('./events');
 
@@ -19,55 +20,57 @@ function getKeyByValue(object, value) {
  * ViewGroup is an abstract class. You can't create instance from it.
  */
 // ViewGroup.prototype = Object.create(View.prototype);
-class ViewGroup<TEvent extends string | symbol> extends View<TEvent> {
-  static Events = { ...EventList, ...View.Events };
-  private _children = {};
+export default class ViewGroupIOS<TEvent extends EventType = EventType> extends View<TEvent> {
+    static Events = { ...EventList, ...View.Events };
+    private _children = {};
 
-  constructor(params: Partial<IViewGroup>) {
-    super();
+    constructor(params: Partial<ViewGroup>){
+        super();
 
-    const EventFunctions = {
-      [EventList.ViewAdded]: function (view) {
-        this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null, view);
-      },
-      [EventList.ViewRemoved]: function (view) {
-        this.onViewRemoved = EventEmitterWrapper(this, EventList.ViewRemoved, null, view);
-      },
-      [EventList.ChildViewAdded]: function (view) {
-        this.onChildViewAdded = EventEmitterWrapper(this, EventList.ChildViewAdded, null, view);
-      },
-      [EventList.ChildViewRemoved]: function (view) {
-        this.onChildViewRemoved = EventEmitterWrapper(this, EventList.ChildViewRemoved, null, view);
-      }
-    };
+        const EventFunctions = {
+            [EventList.ViewAdded]: function (view) {
+              this.onViewAdded = EventEmitterWrapper(this, EventList.ViewAdded, null, view);
+            },
+            [EventList.ViewRemoved]: function (view) {
+              this.onViewRemoved = EventEmitterWrapper(this, EventList.ViewRemoved, null, view);
+            },
+            [EventList.ChildViewAdded]: function (view) {
+              this.onChildViewAdded = EventEmitterWrapper(this, EventList.ChildViewAdded, null, view);
+            },
+            [EventList.ChildViewRemoved]: function (view) {
+              this.onChildViewRemoved = EventEmitterWrapper(this, EventList.ChildViewRemoved, null, view);
+            },
+        };
+        
+        // EventEmitterCreator(this, EventFunctions);
+        this.nativeObject.didAddSubview = this.onViewAddedHandler;
+        this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
 
-    // EventEmitterCreator(this, EventFunctions);
-    this.nativeObject.didAddSubview = this.onViewAddedHandler;
-    this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
-
-    // TODO: Recheck after es6 compile
-    if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
-    }
-
-    //Android spec methods
-    this.android.requestDisallowInterceptTouchEvent = () => {};
-
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-      value: (event, callback) => {
-        if (typeof EventFunctions[event] === 'function') {
-          EventFunctions[event].call(this);
-          this.emitter.on(event, callback);
-        } else {
-          parentOnFunction(event, callback);
+        // TODO: Recheck after es6 compile
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
         }
-      },
-      configurable: true
-    });
-  }
+    
+        //Android spec methods
+        this.android.requestDisallowInterceptTouchEvent = () => {};
+    
+    
+        const parentOnFunction = this.on;
+        Object.defineProperty(this, 'on', {
+            value: (event, callback) => {
+                if (typeof EventFunctions[event] === 'function') {
+                    EventFunctions[event].call(this);
+                    this.emitter.on(event, callback);
+                }
+                else {
+                    parentOnFunction(event, callback);
+                }
+            },
+            configurable: true
+        });
+    }
 
   addChild = function (view: View): void {
     view.parent = this;
@@ -134,5 +137,3 @@ class ViewGroup<TEvent extends string | symbol> extends View<TEvent> {
     }
   };
 }
-
-module.exports = ViewGroup;

@@ -1,14 +1,18 @@
 /*globals array,requireClass,release */
 
-const TypeUtil = require('../../util/type');
-const NativeViewGroup = requireClass('android.view.ViewGroup');
-import { ViewGroupEvents } from '.';
-import { EventEmitterWrapper } from '../../core/eventemitter';
-import { View } from '../view/view-Android';
+const TypeUtil = require("../../util/type");
+const NativeViewGroup = requireClass("android.view.ViewGroup");
+import { EventEmitterWrapper } from "../../core/eventemitter";
+import { ExtractEventValues } from "../../core/eventemitter/extract-event-values";
+import { ViewAndroid } from "../view/view.android";
+import { ViewGroupEvents } from "./viewgroup-events";
+const Events = { ...ViewAndroid.Events, ...ViewGroupEvents };
+type EventsType = ExtractEventValues<typeof Events>;
 
-export class ViewGroup extends View {
-  static Events = { ...View.Events, ...ViewGroupEvents };
-
+export class ViewGroup<
+  TEvent extends string | { [key: string]: string } = string
+> extends ViewAndroid<EventsType & ExtractEventValues<TEvent>> {
+  static Events = Events;
   private _onViewAdded = null;
   private _onViewRemoved = null;
   private _onChildViewAdded = null;
@@ -21,7 +25,6 @@ export class ViewGroup extends View {
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
-    View.call(this);
     const eventEmitterCallback = () => {
       if (!this.didSetHierarchyChangeListener) {
         this.setHierarchyChangeListener();
@@ -42,7 +45,7 @@ export class ViewGroup extends View {
         this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null);
       }
     };
-    EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
+    // EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
 
     Object.defineProperties(this.android, {
       requestDisallowInterceptTouchEvent: {
@@ -181,14 +184,22 @@ export class ViewGroup extends View {
 
   // This method is needed to respect border radius of the view.
   private getRippleMask(borderRadius) {
-    const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
-    const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
+    const NativeRoundRectShape = requireClass(
+      "android.graphics.drawable.shapes.RoundRectShape"
+    );
+    const NativeShapeDrawable = requireClass(
+      "android.graphics.drawable.ShapeDrawable"
+    );
 
     var outerRadii = [];
     outerRadii.length = 8;
     outerRadii.fill(borderRadius);
 
-    var roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
+    var roundRectShape = new NativeRoundRectShape(
+      array(outerRadii, "float"),
+      null,
+      null
+    );
     var shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
     return shapeDrawable;

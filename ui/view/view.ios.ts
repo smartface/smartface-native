@@ -1,20 +1,17 @@
-import { EventEmitter } from 'core/eventemitter';
-import { Point2D } from 'sf-core/primitive/point2d';
-import { ViewEvents } from './event';
-import { IView } from './iview';
+import { Point2D } from "sf-core/primitive/point2d";
+import Color from "../color";
+import { ViewEvents } from "./view-event";
+import View, {ViewBase} from "./view";
+import { EventType } from "core/eventemitter/EventType";
 
-const TypeUtil = require('../../util/type');
-const Exception = require('../../util').Exception;
-const Color = require('../../ui/color');
+const Exception = require("../../util").Exception;
 const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 const { EventEmitterCreator } = require('../../core/eventemitter');
 
 declare const myLabelTitle: any;
 
-const EventList = require('./events');
 
-const image: ImageView;
 function isInside(frame, point) {
   var x = point.x;
   var y = point.y;
@@ -23,454 +20,464 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewiOS<TEvent extends string | symbol = string | symbol> extends EventEmitter<TEvent> implements NativeComponent {
-  protected android: { [key: string]: any } = {};
-  protected _uniqueId: string;
-  protected _maskedBorders = [ViewiOS.Border.TOP_LEFT, ViewiOS.Border.TOP_RIGHT, ViewiOS.Border.BOTTOM_LEFT, ViewiOS.Border.BOTTOM_RIGHT];
-  private _rotation: number = 0;
-  private _rotationX: number = 0;
-  private _rotationY: number = 0;
-  private _scale: Point2D = {
-    x: 1.0,
-    y: 1.0
-  };
-  private _onTouch: IView['onTouch'];
-  private _onTouchEnded: IView['onTouchEnded'];
-  private _onTouchCancelled: IView['onTouchCancelled'];
-  private _onTouchMoved: IView['onTouchMoved'];
-  private _nativeObject: any;
-  private gradientColor: any;
-  private _parent: IView;
-  private EventFunctions = {
-    [EventList.Touch]: () => {
-      const onTouchHandler = (e) => {
-        const options = {
-          x: e && e.point ? e.point.x : null,
-          y: e && e.point ? e.point.y : null
+type ViewIOSParams = {};
+
+export default class ViewIOS<TEvent extends EventType = EventType> extends ViewBase<TEvent> implements View<TEvent> {
+    android: {[key: string]: any} = {};
+    protected _uniqueId: string;
+    protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
+    private _rotation: number = 0;
+    private _rotationX: number = 0;
+    private _rotationY: number = 0;
+    private _scale: Point2D = {
+        x: 1.0,
+        y: 1.0
+    };
+    onTouchHandler = (e: {point: Point2D}) => {
+        const point = {
+            x: e ? e.point.x : null,
+            y: e ? e.point.y : null
         };
-        this.emitter.emit(EventList.Touch, options);
-      };
-      this.nativeObject.onTouch = onTouchHandler;
-    },
-    [EventList.TouchCancelled]: () => {
-      const onTouchCancelledHandler = (e) => {
-        const options = {
-          x: e && e.point ? e.point.x : null,
-          y: e && e.point ? e.point.y : null
-        };
-        this.emitter.emit(EventList.TouchCancelled, options);
-      };
-      this.nativeObject.onTouchCancelled = onTouchCancelledHandler;
-    },
-    [EventList.TouchEnded]: () => {
-      const onTouchEndedHandler = (e) => {
+        this._onTouch?.(point);
+        this.emitter.emit(ViewEvents.Touch, point);
+    };
+    onTouchEndedHandler = (e: {point: Point2D}) => {
         const inside = isInside(this.nativeObject.frame, e.point);
-        const options = {
-          x: e && e.point ? e.point.x : null,
-          y: e && e.point ? e.point.y : null,
-          isInside: inside
+        const event = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null,
+            isInside: inside
         };
-        this.emitter.emit(EventList.TouchEnded, options);
-      };
-      this.nativeObject.onTouchEnded = onTouchEndedHandler;
-    },
-    [EventList.TouchMoved]: () => {
-      const onTouchMoveHandler = (e) => {
+        this._onTouchEnded?.(inside, event);
+        this.emitter.emit(ViewEvents.TouchEnded, event);
+    };
+    onTouchCancelledHandler = (e: {point: Point2D}) => {
+        const point = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null
+        };
+        this._onTouchCancelled?.(point);
+        this.emitter.emit(ViewEvents.TouchCancelled, point);
+    }
+    onTouchMovedHandler = (e: {point: Point2D}) => {
         const inside = isInside(this.nativeObject.frame, e.point);
-        const options = {
-          x: e && e.point ? e.point.x : null,
-          y: e && e.point ? e.point.y : null,
-          isInside: inside
+        const event = {
+            x: e && e.point ? e.point.x : null,
+            y: e && e.point ? e.point.y : null,
+            isInside: inside
         };
-        this.emitter.emit(EventList.TouchMoved, options);
-      };
-      this.nativeObject.onTouchMoved = onTouchMoveHandler;
-    }
-  };
-
-  static Events = ViewEvents;
-  static Border = {
-    TOP_LEFT: 1 << 0,
-    TOP_RIGHT: 1 << 1,
-    BOTTOM_LEFT: 1 << 2,
-    BOTTOM_RIGHT: 1 << 3
-  } as const;
-
-  constructor(params?: Partial<IView>) {
-    super();
-
-    EventEmitterCreator(this, this.EventFunctions);
-    if (!this.nativeObject) {
-      if (params && params.nativeObject) {
-        this._nativeObject = params.nativeObject;
-      } else {
-        this._nativeObject = new __SF_UIView();
-      }
-    }
-
-    this._uniqueId = this.nativeObject.uuid;
-
-    // Defaults
-    this.nativeObject.yoga.isEnabled = true;
-    this.nativeObject.layer.masksToBounds = true;
-    this.nativeObject.layer.rotationZ = 0;
-    this.nativeObject.layer.rotationX = 0;
-    this.nativeObject.layer.rotationY = 0;
-
-    if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
-    }
-  }
-
-  get uniqueId() {
-    return this._uniqueId;
-  }
-
-  get parent() {
-    return this._parent;
-  }
-
-  set parent(view: IView) {
-    this._parent = view;
-  }
-
-  // get shadowOffset() {
-  //     return this.shadowOffset;
-  // }
-
-  get nativeObject() {
-    return this._nativeObject;
-  }
-
-  get accessibilityLabel() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString');
-  }
-  set accessibilityLabel(value) {
-    new Invocation.Argument({
-      type: 'NSString',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setAccessibilityLabel:', [this.accessibilityLabel]);
-  }
-
-  // TODO: Check that Where does myLabelTitle come from?
-  get accessible() {
-    return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, 'isAccessibilityElement', [], 'BOOL');
-  }
-  set accessible(value) {
-    const isAccessibility = new Invocation.Argument({
-      type: 'BOOL',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setIsAccessibilityElement:', [isAccessibility]);
-  }
-
-  get ios() {
-    const self = this;
-    return {
-      get shadowOffset() {
-        return self.getShadowOffset();
-      },
-      set shadowOffset(shadowOffset: Point2D) {
-        self.setShadowOffset(shadowOffset);
-      },
-      get shadowRadius() {
-        return self.shadowRadius;
-      },
-      set shadowRadius(shadowOffset: Point2D) {
-        self.shadowRadius = shadowOffset;
-      }
+        this._onTouchMoved?.(inside, event)
+        this.emitter.emit(ViewEvents.TouchMoved, event);
     };
-  }
+    private gradientColor: any;
+    private _parent: View;
+    static Border = {
+        TOP_LEFT: 1 << 0,
+        TOP_RIGHT: 1 << 1,
+        BOTTOM_LEFT: 1 << 2,
+        BOTTOM_RIGHT: 1 << 3
+    } as const;
+    
+    constructor(params?: Partial<View>) {
+        super();
 
-  // ios
-  private getShadowOffset = () => {
-    this.ios.shadowOffset = { x: 10, y: 10 };
-    var size = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOffset', [], 'CGSize');
-    return {
-      x: size.width,
-      y: size.height
-    };
-  };
-  private setShadowOffset = (shadowOffset: Point2D) => {
-    var argShadowOffset = new Invocation.Argument({
-      type: 'CGSize',
-      value: {
-        width: shadowOffset.x,
-        height: shadowOffset.y
-      }
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOffset:', [argShadowOffset]);
-  };
-
-  // ios
-  private get shadowRadius() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowRadius', [], 'CGFloat');
-  }
-  private set shadowRadius(shadowRadius) {
-    var argShadowRadius = new Invocation.Argument({
-      type: 'CGFloat',
-      value: shadowRadius
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowRadius:', [argShadowRadius]);
-  }
-
-  // ios
-  private get shadowOpacity() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'float');
-  }
-  private set shadowOpacity(shadowOpacity) {
-    var argShadowOpacity = new Invocation.Argument({
-      type: 'float',
-      value: shadowOpacity
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOpacity:', [argShadowOpacity]);
-  }
-
-  // ios
-  private get shadowColor() {
-    var color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
-    return new Color({
-      color: color
-    });
-  }
-  private set shadowColor(shadowColor) {
-    var argShadowColor = new Invocation.Argument({
-      type: 'CGColor',
-      value: shadowColor.nativeObject
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
-  }
-
-  // ios
-  private get exclusiveTouch() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'isExclusiveTouch', [], 'BOOL');
-  }
-  private set exclusiveTouch(value) {
-    var argExclusiveTouch = new Invocation.Argument({
-      type: 'BOOL',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
-  }
-
-  // TODO: ios da olacak
-  // private get masksToBounds() {
-  //     return this.masksToBounds;
-  // }
-  // private set masksToBounds(value) {
-  //     this.masksToBounds = value;
-  // }
-
-  get masksToBounds() {
-    return this.nativeObject.layer.masksToBounds;
-  }
-  set masksToBounds(value) {
-    this.nativeObject.layer.masksToBounds = value;
-  }
-
-  // ios
-  private get clipsToBounds() {
-    return this.nativeObject.valueForKey('clipsToBounds');
-  }
-  private set clipsToBounds(value) {
-    this.nativeObject.setValueForKey(value, 'clipsToBounds');
-  }
-
-  get borderColor() {
-    return new Color({
-      color: this.nativeObject.layer.borderUIColor
-    });
-  }
-  set borderColor(value) {
-    this.nativeObject.layer.borderUIColor = value.nativeObject;
-  }
-
-  get alpha() {
-    return this.nativeObject.alpha;
-  }
-  set alpha(value) {
-    if (typeof value === 'number') {
-      this.nativeObject.alpha = value;
-    } else {
-      throw new TypeError(Exception.TypeError.NUMBER);
-    }
-  }
-
-  get borderRadius() {
-    return this.nativeObject.layer.cornerRadius;
-  }
-  set borderRadius(value) {
-    this.nativeObject.layer.cornerRadius = value;
-  }
-
-  get maskedBorders() {
-    return this._maskedBorders;
-  }
-  set maskedBorders(value) {
-    var corners = 0;
-    for (var i = 0; i < value.length; i++) {
-      corners = corners | value[i];
-    }
-    this._maskedBorders = value;
-    this.nativeObject.layer.maskedCorners = corners;
-  }
-
-  get backgroundColor() {
-    return new Color({
-      color: this.nativeObject.backgroundColor
-    });
-  }
-  set backgroundColor(value) {
-    if (value.nativeObject.constructor.name === 'CAGradientLayer') {
-      if (!this.gradientColor) {
-        this.nativeObject.addFrameObserver();
-        this.nativeObject.frameObserveHandler = function (e) {
-          if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
-            return;
-          }
-          this.gradientColor.frame = e.frame;
-          this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
-        };
-      }
-      this.gradientColor = value.nativeObject;
-      if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
-        return;
-      }
-      this.gradientColor.frame = this.nativeObject.frame;
-      this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
-    } else {
-      if (this.gradientColor) {
-        this.nativeObject.removeFrameObserver();
-        this.gradientColor = undefined;
-      }
-      this.nativeObject.backgroundColor = value.nativeObject;
-    }
-  }
-
-  get id() {
-    return this.nativeObject.tag;
-  }
-  set id(value) {
-    this.nativeObject.tag = value;
-  }
-
-  get transitionId() {
-    return this.nativeObject.valueForKey('heroID');
-  }
-  set transitionId(value) {
-    if (typeof value === 'string') {
-      this.nativeObject.setValueForKey(value, 'heroID');
-    }
-  }
-
-  get rotation() {
-    return this._rotation;
-  }
-  set rotation(value) {
-    this._rotation = value;
-    this.nativeObject.layer.rotationZ = this._rotation * (Math.PI / 180);
-    this.nativeObject.layer.rotate();
-  }
-
-  get rotationX() {
-    return this._rotationX;
-  }
-  set rotationX(value) {
-    this._rotationX = value;
-    this.nativeObject.layer.rotationX = this._rotationX * (Math.PI / 180);
-    this.nativeObject.layer.rotate();
-  }
-
-  // var _rotationY = 0;
-  get rotationY() {
-    return this._rotationY;
-  }
-  set rotationY(value) {
-    this._rotationY = value;
-    this.nativeObject.layer.rotationY = this._rotationY * (Math.PI / 180);
-    this.nativeObject.layer.rotate();
-  }
-
-  get visible() {
-    return this.nativeObject.visible;
-  }
-  set visible(value) {
-    this.nativeObject.visible = value;
-  }
-
-  get scale() {
-    return this._scale;
-  }
-  set scale(value) {
-    this._scale = value;
-    this.nativeObject.scale({
-      scaleX: value.x,
-      scaleY: value.y
-    });
-  }
-
-  get touchEnabled() {
-    return this.nativeObject.touchEnabled;
-  }
-  set touchEnabled(value) {
-    this.nativeObject.touchEnabled = value;
-  }
-
-  getPosition() {
-    return {
-      left: this.left,
-      top: this.top,
-      width: this.width,
-      height: this.height
-    };
-  }
-
-  flipHorizontally() {
-    this.nativeObject.flipHorizontally();
-  }
-
-  flipVertically() {
-    this.nativeObject.flipVertically();
-  }
-
-  setPosition(position) {
-    this.left = position.left;
-    this.top = position.top;
-    this.width = position.width;
-    this.height = position.height;
-  }
-
-  //Issue: IOS-2340
-  bringToFront() {
-    var parent = this.getParent();
-    if (parent) {
-      var maxZPosition = 0;
-      for (var subview in parent.nativeObject.subviews) {
-        var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer, 'zPosition', [], 'CGFloat');
-        if (zPosition > maxZPosition) {
-          maxZPosition = zPosition;
+        // EventEmitterCreator(this, this.EventFunctions);
+        if (!this.nativeObject) {
+            if (params && params.nativeObject) {
+                this._nativeObject = params.nativeObject;
+            } else {
+                this._nativeObject = new __SF_UIView();
+            }
         }
-      }
-      var argZPosition = new Invocation.Argument({
-        type: 'CGFloat',
-        value: maxZPosition + 1
-      });
-      Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setZPosition:', [argZPosition]);
+
+        this._uniqueId = this.nativeObject.uuid;
+
+        // Defaults
+        this.nativeObject.yoga.isEnabled = true;
+        this.nativeObject.layer.masksToBounds = true;
+        this.nativeObject.layer.rotationZ = 0;
+        this.nativeObject.layer.rotationX = 0;
+        this.nativeObject.layer.rotationY = 0;
+
+        this.nativeObject.onTouch = this.onTouchHandler;
+        this.nativeObject.onTouchCancelled = this.onTouchCancelledHandler;
+        this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
+        this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
+
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
     }
-  }
 
-  getParent() {
-    return this._parent ? this._parent : null;
-  }
+    get uniqueId() {
+        return this._uniqueId;
+    }
 
-  getScreenLocation() {
-    var viewOrigin = {
-      x: this.nativeObject.bounds.x,
-      y: this.nativeObject.bounds.y
+    get parent(){
+        return this._parent;
+    }
+
+    set parent(view: View){
+        this._parent = view;
+    }
+
+    // get shadowOffset() {
+    //     return this.shadowOffset;
+    // }
+
+    get nativeObject(){
+        return this._nativeObject;
+    }
+
+    get accessibilityLabel(){
+        return Invocation.invokeInstanceMethod(this.nativeObject, "accessibilityLabel", [], "NSString");
+    }
+    set accessibilityLabel(value) {
+        new Invocation.Argument({
+            type: "NSString",
+            value: value
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject, "setAccessibilityLabel:", [this.accessibilityLabel]);
+    }
+
+    // TODO: Check that Where does myLabelTitle come from?
+    get accessible() {
+        return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, "isAccessibilityElement", [], "BOOL");
+    }
+    set accessible(value) {
+        const isAccessibility = new Invocation.Argument({
+            type: "BOOL",
+            value: value
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject, "setIsAccessibilityElement:", [isAccessibility]);
+    }
+
+
+    get ios(){
+        const self = this;
+        return {
+            get shadowOffset() {
+                return  self.shadowOffset;
+            },
+            set shadowOffset(shadowOffset: Point2D) {
+                self.shadowOffset  = shadowOffset;
+            },
+            get shadowRadius() {
+                return  self.shadowRadius;
+            },
+            set shadowRadius(shadowRadius: number) {
+                self.shadowRadius = shadowRadius;
+            },
+            get shadowOpacity() {
+                return  self.shadowRadius;
+            },
+            set shadowOpacity(shadowOpacity: number) {
+                self.shadowOpacity = shadowOpacity;
+            },
+            get shadowColor() {
+                return  self.shadowRadius;
+            },
+            set shadowColor(shadowColor: Color) {
+                self.shadowColor = shadowColor;
+            },
+        }
     };
+
+    // ios
+    private get shadowOffset() {
+        this.ios.shadowOffset = {x: 10, y: 10};
+        var size = Invocation.invokeInstanceMethod(this.nativeObject.layer, "shadowOffset", [], "CGSize");
+        return {
+            x: size.width,
+            y: size.height
+        };
+    }
+    private set shadowOffset(shadowOffset: Point2D) {
+        var argShadowOffset = new Invocation.Argument({
+            type: "CGSize",
+            value: {
+                width: shadowOffset.x,
+                height: shadowOffset.y
+            }
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject.layer, "setShadowOffset:", [argShadowOffset]);
+    }
+
+    // ios
+    private get shadowRadius() {
+        return Invocation.invokeInstanceMethod(this.nativeObject.layer, "shadowRadius", [], "CGFloat");
+    }
+    private set shadowRadius(shadowRadius) {
+        var argShadowRadius = new Invocation.Argument({
+            type: "CGFloat",
+            value: shadowRadius
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject.layer, "setShadowRadius:", [argShadowRadius]);
+    }
+
+    // ios
+    private get shadowOpacity() {
+        return Invocation.invokeInstanceMethod(this.nativeObject.layer, "shadowOpacity", [], "float");
+    }
+    private set shadowOpacity(shadowOpacity) {
+        var argShadowOpacity = new Invocation.Argument({
+            type: "float",
+            value: shadowOpacity
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject.layer, "setShadowOpacity:", [argShadowOpacity]);
+    }
+
+    // ios
+    private get shadowColor() {
+        var color = Invocation.invokeInstanceMethod(this.nativeObject.layer, "shadowColor", [], "CGColor");
+        return new Color({
+            color: color
+        });
+    }
+    private set shadowColor(shadowColor: Color) {
+        var argShadowColor = new Invocation.Argument({
+            type: "CGColor",
+            value: shadowColor.nativeObject
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject.layer, "setShadowColor:", [argShadowColor]);
+    }
+
+    // ios 
+    private get exclusiveTouch() {
+        return Invocation.invokeInstanceMethod(this.nativeObject, "isExclusiveTouch", [], "BOOL");
+    }
+    private set exclusiveTouch(value) {
+        var argExclusiveTouch = new Invocation.Argument({
+            type: "BOOL",
+            value: value
+        });
+        Invocation.invokeInstanceMethod(this.nativeObject, "setExclusiveTouch:", [argExclusiveTouch]);
+    }
+
+    // TODO: ios da olacak
+    // private get masksToBounds() {
+    //     return this.masksToBounds;
+    // }
+    // private set masksToBounds(value) {
+    //     this.masksToBounds = value;
+    // }
+
+
+    get masksToBounds() {
+        return this.nativeObject.layer.masksToBounds;
+    }
+    set masksToBounds(value) {
+        this.nativeObject.layer.masksToBounds = value;
+    }
+
+    // ios
+    private get clipsToBounds() {
+        return this.nativeObject.valueForKey("clipsToBounds");
+    }
+    private set clipsToBounds(value) {
+        this.nativeObject.setValueForKey(value, "clipsToBounds");
+    }
+
+
+
+    get borderColor() {
+        return new Color({
+            color: this.nativeObject.layer.borderUIColor
+        });
+    }
+    set borderColor(value) {
+        this.nativeObject.layer.borderUIColor = value.nativeObject;
+    }
+
+    get alpha() {
+        return this.nativeObject.alpha;
+    }
+    set alpha(value) {
+        if (typeof value === "number") {
+            this.nativeObject.alpha = value;
+        } else {
+            throw new TypeError(Exception.TypeError.NUMBER);
+        }
+    }
+
+    get borderRadius() {
+        return this.nativeObject.layer.cornerRadius;
+    }
+    set borderRadius(value) {
+        this.nativeObject.layer.cornerRadius = value;
+    }
+
+    get maskedBorders() {
+        return this._maskedBorders;
+    }
+    set maskedBorders(value) {
+        var corners = 0;
+        for (var i = 0; i < value.length; i++) {
+            corners = corners | value[i];
+        }
+        this._maskedBorders = value;
+        this.nativeObject.layer.maskedCorners = corners;
+    }
+
+    get backgroundColor() {
+        
+            return new Color({
+                color: this.nativeObject.backgroundColor
+            });
+        }
+    set backgroundColor(value) {
+        if (value.nativeObject.constructor.name === "CAGradientLayer") {
+            if (!this.gradientColor) {
+                this.nativeObject.addFrameObserver();
+                this.nativeObject.frameObserveHandler = function (e) {
+                    if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
+                        return;
+                    }
+                    this.gradientColor.frame = e.frame;
+                    this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+                }
+            }
+            this.gradientColor = value.nativeObject;
+            if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
+                return;
+            }
+            this.gradientColor.frame = this.nativeObject.frame;
+            this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+        } else {
+            if (this.gradientColor) {
+                this.nativeObject.removeFrameObserver();
+                this.gradientColor = undefined;
+            }
+            this.nativeObject.backgroundColor = value.nativeObject;
+        }
+    }
+
+
+    get id() {
+        return this.nativeObject.tag;
+    }
+    set id(value) {
+        this.nativeObject.tag = value;
+    }
+
+    get transitionId() {
+        return this.nativeObject.valueForKey("heroID");
+    }
+    set transitionId(value) {
+        if (typeof value === "string") {
+            this.nativeObject.setValueForKey(value, "heroID");
+        }
+    }
+
+    get rotation() {
+        return this._rotation;
+    }
+    set rotation(value) {
+        this._rotation = value;
+        this.nativeObject.layer.rotationZ = this._rotation * (Math.PI / 180);
+        this.nativeObject.layer.rotate();
+    }
+
+    get rotationX() {
+        return this._rotationX;
+    }
+    set rotationX(value) {
+        this._rotationX = value;
+        this.nativeObject.layer.rotationX = this._rotationX * (Math.PI / 180);
+        this.nativeObject.layer.rotate();
+    }
+
+    // var _rotationY = 0;
+    get rotationY() {
+        return this._rotationY;
+    }
+    set rotationY(value) {
+        this._rotationY = value;
+        this.nativeObject.layer.rotationY = this._rotationY * (Math.PI / 180);
+        this.nativeObject.layer.rotate();
+    }
+
+    get visible() {
+        return this.nativeObject.visible;
+    }
+    set visible(value) {
+        this.nativeObject.visible = value;
+    }
+
+    get scale() {
+        return this._scale;
+    }
+    set scale(value) {
+        this._scale = value;
+        this.nativeObject.scale({
+            scaleX: value.x,
+            scaleY: value.y
+        });
+    }
+
+    get touchEnabled() {
+        return this.nativeObject.touchEnabled;
+    }
+    set touchEnabled(value) {
+        this.nativeObject.touchEnabled = value;
+    }
+
+
+    getPosition() {
+        return {
+            left: this.left,
+            top: this.top,
+            width: this.width,
+            height: this.height
+        };
+    }
+
+    flipHorizontally() {
+        this.nativeObject.flipHorizontally();
+    }
+
+
+    flipVertically() {
+        this.nativeObject.flipVertically();
+    }
+
+    setPosition(position) {
+        this.left = position.left;
+        this.top = position.top;
+        this.width = position.width;
+        this.height = position.height;
+    }
+
+    //Issue: IOS-2340
+    bringToFront() {
+        var parent = this.getParent();
+        if (parent) {
+            var maxZPosition = 0;
+            for (var subview in parent.nativeObject.subviews) {
+                var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer, "zPosition", [], "CGFloat");
+                if (zPosition > maxZPosition) {
+                    maxZPosition = zPosition
+                }
+            }
+            var argZPosition = new Invocation.Argument({
+                type: "CGFloat",
+                value: maxZPosition + 1
+            });
+            Invocation.invokeInstanceMethod(this.nativeObject.layer, "setZPosition:", [argZPosition]);
+        }
+    };
+
+    getParent() {
+        return this._parent ? this._parent : null;
+    };
+
+    getScreenLocation(){
+        var viewOrigin = {
+            x: this.nativeObject.bounds.x,
+            y: this.nativeObject.bounds.y
+        };
     var origin = new Invocation.Argument({
       type: 'CGPoint',
       value: viewOrigin

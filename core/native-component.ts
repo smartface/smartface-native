@@ -1,4 +1,4 @@
-import { INativeComponent } from './inative-component';
+import { INativeComponent } from "./inative-component";
 
 export default class NativeComponent implements INativeComponent {
   protected _nativeObject: any;
