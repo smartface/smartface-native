@@ -18,17 +18,17 @@ var pageAnimationsCache = {},
 
 var _addedFragmentsInContainer = {};
 
-export default abstract class FragmentTransaction {
-  static readonly AnimationType = Object.freeze({
+namespace FragmentTransaction {
+  export const AnimationType = Object.freeze({
     RIGHTTOLEFT: '0',
     LEFTTORIGHT: '1'
   });
 
-  static pageCount = 0;
-  static generatePageID() {
+  export let pageCount = 0;
+  export function generatePageID() {
     return ++FragmentTransaction.pageCount;
   }
-  static push(params: any) {
+  export function push(params: any) {
     FragmentTransaction.checkBottomTabBarVisible(params.page);
 
     var tag = params.page.pageID;
@@ -62,13 +62,13 @@ export default abstract class FragmentTransaction {
     params.onComplete && params.onComplete();
   }
 
-  static pop(params: any) {
+  export function pop(params: any) {
     params && (params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT);
     FragmentTransaction.checkBottomTabBarVisible(params.page);
     FragmentTransaction.replace(params);
   }
 
-  static replace(params: any) {
+  export function replace(params: any) {
     // don't remove these variables. If they are global values, an exception occurs.
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -111,7 +111,7 @@ export default abstract class FragmentTransaction {
     params.onComplete && params.onComplete();
   }
 
-  static revealTransition(transitionViews, page, animated = true) {
+  export function revealTransition(transitionViews, page, animated = true) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
@@ -133,7 +133,7 @@ export default abstract class FragmentTransaction {
     fragmentManager.executePendingTransactions();
   }
 
-  static popUpTransition(page, animation) {
+  export function popUpTransition(page, animation) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
@@ -149,7 +149,7 @@ export default abstract class FragmentTransaction {
     fragmentManager.executePendingTransactions();
   }
 
-  static dismissTransition(page, animation) {
+  export function dismissTransition(page, animation) {
     let fragmentManager = activity.getSupportFragmentManager();
     !pagePopUpAnimationsCache && FragmentTransaction.setPopUpAnimationsCache();
 
@@ -187,7 +187,7 @@ export default abstract class FragmentTransaction {
     fragmentManager.executePendingTransactions();
   }
 
-  static checkBottomTabBarVisible(page) {
+  export function checkBottomTabBarVisible(page) {
     // TODO: Beautify visibility setting of bottom tabbar
     if (page.isInsideBottomTabBar) {
       (Application as any).tabBar?.nativeObject.setVisibility(0); // VISIBLE
@@ -196,7 +196,7 @@ export default abstract class FragmentTransaction {
     }
   }
 
-  static addSharedElement(params) {
+  export function addSharedElement(params) {
     let { animated, page, fragmentTransaction, transitionViews } = params;
     if (animated) {
       var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
@@ -215,7 +215,7 @@ export default abstract class FragmentTransaction {
     }
   }
 
-  static leftToRightTransitionAnimation(fragmentTransaction) {
+  export function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache['LEFTTORIGHT']) {
       pageAnimationsCache['LEFTTORIGHT'] = {};
       var packageName = activity.getPackageName();
@@ -231,7 +231,7 @@ export default abstract class FragmentTransaction {
       fragmentTransaction.setCustomAnimations(rightEnter, rightExit);
     }
   }
-  static rightToLeftTransitionAnimation(fragmentTransaction) {
+  export function rightToLeftTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache['RIGHTTOLEFT']) {
       pageAnimationsCache['RIGHTTOLEFT'] = {};
       var packageName = activity.getPackageName();
@@ -252,7 +252,7 @@ export default abstract class FragmentTransaction {
     }
   }
 
-  static setPopUpAnimationsCache() {
+  export function setPopUpAnimationsCache() {
     var packageName = activity.getPackageName();
     var resources = AndroidConfig.activityResources;
     pagePopUpAnimationsCache = {};
@@ -261,3 +261,5 @@ export default abstract class FragmentTransaction {
     return pagePopUpAnimationsCache;
   }
 }
+
+export default FragmentTransaction;

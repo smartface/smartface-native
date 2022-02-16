@@ -3,8 +3,8 @@ import NavigationController from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
-export default abstract class ViewController {
-  static activateRootController(controller) {
+namespace ViewController {
+  export function activateRootController(controller) {
     if (!controller) return;
     controller.__isActive = true;
     let parentController = controller.parentController;
@@ -13,7 +13,7 @@ export default abstract class ViewController {
       parentController = parentController.parentController;
     }
   }
-  static deactivateRootController(controller) {
+  export function deactivateRootController(controller) {
     if (!controller) return;
     controller.__isActive = false;
     let parentController = controller.parentController;
@@ -22,7 +22,7 @@ export default abstract class ViewController {
       parentController = parentController.parentController;
     }
   }
-  static setIsActiveOfController(controller, __isActive) {
+  export function setIsActiveOfController(controller, __isActive) {
     if (!controller || controller instanceof Page) return;
     controller.__isActive = __isActive;
     // TODO: Ugly code. Beatufy this implementation
@@ -33,13 +33,13 @@ export default abstract class ViewController {
       childController = controller.getCurrentController();
     }
   }
-  static activateController(controller) {
+  export function activateController(controller) {
     ViewController.setIsActiveOfController(controller, true);
   }
-  static deactivateController(controller) {
+  export function deactivateController(controller) {
     ViewController.setIsActiveOfController(controller, false);
   }
-  static setController(params) {
+  export function setController(params) {
 
     if (params.controller instanceof NavigationController) {
       var childControllerStack = params.controller.childControllers;
@@ -76,7 +76,7 @@ export default abstract class ViewController {
     }
   }
 
-  static getCurrentPageFromController(controller) {
+  export function getCurrentPageFromController(controller) {
     if (controller instanceof Page) {
       return controller;
     }
@@ -91,7 +91,7 @@ export default abstract class ViewController {
     return null;
   }
 
-  static setIsInsideBottomTabBarForAllChildren(controller) {
+  export function setIsInsideBottomTabBarForAllChildren(controller) {
     controller.isInsideBottomTabBar = true;
     if (controller instanceof Page) {
       return;
@@ -104,3 +104,5 @@ export default abstract class ViewController {
     });
   }
 }
+
+export default ViewController;
