@@ -58,10 +58,9 @@ Object.defineProperty(Hardware.android, 'vendorID', {
 
 Object.defineProperty(Hardware, 'deviceType', {
     get: function() {
-        const NativeConfiguration = requireClass('android.content.res.Configuration');
-        const configuration = AndroidConfig.activity.getResources().getConfiguration();
-        const screenSize = configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK;
-        const isTablet = screenSize >= NativeConfiguration.SCREENLAYOUT_SIZE_LARGE;
+        const NativeR = requireClass(AndroidConfig.packageName + '.R');
+        const activity = AndroidConfig.activity;
+        const isTablet = activity.getResources().getBoolean(NativeR.bool.isTablet);
         return isTablet ? DEVICE_TYPES.TABLET : DEVICE_TYPES.PHONE;
     },
     configurable: false
