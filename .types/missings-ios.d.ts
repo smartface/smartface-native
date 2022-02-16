@@ -116,7 +116,53 @@ declare class __SF_NSUserDefaults {
   synchronize(): any;
   constructor(param: string);
 }
-declare class __SF_FILE {}
+declare class __SF_File {
+  static create(value: __SF_NSIndexPath): __SF_File;
+  static getDocumentsDirectory(): __SF_NSIndexPath;
+  static getMainBundleDirectory(): __SF_NSIndexPath;
+}
+
+declare class __SF_FileStream {
+  static createWithPathWithStreamModeWithContentMode(path: __SF_NSIndexPath, streamModeValue: any, contentModeValue: any): __SF_FileStream;
+  streamMode: any;
+  contentMode: any;
+  isReadable(): any;
+  isWritable(): any;
+  getName(): any;
+  getPath(): any;
+  closeFile(): any;
+  getBlob(): __SF_NSData;
+  readToEnd(): any;
+  seekToEnd(): any;
+  writeString(content: string): any;
+  writeBinary(content: __SF_NSData): any;
+  offset: any;
+}
+
+declare class __SF_LAContext {
+  evaluatePolicy(message: string, onSuccess: () => void, onError: () => void): void;
+  canEvaluatePolicy(): boolean;
+}
+
+declare class __SF_NSLocale {
+  constructor(params: { locale: string });
+  static currentLocale(): any;
+}
+
+declare class __SF_NSOperationQueue {
+  static mainQueue(): any;
+}
+
+declare class __SF_NSBlockOperation {
+  static blockOperationWithJSValue(): any;
+  addOperation(operation: any): void;
+  operationCount: number;
+  cancelAllOperations(): void;
+}
+
+declare class __SF_UIPasteboard {
+  static generalPasteboard(): any;
+}
 
 declare class __SF_UIFont {
   // TODO: it must be fontNamesByFamilyName
@@ -124,12 +170,12 @@ declare class __SF_UIFont {
   static boldSystemFontOfSize(size: number): number;
   static fontWithNameSize(fontFamily: string, size: number): any;
   static italicSystemFontOfSize(size: number): number;
-  static createFromFileWithFilenameStringSize(actualPath: __SF_NSIndexPath, size: number): any; /*TODO: change the typing when you are doing font.createFromFile */
+  static createFromFileWithFilenameStringSize(actualPath: __SF_NSIndexPath, size: number): __SF_UIFont;
 }
 
 declare class __SF_NSData {
-  static base64Encoded(base64: string): unknown; /** return type of blob.createfrombase64 */
-  static dataFromUTF8String(utf8: string): unknown; /** return type of blob.createFromUTF8String */
+  static base64Encoded(base64: string): __SF_NSData;
+  static dataFromUTF8String(utf8: string): __SF_NSData;
 }
 
 declare class __SF_FLAnimatedImage {
@@ -234,15 +280,26 @@ declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
 }
 
+declare interface iOSSharedApplication {
+  statusBarFrame: { height: number };
+  sf_statusBarStyle: any;
+  sf_statusBarHidden: boolean;
+  userInterfaceLayoutDirection: number;
+  statusBarOrientationAnimationDuration: number;
+  keyWindow: { addSubView(view: __SF_UIView): void };
+  scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
+  presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
+  cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
+  cancelAllLocalNotifications(): void;
+  applicationIconBadgeNumber: number;
+  scheduledLocalNotifications: __SF_UILocalNotification[];
+  registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
+  registerForRemoteNotifications(): void;
+  unregisterForRemoteNotifications(): void;
+}
+
 declare class __SF_UIApplication extends iOSBaseClass {
-  static sharedApplication(): {
-    statusBarFrame: { height: number };
-    sf_statusBarStyle: any;
-    sf_statusBarHidden: boolean;
-    userInterfaceLayoutDirection: number;
-    statusBarOrientationAnimationDuration: number;
-    keyWindow: { addSubView(view: __SF_UIView): void };
-  };
+  static sharedApplication(): iOSSharedApplication;
 }
 
 declare class __SF_CMMotionManager {
@@ -259,6 +316,7 @@ declare class __SF_CallObserverDelegate {
 }
 
 declare class __SF_CNMutableContact {
+  static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact, filename: string): any;
   static new(): __SF_CNMutableContact;
   constructor();
   namePrefix: string;
@@ -616,9 +674,27 @@ declare class __SF_UITabBarController extends __SF_UINavigationController {
 }
 declare class __SF_UITabBarControllerDelegate {}
 
+declare interface iOSCurrentDevice {
+  UUID: string;
+  model: string;
+  name: string;
+  orientation: number;
+  batteryMonitoringEnabled: boolean;
+  batteryState: number;
+  systemVersion: string;
+}
+
 declare class __SF_UIDevice {
-  static currentDevice(): any;
-  static modelName(): any;
+  static currentDevice(): iOSCurrentDevice;
+  static modelName(): string;
+  static currentReachabilityStatus(): number;
+  static getIFAddresses(): string[];
+  static vibrate(): void;
+  static takeSnapShot(): void;
+}
+
+declare class __SF_UIAccessibility {
+  static isVoiceOverRunning(): boolean;
 }
 
 declare class __SF_UITabbarItem {
@@ -873,8 +949,11 @@ declare class __SF_WKWebView extends __SF_UIView {
   serverTrustPolicies: any[];
 }
 
-declare class __SF_AVAudioSession {
+declare class __SF_AVAudioSession extends __SF_NSOBject {
   static sharedInstance(): any;
+  setCategory(category: string, callback: (e) => void): void;
+  setMode(category: string, callback: (e) => void): void;
+  setActiveWithOptions(active: boolean, option: number, callback: (e) => void): void;
 }
 
 declare class __SF_CLLocationManager {
@@ -892,6 +971,7 @@ declare class __SF_CLLocationManagerDelegate {
 }
 
 declare class __SF_UIImagePickerController extends __SF_UINavigationController {
+  static fixVideoOrientation(url: __SF_NSURL, callback: (e) => void): void;
   mediaTypes: any;
   allowsEditing: boolean;
   sourceType: any;
@@ -930,4 +1010,170 @@ declare class __SF_YPImagePickerConfiguration {
 
 declare class __SF_YPImagePicker {
   constructor(pickerConfig: __SF_YPImagePickerConfiguration);
+  didFinishPicking(data: any): void;
+  picker: __SF_UIImagePickerController;
+}
+
+declare class __SF_TOCropViewController {
+  static createWithCroppingStyleImage(e: any): __SF_TOCropViewController;
+  title: string;
+  setCustomAspect(e: { width: number; height: number }): void;
+  delegate: __SF_TOCropViewControllerDelegate;
+  delegateStrong: __SF_TOCropViewControllerDelegate;
+}
+
+declare class __SF_TOCropViewControllerDelegate {
+  didCropToImage(data: any): void;
+  didCropToCircularImage(data: any): void;
+  didFinishCancelled(data: any): void;
+}
+
+declare class __SF_CTTelephonyNetworkInfo {
+  subscriberCellularProvider: {
+    carrierName: string;
+  };
+}
+
+declare class __SF_SMFReachability {
+  static reachabilityForInternetConnection(): __SF_SMFReachability;
+  observeFromNotificationCenter(): void;
+  currentReachabilityStatus(): number;
+  reachabilityChangedCallback: () => void;
+  startNotifier(): void;
+  stopNotifier(): void;
+}
+
+declare class __SF_Timer {
+  scheduledTimer(delay: number, callback: () => void): any;
+  invalidate(): void;
+}
+
+declare class __SF_SMFServerTrustPolicy {
+  static createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(
+    host: any,
+    nSURLCertificates: any,
+    validateCertificateChain: boolean,
+    validateHost: boolean
+  ): __SF_SMFServerTrustPolicy;
+}
+
+declare class __SF_Http {
+  timeoutIntervalForRequest: number;
+  defaultHTTPHeaders: any;
+  serverTrustPolicies: __SF_SMFServerTrustPolicy;
+  cancelAll(): void;
+  requestFile(url: __SF_NSURL, fileName: string, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+  requestImage(url: __SF_NSURL, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+  requestString(url: __SF_NSURL, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+  requestJSON(url: __SF_NSURL, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+  request(params: any, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+  upload(params: any, onSuccess: (e: any) => void, onFailure?: (e: any) => void): any;
+}
+
+declare class __SF_URLSessionTask {
+  suspend(): void;
+  cancel(): void;
+  resume(): void;
+}
+
+declare class __SF_SFSpeechRecognizer {
+  constructor(locale: __SF_NSLocale);
+  static supportedLocalesToArray(): any[];
+  static speechRequestAuthorization(callback: (e: any) => void);
+  delegate: __SF_SFSpeechRecognizerDelegate;
+  recognitionTask(recognitionRequest: any, callback: (e) => void): void;
+}
+
+declare class __SF_SFSpeechRecognizerDelegate {
+  speechRecognizerAvailabilityDidChange: (e: any) => void;
+}
+
+declare class __SF_AVAudioEngine {
+  inputNode: any;
+  isRunning: boolean;
+  stop(): void;
+  prepare(): void;
+  start(onError: (e: any) => void);
+}
+
+declare class __SF_SFSpeechAudioBufferRecognitionRequest {
+  shouldReportPartialResults: boolean;
+  appendBuffer(buffer: any): void;
+}
+
+declare class __SF_AVPlayerItem {
+  static createFromUrl(url: __SF_NSURL): __SF_AVPlayerItem;
+}
+
+declare class __SF_AVPlayer {
+  constructor(avPlayerItem: __SF_AVPlayerItem);
+  removeObserver(): void;
+  replaceCurrentItem(avPlayer: __SF_AVPlayerItem): void;
+  play(): void;
+  seekToMillisecond(milliseconds: number): void;
+  pause(): void;
+  seekTo(to: number): void;
+  duration(): number;
+  getCurrentTime(): number;
+  onItemReady: () => void;
+  AVPlayerItemDidPlayToEndTime: () => void;
+  volume: number;
+  rate: number;
+}
+
+declare class __SF_SMFCrypto {
+  generateAESKey(length: number): any;
+  generateKeyPair(keySize: number): any;
+  encrypt(plainText: string, key: string): string;
+  decrypt(plainText: string, key: string): string;
+  getExportedPublicKey(key: string): string;
+  encryptAES(plainText: string, key: string, ivSize: number, onComplete: (...args: any[]) => void, onFailure: (...args: any[]) => void): void;
+  decryptAES(encryptedText: string, key: string, iv: string, onComplete: (...args: any[]) => void, onFailure: (...args: any[]) => void): void;
+}
+
+declare class __SF_Database {
+  constructor(path: string | __SF_NSIndexPath);
+  errorHandler: (e: any) => void;
+  run(sqlCommand: string): void;
+  prepare(sqlCommand: string): void;
+}
+
+declare class __SF_UNUserNotificationCenter {
+  static currentNotificationCenter(): __SF_UNUserNotificationCenter;
+  delegate: __SF_SMFUNUserNotificationCenterDelegate;
+  removeAllDeliveredNotifications(): void;
+}
+
+declare class __SF_UILocalNotification {
+  alertBody: string;
+  alertAction: string;
+  soundName: string;
+  alertLaunchImage: string;
+  fireDate: any;
+  repeatInterval: number;
+  applicationIconBadgeNumber: number;
+  hasAction: boolean;
+  userInfo: Record<string, any>;
+}
+
+declare class __SF_UIUserNotificationSettings {
+  static settingsForTypesCategories(type: number): __SF_UIUserNotificationSettings;
+}
+
+declare class __SF_UIUserNotificationTypeSound {}
+
+declare class __SF_UIUserNotificationTypeBadge {}
+
+declare class __SF_UIUserNotificationTypeAlert {}
+
+declare class __SF_SMFUNUserNotificationCenterDelegate {
+  static willPresentNotification: (e: any) => number;
+  static didReceiveNotificationResponse: (e: any) => void;
+}
+
+declare class __SF_KeychainPasswordItem {
+  constructor(service: any, account: any, option: any);
+  readPasswordWithBlock(callback: (e: any) => void): void;
+  deleteItemWithBlock(callback: (e: any) => void): void;
+  savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
