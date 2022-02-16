@@ -1,11 +1,9 @@
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
-import RemoteUpdateService from './RAU';
-import StatusBar from './statusbar';
-import Navigationbar from './android/navigationbar';
-import NavigationbarStyle from './android/navigationbar/style';
+import Navigationbar from './android/navigationbar/navigationbar';
 import SliderDrawer from '../ui/sliderdrawer';
-import { IEventEmitter } from '../core/eventemitter/EventEmitter';
+import StatusBar from './statusbar/statusbar';
+import { NavigationBarStyle } from './android/navigationbar/navigationbar.android';
 
 declare enum Events {
   /**
@@ -620,7 +618,7 @@ declare class Application {
   static Android: Partial<{
     KeyboardMode: typeof KeyboardMode;
     NavigationBar: {
-      Style: NavigationbarStyle;
+      Style: NavigationBarStyle;
     };
     /**
      * @enum Application.Android.Permissions
@@ -882,54 +880,6 @@ declare class Application {
    * @since 4.0.2
    */
   static setAppTheme: (theme: string) => void;
-  /**
-   * Checks if there is a new update.
-   *
-   *     @example
-   *     Application.checkUpdate(function(err, result) {
-   *         if (err) {
-   *             console.log("check update error: " + err);
-   *         } else {
-   *             result.download(function(err, downloadFinish) {
-   *                 if (err) {
-   *                     console.log("download error: " + err);
-   *                 } else {
-   *                     downloadFinish.updateAll(function(err) {
-   *                         if (err) {
-   *                             console.log("update all error: " + err);
-   *                         } else {
-   *                             console.log(downloadFinish.meta);
-   *                             Application.restart();
-   *                         }
-   *                     });
-   *                 }
-   *             });
-   *         }
-   *     },"user_name");
-   *
-   * @method checkUpdate
-   * @see https://developer.smartface.io/docs/remote-app-update
-   * @param {Function} callback Function for update check result
-   * @param {Object} callback.err For a valid update data, err argument should be null otherwise it will be message field in json response.
-   * @param {Object} callback.result Update object when there is a new version of the app.
-   * @param {String} callback.result.newVersion New version number obtained from RAU.
-   * @param {String} callback.result.newRevision Revision value of the new version.
-   * @param {Function} callback.result.download Method that initiates download of update files.
-   * @param {Object} callback.result.download.err Error object of the download operation. For a valid update data, err argument should be null.
-   * @param {Object} callback.result.download.downloadFinish Result object of the download operation.
-   * @param {Function} callback.result.download.downloadFinish.updateAll Updates all files silently, callback is fired at the end of operation.
-   * @param {Object} callback.result.download.downloadFinish.updateAll.err Error object of the update operation. For a valid update, err argument will be null.
-   * @param {Function} callback.result.download.downloadFinish.cancel Clears all staged files.
-   * @param {Object} callback.result.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument will be null.
-   * @param {Function} callback.result.download.downloadFinish.meta  Meta in rau.json as object parsed.
-   * @param {String} User information
-   * @readonly
-   * @android
-   * @ios
-   * @static
-   * @since 0.1
-   */
-  static checkUpdate: typeof RemoteUpdateService.checkUpdate;
   /**
    * Triggered when unhandelled error occurs.
    *

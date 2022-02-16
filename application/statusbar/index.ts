@@ -1,15 +1,3 @@
-import Color from '../../ui/color';
+import StatusBarBase from './statusbar';
 
-declare enum StatusBarStyle {
-  DEFAULT,
-  LIGHTCONTENT
-}
-
-declare type StatusBar = {
-  height: number;
-  backgroundColor: Color;
-  visible: boolean;
-  style: StatusBarStyle;
-};
-
-export default require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default as StatusBar;
+export const StatusBar: typeof StatusBarBase = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
