@@ -1,0 +1,63 @@
+namespace Invocation {
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType: string): __SF_NSOBject {
+    const invocation = __SF_NSInvocation.createInvocationWithSelectorInstance(selector, target);
+    if (invocation) {
+      invocation.target = target;
+      invocation.setSelectorWithString(selector);
+      invocation.retainArguments();
+      for (let i = 0; i < argumentsArray.length; i++) {
+        invocation['set' + argumentsArray[i].type + 'ArgumentAtIndex'](argumentsArray[i].value, i + 2);
+      }
+
+      invocation.invoke();
+      if (returnValueType) {
+        return invocation['get' + returnValueType + 'ReturnValue']();
+      }
+    }
+  }
+
+  export function invokeClassMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType: string): __SF_NSOBject {
+    const invocation = __SF_NSInvocation.createClassInvocationWithSelectorInstance(selector, target);
+    if (invocation) {
+      invocation.setClassTargetFromString(target);
+      invocation.setSelectorWithString(selector);
+      invocation.retainArguments();
+      for (let i = 0; i < argumentsArray.length; i++) {
+        invocation['set' + argumentsArray[i].type + 'ArgumentAtIndex'](argumentsArray[i].value, i + 2);
+      }
+
+      invocation.invoke();
+
+      if (returnValueType) {
+        return invocation['get' + returnValueType + 'ReturnValue']();
+      }
+    }
+  }
+
+  export class Argument {
+    private _type: string;
+    private _value: any;
+
+    constructor(params: any) {
+      for (let param in params) {
+        this[param] = params[param];
+      }
+    }
+
+    get type(): string {
+      return this._type;
+    }
+    set type(type: string) {
+      this._type = type;
+    }
+    get value(): any {
+      return this._value;
+    }
+
+    set value(value: any) {
+      this._value = value;
+    }
+  }
+}
+
+export default Invocation;

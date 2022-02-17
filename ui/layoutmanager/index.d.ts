@@ -1,5 +1,6 @@
 import { Point2D } from '../../primitive/point2d';
 import { Boundary } from '../../primitive/boundary';
+import NativeComponent from '../../core/native-component';
 
 declare enum Events {
   /**
