@@ -120,4 +120,4 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
   };
 }
 
-module.exports = AttributedStringAndroid;
+export default AttributedStringAndroid;
