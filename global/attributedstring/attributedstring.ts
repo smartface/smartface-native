@@ -1,3 +1,4 @@
+import NativeComponent from 'core/native-component';
 import Color from '../../ui/color';
 import Font from '../../ui/font';
 
@@ -16,7 +17,7 @@ import Font from '../../ui/font';
  *     attributeString.font = Font.create("Times New Roman",30,Font.NORMAL);
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
-declare class AttributedString {
+export declare class AttributedString extends NativeComponent {
   constructor(params?: Partial<AttributedString>);
   /**
    * Gets/sets backgroundColor on AttributedString.
@@ -101,5 +102,3 @@ declare class AttributedString {
     strikethroughColor?: Color;
   }>;
 }
-
-export = AttributedString;
