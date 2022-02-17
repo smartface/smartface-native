@@ -1,6 +1,14 @@
 import Screen from '../../device/screen';
 import Invocation from '../../util/iOS/invocation';
 
+interface KeyboardInfoParams {
+  userInfo?: {
+    UIKeyboardAnimationDurationUserInfoKey: number;
+    UIKeyboardAnimationCurveUserInfoKey: number;
+  };
+  isBeginEditing?: boolean;
+}
+
 export default class KeyboardAnimationDelegate {
   private _top = 0;
   private _topDistance = 0;
@@ -37,7 +45,7 @@ export default class KeyboardAnimationDelegate {
     return top;
   }
 
-  keyboardShowAnimation(keyboardHeight: number, e: any, isBeginEditing: boolean) {
+  keyboardShowAnimation(keyboardHeight: number, e: KeyboardInfoParams, isBeginEditing: boolean) {
     KeyboardAnimationDelegate.isKeyboardVisible = true;
     KeyboardAnimationDelegate.ApplicationKeyboardHeight = keyboardHeight;
     let height = this.nativeObject.frame.height;
@@ -68,7 +76,7 @@ export default class KeyboardAnimationDelegate {
         this._topDistance = 0;
       }
 
-      if (e && e.userInfo) {
+      if (e?.userInfo) {
         var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
         var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
         var animationOptions = animationCurve << 16;
@@ -101,7 +109,7 @@ export default class KeyboardAnimationDelegate {
     } else {
       if (this.getParentViewController()) {
         if (this.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this) && this.getParentViewController().view.frame.y != 0) {
-          if (e && e.userInfo) {
+          if (e?.userInfo) {
             this.keyboardHideAnimation({
               userInfo: e.userInfo,
               isBeginEditing: isBeginEditing
@@ -114,7 +122,7 @@ export default class KeyboardAnimationDelegate {
         }
       } else if (this.parentDialog) {
         if (this.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this)) {
-          if (e && e.userInfo) {
+          if (e?.userInfo) {
             this.keyboardHideAnimation({
               userInfo: e.userInfo,
               isBeginEditing: isBeginEditing
@@ -144,13 +152,13 @@ export default class KeyboardAnimationDelegate {
     }
   }
 
-  keyboardHideAnimation(e: any) {
-    if (!(e && e.isBeginEditing)) {
+  keyboardHideAnimation(e: KeyboardInfoParams) {
+    if (!e?.isBeginEditing) {
       KeyboardAnimationDelegate.isKeyboardVisible = false;
     }
     if (this.getParentViewController() || this.parentDialog) {
       if (this._isKeyboadAnimationCompleted) {
-        if (e && e.userInfo) {
+        if (e?.userInfo) {
           var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
           var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
           var animationOptions = animationCurve << 16;

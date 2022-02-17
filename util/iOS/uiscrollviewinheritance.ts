@@ -1,6 +1,6 @@
 namespace UIScrollViewInheritance {
   export function addPropertiesAndMethods(customNativeObject: __SF_UIScrollView) {
-    const nativeObject = customNativeObject ? customNativeObject : this.nativeObject as __SF_UIScrollView;
+    const nativeObject = customNativeObject ? customNativeObject : (this.nativeObject as __SF_UIScrollView);
 
     nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
 
@@ -23,7 +23,6 @@ namespace UIScrollViewInheritance {
       },
       enumerable: true
     });
-
 
     Object.defineProperty(this, 'contentOffset', {
       get: function () {
@@ -55,7 +54,6 @@ namespace UIScrollViewInheritance {
       },
       enumerable: true
     });
-
 
     Object.defineProperty(this.ios, 'onScrollBeginDragging', {
       set: function (value) {
@@ -154,41 +152,41 @@ class UIScrollViewBase {
       },
       set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
-        const contentOffset = {
-          x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-          y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          value(contentOffset);
         };
-        value(contentOffset);
-        }
       },
       set onScrollBeginDecelerating(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
-        const contentOffset = {
-          x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-          y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          value(contentOffset);
         };
-        value(contentOffset);
-        }
       },
       set onScrollEndDecelerating(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollEndDecelerating = (scrollView: __SF_UIScrollView) => {
-        const contentOffset = {
-          x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-          y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          value(contentOffset);
         };
-        value(contentOffset);
-        }
       },
       set onScrollEndDraggingWillDecelerate(value: (contentOffset: __SF_NSRect, decelerate: any) => void) {
         self.nativeObject.onScrollViewDidEndDraggingWillDecelerate = (scrollView: __SF_UIScrollView, decelerate: any) => {
-        const contentOffset = {
-          x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-          y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          value(contentOffset, decelerate);
         };
-        value(contentOffset, decelerate);
-        }
       },
-      set onScrollEndDraggingWithVelocityTargetContentOffset(value: (contentOffset: __SF_NSRect, velocity: number, targetContentOffset : __SF_NSRect) => void) {
+      set onScrollEndDraggingWithVelocityTargetContentOffset(value: (contentOffset: __SF_NSRect, velocity: number, targetContentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = (scrollView: __SF_UIScrollView, velocity: number, targetContentOffset: __SF_NSRect) => {
           const contentOffset = {
             x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
@@ -197,9 +195,9 @@ class UIScrollViewBase {
           targetContentOffset.x += +scrollView.contentInsetDictionary.left;
           targetContentOffset.y += +scrollView.contentInsetDictionary.top;
           value(contentOffset, velocity, targetContentOffset);
-        }
+        };
       }
-    }
+    };
 
     Object.assign(this._ios, ios);
   }

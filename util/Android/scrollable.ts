@@ -10,9 +10,9 @@ const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widge
 export default class Scrollable {
   protected _android: any; /**TODO: Check out with Cenk */
   onPullRefresh(): void {}
-  nativeInner: any;
-  nativeObject: any;
-  nativeDataAdapter: any;
+  nativeInner: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
+  nativeObject: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
+  nativeDataAdapter: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
   private _overScrollMode = 0;
   private _onGesture: (distances: { distanceX: number; distanceY: number }) => boolean;
   private _onAttachedToWindow: (...args: any) => any;
@@ -56,19 +56,19 @@ export default class Scrollable {
         return self._overScrollMode;
       },
       set overScrollMode(mode: Scrollable['_overScrollMode']) {
-        const nativeLayout = (self instanceof ListView || self instanceof GridView) ? self.nativeInner : self.nativeObject;
+        const nativeLayout = self instanceof ListView || self instanceof GridView ? self.nativeInner : self.nativeObject;
         nativeLayout.setOverScrollMode(mode);
         self._overScrollMode = mode;
       },
       saveInstanceState() {
-        const layoutManager = self instanceof GridView ? self.layoutManager : undefined
+        const layoutManager = self instanceof GridView ? self.layoutManager : undefined;
         return {
-          nativeObject: (layoutManager as any)?.nativeObject.onSaveInstanceState()
-        }
+          nativeObject: layoutManager?.nativeObject.onSaveInstanceState()
+        };
       },
       restoreInstanceState(savedInstance: any) {
         const layoutManager = self instanceof GridView ? self.layoutManager : undefined;
-        (layoutManager as any).nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
+        layoutManager?.nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
       },
       get onAttachedToWindow() {
         return self._onAttachedToWindow;

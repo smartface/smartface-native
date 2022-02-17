@@ -6,7 +6,7 @@ namespace NSLineBreakMode {
   export const byClipping = 2;
   export const byTruncatingHead = 3;
   export const byTruncatingTail = 4;
-  export const byTruncatingMiddle = 5;  
+  export const byTruncatingMiddle = 5;
   export function ellipsizeModeToNSLineBreakMode(mode: EllipsizeMode) {
     switch (mode) {
       case EllipsizeMode.START:

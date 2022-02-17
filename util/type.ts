@@ -9,7 +9,7 @@ namespace TypeUtil {
     return typeof param === 'string';
   }
   export function isObject(param: any) {
-    return typeof param === 'object';
+    return typeof param !== null && !Array.isArray(param);
   }
   export function isFunction(param: any) {
     return typeof param === 'function';

@@ -3,8 +3,11 @@ import NavigationController from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
+type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
+
+type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
 namespace ViewController {
-  export function activateRootController(controller) {
+  export function activateRootController(controller: PageWithController) {
     if (!controller) return;
     controller.__isActive = true;
     let parentController = controller.parentController;
@@ -13,7 +16,7 @@ namespace ViewController {
       parentController = parentController.parentController;
     }
   }
-  export function deactivateRootController(controller) {
+  export function deactivateRootController(controller: PageWithController) {
     if (!controller) return;
     controller.__isActive = false;
     let parentController = controller.parentController;
@@ -22,10 +25,9 @@ namespace ViewController {
       parentController = parentController.parentController;
     }
   }
-  export function setIsActiveOfController(controller, __isActive) {
+  export function setIsActiveOfController(controller: PageWithController, __isActive: boolean) {
     if (!controller || controller instanceof Page) return;
     controller.__isActive = __isActive;
-    // TODO: Ugly code. Beatufy this implementation
     var childController = controller.getCurrentController();
     while (childController) {
       childController.__isActive = __isActive;
@@ -33,14 +35,13 @@ namespace ViewController {
       childController = controller.getCurrentController();
     }
   }
-  export function activateController(controller) {
+  export function activateController(controller: PageWithController) {
     ViewController.setIsActiveOfController(controller, true);
   }
-  export function deactivateController(controller) {
+  export function deactivateController(controller: PageWithController) {
     ViewController.setIsActiveOfController(controller, false);
   }
-  export function setController(params) {
-
+  export function setController(params: ControllerParams) {
     if (params.controller instanceof NavigationController) {
       var childControllerStack = params.controller.childControllers;
       var childControllerStackLenght = childControllerStack.length;
@@ -76,7 +77,7 @@ namespace ViewController {
     }
   }
 
-  export function getCurrentPageFromController(controller) {
+  export function getCurrentPageFromController(controller: PageWithController) {
     if (controller instanceof Page) {
       return controller;
     }
@@ -91,14 +92,14 @@ namespace ViewController {
     return null;
   }
 
-  export function setIsInsideBottomTabBarForAllChildren(controller) {
+  export function setIsInsideBottomTabBarForAllChildren(controller: PageWithController) {
     controller.isInsideBottomTabBar = true;
     if (controller instanceof Page) {
       return;
     }
 
     // for NavigationController
-    controller.childControllers.forEach(function (childController) {
+    controller.childControllers.forEach(function (childController: unknown) {
       childController.isInsideBottomTabBar = true;
       ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });

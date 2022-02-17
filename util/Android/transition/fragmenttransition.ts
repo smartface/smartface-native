@@ -22,7 +22,7 @@ namespace FragmentTransaction {
   export enum AnimationType {
     RIGHTTOLEFT = '0',
     LEFTTORIGHT = '1'
-  };
+  }
 
   export let pageCount = 0;
   export function generatePageID() {
@@ -56,7 +56,6 @@ namespace FragmentTransaction {
       var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
       currentPage.layout.nativeObject.setFocusableInTouchMode(false);
       !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-      // !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
     }
 
     params.onComplete && params.onComplete();
@@ -92,13 +91,6 @@ namespace FragmentTransaction {
       _addedFragmentsInContainer[params.page.pageID] = true;
       fragmentTransaction.add(rootViewId, params.page.nativeObject, '' + params.page.pageID);
     } else {
-      // let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
-      // if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
-      //     // first push to pop up navigation controller
-      //     let firstPageInPopup = params.page.parentController.childControllers[0];
-      //     fragmentTransaction.remove(firstPageInPopup.nativeObject);
-      // }
-
       _addedFragmentsInContainer = {};
       _addedFragmentsInContainer[params.page.pageID] = true;
       // replace removes all added fragments
@@ -128,7 +120,6 @@ namespace FragmentTransaction {
     _addedFragmentsInContainer = {};
     _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.replace(rootViewId, page.nativeObject);
-    // fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
   }

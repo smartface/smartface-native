@@ -2,7 +2,7 @@ import AttributedString from '../../ui/attributedstring';
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
 export default class AttributedTitle {
-  private _attributedTitle: AttributedString = undefined;
+  private _attributedTitle: AttributedString;
   constructor(private context: any) {}
 
   get attributedTitle(): AttributedString {

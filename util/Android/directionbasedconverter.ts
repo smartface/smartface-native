@@ -31,7 +31,7 @@ namespace DirectionBasedConverter {
       nativeLayout.setLayoutDirection(Application.LayoutDirection.RIGHTTOLEFT);
     }
   }
-  
+
   export function flipHorizontally(view: ViewBase) {
     return RTL ? view.flipHorizontally() : view;
   }

@@ -17,9 +17,9 @@ namespace AndroidConfig {
   export enum SDK {
     SDK_NOUGAT = 24,
     SDK_MARSHMALLOW = 23,
-    SDK_LOLLIPOP =21,
-    SDK_KITKAT =19
-  };
+    SDK_LOLLIPOP = 21,
+    SDK_KITKAT = 19
+  }
   export const activity = SpratAndroidActivity;
   export const activityResources = AndroidConfig.activity.getResources();
   export function getResourceId(resourceName: string, type: any) {
