@@ -9,8 +9,9 @@
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
-declare class Blob {
-  constructor(parts: string[], properties: { type: string });
+export declare class Blob {
+  nativeObject: any;
+  constructor(parts?: string[], properties?: { type: string });
   /**
    * Returns the type of Blob data.
    *
@@ -85,4 +86,4 @@ declare class Blob {
   static createFromUTF8String(utf8String: string): Blob;
 }
 
-export = Blob;
+export default Blob;
