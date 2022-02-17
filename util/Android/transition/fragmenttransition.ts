@@ -19,10 +19,10 @@ var pageAnimationsCache = {},
 var _addedFragmentsInContainer = {};
 
 namespace FragmentTransaction {
-  export const AnimationType = Object.freeze({
-    RIGHTTOLEFT: '0',
-    LEFTTORIGHT: '1'
-  });
+  export enum AnimationType {
+    RIGHTTOLEFT = '0',
+    LEFTTORIGHT = '1'
+  };
 
   export let pageCount = 0;
   export function generatePageID() {

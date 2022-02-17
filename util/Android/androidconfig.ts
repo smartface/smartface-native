@@ -14,12 +14,12 @@ namespace AndroidConfig {
   export const isEmulator = (NativeBuildConfig.FLAVOR as string).toLowerCase().indexOf(EMULATOR_KEYWORD) !== -1;
   export const packageName = PACKAGE_NAME;
   export const sdkVersion = NativeBuild.VERSION.SDK_INT;
-  export const SDK = Object.freeze({
-    SDK_NOUGAT: 24,
-    SDK_MARSHMALLOW: 23,
-    SDK_LOLLIPOP: 21,
-    SDK_KITKAT: 19
-  });
+  export enum SDK {
+    SDK_NOUGAT = 24,
+    SDK_MARSHMALLOW = 23,
+    SDK_LOLLIPOP =21,
+    SDK_KITKAT =19
+  };
   export const activity = SpratAndroidActivity;
   export const activityResources = AndroidConfig.activity.getResources();
   export function getResourceId(resourceName: string, type: any) {
