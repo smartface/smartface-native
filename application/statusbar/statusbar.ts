@@ -5,11 +5,11 @@ declare enum StatusBarStyle {
   LIGHTCONTENT
 }
 
-declare type StatusBar = {
+declare class StatusBar {
   height: number;
   backgroundColor: Color;
   visible: boolean;
   style: StatusBarStyle;
-};
+}
 
-export = StatusBar;
+export default StatusBar;
