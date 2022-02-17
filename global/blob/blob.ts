@@ -1,3 +1,5 @@
+import NativeComponent from 'core/native-component';
+
 /**
  * @class Blob
  * @since 0.1
@@ -9,8 +11,7 @@
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
-export declare class Blob {
-  nativeObject: any;
+export declare class Blob extends NativeComponent {
   constructor(parts?: string[], properties?: { type: string });
   /**
    * Returns the type of Blob data.
