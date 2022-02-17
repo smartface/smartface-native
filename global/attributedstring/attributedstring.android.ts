@@ -19,7 +19,7 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
     super();
 
     if (params) {
-      for (var param in params) {
+      for (const param in params) {
         this[param] = params[param];
       }
     }
@@ -70,11 +70,11 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
   setSpan(stringBuilder: any) {
     const self = this;
     stringBuilder.append(this.string);
-    var start = stringBuilder.length() - this.string.length;
-    var end = stringBuilder.length();
+    const start = stringBuilder.length() - this.string.length;
+    const end = stringBuilder.length();
   
     if (this.link !== undefined) {
-      var clickableSpanOverrideMethods = {
+      const clickableSpanOverrideMethods = {
         onClick: function () {
           self.textView.onClick && self.textView.onClick(self.link);
           self.textView.onLinkClick && self.textView.onLinkClick(self.link);
