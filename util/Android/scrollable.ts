@@ -1,23 +1,34 @@
-import IView from '../../ui/view/view';
 import ListViewItem from '../../ui/listviewitem';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import ListView from '../../ui/listview';
 import GridView from '../../ui/gridview';
+import NativeComponent from '../../core/native-component';
 
 const NativeRecyclerView = requireClass('androidx.recyclerview.widget.RecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
 
-export default class Scrollable {
-  protected _android: any; /**TODO: Check out with Cenk */
+type AndroidParams = {
+  onGesture: (distances: { distanceX: number; distanceY: number }) => boolean;
+  overScrollMode: number;
+  saveInstanceState(): {
+    nativeObject: any;
+  };
+  restoreInstanceState(savedInstance: any): void;
+  onAttachedToWindow: (...args: any) => any;
+  onDetachedFromWindow: (...args: any) => any;
+};
+
+export default class Scrollable<TNative extends Record<string, any> = Record<string, any>> extends NativeComponent {
+  protected _android: AndroidParams & TNative;
   onPullRefresh(): void {}
-  nativeInner: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
-  nativeObject: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
-  nativeDataAdapter: any; /** TODO: Cannot be set to protected or private until const android and self=this can be optimized */
+  private nativeInner: any;
+  private nativeDataAdapter: any;
   private _overScrollMode = 0;
   private _onGesture: (distances: { distanceX: number; distanceY: number }) => boolean;
   private _onAttachedToWindow: (...args: any) => any;
   private _onDetachedFromWindow: (...args: any) => any;
   constructor() {
+    super();
     this.nativeObject.setOnRefreshListener(
       NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: () => {
@@ -28,35 +39,36 @@ export default class Scrollable {
 
     this.nativeInner.addOnItemTouchListener(
       NativeRecyclerView.OnItemTouchListener.implement({
-        onInterceptTouchEvent: () => !(this as any).touchEnabled,
+        onInterceptTouchEvent: () => !(this as any).touchEnabled /**TODO: Fix as any  */,
         onRequestDisallowInterceptTouchEvent: () => {},
         onTouchEvent: () => {}
       })
     );
 
     const self = this;
-    const android = {
+    const nativeInner = this.nativeInner;
+    const android: AndroidParams = {
       get onGesture() {
         return self._onGesture;
       },
       set onGesture(value: Scrollable['_onGesture']) {
         self._onGesture = value;
         if (self._onGesture) {
-          self.nativeInner.setJsCallbacks({
+          nativeInner.setJsCallbacks({
             onScrollGesture: (distanceX: number, distanceY: number) => {
               const returnValue = self._onGesture?.({ distanceX: distanceX, distanceY: distanceY }) ?? true;
               return !!returnValue;
             }
           });
         } else {
-          self.nativeInner.setJsCallbacks(null);
+          nativeInner.setJsCallbacks(null);
         }
       },
       get overScrollMode() {
         return self._overScrollMode;
       },
       set overScrollMode(mode: Scrollable['_overScrollMode']) {
-        const nativeLayout = self instanceof ListView || self instanceof GridView ? self.nativeInner : self.nativeObject;
+        const nativeLayout = self instanceof ListView || self instanceof GridView ? nativeInner : self.nativeObject;
         nativeLayout.setOverScrollMode(mode);
         self._overScrollMode = mode;
       },
@@ -68,7 +80,7 @@ export default class Scrollable {
       },
       restoreInstanceState(savedInstance: any) {
         const layoutManager = self instanceof GridView ? self.layoutManager : undefined;
-        layoutManager?.nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
+        layoutManager?.nativeObject.onRestoreInstanceSltate(savedInstance.nativeObject);
       },
       get onAttachedToWindow() {
         return self._onAttachedToWindow;
@@ -96,7 +108,7 @@ export default class Scrollable {
   }
 
   indexByListViewItem = (listViewItem: ListViewItem): number => {
-    return this.nativeInner.getChildAdapterPosition((listViewItem as any).nativeObject);
+    return this.nativeInner.getChildAdapterPosition((listViewItem as any).nativeObject); /**TODO: Fix as any after listviewitem is completed */
   };
 
   deleteRowRange = (params: Record<string, any>) => {

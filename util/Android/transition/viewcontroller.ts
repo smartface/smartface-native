@@ -3,6 +3,8 @@ import NavigationController from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
+/** TODO: Check this out after bottomtabbar, navigationcontroller and page is completed */
+
 type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
 
 type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
