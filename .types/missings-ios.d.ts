@@ -1079,7 +1079,7 @@ declare class __SF_SMFReachability {
 }
 
 declare class __SF_Timer {
-  scheduledTimer(delay: number, callback: () => void): any;
+  scheduledTimer(delay: number, callback: () => void, repeats: boolean): any;
   invalidate(): void;
 }
 
