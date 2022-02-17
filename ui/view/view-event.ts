@@ -4,3 +4,5 @@ export const ViewEvents = {
   TouchEnded: 'touchEnded',
   TouchMoved: 'touchMoved'
 } as const;
+
+export type ViewEvents = ExtractValues<typeof ViewEvents>;

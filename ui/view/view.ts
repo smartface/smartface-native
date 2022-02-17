@@ -5,6 +5,7 @@ import NativeEventEmitterComponent from "core/native-event-emitter-component";
 import { INativeComponent } from "core/inative-component";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
 import Flex from "core/flex";
+import { ViewEvents } from "./view-event";
 
 type Events = ExtractEventValues<typeof ViewEvents>
 /**
@@ -25,8 +26,8 @@ type Events = ExtractEventValues<typeof ViewEvents>
  *     myView.backgroundColor = Color.RED;
  *
  */
-interface IView<TEvent extends string = Events, TIOS extends {[key: string]: any} = {[key: string]: any} , TAND extends {[key: string]: any} = {[key: string]: any} >
-	extends IEventEmitter<TEvent | Events>, INativeComponent
+interface IView<TEvent extends string = ViewEvents, TIOS extends {[key: string]: any} = {[key: string]: any} , TAND extends {[key: string]: any} = {[key: string]: any} >
+	extends IEventEmitter<TEvent | ViewEvents>, INativeComponent
 {
 	/**
 	 * Gets/sets the transitionId to be used for transitionViews. See transitionViews for more information
@@ -877,59 +878,59 @@ interface IView<TEvent extends string = Events, TIOS extends {[key: string]: any
 	 */
 	FORCERIGHTTOLEFT = 4,
 }
-export enum ViewEvents {
-	/**
-	 * This event is called when a touch screen motion event starts.
-	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-	 * @param {Object} motionEvent
-	 * @param {Number} motionEvent.x
-	 * @param {Number} motionEvent.y
-	 * @android
-	 * @ios
-	 * @since 4.3.5
-	 */
-	Touch = "touch",
-	/**
-	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
-	 *
-	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-	 * @param {Object} motionEvent
-	 * @param {Number} motionEvent.x
-	 * @param {Number} motionEvent.y
-	 * @android
-	 * @ios
-	 * @since 4.3.5
-	 */
-	TouchCancelled = "touchCancelled",
-	/**
-	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
-	 *
-	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
-	 * @param {Object} motionEvent
-	 * @param {Boolean} motionEvent.isInside
-	 * @param {Number} motionEvent.x
-	 * @param {Number} motionEvent.y
-	 * @android
-	 * @ios
-	 * @since 4.3.5
-	 */
-	TouchEnded = "touchEnded",
-	/**
-	 * This event is called when the touch has changed its point on the screen.
-	 *
-	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-	 * @param {Object} motionEvent
-	 * @param {Boolean} isInside
-	 * @param {Number} motionEvent.x
-	 * @param {Number} motionEvent.y
-	 * @android
-	 * @ios
-	 * @member UI.View
-	 * @since 4.3.5
-	 */
-	TouchMoved = "touchMoved",
-}
+// export enum ViewEvents {
+// 	/**
+// 	 * This event is called when a touch screen motion event starts.
+// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+// 	 * @param {Object} motionEvent
+// 	 * @param {Number} motionEvent.x
+// 	 * @param {Number} motionEvent.y
+// 	 * @android
+// 	 * @ios
+// 	 * @since 4.3.5
+// 	 */
+// 	Touch = "touch",
+// 	/**
+// 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
+// 	 *
+// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+// 	 * @param {Object} motionEvent
+// 	 * @param {Number} motionEvent.x
+// 	 * @param {Number} motionEvent.y
+// 	 * @android
+// 	 * @ios
+// 	 * @since 4.3.5
+// 	 */
+// 	TouchCancelled = "touchCancelled",
+// 	/**
+// 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
+// 	 *
+// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+// 	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
+// 	 * @param {Object} motionEvent
+// 	 * @param {Boolean} motionEvent.isInside
+// 	 * @param {Number} motionEvent.x
+// 	 * @param {Number} motionEvent.y
+// 	 * @android
+// 	 * @ios
+// 	 * @since 4.3.5
+// 	 */
+// 	TouchEnded = "touchEnded",
+// 	/**
+// 	 * This event is called when the touch has changed its point on the screen.
+// 	 *
+// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
+// 	 * @param {Object} motionEvent
+// 	 * @param {Boolean} isInside
+// 	 * @param {Number} motionEvent.x
+// 	 * @param {Number} motionEvent.y
+// 	 * @android
+// 	 * @ios
+// 	 * @member UI.View
+// 	 * @since 4.3.5
+// 	 */
+// 	TouchMoved = "touchMoved",
+// }
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
@@ -955,6 +956,201 @@ extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
 	protected _onTouchEnded: IView['onTouchEnded'];
 	protected _onTouchCancelled: IView['onTouchCancelled'];
 	protected _onTouchMoved: IView['onTouchMoved'];
+}
+
+export declare class AbstractView<TEvent extends string = ViewEvents> extends ViewBase<TEvent> implements IView<ViewEvents> {
+	transitionId: string;
+	accessible: boolean;
+	accessibilityLabel: string;
+	alpha: number;
+	backgroundColor: Color;
+	borderColor: Color;
+	borderWidth: number;
+	borderRadius: number;
+	id: string;
+	testId: string;
+	visible: boolean;
+	rotation: number;
+	rotationX: number;
+	rotationY: number;
+	touchEnabled: boolean;
+	left: number;
+	top: number;
+	right: number;
+	bottom: number;
+	height: number;
+	width: number;
+	minWidth: number;
+	minHeight: number;
+	maxWidth: number;
+	maxHeight: number;
+	paddingTop: number;
+	paddingBottom: number;
+	paddingLeft: number;
+	paddingRight: number;
+	padding: number;
+	marginTop: number;
+	marginBottom: number;
+	marginLeft: number;
+	marginRight: number;
+	margin: number;
+	positionType: Flex.PositionType;
+	flexGrow: number;
+	aspectRatio: number;
+	flexShrink: number;
+	flexBasis: number;
+	scale: Point2D;
+	alignSelf: Flex.AlignSelf;
+	applyLayout(): void;
+	bringToFront(): void;
+	flipHorizontally(): void;
+	flipVertically(): void;
+	getScreenLocation(): Point2D;
+	getParent(): IView<"touch" | "touchCancelled" | "touchEnded" | "touchMoved", { [key: string]: any; }, { [key: string]: any; }>;
+	onTouch: (e: Point2D) => boolean | void;
+	onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
+	onTouchCancelled: (point: Point2D) => boolean | void;
+	onTouchMoved: (e: boolean | { isInside: boolean; }, point?: Point2D) => boolean | void;
+	dirty(): void;
+	android: { [key: string]: any; } & Partial<{
+		/**
+		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+		 * This property only supported for api level 23 and above.
+		 *
+		 * @property {Boolean} [useForeground = false]
+		 * @android
+		 * @member UI.View
+		 * @since 4.0.2
+		 */
+		useForeground: boolean;
+		/**
+		 * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+		 * to see the effect.
+		 *
+		 * @property {Boolean} [rippleEnabled = false]
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleEnabled: boolean;
+		/**
+		 * Gets/sets ripple effect color for view.
+		 *
+		 * @property {UI.Color} rippleColor
+		 * @android
+		 * @member UI.View
+		 * @since 3.2.1
+		 */
+		rippleColor: Color;
+		/**
+		 * Gets/Sets the elevation of the view. For the views that has
+		 * StateListAnimator natively like Button, will lost its own
+		 * StateListAnimation when elevation value changed.
+		 * For details : https://developer.android.com/training/material/shadows-clipping.html
+		 *
+		 * @property {Number} elevation
+		 * @android
+		 * @member UI.View
+		 * @see https://developer.android.com/training/material/shadows-clipping.html
+		 * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
+		 * @since 1.1.12
+		 */
+		elevation: number;
+		/**
+		 * Gets/sets the depth location of the view relative to its elevation. To put view over button,
+		 * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+		 * This property affects after Android Lollipop. No-op before api level 21.
+		 *
+		 * @property {Number} zIndex
+		 * @android
+		 * @member UI.View
+		 * @since 2.0.8
+		 */
+		zIndex: number;
+	}>;
+	ios: { [key: string]: any; } & Partial<{
+		/**
+		 * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
+		 * The default value of this property is false
+		 *
+		 * @property {Boolean} [exclusiveTouch = false]
+		 * @ios
+		 * @since 2.0.10
+		 */
+		exclusiveTouch: boolean;
+		/**
+		 * A Boolean value that determines whether subviews are confined to the bounds of the view.
+		 *
+		 * @property {Boolean} [clipsToBounds = false]
+		 * @ios
+		 * @since 1.1.15
+		 */
+		clipsToBounds: number;
+		/**
+		 * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
+		 *
+		 *     @example
+		 *     view.ios.masksToBounds = false;
+		 *     view.ios.shadowOffset = {x:10,y:10};
+		 *     view.ios.shadowRadius = 5;
+		 *     view.ios.shadowOpacity = 0.5;
+		 *     view.ios.shadowColor = Color.GRAY;
+		 *
+		 * @property {Object} [shadowOffset = {x: 0.0,y: -3.0}]
+		 * @property {Number} shadowOffset.x
+		 * @property {Number} shadowOffset.y
+		 * @ios
+		 * @since 2.0.6
+		 */
+		shadowOffset: Point2D;
+		/**
+		 * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
+		 *
+		 * @property {Number} [shadowRadius = 3]
+		 * @ios
+		 * @since 2.0.6
+		 */
+		shadowRadius: number;
+		/**
+		 * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
+		 *
+		 * @property {Number} [shadowOpacity = 0]
+		 * @ios
+		 * @since 2.0.6
+		 */
+		shadowOpacity: number;
+		/**
+		 * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
+		 *
+		 * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+		 * @ios
+		 * @since 2.0.6
+		 */
+		shadowColor: Color;
+		/**
+		 *
+		 * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
+		 *
+		 * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
+		 * @ios
+		 * @static
+		 * @since 3.1.3
+		 */
+		viewAppearanceSemanticContentAttribute: SemanticContentAttribute;
+		/**
+		 * Disables a view transition animation.
+		 *
+		 * @method performWithoutAnimation
+		 * @param {Function} functionWithoutAnimation
+		 * @ios
+		 * @since 4.2.1
+		 */
+		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+	}>;
+	masksToBounds: boolean;
+	maskedBorders: Border[];
+	getPosition: () => { left: number; top: number; width: number; height: number; }; 
+
 }
 
 export default IView;

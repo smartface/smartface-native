@@ -18,10 +18,9 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 
 const activity = AndroidConfig.activity;
 const Events = { ...ViewGroup.Events, ...FlexLayoutEvents };
-type EventsType = ExtractValues<typeof Events>;
 
-class FlexLayoutAndroid<TEvent extends string = EventsType>
-  extends ViewGroup<TEvent | ExtractValues<typeof FlexLayoutEvents>, AndroidProps>
+class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
+  extends ViewGroup<TEvent | FlexLayoutEvents, AndroidProps>
   implements IFlexLayout
 {
   private _onInterceptTouchEvent: (e: any) => void;

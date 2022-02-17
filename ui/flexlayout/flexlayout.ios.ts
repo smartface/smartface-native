@@ -8,7 +8,7 @@ import { FlexLayoutEvents } from './flexlayout-events';
 
 const Events = { ...ViewGroupIOS.Events, ...FlexLayoutEvents };
 
-class FlexLayoutIOS<TEvent extends string = ExtractValues<typeof FlexLayoutEvents>> extends ViewGroupIOS<TEvent | ExtractValues<typeof FlexLayoutEvents>> implements IFlexLayout
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout
 {
   constructor(params: any) {
     super(params);

@@ -93,7 +93,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ExtractValues<typeof ViewEvents>, TNative extends {[key: string]: any} = {[key: string]: any}>
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends {[key: string]: any} = {[key: string]: any}>
   extends ViewBase<TEvent>
   implements INativeComponent, View<TEvent>
 {

@@ -1,7 +1,10 @@
 import Color from '../color';
 import Flex from '../../core/flex';
-import { IViewGroup } from 'ui/viewgroup/viewgroup';
+import { AbstractViewGroup, IViewGroup } from 'ui/viewgroup/viewgroup';
 import { FlexLayoutEvents } from './flexlayout-events';
+import { EventListenerCallback } from 'core/eventemitter';
+import { Point2D } from 'primitive/point2d';
+import IView, { AbstractView, SemanticContentAttribute, Border } from 'ui/view/view';
 
 export type AndroidProps = Partial<{
   /**
@@ -82,8 +85,6 @@ export type AndroidProps = Partial<{
   zIndex: number;
 }>;
 
-type Events = ExtractValues<typeof FlexLayoutEvents>;
-
 /**
  * @class UI.FlexLayout
  * @since 0.1
@@ -121,7 +122,7 @@ type Events = ExtractValues<typeof FlexLayoutEvents>;
  *     page.layout.addChild(myFlexLayout);
  *
  */
-export interface IFlexLayout<TEvent extends string = Events, TIOS = {}, TAND = {}> extends IViewGroup<TEvent | Events, TIOS, TAND & AndroidProps> {
+export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TIOS = {}, TAND = {}> extends IViewGroup<TEvent | FlexLayoutEvents, TIOS, TAND & AndroidProps> {
   /**
    * This property specifies where items will start to be positioned.
    * If you set RTL(right to left) objects will be positioned by starting from right edge of the Flex.
@@ -207,6 +208,15 @@ export interface IFlexLayout<TEvent extends string = Events, TIOS = {}, TAND = {
    * @ios
    */
   applyLayout(): void;
+}
+
+export declare class AbstractFlexLayout<TEvent extends string = FlexLayoutEvents> extends AbstractViewGroup<TEvent | FlexLayoutEvents> implements IFlexLayout<TEvent | FlexLayoutEvents> {
+  direction: Flex.Direction;
+  flexDirection: Flex.FlexDirection;
+  justifyContent: Flex.JustifyContent;
+  alignContent: Flex.AlignContent;
+  alignItems: Flex.AlignItems;
+  flexWrap: Flex.FlexWrap;
 }
 
 export default IFlexLayout;

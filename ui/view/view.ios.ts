@@ -20,9 +20,9 @@ function isInside(frame, point) {
 
 type ViewIOSParams = {};
 
-export default class ViewIOS<TEvent extends string = string, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements View<TEvent> {
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements View<TEvent> {
   android = {
-    
+
   };
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];

@@ -1,8 +1,6 @@
-import { ConstructorOf } from "core/constructorof";
-import IFlexLayout from "./flexlayout";
-import { FlexLayoutEvents } from "./flexlayout-events";
+import { AbstractFlexLayout } from "./flexlayout";
 
-const FlexLayout: ConstructorOf<IFlexLayout> = require(`./image.${Device.deviceOS.toLowerCase()}`)
+const FlexLayout: typeof AbstractFlexLayout = require(`./image.${Device.deviceOS.toLowerCase()}`)
 .default;
 
 export default FlexLayout;

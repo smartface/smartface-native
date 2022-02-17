@@ -12,7 +12,7 @@ type EventsType = ExtractEventValues<typeof Events>;
 
 export class ViewGroup<
   TEvent extends string = EventsType, TNative = {}
-> extends ViewAndroid<EventsType | ExtractEventValues<TEvent>, TNative> {
+> extends ViewAndroid<ViewGroupEvents, TNative> {
   static Events = Events;
   private _onViewAdded = null;
   private _onViewRemoved = null;
