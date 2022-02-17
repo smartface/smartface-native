@@ -1,3 +1,9 @@
+declare enum DEVICE_TYPES {
+	UNSPECIFIED = "unspecified",
+	PHONE = "phone",
+	TABLET = "tablet"
+}
+
 /**
  * @class Device.Hardware
  * @since 0.1
@@ -11,6 +17,7 @@
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
  *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
+ *     console.log("Device.Hardware.deviceType: "   + Hardware.deviceType);
  *
  */
 declare const Hardware: {
@@ -91,6 +98,33 @@ declare const Hardware: {
 	 * @since 0.1
 	 */
 	readonly brandName: string;
+	/**
+	 *
+	 * Returns the device type.
+	 * @property {string} deviceType
+	 * @android
+	 * @ios
+	 * @readonly
+	 * @static
+	 * @since 4.4.1
+	 */
+	readonly deviceType: string;
+
+  /**
+   * Defines the available device types
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 4.4.1
+   * @example
+   * ```
+   * Hardware.deviceType === Hardware.DeviceType.PHONE; // determines if the current device is a mobile phone
+	 * Hardware.deviceType === "phone";
+   * ```
+   */
+  readonly DeviceType: typeof DEVICE_TYPES;
 };
 
-export = Hardware;
+export default Hardware
+

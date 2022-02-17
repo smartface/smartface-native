@@ -11,6 +11,12 @@ Hardware.ios = {};
 Hardware.ios.microphone = {};
 Hardware.ios.microphone.requestRecordPermission = function() {};
 
+const DEVICE_TYPES = {
+    UNSPECIFIED: "unspecified",
+	PHONE: "phone",
+	TABLET: "tablet",
+}
+
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function() {
         var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
@@ -46,6 +52,16 @@ Object.defineProperty(Hardware, 'brandModel', {
 Object.defineProperty(Hardware.android, 'vendorID', {
     get: function() {
         return NativeBuild.SERIAL;
+    },
+    configurable: false
+});
+
+Object.defineProperty(Hardware, 'deviceType', {
+    get: function() {
+        const NativeR = requireClass(AndroidConfig.packageName + '.R');
+        const activity = AndroidConfig.activity;
+        const isTablet = activity.getResources().getBoolean(NativeR.bool.isTablet);
+        return isTablet ? DEVICE_TYPES.TABLET : DEVICE_TYPES.PHONE;
     },
     configurable: false
 });
