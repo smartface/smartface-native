@@ -1,11 +1,12 @@
 import Color from "../color";
 import { Point2D } from "../../primitive/point2d";
-import {  EventEmitterMixin, IEventEmitter } from "core/eventemitter";
+import {  IEventEmitter } from "core/eventemitter";
+import NativeEventEmitterComponent from "core/native-event-emitter-component";
 import { INativeComponent } from "core/inative-component";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
-import { EventType } from "../../core/eventemitter/EventType";
-import NativeComponent from "core/native-component";
 import Flex from "core/flex";
+
+type Events = ExtractEventValues<typeof ViewEvents>
 /**
  * @class UI.View
  * @since 0.1
@@ -24,8 +25,8 @@ import Flex from "core/flex";
  *     myView.backgroundColor = Color.RED;
  *
  */
-interface IView<TEvent extends EventType = ExtractEventValues<typeof ViewEvents>, TIOS extends {[key: string]: any} = {[key: string]: any} , TAND extends {[key: string]: any} = {[key: string]: any} >
-	extends IEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<typeof ViewEvents>>, INativeComponent
+interface IView<TEvent extends string = Events, TIOS extends {[key: string]: any} = {[key: string]: any} , TAND extends {[key: string]: any} = {[key: string]: any} >
+	extends IEventEmitter<TEvent | Events>, INativeComponent
 {
 	/**
 	 * Gets/sets the transitionId to be used for transitionViews. See transitionViews for more information
@@ -930,10 +931,10 @@ export enum ViewEvents {
 	TouchMoved = "touchMoved",
 }
 
-const NativeEventEmitter = EventEmitterMixin(NativeComponent);
+// const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<TEvent extends EventType = EventType>
-extends NativeEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<ViewEvents>> {
+export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>>
+extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
 	
 	// export namespace ios {
 	// 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;

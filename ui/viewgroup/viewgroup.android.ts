@@ -7,10 +7,11 @@ import { ExtractEventValues } from "../../core/eventemitter/extract-event-values
 import { ViewAndroid } from "../view/view.android";
 import { ViewGroupEvents } from "./viewgroup-events";
 const Events = { ...ViewAndroid.Events, ...ViewGroupEvents };
+
 type EventsType = ExtractEventValues<typeof Events>;
 
 export class ViewGroup<
-  TEvent extends string | { [key: string]: string } = string, TNative = {}
+  TEvent extends string = EventsType, TNative = {}
 > extends ViewAndroid<EventsType | ExtractEventValues<TEvent>, TNative> {
   static Events = Events;
   private _onViewAdded = null;

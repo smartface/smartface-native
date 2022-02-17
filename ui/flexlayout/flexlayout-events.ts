@@ -1,3 +1,3 @@
-export enum FlexLayoutEvents {
-  InterceptTouchEvent = "interceptTouchEvent"
-}
+export const FlexLayoutEvents = {
+  InterceptTouchEvent: "interceptTouchEvent"
+} as const;

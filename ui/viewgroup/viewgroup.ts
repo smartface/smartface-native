@@ -1,5 +1,6 @@
 import { EventType } from "core/eventemitter/EventType";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
+import IView from "../view/view";
 import View from "../view/view";
 import { ViewGroupEvents } from "./viewgroup-events";
 
@@ -20,12 +21,8 @@ import { ViewGroupEvents } from "./viewgroup-events";
  *     myFlexLayout.addChild(myLabel);
  */
 
-export declare interface IViewGroup<TEvent extends EventType = typeof ViewGroupEvents, TIOS = {}, TAND = {}>
-  extends View<
-    TEvent extends string
-      ? TEvent | ExtractEventValues<typeof ViewGroupEvents>
-      : TEvent & typeof ViewGroupEvents, TIOS, TAND
-  > {
+export declare interface IViewGroup<TEvent extends string = ExtractEventValues<typeof ViewGroupEvents>, TIOS = {}, TAND = {}>
+  extends View<TEvent | ExtractEventValues<typeof ViewGroupEvents>, TIOS, TAND> {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -75,16 +72,7 @@ export declare interface IViewGroup<TEvent extends EventType = typeof ViewGroupE
    * @since 3.1.3
    */
   getChildList(): View[];
-  /**
-   * Called when a child does not want this parent and its ancestors to intercept touch events .
-   * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
-   *
-   * @method requestDisallowInterceptTouchEvent
-   * @param {Boolean} disallow
-   * @android
-   * @since 4.0.3
-   */
-  requestDisallowInterceptTouchEvent(disallow: boolean): void;
+  
   /**
    * Finds a child view with specified id within the layout.
    *
@@ -146,4 +134,17 @@ export declare interface IViewGroup<TEvent extends EventType = typeof ViewGroupE
    * ````
    */
   onViewRemoved: (view: View) => void;
+
+  // android: IView<TEvent, TIOS, TAND>["android"] & {
+  //   /**
+  //  * Called when a child does not want this parent and its ancestors to intercept touch events .
+  //  * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+  //  *
+  //  * @method requestDisallowInterceptTouchEvent
+  //  * @param {Boolean} disallow
+  //  * @android
+  //  * @since 4.0.3
+  //  */
+  //   requestDisallowInterceptTouchEvent(disallow: boolean): void;
+  // }
 }
