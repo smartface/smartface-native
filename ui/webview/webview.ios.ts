@@ -1,11 +1,82 @@
 import File from 'io/file';
 import ViewIOS from 'ui/view/view.ios';
 import Invocation from 'util/iOS/invocation';
-import { WebViewEvents } from './events';
+import IWebView, { iOSProps } from './webview';
+import { WebViewEvents } from './webview-events';
 
-class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
+function dataTypesToNSSet(dataTypes) {
+  const alloc = Invocation.invokeClassMethod('NSSet', 'alloc', [], 'id');
+  //TODO: new Invocation
+  const argDataTypes = new Invocation.Argument({
+    type: 'id',
+    value: dataTypes
+  });
+  return Invocation.invokeInstanceMethod(alloc, 'initWithArray:', [argDataTypes], 'id');
+}
+
+function removeDataOfTypes(dataTypes) {
+  let defaultDataStore;
+  const invocationDefaultDataStore = __SF_NSInvocation.createClassInvocationWithSelectorInstance('defaultDataStore', 'WKWebsiteDataStore');
+  if (invocationDefaultDataStore) {
+    invocationDefaultDataStore.setClassTargetFromString('WKWebsiteDataStore');
+    invocationDefaultDataStore.setSelectorWithString('defaultDataStore');
+    invocationDefaultDataStore.retainArguments();
+
+    invocationDefaultDataStore.invoke();
+    defaultDataStore = invocationDefaultDataStore.getReturnValue();
+  }
+
+  let nsdate;
+  const invocationNSDate = __SF_NSInvocation.createClassInvocationWithSelectorInstance('dateWithTimeIntervalSince1970:', 'NSDate');
+  if (invocationNSDate) {
+    invocationNSDate.setClassTargetFromString('NSDate');
+    invocationNSDate.setSelectorWithString('dateWithTimeIntervalSince1970:');
+    invocationNSDate.retainArguments();
+    invocationNSDate.setDoubleArgumentAtIndex(0, 2);
+
+    invocationNSDate.invoke();
+    nsdate = invocationNSDate.getReturnValue();
+  }
+
+  const invocationFetchDataRecordsOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance('fetchDataRecordsOfTypes:completionHandler:', defaultDataStore);
+  if (invocationFetchDataRecordsOfTypes) {
+    const invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance('setIDBlockArgument:atIndex:', invocationFetchDataRecordsOfTypes);
+    if (invocationCheck) {
+      invocationFetchDataRecordsOfTypes.target = defaultDataStore;
+      invocationFetchDataRecordsOfTypes.setSelectorWithString('fetchDataRecordsOfTypes:completionHandler:');
+      invocationFetchDataRecordsOfTypes.retainArguments();
+      invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
+      invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function (result) {}, 3);
+
+      invocationFetchDataRecordsOfTypes.invoke();
+    }
+  }
+
+  const invocationRemoveDataOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance('removeDataOfTypes:modifiedSince:completionHandler:', defaultDataStore);
+  if (invocationRemoveDataOfTypes) {
+    const invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance('setVoidBlockArgument:atIndex:', invocationRemoveDataOfTypes);
+    if (invocationCheck) {
+      invocationRemoveDataOfTypes.target = defaultDataStore;
+      invocationRemoveDataOfTypes.setSelectorWithString('removeDataOfTypes:modifiedSince:completionHandler:');
+      invocationRemoveDataOfTypes.retainArguments();
+      invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
+      invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate, 3);
+      invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function () {}, 4);
+
+      invocationRemoveDataOfTypes.invoke();
+    }
+  }
+}
+class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent | WebViewEvents, iOSProps> implements IWebView {
+  private _scrollBarEnabled: boolean;
+  private _onError;
+  private _onShow;
+  private _onLoad;
+  private _onChangedURL;
+  private _safeAreaInsets;
+  private _sslPinning;
   static removeAllData = function () {
-    const allWebsiteDataTypes;
+    let allWebsiteDataTypes;
     const invocationWebsiteDataTypes = __SF_NSInvocation.createClassInvocationWithSelectorInstance('allWebsiteDataTypes', 'WKWebsiteDataStore');
     if (invocationWebsiteDataTypes) {
       invocationWebsiteDataTypes.setClassTargetFromString('WKWebsiteDataStore');
@@ -16,7 +87,7 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
       allWebsiteDataTypes = invocationWebsiteDataTypes.getReturnValue();
     }
 
-    const defaultDataStore;
+    let defaultDataStore;
     const invocationDefaultDataStore = __SF_NSInvocation.createClassInvocationWithSelectorInstance('defaultDataStore', 'WKWebsiteDataStore');
     if (invocationDefaultDataStore) {
       invocationDefaultDataStore.setClassTargetFromString('WKWebsiteDataStore');
@@ -27,7 +98,7 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
       defaultDataStore = invocationDefaultDataStore.getReturnValue();
     }
 
-    const nsdate;
+    let nsdate;
     const invocationNSDate = __SF_NSInvocation.createClassInvocationWithSelectorInstance('dateWithTimeIntervalSince1970:', 'NSDate');
     if (invocationNSDate) {
       invocationNSDate.setClassTargetFromString('NSDate');
@@ -68,8 +139,8 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
       }
     }
   };
-  constructor(params: any) {
-    super(params);
+  constructor(params?: Partial<IWebView>) {
+    super();
     const self = this;
     if (!this.nativeObject) {
       this.nativeObject = new __SF_WKWebView();
@@ -80,89 +151,88 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
 
     this.nativeObject.setValueForKey(false, 'opaque');
 
-    
-  self.onLoad = function () {};
-  self.nativeObject.onLoad = function (e) {
-    self.onLoad({
-      url: e.url.absoluteString
-    });
-  };
+    self.onLoad = function () {};
+    self.nativeObject.onLoad = function (e) {
+      self.onLoad({
+        url: e.url.absoluteString
+      });
+    };
 
-  self.onShow = function () {};
-  self.nativeObject.onShow = function (e) {
-    self.onShow({
-      url: e.url.absoluteString
-    });
-  };
+    self.onShow = function () {};
+    self.nativeObject.onShow = function (e) {
+      self.onShow({
+        url: e.url.absoluteString
+      });
+    };
 
-  self.onError = function () {};
-  self.nativeObject.onError = function (e) {
-    self.onError({
-      code: e.error.code,
-      message: e.error.localizedDescription
-    });
-  };
+    self.onError = function () {};
+    self.nativeObject.onError = function (e) {
+      self.onError({
+        code: e.error.code,
+        message: e.error.localizedDescription
+      });
+    };
 
-  self.self.ios.onOpenNewWindow = function () {};
-  self.nativeObject.onOpenNewWindow = function (e) {
-    const urlString = e.request.URL ? e.request.URL.absoluteString : undefined;
-    self.ios.onOpenNewWindow({
-      url: urlString
-    });
-  };
+    self.ios.onOpenNewWindow = function () {};
+    self.nativeObject.onOpenNewWindow = function (e) {
+      const urlString = e.request.URL ? e.request.URL.absoluteString : undefined;
+      self.ios.onOpenNewWindow({
+        url: urlString
+      });
+    };
 
-  self.onChangedURL = function () {};
-  self.nativeObject.onChangedURL = function (e) {
-    const check = self.onChangedURL({
-      url: e.url.absoluteString
-    });
-    if (check || check === undefined) {
-      return true;
-    } else {
-      return false;
+    self.onChangedURL = function () {};
+    self.nativeObject.onChangedURL = function (e) {
+      const check = self.onChangedURL({
+        url: e.url.absoluteString
+      });
+      if (check || check === undefined) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    const EventFunctions = {
+      [WebViewEvents.BackButtonPressed]: function () {
+        //Android Only
+      },
+      [WebViewEvents.ChangedURL]: function () {
+        self.onChangedURL = function (state) {
+          this.emitter.emit(WebViewEvents.ChangedURL, state);
+        };
+      },
+      [WebViewEvents.ConsoleMessage]: function () {
+        //Android only
+      },
+      [WebViewEvents.Error]: function () {
+        self.onError = function (state) {
+          this.emitter.emit(WebViewEvents.Error, state);
+        };
+      },
+      [WebViewEvents.Load]: function () {
+        self.onLoad = function (state) {
+          this.emitter.emit(WebViewEvents.Load, state);
+        };
+      },
+      [WebViewEvents.OpenNewWindow]: function () {
+        self.ios.onOpenNewWindow = function (state) {
+          this.emitter.emit(WebViewEvents.OpenNewWindow, state);
+        };
+      },
+      [WebViewEvents.Show]: function () {
+        self.onShow = function (state) {
+          this.emitter.emit(WebViewEvents.Show, state);
+        };
+      }
+    };
+
+    // Assign parameters given in constructor
+    if (params) {
+      for (const param in params) {
+        this[param] = params[param];
+      }
     }
-  };
-
-  const EventFunctions = {
-    [WebViewEvents.BackButtonPressed]: function () {
-      //Android Only
-    },
-    [WebViewEvents.ChangedURL]: function () {
-      self.onChangedURL = function (state) {
-        this.emitter.emit(WebViewEvents.ChangedURL, state);
-      };
-    },
-    [WebViewEvents.ConsoleMessage]: function () {
-      //Android only
-    },
-    [WebViewEvents.Error]: function () {
-      self.onError = function (state) {
-        this.emitter.emit(WebViewEvents.Error, state);
-      };
-    },
-    [WebViewEvents.Load]: function () {
-      self.onLoad = function (state) {
-        this.emitter.emit(WebViewEvents.Load, state);
-      };
-    },
-    [WebViewEvents.OpenNewWindow]: function () {
-      self.ios.onOpenNewWindow = function (state) {
-        this.emitter.emit(WebViewEvents.OpenNewWindow, state);
-      };
-    },
-    [WebViewEvents.Show]: function () {
-      self.onShow = function (state) {
-        this.emitter.emit(WebViewEvents.Show, state);
-      };
-    }
-  };
-
-  // Assign parameters given in constructor
-  if (params) {
-    for (const param in params) {
-      this[param] = params[param];
-    }
-  }
 
     const ios = {
       get() {
@@ -192,7 +262,7 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
         let trustPolicies = values
           ? values.map((value) => {
               const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
-  
+
               let nSURLCertificates = certificates.map(function (path) {
                 let certFile = new File({
                   path: path
@@ -205,8 +275,32 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
         self.nativeObject.serverTrustPolicies = trustPolicies;
       }
     };
-    
+
     this._ios = Object.assign(this._ios, ios);
+  }
+  get onChangedURL() {
+    return this._onChangedURL;
+  }
+  set onChangedURL(callback) {
+    this._onChangedURL = callback;
+  }
+  get onLoad() {
+    return this._onLoad;
+  }
+  set onLoad(callback) {
+    this._onLoad = callback;
+  }
+  get onError() {
+    return this._onError;
+  }
+  set onError(callback) {
+    this._onError = callback;
+  }
+  get onShow() {
+    return this._onShow;
+  }
+  set onShow(callback) {
+    this._onShow = callback;
   }
   get userAgent() {
     return this.nativeObject.valueForKey('customUserAgent');
@@ -273,7 +367,7 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
     removeDataOfTypes(nsSetDataTypes);
   }
   clearAllData() {
-    this.removeAllData();
+    WebViewIOS.removeAllData();
   }
   loadURL(value: string) {
     const nsURL = __SF_NSURL.URLWithString(value);
@@ -331,70 +425,6 @@ class WebViewIOS extends ViewIOS<typeof WebViewEvents> {
       }
     }
     this.nativeObject.evaluateJavaScript(javascript, result);
-  }
-}
-
-function dataTypesToNSSet(dataTypes) {
-  const alloc = Invocation.invokeClassMethod('NSSet', 'alloc', [], 'id');
-  //TODO: new Invocation
-  const argDataTypes = new Invocation.Argument({
-    type: 'id',
-    value: dataTypes
-  });
-  return Invocation.invokeInstanceMethod(alloc, 'initWithArray:', [argDataTypes], 'id');
-}
-
-function removeDataOfTypes(dataTypes) {
-  let defaultDataStore;
-  const invocationDefaultDataStore = __SF_NSInvocation.createClassInvocationWithSelectorInstance('defaultDataStore', 'WKWebsiteDataStore');
-  if (invocationDefaultDataStore) {
-    invocationDefaultDataStore.setClassTargetFromString('WKWebsiteDataStore');
-    invocationDefaultDataStore.setSelectorWithString('defaultDataStore');
-    invocationDefaultDataStore.retainArguments();
-
-    invocationDefaultDataStore.invoke();
-    defaultDataStore = invocationDefaultDataStore.getReturnValue();
-  }
-
-  let nsdate;
-  const invocationNSDate = __SF_NSInvocation.createClassInvocationWithSelectorInstance('dateWithTimeIntervalSince1970:', 'NSDate');
-  if (invocationNSDate) {
-    invocationNSDate.setClassTargetFromString('NSDate');
-    invocationNSDate.setSelectorWithString('dateWithTimeIntervalSince1970:');
-    invocationNSDate.retainArguments();
-    invocationNSDate.setDoubleArgumentAtIndex(0, 2);
-
-    invocationNSDate.invoke();
-    nsdate = invocationNSDate.getReturnValue();
-  }
-
-  const invocationFetchDataRecordsOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance('fetchDataRecordsOfTypes:completionHandler:', defaultDataStore);
-  if (invocationFetchDataRecordsOfTypes) {
-    const invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance('setIDBlockArgument:atIndex:', invocationFetchDataRecordsOfTypes);
-    if (invocationCheck) {
-      invocationFetchDataRecordsOfTypes.target = defaultDataStore;
-      invocationFetchDataRecordsOfTypes.setSelectorWithString('fetchDataRecordsOfTypes:completionHandler:');
-      invocationFetchDataRecordsOfTypes.retainArguments();
-      invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
-      invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function (result) {}, 3);
-
-      invocationFetchDataRecordsOfTypes.invoke();
-    }
-  }
-
-  const invocationRemoveDataOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance('removeDataOfTypes:modifiedSince:completionHandler:', defaultDataStore);
-  if (invocationRemoveDataOfTypes) {
-    const invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance('setVoidBlockArgument:atIndex:', invocationRemoveDataOfTypes);
-    if (invocationCheck) {
-      invocationRemoveDataOfTypes.target = defaultDataStore;
-      invocationRemoveDataOfTypes.setSelectorWithString('removeDataOfTypes:modifiedSince:completionHandler:');
-      invocationRemoveDataOfTypes.retainArguments();
-      invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(dataTypes, 2);
-      invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate, 3);
-      invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function () {}, 4);
-
-      invocationRemoveDataOfTypes.invoke();
-    }
   }
 }
 

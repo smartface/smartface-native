@@ -3,110 +3,106 @@ import Page from '../page';
 import File from '../../io/file';
 import ContentInsetAdjustment from '../ios/contentinsetadjustment';
 import { Boundary } from '../../primitive/boundary';
-import { EventType } from 'core/eventemitter/EventType';
-import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import { EventEmitterMixin, IEventEmitter } from 'core/eventemitter';
-import { INativeComponent } from 'core/inative-component';
-import { ViewEvents } from '../view/view-event';
-import NativeComponent from 'core/native-component';
+import { WebViewEvents } from './webview-events';
+import IView, { AbstractView } from '../view/view';
 
-export type AndroidProps = {
-/**
+export type AndroidProps = Partial<{
+  /**
    * Gets/sets over-scroll mode for this view.
    *
    * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
    * @android
    * @since 3.2.1
    */
- overScrollMode: OverScrollMode;
- /**
-  * Sets/Gets the current page which contains the webview.
-  *
-  * @property {UI.Page} page
-  * @android
-  * @since 2.0.10
-  */
- page: Page;
- /**
-  * Sets/Gets the visibility of zoom controls.
-  *
-  * @property {Boolean} displayZoomControls
-  * @android
-  * @since 4.3.4
-  */
- displayZoomControls: boolean;
- /**
-  * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
-  * event begin to trigger. The purpose of using this event might be
-  * navigating back to pervious web pages.
-  *
-  * @event onBackButtonPressed
-  * @deprecated
-  * @android
-  * @since 3.2.1
-  * @example
-  * ````
-  * import WebView from '@smartface/native/ui/webview';
-  *
-  * const webView = new WebView();
-  * webView.on(WebView.Events.BackButtonPressed, () => {
-  * 	console.info('onBackButtonPressed');
-  * });
-  * ````
-  */
- onBackButtonPressed?: () => void;
- /**
-  * Report a JavaScript console message to the host application.
-  *
-  * @event onConsoleMessage
-  * @deprecated
-  * @param {Object} params
-  * @param {Number} params.sourceId     The name of the source file that caused the error.
-  * @param {String} params.message      The error message to report.
-  * @param {String} params.lineNumber   The line number of the error.
-  * @param {String} params.messageLevel The message level of the report
-  * @android
-  * @since 4.0.4
-  * @example
-  * ````
-  * import WebView from '@smartface/native/ui/webview';
-  *
-  * const webView = new WebView();
-  * webView.on(WebView.Events.ConsoleMessage, (params) => {
-  * 	console.info('onConsoleMessage', params);
-  * });
-  * ````
-  */
- onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void;
- /**
-  * Removes the autocomplete popup from the currently focused form field, if present.
-  *
-  * @method clearFormData
-  * @android
-  * @since 2.0.7
-  */
- clearFormData(): void;
- /**
-  * Tells this WebView to clear its internal back/forward list.
-  *
-  * @method clearHistory
-  * @android
-  * @since 2.0.7
-  */
- clearHistory(): void;
- /**
-  * Enables debugging of WebView contents.
-  *
-  * @method setWebContentsDebuggingEnabled
-  * @android
-  * @param {Boolean} [enabled=false]
-  * @static
-  * @since 4.0.6
-  */
- setWebContentsDebuggingEnabled(enabled: boolean): void;
-}
+  overScrollMode: OverScrollMode;
+  /**
+   * Sets/Gets the current page which contains the webview.
+   *
+   * @property {UI.Page} page
+   * @android
+   * @since 2.0.10
+   */
+  page: Page;
+  /**
+   * Sets/Gets the visibility of zoom controls.
+   *
+   * @property {Boolean} displayZoomControls
+   * @android
+   * @since 4.3.4
+   */
+  displayZoomControls: boolean;
+  /**
+   * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
+   * event begin to trigger. The purpose of using this event might be
+   * navigating back to pervious web pages.
+   *
+   * @event onBackButtonPressed
+   * @deprecated
+   * @android
+   * @since 3.2.1
+   * @example
+   * ````
+   * import WebView from '@smartface/native/ui/webview';
+   *
+   * const webView = new WebView();
+   * webView.on(WebView.Events.BackButtonPressed, () => {
+   * 	console.info('onBackButtonPressed');
+   * });
+   * ````
+   */
+  onBackButtonPressed?: () => void;
+  /**
+   * Report a JavaScript console message to the host application.
+   *
+   * @event onConsoleMessage
+   * @deprecated
+   * @param {Object} params
+   * @param {Number} params.sourceId     The name of the source file that caused the error.
+   * @param {String} params.message      The error message to report.
+   * @param {String} params.lineNumber   The line number of the error.
+   * @param {String} params.messageLevel The message level of the report
+   * @android
+   * @since 4.0.4
+   * @example
+   * ````
+   * import WebView from '@smartface/native/ui/webview';
+   *
+   * const webView = new WebView();
+   * webView.on(WebView.Events.ConsoleMessage, (params) => {
+   * 	console.info('onConsoleMessage', params);
+   * });
+   * ````
+   */
+  onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void;
+  /**
+   * Removes the autocomplete popup from the currently focused form field, if present.
+   *
+   * @method clearFormData
+   * @android
+   * @since 2.0.7
+   */
+  clearFormData(): void;
+  /**
+   * Tells this WebView to clear its internal back/forward list.
+   *
+   * @method clearHistory
+   * @android
+   * @since 2.0.7
+   */
+  clearHistory(): void;
+  /**
+   * Enables debugging of WebView contents.
+   *
+   * @method setWebContentsDebuggingEnabled
+   * @android
+   * @param {Boolean} [enabled=false]
+   * @static
+   * @since 4.0.6
+   */
+  setWebContentsDebuggingEnabled(enabled: boolean): void;
+}>;
 
-export type iOSProps= {
+export type iOSProps = Partial<{
   /**
    * Sets/Gets the bounce effect when scrolling.
    *
@@ -141,96 +137,7 @@ export type iOSProps= {
    * @since 4.0.0
    */
   contentInsetAdjustmentBehavior: ContentInsetAdjustment;
-};
-declare enum WebViewEvents {
-  /**
-   * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
-   * event begin to trigger. The purpose of using this event might be
-   * navigating back to pervious web pages.
-   *
-   * @event onBackButtonPressed
-   * @android
-   * @since 3.2.1
-   */
-  BackButtonPressed = 'backButtonPressed',
-  /**
-   * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
-   *
-   * @event onChangedURL
-   * @param {Object} event
-   * @param {String} event.url
-   * @return {Boolean}
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  ChangedURL = 'changedURL',
-  /**
-   * Report a JavaScript console message to the host application.
-   *
-   * @event onConsoleMessage
-   * @param {Object} params
-   * @param {Number} params.sourceId     The name of the source file that caused the error.
-   * @param {String} params.message      The error message to report.
-   * @param {String} params.lineNumber   The line number of the error.
-   * @param {String} params.messageLevel The message level of the report
-   * @android
-   * @since 4.0.4
-   */
-  ConsoleMessage = 'consoleMessage',
-  /**
-   * Callback triggered when an error occured while loading a web page.
-   *
-   * @event onError
-   * @param {Object} event
-   * @param {String} event.url
-   * @param {Number} event.code
-   * @param {String} event.message
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Error = 'error',
-  /**
-   * Callback triggered when the web page has started loading. In Android, This method is called once for each main frame load so a page with iframes or
-   * framesets will call onLoad one time for the main frame.
-   *
-   * @event onLoad
-   * @param {Object} event
-   * @param {String} event.url
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Load = 'load',
-  /**
-   * Callback triggered when the target equals to _blank. That means open new window.
-   *
-   *     @example
-   *     myWebView.ios.onOpenNewWindow = function(event) {
-   *         myWebView.loadURL(event.url);
-   *     };
-   *
-   * @event onOpenNewWindow
-   * @param {Object} event
-   * @param {String} event.url
-   * @iosx
-   * @since 4.0.1
-   */
-  OpenNewWindow = 'openNewWindow',
-  /**
-   * Callback triggered when a web page has finished loading. In Android, this method is called only for main frame. Receiving an onShow callback
-   * does not guarantee that the next frame drawn by WebView will reflect the state of the DOM at this point.
-   *
-   * @event onShow
-   * @param {Object} event
-   * @param {String} event.url
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Show = 'show'
-}
+}>;
 
 /**
  * @class UI.WebView
@@ -265,7 +172,7 @@ declare enum WebViewEvents {
  *
  */
 
-interface IWebView<TEvent extends EventType = ExtractEventValues<typeof WebViewEvents>> extends IEventEmitter<ExtractEventValues<TEvent> | ExtractEventValues<typeof WebViewEvents>>, INativeComponent {
+interface IWebView<TEvent extends string = WebViewEvents, TIOS = {}, TAND = {}> extends IView<TEvent | WebViewEvents, TIOS & iOSProps, TAND & AndroidProps> {
   /**
    * Indicates whether the links clicked on the webview will be rendered inside the webview or not.
    * Otherwise, the default browser of the device will handle that link.
@@ -560,166 +467,9 @@ interface IWebView<TEvent extends EventType = ExtractEventValues<typeof WebViewE
    * @since 2.0.7
    */
   clearAllData(): void;
-  android: Partial<{
-      /**
-       * Gets/sets over-scroll mode for this view.
-       *
-       * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-       * @android
-       * @since 3.2.1
-       */
-      overScrollMode: OverScrollMode;
-      /**
-       * Sets/Gets the current page which contains the webview.
-       *
-       * @property {UI.Page} page
-       * @android
-       * @since 2.0.10
-       */
-      page: Page | undefined;
-      /**
-       * Sets/Gets the visibility of zoom controls.
-       *
-       * @property {Boolean} displayZoomControls
-       * @android
-       * @since 4.3.4
-       */
-      displayZoomControls: boolean;
-      /**
-       * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
-       * event begin to trigger. The purpose of using this event might be
-       * navigating back to pervious web pages.
-       *
-       * @event onBackButtonPressed
-       * @deprecated
-       * @android
-       * @since 3.2.1
-       * @example
-       * ````
-       * import WebView from '@smartface/native/ui/webview';
-       *
-       * const webView = new WebView();
-       * webView.on(WebView.Events.BackButtonPressed, () => {
-       * 	console.info('onBackButtonPressed');
-       * });
-       * ````
-       */
-      onBackButtonPressed?: () => void;
-      /**
-       * Report a JavaScript console message to the host application.
-       *
-       * @event onConsoleMessage
-       * @deprecated
-       * @param {Object} params
-       * @param {Number} params.sourceId     The name of the source file that caused the error.
-       * @param {String} params.message      The error message to report.
-       * @param {String} params.lineNumber   The line number of the error.
-       * @param {String} params.messageLevel The message level of the report
-       * @android
-       * @since 4.0.4
-       * @example
-       * ````
-       * import WebView from '@smartface/native/ui/webview';
-       *
-       * const webView = new WebView();
-       * webView.on(WebView.Events.ConsoleMessage, (params) => {
-       * 	console.info('onConsoleMessage', params);
-       * });
-       * ````
-       */
-      onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void;
-      /**
-       * Removes the autocomplete popup from the currently focused form field, if present.
-       *
-       * @method clearFormData
-       * @android
-       * @since 2.0.7
-       */
-      clearFormData(): void;
-      /**
-       * Tells this WebView to clear its internal back/forward list.
-       *
-       * @method clearHistory
-       * @android
-       * @since 2.0.7
-       */
-      clearHistory(): void;
-      /**
-       * Enables debugging of WebView contents.
-       *
-       * @method setWebContentsDebuggingEnabled
-       * @android
-       * @param {Boolean} [enabled=false]
-       * @static
-       * @since 4.0.6
-       */
-      setWebContentsDebuggingEnabled(enabled: boolean): void;
-    }>;
-  ios: Partial<{
-      /**
-       * Sets/Gets the bounce effect when scrolling.
-       *
-       * @property {Boolean} bounces
-       * @ios
-       * @since 3.2.1
-       */
-      bounces: boolean;
-      /**
-       * This event is triggered more than once to get safeAreaInsets.
-       *
-       * @event safeAreaInsets
-       * @param {Object} systemSafeAreaInsets
-       * @param {Number} systemSafeAreaInsets.top
-       * @param {Number} systemSafeAreaInsets.bottom
-       * @param {Number} systemSafeAreaInsets.right
-       * @param {Number} systemSafeAreaInsets.left
-       * @return {Object} safeAreaInsets
-       * @return {Number} return.top
-       * @return {Number} return.bottom
-       * @return {Number} return.right
-       * @return {Number} return.left
-       * @ios
-       * @since 3.2.1
-       */
-      safeAreaInsets?: (e: Boundary) => Boundary;
-      /**
-       * The behavior for determining the adjusted content offsets.
-       *
-       * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
-       * @ios
-       * @since 4.0.0
-       */
-      contentInsetAdjustmentBehavior: ContentInsetAdjustment;
-      /**
-       * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
-       * By validating both the certificate chain and host, certificate pinning provides a very secure form of server trust validation mitigating most, if not all, MITM attacks.
-       * Applications are encouraged to always validate the host and require a valid certificate chain in production environments.
-       *
-       * @property {Array}    sslPinning
-       * @property {String}   sslPinning.host
-       * @property {Array}    sslPinning.certificates Only DER format accepted.
-       * @property {Boolean}  [sslPinning.validateCertificateChain=true]
-       * @property {Boolean}  [sslPinning.validateHost=true]
-       * @ios
-       * @since 4.3.4
-       */
-      sslPinning?: [
-            {
-              host: string;
-              certificates: Array<string>;
-              validateCertificateChain?: boolean;
-              validateHost?: boolean;
-            }
-          ];
-    }>;
 }
-const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export declare class WebViewBase<TEvent extends { [key: string]: any } = { [key: string]: any }> extends NativeEventEmitter<TEvent & WebViewEvents> implements IWebView  {
-  constructor(params?: Partial<IWebView>);
-  android: Partial<AndroidProps>;
-  ios: Partial<iOSProps>;
-  nativeObject: any;
+export declare class AbstractWebView<TEvent extends string = WebViewEvents> extends AbstractView<TEvent> implements IWebView<TEvent> {
   openLinkInside: boolean;
   scrollEnabled: boolean;
   userAgent: string;
@@ -733,15 +483,16 @@ export declare class WebViewBase<TEvent extends { [key: string]: any } = { [key:
   loadHTML(html: string): void;
   loadFile(file: File): void;
   evaluateJS(javascript: string, onReceive: (value: string) => void): void;
-  onChangedURL?: (e: { url: string; }) => boolean;
-  onLoad?: (e: { url: string; }) => void;
-  onOpenNewWindow?: (e: { url: string; }) => void;
-  onError?: (e: { url: string; code: number; message: string; }) => void;
-  onShow?: (e: { url: string; }) => void;
+  onChangedURL?: (e: { url: string }) => boolean;
+  onLoad?: (e: { url: string }) => void;
+  onOpenNewWindow?: (e: { url: string }) => void;
+  onError?: (e: { url: string; code: number; message: string }) => void;
+  onShow?: (e: { url: string }) => void;
   clearCache(deleteDiskFiles: boolean): void;
   clearCookie(): void;
   clearAllData(): void;
-  static Events: typeof ViewEvents & WebViewEvents;
+  android: AndroidProps;
+  ios: iOSProps;
 }
 
 export default IWebView;

@@ -5,10 +5,11 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
 import Path from '../../io/path';
 import scrollableSuper from '../../util/Android/scrollable';
-import RequestCodes from '../../util/Android/requestcodes';
+import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import TypeUtil from '../../util/type';
-import { WebViewEvents } from './events';
-import WebView, { AndroidProps, WebViewBase } from './webview';
+import { WebViewEvents } from './webview-events';
+import WebView, { AndroidProps } from './webview';
+import IWebView from './webview';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
@@ -28,7 +29,29 @@ let activity = AndroidConfig.activity;
 let mFilePathCallback: any;
 let mCameraPhotoPath: any;
 let mUploadMessage: any;
-class WebViewAndroid extends ViewAndroid<typeof WebViewEvents, AndroidProps> implements WebViewBase {
+
+function createImageFile() {
+  const timeStamp = new NativeSimpleDateFormat('yyyyMMdd_HHmmss').format(new NativeDate());
+  const imageFileName = 'JPEG_' + timeStamp + '_';
+  const storageDir = activity.getExternalCacheDir();
+  const imageFile = NativeFile.createTempFile(imageFileName /* prefix */, '.jpg' /* suffix */, storageDir /* directory */);
+  return imageFile;
+}
+
+function overrideURLChange(url: string, _canOpenLinkInside: boolean) {
+  if (_canOpenLinkInside) {
+    return false;
+  } else {
+    const NativeIntent = requireClass('android.content.Intent');
+    const NativeURI = requireClass('android.net.Uri');
+    const action = NativeIntent.ACTION_VIEW;
+    const uri = NativeURI.parse(url);
+    const intent = new NativeIntent(action, uri);
+    activity.startActivity(intent);
+    return true;
+  }
+}
+class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView {
   private _canOpenLinkInside = true;
   private _onError;
   private _onShow;
@@ -40,8 +63,8 @@ class WebViewAndroid extends ViewAndroid<typeof WebViewEvents, AndroidProps> imp
   private _superTouchCallbacks;
   private _onBackButtonPressedCallback;
   private _page: any;
-  private static REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
-  private static RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;
+  private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
+  private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
   private static onActivityResult = function (requestCode, resultCode, data) {
     if (requestCode == WebViewAndroid.RESULT_CODE_ICE_CREAM) {
       let uri = null;
@@ -75,17 +98,8 @@ class WebViewAndroid extends ViewAndroid<typeof WebViewEvents, AndroidProps> imp
       mFilePathCallback = null;
     }
   };
-  static readonly Android = {
-    ConsoleMessageLevel: {
-      DEBUG: 'DEBUG',
-      ERROR: 'ERROR',
-      LOG: 'LOG',
-      TIP: 'TIP',
-      WARNING: 'WARNING'
-    } as const                     
-  };
-  constructor(params: Partial<WebView>) {
-    super(params);
+  constructor(params?: Partial<WebView>) {
+    super();
     const self = this;
 
     const EventFunctions = {
@@ -427,28 +441,6 @@ class WebViewAndroid extends ViewAndroid<typeof WebViewEvents, AndroidProps> imp
     } else {
       cookieManager.removeAllCookie();
     }
-  }
-}
-
-function createImageFile() {
-  const timeStamp = new NativeSimpleDateFormat('yyyyMMdd_HHmmss').format(new NativeDate());
-  const imageFileName = 'JPEG_' + timeStamp + '_';
-  const storageDir = activity.getExternalCacheDir();
-  const imageFile = NativeFile.createTempFile(imageFileName /* prefix */, '.jpg' /* suffix */, storageDir /* directory */);
-  return imageFile;
-}
-
-function overrideURLChange(url: string, _canOpenLinkInside: boolean) {
-  if (_canOpenLinkInside) {
-    return false;
-  } else {
-    const NativeIntent = requireClass('android.content.Intent');
-    const NativeURI = requireClass('android.net.Uri');
-    const action = NativeIntent.ACTION_VIEW;
-    const uri = NativeURI.parse(url);
-    const intent = new NativeIntent(action, uri);
-    activity.startActivity(intent);
-    return true;
   }
 }
 
