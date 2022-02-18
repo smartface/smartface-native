@@ -1,7 +1,5 @@
+import { AttributedStringBase } from './attributedstring';
 
-import { AttributedString as AttributedStringBase } from "./attributedstring";
-
-const AttributedString: typeof AttributedStringBase = require(`./attributedstring.${Device.deviceOS.toLowerCase()}`)
-.default;
+const AttributedString: typeof AttributedStringBase = require(`./attributedstring.${Device.deviceOS.toLowerCase()}`).default;
 
 export default AttributedString;

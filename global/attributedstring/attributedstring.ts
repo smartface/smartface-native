@@ -1,4 +1,4 @@
-import NativeComponent from 'core/native-component';
+import { INativeComponent } from '../../core/inative-component';
 import Color from '../../ui/color';
 import Font from '../../ui/font';
 
@@ -17,8 +17,26 @@ import Font from '../../ui/font';
  *     attributeString.font = Font.create("Times New Roman",30,Font.NORMAL);
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
-export declare class AttributedString extends NativeComponent {
-  constructor(params?: Partial<AttributedString>);
+
+export type iOSProps = Partial<{
+  /**
+   * Gets/sets underlineColor on AttributedString.
+   *
+   * @property {UI.Color} underlineColor
+   * @ios
+   * @since 3.0.0
+   */
+  underlineColor?: Color;
+  /**
+   * Gets/sets strikethroughColor on AttributedString.
+   *
+   * @property {UI.Color} strikethroughColor
+   * @ios
+   * @since 3.2.1
+   */
+  strikethroughColor?: Color;
+}>;
+export interface IAttributedString extends INativeComponent {
   /**
    * Gets/sets backgroundColor on AttributedString.
    *
@@ -101,4 +119,51 @@ export declare class AttributedString extends NativeComponent {
      */
     strikethroughColor?: Color;
   }>;
+}
+
+export class AttributedStringBase implements IAttributedString {
+  get backgroundColor(): Color {
+    throw new Error('Method not implemented.');
+  }
+  set backgroundColor(value: Color) {
+    throw new Error('Method not implemented.');
+  }
+  get string(): string {
+    throw new Error('Method not implemented.');
+  }
+  set string(value: string) {
+    throw new Error('Method not implemented.');
+  }
+  get font(): Font {
+    throw new Error('Method not implemented.');
+  }
+  set font(value: Font) {
+    throw new Error('Method not implemented.');
+  }
+  get foregroundColor(): Color {
+    throw new Error('Method not implemented.');
+  }
+  set foregroundColor(value: Color) {
+    throw new Error('Method not implemented.');
+  }
+  get link(): string {
+    throw new Error('Method not implemented.');
+  }
+  set link(value: string) {
+    throw new Error('Method not implemented.');
+  }
+  get strikethrough(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  set strikethrough(value: boolean) {
+    throw new Error('Method not implemented.');
+  }
+  get underline(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  set underline(value: boolean) {
+    throw new Error('Method not implemented.');
+  }
+  ios: iOSProps;
+  nativeObject: any;
 }

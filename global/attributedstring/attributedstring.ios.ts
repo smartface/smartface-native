@@ -1,9 +1,8 @@
-import NativeComponent from 'core/native-component';
 import Color from 'ui/color';
 import Font from 'ui/font';
-import { AttributedString } from './attributedstring';
+import { AttributedStringBase, IAttributedString } from './attributedstring';
 
-class AttributedStringIOS extends NativeComponent implements AttributedString {
+class AttributedStringIOS extends AttributedStringBase {
   private _string = '';
   private _foregroundColor = Color.BLACK;
   private _underlineColor = Color.BLACK;
@@ -15,7 +14,7 @@ class AttributedStringIOS extends NativeComponent implements AttributedString {
   private _link?: string = undefined;
   ios = {};
   android = {};
-  constructor(params?: Partial<AttributedString>) {
+  constructor(params?: Partial<IAttributedString>) {
     super();
     this.setParams(params);
   }
@@ -73,7 +72,7 @@ class AttributedStringIOS extends NativeComponent implements AttributedString {
   set link(value: string) {
     this._link = value;
   }
-  setParams(params: Partial<AttributedString>) {
+  setParams(params: Partial<IAttributedString>) {
     for (const param in params) {
       if (param === 'ios' || param === 'android') {
         this.setOSSpecificParams(params[param], param);
@@ -82,7 +81,7 @@ class AttributedStringIOS extends NativeComponent implements AttributedString {
       }
     }
   }
-  setOSSpecificParams(params: Partial<AttributedString>, key: string) {
+  setOSSpecificParams(params: Partial<IAttributedString>, key: string) {
     for (const param in params) {
       this[key][param] = params[param];
     }

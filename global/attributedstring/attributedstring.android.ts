@@ -1,10 +1,9 @@
-import NativeComponent from 'core/native-component';
 import Color from 'ui/color';
 import Font from 'ui/font';
-import { AttributedString } from './attributedstring';
+import { AttributedStringBase, IAttributedString } from './attributedstring';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
-class AttributedStringAndroid extends NativeComponent implements AttributedString {
+class AttributedStringAndroid extends AttributedStringBase {
   private _string = '';
   private _foregroundColor = Color.BLACK;
   private _backgroundColor = Color.TRANSPARENT;
@@ -15,7 +14,7 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
   private textView: any;
   ios = {};
   android = {};
-  constructor(params?: Partial<AttributedString>) {
+  constructor(params?: Partial<IAttributedString>) {
     super();
 
     if (params) {
@@ -66,13 +65,12 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
   set link(value: string) {
     this._link = value;
   }
-  
   setSpan(stringBuilder: any) {
     const self = this;
     stringBuilder.append(this.string);
     const start = stringBuilder.length() - this.string.length;
     const end = stringBuilder.length();
-  
+
     if (this.link !== undefined) {
       const clickableSpanOverrideMethods = {
         onClick: function () {
@@ -83,18 +81,18 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
           ds.setUnderlineText(self.underline);
         }
       };
-  
+
       const SFClickableSpan = requireClass('io.smartface.android.sfcore.ui.textview.SFClickableSpan');
-      let clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
+      const clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
       stringBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-  
+
     if (this.strikethrough) {
       const NativeStrikethroughSpan = requireClass('android.text.style.StrikethroughSpan');
-      let _strikethroughSpan = new NativeStrikethroughSpan();
+      const _strikethroughSpan = new NativeStrikethroughSpan();
       stringBuilder.setSpan(_strikethroughSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-  
+
     if (this.foregroundColor) {
       const NativeForegroundColorSpan = requireClass('android.text.style.ForegroundColorSpan');
       stringBuilder.setSpan(new NativeForegroundColorSpan(this.foregroundColor.nativeObject), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -106,18 +104,18 @@ class AttributedStringAndroid extends NativeComponent implements AttributedStrin
     if (this.font) {
       const NativeAbsoluteSizeSpan = requireClass('android.text.style.AbsoluteSizeSpan');
       const SFTypefaceSpan = requireClass('io.smartface.android.sfcore.ui.textview.SFTypefaceSpan');
-  
+
       //@ts-ignore TODO: font should have nativeObject
-      let _typeSpan = new SFTypefaceSpan('SF', this.font.nativeObject);
+      const _typeSpan = new SFTypefaceSpan('SF', this.font.nativeObject);
       stringBuilder.setSpan(_typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
       stringBuilder.setSpan(new NativeAbsoluteSizeSpan(this.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-  
+
     if (this.underline === true) {
       const NativeUnderlineSpan = requireClass('android.text.style.UnderlineSpan');
       stringBuilder.setSpan(new NativeUnderlineSpan(), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-  };
+  }
 }
 
 export default AttributedStringAndroid;
