@@ -1,15 +1,18 @@
-import { ViewGroupEvents } from 'ui/viewgroup/viewgroup-events';
+import { EventType } from 'core/eventemitter/EventType';
+import IView from 'ui/view/view';
 import ViewGroupIOS from 'ui/viewgroup/viewgroup.ios';
+import IFlexLayout from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
 
 // const YogaEnums = require('../../util').YogaEnums;
 
 const Events = { ...ViewGroupIOS.Events, ...FlexLayoutEvents };
 
-class FlexLayoutIOS extends ViewGroupIOS<FlexLayoutEvents> {
-	static Events = Events;
-  constructor(params: any) {
-    super(params);
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout
+{
+  constructor(params?: Partial<IFlexLayout>) {
+    super({});
+
     // Assign parameters given in constructor
     if (params) {
       for (var param in params) {
@@ -17,6 +20,8 @@ class FlexLayoutIOS extends ViewGroupIOS<FlexLayoutEvents> {
       }
     }
   }
+  onViewAdded: (view: IView) => void;
+  onViewRemoved: (view: IView) => void;
 }
 
 

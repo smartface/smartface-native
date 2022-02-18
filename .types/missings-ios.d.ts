@@ -1,9 +1,4 @@
-declare class iOSBaseClass {
-  setValueForKey(value: any, key: string): void;
-  valueForKey(key: string): any;
-}
-
-declare class __SF_UIColor {
+declare class __SF_UIColor extends __SF_NSOBject {
   static hexColor: (hex: String) => __SF_UIColor;
   static blackColor(): __SF_UIColor;
   static blueColor(): __SF_UIColor;
@@ -18,18 +13,19 @@ declare class __SF_UIColor {
   constructor(r: number, g: number, b: number);
   constructor(a: number, r: number, g: number, b: number);
   layerToImage(): __SF_UIImage;
-  frame: unknown;
+  frame: __SF_NSRect;
 }
 
-declare class __SF_UIImage {
+declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
-  static createName(fileName: string): void;
+  static createName(fileName: string): __SF_UIImage;
   static createNSData(obj: any);
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
+  size: { width: number; height: number};
 }
 
-declare class __SF_UIImageView {
+declare class __SF_UIImageView extends __SF_UIView {
   contentMode: number; /**TODO: After FillType is typed */
   image: any;
   loadImage(image: __SF_UIImage): void;
@@ -38,11 +34,17 @@ declare class __SF_UIImageView {
   tintColor: __SF_UIColor;
   loadFromURL(url: any, placeholder: __SF_UIImage, headers: any, onSuccess: (innerFade: boolean, image: __SF_UIImage, error: any, cache: any /**TODO: ImageCacheType */, url: any) => void): void;
 }
-declare class __SF_NSInvocation {
-  static createInvocationWithSelectorInstance(name: string, obj: any): any;
+declare class __SF_NSInvocation extends __SF_NSOBject{
+  static createInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
+  static createClassInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
+  target: __SF_NSOBject;
+  setSelectorWithString(selector: string): void;
+  retainArguments(): void;
+  invoke(): void;
+  setClassTargetFromString(target: any): void;
 }
 
-declare class __SF_SMFUILabel {
+declare class __SF_SMFUILabel extends __SF_UIView {
   font: __SF_UIFont;
   minimumFontSize: number;
   adjustsFontSizeToFitWidth: boolean;
@@ -60,25 +62,36 @@ declare class __SF_Dispatch {
   static mainAsync: () => void;
 }
 
-declare class __SF_UIScreen {
-  mainScreen: () => { bounds: { width: number; heigth: number }; scale: number };
+declare class __SF_UIScreen extends __SF_NSOBject {
+  mainScreen: () => { bounds: __SF_NSRect; scale: number };
 }
 
 declare class __SF_UIApplicationDidChangeStatusBarOrientationNotification {}
 
-declare class __SF_UIView extends iOSBaseClass {
+declare class __SF_GCRect {
+  width?: number;
+  height?: number;
+  x?: number;
+  y?: number
+  minX?: number;
+  midX?: number;
+  maxX?: number;
+  minY?: number;
+  midY?: number;
+  maxY?: number;
+}
+
+declare class __SF_NSRect extends __SF_GCRect {
+
+}
+
+declare class __SF_UIView extends __SF_NSOBject {
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
   yoga: any;
-  frame: {
-    width: number;
-    heigth: number;
-  };
-  bounds: {
-    x: number;
-    y: number;
-  };
+  frame: __SF_NSRect;
+  bounds: __SF_NSRect;
   layer: any;
   onTouch: (e: any) => void;
   onTouchCancelled: (e: any) => void;
@@ -87,7 +100,7 @@ declare class __SF_UIView extends iOSBaseClass {
   alpha: number;
   backgroundColor: __SF_UIColor;
   addFrameObserver(): void;
-  frameObserveHandler(handler: (e: { frame: unknown }) => void): void;
+  frameObserveHandler(handler: (e: { frame: __SF_NSRect }) => void): void;
   removeFrameObserver(): void;
   tag: string;
   scale(coordinates: { x: number; y: number }): void;
@@ -109,9 +122,11 @@ declare class __SF_UIView extends iOSBaseClass {
   className(): any;
   becomeFirstResponder(): void;
   resignFirstResponder(): void;
+  getParentViewController(): __SF_UIViewController;
   removeFromParentViewController(): void;
+  parentViewController(): __SF_UIViewController;
 }
-declare class __SF_NSUserDefaults {
+declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;
   synchronize(): any;
   constructor(param: string);
@@ -144,16 +159,16 @@ declare class __SF_LAContext {
   canEvaluatePolicy(): boolean;
 }
 
-declare class __SF_NSLocale {
+declare class __SF_NSLocale extends __SF_NSOBject {
   constructor(params: { locale: string });
   static currentLocale(): any;
 }
 
-declare class __SF_NSOperationQueue {
+declare class __SF_NSOperationQueue extends __SF_NSOBject {
   static mainQueue(): any;
 }
 
-declare class __SF_NSBlockOperation {
+declare class __SF_NSBlockOperation extends __SF_NSOBject {
   static blockOperationWithJSValue(): any;
   addOperation(operation: any): void;
   operationCount: number;
@@ -173,7 +188,7 @@ declare class __SF_UIFont {
   static createFromFileWithFilenameStringSize(actualPath: __SF_NSIndexPath, size: number): __SF_UIFont;
 }
 
-declare class __SF_NSData {
+declare class __SF_NSData extends __SF_NSOBject {
   static base64Encoded(base64: string): __SF_NSData;
   static dataFromUTF8String(utf8: string): __SF_NSData;
 }
@@ -191,7 +206,7 @@ declare class __SF_FLAnimatedImageView {
   setLoopCompletionBlockWithJSValue(handler: (...args: any) => void): void;
 }
 
-declare class __SF_NSIndexPath {}
+declare class __SF_NSIndexPath extends __SF_NSOBject {}
 
 declare class __SF_UIRefreshControl extends __SF_UIView {
   removeFromSuperview(): void;
@@ -229,7 +244,7 @@ declare class __SF_UITableView extends __SF_UIScrollView {
   actionRowRange(style: number, positionStart: number, itemCount: number, animation?: boolean): void;
 }
 
-declare class __SF_UICollectionView {
+declare class __SF_UICollectionView extends __SF_UIScrollView {
   constructor(layoutManager: __SF_UICollectionViewFlowLayout);
   numberOfSectionsCallback: (collectionView: any) => number;
   cellForItemAtIndexPath(indexPath: __SF_NSIndexPath): any;
@@ -241,7 +256,11 @@ declare class __SF_UICollectionView {
   superview: any;
 }
 
-declare class __SF_UICollectionViewCell {
+declare class __SF_UICollectionReusableView extends __SF_UIView {
+
+}
+
+declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
   contentView: __SF_UIView;
   uuid: string;
   reuseIdentifier: any;
@@ -281,7 +300,7 @@ declare class __SF_Label {
 }
 
 declare interface iOSSharedApplication {
-  statusBarFrame: { height: number };
+  statusBarFrame: __SF_NSRect;
   sf_statusBarStyle: any;
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
@@ -298,7 +317,7 @@ declare interface iOSSharedApplication {
   unregisterForRemoteNotifications(): void;
 }
 
-declare class __SF_UIApplication extends iOSBaseClass {
+declare class __SF_UIApplication extends __SF_NSOBject {
   static sharedApplication(): iOSSharedApplication;
 }
 
@@ -406,7 +425,7 @@ declare class __SF_UIDocumentPickerViewControllerDelegate {
   documentPickerWasCancelled(): void;
 }
 
-declare class __SF_UIActivityIndicatorView {
+declare class __SF_UIActivityIndicatorView extends __SF_UIView {
   constructor(style: any /**TODO: ActivityIndicatiorStyle*/);
   startAnimating(): void;
   color: __SF_UIColor; //TODO: Add nativeobject of color
@@ -414,7 +433,7 @@ declare class __SF_UIActivityIndicatorView {
   activityIndicatorViewStyle: any; //TODO: ActivityIndicatorStyle;
 }
 
-declare class __SF_UIAlertController extends iOSBaseClass {
+declare class __SF_UIAlertController extends __SF_NSOBject {
   static createAlertController(style: number): __SF_UIAlertController;
   static present(view: __SF_UIAlertControllerView): any;
   static dismissAlert(view: __SF_UIAlertControllerView, delegate: any /* TODO: Add delegate type */): any;
@@ -423,7 +442,7 @@ declare class __SF_UIAlertController extends iOSBaseClass {
   addAction(action: __SF_UIAlertAction): void;
 }
 
-declare class __SF_UIAlertControllerView {
+declare class __SF_UIAlertControllerView extends __SF_UIView {
   title: string;
   message: string;
   addAction(action: __SF_UIAlertAction): any;
@@ -555,7 +574,7 @@ declare class __SF_Cluster {
   padding: number;
   borderWidth: number;
   textColor: __SF_UIColor;
-  size: { width: number; heigth: number };
+  size: { width: number; height: number };
   onPress: (e: any) => void;
   addAnnotation(annotation: __SF_Annotation): void;
   removeAnnotation(annotation: __SF_Annotation): void;
@@ -642,6 +661,10 @@ declare class __SF_UIViewController {
   onHide: () => void;
   orientations: any;
   navigationItem: __SF_UINavigationItem;
+  view: __SF_UIView;
+  statusBarHidden: boolean;
+  statusBarStyle: any;
+  tabBarController: __SF_UITabBarController;
 }
 
 declare class __SF_UINavigationItem {
@@ -656,14 +679,17 @@ declare class __SF_UINavigationItem {
 
 declare class __SF_NSOBject {
   instancesRespondToSelector(selector: string): any;
+  setValueForKey(value: any, key: string): void;
+  valueForKey(key: string): any;
+  [key: string]: any;
 }
 
-declare class __SF_NSURL {
+declare class __SF_NSURL extends __SF_NSOBject {
   static URLWithString(value: string): __SF_NSURL;
   static fileURLWithPath(actualPath: __SF_NSIndexPath): __SF_NSURL;
 }
 
-declare class __SF_NSURLRequest {
+declare class __SF_NSURLRequest extends __SF_NSOBject {
   requestWithURL(url: __SF_NSURL): any;
 }
 
@@ -671,6 +697,9 @@ declare class __SF_UITabBarController extends __SF_UINavigationController {
   static new(): __SF_UITabBarController;
   delegate: __SF_UITabBarControllerDelegate;
   selectedIndex: number;
+  tabBar: {
+    frame: __SF_NSRect;
+  }
 }
 declare class __SF_UITabBarControllerDelegate {}
 
@@ -767,7 +796,7 @@ declare class __SF_MultiSlider extends __SF_UIView {
   isHapticSnap: boolean;
   thumbShadowOpacity: number;
   thumbShadowRadius: number;
-  thumbShadowOffset: { x: number; y: number };
+  thumbShadowOffset: __SF_NSRect;
   applyThumbViewChanges(): void;
   hasRoundTrackEnds: boolean;
   showsThumbImageShadow: boolean;
@@ -782,10 +811,13 @@ declare class __SF_UIScrollView extends __SF_UIView {
   onScrollEndDecelerating: (scrollView: any) => void;
   onScrollViewDidEndDraggingWillDecelerate: (scrollView: any, decelerate?: any) => void;
   onScrollViewWillEndDraggingWithVelocityTargetContentOffset: (scrollView: any, velocity: number, targetContentOffset: any) => void;
-  setContentOffsetAnimated(e: { x: number; y: number }): void;
+  setContentOffsetAnimated(e: __SF_NSRect): void;
   scrollToBottom(): void;
   scrollToRight(): void;
-  contenSize: { width: number; heigth: number };
+  contentSize: __SF_NSRect;
+  contentOffset: __SF_NSRect;
+  contentInsetDictionary: any;
+  decelerationRate: number;
 }
 
 declare class __SF_SMFUISearchBar extends __SF_UIView {
@@ -852,7 +884,11 @@ declare class __SF_UIPageViewController extends __SF_UIView {
   static createWithTransitionStyleNavigationOrientation(transitionStyle: any, navigationOrientation: any): __SF_UIPageViewController;
 }
 
-declare class __SF_UISwitch {
+declare class __SF_UIControl extends __SF_UIView {
+
+}
+
+declare class __SF_UISwitch extends __SF_UIControl {
   setEnabled: boolean;
   isOn: boolean;
   thumbTintColor: __SF_UIColor;
@@ -871,7 +907,7 @@ declare class __SF_TopTabViewController extends __SF_UIViewController {
   selectedIconColor: __SF_UIColor;
   titleColor: __SF_UIColor;
   selectedTitleColor: __SF_UIColor;
-  indicatorHeigth: number;
+  indicatorheight: number;
   barHeight: number;
   pagingEnabled: boolean;
   scrollEnabled: boolean;
@@ -911,7 +947,7 @@ declare class __SF_UITextField extends __SF_UIView {
   addObserver: () => void;
 }
 
-declare class __SF_NSTextContainer {
+declare class __SF_NSTextContainer extends __SF_NSOBject {
   maximumNumberOfLines: number;
   lineBreakMode: number;
 }

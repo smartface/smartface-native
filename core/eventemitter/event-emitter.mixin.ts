@@ -1,7 +1,5 @@
 import { EventEmitter, EventListenerCallback, IEventEmitter } from './event-emitter';
 import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
-import { EventType } from './EventType';
-import { ExtractEventValues } from './extract-event-values';
 
 /**
  * This callback will be executed after the handler function is set.
@@ -90,7 +88,7 @@ export function EventEmitterMixin(TargetClass: ConstructorOf<any>) {
     
     return class NativeEmitter<TEvent extends string = string> extends TargetClass implements IEventEmitter<TEvent> {
 
-    readonly emitter: EventEmitter<TEvent> = new EventEmitter();
+    readonly emitter = new EventEmitter<TEvent>();
 
     on(eventName: TEvent, callback: EventListenerCallback) {
       this.emitter.on(eventName, callback);

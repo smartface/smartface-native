@@ -1,6 +1,5 @@
-import { ConstructorOf } from "core/constructorof";
-import { ViewGroup } from "./viewgroup";
+import { AbstractViewGroup } from "./viewgroup";
 
-const ViewGroup: ConstructorOf<ViewGroup, Partial<ViewGroup>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
-
+const ViewGroup: typeof AbstractViewGroup = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+const v = new ViewGroup()
 export default ViewGroup;
