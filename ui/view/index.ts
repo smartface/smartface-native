@@ -1,6 +1,5 @@
-import { ConstructorOf } from "../../core/constructorof";
-import { View } from "./view";
+import { AbstractView } from "./view";
 
-const View: ConstructorOf<View, Partial<View>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+const View: typeof AbstractView = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
 
 export default View;

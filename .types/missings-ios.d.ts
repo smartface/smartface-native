@@ -18,10 +18,11 @@ declare class __SF_UIColor extends __SF_NSOBject {
 
 declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
-  static createName(fileName: string): void;
+  static createName(fileName: string): __SF_UIImage;
   static createNSData(obj: any);
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
+  size: { width: number; height: number};
 }
 
 declare class __SF_UIImageView extends __SF_UIView {
