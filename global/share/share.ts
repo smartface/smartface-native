@@ -12,7 +12,7 @@ import Contacts from '../../device/contacts';
  * other apps on the device. Blacklist works for iOS only.
  *
  */
-declare const Share: {
+export declare class ShareBase {
   /**
    * Shares a text.
    *
@@ -28,7 +28,7 @@ declare const Share: {
    * @android
    * @since 0.1
    */
-  shareText(text: string, page: Page, blacklist: string[]): void;
+  static shareText(text: string, page: Page, blacklist: string[]): void;
   /**
    * Shares an image.
    *
@@ -47,7 +47,7 @@ declare const Share: {
    * @ios
    * @since 0.1
    */
-  shareImage(image: Image, page: Page, blacklist: string[]): void;
+  static shareImage(image: Image, page: Page, blacklist: string[]): void;
   /**
    * Shares a file.
    *
@@ -66,7 +66,7 @@ declare const Share: {
    * @android
    * @since 0.1
    */
-  shareFile(image: File, page: Page, blacklist: string[]): void;
+  static shareFile(file: File, page: Page, blacklist: string[]): void;
   /**
    * Shares contact.
    *
@@ -81,7 +81,7 @@ declare const Share: {
    * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
    * @since 4.2.1
    */
-  shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }): void;
+  static shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }): void;
 
   /**
    * Shares file, image & text.
@@ -108,8 +108,8 @@ declare const Share: {
    * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#multiple-sharing
    * @since 4.0.2
    */
-  share(params: { items: any[]; page: Page; blacklist: string[] }): void;
-  ios: Partial<{
+  static share(params: { items: any[]; page: Page; blacklist: string[] }): void;
+  static ios: Partial<{
     /**
      * @property {String} AirDrop
      * @static
@@ -159,6 +159,4 @@ declare const Share: {
      */
     readonly Vimeo: string;
   }>;
-};
-
-export = Share;
+}

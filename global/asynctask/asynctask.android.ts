@@ -101,3 +101,5 @@ export class AsyncTaskAndroid extends AsyncTaskBase {
     return 'AsyncTask';
   }
 }
+
+export default AsyncTaskAndroid;

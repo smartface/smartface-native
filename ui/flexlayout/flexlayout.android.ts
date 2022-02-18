@@ -18,13 +18,10 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 const activity = AndroidConfig.activity;
 const Events = { ...ViewGroup.Events, ...FlexLayoutEvents };
 
-class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
-  extends ViewGroup<TEvent | FlexLayoutEvents, AndroidProps>
-  implements IFlexLayout
-{
+class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGroup<TEvent | FlexLayoutEvents, AndroidProps> implements IFlexLayout {
   private _onInterceptTouchEvent: (e: any) => void;
   private _flexWrap: number | null = null;
-  
+
   constructor(params: any) {
     super({
       nativeObject: new NativeYogaLayout(activity, {
@@ -99,9 +96,16 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
 
   toString() {
     return 'FlexLayout';
-  } 
+  }
 
-  protected _android: { [key: string]: any; updateRippleEffectIfNeeded: () => void; rippleColor: import("ui/color"); } & Partial<{ useForeground: boolean; rippleEnabled: boolean; rippleColor: import("ui/color"); onInterceptTouchEvent: () => boolean; elevation: number; zIndex: number; }>;
+  protected _android: { [key: string]: any; updateRippleEffectIfNeeded: () => void; rippleColor: import('ui/color') } & Partial<{
+    useForeground: boolean;
+    rippleEnabled: boolean;
+    rippleColor: import('ui/color');
+    onInterceptTouchEvent: () => boolean;
+    elevation: number;
+    zIndex: number;
+  }>;
   _maskedBorders: any[];
   protected _masksToBounds: boolean;
   _nativeObject: any;
@@ -117,4 +121,4 @@ function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
   return null;
 }
 
-module.exports = FlexLayoutAndroid;
+export default FlexLayoutAndroid;
