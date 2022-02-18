@@ -1,5 +1,6 @@
-import Blob from '../../blob';
-import IImage, { Format, ImageAndroidProps, ImageBase } from './image';
+import IBlob from '../../global/blob/blob';
+import BlobAndroid from '../../global/blob/blob.android';
+import IImage, { Format, ImageBase } from './image';
 
 /*globals requireClass*/
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
@@ -18,11 +19,11 @@ const androidResources = AndroidConfig.activityResources;
 
 class Image extends ImageBase {
   static createFromFile = (path: string, width?: number, height?: number) => {
-    var imageFile = new File({
+    const imageFile = new File({
       path: path
     });
     if (imageFile && imageFile.nativeObject) {
-      var bitmap;
+      let bitmap;
       if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
         bitmap = imageFile.nativeObject;
       } else {
@@ -47,7 +48,7 @@ class Image extends ImageBase {
     });
   }
   static createFromBlob(blob) {
-    var newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
+    const newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
     if (newBitmap)
       return new Image({
         bitmap: newBitmap
@@ -59,14 +60,14 @@ class Image extends ImageBase {
       if (typeof params.path !== 'string') throw new Error('path value must be a string.');
       if (typeof params.radius !== 'number') throw new Error('radius value must be a number.');
 
-      var imageFile = new File({
+      const imageFile = new File({
         path: params.path
       });
       if (imageFile.type === Path.FILE_TYPE.ASSET || imageFile.type === Path.FILE_TYPE.DRAWABLE) {
-        var image = Image.createFromFile(params.path);
+        const image = Image.createFromFile(params.path);
         return image.android.round(params.radius);
       } else {
-        var roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
+        const roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
         return new Image({
           roundedBitmapDrawable: roundedBitmapDrawable
         });
@@ -102,7 +103,7 @@ class Image extends ImageBase {
     super();
     if (typeof params !== 'object') throw new Error('Constructor parameters needed for Image!');
     if (params) {
-      for (var param in params) {
+      for (const param in params) {
         this[param] = params[param];
       }
     }
@@ -116,20 +117,21 @@ class Image extends ImageBase {
     return this.nativeObject.getBitmap().getWidth();
   }
 
-  toBlob(): Blob {
-    var bitmap = this.nativeObject.getBitmap();
-    var stream = new NativeByteArrayOutputStream();
+  toBlob(): IBlob {
+    const bitmap = this.nativeObject.getBitmap();
+    const stream = new NativeByteArrayOutputStream();
     bitmap.compress(CompressFormat[1], 100, stream);
-    return new Blob(stream.toByteArray(), {
+    return new BlobAndroid(stream.toByteArray(), {
       type: 'image'
     });
   }
 
   resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
-    var success = true;
+    let success = true;
+    let newBitmap: any;
     try {
-      var originalBitmap = this.nativeObject.getBitmap();
-      var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);
+      const originalBitmap = this.nativeObject.getBitmap();
+      newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);
     } catch (err) {
       success = false;
       if (onFailure)
@@ -138,7 +140,7 @@ class Image extends ImageBase {
         });
       else return null;
     }
-    if (success && newBitmap) {
+    if (success && !!newBitmap) {
       if (onSuccess)
         onSuccess({
           image: new Image({
@@ -153,10 +155,11 @@ class Image extends ImageBase {
   }
 
   crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
-    var success = true;
+    let success = true;
+    let newBitmap: any;
     try {
-      var originalBitmap = this.nativeObject.getBitmap();
-      var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
+      const originalBitmap = this.nativeObject.getBitmap();
+      newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
     } catch (err) {
       success = false;
       if (onFailure)
@@ -180,14 +183,15 @@ class Image extends ImageBase {
   }
 
   rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
-    var success = true;
+    let success = true;
+    let newBitmap: any;
     try {
-      var matrix = new NativeMatrix();
+      const matrix = new NativeMatrix();
       matrix.postRotate(angle);
-      var bitmap = this.nativeObject.getBitmap();
-      var width = bitmap.getWidth(),
+      const bitmap = this.nativeObject.getBitmap();
+      const width = bitmap.getWidth(),
         height = bitmap.getHeight();
-      var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+      newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     } catch (err) {
       success = false;
       if (onFailure)
@@ -210,13 +214,14 @@ class Image extends ImageBase {
     }
   }
 
-  compress(format: Format, quality: number, onSuccess: (e: { blob: Blob }) => void, onFailure: (e?: { message: string }) => void): false | Blob {
-    var success = true;
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): false | IBlob {
+    let success = true;
+    let byteArray;
     try {
-      var out = new NativeByteArrayOutputStream();
-      var bitmap = this.nativeObject.getBitmap();
+      const out = new NativeByteArrayOutputStream();
+      const bitmap = this.nativeObject.getBitmap();
       bitmap.compress(CompressFormat[format], quality, out);
-      var byteArray = out.toByteArray();
+      byteArray = out.toByteArray();
     } catch (err) {
       success = false;
       if (onFailure)
@@ -228,12 +233,12 @@ class Image extends ImageBase {
     if (success) {
       if (onSuccess)
         onSuccess({
-          blob: new Blob(byteArray, {
+          blob: new BlobAndroid(byteArray, {
             type: 'image'
           })
         });
       else
-        return new Blob(byteArray, {
+        return new BlobAndroid(byteArray, {
           type: 'image'
         });
     }
@@ -252,7 +257,7 @@ class Image extends ImageBase {
   }
 
   set path(value) {
-    var bitmap = NativeBitmapFactory.decodeFile(value);
+    const bitmap = NativeBitmapFactory.decodeFile(value);
     this.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
   }
 
@@ -270,7 +275,7 @@ class Image extends ImageBase {
       round(radius: number) {
         if (typeof radius !== 'number') throw new Error('radius value must be a number.');
 
-        var roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
+        const roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
         return new Image({
           roundedBitmapDrawable: roundedBitmapDrawable
         });
@@ -309,7 +314,7 @@ function getRoundedBitmapDrawable(imagePathOrBitmap, radius) {
 
 // Code taken from https://developer.android.com/topic/performance/graphics/load-bitmap.html
 function decodeSampledBitmapFromResource(file, reqWidth, reqHeight) {
-  var options = new NativeBitmapFactory.Options();
+  const options = new NativeBitmapFactory.Options();
   options.inJustDecodeBounds = true;
   if (typeof file === 'string') NativeBitmapFactory.decodeFile(file, options);
   // assetsInputStream for reading from assets
@@ -324,13 +329,13 @@ function decodeSampledBitmapFromResource(file, reqWidth, reqHeight) {
 
 function calculateInSampleSize(options, reqWidth, reqHeight) {
   // Raw height and width of image
-  var height = options.outHeight;
-  var width = options.outWidth;
-  var inSampleSize = 1;
+  const height = options.outHeight;
+  const width = options.outWidth;
+  let inSampleSize = 1;
 
   if (height > reqHeight || width > reqWidth) {
-    var halfHeight = height / 2;
-    var halfWidth = width / 2;
+    const halfHeight = height / 2;
+    const halfWidth = width / 2;
 
     // Calculate the largest inSampleSize value that is a power of 2 and keeps both
     // height and width larger than the requested height and width.

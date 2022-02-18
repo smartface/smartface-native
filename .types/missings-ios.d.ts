@@ -22,7 +22,7 @@ declare class __SF_UIImage extends __SF_NSOBject {
   static createNSData(obj: any);
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
-  size: { width: number; height: number};
+  size: { width: number; height: number };
 }
 
 declare class __SF_UIImageView extends __SF_UIView {
@@ -34,7 +34,7 @@ declare class __SF_UIImageView extends __SF_UIView {
   tintColor: __SF_UIColor;
   loadFromURL(url: any, placeholder: __SF_UIImage, headers: any, onSuccess: (innerFade: boolean, image: __SF_UIImage, error: any, cache: any /**TODO: ImageCacheType */, url: any) => void): void;
 }
-declare class __SF_NSInvocation extends __SF_NSOBject{
+declare class __SF_NSInvocation extends __SF_NSOBject {
   static createInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
   static createClassInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
   target: __SF_NSOBject;
@@ -72,7 +72,7 @@ declare class __SF_GCRect {
   width?: number;
   height?: number;
   x?: number;
-  y?: number
+  y?: number;
   minX?: number;
   midX?: number;
   maxX?: number;
@@ -81,9 +81,7 @@ declare class __SF_GCRect {
   maxY?: number;
 }
 
-declare class __SF_NSRect extends __SF_GCRect {
-
-}
+declare class __SF_NSRect extends __SF_GCRect {}
 
 declare class __SF_UIView extends __SF_NSOBject {
   static viewAppearanceSemanticContentAttribute(): number;
@@ -189,8 +187,8 @@ declare class __SF_UIFont {
 }
 
 declare class __SF_NSData extends __SF_NSOBject {
-  static base64Encoded(base64: string): __SF_NSData;
-  static dataFromUTF8String(utf8: string): __SF_NSData;
+  static base64Encoded(base64: string): string[];
+  static dataFromUTF8String(utf8: string): string[];
 }
 
 declare class __SF_FLAnimatedImage {
@@ -256,9 +254,7 @@ declare class __SF_UICollectionView extends __SF_UIScrollView {
   superview: any;
 }
 
-declare class __SF_UICollectionReusableView extends __SF_UIView {
-
-}
+declare class __SF_UICollectionReusableView extends __SF_UIView {}
 
 declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
   contentView: __SF_UIView;
@@ -699,7 +695,7 @@ declare class __SF_UITabBarController extends __SF_UINavigationController {
   selectedIndex: number;
   tabBar: {
     frame: __SF_NSRect;
-  }
+  };
 }
 declare class __SF_UITabBarControllerDelegate {}
 
@@ -884,9 +880,7 @@ declare class __SF_UIPageViewController extends __SF_UIView {
   static createWithTransitionStyleNavigationOrientation(transitionStyle: any, navigationOrientation: any): __SF_UIPageViewController;
 }
 
-declare class __SF_UIControl extends __SF_UIView {
-
-}
+declare class __SF_UIControl extends __SF_UIView {}
 
 declare class __SF_UISwitch extends __SF_UIControl {
   setEnabled: boolean;

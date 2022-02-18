@@ -1,8 +1,6 @@
 import { INativeComponent } from "core/inative-component";
-import NativeComponent from "core/native-component";
-import Blob from "../../blob";
+import IBlob from "../../global/blob/blob";
 import { Rectangle } from "../../primitive/rectangle";
-import ViewIOS from "../view/view.ios";
 
 /**
  * @class UI.Image
@@ -78,7 +76,7 @@ interface IImage extends INativeComponent {
    * @return Blob
    * @since 0.1
    */
-  toBlob(): Blob;
+  toBlob(): IBlob;
 
   /**
    * Creates a new image from existing image with specified width and height.
@@ -177,9 +175,9 @@ interface IImage extends INativeComponent {
   compress(
     format: Format,
     quality: number,
-    onSuccess: (e: { blob: Blob }) => void,
+    onSuccess: (e: { blob: IBlob }) => void,
     onFailure: (e?: { message: string }) => void
-  ): Blob | false;
+  ): IBlob | false;
   /**
    * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
    * onSuccess and onFailure are optional parameters.
@@ -354,7 +352,7 @@ export class ImageBase implements IImage {
   crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
     throw new Error("Method not implemented.");
   }
-  compress(format: Format, quality: number, onSuccess: (e: { blob: Blob; }) => void, onFailure: (e?: { message: string; }) => void): false | Blob {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob; }) => void, onFailure: (e?: { message: string; }) => void): false | IBlob {
     throw new Error("Method not implemented.");
   }
   rotate(angle: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
@@ -378,7 +376,7 @@ export class ImageBase implements IImage {
     throw new Error("Method not implemented.");
     return null;
   }
-  toBlob(): Blob {
+  toBlob(): IBlob {
     throw new Error("Method not implemented.");
   }
 
@@ -401,7 +399,9 @@ export class ImageBase implements IImage {
    * @see https://developer.android.com/reference/android/R.drawable
    * @since 4.0.2
    */
-  // static createSystemIcon(icon: number | string): Image;
+  static createSystemIcon(icon: number | string): IImage {
+    throw new Error("Method not implemented.");
+  }
   /**
    * Creates an image object from given a blob.
    *
@@ -413,7 +413,10 @@ export class ImageBase implements IImage {
    * @ios
    * @since 0.1
    */
-  // static createFromBlob(blob: Blob): Image;
+  static createFromBlob(blob: IBlob): IImage {
+    throw new Error("Method not implemented.");
+  }
+
   /**
    * Creates a rounded image object from given path. This method works for only Android. It returns undefined for iOS.
    *
@@ -426,7 +429,10 @@ export class ImageBase implements IImage {
    * @android
    * @since 2.0.10
    */
-  // static createRoundedImage(params: { path: string; radius?: number }): Image;
+  static createRoundedImage(params: { path: string; radius?: number }): IImage {
+    throw new Error("Method not implemented.");
+  }
+
   /**
    * Creates an Image instance from given file path. Large bitmap loading causes OutOfMemory exception on Android.
    * width and height parameters works for only Android. No-op for iOS.
@@ -447,7 +453,10 @@ export class ImageBase implements IImage {
    * @since 0.1
    * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
    */
-  // static createFromFile(path: string, width?: number, height?: number): Image;
+  static createFromFile(path: string, width?: number, height?: number): IImage {
+    throw new Error("Method not implemented.");
+  }
+  
   /**
    * iOS Specific Properties.
    * @class UI.Image.iOS
@@ -459,9 +468,7 @@ export class ImageBase implements IImage {
   };
 
   get ios() {
-    return {
-      ...this.ios
-    }
+    return {};
   }
 }
 
