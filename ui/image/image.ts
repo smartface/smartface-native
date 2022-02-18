@@ -1,8 +1,6 @@
 import { INativeComponent } from "core/inative-component";
-import NativeComponent from "core/native-component";
-import Blob from "../../blob";
+import IBlob from "../../global/blob/blob";
 import { Rectangle } from "../../primitive/rectangle";
-import ViewIOS from "../view/view.ios";
 
 /**
  * @class UI.Image
@@ -78,7 +76,7 @@ interface IImage extends INativeComponent {
    * @return Blob
    * @since 0.1
    */
-  toBlob(): Blob;
+  toBlob(): IBlob;
 
   /**
    * Creates a new image from existing image with specified width and height.
@@ -177,9 +175,9 @@ interface IImage extends INativeComponent {
   compress(
     format: Format,
     quality: number,
-    onSuccess: (e: { blob: Blob }) => void,
+    onSuccess: (e: { blob: IBlob }) => void,
     onFailure: (e?: { message: string }) => void
-  ): Blob | false;
+  ): IBlob | false;
   /**
    * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
    * onSuccess and onFailure are optional parameters.
@@ -354,7 +352,7 @@ export class ImageBase implements IImage {
   crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
     throw new Error("Method not implemented.");
   }
-  compress(format: Format, quality: number, onSuccess: (e: { blob: Blob; }) => void, onFailure: (e?: { message: string; }) => void): false | Blob {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob; }) => void, onFailure: (e?: { message: string; }) => void): false | IBlob {
     throw new Error("Method not implemented.");
   }
   rotate(angle: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
@@ -378,7 +376,7 @@ export class ImageBase implements IImage {
     throw new Error("Method not implemented.");
     return null;
   }
-  toBlob(): Blob {
+  toBlob(): IBlob {
     throw new Error("Method not implemented.");
   }
 
@@ -415,7 +413,7 @@ export class ImageBase implements IImage {
    * @ios
    * @since 0.1
    */
-  static createFromBlob(blob: Blob): IImage {
+  static createFromBlob(blob: IBlob): IImage {
     throw new Error("Method not implemented.");
   }
 

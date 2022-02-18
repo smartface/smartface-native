@@ -1,4 +1,5 @@
-import Blob from '../../blob';
+import IBlob from '../../global/blob/blob';
+import BlobAndroid from '../../global/blob/blob.android';
 import IImage, { Format, ImageBase } from './image';
 
 /*globals requireClass*/
@@ -116,11 +117,11 @@ class Image extends ImageBase {
     return this.nativeObject.getBitmap().getWidth();
   }
 
-  toBlob(): Blob {
+  toBlob(): IBlob {
     const bitmap = this.nativeObject.getBitmap();
     const stream = new NativeByteArrayOutputStream();
     bitmap.compress(CompressFormat[1], 100, stream);
-    return new Blob(stream.toByteArray(), {
+    return new BlobAndroid(stream.toByteArray(), {
       type: 'image'
     });
   }
@@ -213,7 +214,7 @@ class Image extends ImageBase {
     }
   }
 
-  compress(format: Format, quality: number, onSuccess: (e: { blob: Blob }) => void, onFailure: (e?: { message: string }) => void): false | Blob {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): false | IBlob {
     let success = true;
     let byteArray;
     try {
@@ -232,12 +233,12 @@ class Image extends ImageBase {
     if (success) {
       if (onSuccess)
         onSuccess({
-          blob: new Blob(byteArray, {
+          blob: new BlobAndroid(byteArray, {
             type: 'image'
           })
         });
       else
-        return new Blob(byteArray, {
+        return new BlobAndroid(byteArray, {
           type: 'image'
         });
     }

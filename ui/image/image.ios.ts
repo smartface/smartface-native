@@ -1,7 +1,8 @@
+import IBlob from '../../global/blob/blob';
+import BlobIOS from '../../global/blob/blob.ios';
 import IImage, { Format, ImageAndroidProps, ImageBase } from './image';
 const File = require('../../io/file');
 const TypeUtil = require('../../util/type');
-const Blob = require('../../blob');
 
 /**
  * @since 4.5.0
@@ -34,11 +35,11 @@ class ImageiOS extends ImageBase {
     });
   }
 
-  static createFromBlob = function (blob: string) {
+  static createFromBlob(blob: IBlob) {
     return new ImageiOS({
       blob: blob
     });
-  };
+  }
 
   static readandroid = {
     createRoundedImage: function () {}
@@ -184,9 +185,9 @@ class ImageiOS extends ImageBase {
     }
   }
 
-  compress(format: Format, quality: number, onSuccess: (e: { blob: import("global/blob"); }) => void, onFailure: (e?: { message: string; }) => void): false | import("global/blob") {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string; }) => void): false | IBlob {
     if (TypeUtil.isNumeric(quality)) {
-      const blob = new Blob(this.nativeObject.compress(format, quality / 100));
+      const blob = new BlobIOS(this.nativeObject.compress(format, quality / 100));
       if (onSuccess) {
         onSuccess({
           blob: blob
@@ -205,7 +206,7 @@ class ImageiOS extends ImageBase {
     let retval = null;
     const imageData = this.nativeObject.convertToData();
     if (imageData) {
-      retval = new Blob(imageData);
+      retval = new BlobIOS(imageData);
     }
     return retval;
   }
