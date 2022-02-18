@@ -1,7 +1,6 @@
-import { ConstructorOf } from "../../core/constructorof";
-import Image from "./image";
+import {ImageBase} from "./image";
 
-const Image: ConstructorOf<Image> = require(`./image.${Device.deviceOS.toLowerCase()}`)
+const Image: typeof ImageBase = require(`./image.${Device.deviceOS.toLowerCase()}`)
 .default;
 
 export default Image;

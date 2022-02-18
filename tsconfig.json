@@ -9,7 +9,7 @@
 		"outFile": "./dist/types",
 		"target": "ES5",
 		"esModuleInterop": true,
-		"lib": ["ES2015"],
+		"lib": ["ES2015"]
 	},
 	"include": [
 		"./application",
