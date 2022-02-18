@@ -1,6 +1,7 @@
 import { EventType } from "core/eventemitter/EventType";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
-import View from "../view/view";
+import NativeEventEmitterComponent from "core/native-event-emitter-component";
+import IView, { AbstractView } from "../view/view";
 import { ViewGroupEvents } from "./viewgroup-events";
 
 /**
@@ -20,12 +21,8 @@ import { ViewGroupEvents } from "./viewgroup-events";
  *     myFlexLayout.addChild(myLabel);
  */
 
-export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEvents>
-  extends View<
-    TEvent extends string
-      ? TEvent | ExtractEventValues<typeof ViewGroupEvents>
-      : TEvent & typeof ViewGroupEvents
-  > {
+export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIOS = {}, TAND = {}>
+  extends IView<TEvent | ViewGroupEvents, TIOS, TAND> {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -35,7 +32,7 @@ export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEv
    * @method addChild
    * @since 0.1
    */
-  addChild(view: View): void;
+  addChild(view: AbstractView): void;
   /**
    * Remove a child view from viewgroup.
    *
@@ -45,7 +42,7 @@ export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEv
    * @method removeChild
    * @since 0.1
    */
-  removeChild(view: View): void;
+  removeChild(view: AbstractView): void;
   /**
    * Removes all child views from viewgroup.
    *
@@ -74,17 +71,8 @@ export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEv
    * @ios
    * @since 3.1.3
    */
-  getChildList(): View[];
-  /**
-   * Called when a child does not want this parent and its ancestors to intercept touch events .
-   * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
-   *
-   * @method requestDisallowInterceptTouchEvent
-   * @param {Boolean} disallow
-   * @android
-   * @since 4.0.3
-   */
-  requestDisallowInterceptTouchEvent(disallow: boolean): void;
+  getChildList(): IView[];
+  
   /**
    * Finds a child view with specified id within the layout.
    *
@@ -126,7 +114,7 @@ export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEv
    * });
    * ````
    */
-  onViewAdded: (view: View) => void;
+  onViewAdded: (view: AbstractView) => void;
   /**
    * This event is called when a view removed from this view's hierarchy.
    *
@@ -145,5 +133,29 @@ export declare interface ViewGroup<TEvent extends EventType = typeof ViewGroupEv
    * });
    * ````
    */
-  onViewRemoved: (view: View) => void;
+  onViewRemoved: (view: AbstractView) => void;
+
+  // android: IView<TEvent, TIOS, TAND>["android"] & {
+  //   /**
+  //  * Called when a child does not want this parent and its ancestors to intercept touch events .
+  //  * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+  //  *
+  //  * @method requestDisallowInterceptTouchEvent
+  //  * @param {Boolean} disallow
+  //  * @android
+  //  * @since 4.0.3
+  //  */
+  //   requestDisallowInterceptTouchEvent(disallow: boolean): void;
+  // }
+}
+
+export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents> extends AbstractView<TEvent> implements IViewGroup<TEvent> {
+  addChild(view: IView): void;
+  removeChild(view: IView): void;
+  removeAll(): void;
+  getChildCount(): number;
+  getChildList(): IView[];
+  findChildById(id: string): void;
+  onViewAdded: (view: IView) => void;
+  onViewRemoved: (view: IView) => void;
 }

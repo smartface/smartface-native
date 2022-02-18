@@ -1,29 +1,24 @@
 /*globals array, requireClass, toJSArray */
-import { Point2D } from "../../primitive/point2d";
-import { Rectangle } from "../../primitive/rectangle";
-import { INativeComponent } from "../../core/inative-component";
-import Color from "../color";
-import { ViewEvents } from "./view-event";
-import View, { ViewBase } from "./view";
-import { EventType } from "../../core/eventemitter/EventType";
+import { Point2D } from '../../primitive/point2d';
+import { Rectangle } from '../../primitive/rectangle';
+import { INativeComponent } from '../../core/inative-component';
+import Color from '../color';
+import { ViewEvents } from './view-event';
+import View, { ViewBase } from './view';
 
-const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const AndroidConfig = require("../../util/Android/androidconfig");
-const TypeUtil = require("../../util/type");
-const NativeR = requireClass("android.R");
-const NativeView = requireClass("android.view.View");
-const NativeYogaNodeFactory = requireClass("com.facebook.yoga.YogaNodeFactory");
-const NativeYogaEdge = requireClass("com.facebook.yoga.YogaEdge");
-const SFViewUtil = requireClass(
-  "io.smartface.android.sfcore.ui.view.SFViewUtil"
-);
-const SFOnTouchViewManager = requireClass(
-  "io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager"
-);
+const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const TypeUtil = require('../../util/type');
+const NativeR = requireClass('android.R');
+const NativeView = requireClass('android.view.View');
+const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
+const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
+const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
+const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
-import { EventEmitterWrapper } from "../../core/eventemitter";
-const LOLLIPOP_AND_LATER =
-  AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
+import { EventEmitterWrapper } from '../../core/eventemitter';
+import IView from './view';
+const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
   [ViewEvents.Touch]: function () {
@@ -70,22 +65,14 @@ const YogaEdge = {
 };
 
 function getRippleMask(borderRadius) {
-  const NativeRoundRectShape = requireClass(
-    "android.graphics.drawable.shapes.RoundRectShape"
-  );
-  const NativeShapeDrawable = requireClass(
-    "android.graphics.drawable.ShapeDrawable"
-  );
+  const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
+  const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 
   var outerRadii = [];
   outerRadii.length = 8;
   outerRadii.fill(borderRadius);
 
-  var roundRectShape = new NativeRoundRectShape(
-    array(outerRadii, "float"),
-    null,
-    null
-  );
+  var roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
   var shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
   return shapeDrawable;
@@ -93,10 +80,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends EventType = EventType>
-  extends ViewBase<TEvent>
-  implements INativeComponent, View<TEvent>
-{
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements INativeComponent, View<TEvent> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -123,12 +107,10 @@ export class ViewAndroid<TEvent extends EventType = EventType>
     x: 1.0,
     y: 1.0
   };
-  private _nativeObject: any;
   private _borderColor: Color;
   private _borderWidth: number;
   private _borderRadius: number;
   private _backgroundColor: Color = Color.TRANSPARENT;
-  private yogaNode: any;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -138,18 +120,13 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   private _rippleEnabled = false;
   private _rippleColor = null;
   private _useForeground = false;
-  private _android = {
-    updateRippleEffectIfNeeded: () => {
-      this._rippleEnabled &&
-        this._rippleColor &&
-        (this._android.rippleColor = this._rippleColor);
-    },
-    rippleColor: null,
-  };
+  protected yogaNode: any;
+  protected _android; 
+  // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
-  constructor(params) {
+  constructor(params?: IView) {
     super();
-    params = params || {};
+    // params = params || {};
     if (!this._nativeObject) {
       this._nativeObject = new NativeView(activity);
       this.yogaNode = NativeYogaNodeFactory.create();
@@ -170,6 +147,34 @@ export class ViewAndroid<TEvent extends EventType = EventType>
       }
     }
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
+    this.setTouchHandlers();
+
+    const self = this;
+
+    this._android = {
+      updateRippleEffectIfNeeded: () => {
+        this._rippleEnabled && this._rippleColor && (this._android.rippleColor = this._rippleColor);
+      },
+      rippleColor: null,
+      get zIndex() {
+        return self.zIndex;
+      },
+      set zIndex(index: number) {
+        self.zIndex = index;
+      },
+      get elevation() {
+        return self.elevation;
+      },
+      set elevation(value) {
+        self.elevation = value;
+      },
+      get overScrollMode() {
+        return self.overScrollMode;
+      },
+      set overScrollMode(mode) {
+        self.overScrollMode = mode;
+      }
+    }
   }
 
   get parent() {
@@ -188,188 +193,183 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   }
 
   //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
-	private _setBorderToAllEdges() {
-		var borderWidthPx = DpToPixel(this.borderWidth);
-		if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
-		this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
-		this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
-		this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
-		this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
-	}
+  private _setBorderToAllEdges() {
+    var borderWidthPx = DpToPixel(this.borderWidth);
+    if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
+    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+    this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
+  }
 
-	private _setMaskedBorders(bitwiseBorders) {
-		let borderRadiusInDp = DpToPixel(this.borderRadius);
-		let borderRadiuses = Array(8).fill(0);
-		for (let i = 0; i < 4; i++) {
-		let borderEnum = 1 << i;
-		if (bitwiseBorders & borderEnum) {
-			bitwiseBorders &= ~borderEnum;
-			switch (borderEnum) {
-			case ViewAndroid.Border.TOP_LEFT:
-				borderRadiuses.fill(borderRadiusInDp, 0, 3);
-				break;
-			case ViewAndroid.Border.TOP_RIGHT:
-				borderRadiuses.fill(borderRadiusInDp, 2, 4);
-				break;
-			case ViewAndroid.Border.BOTTOM_RIGHT:
-				borderRadiuses.fill(borderRadiusInDp, 4, 6);
-				break;
-			case ViewAndroid.Border.BOTTOM_LEFT:
-				borderRadiuses.fill(borderRadiusInDp, 6, 8);
-				break;
-			}
-		}
-		}
-		return borderRadiuses;
-	}
-	private _resetBackground = function () {
-		let color = this.backgroundColor;
-		let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
-		//Provide backward support in case of diff behavior of border radius.
-		let borderRadiuses =
-		bitwiseBorders !== ViewAndroid.Border.ALL
-			? this._setMaskedBorders(bitwiseBorders)
-			: [DpToPixel(this.borderRadius)];
-		let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-		let borderColor = this.borderColor.nativeObject;
-		let backgroundColor = this.backgroundColor.nativeObject;
+  private _setMaskedBorders(bitwiseBorders) {
+    let borderRadiusInDp = DpToPixel(this.borderRadius);
+    let borderRadiuses = Array(8).fill(0);
+    for (let i = 0; i < 4; i++) {
+      let borderEnum = 1 << i;
+      if (bitwiseBorders & borderEnum) {
+        bitwiseBorders &= ~borderEnum;
+        switch (borderEnum) {
+          case ViewAndroid.Border.TOP_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 0, 3);
+            break;
+          case ViewAndroid.Border.TOP_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 2, 4);
+            break;
+          case ViewAndroid.Border.BOTTOM_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 4, 6);
+            break;
+          case ViewAndroid.Border.BOTTOM_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 6, 8);
+            break;
+        }
+      }
+    }
+    return borderRadiuses;
+  }
+  private _resetBackground = function () {
+    let color = this.backgroundColor;
+    let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
+    //Provide backward support in case of diff behavior of border radius.
+    let borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
+    let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
+    let borderColor = this.borderColor.nativeObject;
+    let backgroundColor = this.backgroundColor.nativeObject;
 
-		if (color.isGradient) {
-		let colors = array(color.colors, 'int');
-		SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
-		} else {
-		SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
-		}
-  	};
+    if (color.isGradient) {
+      let colors = array(color.colors, 'int');
+      SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
+    } else {
+      SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
+    }
+  };
 
-	get android() {
-		return this._android;
-	}
-	get nativeObject() {
-		return this._nativeObject;
-	}
+  get android() {
+    return this._android;
+  }
+  get nativeObject() {
+    return this._nativeObject;
+  }
 
-	// android
-	get zIndex() {
-		return SFViewUtil.getZ(this._nativeObject);
-	}
-	set zIndex(index: number) {
-		if (!TypeUtil.isNumeric(index)) throw new Error('zIndex value must be a number.');
-		SFViewUtil.setZ(this._nativeObject, index);
-	}
+  // android
+  get zIndex() {
+    return SFViewUtil.getZ(this._nativeObject);
+  }
+  set zIndex(index: number) {
+    if (!TypeUtil.isNumeric(index)) throw new Error('zIndex value must be a number.');
+    SFViewUtil.setZ(this._nativeObject, index);
+  }
 
-	// android
-	get elevation() {
-		return SFViewUtil.getElevation(this._nativeObject);
-	}
-	set elevation(value) {
-		SFViewUtil.setElevation(this._nativeObject, value);
-	}
+  // android
+  get elevation() {
+    return SFViewUtil.getElevation(this._nativeObject);
+  }
+  set elevation(value) {
+    SFViewUtil.setElevation(this._nativeObject, value);
+  }
 
-	get aspectRatio() {
-		return null;
-	}
+  get aspectRatio() {
+    return null;
+  }
 
-	set aspectRatio(value) {}
+  set aspectRatio(value) {}
 
-	// android
-	get overScrollMode() {
-		return this._overScrollMode;
-	}
-	set overScrollMode(mode) {
-		this._nativeObject.setOverScrollMode(mode);
-		this._overScrollMode = mode;
-	}
+  // android
+  get overScrollMode() {
+    return this._overScrollMode;
+  }
+  set overScrollMode(mode) {
+    this._nativeObject.setOverScrollMode(mode);
+    this._overScrollMode = mode;
+  }
 
-	get backgroundColor() {
-		return this._backgroundColor;
-	}
-	set backgroundColor(color: Color) {
-		this._backgroundColor = color;
-		this._resetBackground();
-	}
+  get backgroundColor() {
+    return this._backgroundColor;
+  }
+  set backgroundColor(color: Color) {
+    this._backgroundColor = color;
+    this._resetBackground();
+  }
 
-	get testId() {
-		if (!AndroidConfig.isEmulator) {
-			return activity.getResources().getResourceEntryName(this._nativeObject.getId());
-		} else {
-			return '';
-		}
-	}
-	set testId(value) {
-		const id = activity.getResourceId(value);
-		if (id > 0) {
-			this._nativeObject.setId(id);
-		}
-	}
+  get testId() {
+    if (!AndroidConfig.isEmulator) {
+      return activity.getResources().getResourceEntryName(this._nativeObject.getId());
+    } else {
+      return '';
+    }
+  }
+  set testId(value) {
+    const id = activity.getResourceId(value);
+    if (id > 0) {
+      this._nativeObject.setId(id);
+    }
+  }
 
-	get accessible() {
-		return this._nativeObject.isImportantForAccessibility();
-	}
-	set accessible(value) {
-		// IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
-		// IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
-		if (value) {
-			this._nativeObject.setImportantForAccessibility(1);
-		} else {
-			this._nativeObject.setImportantForAccessibility(2);
-		}
-	}
+  get accessible() {
+    return this._nativeObject.isImportantForAccessibility();
+  }
+  set accessible(value) {
+    // IMPORTANT_FOR_ACCESSIBILITY_YES = 1,
+    // IMPORTANT_FOR_ACCESSIBILITY_NO = 2,
+    if (value) {
+      this._nativeObject.setImportantForAccessibility(1);
+    } else {
+      this._nativeObject.setImportantForAccessibility(2);
+    }
+  }
 
-	get accessibilityLabel() {
-		return this._nativeObject.getContentDescription();
-	}
-	set accessibilityLabel(value) {
-		this._nativeObject.setContentDescription(value);
-	}
-	get borderColor() {
-		return this._borderColor;
-	}
-	set borderColor(value) {
-		this._borderColor = value;
+  get accessibilityLabel() {
+    return this._nativeObject.getContentDescription();
+  }
+  set accessibilityLabel(value) {
+    this._nativeObject.setContentDescription(value);
+  }
+  get borderColor() {
+    return this._borderColor;
+  }
+  set borderColor(value) {
+    this._borderColor = value;
 
-		this._resetBackground();
-		this._setBorderToAllEdges();
-	}
+    this._resetBackground();
+    this._setBorderToAllEdges();
+  }
 
-	get borderWidth() {
-		return this._borderWidth;
-	}
-	set borderWidth(value) {
-		this._borderWidth = value;
+  get borderWidth() {
+    return this._borderWidth;
+  }
+  set borderWidth(value) {
+    this._borderWidth = value;
 
-		this._resetBackground();
-		this._setBorderToAllEdges();
-	}
+    this._resetBackground();
+    this._setBorderToAllEdges();
+  }
 
-	get borderRadius() {
-		return this._borderRadius;
-	}
+  get borderRadius() {
+    return this._borderRadius;
+  }
 
-	set borderRadius(value) {
-		this._borderRadius = value;
-		this._resetBackground();
-		this._android.updateRippleEffectIfNeeded &&
-		this._android.updateRippleEffectIfNeeded();
-	}
+  set borderRadius(value) {
+    this._borderRadius = value;
+    this._resetBackground();
+    this._android.updateRippleEffectIfNeeded && this._android.updateRippleEffectIfNeeded();
+  }
 
-	get maskedBorders() {
-		return this._maskedBorders;
-	}
-	set maskedBorders(value) {
-		this._maskedBorders = value;
-		this._resetBackground();
-		this._android.updateRippleEffectIfNeeded &&
-		this._android.updateRippleEffectIfNeeded();
-	}
+  get maskedBorders() {
+    return this._maskedBorders;
+  }
+  set maskedBorders(value) {
+    this._maskedBorders = value;
+    this._resetBackground();
+    this._android.updateRippleEffectIfNeeded && this._android.updateRippleEffectIfNeeded();
+  }
 
-	get masksToBounds() {
-		return this._masksToBounds;
-	}
-	set masksToBounds(value) {
-		this._masksToBounds = value;
-		this._nativeObject.setClipToOutline(this._masksToBounds);
-	}
+  get masksToBounds() {
+    return this._masksToBounds;
+  }
+  set masksToBounds(value) {
+    this._masksToBounds = value;
+    this._nativeObject.setClipToOutline(this._masksToBounds);
+  }
 
   private _touchCallbacks = {
     onTouchEnded: (isInside: boolean, x: number, y: number) => {
@@ -506,28 +506,24 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   }
   set onTouch(onTouch) {
     this._onTouch = onTouch;
-    this.setTouchHandlers();
   }
   get onTouchEnded() {
     return this._onTouchEnded;
   }
   set onTouchEnded(onTouchEnded) {
     this._onTouchEnded = onTouchEnded;
-    this.setTouchHandlers();
   }
   get onTouchMoved() {
     return this._onTouchMoved;
   }
   set onTouchMoved(onTouchMoved) {
     this._onTouchMoved = onTouchMoved;
-    this.setTouchHandlers();
   }
   get onTouchCancelled() {
     return this._onTouchCancelled;
   }
   set onTouchCancelled(onTouchCancelled) {
     this._onTouchCancelled = onTouchCancelled.bind(this);
-    this.setTouchHandlers();
   }
   get visible() {
     // View.VISIBLE is 0
@@ -886,44 +882,26 @@ export class ViewAndroid<TEvent extends EventType = EventType>
   set rippleColor(value) {
     this._rippleColor = value;
 
-    if (
-      this.rippleEnabled &&
-      AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP
-    ) {
-      var states = array([array([], "int")]);
-      var colors = array([this._rippleColor.nativeObject], "int");
+    if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+      var states = array([array([], 'int')]);
+      var colors = array([this._rippleColor.nativeObject], 'int');
 
-      const NativeColorStateList = requireClass(
-        "android.content.res.ColorStateList"
-      );
-      const NativeRippleDrawable = requireClass(
-        "android.graphics.drawable.RippleDrawable"
-      );
+      const NativeColorStateList = requireClass('android.content.res.ColorStateList');
+      const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
       var colorStateList = new NativeColorStateList(states, colors);
 
       var mask = getRippleMask(DpToPixel(this.borderRadius));
 
-      if (
-        this._useForeground === true &&
-        AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-      ) {
+      if (this._useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
         /*
 		Only supported for api level 23 and above
 		*/
         let currentBackground = this.nativeObject.getForeground();
-        let rippleDrawableForegorund = new NativeRippleDrawable(
-          colorStateList,
-          currentBackground,
-          mask
-        );
+        let rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
         this.nativeObject.setForeground(rippleDrawableForegorund);
       } else {
         let currentBackground = this.nativeObject.getBackground();
-        let rippleDrawableBackgorund = new NativeRippleDrawable(
-          colorStateList,
-          currentBackground,
-          mask
-        );
+        let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
         this.nativeObject.setBackground(rippleDrawableBackgorund);
       }
     }

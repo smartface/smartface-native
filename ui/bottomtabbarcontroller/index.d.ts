@@ -2,7 +2,8 @@ import NavigationController from '../navigationcontroller';
 import View from '../view';
 import Page from '../page';
 import BottomTabBar from '../bottomtabbar';
-import { IEventEmitter } from 'core/eventemitter';
+import { IEventEmitter } from '../../core/eventemitter';
+import NativeComponent from '../../core/native-component';
 
 declare enum Events {
   SelectByIndex = 'selectByIndex',
