@@ -1,6 +1,36 @@
-import { IEventEmitter } from 'core/eventemitter';
+import { INativeComponent } from '../../core/inative-component';
+import { AsyncTaskEvents } from './asynctask-events';
 
-export = AsyncTask;
+export enum Status {
+  /**
+   * Indicates that onComplete has finished.
+   *
+   * @property FINISHED
+   * @static
+   * @readonly
+   * @since 3.2.0
+   */
+  FINISHED,
+  /**
+   * Indicates that the task has not been executed yet.
+   *
+   * @property PENDING
+   * @static
+   * @readonly
+   * @since 3.2.0
+   */
+  PENDING,
+  /**
+   * Indicates that the task is running.
+   *
+   * @property RUNNING
+   * @static
+   * @readonly
+   * @since 3.2.0
+   */
+  RUNNING
+}
+
 /**
  * @class AsyncTask
  * @since 3.1.0
@@ -18,12 +48,11 @@ export = AsyncTask;
  *
  *     asynctask.run();
  */
-declare class AsyncTask extends NativeComponent implements IEventEmitter<AsyncTask.Events> {
-  constructor();
-  on(eventName: AsyncTask.Events, callback: (...args: any) => void): () => void;
-  once(eventName: AsyncTask.Events, callback: (...args: any) => void): () => void;
-  off(eventName: AsyncTask.Events, callback?: (...args: any) => void): void;
-  emit(event: AsyncTask.Events, detail?: any[]): void;
+export interface IAsyncTask extends INativeComponent {
+  on(eventName: AsyncTaskEvents, callback: (...args: any) => void): () => void;
+  once(eventName: AsyncTaskEvents, callback: (...args: any) => void): () => void;
+  off(eventName: AsyncTaskEvents, callback?: (...args: any) => void): void;
+  emit(event: AsyncTaskEvents, detail?: any[]): void;
   /**
    * This event describes task of AsyncTask instance.
    *
@@ -97,7 +126,7 @@ declare class AsyncTask extends NativeComponent implements IEventEmitter<AsyncTa
    * @since 3.2.2
    * @return {AsyncTask.Android.Status} status
    */
-  getStatus?: () => AsyncTask.Android.Status;
+  getStatus?: () => Status;
   /**
    * Runs the task.
    *
@@ -121,75 +150,57 @@ declare class AsyncTask extends NativeComponent implements IEventEmitter<AsyncTa
    */
   cancel(): void;
 }
-declare namespace AsyncTask {
-  /**
-   * Android Specific Properties.
-   * @class AsyncTask.Android
-   * @since 3.2.2
-   */
-  namespace Android {
-    /**
-     * @enum AsyncTask.Android.Status
-     * @since 3.2.2
-     *
-     */
-    enum Status {
-      /**
-       * Indicates that onComplete has finished.
-       *
-       * @property FINISHED
-       * @static
-       * @readonly
-       * @since 3.2.0
-       */
-      FINISHED,
-      /**
-       * Indicates that the task has not been executed yet.
-       *
-       * @property PENDING
-       * @static
-       * @readonly
-       * @since 3.2.0
-       */
-      PENDING,
-      /**
-       * Indicates that the task is running.
-       *
-       * @property RUNNING
-       * @static
-       * @readonly
-       * @since 3.2.0
-       */
-      RUNNING
-    }
-  }
 
-  enum Events {
-    /**
-     * This event invokes when task is completed.
-     *
-     * @event onComplete
-     * @android
-     * @ios
-     * @since 3.1.0
-     */
-    Complete = 'complete',
-    /**
-     * Runs on the UI thread after cancel() is invoked
-     *
-     * @method onCancelled
-     * @android
-     * @ios
-     * @since 3.2.2
-     */
-    Cancelled = 'cancelled',
-    /**
-     * Runs on the UI thread before onComplete.
-     *
-     * @method onPreExecute
-     * @android
-     * @since 3.2.2
-     */
-    PreExecute = 'preExecute'
+export class AsyncTaskBase implements IAsyncTask {
+  protected _task: (...args) => void;
+  protected _onComplete: (...args) => void;
+  protected _onCancelled: (...args) => void;
+  protected _onPreExecute: (...args) => void;
+  on(eventName: 'complete' | 'cancelled' | 'preExecute', callback: (...args: any) => void): () => void {
+    throw new Error('Method not implemented.');
   }
+  once(eventName: 'complete' | 'cancelled' | 'preExecute', callback: (...args: any) => void): () => void {
+    throw new Error('Method not implemented.');
+  }
+  off(eventName: 'complete' | 'cancelled' | 'preExecute', callback?: (...args: any) => void): void {
+    throw new Error('Method not implemented.');
+  }
+  emit(event: 'complete' | 'cancelled' | 'preExecute', detail?: any[]): void {
+    throw new Error('Method not implemented.');
+  }
+  get task(): (...args) => void {
+    throw new Error('Method not implemented.');
+  }
+  set task(value: (...args) => void) {
+    throw new Error('Method not implemented.');
+  }
+  get onComplete(): (...args) => void {
+    throw new Error('Method not implemented.');
+  }
+  set onComplete(value: (...args) => void) {
+    throw new Error('Method not implemented.');
+  }
+  get onCancelled(): (...args) => void {
+    throw new Error('Method not implemented.');
+  }
+  set onCancelled(value: (...args) => void) {
+    throw new Error('Method not implemented.');
+  }
+  get onPreExecute(): (...args) => void {
+    throw new Error('Method not implemented.');
+  }
+  set onPreExecute(value: (...args) => void) {
+    throw new Error('Method not implemented.');
+  }
+  getStatus?: () => Status;
+  run(): void {
+    throw new Error('Method not implemented.');
+  }
+  cancel(): void {
+    throw new Error('Method not implemented.');
+  }
+  nativeObject: any;
+  static readonly Android = {
+    Status
+  };
 }

@@ -167,7 +167,7 @@ declare class __SF_NSOperationQueue extends __SF_NSOBject {
 }
 
 declare class __SF_NSBlockOperation extends __SF_NSOBject {
-  static blockOperationWithJSValue(): any;
+  static blockOperationWithJSValue(fun?: () => void): any;
   addOperation(operation: any): void;
   operationCount: number;
   cancelAllOperations(): void;
