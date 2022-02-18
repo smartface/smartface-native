@@ -401,7 +401,9 @@ export class ImageBase implements IImage {
    * @see https://developer.android.com/reference/android/R.drawable
    * @since 4.0.2
    */
-  // static createSystemIcon(icon: number | string): Image;
+  static createSystemIcon(icon: number | string): IImage {
+    throw new Error("Method not implemented.");
+  }
   /**
    * Creates an image object from given a blob.
    *
@@ -413,7 +415,10 @@ export class ImageBase implements IImage {
    * @ios
    * @since 0.1
    */
-  // static createFromBlob(blob: Blob): Image;
+  static createFromBlob(blob: Blob): IImage {
+    throw new Error("Method not implemented.");
+  }
+
   /**
    * Creates a rounded image object from given path. This method works for only Android. It returns undefined for iOS.
    *
@@ -426,7 +431,10 @@ export class ImageBase implements IImage {
    * @android
    * @since 2.0.10
    */
-  // static createRoundedImage(params: { path: string; radius?: number }): Image;
+  static createRoundedImage(params: { path: string; radius?: number }): IImage {
+    throw new Error("Method not implemented.");
+  }
+
   /**
    * Creates an Image instance from given file path. Large bitmap loading causes OutOfMemory exception on Android.
    * width and height parameters works for only Android. No-op for iOS.
@@ -447,7 +455,10 @@ export class ImageBase implements IImage {
    * @since 0.1
    * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
    */
-  // static createFromFile(path: string, width?: number, height?: number): Image;
+  static createFromFile(path: string, width?: number, height?: number): IImage {
+    throw new Error("Method not implemented.");
+  }
+  
   /**
    * iOS Specific Properties.
    * @class UI.Image.iOS
@@ -459,9 +470,7 @@ export class ImageBase implements IImage {
   };
 
   get ios() {
-    return {
-      ...this.ios
-    }
+    return {};
   }
 }
 

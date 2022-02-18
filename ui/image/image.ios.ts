@@ -1,12 +1,7 @@
-import IImage, { ImageAndroidProps, ImageBase } from './image';
+import IImage, { Format, ImageAndroidProps, ImageBase } from './image';
 const File = require('../../io/file');
 const TypeUtil = require('../../util/type');
 const Blob = require('../../blob');
-
-enum Format {
-  JPEG,
-  PNG
-}
 
 /**
  * @since 4.5.0
@@ -78,9 +73,9 @@ class ImageiOS extends ImageBase {
 
   get android(): ImageAndroidProps {
     return {};
-  };
+  }
 
-  createSystemIcon(id) {
+  createSystemIcon() {
     return this;
   }
 
