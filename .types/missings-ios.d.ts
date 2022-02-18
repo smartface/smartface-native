@@ -59,7 +59,7 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 
 declare class __SF_Dispatch {
   static mainAsyncAfter: () => void;
-  static mainAsync: () => void;
+  static mainAsync: (fun?: (...args) => void) => void;
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
@@ -167,7 +167,7 @@ declare class __SF_NSOperationQueue extends __SF_NSOBject {
 }
 
 declare class __SF_NSBlockOperation extends __SF_NSOBject {
-  static blockOperationWithJSValue(): any;
+  static blockOperationWithJSValue(fun?: () => void): any;
   addOperation(operation: any): void;
   operationCount: number;
   cancelAllOperations(): void;
@@ -331,7 +331,7 @@ declare class __SF_CallObserverDelegate {
 }
 
 declare class __SF_CNMutableContact {
-  static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact, filename: string): any;
+  static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact[], filename: string): any;
   static new(): __SF_CNMutableContact;
   constructor();
   namePrefix: string;
@@ -1074,7 +1074,7 @@ declare class __SF_SMFReachability {
 }
 
 declare class __SF_Timer {
-  scheduledTimer(delay: number, callback: () => void): any;
+  scheduledTimer(delay: number, callback: () => void, repeat: boolean): any;
   invalidate(): void;
 }
 

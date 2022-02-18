@@ -1,5 +1,5 @@
-import IView from 'ui/view/view';
-import ViewGroupIOS from 'ui/viewgroup/viewgroup.ios';
+import IView from '../view/view';
+import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import IFlexLayout from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
 

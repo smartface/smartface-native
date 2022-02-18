@@ -1,3 +1,5 @@
+import NativeComponent from 'core/native-component';
+
 /**
  * @class Timer
  * @since 0.1
@@ -25,7 +27,8 @@
  *
  *
  */
-declare class Timer extends NativeComponent {
+export declare class TimerBase extends NativeComponent {
+  constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>);
   /**
    * @method setTimeout
    *
@@ -70,7 +73,5 @@ declare class Timer extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static clearAllTimer(timer: Timer): void;
+  static clearAllTimer(): void;
 }
-
-export = Timer;

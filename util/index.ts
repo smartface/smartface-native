@@ -16,7 +16,7 @@ export { default as DirectionBasedConverter } from './Android/directionbasedconv
 export { default as HeaderBarItemPadding } from './Android/headerbaritempadding';
 export { default as LayoutParams } from './Android/layoutparams';
 export * as RequestCodes from './Android/requestcodes';
-export { default as Scrollable } from './Android/scrollable';
+export { default as Scrollable } from '../core/scrollable';
 export { default as SystemServices } from './Android/systemservices';
 export * as TextViewSizeCalculator from './Android/textviewsizecalculator';
 export { default as TypeValue } from './Android/typevalue';
