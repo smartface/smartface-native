@@ -1,13 +1,16 @@
-import { ImageBase } from "./image";
-const File = require("../../io/file");
-const TypeUtil = require("../../util/type");
-const Blob = require("../../blob");
+import IImage, { ImageAndroidProps, ImageBase } from './image';
+const File = require('../../io/file');
+const TypeUtil = require('../../util/type');
+const Blob = require('../../blob');
 
 enum Format {
   JPEG,
   PNG
 }
 
+/**
+ * @since 4.5.0
+ */
 class ImageiOS extends ImageBase {
   static createFromFile = function (path) {
     const imageFile = new File({
@@ -18,7 +21,7 @@ class ImageiOS extends ImageBase {
       retval = null;
     } else {
       retval = new ImageiOS({
-        path: imageFile.nativeObject.getActualPath(),
+        path: imageFile.nativeObject.getActualPath()
       });
     }
     return retval;
@@ -26,19 +29,19 @@ class ImageiOS extends ImageBase {
 
   static createFromName = function (name: string) {
     return new ImageiOS({
-      name: name,
+      name: name
     });
   };
 
   static createFromImage(image: string) {
     return new ImageiOS({
-      image: image,
+      image: image
     });
   }
 
   static createFromBlob = function (blob: string) {
     return new ImageiOS({
-      blob: blob,
+      blob: blob
     });
   };
 
@@ -63,7 +66,8 @@ class ImageiOS extends ImageBase {
         this.nativeObject = new __SF_UIImage(params.path);
       }
     } else if (params.name) {
-      this.nativeObject = new __SF_UIImage.createName(params.name);
+      // TODO: Check usage of new __SF_UIImage
+      this.nativeObject = __SF_UIImage.createName(params.name);
     } else if (params.blob) {
       this.nativeObject = __SF_UIImage.createNSData(params.blob.nativeObject);
     } else if (params.image) {
@@ -72,25 +76,22 @@ class ImageiOS extends ImageBase {
     this._nativeImage = this.nativeObject;
   }
 
-  get height(): number {
-    return this.nativeObject.size.height;
-  }
-  get width(): number {
-    return this.nativeObject.size.width;
-  }
+  get android(): ImageAndroidProps {
+    return {};
+  };
 
   createSystemIcon(id) {
     return this;
   }
 
-  get android() {
-    const self = this;
-    return {
-      round: (radius: number) => {
-        return;
-      },
-    };
-  }
+  // get android() {
+  //   const self = this;
+  //   return {
+  //     round: (radius: number) => {
+  //       return;
+  //     },
+  //   };
+  // }
 
   get ios() {
     const self = this;
@@ -111,14 +112,10 @@ class ImageiOS extends ImageBase {
         return ImageiOS.createFromImage(image);
       },
       imageWithRenderingMode(value) {
-        return ImageiOS.createFromImage(
-          this.nativeObject.imageWithRenderingMode(value)
-        );
+        return ImageiOS.createFromImage(this.nativeObject.imageWithRenderingMode(value));
       },
       imageFlippedForRightToLeftLayoutDirection() {
-        return ImageiOS.createFromImage(
-          self.nativeObject.imageFlippedForRightToLeftLayoutDirection()
-        );
+        return ImageiOS.createFromImage(self.nativeObject.imageFlippedForRightToLeftLayoutDirection());
       },
       get renderingMode() {
         return self.nativeObject.valueForKey('renderingMode');
@@ -128,8 +125,7 @@ class ImageiOS extends ImageBase {
       }
     };
   }
-
-  resize(width: number, height: number, onSuccess: ({ image: Image }) => void, onFailure: () => void) {
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): false | IImage {
     if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)) {
       // TODO: Recheck new Image.createFromImage(...)
       const resizedImage = ImageiOS.createFromImage(
@@ -152,20 +148,8 @@ class ImageiOS extends ImageBase {
     return false;
   }
 
-  crop(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    onSuccess: ({ image: Image }) => void,
-    onFailure: () => void
-  ) {
-    if (
-      TypeUtil.isNumeric(width) &&
-      TypeUtil.isNumeric(height) &&
-      TypeUtil.isNumeric(x) &&
-      TypeUtil.isNumeric(y)
-    ) {
+  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
+    if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height) && TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y)) {
       const resizedImage = ImageiOS.createFromImage(
         this.nativeObject.cropToBounds({
           x: x,
@@ -188,12 +172,10 @@ class ImageiOS extends ImageBase {
     return false;
   }
 
-  rotate(angle: number, onSuccess: ({ image: Image }) => void, onFailure: () => void) {
+  rotate(angle: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
     if (TypeUtil.isNumeric(angle)) {
       // TODO: Recheck usage of new Image.createFromImage(...)
-      const resizedImage = ImageiOS.createFromImage(
-        this.nativeObject.imageRotatedByDegrees(angle, false)
-      );
+      const resizedImage = ImageiOS.createFromImage(this.nativeObject.imageRotatedByDegrees(angle, false));
       if (onSuccess) {
         onSuccess({
           image: resizedImage
@@ -205,10 +187,9 @@ class ImageiOS extends ImageBase {
     if (onFailure) {
       onFailure();
     }
-    return false;
   }
 
-  compress(format: Format, quality: number, onSuccess: ({ blob: Blob }) => void, onFailure: () => void) {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: import("global/blob"); }) => void, onFailure: (e?: { message: string; }) => void): false | import("global/blob") {
     if (TypeUtil.isNumeric(quality)) {
       const blob = new Blob(this.nativeObject.compress(format, quality / 100));
       if (onSuccess) {
