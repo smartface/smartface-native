@@ -1,15 +1,13 @@
-import { EventEmitterWrapper } from "core/eventemitter";
-import { ExtractEventValues } from "core/eventemitter/extract-event-values";
-import IView from "ui/view/view";
-import View from "../view/view.ios";
-import { IViewGroup } from "./viewgroup";
-import { ViewGroupEvents } from "./viewgroup-events";
+import { EventEmitterWrapper } from 'core/eventemitter';
+import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
+import IView from 'ui/view/view';
+import View from '../view/view.ios';
+import { IViewGroup } from './viewgroup';
+import { ViewGroupEvents } from './viewgroup-events';
 
 function getKeyByValue(object, value) {
-  for (var prop in object) {
-    if (object.hasOwnProperty(prop)) {
-      if (object[prop].id === value) return object[prop];
-    }
+  for (const prop in object) {
+    if (object[prop].id === value) return object[prop];
   }
 }
 /**
@@ -21,53 +19,53 @@ function getKeyByValue(object, value) {
  */
 // ViewGroup.prototype = Object.create(View.prototype);
 export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative> implements IViewGroup<ViewGroupEvents | ExtractEventValues<TEvent>> {
-    private _children = {};
+  private _children = {};
 
-    constructor(params?: Partial<IViewGroup>){
-        super();
+  constructor(params?: Partial<IViewGroup>){
+    super();
 
-        const EventFunctions = {
-            [ViewGroupEvents.ViewAdded]: function (view) {
-              this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null, view);
-            },
-            [ViewGroupEvents.ViewRemoved]: function (view) {
-              this.onViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ViewRemoved, null, view);
-            },
-            [ViewGroupEvents.ChildViewAdded]: function (view) {
-              this.onChildViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ChildViewAdded, null, view);
-            },
-            [ViewGroupEvents.ChildViewRemoved]: function (view) {
-              this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null, view);
-            },
-        };
-        // EventEmitterCreator(this, EventFunctions);
-        this.nativeObject.didAddSubview = this.onViewAddedHandler;
-        this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
+    const EventFunctions = {
+      [ViewGroupEvents.ViewAdded]: function (view) {
+        this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null, view);
+      },
+      [ViewGroupEvents.ViewRemoved]: function (view) {
+        this.onViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ViewRemoved, null, view);
+      },
+      [ViewGroupEvents.ChildViewAdded]: function (view) {
+        this.onChildViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ChildViewAdded, null, view);
+      },
+      [ViewGroupEvents.ChildViewRemoved]: function (view) {
+        this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null, view);
+      },
+    };
+    // EventEmitterCreator(this, EventFunctions);
+    this.nativeObject.didAddSubview = this.onViewAddedHandler;
+    this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
 
-        // TODO: Recheck after es6 compile
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    
-        //Android spec methods
-    
-    
-        const parentOnFunction = this.on;
-        Object.defineProperty(this, 'on', {
-            value: (event, callback) => {
-                if (typeof EventFunctions[event] === 'function') {
-                    EventFunctions[event].call(this);
-                    this.emitter.on(event, callback);
-                }
-                else {
-                    parentOnFunction(event, callback);
-                }
-            },
-            configurable: true
-        });
+    // TODO: Recheck after es6 compile
+    if (params) {
+      for (const param in params) {
+        this[param] = params[param];
+      }
     }
+    
+    //Android spec methods
+    
+    
+    const parentOnFunction = this.on;
+    Object.defineProperty(this, 'on', {
+      value: (event, callback) => {
+        if (typeof EventFunctions[event] === 'function') {
+          EventFunctions[event].call(this);
+          this.emitter.on(event, callback);
+        }
+        else {
+          parentOnFunction(event, callback);
+        }
+      },
+      configurable: true
+    });
+  }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
   addChild = function (view: View): void {
@@ -84,7 +82,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   };
 
   removeAll = function () {
-    for (var child in this._children) {
+    for (const child in this._children) {
       this._children[child].parent = undefined;
       this._children[child].nativeObject.removeFromSuperview();
     }
@@ -96,8 +94,8 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   };
 
   getChildList = function () {
-    var childList = [];
-    for (var i in this._children) {
+    const childList = [];
+    for (const i in this._children) {
       childList.push(this._children[i]);
     }
     return childList;
@@ -109,28 +107,28 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
 
   onViewAddedHandler = function (e) {
     if (typeof this.onViewAdded === 'function') {
-      var view = this._children[e.subview.uuid];
+      const view = this._children[e.subview.uuid];
       this.onViewAdded(view);
       if (this.onChildViewAdded) {
         this.onChildViewAdded(view);
       }
     }
     if (typeof this.onViewAddedInnerCallback === 'function') {
-      var view = this._children[e.subview.uuid];
+      const view = this._children[e.subview.uuid];
       this.onViewAddedInnerCallback(view);
     }
   };
 
   onViewRemovedHandler = function (e) {
     if (typeof this.onViewRemoved === 'function') {
-      var view = this._children[e.subview.uuid];
+      const view = this._children[e.subview.uuid];
       this.onViewRemoved(view);
       if (this.onChildViewRemoved) {
         this.onChildViewRemoved(view);
       }
     }
     if (typeof this.onViewRemovedInnerCallback === 'function') {
-      var view = this._children[e.subview.uuid];
+      const view = this._children[e.subview.uuid];
       this.onViewRemovedInnerCallback(view);
     }
   };
