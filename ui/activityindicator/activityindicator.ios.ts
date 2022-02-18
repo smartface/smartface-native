@@ -1,95 +1,71 @@
-import View from '../view/view.ios';
 import Color from '../../ui/color';
-import { EventType } from 'core/eventemitter/EventType';
-import ActivityIndicatorIOSComponents from './ios';
+import IView from '../view/view';
+import ViewIOS from '../view/view.ios';
+import { AbstractActivityIndicator } from './activityindicator';
 
-export enum ActivityIndicatorIOSType {
-    WHITELARGE,
-    WHITE,
-    GRAY
-}
+type iOSParams = {
+  activityIndicatorViewStyle: keyof typeof AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle;
+};
 
-export default class ActivityIndicatorIOS<TEvent extends EventType = EventType> extends View<TEvent> {
-    private _color: Color;
+export default class ActivityIndicatorIOS extends ViewIOS implements IView {
+  protected _ios: iOSParams & ViewIOS['_ios'];
+  private _color: Color;
+  _nativeObject: __SF_UIActivityIndicatorView;
+  constructor(params: Partial<ActivityIndicatorIOS>) {
+    super(params);
 
-    constructor(params: Partial<ActivityIndicatorIOS>) {
-        super(params);
-
-        if (!this.nativeObject) {
-            // TODO Recheck after meeting with Cenk.
-            this._nativeObject = new __SF_UIActivityIndicatorView(ActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL);
-        }
-
-        this.nativeObject.startAnimating();
-
-        this._color = Color.create("#00A1F1");
-        this.nativeObject.color = this._color.nativeObject;
-
-        // Assign parameters given in constructor
-        ((params: any) => {
-            for (var param in params) {
-                if (param === "ios" || param === "android") {
-                    setOSSpecificParams.call(this, params[param], param);
-                } else {
-                    this[param] = params[param];
-                }
-            }
-
-            function setOSSpecificParams(params, key) {
-                for (var param in params) {
-                    this[key][param] = params[param];
-                }
-            }
-        })(params);
+    if (!this.nativeObject) {
+      this._nativeObject = new __SF_UIActivityIndicatorView(AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL);
     }
 
-    static Events = { ...View.Events };
+    this.nativeObject.startAnimating();
+    this._color = Color.create('#00A1F1');
+    this.nativeObject.color = this._color.nativeObject;
 
-    static iOS = {
-        ...View.iOS,
-        ...ActivityIndicatorIOSComponents,
-        Type: ActivityIndicatorIOSType
-    }
+    const self = this;
 
-    get ios() {
-        const self = this;
-        return {
-            // TODO Recheck after meeting with Cenk.
-            ...this.ios,
-            get type() {
-                return self.nativeObject.activityIndicatorViewStyle;
-            },
-            set type(value: any) {
-                self.nativeObject.activityIndicatorViewStyle = value;
-                self.nativeObject.color = self._color.nativeObject;
-            },
+    const ios = {
+      get activityIndicatorViewStyle() {
+        return self.nativeObject.activityIndicatorViewStyle;
+      },
+      set activityIndicatorViewStyle(value: typeof AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle) {
+        self.nativeObject.activityIndicatorViewStyle = value;
+        self.nativeObject.color = self._color.nativeObject;
+      }
+    };
 
-            get activityIndicatorViewStyle() {
-                return self.nativeObject.activityIndicatorViewStyle;
-            },
-            set activityIndicatorViewStyle(value: any) {
-                self.nativeObject.activityIndicatorViewStyle = value;
-                self.nativeObject.color = self._color.nativeObject;
-            }
-        }
-    }
+    this._ios = Object.assign(this._ios, ios);
 
-    get color() {
-        return this._color;
+    // Assign parameters given in constructor
+    for (const param in params) {
+      this[param] = params[param];
     }
-    set color(value: Color) {
-        this._color = value;
-        this.nativeObject.color = value.nativeObject;
-    }
+  }
 
-    get visible(): boolean {
-        return this.nativeObject.visible;
+  get color() {
+    return this._color;
+  }
+  set color(value: Color) {
+    this._color = value;
+    this.nativeObject.color = value.nativeObject;
+  }
+
+  get visible(): boolean {
+    return this.nativeObject.visible;
+  }
+  set visible(value: boolean) {
+    if (value) {
+      this.nativeObject.startAnimating();
+    } else {
+      this.nativeObject.stopAnimating();
     }
-    set visible(value: boolean) {
-        if (value) {
-            this.nativeObject.startAnimating();
-        } else {
-            this.nativeObject.stopAnimating();
-        }
-    }
+  }
+
+  get nativeObject() {
+    return this._nativeObject;
+  }
+
+  get ios() {
+    return this._ios;
+  }
 }
