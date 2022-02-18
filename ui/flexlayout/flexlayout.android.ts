@@ -1,12 +1,11 @@
-import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import Flex from 'core/flex';
+import Flex from '../../core/flex';
+import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import { ViewGroup } from '../../ui/viewgroup/viewgroup.android';
 import IFlexLayout, { AndroidProps } from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
 
-/*globals requireClass*/
+// /*globals requireClass*/
 const AndroidConfig = require('../../util/Android/androidconfig');
-const { EventEmitterCreator } = require('../../core/eventemitter');
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
 // const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
@@ -28,24 +27,22 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
   
   constructor(params: any) {
     super({
-      params: {
-        ...params,
-        nativeObject: new NativeYogaLayout(activity, {
-          onInterceptTouchEvent: (event) => {
-            if (this.android.onInterceptTouchEvent) {
-              return this.android.onInterceptTouchEvent();
-            }
+      nativeObject: new NativeYogaLayout(activity, {
+        onInterceptTouchEvent: () => {
+          if (this.android.onInterceptTouchEvent) {
+            return this.android.onInterceptTouchEvent();
           }
-        })
-      }
+        }
+      })
     });
+
     const EventFunctions = {
-      [Events.InterceptTouchEvent]: function () {
-        this._onInterceptTouchEvent = (e) => {
-          this.emitter.emit(Events.InterceptTouchEvent);
-        };
+      [Events.InterceptTouchEvent]: (e) => {
+        this._onInterceptTouchEvent(e);
       }
     };
+
+    eventCallbacksAssign(this, EventFunctions);
 
     const self = this;
 
@@ -58,14 +55,8 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
       }
     };
 
+    Object.assign(this, params);
     this._android = Object.assign(this._android, android);
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
-    }
   }
 
   get direction() {
@@ -117,8 +108,8 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents>
 }
 
 function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
-  var jsKeys = Object.keys(jsEnums);
-  for (var i = 0; i < jsKeys.length; i++) {
+  const jsKeys = Object.keys(jsEnums);
+  for (let i = 0; i < jsKeys.length; i++) {
     if (javaEnum.equals(jsEnums[jsKeys[i]])) {
       return jsEnums[jsKeys[i]];
     }

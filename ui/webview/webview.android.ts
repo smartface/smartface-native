@@ -1,15 +1,17 @@
-import { ViewAndroid } from '../view/view.android';
-
 /*globals array,requireClass */
+import { ViewAndroid } from '../view/view.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
 import Path from '../../io/path';
-import scrollableSuper from '../../util/Android/scrollable';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import TypeUtil from '../../util/type';
 import { WebViewEvents } from './webview-events';
 import WebView, { AndroidProps } from './webview';
 import IWebView from './webview';
+import { Scrollable } from '../../util';
+import { IScrollable } from '../../core/scrollable';
+import { Point2D } from '../../primitive/point2d';
+import ListViewItem from '../listviewitem';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
@@ -24,7 +26,7 @@ const NativeFile = requireClass('java.io.File');
 const NativeWebView = requireClass('android.webkit.WebView');
 const SFWebView = requireClass('io.smartface.android.sfcore.ui.webview.SFWebView');
 
-let activity = AndroidConfig.activity;
+const activity = AndroidConfig.activity;
 
 let mFilePathCallback: any;
 let mCameraPhotoPath: any;
@@ -51,7 +53,8 @@ function overrideURLChange(url: string, _canOpenLinkInside: boolean) {
     return true;
   }
 }
-class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView {
+class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView, IScrollable {
+  
   private _canOpenLinkInside = true;
   private _onError;
   private _onShow;
@@ -63,33 +66,34 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
   private _superTouchCallbacks;
   private _onBackButtonPressedCallback;
   private _page: any;
+  private scrollable: Scrollable;
   private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
   private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
   private static onActivityResult = function (requestCode, resultCode, data) {
-    if (requestCode == WebViewAndroid.RESULT_CODE_ICE_CREAM) {
+    if (requestCode === WebViewAndroid.RESULT_CODE_ICE_CREAM) {
       let uri = null;
-      if (data != null) {
+      if (data !== null) {
         uri = data.getData();
       }
       mUploadMessage.onReceiveValue(uri);
       mUploadMessage = null;
-    } else if (requestCode == WebViewAndroid.REQUEST_CODE_LOLIPOP) {
+    } else if (requestCode === WebViewAndroid.REQUEST_CODE_LOLIPOP) {
       let results = null;
       // Check that the response is a good one
-      if (resultCode == -1) {
+      if (resultCode === -1) {
         // Activity.RESULT_OK
-        if (data == null) {
+        if (data === null) {
           // If there is not data, then we may have taken a photo
-          if (mCameraPhotoPath != null) {
-            let parsedUri = [];
+          if (mCameraPhotoPath !== null) {
+            const parsedUri = [];
             parsedUri.push(NativeUri.parse(mCameraPhotoPath));
             results = array(parsedUri, 'android.net.Uri');
           }
         } else {
           const dataString = data.getDataString();
-          let parsedUri2 = [];
+          const parsedUri2 = [];
           parsedUri2.push(NativeUri.parse(dataString));
-          if (dataString != null) {
+          if (dataString !== null) {
             results = array(parsedUri2, 'android.net.Uri');
           }
         }
@@ -238,20 +242,20 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
     const webChromeClientCallbacks = {
       //For Android5.0+
       onShowFileChooser: function (filePathCallback) {
-        if (mFilePathCallback != null) {
+        if (mFilePathCallback !== null) {
           mFilePathCallback.onReceiveValue(null);
         }
         mFilePathCallback = filePathCallback;
 
         let takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) !== null) {
           // Create the File where the photo should go
           let photoFile = null;
           photoFile = createImageFile();
           takePictureIntent.putExtra('PhotoPath', mCameraPhotoPath);
 
           // Continue only if the File was successfully created
-          if (photoFile != null) {
+          if (photoFile !== null) {
             mCameraPhotoPath = 'file:' + photoFile.getAbsolutePath();
             takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT, NativeUri.fromFile(photoFile));
           } else {
@@ -259,18 +263,18 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
           }
         }
 
-        let contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+        const contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
         contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
         contentSelectionIntent.setType('image/*');
 
         let intentArray;
-        let tempArr = [];
-        if (takePictureIntent != null) {
+        const tempArr = [];
+        if (takePictureIntent !== null) {
           tempArr.push(takePictureIntent);
         }
         intentArray = array(tempArr, 'android.content.Intent');
 
-        let chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
+        const chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
         chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
         chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, 'Image Chooser');
         chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
@@ -279,23 +283,23 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
         return true;
       },
       onConsoleMessage: function (sourceId: number, message: string, lineNumber: number, messageLevel: string) {
-        let result = self._android.onConsoleMessage
+        const result = self._android.onConsoleMessage
           ? self._android.onConsoleMessage({
-              sourceId,
-              message,
-              lineNumber,
-              messageLevel
-            })
+            sourceId,
+            message,
+            lineNumber,
+            messageLevel
+          })
           : false;
         return TypeUtil.isBoolean(result) ? result : false;
       }
     };
 
     if (!this.nativeObject) {
-      this.nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
+      this._nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
     }
 
-    scrollableSuper(this, this.nativeObject);
+    this.scrollable = new Scrollable(this.nativeObject);
 
     /* Webview contains background color which draws all over given background drawbles.
     It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
@@ -312,6 +316,22 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
       }
     }
   }
+  get contentOffset(): Point2D {
+    return this.scrollable.contentOffset;
+  }
+  indexByListViewItem(listViewItem: ListViewItem): number {
+    return this.scrollable.indexByListViewItem(listViewItem);
+  }
+  deleteRowRange(params: Record<string, any>): void {
+    this.scrollable.deleteRowRange(params);
+  }
+  insertRowRange(params: Record<string, any>): void {
+    this.scrollable.insertRowRange(params);
+  }
+  refreshRowRange(params: Record<string, any>): void {
+    this.scrollable.refreshRowRange(params);
+  }
+  onOpenNewWindow?: (e: { url: string; }) => void;
   get scrollBarEnabled() {
     return this._scrollBarEnabled;
   }
@@ -400,11 +420,11 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
   loadFile(file: File) {
     if (file instanceof File) {
       //@ts-ignore TODO: something wrong with typings or broken if-else logic
-      if (file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
+      if (file.type === Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
         //Generate FILE PATH
         this.nativeObject.loadUrl('file:///' + file.fullPath);
         //@ts-ignore
-      } else if (file.type == Path.FILE_TYPE.ASSET) {
+      } else if (file.type === Path.FILE_TYPE.ASSET) {
         this.nativeObject.loadUrl('file:///android_asset/' + file.path.replace('assets://', ''));
       }
     }

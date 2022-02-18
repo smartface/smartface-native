@@ -1,8 +1,9 @@
-import ListViewItem from '../../ui/listviewitem';
-import AndroidUnitConverter from '../../util/Android/unitconverter';
-import ListView from '../../ui/listview';
-import GridView from '../../ui/gridview';
-import NativeComponent from '../../core/native-component';
+import ListViewItem from '../ui/listviewitem';
+import AndroidUnitConverter from '../util/Android/unitconverter';
+import ListView from '../ui/listview';
+import GridView from '../ui/gridview';
+import NativeComponent from './native-component';
+import { Point2D } from '../primitive/point2d';
 
 const NativeRecyclerView = requireClass('androidx.recyclerview.widget.RecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
@@ -18,6 +19,14 @@ type AndroidParams = {
   onDetachedFromWindow: (...args: any) => any;
 };
 
+export interface IScrollable {
+  readonly contentOffset: Point2D;
+  indexByListViewItem(listViewItem: ListViewItem): number;
+  deleteRowRange(params: Record<string, any>): void;
+  insertRowRange(params: Record<string, any>): void;
+  refreshRowRange(params: Record<string, any>):void;
+}
+
 export default class Scrollable<TNative extends Record<string, any> = Record<string, any>> extends NativeComponent {
   protected _android: AndroidParams & TNative;
   onPullRefresh(): void {}
@@ -27,8 +36,9 @@ export default class Scrollable<TNative extends Record<string, any> = Record<str
   private _onGesture: (distances: { distanceX: number; distanceY: number }) => boolean;
   private _onAttachedToWindow: (...args: any) => any;
   private _onDetachedFromWindow: (...args: any) => any;
-  constructor() {
+  constructor(nativeObject: any) {
     super();
+    this._nativeObject = nativeObject;
     this.nativeObject.setOnRefreshListener(
       NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: () => {
