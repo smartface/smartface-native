@@ -1,13 +1,20 @@
-import Color from "../color";
-import { Point2D } from "../../primitive/point2d";
-import {  IEventEmitter } from "core/eventemitter";
-import NativeEventEmitterComponent from "core/native-event-emitter-component";
-import { INativeComponent } from "core/inative-component";
-import { ExtractEventValues } from "core/eventemitter/extract-event-values";
-import Flex from "core/flex";
-import { ViewEvents } from "./view-event";
+import Color from '../color';
+import { Point2D } from '../../primitive/point2d';
+import {  IEventEmitter } from 'core/eventemitter';
+import NativeEventEmitterComponent from 'core/native-event-emitter-component';
+import { INativeComponent } from 'core/inative-component';
+import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
+import Flex from 'core/flex';
+import { ViewEvents } from './view-event';
 
-type Events = ExtractEventValues<typeof ViewEvents>
+export type ViewAndroidProps =  {
+	updateRippleEffectIfNeeded: () => void;
+	rippleColor: any;
+	zIndex: number;
+	elevation: any;
+	overScrollMode: number;
+}
+
 /**
  * @class UI.View
  * @since 0.1
@@ -794,7 +801,7 @@ interface IView<TEvent extends string = ViewEvents, TIOS extends {[key: string]:
 	 *
 	 * Includes enums of View's borders.
 	 */
- export enum Border {
+export enum Border {
 	/**
 	 * View's top-left border.
 	 *
@@ -846,7 +853,7 @@ interface IView<TEvent extends string = ViewEvents, TIOS extends {[key: string]:
  * @since 3.1.3
  * @ios
  */
- export enum SemanticContentAttribute {
+export enum SemanticContentAttribute {
 	/**
 	 * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
 	 *
@@ -935,87 +942,87 @@ interface IView<TEvent extends string = ViewEvents, TIOS extends {[key: string]:
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
 export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>>
-extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
+  extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
 	
-	// export namespace ios {
-	// 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-	// 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-	// }
-	/**
+  // export namespace ios {
+  // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
+  // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
+  // }
+  /**
 	 * iOS Specific Properties.
 	 * @class UI.View.iOS
 	 * @since 3.1.3
 	 */
-	static iOS = {
-		SemanticContentAttribute
-	}
-	static Events = ViewEvents;
-	static Border = Border;
+  static iOS = {
+    SemanticContentAttribute
+  };
+  static Events = ViewEvents;
+  static Border = Border;
 
-	protected _onTouch: IView['onTouch'];
-	protected _onTouchEnded: IView['onTouchEnded'];
-	protected _onTouchCancelled: IView['onTouchCancelled'];
-	protected _onTouchMoved: IView['onTouchMoved'];
+  protected _onTouch: IView['onTouch'];
+  protected _onTouchEnded: IView['onTouchEnded'];
+  protected _onTouchCancelled: IView['onTouchCancelled'];
+  protected _onTouchMoved: IView['onTouchMoved'];
 }
 
 /**
  * Only use for module export
  */
 export declare class AbstractView<TEvent extends string = ViewEvents> extends ViewBase<TEvent> implements IView<ViewEvents> {
-	transitionId: string;
-	accessible: boolean;
-	accessibilityLabel: string;
-	alpha: number;
-	backgroundColor: Color;
-	borderColor: Color;
-	borderWidth: number;
-	borderRadius: number;
-	id: string;
-	testId: string;
-	visible: boolean;
-	rotation: number;
-	rotationX: number;
-	rotationY: number;
-	touchEnabled: boolean;
-	left: number;
-	top: number;
-	right: number;
-	bottom: number;
-	height: number;
-	width: number;
-	minWidth: number;
-	minHeight: number;
-	maxWidth: number;
-	maxHeight: number;
-	paddingTop: number;
-	paddingBottom: number;
-	paddingLeft: number;
-	paddingRight: number;
-	padding: number;
-	marginTop: number;
-	marginBottom: number;
-	marginLeft: number;
-	marginRight: number;
-	margin: number;
-	positionType: Flex.PositionType;
-	flexGrow: number;
-	aspectRatio: number;
-	flexShrink: number;
-	flexBasis: number;
-	scale: Point2D;
-	alignSelf: Flex.AlignSelf;
-	applyLayout(): void;
-	bringToFront(): void;
-	flipHorizontally(): void;
-	flipVertically(): void;
-	getScreenLocation(): Point2D;
-	getParent(): IView<"touch" | "touchCancelled" | "touchEnded" | "touchMoved", { [key: string]: any; }, { [key: string]: any; }>;
-	onTouch: (e: Point2D) => boolean | void;
-	onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
-	onTouchCancelled: (point: Point2D) => boolean | void;
-	onTouchMoved: (e: boolean | { isInside: boolean; }, point?: Point2D) => boolean | void;
-	dirty(): void;
-	android: { [key: string]: any; } & Partial<{
+  transitionId: string;
+  accessible: boolean;
+  accessibilityLabel: string;
+  alpha: number;
+  backgroundColor: Color;
+  borderColor: Color;
+  borderWidth: number;
+  borderRadius: number;
+  id: string;
+  testId: string;
+  visible: boolean;
+  rotation: number;
+  rotationX: number;
+  rotationY: number;
+  touchEnabled: boolean;
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  height: number;
+  width: number;
+  minWidth: number;
+  minHeight: number;
+  maxWidth: number;
+  maxHeight: number;
+  paddingTop: number;
+  paddingBottom: number;
+  paddingLeft: number;
+  paddingRight: number;
+  padding: number;
+  marginTop: number;
+  marginBottom: number;
+  marginLeft: number;
+  marginRight: number;
+  margin: number;
+  positionType: Flex.PositionType;
+  flexGrow: number;
+  aspectRatio: number;
+  flexShrink: number;
+  flexBasis: number;
+  scale: Point2D;
+  alignSelf: Flex.AlignSelf;
+  applyLayout(): void;
+  bringToFront(): void;
+  flipHorizontally(): void;
+  flipVertically(): void;
+  getScreenLocation(): Point2D;
+  getParent(): IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, { [key: string]: any; }>;
+  onTouch: (e: Point2D) => boolean | void;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
+  onTouchCancelled: (point: Point2D) => boolean | void;
+  onTouchMoved: (e: boolean | { isInside: boolean; }, point?: Point2D) => boolean | void;
+  dirty(): void;
+  android: { [key: string]: any; } & Partial<{
 		/**
 		 * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
 		 * This property only supported for api level 23 and above.
@@ -1071,7 +1078,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents> extends Vi
 		 */
 		zIndex: number;
 	}>;
-	ios: { [key: string]: any; } & Partial<{
+  ios: { [key: string]: any; } & Partial<{
 		/**
 		 * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
 		 * The default value of this property is false
@@ -1150,9 +1157,9 @@ export declare class AbstractView<TEvent extends string = ViewEvents> extends Vi
 		 */
 		performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 	}>;
-	masksToBounds: boolean;
-	maskedBorders: Border[];
-	getPosition: () => { left: number; top: number; width: number; height: number; }; 
+  masksToBounds: boolean;
+  maskedBorders: Border[];
+  getPosition: () => { left: number; top: number; width: number; height: number; }; 
 
 }
 

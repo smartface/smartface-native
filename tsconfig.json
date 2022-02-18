@@ -22,7 +22,7 @@
 		"./util",
 		"./primitive",
 		"./test.ts"
-	],
+, "core/scrollable.ts"	],
 	"files": [
 		".types/typings.d.ts",
 		".types/missings-android.d.ts",

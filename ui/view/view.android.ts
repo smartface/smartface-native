@@ -68,19 +68,19 @@ function getRippleMask(borderRadius) {
   const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
   const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 
-  var outerRadii = [];
+  const outerRadii = [];
   outerRadii.length = 8;
   outerRadii.fill(borderRadius);
 
-  var roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
-  var shapeDrawable = new NativeShapeDrawable(roundRectShape);
+  const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
+  const shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
   return shapeDrawable;
 }
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements INativeComponent, View<TEvent> {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements INativeComponent, View<TEvent, {}, TNative> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -140,18 +140,20 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     this._nativeObject.setId(NativeView.generateViewId());
 
-    // Assign parameters given in constructor
-    if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
-    }
+    Object.assign(this, params);
+
+    // // Assign parameters given in constructor
+    // if (params) {
+    //   for (var param in params) {
+    //     this[param] = params[param];
+    //   }
+    // }
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
     this.setTouchHandlers();
 
     const self = this;
 
-    this._android = {
+    const android = {
       updateRippleEffectIfNeeded: () => {
         this._rippleEnabled && this._rippleColor && (this._android.rippleColor = this._rippleColor);
       },
@@ -174,7 +176,9 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       set overScrollMode(mode) {
         self.overScrollMode = mode;
       }
-    }
+    };
+
+    this._android = android;
   }
 
   get parent() {
@@ -186,7 +190,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
   private setTouchHandlers() {
     if (this.didSetTouchHandler) return;
-    let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
+    const touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
@@ -194,7 +198,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
   //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
   private _setBorderToAllEdges() {
-    var borderWidthPx = DpToPixel(this.borderWidth);
+    let borderWidthPx = DpToPixel(this.borderWidth);
     if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
     this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
     this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -203,41 +207,43 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   }
 
   private _setMaskedBorders(bitwiseBorders) {
-    let borderRadiusInDp = DpToPixel(this.borderRadius);
-    let borderRadiuses = Array(8).fill(0);
+    const borderRadiusInDp = DpToPixel(this.borderRadius);
+    const borderRadiuses = Array(8).fill(0);
     for (let i = 0; i < 4; i++) {
-      let borderEnum = 1 << i;
+      const borderEnum = 1 << i;
       if (bitwiseBorders & borderEnum) {
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
-          case ViewAndroid.Border.TOP_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 0, 3);
-            break;
-          case ViewAndroid.Border.TOP_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 2, 4);
-            break;
-          case ViewAndroid.Border.BOTTOM_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 4, 6);
-            break;
-          case ViewAndroid.Border.BOTTOM_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 6, 8);
-            break;
+        case ViewAndroid.Border.TOP_LEFT:
+          borderRadiuses.fill(borderRadiusInDp, 0, 3);
+          break;
+        case ViewAndroid.Border.TOP_RIGHT:
+          borderRadiuses.fill(borderRadiusInDp, 2, 4);
+          break;
+        case ViewAndroid.Border.BOTTOM_RIGHT:
+          borderRadiuses.fill(borderRadiusInDp, 4, 6);
+          break;
+        case ViewAndroid.Border.BOTTOM_LEFT:
+          borderRadiuses.fill(borderRadiusInDp, 6, 8);
+          break;
+        default:
+          break;
         }
       }
     }
     return borderRadiuses;
   }
   private _resetBackground = function () {
-    let color = this.backgroundColor;
-    let bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
+    const color = this.backgroundColor;
+    const bitwiseBorders = this.maskedBorders.reduce((acc, cValue) => acc | cValue, 0);
     //Provide backward support in case of diff behavior of border radius.
-    let borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
-    let borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-    let borderColor = this.borderColor.nativeObject;
-    let backgroundColor = this.backgroundColor.nativeObject;
+    const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
+    const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
+    const borderColor = this.borderColor.nativeObject;
+    const backgroundColor = this.backgroundColor.nativeObject;
 
     if (color.isGradient) {
-      let colors = array(color.colors, 'int');
+      const colors = array(color.colors, 'int');
       SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
     } else {
       SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
@@ -537,8 +543,8 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     else this._nativeObject.setVisibility(4);
   }
   getScreenLocation() {
-    var location = toJSArray(SFViewUtil.getLocationOnScreen(this.nativeObject));
-    var position: Point2D = {};
+    const location = toJSArray(SFViewUtil.getLocationOnScreen(this.nativeObject));
+    const position: Point2D = {};
     position.x = PixelToDp(location[0]);
     position.y = PixelToDp(location[1]);
     return position;
@@ -621,7 +627,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     // TODO: Find another way to do this
     const ScrollView = require('../scrollview');
     if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.HORIZONTAL) {
-      var layoutParams = this._nativeObject.getLayoutParams();
+      const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
   }
@@ -634,7 +640,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     // TODO: Find another way to do this
     const ScrollView = require('../scrollview');
     if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.VERTICAL) {
-      var layoutParams = this._nativeObject.getLayoutParams();
+      const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.width = -2);
     }
   }
@@ -716,7 +722,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   }
   set padding(padding) {
     // YogaEdge.ALL not working on YogaCore. We are setting border to all.
-    var db_padding = DpToPixel(padding);
+    const db_padding = DpToPixel(padding);
     this.yogaNode.setPadding(YogaEdge.TOP, db_padding);
     this.yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
     this.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
@@ -776,7 +782,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   }
   set margin(margin) {
     // YogaEdge.ALL not working on YogaCore. We are setting border to all.
-    var db_margin = DpToPixel(margin);
+    const db_margin = DpToPixel(margin);
     this.yogaNode.setMargin(YogaEdge.TOP, db_margin);
     this.yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
     this.yogaNode.setMargin(YogaEdge.LEFT, db_margin);
@@ -883,25 +889,25 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     this._rippleColor = value;
 
     if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-      var states = array([array([], 'int')]);
-      var colors = array([this._rippleColor.nativeObject], 'int');
+      const states = array([array([], 'int')]);
+      const colors = array([this._rippleColor.nativeObject], 'int');
 
       const NativeColorStateList = requireClass('android.content.res.ColorStateList');
       const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
-      var colorStateList = new NativeColorStateList(states, colors);
+      const colorStateList = new NativeColorStateList(states, colors);
 
-      var mask = getRippleMask(DpToPixel(this.borderRadius));
+      const mask = getRippleMask(DpToPixel(this.borderRadius));
 
       if (this._useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
         /*
 		Only supported for api level 23 and above
 		*/
-        let currentBackground = this.nativeObject.getForeground();
-        let rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+        const currentBackground = this.nativeObject.getForeground();
+        const rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
         this.nativeObject.setForeground(rippleDrawableForegorund);
       } else {
-        let currentBackground = this.nativeObject.getBackground();
-        let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+        const currentBackground = this.nativeObject.getBackground();
+        const rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
         this.nativeObject.setBackground(rippleDrawableBackgorund);
       }
     }
