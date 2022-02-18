@@ -1,4 +1,4 @@
-import { Blob as BlobBase } from './blob';
+import { BlobBase } from './blob';
 
 const Blob: typeof BlobBase = require(`./blob.${Device.deviceOS.toLowerCase()}`).default;
 

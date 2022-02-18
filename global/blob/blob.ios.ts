@@ -1,6 +1,6 @@
-import NativeComponent from 'core/native-component';
+import { BlobBase } from './blob';
 
-class BlobIOS extends NativeComponent {
+class BlobIOS extends BlobBase {
   constructor(parts: string[], properties?: { type: string }) {
     super();
     if (!this.nativeObject) {
@@ -16,9 +16,9 @@ class BlobIOS extends NativeComponent {
   toString() {
     return this.nativeObject.toUtf8();
   }
-  toBase64Async(callbacks: { onComplete: (base64: string) => void; onFailure: (base64: string) => void }) {
-    const onComplete = callbacks.onComplete;
-    const onFailure = callbacks.onFailure;
+  toBase64Async(handlers: { onComplete: (base64: string) => void; onFailure?: (base64: string) => void }) {
+    const onComplete = handlers.onComplete;
+    const onFailure = handlers.onFailure;
     this.nativeObject.toBase64Async(function (base64: string) {
       if (base64) {
         if (typeof onComplete == 'function') {

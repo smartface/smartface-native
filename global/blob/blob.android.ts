@@ -1,11 +1,10 @@
-import NativeComponent from 'core/native-component';
 import Base64Util from 'util/base64';
-import Blob from './blob';
+import { BlobBase } from './blob';
 
 const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
 const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
 
-class BlobAndroid extends NativeComponent {
+class BlobAndroid extends BlobBase {
   private _parts: string[];
   private _type: string;
   constructor(parts?: string[], properties?: { type: string }) {
@@ -30,16 +29,16 @@ class BlobAndroid extends NativeComponent {
     //TODO: arrayLength
     return this.nativeObject && arrayLength(this.nativeObject.toByteArray());
   }
-  slice(start: number, end: number): Blob {
-    var newBlob = new Blob();
-    var byteArray = this.nativeObject.toByteArray();
+  slice(start: number, end: number): BlobBase {
+    const newBlob = new BlobAndroid();
+    const byteArray = this.nativeObject.toByteArray();
     newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)
     return newBlob;
   }
   toBase64() {
     const NativeBase64 = requireClass('android.util.Base64');
-    let byteArray = this.nativeObject.toByteArray();
-    let encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.NO_WRAP);
+    const byteArray = this.nativeObject.toByteArray();
+    const encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.NO_WRAP);
     return encodedString;
   }
   toBase64Async(callbacks: { onComplete: (base64: String) => void; onFailure?: () => void }) {
@@ -54,16 +53,16 @@ class BlobAndroid extends NativeComponent {
    */
   static createFromBase64(base64String: string) {
     const NativeBase64 = requireClass('android.util.Base64');
-    let byteArray = NativeBase64.decode(base64String, NativeBase64.NO_WRAP);
-    let newBlob = new Blob(byteArray, {
+    const byteArray = NativeBase64.decode(base64String, NativeBase64.NO_WRAP);
+    const newBlob = new BlobAndroid(byteArray, {
       type: 'image'
     });
     return newBlob;
   }
   static createFromUTF8String(str: string) {
     // utf string or string
-    var utf8Array = Base64Util.StrToUtf8Array(str);
-    return new Blob(array(utf8Array, 'byte'), {
+    const utf8Array = Base64Util.StrToUtf8Array(str);
+    return new BlobAndroid(array(utf8Array, 'byte'), {
       type: 'text'
     });
   }
