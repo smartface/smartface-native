@@ -4,7 +4,7 @@
  * @class UI.ActivityIndicator.iOS.ActivityIndicatorViewStyle
  * @since 3.2.1
  */
-declare enum ActivityIndicatorViewStyle {
+enum ActivityIndicatorViewStyle {
   /**
    * @property {Number} LARGE
    * @ios
@@ -22,4 +22,5 @@ declare enum ActivityIndicatorViewStyle {
    */
   NORMAL = 1
 }
-export = ActivityIndicatorViewStyle;
+
+export default ActivityIndicatorViewStyle;
