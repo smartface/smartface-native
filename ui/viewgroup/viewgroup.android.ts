@@ -5,6 +5,7 @@ const NativeViewGroup = requireClass("android.view.ViewGroup");
 import { EventEmitterWrapper } from "../../core/eventemitter";
 import { ExtractEventValues } from "../../core/eventemitter/extract-event-values";
 import { ViewAndroid } from "../view/view.android";
+import { IViewGroup } from "./viewgroup";
 import { ViewGroupEvents } from "./viewgroup-events";
 const Events = { ...ViewAndroid.Events, ...ViewGroupEvents };
 
@@ -21,8 +22,8 @@ export class ViewGroup<
   private childViews = {};
   private didSetHierarchyChangeListener: boolean;
 
-  constructor(params) {
-    super(params);
+  constructor(params?: Partial<IViewGroup>) {
+    super();
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
@@ -57,11 +58,11 @@ export class ViewGroup<
       }
     });
 
+
     // Assign parameters given in constructor
     if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
+      // TODO: Convert
+      
     }
   }
 

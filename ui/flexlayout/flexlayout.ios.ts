@@ -10,8 +10,9 @@ const Events = { ...ViewGroupIOS.Events, ...FlexLayoutEvents };
 
 class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout
 {
-  constructor(params: any) {
-    super(params);
+  constructor(params?: Partial<IFlexLayout>) {
+    super({});
+
     // Assign parameters given in constructor
     if (params) {
       for (var param in params) {

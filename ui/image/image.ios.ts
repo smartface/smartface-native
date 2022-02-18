@@ -8,6 +8,9 @@ enum Format {
   PNG
 }
 
+/**
+ * @since 4.5.0
+ */
 class ImageiOS extends ImageBase {
   static createFromFile = function (path) {
     const imageFile = new File({

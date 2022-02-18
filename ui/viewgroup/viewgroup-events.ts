@@ -1,4 +1,3 @@
-import { ExtractEventValues } from "core/eventemitter/extract-event-values";
 import { ViewEvents } from "ui/view/view-event";
 
 export const ViewGroupEvents = {
@@ -9,4 +8,4 @@ export const ViewGroupEvents = {
   ...ViewEvents
 } as const;
 
-export type ViewGroupEvents = ExtractEventValues<typeof ViewGroupEvents>
+export type ViewGroupEvents = ExtractValues<typeof ViewGroupEvents>

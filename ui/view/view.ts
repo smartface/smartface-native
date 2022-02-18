@@ -958,6 +958,9 @@ extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
 	protected _onTouchMoved: IView['onTouchMoved'];
 }
 
+/**
+ * Only use for module export
+ */
 export declare class AbstractView<TEvent extends string = ViewEvents> extends ViewBase<TEvent> implements IView<ViewEvents> {
 	transitionId: string;
 	accessible: boolean;

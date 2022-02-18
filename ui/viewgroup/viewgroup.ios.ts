@@ -1,13 +1,9 @@
 import { EventEmitterWrapper } from "core/eventemitter";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
 import IView from "ui/view/view";
-import { ViewEvents } from "ui/view/view-event";
 import View from "../view/view.ios";
 import { IViewGroup } from "./viewgroup";
 import { ViewGroupEvents } from "./viewgroup-events";
-
-const Events = { ...ViewEvents, ...ViewGroupEvents };
-type EventsType = ExtractEventValues<typeof Events>;
 
 function getKeyByValue(object, value) {
   for (var prop in object) {
@@ -24,24 +20,24 @@ function getKeyByValue(object, value) {
  * ViewGroup is an abstract class. You can't create instance from it.
  */
 // ViewGroup.prototype = Object.create(View.prototype);
-export default class ViewGroupIOS<TEvent extends string = EventsType, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<EventsType | ExtractEventValues<TEvent>, TNative> implements IViewGroup<EventsType | ExtractEventValues<TEvent>> {
+export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative> implements IViewGroup<ViewGroupEvents | ExtractEventValues<TEvent>> {
     private _children = {};
 
-    constructor(params: Partial<IViewGroup>){
+    constructor(params?: Partial<IViewGroup>){
         super();
 
         const EventFunctions = {
-            [Events.ViewAdded]: function (view) {
-              this.onViewAdded = EventEmitterWrapper(this, Events.ViewAdded, null, view);
+            [ViewGroupEvents.ViewAdded]: function (view) {
+              this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null, view);
             },
-            [Events.ViewRemoved]: function (view) {
-              this.onViewRemoved = EventEmitterWrapper(this, Events.ViewRemoved, null, view);
+            [ViewGroupEvents.ViewRemoved]: function (view) {
+              this.onViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ViewRemoved, null, view);
             },
-            [Events.ChildViewAdded]: function (view) {
-              this.onChildViewAdded = EventEmitterWrapper(this, Events.ChildViewAdded, null, view);
+            [ViewGroupEvents.ChildViewAdded]: function (view) {
+              this.onChildViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ChildViewAdded, null, view);
             },
-            [Events.ChildViewRemoved]: function (view) {
-              this.onChildViewRemoved = EventEmitterWrapper(this, Events.ChildViewRemoved, null, view);
+            [ViewGroupEvents.ChildViewRemoved]: function (view) {
+              this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null, view);
             },
         };
         // EventEmitterCreator(this, EventFunctions);

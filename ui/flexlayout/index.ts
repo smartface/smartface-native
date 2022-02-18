@@ -1,6 +1,7 @@
-import { AbstractFlexLayout } from "./flexlayout";
+import { ConstructorOf } from "@smartface/core";
+import IFlexLayout from "./flexlayout";
 
-const FlexLayout: typeof AbstractFlexLayout = require(`./image.${Device.deviceOS.toLowerCase()}`)
+const FlexLayout: ConstructorOf<IFlexLayout> = require(`./image.${Device.deviceOS.toLowerCase()}`)
 .default;
 
 export default FlexLayout;

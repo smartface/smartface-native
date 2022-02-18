@@ -1,10 +1,7 @@
 import Color from '../color';
 import Flex from '../../core/flex';
-import { AbstractViewGroup, IViewGroup } from 'ui/viewgroup/viewgroup';
+import { IViewGroup } from 'ui/viewgroup/viewgroup';
 import { FlexLayoutEvents } from './flexlayout-events';
-import { EventListenerCallback } from 'core/eventemitter';
-import { Point2D } from 'primitive/point2d';
-import IView, { AbstractView, SemanticContentAttribute, Border } from 'ui/view/view';
 
 export type AndroidProps = Partial<{
   /**
@@ -208,15 +205,6 @@ export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TIOS = {}
    * @ios
    */
   applyLayout(): void;
-}
-
-export declare class AbstractFlexLayout<TEvent extends string = FlexLayoutEvents> extends AbstractViewGroup<TEvent | FlexLayoutEvents> implements IFlexLayout<TEvent | FlexLayoutEvents> {
-  direction: Flex.Direction;
-  flexDirection: Flex.FlexDirection;
-  justifyContent: Flex.JustifyContent;
-  alignContent: Flex.AlignContent;
-  alignItems: Flex.AlignItems;
-  flexWrap: Flex.FlexWrap;
 }
 
 export default IFlexLayout;

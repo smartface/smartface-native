@@ -343,6 +343,10 @@ export type ImageIOSProps = {
     mode: number
   ): IImage
 } | {};
+
+/**
+ * @since 4.5.0
+ */
 export class ImageBase implements IImage {
   resize(width: number, height: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): false | IImage {
     throw new Error("Method not implemented.");
