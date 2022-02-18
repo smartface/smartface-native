@@ -77,6 +77,17 @@ Hardware.deviceType;
 
 /**
  *
+ * Returns the device type.
+ * @enum {String} DeviceType
+ * @android
+ * @ios
+ * @readonly
+ * @static
+ * @since 4.4.1
+ */
+Hardware.DeviceType;
+/**
+ *
  * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {Number} vendorID
  * @android
