@@ -1,3 +1,5 @@
+import { INativeComponent } from '../../core/inative-component';
+
 /**
  * @class Blob
  * @since 0.1
@@ -9,8 +11,7 @@
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
-declare class Blob {
-  constructor(parts: string[], properties: { type: string });
+interface IBlob extends INativeComponent {
   /**
    * Returns the type of Blob data.
    *
@@ -33,7 +34,7 @@ declare class Blob {
    * @method slice
    * @since 0.1
    */
-  slice?: (start: number, end: number) => Blob;
+  slice?: (start: number, end: number) => BlobBase;
   /**
    * Returns a base64 String
    *
@@ -63,6 +64,30 @@ declare class Blob {
    * @since 0.1
    */
   toString: () => string;
+}
+
+export class BlobBase implements IBlob {
+  nativeObject: any;
+  get type(): string {
+    throw new Error('Method not implemented.');
+    return null;
+  }
+  get size(): number {
+    throw new Error('Method not implemented.');
+    return null;
+  }
+  slice(start: number, end: number): BlobBase {
+    throw new Error('Method not implemented.');
+  }
+  toBase64(): string {
+    throw new Error('Method not implemented.');
+  }
+  toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void {
+    throw new Error('Method not implemented.');
+  }
+  toString(): string {
+    throw new Error('Method not implemented.');
+  }
   /**
    * Creates a blob object from given a base64String.
    *
@@ -72,7 +97,7 @@ declare class Blob {
    * @static
    * @since 0.1
    */
-  static createFromBase64(Base64String: string): Blob;
+  static createFromBase64: (Base64String: string) => BlobBase;
   /**
    * Creates a blob object from given a utf8 string.
    *
@@ -82,7 +107,7 @@ declare class Blob {
    * @static
    * @since 0.1
    */
-  static createFromUTF8String(utf8String: string): Blob;
+  static createFromUTF8String: (utf8String: string) => BlobBase;
 }
 
-export = Blob;
+export default IBlob;
