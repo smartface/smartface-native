@@ -59,7 +59,7 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 
 declare class __SF_Dispatch {
   static mainAsyncAfter: () => void;
-  static mainAsync: () => void;
+  static mainAsync: (fun?: (...args) => void) => void;
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
@@ -331,7 +331,7 @@ declare class __SF_CallObserverDelegate {
 }
 
 declare class __SF_CNMutableContact {
-  static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact, filename: string): any;
+  static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact[], filename: string): any;
   static new(): __SF_CNMutableContact;
   constructor();
   namePrefix: string;
