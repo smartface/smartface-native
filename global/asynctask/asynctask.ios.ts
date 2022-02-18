@@ -80,3 +80,5 @@ export class AsyncTaskIOS extends AsyncTaskBase {
     return 'AsyncTask';
   }
 }
+
+export default AsyncTaskIOS;
