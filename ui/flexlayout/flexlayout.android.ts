@@ -3,6 +3,7 @@ import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssi
 import { ViewGroup } from '../../ui/viewgroup/viewgroup.android';
 import IFlexLayout, { AndroidProps } from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
+import Color from 'ui/color';
 
 // /*globals requireClass*/
 const AndroidConfig = require('../../util/Android/androidconfig');
@@ -98,10 +99,12 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
     return 'FlexLayout';
   }
 
-  protected _android: { [key: string]: any; updateRippleEffectIfNeeded: () => void; rippleColor: import('ui/color') } & Partial<{
+  protected _android: Partial<{
+    [key: string]: any; 
+    updateRippleEffectIfNeeded: () => void;
     useForeground: boolean;
     rippleEnabled: boolean;
-    rippleColor: import('ui/color');
+    rippleColor: Color;
     onInterceptTouchEvent: () => boolean;
     elevation: number;
     zIndex: number;
