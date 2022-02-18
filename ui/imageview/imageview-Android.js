@@ -201,21 +201,18 @@ ImageView.prototype.fetchFromUrl = function (params) {
             headers["Cache-Control"] = "no-cache";
         }
     }
-    let glideRequestListener = null;
-    if (onFailure) {
-        const GlideRequestListener = requireClass("io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener");
-        glideRequestListener = GlideRequestListener.implement({
-            onSuccess: function (resource, model, target, dataSource, isFirstResource) {
-                const cacheName = dataSource.toString();
-                let cacheType = getCacheTypeByName(cacheName);
-                const image = new Image({ drawable: resource });
-                onSuccess(image, cacheType);
-            },
-            onFailure: function (glideException, model, target, isFirstResource) {
-                onFailure();
-            }
-        });
-    }
+    const GlideRequestListener = requireClass("io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener");
+    const glideRequestListener = GlideRequestListener.implement({
+        onSuccess: function (resource, model, target, dataSource, isFirstResource) {
+            const cacheName = dataSource.toString();
+            let cacheType = getCacheTypeByName(cacheName);
+            const image = new Image({ drawable: resource });
+            onSuccess && onSuccess(image, cacheType);
+        },
+        onFailure: function (glideException, model, target, isFirstResource) {
+            onFailure && onFailure();
+        }
+    });
     const parameters = new FetchFromUrlParameters(
         AndroidConfig.activity,
         this.nativeObject,
