@@ -1,4 +1,4 @@
-import NativeComponent from "core/native-component";
+import NativeComponent from 'core/native-component';
 
 /**
  * @class Timer
@@ -28,6 +28,7 @@ import NativeComponent from "core/native-component";
  *
  */
 export declare class TimerBase extends NativeComponent {
+  constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>);
   /**
    * @method setTimeout
    *

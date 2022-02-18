@@ -11,10 +11,10 @@ class TimerAndroid extends NativeComponent implements TimerBase {
   private delay: number;
   static handler = NativeSFHandler.getHandler();
   static setTimeout(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({...params, repeat: false});
+    return new TimerAndroid({ ...params, repeat: false });
   }
   static setInterval(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({...params, repeat: true});
+    return new TimerAndroid({ ...params, repeat: true });
   }
   static clearTimer(timer: TimerAndroid) {
     if (timer && timer.nativeObject) {
@@ -27,7 +27,7 @@ class TimerAndroid extends NativeComponent implements TimerBase {
   static clearAllTimer() {
     TimerAndroid.handler.removeCallbacksAndMessages(null);
   }
-  constructor(params: any) {
+  constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
     super();
     this.repeat = params.repeat;
 
