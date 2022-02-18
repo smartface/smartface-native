@@ -1,8 +1,4 @@
-declare enum DEVICE_TYPES {
-	UNSPECIFIED = "unspecified",
-	PHONE = "phone",
-	TABLET = "tablet"
-}
+
 
 /**
  * @class Device.Hardware
@@ -20,7 +16,7 @@ declare enum DEVICE_TYPES {
  *     console.log("Device.Hardware.deviceType: "   + Hardware.deviceType);
  *
  */
-declare const Hardware: {
+ declare namespace Hardware {
 	/**
 	 *
 	 * Returns the unique id of the device. The value may change if the device is formatted.
@@ -31,7 +27,7 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly UID: string;
+	export const UID: string;
 	/**
 	 *
 	 * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
@@ -41,8 +37,8 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly IMEI?: string;
-	readonly android: Partial<{
+	export const IMEI : string;
+	export const android: Partial<{
 		// TODO: discuss why IMEI is in android
 		readonly IMEI?: string;
 		/**
@@ -50,13 +46,13 @@ declare const Hardware: {
 		 * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
 		 * @property {Number} vendorID
 		 * @android
-		 * @readonly
+		 * @export const
 		 * @static
 		 * @since 0.1
 		 */
 		readonly vendorID?: number;
 	}>;
-	ios: Partial<{
+	export const ios: Partial<{
 		microphone?: {
 			/**
 			 *
@@ -68,7 +64,7 @@ declare const Hardware: {
 			 * @param {Function} callback for permission situation.
 			 * @method requestRecordPermission
 			 * @ios
-			 * @readonly
+			 * @export const
 			 * @static
 			 * @since 1.1.12
 			 */
@@ -82,39 +78,40 @@ declare const Hardware: {
 	 * @property {String} brandModel
 	 * @android
 	 * @ios
-	 * @readonly
+	 * @export const
 	 * @static
 	 * @since 0.1
 	 */
-	readonly brandModel: string;
+	export const brandModel: string;
 	/**
 	 *
 	 * Returns the brand name of the device.
 	 * @property {String} brandName
 	 * @android
 	 * @ios
-	 * @readonly
+	 * @export const
 	 * @static
 	 * @since 0.1
 	 */
-	readonly brandName: string;
+	export const brandName: string;
 	/**
 	 *
 	 * Returns the device type.
 	 * @property {string} deviceType
 	 * @android
 	 * @ios
-	 * @readonly
+	 * @export const
 	 * @static
 	 * @since 4.4.1
 	 */
-	readonly deviceType: string;
+	export const deviceType: string;
 
   /**
    * Defines the available device types
+   * @enum {string} DeviceType
    * @android
    * @ios
-   * @readonly
+   * @export const
    * @static
    * @since 4.4.1
    * @example
@@ -123,8 +120,11 @@ declare const Hardware: {
 	 * Hardware.deviceType === "phone";
    * ```
    */
-  readonly DeviceType: typeof DEVICE_TYPES;
-};
+  export enum DeviceType {
+	UNSPECIFIED = "unspecified",
+	PHONE = "phone",
+	TABLET = "tablet"
+    }
+}
 
 export default Hardware
-
