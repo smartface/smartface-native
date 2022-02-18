@@ -46,7 +46,7 @@
 		 * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
 		 * @property {Number} vendorID
 		 * @android
-		 * @export const
+		 * @readonly
 		 * @static
 		 * @since 0.1
 		 */
@@ -64,7 +64,7 @@
 			 * @param {Function} callback for permission situation.
 			 * @method requestRecordPermission
 			 * @ios
-			 * @export const
+			 * @readonly
 			 * @static
 			 * @since 1.1.12
 			 */
@@ -78,7 +78,7 @@
 	 * @property {String} brandModel
 	 * @android
 	 * @ios
-	 * @export const
+	 * @readonly
 	 * @static
 	 * @since 0.1
 	 */
@@ -89,7 +89,7 @@
 	 * @property {String} brandName
 	 * @android
 	 * @ios
-	 * @export const
+	 * @readonly
 	 * @static
 	 * @since 0.1
 	 */
@@ -100,7 +100,7 @@
 	 * @property {string} deviceType
 	 * @android
 	 * @ios
-	 * @export const
+	 * @readonly
 	 * @static
 	 * @since 4.4.1
 	 */
@@ -111,7 +111,7 @@
    * @enum {string} DeviceType
    * @android
    * @ios
-   * @export const
+   * @readonly
    * @static
    * @since 4.4.1
    * @example
