@@ -1,3 +1,4 @@
+import { INativeComponent } from '../../core/inative-component';
 import Contacts from '../../device/contacts';
 import File from '../../io/file';
 import Page from '../../ui/page';
@@ -25,8 +26,8 @@ const UIActivityType = {
 };
 
 export class ShareIOS implements ShareBase {
-  static ios__presentViewController(page, activity) {
-    __SF_Dispatch.mainAsync(function () {
+  static ios__presentViewController(page: INativeComponent, activity) {
+    __SF_Dispatch.mainAsync(() => {
       page.nativeObject.presentViewController(activity);
     });
   }
@@ -43,9 +44,9 @@ export class ShareIOS implements ShareBase {
 
     return Invocation.invokeInstanceMethod(alloc, 'initWithActivityItems:applicationActivities:', [argActivityItems, argApplicationActivities], 'id');
   }
-  static shareText(text: string, page: Page, blacklist: string[]) {
+  static shareText(text: INativeComponent, page: Page, blacklist: string[]) {
     //TODO: wrong usage?
-    const activity = ShareIOS.createActivity([text.nativeObject]);
+    const activity = ShareIOS.createActivity([text.nativeObject]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }
@@ -63,7 +64,7 @@ export class ShareIOS implements ShareBase {
     }
 
     const path = __SF_CNMutableContact.getShareableFilePathWithContactArrayFileName(_itemsNativeObject, fileName);
-    const activity = ShareIOS.createActivity([path]);
+    const activity = ShareIOS.createActivity([path]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }
@@ -72,11 +73,11 @@ export class ShareIOS implements ShareBase {
     //@ts-ignore TODO: file needs nativeObject
     const actualPath = file.nativeObject.getActualPath();
     const url = __SF_NSURL.fileURLWithPath(actualPath);
-    const activity = ShareIOS.createActivity([url]);
+    const activity = ShareIOS.createActivity([url]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }
-  static share(object: { items: any[]; page: Page; blacklist: string[] }) {
+  static share(object: { items: INativeComponent[]; page: Page; blacklist: string[] }) {
     const items = object.items;
     const page = object.page;
     const blacklist = object.blacklist;
@@ -85,7 +86,6 @@ export class ShareIOS implements ShareBase {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       if (item instanceof File) {
-        //@ts-ignore TODO: nativeobject on file
         const actualPath = item.nativeObject.getActualPath();
         const url = __SF_NSURL.fileURLWithPath(actualPath);
         _itemsNativeObject.push(url);
@@ -97,7 +97,7 @@ export class ShareIOS implements ShareBase {
       }
     }
 
-    const activity = ShareIOS.createActivity(_itemsNativeObject);
+    const activity = ShareIOS.createActivity(_itemsNativeObject) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }

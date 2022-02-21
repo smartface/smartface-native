@@ -16,6 +16,10 @@ declare class __SF_UIColor extends __SF_NSOBject {
   frame: __SF_NSRect;
 }
 
+declare namespace SF {
+  export function requireClass(name: string): any;
+}
+
 declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
   static createName(fileName: string): __SF_UIImage;
@@ -59,7 +63,7 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 
 declare class __SF_Dispatch {
   static mainAsyncAfter: () => void;
-  static mainAsync: (fun?: (...args) => void) => void;
+  static mainAsync: (fun?: (...args: any[]) => void) => void;
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
@@ -686,7 +690,7 @@ declare class __SF_NSURL extends __SF_NSOBject {
 }
 
 declare class __SF_NSURLRequest extends __SF_NSOBject {
-  requestWithURL(url: __SF_NSURL): any;
+  static requestWithURL(url: __SF_NSURL): any;
 }
 
 declare class __SF_UITabBarController extends __SF_UINavigationController {
