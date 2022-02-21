@@ -223,9 +223,11 @@ declare class File extends NativeComponent {
    * @since 0.1
    */
   readonly writable: boolean;
-  ios: Partial<{}>;
   static getDocumentsDirectory(): string; //ios only property but used normally
   static getMainBundleDirectory(): string; //ios only property but used normally
+  ios: Partial<{
+    getNSURL: () => string;
+  }>;
 }
 
 export = File;

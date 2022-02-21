@@ -1,6 +1,7 @@
 import File from 'io/file';
 import ViewIOS from 'ui/view/view.ios';
 import Invocation from 'util/iOS/invocation';
+import { UIScrollViewInheritance } from '../../util';
 import IWebView, { iOSProps } from './webview';
 import { WebViewEvents } from './webview-events';
 
@@ -143,7 +144,7 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
     super();
     const self = this;
     if (!this.nativeObject) {
-      this.nativeObject = new __SF_WKWebView();
+      this._nativeObject = new __SF_WKWebView();
     }
 
     UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
@@ -262,7 +263,6 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
         let trustPolicies = values
           ? values.map((value) => {
               const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
-
               let nSURLCertificates = certificates.map(function (path) {
                 let certFile = new File({
                   path: path
