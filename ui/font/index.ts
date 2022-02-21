@@ -1,4 +1,4 @@
-// import { AbstractViewGroup } from "./viewgroup";
+import { AbstractFont } from './font';
 
-// const ViewGroup: typeof AbstractViewGroup = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
-// export default ViewGroup;
+const Font: typeof AbstractFont = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+export default Font;
