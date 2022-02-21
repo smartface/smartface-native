@@ -1194,7 +1194,7 @@ declare class __SF_UILocalNotification {
 }
 
 declare class __SF_UIUserNotificationSettings {
-  static settingsForTypesCategories(type: number): __SF_UIUserNotificationSettings;
+  static settingsForTypesCategories(type: number, param?: any): __SF_UIUserNotificationSettings;
 }
 
 declare class __SF_UIUserNotificationTypeSound {}
