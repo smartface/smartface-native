@@ -10,7 +10,7 @@ export interface IFile extends INativeComponent {
    * @android
    * @ios
    */
-  resolvedPath: string;
+  resolvedPath: any;
 
   /**
    * @android
@@ -101,18 +101,20 @@ export interface IFile extends INativeComponent {
    */
   size: number;
 
+  /**
+   * @ios
+   * @android
+   */
   getAbsolutePath(): string;
+
   /**
    * Copy file or directory to given path.
-   *
-   * @param {String} destination
-   * @return {Boolean}
-   * @method copy
    * @android
    * @ios
    * @since 0.1
    */
   copy(destination: string): boolean;
+
   /**
    * Creates the file named by this pathname.
    *
@@ -134,7 +136,7 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  createDirectory(createParents: any): any;
+  createDirectory(createParents: any): boolean;
   /**
    * Deletes the file or directory.
    *
@@ -195,10 +197,11 @@ export interface IFile extends INativeComponent {
 }
 
 export class FileBase implements IFile {
+  constructor(params?: Partial<IFile>) {}
   static getDocumentsDirectory: () => string;
   static getMainBundleDirectory: () => string;
 
-  resolvedPath: string;
+  resolvedPath: any;
   type: string;
   fullPath: string;
   drawableResourceId: number;
@@ -248,7 +251,7 @@ export class FileBase implements IFile {
   createFile(createParents: boolean): boolean {
     throw new Error('Method not implemented.');
   }
-  createDirectory(createParents: any) {
+  createDirectory(createParents: any): boolean {
     throw new Error('Method not implemented.');
   }
   remove(withChilds: boolean): boolean {

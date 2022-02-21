@@ -4,14 +4,14 @@ import Path from '../path';
 import TypeUtil from '../../util/type';
 import Blob from '../../global/blob';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { FileStreamBase, IFileStream, StreamType, ContentMode } from './filestream';
+import { FileStreamBase, IFileStream, FileStreamType, FileContentMode } from './filestream';
 
 const StringUtil = requireClass('io.smartface.android.utils.StringUtil');
 
 export class FileStreamAndroid extends FileStreamBase {
   private _fileObject: any;
-  private _mode: StreamType;
-  private _contentMode: ContentMode;
+  private _mode: FileStreamType;
+  private _contentMode: FileContentMode;
   private _closed = false;
   constructor(params?: Partial<IFileStream>) {
     super();
@@ -24,6 +24,7 @@ export class FileStreamAndroid extends FileStreamBase {
           path: params.path
         });
       }
+      // TODO Recheck
       // must check instance of File but
       // instanceof check, but got #<Object>
       else if (params.source) {
@@ -114,18 +115,18 @@ export class FileStreamAndroid extends FileStreamBase {
   }
 
   static StreamType = {
-    ...StreamType,
+    ...FileStreamType,
     hasValue: (valueToFind: number): boolean => {
-      return Object.keys(StreamType).some((element) => {
-        return StreamType[element] === valueToFind;
+      return Object.keys(FileStreamType).some((element) => {
+        return FileStreamType[element] === valueToFind;
       });
     }
   };
   static ContentMode = {
-    ...ContentMode,
+    ...FileContentMode,
     hasValue: (valueToFind: number): boolean => {
-      return Object.keys(ContentMode).some((element) => {
-        return ContentMode[element] === valueToFind;
+      return Object.keys(FileContentMode).some((element) => {
+        return FileContentMode[element] === valueToFind;
       });
     }
   };
@@ -134,11 +135,11 @@ export class FileStreamAndroid extends FileStreamBase {
     return;
   }
 
-  get mode(): StreamType {
+  get mode(): FileStreamType {
     return this._mode;
   }
 
-  get contentMode(): ContentMode {
+  get contentMode(): FileContentMode {
     return this._contentMode;
   }
 

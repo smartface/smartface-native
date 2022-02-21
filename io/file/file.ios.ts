@@ -1,5 +1,6 @@
 import { FileBase, IFile } from './file';
 import FileStream from '../../io/filestream';
+import { FileContentMode, FileStreamType } from '../filestream/filestream';
 
 export default class FileIOS extends FileBase {
   constructor(params?: Partial<IFile>) {
@@ -87,7 +88,7 @@ export default class FileIOS extends FileBase {
     return this.nativeObject.copy(destination);
   }
 
-  createDirectory(createParents: boolean): void {
+  createDirectory(createParents: boolean): boolean {
     const value = createParents === undefined ? true : createParents;
     return this.nativeObject.createDirectory(value);
   }
@@ -122,7 +123,7 @@ export default class FileIOS extends FileBase {
     return this.nativeObject.rename(newName);
   }
 
-  openStream(streamType: FileStream.StreamType, contentMode: FileStream.ContentMode): FileStream {
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream {
     return FileStream.create(this.nativeObject.getActualPath(), streamType, contentMode);
   }
 

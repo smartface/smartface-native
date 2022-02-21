@@ -1,5 +1,5 @@
 import Blob from '../../global/blob';
-import { ContentMode, StreamType, FileStreamBase, IFileStream } from './filestream';
+import { FileContentMode, FileStreamType, FileStreamBase, IFileStream } from './filestream';
 
 export default class FileStreamIOS extends FileStreamBase {
   constructor(params?: Partial<IFileStream>) {
@@ -19,11 +19,11 @@ export default class FileStreamIOS extends FileStreamBase {
     return fileStreamInstance;
   }
 
-  get mode(): StreamType {
+  get mode(): FileStreamType {
     return this.nativeObject.streamMode;
   }
 
-  get contentMode(): ContentMode {
+  get contentMode(): FileContentMode {
     return this.nativeObject.contentMode;
   }
 
