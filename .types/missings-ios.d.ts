@@ -10,9 +10,12 @@ declare class __SF_UIColor extends __SF_NSOBject {
   static clearColor(): __SF_UIColor;
   static yellowColor(): __SF_UIColor;
   static whiteColor(): __SF_UIColor;
+  static grayColor(): __SF_UIColor;
+  static redColor(): __SF_UIColor;
   constructor(r: number, g: number, b: number);
   constructor(a: number, r: number, g: number, b: number);
   layerToImage(): __SF_UIImage;
+  components(): { red: number; blue: number; green: number; alpha: number };
   frame: __SF_NSRect;
 }
 
