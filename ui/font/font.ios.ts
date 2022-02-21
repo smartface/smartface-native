@@ -10,7 +10,7 @@ export default class FontIOS extends AbstractFont {
 
   static create(fontFamily: string, size: number, style?: FontStyle): FontIOS {
     if (style === this.NORMAL) {
-      if (fontFamily === AbstractFont.DEFAULT) {
+      if (fontFamily === FontIOS.DEFAULT) {
         return __SF_UIFont.systemFontOfSize(size);
       } else {
         let retval = null;
@@ -24,7 +24,7 @@ export default class FontIOS extends AbstractFont {
         return retval;
       }
     } else if (style === this.BOLD) {
-      if (fontFamily === AbstractFont.DEFAULT) {
+      if (fontFamily === FontIOS.DEFAULT) {
         return __SF_UIFont.boldSystemFontOfSize(size);
       } else {
         let retval = null;
@@ -38,7 +38,7 @@ export default class FontIOS extends AbstractFont {
         return retval;
       }
     } else if (style === this.ITALIC) {
-      if (fontFamily === AbstractFont.DEFAULT) {
+      if (fontFamily === FontIOS.DEFAULT) {
         return __SF_UIFont.italicSystemFontOfSize(size);
       } else {
         let retval = null;
@@ -52,7 +52,7 @@ export default class FontIOS extends AbstractFont {
         return retval;
       }
     } else if (style === this.BOLD_ITALIC) {
-      if (fontFamily === AbstractFont.DEFAULT) {
+      if (fontFamily === FontIOS.DEFAULT) {
         return __SF_UIFont.systemFontOfSize(size).boldItalic();
       } else {
         let retval = null;
@@ -66,7 +66,7 @@ export default class FontIOS extends AbstractFont {
         return retval;
       }
     } else {
-      if (fontFamily === AbstractFont.DEFAULT) {
+      if (fontFamily === FontIOS.DEFAULT || fontFamily === FontIOS.IOS_SYSTEM_FONT) {
         return __SF_UIFont.systemFontOfSize(size);
       } else {
         const font = getFileFont(fontFamily, size, '_n');
@@ -104,6 +104,13 @@ export default class FontIOS extends AbstractFont {
       return retval;
     }
   };
+
+  static DEFAULT = AbstractFont.DEFAULT;
+  static IOS_SYSTEM_FONT = AbstractFont.IOS_SYSTEM_FONT;
+  static NORMAL = AbstractFont.NORMAL;
+  static BOLD = AbstractFont.BOLD;
+  static ITALIC = AbstractFont.ITALIC;
+  static BOLD_ITALIC = AbstractFont.BOLD_ITALIC;
 }
 
 function getFileFont(fontFamily: string, size: number, fontSuffix: string): any {

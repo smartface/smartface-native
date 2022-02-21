@@ -91,7 +91,9 @@ export declare class AbstractFont extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static DEFAULT: FontStyle.DEFAULT | FontStyle.IOS_SYSTEM_FONT;
+  static DEFAULT: FontStyle.DEFAULT;
+
+  static IOS_SYSTEM_FONT: FontStyle.IOS_SYSTEM_FONT;
   /**
    * Represents normal font style
    *

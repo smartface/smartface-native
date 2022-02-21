@@ -47,22 +47,22 @@ export default class FontAndroid extends AbstractFont {
 
     if (style !== undefined) {
       switch (style) {
-        case AbstractFont.NORMAL:
+        case FontAndroid.NORMAL:
           fontStyle = NativeTypeface.NORMAL;
           fontSuffix = '_n';
           fontSuffix2 = '';
           break;
-        case AbstractFont.BOLD:
+        case FontAndroid.BOLD:
           fontStyle = NativeTypeface.BOLD;
           fontSuffix = '_b';
           fontSuffix2 = '-Bold';
           break;
-        case AbstractFont.ITALIC:
+        case FontAndroid.ITALIC:
           fontStyle = NativeTypeface.ITALIC;
           fontSuffix = '_i';
           fontSuffix2 = '-Italic';
           break;
-        case AbstractFont.BOLD_ITALIC:
+        case FontAndroid.BOLD_ITALIC:
           fontStyle = NativeTypeface.BOLD_ITALIC;
           fontSuffix = '_bi';
           fontSuffix2 = '-BoldItalic';
@@ -73,7 +73,7 @@ export default class FontAndroid extends AbstractFont {
     }
     let typeface: any;
     let font: FontAndroid;
-    if (fontFamily && fontFamily.length > 0 && fontFamily !== AbstractFont.DEFAULT) {
+    if (fontFamily && fontFamily.length > 0 && fontFamily !== FontAndroid.DEFAULT) {
       // Searching font on assets:
       const base = fontFamily.split(' ').join('.');
       const convertedFontName = base + fontSuffix + '.ttf';
@@ -150,6 +150,13 @@ export default class FontAndroid extends AbstractFont {
       size: size
     });
   }
+
+  static DEFAULT = AbstractFont.DEFAULT;
+  static IOS_SYSTEM_FONT = AbstractFont.IOS_SYSTEM_FONT;
+  static NORMAL = AbstractFont.NORMAL;
+  static BOLD = AbstractFont.BOLD;
+  static ITALIC = AbstractFont.ITALIC;
+  static BOLD_ITALIC = AbstractFont.BOLD_ITALIC;
 }
 
 function getFromCache(family: string, style: FontStyle, size: number): FontAndroid | undefined {
