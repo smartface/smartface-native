@@ -158,7 +158,7 @@ declare class __SF_LAContext {
 }
 
 declare class __SF_NSLocale extends __SF_NSOBject {
-  constructor(params: { locale: string });
+  constructor(locale: string);
   static currentLocale(): any;
 }
 

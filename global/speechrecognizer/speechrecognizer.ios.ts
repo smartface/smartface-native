@@ -223,7 +223,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
     isLocaleSupported(locale: string): boolean {
       let nslocale;
       if (locale) {
-        nslocale = new __SF_NSLocale({ locale });
+        nslocale = new __SF_NSLocale(locale);
       } else {
         nslocale = __SF_NSLocale.currentLocale();
       }
