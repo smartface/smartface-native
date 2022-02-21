@@ -127,6 +127,7 @@ declare class __SF_UIView extends __SF_NSOBject {
 declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;
   synchronize(): any;
+  dictionaryRepresentation(): any;
   constructor(param: string);
 }
 declare class __SF_File {
