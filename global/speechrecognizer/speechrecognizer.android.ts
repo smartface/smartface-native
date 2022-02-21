@@ -5,7 +5,7 @@ const Intent = requireClass('android.content.Intent');
 const Locale = requireClass('java.util.Locale');
 const RecognitionListener = requireClass('android.speech.RecognitionListener');
 
-function createIntent(params) {
+function createIntent(params: { locale: string }) {
   const _intent = new Intent('android.speech.action.RECOGNIZE_SPEECH'); // "android.speech.action.RECOGNIZE_SPEECH" = RecognizerIntent.ACTION_RECOGNIZE_SPEECH
   if (params && params.locale) {
     _intent.putExtra('android.speech.extra.LANGUAGE', params.locale);
@@ -31,7 +31,7 @@ class SpeechRecognizerAndroid implements SpeechRecognizerBase {
     SpeechRecognizerAndroid.speechRecognizer.nativeObject.startListening(SpeechRecognizerAndroid.speechRecognizer.intent);
     SpeechRecognizerAndroid._isRunning = true;
   }
-  static create(params) {
+  static create(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }) {
     const activity = AndroidConfig.activity;
     if (!SpeechRecognizerAndroid.nativeObject) {
       SpeechRecognizerAndroid.nativeObject = NativeSpeechRecognizer.createSpeechRecognizer(activity);
@@ -52,7 +52,7 @@ class SpeechRecognizerAndroid implements SpeechRecognizerBase {
   static isRunning(): boolean {
     return SpeechRecognizerAndroid._isRunning;
   }
-  static createRecognizerListener(params) {
+  static createRecognizerListener(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }) {
     const recognizerListener = RecognitionListener.implement({
       onResults: function (bundle) {
         const results = bundle.getStringArrayList('results_recognition');

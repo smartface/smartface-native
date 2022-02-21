@@ -2,14 +2,14 @@ import Hardware from '../../device/hardware';
 import Timer from '../timer';
 import { SpeechRecognizerAndroidError, SpeechRecognizerBase, SpeechRecognizerError } from './speechrecognizer';
 
-const SFSpeechRecognizerAuthorizationStatus = {
-  notDetermined: 0,
-  denied: 1,
-  restricted: 2,
-  authorized: 3
-};
+enum SFSpeechRecognizerAuthorizationStatus {
+  notDetermined,
+  denied,
+  restricted,
+  authorized
+}
 
-function isLocaleSupport(locale) {
+function isLocaleSupport(locale: { identifier: string } | __SF_NSLocale) {
   const supportedArray = __SF_SFSpeechRecognizer.supportedLocalesToArray();
   const filtered = supportedArray.filter(function (obj, index, arr) {
     const identifier = obj.identifier.replace(/-/g, '_');
@@ -33,7 +33,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
     SpeechRecognizerIOS.stop();
     SpeechRecognizerIOS.onErrorHandler = params.onError;
 
-    __SF_SFSpeechRecognizer.speechRequestAuthorization(function (e) {
+    __SF_SFSpeechRecognizer.speechRequestAuthorization(function (e: { status: SFSpeechRecognizerAuthorizationStatus }) {
       if (e.status === SFSpeechRecognizerAuthorizationStatus.authorized) {
         Hardware.ios.microphone.requestRecordPermission(function (granted) {
           if (granted) {
@@ -85,7 +85,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
       delay: 100
     });
   }
-  static createRecognizer(params) {
+  static createRecognizer(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }) {
     if (SpeechRecognizerIOS.speechRecognizer) {
       return;
     }
@@ -178,7 +178,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
           if (e.result) {
             params.onFinish(e.result.bestTranscription.formattedString);
           } else {
-            params.onFinish();
+            params.onFinish('');
           }
         }
       }
