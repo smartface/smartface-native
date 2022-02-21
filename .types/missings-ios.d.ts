@@ -58,7 +58,7 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 }
 
 declare class __SF_Dispatch {
-  static mainAsyncAfter: () => void;
+  static mainAsyncAfter: (fun?: (...args) => void, time?: number) => void;
   static mainAsync: (fun?: (...args) => void) => void;
 }
 
