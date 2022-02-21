@@ -2,13 +2,13 @@ import FileStream from '.';
 import { INativeComponent } from '../../core/inative-component';
 import Blob from '../../global/blob';
 
-export enum StreamType {
+export enum FileStreamType {
   APPEND,
   READ,
   WRITE
 }
 
-export enum ContentMode {
+export enum FileContentMode {
   TEXT,
   BINARY
 }
@@ -20,7 +20,7 @@ export interface IFileStream extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  mode: FileStream.StreamType;
+  mode: FileStreamType;
 
   /**
    * Gets the content mode of FileStream operation.
@@ -28,7 +28,7 @@ export interface IFileStream extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  contentMode: FileStream.ContentMode;
+  contentMode: FileContentMode;
 
   /**
    * Checks whether the stream is readable.
@@ -101,21 +101,19 @@ export interface IFileStream extends INativeComponent {
   seekToEnd?: () => void;
 }
 
-/**
- * berk
- */
 export class FileStreamBase implements IFileStream {
-  static StreamType = StreamType;
-  static ContentMode = ContentMode;
+  constructor(params?: Partial<IFileStream>) {}
+  static StreamType = FileStreamType;
+  static ContentMode = FileContentMode;
 
   static create(path: any, streamMode: any, contentMode: number): FileStreamBase {
     throw new Error('Method not implemented.');
   }
 
-  get mode(): StreamType {
+  get mode(): FileStreamType {
     throw new Error('Method not implemented.');
   }
-  get contentMode(): ContentMode {
+  get contentMode(): FileContentMode {
     throw new Error('Method not implemented.');
   }
   get isReadable(): boolean {
