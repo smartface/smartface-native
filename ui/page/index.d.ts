@@ -5,6 +5,7 @@ import StatusBar from '../../application/statusbar';
 import HeaderBar from '../headerbar';
 import { IFlexLayout } from '../../primitive/iflexlayout';
 import { EventEmitter, IEventEmitter } from 'core/eventemitter';
+import NativeComponent from '../../core/native-component';
 
 declare enum PageEvents {
   /**

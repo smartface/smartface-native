@@ -2,28 +2,26 @@ import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
 import View, { ViewBase } from './view';
-import { EventType } from '../../core/eventemitter/EventType';
+import { Invocation } from '../../util';
+import { Size } from '../../primitive/size';
 
 const Exception = require('../../util').Exception;
-const Invocation = require('../../util').Invocation;
 const YGUnit = require('../../util').YogaEnums.YGUnit;
 
 declare const myLabelTitle: any;
 
 function isInside(frame, point) {
-  var x = point.x;
-  var y = point.y;
-  var w = frame.width;
-  var h = frame.height;
+  const x = point.x;
+  const y = point.y;
+  const w = frame.width;
+  const h = frame.height;
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
 type ViewIOSParams = {};
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements View<TEvent> {
-  android = {
-
-  };
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = {}> extends ViewBase<TEvent> implements View<TEvent, TNative> {
+  android = {};
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
   protected _nativeObject: any;
@@ -35,12 +33,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     y: 1.0
   };
 
-  protected _ios: {
-    shadowOffset: Point2D;
-    shadowRadius: number;
-    shadowOpacity: number;
-    shadowColor: Color;
-  } & TNative;
+  protected _ios: View<TEvent, TNative>['ios'];
 
   onTouchHandler = (e: { point: Point2D }) => {
     const point = {
@@ -114,7 +107,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
 
     if (params) {
-      for (var param in params) {
+      for (const param in params) {
         this[param] = params[param];
       }
     }
@@ -141,17 +134,41 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
         self.shadowOpacity = shadowOpacity;
       },
       get shadowColor() {
-        return self.shadowRadius;
+        return self.shadowColor;
       },
       set shadowColor(shadowColor: Color) {
         self.shadowColor = shadowColor;
+      },
+      get exclusiveTouch() {
+        return self.exclusiveTouch as boolean;
+      },
+      set exclusiveTouch(value: boolean) {
+        self.exclusiveTouch = value;
+      },
+      get masksToBounds() {
+        return self.masksToBounds;
+      },
+      set masksToBounds(value) {
+        self.masksToBounds = value;
+      },
+      get clipsToBounds() {
+        return self.clipsToBounds;
+      },
+      set clipsToBounds(value) {
+        self.clipsToBounds = value;
+      },
+      get viewAppearanceSemanticContentAttribute() {
+        return __SF_UIView.viewAppearanceSemanticContentAttribute();
+      },
+      set viewAppearanceSemanticContentAttribute(value) {
+        const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); // For application-iOS.js Application Direction Manager
+        userDefaults.setObjectForKey(value, 'smartface.ios.viewAppearanceSemanticContentAttribute');
+        userDefaults.synchronize();
+      },
+      performWithoutAnimation(functionWithoutAnimation: Function) {
+        __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
       }
-    } as {
-      shadowOffset: Point2D;
-      shadowRadius: number;
-      shadowOpacity: number;
-      shadowColor: Color;
-    } & TNative;
+    } as View<TEvent, TNative>['ios'];
   }
 
   get uniqueId() {
@@ -175,19 +192,20 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   }
 
   get accessibilityLabel() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString');
+    return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString') as string;
   }
   set accessibilityLabel(value) {
-    new Invocation.Argument({
-      type: 'NSString',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setAccessibilityLabel:', [this.accessibilityLabel]);
+    Invocation.invokeInstanceMethod(this.nativeObject, 'setAccessibilityLabel:', [
+      new Invocation.Argument({
+        type: 'NSString',
+        value: value
+      })
+    ]);
   }
 
   // TODO: Check that Where does myLabelTitle come from?
   get accessible() {
-    return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, 'isAccessibilityElement', [], 'BOOL');
+    return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, 'isAccessibilityElement', [], 'BOOL') as boolean;
   }
   set accessible(value) {
     const isAccessibility = new Invocation.Argument({
@@ -204,14 +222,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   // ios
   private get shadowOffset() {
     this.ios.shadowOffset = { x: 10, y: 10 };
-    var size = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOffset', [], 'CGSize');
+    const size = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOffset', [], 'CGSize') as Size;
     return {
       x: size.width,
       y: size.height
     };
   }
   private set shadowOffset(shadowOffset: Point2D) {
-    var argShadowOffset = new Invocation.Argument({
+    const argShadowOffset = new Invocation.Argument({
       type: 'CGSize',
       value: {
         width: shadowOffset.x,
@@ -223,10 +241,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   // ios
   private get shadowRadius() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowRadius', [], 'CGFloat');
+    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowRadius', [], 'CGFloat') as number;
   }
   private set shadowRadius(shadowRadius) {
-    var argShadowRadius = new Invocation.Argument({
+    const argShadowRadius = new Invocation.Argument({
       type: 'CGFloat',
       value: shadowRadius
     });
@@ -238,7 +256,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'float');
   }
   private set shadowOpacity(shadowOpacity) {
-    var argShadowOpacity = new Invocation.Argument({
+    const argShadowOpacity = new Invocation.Argument({
       type: 'float',
       value: shadowOpacity
     });
@@ -247,13 +265,13 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   // ios
   private get shadowColor() {
-    var color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
     return new Color({
       color: color
     });
   }
   private set shadowColor(shadowColor: Color) {
-    var argShadowColor = new Invocation.Argument({
+    const argShadowColor = new Invocation.Argument({
       type: 'CGColor',
       value: shadowColor.nativeObject
     });
@@ -262,10 +280,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   // ios
   private get exclusiveTouch() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'isExclusiveTouch', [], 'BOOL');
+    return Invocation.invokeInstanceMethod(this.nativeObject, 'isExclusiveTouch', [], 'BOOL') as boolean;
   }
-  private set exclusiveTouch(value) {
-    var argExclusiveTouch = new Invocation.Argument({
+  private set exclusiveTouch(value: boolean) {
+    const argExclusiveTouch = new Invocation.Argument({
       type: 'BOOL',
       value: value
     });
@@ -283,7 +301,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   get masksToBounds() {
     return this.nativeObject.layer.masksToBounds;
   }
-  set masksToBounds(value) {
+  set masksToBounds(value: boolean) {
     this.nativeObject.layer.masksToBounds = value;
   }
 
@@ -291,7 +309,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   private get clipsToBounds() {
     return this.nativeObject.valueForKey('clipsToBounds');
   }
-  private set clipsToBounds(value) {
+  private set clipsToBounds(value: number) {
     this.nativeObject.setValueForKey(value, 'clipsToBounds');
   }
 
@@ -326,8 +344,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     return this._maskedBorders;
   }
   set maskedBorders(value) {
-    var corners = 0;
-    for (var i = 0; i < value.length; i++) {
+    let corners = 0;
+    for (let i = 0; i < value.length; i++) {
       corners = corners | value[i];
     }
     this._maskedBorders = value;
@@ -461,16 +479,16 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   //Issue: IOS-2340
   bringToFront() {
-    var parent = this.getParent();
+    const parent = this.getParent();
     if (parent) {
-      var maxZPosition = 0;
-      for (var subview in parent.nativeObject.subviews) {
-        var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer, 'zPosition', [], 'CGFloat');
-        if (zPosition > maxZPosition) {
+      let maxZPosition = 0;
+      for (const subview in parent.nativeObject.subviews) {
+        const zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer, 'zPosition', [], 'CGFloat');
+        if (typeof zPosition === 'number' && zPosition > maxZPosition) {
           maxZPosition = zPosition;
         }
       }
-      var argZPosition = new Invocation.Argument({
+      const argZPosition = new Invocation.Argument({
         type: 'CGFloat',
         value: maxZPosition + 1
       });
@@ -483,22 +501,22 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   }
 
   getScreenLocation() {
-    var viewOrigin = {
+    const viewOrigin = {
       x: this.nativeObject.bounds.x,
       y: this.nativeObject.bounds.y
     };
-    var origin = new Invocation.Argument({
+    const origin = new Invocation.Argument({
       type: 'CGPoint',
       value: viewOrigin
     });
 
-    var view = new Invocation.Argument({
+    const view = new Invocation.Argument({
       type: 'id',
       value: undefined
     });
 
-    var screenOrigin = Invocation.invokeInstanceMethod(this.nativeObject, 'convertPoint:toView:', [origin, view], 'CGPoint');
-    return screenOrigin;
+    const screenOrigin = Invocation.invokeInstanceMethod(this.nativeObject, 'convertPoint:toView:', [origin, view], 'CGPoint');
+    return screenOrigin as Point2D;
   }
 
   get onTouch() {
@@ -509,9 +527,9 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       return;
     }
     this._onTouch = value;
-    var onTouchHandler = function (e) {
+    const onTouchHandler = function (e) {
       if (e && e.point) {
-        var object = {
+        const object = {
           x: e.point.x,
           y: e.point.y
         };
@@ -532,10 +550,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       return;
     }
     this._onTouchEnded = value;
-    var onTouchEndedHandler = function (e) {
+    const onTouchEndedHandler = function (e) {
       if (e && e.point) {
-        var inside = isInside(this.nativeObject.frame, e.point);
-        var object = {
+        const inside = isInside(this.nativeObject.frame, e.point);
+        const object = {
           isInside: inside,
           x: e.point.x,
           y: e.point.y
@@ -555,10 +573,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     if (typeof value !== 'function') {
       return;
     }
-    var onTouchMoveHandler = function (e) {
+    const onTouchMoveHandler = function (e) {
       if (e && e.point) {
-        var inside = isInside(this.nativeObject.frame, e.point);
-        var object = {
+        const inside = isInside(this.nativeObject.frame, e.point);
+        const object = {
           isInside: inside,
           x: e.point.x,
           y: e.point.y
@@ -577,9 +595,9 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     if (typeof value !== 'function') {
       return;
     }
-    var onTouchCancelledHandler = function (e) {
+    const onTouchCancelledHandler = function (e) {
       if (e && e.point) {
-        var object = {
+        const object = {
           x: e.point.x,
           y: e.point.y
         };
@@ -698,7 +716,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       this.flexBasis = NaN;
       if (this.nativeObject.superview && this.nativeObject.superview.yoga.isEnabled) {
         if (this.nativeObject.superview.yoga.flexDirection === 0 || this.nativeObject.superview.yoga.flexDirection === 1) {
-          var height = this.nativeObject.yoga.getYGValueForKey('height');
+          const height = this.nativeObject.yoga.getYGValueForKey('height');
           if (isNaN(height)) {
             this.nativeObject.frame = {
               x: this.left,
@@ -708,7 +726,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
             };
           }
         } else {
-          var width = this.nativeObject.yoga.getYGValueForKey('width');
+          const width = this.nativeObject.yoga.getYGValueForKey('width');
           if (isNaN(width)) {
             this.nativeObject.frame = {
               x: this.left,
@@ -1171,7 +1189,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       return __SF_UIView.viewAppearanceSemanticContentAttribute();
     },
     set viewAppearanceSemanticContentAttribute(value) {
-      var userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); // For application-iOS.js Application Direction Manager
+      const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); // For application-iOS.js Application Direction Manager
       userDefaults.setObjectForKey(value, 'smartface.ios.viewAppearanceSemanticContentAttribute');
       userDefaults.synchronize();
 

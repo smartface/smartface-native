@@ -1,3 +1,4 @@
+import NativeComponent from '../../core/native-component';
 import FileStream from '../filestream';
 /**
  * @class IO.File
@@ -222,7 +223,9 @@ declare class File extends NativeComponent {
    * @since 0.1
    */
   readonly writable: boolean;
-  ios: Partial<{}>;
+  ios: Partial<{
+    getNSURL: () => string;
+  }>;
 }
 
 export = File;
