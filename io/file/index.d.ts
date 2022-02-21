@@ -1,3 +1,4 @@
+import NativeComponent from '../../core/native-component';
 import FileStream from '../filestream';
 /**
  * @class IO.File
@@ -223,6 +224,8 @@ declare class File extends NativeComponent {
    */
   readonly writable: boolean;
   ios: Partial<{}>;
+  static getDocumentsDirectory(): string; //ios only property but used normally
+  static getMainBundleDirectory(): string; //ios only property but used normally
 }
 
 export = File;

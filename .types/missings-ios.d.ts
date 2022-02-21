@@ -29,7 +29,7 @@ declare class __SF_UIImageView extends __SF_UIView {
   contentMode: number; /**TODO: After FillType is typed */
   image: any;
   loadImage(image: __SF_UIImage): void;
-  getActualPath(): __SF_NSIndexPath;
+  getActualPath(): string;
   alpha: number;
   tintColor: __SF_UIColor;
   loadFromURL(url: any, placeholder: __SF_UIImage, headers: any, onSuccess: (innerFade: boolean, image: __SF_UIImage, error: any, cache: any /**TODO: ImageCacheType */, url: any) => void): void;
@@ -130,13 +130,13 @@ declare class __SF_NSUserDefaults extends __SF_NSOBject {
   constructor(param: string);
 }
 declare class __SF_File {
-  static create(value: __SF_NSIndexPath): __SF_File;
-  static getDocumentsDirectory(): __SF_NSIndexPath;
-  static getMainBundleDirectory(): __SF_NSIndexPath;
+  static create(value: string): __SF_File;
+  static getDocumentsDirectory(): string;
+  static getMainBundleDirectory(): string;
 }
 
 declare class __SF_FileStream {
-  static createWithPathWithStreamModeWithContentMode(path: __SF_NSIndexPath, streamModeValue: any, contentModeValue: any): __SF_FileStream;
+  static createWithPathWithStreamModeWithContentMode(path: string, streamModeValue: any, contentModeValue: any): __SF_FileStream;
   streamMode: any;
   contentMode: any;
   isReadable(): any;
@@ -178,12 +178,13 @@ declare class __SF_UIPasteboard {
 }
 
 declare class __SF_UIFont {
-  // TODO: it must be fontNamesByFamilyName
-  static systemFontOfSize(size: number): number;
-  static boldSystemFontOfSize(size: number): number;
+  static systemFontOfSize(size: number): any;
+  static boldSystemFontOfSize(size: number): any;
   static fontWithNameSize(fontFamily: string, size: number): any;
-  static italicSystemFontOfSize(size: number): number;
-  static createFromFileWithFilenameStringSize(actualPath: __SF_NSIndexPath, size: number): __SF_UIFont;
+  static italicSystemFontOfSize(size: number): any;
+  static createFromFileWithFilenameStringSize(actualPath: string, size: number): any;
+  static familyNames(): string[];
+  static fontNamesForFamilyName(familyName: string): string[];
 }
 
 declare class __SF_NSData extends __SF_NSOBject {
@@ -232,7 +233,7 @@ declare class __SF_UITableView extends __SF_UIScrollView {
   deleteRowIndexAnimation(index: number, animation: any /**TODO: UITableViewRowAnimation */): void;
   getVisibleIndexArray(): number[];
   getVisibleIndexArray(): number[];
-  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: __SF_NSIndexPath, style: number, animated?: boolean): void;
+  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: string, style: number, animated?: boolean): void;
   contentOffset: { x: number; y: number };
   isEditing: boolean;
   canMoveRowAt?: (value: any, e: any) => any;
@@ -245,12 +246,12 @@ declare class __SF_UITableView extends __SF_UIScrollView {
 declare class __SF_UICollectionView extends __SF_UIScrollView {
   constructor(layoutManager: __SF_UICollectionViewFlowLayout);
   numberOfSectionsCallback: (collectionView: any) => number;
-  cellForItemAtIndexPath(indexPath: __SF_NSIndexPath): any;
+  cellForItemAtIndexPath(indexPath: string): any;
   numberOfItemsInSectionCallback: (collectionView: any, section: any) => any;
-  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
-  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
+  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
+  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
   registerClassForCellWithReuseIdentifier(cell: __SF_UICollectionViewCell, type: any): void;
-  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: __SF_NSIndexPath): __SF_UICollectionViewCell;
+  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: string): __SF_UICollectionViewCell;
   superview: any;
 }
 
@@ -682,7 +683,7 @@ declare class __SF_NSOBject {
 
 declare class __SF_NSURL extends __SF_NSOBject {
   static URLWithString(value: string): __SF_NSURL;
-  static fileURLWithPath(actualPath: __SF_NSIndexPath): __SF_NSURL;
+  static fileURLWithPath(actualPath: string): __SF_NSURL;
 }
 
 declare class __SF_NSURLRequest extends __SF_NSOBject {
@@ -963,7 +964,7 @@ declare class __SF_SMFSFSafariViewController {
 declare class __SF_WKWebView extends __SF_UIView {
   scrollView: __SF_UIScrollView;
   load(urlRequest: __SF_NSURLRequest): void;
-  getActualPath(): __SF_NSIndexPath;
+  getActualPath(): string;
   loadHTMLStringBaseURL(html: string, e: any): void;
   onLoad: (e: any) => void;
   onShow: (e: any) => void;
@@ -1011,7 +1012,7 @@ declare class __SF_UIImagePickerController extends __SF_UINavigationController {
   static convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(
     quality: number,
     optimize: boolean,
-    path: __SF_NSIndexPath,
+    path: string,
     fileName: string,
     callBack: (e: any) => void
   ): void;
@@ -1162,7 +1163,7 @@ declare class __SF_SMFCrypto {
 }
 
 declare class __SF_Database {
-  constructor(path: string | __SF_NSIndexPath);
+  constructor(path: string | string);
   errorHandler: (e: any) => void;
   run(sqlCommand: string): void;
   prepare(sqlCommand: string): void;
