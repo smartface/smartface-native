@@ -1,10 +1,10 @@
 import NativeComponent from '../../../core/native-component';
 import File from '../../../io/file';
-import { Database, DatabaseBase } from './database';
+import { Database, BaseDatabase } from './database';
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
 
-class DatabaseAndroid extends DatabaseBase {
+class DatabaseAndroid extends BaseDatabase {
   private _file: File;
   constructor(params?: { file?: File; inMemory?: boolean }) {
     super();

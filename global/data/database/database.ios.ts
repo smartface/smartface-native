@@ -1,7 +1,7 @@
-import { Database, DatabaseBase } from './database';
+import { Database, BaseDatabase } from './database';
 import File from '../../../io/file';
 
-class DatabaseIOS extends DatabaseBase {
+class DatabaseIOS extends BaseDatabase {
   constructor(params?: { file?: File; inMemory?: boolean }) {
     super();
     if (!this.nativeObject) {

@@ -1,6 +1,6 @@
-import { DataBase } from './data';
+import { BaseData } from './data';
 
-class DataIOS implements DataBase {
+class DataIOS implements BaseData {
   static ios = {
     getNativeObject() {
       return new __SF_NSUserDefaults('SF_USER_DEFAULTS');

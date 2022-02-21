@@ -17,7 +17,7 @@
  *     let userEmail = Data.getStringVariable('userEmail');
  *
  */
-export declare class DataBase {
+export declare class BaseData {
   /**
    * Get stored string type variable. If variable is not exists, will return null.
    *

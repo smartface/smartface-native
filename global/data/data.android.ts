@@ -1,7 +1,7 @@
 import { AndroidConfig, TypeUtil } from '../../util';
-import { DataBase } from './data';
+import { BaseData } from './data';
 
-class DataAndroid implements DataBase {
+class DataAndroid implements BaseData {
   private static activity = AndroidConfig.activity;
   private static jsSharedPreferences = DataAndroid.activity.getSharedPreferences('JS', 0);
   static getStringVariable(key: string) {

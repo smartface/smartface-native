@@ -100,7 +100,7 @@ export interface IDatabase extends INativeComponent {
   query(query: string): Database.QueryResult;
 }
 
-export class DatabaseBase implements IDatabase {
+export class BaseDatabase implements IDatabase {
   constructor(params?: { file?: File; inMemory?: boolean }) {
     throw new Error('Method not implemented.');
   }

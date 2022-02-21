@@ -1,6 +1,6 @@
-import { DatabaseBase } from './database';
+import { BaseDatabase } from './database';
 
-const Database: typeof DatabaseBase = require(`./database.${Device.deviceOS.toLowerCase()}`).default;
-type Database = DatabaseBase;
+const Database: typeof BaseDatabase = require(`./database.${Device.deviceOS.toLowerCase()}`).default;
+type Database = BaseDatabase;
 
 export default Database;
