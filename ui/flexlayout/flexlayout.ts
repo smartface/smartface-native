@@ -1,7 +1,7 @@
-import Color from '../color';
 import Flex from '../../core/flex';
 import { IViewGroup } from 'ui/viewgroup/viewgroup';
 import { FlexLayoutEvents } from './flexlayout-events';
+import Color from '../color';
 
 export type AndroidProps = Partial<{
   /**
