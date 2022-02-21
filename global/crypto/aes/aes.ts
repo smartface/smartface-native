@@ -34,5 +34,14 @@ export declare class AESBase {
    * @since 4.4
    */
   static decryptGCMAsync: (params: { encryptedText: string; key: string; iv: string; onComplete: (decryptedText: string) => void; onFailure: (err: string) => void }) => void;
+  /**
+   * Used to generate secure random key with given size. Key could be one of 16, 24, or 32 bytes
+   *
+   * @method generateKey
+   * @param {Number} [size = 32]
+   * @ios
+   * @android
+   * @since 4.4
+   */
   static generateKey: (length: number) => string;
 }
