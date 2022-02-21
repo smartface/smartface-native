@@ -65,7 +65,7 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 }
 
 declare class __SF_Dispatch {
-  static mainAsyncAfter: () => void;
+  static mainAsyncAfter: (fun?: (...args: any[]) => void, time?: number) => void;
   static mainAsync: (fun?: (...args: any[]) => void) => void;
 }
 
@@ -165,7 +165,7 @@ declare class __SF_LAContext {
 }
 
 declare class __SF_NSLocale extends __SF_NSOBject {
-  constructor(params: { locale: string });
+  constructor(locale: string);
   static currentLocale(): any;
 }
 

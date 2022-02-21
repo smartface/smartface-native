@@ -1,6 +1,18 @@
-import SpeechRecognizerError from './error';
+export enum SpeechRecognizerError {
+  INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
+  NETWORK = 'NETWORK',
+  NETWORK_TIMEOUT = 'NETWORK_TIMEOUT',
+  SPEECH_TIMEOUT = 'SPEECH_TIMEOUT',
+  CLIENT = 'CLIENT',
+  SERVER = 'SERVER'
+}
 
-export = SpeechRecognizer;
+export enum SpeechRecognizerAndroidError {
+  AUDIO = 'AUDIO',
+  NO_MATCH = 'NO_MATCH',
+  RECOGNIZER_BUSY = 'RECOGNIZER_BUSY'
+}
+
 /**
  * @class SpeechRecognizer
  * @static
@@ -62,7 +74,7 @@ export = SpeechRecognizer;
  *     }
  *
  */
-declare const SpeechRecognizer: {
+export declare class SpeechRecognizerBase {
   /**
    * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
    *
@@ -79,7 +91,7 @@ declare const SpeechRecognizer: {
    * @ios
    * @since 1.1.13
    */
-  start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void;
+  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void;
   /**
    * Stop speech recognition service.
    *
@@ -88,7 +100,7 @@ declare const SpeechRecognizer: {
    * @ios
    * @since 1.1.13
    */
-  stop(): void;
+  static stop(): void;
   /**
    * Returns whether speech recognition service runs or not.
    *
@@ -98,8 +110,8 @@ declare const SpeechRecognizer: {
    * @ios
    * @since 1.1.13
    */
-  isRunning(): boolean;
-  ios: Partial<{
+  static isRunning(): boolean;
+  static ios: Partial<{
     /**
      * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
      *
@@ -111,5 +123,5 @@ declare const SpeechRecognizer: {
      */
     isLocaleSupported(locale: string): boolean;
   }>;
-  Error: typeof SpeechRecognizerError;
-};
+  static readonly Error: typeof SpeechRecognizerError & { android: typeof SpeechRecognizerAndroidError };
+}

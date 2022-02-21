@@ -65,7 +65,7 @@ declare const Hardware: {
        * @static
        * @since 1.1.12
        */
-      requestRecordPermission?: (callback: () => void) => void;
+      requestRecordPermission?: (callback: (...args) => void) => void;
     };
     modelName?: string;
   }>;
