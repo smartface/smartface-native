@@ -70,7 +70,7 @@ declare class __SF_Dispatch {
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
-  mainScreen: () => { bounds: __SF_NSRect; scale: number };
+  static mainScreen: () => { bounds: __SF_NSRect; scale: number };
 }
 
 declare class __SF_UIApplicationDidChangeStatusBarOrientationNotification {}
@@ -113,7 +113,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   flipHorizontally(): void;
   flipVertically(): void;
   superview: __SF_UIView;
-  addSubView(view: __SF_UIView): void;
+  addSubview(view: __SF_UIView): void;
   removeFromSuperview(): void;
   willRemoveSubview: (e: any) => void;
   widthAnchor: any;
@@ -222,7 +222,7 @@ declare class __SF_UIRefreshControl extends __SF_UIView {
 }
 
 declare class __SF_UITableView extends __SF_UIScrollView {
-  addSubView(refreshControl: __SF_UIRefreshControl): void;
+  addSubview(refreshControl: __SF_UIRefreshControl): void;
   separatorStyle: number;
   showsVerticalScrollIndicator: boolean;
   leftToRightSwipeEnabled: boolean;
@@ -309,7 +309,7 @@ declare interface iOSSharedApplication {
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
   statusBarOrientationAnimationDuration: number;
-  keyWindow: { addSubView(view: __SF_UIView): void };
+  keyWindow: { addSubview(view: __SF_UIView): void };
   scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
   presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
   cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
