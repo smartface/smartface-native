@@ -28,8 +28,8 @@ export default class DialogAndroid extends AbstractDialog {
   private _isSetListener = false;
   private _cancelable = false;
   skipDefaults = false;
-  private dialogWindow;
-  private colorDrawable;
+  private dialogWindow: any;
+  private colorDrawable: any;
 
   constructor(params: Partial<DialogAndroid> = {}) {
     super();
@@ -69,8 +69,7 @@ export default class DialogAndroid extends AbstractDialog {
       this.dialogWindow.setGravity(80);
       this.dialogWindow.setBackgroundDrawable(this.colorDrawable);
 
-      const isStatusBarVisible = Application.statusBar.visible;
-      const statusBarHeight = isStatusBarVisible ? Application.statusBar.visible : 0;
+      const statusBarHeight = Application.statusBar.visible ? Application.statusBar.height : 0;
       const layoutHeight = Screen.height - statusBarHeight;
       this._layout.height = statusBarHeight > 0 ? statusBarHeight : layoutHeight;
       this.dialogWindow.setLayout(LayoutParams.MATCH_PARENT, statusBarHeight > 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT);
@@ -137,6 +136,10 @@ export default class DialogAndroid extends AbstractDialog {
 
   hide() {
     this.nativeObject.dismiss();
+  }
+
+  toString() {
+    return 'Dialog';
   }
 
   static Android: {
