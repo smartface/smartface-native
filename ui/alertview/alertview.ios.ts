@@ -9,7 +9,7 @@ export default class AlertViewIOS extends NativeComponent implements IAlertView 
   private delegate: (method: { name: string }) => void;
   private _onDismiss: (alertView: AlertViewIOS) => void;
   android = {};
-  constructor(params: Partial<AlertViewIOS> = {}) {
+  constructor(params: Partial<IAlertView> = {}) {
     super();
     this.nativeObject = __SF_UIAlertController.createAlertController(1);
     this.title = '';

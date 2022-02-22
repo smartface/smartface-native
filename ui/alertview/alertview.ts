@@ -197,7 +197,7 @@ export interface IAlertView {
 }
 
 export declare class AbstractAlertView implements IAlertView {
-  constructor(params?: Partial<AbstractAlertView>);
+  constructor(params?: Partial<IAlertView>);
   isShowing(): void;
   show(): void;
   dismiss(): void;

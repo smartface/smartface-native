@@ -15,7 +15,7 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
   private __textBoxes: TextBox[];
   private __onDismiss: AbstractAlertView['onDismiss'];
   private _cancellable: AbstractAlertView['android']['cancellable'];
-  constructor(params: Partial<AlertViewAndroid> = {}) {
+  constructor(params: Partial<IAlertView> = {}) {
     super();
     if (!this.nativeObject) {
       this.nativeObject = new NativeAlertDialog(AndroidConfig.activity);
