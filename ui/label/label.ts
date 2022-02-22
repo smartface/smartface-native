@@ -1,55 +1,42 @@
-/// <reference path="../../.types/typings.d.ts" />
-
-import Color from '../color';
-import Font from '../font';
 import TextDirection from '../android/textdirection';
+import Color from '../color';
+import EllipsizeMode from '../ellipsizemode';
+import Font from '../font';
 import TextAlignment from '../textalignment';
-import View from '../view';
-/**
- * @class UI.Label
- * @since 0.1
- * @extends UI.View
- * Label is a view that displays read-only text on the screen.
- *
- *     @example
- *     const Label = require('@smartface/native/ui/label');
- *     const Color = require('@smartface/native/ui/color');
- *     var myLabel = new Label({
- *         text: "This is my label",
- *         visible: true
- *     });
- *     myLabel.width = 200,
- *     myLabel.height = 50,
- *     myLabel.top = 10,
- *     myLabel.left = 20,
- *     myLabel.backgroundColor = Color.GRAY;
- */
-declare class Label extends View implements Label {
-  constructor(params?: Partial<Label>);
+import IView, { AbstractView } from '../view/view';
+
+interface ILabelAndroid {
   /**
-   * Gets/sets background color of a view. It allows setting background
-   * color with UI.Color instance.
+   * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
    *
-   * @property {UI.Color} [backgroundColor = UI.Color.TRANSPARENT]
    * @android
-   * @ios
-   * @since 0.1
+   * @since 4.2.2
    */
-  backgroundColor: Color;
+  adjustableFontSizeStep: number;
+  /**
+   * Gets/sets the text direction.
+   *
+   * @property {UI.Android.TextDirection} textDirection
+   * @android
+   * @since 4.0.2
+   */
+  textDirection: TextDirection;
+}
+
+export declare interface ILabel<TEvent extends string = '', TIOS = {}, TAND = ILabelAndroid> extends IView<TEvent, TIOS, TAND> {
   /**
    * Gets/sets font of a Label. When set to null label uses system font.
    * It is set to null by default.
    *
    *     @example
-   *     const Label = require('@smartface/native/ui/label');
-   *     const Font = require('@smartface/native/ui/font')
-   *     var myLabel = new Label({
+   *     import Label from '@smartface/native/ui/label';
+   *     import Font from '@smartface/native/ui/font';
+   *     const myLabel = new Label({
    *         text: "This is my label",
    *         visible: true
    *     });
    *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
    *
-   * @property {UI.Font} [font = null]
    * @android
    * @ios
    * @since 0.1
@@ -59,7 +46,7 @@ declare class Label extends View implements Label {
    * Enables/disables multiple line property of a Label. If set to true
    * and the text is long enough, text will be shown in multiline. Setting multiline will override the {@link UI.Label#ellipsizeMode ellipsizeMode} prop.
    *
-   * @property {Boolean} [multiline = false]
+   * @default false
    * @android
    * @ios
    * @since 0.1
@@ -69,7 +56,6 @@ declare class Label extends View implements Label {
   /**
    * Sets the height of the Label to be at most maxLines tall. Setting 0 indicates that maxLines will be as much as given content.
    *
-   * @property {Number} maxLines
    * @android
    * @ios
    * @since 4.0.2
@@ -83,15 +69,7 @@ declare class Label extends View implements Label {
    * @ios
    * @since 4.0.2
    */
-  ellipsizeMode: number;
-  /**
-   * Gets/sets the text direction.
-   *
-   * @property {UI.Android.TextDirection} textDirection
-   * @android
-   * @since 4.0.2
-   */
-  textDirection: TextDirection;
+  ellipsizeMode: EllipsizeMode;
   /**
    * Gets/sets text on Label.
    *
@@ -125,7 +103,7 @@ declare class Label extends View implements Label {
    * @ios
    * @since 0.1
    */
-  textColor: Color;
+  textColor: Color | Record<string, Color>;
 
   /**
    * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)
@@ -137,7 +115,7 @@ declare class Label extends View implements Label {
    * @see {@link UI.Label#minimumFontSize minimumFontSize}
    * @see {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}
    */
-  adjustFontSizeToFit: Boolean;
+  adjustFontSizeToFit: boolean;
 
   /**
    * Gets/sets minimum font size of Label.
@@ -147,35 +125,18 @@ declare class Label extends View implements Label {
    * @android
    * @since 4.2.2
    */
-  minimumFontSize: Number;
-
-  android: View['android'] & {
-    /**
-     * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
-     *
-     * @property {Number} [adjustableFontSizeStep = 1]
-     * @android
-     * @since 4.2.2
-     */
-    adjustableFontSizeStep: Number;
-  };
+  minimumFontSize: number;
 }
 
-declare interface Label {
-  backgroundColor: Color;
+export declare class AbstractLabel<TEvent extends string = ''> extends AbstractView<TEvent> implements ILabel<TEvent> {
+  constructor(params?: Partial<AbstractLabel>);
   font: Font;
   multiline: boolean;
   maxLines: number;
-  ellipsizeMode: number;
-  textDirection: TextDirection;
+  ellipsizeMode: EllipsizeMode;
   text: string;
   textAlignment: TextAlignment;
-  textColor: Color;
-  adjustFontSizeToFit: Boolean;
-  minimumFontSize: Number;
-  android: View['android'] & {
-    adjustableFontSizeStep: Number;
-  };
+  textColor: Color | Record<string, Color>;
+  adjustFontSizeToFit: boolean;
+  minimumFontSize: number;
 }
-
-export = Label;

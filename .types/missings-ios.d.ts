@@ -426,7 +426,7 @@ declare class __SF_UIDocumentPickerViewController {
 
 declare class __SF_UIDocumentPickerViewControllerDelegate {
   constructor();
-  didPickDocumentsAtURLs(urls: string[]): void;
+  didPickDocumentsAtURLs(urls: { path: string }[]): void;
   documentPickerWasCancelled(): void;
 }
 
