@@ -1,5 +1,6 @@
-import { AbstactColor } from './color';
+import { AbstractColor } from './color';
 
-const Color: typeof AbstactColor = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+const Color: typeof AbstractColor = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+type Color = AbstractColor;
 
 export default Color;

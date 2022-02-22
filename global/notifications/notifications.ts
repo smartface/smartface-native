@@ -1,37 +1,5 @@
 import Color from '../../ui/color';
-
-declare enum Events {
-  /**
-   * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
-   * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
-   *
-   *     @example
-   *     Notifications.onNotificationReceive = function(e){
-   *      console.log("willPresentNotification", e);
-   *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
-   *     };
-   *
-   * @event onNotificationReceive
-   * @param {Object} data
-   * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
-   * @ios
-   * @android
-   * @static
-   * @since 4.0.3
-   */
-  NotificationReceive = 'notificationReceive',
-  /**
-   * This event triggered when clicked on notification alert
-   *
-   * @event onNotificationClick
-   * @param {Object} data
-   * @ios
-   * @android
-   * @static
-   * @since 4.0.3
-   */
-  NotificationClick = 'notificationClick'
-}
+import { NotificationEvents } from './notifications-events';
 
 /**
  * @class Notifications
@@ -47,12 +15,12 @@ declare enum Events {
  *     });
  *
  */
-declare class Notifications {
-  static on(eventName: Events, callback: (...args: any) => void): () => void;
-  static once(eventName: Events, callback: (...args: any) => void): () => void;
-  static off(eventName: Events, callback?: (...args: any) => void): void;
-  static emit(event: Events, ...args: any[]): void;
-  static Events: Events;
+export declare class NotificationsBase {
+  static on(eventName: NotificationEvents, callback: (...args: any) => void): () => void;
+  static once(eventName: NotificationEvents, callback: (...args: any) => void): () => void;
+  static off(eventName: NotificationEvents, callback?: (...args: any) => void): void;
+  static emit(event: NotificationEvents, ...args: any[]): void;
+  static Events: NotificationEvents;
   /**
    * Cancel all presented or scheduled local notifications.
    *
@@ -185,7 +153,7 @@ declare class Notifications {
 
   public readonly android: {};
 }
-declare namespace Notifications {
+export declare namespace Notifications {
   /**
    * @enum {Number} Notifications.Priority
    * @since 0.1
@@ -590,5 +558,3 @@ declare namespace Notifications {
     }
   }
 }
-
-export = Notifications;

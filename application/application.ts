@@ -467,6 +467,8 @@ declare class Application {
      * @since 3.1.3
      */
     userInterfaceLayoutDirection: any;
+    registeredRemoteWithSuccessCallback: any;
+    registeredRemoteWithFailureCallback: any;
   }>;
   /**
    * Gets status bar object. This property is readonly, you can not set
@@ -945,7 +947,7 @@ declare class Application {
    * });
    * ````
    */
-  static onReceivedNotification: (data: { remote: { [key: string]: any }; local: { [key: string]: any } }) => void;
+  static onReceivedNotification: (data: Partial<{ remote: { [key: string]: any }; local: { [key: string]: any } }>) => void;
   /**
    * Triggered when application is called by another application.
    * For Android, onApplicationCallReceived will be triggered when

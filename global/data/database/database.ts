@@ -1,6 +1,6 @@
+import { INativeComponent } from '../../../core/inative-component';
 import File from '../../../io/file';
 
-export = Database;
 /**
  * @class Data.Database
  * @since 1.0
@@ -33,8 +33,7 @@ export = Database;
  *     console.log("Worker count is: " + queryResult.count());
  *
  */
-declare class Database extends NativeComponent {
-  constructor(params?: { file?: File; inMemory?: boolean });
+export interface IDatabase extends INativeComponent {
   /**
    * The file for creating/opening database from it. If the given file is Assets, the database will be open but if assets not exists the exception will thrown.
    * The parameter will setted if only given in constructor.
@@ -77,7 +76,7 @@ declare class Database extends NativeComponent {
   /**
    * Execute Non SELECT SQL Command on Database. Method will thrown exception when execution failed.
    *
-   * @param {String} sqlCommand
+   * @param {String} query
    * @method execute
    * @android
    * @ios
@@ -85,11 +84,11 @@ declare class Database extends NativeComponent {
    * @see https://sqlite.org/lang.html
    * @since 1.0
    */
-  execute(): void;
+  execute(query: string): void;
   /**
    * Execute SELECT SQL Command on Database. Method will thrown exception when execution failed.
    *
-   * @param {String} sqlCommand
+   * @param {String} query
    * @return {Data.Database.QueryResult}
    * @method query
    * @android
@@ -100,7 +99,25 @@ declare class Database extends NativeComponent {
    */
   query(query: string): Database.QueryResult;
 }
-declare namespace Database {
+
+export class BaseDatabase implements IDatabase {
+  constructor(params?: { file?: File; inMemory?: boolean }) {
+    throw new Error('Method not implemented.');
+  }
+  file: File;
+  inMemory: Boolean;
+  close(): void {
+    throw new Error('Method not implemented.');
+  }
+  execute(query: string): void {
+    throw new Error('Method not implemented.');
+  }
+  query(query: string): Database.QueryResult {
+    throw new Error('Method not implemented.');
+  }
+  nativeObject: any;
+}
+export declare namespace Database {
   /**
    * @class Data.Database.QueryResult
    * @since 1.0
@@ -162,14 +179,16 @@ declare namespace Database {
      * @since 1.0
      */
     get(index: number): DatabaseObject;
-    /**
-     * Closes the QueryResult, releasing all of its resources and making it completely invalid.
-     *
-     * @method close
-     * @android
-     * @since 4.0.2
-     */
-    close(): void;
+    android: Partial<{
+      /**
+       * Closes the QueryResult, releasing all of its resources and making it completely invalid.
+       *
+       * @method close
+       * @android
+       * @since 4.0.2
+       */
+      close(): void;
+    }>;
   }
   /**
    * @class Data.Database.DatabaseObject
@@ -196,6 +215,7 @@ declare namespace Database {
    *     }
    */
   class DatabaseObject {
+    constructor(params: { data: any; columnNames: string[] });
     /**
      * Returns given column name with String. If the given column is not String will thrown exception.
      *

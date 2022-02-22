@@ -17,7 +17,7 @@
  *     let userEmail = Data.getStringVariable('userEmail');
  *
  */
-declare const Data: {
+export declare class BaseData {
   /**
    * Get stored string type variable. If variable is not exists, will return null.
    *
@@ -28,7 +28,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  getStringVariable: (key: string) => string;
+  static getStringVariable: (key: string) => string;
   /**
    * Get stored boolean type variable. If variable is not exists, will return null.
    *
@@ -39,7 +39,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  getBooleanVariable: (key: string) => boolean;
+  static getBooleanVariable: (key: string) => boolean;
   /**
    * Get stored integer type variable. If variable is not exists, will return null
    *
@@ -50,7 +50,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  getIntVariable: (key: string) => number;
+  static getIntVariable: (key: string) => number;
   /**
    * Get stored float type variable. If variable is not exists, will return null
    *
@@ -61,7 +61,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  getFloatVariable: (key: string) => number;
+  static getFloatVariable: (key: string) => number;
   /**
    * Get stored long type variable. If variable is not exists, will return null
    *
@@ -72,7 +72,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  getLongVariable: (key: string) => number;
+  static getLongVariable: (key: string) => number;
   /**
    * Store string type variable
    *
@@ -83,7 +83,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  setStringVariable: (key: string, value: string) => void;
+  static setStringVariable: (key: string, value: string) => void;
   /**
    * Store boolean type variable
    *
@@ -94,7 +94,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  setBooleanVariable: (key: string, value: boolean) => void;
+  static setBooleanVariable: (key: string, value: boolean) => void;
   /**
    * Store integer type variable
    *
@@ -105,7 +105,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  setIntVariable: (key: string, value: number) => void;
+  static setIntVariable: (key: string, value: number) => void;
   /**
    * Store float type variable
    *
@@ -116,7 +116,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  setFloatVariable: (key: string, value: number) => void;
+  static setFloatVariable: (key: string, value: number) => void;
   /**
    * Store long type variable
    *
@@ -127,7 +127,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  setLongVariable: (key: string, value: number) => void;
+  static setLongVariable: (key: string, value: number) => void;
 
   /**
    * Check variable exist within storaged variables.
@@ -139,7 +139,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  containsVariable: (key: string) => boolean;
+  static containsVariable: (key: string) => boolean;
   /**
    * Remove variable.
    *
@@ -149,7 +149,7 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  removeVariable: (key: string) => void;
+  static removeVariable: (key: string) => void;
   /**
    * Removes all variables from storage regardless of their types
    *
@@ -159,7 +159,5 @@ declare const Data: {
    * @ios
    * @since 0.1
    */
-  removeAllVariables: (key: string) => void;
-};
-
-export = Data;
+  static removeAllVariables: (key: string) => void;
+}
