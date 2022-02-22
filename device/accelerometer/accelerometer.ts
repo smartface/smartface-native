@@ -1,18 +1,6 @@
-declare enum Events {
-  /**
-   * Callback to capture accelerometer events.
-   *
-   * @since 0.1
-   * @event onAccelerate
-   * @param {Object} event
-   * @param {Number} event.x
-   * @param {Number} event.y
-   * @param {Number} event.z
-   * @android
-   * @ios
-   */
-  Accelerate = 'accelerate'
-}
+import { EventListenerCallback, IEventEmitter } from '../../core/eventemitter';
+import NativeComponent from '../../core/native-component';
+import { AccelerometerEvents } from './accelerometer-events';
 
 /**
  * @class Device.Accelerometer
@@ -31,11 +19,19 @@ declare enum Events {
  *     };
  *
  */
-declare class Accelerometer {
-  static on(eventName: Events, callback: (...args: any) => void): () => void;
-  static once(eventName: Events, callback: (...args: any) => void): () => void;
-  static off(eventName: Events, callback?: (...args: any) => void): void;
-  static emit(event: Events, detail?: any[]): void;
+export class AccelerometerBase extends NativeComponent implements IEventEmitter<AccelerometerEvents> {
+  on(eventName: 'accelerate', callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  once(eventName: 'accelerate', callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  off(eventName: 'accelerate', callback?: EventListenerCallback): void {
+    throw new Error('Method not implemented.');
+  }
+  emit(event: 'accelerate', ...args: any[]): void {
+    throw new Error('Method not implemented.');
+  }
   /**
    * Starts capturing accelerometer values.
    *
@@ -85,7 +81,5 @@ declare class Accelerometer {
    * @since 4.0.2
    */
   static accelerometerUpdateInterval: number;
-  static Events: typeof Events;
+  static Events = AccelerometerEvents;
 }
-
-export = Accelerometer;

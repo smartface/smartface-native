@@ -330,7 +330,7 @@ declare class __SF_CMMotionManager {
   accelerometerUpdateInterval: number;
   startAccelerometerUpdates(): void;
   stopAccelerometerUpdates(): void;
-  callback: () => void;
+  callback: (e?: any) => void;
 }
 
 declare class __SF_CallObserverDelegate {
