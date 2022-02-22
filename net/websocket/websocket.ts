@@ -1,78 +1,9 @@
-import { EventEmitter, IEventEmitter } from "../../core/eventemitter/event-emitter";
-import Blob from "../../global/blob";
+import Blob from '../../global/blob';
+import { INativeComponent } from '../../core/inative-component';
+import { EventListenerCallback, IEventEmitter } from '../../core/eventemitter/event-emitter';
+import { WebSocketEvents } from './websocket-events';
 
-declare enum Events {
-  /**
-   * Invoked when the web socket has been closed.
-   * @param {Object} e
-   * @param {Number} e.code
-   * @param {String} e.reason
-   * @event
-   * @since 1.1.17
-   */
-  Close = 'close',
-  /**
-   * Invoked when an error occured on reading or writing to the network.
-   * @param {Object} e
-   * @param {String} e.message
-   * @param {Number} e.code
-   * @event
-   * @since 1.1.17
-   */
-  Failure = 'failure',
-  /**
-   * Invoked when a message has been received.
-   * @param {Object} params
-   * @param {String} params.string
-   * @param {Blob} params.blob
-   * @event
-   * @since 1.1.17
-   */
-  Message = 'message',
-  /**
-   * Invoked when a web socket has been accepted by the web socket server.
-   * @event
-   * @since 1.1.17
-   */
-  Open = 'open'
-}
-
-/**
- *
- * WebSocket creates a web socket client. It connects to a WebSocket server and then sending
- * and receiving data on the connection. {@link Net.WebSocket#url url}  parameter must be passed in constructor.
- *
- *     @example
- *     const WebSocket = require("@smartface/native/net/websocket");
- *
- *     var myWebSocket = new WebSocket({url: "your-server-url"});
- *     myWebSocket.onOpen = function() {
- *         console.log("Web socket opened.");
- *         console.log("Send string.");
- *         myWebSocket.send("some data");
- *     };
- *
- *     myWebSocket.onClose = function(e) {
- *         console.log("Socket closed.");
- *     }
- *
- *     myWebSocket.onMessage = function(e) {
- *         console.log("Message received.");
- *         console.log("Close socket connection.");
- *         myWebSocket.close({code: 1000});
- *     };
- *
- * @class Net.WebSocket
- * @since 1.1.17
- */
-declare class WebSocket extends NativeComponent implements IEventEmitter<Events> {
-  constructor(params?: Partial<WebSocket>);
-  protected emitter: EventEmitter<Events>;
-  on(eventName: Events, callback: (...args: any[]) => void): () => void;
-  once(eventName: Events, callback: (...args: any[]) => void): () => void;
-  off(eventName: Events, callback: (...args: any[]) => void): void;
-  emit(event: Events, ...args: any[]): void;
-
+export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEvents> {
   /**
    * Gets headers of socket connection.
    * If you want to change the headers, you have to call the constructor again (create a new instance).
@@ -83,7 +14,7 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * @ios
    * @since 1.1.17
    */
-  readonly headers: Record<string, string>;
+  headers: Record<string, string>;
 
   /**
    * Gets url of socket connection.
@@ -95,7 +26,7 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * @ios
    * @since 1.1.17
    */
-  readonly url: string;
+  url: string;
   /**
    * Close the web socket.
    * @param {Object} params
@@ -185,8 +116,46 @@ declare class WebSocket extends NativeComponent implements IEventEmitter<Events>
    * ````
    */
   onFailure(e: { code: number; message: string }): void;
-
-  static Events: typeof Events;
 }
 
-export = WebSocket;
+export class WebSocketBase implements IWebSocket {
+  constructor(params?: Partial<IWebSocket>) {}
+  get headers(): Record<string, string> {
+    throw new Error('Method not implemented.');
+  }
+  get url(): string {
+    throw new Error('Method not implemented.');
+  }
+  close(params: { code: number; reason?: string }): void {
+    throw new Error('Method not implemented.');
+  }
+  send(params: { data: any }): boolean {
+    throw new Error('Method not implemented.');
+  }
+  onOpen(): void {
+    throw new Error('Method not implemented.');
+  }
+  onMessage(e: { string: string; blob: Blob }): void {
+    throw new Error('Method not implemented.');
+  }
+  onClose(e: { code: number; reason: string }): void {
+    throw new Error('Method not implemented.');
+  }
+  onFailure(e: { code: number; message: string }): void {
+    throw new Error('Method not implemented.');
+  }
+  on(eventName: WebSocketEvents, callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  once(eventName: WebSocketEvents, callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  off(eventName: WebSocketEvents, callback?: EventListenerCallback): void {
+    throw new Error('Method not implemented.');
+  }
+  emit(event: WebSocketEvents, ...args: any[]): void {
+    throw new Error('Method not implemented.');
+  }
+  nativeObject: any;
+  static Events: typeof WebSocketEvents;
+}
