@@ -20,16 +20,16 @@ import { AccelerometerEvents } from './accelerometer-events';
  *
  */
 export class AccelerometerBase extends NativeComponent implements IEventEmitter<AccelerometerEvents> {
-  on(eventName: 'accelerate', callback: EventListenerCallback): () => void {
+  on(eventName: AccelerometerEvents, callback: EventListenerCallback): () => void {
     throw new Error('Method not implemented.');
   }
-  once(eventName: 'accelerate', callback: EventListenerCallback): () => void {
+  once(eventName: AccelerometerEvents, callback: EventListenerCallback): () => void {
     throw new Error('Method not implemented.');
   }
-  off(eventName: 'accelerate', callback?: EventListenerCallback): void {
+  off(eventName: AccelerometerEvents, callback?: EventListenerCallback): void {
     throw new Error('Method not implemented.');
   }
-  emit(event: 'accelerate', ...args: any[]): void {
+  emit(event: AccelerometerEvents, ...args: any[]): void {
     throw new Error('Method not implemented.');
   }
   /**
