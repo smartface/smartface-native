@@ -1,17 +1,17 @@
 import { HardwareBase } from './hardware';
 
 class Hardware implements HardwareBase {
-  UID = __SF_UIDevice.currentDevice().UUID;
-  IMEI = '-1';
-  brandName = 'Apple';
-  android = {};
-  get brandModel() {
+  static UID = __SF_UIDevice.currentDevice().UUID;
+  static IMEI = '-1';
+  static brandName = 'Apple';
+  static android = {};
+  static get brandModel() {
     return __SF_UIDevice.modelName();
   }
-  getDeviceModelName() {
-    return this.ios.modelName;
+  static getDeviceModelName() {
+    return Hardware.ios.modelName;
   }
-  get ios() {
+  static get ios() {
     return {
       microphone: {
         requestRecordPermission(callback) {

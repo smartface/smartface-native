@@ -7,12 +7,12 @@ const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
 class Hardware implements HardwareBase {
-  IMEI?: string;
-  MANUFACTURER = NativeBuild.MANUFACTURER;
-  ios = { microphone: { requestRecordPermission() {} } };
-  brandModel = NativeBuild.MODEL;
-  brandName = NativeBuild.BRAND;
-  get android() {
+  static IMEI = '-1';
+  static MANUFACTURER = NativeBuild.MANUFACTURER;
+  static ios = { microphone: { requestRecordPermission() {} } };
+  static brandModel = NativeBuild.MODEL;
+  static brandName = NativeBuild.BRAND;
+  static get android() {
     return {
       get IMEI() {
         const telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
@@ -23,13 +23,13 @@ class Hardware implements HardwareBase {
       }
     };
   }
-  get UID() {
+  static get UID() {
     const activity = AndroidConfig.activity;
     const contentResolver = activity.getContentResolver();
     return NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID);
   }
-  getDeviceModelName() {
-    return this.MANUFACTURER + ' ' + this.brandName + ' ' + this.brandModel;
+  static getDeviceModelName() {
+    return Hardware.MANUFACTURER + ' ' + Hardware.brandName + ' ' + Hardware.brandModel;
   }
 }
 
