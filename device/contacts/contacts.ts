@@ -1,33 +1,7 @@
 import Page from '../../ui/page';
 import Blob from '../../global/blob';
+import NativeComponent from '../../core/native-component';
 
-declare namespace Contacts {
-  /**
-   *
-   * @class Device.Contacts.Contact
-   * @since 4.1.5
-   *
-   * Encapsulates the necessary properties of Contact
-   *
-   */
-  export class Contact {
-    constructor(params?: Partial<Contact>);
-    phoneNumbers?: number[] | string[];
-    emailAddresses?: string[];
-    addresses?: string[];
-    urlAddresses?: string[];
-    firstName?: string;
-    lastName?: string;
-    middleName?: string;
-    namePrefix?: string;
-    nameSuffix?: string;
-    title?: string;
-    organization?: string;
-    department?: string;
-    nickname?: string;
-    photo?: Blob;
-  }
-}
 /**
  * @class Device.Contacts
  * @since 0.1
@@ -51,7 +25,8 @@ declare namespace Contacts {
  *
  *
  */
-declare class Contacts {
+export class ContactsBase extends NativeComponent {
+  static Contact: typeof ContactBase;
   /**
    * This function adds a contact to contact list with specified properties. You need check
    * {@link Application.Android.Permissions#WRITE_CONTACTS} before adding contact.
@@ -93,7 +68,9 @@ declare class Contacts {
    * @ios
    * @since 0.1
    */
-  static add(params: { contact: Contacts.Contact; onSuccess?: () => void; onFailure?: () => void }): void;
+  static add(params: { contact: ContactBase; onSuccess?: () => void; onFailure?: () => void }): void {
+    throw new Error('Method not implemented.');
+  }
   /**
    * This function shows contact list. It allows user to pick a data from the list.You need check
    * {@link Application.android.Permissions#READ_CONTACTS} before picking contact.
@@ -128,7 +105,9 @@ declare class Contacts {
       onSuccess: (contact: any) => void;
       onFailure?: () => void;
     }
-  ): void;
+  ): void {
+    throw new Error('Method not implemented.');
+  }
   /**
    * This function returns a contact array.You need check
    * {@link Application.Android.Permissions#READ_CONTACTS} before using this function.
@@ -155,7 +134,9 @@ declare class Contacts {
    * @ios
    * @since 0.1
    */
-  static fetchAll: (handlers: { onSuccess: (contacts: Contacts.Contact[]) => void; onFailure?: (error: string) => void }) => void;
+  static fetchAll(handlers: { onSuccess: (contacts: ContactBase[]) => void; onFailure?: (error: string) => void }): void {
+    throw new Error('Method not implemented.');
+  }
 
   /**
    * This function searches contacts by given phone number.You need check
@@ -183,12 +164,34 @@ declare class Contacts {
    * @ios
    * @since 4.3.0
    */
-  static getContactsByPhoneNumber: (
+  static getContactsByPhoneNumber(
     phoneNumber: String,
     handlers: {
-      onSuccess: (contacts: Contacts.Contact[]) => void;
+      onSuccess: (contacts: ContactBase[]) => void;
       onFailure?: (error: string) => void;
     }
-  ) => void;
+  ): void {
+    throw new Error('Method not implemented.');
+  }
 }
-export = Contacts;
+
+export class ContactBase extends NativeComponent {
+  constructor(params?: Partial<ContactBase>) {
+    super();
+    throw new Error('Method not implemented.');
+  }
+  phoneNumbers?: string[];
+  emailAddresses?: string[];
+  addresses?: string[];
+  urlAddresses?: string[];
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  namePrefix?: string;
+  nameSuffix?: string;
+  title?: string;
+  organization?: string;
+  department?: string;
+  nickname?: string;
+  photo?: Blob;
+}

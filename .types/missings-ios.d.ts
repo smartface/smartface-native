@@ -88,6 +88,10 @@ declare class __SF_GCRect {
   maxY?: number;
 }
 
+declare class __SF_CNContactPickerViewController {
+  static new(): any;
+}
+
 declare class __SF_NSRect extends __SF_GCRect {}
 
 declare class __SF_UIView extends __SF_NSOBject {
@@ -392,9 +396,9 @@ declare class __SF_CNContactPickerDelegate {
 
 declare class __SF_CNContactStore {
   static new(): __SF_CNContactStore;
-  requestAccess: (value: () => void) => void;
-  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void) => void;
-  executeSave(saveRequest: __SF_CNSaveRequest): void;
+  requestAccess: (value: () => void, failure: (...args: any[]) => void) => void;
+  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void, failure: (...args: any[]) => void) => void;
+  executeSave(saveRequest: __SF_CNSaveRequest): any;
 }
 
 declare class __SF_CNPhoneNumber {
