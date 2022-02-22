@@ -548,6 +548,38 @@ function NavigationView(params) {
         self.nativeObject.presentViewController(controllerToPresent, completionBlock, animated);
     };
 
+    this.presentBottomShet = (controllerToPresent, animated, completionBlock, options) => {
+        // let opitonss = {
+        //     cornerRadius: 60,
+        //     detents: ["medium", "large"]
+        //     isGrabberVisible: false
+        // }
+        self.nativeObject.presentSheetController(this.applySheetOptions(controllerToPresent, opitonss), completionBlock, animated);
+    }
+    
+    this.applySheetOptions = (controller, options) => {
+        if(options.cornerRadius) controller.sheetPresentationController.cornerRadius(controller.sheetPresentationController, options.cornerRadius)
+        if(options.detents && options.detents.length > 0) {
+            let customDetents = [];
+            options.detents.map((key) => {
+                if (key == "medium") {
+                    customDetents.push(controller.sheetPresentationController.medium());
+                }
+                if (key == "large") {
+                    customDetents.push(controller.sheetPresentationController.large());
+                }
+            })
+            if (customDetents.length > 0) {
+                controller.sheetPresentationController.detents = customDetents
+            }
+        }
+        if (typeof options.isGrabberVisible == "boolean") {
+            controller.sheetPresentationController.prefersGrabberVisible = options.isGrabberVisible;
+        }
+
+        return controller;
+    }
+
     this.dismiss = function(completionBlock, animated) {
         self.nativeObject.dismissViewController(completionBlock, animated);
     };
