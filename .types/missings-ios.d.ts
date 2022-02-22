@@ -1171,7 +1171,7 @@ declare class __SF_SMFCrypto {
 }
 
 declare class __SF_Database {
-  constructor(path: string | string);
+  constructor(path: string);
   errorHandler: (e: any) => void;
   run(sqlCommand: string): void;
   prepare(sqlCommand: string): void;
