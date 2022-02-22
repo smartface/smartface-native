@@ -1,3 +1,6 @@
 import ApplicationBase from './application';
 
-export const Application: typeof ApplicationBase = require(`./application.${Device.deviceOS.toLowerCase()}`).default;
+const Application: typeof ApplicationBase = require(`./application.${Device.deviceOS.toLowerCase()}`).default;
+type Application = ApplicationBase;
+
+export default Application;
