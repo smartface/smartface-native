@@ -137,6 +137,7 @@ export type iOSProps = Partial<{
    * @since 4.0.0
    */
   contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+  onOpenNewWindow: (e?:{url: string}) => void;
 }>;
 
 /**
@@ -469,7 +470,7 @@ interface IWebView<TEvent extends string = WebViewEvents, TIOS = {}, TAND = {}> 
   clearAllData(): void;
 }
 
-export declare class AbstractWebView<TEvent extends string = WebViewEvents> extends AbstractView<TEvent> implements IWebView<TEvent> {
+export declare class AbstractWebView<TEvent extends string = WebViewEvents> extends AbstractView<TEvent> implements IWebView<TEvent, iOSProps> {
   openLinkInside: boolean;
   scrollEnabled: boolean;
   userAgent: string;

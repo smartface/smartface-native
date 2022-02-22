@@ -10,10 +10,17 @@ declare class __SF_UIColor extends __SF_NSOBject {
   static clearColor(): __SF_UIColor;
   static yellowColor(): __SF_UIColor;
   static whiteColor(): __SF_UIColor;
+  static grayColor(): __SF_UIColor;
+  static redColor(): __SF_UIColor;
   constructor(r: number, g: number, b: number);
   constructor(a: number, r: number, g: number, b: number);
   layerToImage(): __SF_UIImage;
+  components(): { red: number; blue: number; green: number; alpha: number };
   frame: __SF_NSRect;
+}
+
+declare namespace SF {
+  export function requireClass(name: string): any;
 }
 
 declare class __SF_UIImage extends __SF_NSOBject {
@@ -58,8 +65,8 @@ declare class __SF_SMFUILabel extends __SF_UIView {
 }
 
 declare class __SF_Dispatch {
-  static mainAsyncAfter: () => void;
-  static mainAsync: (fun?: (...args) => void) => void;
+  static mainAsyncAfter: (fun?: (...args: any[]) => void, time?: number) => void;
+  static mainAsync: (fun?: (...args: any[]) => void) => void;
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
@@ -127,6 +134,7 @@ declare class __SF_UIView extends __SF_NSOBject {
 declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;
   synchronize(): any;
+  dictionaryRepresentation(): any;
   constructor(param: string);
 }
 declare class __SF_File {
@@ -158,7 +166,7 @@ declare class __SF_LAContext {
 }
 
 declare class __SF_NSLocale extends __SF_NSOBject {
-  constructor(params: { locale: string });
+  constructor(locale: string);
   static currentLocale(): any;
 }
 
@@ -686,7 +694,7 @@ declare class __SF_NSURL extends __SF_NSOBject {
 }
 
 declare class __SF_NSURLRequest extends __SF_NSOBject {
-  requestWithURL(url: __SF_NSURL): any;
+  static requestWithURL(url: __SF_NSURL): any;
 }
 
 declare class __SF_UITabBarController extends __SF_UINavigationController {
@@ -1187,7 +1195,7 @@ declare class __SF_UILocalNotification {
 }
 
 declare class __SF_UIUserNotificationSettings {
-  static settingsForTypesCategories(type: number): __SF_UIUserNotificationSettings;
+  static settingsForTypesCategories(type: number, param?: any): __SF_UIUserNotificationSettings;
 }
 
 declare class __SF_UIUserNotificationTypeSound {}
