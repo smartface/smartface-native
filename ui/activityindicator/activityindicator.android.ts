@@ -1,11 +1,12 @@
 import { ViewAndroid } from '../view/view.android';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
+import { ViewEvents } from '../view/view-event';
 
 const NativeProgressBar = requireClass('android.widget.ProgressBar');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 
-export default class ActivityIndicatorAndroid extends ViewAndroid {
+export default class ActivityIndicatorAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> {
   private _color: Color;
   ios = { type: {} }; //TODO: Find a better way for this
   constructor(params: Partial<ActivityIndicatorAndroid> = {}) {

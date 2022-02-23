@@ -1,5 +1,6 @@
 import Color from '../../ui/color';
-import IView from '../view/view';
+import IView from '../view';
+import { ViewEvents } from '../view/view-event';
 import ViewIOS from '../view/view.ios';
 import { AbstractActivityIndicator } from './activityindicator';
 
@@ -7,7 +8,7 @@ type iOSParams = {
   activityIndicatorViewStyle: keyof typeof AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle;
 };
 
-export default class ActivityIndicatorIOS extends ViewIOS implements IView {
+export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent> {
   protected _ios: iOSParams & ViewIOS['_ios'];
   private _color: Color;
   _nativeObject: __SF_UIActivityIndicatorView;

@@ -1,5 +1,6 @@
 import Color from '../color';
-import { AbstractView } from '../view/view';
+import { AbstractView } from '../view';
+import { ViewEvents } from '../view/view-event';
 
 enum ActivityIndicatorViewStyle {
   /**
@@ -19,7 +20,7 @@ enum ActivityIndicatorViewStyle {
    */
   NORMAL = 1
 }
-export class AbstractActivityIndicator extends AbstractView {
+export class AbstractActivityIndicator<TEvent extends string = ViewEvents> extends AbstractView<TEvent> {
   /**
    * Gets/sets color of the activity indicator.
    *
