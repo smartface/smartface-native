@@ -17,7 +17,7 @@ class AccelerometerAndroid extends NativeEventEmitterComponent<AccelerometerEven
     super();
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        this._nativeSFAccelerometerListener.onAccelerateCallback(e);
+        this._nativeSFAccelerometerListener.onAccelerateCallback?.(e);
       }
     };
 

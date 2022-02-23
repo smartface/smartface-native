@@ -11,7 +11,7 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents> 
     this.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        this.monitonManager.callback && this.monitonManager.callback(e);
+        this.monitonManager.callback?.(e);
       }
     };
 
