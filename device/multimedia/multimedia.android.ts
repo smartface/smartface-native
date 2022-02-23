@@ -1,4 +1,4 @@
-import { CameraDevice, CameraFlashMode, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams } from '.';
+import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from '.';
 import File from '../../io/file';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
@@ -112,18 +112,7 @@ class MultimediaAndroid extends MultimediaBase {
       page.nativeObject.startActivityForResult(takePictureIntent, this.CAMERA_REQUEST);
     } else this.startRecordVideoWithExtraField({ _captureParams: this._captureParams });
   }
-  recordVideo(params: {
-    page: Page;
-    maximumDuration?: Number;
-    videoQuality?: Number;
-    ios?: {
-      cameraFlashMode?: CameraFlashMode;
-      cameraDevice?: CameraDevice;
-    };
-    onSuccess?: (params: { video: File }) => void;
-    onCancel?: () => void;
-    onFailure?: (e: { message: string }) => void;
-  }) {
+  recordVideo(params: RecordVideoParams) {
     if (!(params.page instanceof Page)) throw new TypeError('Page parameter required');
 
     this._pickParams = {};
@@ -159,7 +148,7 @@ class MultimediaAndroid extends MultimediaBase {
      */
     params.page.nativeObject.startActivityForResult(intent, this.PICK_FROM_GALLERY);
   }
-  convertToMp4(params: { videoFile: File; outputFileName: String; onCompleted: (params: { video: File }) => void; onFailure?: () => void }) {
+  convertToMp4(params: ConvertToMp4Params) {
     const { videoFile, outputFileName, onCompleted, onFailure } = params;
 
     if (!videoFile || !outputFileName) throw new Error('Video File or Output File Name cannot be undefined');
