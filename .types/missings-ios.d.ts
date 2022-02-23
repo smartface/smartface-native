@@ -629,7 +629,7 @@ declare class __SF_UINavigationController {
   popToViewControllerAnimated(uiViewController: __SF_UIViewController, animated: boolean): void;
   popViewControllerAnimated(animated: boolean): void;
   presentViewController(controllerToPresent: __SF_UIViewController, completionBlock: () => void, animated: boolean): void;
-  dismissViewController(completionBlock: () => void, animated: boolean): void;
+  dismissViewController(completionBlock?: () => void, animated?: boolean): void;
   delegate: __SF_SMFNavigationControllerDelegate;
   navigationBar: __SF_UINavigationBar;
 }
@@ -1024,6 +1024,7 @@ declare class __SF_UIImagePickerController extends __SF_UINavigationController {
     fileName: string,
     callBack: (e: any) => void
   ): void;
+  setValueForKey(value: any, key: string): void;
 }
 
 declare class __SF_UIImagePickerControllerDelegate extends __SF_SMFNavigationControllerDelegate {
@@ -1054,11 +1055,23 @@ declare class __SF_YPImagePicker {
 }
 
 declare class __SF_TOCropViewController {
-  static createWithCroppingStyleImage(e: any): __SF_TOCropViewController;
+  static createWithCroppingStyleImage(e: any, imageNativeObject?: any): __SF_TOCropViewController;
   title: string;
   setCustomAspect(e: { width: number; height: number }): void;
   delegate: __SF_TOCropViewControllerDelegate;
   delegateStrong: __SF_TOCropViewControllerDelegate;
+  aspectRatioLockEnabled: boolean;
+  aspectRatioPickerButtonHidden: boolean;
+  resetAspectRatioEnabled: boolean;
+  aspectRatioLockDimensionSwapEnabled: boolean;
+  resetButtonHidden: boolean;
+  rotateButtonsHidden: boolean;
+  showOnlyIcons: boolean;
+  doneButtonTitle: string;
+  cancelButtonTitle: string;
+  doneButtonColor: string;
+  cancelButtonColor: string;
+  dismissViewController(completionBlock?: () => void, animated?: boolean): void;
 }
 
 declare class __SF_TOCropViewControllerDelegate {

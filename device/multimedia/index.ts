@@ -2,378 +2,297 @@ import Page from '../../ui/page';
 import Image from '../../ui/image';
 import File from '../../io/file';
 import Color from '../../ui/color';
-/**
- * @class Device.Multimedia
- * @since 0.1
- * @android
- * @ios
- *
- * Multimedia manages camera, video and image.
- *
- *     @example
- *     const Page = require("@smartface/native/ui/page");
- *     const extend = require("js-base/core/extend");
- *     const Button = require('@smartface/native/ui/button');
- *     const Multimedia = require("@smartface/native/device/multimedia");
- *
- *        var Page1 = extend(Page)(
- *            function(_super) {
- *                _super(this, {
- *                    onShow: function(params) {
- *                    },
- *                    onLoad: function(){
- *                       var self = this;
- *                        var button = new Button();
- *                        button.flexGrow = 1;
- *                        button.text = "Button"
- *
- *                        button.onPress = function(){
- *
- *                           Multimedia.capturePhoto({
- *                               onSuccess: capturedImage,
- *                                page : self
- *                            });
- *
- *                            function capturedImage(picked) {
- *                                var image = picked.image;
- *                            }
- *                        }
- *                        this.layout.addChild(button);
- *                    }
- *                });
- *
- *            }
- *        );
- *
- *       module.exports = Page1;
- *
- *
- */
-declare namespace Multimedia {
+
+export enum ActionType {
   /**
-   * @enum {Number} Device.Multimedia.ActionType
+   * @property {Number} IMAGE_CAPTURE
+   * @static
+   * @readonly
+   * @android
+   * @ios
    * @since 0.1
+   */
+  IMAGE_CAPTURE = 0,
+  /**
+   * @property {Number} VIDEO_CAPTURE
+   * @static
+   * @readonly
    * @android
    * @ios
-   *
-   * ActionType is used to indicate type of the camera action.
-   */
-  enum ActionType {
-    /**
-     * @property {Number} IMAGE_CAPTURE
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    IMAGE_CAPTURE = 0,
-    /**
-     * @property {Number} VIDEO_CAPTURE
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    VIDEO_CAPTURE = 1
-  }
-  /**
-   * @enum {Number} Device.Multimedia.Type
    * @since 0.1
-   * @android
-   * @ios
-   *
-   * Type is used to indicate type of the media.
    */
-  enum Type {
-    /**
-     * @property {Number} IMAGE
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    IMAGE = 0,
-    /**
-     * @property {Number} VIDEO
-     * @static
-     * @readonly
-     * @since 0.1
-     * @android
-     * @ios
-     */
-    VIDEO = 1
-  }
-  enum CameraFlashMode {
-    OFF,
-    AUTO,
-    ON
-  }
-  enum CameraDevice {
-    REAR = 0,
-    FRONT = 1
-  }
-  enum GalleryAuthorizationStatus {
-    NotDetermined = 0,
-    Restricted = 1,
-    Denied = 2,
-    Authorized = 3
-  }
-  enum CameraAuthorizationStatus {
-    NotDetermined = 0,
-    Restricted = 1,
-    Denied = 2,
-    Authorized = 3
-  }
-  namespace iOS {
-    /**
-     * @enum {Number} Device.Multimedia.galleryAuthorizationStatus
-     * @since 2.0.11
-     * @ios
-     * @deprecated 3.1.1 Use {@link Device.Multimedia.iOS.GalleryAuthorizationStatus}
-     */
-    enum GalleryAuthorizationStatus {
-      /**
-       * User has not yet made a choice with regards to this application.
-       *
-       * @property {Number} NotDetermined
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      NOTDETERMINED = 0,
-      /**
-       * This application is not authorized to access photo data.
-       * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
-       *
-       * @property {Number} Restricted
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      RESTRICTED = 1,
-      /**
-       * User has explicitly denied this application access to photos data.
-       *
-       * @property {Number} Denied
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      DENIED = 2,
-      /**
-       * User has authorized this application to access photos data.
-       *
-       * @property {Number} Authorized
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      AUTHORIZED = 3
-    }
-    /**
-     * @enum {Number} Device.Multimedia.cameraAuthorizationStatus
-     * @since 2.0.11
-     * @ios
-     * @deprecated 3.1.1 Use {@link Device.Multimedia.iOS.CameraAuthorizationStatus}
-     */
-    enum CameraAuthorizationStatus {
-      /**
-       * User has not yet made a choice with regards to this application.
-       *
-       * @property {Number} NotDetermined
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      NOTDETERMINED = 0,
-      /**
-       * This application is not authorized to access camera.
-       * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
-       *
-       * @property {Number} Restricted
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      RESTRICTED = 1,
-      /**
-       * User has explicitly denied this application access to camera.
-       *
-       * @property {Number} Denied
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      DENIED = 2,
-      /**
-       * User has authorized this application to access camera.
-       *
-       * @property {Number} Authorized
-       * @static
-       * @ios
-       * @readonly
-       * @since 2.0.11
-       */
-      AUTHORIZED = 3
-    }
-    /**
-     * @enum {Number} Device.Multimedia.iOS.CameraFlashMode
-     * @since 3.1.1
-     * @ios
-     */
-    enum CameraFlashMode {
-      /**
-       * Specifies that flash illumination is always off, no matter what the ambient light conditions are.
-       *
-       * @property {Number} OFF
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      OFF,
-      /**
-       * Specifies that the device should consider ambient light conditions to automatically determine whether or not to use flash illumination.
-       *
-       * @property {Number} AUTO
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      AUTO,
-      /**
-       * Specifies that flash illumination is always on, no matter what the ambient light conditions are.
-       *
-       * @property {Number} ON
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      ON
-    }
-    /**
-     * @enum {Number} Device.Multimedia.iOS.CameraDevice
-     * @since 4.3.0
-     * @ios
-     */
-    enum CameraDevice {
-      /**
-       * Specifies the camera on the rear of the device.
-       *
-       * @property {Number} REAR
-       * @static
-       * @ios
-       * @readonly
-       * @since 4.3.0
-       */
-      REAR = 0,
-      /**
-       * Specifies the camera on the front of the device.
-       *
-       * @property {Number} FRONT
-       * @static
-       * @ios
-       * @readonly
-       * @since 4.3.0
-       */
-      FRONT = 1
-    }
-  }
-
-  /**
-   * These enums used to specify shape of crop window.
-   *
-   * @enum {Number} Device.Multimedia.CropShape
-   * @since 4.3.6
-   * @android
-   * @ios
-   */
-  enum CropShape {
-    /**
-     * Specifies that crop window shape is oval.
-     *
-     * @property {Number} OVAL
-     * @static
-     * @android
-     * @ios
-     * @readonly
-     * @since 4.3.6
-     */
-    OVAL = 2,
-    /**
-     * Specifies that crop window shape is rectangle.
-     *
-     * @property {Number} RECTANGLE
-     * @static
-     * @android
-     * @ios
-     * @readonly
-     * @since 4.3.6
-     */
-    RECTANGLE = 1
-  }
-
-  namespace Android {
-    /**
-     * These enums used to specify shape of crop window.
-     *
-     * @enum {Number} Device.Multimedia.Android.CropShape
-     * @since 4.1.5
-     * @android
-     * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape}
-     */
-    enum CropShape {
-      /**
-       * Specifies that crop window shape is oval.
-       *
-       * @property {Number} OVAL
-       * @static
-       * @android
-       * @readonly
-       * @since 4.1.5
-       * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.OVAL}
-       */
-      OVAL = 2,
-
-      /**
-       * Specifies that crop window shape is rectangle.
-       *
-       * @property {Number} RECTANGLE
-       * @static
-       * @android
-       * @readonly
-       * @since 4.1.5
-       * @deprecated 4.3.6 Use {@link Device.Multimedia.CropShape.RECTANGLE}
-       */
-      RECTANGLE = 1
-    }
-  }
+  VIDEO_CAPTURE = 1
 }
 
-declare type MultimediaParams = {
-  type?: Multimedia.Type;
+export enum Type {
+  /**
+   * @property {Number} IMAGE
+   * @static
+   * @readonly
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  IMAGE = 0,
+  /**
+   * @property {Number} VIDEO
+   * @static
+   * @readonly
+   * @since 0.1
+   * @android
+   * @ios
+   */
+  VIDEO = 1
+}
+
+export enum CropShape {
+  /**
+   * Specifies that crop window shape is oval.
+   *
+   * @property {Number} OVAL
+   * @static
+   * @android
+   * @ios
+   * @readonly
+   * @since 4.3.6
+   */
+  OVAL = 2,
+  /**
+   * Specifies that crop window shape is rectangle.
+   *
+   * @property {Number} RECTANGLE
+   * @static
+   * @android
+   * @ios
+   * @readonly
+   * @since 4.3.6
+   */
+  RECTANGLE = 1
+}
+
+export enum CameraDevice {
+  /**
+   * Specifies the camera on the rear of the device.
+   *
+   * @property {Number} REAR
+   * @static
+   * @ios
+   * @readonly
+   * @since 4.3.0
+   */
+  REAR = 0,
+  /**
+   * Specifies the camera on the front of the device.
+   *
+   * @property {Number} FRONT
+   * @static
+   * @ios
+   * @readonly
+   * @since 4.3.0
+   */
+  FRONT = 1
+}
+
+export enum CameraAuthorizationStatus {
+  /**
+   * User has not yet made a choice with regards to this application.
+   *
+   * @property {Number} NotDetermined
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  NOTDETERMINED = 0,
+  /**
+   * This application is not authorized to access camera.
+   * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+   *
+   * @property {Number} Restricted
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  RESTRICTED = 1,
+  /**
+   * User has explicitly denied this application access to camera.
+   *
+   * @property {Number} Denied
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  DENIED = 2,
+  /**
+   * User has authorized this application to access camera.
+   *
+   * @property {Number} Authorized
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  AUTHORIZED = 3
+}
+
+export enum CameraFlashMode {
+  /**
+   * Specifies that flash illumination is always off, no matter what the ambient light conditions are.
+   *
+   * @property {Number} OFF
+   * @static
+   * @ios
+   * @readonly
+   * @since 3.1.1
+   */
+  OFF,
+  /**
+   * Specifies that the device should consider ambient light conditions to automatically determine whether or not to use flash illumination.
+   *
+   * @property {Number} AUTO
+   * @static
+   * @ios
+   * @readonly
+   * @since 3.1.1
+   */
+  AUTO,
+  /**
+   * Specifies that flash illumination is always on, no matter what the ambient light conditions are.
+   *
+   * @property {Number} ON
+   * @static
+   * @ios
+   * @readonly
+   * @since 3.1.1
+   */
+  ON
+}
+
+export enum GalleryAuthorizationStatus {
+  /**
+   * User has not yet made a choice with regards to this application.
+   *
+   * @property {Number} NotDetermined
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  NOTDETERMINED = 0,
+  /**
+   * This application is not authorized to access photo data.
+   * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+   *
+   * @property {Number} Restricted
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  RESTRICTED = 1,
+  /**
+   * User has explicitly denied this application access to photos data.
+   *
+   * @property {Number} Denied
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  DENIED = 2,
+  /**
+   * User has authorized this application to access photos data.
+   *
+   * @property {Number} Authorized
+   * @static
+   * @ios
+   * @readonly
+   * @since 2.0.11
+   */
+  AUTHORIZED = 3
+}
+export declare type ConvertToMp4Params = {
+  videoFile: File;
+  outputFileName: string;
+  onCompleted: (params: { video: File }) => void;
+  onFailure?: () => void;
+};
+
+export declare type PickMultipleFromGalleryParams = {
+  type?: Type;
   page: Page;
-  action?: Multimedia.ActionType;
+  android?: {
+    fixOrientation?: boolean;
+    maxImageSize?: number;
+  };
+  onSuccess: (params: { assets: [{ image?: Image; file?: File | null }] }) => void;
+  onCancel?: () => void;
+  onFailure?: (e: [{ message: string; fileName: string | null; uri: string }]) => void;
+};
+
+export declare type LaunchCropperParams = {
+  page: Page;
+  asset: File | Image;
+  aspectRatio?: { x: number; y: number };
+  cropShape?: CropShape;
+  headerBarTitle?: string;
+  enableFreeStyleCrop?: boolean;
+  android?: {
+    rotateText?: string;
+    scaleText?: string;
+    cropText?: string;
+    hideBottomControls?: boolean;
+    maxResultSize?: {
+      height: number;
+      width: number;
+    };
+    fixOrientation?: boolean;
+    maxImageSize?: number;
+  };
+  ios?: {
+    aspectRatioPickerButtonHidden: boolean;
+    resetButtonHidden?: boolean;
+    resetAspectRatioEnabled?: boolean;
+    aspectRatioLockDimensionSwapEnabled?: boolean;
+    rotateButtonsHidden?: boolean;
+    showOnlyIcons?: boolean;
+    doneButtonTitle?: string;
+    cancelButtonTitle?: string;
+    doneButtonColor?: Color;
+    cancelButtonColor?: Color;
+  };
+  onSuccess: (params: { image?: Image }) => void;
+  onCancel?: () => void;
+  onFailure?: (e: { message: string }) => void;
+};
+
+export declare type RecordVideoParams = {
+  page: Page;
+  maximumDuration?: Number;
+  videoQuality?: Number;
+  ios?: {
+    cameraFlashMode?: CameraFlashMode;
+    cameraDevice?: CameraDevice;
+  };
+  onSuccess?: (params: { video: File }) => void;
+  onCancel?: () => void;
+  onFailure?: (e: { message: string }) => void;
+};
+
+export declare type MultimediaParams = {
+  type?: Type;
+  page: Page;
+  action?: ActionType;
   allowsEditing?: boolean;
   aspectRatio?: { x: number; y: number };
   ios?: {
-    cameraFlashMode?: Multimedia.iOS.CameraFlashMode;
-    cameraDevice?: Multimedia.iOS.CameraDevice;
+    cameraFlashMode?: CameraFlashMode;
+    cameraDevice?: CameraDevice;
   };
   android?: {
-    cropShape?: Multimedia.CropShape;
+    cropShape?: CropShape;
     rotateText?: string;
     scaleText?: string;
     cropText?: string;
@@ -392,7 +311,40 @@ declare type MultimediaParams = {
   onFailure?: (e: { message: string }) => void;
 };
 
-declare class Multimedia {
+export declare class MultimediaBase {
+  /**
+   * @enum {Number} Device.Multimedia.ActionType
+   * @since 0.1
+   * @android
+   * @ios
+   *
+   * ActionType is used to indicate type of the camera action.
+   */
+  static readonly ActionType: ActionType;
+  /**
+   * @enum {Number} Device.Multimedia.Type
+   * @since 0.1
+   * @android
+   * @ios
+   *
+   * Type is used to indicate type of the media.
+   */
+  static readonly Type: Type;
+  /**
+   * These enums used to specify shape of crop window.
+   *
+   * @enum {Number} Device.Multimedia.CropShape
+   * @since 4.3.6
+   * @android
+   * @ios
+   */
+  static readonly CropShape: CropShape;
+  /**
+   * @enum {Number} Device.Multimedia.CameraDevice
+   * @since 4.3.0
+   * @ios
+   */
+  static readonly CameraDevice: CameraDevice;
   /**
    * These enums used to specify quality of video
    *
@@ -580,18 +532,7 @@ declare class Multimedia {
    * @ios
    * @since 4.3.0
    */
-  static recordVideo(params: {
-    page: Page;
-    maximumDuration?: Number;
-    videoQuality?: Number;
-    ios?: {
-      cameraFlashMode?: Multimedia.iOS.CameraFlashMode;
-      cameraDevice?: Multimedia.iOS.CameraDevice;
-    };
-    onSuccess?: (params: { video: File }) => void;
-    onCancel?: () => void;
-    onFailure?: (e: { message: string }) => void;
-  }): void;
+  static recordVideo(params: RecordVideoParams): void;
 
   /**
    * @method pickFromGallery
@@ -693,17 +634,7 @@ declare class Multimedia {
    * @ios
    * @since 4.3.6
    */
-  static pickMultipleFromGallery(params: {
-    type?: Multimedia.Type;
-    page: Page;
-    android?: {
-      fixOrientation?: boolean;
-      maxImageSize?: number;
-    };
-    onSuccess: (params: { assets: [{ image?: Image; file?: File | null }] }) => void;
-    onCancel?: () => void;
-    onFailure?: (e: [{ message: string; fileName: string | null; uri: string }]) => void;
-  }): void;
+  static pickMultipleFromGallery(params: PickMultipleFromGalleryParams): void;
 
   /**
    * @method launchCropper
@@ -754,41 +685,7 @@ declare class Multimedia {
    * @ios
    * @since 4.3.6
    */
-  static launchCropper(params: {
-    page: Page;
-    asset: File | Image;
-    aspectRatio?: { x: number; y: number };
-    cropShape?: Multimedia.CropShape;
-    headerBarTitle?: string;
-    enableFreeStyleCrop?: boolean;
-    android?: {
-      rotateText?: string;
-      scaleText?: string;
-      cropText?: string;
-      hideBottomControls?: boolean;
-      maxResultSize?: {
-        height: number;
-        width: number;
-      };
-      fixOrientation?: boolean;
-      maxImageSize?: number;
-    };
-    ios?: {
-      aspectRatioPickerButtonHidden: boolean;
-      resetButtonHidden?: boolean;
-      resetAspectRatioEnabled?: boolean;
-      aspectRatioLockDimensionSwapEnabled?: boolean;
-      rotateButtonsHidden?: boolean;
-      showOnlyIcons?: boolean;
-      doneButtonTitle?: string;
-      cancelButtonTitle?: string;
-      doneButtonColor?: Color;
-      cancelButtonColor?: Color;
-    };
-    onSuccess: (params: { image?: Image }) => void;
-    onCancel?: () => void;
-    onFailure?: (e: { message: string }) => void;
-  }): void;
+  static launchCropper(params: LaunchCropperParams): void;
 
   /**
    * @method convertToMp4
@@ -809,7 +706,7 @@ declare class Multimedia {
    *
    * @param {Object} params Object describing parameters for the function.
    * @param {IO.File} params.videoFile Input Video file to convert
-   * @param {String} params.outputFileName Converted video file name
+   * @param {string} params.outputFileName Converted video file name
    * @param {Function} params.onCompleted Callback for success situation.
    * @param {Object} params.onCompleted.params
    * @param {IO.File} params.onCompleted.params.video Converted video file
@@ -818,7 +715,7 @@ declare class Multimedia {
    * @ios
    * @since 4.2.2
    */
-  static convertToMp4(params: { videoFile: File; outputFileName: String; onCompleted: (params: { video: File }) => void; onFailure?: () => void }): void;
+  static convertToMp4(params: ConvertToMp4Params): void;
 
   /**
    * Indicates whether the device has camera feature.
@@ -859,7 +756,7 @@ declare class Multimedia {
      * @ios
      * @since 2.0.11
      */
-    getGalleryAuthorizationStatus(): Multimedia.iOS.GalleryAuthorizationStatus;
+    getGalleryAuthorizationStatus(): GalleryAuthorizationStatus;
     /**
      * @method getCameraAuthorizationStatus
      *
@@ -867,8 +764,11 @@ declare class Multimedia {
      * @ios
      * @since 2.0.11
      */
-    getCameraAuthorizationStatus(): Multimedia.iOS.CameraAuthorizationStatus;
+    getCameraAuthorizationStatus(): CameraAuthorizationStatus;
   }>;
 }
 
-export = Multimedia;
+const Multimedia: typeof MultimediaBase = require(`./multimedia.${Device.deviceOS.toLowerCase()}`).default;
+type Multimedia = MultimediaBase;
+
+export default Multimedia;

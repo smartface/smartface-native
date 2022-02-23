@@ -2,7 +2,12 @@ import { Point2D } from '../../primitive/point2d';
 import { Size } from '../../primitive/size';
 
 namespace Invocation {
-  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: (Invocation.Argument )[], returnValueType?: string): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument{
+  export function invokeInstanceMethod(
+    target: __SF_NSOBject,
+    selector: string,
+    argumentsArray: Invocation.Argument[],
+    returnValueType?: string
+  ): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument {
     const invocation = __SF_NSInvocation.createInvocationWithSelectorInstance(selector, target);
     if (invocation) {
       invocation.target = target;
@@ -19,7 +24,7 @@ namespace Invocation {
     }
   }
 
-  export function invokeClassMethod(target: string, selector: string, argumentsArray: Invocation.Argument[], returnValueType: string): __SF_NSOBject {
+  export function invokeClassMethod(target: string, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: string): __SF_NSOBject {
     const invocation = __SF_NSInvocation.createClassInvocationWithSelectorInstance(selector, target);
     if (invocation) {
       invocation.setClassTargetFromString(target);
