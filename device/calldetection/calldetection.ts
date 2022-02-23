@@ -110,7 +110,3 @@ export class ICallDetection extends NativeEventEmitterComponent<CallDetectionEve
    */
   onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
 }
-
-export class CallDetectionBase extends NativeEventEmitterComponent<CallDetectionEvents> implements ICallDetection {
-  onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
-}

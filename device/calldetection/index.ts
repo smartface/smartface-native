@@ -1,6 +1,6 @@
-import { CallDetectionBase } from './calldetection';
+import { ICallDetection } from './calldetection';
 
-const CallDetection: typeof CallDetectionBase = require(`./calldetection.${Device.deviceOS.toLowerCase()}`).default;
-type CallDetection = CallDetectionBase;
+const CallDetection: ICallDetection = require(`./calldetection.${Device.deviceOS.toLowerCase()}`).default;
+type CallDetection = ICallDetection;
 
 export default CallDetection;
