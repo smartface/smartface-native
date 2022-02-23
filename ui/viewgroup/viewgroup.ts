@@ -1,7 +1,7 @@
 import { EventType } from "core/eventemitter/EventType";
 import { ExtractEventValues } from "core/eventemitter/extract-event-values";
 import NativeEventEmitterComponent from "core/native-event-emitter-component";
-import IView, { AbstractView } from "../view/view";
+import IView, { AbstractView } from "../view";
 import { ViewGroupEvents } from "./viewgroup-events";
 
 /**

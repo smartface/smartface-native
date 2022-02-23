@@ -4,7 +4,7 @@ import File from '../../io/file';
 import ContentInsetAdjustment from '../ios/contentinsetadjustment';
 import { Boundary } from '../../primitive/boundary';
 import { WebViewEvents } from './webview-events';
-import IView, { AbstractView } from '../view/view';
+import IView, { AbstractView } from '../view';
 
 export type AndroidProps = Partial<{
   /**

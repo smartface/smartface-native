@@ -1,5 +1,5 @@
 import Color from '.';
-import { AbstractColor, GradientDirection } from './color';
+import { AbstractColor, GradientDirection } from '.';
 
 export default class ColorIOS extends AbstractColor {
   constructor(params: { color: __SF_UIColor | __SF_CAGradientLayer }) {
@@ -40,7 +40,7 @@ export default class ColorIOS extends AbstractColor {
       y: params.direction === GradientDirection.HORIZONTAL ? 0 : 1
     };
     return new Color({
-      color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, pointStart, pointEnd)
+      color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, pointStart, pointEnd) as any
     });
   }
   static red(color: ColorIOS): number {
