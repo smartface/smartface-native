@@ -6,7 +6,7 @@ function manageNativeContact(contact) {
     returnValue.displayName = contact.givenName + ' ' + contact.familyName;
   }
 
-  const phoneNumbers = [];
+  const phoneNumbers: string[] = [];
   for (const number in contact.phoneNumbers) {
     // Added this check to resolve the sonar issue.
     // hasOwnProperty() is used to filter out properties from the object's prototype chain.
@@ -306,7 +306,7 @@ class ContactsIOS extends ContactsBase {
       );
     }
   }
-  getAll(params) {
+  getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: Contact[]) => void }) {
     //Depracated on 4.1.5
     const store = __SF_CNContactStore.new();
     store.requestAccess(
