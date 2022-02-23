@@ -48,9 +48,7 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
 
     const ios = {
       locationServicesEnabled() {},
-      getAuthorizationStatus() {
-        return true;
-      },
+      getAuthorizationStatus() {},
       authorizationStatus: {}
     };
     Object.assign(this.ios, ios);
@@ -77,7 +75,7 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
     };
     Object.assign(this.android, android);
   }
-  locationCallback = function (latitude, longitude) {
+  locationCallback = (latitude, longitude) => {
     this._onLocationChanged &&
       this._onLocationChanged({
         latitude,
