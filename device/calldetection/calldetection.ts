@@ -1,5 +1,4 @@
-import { IEventEmitter } from '../../core/eventemitter';
-import NativeComponent from '../../core/native-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { CallDetectionEvents } from './calldetection-events';
 
 export enum State {
@@ -87,19 +86,7 @@ export enum State {
  *
  */
 
-export class CallDetectionBase extends NativeComponent implements IEventEmitter<CallDetectionEvents> {
-  on(eventName: CallDetectionEvents, callback: (...args: any) => void): () => void {
-    throw new Error('Method not implemented.');
-  }
-  once(eventName: CallDetectionEvents, callback: (...args: any) => void): () => void {
-    throw new Error('Method not implemented.');
-  }
-  off(eventName: CallDetectionEvents, callback?: (...args: any) => void): void {
-    throw new Error('Method not implemented.');
-  }
-  emit(event: CallDetectionEvents, detail?: any[]): void {
-    throw new Error('Method not implemented.');
-  }
+export class ICallDetection extends NativeEventEmitterComponent<CallDetectionEvents> {
   /**
    * Triggers when device call state changes.
    *
@@ -121,20 +108,9 @@ export class CallDetectionBase extends NativeComponent implements IEventEmitter<
    * });
    * ````
    */
-  set onCallStateChanged(callback: ({ state, incomingNumber }: { state: State; incomingNumber?: string; observer?: any }) => void) {
-    throw new Error('Method not implemented.');
-  }
-  get onCallStateChanged() {
-    throw new Error('Method not implemented.');
-  }
-  static Events = CallDetectionEvents;
-  /**
-   * Call state
-   * @enum {String} State
-   * @since 4.3.1
-   * @android
-   * @ios
-   *
-   */
-  static State = State;
+  onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
+}
+
+export class CallDetectionBase extends NativeEventEmitterComponent<CallDetectionEvents> implements ICallDetection {
+  onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
 }

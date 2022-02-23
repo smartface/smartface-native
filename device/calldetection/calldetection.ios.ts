@@ -1,15 +1,16 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
-import { CallDetectionBase, State } from './calldetection';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { ICallDetection, State } from './calldetection';
 import { CallDetectionEvents } from './calldetection-events';
 
-class CallDetectionAndroid extends CallDetectionBase {
-  private _onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;
+class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> implements ICallDetection {
+  onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;
   private callObserverDelegate: __SF_CallObserverDelegate;
   constructor() {
     super();
     const EventFunctions = {
       [CallDetectionEvents.CallStateChanged]: (e) => {
-        this.onCallStateChanged(e);
+        this.onCallStateChanged?.(e);
       }
     };
     eventCallbacksAssign(this, EventFunctions);
@@ -25,15 +26,10 @@ class CallDetectionAndroid extends CallDetectionBase {
       } else {
         state = State.INCOMING;
       }
-      this.onCallStateChanged && this.onCallStateChanged({ state, observer });
+      this.onCallStateChanged?.({ state, observer });
     };
   }
-  set onCallStateChanged(callback: ({ state, incomingNumber }: { state: State; incomingNumber?: string; observer?: any }) => void) {
-    this._onCallStateChanged = callback;
-  }
-  get onCallStateChanged(): ({ state, incomingNumber }: { state: State; incomingNumber?: string; observer?: any }) => void {
-    return this._onCallStateChanged;
-  }
 }
+const CallDetection = new CallDetectionIOS();
 
-export default CallDetectionAndroid;
+export default CallDetection;
