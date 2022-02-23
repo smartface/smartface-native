@@ -16,7 +16,7 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "indent": ["warn", 2],
-    "quotes": ["warn", "single"],
+    "quotes": ["warn", "single", { "avoidEscape": true }],
     "semi": ["error", "always"],
     "no-unused-vars": "off",
     "prefer-const": ["warn"],

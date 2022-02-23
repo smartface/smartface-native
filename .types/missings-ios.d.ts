@@ -334,7 +334,7 @@ declare class __SF_CMMotionManager {
   accelerometerUpdateInterval: number;
   startAccelerometerUpdates(): void;
   stopAccelerometerUpdates(): void;
-  callback: () => void;
+  callback: (e?: any) => void;
 }
 
 declare class __SF_CallObserverDelegate {
@@ -429,7 +429,7 @@ declare class __SF_UIDocumentPickerViewController {
 
 declare class __SF_UIDocumentPickerViewControllerDelegate {
   constructor();
-  didPickDocumentsAtURLs(urls: string[]): void;
+  didPickDocumentsAtURLs(urls: { path: string }[]): void;
   documentPickerWasCancelled(): void;
 }
 

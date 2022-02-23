@@ -1,4 +1,4 @@
-import { ConstructorOf } from '@smartface/core';
+import { ConstructorOf } from '../../core/constructorof';
 import IFlexLayout from './flexlayout';
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./image.${Device.deviceOS.toLowerCase()}`)

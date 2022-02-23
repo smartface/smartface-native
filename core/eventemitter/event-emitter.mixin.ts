@@ -1,5 +1,5 @@
 import { EventEmitter, EventListenerCallback, IEventEmitter } from './event-emitter';
-import {ConstructorOf} from '@smartface/core/lib/ConstructorOf'
+import { ConstructorOf } from '../../core/constructorof';
 
 /**
  * This callback will be executed after the handler function is set.
@@ -85,9 +85,7 @@ export function EventEmitterMixin(TargetClass: ConstructorOf<any>) {
   //   configurable: true
   // });
 
-    
-    return class NativeEmitter<TEvent extends string = string> extends TargetClass implements IEventEmitter<TEvent> {
-
+  return class NativeEmitter<TEvent extends string = string> extends TargetClass implements IEventEmitter<TEvent> {
     readonly emitter = new EventEmitter<TEvent>();
 
     on(eventName: TEvent, callback: EventListenerCallback) {

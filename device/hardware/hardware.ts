@@ -13,7 +13,7 @@
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
  *
  */
-declare const Hardware: {
+export declare class HardwareBase {
   /**
    *
    * Returns the unique id of the device. The value may change if the device is formatted.
@@ -24,7 +24,7 @@ declare const Hardware: {
    * @static
    * @since 0.1
    */
-  readonly UID: string;
+  static readonly UID: string;
   /**
    *
    * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
@@ -34,8 +34,8 @@ declare const Hardware: {
    * @static
    * @since 0.1
    */
-  readonly IMEI?: string;
-  readonly android: Partial<{
+  static readonly IMEI?: string;
+  static readonly android: {
     // TODO: discuss why IMEI is in android
     readonly IMEI?: string;
     /**
@@ -48,8 +48,8 @@ declare const Hardware: {
      * @since 0.1
      */
     readonly vendorID?: number;
-  }>;
-  ios: Partial<{
+  };
+  static ios: {
     microphone?: {
       /**
        *
@@ -68,7 +68,7 @@ declare const Hardware: {
       requestRecordPermission?: (callback: (...args) => void) => void;
     };
     modelName?: string;
-  }>;
+  };
   /**
    *
    * Returns the model name of the device.
@@ -79,7 +79,7 @@ declare const Hardware: {
    * @static
    * @since 0.1
    */
-  readonly brandModel: string;
+  static readonly brandModel: string;
   /**
    *
    * Returns the brand name of the device.
@@ -90,7 +90,15 @@ declare const Hardware: {
    * @static
    * @since 0.1
    */
-  readonly brandName: string;
-};
-
-export = Hardware;
+  static readonly brandName: string;
+  /**
+   *
+   * Returns the device model name.
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  static getDeviceModelName(): string;
+}
