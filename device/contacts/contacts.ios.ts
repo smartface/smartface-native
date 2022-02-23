@@ -1,9 +1,9 @@
-import { ContactBase, ContactsBase } from './contacts';
+import { ContactsBase, ContactBase } from './contacts';
 
 function manageNativeContact(contact) {
-  const returnValue = {};
+  const returnValue = new Contact();
   if (contact.givenName) {
-    returnValue['displayName'] = contact.givenName + ' ' + contact.familyName;
+    returnValue.displayName = contact.givenName + ' ' + contact.familyName;
   }
 
   const phoneNumbers = [];
@@ -14,7 +14,7 @@ function manageNativeContact(contact) {
       phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
     }
   }
-  returnValue['phoneNumber'] = phoneNumbers;
+  returnValue.phoneNumbers = phoneNumbers;
 
   const emailAddresses = [];
   for (const email in contact.emailAddresses) {
@@ -24,7 +24,7 @@ function manageNativeContact(contact) {
       emailAddresses.push(contact.emailAddresses[email].value);
     }
   }
-  returnValue['email'] = emailAddresses;
+  returnValue.emailAddresses = emailAddresses;
 
   const urlAddresses = [];
   for (const urlAddress in contact.urlAddresses) {
@@ -33,7 +33,7 @@ function manageNativeContact(contact) {
       urlAddresses.push(contact.urlAddresses[urlAddress].value);
     }
   }
-  returnValue['urlAddress'] = urlAddresses;
+  returnValue.urlAddresses = urlAddresses;
 
   const addresses = [];
   for (const address in contact.postalAddresses) {
@@ -52,13 +52,13 @@ function manageNativeContact(contact) {
       addresses.push(addressStr);
     }
   }
-  returnValue['address'] = addresses;
+  returnValue.addresses = addresses;
 
   return returnValue;
 }
 
 export class Contact extends ContactBase {
-  constructor(params?: Partial<ContactBase>) {
+  constructor(params?: Partial<Contact>) {
     super();
     params = params || {};
     if (params.nativeObject) {
@@ -84,8 +84,8 @@ class ContactsIOS extends ContactsBase {
     __pickerDelegate: new __SF_CNContactPickerDelegate()
   };
   static android: {};
-  static Contact: typeof Contact;
-  constructor(params?: Partial<Contacts>) {
+  public static readonly Contact = Contact;
+  constructor(params?: Partial<ContactsBase>) {
     super();
     params = params || {};
     if (params.nativeObject) {

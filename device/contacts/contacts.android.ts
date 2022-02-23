@@ -14,7 +14,6 @@ const activity = AndroidConfig.activity;
 const RAW_CONTACT_ID = 'raw_contact_id'; // ContactsContract.DataColumns.RAW_CONTACT_ID;
 const MIMETYPE = 'mimetype'; // ContactsContract.DataColumns.MIMETYPE;
 let CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/name'; // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
-const DISPLAY_NAME = 'data1'; // ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
 
 let uri;
 const NUMBER = 'data1'; // ContactsContract.CommonDataKinds.Phone.NUMBER;
@@ -124,39 +123,25 @@ function getContactPhoneNumber(contactUri) {
   return number;
 }
 
-function addContactName(displayName) {
-  // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
-  CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/name';
-  if (displayName) {
-    let displayNameContent = NativeContentProviderOperation.newInsert(uri);
-    displayNameContent = displayNameContent.withValueBackReference(RAW_CONTACT_ID, 0);
-    displayNameContent = displayNameContent.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
-    displayNameContent = displayNameContent.withValue(DISPLAY_NAME, displayName);
-    const cpo = displayNameContent.build();
-    //TODO: contentProviderOperation is missing, should it be NativeContentProviderOperation?
-    contentProviderOperation.add(cpo);
-  }
-}
-
-function addContactStructureName(contact) {
+function addContactStructureName(contact: Contact, contentProviderOperation) {
   const { namePrefix = '', firstName = '', lastName = '', middleName = '', nameSuffix = '' } = contact;
   const cpo = SFContactUtil.addContactStructureName(uri, namePrefix, firstName, lastName, middleName, nameSuffix);
   contentProviderOperation.add(cpo);
 }
 
-function addContactWork(contact) {
+function addContactWork(contact: Contact, contentProviderOperation) {
   const { title = '', organization = '', department = '' } = contact;
   const cpo = SFContactUtil.addContactWork(uri, title, organization, department);
   contentProviderOperation.add(cpo);
 }
 
-function addContactNickname(contact) {
+function addContactNickname(contact: Contact, contentProviderOperation) {
   const { nickname = '' } = contact;
   const cpo = SFContactUtil.addContactNickname(uri, nickname);
   contentProviderOperation.add(cpo);
 }
 
-function addContactPhoto(contact) {
+function addContactPhoto(contact: Contact, contentProviderOperation) {
   const { photo } = contact;
   if (photo) {
     const cpo = SFContactUtil.addContactPhoto(uri, photo.nativeObject.toByteArray());
@@ -164,7 +149,7 @@ function addContactPhoto(contact) {
   }
 }
 
-function addContactNumber(phoneNumber) {
+function addContactNumber(phoneNumber, contentProviderOperation) {
   //NativeContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
   CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/phone_v2';
 
@@ -178,7 +163,7 @@ function addContactNumber(phoneNumber) {
   contentProviderOperation.add(cpo);
 }
 
-function addContactEmail(email) {
+function addContactEmail(email, contentProviderOperation) {
   if (email !== null) {
     // NativeContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
     CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/email_v2';
@@ -194,7 +179,7 @@ function addContactEmail(email) {
   }
 }
 
-function addContactUrl(urlAddress) {
+function addContactUrl(urlAddress, contentProviderOperation) {
   if (urlAddress) {
     const URL = NativeContactsContract.CommonDataKinds.Website.URL;
     // ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE;
@@ -211,7 +196,7 @@ function addContactUrl(urlAddress) {
   }
 }
 
-function addContactAddress(address) {
+function addContactAddress(address, contentProviderOperation) {
   if (address) {
     // ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE;
     CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/postal-address_v2';
@@ -226,9 +211,17 @@ function addContactAddress(address) {
 }
 
 export class Contact extends ContactBase {
-  constructor(params?: Partial<ContactBase>) {
+  constructor(params?: Partial<Contact>) {
     super();
-    Object.assign(this, params);
+    for (const param in params) {
+      if (param === 'ios' || param === 'android') {
+        for (const osSpecificParameter in params[param]) {
+          this[param][osSpecificParameter] = params[param][osSpecificParameter];
+        }
+      } else {
+        this[param] = params[param];
+      }
+    }
   }
 }
 
@@ -241,7 +234,7 @@ class ContactsAndroid extends ContactsBase {
   constructor() {
     super();
   }
-  add(params: { contact: any; onSuccess: (contacts: any[]) => void; onFailure: (error) => void }) {
+  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: (error) => void }) {
     const { contact, onSuccess, onFailure } = params;
     this._onSuccess = onSuccess;
     this._onFailure = onFailure;
@@ -267,22 +260,15 @@ class ContactsAndroid extends ContactsBase {
         urlAddresses = contact.urlAddresses;
         emailAddresses = contact.emailAddresses;
         addresses = contact.addresses;
-        addContactStructureName(contact);
-        addContactWork(contact);
-        addContactNickname(contact);
-        addContactPhoto(contact);
-        // else check is deprecated
-      } else {
-        phoneNumbers = [contact.phoneNumber];
-        urlAddresses = [contact.urlAddress];
-        emailAddresses = [contact.email];
-        addresses = [contact.address];
-        addContactName(contact.displayName);
+        addContactStructureName(contact, this.contentProviderOperation);
+        addContactWork(contact, this.contentProviderOperation);
+        addContactNickname(contact, this.contentProviderOperation);
+        addContactPhoto(contact, this.contentProviderOperation);
       }
-      phoneNumbers.forEach((_) => addContactNumber(_));
-      urlAddresses.forEach((_) => addContactUrl(_));
-      emailAddresses.forEach((_) => addContactEmail(_));
-      addresses.forEach((_) => addContactAddress(_));
+      phoneNumbers.forEach((_) => addContactNumber(_, this.contentProviderOperation));
+      urlAddresses.forEach((_) => addContactUrl(_, this.contentProviderOperation));
+      emailAddresses.forEach((_) => addContactEmail(_, this.contentProviderOperation));
+      addresses.forEach((_) => addContactAddress(_, this.contentProviderOperation));
 
       const AUTHORITY = 'com.android.contacts'; // ContactsContract.AUTHORITY;
       contentResolver.applyBatch(AUTHORITY, this.contentProviderOperation);
@@ -421,8 +407,8 @@ class ContactsAndroid extends ContactsBase {
       onFailure && onFailure(error);
     }
   }
-  pickContact(params: { page: Page; onSuccess: (contact: any) => void; onFailure: (error) => void }) {
-    const { onSuccess, onFailure, page } = params;
+  pickContact(page: Page, params: { onSuccess?: (contact: any) => void; onFailure?: (error) => void }) {
+    const { onSuccess, onFailure } = params;
     if (!(page instanceof Page)) throw new TypeError('Page parameter required');
 
     this._onSuccess = onSuccess;
