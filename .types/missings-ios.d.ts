@@ -999,8 +999,8 @@ declare class __SF_CLLocationManager {
   static locationServicesEnabled(): boolean;
   delegate: __SF_CLLocationManagerDelegate;
   startUpdatingLocation(): void;
-  startUpdatingLocation(): void;
-  lastKnownLocation(): void;
+  stopUpdatingLocation(): void;
+  lastKnownLocation(): any;
   requestWhenInUseAuthorization(): void;
 }
 

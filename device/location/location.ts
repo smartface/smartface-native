@@ -1,8 +1,6 @@
-declare enum Events {
-  LocationChanged = 'locationChanged'
-}
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { LocationEvents } from './location-events';
 
-export = Location;
 /**
  * @class Device.Location
  * @since 0.1
@@ -24,11 +22,8 @@ export = Location;
  *     });
  *
  */
-declare class Location {
-  static on(eventName: Events, callback: (...args: any) => void): () => void;
-  static off(eventName: Events, callback?: (...args: any) => void): void;
-  static emit(event: Events, detail?: any[]): void;
-  static android: Partial<{
+export interface ILocation extends NativeEventEmitterComponent<LocationEvents> {
+  android: Partial<{
     /**
      * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
      * Shows an dialog to open the location service when the location service is off.
@@ -57,7 +52,7 @@ declare class Location {
    * @static
    * @since 0.1
    */
-  static start(priority?: Location.Android.Priority, interval?: number): void;
+  start(priority?: Location.Android.Priority, interval?: number): void;
   /**
    * Stops capturing.
    *
@@ -67,7 +62,7 @@ declare class Location {
    * @static
    * @since 0.1
    */
-  static stop(): void;
+  stop(): void;
   /**
    * Callback to capture location events.
    *
@@ -88,7 +83,7 @@ declare class Location {
    * });
    * ````
    */
-  static onLocationChanged(e: { latitude: number; longitude: number }): void;
+  onLocationChanged(e: { latitude: number; longitude: number }): void;
   /**
    * Gets last known location. The onFailure function will be triggered if no location data has ever been retrieved or unexpected error occurred.
    *
@@ -102,8 +97,8 @@ declare class Location {
    * @static
    * @since 4.0.2
    */
-  static getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void): void;
-  static ios: Partial<{
+  getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void): void;
+  ios: Partial<{
     /**
      * Callback to capture authorization status changes.
      * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
@@ -135,10 +130,10 @@ declare class Location {
      */
     locationServicesEnabled(): boolean;
   }>;
-  static Events: typeof Events;
+  Events: typeof LocationEvents;
 }
 
-declare namespace Location {
+export declare namespace Location {
   /**
    * iOS Specific Properties.
    * @class Device.Location.iOS
