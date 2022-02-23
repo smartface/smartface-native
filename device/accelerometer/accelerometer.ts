@@ -1,18 +1,5 @@
-declare enum Events {
-  /**
-   * Callback to capture accelerometer events.
-   *
-   * @since 0.1
-   * @event onAccelerate
-   * @param {Object} event
-   * @param {Number} event.x
-   * @param {Number} event.y
-   * @param {Number} event.z
-   * @android
-   * @ios
-   */
-  Accelerate = 'accelerate'
-}
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { AccelerometerEvents } from './accelerometer-events';
 
 /**
  * @class Device.Accelerometer
@@ -31,11 +18,7 @@ declare enum Events {
  *     };
  *
  */
-declare class Accelerometer {
-  static on(eventName: Events, callback: (...args: any) => void): () => void;
-  static once(eventName: Events, callback: (...args: any) => void): () => void;
-  static off(eventName: Events, callback?: (...args: any) => void): void;
-  static emit(event: Events, detail?: any[]): void;
+export interface IAccelerometer extends NativeEventEmitterComponent<AccelerometerEvents> {
   /**
    * Starts capturing accelerometer values.
    *
@@ -44,7 +27,7 @@ declare class Accelerometer {
    * @ios
    * @since 0.1
    */
-  static start: () => void;
+  start: () => void;
   /**
    * Stops capturing.
    *
@@ -53,7 +36,7 @@ declare class Accelerometer {
    * @ios
    * @since 0.1
    */
-  static stop: () => void;
+  stop: () => void;
   /**
    * Callback to capture accelerometer events.
    *
@@ -75,17 +58,16 @@ declare class Accelerometer {
    * });
    * ````
    */
-  static onAccelerate: (e: { x: number; y: number; z: number }) => void;
+  onAccelerate: (e: { x: number; y: number; z: number }) => void;
 
-  /**
-   * The interval, in millisecond, for providing accelerometer updates to the block handler.
-   *
-   * @property {Number} [accelerometerUpdateInterval = 100]
-   * @ios
-   * @since 4.0.2
-   */
-  static accelerometerUpdateInterval: number;
-  static Events: typeof Events;
+  ios: {
+    /**
+     * The interval, in millisecond, for providing accelerometer updates to the block handler.
+     *
+     * @property {Number} [accelerometerUpdateInterval = 100]
+     * @ios
+     * @since 4.0.2
+     */
+    accelerometerUpdateInterval: number;
+  };
 }
-
-export = Accelerometer;
