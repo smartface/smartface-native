@@ -6,6 +6,7 @@ import TextAlignment from '../textalignment';
 import { ViewAndroid } from '../view/view.android';
 import { AbstractLabel, ILabel } from './label';
 import { TypeUtil, TypeValue } from '../../util';
+import { ViewEvents } from '../view/view-event';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -31,11 +32,11 @@ const MIDLEFT_GRAVITY = 16 | 3;
 const MIDCENTER_GRAVITY = 17;
 const MINIMUM_FONT_SIZE = 7;
 
-export default class LabelAndroid extends ViewAndroid implements ILabel {
+export default class LabelAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements ILabel {
   private _ellipsizeMode: AbstractLabel['ellipsizeMode'];
   protected _android: AbstractLabel['android'];
-  private _textAlignment: TextAlignment;
-  private viewNativeDefaultTextAlignment: number = null;
+  protected _textAlignment: TextAlignment;
+  protected viewNativeDefaultTextAlignment: number = null;
   private skipDefaults: boolean;
   private _adjustFontSizeToFit = false;
   private _minimumFontSize = MINIMUM_FONT_SIZE;
