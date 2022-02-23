@@ -58,4 +58,3 @@ class AccelerometerAndroid extends AccelerometerBase {
 const Accelerometer = new AccelerometerAndroid();
 
 export default Accelerometer;
-Accelerometer;
