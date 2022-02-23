@@ -1,10 +1,8 @@
 /*globals array, requireClass, toJSArray */
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
-import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { ViewBase } from './view';
 
 const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
 const AndroidConfig = require('../../util/Android/androidconfig');
@@ -17,7 +15,7 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
 import { EventEmitterWrapper } from '../../core/eventemitter';
-import IView from './view';
+import View, { IView, ViewBase } from '.';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -80,7 +78,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements INativeComponent, View<TEvent, {}, TNative> {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements IView<TEvent, {}, TNative> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,

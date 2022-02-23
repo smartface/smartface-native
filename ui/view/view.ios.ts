@@ -1,7 +1,7 @@
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { ViewBase } from './view';
+import View, { IView, ViewBase } from '.';
 import { Invocation } from '../../util';
 import { Size } from '../../primitive/size';
 
@@ -20,7 +20,7 @@ function isInside(frame, point) {
 
 type ViewIOSParams = {};
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = {}> extends ViewBase<TEvent> implements View<TEvent, TNative> {
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = {}> extends ViewBase<TEvent> implements IView<TEvent, TNative> {
   android = {};
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
@@ -265,9 +265,9 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   // ios
   private get shadowColor() {
-    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor') as Color;
     return new Color({
-      color: color
+      color
     });
   }
   private set shadowColor(shadowColor: Color) {
