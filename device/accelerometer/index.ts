@@ -1,6 +1,6 @@
-import { AccelerometerBase } from './accelerometer';
+import { IAccelerometer } from './accelerometer';
 
-const Accelerometer: typeof AccelerometerBase = require(`./accelerometer.${Device.deviceOS.toLowerCase()}`).default;
-type Accelerometer = AccelerometerBase;
+const Accelerometer: IAccelerometer = require(`./accelerometer.${Device.deviceOS.toLowerCase()}`).default;
+type Accelerometer = IAccelerometer;
 
 export default Accelerometer;
