@@ -54,7 +54,7 @@ export enum GradientDirection {
  *     const myHEXColor = Color.create("#FFAACC");
  */
 export declare class AbstractColor extends NativeComponent {
-  constructor(params?: {color: Color});
+  constructor(params?: { color: Color | __SF_UIColor }); //TODO: Writing iOS specific class isn't best practice. Find something better.
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *

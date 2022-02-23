@@ -108,7 +108,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private _borderColor: Color;
   private _borderWidth: number;
   private _borderRadius: number;
-  private _backgroundColor: Color = Color.TRANSPARENT;
+  protected _backgroundColor: Color = Color.TRANSPARENT;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -119,7 +119,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private _rippleColor = null;
   private _useForeground = false;
   protected yogaNode: any;
-  protected _android; 
+  protected _android;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
   constructor(params?: IView) {
@@ -212,20 +212,20 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       if (bitwiseBorders & borderEnum) {
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
-        case ViewAndroid.Border.TOP_LEFT:
-          borderRadiuses.fill(borderRadiusInDp, 0, 3);
-          break;
-        case ViewAndroid.Border.TOP_RIGHT:
-          borderRadiuses.fill(borderRadiusInDp, 2, 4);
-          break;
-        case ViewAndroid.Border.BOTTOM_RIGHT:
-          borderRadiuses.fill(borderRadiusInDp, 4, 6);
-          break;
-        case ViewAndroid.Border.BOTTOM_LEFT:
-          borderRadiuses.fill(borderRadiusInDp, 6, 8);
-          break;
-        default:
-          break;
+          case ViewAndroid.Border.TOP_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 0, 3);
+            break;
+          case ViewAndroid.Border.TOP_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 2, 4);
+            break;
+          case ViewAndroid.Border.BOTTOM_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 4, 6);
+            break;
+          case ViewAndroid.Border.BOTTOM_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 6, 8);
+            break;
+          default:
+            break;
         }
       }
     }
