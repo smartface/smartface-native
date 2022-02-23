@@ -1,4 +1,4 @@
-import { AbstractColor } from './color';
+import { AbstractColor } from '.';
 
 const NativeColor = requireClass('android.graphics.Color');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');

@@ -1,4 +1,4 @@
-import { ViewBase } from '../../ui/view/view';
+import { ViewBase } from '../../ui/view';
 import Application from '../../application';
 import FragmentTransaction from './transition/fragmenttransition';
 
