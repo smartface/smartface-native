@@ -9,37 +9,37 @@ class AccelerometerAndroid extends AccelerometerBase {
   monitonManager = new __SF_CMMotionManager();
   ios = {};
   android = {};
-  private __instance = new NativeSFAccelerometerListener();
-  private __isSetCallback = false;
-  private __isStarted = false;
+  private _nativeSFAccelerometerListener = new NativeSFAccelerometerListener();
+  private _isSetCallback = false;
+  private _isStarted = false;
   private _callback;
   constructor() {
     super();
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        this.__instance.onAccelerateCallback(e);
+        this._nativeSFAccelerometerListener.onAccelerateCallback(e);
       }
     };
 
     eventCallbacksAssign(this, EventFunctions);
   }
   start() {
-    if (this.__isStarted) return;
-    this.__isStarted = true;
-    this.__instance.startListener();
+    if (this._isStarted) return;
+    this._isStarted = true;
+    this._nativeSFAccelerometerListener.startListener();
   }
   stop() {
-    if (!this.__isStarted) return;
-    this.__isStarted = false;
-    this.__instance.stopListener();
+    if (!this._isStarted) return;
+    this._isStarted = false;
+    this._nativeSFAccelerometerListener.stopListener();
   }
   set onAccelerate(callback: (...args: any[]) => void) {
     const self = this;
     this._callback = callback;
     if (typeof callback === 'function') {
-      if (this.__isSetCallback) return;
-      this.__isSetCallback = true;
-      this.__instance.onAccelerateCallback = function (x, y, z) {
+      if (this._isSetCallback) return;
+      this._isSetCallback = true;
+      this._nativeSFAccelerometerListener.onAccelerateCallback = function (x, y, z) {
         self._callback &&
           self._callback({
             x,
@@ -48,9 +48,9 @@ class AccelerometerAndroid extends AccelerometerBase {
           });
       };
     } else {
-      if (!this.__isSetCallback) return;
-      this.__isSetCallback = false;
-      this.__instance.onAccelerateCallback = null;
+      if (!this._isSetCallback) return;
+      this._isSetCallback = false;
+      this._nativeSFAccelerometerListener.onAccelerateCallback = null;
     }
   }
 }
