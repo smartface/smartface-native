@@ -1215,3 +1215,6 @@ declare class __SF_KeychainPasswordItem {
   deleteItemWithBlock(callback: (e: any) => void): void;
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
+
+declare const __SF_UIScrollViewDecelerationRateNormal: number;
+declare const __SF_UIScrollViewDecelerationRateFast: number;
