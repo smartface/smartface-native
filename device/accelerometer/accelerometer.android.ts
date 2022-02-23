@@ -9,21 +9,15 @@ class AccelerometerAndroid extends AccelerometerBase {
   monitonManager = new __SF_CMMotionManager();
   ios = {};
   android = {};
-  private __instance = null;
+  private __instance = new NativeSFAccelerometerListener();
   private __isSetCallback = false;
   private __isStarted = false;
   private _callback;
-  private __getInstance = () => {
-    if (!this.__instance) {
-      this.__instance = new NativeSFAccelerometerListener();
-    }
-    return this.__instance;
-  };
   constructor() {
     super();
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        this.__getInstance().onAccelerateCallback(e);
+        this.__instance.onAccelerateCallback(e);
       }
     };
 
@@ -32,12 +26,12 @@ class AccelerometerAndroid extends AccelerometerBase {
   start() {
     if (this.__isStarted) return;
     this.__isStarted = true;
-    this.__getInstance().startListener();
+    this.__instance.startListener();
   }
   stop() {
     if (!this.__isStarted) return;
     this.__isStarted = false;
-    this.__getInstance().stopListener();
+    this.__instance.stopListener();
   }
   set onAccelerate(callback: (...args: any[]) => void) {
     const self = this;
@@ -45,7 +39,7 @@ class AccelerometerAndroid extends AccelerometerBase {
     if (typeof callback === 'function') {
       if (this.__isSetCallback) return;
       this.__isSetCallback = true;
-      this.__getInstance().onAccelerateCallback = function (x, y, z) {
+      this.__instance.onAccelerateCallback = function (x, y, z) {
         self._callback &&
           self._callback({
             x,
@@ -56,7 +50,7 @@ class AccelerometerAndroid extends AccelerometerBase {
     } else {
       if (!this.__isSetCallback) return;
       this.__isSetCallback = false;
-      this.__getInstance().onAccelerateCallback = null;
+      this.__instance.onAccelerateCallback = null;
     }
   }
 }
