@@ -1215,3 +1215,34 @@ declare class __SF_KeychainPasswordItem {
   deleteItemWithBlock(callback: (e: any) => void): void;
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
+
+declare const __SF_UIScrollViewDecelerationRateNormal: number;
+declare const __SF_UIScrollViewDecelerationRateFast: number;
+
+declare const __SF_UITextContentTypeName: string;
+declare const __SF_UITextContentTypeNamePrefix: string;
+declare const __SF_UITextContentTypeGivenName: string;
+declare const __SF_UITextContentTypeMiddleName: string;
+declare const __SF_UITextContentTypeFamilyName: string;
+declare const __SF_UITextContentTypeNameSuffix: string;
+declare const __SF_UITextContentTypeNickname: string;
+declare const __SF_UITextContentTypeJobTitle: string;
+declare const __SF_UITextContentTypeOrganizationName: string;
+declare const __SF_UITextContentTypeLocation: string;
+declare const __SF_UITextContentTypeFullStreetAddress: string;
+declare const __SF_UITextContentTypeStreetAddressLine1: string;
+declare const __SF_UITextContentTypeStreetAddressLine2: string;
+declare const __SF_UITextContentTypeAddressCity: string;
+declare const __SF_UITextContentTypeAddressState: string;
+declare const __SF_UITextContentTypeAddressCityAndState: string;
+declare const __SF_UITextContentTypeSublocality: string;
+declare const __SF_UITextContentTypeCountryName: string;
+declare const __SF_UITextContentTypePostalCode: string;
+declare const __SF_UITextContentTypeTelephoneNumber: string;
+declare const __SF_UITextContentTypeEmailAddress: string;
+declare const __SF_UITextContentTypeURL: string;
+declare const __SF_UITextContentTypeCreditCardNumber: string;
+declare const __SF_UITextContentTypeUsername: string;
+declare const __SF_UITextContentTypePassword: string;
+declare const __SF_UITextContentTypeNewPassword: string;
+declare const __SF_UITextContentTypeOneTimeCode: string;
