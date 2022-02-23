@@ -3,7 +3,7 @@ import Color from '../color';
 import EllipsizeMode from '../ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../textalignment';
-import IView, { AbstractView } from '../view/view';
+import IView, { AbstractView } from '../view';
 
 interface ILabelAndroid {
   /**

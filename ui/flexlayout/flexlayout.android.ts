@@ -24,23 +24,15 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
   private _flexWrap: number | null = null;
 
   constructor(params: any) {
-    super({
-      nativeObject: new NativeYogaLayout(activity, {
-        onInterceptTouchEvent: () => {
-          if (this.android.onInterceptTouchEvent) {
-            return this.android.onInterceptTouchEvent();
-          }
-        }
-      })
-    });
+    super();
 
-    const EventFunctions = {
-      [Events.InterceptTouchEvent]: (e) => {
-        this._onInterceptTouchEvent(e);
+    this._nativeObject = new NativeYogaLayout(activity, {
+      onInterceptTouchEvent: () => {
+        this.emit('interceptTouchEvent');
+        return !!this.android.onInterceptTouchEvent?.();
       }
-    };
+    })
 
-    eventCallbacksAssign(this, EventFunctions);
 
     const self = this;
 

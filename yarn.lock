@@ -52,11 +52,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@smartface/core@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@smartface/core/-/core-1.0.0.tgz#adf3c6a0cc04805b832927a09b78dbe84256db0b"
-  integrity sha512-VBp08RFhnl6GVuGgUTf2+qU9w4yIiF4taa8031sU1WxbsGcyNIWFS+MZm7juN6rnQ0M4FeqveTPfCAHwfD/i0w==
-
 "@types/json-schema@^7.0.9":
   version "7.0.9"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"

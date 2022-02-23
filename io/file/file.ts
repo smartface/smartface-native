@@ -191,13 +191,14 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
+  readonly writable: boolean;
   rename(newName: string): boolean;
 
   ios: iOSProps;
 }
 
 export class FileBase implements IFile {
-  constructor(params?: Partial<IFile>) {}
+  constructor(params: Partial<IFile> = {}) {}
   static getDocumentsDirectory: () => string;
   static getMainBundleDirectory: () => string;
 
