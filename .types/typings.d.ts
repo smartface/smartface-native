@@ -14,6 +14,7 @@ declare global {
   function toJSArray(val: any): any[];
   function float(val: any): number;
   function int(val: any): number;
+  function release(value: any): any;
 
   function alert(
     params:
