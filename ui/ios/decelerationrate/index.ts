@@ -19,7 +19,7 @@ export type DecelerationRateType = {
  * @ios
  * @since 4.1.2
  */
-const DecelerationRate: DecelerationRateType = Device.deviceOS.toLowerCase() === 'ios' ? require(`./decelerationrate.${Device.deviceOS.toLowerCase()}`).default : ({} as const);
+const DecelerationRate: DecelerationRateType = Device.deviceOS.toLowerCase() === 'ios' ? require(`./decelerationrate.${Device.deviceOS.toLowerCase()}`).default : {};
 type DecelerationRate = DecelerationRateType;
 
 export default DecelerationRate;
