@@ -30,7 +30,7 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
     SettingsStatusCodes: SETTINGS_STATUS_CODES
   };
   ios;
-  iOS;
+  iOS = {};
   private _instance: any;
   CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
   Events = LocationEvents;
