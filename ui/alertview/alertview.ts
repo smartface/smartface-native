@@ -1,5 +1,3 @@
-import { INativeComponent } from '../../core/inative-component';
-
 /**
  * @enum {Number} UI.AlertView.Android.ButtonType
  * @since 0.1
@@ -117,7 +115,7 @@ export interface IAlertView {
    * @param {UI.AlertView} alertView Dismissed AlertView object
    * @since 0.1
    */
-  onDismiss: (alertView?: AbstractAlertView) => void;
+  onDismiss: (alertView?: IAlertView) => void;
   readonly android: Partial<{
     /**
      * Gets/sets whether the alert view is cancelable or not when touched outside.
@@ -204,7 +202,7 @@ export declare class AbstractAlertView implements IAlertView {
   toString(): string;
   title: string;
   message: string;
-  onDismiss: (alertView?: AbstractAlertView) => void;
+  onDismiss: (alertView?: IAlertView) => void;
   android: Partial<{
     /**
      * Gets/sets whether the alert view is cancelable or not when touched outside.

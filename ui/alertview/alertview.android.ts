@@ -1,20 +1,20 @@
 import NativeComponent from '../../core/native-component';
 import TextBox from '../textbox';
-import { AbstractAlertView, ButtonType, IAlertView } from './alertview';
+import { ButtonType, IAlertView } from './alertview';
 import { LayoutParams, UnitConverter } from '../../util';
 
 const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview.SFAlertView');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class AlertViewAndroid extends NativeComponent implements IAlertView {
-  private _android: AbstractAlertView['android'];
+  private _android: IAlertView['android'];
   private __didSetOnDismissListener = true;
   private __buttonCallbacks: Array<() => void> = [];
   private __title = '';
   private __message = '';
   private __textBoxes: TextBox[];
-  private __onDismiss: AbstractAlertView['onDismiss'];
-  private _cancellable: AbstractAlertView['android']['cancellable'];
+  private __onDismiss: IAlertView['onDismiss'];
+  private _cancellable: IAlertView['android']['cancellable'];
   constructor(params: Partial<IAlertView> = {}) {
     super();
     if (!this.nativeObject) {
@@ -37,7 +37,7 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
   dismiss(): void {
     this.nativeObject.dismiss();
   }
-  addButton(params: Partial<Parameters<AbstractAlertView['addButton']>['0']>): void {
+  addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
     const text = params.text || '';
     const buttonType = params.type || params.index;
     this.__buttonCallbacks[buttonType] = params.onClick;
@@ -75,7 +75,7 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
       })
     );
   }
-  addTextBox(params: Partial<Parameters<AbstractAlertView['addTextBox']>['0']>): void {
+  addTextBox(params: Partial<Parameters<IAlertView['addTextBox']>['0']>): void {
     const { hint = '', text = '', isPassword = false, android: { viewSpacings: viewSpacings = {}, height, width } = {} } = params;
     const mTextBox = new TextBox({
       hint,
@@ -114,10 +114,10 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
   private androidSpecificProperties() {
     const self = this;
     this._android = {
-      get cancellable(): AbstractAlertView['android']['cancellable'] {
+      get cancellable(): IAlertView['android']['cancellable'] {
         return self._cancellable;
       },
-      set cancellable(value: AbstractAlertView['android']['cancellable']) {
+      set cancellable(value: IAlertView['android']['cancellable']) {
         self._cancellable = value;
         self.nativeObject.setCancelable(value);
         self.nativeObject.setCanceledOnTouchOutside(value);
@@ -125,29 +125,29 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
     };
   }
 
-  get textBoxes(): AbstractAlertView['textBoxes'] {
+  get textBoxes(): IAlertView['textBoxes'] {
     return this.__textBoxes.map((textBox) => ({ text: textBox.text }));
   }
 
-  get title(): AbstractAlertView['title'] {
+  get title(): IAlertView['title'] {
     return this.__title;
   }
-  set title(value: AbstractAlertView['title']) {
+  set title(value: IAlertView['title']) {
     this.__title = value;
     this.nativeObject.setTitle(value);
   }
-  get message(): AbstractAlertView['message'] {
+  get message(): IAlertView['message'] {
     return this.__message;
   }
-  set message(value: AbstractAlertView['message']) {
+  set message(value: IAlertView['message']) {
     this.__message = value;
     this.nativeObject.setMessage(value);
   }
 
-  get onDismiss(): AbstractAlertView['onDismiss'] {
+  get onDismiss(): IAlertView['onDismiss'] {
     return this.__onDismiss;
   }
-  set onDismiss(value: AbstractAlertView['onDismiss']) {
+  set onDismiss(value: IAlertView['onDismiss']) {
     this.__onDismiss = value.bind(this);
     if (!this.__didSetOnDismissListener) {
       this.setOnDismissListener();

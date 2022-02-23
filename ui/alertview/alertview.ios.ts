@@ -1,5 +1,5 @@
 import NativeComponent from '../../core/native-component';
-import { AbstractAlertView, ButtonType, IAlertView } from './alertview';
+import { ButtonType, IAlertView } from './alertview';
 
 enum MethodNames {
   onDismiss = 'onDismiss'
@@ -29,22 +29,22 @@ export default class AlertViewIOS extends NativeComponent implements IAlertView 
   show(): void {
     __SF_UIAlertController.present(this.nativeObject);
   }
-  get title(): AbstractAlertView['title'] {
+  get title(): IAlertView['title'] {
     return this.nativeObject.title;
   }
-  set title(value: AbstractAlertView['title']) {
+  set title(value: IAlertView['title']) {
     this.nativeObject.title = value;
   }
-  get message(): AbstractAlertView['message'] {
+  get message(): IAlertView['message'] {
     return this.nativeObject.message;
   }
-  set message(value: AbstractAlertView['message']) {
+  set message(value: IAlertView['message']) {
     this.nativeObject.message = value;
   }
-  get onDismiss(): AbstractAlertView['onDismiss'] {
+  get onDismiss(): IAlertView['onDismiss'] {
     return this._onDismiss;
   }
-  set onDismiss(value: AbstractAlertView['onDismiss']) {
+  set onDismiss(value: IAlertView['onDismiss']) {
     this._onDismiss = value;
   }
   dismiss(): void {
@@ -59,11 +59,11 @@ export default class AlertViewIOS extends NativeComponent implements IAlertView 
     }
     return returnArray;
   }
-  addButton(params: Partial<Parameters<AbstractAlertView['addButton']>['0']>): void {
+  addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
     const action = __SF_UIAlertAction.createAction(params.text, params.index, params.onClick);
     this.nativeObject.addAction(action);
   }
-  addTextBox(params: Partial<Parameters<AbstractAlertView['addTextBox']>['0']>): void {
+  addTextBox(params: Partial<Parameters<IAlertView['addTextBox']>['0']>): void {
     __SF_UIAlertController.addTextFieldArea(this.nativeObject, params.text, params.hint, params.isPassword);
   }
 
