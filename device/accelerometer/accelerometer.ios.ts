@@ -2,38 +2,40 @@ import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssi
 import { AccelerometerBase } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
 class AccelerometerIOS extends AccelerometerBase {
-  static monitonManager = new __SF_CMMotionManager();
-  static ios = {};
-  static android = {};
+  monitonManager = new __SF_CMMotionManager();
+  ios = {};
+  android = {};
   constructor() {
     super();
-    AccelerometerIOS.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
+    this.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        AccelerometerIOS.monitonManager.callback(e);
+        this.monitonManager.callback && this.monitonManager.callback(e);
       }
     };
 
     eventCallbacksAssign(this, EventFunctions);
     const ios = {
       get accelerometerUpdateInterval() {
-        return AccelerometerIOS.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
+        return this.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
       },
       set accelerometerUpdateInterval(value) {
-        AccelerometerIOS.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
+        this.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
       }
     };
-    Object.assign(AccelerometerIOS.ios, ios);
+    Object.assign(this.ios, ios);
   }
-  static start() {
-    AccelerometerIOS.monitonManager.startAccelerometerUpdates();
+  start() {
+    this.monitonManager.startAccelerometerUpdates();
   }
-  static stop() {
-    AccelerometerIOS.monitonManager.stopAccelerometerUpdates();
+  stop() {
+    this.monitonManager.stopAccelerometerUpdates();
   }
-  static set onAccelerate(value: (...args: any[]) => void) {
-    AccelerometerIOS.monitonManager.callback = value;
+  set onAccelerate(value: (...args: any[]) => void) {
+    this.monitonManager.callback = value;
   }
 }
 
-export default AccelerometerIOS;
+const Accelerometer = new AccelerometerIOS();
+
+export default Accelerometer;

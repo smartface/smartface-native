@@ -5,56 +5,63 @@ import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssi
 import { AccelerometerBase } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
 class AccelerometerAndroid extends AccelerometerBase {
-  static monitonManager = new __SF_CMMotionManager();
-  static ios = {};
-  static android = {};
-  private static __instance = null;
-  private static __isSetCallback = false;
-  private static __isStarted = false;
-  private static _callback;
-  private static __getInstance = function () {
-    if (!AccelerometerAndroid.__instance) AccelerometerAndroid.__instance = new NativeSFAccelerometerListener();
-    return AccelerometerAndroid.__instance;
+  static Events = AccelerometerEvents;
+  monitonManager = new __SF_CMMotionManager();
+  ios = {};
+  android = {};
+  private __instance = null;
+  private __isSetCallback = false;
+  private __isStarted = false;
+  private _callback;
+  private __getInstance = () => {
+    if (!this.__instance) {
+      this.__instance = new NativeSFAccelerometerListener();
+    }
+    return this.__instance;
   };
   constructor() {
     super();
     const EventFunctions = {
       [AccelerometerEvents.Accelerate]: (e) => {
-        AccelerometerAndroid.__getInstance().onAccelerateCallback(e);
+        this.__getInstance().onAccelerateCallback(e);
       }
     };
 
     eventCallbacksAssign(this, EventFunctions);
   }
-  static start() {
-    if (AccelerometerAndroid.__isStarted) return;
-    AccelerometerAndroid.__isStarted = true;
-    AccelerometerAndroid.__getInstance().startListener();
+  start() {
+    if (this.__isStarted) return;
+    this.__isStarted = true;
+    this.__getInstance().startListener();
   }
-  static stop() {
-    if (!AccelerometerAndroid.__isStarted) return;
-    AccelerometerAndroid.__isStarted = false;
-    AccelerometerAndroid.__getInstance().stopListener();
+  stop() {
+    if (!this.__isStarted) return;
+    this.__isStarted = false;
+    this.__getInstance().stopListener();
   }
-  static set onAccelerate(callback: (...args: any[]) => void) {
-    AccelerometerAndroid._callback = callback;
+  set onAccelerate(callback: (...args: any[]) => void) {
+    const self = this;
+    this._callback = callback;
     if (typeof callback === 'function') {
-      if (AccelerometerAndroid.__isSetCallback) return;
-      AccelerometerAndroid.__isSetCallback = true;
-      AccelerometerAndroid.__getInstance().onAccelerateCallback = function (x, y, z) {
-        AccelerometerAndroid._callback &&
-          AccelerometerAndroid._callback({
+      if (this.__isSetCallback) return;
+      this.__isSetCallback = true;
+      this.__getInstance().onAccelerateCallback = function (x, y, z) {
+        self._callback &&
+          self._callback({
             x,
             y,
             z
           });
       };
     } else {
-      if (!AccelerometerAndroid.__isSetCallback) return;
-      AccelerometerAndroid.__isSetCallback = false;
-      AccelerometerAndroid.__getInstance().onAccelerateCallback = null;
+      if (!this.__isSetCallback) return;
+      this.__isSetCallback = false;
+      this.__getInstance().onAccelerateCallback = null;
     }
   }
 }
 
-export default AccelerometerAndroid;
+const Accelerometer = new AccelerometerAndroid();
+
+export default Accelerometer;
+Accelerometer;
