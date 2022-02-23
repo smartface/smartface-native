@@ -1,4 +1,4 @@
-export default {
+export const ApplicationEvents = {
   Exit: 'exit',
   Maximize: 'maximize',
   Minimize: 'minimize',
@@ -8,4 +8,6 @@ export default {
   AppShortcutReceived: 'appShortcutReceived',
   BackButtonPressed: 'backButtonPressed',
   RequestPermissionResult: 'requestPermissionResult'
-};
+} as const;
+
+export type ApplicationEvents = ExtractValues<typeof ApplicationEvents>;

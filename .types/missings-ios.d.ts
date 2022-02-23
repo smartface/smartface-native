@@ -310,7 +310,7 @@ declare interface iOSSharedApplication {
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
   statusBarOrientationAnimationDuration: number;
-  keyWindow: { addSubview(view: __SF_UIView): void };
+  keyWindow: { addSubview(view: __SF_UIView): void; rootViewController: any; makeKeyAndVisible: (...args: any[]) => void };
   scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
   presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
   cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
@@ -999,8 +999,8 @@ declare class __SF_CLLocationManager {
   static locationServicesEnabled(): boolean;
   delegate: __SF_CLLocationManagerDelegate;
   startUpdatingLocation(): void;
-  startUpdatingLocation(): void;
-  lastKnownLocation(): void;
+  stopUpdatingLocation(): void;
+  lastKnownLocation(): any;
   requestWhenInUseAuthorization(): void;
 }
 

@@ -4,6 +4,8 @@ import Navigationbar from './android/navigationbar/navigationbar';
 import SliderDrawer from '../ui/sliderdrawer';
 import StatusBar from './statusbar/statusbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar.android';
+import { EventEmitter } from '../core/eventemitter';
+import { ApplicationEvents } from './application-events';
 
 declare enum Events {
   /**
@@ -242,11 +244,11 @@ declare enum KeyboardMode {
  *
  * A set of collection for application based properties and methods.
  */
-declare class Application {
-  static on(eventName: Events, callback: (...args: any) => void): () => void;
-  static once(eventName: Events, callback: (...args: any) => void): () => void;
-  static off(eventName: Events, callback?: (...args: any) => void): void;
-  static emit(event: Events, ...detail: any[]): void;
+export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
+  on(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
+  once(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
+  off(eventName: ApplicationEvents, callback?: (...args: any) => void): void;
+  emit(event: ApplicationEvents, ...detail: any[]): void;
   /**
    * The received bytes from the application.
    *
@@ -1117,5 +1119,3 @@ declare class Application {
    */
   static isVoiceOverEnabled: Boolean;
 }
-
-export = Application;
