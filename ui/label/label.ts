@@ -4,6 +4,7 @@ import EllipsizeMode from '../ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../textalignment';
 import IView, { AbstractView } from '../view';
+import { ViewEvents } from '../view/view-event';
 
 interface ILabelAndroid {
   /**
@@ -23,7 +24,7 @@ interface ILabelAndroid {
   textDirection: TextDirection;
 }
 
-export declare interface ILabel<TEvent extends string = '', TIOS = {}, TAND = ILabelAndroid> extends IView<TEvent, TIOS, TAND> {
+export declare interface ILabel<TEvent extends string = ViewEvents, TIOS = {}, TAND = ILabelAndroid> extends IView<TEvent, TIOS, TAND> {
   /**
    * Gets/sets font of a Label. When set to null label uses system font.
    * It is set to null by default.
@@ -128,7 +129,7 @@ export declare interface ILabel<TEvent extends string = '', TIOS = {}, TAND = IL
   minimumFontSize: number;
 }
 
-export declare class AbstractLabel<TEvent extends string = ''> extends AbstractView<TEvent> implements ILabel<TEvent> {
+export declare class AbstractLabel<TEvent extends string = ViewEvents> extends AbstractView<TEvent> implements ILabel<TEvent> {
   constructor(params?: Partial<AbstractLabel>);
   font: Font;
   multiline: boolean;

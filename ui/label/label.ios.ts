@@ -1,15 +1,16 @@
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
 import Color from '../color';
 import TextAlignment from '../textalignment';
+import { ViewEvents } from '../view/view-event';
 import ViewIOS from '../view/view.ios';
 import { AbstractLabel, ILabel } from './label';
 
 const DEFAULT_MINIMUM_FONT_SIZE = 1;
 
-export default class LabelIOS extends ViewIOS implements ILabel {
+export default class LabelIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent> implements ILabel {
   private _minimumFontSize = DEFAULT_MINIMUM_FONT_SIZE;
   private _textAlignment = TextAlignment.MIDLEFT;
-  private _textColor = Color.BLACK;
+  protected _textColor: ILabel['textColor'] = Color.BLACK;
   constructor(params: Partial<AbstractLabel> = {}) {
     super();
     if (!this.nativeObject) {
