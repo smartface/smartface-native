@@ -2,12 +2,12 @@
 const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
 
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
-import { AccelerometerBase } from './accelerometer';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { IAccelerometer } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
-class AccelerometerAndroid extends AccelerometerBase {
-  static Events = AccelerometerEvents;
+class AccelerometerAndroid extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
   monitonManager = new __SF_CMMotionManager();
-  ios = {};
+  ios = { accelerometerUpdateInterval: 0 };
   android = {};
   private _nativeSFAccelerometerListener = new NativeSFAccelerometerListener();
   private _isSetCallback = false;

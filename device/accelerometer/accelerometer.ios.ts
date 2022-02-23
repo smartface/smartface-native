@@ -1,10 +1,11 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
-import { AccelerometerBase } from './accelerometer';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { IAccelerometer } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
-class AccelerometerIOS extends AccelerometerBase {
+class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
   monitonManager = new __SF_CMMotionManager();
-  ios = {};
   android = {};
+  readonly ios: { accelerometerUpdateInterval: number };
   constructor() {
     super();
     this.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
@@ -15,12 +16,13 @@ class AccelerometerIOS extends AccelerometerBase {
     };
 
     eventCallbacksAssign(this, EventFunctions);
+    const self = this;
     const ios = {
       get accelerometerUpdateInterval() {
-        return this.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
+        return self.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
       },
       set accelerometerUpdateInterval(value) {
-        this.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
+        self.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
       }
     };
     Object.assign(this.ios, ios);

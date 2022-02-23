@@ -18,7 +18,7 @@ import { AccelerometerEvents } from './accelerometer-events';
  *     };
  *
  */
-export class AccelerometerBase extends NativeEventEmitterComponent<AccelerometerEvents> {
+export interface IAccelerometer extends NativeEventEmitterComponent<AccelerometerEvents> {
   /**
    * Starts capturing accelerometer values.
    *
@@ -27,7 +27,7 @@ export class AccelerometerBase extends NativeEventEmitterComponent<Accelerometer
    * @ios
    * @since 0.1
    */
-  static start: () => void;
+  start: () => void;
   /**
    * Stops capturing.
    *
@@ -36,7 +36,7 @@ export class AccelerometerBase extends NativeEventEmitterComponent<Accelerometer
    * @ios
    * @since 0.1
    */
-  static stop: () => void;
+  stop: () => void;
   /**
    * Callback to capture accelerometer events.
    *
@@ -58,15 +58,16 @@ export class AccelerometerBase extends NativeEventEmitterComponent<Accelerometer
    * });
    * ````
    */
-  static onAccelerate: (e: { x: number; y: number; z: number }) => void;
+  onAccelerate: (e: { x: number; y: number; z: number }) => void;
 
-  /**
-   * The interval, in millisecond, for providing accelerometer updates to the block handler.
-   *
-   * @property {Number} [accelerometerUpdateInterval = 100]
-   * @ios
-   * @since 4.0.2
-   */
-  static accelerometerUpdateInterval: number;
-  static Events = AccelerometerEvents;
+  ios: {
+    /**
+     * The interval, in millisecond, for providing accelerometer updates to the block handler.
+     *
+     * @property {Number} [accelerometerUpdateInterval = 100]
+     * @ios
+     * @since 4.0.2
+     */
+    accelerometerUpdateInterval: number;
+  };
 }
