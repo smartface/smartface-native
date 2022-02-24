@@ -729,6 +729,7 @@ declare class __SF_UIDevice {
   static getIFAddresses(): string[];
   static vibrate(): void;
   static takeSnapShot(): void;
+  static forceTouchAvaliable(): boolean;
 }
 
 declare class __SF_UIAccessibility {
