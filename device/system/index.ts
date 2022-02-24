@@ -1,4 +1,84 @@
 /**
+ * @enum {String} Device.System.OSType
+ * @static
+ * @since 2.0.7
+ */
+export enum OSType {
+  /**
+   * @property {String} ANDROID
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 2.0.7
+   */
+  ANDROID = 'Android',
+
+  /**
+   * @property {String} IOS
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 2.0.7
+   */
+  IOS = 'iOS'
+}
+
+/**
+ * @enum {Number} Device.System.BiometryType
+ * @since 4.3.1
+ * @ios
+ * @android
+ *
+ * The set of available biometric authentication types.
+ */
+export enum BiometryType {
+  /**
+   * The device supports the biometrics (e.g. fingerprint, iris, or face).
+   *
+   * @property {Number} BIOMETRICS
+   * @static
+   * @android
+   * @readonly
+   * @since 4.3.1
+   */
+  BIOMETRICS = 3,
+
+  /**
+   * No biometry type is supported. Works on iOS 11.0+.
+   *
+   * @property {Number} NONE
+   * @static
+   * @ios
+   * @android
+   * @readonly
+   * @since 4.3.1
+   */
+  NONE = 0,
+  /**
+   * The device supports Touch ID. Works on iOS 11.0+.
+   *
+   * @property {Number} TOUCHID
+   * @static
+   * @ios
+   * @readonly
+   * @since 4.3.1
+   */
+  TOUCHID = 1,
+  /**
+   * The device supports Face ID. Works on iOS 11.0+.
+   *
+   * @property {Number} FACEID
+   * @static
+   * @ios
+   * @readonly
+   * @since 4.3.1
+   */
+  FACEID = 2
+}
+
+/**
  * @class Device.System
  * @since 0.1
  *
@@ -20,7 +100,9 @@
  *     console.log("Device.System.fingerPrintAvailable: "           + System.fingerPrintAvailable);
  *
  */
-declare class System {
+export declare class AbstractSystem {
+  static OS: OSType.ANDROID | OSType.IOS;
+  static OSType: typeof OSType;
   /**
    *
    * Returns the device's current language set.
@@ -87,7 +169,7 @@ declare class System {
    * @static
    * @since 4.3.1
    */
-  static biometricType: typeof System.BiometryType;
+  static biometricType: BiometryType;
 
   static android: Partial<{
     /**
@@ -155,26 +237,6 @@ declare class System {
     getPackageVersion?(params: { packageName: string | null; onSuccess: (versionName: string) => void; onError: (error: ErrorType) => void }): void;
   }>;
   static ios: Partial<{
-    /**
-     * @enum {Number} Device.System.LABiometryType
-     * @since 3.0.2
-     * @ios
-     *
-     * The set of available biometric authentication types. Works on iOS 11.0+.
-     * @deprecated since 4.3.1 Use {@link Device.System.BiometryType}
-     */
-    LABiometryType: LABiometryType;
-    /**
-     *
-     * Returns the set of available biometric authentication supported by the device.
-     * @property {Device.System.LABiometryType} LAContextBiometricType
-     * @readonly
-     * @ios
-     * @static
-     * @since 3.0.2
-     * @deprecated since 4.3.1 Use {@link Device.System#biometricType}
-     */
-    LAContextBiometricType: LABiometryType;
     /**
      * @deprecated
      *
@@ -387,122 +449,10 @@ declare class System {
    *
    * The set of available biometric authentication types.
    */
-  static readonly BiometryType: {
-    /**
-     * The device supports the biometrics (e.g. fingerprint, iris, or face).
-     *
-     * @property {Number} BIOMETRICS
-     * @static
-     * @android
-     * @readonly
-     * @since 4.3.1
-     */
-    BIOMETRICS: 3;
-
-    /**
-     * No biometry type is supported. Works on iOS 11.0+.
-     *
-     * @property {Number} NONE
-     * @static
-     * @ios
-     * @android
-     * @readonly
-     * @since 4.3.1
-     */
-    NONE: 0;
-    /**
-     * The device supports Touch ID. Works on iOS 11.0+.
-     *
-     * @property {Number} TOUCHID
-     * @static
-     * @ios
-     * @readonly
-     * @since 4.3.1
-     */
-    TOUCHID: 1;
-    /**
-     * The device supports Face ID. Works on iOS 11.0+.
-     *
-     * @property {Number} FACEID
-     * @static
-     * @ios
-     * @readonly
-     * @since 4.3.1
-     */
-    FACEID: 2;
-  };
+  static readonly BiometryType: BiometryType;
 }
 
-declare namespace System {
-  const OS: OSType;
+const System: typeof AbstractSystem = require(`./system.${Device.deviceOS.toLowerCase()}`).default;
+type System = AbstractSystem;
 
-  /**
-   * @enum {String} Device.System.OSType
-   * @static
-   * @since 2.0.7
-   */
-  enum OSType {
-    /**
-     * @property {String} ANDROID
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 2.0.7
-     */
-    ANDROID = 'Android',
-
-    /**
-     * @property {String} IOS
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 2.0.7
-     */
-    IOS = 'iOS'
-  }
-}
-
-/**
- * @enum {Number} Device.System.LABiometryType
- * @since 3.0.2
- * @ios
- *
- * The set of available biometric authentication types. Works on iOS 11.0+.
- * @deprecated since 4.3.1 Use {@link Device.System#BiometryType}
- */
-declare enum LABiometryType {
-  /**
-   * No biometry type is supported. Works on iOS 11.0+.
-   *
-   * @property {Number} NONE
-   * @static
-   * @ios
-   * @readonly
-   * @since 3.0.2
-   */
-  NONE = 0,
-  /**
-   * The device supports Touch ID. Works on iOS 11.0+.
-   *
-   * @property {Number} TOUCHID
-   * @static
-   * @ios
-   * @readonly
-   * @since 3.0.2
-   */
-  TOUCHID = 1,
-  /**
-   * The device supports Face ID. Works on iOS 11.0+.
-   *
-   * @property {Number} FACEID
-   * @static
-   * @ios
-   * @readonly
-   * @since 3.0.2
-   */
-  FACEID = 2
-}
-
-export = System;
+export default System;

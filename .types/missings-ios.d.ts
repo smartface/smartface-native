@@ -167,6 +167,9 @@ declare class __SF_FileStream {
 declare class __SF_LAContext {
   evaluatePolicy(message: string, onSuccess: () => void, onError: () => void): void;
   canEvaluatePolicy(): boolean;
+  instancesRespondToSelector(selector: string): any;
+  setValueForKey(value: any, key: string): void;
+  valueForKey(key: string): any;
 }
 
 declare class __SF_NSLocale extends __SF_NSOBject {
@@ -324,6 +327,7 @@ declare interface iOSSharedApplication {
   registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
   registerForRemoteNotifications(): void;
   unregisterForRemoteNotifications(): void;
+  canOpenURL(value: __SF_NSURL): boolean;
 }
 
 declare class __SF_UIApplication extends __SF_NSOBject {
@@ -720,6 +724,7 @@ declare interface iOSCurrentDevice {
   batteryMonitoringEnabled: boolean;
   batteryState: number;
   systemVersion: string;
+  batteryLevel: number;
 }
 
 declare class __SF_UIDevice {
