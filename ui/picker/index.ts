@@ -40,7 +40,7 @@ export interface PickerIOSProperties {
    * @since 4.2.3
    */
   dialogLineColor?: Color;
-  rowHeight: number;
+  rowHeight?: number;
 }
 
 /**
