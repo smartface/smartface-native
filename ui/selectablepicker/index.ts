@@ -1,61 +1,12 @@
-import { EventEmitter } from 'core/eventemitter';
+import { IEventEmitter } from '../../core/eventemitter';
+import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import Font from '../font';
+import { SelectablePickerEvents } from './selectablepicker-events';
+import { ConstructorOf } from '../../core/constructorof';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 
-declare enum Events {
-  /**
-   * This event is called when an item is selected/unselected on the SelectablePicker.
-   * If multiSelectEnabled is false, selected will be always true.
-   *
-   * @param {Number} index
-   * @param {Boolean} selected
-   * @event onSelected
-   * @android
-   * @since 4.0.5
-   */
-  Selected = 'selected'
-}
-
-/**
- * @class UI.SelectablePicker
- * @since 4.0.5
- *
- * SelectablePicker is a dialog where users are able to pick item/items on.
- *
- *     @example
- *     const SelectablePicker = require('@smartface/native/ui/selectablepicker');
- *     var items = [
- *          "item1",
- *          "item2",
- *          "item3",
- *          "item4",
- *          "item5"
- *     ];
- *
- *     var checkedItems = [3,2]
- *     var mySelectablePicker = new SelectablePicker({
- *          multiSelectEnabled: true,
- *          items: items,
- *          checkedItems: checkedItems
- *     });
- *     var doneCallback = function(params){
- *          console.log(params.items);
- *     }
- *     var cancelCallback = function(params){
- *          console.log("Canceled");
- *     }
- *     mySelectablePicker.show(doneCallback,cancelCallback);
- */
-declare class SelectablePicker extends NativeComponent {
-  constructor(params?: Partial<SelectablePicker>);
-  static Events: typeof Events;
-
-  protected emitter: EventEmitter<Events>;
-  on(eventName: Events, callback: (...args: any[]) => void): () => void;
-  once(eventName: Events, callback: (...args: any[]) => void): () => void;
-  off(eventName: Events, callback: (...args: any[]) => void): void;
-  emit(event: Events, ...args: any[]): void;
-
+export declare interface ISelectablePicker<TEvent extends string = SelectablePickerEvents> extends NativeEventEmitterComponent<TEvent> {
   /**
    * Gets/sets items of the SelectablePicker.
    *
@@ -63,7 +14,7 @@ declare class SelectablePicker extends NativeComponent {
    * @android
    * @since 4.0.5
    */
-  items: [];
+  items: string[];
   /**
    * This event is called when an item is selected/unselected on the SelectablePicker.
    * If multiSelectEnabled is false, selected will be always true.
@@ -84,7 +35,7 @@ declare class SelectablePicker extends NativeComponent {
    * });
    * ````
    */
-  onSelected: (index: boolean, selected: boolean) => void;
+  onSelected: (index?: number, selected?: boolean) => void;
   /**
    * Gets/sets title of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -218,4 +169,7 @@ declare class SelectablePicker extends NativeComponent {
    */
   show(done: (param: { items: number | number[] }) => void, cancel: () => void): void;
 }
-export = SelectablePicker;
+
+const SelectablePicker: ConstructorOf<ISelectablePicker, Partial<ISelectablePicker>> = require(`./selectablepicker.${Device.deviceOS.toLowerCase()}`).default;
+type SelectablePicker = ISelectablePicker;
+export default SelectablePicker;
