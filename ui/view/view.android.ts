@@ -105,9 +105,9 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     x: 1.0,
     y: 1.0
   };
-  private _borderColor: Color;
-  private _borderWidth: number;
-  private _borderRadius: number;
+  protected _borderColor: Color;
+  protected _borderWidth: number;
+  protected _borderRadius: number;
   protected _backgroundColor: Color = Color.TRANSPARENT;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
@@ -195,7 +195,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   }
 
   //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
-  private _setBorderToAllEdges() {
+  protected _setBorderToAllEdges() {
     let borderWidthPx = DpToPixel(this.borderWidth);
     if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
     this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);

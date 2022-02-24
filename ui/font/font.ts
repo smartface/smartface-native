@@ -10,6 +10,7 @@ export enum FontStyle {
 }
 
 export declare class AbstractFont extends NativeComponent {
+  constructor(params?: Partial<AbstractFont>);
   /**
    * Gets size of font.
    *
