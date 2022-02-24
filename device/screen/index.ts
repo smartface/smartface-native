@@ -1,68 +1,69 @@
 import Image from '../../ui/image';
-declare namespace Screen {
-  type Orientation = 'portrait' | 'upsidedown' | 'landspaceleft' | 'landspaceright' | 'faceup' | 'facedown';
+
+export const OrientationTypeIOS = {
   /**
-   * @enum {String} Device.Screen.OrientationType
+   * @property {String} FACEUP
    * @static
+   * @ios
+   * @readonly
    * @since 0.1
    */
-  const OrientationType: {
-    /**
-     * @property {String} PORTRAIT
-     * @static
-     * @ios
-     * @android
-     * @readonly
-     * @since 0.1
-     */
-    readonly PORTRAIT: 'portrait';
-    /**
-     * @property {String} UPSIDEDOWN
-     * @static
-     * @ios
-     * @android
-     * @readonly
-     * @since 0.1
-     */
-    readonly UPSIDEDOWN: 'upsidedown';
-    /**
-     * @property {String} LANDSCAPELEFT
-     * @static
-     * @ios
-     * @android
-     * @readonly
-     * @since 0.1
-     */
-    readonly LANDSCAPELEFT: 'landspaceleft';
-    /**
-     * @property {String} LANDSCAPERIGHT
-     * @static
-     * @ios
-     * @android
-     * @readonly
-     * @since 0.1
-     */
-    readonly LANDSCAPERIGHT: 'landspaceright';
-    readonly ios: Partial<{
-      /**
-       * @property {String} FACEUP
-       * @static
-       * @ios
-       * @readonly
-       * @since 0.1
-       */
-      readonly FACEUP: 'faceup';
-      /**
-       * @property {String} FACEDOWN
-       * @static
-       * @ios
-       * @readonly
-       * @since 0.1
-       */
-      readonly FACEDOWN: 'facedown';
-    }>;
-  };
-}
+  FACEUP: 'faceup',
+  /**
+   * @property {String} FACEDOWN
+   * @static
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  FACEDOWN: 'facedown'
+} as const;
+
+/**
+ * @enum {String} Device.Screen.OrientationType
+ * @static
+ * @since 0.1
+ */
+export const OrientationType = {
+  /**
+   * @property {String} PORTRAIT
+   * @static
+   * @ios
+   * @android
+   * @readonly
+   * @since 0.1
+   */
+  PORTRAIT: 'portrait',
+  /**
+   * @property {String} UPSIDEDOWN
+   * @static
+   * @ios
+   * @android
+   * @readonly
+   * @since 0.1
+   */
+  UPSIDEDOWN: 'upsidedown',
+  /**
+   * @property {String} LANDSCAPELEFT
+   * @static
+   * @ios
+   * @android
+   * @readonly
+   * @since 0.1
+   */
+  LANDSCAPELEFT: 'landspaceleft',
+  /**
+   * @property {String} LANDSCAPERIGHT
+   * @static
+   * @ios
+   * @android
+   * @readonly
+   * @since 0.1
+   */
+  LANDSCAPERIGHT: 'landspaceright',
+  ios: OrientationTypeIOS
+} as const;
+
 /**
  * @class Device.Screen
  * @since 0.1
@@ -81,7 +82,7 @@ declare namespace Screen {
  *
  *
  */
-declare class Screen {
+export declare class ScreenBase {
   /**
    * Gets current device screen orientation.
    *
@@ -92,7 +93,7 @@ declare class Screen {
    * @static
    * @since 0.1
    */
-  static readonly orientation: Screen.Orientation;
+  static readonly orientation: typeof OrientationType;
   /**
    * Gets height of device screen.
    *
@@ -161,4 +162,7 @@ declare class Screen {
   }>;
 }
 
-export = Screen;
+const Screen: typeof ScreenBase = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
+type Screen = ScreenBase;
+
+export default Screen;
