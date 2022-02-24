@@ -5,22 +5,17 @@ import { FlexLayoutEvents } from './flexlayout-events';
 
 // const YogaEnums = require('../../util').YogaEnums;
 
-class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout
-{
-  constructor(params?: Partial<IFlexLayout>) {
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout {
+  constructor(params: Partial<IFlexLayout> = {}) {
     super({});
 
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
+    for (const param in params) {
+      this[param] = params[param];
     }
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
 }
-
 
 /**
 // YG Enums are inherited from UIView

@@ -1,22 +1,46 @@
+import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import Font from '../font';
-import View from '../view';
+import { IView } from '../view';
+import { PickerEvents } from './picker-events';
 
-declare enum PickerEvents {
+export interface PickerAndroidProperties {
   /**
-   * This event is called when scroll ends & an item is selected on a picker.
+   * Enables/disables the Picker.
    *
-   * @param {Number} index
-   * @event onSelected
+   * @since 1.1.8
+   * @property {Boolean} [enabled = true]
    * @android
-   * @ios
-   * @since 0.1
    */
-  Selected = 'selected'
+  enabled?: boolean;
 }
-declare namespace Picker {
-  const Events: typeof PickerEvents & typeof View.Events;
-  type Events = typeof Events;
+
+export interface PickerIOSProperties {
+  /**
+   * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
+   *
+   * @property {UI.Color} cancelHighlightedColor
+   * @ios
+   * @since 3.1.1
+   */
+  cancelHighlightedColor?: Color;
+  /**
+   * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
+   *
+   * @property {UI.Color} okHighlightedColor
+   * @ios
+   * @since 3.1.1
+   */
+  okHighlightedColor?: Color;
+  /**
+   * Gets/sets dialogLineColor of Picker.
+   *
+   * @property {UI.Color} dialogLineColor
+   * @ios
+   * @since 4.2.3
+   */
+  dialogLineColor?: Color;
+  rowHeight: number;
 }
 
 /**
@@ -28,28 +52,29 @@ declare namespace Picker {
  * you can call UI.Picker.show method.
  *
  *     @example
- *     const Picker = require("@smartface/native/ui/picker");
- *     var items = [
+ *     import Picker from "@smartface/native/ui/picker";
+ *     const items = [
  *         "item 1",
  *         "item 2",
  *         "item 3",
  *         "item 4",
  *         "item 5"
  *     ];
- *     var myPicker = new Picker({
+ *     const myPicker = new Picker({
  *         items: items,
  *         currentIndex: 2
  *     });
  *
- *     var okCallback = function(params) {
+ *     const okCallback = function(params) {
  *         console.log('Selected index: ' + params.index);
  *     }
- *     var cancelCallback = function() {
+ *     const cancelCallback = function() {
  *         console.log('Canceled');
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-declare class Picker extends View<PickerEvents> {
+export declare interface IPicker<TEvent extends string = PickerEvents, TIOS = PickerIOSProperties, TAND = PickerAndroidProperties>
+  extends IView<TEvent | PickerEvents, TIOS & PickerIOSProperties, TAND & PickerAndroidProperties> {
   /**
    * Gets/sets items of the picker.
    *
@@ -68,42 +93,6 @@ declare class Picker extends View<PickerEvents> {
    * @since 0.1
    */
   currentIndex: number;
-  /**
-   * Enables/disables the Picker.
-   *
-   * @since 1.1.8
-   * @property {Boolean} [enabled = true]
-   * @android
-   */
-  android: View['android'] & {
-    enabled: boolean;
-  };
-  ios: View['ios'] & {
-    /**
-     * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
-     *
-     * @property {UI.Color} cancelHighlightedColor
-     * @ios
-     * @since 3.1.1
-     */
-    cancelHighlightedColor: Color;
-    /**
-     * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
-     *
-     * @property {UI.Color} okHighlightedColor
-     * @ios
-     * @since 3.1.1
-     */
-    okHighlightedColor: Color;
-    /**
-     * Gets/sets dialogLineColor of Picker.
-     *
-     * @property {UI.Color} dialogLineColor
-     * @ios
-     * @since 4.2.3
-     */
-    dialogLineColor: Color;
-  };
   /**
    * Gets/sets textColor of Picker.
    *
@@ -154,7 +143,7 @@ declare class Picker extends View<PickerEvents> {
    * @ios
    * @since 0.1
    */
-  show(ok: (param: { index: number }) => void, cancel: () => void): void;
+  show(ok?: (param?: { index: number }) => void, cancel?: () => void): void;
   /**
    * Gets/sets title of the picker. This property only works with show method. Must set before show method.
    *
@@ -237,4 +226,7 @@ declare class Picker extends View<PickerEvents> {
    */
   okFont: Font;
 }
-export = Picker;
+
+const Picker: ConstructorOf<IPicker, Partial<IPicker>> = require(`./picker.${Device.deviceOS.toLowerCase()}`).default;
+type Picker = IPicker;
+export default Picker;
