@@ -1162,6 +1162,7 @@ declare class __SF_SFSpeechAudioBufferRecognitionRequest {
 
 declare class __SF_AVPlayerItem {
   static createFromUrl(url: __SF_NSURL): __SF_AVPlayerItem;
+  static createFromURL(url: __SF_NSURL): __SF_AVPlayerItem;
 }
 
 declare class __SF_AVPlayer {
