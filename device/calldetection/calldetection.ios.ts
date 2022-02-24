@@ -1,4 +1,3 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { ICallDetection, State } from './calldetection';
 import { CallDetectionEvents } from './calldetection-events';
@@ -8,12 +7,6 @@ class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> 
   private callObserverDelegate: __SF_CallObserverDelegate;
   constructor() {
     super();
-    const EventFunctions = {
-      [CallDetectionEvents.CallStateChanged]: (e) => {
-        this.onCallStateChanged?.(e);
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
     this.callObserverDelegate = new __SF_CallObserverDelegate();
     this.callObserverDelegate.callObserverCallChanged = (observer, call) => {
       let state;
@@ -27,6 +20,7 @@ class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> 
         state = State.INCOMING;
       }
       this.onCallStateChanged?.({ state, observer });
+      this.emit(CallDetectionEvents.CallStateChanged, state, observer);
     };
   }
 }

@@ -1,4 +1,3 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { ICallDetection, State } from './calldetection';
 import { CallDetectionEvents } from './calldetection-events';
@@ -11,18 +10,12 @@ class CallDetectionAndroid extends NativeEventEmitterComponent<CallDetectionEven
   onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;
   constructor() {
     super();
-    const EventFunctions = {
-      [CallDetectionEvents.CallStateChanged]: (e) => {
-        this.onCallStateChanged?.(e);
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
-    const self = this;
-    const phoneListener = new SFPhoneStateListener(function (state, incomingNumber) {
-      self.onCallStateChanged?.({
+    const phoneListener = new SFPhoneStateListener((state, incomingNumber) => {
+      this.onCallStateChanged?.({
         state: state,
         incomingNumber: incomingNumber
       });
+      this.emit(CallDetectionEvents.CallStateChanged, state, incomingNumber);
     });
 
     const telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
