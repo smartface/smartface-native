@@ -46,25 +46,17 @@ export default class WebSocketAndroid extends WebSocketBase {
     this.nativeObject = this._client.newWebSocket(this._request, this._listener);
 
     const EventFunctions = {
-      [Events.Close]: () => {
-        this._onCloseCallback = (e) => {
-          this.emitter.emit(Events.Close, e);
-        };
+      [Events.Close]: (e) => {
+        this._onCloseCallback?.(e);
       },
-      [Events.Failure]: () => {
-        this._onFailureCallback = (e) => {
-          this.emitter.emit(Events.Failure, e);
-        };
+      [Events.Failure]: (e) => {
+        this._onFailureCallback?.(e);
       },
-      [Events.Message]: () => {
-        this._onMessageCallback = (e) => {
-          this.emitter.emit(Events.Message, e);
-        };
+      [Events.Message]: (e) => {
+        this._onMessageCallback?.(e);
       },
-      [Events.Open]: () => {
-        this._onOpenCallback = (e) => {
-          this.emitter.emit(Events.Open, e);
-        };
+      [Events.Open]: (e) => {
+        this._onOpenCallback?.(e);
       }
     };
     eventCallbacksAssign(this, EventFunctions);
