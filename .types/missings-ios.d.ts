@@ -975,6 +975,9 @@ declare class __SF_AVPlayerViewController extends __SF_UIView {
 
 declare class __SF_SMFSFSafariViewController {
   static create(url: __SF_NSURL, animated: boolean): __SF_SMFSFSafariViewController;
+  instancesRespondToSelector(selector: string): any;
+  setValueForKey(value: any, key: string): void;
+  valueForKey(key: string): any;
 }
 
 declare class __SF_WKWebView extends __SF_UIView {
