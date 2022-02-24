@@ -82,7 +82,7 @@ export const OrientationType = {
  *
  *
  */
-export declare class ScreenBase {
+export declare class AbstractScreen {
   /**
    * Gets current device screen orientation.
    *
@@ -162,7 +162,7 @@ export declare class ScreenBase {
   }>;
 }
 
-const Screen: typeof ScreenBase = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
-type Screen = ScreenBase;
+const Screen: typeof AbstractScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
+type Screen = AbstractScreen;
 
 export default Screen;

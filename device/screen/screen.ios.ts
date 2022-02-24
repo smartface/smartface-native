@@ -1,4 +1,4 @@
-import { OrientationType, ScreenBase } from '.';
+import { OrientationType, AbstractScreen } from '.';
 import Image from '../../ui/image';
 
 const orientationArray = [
@@ -11,12 +11,10 @@ const orientationArray = [
   OrientationType.ios.FACEDOWN
 ];
 
-class ScreenIOS extends ScreenBase {
+class ScreenIOS implements AbstractScreen {
   OrientationType = OrientationType;
   ios = { forceTouchAvaliable: __SF_UIDevice.forceTouchAvaliable() };
-  constructor() {
-    super();
-  }
+  constructor() {}
   get dpi() {
     if (__SF_UIScreen.mainScreen().scale === 2) {
       return 326;

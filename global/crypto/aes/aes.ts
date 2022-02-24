@@ -1,4 +1,4 @@
-export declare class AESBase {
+export declare class AbstractAES {
   /**
    * Used to encrypt the provided plain text with given parameters.
    *
