@@ -23,8 +23,8 @@ import AttributedString from '../../global/attributedstring';
  *     });
  *     myTab.add('home', myItem);
  */
-declare class TabBarItem extends NativeComponent {
-  constructor(params?: Partial<TabBarItem>);
+export declare class AbstractTabBarItem {
+  constructor(params?: Partial<AbstractTabBarItem>);
   /**
    * Gets/sets the title of tab item.
    *
@@ -44,7 +44,7 @@ declare class TabBarItem extends NativeComponent {
    * @ios
    * @since 1.1.10
    */
-  icon: Image;
+  icon: { normal: Image | string; selected: Image | string } | Image | string;
   /**
    * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge usage isn't currently supported if this TabBarItem is belongs to TabBarController.
    * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.
@@ -109,5 +109,3 @@ declare class TabBarItem extends NativeComponent {
     font: Font;
   }>;
 }
-
-export = TabBarItem;
