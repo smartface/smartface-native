@@ -1,19 +1,6 @@
-import { EventEmitter, IEventEmitter } from 'core/eventemitter';
-
-declare enum Events {
-  /**
-   * Triggered when a time is selected on the picker.
-   *
-   * @since 0.1
-   * @param {Object} time
-   * @param {Number} time.hour
-   * @param {Number} time.minute
-   * @event onTimeSelected
-   * @android
-   * @ios
-   */
-  Selected = 'selected'
-}
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { TimePickerEvents } from './timepicker-events';
+import { ConstructorOf } from '../../core/constructorof';
 
 /**
  * @class UI.TimePicker
@@ -22,23 +9,16 @@ declare enum Events {
  * TimePicker is a dialog where users are able to select the time.
  *
  *     @example
- *     const TimePicker = require('@smartface/native/ui/timepicker');
- *     var myTimePicker = new TimePicker();
- *     myTimePicker.onTimeSelected = function(time) {
+ *     import TimePicker from '@smartface/native/ui/timepicker';
+ *     const myTimePicker = new TimePicker();
+ *     myTimePicker.onTimeSelected = (time) => {
  *         console.log('Hour: ' + time.hour + ' Minute: ' + time.minute);
  *     };
  *     myTimePicker.android.is24HourFormat = false;
  *     myTimePicker.show();
  *
  */
-declare class TimePicker extends NativeComponent implements IEventEmitter<Events> {
-  static Events: typeof Events;
-
-  protected emitter: EventEmitter<Events>;
-  on(eventName: Events, callback: (...args: any[]) => void): () => void;
-  once(eventName: Events, callback: (...args: any[]) => void): () => void;
-  off(eventName: Events, callback: (...args: any[]) => void): void;
-  emit(event: Events, ...args: any[]): void;
+export declare interface ITimePicker<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent> {
   /**
    * Sets the time avaliable on the picker.
    *
@@ -91,4 +71,7 @@ declare class TimePicker extends NativeComponent implements IEventEmitter<Events
    */
   onTimeSelected: (e: { hour: number; minute: number }) => void;
 }
-export = TimePicker;
+
+const TimePicker: ConstructorOf<ITimePicker, Partial<ITimePicker>> = require(`./timepicker.${Device.deviceOS.toLowerCase()}`).default;
+type TimePicker = ITimePicker;
+export default TimePicker;
