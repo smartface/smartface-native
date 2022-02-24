@@ -1,6 +1,7 @@
 import Page from '../../ui/page';
 import Blob from '../../global/blob';
 import NativeComponent from '../../core/native-component';
+
 export declare class ContactBase extends NativeComponent {
   constructor(params?: Partial<ContactBase>);
   phoneNumbers?: string[];

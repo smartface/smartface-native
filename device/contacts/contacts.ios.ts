@@ -1,3 +1,4 @@
+import Page from '../../ui/page';
 import { ContactsBase, ContactBase } from './contacts';
 
 function manageNativeContact(contact) {
@@ -94,30 +95,36 @@ class ContactsIOS extends ContactsBase {
       this.nativeObject = __SF_CNMutableContact.new();
     }
   }
-  pickContact(params) {
-    if (typeof params.page === 'object') {
+  pickContact(
+    page: Page,
+    handlers: {
+      onSuccess: (contact: Contact) => void;
+      onFailure?: () => void;
+    }
+  ) {
+    if (typeof page === 'object') {
       const store = __SF_CNContactStore.new();
       store.requestAccess(
         function () {
           const pickerViewController = __SF_CNContactPickerViewController.new();
           ContactsIOS.ios.__pickerDelegate.contactPickerDidSelectContact = function (contact) {
-            if (typeof params.onSuccess === 'function') {
+            if (typeof handlers.onSuccess === 'function') {
               __SF_Dispatch.mainAsync(function () {
                 const jsContact = new ContactsIOS.Contact({
                   nativeObject: contact.mutableCopy()
                 });
-                params.onSuccess(jsContact);
+                handlers.onSuccess(jsContact);
               });
             }
           };
           pickerViewController.delegate = ContactsIOS.ios.__pickerDelegate;
 
-          params.page.nativeObject.presentViewController(pickerViewController);
+          page.nativeObject.presentViewController(pickerViewController);
         },
         function () {
-          if (typeof params.onFailure === 'function') {
+          if (typeof handlers.onFailure === 'function') {
             __SF_Dispatch.mainAsync(function () {
-              params.onFailure();
+              handlers.onFailure();
             });
           }
         }
@@ -126,7 +133,13 @@ class ContactsIOS extends ContactsBase {
       throw Error('page parameter cannot be null');
     }
   }
-  getContactsByPhoneNumber(phoneNumber, callbacks) {
+  getContactsByPhoneNumber(
+    phoneNumber: string,
+    handlers: {
+      onSuccess: (contacts: Contact[]) => void;
+      onFailure?: (error: string) => void;
+    }
+  ) {
     const store = __SF_CNContactStore.new();
     store.requestAccess(
       function () {
@@ -147,16 +160,16 @@ class ContactsIOS extends ContactsBase {
                 }
               }
             }
-            callbacks.onSuccess(allContactsManagedArray);
+            handlers.onSuccess(allContactsManagedArray);
           },
           function (error) {
-            callbacks.onFailure(error);
+            handlers.onFailure(error);
           }
         );
       },
       function (error) {
-        if (typeof callbacks.onFailure === 'function') {
-          callbacks.onFailure(error);
+        if (typeof handlers.onFailure === 'function') {
+          handlers.onFailure(error);
         }
       }
     );
@@ -192,7 +205,7 @@ class ContactsIOS extends ContactsBase {
       }
     );
   }
-  add(params) {
+  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: (...args: any[]) => void; page?: Page }) {
     const store = __SF_CNContactStore.new();
     store.requestAccess(
       function () {
@@ -274,37 +287,6 @@ class ContactsIOS extends ContactsBase {
         });
       }
     );
-  }
-  pick(params) {
-    //Depracated on 4.1.5
-
-    if (typeof params.page === 'object') {
-      const store = __SF_CNContactStore.new();
-
-      store.requestAccess(
-        function () {
-          const pickerViewController = __SF_CNContactPickerViewController.new();
-          const pickerDelegate = new __SF_CNContactPickerDelegate();
-          pickerDelegate.contactPickerDidCancel = function () {
-            pickerViewController.dismiss(true, function () {});
-          };
-          pickerDelegate.contactPickerDidSelectContact = function (contact) {
-            const returnValue = manageNativeContact(contact);
-            if (typeof params.onSuccess === 'function') {
-              params.onSuccess(returnValue);
-            }
-          };
-          pickerViewController.delegate = pickerDelegate;
-
-          params.page.nativeObject.presentViewController(pickerViewController);
-        },
-        function () {
-          if (typeof params.onFailure === 'function') {
-            params.onFailure();
-          }
-        }
-      );
-    }
   }
   getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: Contact[]) => void }) {
     //Depracated on 4.1.5

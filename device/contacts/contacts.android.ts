@@ -230,7 +230,7 @@ class ContactsAndroid extends ContactsBase {
   private contentProviderOperation;
   private _onSuccess;
   private _onFailure;
-  static Contact: typeof Contact;
+  public static readonly Contact = Contact;
   constructor() {
     super();
   }
