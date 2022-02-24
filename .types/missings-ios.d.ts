@@ -755,7 +755,10 @@ declare class __SF_UIPickerView extends __SF_UIView {
   dialogBackgroundColor: __SF_UIColor;
   dialogLineColor: __SF_UIColor;
   show(
+    nativeObject: __SF_UIPickerView,
     title: string | undefined,
+    cancelFunc: (e: any) => void,
+    okFunc: (e: any) => void,
     titleColor: __SF_UIColor | undefined,
     titleFont: __SF_UIFont | undefined,
     cancelColor: __SF_UIColor | undefined,
