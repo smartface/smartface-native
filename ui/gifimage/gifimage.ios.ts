@@ -3,9 +3,10 @@ import FileStream from '../../io/filestream';
 import Image from '../../ui/image';
 import Blob from '../../global/blob';
 import { AndroidProps, GifImageBase, IGifImage, iOSProps } from '.';
+import { Size } from '../../primitive/size';
 
 export default class GifImageIOS extends GifImageBase {
-  constructor(params?: Partial<IGifImage>) {
+  constructor(params: Partial<IGifImage> = {}) {
     super(params);
 
     this.nativeObject = params.nativeObject;
@@ -38,7 +39,7 @@ export default class GifImageIOS extends GifImageBase {
     return Image.createFromImage(this.nativeObject.posterImage);
   }
 
-  get instrinsicSize(): { width: number; height: number } {
+  get instrinsicSize(): Size {
     return this.nativeObject.size;
   }
 

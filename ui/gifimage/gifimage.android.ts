@@ -6,12 +6,13 @@ import File from '../../io/file';
 import Blob from '../../global/blob';
 import Image from '../../ui/image';
 import { AndroidProps, GifImageBase, IGifImage, iOSProps } from '.';
+import { Size } from '../../primitive/size';
 
 export default class GifImageAndroid extends GifImageBase {
   private _content: File | Blob;
   private _seekPosition: number;
   private _speed: number;
-  constructor(params?: Partial<IGifImage>) {
+  constructor(params: Partial<IGifImage> = {}) {
     super(params);
 
     params?.android?.drawable && (this.nativeObject = params.android.drawable);
@@ -58,7 +59,7 @@ export default class GifImageAndroid extends GifImageBase {
     return new Image({ bitmap });
   }
 
-  get instrinsicSize(): { width: number; height: number } {
+  get instrinsicSize(): Size {
     const width = this.nativeObject.getIntrinsicWidth();
     const height = this.nativeObject.getIntrinsicHeight();
     return { width, height };

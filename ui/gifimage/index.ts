@@ -2,6 +2,7 @@ import { INativeComponent } from '../../core/inative-component';
 import Blob from '../../global/blob';
 import { BlobBase } from '../../global/blob/blob';
 import File from '../../io/file';
+import { Size } from '../../primitive/size';
 import Image from '../image';
 
 export type iOSProps = {
@@ -78,7 +79,7 @@ export interface IGifImage extends INativeComponent {
    * @ios
    * @since 3.2.0
    */
-  instrinsicSize: { width: number; height: number };
+  instrinsicSize: Size;
 
   /**
    * Returns a Blob instance.
@@ -90,7 +91,7 @@ export interface IGifImage extends INativeComponent {
 }
 
 export class GifImageBase implements IGifImage {
-  constructor(params?: Partial<IGifImage>) {}
+  constructor(params: Partial<IGifImage> = {}) {}
 
   /**
    * Creates an gifImage object from given a blob.
@@ -138,7 +139,7 @@ export class GifImageBase implements IGifImage {
   get posterImage(): Image {
     throw new Error('Method not implemented.');
   }
-  get instrinsicSize(): { width: number; height: number } {
+  get instrinsicSize(): Size {
     throw new Error('Method not implemented.');
   }
   toBlob(): BlobBase {
