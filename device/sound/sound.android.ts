@@ -68,7 +68,7 @@ export default class SoundAndroid extends AbstractSound {
   get android() {
     return this._android;
   }
-  get volume() {
+  get volume(): number {
     return this._volume;
   }
   set volume(volume: number) {
@@ -77,7 +77,7 @@ export default class SoundAndroid extends AbstractSound {
       this.nativeObject.setVolume(volume, volume);
     }
   }
-  get isLooping() {
+  get isLooping(): boolean {
     return this.nativeObject.isLooping();
   }
   set isLooping(isLooping: boolean) {

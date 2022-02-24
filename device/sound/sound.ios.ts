@@ -7,6 +7,8 @@ export default class SoundIOS extends AbstractSound {
   private addCallbackFunction: () => void;
   private avPlayerItem: __SF_AVPlayerItem;
   private _isLooping = false;
+  private _onReadyCallback: () => void;
+  private _onFinishCallback: () => void;
   constructor(params?: Partial<SoundIOS>) {
     super();
     const self = this;
@@ -30,7 +32,19 @@ export default class SoundIOS extends AbstractSound {
       };
     };
   }
-  get isPlaying() {
+  get onReady() {
+    return this._onReadyCallback;
+  }
+  set onReady(onReady) {
+    this._onReadyCallback = onReady;
+  }
+  get onFinish() {
+    return this._onFinishCallback;
+  }
+  set onFinish(onFinish) {
+    this._onFinishCallback = onFinish;
+  }
+  get isPlaying(): boolean {
     if (this.nativeObject.rate !== 0) {
       return true;
     } else {
@@ -43,13 +57,13 @@ export default class SoundIOS extends AbstractSound {
   get currentDuration(): number {
     return this.nativeObject.getCurrentTime() * 1000;
   }
-  get volume() {
+  get volume(): number {
     return this.nativeObject.volume;
   }
   set volume(volume: number) {
     this.nativeObject.volume = volume;
   }
-  get isLooping() {
+  get isLooping(): boolean {
     return this._isLooping;
   }
   set isLooping(isLooping: boolean) {
@@ -80,20 +94,20 @@ export default class SoundIOS extends AbstractSound {
     }
     this.nativeObject.addObserver();
   }
-  play() {
+  play(): void {
     this.nativeObject.play();
   }
-  pause() {
+  pause(): void {
     this.nativeObject.pause();
   }
-  stop() {
+  stop(): void {
     this.nativeObject.pause();
     this.seekTo(0);
   }
-  seekTo(milliseconds) {
+  seekTo(milliseconds): void {
     this.nativeObject.seekToMillisecond(milliseconds);
   }
-  setVolume(value) {
+  setVolume(value): void {
     this.nativeObject.volume = value;
   }
 }
