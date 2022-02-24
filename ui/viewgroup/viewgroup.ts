@@ -1,8 +1,8 @@
-import { EventType } from "core/eventemitter/EventType";
-import { ExtractEventValues } from "core/eventemitter/extract-event-values";
-import NativeEventEmitterComponent from "core/native-event-emitter-component";
-import IView, { AbstractView } from "../view/view";
-import { ViewGroupEvents } from "./viewgroup-events";
+import { EventType } from 'core/eventemitter/EventType';
+import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
+import NativeEventEmitterComponent from 'core/native-event-emitter-component';
+import IView, { AbstractView } from '../view';
+import { ViewGroupEvents } from './viewgroup-events';
 
 /**
  * @class UI.ViewGroup
@@ -21,8 +21,7 @@ import { ViewGroupEvents } from "./viewgroup-events";
  *     myFlexLayout.addChild(myLabel);
  */
 
-export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIOS = {}, TAND = {}>
-  extends IView<TEvent | ViewGroupEvents, TIOS, TAND> {
+export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIOS = {}, TAND = {}> extends IView<TEvent | ViewGroupEvents, TIOS, TAND> {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -72,7 +71,7 @@ export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIO
    * @since 3.1.3
    */
   getChildList(): IView[];
-  
+
   /**
    * Finds a child view with specified id within the layout.
    *

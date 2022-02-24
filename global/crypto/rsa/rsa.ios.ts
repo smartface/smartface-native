@@ -1,6 +1,6 @@
-import { AESBase } from '../aes/aes';
+import { AbstractRSA } from './rsa';
 
-class RSAIOS implements AESBase {
+class RSAIOS implements AbstractRSA {
   static SFCrypto = new __SF_SMFCrypto();
   static generateKeyPair(params: { keySize: number }) {
     const { keySize } = params;

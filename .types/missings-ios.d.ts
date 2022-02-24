@@ -36,7 +36,7 @@ declare class __SF_UIImageView extends __SF_UIView {
   contentMode: number; /**TODO: After FillType is typed */
   image: any;
   loadImage(image: __SF_UIImage): void;
-  getActualPath(): __SF_NSIndexPath;
+  getActualPath(): string;
   alpha: number;
   tintColor: __SF_UIColor;
   loadFromURL(url: any, placeholder: __SF_UIImage, headers: any, onSuccess: (innerFade: boolean, image: __SF_UIImage, error: any, cache: any /**TODO: ImageCacheType */, url: any) => void): void;
@@ -70,7 +70,7 @@ declare class __SF_Dispatch {
 }
 
 declare class __SF_UIScreen extends __SF_NSOBject {
-  mainScreen: () => { bounds: __SF_NSRect; scale: number };
+  static mainScreen: () => { bounds: __SF_NSRect; scale: number };
 }
 
 declare class __SF_UIApplicationDidChangeStatusBarOrientationNotification {}
@@ -86,6 +86,10 @@ declare class __SF_GCRect {
   minY?: number;
   midY?: number;
   maxY?: number;
+}
+
+declare class __SF_CNContactPickerViewController {
+  static new(): any;
 }
 
 declare class __SF_NSRect extends __SF_GCRect {}
@@ -113,7 +117,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   flipHorizontally(): void;
   flipVertically(): void;
   superview: __SF_UIView;
-  addSubView(view: __SF_UIView): void;
+  addSubview(view: __SF_UIView): void;
   removeFromSuperview(): void;
   willRemoveSubview: (e: any) => void;
   widthAnchor: any;
@@ -138,13 +142,13 @@ declare class __SF_NSUserDefaults extends __SF_NSOBject {
   constructor(param: string);
 }
 declare class __SF_File {
-  static create(value: __SF_NSIndexPath): __SF_File;
-  static getDocumentsDirectory(): __SF_NSIndexPath;
-  static getMainBundleDirectory(): __SF_NSIndexPath;
+  static create(value: string): __SF_File;
+  static getDocumentsDirectory(): string;
+  static getMainBundleDirectory(): string;
 }
 
 declare class __SF_FileStream {
-  static createWithPathWithStreamModeWithContentMode(path: __SF_NSIndexPath, streamModeValue: any, contentModeValue: any): __SF_FileStream;
+  static createWithPathWithStreamModeWithContentMode(path: string, streamModeValue: any, contentModeValue: any): __SF_FileStream;
   streamMode: any;
   contentMode: any;
   isReadable(): any;
@@ -186,12 +190,13 @@ declare class __SF_UIPasteboard {
 }
 
 declare class __SF_UIFont {
-  // TODO: it must be fontNamesByFamilyName
-  static systemFontOfSize(size: number): number;
-  static boldSystemFontOfSize(size: number): number;
+  static systemFontOfSize(size: number): any;
+  static boldSystemFontOfSize(size: number): any;
   static fontWithNameSize(fontFamily: string, size: number): any;
-  static italicSystemFontOfSize(size: number): number;
-  static createFromFileWithFilenameStringSize(actualPath: __SF_NSIndexPath, size: number): __SF_UIFont;
+  static italicSystemFontOfSize(size: number): any;
+  static createFromFileWithFilenameStringSize(actualPath: string, size: number): any;
+  static familyNames(): string[];
+  static fontNamesForFamilyName(familyName: string): string[];
 }
 
 declare class __SF_NSData extends __SF_NSOBject {
@@ -222,7 +227,7 @@ declare class __SF_UIRefreshControl extends __SF_UIView {
 }
 
 declare class __SF_UITableView extends __SF_UIScrollView {
-  addSubView(refreshControl: __SF_UIRefreshControl): void;
+  addSubview(refreshControl: __SF_UIRefreshControl): void;
   separatorStyle: number;
   showsVerticalScrollIndicator: boolean;
   leftToRightSwipeEnabled: boolean;
@@ -240,7 +245,7 @@ declare class __SF_UITableView extends __SF_UIScrollView {
   deleteRowIndexAnimation(index: number, animation: any /**TODO: UITableViewRowAnimation */): void;
   getVisibleIndexArray(): number[];
   getVisibleIndexArray(): number[];
-  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: __SF_NSIndexPath, style: number, animated?: boolean): void;
+  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: string, style: number, animated?: boolean): void;
   contentOffset: { x: number; y: number };
   isEditing: boolean;
   canMoveRowAt?: (value: any, e: any) => any;
@@ -253,12 +258,12 @@ declare class __SF_UITableView extends __SF_UIScrollView {
 declare class __SF_UICollectionView extends __SF_UIScrollView {
   constructor(layoutManager: __SF_UICollectionViewFlowLayout);
   numberOfSectionsCallback: (collectionView: any) => number;
-  cellForItemAtIndexPath(indexPath: __SF_NSIndexPath): any;
+  cellForItemAtIndexPath(indexPath: string): any;
   numberOfItemsInSectionCallback: (collectionView: any, section: any) => any;
-  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
-  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: __SF_NSIndexPath) => any;
+  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
+  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
   registerClassForCellWithReuseIdentifier(cell: __SF_UICollectionViewCell, type: any): void;
-  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: __SF_NSIndexPath): __SF_UICollectionViewCell;
+  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: string): __SF_UICollectionViewCell;
   superview: any;
 }
 
@@ -309,7 +314,7 @@ declare interface iOSSharedApplication {
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
   statusBarOrientationAnimationDuration: number;
-  keyWindow: { addSubView(view: __SF_UIView): void };
+  keyWindow: { addSubview(view: __SF_UIView): void; rootViewController: any; makeKeyAndVisible: (...args: any[]) => void };
   scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
   presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
   cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
@@ -330,7 +335,7 @@ declare class __SF_CMMotionManager {
   accelerometerUpdateInterval: number;
   startAccelerometerUpdates(): void;
   stopAccelerometerUpdates(): void;
-  callback: () => void;
+  callback: (e?: any) => void;
 }
 
 declare class __SF_CallObserverDelegate {
@@ -392,9 +397,9 @@ declare class __SF_CNContactPickerDelegate {
 
 declare class __SF_CNContactStore {
   static new(): __SF_CNContactStore;
-  requestAccess: (value: () => void) => void;
-  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void) => void;
-  executeSave(saveRequest: __SF_CNSaveRequest): void;
+  requestAccess: (value: () => void, failure: (...args: any[]) => void) => void;
+  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void, failure: (...args: any[]) => void) => void;
+  executeSave(saveRequest: __SF_CNSaveRequest): any;
 }
 
 declare class __SF_CNPhoneNumber {
@@ -628,7 +633,7 @@ declare class __SF_UINavigationController {
   popToViewControllerAnimated(uiViewController: __SF_UIViewController, animated: boolean): void;
   popViewControllerAnimated(animated: boolean): void;
   presentViewController(controllerToPresent: __SF_UIViewController, completionBlock: () => void, animated: boolean): void;
-  dismissViewController(completionBlock: () => void, animated: boolean): void;
+  dismissViewController(completionBlock?: () => void, animated?: boolean): void;
   delegate: __SF_SMFNavigationControllerDelegate;
   navigationBar: __SF_UINavigationBar;
 }
@@ -690,7 +695,7 @@ declare class __SF_NSOBject {
 
 declare class __SF_NSURL extends __SF_NSOBject {
   static URLWithString(value: string): __SF_NSURL;
-  static fileURLWithPath(actualPath: __SF_NSIndexPath): __SF_NSURL;
+  static fileURLWithPath(actualPath: string): __SF_NSURL;
 }
 
 declare class __SF_NSURLRequest extends __SF_NSOBject {
@@ -724,6 +729,7 @@ declare class __SF_UIDevice {
   static getIFAddresses(): string[];
   static vibrate(): void;
   static takeSnapShot(): void;
+  static forceTouchAvaliable(): boolean;
 }
 
 declare class __SF_UIAccessibility {
@@ -754,7 +760,10 @@ declare class __SF_UIPickerView extends __SF_UIView {
   dialogBackgroundColor: __SF_UIColor;
   dialogLineColor: __SF_UIColor;
   show(
+    nativeObject: __SF_UIPickerView,
     title: string | undefined,
+    cancelFunc: (e: any) => void,
+    okFunc: (e: any) => void,
     titleColor: __SF_UIColor | undefined,
     titleFont: __SF_UIFont | undefined,
     cancelColor: __SF_UIColor | undefined,
@@ -971,7 +980,7 @@ declare class __SF_SMFSFSafariViewController {
 declare class __SF_WKWebView extends __SF_UIView {
   scrollView: __SF_UIScrollView;
   load(urlRequest: __SF_NSURLRequest): void;
-  getActualPath(): __SF_NSIndexPath;
+  getActualPath(): string;
   loadHTMLStringBaseURL(html: string, e: any): void;
   onLoad: (e: any) => void;
   onShow: (e: any) => void;
@@ -998,8 +1007,8 @@ declare class __SF_CLLocationManager {
   static locationServicesEnabled(): boolean;
   delegate: __SF_CLLocationManagerDelegate;
   startUpdatingLocation(): void;
-  startUpdatingLocation(): void;
-  lastKnownLocation(): void;
+  stopUpdatingLocation(): void;
+  lastKnownLocation(): any;
   requestWhenInUseAuthorization(): void;
 }
 
@@ -1019,10 +1028,11 @@ declare class __SF_UIImagePickerController extends __SF_UINavigationController {
   static convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(
     quality: number,
     optimize: boolean,
-    path: __SF_NSIndexPath,
+    path: string,
     fileName: string,
     callBack: (e: any) => void
   ): void;
+  setValueForKey(value: any, key: string): void;
 }
 
 declare class __SF_UIImagePickerControllerDelegate extends __SF_SMFNavigationControllerDelegate {
@@ -1053,11 +1063,23 @@ declare class __SF_YPImagePicker {
 }
 
 declare class __SF_TOCropViewController {
-  static createWithCroppingStyleImage(e: any): __SF_TOCropViewController;
+  static createWithCroppingStyleImage(e: any, imageNativeObject?: any): __SF_TOCropViewController;
   title: string;
   setCustomAspect(e: { width: number; height: number }): void;
   delegate: __SF_TOCropViewControllerDelegate;
   delegateStrong: __SF_TOCropViewControllerDelegate;
+  aspectRatioLockEnabled: boolean;
+  aspectRatioPickerButtonHidden: boolean;
+  resetAspectRatioEnabled: boolean;
+  aspectRatioLockDimensionSwapEnabled: boolean;
+  resetButtonHidden: boolean;
+  rotateButtonsHidden: boolean;
+  showOnlyIcons: boolean;
+  doneButtonTitle: string;
+  cancelButtonTitle: string;
+  doneButtonColor: string;
+  cancelButtonColor: string;
+  dismissViewController(completionBlock?: () => void, animated?: boolean): void;
 }
 
 declare class __SF_TOCropViewControllerDelegate {
@@ -1170,7 +1192,7 @@ declare class __SF_SMFCrypto {
 }
 
 declare class __SF_Database {
-  constructor(path: string | __SF_NSIndexPath);
+  constructor(path: string);
   errorHandler: (e: any) => void;
   run(sqlCommand: string): void;
   prepare(sqlCommand: string): void;
@@ -1215,3 +1237,34 @@ declare class __SF_KeychainPasswordItem {
   deleteItemWithBlock(callback: (e: any) => void): void;
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
+
+declare const __SF_UIScrollViewDecelerationRateNormal: number;
+declare const __SF_UIScrollViewDecelerationRateFast: number;
+
+declare const __SF_UITextContentTypeName: string;
+declare const __SF_UITextContentTypeNamePrefix: string;
+declare const __SF_UITextContentTypeGivenName: string;
+declare const __SF_UITextContentTypeMiddleName: string;
+declare const __SF_UITextContentTypeFamilyName: string;
+declare const __SF_UITextContentTypeNameSuffix: string;
+declare const __SF_UITextContentTypeNickname: string;
+declare const __SF_UITextContentTypeJobTitle: string;
+declare const __SF_UITextContentTypeOrganizationName: string;
+declare const __SF_UITextContentTypeLocation: string;
+declare const __SF_UITextContentTypeFullStreetAddress: string;
+declare const __SF_UITextContentTypeStreetAddressLine1: string;
+declare const __SF_UITextContentTypeStreetAddressLine2: string;
+declare const __SF_UITextContentTypeAddressCity: string;
+declare const __SF_UITextContentTypeAddressState: string;
+declare const __SF_UITextContentTypeAddressCityAndState: string;
+declare const __SF_UITextContentTypeSublocality: string;
+declare const __SF_UITextContentTypeCountryName: string;
+declare const __SF_UITextContentTypePostalCode: string;
+declare const __SF_UITextContentTypeTelephoneNumber: string;
+declare const __SF_UITextContentTypeEmailAddress: string;
+declare const __SF_UITextContentTypeURL: string;
+declare const __SF_UITextContentTypeCreditCardNumber: string;
+declare const __SF_UITextContentTypeUsername: string;
+declare const __SF_UITextContentTypePassword: string;
+declare const __SF_UITextContentTypeNewPassword: string;
+declare const __SF_UITextContentTypeOneTimeCode: string;

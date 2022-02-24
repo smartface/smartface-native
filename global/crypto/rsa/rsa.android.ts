@@ -1,8 +1,8 @@
 const ENCRYPT_ALGORITHM = 'RSA';
 
-import { AESBase } from '../aes/aes';
+import { AbstractRSA } from './rsa';
 
-class RSAAndroid implements AESBase {
+class RSAAndroid implements AbstractRSA {
   static SFCrypto = requireClass('io.smartface.android.sfcore.global.crypto.RSACrypto');
   static generateKeyPair(params: { keySize: number }) {
     const { keySize = 2048 } = params;

@@ -4,13 +4,12 @@ import TypeUtil from '../util/type';
 import AndroidConfig from '../util/Android/androidconfig';
 import Http from '../net/http';
 import Network from '../device/network';
-//TODO: EventEmitter
-// import { EventEmitterCreator } from '../core/eventemitter';
-import Events from './events';
 import { EventEmitter } from 'core/eventemitter';
-import SliderDrawer from 'sf-core/ui/sliderdrawer';
 import { StatusBar } from './statusbar';
 import { NavigationBar } from './android/navigationbar';
+import { ApplicationEvents } from './application-events';
+import SliderDrawer from '../ui/sliderdrawer';
+import { RequestCodes } from '../util';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -58,7 +57,7 @@ const REQUEST_CODE_CALL_APPLICATION = 114,
 class ApplicationWrapper extends EventEmitter<string> {
   public statusBar = StatusBar;
   private _sliderDrawer: any;
-  private _keepScreenAwake: any;
+  private _keepScreenAwake = false;
   private _onExit: any;
   private _onMaximize: any;
   private _onMinimize: any;
@@ -71,15 +70,139 @@ class ApplicationWrapper extends EventEmitter<string> {
   private _onBackButtonPressed: any;
   private _onRequestPermissionsResult: any;
   private _keyboardMode: any;
-  private _secureWindowContent: any;
+  private _secureWindowContent = false;
   private __mDrawerLayout: any;
+  private activity = AndroidConfig.activity;
+  private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
   } as const;
-  Events = { ...Events };
+  static Events = ApplicationEvents;
   constructor() {
     super();
+
+    this.onApplicationCallReceived = (e) => {
+      if (checkIsAppShortcut(e)) {
+        if (this._onAppShortcutReceived) this._onAppShortcutReceived(e);
+      } else {
+        if (this._onApplicationCallReceived) this._onApplicationCallReceived(e);
+      }
+    };
+
+    this._onApplicationCallReceived = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.ApplicationCallReceived, e);
+    };
+
+    this._onAppShortcutReceived = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.AppShortcutReceived, e);
+    };
+
+    this._onBackButtonPressed = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.BackButtonPressed, e);
+    };
+
+    this.onUnhandledError = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.UnhandledError, e);
+    };
+
+    this._onExit = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.Exit, e);
+    };
+
+    this._onMaximize = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.Maximize, e);
+    };
+
+    this._onMinimize = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.Minimize, e);
+    };
+
+    this._onReceivedNotification = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.ReceivedNotification, e);
+    };
+
+    this._onRequestPermissionsResult = (e) => {
+      ApplicationAndroid.emit(ApplicationEvents.RequestPermissionResult, e);
+    };
+
+    this.spratAndroidActivityInstance.attachBackPressedListener({
+      onBackPressed: function () {
+        this._onBackButtonPressed && this._onBackButtonPressed();
+      }
+    });
+
+    const mDrawerLayout = this.activity.findViewById(NativeR.id.layout_root);
+    ApplicationAndroid.drawerLayout = mDrawerLayout;
+
+    // Creating Activity Lifecycle listener
+    const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
+      onCreate: function () {},
+      onResume: function () {
+        if (this._onMaximize) {
+          this._onMaximize();
+        }
+      },
+      onPause: function () {
+        if (this._onMinimize) {
+          this._onMinimize();
+        }
+      },
+      onStop: function () {},
+      onStart: function () {},
+      onDestroy: function () {
+        cancelAllBackgroundJobs();
+        if (this._onExit) {
+          this._onExit();
+        }
+      },
+      onRequestPermissionsResult: function (requestCode, permission, grantResult) {
+        let permissionResults = {};
+        permissionResults['requestCode'] = requestCode;
+        permissionResults['result'] = grantResult === 0;
+        ApplicationAndroid.android.onRequestPermissionsResult && ApplicationAndroid.android.onRequestPermissionsResult(permissionResults);
+      },
+      onActivityResult: function (requestCode, resultCode, data) {
+        //TODO: check if this is correct
+        if (requestCode === RequestCodes.Location.CHECK_SETTINGS_CODE) {
+          Location.__onActivityResult && Location.__onActivityResult(resultCode);
+        }
+      },
+      dispatchTouchEvent: function (actionType, x, y) {
+        let dispatchTouchEvent;
+        if (ApplicationAndroid.android.dispatchTouchEvent) dispatchTouchEvent = ApplicationAndroid.android.dispatchTouchEvent();
+        return typeof dispatchTouchEvent === 'boolean' ? dispatchTouchEvent : false;
+      }
+    });
+
+    // Attaching Activity Lifecycle event
+    this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
+  }
+
+  attachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+      sliderDrawer.__isAttached = true;
+      const sliderDrawerId = sliderDrawer.nativeObject.getId();
+      const isExists = this.__mDrawerLayout.findViewById(sliderDrawerId);
+      if (!isExists) {
+        this.__mDrawerLayout.addView(sliderDrawer.nativeObject);
+        this.__mDrawerLayout.bringToFront();
+        if (sliderDrawer.drawerListener) {
+          this.__mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+        }
+      }
+      sliderDrawer.onLoad && sliderDrawer.onLoad();
+    }
+  }
+
+  detachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+      sliderDrawer.__isAttached = false;
+      this.__mDrawerLayout.removeView(sliderDrawer.nativeObject);
+      if (sliderDrawer.drawerListener) {
+        this.__mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+      }
+    }
   }
   call() {
     let _uriScheme,
@@ -108,18 +231,18 @@ class ApplicationWrapper extends EventEmitter<string> {
       _chooserTitle = chooserTitle;
       _action = action;
     }
-    if (!TypeUtil.isString(uriScheme)) {
+    if (!TypeUtil.isString(_uriScheme)) {
       throw new TypeError('uriScheme must be string');
     }
 
     const NativeIntent = requireClass('android.content.Intent');
     const NativeUri = requireClass('android.net.Uri');
 
-    let intent = new NativeIntent(_action);
+    const intent = new NativeIntent(_action);
     let uriObject;
     if (TypeUtil.isObject(_data) && Object.keys(_data).length > 0) {
       // we should use intent.putExtra but it causes native crash.
-      let params = Object.keys(_data)
+      const params = Object.keys(_data)
         .map(function (k) {
           return k + '=' + _data[k];
         })
@@ -129,7 +252,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         configureIntent.call(intent, _uriScheme);
         uriObject = NativeUri.parse(params);
       } else {
-        let uri = _uriScheme + '?' + params;
+        const uri = _uriScheme + '?' + params;
         uriObject = NativeUri.parse(uri);
       }
     } else {
@@ -138,17 +261,17 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
     uriObject && intent.setData(uriObject);
     if (TypeUtil.isBoolean(_isShowChooser) && _isShowChooser) {
-      let title = TypeUtil.isString(_chooserTitle) ? _chooserTitle : 'Select and application';
-      let chooserIntent = NativeIntent.createChooser(intent, title);
+      const title = TypeUtil.isString(_chooserTitle) ? _chooserTitle : 'Select and application';
+      const chooserIntent = NativeIntent.createChooser(intent, title);
       try {
-        activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+        this.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
         _onFailure && _onFailure();
         return;
       }
     } else {
       try {
-        activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+        this.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
         _onFailure && _onFailure();
         return;
@@ -158,12 +281,10 @@ class ApplicationWrapper extends EventEmitter<string> {
   }
   canOpenUrl(url) {
     if (!url) {
-      console.error(new Error("url parameter can't be empty."));
-      return;
+      throw new Error("url parameter can't be empty.");
     }
     if (!TypeUtil.isString(url)) {
-      console.error(new Error('url parameter must be string.'));
-      return;
+      throw new Error('url parameter must be string.');
     }
     const NativeIntent = requireClass('android.content.Intent');
     const NativeUri = requireClass('android.net.Uri');
@@ -171,7 +292,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     launchIntent.setData(NativeUri.parse(url));
     const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
     const componentName = launchIntent.resolveActivity(packageManager);
-    if (componentName == null) {
+    if (componentName === null) {
       return false;
     } else {
       const fallback = '{com.android.fallback/com.android.fallback.Fallback}';
@@ -179,13 +300,13 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
   }
   exit() {
-    activity.finish();
+    this.activity.finish();
   }
   restart() {
-    spratAndroidActivityInstance.restartSpratActivity();
+    this.spratAndroidActivityInstance.restartSpratActivity();
   }
   hideKeyboard() {
-    const focusedView = activity.getCurrentFocus();
+    const focusedView = this.activity.getCurrentFocus();
     if (!focusedView) return;
     const windowToken = focusedView.getWindowToken();
     const inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
@@ -197,9 +318,9 @@ class ApplicationWrapper extends EventEmitter<string> {
       return;
     }
     this.__isSetOnItemSelectedListener = true;
-    spratAndroidActivityInstance.attachItemSelectedListener({
+    this.spratAndroidActivityInstance.attachItemSelectedListener({
       onOptionsItemSelected: function () {
-        let leftItem = self.currentPage._headerBarLeftItem;
+        const leftItem = self.currentPage._headerBarLeftItem;
         if (leftItem) {
           leftItem.onPress && leftItem.onPress();
         }
@@ -225,10 +346,10 @@ class ApplicationWrapper extends EventEmitter<string> {
   }
   set sliderDrawer(drawer) {
     if (drawer instanceof SliderDrawer) {
-      detachSliderDrawer(this._sliderDrawer);
+      this.detachSliderDrawer(this._sliderDrawer);
 
       this._sliderDrawer = drawer;
-      attachSliderDrawer(this._sliderDrawer);
+      this.attachSliderDrawer(this._sliderDrawer);
     } else {
       throw TypeError('Object must be SliderDrawer instance');
     }
@@ -240,37 +361,37 @@ class ApplicationWrapper extends EventEmitter<string> {
     this._keepScreenAwake = value;
     if (this._keepScreenAwake) {
       // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-      activity.getWindow().addFlags(128);
+      this.activity.getWindow().addFlags(128);
     } else {
       // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-      activity.getWindow().clearFlags(128);
+      this.activity.getWindow().clearFlags(128);
     }
   }
   get byteReceived() {
     const NativeTrafficStats = requireClass('android.net.TrafficStats');
-    const UID = activity.getApplicationInfo().uid;
+    const UID = this.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
   }
   get byteSent() {
     const NativeTrafficStats = requireClass('android.net.TrafficStats');
-    const UID = activity.getApplicationInfo().uid;
+    const UID = this.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.currentReleaseChannel;
+    return ApplicationAndroid.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.smartfaceAppName;
+    return ApplicationAndroid.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.smartfaceAppName;
+    return ApplicationAndroid.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.version;
+    return ApplicationAndroid.version;
   }
   // events
   // We can not handle application calls for now, so let SMFApplication handle this
@@ -280,7 +401,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onExit(onExit) {
     this._onExit = (e) => {
       onExit && onExit(e);
-      this.emitter.emit(Events.Exit, e);
+      this.emitter.emit(ApplicationEvents.Exit, e);
     };
   }
   get onMaximize() {
@@ -289,7 +410,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onMaximize(onMaximize) {
     this._onMaximize = (e) => {
       onMaximize && onMaximize(e);
-      this.emitter.emit(Events.Maximize, e);
+      this.emitter.emit(ApplicationEvents.Maximize, e);
     };
   }
   get onMinimize() {
@@ -298,7 +419,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onMinimize(onMinimize) {
     this._onMinimize = (e) => {
       onMinimize && onMinimize(e);
-      this.emitter.emit(Events.Minimize, e);
+      this.emitter.emit(ApplicationEvents.Minimize, e);
     };
   }
   get onReceivedNotification() {
@@ -307,19 +428,19 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onReceivedNotification(callback) {
     if (TypeUtil.isFunction(callback) || callback === null) {
       this._onReceivedNotification = (e) => {
-        this.callback && callback(e);
-        this.emitter.emit(Events.ReceivedNotification, e);
+        callback && callback(e);
+        this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
       };
     }
   }
   get onUnhandledError() {
-    return Application.onUnhandledError;
+    return ApplicationAndroid.onUnhandledError;
   }
   set onUnhandledError(onUnhandledError) {
     if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-      Application.onUnhandledError = (e) => {
+      ApplicationAndroid.onUnhandledError = (e) => {
         onUnhandledError(e);
-        this.emitter.emit(Events.UnhandledError, e);
+        this.emitter.emit(ApplicationEvents.UnhandledError, e);
       };
     }
   }
@@ -329,7 +450,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onApplicationCallReceived(callback) {
     this._onApplicationCallReceived = (e) => {
       callback && callback(e);
-      this.emitter.emit(Events.ApplicationCallReceived, e);
+      this.emitter.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
   }
   get onAppShortcutReceived() {
@@ -338,7 +459,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   set onAppShortcutReceived(callback) {
     this._onAppShortcutReceived = (e) => {
       callback && callback(e);
-      this.emitter.emit(Events.AppShortcutReceived, e);
+      this.emitter.emit(ApplicationEvents.AppShortcutReceived, e);
     };
   }
   get isVoiceOverEnabled() {
@@ -346,7 +467,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     const NativeContext = requireClass('android.content.Context');
     const context = AndroidConfig.activity;
     const accessibilityManager = context.getSystemService(NativeContext.ACCESSIBILITY_SERVICE);
-    if (accessibilityManager != null && accessibilityManager.isEnabled()) {
+    if (accessibilityManager !== null && accessibilityManager.isEnabled()) {
       const serviceInfoList = accessibilityManager.getEnabledAccessibilityServiceList(NativeAccessibilityServiceInfo.FEEDBACK_SPOKEN);
       if (!serviceInfoList.isEmpty()) return true;
     }
@@ -356,7 +477,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     const self = this;
     return {
       Permissions,
-      packageName: activity.getPackageName(),
+      packageName: self.activity.getPackageName(),
       get dispatchTouchEvent() {
         return self._dispatchTouchEvent;
       },
@@ -369,9 +490,9 @@ class ApplicationWrapper extends EventEmitter<string> {
       set onBackButtonPressed(callback) {
         self._onBackButtonPressed = (e) => {
           callback && callback(e);
-          self.emitter.emit(Events.BackButtonPressed, e);
+          self.emitter.emit(ApplicationEvents.BackButtonPressed, e);
         };
-        spratAndroidActivityInstance.attachBackPressedListener({
+        self.spratAndroidActivityInstance.attachBackPressedListener({
           onBackPressed: function () {
             self._onBackButtonPressed && self._onBackButtonPressed();
           }
@@ -384,11 +505,11 @@ class ApplicationWrapper extends EventEmitter<string> {
         if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
           // PackageManager.PERMISSION_GRANTED
           const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
-          return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
+          return NativeContextCompat.checkSelfPermission(self.activity, permission) === 0;
         } else {
-          const packageManager = activity.getPackageManager();
+          const packageManager = self.activity.getPackageManager();
           // PackageManager.PERMISSION_GRANTED
-          return packageManager.checkPermission(permission, self.android.packageName) == 0;
+          return packageManager.checkPermission(permission, self.android.packageName) === 0;
         }
       },
       // @todo requestPermissions should accept permission array too, but due to AND- it accepts just one permission.
@@ -403,19 +524,19 @@ class ApplicationWrapper extends EventEmitter<string> {
               result: self.android.checkPermission(permissions)
             });
         } else {
-          activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
+          self.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
         }
       },
       shouldShowRequestPermissionRationale(permission) {
         if (!TypeUtil.isString(permission)) {
           throw new Error('Permission must be Application.Permission type');
         }
-        return AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW && activity.shouldShowRequestPermissionRationale(permission);
+        return AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW && self.activity.shouldShowRequestPermissionRationale(permission);
       },
       setAppTheme(currentTheme) {
         const NativePreferenceManager = requireClass('android.preference.PreferenceManager');
-        let sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
-        let _themeRes = activity.getResources().getIdentifier(currentTheme, 'style', activity.getPackageName());
+        const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
+        const _themeRes = self.activity.getResources().getIdentifier(currentTheme, 'style', self.activity.getPackageName());
         sharedPreferences.edit().putInt('SFCurrentBaseTheme', _themeRes).commit();
       },
       get onRequestPermissionsResult() {
@@ -425,7 +546,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         if (TypeUtil.isFunction(callback) || callback === null) {
           self._onRequestPermissionsResult = (e) => {
             callback && callback(e);
-            self.emitter.emit(Events.RequestPermissionResult, e);
+            self.emitter.emit(ApplicationEvents.RequestPermissionResult, e);
           };
         }
       },
@@ -438,7 +559,7 @@ class ApplicationWrapper extends EventEmitter<string> {
       set keyboardMode(modeEnum) {
         if (typeof modeEnum !== 'number') return;
         self._keyboardMode = modeEnum;
-        activity.getWindow().setSoftInputMode(modeEnum);
+        self.activity.getWindow().setSoftInputMode(modeEnum);
       },
       get locale() {
         const LocaleConfigurationUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
@@ -448,21 +569,21 @@ class ApplicationWrapper extends EventEmitter<string> {
         if (TypeUtil.isString(languageCode)) {
           const NativePreferenceManager = requireClass('android.preference.PreferenceManager');
           const LocaleHelperUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
-          const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
+          const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
           sharedPreferences.edit().putString('AppLocale', languageCode).commit();
-          LocaleHelperUtil.changeConfigurationLocale(activity);
+          LocaleHelperUtil.changeConfigurationLocale(self.activity);
         }
       },
       get getLayoutDirection() {
-        return activity.getResources().getConfiguration().getLayoutDirection();
+        return self.activity.getResources().getConfiguration().getLayoutDirection();
       },
       get secureWindowContent() {
         return self._secureWindowContent;
       },
       set secureWindowContent(value) {
         self._secureWindowContent = value;
-        if (self._secureWindowContent) activity.getWindow().setFlags(FLAG_SECURE, FLAG_SECURE);
-        else activity.getWindow().clearFlags(FLAG_SECURE);
+        if (self._secureWindowContent) self.activity.getWindow().setFlags(FLAG_SECURE, FLAG_SECURE);
+        else self.activity.getWindow().clearFlags(FLAG_SECURE);
       }
     };
   }
@@ -525,152 +646,14 @@ function cancelAllBackgroundJobs() {
 
 function configureIntent(uriScheme) {
   const intent = this;
-  let classActivityNameArray = uriScheme.split('|');
+  const classActivityNameArray = uriScheme.split('|');
   intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
-}
-
-function attachSliderDrawer(sliderDrawer) {
-  if (sliderDrawer) {
-    sliderDrawer.__isAttached = true;
-    const sliderDrawerId = sliderDrawer.nativeObject.getId();
-    const isExists = mDrawerLayout.findViewById(sliderDrawerId);
-    if (!isExists) {
-      mDrawerLayout.addView(sliderDrawer.nativeObject);
-      mDrawerLayout.bringToFront();
-      if (sliderDrawer.drawerListener) {
-        mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
-      }
-    }
-    sliderDrawer.onLoad && sliderDrawer.onLoad();
-  }
-}
-
-function detachSliderDrawer(sliderDrawer) {
-  if (sliderDrawer) {
-    sliderDrawer.__isAttached = false;
-    mDrawerLayout.removeView(sliderDrawer.nativeObject);
-    if (sliderDrawer.drawerListener) {
-      mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
-    }
-  }
 }
 
 function checkIsAppShortcut(e) {
   return e && e.data && e.data.hasOwnProperty('AppShortcutType');
 }
 
-let _onMinimize,
-  _onMaximize,
-  _onExit,
-  _onBackButtonPressed,
-  _onApplicationCallReceived,
-  _onAppShortcutReceived,
-  _onReceivedNotification,
-  _onRequestPermissionsResult,
-  _keepScreenAwake = false,
-  _keyboardMode,
-  _sliderDrawer,
-  _dispatchTouchEvent,
-  activity = AndroidConfig.activity,
-  spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),
-  _secureWindowContent = false;
+const Application = new ApplicationWrapper();
 
-Application.onApplicationCallReceived = (e) => {
-  if (checkIsAppShortcut(e)) {
-    if (_onAppShortcutReceived) _onAppShortcutReceived(e);
-  } else {
-    if (_onApplicationCallReceived) _onApplicationCallReceived(e);
-  }
-};
-
-_onApplicationCallReceived = (e) => {
-  ApplicationAndroid.emit(Events.ApplicationCallReceived, e);
-};
-
-_onAppShortcutReceived = (e) => {
-  ApplicationAndroid.emit(Events.AppShortcutReceived, e);
-};
-
-_onBackButtonPressed = (e) => {
-  ApplicationAndroid.emit(Events.BackButtonPressed, e);
-};
-
-Application.onUnhandledError = (e) => {
-  ApplicationAndroid.emit(Events.UnhandledError, e);
-};
-
-_onExit = (e) => {
-  ApplicationAndroid.emit(Events.Exit, e);
-};
-
-_onMaximize = (e) => {
-  ApplicationAndroid.emit(Events.Maximize, e);
-};
-
-_onMinimize = (e) => {
-  ApplicationAndroid.emit(Events.Minimize, e);
-};
-
-_onReceivedNotification = (e) => {
-  ApplicationAndroid.emit(Events.ReceivedNotification, e);
-};
-
-_onRequestPermissionsResult = (e) => {
-  ApplicationAndroid.emit(Events.RequestPermissionResult, e);
-};
-
-// TODO: events
-// EventEmitterCreator(ApplicationWrapper, EventFunctions);
-
-spratAndroidActivityInstance.attachBackPressedListener({
-  onBackPressed: function () {
-    _onBackButtonPressed && _onBackButtonPressed();
-  }
-});
-
-const mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-ApplicationAndroid.drawerLayout = mDrawerLayout;
-
-// Creating Activity Lifecycle listener
-const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
-  onCreate: function () {},
-  onResume: function () {
-    if (_onMaximize) {
-      _onMaximize();
-    }
-  },
-  onPause: function () {
-    if (_onMinimize) {
-      _onMinimize();
-    }
-  },
-  onStop: function () {},
-  onStart: function () {},
-  onDestroy: function () {
-    cancelAllBackgroundJobs();
-    if (_onExit) {
-      _onExit();
-    }
-  },
-  onRequestPermissionsResult: function (requestCode, permission, grantResult) {
-    let permissionResults = {};
-    permissionResults['requestCode'] = requestCode;
-    permissionResults['result'] = grantResult === 0;
-    ApplicationAndroid.android.onRequestPermissionsResult && ApplicationAndroid.android.onRequestPermissionsResult(permissionResults);
-  },
-  onActivityResult: function (requestCode, resultCode, data) {
-    if (requestCode === Location.CHECK_SETTINGS_CODE) {
-      Location.__onActivityResult && Location.__onActivityResult(resultCode);
-    }
-  },
-  dispatchTouchEvent: function (actionType, x, y) {
-    let dispatchTouchEvent;
-    if (ApplicationAndroid.android.dispatchTouchEvent) dispatchTouchEvent = ApplicationAndroid.android.dispatchTouchEvent();
-    return typeof dispatchTouchEvent === 'boolean' ? dispatchTouchEvent : false;
-  }
-});
-
-// Attaching Activity Lifecycle event
-spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
-
-export default ApplicationAndroid;
+export default Application;

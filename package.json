@@ -29,7 +29,6 @@
   "license": "ISC",
   "homepage": "https://github.com/smartface/smartface-native",
   "dependencies": {
-    "@smartface/core": "^1.0.0",
     "events": "^3.3.0"
   },
   "devDependencies": {

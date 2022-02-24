@@ -1,4 +1,4 @@
-export declare class RSABase {
+export declare class AbstractRSA {
   /**
    * Used to encrypt the provided content with given public key.
    *

@@ -1,10 +1,8 @@
 /*globals array, requireClass, toJSArray */
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
-import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { ViewBase } from './view';
 
 const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
 const AndroidConfig = require('../../util/Android/androidconfig');
@@ -17,7 +15,7 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
 import { EventEmitterWrapper } from '../../core/eventemitter';
-import IView from './view';
+import View, { IView, ViewBase } from '.';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -80,7 +78,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements INativeComponent, View<TEvent, {}, TNative> {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements IView<TEvent, {}, TNative> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -107,10 +105,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     x: 1.0,
     y: 1.0
   };
-  private _borderColor: Color;
-  private _borderWidth: number;
-  private _borderRadius: number;
-  private _backgroundColor: Color = Color.TRANSPARENT;
+  protected _borderColor: Color;
+  protected _borderWidth: number;
+  protected _borderRadius: number;
+  protected _backgroundColor: Color = Color.TRANSPARENT;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -121,7 +119,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private _rippleColor = null;
   private _useForeground = false;
   protected yogaNode: any;
-  protected _android; 
+  protected _android;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
   constructor(params?: IView) {
@@ -197,7 +195,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   }
 
   //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
-  private _setBorderToAllEdges() {
+  protected _setBorderToAllEdges() {
     let borderWidthPx = DpToPixel(this.borderWidth);
     if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
     this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
@@ -214,20 +212,20 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       if (bitwiseBorders & borderEnum) {
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
-        case ViewAndroid.Border.TOP_LEFT:
-          borderRadiuses.fill(borderRadiusInDp, 0, 3);
-          break;
-        case ViewAndroid.Border.TOP_RIGHT:
-          borderRadiuses.fill(borderRadiusInDp, 2, 4);
-          break;
-        case ViewAndroid.Border.BOTTOM_RIGHT:
-          borderRadiuses.fill(borderRadiusInDp, 4, 6);
-          break;
-        case ViewAndroid.Border.BOTTOM_LEFT:
-          borderRadiuses.fill(borderRadiusInDp, 6, 8);
-          break;
-        default:
-          break;
+          case ViewAndroid.Border.TOP_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 0, 3);
+            break;
+          case ViewAndroid.Border.TOP_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 2, 4);
+            break;
+          case ViewAndroid.Border.BOTTOM_RIGHT:
+            borderRadiuses.fill(borderRadiusInDp, 4, 6);
+            break;
+          case ViewAndroid.Border.BOTTOM_LEFT:
+            borderRadiuses.fill(borderRadiusInDp, 6, 8);
+            break;
+          default:
+            break;
         }
       }
     }

@@ -4,7 +4,7 @@ import Accelerometer from '../device/accelerometer';
 import Network from '../device/network';
 import Timer from '../global/timer';
 import { Invocation } from '../util';
-import Events from './events';
+import { ApplicationEvents } from './application-events';
 import { EventEmitter } from 'core/eventemitter';
 import { INativeComponent } from 'core/inative-component';
 
@@ -12,7 +12,7 @@ import { INativeComponent } from 'core/inative-component';
 (function () {
   let userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
   let viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
-  if (viewAppearanceSemanticContentAttribute != undefined) {
+  if (viewAppearanceSemanticContentAttribute !== undefined) {
     __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
   }
 })();
@@ -28,8 +28,8 @@ function listenAppShortcut(callback) {
   SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
     let returnValue = true;
     if (typeof callback === 'function') {
-      let innerReturnValue = callback({ data: shortcutItem.userInfo });
-      if (typeof innerReturnValue == 'boolean') {
+      const innerReturnValue = callback({ data: shortcutItem.userInfo });
+      if (typeof innerReturnValue === 'boolean') {
         returnValue = innerReturnValue;
       }
     }
@@ -52,10 +52,45 @@ const EventFunctions = {
   //     // Android only
   // },
 };
-//TODO: event type should be given correctly
-class SFApplication extends EventEmitter<string> {
+
+class SFApplication extends EventEmitter<ApplicationEvents> {
+  private _onUnhandledError: any;
+  private _onExit: () => void;
+  private _onReceivedNotification: (e: any) => void;
+  private _onApplicationCallReceived: any;
+  private _onAppShortcutReceived: any;
+  private _onMaximize: (e: any) => void;
+  private _onMinimize: (e: any) => void;
   constructor() {
     super();
+
+    listenAppShortcut((e) => {
+      ApplicationIOS.emit(ApplicationEvents.AppShortcutReceived, e);
+    });
+
+    this.onUnhandledError = (e) => {
+      ApplicationIOS.emit(ApplicationEvents.UnhandledError, e);
+    };
+
+    this.onExit = function () {
+      ApplicationIOS.emit(ApplicationEvents.Exit);
+    };
+
+    this.onReceivedNotification = function (e) {
+      ApplicationIOS.emit(ApplicationEvents.ReceivedNotification, e);
+    };
+
+    this.onApplicationCallReceived = function (e) {
+      ApplicationIOS.emit(ApplicationEvents.ApplicationCallReceived, e);
+    };
+
+    this.onMaximize = function (e) {
+      ApplicationIOS.emit(ApplicationEvents.Maximize, e);
+    };
+
+    this.onMinimize = function (e) {
+      ApplicationIOS.emit(ApplicationEvents.Minimize, e);
+    };
   }
   private _sliderDrawer;
   private _rootPage;
@@ -71,8 +106,7 @@ class SFApplication extends EventEmitter<string> {
     return SMFApplication.canOpenUrl(url);
   }
   exit() {
-    // TODO define Application globally
-    Application.onExit();
+    this._onExit();
     // TODO define SMFApplication globally
     SMFApplication.exit();
   }
@@ -165,39 +199,31 @@ class SFApplication extends EventEmitter<string> {
     }
   }
   get onUnhandledError() {
-    // TODO: Application Global
-    return Application.onUnhandledError;
+    return this._onUnhandledError;
   }
   set onUnhandledError(value) {
-    // TODO: Application Global
-    Application.onUnhandledError = (e) => {
+    this._onUnhandledError = (e) => {
       value && value(e);
-      // TODO: EventEmitter
-      this.emitter.emit(Events.UnhandledError, e);
+      this.emitter.emit(ApplicationEvents.UnhandledError, e);
     };
   }
   set onExit(value) {
-    // TODO: Application Global
-    Application.onExit = (e) => {
-      value && value(e);
-      // TODO: EventEmitter
-      this.emitter.emit(Events.Exit, e);
+    this._onExit = () => {
+      value && value();
+      this.emitter.emit(ApplicationEvents.Exit);
     };
   }
   get onExit() {
-    // TODO: Application Global
-    return Application.onExit;
+    return this._onExit;
   }
   set onReceivedNotification(value) {
-    // TODO: Application Global
-    Application.onReceivedNotification = (e) => {
+    this._onReceivedNotification = (e) => {
       value && value(e);
-      // TODO: EventEmitter
-      this.emitter.emit(Events.ReceivedNotification, e);
+      this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
     };
   }
   get onReceivedNotification() {
-    return Application.onReceivedNotification;
+    return this._onReceivedNotification;
   }
   set onUserActivityWithBrowsingWeb(value) {
     this._onUserActivityWithBrowsingWeb = value;
@@ -212,41 +238,38 @@ class SFApplication extends EventEmitter<string> {
     };
   }
   get onApplicationCallReceived() {
-    return Application.onApplicationCallReceived;
+    return this._onApplicationCallReceived;
   }
   set onApplicationCallReceived(value) {
-    Application.onApplicationCallReceived = (e) => {
+    this._onApplicationCallReceived = (e) => {
       value && value(e);
-      this.emitter.emit(Events.ApplicationCallReceived, e);
+      this.emitter.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
-  }
-  get onAppShortcutReceived() {
-    return Application.onApplicationCallReceived;
   }
   set onAppShortcutReceived(value) {
     listenAppShortcut(value);
-    Application.onAppShortcutReceive = value;
+    this._onAppShortcutReceived = value;
   }
   get onUserActivityWithBrowsingWeb() {
     return this._onUserActivityWithBrowsingWeb;
   }
   set onMaximize(value) {
-    Application.onMaximize = (e) => {
+    this._onMaximize = (e) => {
       value && value(e);
-      this.emitter.emit(Events.Maximize, e);
+      this.emitter.emit(ApplicationEvents.Maximize, e);
     };
   }
   get onMaximize() {
-    return Application.onMaximize;
+    return this._onMaximize;
   }
   set onMinimize(value) {
-    Application.onMinimize = (e) => {
+    this._onMinimize = (e) => {
       value && value(e);
-      this.emitter.emit(Events.Minimize, e);
+      this.emitter.emit(ApplicationEvents.Minimize, e);
     };
   }
   get onMinimize() {
-    return Application.onMinimize;
+    return this._onMinimize;
   }
   get currentReleaseChannel() {
     return Application.currentReleaseChannel;
@@ -277,6 +300,7 @@ class SFApplication extends EventEmitter<string> {
     };
   }
   get android() {
+    const self = this;
     return {
       checkPermission() {},
       requestPermissions() {},
@@ -286,7 +310,7 @@ class SFApplication extends EventEmitter<string> {
       navigationBar: {},
       setAppTheme(e) {
         // TODO: EventEmitter
-        this.emitter.emit(Events.UnhandledError, e);
+        self.emitter.emit(ApplicationEvents.UnhandledError, e);
       }
     };
   }
@@ -363,33 +387,5 @@ function cancelAllBackgroundJobs() {
 }
 
 const ApplicationIOS = new SFApplication();
-
-listenAppShortcut((e) => {
-  ApplicationIOS.emit(Events.AppShortcutReceived, e);
-});
-
-Application.onUnhandledError = (e) => {
-  ApplicationIOS.emit(Events.UnhandledError, e);
-};
-
-Application.onExit = function (e) {
-  ApplicationIOS.emit(Events.Exit, e);
-};
-
-Application.onReceivedNotification = function (e) {
-  ApplicationIOS.emit(Events.ReceivedNotification, e);
-};
-
-Application.onApplicationCallReceived = function (e) {
-  ApplicationIOS.emit(Events.ApplicationCallReceived, e);
-};
-
-Application.onMaximize = function (e) {
-  ApplicationIOS.emit(Events.Maximize, e);
-};
-
-Application.onMinimize = function (e) {
-  ApplicationIOS.emit(Events.Minimize, e);
-};
 
 export default ApplicationIOS;
