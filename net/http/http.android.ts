@@ -1,9 +1,10 @@
 /*globals requireClass*/
 import Blob from '../../global/blob';
 import Network from '../../device/network';
-import { BlobBase } from '../../global/blob/blob';
-import { FileBase } from '../../io/file/file';
-import { ImageBase } from '../../ui/image/image';
+import File from '../../io/file';
+import FileStream from '../../io/filestream';
+import Path from '../../io/path';
+import Image from '../../ui/image';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { HttpBase, HttpRequestBase, IHttp } from './http';
 
@@ -31,13 +32,14 @@ export class HttpRequest extends HttpRequestBase {
   }
 }
 
+const _instanceCollection: HttpAndroid[] = [];
+
 export default class HttpAndroid extends HttpBase {
   private _clientBuilder: any;
   private _timeout: number;
   private _defaultHeaders: { [key: string]: string };
   private _cookiePersistenceEnabled = false;
   private _client: any;
-  private _instanceCollection = [];
   constructor(params?: Partial<IHttp>) {
     super(params);
     this._clientBuilder = new OkHttpClientBuilder();
@@ -47,7 +49,7 @@ export default class HttpAndroid extends HttpBase {
       this[param] = params[param];
     }
 
-    this._instanceCollection.push(this);
+    _instanceCollection.push(this);
 
     if (!Number.isInteger(this.timeout)) {
       this.timeout = 60000;
@@ -88,9 +90,9 @@ export default class HttpAndroid extends HttpBase {
     }
   }
 
-  __cancelAll(): void {
-    for (let i = 0; i < this._instanceCollection.length; i++) {
-      this._instanceCollection[i].cancelAll();
+  static cancelAll(): void {
+    for (let i = 0; i < _instanceCollection.length; i++) {
+      _instanceCollection[i].cancelAll();
     }
   }
 
@@ -100,10 +102,10 @@ export default class HttpAndroid extends HttpBase {
   }
 
   upload(
-    params: { url: string } & { body: { name: string; fileName: string; contentType: string; value: BlobBase; user: string; password: string } } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body: BlobBase; statusCode: number; headers?: { [key: string]: string } }) => void;
+    params: { url: string } & { body: { name: string; fileName: string; contentType: string; value: Blob; user: string; password: string } } & {
+      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body: Blob; statusCode: number; headers?: { [key: string]: string } }) => void;
       onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    } & { params: { url: string; headers?: { [key: string]: string }; method: string; body: any[] | BlobBase } }
+    } & { params: { url: string; headers?: { [key: string]: string }; method: string; body: any[] | Blob } }
   ) {
     params && (params.params.method = 'POST');
     return this.request(params, true, true);
@@ -126,14 +128,13 @@ export default class HttpAndroid extends HttpBase {
 
   requestImage(
     params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { image: ImageBase }) => void;
+      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { image: Image }) => void;
       onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
     }
   ) {
     if (!params) throw new Error('Required request parameters.');
 
     const requestOnLoad = params.onLoad;
-    const Image = require('../../ui/image');
 
     params.onLoad = (e) => {
       if (e && e.body) {
@@ -165,7 +166,7 @@ export default class HttpAndroid extends HttpBase {
 
   requestFile(
     params: { url: string } & { fileName?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { file?: FileBase }) => void;
+      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { file?: File }) => void;
       onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
     }
   ) {
@@ -173,16 +174,15 @@ export default class HttpAndroid extends HttpBase {
 
     const requestOnLoad = params.onLoad;
     params.onLoad = (e) => {
-      const IO = require('../../io');
       const cacheDir = activity.getCacheDir().getAbsolutePath();
       let path;
-      if (params.fileName) path = cacheDir + IO.Path.Separator + params.fileName;
+      if (params.fileName) path = cacheDir + Path.Separator + params.fileName;
       else path = cacheDir + params.url.substring(params.url.lastIndexOf('/'));
-      const file = new IO.File({
+      const file = new File({
         path: path
       });
       if (e && e.body) {
-        const stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
+        const stream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
         stream.write(e.body);
         stream.close();
         e.file = file;
@@ -196,7 +196,7 @@ export default class HttpAndroid extends HttpBase {
 
   request(
     params: { url: string } & { method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'; headers?: { [key: string]: string }; user?: string; password?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body?: BlobBase }) => void;
+      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body?: Blob }) => void;
       onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
     }
   ) {
