@@ -80,11 +80,11 @@ class SystemIOS implements AbstractSystem {
   vibrate() {
     __SF_UIDevice.vibrate();
   }
-  validateBiometric(params) {
+  validateBiometric(params: { message: string; onSuccess: () => void; onError: (cancelled?: boolean, error?: string) => void }) {
     const context = new __SF_LAContext();
     context.evaluatePolicy(params.message, params.onSuccess, params.onError);
   }
-  validateFingerPrint(params) {
+  validateFingerPrint(params: { message: string; onSuccess: () => void; onError: (cancelled?: boolean, error?: string) => void }) {
     this.validateBiometric(params);
   }
   isApplicationInstalled(packageName) {

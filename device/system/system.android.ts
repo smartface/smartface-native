@@ -123,7 +123,17 @@ class SystemAndroid implements AbstractSystem {
   get biometricsAvailable() {
     return SFBiometricPrompt.getBiometricType(AndroidConfig.activity) === this.BiometryType.BIOMETRICS;
   }
-  validateBiometric(params) {
+  validateBiometric(params: {
+    android: {
+      title: string;
+      cancelButtonText?: string;
+      subTitle?: string;
+      confirmationRequired?: boolean;
+    };
+    message: string;
+    onSuccess: () => void;
+    onError: (cancelled?: boolean, error?: string) => void;
+  }) {
     const {
       message,
       android: { title: title = 'title', subTitle: subTitle = 'subTitle', cancelButtonText: cancelButtonText = 'Cancel', confirmationRequired: confirmationRequired = true } = {},
@@ -151,7 +161,14 @@ class SystemAndroid implements AbstractSystem {
   get biometricType() {
     return SFBiometricPrompt.getBiometricType(AndroidConfig.activity);
   }
-  validateFingerPrint(params) {
+  validateFingerPrint(params: {
+    android: Partial<{
+      title: string;
+    }>;
+    message: string;
+    onSuccess: () => void;
+    onError: () => void;
+  }) {
     if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable) {
       const NativeFingerprintAuthenticationDialogFragment = requireClass('com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment');
       const NativeFingerPrintListener = requireClass('com.android.fingerprintdialog.FingerPrintListener');
