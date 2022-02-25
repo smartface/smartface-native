@@ -33,7 +33,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
     }
 
     const self = this;
-    const android = {
+    const _android = {
       get toggleImage(): Image {
         return self._toggleImage;
       },
@@ -67,7 +67,9 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
         self.setThumbColor();
       }
     };
-    Object.assign(this._android, android);
+    const { android, ...restParams } = this;
+    Object.assign(this._android, _android);
+    Object.assign(this, restParams);
 
     // Assign parameters given in constructor
     for (const param in params) {
