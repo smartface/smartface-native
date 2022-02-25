@@ -109,3 +109,8 @@ export declare class AbstractTabBarItem {
     font: Font;
   }>;
 }
+
+const TabbarItem: typeof AbstractTabBarItem = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;
+type TabbarItem = AbstractTabBarItem;
+
+export default TabbarItem;
