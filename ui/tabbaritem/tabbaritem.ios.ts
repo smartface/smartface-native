@@ -13,8 +13,8 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
   private _icon;
   private _badge;
   private _route: string;
-  private _android: { attributedTitle: AttributedStringBase; systemIcon: string | number };
-  private _ios: Partial<{ font: Font }>;
+  private _android: Partial<{ attributedTitle: AttributedStringBase; systemIcon: string | number }> = {};
+  private _ios: Partial<{ font: Font }> = {};
   constructor(params?: Partial<TabbarItemIOS>) {
     super();
     this.nativeObject = undefined;
@@ -31,6 +31,25 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
           }
         };
 
+    this._ios = {
+      get font(): Font {
+        return this._ios?.font;
+      },
+      set font(value: Font) {
+        this._ios.font = value;
+        if (this.nativeObject) {
+          if (this._ios.font) {
+            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 0); //UIControlStateNormal
+            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 0); //UIControlStateHighlighted
+            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 1); //UIControlStateDisabled
+          } else {
+            this.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
+            this.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
+            this.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
+          }
+        }
+      }
+    };
     for (const param in params) {
       if (param === 'ios' || param === 'android') {
         for (const osSpecificParameter in params[param]) {
@@ -116,23 +135,6 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
             this.nativeObject.selectedImage = image.nativeObject ? image.nativeObject : undefined;
           }
         }
-      }
-    }
-  }
-  get font(): Font {
-    return this._ios.font;
-  }
-  set font(value: Font) {
-    this._ios.font = value;
-    if (this.nativeObject) {
-      if (this._ios.font) {
-        this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 0); //UIControlStateNormal
-        this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 0); //UIControlStateHighlighted
-        this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 1); //UIControlStateDisabled
-      } else {
-        this.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
-        this.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
-        this.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
       }
     }
   }

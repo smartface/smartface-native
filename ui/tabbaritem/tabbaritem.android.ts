@@ -17,12 +17,12 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
   private tabBarItemParent = null;
   private index = null;
   private badgeAdded = false;
-  private _android: {
+  private _android: Partial<{
     attributedTitle: AttributedString;
     systemIcon: number | string;
-  };
+  }> = {};
   private _route: string;
-  public ios: Partial<{ font: AbstractFont }>;
+  public ios: Partial<{ font: AbstractFont }> = {};
   constructor(params?: Partial<AbstractTabBarItem>) {
     super();
     // Assign parameters given in constructor
@@ -41,7 +41,7 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
         self.nativeObject && self.nativeObject.setIcon(Image.systemDrawableId(self._systemIcon));
       },
       get attributedTitle() {
-        return self._android.attributedTitle;
+        return self._android?.attributedTitle;
       },
       set attributedTitle(value: AttributedString) {
         self._android.attributedTitle = value;

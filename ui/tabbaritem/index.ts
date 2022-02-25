@@ -70,7 +70,7 @@ export declare class AbstractTabBarItem {
    */
   route: string;
 
-  public readonly android: {
+  public readonly android: Partial<{
     /**
      * Gets/sets attributed title of tab bar item.
      *
@@ -97,7 +97,7 @@ export declare class AbstractTabBarItem {
      * @since 4.0.2
      */
     systemIcon: number | string;
-  };
+  }>;
   public readonly ios: Partial<{
     /**
      * Gets/sets font of tab bar item.
