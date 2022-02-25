@@ -77,11 +77,12 @@ export default class BottomTabBarIOS extends NativeComponent implements Abstract
   get items() {
     return this._items;
   }
-  set items(value: any[]) {
+  set items(value: TabBarItem[]) {
     if (typeof value === 'object') {
       this._items = value;
 
       for (const i in this._items) {
+        //TODO: update once tabbaritem merged
         if (typeof this._items[i].nativeObject === 'undefined') {
           this._items[i].nativeObject = this.nativeObject.items[i];
         }

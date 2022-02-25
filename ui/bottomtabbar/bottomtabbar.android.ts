@@ -61,7 +61,7 @@ export default class BottomTabBarAndroid extends NativeComponent implements Abst
   get itemColor() {
     return this._itemColors;
   }
-  set itemColor(colors) {
+  set itemColor(colors: { normal: Color; selected: Color }) {
     if (colors && colors.normal && colors.selected) {
       if (colors.normal instanceof Color && colors.selected instanceof Color) {
         const NativeR = requireClass('android.R');
@@ -92,7 +92,7 @@ export default class BottomTabBarAndroid extends NativeComponent implements Abst
   toString() {
     return 'Tab';
   }
-  createTabbarMenuItems(tabBarItems) {
+  createTabbarMenuItems(tabBarItems: any[]) {
     const btbMenu = this.nativeObject.getMenu();
     btbMenu.clear();
 
