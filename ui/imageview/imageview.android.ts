@@ -38,10 +38,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       this._nativeObject = new NativeImageView(AndroidConfig.activity);
     }
 
-    const { ios, android, ...restParams } = params;
-    Object.assign(this.ios, ios);
-    Object.assign(this.android, android);
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
 
   get image(): string | Image {

@@ -25,10 +25,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this.nativeObject.contentMode = ImageViewFillType.NORMAL;
     this.touchEnabled = true;
 
-    const { ios, android, ...restParams } = params;
-    Object.assign(this.ios, ios);
-    Object.assign(this.android, android);
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
 
   get image(): string | Image {
