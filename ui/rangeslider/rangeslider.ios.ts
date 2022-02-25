@@ -5,7 +5,6 @@ import Image from '../image';
 import ViewIOS from '../view/view.ios';
 import { RangeSliderEvents } from './rangeslider-events';
 import { UIControlEvents } from '../../util';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 
 export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> extends ViewIOS<TEvent | RangeSliderEvents, iOSProps> implements IRangeSlider {
   private _rangeEnabled: boolean;
@@ -73,15 +72,9 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
 
     const valueChangeHandler = () => {
       self.onValueChange?.(self.value);
+      self.emit(RangeSliderEvents.ValueChange, self.value);
     };
     self.nativeObject.addJSTarget(valueChangeHandler, UIControlEvents.valueChanged);
-
-    const EventFunctions = {
-      [RangeSliderEvents.ValueChange]: (e) => {
-        self.onValueChange(e);
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
 
     this.setParams(params);
   }

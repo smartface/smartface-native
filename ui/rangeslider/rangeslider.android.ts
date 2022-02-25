@@ -5,7 +5,6 @@ import { RangeSliderEvents } from './rangeslider-events';
 import { ViewAndroid } from '../view/view.android';
 import { AndroidProps, IRangeSlider } from '.';
 import Color from '../color';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 
@@ -73,12 +72,13 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
     };
     Object.assign(this._android, android);
 
-    const EventFunctions = {
-      [RangeSliderEvents.ValueChange]: (e) => {
-        this.onValueChange(e);
+    this.nativeObject.setOnValueChange({
+      onValueChange: (leftPinValue: any, rightPinValue: any) => {
+        const param = this._rangeEnabled ? [leftPinValue, rightPinValue] : [rightPinValue];
+        this._onValueChange?.(param);
+        this.emit(RangeSliderEvents.ValueChange, param);
       }
-    };
-    eventCallbacksAssign(this, EventFunctions);
+    });
 
     // Assign parameters given in constructor
     for (const param in params) {
@@ -173,11 +173,5 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   }
   set onValueChange(value: (value: number[]) => void) {
     this._onValueChange = value;
-    this.nativeObject.setOnValueChange({
-      onValueChange: (leftPinValue: any, rightPinValue: any) => {
-        const param = this._rangeEnabled ? [leftPinValue, rightPinValue] : [rightPinValue];
-        this._onValueChange?.(param);
-      }
-    });
   }
 }
