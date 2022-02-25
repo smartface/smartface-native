@@ -112,7 +112,7 @@ declare class Toast extends NativeComponent {
 	 */
     show(): void;
 	/**
-	 * This method should be called when the created snackbar intended to show.
+	 * This method should be called when the created toast intended to show.
 	 * @android
 	 * @ios
 	 * @since 4.4.1

@@ -101,7 +101,7 @@ Toast.prototype.isShowing = false
 Toast.prototype.createAction = function (parameter, callbackFunction) { }
 
 /**
- * This function will be called after a snack dismiss from screen.
+ * This function will be called after a toast dismiss from screen.
  * @param {function} callback function called when toast dismissed.
  * @method onDismissed
  * @android
