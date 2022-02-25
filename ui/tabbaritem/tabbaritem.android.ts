@@ -3,7 +3,7 @@ import NativeComponent from '../../core/native-component';
 import AttributedString from '../attributedstring';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
-import { AbstractFont } from '../font/font';
+import Font from '../font';
 import Image from '../image';
 import TabBarController from '../tabbarcontroller';
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
@@ -22,15 +22,14 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
     systemIcon: number | string;
   }> = {};
   private _route: string;
-  public ios: Partial<{ font: AbstractFont }> = {};
+  private _ios: Partial<{ font: Font }> = {};
   constructor(params?: Partial<AbstractTabBarItem>) {
     super();
     // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+    const { ios, android, ...restParams } = params;
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
     const self = this;
     this._android = {
       get systemIcon() {
@@ -47,6 +46,9 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
         self._android.attributedTitle = value;
       }
     };
+  }
+  get ios() {
+    return this._ios;
   }
   get title() {
     return this._title;

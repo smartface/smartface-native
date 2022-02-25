@@ -50,15 +50,10 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
         }
       }
     };
-    for (const param in params) {
-      if (param === 'ios' || param === 'android') {
-        for (const osSpecificParameter in params[param]) {
-          this[param][osSpecificParameter] = params[param][osSpecificParameter];
-        }
-      } else {
-        this[param] = params[param];
-      }
-    }
+    const { ios, android, ...restParams } = params;
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
   }
   get android() {
     return this._android;
