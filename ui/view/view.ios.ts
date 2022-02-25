@@ -2,11 +2,9 @@ import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
 import View, { IView, ViewBase } from '.';
-import { Invocation } from '../../util';
+import { Invocation, Exception, YogaEnums } from '../../util';
 import { Size } from '../../primitive/size';
-
-const Exception = require('../../util').Exception;
-const YGUnit = require('../../util').YogaEnums.YGUnit;
+const YGUnit = YogaEnums.YGUnit;
 
 declare const myLabelTitle: any;
 
@@ -17,8 +15,6 @@ function isInside(frame, point) {
   const h = frame.height;
   return !(x > w || x < 0 || y > h || y < 0);
 }
-
-type ViewIOSParams = {};
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = {}> extends ViewBase<TEvent> implements IView<TEvent, TNative> {
   android = {};
@@ -352,35 +348,37 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     this.nativeObject.layer.maskedCorners = corners;
   }
 
-  get backgroundColor() {
+  get backgroundColor(): IView['backgroundColor'] {
     return new Color({
       color: this.nativeObject.backgroundColor
     });
   }
   set backgroundColor(value) {
-    if (value.nativeObject.constructor.name === 'CAGradientLayer') {
-      if (!this.gradientColor) {
-        this.nativeObject.addFrameObserver();
-        this.nativeObject.frameObserveHandler = function (e) {
-          if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
-            return;
-          }
-          this.gradientColor.frame = e.frame;
-          this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
-        };
+    if (value instanceof Color) {
+      if (value.nativeObject.constructor.name === 'CAGradientLayer') {
+        if (!this.gradientColor) {
+          this.nativeObject.addFrameObserver();
+          this.nativeObject.frameObserveHandler = function (e) {
+            if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
+              return;
+            }
+            this.gradientColor.frame = e.frame;
+            this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+          };
+        }
+        this.gradientColor = value.nativeObject;
+        if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
+          return;
+        }
+        this.gradientColor.frame = this.nativeObject.frame;
+        this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+      } else {
+        if (this.gradientColor) {
+          this.nativeObject.removeFrameObserver();
+          this.gradientColor = undefined;
+        }
+        this.nativeObject.backgroundColor = value.nativeObject;
       }
-      this.gradientColor = value.nativeObject;
-      if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
-        return;
-      }
-      this.gradientColor.frame = this.nativeObject.frame;
-      this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
-    } else {
-      if (this.gradientColor) {
-        this.nativeObject.removeFrameObserver();
-        this.gradientColor = undefined;
-      }
-      this.nativeObject.backgroundColor = value.nativeObject;
     }
   }
 

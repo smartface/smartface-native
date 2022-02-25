@@ -7,6 +7,7 @@ import { ViewAndroid } from '../view/view.android';
 import { ILabel, ILabelAndroid } from '.';
 import { TypeUtil, TypeValue } from '../../util';
 import { ViewEvents } from '../view/view-event';
+import { IViewState } from '../view';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -107,7 +108,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize, maximumTextSize, this.android.adjustableFontSizeStep, TypeValue.COMPLEX_UNIT_DIP);
   }
 
-  private createColorStateList(textColors: Record<string, Color> /**TODO: Change this after Button color states are done */) {
+  private createColorStateList(textColors: IViewState<Color>) {
     const colorsSets: Color[] = [];
     const statesSet: any[] = [];
     if (textColors.normal) {
@@ -185,12 +186,12 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return this._textColor;
   }
   set textColor(value: ILabel['textColor']) {
-    if (value.nativeObject && value instanceof Color) {
+    if (value instanceof Color && value.nativeObject) {
       this._textColor = value;
       this.nativeObject.setTextColor(value.nativeObject);
     } else if (TypeUtil.isObject(value)) {
       this._textColor = value;
-      const textColorStateListDrawable = this.createColorStateList(value as Record<string, Color>); /**TODO: Look after button typescript is finished */
+      const textColorStateListDrawable = this.createColorStateList(value as IViewState<Color>);
       this.nativeObject.setTextColor(textColorStateListDrawable);
     }
   }

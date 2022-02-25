@@ -7,6 +7,14 @@ import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
 
+export interface IViewState<Property = any> {
+  normal?: Property;
+  disabled?: Property;
+  selected?: Property;
+  pressed?: Property;
+  focused?: Property;
+}
+
 export type ViewAndroidProps = {
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -223,7 +231,7 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: Color;
+  backgroundColor: Color | IViewState<Color>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -984,7 +992,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TIOS exten
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: Color;
+  backgroundColor: Color | IViewState<Color>;
   borderColor: Color;
   borderWidth: number;
   borderRadius: number;

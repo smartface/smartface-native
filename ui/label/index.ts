@@ -3,10 +3,9 @@ import Color from '../color';
 import EllipsizeMode from '../ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../textalignment';
-import IView from '../view';
+import IView, { IViewState } from '../view';
 import { ViewEvents } from '../view/view-event';
 import { ConstructorOf } from '../../core/constructorof';
-
 export interface ILabelAndroid {
   /**
    * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
@@ -107,7 +106,7 @@ export declare interface ILabel<TEvent extends string = ViewEvents, TIOS = {}, T
    * @ios
    * @since 0.1
    */
-  textColor: Color | Record<string, Color>;
+  textColor: Color | IViewState<Color>;
 
   /**
    * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)
