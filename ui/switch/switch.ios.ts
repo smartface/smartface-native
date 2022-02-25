@@ -24,12 +24,11 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
 
     this.nativeObject.layer.masksToBounds = false;
 
-    const EventFunctions = {
-      [SwitchEvents.ToggleChanged]: (e) => {
-        this.onToggleChanged(e);
-      }
+    const onToggleChangedHandler = (toggle: boolean) => {
+      this._onToggleChanged(toggle);
+      this.emit(SwitchEvents.ToggleChanged, toggle);
     };
-    eventCallbacksAssign(this, EventFunctions);
+    this.nativeObject.addJSTarget(onToggleChangedHandler, UIControlEvents.valueChanged);
 
     // Assign parameters given in constructor
     for (const param in params) {
@@ -84,9 +83,5 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   }
   set onToggleChanged(value: (toggle: boolean) => void) {
     this._onToggleChanged = value;
-    const onToggleChangedHandler = (toggle: boolean) => {
-      this._onToggleChanged(toggle);
-    };
-    this.nativeObject.addJSTarget(onToggleChangedHandler, UIControlEvents.valueChanged);
   }
 }

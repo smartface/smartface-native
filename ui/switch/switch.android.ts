@@ -1,6 +1,5 @@
 /*globals requireClass*/
 import { AndroidProps, ISwitch } from '.';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import Image from '../image';
@@ -28,6 +27,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
           this.setThumbColor();
           this.setTrackColor();
           this._onToggleChangedCallback?.(isChecked);
+          this.emit(SwitchEvents.ToggleChanged, isChecked);
         }
       });
     }
@@ -68,13 +68,6 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
       }
     };
     Object.assign(this._android, android);
-
-    const EventFunctions = {
-      [SwitchEvents.ToggleChanged]: (e) => {
-        this._onToggleChangedCallback?.(e);
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
 
     // Assign parameters given in constructor
     for (const param in params) {
