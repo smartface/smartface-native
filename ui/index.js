@@ -17,6 +17,7 @@ module.exports = {
     Image: require('./image'),
     StatusBarStyle: require('./statusbarstyle'),
     TextBox: require('./textbox'),
+    Toast: require('./toast'),
     KeyboardType: require('./keyboardtype'),
     KeyboardAppearance: require('./keyboardappearance'),
     ActionKeyType: require('./actionkeytype'),
