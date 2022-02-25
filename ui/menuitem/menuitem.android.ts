@@ -25,12 +25,12 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   constructor(params?: Partial<MenuItem>) {
     super();
     const self = this;
-    const EventFunctions = {
-      [MenuItemEvents.Selected]: function () {
-        self._onSelected?.();
-      }
+
+    const callbackWrapper = () => {
+      this.emit(MenuItemEvents.Selected);
     };
-    eventCallbacksAssign(this, EventFunctions);
+
+    this._onSelected = callbackWrapper;
 
     const android = {
       get titleColor(): Color {
@@ -75,10 +75,12 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
     return this._onSelected;
   }
   set onSelected(callback: () => void) {
-    if (!TypeUtil.isFunction(callback)) {
-      throw new TypeError(Exception.TypeError.FUNCTION);
-    }
-    this._onSelected = callback;
+    const callbackWrapper = () => {
+      callback?.();
+      this.emit(MenuItemEvents.Selected);
+    };
+
+    this._onSelected = callbackWrapper;
   }
   toString() {
     return 'MenuItem';

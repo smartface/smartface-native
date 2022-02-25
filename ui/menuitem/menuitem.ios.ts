@@ -1,5 +1,4 @@
 import MenuItem, { AbstractMenuItem, Style } from '.';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
@@ -20,14 +19,6 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
   constructor(params?: Partial<MenuItem>) {
     super();
     const self = this;
-
-    const EventFunctions = {
-      [MenuItemEvents.Selected]: function () {
-        self.onSelected?.();
-      }
-    };
-
-    eventCallbacksAssign(this, EventFunctions);
 
     const ios = {
       get style(): Style {
@@ -61,6 +52,10 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
   }
   toString() {
     return 'MenuItem';
+  }
+  protected onSelectedListener() {
+    this.onSelected?.();
+    this.emit(MenuItemEvents.Selected);
   }
   get android() {
     return this._android;
