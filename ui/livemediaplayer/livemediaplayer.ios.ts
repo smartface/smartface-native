@@ -26,17 +26,11 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
 
     this.playerDelegate = new __SF_NodePlayerDelegateClass();
     this.playerDelegate.onEventCallbackEventMsg = function (e) {
-      self._onChange && self._onChange({ event: e.event, message: e.msg });
+      self._onChange?.({ event: e.event, message: e.msg });
+      self.emit(LiveMediaPlayerEvents.Change, { event: e.event, message: e.msg });
     };
     this.nodePlayer.nodePlayerDelegate = this.playerDelegate;
 
-    const EventFunctions = {
-      [LiveMediaPlayerEvents.Change]: function (state) {
-        self._onChange?.(state);
-      }
-    };
-
-    eventCallbacksAssign(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
       for (const param in params) {

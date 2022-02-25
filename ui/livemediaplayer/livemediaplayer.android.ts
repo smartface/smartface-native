@@ -33,18 +33,12 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
     this.nodePlayer.setNodePlayerDelegate(
       new SFLiveMediaPlayerDelegate({
         onEventCallback: function (event, message) {
-          self._onChange && self._onChange({ event, message });
+          self._onChange?.({ event, message });
+          self.emit(LiveMediaPlayerEvents.Change, { event, message });
         }
       })
     );
 
-    const EventFunctions = {
-      [LiveMediaPlayerEvents.Change]: function (state) {
-        self._onChange?.(state);
-      }
-    };
-
-    eventCallbacksAssign(this, EventFunctions);
     // Assign parameters given in constructor
     if (params) {
       for (const param in params) {
