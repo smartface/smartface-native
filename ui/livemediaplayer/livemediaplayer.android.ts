@@ -1,0 +1,99 @@
+import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
+import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
+import { ViewAndroid } from '../view/view.android';
+import { LiveMediaPlayerEvents } from './livemediaplayer-events';
+
+const SFLiveMediaPlayerDelegate = requireClass('io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPlayerDelegate');
+
+const NodePlayerView = requireClass('cn.nodemedia.NodePlayerView');
+const NodePlayer = requireClass('cn.nodemedia.NodePlayer');
+
+export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPlayerEvents> extends ViewAndroid<TEvent | LiveMediaPlayerEvents, {}> implements ILiveMediaPlayer {
+  static ScaleType = {
+    STRETCH: NodePlayerView.UIViewContentMode.ScaleToFill,
+    ASPECTFIT: NodePlayerView.UIViewContentMode.ScaleAspectFit,
+    ASPECTFILL: NodePlayerView.UIViewContentMode.ScaleAspectFill
+  };
+  static Events = LiveMediaPlayerEvents;
+  private nodePlayer: any;
+  private _inputUrl;
+  private _scaleType = ScaleType.STRETCH;
+  private _audioEnabled = true;
+  private _videoEnabled = true;
+  private _onChange: (params: { event: number; message: string }) => void;
+  constructor(params?: Partial<LiveMediaPlayer>) {
+    super();
+    const self = this;
+    if (!this._nativeObject) {
+      this._nativeObject = new NodePlayerView(AndroidConfig.activity);
+      this.nodePlayer = new NodePlayer(AndroidConfig.activity);
+    }
+    this.nodePlayer.setPlayerView(this._nativeObject);
+
+    this.nodePlayer.setNodePlayerDelegate(
+      new SFLiveMediaPlayerDelegate({
+        onEventCallback: function (event, message) {
+          self._onChange?.({ event, message });
+          self.emit(LiveMediaPlayerEvents.Change, { event, message });
+        }
+      })
+    );
+
+    // Assign parameters given in constructor
+    if (params) {
+      for (const param in params) {
+        this[param] = params[param];
+      }
+    }
+  }
+  get onChange() {
+    return this._onChange;
+  }
+  set onChange(callback: (params: { event: number; message: string }) => void) {
+    this._onChange = callback;
+  }
+  get inputUrl() {
+    return this._inputUrl;
+  }
+  set inputUrl(url: string) {
+    this._inputUrl = url;
+    this.nodePlayer.setInputUrl(this._inputUrl);
+  }
+  get audioEnabled() {
+    return this._audioEnabled;
+  }
+  set audioEnabled(isEnabled: boolean) {
+    this._audioEnabled = isEnabled;
+    this.nodePlayer.setAudioEnable(this._audioEnabled);
+  }
+  get videoEnabled() {
+    return this._videoEnabled;
+  }
+  set videoEnabled(isEnabled: boolean) {
+    this._videoEnabled = isEnabled;
+    this.nodePlayer.setVideoEnable(this._videoEnabled);
+  }
+  get scaleType() {
+    return this._scaleType;
+  }
+  set scaleType(mode: ScaleType) {
+    this._scaleType = mode;
+    this._nativeObject.setUIViewContentMode(this._scaleType);
+  }
+  pause() {
+    this.nodePlayer.pause();
+  }
+  //TODO: rename this or view.start
+  start() {
+    this.nodePlayer.start();
+  }
+  stop() {
+    this.nodePlayer.stop();
+  }
+  release() {
+    this.nodePlayer.release();
+  }
+  isPlaying() {
+    return this.nodePlayer.isPlaying();
+  }
+}

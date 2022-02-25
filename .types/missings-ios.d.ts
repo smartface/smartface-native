@@ -1174,6 +1174,8 @@ declare class __SF_AVPlayerItem {
   static createFromURL(url: __SF_NSURL): __SF_AVPlayerItem;
 }
 
+declare class __SF_NodePlayer {}
+
 declare class __SF_AVPlayer {
   constructor(avPlayerItem: __SF_AVPlayerItem);
   removeObserver(): void;

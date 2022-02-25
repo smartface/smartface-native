@@ -1,18 +1,43 @@
-import View from '../../ui/view';
+import { AbstractView, IView } from '../view';
+import { ViewEvents } from '../view/view-event';
+import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 
-declare enum IEvents {
+export enum ScaleType {
   /**
-   * Set the event callback.
-   *
-   * @event onChange
-   * @param {Object} params
-   * @param {Number} params.event See more: https://github.com/NodeMedia/NodeMediaClient-Android/blob/2.x/docs/NodePlayer_API_CN.md#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83
-   * @param {String} params.message
+   * @property {Number} STRETCH
+   * @android
+   * @ios
+   * @static
+   * @readonly
    * @android
    * @ios
    * @since 4.2.2
    */
-  Change = 'change'
+  STRETCH = 0,
+
+  /**
+   * @property {Number} ASPECTFIT
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @android
+   * @ios
+   * @since 4.2.2
+   */
+  ASPECTFIT = 1,
+
+  /**
+   * @property {Number} ASPECTFILL
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @android
+   * @ios
+   * @since 4.2.2
+   */
+  ASPECTFILL = 2
 }
 
 /**
@@ -34,8 +59,7 @@ declare enum IEvents {
  *
  */
 
-declare class LiveMediaPlayer extends View<IEvents> {
-  constructor(params?: Partial<LiveMediaPlayer>);
+export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents, TIOS = {}, TAND = {}> extends IView<TEvent | LiveMediaPlayerEvents, TIOS & {}, TAND & {}> {
   /**
    * Set whether video is enabled
    *
@@ -74,7 +98,7 @@ declare class LiveMediaPlayer extends View<IEvents> {
    * @ios
    * @since 4.2.2
    */
-  scaleType: LiveMediaPlayer.ScaleType;
+  scaleType: ScaleType;
 
   /**
    * Start playing.
@@ -150,52 +174,22 @@ declare class LiveMediaPlayer extends View<IEvents> {
   onChange: (params: { event: number; message: string }) => void;
 }
 
-declare namespace LiveMediaPlayer {
-  const Events: typeof IEvents & typeof View.Events;
-  type Events = typeof Events;
-  /**
-   * @enum {Number} UI.LiveMediaPlayer.ScaleType
-   *
-   * ScaleType is an enum. It defines the scale type of the video player.
-   * @since 4.2.2
-   *
-   */
-  enum ScaleType {
-    /**
-     * @property {Number} STRETCH
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 4.2.2
-     */
-    STRETCH = 0,
-
-    /**
-     * @property {Number} ASPECTFIT
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 4.2.2
-     */
-    ASPECTFIT = 1,
-
-    /**
-     * @property {Number} ASPECTFILL
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @android
-     * @ios
-     * @since 4.2.2
-     */
-    ASPECTFILL = 2
-  }
+export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents> extends AbstractView<TEvent> implements ILiveMediaPlayer<TEvent, {}, {}> {
+  static Events: LiveMediaPlayerEvents & ViewEvents;
+  static ScaleType: ScaleType;
+  videoEnabled: boolean;
+  inputUrl: string;
+  audioEnabled: boolean;
+  scaleType: ScaleType;
+  start(): void;
+  pause(): void;
+  isPlaying(): boolean;
+  release(): void;
+  stop(): void;
+  onChange: (params: { event: number; message: string }) => void;
 }
-export = LiveMediaPlayer;
+
+const LiveMediaPlayer: typeof AbstractLiveMediaPlayer = require(`./webview.${Device.deviceOS.toLowerCase()}`).default;
+type LiveMediaPlayer = AbstractLiveMediaPlayer;
+
+export default LiveMediaPlayer;
