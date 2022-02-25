@@ -1,39 +1,9 @@
 import Color from '../color';
 import Image from '../image';
-import View from '../view';
+import View, { AbstractView, IView } from '../view';
+import { SliderEvents } from './slider-events';
 
-declare enum SliderEvents {
-  ValueChange = 'valueChange'
-}
-declare namespace Slider {
-  const Events: typeof SliderEvents & typeof View.Events;
-  type Events = typeof Events;
-}
-
-/**
- * @class UI.Slider
- * @since 0.1
- * @extends UI.View
- *
- * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
- *
- *     @example
- *     var Color = require('@smartface/native/ui/color');
- *     const Slider = require('@smartface/native/ui/slider');
- *     var mySlider = new Slider({
- *         width: 200,
- *         maxValue: 100,
- *         minValue: 0,
- *         value: 40,
- *         minTrackColor: Color.RED,
- *         thumbColor: Color.BLUE,
- *         onValueChange: function() {
- *             console.log("Slider's value: " + mySlider.value);
- *         }
- *     });
- *
- */
-declare class Slider extends View {
+export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}, TAND = {}> extends IView<TEvent | SliderEvents, TIOS, TAND> {
   /**
    * Gets/sets color of the thumb.
    *
@@ -175,4 +145,43 @@ declare class Slider extends View {
    */
   onValueChange: () => void;
 }
-export = Slider;
+
+export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent> implements ISlider<TEvent> {
+  thumbColor: Color;
+  thumbImage: Image;
+  minTrackColor: Color;
+  maxTrackColor: Color;
+  value: number;
+  minValue: number;
+  maxValue: number;
+  enabled: boolean;
+  onValueChange: () => void;
+}
+
+/**
+ * @class UI.Slider
+ * @since 0.1
+ * @extends UI.View
+ *
+ * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
+ *
+ *     @example
+ *     import Color from '@smartface/native/ui/color';
+ *     import Slider from '@smartface/native/ui/slider';
+ *     const mySlider = new Slider({
+ *         width: 200,
+ *         maxValue: 100,
+ *         minValue: 0,
+ *         value: 40,
+ *         minTrackColor: Color.RED,
+ *         thumbColor: Color.BLUE,
+ *         onValueChange: () => {
+ *             console.log("Slider's value: " + mySlider.value);
+ *         }
+ *     });
+ *
+ */
+const Slider: typeof AbstractSlider = require(`./slider.${Device.deviceOS.toLowerCase()}`).default;
+type Slider = AbstractSlider;
+
+export default Slider;
