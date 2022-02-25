@@ -33,7 +33,7 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
     }
 
     const self = this;
-    const android = {
+    const _android = {
       get thumbSize(): number {
         return self._thumbSize;
       },
@@ -70,7 +70,9 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
         self.nativeObject.setBarWeight(AndroidUnitConverter.dpToPixel(self._outerTrackWeight));
       }
     };
-    Object.assign(this._android, android);
+    const { android, ...restParams } = this;
+    Object.assign(this._android, _android);
+    Object.assign(this, restParams);
 
     this.nativeObject.setOnValueChange({
       onValueChange: (leftPinValue: any, rightPinValue: any) => {

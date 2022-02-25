@@ -25,7 +25,7 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
     this._nativeObject.maximumValue = 5;
 
     const self = this;
-    const ios = {
+    const _ios = {
       get thumbShadowColor(): Color {
         return self.nativeObject.thumbShadowColor;
       },
@@ -68,7 +68,9 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
         self.nativeObject.applyThumbViewChanges();
       }
     };
-    Object.assign(this._ios, ios);
+    const { ios, ...restParams } = this;
+    Object.assign(this._ios, _ios);
+    Object.assign(this, restParams);
 
     const valueChangeHandler = () => {
       self.onValueChange?.(self.value);
