@@ -47,7 +47,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
   private _cameraOptions: Partial<{ cameraId: number; cameraFrontMirror: boolean }>;
   private _audioOptions: Partial<{ bitrate: number; profile: number; samplerate: number }>;
   private _onChange: (params: { event: number; message: string }) => void;
-  private nodePublisher: __SF_NodePublisher;
+  private nodePublisher: any;
   constructor(params?: Partial<LiveMediaPublisher>) {
     super();
     const self = this;

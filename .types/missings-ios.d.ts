@@ -528,17 +528,9 @@ declare class __SF_SMFMFMailComposeViewControllerDelegate {
 }
 
 declare class __SF_NodePublisher {
-  setFlashEnable(_flashEnabled: boolean): void;
-  setOutputUrl(_outputUrl: string): void;
-  setAudioParam(bitrate: any, profile: any, samplerate: any): void;
-  setCameraPreview(nativeObject: any, cameraId: any, cameraFrontMirror: any): void;
-  setVideoParam(preset: any, fps: any, bitrate: any, profile: any, videoFrontMirror: any): void;
-  setVideoEnable(_videoEnabled: boolean): void;
-  setAudioEnable(_audioEnabled: boolean): void;
   setCameraPreviewCameraIdFrontMirror(view: __SF_UIView, cameraId: number, cameraFrontMirror: boolean): void;
   setVideoParamPresetFpsBitrateProfileFrontMirror(preset: number, fps: number, bitrate: number, profile: number, videoFrontMirror: boolean): void;
   setAudioParamBitrateProfileSampleRate(bitrate: number, profile: number, samplerate: number): void;
-  setNodePublisherDelegate(delegate: any): void;
   nodePublisherDelegate: __SF_NodePlayerDelegateClass;
   audioEnable: boolean;
   videoEnable: boolean;
@@ -549,7 +541,6 @@ declare class __SF_NodePublisher {
   startPreview(): void;
   stopPreview(): void;
   switchCamera(): void;
-  release(): void;
 }
 
 declare class __SF_NodePlayerDelegateClass {
