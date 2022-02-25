@@ -30,7 +30,7 @@ import Page from '../page';
  *     menu.items = [menuItem1, menuItem2];
  *     menu.show(myPage);
  */
-declare class Menu {
+export declare class AbstractMenu {
   /**
    * Gets/sets header title of Menu
    *
@@ -62,4 +62,7 @@ declare class Menu {
   show(page: Page): void;
 }
 
-export = Menu;
+const Menu: typeof AbstractMenu = require(`./menu.${Device.deviceOS.toLowerCase()}`).default;
+type Menu = AbstractMenu;
+
+export default Menu;
