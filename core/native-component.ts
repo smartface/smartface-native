@@ -1,13 +1,13 @@
-import { INativeComponent } from "./inative-component";
+import { INativeComponent } from './inative-component';
 
-export default class NativeComponent implements INativeComponent {
-  protected _nativeObject: any;
+export default class NativeComponent<TNative = any> implements INativeComponent<TNative> {
+  protected _nativeObject: TNative;
 
-  get nativeObject(): any {
+  get nativeObject(): TNative {
     return this._nativeObject;
   }
 
-  set nativeObject(value: any) {
+  set nativeObject(value: TNative) {
     this._nativeObject = value;
   }
 }
