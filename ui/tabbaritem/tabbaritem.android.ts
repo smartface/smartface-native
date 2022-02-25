@@ -32,7 +32,7 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
       }
     }
     const self = this;
-    const android = {
+    this._android = {
       get systemIcon() {
         return self._systemIcon;
       },
@@ -47,7 +47,6 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
         self._android.attributedTitle = value;
       }
     };
-    Object.assign(this._android, android);
   }
   get title() {
     return this._title;
