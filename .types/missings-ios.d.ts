@@ -27,6 +27,7 @@ declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
   static createName(fileName: string): __SF_UIImage;
   static createNSData(obj: any);
+  static getInstance(): any;
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
   size: { width: number; height: number };
