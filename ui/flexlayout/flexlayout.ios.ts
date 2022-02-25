@@ -6,12 +6,12 @@ import { FlexLayoutEvents } from './flexlayout-events';
 // const YogaEnums = require('../../util').YogaEnums;
 
 class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout {
+  readonly android = {};
   constructor(params: Partial<IFlexLayout> = {}) {
     super({});
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    const {android, ...restParams} = params;
+    Object.assign(this, restParams);
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;

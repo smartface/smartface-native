@@ -23,7 +23,7 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
   private _onInterceptTouchEvent: (e: any) => void;
   private _flexWrap: number | null = null;
 
-  constructor(params: any) {
+  constructor(params: Partial<IFlexLayout> = {}) {
     super();
 
     this._nativeObject = new NativeYogaLayout(activity, {
@@ -36,7 +36,7 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
 
     const self = this;
 
-    const android = {
+    const androidAddition = {
       get onInterceptTouchEvent() {
         return self._onInterceptTouchEvent;
       },
@@ -45,8 +45,9 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
       }
     };
 
-    Object.assign(this, params);
-    this._android = Object.assign(this._android, android);
+    const {android, ...restParams} = params;
+    Object.assign(this._android, androidAddition, android);
+    Object.assign(this, restParams);
   }
 
   get direction() {
