@@ -18,7 +18,7 @@ const Color = require("../color");
 function Toast() { }
 
 /**
- * Gets/sets the message for a snackbar
+ * Gets/sets the message for a toast
  * @property {String} 
  * @android
  * @ios
@@ -27,7 +27,7 @@ function Toast() { }
 Toast.prototype.message = ""
 
 /**
- * Gets/sets the background of snackbar message view.
+ * Gets/sets the background of toast message view.
  * 
  * @property {UI.Color} [backgroundColor = UI.Color.DARKGRAY]
  * @android
@@ -37,7 +37,7 @@ Toast.prototype.message = ""
 Toast.prototype.backgroundColor = Color.DARKGRAY
 
 /**
- * Gets/sets the actionTextColor for a snackbar's action.
+ * Gets/sets the actionTextColor for a toast's action.
  * @property {UI.Color} [actionTextColor = UI.Color.WHITE]
  * @android
  * @ios
@@ -46,7 +46,7 @@ Toast.prototype.backgroundColor = Color.DARKGRAY
 Toast.prototype.actionTextColor = Color.WHITE
 
 /**
- * Gets/sets the messageTextColor of snackbar message text.
+ * Gets/sets the messageTextColor of toast message text.
  * 
  * @property {UI.Color} [messageTextColor = UI.Color.WHITE]
  * @android
@@ -56,7 +56,7 @@ Toast.prototype.actionTextColor = Color.WHITE
 Toast.prototype.messageTextColor = Color.WHITE
 
 /**
- * Gets/sets the bottom offset of snackbar message view from bottom.
+ * Gets/sets the bottom offset of toast message view from bottom.
  * 
  * @property {Number} [bottomOffset = 0]
  * @android
@@ -84,7 +84,7 @@ Toast.prototype.duration = 4
 Toast.prototype.isShowing = false
 
 /**
- * Add an action to snackbar.
+ * Add an action to toast.
  * 
  *     @example
  *     myToast.createAction("Action Title", () =>  {
@@ -93,7 +93,7 @@ Toast.prototype.isShowing = false
  * 
  * @method createAction
  * @param {String} actionTitle The value will be visible on action text.
- * @param {void} callbackFunction Assinged function will be called when user tap the action.
+ * @param {Function} callbackFunction Assinged function will be called when user tap the action.
  * @android
  * @ios
  * @since 4.4.1
@@ -102,7 +102,7 @@ Toast.prototype.createAction = function (parameter, callbackFunction) { }
 
 /**
  * This function will be called after a snack dismiss from screen.
- * @param {function} callback function called when snackbar dismissed.
+ * @param {function} callback function called when toast dismissed.
  * @method onDismissed
  * @android
  * @ios
@@ -111,7 +111,7 @@ Toast.prototype.createAction = function (parameter, callbackFunction) { }
 Toast.prototype.onDismissed = function () { };
 
 /**
- * This is method should be called when created snackbar wants to show.
+ * This is method should be called when created toast wants to show.
  * 
  * @method show
  * @android
@@ -121,7 +121,7 @@ Toast.prototype.onDismissed = function () { };
 Toast.prototype.show = function () { }
 
 /**
- * This is method should be called when created snackbar wants to dismiss.
+ * This is method should be called when created toast wants to dismiss.
  * 
  * @method dismiss
  * @android
