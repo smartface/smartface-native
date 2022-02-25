@@ -3,7 +3,6 @@ import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import { RequestCodes, TypeUtil } from '../../util';
-import { EmailComposer } from '../../util/Android/requestcodes';
 import Page from '../page';
 
 const NativeIntent = requireClass('android.content.Intent');
@@ -92,5 +91,3 @@ export default class EmailComposerAndroid extends NativeComponent implements Abs
     this._closeCallback && this.onClose();
   }
 }
-
-module.exports = EmailComposer;
