@@ -30,6 +30,8 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
     this.nativeObject.minimumValue = 0;
     this.nativeObject.maximumValue = 100;
 
+    this.nativeObject.addJSTarget(this.handleValueChange, UIControlEvents.valueChanged);
+
     for (const param in params) {
       this[param] = params[param];
     }
@@ -104,7 +106,6 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   }
   set onValueChange(value: () => void) {
     this._onValueChange = value;
-    this.nativeObject.addJSTarget(this.handleValueChange, UIControlEvents.valueChanged);
   }
 
   handleValueChange() {
@@ -113,7 +114,7 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
     if (this._value !== intValue) {
       this._value = intValue;
       this?.onValueChange();
-      this.emit('valueChange');
+      this.emit(SliderEvents.ValueChange);
     }
   }
 }

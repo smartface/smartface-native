@@ -45,7 +45,9 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
         SeekBar.OnSeekBarChangeListener.implement({
           onProgressChanged: (seekBar, actualValue, fromUser) => {
             // TODO Recheck after
-            this?._onValueChange(actualValue + this._minValue);
+            const param = actualValue + this._minValue;
+            this?._onValueChange(param);
+            this.emit(SliderEvents.ValueChange, param);
           },
           onStartTrackingTouch: function (seekBar) {},
           onStopTrackingTouch: function (seekBar) {}
@@ -144,7 +146,6 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   }
   set onValueChange(value: () => void) {
     this._onValueChange = value;
-    this.emit('valueChange');
   }
 
   toString(): string {
