@@ -1,5 +1,4 @@
 import { AbstractView, IView } from '../view';
-import { ViewEvents } from '../view/view-event';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 
 /**
@@ -9,7 +8,7 @@ import { LiveMediaPublisherEvents } from './livemediapublisher-events';
  * @android
  * @ios
  */
-enum Camera {
+export enum Camera {
   /**
    * Front camera id
    * @property {Number} FRONT
@@ -45,7 +44,7 @@ enum Camera {
  * @ios
  */
 
-enum VideoPreset {
+export enum VideoPreset {
   /**
    * @property {Number} PRESET_16X9_270
    * @android
@@ -246,7 +245,7 @@ enum VideoPreset {
  * @android
  * @ios
  */
-enum VideoProfile {
+export enum VideoProfile {
   /**
    * @property {Number} BASELINE
    * @android
@@ -291,7 +290,7 @@ enum VideoProfile {
  * @android
  * @ios
  */
-enum AudioProfile {
+export enum AudioProfile {
   /**
    * @property {Number} LCAAC
    * @android

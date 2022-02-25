@@ -1,4 +1,4 @@
-import LiveMediaPublisher, { ILiveMediaPublisher } from '.';
+import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
 import View from '../view';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
@@ -25,37 +25,10 @@ const audioDefault = {
 
 export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPublisherEvents> extends ViewIOS<TEvent | LiveMediaPublisherEvents, {}> implements ILiveMediaPublisher {
   static Events = LiveMediaPublisherEvents;
-  static Camera = {
-    BACK: 0,
-    FRONT: 1
-  };
-  static VideoPreset = {
-    PRESET_16X9_270: 0,
-    PRESET_16X9_360: 1,
-    PRESET_16X9_480: 2,
-    PRESET_16X9_540: 3,
-    PRESET_16X9_720: 4,
-    PRESET_16X9_1080: 5,
-    PRESET_4X3_270: 10,
-    PRESET_4X3_360: 11,
-    PRESET_4X3_480: 12,
-    PRESET_4X3_540: 13,
-    PRESET_4X3_720: 14,
-    PRESET_1X1_270: 20,
-    PRESET_1X1_360: 21,
-    PRESET_1X1_480: 22,
-    PRESET_1X1_540: 23,
-    PRESET_1X1_720: 24
-  };
-  static VideoProfile = {
-    BASELINE: 0,
-    MAIN: 1,
-    HIGH: 2
-  };
-  static AudioProfile = {
-    LCAAC: 0,
-    HEAAC: 1
-  };
+  static Camera = Camera;
+  static VideoPreset = VideoPreset;
+  static VideoProfile = VideoProfile;
+  static AudioProfile = AudioProfile;
   private nodePublisher: __SF_NodePublisher;
   private publisherDelegate: __SF_NodePlayerDelegateClass;
   private _outputUrl = '';
