@@ -524,11 +524,11 @@ export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMedi
   release(): void;
   stop(): void;
   onChange: (params: { event: number; message: string }) => void;
-  static Events: LiveMediaPublisherEvents;
-  static Camera: Camera;
-  static VideoPreset: VideoPreset;
-  static VideoProfile: VideoProfile;
-  static AudioProfile: AudioProfile;
+  static Events: typeof LiveMediaPublisherEvents;
+  static Camera: typeof Camera;
+  static VideoPreset: typeof VideoPreset;
+  static VideoProfile: typeof VideoProfile;
+  static AudioProfile: typeof AudioProfile;
 }
 
 const LiveMediaPublisher: typeof AbstractLiveMediaPublisher = require(`./livemediaplayer.${Device.deviceOS.toLowerCase()}`).default;
