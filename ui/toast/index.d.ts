@@ -89,7 +89,7 @@ declare class Toast <TEvents = ToastEvents> extends  NativeComponent<TEvents> {
     get duration(): number;
 	
 	/**
-	 * Gets/sets how long it will stay on the screen.
+	 * Gets status of the toast. Returns true if the toast is currently displayed on the screen. 
 	 * @property {Number} [duration = Number]
 	 * @android
 	 * @ios
@@ -115,14 +115,14 @@ declare class Toast <TEvents = ToastEvents> extends  NativeComponent<TEvents> {
 	 */
     onDismissed(callback: void);
 	/**
-	 * This is method should be called when created toast wants to show.
+	 *  This method shows the toast on the screen.
 	 * @android
 	 * @ios
 	 * @since 4.4.1
 	 */
     show(): void;
 	/**
-	 * This method should be called when the created toast intended to show.
+	 * Dismisses the Toast, isShowing property set to false after this operation.
 	 * @android
 	 * @ios
 	 * @since 4.4.1
