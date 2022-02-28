@@ -122,7 +122,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _android;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
-  constructor(params?: IView) {
+  constructor(params: Partial<IView> = {}) {
     super();
     // params = params || {};
     if (!this._nativeObject) {

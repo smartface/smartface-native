@@ -12,14 +12,11 @@ export default class LabelIOS<TEvent extends string = ViewEvents> extends ViewIO
   private _textAlignment = TextAlignment.MIDLEFT;
   protected _textColor: ILabel['textColor'] = Color.BLACK;
   constructor(params: Partial<AbstractLabel> = {}) {
-    super();
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_SMFUILabel();
     }
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
     this.touchEnabled = true;
   }
 
