@@ -7,16 +7,17 @@ import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 const UITabBarController = requireClass('UITabBarController');
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements AbstractBottomTabbarController {
+  static Events = BottomTabbarControllerEvents;
   ios = {};
   android = {};
   private parentController = undefined;
   private view;
   private model;
   private _tabBar;
-  private shouldSelectByIndex;
-  private didSelectByIndex;
-  private shouldSelectViewController;
-  private didSelectViewController;
+  private _shouldSelectByIndex;
+  private _didSelectByIndex;
+  private _shouldSelectViewController;
+  private _didSelectViewController;
   private viewModel;
   private nativeObjectDelegate;
   private currentIndex: number;
@@ -83,6 +84,30 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
     self.childControllers = [];
     self.currentIndex = 0;
+  }
+  get didSelectByIndex() {
+    return this._didSelectByIndex;
+  }
+  set didSelectByIndex(value: any) {
+    this._didSelectByIndex = value;
+  }
+  get shouldSelectByIndex() {
+    return this._shouldSelectByIndex;
+  }
+  set shouldSelectByIndex(value: any) {
+    this._shouldSelectByIndex = value;
+  }
+  get shouldSelectViewController() {
+    return this._shouldSelectViewController;
+  }
+  set shouldSelectViewController(value: any) {
+    this._shouldSelectViewController = value;
+  }
+  get didSelectViewController() {
+    return this._didSelectViewController;
+  }
+  set didSelectViewController(value: any) {
+    this._didSelectViewController = value;
   }
   get childControllers() {
     return this.model.childControllers;

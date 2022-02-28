@@ -23,7 +23,7 @@ import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
 export interface IBottomTabBarController {
-  getCurrentController: () => NavigationController | Page;
+  getCurrentController?: () => NavigationController | Page;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
   /**
@@ -101,9 +101,9 @@ export interface IBottomTabBarController {
 }
 
 export declare class AbstractBottomTabbarController implements IBottomTabBarController {
-  constructor(params?: IBottomTabBarController);
-  static Events: BottomTabbarControllerEvents;
-  getCurrentController: () => NavigationController | Page;
+  constructor(params?: Partial<IBottomTabBarController>);
+  static Events: typeof BottomTabbarControllerEvents;
+  getCurrentController?: () => NavigationController | Page;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
   childControllers: (NavigationController | Page)[];
