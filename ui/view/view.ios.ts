@@ -102,11 +102,11 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
     this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
 
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+    // if (params) {
+    //   for (const param in params) {
+    //     this[param] = params[param];
+    //   }
+    // }
 
     const self = this;
 
@@ -165,6 +165,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
         __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
       }
     } as View<TEvent, TNative>['ios'];
+
+    const {android:androidParams, ios, ...rest} = params;
+    Object.assign(this._ios, ios);
+    Object.assign(this, rest);
   }
 
   get uniqueId() {

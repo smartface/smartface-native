@@ -17,9 +17,6 @@ export default class LabelIOS<TEvent extends string = ViewEvents> extends ViewIO
       this._nativeObject = new __SF_SMFUILabel();
     }
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
     this.touchEnabled = true;
   }
 

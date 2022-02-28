@@ -1,16 +1,16 @@
 /*globals array,requireClass,release */
 
-const TypeUtil = require("../../util/type");
-const NativeViewGroup = requireClass("android.view.ViewGroup");
-import { EventEmitterWrapper } from "../../core/eventemitter";
-import { ExtractEventValues } from "../../core/eventemitter/extract-event-values";
-import { ViewAndroid } from "../view/view.android";
-import { IViewGroup } from "./viewgroup";
-import { ViewGroupEvents } from "./viewgroup-events";
+import { TypeUtil } from '../../util';
+import { EventEmitterWrapper } from '../../core/eventemitter';
+import { ViewAndroid } from '../view/view.android';
+import { IViewGroup } from './viewgroup';
+import { ViewGroupEvents } from './viewgroup-events';
 
-export class ViewGroup<
-  TEvent extends string = ViewGroupEvents, TNative = {}
-> extends ViewAndroid<TEvent, TNative> {
+const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
+const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
+const NativeViewGroup = requireClass('android.view.ViewGroup');
+
+export class ViewGroup<TEvent extends string = ViewGroupEvents, TNative = {}> extends ViewAndroid<TEvent, TNative> {
   static Events = ViewGroupEvents;
   private _onViewAdded = null;
   private _onViewRemoved = null;
@@ -55,11 +55,9 @@ export class ViewGroup<
       }
     });
 
-
     // Assign parameters given in constructor
     if (params) {
       // TODO: Convert
-      
     }
   }
 
@@ -98,8 +96,8 @@ export class ViewGroup<
   removeAll() {
     this.nativeObject.removeAllViews();
 
-    var ids = Object.keys(this.childViews);
-    for (var i = 0; i < ids.length; i++) {
+    const ids = Object.keys(this.childViews);
+    for (let i = 0; i < ids.length; i++) {
       this.childViews[ids[i]].parent = undefined;
     }
     this.childViews = {};
@@ -110,8 +108,8 @@ export class ViewGroup<
   }
 
   getChildList() {
-    var childList = [];
-    for (var i in this.childViews) {
+    const childList = [];
+    for (let i in this.childViews) {
       childList.push(this.childViews[i]);
     }
     return childList;
@@ -183,23 +181,12 @@ export class ViewGroup<
 
   // This method is needed to respect border radius of the view.
   private getRippleMask(borderRadius) {
-    const NativeRoundRectShape = requireClass(
-      "android.graphics.drawable.shapes.RoundRectShape"
-    );
-    const NativeShapeDrawable = requireClass(
-      "android.graphics.drawable.ShapeDrawable"
-    );
-
-    var outerRadii = [];
+    const outerRadii = [];
     outerRadii.length = 8;
     outerRadii.fill(borderRadius);
 
-    var roundRectShape = new NativeRoundRectShape(
-      array(outerRadii, "float"),
-      null,
-      null
-    );
-    var shapeDrawable = new NativeShapeDrawable(roundRectShape);
+    const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
+    const shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
     return shapeDrawable;
   }

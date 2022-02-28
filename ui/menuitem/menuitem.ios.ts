@@ -53,7 +53,7 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
   toString() {
     return 'MenuItem';
   }
-  protected onSelectedListener() {
+  onSelectedListener() {
     this.onSelected?.();
     this.emit(MenuItemEvents.Selected);
   }

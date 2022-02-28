@@ -27,6 +27,7 @@ declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
   static createName(fileName: string): __SF_UIImage;
   static createNSData(obj: any);
+  static getInstance(): any;
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
   size: { width: number; height: number };
@@ -280,6 +281,7 @@ declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
 }
 
 declare class __SF_UIBarButtonItem extends __SF_UIView {
+  static createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   target: __SF_UIBarButtonItem;
   containerView: any;
@@ -512,6 +514,7 @@ declare class __SF_UIDatePicker {
 }
 
 declare class __SF_MFMailComposeViewController {
+  static canSendMail(): boolean;
   constructor();
   canSendMail(): boolean;
   setCcRecipients(cc: any): void;
