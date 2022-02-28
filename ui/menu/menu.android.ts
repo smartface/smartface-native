@@ -7,8 +7,7 @@ export default class MenuAndroid implements AbstractMenu {
   private _items: MenuItem[] = [];
   private _headerTitle = '';
   constructor(params?: Partial<Menu>) {
-    const { ...restParams } = params;
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
   get items() {
     return this._items;

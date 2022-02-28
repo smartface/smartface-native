@@ -9,8 +9,7 @@ export default class MenuIOS extends NativeComponent implements AbstractMenu {
   private _headerTitle = '';
   constructor(params?: Partial<Menu>) {
     super();
-    const { ...restParams } = params;
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
   get items() {
     return this._items;
