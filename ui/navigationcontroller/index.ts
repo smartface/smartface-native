@@ -1,7 +1,38 @@
 import Page from '../page';
 import HeaderBar from '../headerbar';
-import { AnimationType } from '../../util/Android/transition/fragmenttransition';
-type Controller = Page | NavigationController;
+
+/**
+ * @enum {Number} UI.NavigationController.OperationType
+ *
+ * Operation type of NavigationController.
+ * @static
+ * @since 3.2
+ *
+ */
+export enum OperationType {
+  /**
+   * @property {Number} PUSH
+   * Push operation
+   * @ios
+   * @android
+   * @static
+   * @readonly
+   * @since 3.2
+   */
+  PUSH = 0,
+  /**
+   * @property {Number} POP
+   * Pop operation
+   * @ios
+   * @android
+   * @static
+   * @readonly
+   * @since 3.2
+   */
+  POP = 1
+}
+
+export type Controller = Page | AbstractNavigationController;
 /**
  * @class UI.NavigationController
  * @since 3.2
@@ -34,7 +65,9 @@ type Controller = Page | NavigationController;
  *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
  *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
-declare class NavigationController {
+export declare class AbstractNavigationController {
+  constructor(params?: Partial<AbstractNavigationController>);
+  static OperationType: typeof OperationType;
   /**
    * Gets/sets child controllers of NavigationController instance.
    *
@@ -99,7 +132,7 @@ declare class NavigationController {
    * @android
    * @since 3.2.0
    */
-  willShow: (params: { controller: Controller }) => void;
+  willShow: (params: { controller: Controller; animated?: boolean }) => void;
   /**
    * This event is triggered before the page is displayed.
    *
@@ -111,7 +144,7 @@ declare class NavigationController {
    * @android
    * @since 3.2.0
    */
-  onTransition: (e: { controller: Controller; operation: NavigationController.OperationType }) => void;
+  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
   /**
    * This function shows up the pop-up controller.
    *
@@ -140,37 +173,3 @@ declare class NavigationController {
    */
   dismiss(params: { onComplete: () => void; animated: boolean }): void;
 }
-
-declare namespace NavigationController {
-  /**
-   * @enum {Number} UI.NavigationController.OperationType
-   *
-   * Operation type of NavigationController.
-   * @static
-   * @since 3.2
-   *
-   */
-  enum OperationType {
-    /**
-     * @property {Number} PUSH
-     * Push operation
-     * @ios
-     * @android
-     * @static
-     * @readonly
-     * @since 3.2
-     */
-    PUSH = 0,
-    /**
-     * @property {Number} POP
-     * Pop operation
-     * @ios
-     * @android
-     * @static
-     * @readonly
-     * @since 3.2
-     */
-    POP = 1
-  }
-}
-export = NavigationController;

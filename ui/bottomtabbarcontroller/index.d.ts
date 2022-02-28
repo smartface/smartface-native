@@ -38,6 +38,7 @@ declare class BottomTabBarController extends NativeComponent implements IEventEm
   getCurrentController: () => NavigationController | Page;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
+  show?: () => void;
   /**
    * Gets/sets child controllers of BottomTabbarController instance.
    *

@@ -7,7 +7,7 @@ import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
 
-type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
+type ControllerParams = { controller: NavigationController | Page | BottomTabBarController; animation?: boolean; isComingFromPresent?: boolean };
 namespace ViewController {
   export function activateRootController(controller: PageWithController) {
     if (!controller) return;
