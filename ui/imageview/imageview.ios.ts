@@ -2,12 +2,13 @@ import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
 import File from '../../io/file';
 import Color from '../color';
 import Image from '../image';
+import IImage from '../image/image';
 import { ImageCacheType } from '../imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 
 export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents> implements IImageView {
-  private _imageTemplate: Image;
+  private _imageTemplate: IImage;
   private _isSetTintColor: boolean;
   constructor(params: Partial<IImageView> = {}) {
     super();
@@ -31,25 +32,27 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   get image(): string | Image {
     return this.nativeObject.image ? Image.createFromImage(this.nativeObject.image) : undefined;
   }
-  set image(value: string | Image) {
+  set image(value: string | IImage) {
     this._imageTemplate = undefined;
 
     if (typeof value === 'string') {
       const image = Image.createFromFile(value);
       if (this._isSetTintColor) {
         // TODO Recheck after build
-        image.nativeObject = image.nativeObject.imageWithRenderingMode(2);
-        this._imageTemplate = image.nativeObject;
+        let rendered: IImage = image.nativeObject.imageWithRenderingMode(2);
+        this._imageTemplate = rendered;
+        this.nativeObject.loadImage(rendered.nativeObject);
+      } else {
+        this.nativeObject.loadImage(image.nativeObject);
       }
-      this.nativeObject.loadImage(image.nativeObject);
     } else {
       if (value) {
         if (this._isSetTintColor) {
-          value.nativeObject = value.nativeObject.imageWithRenderingMode(2);
-          // TODO Recheck after build
-          this._imageTemplate = value.nativeObject;
-        }
-        this.nativeObject.loadImage(value.nativeObject);
+          let rendered: IImage = value.nativeObject.imageWithRenderingMode(2);
+          this._imageTemplate = rendered;
+          this.nativeObject.loadImage(rendered.nativeObject);
+        } else
+          this.nativeObject.loadImage(value.nativeObject);
       } else {
         this.nativeObject.loadImage(undefined);
       }
@@ -64,10 +67,10 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   set tintColor(value: Color) {
     if (this.nativeObject.image) {
       if (this._imageTemplate) {
-        this.nativeObject.image = this._imageTemplate;
+        this.nativeObject.image = this._imageTemplate.nativeObject;
       } else {
         this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
-        this.nativeObject.image = this._imageTemplate;
+        this.nativeObject.image = this._imageTemplate.nativeObject;
       }
     }
     this._isSetTintColor = true;
@@ -91,13 +94,14 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
+    cache?: ImageCacheType
   }): void {
     if (typeof params.url === 'string') {
       // Deprecated: Use loadFromUrl(object);
       this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, params.headers, undefined, () => {
         if (!params.onFailure) {
           // TODO Recheck after build
-          if (cache == ImageCacheType.NONE && params.fade !== false) {
+          if (params.cache == ImageCacheType.NONE && params.fade !== false) {
             var alpha = this.nativeObject.alpha;
             this.nativeObject.alpha = 0;
             __SF_UIView.animation(
@@ -181,6 +185,8 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
+    image: any,
+    cache: ImageCacheType
   }): void {
     let options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
     params.ios && params.ios.isRefreshCached && (options = options | SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
@@ -192,7 +198,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
         if (typeof params.onSuccess === 'function') {
           __SF_Dispatch.mainAsync(function (innerIndex) {
             // TODO Recheck after build
-            params.onSuccess(Image.createFromImage(image), cache);
+            params.onSuccess(Image.createFromImage(params.image), params.cache);
           });
         }
       } else {

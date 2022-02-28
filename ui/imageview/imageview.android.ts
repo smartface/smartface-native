@@ -33,13 +33,11 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   private _tintColor: Color;
   private _newImageLoaded: boolean = false;
   constructor(params: Partial<IImageView> = {}) {
-    super();
+    super(params as any);
 
     if (!this.nativeObject) {
       this._nativeObject = new NativeImageView(AndroidConfig.activity);
     }
-
-    Object.assign(this, params);
   }
 
   get image(): string | Image {
