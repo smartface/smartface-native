@@ -1,9 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { DatePickerEvents } from './datepicker-events';
-import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import Font from '../font';
-import { EventListenerCallback } from '../../core/eventemitter';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -117,7 +115,7 @@ export enum DatePickerMode {
   DATEANDTIME = 2
 }
 
-interface DatePickerIOSProperties {
+export interface DatePickerIOSProperties {
   /**
    * Gets/sets title of the picker. This property only works with show method. Must set before show method.
    *
@@ -240,7 +238,7 @@ interface DatePickerIOSProperties {
   dialogBackgroundColor: Color;
 }
 
-interface DatePickerAndroidProperties {
+export interface DatePickerAndroidProperties {
   /**
    * According to your requirements, this property enables you to specify native built-in styles.
    *
@@ -336,8 +334,8 @@ export declare interface IDatePicker {
 
 export declare class AbstractDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent | DatePickerEvents> implements IDatePicker {
   constructor(params?: Partial<IDatePicker>);
-  ios: DatePickerIOSProperties;
-  android: DatePickerAndroidProperties;
+  get ios(): DatePickerIOSProperties;
+  get android(): DatePickerAndroidProperties;
   setDate(date: Date): void;
   setMinDate(date: Date): void;
   setMaxDate(date: Date): void;

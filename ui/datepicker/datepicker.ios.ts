@@ -5,6 +5,7 @@ import { DatePickerEvents } from './datepicker-events';
 export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends AbstractDatePicker<TEvent> {
   protected _nativeObject: __SF_UIDatePicker;
   private _ios: IDatePicker['ios'];
+  private _android: IDatePicker['android'];
   private _titleColor: IDatePicker['ios']['titleColor'];
   private _titleFont: IDatePicker['ios']['titleFont'];
   private _cancelColor: IDatePicker['ios']['cancelColor'];
@@ -19,6 +20,7 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
   private onCancelledListener: () => void;
   constructor(params: Partial<IDatePicker> = {}) {
     super();
+    const { ios, android, ...restParams } = params;
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIDatePicker();
@@ -35,12 +37,20 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
       this.onCancelled?.();
     };
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
   }
   get nativeObject() {
     return this._nativeObject;
+  }
+
+  get ios() {
+    return this._ios;
+  }
+
+  get android() {
+    return this._android;
   }
 
   setDate(date: Date) {

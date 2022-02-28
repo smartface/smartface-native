@@ -7,8 +7,11 @@ const NativeDialogInterface = requireClass('android.content.DialogInterface');
 export default class DatePickerAndroid<TEvent extends string = DatePickerEvents> extends AbstractDatePicker<TEvent> {
   private _onDateSelected: IDatePicker['onDateSelected'];
   private _onCancelled: IDatePicker['onCancelled'];
+  private _android: IDatePicker['android'];
+  private _ios: IDatePicker['ios'];
   constructor(params: Partial<IDatePicker> = {}) {
     super();
+    const { ios, android, ...restParams } = params;
 
     const today = new Date();
 
@@ -39,11 +42,18 @@ export default class DatePickerAndroid<TEvent extends string = DatePickerEvents>
       })
     );
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
   }
 
+  get ios() {
+    return this._ios;
+  }
+
+  get android() {
+    return this._android;
+  }
   show() {
     this.nativeObject.show();
   }
