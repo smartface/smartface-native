@@ -25,11 +25,6 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
   private _ios: Partial<{ font: Font }> = {};
   constructor(params?: Partial<AbstractTabBarItem>) {
     super();
-    // Assign parameters given in constructor
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
     const self = this;
     this._android = {
       get systemIcon() {
@@ -46,6 +41,12 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
         self._android.attributedTitle = value;
       }
     };
+
+    // Assign parameters given in constructor
+    const { ios, android, ...restParams } = params;
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
   }
   get ios() {
     return this._ios;
