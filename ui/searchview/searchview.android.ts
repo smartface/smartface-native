@@ -149,9 +149,11 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
               const inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
               inputManager.showSoftInput(view, 0);
               this?._onSearchBeginCallback();
+              this.emit('searchBegin');
               this.mUnderLine.getBackground().setColorFilter(this._underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
             } else {
               this?._onSearchEndCallback();
+              this.emit('searchEnd');
               this.mUnderLine.getBackground().setColorFilter(this._underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
             }
           }
@@ -460,6 +462,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       NativeTextWatcher.implement({
         onTextChanged: (charSequence: string, start, before, count) => {
           !this._hasEventsLocked && this._onTextChangedCallback(charSequence.toString());
+          !this._hasEventsLocked && this.emit('textChanged', charSequence.toString());
         },
         beforeTextChanged: (charSequence, start, count, after) => {},
         afterTextChanged: (editable) => {}
@@ -474,6 +477,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       NativeTextView.OnEditorActionListener.implement({
         onEditorAction: (textView, actionId, event) => {
           this._onSearchButtonClickedCallback();
+          this.emit('searchButtonClicked');
           return true;
         }
       })
