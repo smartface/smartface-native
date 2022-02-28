@@ -1,4 +1,4 @@
-import { IPage, PageBase, PageIOSParams, PageOrientation } from '.';
+import { IPage, PageAndroidParams, PageBase, PageIOSParams, PageOrientation } from '.';
 import Screen, { OrientationType } from '../../device/screen';
 import { Invocation } from '../../util';
 import FlexLayout from '../flexlayout';
@@ -21,9 +21,12 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   private _presentationStyle = 0;
   private _largeTitleDisplayMode = 0;
   private _leftItem: any;
+  private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
   protected _ios: TNative & PageIOSParams;
+  protected _android: PageAndroidParams;
   constructor(params: Partial<IPage> = {}) {
     super();
+    const { ios, android, ...restParams } = params;
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIViewController();
     }
@@ -43,17 +46,17 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
     this.headerBar.android = {};
     this.headerBar.ios = {};
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    Object.assign(this._ios, ios);
+    Object.assign(this._android, android);
+    Object.assign(this, restParams);
   }
 
   onLoad: () => void;
   onShow: () => void;
   onHide: () => void;
-  onOrientationChange: (e: Parameters<IPage['onOrientationChange']>['0']) => void;
+  onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
 
-  orientation: IPage['orientation'] = [PageOrientation.PORTRAIT];
+  orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
   get ios() {
@@ -61,7 +64,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   }
 
   get android() {
-    return {};
+    return this._android;
   }
   get layout(): IPage['layout'] {
     return this.pageView;
@@ -109,7 +112,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
 
   private checkOrientation() {
     const currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
-    if (this.orientation.indexOf(currentOrientation) === -1) {
+    if (this._orientationNative.indexOf(currentOrientation) === -1) {
       __SF_UIDevice.changeOrientation(currentOrientation); //Workaround for IOS-2580
       __SF_UIDevice.changeOrientation(this.orientation[0]);
       this.layout.applyLayout();

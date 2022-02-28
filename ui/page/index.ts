@@ -57,7 +57,7 @@ export interface PageAndroidParams {
    * });
    * ````
    */
-  onBackButtonPressed?(): void;
+  onBackButtonPressed(): void;
   transitionViewsCallback?: {
     onTransitionStart: () => void;
     onTransitionEnd: () => void;
@@ -259,7 +259,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    * @since 3.1.1
    *
    */
-  present(params?: ControllerParams): void;
+  present(params: ControllerParams): void;
   /**
    * This function dismiss presently shown pop-up page.
    *
@@ -313,7 +313,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    * @ios
    * @since 0.1
    */
-  orientation: PageOrientation[];
+  orientation: PageOrientation;
   /**
    * This event will be called when orientation of the Page changes.
    * iOS fires this event before orientation changed but Android fires after changed.
@@ -359,7 +359,7 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {},
   once(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback: EventListenerCallback): () => void;
   off(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback?: EventListenerCallback): void;
   emit(event: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, ...args: any[]): void;
-  orientation: PageOrientation[];
+  orientation: PageOrientation;
   parentController: { headerBar: HeaderBar; tabBar: TabBarController };
   transitionViews: View[];
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
