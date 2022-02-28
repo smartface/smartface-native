@@ -19,8 +19,18 @@ import Color from "../color";
  *
  */
 
-declare class Toast extends NativeComponent {
+ declare enum ToastEvents {
+	Dismissed = 'dismissed',
+  }
+
+  declare namespace Toast {
+	const Events: typeof ToastEvents
+	type Events = typeof Events
+  }
+
+declare class Toast <TEvents = ToastEvents> extends  NativeComponent<TEvents> {
     constructor(params?: Partial<Toast>)
+	on(eventName: TEvents, callback: (...args: any[]) => void): () => void;
 
     /**
 	 * Gets/sets the message of toast.
