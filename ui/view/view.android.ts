@@ -138,7 +138,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     this._nativeObject.setId(NativeView.generateViewId());
 
-    Object.assign(this, params);
+    
 
     // // Assign parameters given in constructor
     // if (params) {
@@ -177,6 +177,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     };
 
     this._android = android;
+
+    const {android:androidParams, ios, ...rest} = params;
+    Object.assign(this._android, androidParams);
+    Object.assign(this, params);
   }
 
   get parent() {
