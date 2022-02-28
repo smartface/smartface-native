@@ -6,6 +6,7 @@ import StatusBar from './statusbar/statusbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar.android';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
+import BottomTabBar from '../ui/bottomtabbar';
 
 declare enum Events {
   /**
@@ -1118,4 +1119,5 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @since 4.3.6
    */
   static isVoiceOverEnabled: Boolean;
+  static tabBar?: BottomTabBar;
 }
