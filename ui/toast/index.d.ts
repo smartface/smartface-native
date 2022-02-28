@@ -19,8 +19,18 @@ import Color from "../color";
  *
  */
 
-declare class Toast extends NativeComponent {
+ declare enum ToastEvents {
+	Dismissed = 'dismissed',
+  }
+
+  declare namespace Toast {
+	const Events: typeof ToastEvents
+	type Events = typeof Events
+  }
+
+declare class Toast <TEvents = ToastEvents> extends  NativeComponent<TEvents> {
     constructor(params?: Partial<Toast>)
+	on(eventName: TEvents, callback: (...args: any[]) => void): () => void;
 
     /**
 	 * Gets/sets the message of toast.
@@ -79,7 +89,7 @@ declare class Toast extends NativeComponent {
     get duration(): number;
 	
 	/**
-	 * Gets/sets how long it will stay on the screen.
+	 * Gets status of the toast. Returns true if the toast is currently displayed on the screen. 
 	 * @property {Number} [duration = Number]
 	 * @android
 	 * @ios
@@ -105,14 +115,14 @@ declare class Toast extends NativeComponent {
 	 */
     onDismissed(callback: void);
 	/**
-	 * This is method should be called when created toast wants to show.
+	 *  This method shows the toast on the screen.
 	 * @android
 	 * @ios
 	 * @since 4.4.1
 	 */
     show(): void;
 	/**
-	 * This method should be called when the created toast intended to show.
+	 * Dismisses the Toast, isShowing property set to false after this operation.
 	 * @android
 	 * @ios
 	 * @since 4.4.1

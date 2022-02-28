@@ -1,77 +1,93 @@
+const View = require('../../ui/view');
+const { EventEmitterCreator } = require("../../core/eventemitter");
+const Events = require('./events');
+Toast.Events = { ...Events }
+
 function Toast(params) {
-    this.nativeObject = new __SF_Snackbar();
+    const self = this;
+    self.nativeObject = new __SF_Snackbar();
+
+    this.dismiss = () => {
+        self.nativeObject.dismiss()    
+    };
+
+    this.nativeObject.dismissed = () => {
+        this.emitter.emit(Events.Dismissed);
+        _onDismissed && _onDismissed();
+    }
 
     this.show = () => {
-        this.nativeObject.show()
+        self.nativeObject.show()
     }
 
     this.createAction = (text, onSubmit) => {
-        this.nativeObject.action(text, onSubmit)
+        self.nativeObject.action(text, onSubmit)
     }
 
-    this.dismiss = () => {
-        this.nativeObject.dismiss();
-    }
-
-    this.nativeObject.onDismissedCompletion = () => {
-        if (typeof this.onDismissed === "function") {
-            this.onDismissed();
-        }
-    }
+    var _onDismissed;
+    Object.defineProperty(this, 'onDismissed', {
+        get: function () {
+            return _onDismissed
+        },
+        set: function (value) {
+            _onDismissed = value;
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(this, 'isShowing', {
         get: function () {
-            return this.nativeObject.isShowing()
+            return self.nativeObject.isShowing()
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'message', {
         get: function () {
-            return this.nativeObject.messageText;
+            return self.nativeObject.messageText;
         },
         set: function (value) {
-            this.nativeObject.messageText = value;
+            self.nativeObject.messageText = value;
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'duration', {
         get: function () {
-            return this.nativeObject.duration;
+            return self.nativeObject.duration;
         },
         set: function (value) {
-            this.nativeObject.duration = value;
+            self.nativeObject.duration = value;
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'messageTextColor', {
         get: function () {
-            return this.nativeObject.messageTextColor;
+            return self.nativeObject.messageTextColor;
         },
         set: function (value) {
-            this.nativeObject.messageTextColor = value.nativeObject;
+            self.nativeObject.messageTextColor = value.nativeObject;
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'backgroundColor', {
         get: function () {
-            return this.nativeObject.messageViewBackgroundColor;
+            return self.nativeObject.messageViewBackgroundColor;
         },
         set: function (value) {
-            this.nativeObject.messageViewBackgroundColor = value.nativeObject;
+            self.nativeObject.messageViewBackgroundColor = value.nativeObject;
         },
         enumerable: true
     });
 
     Object.defineProperty(this, 'actionTextColor', {
         get: function () {
-            return this.nativeObject.actionTextColor;
+            return self.nativeObject.actionTextColor;
         },
         set: function (value) {
-            this.nativeObject.actionTextColor = value.nativeObject;
+            self.nativeObject.actionTextColor = value.nativeObject;
         },
         enumerable: true
     });
@@ -83,11 +99,12 @@ function Toast(params) {
         },
         set: function (value) {
             _bottomOffset = value;
-            this.nativeObject.bottomOffset = value;
+            self.nativeObject.bottomOffset = value;
         },
         enumerable: true
     });
 
+    EventEmitterCreator(this, {});
     if (params) {
         for (var param in params) {
             this[param] = params[param];
