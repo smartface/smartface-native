@@ -8,9 +8,14 @@ function Toast(params) {
     self.nativeObject = new __SF_Snackbar();
 
     this.dismiss = () => {
+        self.nativeObject.dismiss()    
+    };
+
+    this.nativeObject.dismissed = () => {
         this.emitter.emit(Events.Dismissed);
         _onDismissed && _onDismissed();
     }
+
     this.show = () => {
         self.nativeObject.show()
     }
@@ -26,7 +31,6 @@ function Toast(params) {
         },
         set: function (value) {
             _onDismissed = value;
-            self.nativeObject.dismissed = self.dismiss;
         },
         enumerable: true
     });
