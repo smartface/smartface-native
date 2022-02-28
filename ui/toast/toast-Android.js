@@ -4,7 +4,12 @@ const NativeSnackBar = requireClass("com.google.android.material.snackbar.Snackb
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 const NativeView = requireClass("android.view.View");
 
+const Events = require("./events");
+const { EventEmitterCreator } = require("../../core/eventemitter");
+Toast.Events = Events;
+
 function Toast(params) {
+    var self = this;
     const convertToMiliSeconds = (seconds) => seconds * 1000;
     const convertToSeconds = (miliSeconds) => miliSeconds / 1000;
     const createNativeSnackBar = (params) => {
@@ -15,68 +20,76 @@ function Toast(params) {
 
 	const defaultDurationInSeconds = 4;
     const defaultMessage = "";
-    if (!this.nativeObject)
-        this.nativeObject = createNativeSnackBar({
+    if (!self.nativeObject)
+        self.nativeObject = createNativeSnackBar({
             duration: defaultDurationInSeconds,
             message: defaultMessage,
         });
-	
+    
+	this.callOnDismissedCallbacks = () => {
+        this.emitter.emit(Events.Dismissed);
+        self.__onDismissed && self.__onDismissed();
+    }
+    const createNativeOnDismissedCallback = (onDismissed) => {
+        return  NativeSnackBar.Callback.extend("SFSnackBarCallback", {
+            onDismissed: () => {
+                onDismissed && onDismissed();
+            },
+        }, null);
+    }
+
+    const nativeCallback = createNativeOnDismissedCallback(this.callOnDismissedCallbacks);
+    self.nativeObject.addCallback(nativeCallback);
+
     Object.defineProperties(this, {
         message: {
             get: () => this.__message,
             set: (message) => {
                 this.__message = message;
-                this.nativeObject.setText(message);
+                self.nativeObject.setText(message);
             },
         },
         duration: {
             get: () => convertToSeconds(this.getDuration()),
             set: (duration) => {
-                this.nativeObject.setDuration(convertToMiliSeconds(duration));
+                self.nativeObject.setDuration(convertToMiliSeconds(duration));
             },
         },
         messageTextColor: {
             get: () => this.__messageTextColor,
             set: (messageTextColor) => {
                 this.__messageTextColor = messageTextColor;
-                this.nativeObject.setTextColor(messageTextColor.nativeObject);
+                self.nativeObject.setTextColor(messageTextColor.nativeObject);
             },
         },
         actionTextColor: {
             get: () => this.__actionTextColor,
             set: (actionTextColor) => {
                 this.__actionTextColor = actionTextColor;
-                this.nativeObject.setActionTextColor(actionTextColor.nativeObject);
+                self.nativeObject.setActionTextColor(actionTextColor.nativeObject);
             },
         },
         backgroundColor: {
             get: () => this.__backgroundColor,
             set: (backgroundColor) => {
                 this.__backgroundColor = backgroundColor;
-                this.nativeObject.setBackgroundTint(backgroundColor.nativeObject);
+                self.nativeObject.setBackgroundTint(backgroundColor.nativeObject);
             },
         },
         bottomOffset: {
             get: () => this.__bottomOffset,
             set: (bottomOffset) => {
                 this.__bottomOffset = bottomOffset;
-                this.nativeObject.getView().setTranslationY(AndroidUnitConverter.dpToPixel(-bottomOffset));
+                self.nativeObject.getView().setTranslationY(AndroidUnitConverter.dpToPixel(-bottomOffset));
             },
         },
         isShowing: {
-            get: () => this.nativeObject.isShown(),
+            get: () => self.nativeObject.isShown(),
         },
         onDismissed: {
-            get: () => this.__onDismissed,
+            get: () => self.__onDismissed,
             set: (onDismissed) => {
-                this.__onDismissed = onDismissed;
-                this.__callback && this.nativeObject.removeCallback(this.__callback);
-                this.__callback = NativeSnackBar.Callback.extend("SFSnackBarCallback", {
-                    onDismissed: () => {
-						return this.__onDismissed && this.__onDismissed();
-					},
-                }, null);
-                this.nativeObject.addCallback(this.__callback);
+                self.__onDismissed = onDismissed;
             },
         },
     });
@@ -85,14 +98,15 @@ function Toast(params) {
         const onClickListener = NativeView.OnClickListener.implement({
             onClick: () => callback && callback(),
         });
-        this.nativeObject.setAction(message, onClickListener);
+        self.nativeObject.setAction(message, onClickListener);
     };
     this.show = () => {
-        this.nativeObject.show();
+        self.nativeObject.show();
     };
     this.dismiss = () => {
-        this.nativeObject.dismiss();
+        self.nativeObject.dismiss();
     };
+    EventEmitterCreator(this, {});
 
     if (params) {
         for (var param in params) {
