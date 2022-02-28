@@ -1,6 +1,6 @@
-import { INativeComponent } from "core/inative-component";
-import IBlob from "../../global/blob/blob";
-import { Rectangle } from "../../primitive/rectangle";
+import { INativeComponent } from 'core/inative-component';
+import IBlob from '../../global/blob/blob';
+import { Rectangle } from '../../primitive/rectangle';
 
 /**
  * @class UI.Image
@@ -114,12 +114,7 @@ interface IImage extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  resize(
-    width: number,
-    height: number,
-    onSuccess?: (e: { image: IImage }) => void,
-    onFailure?: (e?: { message: string }) => void
-  ): IImage | false;
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | false;
   /**
    * Returns a cropped image from existing image with specified rectangle.
    * onSuccess and onFailure are optional parameters.
@@ -140,14 +135,7 @@ interface IImage extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  crop(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    onSuccess: (e: { image: IImage }) => void,
-    onFailure: (e?: { message: string }) => void
-  ): IImage | false;
+  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): IImage | false;
   /**
    * Returns a compressed blob from existing image with given quality.
    * onSuccess and onFailure are optional parameters.
@@ -172,12 +160,7 @@ interface IImage extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  compress(
-    format: Format,
-    quality: number,
-    onSuccess: (e: { blob: IBlob }) => void,
-    onFailure: (e?: { message: string }) => void
-  ): IBlob | false;
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): IBlob | false;
   /**
    * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
    * onSuccess and onFailure are optional parameters.
@@ -195,11 +178,7 @@ interface IImage extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  rotate(
-    angle: number,
-    onSuccess: (e: { image: IImage }) => void,
-    onFailure: (e?: { message: string }) => void
-  ): IImage | false;
+  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): IImage | false;
 }
 
 /**
@@ -228,7 +207,7 @@ export enum Format {
    * @readonly
    * @since 0.1
    */
-  PNG = 1,
+  PNG = 1
 }
 
 /**
@@ -266,97 +245,98 @@ export enum RenderingMode {
    * @readonly
    * @since 3.1.3
    */
-  TEMPLATE = 2,
+  TEMPLATE = 2
 }
 
-export type ImageAndroidProps = {} | {
-  /**
-   * Returns an image with rounded corners. This method returns the original image for iOS.
-   *
-   * @method round
-   * @param {Number} radius Corner radius
-   * @return UI.Image
-   * @android
-   * @since 2.0.10
-   */
-  round(radius: number): IImage; 
-  systemIcon: IImage;
-};
+export type ImageAndroidProps =
+  | {}
+  | {
+      /**
+       * Returns an image with rounded corners. This method returns the original image for iOS.
+       *
+       * @method round
+       * @param {Number} radius Corner radius
+       * @return UI.Image
+       * @android
+       * @since 2.0.10
+       */
+      round(radius: number): IImage;
+      systemIcon: IImage;
+    };
 
-export type ImageIOSProps = {
-  /**
-   * Determines how an image is rendered.
-   *
-   * @method imageWithRenderingMode
-   * @param {UI.Image.iOS.RenderingMode} renderingMode
-   * @ios
-   * @return UI.Image
-   * @since 3.1.3
-   */
-  imageWithRenderingMode(mode: RenderingMode): IImage
-  /**
-   * Returns the image of automatically related to system or application direction.
-   *
-   * @method imageFlippedForRightToLeftLayoutDirection
-   * @ios
-   * @return UI.Image
-   * @since 3.1.3
-   */
-  imageFlippedForRightToLeftLayoutDirection(): IImage
+export type ImageIOSProps =
+  | {
+      /**
+       * Determines how an image is rendered.
+       *
+       * @method imageWithRenderingMode
+       * @param {UI.Image.iOS.RenderingMode} renderingMode
+       * @ios
+       * @return UI.Image
+       * @since 3.1.3
+       */
+      imageWithRenderingMode(mode: RenderingMode): IImage;
+      /**
+       * Returns the image of automatically related to system or application direction.
+       *
+       * @method imageFlippedForRightToLeftLayoutDirection
+       * @ios
+       * @return UI.Image
+       * @since 3.1.3
+       */
+      imageFlippedForRightToLeftLayoutDirection(): IImage;
 
-  /**
-   * Gets the renderingMode of image.
-   *
-   * @ios
-   * @property {UI.Image.iOS.RenderingMode} renderingMode
-   * @readonly
-   * @since 3.2.0
-   */
-  renderingMode: RenderingMode;
-  /**
-   * A Boolean value that indicates whether the image should flip in a right-to-left layout.
-   *
-   * @ios
-   * @property {Boolean} flipsForRightToLeftLayoutDirection
-   * @readonly
-   * @since 3.2.0
-   */
-  flipsForRightToLeftLayoutDirection: boolean;
-  /**
-   * Specifies the possible resizing modes for an image.
-   *
-   * @method resizableImageWithCapInsetsResizingMode
-   * @ios
-   * @param {Object} insets
-   * @param {Number} insets.top
-   * @param {Number} insets.left
-   * @param {Number} insets.width  Width in pixels
-   * @param {Number} insets.height Height in pixels
-   * @param {Number} mode &emsp;UIImageResizingModeTile = 0 <br />&emsp;UIImageResizingModeStretch = 1
-   * @return UI.Image
-   * @since 1.1.18
-   */
-  resizableImageWithCapInsetsResizingMode(
-    insets: Rectangle,
-    mode: number
-  ): IImage
-} | {};
+      /**
+       * Gets the renderingMode of image.
+       *
+       * @ios
+       * @property {UI.Image.iOS.RenderingMode} renderingMode
+       * @readonly
+       * @since 3.2.0
+       */
+      renderingMode: RenderingMode;
+      /**
+       * A Boolean value that indicates whether the image should flip in a right-to-left layout.
+       *
+       * @ios
+       * @property {Boolean} flipsForRightToLeftLayoutDirection
+       * @readonly
+       * @since 3.2.0
+       */
+      flipsForRightToLeftLayoutDirection: boolean;
+      /**
+       * Specifies the possible resizing modes for an image.
+       *
+       * @method resizableImageWithCapInsetsResizingMode
+       * @ios
+       * @param {Object} insets
+       * @param {Number} insets.top
+       * @param {Number} insets.left
+       * @param {Number} insets.width  Width in pixels
+       * @param {Number} insets.height Height in pixels
+       * @param {Number} mode &emsp;UIImageResizingModeTile = 0 <br />&emsp;UIImageResizingModeStretch = 1
+       * @return UI.Image
+       * @since 1.1.18
+       */
+      resizableImageWithCapInsetsResizingMode(insets: Rectangle, mode: number): IImage;
+    }
+  | {};
 
 /**
  * @since 4.5.0
  */
 export class ImageBase implements IImage {
-  resize(width: number, height: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): false | IImage {
-    throw new Error("Method not implemented.");
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
+    throw new Error('Method not implemented.');
   }
-  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
-    throw new Error("Method not implemented.");
+  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
+    throw new Error('Method not implemented.');
   }
-  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob; }) => void, onFailure: (e?: { message: string; }) => void): false | IBlob {
-    throw new Error("Method not implemented.");
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): false | IBlob {
+    throw new Error('Method not implemented.');
   }
-  rotate(angle: number, onSuccess: (e: { image: IImage; }) => void, onFailure: (e?: { message: string; }) => void): false | IImage {
-    throw new Error("Method not implemented.");
+  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
+    throw new Error('Method not implemented.');
   }
   get height(): number {
     return this.nativeObject.size.height;
@@ -365,28 +345,28 @@ export class ImageBase implements IImage {
     return this.nativeObject.size.width;
   }
   set autoMirrored(value) {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   get autoMirrored() {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
     return null;
   }
   get android(): ImageAndroidProps {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
     return null;
   }
   toBlob(): IBlob {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
-  toString(){
+  toString() {
     return 'Image';
   }
 
   nativeObject: __SF_NSOBject & {
-    size: { width: number; height: number},
-    [key: string]: any
+    size: { width: number; height: number };
+    [key: string]: any;
   };
   /**
    * Creates an Image object which built-in icon is created corresponding systemIcon value.
@@ -400,7 +380,7 @@ export class ImageBase implements IImage {
    * @since 4.0.2
    */
   static createSystemIcon(icon: number | string): IImage {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   /**
    * Creates an image object from given a blob.
@@ -414,7 +394,39 @@ export class ImageBase implements IImage {
    * @since 0.1
    */
   static createFromBlob(blob: IBlob): IImage {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Used privately inside framework
+   * Creates an image object from image.nativeobject.
+   *
+   * @param {NativeObject} image Contains image datas.
+   * @method createFromImage
+   * @return UI.Image
+   * @static
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  static createFromImage(image: any): IImage {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Used privately inside framework
+   * Creates an image object from file path or image.
+   *
+   * @param {IImage | string} path Contains image datas.
+   * @method createImageFromPath
+   * @return UI.Image
+   * @static
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  static createImageFromPath(path: IImage | string): IImage {
+    throw new Error('Method not implemented.');
   }
 
   /**
@@ -430,7 +442,7 @@ export class ImageBase implements IImage {
    * @since 2.0.10
    */
   static createRoundedImage(params: { path: string; radius?: number }): IImage {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   /**
@@ -454,9 +466,9 @@ export class ImageBase implements IImage {
    * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
    */
   static createFromFile(path: string, width?: number, height?: number): IImage {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
-  
+
   /**
    * iOS Specific Properties.
    * @class UI.Image.iOS
@@ -464,7 +476,7 @@ export class ImageBase implements IImage {
    */
   static readonly iOS = {
     RenderingMode,
-    Format,
+    Format
   };
 
   get ios() {

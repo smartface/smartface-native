@@ -281,6 +281,7 @@ declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
 }
 
 declare class __SF_UIBarButtonItem extends __SF_UIView {
+  static createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   target: __SF_UIBarButtonItem;
   containerView: any;
