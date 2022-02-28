@@ -1,4 +1,5 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const NativeSnackBar = requireClass("com.google.android.material.snackbar.Snackbar");
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 const NativeView = requireClass("android.view.View");
@@ -59,7 +60,7 @@ function Toast(params) {
             get: () => this.__bottomOffset,
             set: (bottomOffset) => {
                 this.__bottomOffset = bottomOffset;
-                this.nativeObject.getView().setTranslationY(-bottomOffset);
+                this.nativeObject.getView().setTranslationY(AndroidUnitConverter.dpToPixel(-bottomOffset));
             },
         },
         isShowing: {
