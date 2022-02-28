@@ -30,6 +30,8 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   private cacheNativeBuilders = {};
   private __isActive;
   private __targetIndex: number;
+  ios = {};
+  android = {};
   constructor(params?: Partial<BottomTabbarController>) {
     super();
     Application.tabBar = new BottomTabBar();
@@ -40,7 +42,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
       listener.implement({
         onNavigationItemSelected: function (item) {
           const ViewController = require('../../util/Android/transition/viewcontroller');
-          var index = item.getItemId();
+          const index = item.getItemId();
           const result = self.shouldSelectByIndex?.({ index: index }) || true;
           self.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
           if (!result) return false;
@@ -86,7 +88,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   }
   set childController(childrenArray: any[]) {
     this._childControllers = childrenArray;
-    for (let index in this._childControllers) {
+    for (const index in this._childControllers) {
       try {
         //TODO: navigation controller doesnt have parentController on typings.
         this._childControllers[index].parentController = this;
@@ -120,12 +122,12 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   }
   addTabBarToActivity() {
     if (!this._disabledShiftingMode) {
-      this._disabledShiftingMode = disableShiftMode(this.tabBar);
+      this._disabledShiftingMode = this.disableShiftMode(this.tabBar);
     }
 
     if (!this._addedToActivity) {
       this._addedToActivity = true;
-      var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
+      const pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
       this.tabBar.nativeObject.setVisibility(8); // GONE
       pageLayoutWrapper.addView(this.tabBar.nativeObject);
     }
@@ -166,8 +168,8 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
           animated: false
         });
       } else if (childController.childControllers.length >= 1) {
-        var childControllerStack = childController.childControllers;
-        var childControllerStackLenght = childControllerStack.length;
+        const childControllerStack = childController.childControllers;
+        const childControllerStackLenght = childControllerStack.length;
 
         // TODO: navigationController missing show method
         // show latest page or controller
@@ -210,7 +212,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     this.initializeOneTime = true;
   }
   getCurrentController() {
-    var controller = this.childControllers[this._selectedIndex];
+    const controller = this.childControllers[this._selectedIndex];
     if (!controller) return null;
     if (controller instanceof Page) return controller;
 
@@ -220,14 +222,14 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   setNormalColorToAttributed() {
     const tabBar = this.tabBar;
 
-    let normalColorNO = tabBar.itemColor.normal.nativeObject;
-    let tabBarItems = tabBar.items;
-    for (var i = tabBarItems.length; i--; ) {
+    const normalColorNO = tabBar.itemColor.normal.nativeObject;
+    const tabBarItems = tabBar.items;
+    for (let i = tabBarItems.length; i--; ) {
       if (i === this.selectedIndex) return;
 
-      let tabBarItem = tabBarItems[i];
+      const tabBarItem = tabBarItems[i];
       if (!tabBarItem._attributedTitleBuilder) return;
-      let nativeStringBuilder = this.attributedItemBuilder(tabBarItem, normalColorNO);
+      const nativeStringBuilder = this.attributedItemBuilder(tabBarItem, normalColorNO);
       tabBarItem.__setTitle(nativeStringBuilder);
     }
   }
@@ -236,19 +238,19 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   */
   controlAttributedTextColor(index, cache) {
     const tabBar = this.tabBar;
-    let tabBarItem = tabBar.items[index];
+    const tabBarItem = tabBar.items[index];
     let nativeStringBuilder;
 
     if (tabBarItem._attributedTitleBuilder) {
-      let selectedColorNO = tabBar.itemColor.selected.nativeObject;
+      const selectedColorNO = tabBar.itemColor.selected.nativeObject;
       nativeStringBuilder = this.attributedItem(tabBarItem, selectedColorNO);
       tabBarItem.__setTitle(nativeStringBuilder);
     }
     if (cache.prevSelectedAttributedItem !== undefined && cache.prevSelectedAttributedItem !== index) {
-      let i = cache.prevSelectedAttributedItem;
-      let prevTabBarItem = tabBar.items[i];
+      const i = cache.prevSelectedAttributedItem;
+      const prevTabBarItem = tabBar.items[i];
       if (prevTabBarItem._attributedTitleBuilder) {
-        let normalColorNO = tabBar.itemColor.normal.nativeObject;
+        const normalColorNO = tabBar.itemColor.normal.nativeObject;
         nativeStringBuilder = this.attributedItem(prevTabBarItem, normalColorNO);
         prevTabBarItem.__setTitle(nativeStringBuilder);
       }
@@ -259,8 +261,8 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     return this.attributedItemBuilder(tabBarItem, color);
   }
   attributedItemBuilder(tabBarItem, color) {
-    let nativeForegroundSpan = new NativeForegroundColorSpan(color);
-    let nativeStringBuilder = tabBarItem._attributedTitleBuilder;
+    const nativeForegroundSpan = new NativeForegroundColorSpan(color);
+    const nativeStringBuilder = tabBarItem._attributedTitleBuilder;
     nativeStringBuilder.setSpan(nativeForegroundSpan, 0, nativeStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
 
     return nativeStringBuilder;
@@ -268,15 +270,15 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   disableShiftMode(bottomTabBar) {
     bottomTabBar.nativeObject.setLabelVisibilityMode(1);
 
-    var menuView = bottomTabBar.nativeObject.getChildAt(0);
-    let childCount = menuView.getChildCount();
+    const menuView = bottomTabBar.nativeObject.getChildAt(0);
+    const childCount = menuView.getChildCount();
     if (childCount === 0) return false;
 
     /* This is workarround to solve bug of material component https://github.com/material-components/material-components-android/issues/139 */
-    for (var i = 0; i < childCount; i++) {
-      var menuViewItem = menuView.getChildAt(i);
+    for (let i = 0; i < childCount; i++) {
+      const menuViewItem = menuView.getChildAt(i);
       //due to material component upgrade, arranged to be backward compatible with older smartface framework
-      var activeLabel = menuViewItem.findViewById(NativeSFR.id.navigation_bar_item_large_label_view || NativeSFR.id.largeLabel);
+      const activeLabel = menuViewItem.findViewById(NativeSFR.id.navigation_bar_item_large_label_view || NativeSFR.id.largeLabel);
       if (activeLabel) {
         activeLabel.setPadding(0, 0, 0, 0);
       }
