@@ -326,6 +326,18 @@ export type ImageIOSProps =
  * @since 4.5.0
  */
 export class ImageBase implements IImage {
+  constructor(params: Partial<{
+    bitmap?: any;
+    roundedBitmapDrawable?: any;
+    drawable: any,
+    android?: {
+      systemIcon?: any;
+    };
+  }>){
+    const { android, ...rest} = params;
+    Object.assign(this, android);
+    Object.assign(this, rest);
+  }
   resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
     throw new Error('Method not implemented.');
   }
