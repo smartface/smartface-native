@@ -172,7 +172,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
     const {android:androidParams, ios, ...rest} = params;
     Object.assign(this._ios, ios);
-    Object.assign(this, params);
+    Object.assign(this, rest);
   }
 
   get uniqueId() {

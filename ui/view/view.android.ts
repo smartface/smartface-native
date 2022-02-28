@@ -180,7 +180,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     const {android:androidParams, ios, ...rest} = params;
     Object.assign(this._android, androidParams);
-    Object.assign(this, params);
+    Object.assign(this, rest);
   }
 
   get parent() {
