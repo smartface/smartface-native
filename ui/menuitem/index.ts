@@ -125,6 +125,11 @@ export declare class AbstractMenuItem implements IMenuItem {
     style: Style;
   }>;
   onSelected: () => void;
+  /**
+   * Used privately by the framework.
+   * @ios
+   */
+  onSelectedListener?: () => void;
 }
 
 const MenuItem: typeof AbstractMenuItem = require(`./menuitem.${Device.deviceOS.toLowerCase()}`).default;

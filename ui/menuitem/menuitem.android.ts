@@ -1,5 +1,4 @@
 import MenuItem, { AbstractMenuItem, Style } from '.';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { Exception, TypeUtil } from '../../util';
 import Color from '../color';
