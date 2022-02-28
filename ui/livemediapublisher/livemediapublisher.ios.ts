@@ -40,7 +40,7 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   private _audioOptions = audioDefault;
   private _onChange: (params: { event: number; message: string }) => void;
   constructor(params?: Partial<LiveMediaPublisher>) {
-    super();
+    super(params);
     const self = this;
     if (!this._nativeObject) {
       const previewView = new View();
@@ -66,8 +66,6 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
       self.emit(LiveMediaPublisherEvents.Change, { event: e.event, message: e.msg });
     };
     this.nodePublisher.nodePublisherDelegate = this.publisherDelegate;
-
-    Object.assign(this, params);
   }
   get onChange() {
     return this._onChange;

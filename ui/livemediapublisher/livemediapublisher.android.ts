@@ -22,7 +22,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
   private _onChange: (params: { event: number; message: string }) => void;
   private nodePublisher: any;
   constructor(params?: Partial<LiveMediaPublisher>) {
-    super();
+    super(params);
     const self = this;
     if (!this._nativeObject) {
       this._nativeObject = new NodeCameraView(AndroidConfig.activity);
@@ -45,8 +45,6 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
         }
       })
     );
-
-    Object.assign(this, params);
   }
   get onChange() {
     return this._onChange;
