@@ -30,8 +30,6 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   private cacheNativeBuilders = {};
   private __isActive;
   private __targetIndex: number;
-  ios = {};
-  android = {};
   constructor(params?: Partial<BottomTabbarController>) {
     super();
     Application.tabBar = new BottomTabBar();
@@ -41,7 +39,6 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(
       listener.implement({
         onNavigationItemSelected: function (item) {
-          const ViewController = require('../../util/Android/transition/viewcontroller');
           const index = item.getItemId();
           const result = self.shouldSelectByIndex?.({ index: index }) || true;
           self.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
