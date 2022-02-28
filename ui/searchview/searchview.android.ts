@@ -108,7 +108,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private skipDefaults: boolean;
 
   constructor(params: Partial<ISearchView> = {}) {
-    super();
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeSearchView(AndroidConfig.activity);
       // Prevent gain focus when SearchView appear.
