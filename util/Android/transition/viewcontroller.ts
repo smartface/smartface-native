@@ -7,7 +7,12 @@ import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
 
-type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
+type ControllerParams = {
+  controller: NavigationController | Page | BottomTabBarController;
+  animation: boolean;
+  isComingFromPresent: boolean;
+  onComplete: () => void;
+};
 namespace ViewController {
   export function activateRootController(controller: PageWithController) {
     if (!controller) return;
@@ -30,7 +35,7 @@ namespace ViewController {
   export function setIsActiveOfController(controller: PageWithController, __isActive: boolean) {
     if (!controller || controller instanceof Page) return;
     controller.__isActive = __isActive;
-    var childController = controller.getCurrentController();
+    const childController = controller.getCurrentController();
     while (childController) {
       childController.__isActive = __isActive;
       if (childController instanceof Page) break;
@@ -45,8 +50,8 @@ namespace ViewController {
   }
   export function setController(params: ControllerParams) {
     if (params.controller instanceof NavigationController) {
-      var childControllerStack = params.controller.childControllers;
-      var childControllerStackLenght = childControllerStack.length;
+      const childControllerStack = params.controller.childControllers;
+      const childControllerStackLenght = childControllerStack.length;
 
       // This check is requested by Smartface Router team.
       if (childControllerStackLenght === 0)

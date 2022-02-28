@@ -1118,4 +1118,6 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @since 4.3.6
    */
   static isVoiceOverEnabled: Boolean;
+  static currentPage: Page;
+  static registOnItemSelectedListener(): void;
 }
