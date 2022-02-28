@@ -1,5 +1,6 @@
 /*globals requireClass, array*/
 import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
+import { INativeComponent } from '../../core/inative-component';
 import File from '../../io/file';
 import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -146,7 +147,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
+  loadFromFile(params: { placeholder?: INativeComponent, file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
     const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
 
     if (file instanceof File) {
@@ -254,7 +255,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     } else if (cacheName === 'MEMORY_CACHE') {
       return ImageCacheType.MEMORY;
     } else {
-      // TODO Recheck
+      // TODO: Recheck
       return ImageCacheType.NETWORK;
     }
   }
