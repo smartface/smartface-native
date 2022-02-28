@@ -10,8 +10,8 @@ import TabBarItem from '../tabbaritem';
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  *
  */
-declare class BottomTabBar extends NativeComponent {
-  constructor(params?: Partial<BottomTabBar>);
+export declare class AbstractBottomTabBar {
+  constructor(params?: Partial<AbstractBottomTabBar>);
   /**
    * Gets/sets background color of the tab bar items.
    *
@@ -63,14 +63,19 @@ declare class BottomTabBar extends NativeComponent {
    * @since 3.2.0
    */
   items: TabBarItem[] | null;
-  /**
-   * A Boolean value that indicates whether the tab bar is translucent.
-   *
-   * @property {Boolean} translucent
-   * @ios
-   * @since 4.0.2
-   */
-  translucent: boolean;
+  ios: Partial<{
+    /**
+     * A Boolean value that indicates whether the tab bar is translucent.
+     *
+     * @property {Boolean} translucent
+     * @ios
+     * @since 4.0.2
+     */
+    translucent: boolean;
+  }>;
 }
 
-export = BottomTabBar;
+const BottomTabBar: typeof AbstractBottomTabBar = require(`./bottomtabbar.${Device.deviceOS.toLowerCase()}`).default;
+type BottomTabBar = AbstractBottomTabBar;
+
+export default BottomTabBar;
