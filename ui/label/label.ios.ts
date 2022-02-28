@@ -12,7 +12,7 @@ export default class LabelIOS<TEvent extends string = ViewEvents> extends ViewIO
   private _textAlignment = TextAlignment.MIDLEFT;
   protected _textColor: ILabel['textColor'] = Color.BLACK;
   constructor(params: Partial<ILabel> = {}) {
-    super();
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_SMFUILabel();
     }

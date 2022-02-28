@@ -46,7 +46,7 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   private gradientColorObject: Record<string, any>;
   private _onPressFunc: IButton['onPress'];
   constructor(params: Partial<IButton> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIButton();
@@ -56,10 +56,6 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
       this.emit('press');
       this.onPress?.();
     }, UIControlEvents.touchUpInside);
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   onLongPress: () => void;
 

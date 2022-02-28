@@ -41,7 +41,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
   private __didSetOnClickListener: boolean;
   private __didSetOnLongClickListener: boolean;
   constructor(params: Partial<IButton> = {}) {
-    super();
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeButton(AndroidConfig.activity);
     }
@@ -60,10 +60,6 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
 
     this.setOnClickListener();
     this.setOnLongClickListener();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   static Events = { ...ViewAndroid.Events, ...ButtonEvents };
   get backgroundColor(): IButton['backgroundColor'] {

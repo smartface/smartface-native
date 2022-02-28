@@ -45,7 +45,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _adjustableFontSizeStep = 1;
   private fontInitial: Font = null;
   private _textColor: ILabel['textColor'] = Color.BLUE;
-  constructor(params: Partial<LabelAndroid> = {}) {
+  constructor(params: Partial<ILabel> = {}) {
     super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
