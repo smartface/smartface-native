@@ -113,7 +113,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
   private __isRecyclerView: any;
-  private nativeInner: any;
   private _touchEnabled: boolean = false;
   private _rippleEnabled = false;
   private _rippleColor = null;
@@ -137,8 +136,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     }
 
     this._nativeObject.setId(NativeView.generateViewId());
-
-    
 
     // // Assign parameters given in constructor
     // if (params) {
@@ -178,7 +175,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     this._android = android;
 
-    const {android:androidParams, ios, ...rest} = params;
+    const { android: androidParams, ios, ...rest } = params;
     Object.assign(this._android, androidParams);
     Object.assign(this, rest);
   }
@@ -192,6 +189,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
   private setTouchHandlers() {
     if (this.didSetTouchHandler) return;
+    //@ts-ignore TODO: Check nativeInner and refurbish the usage
     const touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);

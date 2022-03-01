@@ -278,6 +278,7 @@ declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
   uuid: string;
   reuseIdentifier: any;
   row: any;
+  expandSwipeAnimated(direction: any, animated?: boolean);
 }
 
 declare class __SF_UIBarButtonItem extends __SF_UIView {
