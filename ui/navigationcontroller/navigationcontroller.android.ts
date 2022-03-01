@@ -1,12 +1,13 @@
 import NavigationController, { Controller, INavigationController, OperationType } from '.';
 import Application from '../../application';
+import NativeComponent from '../../core/native-component';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import ViewController, { ControllerParams } from '../../util/Android/transition/viewcontroller';
 import BottomTabBarController from '../bottomtabbarcontroller';
 import HeaderBar from '../headerbar';
 import Page from '../page';
 
-export default class NavigationControllerAndroid implements INavigationController {
+export default class NavigationControllerAndroid extends NativeComponent implements INavigationController {
   static NavCount = 0;
   static OperationType = OperationType;
   private pageIDCollectionInStack = {};
@@ -19,11 +20,14 @@ export default class NavigationControllerAndroid implements INavigationControlle
   popupBackNavigator: any;
   popUpBackPage: Page;
   constructor(params: Partial<INavigationController> = {}) {
+    super();
+    const { ...restParams } = params;
+
     this.__isActive = false;
     this.__navID = ++NavigationControllerAndroid.NavCount;
+    Object.assign(this, restParams);
   }
   parentController: INavigationController;
-  nativeObject: any;
   headerBar: HeaderBar;
   get childControllers() {
     return this._childControllers;
@@ -115,7 +119,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
       operation: OperationType.PUSH
     });
   }
-  push(params: ControllerParams) {
+  push(params: Parameters<INavigationController['push']>['0']) {
     if (!params.controller.pageID) {
       params.controller.pageID = FragmentTransaction.generatePageID();
     }
@@ -133,7 +137,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
     this._childControllers.push(params.controller);
     this.show(params);
   }
-  showController(params) {
+  showController(params: Parameters<INavigationController['push']>['0']) {
     if (params.controller instanceof Page) {
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
       FragmentTransaction.push({
@@ -150,7 +154,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
     }
   }
 
-  present(params) {
+  present(params: Parameters<INavigationController['present']>['0']) {
     if (!params || !this.__isActive) {
       return;
     }
@@ -166,7 +170,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
 
     params.onComplete && params.onComplete();
   }
-  dismiss(params: any) {
+  dismiss(params: Parameters<INavigationController['dismiss']>['0']) {
     if (!this.popupBackNavigator) {
       return;
     }
@@ -182,7 +186,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
     ViewController.deactivateController(this);
     params.onComplete && params.onComplete();
   }
-  pop(params) {
+  pop(params: Parameters<INavigationController['pop']>['0']) {
     if (this._childControllers.length < 2) {
       throw new Error('There is no page in history!');
     }
@@ -226,7 +230,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
     }
     return null;
   }
-  popFromHistoryController(currentController, params) {
+  popFromHistoryController(currentController: Controller, params: ControllerParams) {
     const targetController = this._childControllers[this._childControllers.length - 1];
     this._willShowCallback?.({ controller: targetController, animated: params.animated });
     if (targetController instanceof Page) {
