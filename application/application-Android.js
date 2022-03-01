@@ -77,7 +77,8 @@ EventEmitterCreator(ApplicationWrapper, EventFunctions);
 
 Object.defineProperty(ApplicationWrapper, 'on', {
     value: (event, callback) => {
-        EventFunctions[event].call(ApplicationWrapper);
+        const eventFunction = EventFunctions[event];
+        eventFunction && eventFunction.call(ApplicationWrapper);
         ApplicationWrapper.emitter.on(event, callback);
     },
     configurable: true
