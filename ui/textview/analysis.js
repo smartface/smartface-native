@@ -336,4 +336,14 @@ TextView.prototype.lineSpacing = 0;
  */
 TextView.prototype.textDirection;
 
+  /**
+ * Gets/sets inset of the TextView.
+ *
+ * @property {UI.TextView} [inset = {top: 0, left: 0, bottom: 0, right: 0}]
+ * @ios
+ * @android
+ * @since 4.4.1
+ */
+TextView.prototype.inset
+
 module.exports = TextView;

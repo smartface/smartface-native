@@ -6,6 +6,13 @@ import TextAlignment from "../textalignment";
 import AttributedString from "../../global/attributedstring";
 import TextDirection from "../android/textdirection";
 
+interface Inset {
+	top?: number;
+	left?: number;
+	bottom?: number;
+	right?: number;
+}
+
 declare enum TextViewEvents {
   /**
    * This event is called when user click link string. onLinkClick just work with attributedText.
@@ -319,5 +326,14 @@ declare class TextView extends View<TextView.Events> {
  * @since 4.0.2
  */
   textDirection: TextDirection;
+  /**
+ * Gets/sets inset of the TextView.
+ *
+ * @property {UI.TextView} [inset = {top: 0, left: 0, bottom: 0, right: 0}]
+ * @ios
+ * @android
+ * @since 4.4.1
+ */
+  inset: Inset
 }
 export = TextView;
