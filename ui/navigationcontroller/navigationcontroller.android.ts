@@ -1,27 +1,29 @@
-import { AbstractNavigationController, Controller, OperationType } from '.';
+import NavigationController, { Controller, INavigationController, OperationType } from '.';
 import Application from '../../application';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import ViewController from '../../util/Android/transition/viewcontroller';
+import ViewController, { ControllerParams } from '../../util/Android/transition/viewcontroller';
 import BottomTabBarController from '../bottomtabbarcontroller';
 import HeaderBar from '../headerbar';
 import Page from '../page';
 
-export class NavigationControllerAndroid implements AbstractNavigationController {
+export default class NavigationControllerAndroid implements INavigationController {
   static NavCount = 0;
   static OperationType = OperationType;
   private pageIDCollectionInStack = {};
-  private _childControllers = [];
+  private _childControllers: Controller[] = [];
   private _willShowCallback: (opts?: { controller: Controller; animated?: boolean }) => void;
   private _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
   private __isActive: boolean;
   private __navID: number;
-  isInsideBottomTabBar: any;
+  isInsideBottomTabBar: boolean;
   popupBackNavigator: any;
-  popUpBackPage: any;
-  constructor(params?: Partial<AbstractNavigationController>) {
+  popUpBackPage: Page;
+  constructor(params: Partial<INavigationController> = {}) {
     this.__isActive = false;
     this.__navID = ++NavigationControllerAndroid.NavCount;
   }
+  parentController: INavigationController;
+  nativeObject: any;
   headerBar: HeaderBar;
   get childControllers() {
     return this._childControllers;
@@ -73,14 +75,19 @@ export class NavigationControllerAndroid implements AbstractNavigationController
   // Use this function to show page or controller without back stack operation.
   // Show page or controller that exists in history
   // Call this function from BottomTabBarController
-  show(params?: any) {
+  show(params?: ControllerParams) {
     if (!this.pageIDCollectionInStack[params.controller.pageID]) {
       throw new Error("This page doesn't exist in history!");
     }
-    if (!this.__isActive) return;
-
-    params.animated && (params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT);
-    !params.controller.parentController && (params.controller.parentController = this);
+    if (!this.__isActive) {
+      return;
+    }
+    if (params.animated) {
+      params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT;
+    }
+    if (params.controller instanceof NavigationController) {
+      params.controller.parentController ||= this;
+    }
     this._willShowCallback?.({
       controller: params.controller,
       animated: params.animated
@@ -143,7 +150,9 @@ export class NavigationControllerAndroid implements AbstractNavigationController
   }
 
   present(params) {
-    if (!params || !this.__isActive) return;
+    if (!params || !this.__isActive) {
+      return;
+    }
     params.controller.popupBackNavigator = this;
     ViewController.deactivateRootController(Application.currentPage);
     ViewController.activateController(params.controller);

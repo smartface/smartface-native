@@ -1,5 +1,7 @@
 import Page from '../page';
 import HeaderBar from '../headerbar';
+import { INativeComponent } from '../../core/inative-component';
+import { IBottomTabBarController } from '../bottomtabbarcontroller';
 
 /**
  * @enum {Number} UI.NavigationController.OperationType
@@ -32,7 +34,8 @@ export enum OperationType {
   POP = 1
 }
 
-export type Controller = Page | AbstractNavigationController;
+export type Controller = Page | INavigationController | IBottomTabBarController;
+
 /**
  * @class UI.NavigationController
  * @since 3.2
@@ -65,9 +68,7 @@ export type Controller = Page | AbstractNavigationController;
  *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
  *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
-export declare class AbstractNavigationController {
-  constructor(params?: Partial<AbstractNavigationController>);
-  static OperationType: typeof OperationType;
+export declare interface INavigationController extends INativeComponent {
   /**
    * Gets/sets child controllers of NavigationController instance.
    *
@@ -172,4 +173,27 @@ export declare class AbstractNavigationController {
    * @since 4.0.0
    */
   dismiss(params: { onComplete: () => void; animated: boolean }): void;
+  parentController: NavigationController;
+  isInsideBottomTabBar: boolean;
 }
+
+export declare class AbstractNavigationController implements INavigationController {
+  constructor(params?: Partial<AbstractNavigationController>);
+  isInsideBottomTabBar: boolean;
+  parentController: INavigationController;
+  nativeObject: any;
+  childControllers: Controller[];
+  headerBar: HeaderBar;
+  push(params: { controller: Controller; animated?: boolean }): void;
+  pop(params?: { animated: boolean }): void;
+  popTo(params: { controller: Controller; animated?: boolean }): void;
+  willShow: (params: { controller: Controller; animated?: boolean }) => void;
+  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
+  present(params: { controller: Controller; animated: boolean; onComplete: () => void }): void;
+  dismiss(params: { onComplete: () => void; animated: boolean }): void;
+  static OperationType: typeof OperationType;
+}
+
+const NavigationController: typeof AbstractNavigationController = require(`./navigationcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type NavigationController = INavigationController;
+export default NavigationController;

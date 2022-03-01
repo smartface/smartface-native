@@ -70,6 +70,7 @@ export type ViewAndroidProps = {
    * @since 2.0.8
    */
   zIndex: number;
+  updateRippleEffectIfNeeded: () => void;
 };
 
 export type ViewIOSProps = {
