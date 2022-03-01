@@ -108,7 +108,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _borderColor: Color;
   protected _borderWidth: number;
   protected _borderRadius: number;
-  protected _backgroundColor: Color = Color.TRANSPARENT;
+  protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -291,10 +291,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     this._overScrollMode = mode;
   }
 
-  get backgroundColor() {
+  get backgroundColor(): IView['backgroundColor'] {
     return this._backgroundColor;
   }
-  set backgroundColor(color: Color) {
+  set backgroundColor(color: IView['backgroundColor']) {
     this._backgroundColor = color;
     this._resetBackground();
   }

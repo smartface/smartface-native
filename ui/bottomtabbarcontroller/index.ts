@@ -1,14 +1,7 @@
 import NavigationController from '../navigationcontroller';
-import View from '../view';
 import Page from '../page';
-import BottomTabBar from '../bottomtabbar';
-import { IEventEmitter } from '../../core/eventemitter';
-import NativeComponent from '../../core/native-component';
-
-declare enum Events {
-  SelectByIndex = 'selectByIndex',
-  ShouldSelectByIndex = 'shouldSelectByIndex'
-}
+import BottomTabBar, { AbstractBottomTabBar } from '../bottomtabbar';
+import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 /**
  * @class UI.BottomTabbarController
@@ -29,13 +22,8 @@ declare enum Events {
  *
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
-declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
-  constructor(params?: Partial<BottomTabBarController>);
-  on(eventName: Events, callback: (...args: any) => void): () => void;
-  once(eventName: Events, callback: (...args: any) => void): () => void;
-  off(eventName: Events, callback?: (...args: any) => void): void;
-  emit(event: Events, detail?: any[]): void;
-  getCurrentController: () => NavigationController | Page;
+export interface IBottomTabBarController {
+  getCurrentController?: () => NavigationController | Page;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
   show?: () => void;
@@ -111,8 +99,22 @@ declare class BottomTabBarController extends NativeComponent implements IEventEm
    * ````
    */
   didSelectByIndex(params: { index: number }): void;
-
-  static Events: typeof Events;
 }
 
-export = BottomTabBarController;
+export declare class AbstractBottomTabbarController implements IBottomTabBarController {
+  constructor(params?: Partial<IBottomTabBarController>);
+  static Events: typeof BottomTabbarControllerEvents;
+  getCurrentController?: () => NavigationController | Page;
+  shouldSelectViewController: (index: any) => boolean;
+  didSelectViewController: (index: any) => void;
+  childControllers: (NavigationController | Page)[];
+  tabBar: AbstractBottomTabBar;
+  selectedIndex: number;
+  shouldSelectByIndex(params: { index: number }): boolean;
+  didSelectByIndex(params: { index: number }): void;
+}
+
+const BottomTabbarController: typeof AbstractBottomTabbarController = require(`./bottomtabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type BottomTabbarController = AbstractBottomTabbarController;
+
+export default BottomTabbarController;

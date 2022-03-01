@@ -5,7 +5,7 @@ import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 /** TODO: Check this out after bottomtabbar, navigationcontroller and page is completed */
 
-type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
+type PageWithController = (Page & { childControllers: unknown[]; __isActive: boolean }) | NavigationController;
 
 type ControllerParams = { controller: NavigationController | Page | BottomTabBarController; animation?: boolean; isComingFromPresent?: boolean };
 namespace ViewController {
