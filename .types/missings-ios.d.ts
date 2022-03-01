@@ -110,7 +110,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   alpha: number;
   backgroundColor: __SF_UIColor;
   addFrameObserver(): void;
-  frameObserveHandler(handler: (e: { frame: __SF_NSRect }) => void): void;
+  frameObserveHandler(e: { frame: __SF_NSRect }): void;
   removeFrameObserver(): void;
   tag: string;
   scale(coordinates: { x: number; y: number }): void;
@@ -477,7 +477,7 @@ declare class __SF_UITabBarAppearance extends __SF_UIView {
   configureWithOpaqueBackground(): void;
 }
 
-declare class __SF_UIButton {
+declare class __SF_UIButton extends __SF_UIView {
   setEnabled: boolean;
   textAlignmentNumber: number;
   contentVerticalAlignment: number;
@@ -486,6 +486,7 @@ declare class __SF_UIButton {
   setTitleColor(textColor: __SF_UIColor, buttonState: number /*TODO: Use ButtonState enum when button is converted*/): void;
   removeFrameObserver(): void;
   addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */): void;
+  setTitle(title: string, state: number);
 }
 
 declare class __SF_UIDatePicker {

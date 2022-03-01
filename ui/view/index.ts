@@ -6,13 +6,159 @@ import { INativeComponent } from 'core/inative-component';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
+export interface IViewState<Property = any> {
+  normal?: Property;
+  disabled?: Property;
+  selected?: Property;
+  pressed?: Property;
+  focused?: Property;
+}
 
 export type ViewAndroidProps = {
   updateRippleEffectIfNeeded: () => void;
-  rippleColor: any;
-  zIndex: number;
-  elevation: any;
   overScrollMode: number;
+  /**
+   * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+   * This property only supported for api level 23 and above.
+   *
+   * @property {Boolean} [useForeground = false]
+   * @android
+   * @member UI.View
+   * @since 4.0.2
+   */
+  useForeground: boolean;
+  /**
+   * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+   * to see the effect.
+   *
+   * @property {Boolean} [rippleEnabled = false]
+   * @android
+   * @member UI.View
+   * @since 3.2.1
+   */
+  rippleEnabled: boolean;
+  /**
+   * Gets/sets ripple effect color for view.
+   *
+   * @property {UI.Color} rippleColor
+   * @android
+   * @member UI.View
+   * @since 3.2.1
+   */
+  rippleColor: Color;
+  /**
+   * Gets/Sets the elevation of the view. For the views that has
+   * StateListAnimator natively like Button, will lost its own
+   * StateListAnimation when elevation value changed.
+   * For details : https://developer.android.com/training/material/shadows-clipping.html
+   *
+   * @property {Number} elevation
+   * @android
+   * @member UI.View
+   * @see https://developer.android.com/training/material/shadows-clipping.html
+   * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
+   * @since 1.1.12
+   */
+  elevation: number;
+  /**
+   * Gets/sets the depth location of the view relative to its elevation. To put view over button,
+   * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+   * This property affects after Android Lollipop. No-op before api level 21.
+   *
+   * @property {Number} zIndex
+   * @android
+   * @member UI.View
+   * @since 2.0.8
+   */
+  zIndex: number;
+};
+
+export type ViewIOSProps = {
+  /**
+   * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
+   * The default value of this property is false
+   *
+   * @property {Boolean} [exclusiveTouch = false]
+   * @ios
+   * @since 2.0.10
+   */
+  exclusiveTouch: boolean;
+  /**
+   * A Boolean value that determines whether subviews are confined to the bounds of the view.
+   *
+   * @property {Boolean} [clipsToBounds = false]
+   * @ios
+   * @since 1.1.15
+   */
+  clipsToBounds: number;
+  /**
+   * A Boolean value that determines whether subviews are confined to the bounds of the view.
+   *
+   * @property {Boolean} [masksToBounds = false]
+   * @ios
+   * @since 1.1.15
+   */
+  masksToBounds: boolean;
+  /**
+   * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
+   *
+   *     @example
+   *     view.ios.masksToBounds = false;
+   *     view.ios.shadowOffset = {x:10,y:10};
+   *     view.ios.shadowRadius = 5;
+   *     view.ios.shadowOpacity = 0.5;
+   *     view.ios.shadowColor = Color.GRAY;
+   *
+   * @property {Object} [shadowOffset = {x: 0.0,y: -3.0}]
+   * @property {Number} shadowOffset.x
+   * @property {Number} shadowOffset.y
+   * @ios
+   * @since 2.0.6
+   */
+  shadowOffset: Point2D;
+  /**
+   * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
+   *
+   * @property {Number} [shadowRadius = 3]
+   * @ios
+   * @since 2.0.6
+   */
+  shadowRadius: number;
+  /**
+   * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
+   *
+   * @property {Number} [shadowOpacity = 0]
+   * @ios
+   * @since 2.0.6
+   */
+  shadowOpacity: number;
+  /**
+   * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
+   *
+   * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+   * @ios
+   * @since 2.0.6
+   */
+  shadowColor: Color;
+  /**
+   *
+   * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
+   *
+   * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
+   * @ios
+   * @static
+   * @since 3.1.3
+   */
+  viewAppearanceSemanticContentAttribute: SemanticContentAttribute;
+  /**
+   * Disables a view transition animation.
+   *
+   * @method performWithoutAnimation
+   * @param {Function} functionWithoutAnimation
+   * @ios
+   * @since 4.2.1
+   */
+  performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 };
 
 /**
@@ -86,7 +232,7 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: Color;
+  backgroundColor: Color | IViewState<Color>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -630,152 +776,8 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * @since 4.3.6
    */
   dirty(): void;
-  android: Partial<
-    TAND & {
-      /**
-       * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
-       * This property only supported for api level 23 and above.
-       *
-       * @property {Boolean} [useForeground = false]
-       * @android
-       * @member UI.View
-       * @since 4.0.2
-       */
-      useForeground: boolean;
-      /**
-       * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
-       * to see the effect.
-       *
-       * @property {Boolean} [rippleEnabled = false]
-       * @android
-       * @member UI.View
-       * @since 3.2.1
-       */
-      rippleEnabled: boolean;
-      /**
-       * Gets/sets ripple effect color for view.
-       *
-       * @property {UI.Color} rippleColor
-       * @android
-       * @member UI.View
-       * @since 3.2.1
-       */
-      rippleColor: Color;
-      /**
-       * Gets/Sets the elevation of the view. For the views that has
-       * StateListAnimator natively like Button, will lost its own
-       * StateListAnimation when elevation value changed.
-       * For details : https://developer.android.com/training/material/shadows-clipping.html
-       *
-       * @property {Number} elevation
-       * @android
-       * @member UI.View
-       * @see https://developer.android.com/training/material/shadows-clipping.html
-       * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
-       * @since 1.1.12
-       */
-      elevation: number;
-      /**
-       * Gets/sets the depth location of the view relative to its elevation. To put view over button,
-       * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
-       * This property affects after Android Lollipop. No-op before api level 21.
-       *
-       * @property {Number} zIndex
-       * @android
-       * @member UI.View
-       * @since 2.0.8
-       */
-      zIndex: number;
-    }
-  >;
-  ios: Partial<{
-    /**
-     * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
-     * The default value of this property is false
-     *
-     * @property {Boolean} [exclusiveTouch = false]
-     * @ios
-     * @since 2.0.10
-     */
-    exclusiveTouch: boolean;
-    /**
-     * A Boolean value that determines whether subviews are confined to the bounds of the view.
-     *
-     * @property {Boolean} [clipsToBounds = false]
-     * @ios
-     * @since 1.1.15
-     */
-    clipsToBounds: number;
-    /**
-     * A Boolean value that determines whether subviews are confined to the bounds of the view.
-     *
-     * @property {Boolean} [masksToBounds = false]
-     * @ios
-     * @since 1.1.15
-     */
-    masksToBounds: boolean;
-    /**
-     * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
-     *
-     *     @example
-     *     view.ios.masksToBounds = false;
-     *     view.ios.shadowOffset = {x:10,y:10};
-     *     view.ios.shadowRadius = 5;
-     *     view.ios.shadowOpacity = 0.5;
-     *     view.ios.shadowColor = Color.GRAY;
-     *
-     * @property {Object} [shadowOffset = {x: 0.0,y: -3.0}]
-     * @property {Number} shadowOffset.x
-     * @property {Number} shadowOffset.y
-     * @ios
-     * @since 2.0.6
-     */
-    shadowOffset: Point2D;
-    /**
-     * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
-     *
-     * @property {Number} [shadowRadius = 3]
-     * @ios
-     * @since 2.0.6
-     */
-    shadowRadius: number;
-    /**
-     * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
-     *
-     * @property {Number} [shadowOpacity = 0]
-     * @ios
-     * @since 2.0.6
-     */
-    shadowOpacity: number;
-    /**
-     * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
-     *
-     * @property {UI.Color} [shadowColor = UI.Color.BLACK]
-     * @ios
-     * @since 2.0.6
-     */
-    shadowColor: Color;
-    /**
-     *
-     * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
-     *
-     * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
-     * @ios
-     * @static
-     * @since 3.1.3
-     */
-    viewAppearanceSemanticContentAttribute: SemanticContentAttribute;
-    /**
-     * Disables a view transition animation.
-     *
-     * @method performWithoutAnimation
-     * @param {Function} functionWithoutAnimation
-     * @ios
-     * @since 4.2.1
-     */
-    performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-  }> &
-    TIOS;
+  android: Partial<ViewAndroidProps> & TAND;
+  ios: Partial<ViewIOSProps> & TIOS;
   /**
    * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
    * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
@@ -991,7 +993,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TIOS exten
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: Color;
+  backgroundColor: Color | IViewState<Color>;
   borderColor: Color;
   borderWidth: number;
   borderRadius: number;
