@@ -1,4 +1,4 @@
-import BottomTabbarController, { AbstractBottomTabbarController } from '.';
+import { IBottomTabBarController } from '.';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Application from '../../application';
@@ -16,7 +16,7 @@ const NativeBottomNavigationView = requireClass('com.google.android.material.bot
 const NativeSFR = requireClass(AndroidConfig.packageName + '.R');
 const NativeForegroundColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 
-export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTabbarControllerEvents> implements AbstractBottomTabbarController {
+export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
   private _addedToActivity = false;
   private _disabledShiftingMode = false;
@@ -30,7 +30,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   private cacheNativeBuilders = {};
   private __isActive;
   private __targetIndex: number;
-  constructor(params?: Partial<BottomTabbarController>) {
+  constructor(params?: Partial<IBottomTabBarController>) {
     super();
     Application.tabBar = new BottomTabBar();
 

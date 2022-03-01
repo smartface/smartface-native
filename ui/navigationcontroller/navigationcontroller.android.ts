@@ -35,7 +35,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
 
     // Fill properties of each controller
     for (let i = 0; i < childControllersArray.length; i++) {
-      const childController = childControllersArray[i];
+      const childController: any = childControllersArray[i]; //TODO: Typing of controller
       childController.parentController = this;
       childController.isInsideBottomTabBar = this.isInsideBottomTabBar;
       if (!childController.pageID) {
@@ -49,7 +49,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
     }
 
     if (this.__isActive) {
-      ViewController.activateController(this.getCurrentController());
+      ViewController.activateController(this.getCurrentController() as any); //TODO: Typing conlict
 
       this.show({
         controller: this._childControllers[this._childControllers.length - 1],
@@ -115,7 +115,7 @@ export default class NavigationControllerAndroid implements INavigationControlle
       operation: OperationType.PUSH
     });
   }
-  push(params) {
+  push(params: ControllerParams) {
     if (!params.controller.pageID) {
       params.controller.pageID = FragmentTransaction.generatePageID();
     }
@@ -124,10 +124,11 @@ export default class NavigationControllerAndroid implements INavigationControlle
       // console.log("This page exist in history! PageID: " + params.controller.pageID);
     }
 
-    this.__isActive && ViewController.deactivateController(this.getCurrentController());
-
-    params.controller.parentController = this;
-    params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
+    if (params.controller instanceof NavigationController) {
+      this.__isActive && ViewController.deactivateController(this.getCurrentController() as any);
+      params.controller.parentController = this;
+      params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
+    }
     this.pageIDCollectionInStack[params.controller.pageID] = params.controller;
     this._childControllers.push(params.controller);
     this.show(params);

@@ -1,15 +1,17 @@
-import { AbstractTabBarItem } from '.';
+import { ITabbarItem } from '.';
 import NativeComponent from '../../core/native-component';
+import { UnitConverter } from '../../util';
 import AttributedString from '../attributedstring';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
 import Font from '../font';
 import Image from '../image';
 import TabBarController from '../tabbarcontroller';
+
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 
-export default class TabbarItemAndroid extends NativeComponent implements AbstractTabBarItem {
+export default class TabbarItemAndroid extends NativeComponent implements ITabbarItem {
   private _title;
   private _icon;
   private _badgeObj = undefined;
@@ -23,7 +25,7 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
   }> = {};
   private _route: string;
   private _ios: Partial<{ font: Font }> = {};
-  constructor(params?: Partial<AbstractTabBarItem>) {
+  constructor(params?: Partial<ITabbarItem>) {
     super();
     const self = this;
     this._android = {
@@ -136,7 +138,7 @@ export default class TabbarItemAndroid extends NativeComponent implements Abstra
       const WRAP_CONTENT = -2;
       const layoutParams = new NativeFrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, TOP_CENTERHORIZANTAL);
       badgeObj.layoutParams = layoutParams;
-      layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(12));
+      layoutParams.setMarginStart(UnitConverter.dpToPixel(12));
       badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
 
       const nativeBottomTabarMenuView = this.tabBarItemParent.nativeObject.getChildAt(0);

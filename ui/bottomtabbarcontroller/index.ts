@@ -2,6 +2,7 @@ import NavigationController from '../navigationcontroller';
 import Page from '../page';
 import BottomTabBar, { AbstractBottomTabBar } from '../bottomtabbar';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
+import { ConstructorOf } from '../../core/constructorof';
 
 /**
  * @class UI.BottomTabbarController
@@ -101,20 +102,6 @@ export interface IBottomTabBarController {
   didSelectByIndex(params: { index: number }): void;
 }
 
-export declare class AbstractBottomTabbarController implements IBottomTabBarController {
-  constructor(params?: Partial<IBottomTabBarController>);
-  static Events: typeof BottomTabbarControllerEvents;
-  getCurrentController?: () => NavigationController | Page;
-  shouldSelectViewController: (index: any) => boolean;
-  didSelectViewController: (index: any) => void;
-  childControllers: (NavigationController | Page)[];
-  tabBar: AbstractBottomTabBar;
-  selectedIndex: number;
-  shouldSelectByIndex(params: { index: number }): boolean;
-  didSelectByIndex(params: { index: number }): void;
-}
-
-const BottomTabbarController: typeof AbstractBottomTabbarController = require(`./bottomtabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
-type BottomTabbarController = AbstractBottomTabbarController;
-
+const BottomTabbarController: ConstructorOf<IBottomTabBarController, Partial<IBottomTabBarController>> = require(`./bottomtabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type BottomTabbarController = IBottomTabBarController;
 export default BottomTabbarController;
