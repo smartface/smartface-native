@@ -352,6 +352,18 @@ function TextView(params) {
         enumerable: true
     });
 
+    var _inset = { top: 0, left: 0, bottom: 0, right: 0 }
+    Object.defineProperty(self, 'inset', {
+        get: function () {
+            return _inset;
+        },
+        set: function ({ top = 0, left = 0, right = 0, bottom = 0 }) {
+            _inset = { top, left, right, bottom }
+            self.nativeObject.inset(top, left, right, bottom)
+        },
+        enumerable: true
+    });
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
