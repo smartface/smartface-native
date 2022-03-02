@@ -1,12 +1,11 @@
 import Flex from '../../core/flex';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
-import { ViewGroup } from '../../ui/viewgroup/viewgroup.android';
-import IFlexLayout, { AndroidProps } from './flexlayout';
+import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
+import { IFlexLayout, AndroidProps } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 import Color from 'ui/color';
 
 // /*globals requireClass*/
-const AndroidConfig = require('../../util/Android/androidconfig');
+import AndroidConfig from '../../util/Android/androidconfig';
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
 // const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
@@ -17,9 +16,8 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 // const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
 
 const activity = AndroidConfig.activity;
-const Events = { ...ViewGroup.Events, ...FlexLayoutEvents };
 
-class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGroup<TEvent | FlexLayoutEvents, AndroidProps> implements IFlexLayout {
+export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupAndroid<TEvent | FlexLayoutEvents, AndroidProps & TNative> implements IFlexLayout {
   private _onInterceptTouchEvent: (e: any) => void;
   private _flexWrap: number | null = null;
 
@@ -115,5 +113,3 @@ function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
   }
   return null;
 }
-
-export default FlexLayoutAndroid;
