@@ -1,15 +1,8 @@
 import Color from '../color';
 import Image from '../image';
 import { ButtonEvents } from './button-events';
-import { ILabel } from '../label/label';
-
-export interface IButtonStates<Property = any> {
-  normal?: Property;
-  disabled?: Property;
-  selected?: Property;
-  pressed?: Property;
-  focused?: Property;
-}
+import { ILabel } from '../label';
+import { IViewState } from '../view';
 
 export declare interface IButton<TEvent extends string = ButtonEvents, TIOS = {}, TAND = {}> extends ILabel<TEvent | ButtonEvents, TIOS, TAND> {
   /**
@@ -47,32 +40,7 @@ export declare interface IButton<TEvent extends string = ButtonEvents, TIOS = {}
    * @android
    * @ios
    */
-  backgroundImage: Image; //TODO: Check with Cenk about Image | IButtonStates<Image>
-
-  /**
-   * Gets/sets background color of a Button. You can assign a color or
-   * an object that contains colors depending on the state of the button.
-   *
-   *     @example
-   *     import Button from '@smartface/native/ui/button';
-   *     import Color from '@smartface/native/ui/color';
-   *     const myButton = new Button();
-   *
-   *     // background color of the button
-   *     myButton.backgroundColor = Color.GREEN;
-   *
-   *     // colors depending on the state of the button
-   *     myButton.backgroundColor = {
-   *         normal: Color.RED,
-   *         disabled: Color.GRAY,
-   *         pressed: Color.BLUE,
-   *     };
-   *
-   * @since 0.1
-   * @android
-   * @ios
-   */
-  backgroundColor: Color; //TODO: Check with Cenk about Color | IButtonStates<Color>
+  backgroundImage: Image | IViewState<Image>;
   /**
    * @deprecated
    * @example

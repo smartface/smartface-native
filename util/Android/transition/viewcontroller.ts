@@ -1,13 +1,20 @@
 import Page from '../../../ui/page';
-import NavigationController from '../../../ui/navigationcontroller';
+import { INavigationController } from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 /** TODO: Check this out after bottomtabbar, navigationcontroller and page is completed */
 
-type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
+type PageWithController = (Page & { childControllers?: unknown[]; __isActive?: boolean; isInsideBottomTabBar?: boolean }) | INavigationController;
 
-type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
+export type ControllerParams = {
+  controller: NavigationController | Page | BottomTabBarController;
+  animation?: boolean;
+  animated?: boolean;
+  isComingFromPresent?: boolean;
+  onComplete?: () => void;
+  animationType?: FragmentTransition.AnimationType;
+};
 namespace ViewController {
   export function activateRootController(controller: PageWithController) {
     if (!controller) return;
@@ -30,7 +37,7 @@ namespace ViewController {
   export function setIsActiveOfController(controller: PageWithController, __isActive: boolean) {
     if (!controller || controller instanceof Page) return;
     controller.__isActive = __isActive;
-    var childController = controller.getCurrentController();
+    const childController = controller.getCurrentController();
     while (childController) {
       childController.__isActive = __isActive;
       if (childController instanceof Page) break;
@@ -45,8 +52,8 @@ namespace ViewController {
   }
   export function setController(params: ControllerParams) {
     if (params.controller instanceof NavigationController) {
-      var childControllerStack = params.controller.childControllers;
-      var childControllerStackLenght = childControllerStack.length;
+      const childControllerStack = params.controller.childControllers;
+      const childControllerStackLenght = childControllerStack.length;
 
       // This check is requested by Smartface Router team.
       if (childControllerStackLenght === 0)
@@ -56,7 +63,7 @@ namespace ViewController {
       // show latest page or controller
       params.controller.show({
         controller: childControllerStack[childControllerStackLenght - 1],
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -66,7 +73,7 @@ namespace ViewController {
       // TODO: Check animation type. I am not sure about that!
       FragmentTransition.push({
         page: params.controller,
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -101,7 +108,7 @@ namespace ViewController {
     }
 
     // for NavigationController
-    controller.childControllers.forEach(function (childController: unknown) {
+    controller.childControllers.forEach((childController) => {
       childController.isInsideBottomTabBar = true;
       ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });

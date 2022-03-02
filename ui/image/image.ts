@@ -326,15 +326,17 @@ export type ImageIOSProps =
  * @since 4.5.0
  */
 export class ImageBase implements IImage {
-  constructor(params: Partial<{
-    bitmap?: any;
-    roundedBitmapDrawable?: any;
-    drawable: any,
-    android?: {
-      systemIcon?: any;
-    };
-  }>){
-    const { android, ...rest} = params;
+  constructor(
+    params: Partial<{
+      bitmap?: any;
+      roundedBitmapDrawable?: any;
+      drawable: any;
+      android?: {
+        systemIcon?: any;
+      };
+    }>
+  ) {
+    const { android, ...rest } = params;
     Object.assign(this, android);
     Object.assign(this, rest);
   }
@@ -376,10 +378,7 @@ export class ImageBase implements IImage {
     return 'Image';
   }
 
-  nativeObject: __SF_NSOBject & {
-    size: { width: number; height: number };
-    [key: string]: any;
-  };
+  nativeObject: __SF_UIImage;
   /**
    * Creates an Image object which built-in icon is created corresponding systemIcon value.
    * This method is Android only.
@@ -478,6 +477,9 @@ export class ImageBase implements IImage {
    * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
    */
   static createFromFile(path: string, width?: number, height?: number): IImage {
+    throw new Error('Method not implemented.');
+  }
+  static systemDrawableId(systemIcon: number) {
     throw new Error('Method not implemented.');
   }
 

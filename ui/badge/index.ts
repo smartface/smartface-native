@@ -1,15 +1,10 @@
 import Color from '../color';
 import Font from '../font';
+import { ConstructorOf } from '../../core/constructorof';
+import { INativeComponent } from '../../core/inative-component';
+import { IViewState } from '../view';
 
-/**
- * @class UI.Badge
- * @since 3.0.0
- *
- * Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
- * This class represents badge object. Creating instance of Badge is not valid since you can't use in anywhere.
- *
- */
-declare class Badge {
+export declare interface IBadge extends INativeComponent {
   /**
    * Gets/sets text of badge.
    *
@@ -45,7 +40,7 @@ declare class Badge {
    * @ios
    * @since 3.1.0
    */
-  textColor: Color | null;
+  textColor: Color | IViewState<Color>;
   /**
    * Gets/sets font of badge.
    *
@@ -87,4 +82,6 @@ declare class Badge {
   move(x: number, y: number): void;
 }
 
-export = Badge;
+const Badge: ConstructorOf<IBadge, Partial<IBadge>> = require(`./badge.${Device.deviceOS.toLowerCase()}`).default;
+type Badge = IBadge;
+export default Badge;

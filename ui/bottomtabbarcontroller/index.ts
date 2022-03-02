@@ -1,14 +1,8 @@
 import NavigationController from '../navigationcontroller';
-import View from '../view';
 import Page from '../page';
-import BottomTabBar from '../bottomtabbar';
-import { IEventEmitter } from '../../core/eventemitter';
-import NativeComponent from '../../core/native-component';
-
-declare enum Events {
-  SelectByIndex = 'selectByIndex',
-  ShouldSelectByIndex = 'shouldSelectByIndex'
-}
+import BottomTabBar, { AbstractBottomTabBar } from '../bottomtabbar';
+import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
+import { ConstructorOf } from '../../core/constructorof';
 
 /**
  * @class UI.BottomTabbarController
@@ -29,15 +23,11 @@ declare enum Events {
  *
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
-declare class BottomTabBarController extends NativeComponent implements IEventEmitter<Events> {
-  constructor(params?: Partial<BottomTabBarController>);
-  on(eventName: Events, callback: (...args: any) => void): () => void;
-  once(eventName: Events, callback: (...args: any) => void): () => void;
-  off(eventName: Events, callback?: (...args: any) => void): void;
-  emit(event: Events, detail?: any[]): void;
-  getCurrentController: () => NavigationController | Page;
+export interface IBottomTabBarController {
+  getCurrentController?: () => NavigationController | Page;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
+  show?: () => void;
   /**
    * Gets/sets child controllers of BottomTabbarController instance.
    *
@@ -110,8 +100,8 @@ declare class BottomTabBarController extends NativeComponent implements IEventEm
    * ````
    */
   didSelectByIndex(params: { index: number }): void;
-
-  static Events: typeof Events;
 }
 
-export = BottomTabBarController;
+const BottomTabbarController: ConstructorOf<IBottomTabBarController, Partial<IBottomTabBarController>> = require(`./bottomtabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type BottomTabbarController = IBottomTabBarController;
+export default BottomTabbarController;

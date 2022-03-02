@@ -2,6 +2,8 @@ import Font from '../font';
 import Image from '../image';
 import Badge from '../badge';
 import AttributedString from '../../global/attributedstring';
+import { ConstructorOf } from '../../core/constructorof';
+import { INativeComponent } from '../../core/inative-component';
 /**
  * @class UI.TabBarItem
  * @since 1.1.10
@@ -23,8 +25,8 @@ import AttributedString from '../../global/attributedstring';
  *     });
  *     myTab.add('home', myItem);
  */
-export declare class AbstractTabBarItem {
-  constructor(params?: Partial<AbstractTabBarItem>);
+export declare interface ITabbarItem extends INativeComponent {
+  _nativeObject: any;
   /**
    * Gets/sets the title of tab item.
    *
@@ -108,9 +110,10 @@ export declare class AbstractTabBarItem {
      */
     font: Font;
   }>;
+  invalidate(): void;
 }
 
-const TabbarItem: typeof AbstractTabBarItem = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;
-type TabbarItem = AbstractTabBarItem;
+const TabbarItem: ConstructorOf<ITabbarItem, Partial<ITabbarItem>> = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;
+type TabbarItem = ITabbarItem;
 
 export default TabbarItem;
