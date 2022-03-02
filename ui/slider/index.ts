@@ -1,6 +1,6 @@
 import Color from '../color';
 import Image from '../image';
-import View, { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view';
 import { SliderEvents } from './slider-events';
 
 export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}, TAND = {}> extends IView<TEvent | SliderEvents, TIOS, TAND> {
@@ -146,7 +146,7 @@ export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}
   onValueChange: () => void;
 }
 
-export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent> implements ISlider<TEvent> {
+export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent | SliderEvents> implements ISlider<TEvent> {
   thumbColor: Color;
   thumbImage: Image;
   minTrackColor: Color;
