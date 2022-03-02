@@ -6,11 +6,10 @@
 // const Events = require('./events');
 // const { EventEmitterCreator } = require('../../core/eventemitter');
 import { AndroidProps, ITextBox } from '.';
-import { AndroidConfig, TypeUtil, SystemServices } from '../../util';
+import { AndroidConfig, SystemServices } from '../../util';
 import ActionKeyType from '../actionkeytype';
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import Font from '../font';
-import { AbstractFont } from '../font/font';
 import KeyboardType from '../keyboardtype';
 import TextAlignment from '../textalignment';
 import TextView from '../textview';
@@ -114,23 +113,27 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
       this._nativeObject = new SFEditText(this.activity, callback);
     }
 
-      // Don't use self.multiline = false due to AND-2725 bug.
-  // setMovementMethod in label-Android.js file removes the textbox cursor.
-  this.nativeObject.setSingleLine(true);
+    // Don't use self.multiline = false due to AND-2725 bug.
+    // setMovementMethod in label-Android.js file removes the textbox cursor.
+    this.nativeObject.setSingleLine(true);
 
-  /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-  this._touchCallbacks.onTouch = (x, y) => {
-    let result,
-      mEvent = {
-        x,
-        y
-      };
-    if (this.onTouch) result = this.onTouch(mEvent);
-    return result === true;
-  };
+    /* Override the onTouch and make default returning false to prevent bug in other listener.*/
+    this._touchCallbacks.onTouch = (x, y) => {
+        let result,
+        mEvent = {
+            x,
+            y
+        };
+        if (this.onTouch) result = this.onTouch(mEvent);
+        return result === true;
+    };
 
-  // Added for https://smartface.atlassian.net/browse/AND-3869
-  this.actionKeyType = ActionKeyType.DEFAULT;
+    // Added for https://smartface.atlassian.net/browse/AND-3869
+    this.actionKeyType = ActionKeyType.DEFAULT;
+
+    const { android, ...restParams } = params;
+    Object.assign(this._android, this.androidProps, android);
+    Object.assign(this, restParams);
   }
 
   get androidProps() {
