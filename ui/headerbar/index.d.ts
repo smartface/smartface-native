@@ -305,7 +305,7 @@ type HeaderBar = {
      *
      *     @example
      *     import Page from '@smartface/native/ui/page';
-     *     comst myPage = new Page();
+     *     const myPage = new Page();
      *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
      *
      * @property {String} subtitle
@@ -319,7 +319,7 @@ type HeaderBar = {
      *
      *     @example
      *     import Page from '@smartface/native/ui/page';
-     *     comst myPage = new Page();
+     *     const myPage = new Page();
      *     myPage.headerBar.android.subtitleColor = Color.create('#00A1F1');
      *
      * @property {Color} subtitleColor
