@@ -1252,6 +1252,10 @@ declare class __SF_KeychainPasswordItem {
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
 
+declare class __SF_UIApplicationWillResignActiveNotification {}
+
+declare class __SF_UIDeviceOrientationDidChangeNotification {}
+
 declare const __SF_UIScrollViewDecelerationRateNormal: number;
 declare const __SF_UIScrollViewDecelerationRateFast: number;
 
