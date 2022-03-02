@@ -17,7 +17,6 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   private _isRTL: boolean;
   constructor(params: Partial<IBadge> = {}) {
     super();
-    const { ...restParams } = params;
 
     const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
     const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
@@ -25,7 +24,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     const isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
     this._isRTL = !isLTR;
 
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
   get text(): IBadge['text'] {
     return this._text;
@@ -98,7 +97,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
           value: (label: __SF_SMFUILabel) => {
             const argColor = new Invocation.Argument({
               type: 'NSObject',
-              value: this._textColor.nativeObject
+              value: value.nativeObject
             });
             Invocation.invokeInstanceMethod(label, 'setTextColor:', [argColor]);
           }

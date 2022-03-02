@@ -81,7 +81,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   }
   set textColor(value: IBadge['textColor']) {
     this._textColor = value;
-    if (this.nativeObject && value) {
+    if (this.nativeObject && value instanceof Color) {
       if (value.nativeObject) {
         this.nativeObject.setTextColor(value.nativeObject);
       } else {
