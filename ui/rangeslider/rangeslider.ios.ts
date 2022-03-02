@@ -77,8 +77,6 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
       self.emit(RangeSliderEvents.ValueChange, self.value);
     };
     self.nativeObject.addJSTarget(valueChangeHandler, UIControlEvents.valueChanged);
-
-    this.setParams(params);
   }
 
   get rangeEnabled(): boolean {
@@ -172,21 +170,5 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
   }
   set onValueChange(value: (value: number[]) => void) {
     this._onValueChange = value;
-  }
-
-  setParams(params: Partial<IRangeSlider>) {
-    for (const param in params) {
-      if (param === 'ios' || param === 'android') {
-        // TODO Recheck after build
-        this.setOSSpecificParams(params[param], param);
-      } else {
-        this[param] = params[param];
-      }
-    }
-  }
-  setOSSpecificParams(params: Partial<IRangeSlider>, key: string) {
-    for (const param in params) {
-      this[key][param] = params[param];
-    }
   }
 }
