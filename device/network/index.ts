@@ -191,6 +191,7 @@ export class NetworkBase extends NativeComponent {
    * @since 0.1
    */
   static roamingEnabled: boolean;
+  static cancelAll: () => void;
 }
 
 const Network: typeof NetworkBase = require(`./network.${Device.deviceOS.toLowerCase()}`).default;

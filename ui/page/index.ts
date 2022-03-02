@@ -352,6 +352,7 @@ export class PageBase<TEvent extends string = PageEvents, TNative = any> extends
 export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {}, TAND = {}, TNative = any>
   implements IPage<TEvent | PageEvents, TIOS & PageIOSParams, TAND & PageAndroidParams, TNative>
 {
+  constructor(params?: Partial<IPage>);
   android: Partial<TAND & PageAndroidParams> & PageAndroidParams;
   ios: Partial<TIOS & PageIOSParams> & PageIOSParams;
   nativeObject: TNative;

@@ -313,6 +313,10 @@ export class HttpBase implements IHttp {
   cancelAll() {
     throw new Error('Method not implemented.');
   }
+
+  static cancelAll() {
+    throw new Error('Method not implemented.');
+  }
   requestFile(params: FileRequestParams): HttpRequest {
     throw new Error('Method not implemented.');
   }
