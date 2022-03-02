@@ -81,11 +81,6 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
         this.emit(RangeSliderEvents.ValueChange, param);
       }
     });
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
 
   get value(): number[] {
