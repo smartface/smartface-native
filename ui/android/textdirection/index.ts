@@ -3,13 +3,13 @@
  * @since 4.0.2
  * @android
  */
-export type TextDirectionType = {
+enum TextDirection {
   /**
    * Text direction is inherited through ViewGroup.
    * @android
    * @since 4.0.2
    */
-  INHERIT: 0;
+  INHERIT,
 
   /**
    * Text direction is using "first strong algorithm". The first strong directional character determines the paragraph direction.
@@ -17,7 +17,7 @@ export type TextDirectionType = {
    * @android
    * @since 4.0.2
    */
-  FIRST_STRONG: 1;
+  FIRST_STRONG,
 
   /**
    * Text direction is using "any-RTL" algorithm. The paragraph direction is RTL if it contains any strong RTL character,
@@ -25,14 +25,14 @@ export type TextDirectionType = {
    * @android
    * @since 4.0.2
    */
-  ANY_RTL: 2;
+  ANY_RTL,
 
   /**
    * Text direction is forced to LTR.
    * @android
    * @since 4.0.2
    */
-  LTR: 3;
+  LTR,
 
   /**
    * Text direction is forced to RTL.
@@ -40,14 +40,14 @@ export type TextDirectionType = {
    * @android
    * @since 4.0.2
    */
-  RTL: 4;
+  RTL,
 
   /**
    * Text direction is coming from the system Locale.
    * @android
    * @since 4.0.2
    */
-  LOCALE: 5;
+  LOCALE,
 
   /**
    * Text direction is using "first strong algorithm". The first strong directional character determines the paragraph direction.
@@ -55,7 +55,7 @@ export type TextDirectionType = {
    * @android
    * @since 4.0.2
    */
-  FIRST_STRONG_LTR: 6;
+  FIRST_STRONG_LTR,
 
   /**
    * Text direction is using "first strong algorithm". The first strong directional character determines the paragraph direction.
@@ -64,15 +64,7 @@ export type TextDirectionType = {
    * @android
    * @since 4.0.2
    */
-  FIRST_STRONG_RTL: 7;
-};
-
-/**
- * These enums are indicates the direction of text.
- * @since 4.0.2
- * @android
- */
-const TextDirection: TextDirectionType = Device.deviceOS.toLowerCase() === 'android' ? require(`./textdirection.${Device.deviceOS.toLowerCase()}`).default : {};
-type TextDirection = TextDirectionType;
+  FIRST_STRONG_RTL
+}
 
 export default TextDirection;
