@@ -19,7 +19,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   private _onToggleChangedCallback: (checked: boolean) => void;
 
   constructor(params: Partial<ISwitch> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new NativeSwitch(AndroidConfig.activity, {
@@ -70,11 +70,6 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
     const { android, ...restParams } = this;
     Object.assign(this._android, _android);
     Object.assign(this, restParams);
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
 
   get thumbOnColor(): Color {

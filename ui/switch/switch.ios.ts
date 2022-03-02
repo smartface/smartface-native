@@ -1,5 +1,4 @@
 import { ISwitch } from '.';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
@@ -10,7 +9,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   private _onToggleChanged: (toggle: boolean) => void;
 
   constructor(params: Partial<ISwitch> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UISwitch();
@@ -29,11 +28,6 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
       this.emit(SwitchEvents.ToggleChanged, toggle);
     };
     this.nativeObject.addJSTarget(onToggleChangedHandler, UIControlEvents.valueChanged);
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
 
   get enabled(): boolean {
