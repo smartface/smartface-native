@@ -12,11 +12,12 @@ export default class ListViewIOS<TEvent extends string = FlexLayoutEvents, TNati
     super(params);
     const { ios, android, ...restParams } = params;
 
-    this.ios.expandSwipe = (direction) => {
+    Object.assign(this._ios, ios);
+
+    this._ios.expandSwipe = (direction) => {
       this.__nativeCell.expandSwipeAnimated(direction, true);
     };
 
-    Object.assign(this._ios, ios);
     Object.assign(this, restParams);
   }
 }

@@ -93,6 +93,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
     STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
+  protected _ios: {[key: string]: any} = {};
   readonly ios = {} as const;
   protected uniqueId: string;
   protected _maskedBorders = [];

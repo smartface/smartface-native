@@ -15,32 +15,28 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
     super(params);
     const { ios, android, ...restParams } = params;
 
-    (this.ios as any).expandSwipe = () => {}; //TODO: Check view.android.ts:97 -> readonly ios = {} as const; for cause of "as any"
+    this._ios.expandSwipe = () => {}; //TODO: Check view.android.ts:97 -> readonly ios = {} as const; for cause of "as any"
 
     if (!this.nativeInner) {
-      this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
-      this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
+      this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this._nativeObject);
+      this._nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
     }
 
-    Object.assign(this._ios, ios);
     Object.assign(this._android, android);
     Object.assign(this, restParams);
   }
-  get _ios() {
-    return this.ios;
-  }
   // Added due to problem in row height for RecyclerView
   get height(): number {
-    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
+    return AndroidUnitConverter.pixelToDp(this._nativeObject.getLayoutParams().height);
   }
   set height(value: number) {
-    this.nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(value);
+    this._nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(value);
   }
   // Added due to problem in row height for RecyclerView
   get width(): number {
-    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
+    return AndroidUnitConverter.pixelToDp(this._nativeObject.getLayoutParams().width);
   }
   set width(value: number) {
-    this.nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(value);
+    this._nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(value);
   }
 }
