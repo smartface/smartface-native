@@ -2,6 +2,8 @@ import { IBottomTabBarController } from '.';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBar from '../bottomtabbar';
+import { IController, INavigationController } from '../navigationcontroller';
+import Page from '../page';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 const UITabBarController = requireClass('UITabBarController');
@@ -10,7 +12,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   static Events = BottomTabbarControllerEvents;
   ios = {};
   android = {};
-  private parentController = undefined;
   private view;
   private model;
   private _tabBar;
@@ -21,6 +22,13 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   private viewModel;
   private nativeObjectDelegate;
   private currentIndex: number;
+  parentController: IController;
+  pageID: number;
+  popupBackNavigator: any;
+  isActive: boolean;
+  headerBar?: import("ui/headerbar");
+  isInsideBottomTabBar: boolean = false;
+
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
     super();
 
@@ -85,6 +93,14 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     self.childControllers = [];
     self.currentIndex = 0;
   }
+  // TODO: not implemented yet
+  getCurrentController(): INavigationController | Page | null {
+    if (this.childControllers.length > 0) {
+      return this.childControllers[this.childControllers.length - 1];
+    }
+    
+    return null;
+  };
   get didSelectByIndex() {
     return this._didSelectByIndex;
   }

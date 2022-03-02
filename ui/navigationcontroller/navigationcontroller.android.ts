@@ -1,4 +1,4 @@
-import NavigationController, { Controller, INavigationController, OperationType } from '.';
+import NavigationController, { Controller, IController, INavigationController, OperationType } from '.';
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
@@ -12,11 +12,11 @@ export default class NavigationControllerAndroid extends NativeComponent impleme
   static OperationType = OperationType;
   private pageIDCollectionInStack = {};
   private _childControllers: Controller[] = [];
-  private _willShowCallback: (opts?: { controller: Controller; animated?: boolean }) => void;
+  private _willShowCallback: (opts?: { controller: IController; animated?: boolean }) => void;
   private _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
-  private __isActive: boolean;
+  protected __isActive: boolean = false;
   private __navID: number;
-  isInsideBottomTabBar: boolean;
+  isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
   popUpBackPage: Page;
   constructor(params: Partial<INavigationController> = {}) {
@@ -27,6 +27,8 @@ export default class NavigationControllerAndroid extends NativeComponent impleme
     this.__navID = ++NavigationControllerAndroid.NavCount;
     Object.assign(this, restParams);
   }
+  pageID: number;
+  isActive: boolean = false;
   parentController: INavigationController;
   headerBar: HeaderBar;
   get childControllers() {
@@ -137,7 +139,7 @@ export default class NavigationControllerAndroid extends NativeComponent impleme
     this._childControllers.push(params.controller);
     this.show(params);
   }
-  showController(params: Parameters<INavigationController['push']>['0']) {
+  showController(params: ControllerParams) {
     if (params.controller instanceof Page) {
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
       FragmentTransaction.push({
@@ -198,7 +200,7 @@ export default class NavigationControllerAndroid extends NativeComponent impleme
     }
 
     !params && (params = {});
-    this.popFromHistoryController(poppedController, params);
+    this.popFromHistoryController(poppedController, {animated: params.animated});
   }
   popTo(params) {
     if (this._childControllers.length < 2) {
@@ -230,7 +232,7 @@ export default class NavigationControllerAndroid extends NativeComponent impleme
     }
     return null;
   }
-  popFromHistoryController(currentController: Controller, params: ControllerParams) {
+  popFromHistoryController(currentController: Controller, params: {animated: boolean}) {
     const targetController = this._childControllers[this._childControllers.length - 1];
     this._willShowCallback?.({ controller: targetController, animated: params.animated });
     if (targetController instanceof Page) {

@@ -19,6 +19,7 @@ import FragmentTransaction from '../../util/Android/transition/fragmenttransitio
 import Image from '../image';
 import SearchView from '../searchview';
 import StatusBar from '../../application/statusbar/statusbar';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const OrientationType = require('../../device/screen/orientationtype');
@@ -187,7 +188,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
       controller: controller as any, //params.controller,
       animation: !!params.animated,
       isComingFromPresent: true,
-      onComplete: params.onComplete
+      onCompleteCallback: params.onComplete
     });
   }
   dismiss(params: Parameters<IPage['dismiss']>['0']) {
@@ -643,10 +644,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
 
         self.toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
       },
-      get contentInsetStartWithNavigation(): IPage['headerBar']['android']['contentInsetStartWithNavigation'] {
+      get contentInsetStartWithNavigation(): number {
         return AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStartWithNavigation());
       },
-      set contentInsetStartWithNavigation(value: IPage['headerBar']['android']['contentInsetStartWithNavigation']) {
+      set contentInsetStartWithNavigation(value: number) {
         // API Level 24+
         self.toolbar.setContentInsetStartWithNavigation(AndroidUnitConverter.dpToPixel(value));
       },

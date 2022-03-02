@@ -3,7 +3,7 @@ import Color from '../color';
 import Font from '../font';
 import View from '../view';
 import HeaderBarItem from '../headerbaritem';
-import Page from '../page';
+import Page, { AbstractPage } from '../page';
 import Image from '../image';
 
 /**
@@ -350,7 +350,7 @@ type HeaderBar = {
      * @since 4.3.6
      * @see https://material.io/components/app-bars-top#specs
      */
-    contentInsetStartWithNavigation?: Number;
+    contentInsetStartWithNavigation?: number;
 
     /**
      * Gets/Sets the padding space on the all sides of a headerbar.
@@ -364,7 +364,7 @@ type HeaderBar = {
      * @android
      * @since 4.3.6
      */
-    padding?: { top?: Number; left?: Number; right?: Number; bottom?: Number };
+    padding?: { top?: number; left?: number; right?: number; bottom?: number };
   }>;
   ios: Partial<{
     /**
@@ -429,7 +429,7 @@ type HeaderBar = {
      * @ios
      * @since 0.1
      */
-    largeTitleDisplayMode?: Page.iOS.LargeTitleDisplayMode;
+    largeTitleDisplayMode?: typeof AbstractPage.iOS.LargeTitleDisplayMode;
 
     /**
      * Used to add a different Image in place of iOS default back action on NavigationController

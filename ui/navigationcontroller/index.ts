@@ -2,6 +2,8 @@ import Page from '../page';
 import HeaderBar from '../headerbar';
 import { INativeComponent } from '../../core/inative-component';
 import { IBottomTabBarController } from '../bottomtabbarcontroller';
+import TabBarController from '../tabbarcontroller';
+import { IBottomTabBar } from '../bottomtabbar';
 
 /**
  * @enum {Number} UI.NavigationController.OperationType
@@ -34,7 +36,26 @@ export enum OperationType {
   POP = 1
 }
 
-export type Controller = Page | INavigationController | IBottomTabBarController;
+
+export interface IController extends INativeComponent {
+  pageID?: number; 
+  popupBackNavigator: any;
+  isActive: boolean;
+  parentController: IController;
+  childControllers?: IController[]; 
+  isInsideBottomTabBar?: boolean;
+  headerBar?: HeaderBar;
+  tabBar?: IController | IBottomTabBar;
+  getCurrentController(): IController | null;
+  show(params?: {
+    controller: IController,
+    animated: any,
+    isComingFromPresent?: boolean,
+    onCompleteCallback?: () => void
+  })
+}
+export type Controller = IController;
+// Page | INavigationController | IBottomTabBarController;
 
 /**
  * @class UI.NavigationController
@@ -68,7 +89,7 @@ export type Controller = Page | INavigationController | IBottomTabBarController;
  *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
  *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
-export declare interface INavigationController extends INativeComponent {
+export declare interface INavigationController extends INativeComponent, IController {
   /**
    * Gets/sets child controllers of NavigationController instance.
    *
@@ -110,7 +131,7 @@ export declare interface INavigationController extends INativeComponent {
    * @ios
    * @since 3.2.0
    */
-  pop(params?: { animated: boolean }): void;
+  pop(params?: { animated?: boolean }): void;
   /**
    * Until the given page is found, the pages popped from back stack.
    *
@@ -175,10 +196,18 @@ export declare interface INavigationController extends INativeComponent {
   dismiss(params: { onComplete: () => void; animated: boolean }): void;
   parentController: NavigationController;
   isInsideBottomTabBar: boolean;
+  isActive: boolean;
+  popupBackNavigator: any;
 }
 
 export declare class AbstractNavigationController implements INavigationController {
   constructor(params?: Partial<AbstractNavigationController>);
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; });
+  tabBar?: TabBarController;
+  getCurrentController(): IController;
+  pageID: number;
+  popupBackNavigator: boolean;
+  isActive: boolean;
   isInsideBottomTabBar: boolean;
   parentController: INavigationController;
   nativeObject: any;
