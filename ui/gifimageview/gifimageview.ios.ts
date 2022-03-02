@@ -8,13 +8,11 @@ export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents>
   private _gifimage: GifImage;
   private _loopCompletionCallback: (loopCountRemain: number) => void;
   constructor(params: Partial<IGifImageView> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_FLAnimatedImageView();
     }
-
-    Object.assign(this, params);
   }
 
   get gifImage(): GifImage {
