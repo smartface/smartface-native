@@ -131,6 +131,7 @@ export interface ILocation extends NativeEventEmitterComponent<LocationEvents> {
     locationServicesEnabled(): boolean;
   }>;
   Events: typeof LocationEvents;
+  __onActivityResult: (resultCode: number) => void;
 }
 
 export declare namespace Location {

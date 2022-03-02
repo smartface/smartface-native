@@ -6,7 +6,6 @@ import { INativeComponent } from 'core/inative-component';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
-
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -16,6 +15,8 @@ export interface IViewState<Property = any> {
 }
 
 export type ViewAndroidProps = {
+  updateRippleEffectIfNeeded: () => void;
+  overScrollMode: number;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
    * This property only supported for api level 23 and above.

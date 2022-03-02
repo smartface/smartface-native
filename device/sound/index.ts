@@ -190,7 +190,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @since 0.1
    */
   public loadURL(url: string): void;
-  get android(): {
+  static android: {
     /**
      * Picks a sound on the device.
      *
@@ -214,7 +214,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
      * @android
      * @since 1.1.8
      */
-    pick: (params: { page: Page; onSuccess: (e: { sound: Sound }) => void }, onFailure: () => void) => void | undefined;
+    pick: (params: { page: Page; onSuccess: (e: { sound: Sound }) => void; onFailure: () => void }) => void | undefined;
   };
 }
 

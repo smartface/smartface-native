@@ -280,6 +280,7 @@ declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
   uuid: string;
   reuseIdentifier: any;
   row: any;
+  expandSwipeAnimated(direction: any, animated?: boolean);
 }
 
 declare class __SF_UIBarButtonItem extends __SF_UIView {
@@ -317,6 +318,7 @@ declare class __SF_Label {
 
 declare interface iOSSharedApplication {
   statusBarFrame: __SF_NSRect;
+  statusBarOrientation: number;
   sf_statusBarStyle: any;
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
@@ -664,7 +666,7 @@ declare class __SF_SMFNavigationControllerDelegate {
   navigationControllerDidShowViewControllerAnimated?: (navigationController: __SF_UINavigationController, viewController: __SF_UIViewController, animated: boolean) => void;
 }
 
-declare class __SF_UIViewController {
+declare class __SF_UIViewController extends __SF_NSOBject {
   automaticallyAdjustsScrollViewInsets: boolean;
   onViewSafeAreaInsetsDidChange: (e: any) => void;
   presentViewController(controllerToPresent: __SF_UIViewController, completionBlock: () => void, animated: boolean): void;
@@ -741,6 +743,7 @@ declare class __SF_UIDevice {
   static vibrate(): void;
   static takeSnapShot(): void;
   static forceTouchAvaliable(): boolean;
+  static changeOrientation(orientation: number): void;
 }
 
 declare class __SF_UIAccessibility {
@@ -1254,6 +1257,8 @@ declare class __SF_KeychainPasswordItem {
   deleteItemWithBlock(callback: (e: any) => void): void;
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
+
+declare class __SF_UIApplicationWillResignActiveNotification {}
 
 declare const __SF_UIScrollViewDecelerationRateNormal: number;
 declare const __SF_UIScrollViewDecelerationRateFast: number;

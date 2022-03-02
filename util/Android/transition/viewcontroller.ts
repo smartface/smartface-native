@@ -8,9 +8,11 @@ import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 type PageWithController = (Page & { childControllers?: unknown[]; __isActive?: boolean; isInsideBottomTabBar?: boolean }) | INavigationController;
 
 export type ControllerParams = {
-  controller: INavigationController | Page | BottomTabBarController;
+  controller: NavigationController | Page | BottomTabBarController;
+  animation?: boolean;
   animated?: boolean;
   isComingFromPresent?: boolean;
+  onComplete?: () => void;
   animationType?: FragmentTransition.AnimationType;
 };
 namespace ViewController {
@@ -35,7 +37,7 @@ namespace ViewController {
   export function setIsActiveOfController(controller: PageWithController, __isActive: boolean) {
     if (!controller || controller instanceof Page) return;
     controller.__isActive = __isActive;
-    let childController = controller.getCurrentController();
+    const childController = controller.getCurrentController();
     while (childController) {
       childController.__isActive = __isActive;
       if (childController instanceof Page) break;
