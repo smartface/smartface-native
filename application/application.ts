@@ -246,6 +246,7 @@ declare enum KeyboardMode {
  * A set of collection for application based properties and methods.
  */
 export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
+  static currentPage: Page;
   on(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   once(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   off(eventName: ApplicationEvents, callback?: (...args: any) => void): void;

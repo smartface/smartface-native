@@ -1,4 +1,4 @@
-import BottomTabbarController, { AbstractBottomTabbarController } from '.';
+import { IBottomTabBarController } from '.';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBar from '../bottomtabbar';
@@ -6,7 +6,7 @@ import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 const UITabBarController = requireClass('UITabBarController');
 
-export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements AbstractBottomTabbarController {
+export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
   ios = {};
   android = {};
@@ -21,7 +21,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   private viewModel;
   private nativeObjectDelegate;
   private currentIndex: number;
-  constructor(params?: Partial<BottomTabbarController & { viewModel?: any }>) {
+  constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
     super();
 
     this.view = new BottomTabBarView({

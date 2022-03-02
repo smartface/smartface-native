@@ -1,12 +1,14 @@
-import BottomTabBar, { AbstractBottomTabBar } from '.';
+import { IBottomTabBar } from '.';
 import NativeComponent from '../../core/native-component';
 import System from '../../device/system';
 import Color from '../color';
+import ColorIOS from '../color/color.ios';
 import Image from '../image';
 import TabBarItem from '../tabbaritem';
-const UITabBar = SF.requireClass('UITabBar');
 
-export default class BottomTabBarIOS extends NativeComponent implements AbstractBottomTabBar {
+const UITabBar = requireClass('UITabBar');
+
+export default class BottomTabBarIOS extends NativeComponent implements IBottomTabBar {
   private _android: Partial<{
     maxItemCount: boolean;
     disableItemAnimation: boolean;
@@ -22,7 +24,7 @@ export default class BottomTabBarIOS extends NativeComponent implements Abstract
     selected: undefined
   };
   private _selectionIndicatorImage: any;
-  constructor(params?: Partial<BottomTabBar> & Partial<NativeComponent>) {
+  constructor(params?: Partial<IBottomTabBar> & Partial<NativeComponent>) {
     super();
 
     this.nativeObject = undefined;
@@ -84,7 +86,7 @@ export default class BottomTabBarIOS extends NativeComponent implements Abstract
       for (const i in this._items) {
         //TODO: update once tabbaritem merged
         if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i].nativeObject = this.nativeObject.items[i];
+          this._items[i]._nativeObject = this.nativeObject.items[i];
         }
         this._items[i].invalidate();
       }
@@ -132,17 +134,14 @@ export default class BottomTabBarIOS extends NativeComponent implements Abstract
     }
   }
   get tintColor() {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.tintColor
-    });
+    }) as any; //TODO: tintColor getter and setter conflict
   }
   set tintColor(value: { selected: Color; normal: Color }) {
     if (this.nativeObject) {
       if (typeof value.normal === 'object') {
-        const systemVersion = parseInt(SF.requireClass('UIDevice').currentDevice().systemVersion);
-        if (systemVersion >= 10) {
-          this.unselectedItemColor = value.normal;
-        }
+        this.unselectedItemColor = value.normal;
       }
       if (typeof value.selected === 'object') {
         this.nativeObject.tintColor = value.selected.nativeObject;
