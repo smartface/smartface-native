@@ -54,7 +54,6 @@ function overrideURLChange(url: string, _canOpenLinkInside: boolean) {
   }
 }
 class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView, IScrollable {
-  
   private _canOpenLinkInside = true;
   private _onError;
   private _onShow;
@@ -69,7 +68,7 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
   private scrollable: Scrollable;
   private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
   private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
-  private static onActivityResult = function (requestCode, resultCode, data) {
+  static onActivityResult = function (requestCode, resultCode, data) {
     if (requestCode === WebViewAndroid.RESULT_CODE_ICE_CREAM) {
       let uri = null;
       if (data !== null) {
@@ -285,11 +284,11 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
       onConsoleMessage: function (sourceId: number, message: string, lineNumber: number, messageLevel: string) {
         const result = self._android.onConsoleMessage
           ? self._android.onConsoleMessage({
-            sourceId,
-            message,
-            lineNumber,
-            messageLevel
-          })
+              sourceId,
+              message,
+              lineNumber,
+              messageLevel
+            })
           : false;
         return TypeUtil.isBoolean(result) ? result : false;
       }
@@ -331,7 +330,7 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
   refreshRowRange(params: Record<string, any>): void {
     this.scrollable.refreshRowRange(params);
   }
-  onOpenNewWindow?: (e: { url: string; }) => void;
+  onOpenNewWindow?: (e: { url: string }) => void;
   get scrollBarEnabled() {
     return this._scrollBarEnabled;
   }

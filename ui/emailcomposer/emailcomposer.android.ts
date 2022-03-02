@@ -84,10 +84,11 @@ export default class EmailComposerAndroid extends NativeComponent implements Abs
       page.nativeObject.startActivityForResult(this.nativeObject, EmailComposerAndroid.EMAIL_REQUESTCODE);
     }
   }
-  canSendMail(): boolean {
+  static _closeCallback: () => void = undefined;
+  static canSendMail(): boolean {
     return true;
   }
-  onActivityResult() {
-    this._closeCallback && this.onClose();
+  static onActivityResult(requestCode: number, resultCode: number, data: any) {
+    EmailComposerAndroid._closeCallback?.();
   }
 }

@@ -31,8 +31,7 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
         this.emit('interceptTouchEvent');
         return !!this.android.onInterceptTouchEvent?.();
       }
-    })
-
+    });
 
     const self = this;
 
@@ -45,7 +44,7 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
       }
     };
 
-    const {android, ...restParams} = params;
+    const { android, ...restParams } = params;
     Object.assign(this._android, androidAddition, android);
     Object.assign(this, restParams);
   }
@@ -93,7 +92,7 @@ class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents> extends ViewGr
   }
 
   protected _android: Partial<{
-    [key: string]: any; 
+    [key: string]: any;
     updateRippleEffectIfNeeded: () => void;
     useForeground: boolean;
     rippleEnabled: boolean;

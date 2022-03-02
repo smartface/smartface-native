@@ -16,7 +16,6 @@ function getCurrentPageFragment() {
 export default class SoundAndroid extends AbstractSound {
   public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
-  private _pickParams;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
   private _volume = 1.0;
@@ -51,8 +50,8 @@ export default class SoundAndroid extends AbstractSound {
     }
 
     const android = {
-      pick(params) {
-        self._pickParams = params;
+      pick(params: Parameters<typeof AbstractSound.android['pick']>['0']) {
+        SoundAndroid._pickParams = params;
         const intent = new NativeIntent();
         intent.setType('audio/*');
         intent.setAction(NativeIntent.ACTION_GET_CONTENT);
@@ -126,7 +125,7 @@ export default class SoundAndroid extends AbstractSound {
     this.nativeObject.setDataSource(url);
     this.nativeObject.prepare();
   }
-  onActivityResult(requestCode, resultCode, data) {
+  static onActivityResult(requestCode: number, resultCode: number, data: any) {
     if (requestCode === SoundAndroid.PICK_SOUND) {
       const fragmentActivity = AndroidConfig.activity;
       if (resultCode === -1) {
@@ -135,18 +134,20 @@ export default class SoundAndroid extends AbstractSound {
           const uri = data.getData();
           const sound = new SoundAndroid();
           sound.nativeObject.setDataSource(fragmentActivity, uri);
-          this._pickParams.onSuccess?.({
+          SoundAndroid._pickParams.onSuccess?.({
             sound: sound
           });
         } catch (err) {
-          if (this._pickParams.onFailure)
-            this._pickParams.onFailure({
-              message: err.toString()
-            });
+          SoundAndroid._pickParams.onFailure?.({ message: err.toString() });
         }
       } else {
-        if (this._pickParams.onCancel) this._pickParams.onCancel();
+        SoundAndroid._pickParams.onCancel?.();
       }
     }
   }
+  static _pickParams: {
+    onCancel?: () => void;
+    onFailure?: (e?: { message: string }) => void;
+    onSuccess?: (e?: { sound: SoundAndroid }) => void;
+  };
 }
