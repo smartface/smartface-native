@@ -173,8 +173,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     a.recycle();
 
     const { ios, android, ...restParams } = params;
-    Object.assign(this.android, this.androidProps);
-    Object.assign(this.ios, ios);
+    Object.assign(this._android, this.androidProps, android);
     Object.assign(this, restParams);
   }
 

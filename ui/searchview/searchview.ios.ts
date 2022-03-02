@@ -154,8 +154,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this.nativeObject.delegate = this._searchBarDelegate;
 
     const { ios, android, ...props } = params;
-    Object.assign(this.ios, this.iOSProps);
-    Object.assign(this.android, {});
+    Object.assign(this._ios, this.iOSProps, ios);
     Object.assign(this, props);
   }
 
