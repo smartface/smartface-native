@@ -1,9 +1,8 @@
 import Flex from '../../core/flex';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import { ViewGroup } from '../../ui/viewgroup/viewgroup.android';
 import IFlexLayout, { AndroidProps } from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
-import Color from 'ui/color';
+import Color from '../../ui/color';
 
 // /*globals requireClass*/
 const AndroidConfig = require('../../util/Android/androidconfig');
