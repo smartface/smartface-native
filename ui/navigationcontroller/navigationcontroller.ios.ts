@@ -1,4 +1,4 @@
-import { Controller, INavigationController, OperationType } from '.';
+import { Controller, IController, INavigationController, OperationType } from '.';
 import NativeComponent from '../../core/native-component';
 import System from '../../device/system';
 import Color from '../../ui/color';
@@ -10,7 +10,7 @@ import { ControllerParams } from '../../util/Android/transition/viewcontroller';
 import View from '../view';
 import { IHeaderBarItem } from '../headerbaritem';
 import BottomTabbarController from '../bottomtabbarcontroller';
-export default class NavigationControllerIOS extends NativeComponent implements INavigationController {
+export default class NavigationControllerIOS extends NativeComponent implements INavigationController, IController {
   private _android = {};
   private _ios = {};
   view: NavigationView;
@@ -18,7 +18,6 @@ export default class NavigationControllerIOS extends NativeComponent implements 
   private _headerBar: HeaderBar;
   constructor(params: Partial<INavigationController> & ControllerParams = { controller: undefined }) {
     super();
-    const { ...restParams } = params;
     this.view = new NavigationView({ viewModel: this });
     this.model = new NavigationModel();
     this._headerBar = new HeaderBar({
@@ -27,8 +26,18 @@ export default class NavigationControllerIOS extends NativeComponent implements 
     this._headerBar.ios.translucent = false;
 
     this._nativeObject = this.view.nativeObject;
-    Object.assign(this, restParams);
+    Object.assign(this, params);
   }
+  pageID: number;
+  tabBar?: import("ui/tabbarcontroller");
+  getCurrentController(): IController {
+    return this.childControllers[this.childControllers.length - 1];
+  }
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; }) {
+    throw new Error('Method not implemented.');
+  }
+  isActive: boolean = false;
+  popupBackNavigator: boolean = false;
   get android() {
     return this._android;
   }
@@ -113,7 +122,7 @@ export default class NavigationControllerIOS extends NativeComponent implements 
       const controller = currentPage.childControllers[currentPage.selectedIndex] as NavigationControllerIOS;
       retval = this.getVisiblePage(controller);
     } else if (currentPage instanceof NavigationControllerIOS) {
-      const controller = currentPage.childControllers[currentPage.childControllers.length - 1] as NavigationControllerIOS;
+      const controller = currentPage.childControllers[currentPage.childControllers.length - 1] as IController;
       retval = this.getVisiblePage(controller);
     } else if (currentPage instanceof Page) {
       retval = currentPage;
@@ -426,9 +435,9 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
 }
 
 class NavigationModel {
-  pageToPush: NavigationControllerIOS = undefined;
-  childControllers: NavigationControllerIOS[];
-  pushPage(page: NavigationControllerIOS) {
+  pageToPush: IController = undefined;
+  childControllers: IController[];
+  pushPage(page: IController) {
     this.pageToPush = page;
     this.childControllers.push(page);
   }
@@ -436,7 +445,7 @@ class NavigationModel {
     const poppedPage = this.childControllers.pop();
     poppedPage.parentController = null;
   }
-  popToPage(page: NavigationControllerIOS) {
+  popToPage(page: IController) {
     const index = this.childControllers.indexOf(page);
     if (index >= 0) {
       this.popToIndex(index);

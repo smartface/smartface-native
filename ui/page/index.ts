@@ -4,7 +4,7 @@ import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import FlexLayout from '../flexlayout';
 import HeaderBar from '../headerbar';
-import NavigationController from '../navigationcontroller';
+import NavigationController, { IController } from '../navigationcontroller';
 import TabBarController from '../tabbarcontroller';
 import View from '../view';
 import { PageEvents } from './page-events';
@@ -104,6 +104,7 @@ export interface PageIOSParams {
 }
 
 export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TAND = {}, TNative = any> extends INativeComponent<TNative>, IEventEmitter<TEvent | PageEvents> {
+  isInsideBottomTabBar: boolean;
   android: Partial<TAND> & PageAndroidParams;
   ios: Partial<TIOS> & PageIOSParams;
   /**
@@ -338,20 +339,43 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    */
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
 
-  readonly parentController: { headerBar: HeaderBar; tabBar: TabBarController };
+  readonly parentController: IController;
 }
 
-export class PageBase<TEvent extends string = PageEvents, TNative = any> extends NativeEventEmitterComponent<TEvent | PageEvents, TNative> {
+export class PageBase<TEvent extends string = PageEvents, TNative = any> extends NativeEventEmitterComponent<TEvent | PageEvents, TNative> implements IController {
+  headerBar?: HeaderBar;
+  tabBar?: TabBarController;
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; }) {
+    throw new Error('Method not implemented.');
+  }
+  parentController: IController;
+  childControllers?: IController[] = [];
+  pageID: number;
+  popupBackNavigator: any;
+  isActive: boolean = false;
   static iOS: {
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
     PresentationStyle: typeof PresentationStyle;
   };
   static Orientation: typeof Orientation;
+  isInsideBottomTabBar: boolean = false;
 }
 
 export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {}, TAND = {}, TNative = any>
-  implements IPage<TEvent | PageEvents, TIOS & PageIOSParams, TAND & PageAndroidParams, TNative>
+  implements IPage<TEvent | PageEvents, TIOS & PageIOSParams, TAND & PageAndroidParams, TNative>, IController
 {
+  childControllers?: IController[];
+  tabBar?: TabBarController;
+  getCurrentController(): IController;
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; });
+  parentController: IController;
+  pageID: number;
+  popupBackNavigator: any;
+  isActive: boolean;
+  isInsideBottomTabBar: boolean;
   android: Partial<TAND & PageAndroidParams> & PageAndroidParams;
   ios: Partial<TIOS & PageIOSParams> & PageIOSParams;
   nativeObject: TNative;
@@ -360,7 +384,6 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {},
   off(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback?: EventListenerCallback): void;
   emit(event: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, ...args: any[]): void;
   orientation: PageOrientation;
-  parentController: { headerBar: HeaderBar; tabBar: TabBarController };
   transitionViews: View[];
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
   onLoad: () => void;

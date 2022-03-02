@@ -4,7 +4,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import Application from '../../application';
 import BottomTabBar from '../bottomtabbar';
 import ViewController from '../../util/Android/transition/viewcontroller';
-import NavigationController from '../navigationcontroller';
+import NavigationController, { IController } from '../navigationcontroller';
 import Page from '../page';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import { EventEmitter } from '../../core/eventemitter';
@@ -21,7 +21,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   private _addedToActivity = false;
   private _disabledShiftingMode = false;
   private _menu;
-  private _childControllers: (NavigationController | Page)[] = [];
+  private _childControllers: IController[] = [];
   private _selectedIndex = 0;
   private _shouldSelectByIndexCallback: ({ index: number }) => boolean;
   private _didSelectByIndexCallback: (params: { index: number }) => void;
@@ -30,6 +30,13 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   private cacheNativeBuilders = {};
   private __isActive;
   private __targetIndex: number;
+  pageID: number;
+  popupBackNavigator: any;
+  isActive: boolean;
+  parentController: IController;
+  headerBar?: import("ui/headerbar");
+  nativeObject: any;
+  isInsideBottomTabBar: boolean;
   constructor(params?: Partial<IBottomTabBarController>) {
     super();
     Application.tabBar = new BottomTabBar();
@@ -50,7 +57,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
           // use self property to show/hide bottom naviagtion view after controller transition
           self.childControllers[self._selectedIndex] && ViewController.deactivateController(self.childControllers[self._selectedIndex]);
           self.childControllers[index].isInsideBottomTabBar = true;
-          self.childControllers[index].__isActive = self.__isActive;
+          self.childControllers[index].isActive = self.__isActive;
           self.push(self.childControllers[index]);
           self._selectedIndex = index;
           try {
@@ -70,6 +77,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     this.addTabBarToActivity();
     params && Object.assign(this, params);
   }
+
   shouldSelectViewController(index: any) {
     return true;
   }
@@ -87,8 +95,9 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     this._childControllers = childrenArray;
     for (const index in this._childControllers) {
       try {
+        const controller = this._childControllers[index];
         //TODO: navigation controller doesnt have parentController on typings.
-        this._childControllers[index].parentController = this;
+        controller.parentController = this as any;
       } catch (e) {
         Application.onUnhandledError && Application.onUnhandledError(e);
       }
@@ -145,7 +154,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     childController.isInsideBottomTabBar = true;
     if (childController instanceof Page) {
       //TODO: Page needs __isActive and pageID
-      childController.__isActive = true;
+      childController.isActive = true;
       if (!childController.pageID) {
         childController.pageID = FragmentTransaction.generatePageID();
       }
@@ -154,7 +163,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
         animated: false
       });
     } else if (childController instanceof NavigationController) {
-      childController.__isActive = true;
+      childController.isActive = true;
       // first press
       if (childController.childControllers.length < 1) {
         if (!childController.childControllers[0])
@@ -211,7 +220,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   getCurrentController() {
     const controller = this.childControllers[this._selectedIndex];
     if (!controller) return null;
-    if (controller instanceof Page) return controller;
+    if (controller instanceof Page) return controller as IController;
 
     //TODO: navigation controller method missing
     return controller.getCurrentController();

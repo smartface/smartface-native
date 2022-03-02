@@ -1,6 +1,6 @@
-import NavigationController from '../navigationcontroller';
+import NavigationController, { IController } from '../navigationcontroller';
 import Page from '../page';
-import BottomTabBar, { AbstractBottomTabBar } from '../bottomtabbar';
+import BottomTabBar from '../bottomtabbar';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 import { ConstructorOf } from '../../core/constructorof';
 
@@ -23,11 +23,10 @@ import { ConstructorOf } from '../../core/constructorof';
  *
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
-export interface IBottomTabBarController {
-  getCurrentController?: () => NavigationController | Page;
+export interface IBottomTabBarController extends IController {
+  isInsideBottomTabBar: boolean;
   shouldSelectViewController: (index: any) => boolean;
   didSelectViewController: (index: any) => void;
-  show?: () => void;
   /**
    * Gets/sets child controllers of BottomTabbarController instance.
    *
@@ -36,7 +35,7 @@ export interface IBottomTabBarController {
    * @ios
    * @since 3.2.0
    */
-  childControllers: (NavigationController | Page)[];
+  childControllers: IController[];
   /**
    * Gets/sets tab bar view of BottomTabbarController instance.
    *
