@@ -2,7 +2,7 @@ import Flex from '../../core/flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
 import { IFlexLayout, AndroidProps } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
-import Color from 'ui/color';
+import Color from '../../ui/color';
 
 // /*globals requireClass*/
 import AndroidConfig from '../../util/Android/androidconfig';

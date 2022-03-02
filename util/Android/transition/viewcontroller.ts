@@ -1,17 +1,19 @@
 import Page from '../../../ui/page';
-import NavigationController from '../../../ui/navigationcontroller';
+import { INavigationController } from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 /** TODO: Check this out after bottomtabbar, navigationcontroller and page is completed */
 
-type PageWithController = (Page & { childControllers: unknown[]; __isActive: boolean }) | NavigationController;
+type PageWithController = (Page & { childControllers?: unknown[]; __isActive?: boolean; isInsideBottomTabBar?: boolean }) | INavigationController;
 
-type ControllerParams = {
+export type ControllerParams = {
   controller: NavigationController | Page | BottomTabBarController;
-  animation: boolean;
-  isComingFromPresent: boolean;
-  onComplete: () => void;
+  animation?: boolean;
+  animated?: boolean;
+  isComingFromPresent?: boolean;
+  onComplete?: () => void;
+  animationType?: FragmentTransition.AnimationType;
 };
 namespace ViewController {
   export function activateRootController(controller: PageWithController) {
@@ -61,7 +63,7 @@ namespace ViewController {
       // show latest page or controller
       params.controller.show({
         controller: childControllerStack[childControllerStackLenght - 1],
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -71,7 +73,7 @@ namespace ViewController {
       // TODO: Check animation type. I am not sure about that!
       FragmentTransition.push({
         page: params.controller,
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -106,7 +108,7 @@ namespace ViewController {
     }
 
     // for NavigationController
-    controller.childControllers.forEach(function (childController: unknown) {
+    controller.childControllers.forEach((childController) => {
       childController.isInsideBottomTabBar = true;
       ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });

@@ -1,7 +1,41 @@
 import Page from '../page';
 import HeaderBar from '../headerbar';
-import { AnimationType } from '../../util/Android/transition/fragmenttransition';
-type Controller = Page | NavigationController;
+import { INativeComponent } from '../../core/inative-component';
+import { IBottomTabBarController } from '../bottomtabbarcontroller';
+
+/**
+ * @enum {Number} UI.NavigationController.OperationType
+ *
+ * Operation type of NavigationController.
+ * @static
+ * @since 3.2
+ *
+ */
+export enum OperationType {
+  /**
+   * @property {Number} PUSH
+   * Push operation
+   * @ios
+   * @android
+   * @static
+   * @readonly
+   * @since 3.2
+   */
+  PUSH = 0,
+  /**
+   * @property {Number} POP
+   * Pop operation
+   * @ios
+   * @android
+   * @static
+   * @readonly
+   * @since 3.2
+   */
+  POP = 1
+}
+
+export type Controller = Page | INavigationController | IBottomTabBarController;
+
 /**
  * @class UI.NavigationController
  * @since 3.2
@@ -34,7 +68,7 @@ type Controller = Page | NavigationController;
  *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
  *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
-declare class NavigationController {
+export declare interface INavigationController extends INativeComponent {
   /**
    * Gets/sets child controllers of NavigationController instance.
    *
@@ -99,7 +133,7 @@ declare class NavigationController {
    * @android
    * @since 3.2.0
    */
-  willShow: (params: { controller: Controller }) => void;
+  willShow: (params: { controller: Controller; animated?: boolean }) => void;
   /**
    * This event is triggered before the page is displayed.
    *
@@ -111,7 +145,7 @@ declare class NavigationController {
    * @android
    * @since 3.2.0
    */
-  onTransition: (e: { controller: Controller; operation: NavigationController.OperationType }) => void;
+  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
   /**
    * This function shows up the pop-up controller.
    *
@@ -139,38 +173,27 @@ declare class NavigationController {
    * @since 4.0.0
    */
   dismiss(params: { onComplete: () => void; animated: boolean }): void;
+  parentController: NavigationController;
+  isInsideBottomTabBar: boolean;
 }
 
-declare namespace NavigationController {
-  /**
-   * @enum {Number} UI.NavigationController.OperationType
-   *
-   * Operation type of NavigationController.
-   * @static
-   * @since 3.2
-   *
-   */
-  enum OperationType {
-    /**
-     * @property {Number} PUSH
-     * Push operation
-     * @ios
-     * @android
-     * @static
-     * @readonly
-     * @since 3.2
-     */
-    PUSH = 0,
-    /**
-     * @property {Number} POP
-     * Pop operation
-     * @ios
-     * @android
-     * @static
-     * @readonly
-     * @since 3.2
-     */
-    POP = 1
-  }
+export declare class AbstractNavigationController implements INavigationController {
+  constructor(params?: Partial<AbstractNavigationController>);
+  isInsideBottomTabBar: boolean;
+  parentController: INavigationController;
+  nativeObject: any;
+  childControllers: Controller[];
+  headerBar: HeaderBar;
+  push(params: { controller: Controller; animated?: boolean }): void;
+  pop(params?: { animated: boolean }): void;
+  popTo(params: { controller: Controller; animated?: boolean }): void;
+  willShow: (params: { controller: Controller; animated?: boolean }) => void;
+  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
+  present(params: { controller: Controller; animated: boolean; onComplete: () => void }): void;
+  dismiss(params: { onComplete: () => void; animated: boolean }): void;
+  static OperationType: typeof OperationType;
 }
-export = NavigationController;
+
+const NavigationController: typeof AbstractNavigationController = require(`./navigationcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type NavigationController = INavigationController;
+export default NavigationController;

@@ -1,3 +1,5 @@
+import { ConstructorOf } from '../../core/constructorof';
+import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 
@@ -10,8 +12,7 @@ import TabBarItem from '../tabbaritem';
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  *
  */
-export declare class AbstractBottomTabBar {
-  constructor(params?: Partial<AbstractBottomTabBar>);
+export declare interface IBottomTabBar extends INativeComponent {
   /**
    * Gets/sets background color of the tab bar items.
    *
@@ -75,7 +76,7 @@ export declare class AbstractBottomTabBar {
   }>;
 }
 
-const BottomTabBar: typeof AbstractBottomTabBar = require(`./bottomtabbar.${Device.deviceOS.toLowerCase()}`).default;
-type BottomTabBar = AbstractBottomTabBar;
+const BottomTabBar: ConstructorOf<IBottomTabBar, Partial<IBottomTabBar>> = require(`./bottomtabbar.${Device.deviceOS.toLowerCase()}`).default;
+type BottomTabBar = IBottomTabBar;
 
 export default BottomTabBar;
