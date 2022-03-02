@@ -107,6 +107,7 @@ declare class ImageView extends View {
 	 * @param {Object} object.android Android specific argument
 	 * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
 	 * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
+	 * @param {String} object.android.cacheSignature Unique key for custom cache invalidation
 	 * @android
 	 * @ios
 	 * @since 3.1.3
@@ -122,6 +123,7 @@ declare class ImageView extends View {
 		android?: {
 			useDiskCache?: boolean;
 			useMemoryCache?: boolean;
+			cacheSignature?: String;
 		};
 	}): void;
 	/**
@@ -135,6 +137,7 @@ declare class ImageView extends View {
 	 * @param {Number} object.height
 	 * @param {Object} object.android Android specific argument
 	 * @param {useMemoryCache?: boolean} object.android.useMemoryCache Designates the using of memory cache.
+	 * @param {String} object.android.cacheSignature Unique key for custom cache invalidation
 	 * @android
 	 * @ios
 	 * @since 3.1.0
@@ -146,6 +149,7 @@ declare class ImageView extends View {
 		height?: number;
 		android?: {
 			useMemoryCache?: boolean;
+			cacheSignature?: String;
 		};
 	}): void;
 	/**
@@ -167,6 +171,7 @@ declare class ImageView extends View {
 	 * @param {Object} object.android Android specific argument
 	 * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
 	 * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
+	 * @param {String} object.android.cacheSignature Unique key for custom cache invalidation.
 	 * @android
 	 * @ios
 	 * @since 3.0.2
@@ -181,6 +186,7 @@ declare class ImageView extends View {
 		android?: {
 			useDiskCache?: boolean;
 			useMemoryCache?: boolean;
+			cacheSignature?: String;
 		};
 	}): void;
 }

@@ -1,3 +1,5 @@
+
+
 /**
  * @class Device.Hardware
  * @since 0.1
@@ -5,15 +7,16 @@
  * Hardware is used to retrieve hardware specific information of the device.
  *
  *     @example
- *     const Hardware = require('@smartface/native/device/hardware');
+ *	   import Hardware from "@smartface/native/device/hardware"
  *     console.log("Device.Hardware.IMEI: "       + Hardware.android.IMEI);
  *     console.log("Device.Hardware.UID: "        + Hardware.UID);
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
  *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
+ *     console.log("Device.Hardware.deviceType: "   + Hardware.deviceType);
  *
  */
-declare const Hardware: {
+ declare namespace Hardware {
 	/**
 	 *
 	 * Returns the unique id of the device. The value may change if the device is formatted.
@@ -24,7 +27,7 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly UID: string;
+	export const UID: string;
 	/**
 	 *
 	 * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
@@ -34,8 +37,8 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly IMEI?: string;
-	readonly android: Partial<{
+	export const IMEI : string;
+	export const android: Partial<{
 		// TODO: discuss why IMEI is in android
 		readonly IMEI?: string;
 		/**
@@ -49,7 +52,7 @@ declare const Hardware: {
 		 */
 		readonly vendorID?: number;
 	}>;
-	ios: Partial<{
+	export const ios: Partial<{
 		microphone?: {
 			/**
 			 *
@@ -79,7 +82,7 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly brandModel: string;
+	export const brandModel: string;
 	/**
 	 *
 	 * Returns the brand name of the device.
@@ -90,7 +93,38 @@ declare const Hardware: {
 	 * @static
 	 * @since 0.1
 	 */
-	readonly brandName: string;
-};
+	export const brandName: string;
+	/**
+	 *
+	 * Returns the device type.
+	 * @property {string} deviceType
+	 * @android
+	 * @ios
+	 * @readonly
+	 * @static
+	 * @since 4.4.1
+	 */
+	export const deviceType: string;
 
-export = Hardware;
+  /**
+   * Defines the available device types
+   * @enum {string} DeviceType
+   * @android
+   * @ios
+   * @readonly
+   * @static
+   * @since 4.4.1
+   * @example
+   * ```
+   * Hardware.deviceType === Hardware.DeviceType.PHONE; // determines if the current device is a mobile phone
+	 * Hardware.deviceType === "phone";
+   * ```
+   */
+  export enum DeviceType {
+	UNSPECIFIED = "unspecified",
+	PHONE = "phone",
+	TABLET = "tablet"
+    }
+}
+
+export default Hardware

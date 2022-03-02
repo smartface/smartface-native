@@ -15,6 +15,7 @@ function ShimmerFlexLayout(params) {
     const self = this;
 
     this.nativeObject = new NativeShimmerFrameLayout(activity);
+    this.nativeObject.hideShimmer();
 
     var _layout = new FlexLayout();
     this.nativeObject.addView(_layout.nativeObject);
@@ -41,7 +42,7 @@ function ShimmerFlexLayout(params) {
         },
         'startShimmering': {
             value: function() {
-                self.nativeObject.startShimmer();
+                self.nativeObject.showShimmer(true);
             },
             enumerable: true
         },
@@ -53,7 +54,7 @@ function ShimmerFlexLayout(params) {
         },
         'stopShimmering': {
             value: function() {
-                self.nativeObject.stopShimmer();
+                self.nativeObject.hideShimmer();
             },
             enumerable: true
         },

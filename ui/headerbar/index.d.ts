@@ -101,7 +101,7 @@ type HeaderBar = {
 	 */
 	backgroundColor: Color;
 	/**
-	 * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
+	 * Gets/sets item color of the header bar. This property will change color of the unassigned color values of left item and all header bar items. For iOS, you should access this property from page.parentController.
 	 *
 	 *     @example
 	 *     const Page = require('@smartface/native/ui/page');
@@ -114,7 +114,7 @@ type HeaderBar = {
 	 *         }
 	 *     });
 	 *
-	 * @property {UI.Color} [itemColor = Color.WHITE]
+	 * @property {UI.Color} [itemColor]
 	 * @android
 	 * @ios
 	 * @since 0.1

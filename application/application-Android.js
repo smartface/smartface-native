@@ -27,6 +27,14 @@ Application.onApplicationCallReceived = (e) => {
             _onApplicationCallReceived(e)
     }
 }
+
+function registerOnUnhandledError() {
+    Application.onUnhandledError = (e) => {
+        _onUnhandledError && _onUnhandledError(e);
+        ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
+    };
+}
+
 _onApplicationCallReceived = (e) => {
     ApplicationWrapper.emitter.emit(Events.ApplicationCallReceived, e);
 }
@@ -39,9 +47,6 @@ _onBackButtonPressed = (e) => {
     ApplicationWrapper.emitter.emit(Events.BackButtonPressed, e);
 }
 
-Application.onUnhandledError = (e) => {
-    ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
-};
 
 _onExit = (e) => {
     ApplicationWrapper.emitter.emit(Events.Exit, e);
@@ -63,14 +68,17 @@ _onRequestPermissionsResult = (e) => {
     ApplicationWrapper.emitter.emit(Events.RequestPermissionResult, e);
 }
 
-const EventFunctions = {}
+const EventFunctions = {
+    [Events.UnhandledError]: () => registerOnUnhandledError(),
+}
 
 ApplicationWrapper.Events = { ...Events };
 EventEmitterCreator(ApplicationWrapper, EventFunctions);
 
 Object.defineProperty(ApplicationWrapper, 'on', {
     value: (event, callback) => {
-        // EventFunctions[event].call(ApplicationWrapper);
+        const eventFunction = EventFunctions[event];
+        eventFunction && eventFunction.call(ApplicationWrapper);
         ApplicationWrapper.emitter.on(event, callback);
     },
     configurable: true
@@ -85,7 +93,7 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114, FLAG_SECURE = 8192;
 var _onMinimize, _onMaximize, _onExit, _onBackButtonPressed, _onApplicationCallReceived, _onAppShortcutReceived,
-    _onReceivedNotification, _onRequestPermissionsResult, _keepScreenAwake = false,
+    _onReceivedNotification, _onRequestPermissionsResult, _onUnhandledError, _keepScreenAwake = false,
     _keyboardMode, _sliderDrawer, _dispatchTouchEvent, activity = AndroidConfig.activity,
     spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance(),_secureWindowContent = false;
 
@@ -410,10 +418,8 @@ Object.defineProperties(ApplicationWrapper, {
         },
         set: function(onUnhandledError) {
             if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-                Application.onUnhandledError = (e) => {
-                    onUnhandledError(e);
-                    ApplicationWrapper.emitter.emit(Events.UnhandledError, e);
-                };
+                _onUnhandledError = onUnhandledError;
+                registerOnUnhandledError();
             }
         },
         enumerable: true

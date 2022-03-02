@@ -11,9 +11,10 @@
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
  *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
+ *     console.log("Device.Hardware.deviceType: "   + Hardware.deviceType);
  * 
  */
-function Hardware() {}
+function Hardware() { }
 
 /**
  *
@@ -64,6 +65,29 @@ Hardware.brandName;
 
 /**
  *
+ * Returns the device type.
+ * @property {String} deviceType
+ * @android
+ * @ios
+ * @readonly
+ * @static
+ * @since 4.4.1
+ */
+Hardware.deviceType;
+
+/**
+ *
+ * Returns the device type.
+ * @enum {String} DeviceType
+ * @android
+ * @ios
+ * @readonly
+ * @static
+ * @since 4.4.1
+ */
+Hardware.DeviceType;
+/**
+ *
  * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
  * @property {Number} vendorID
  * @android
@@ -90,6 +114,6 @@ Hardware.android.vendorID;
  * @static
  * @since 1.1.12
  */
-Hardware.ios.microphone.requestRecordPermission(function callback() {});
+Hardware.ios.microphone.requestRecordPermission(function callback() { });
 
 module.exports = Hardware;

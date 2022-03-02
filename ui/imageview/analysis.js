@@ -108,6 +108,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {Object} object.android Android specific argument
  * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
  * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
+ * @param {String} object.android.cacheSignature Unique key for custom cache invalidation.
  * @android
  * @ios
  * @since 3.1.3
@@ -125,6 +126,7 @@ ImageView.prototype.loadFromUrl = function(params) {};
  * @param {Number} object.height
  * @param {Object} object.android Android specific argument
  * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
+ * @param {String} object.android.cacheSignature Unique key for custom cache invalidation.
  * @android
  * @ios
  * @since 3.1.0
@@ -150,6 +152,7 @@ ImageView.prototype.loadFromFile = function(object) {};
  * @param {Object} object.android Android specific argument
  * @param {boolean} object.android.useDiskCache Designates the using of disk cache.
  * @param {boolean} object.android.useMemoryCache Designates the using of memory cache.
+ * @param {String} object.android.cacheSignature Unique key for custom cache invalidation.
  * @android
  * @ios
  * @since 3.0.2
