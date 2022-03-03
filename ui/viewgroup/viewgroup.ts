@@ -1,6 +1,3 @@
-import { EventType } from 'core/eventemitter/EventType';
-import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import NativeEventEmitterComponent from 'core/native-event-emitter-component';
 import IView, { AbstractView } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
@@ -31,7 +28,7 @@ export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIO
    * @method addChild
    * @since 0.1
    */
-  addChild(view: AbstractView): void;
+  addChild(view: IView): void;
   /**
    * Remove a child view from viewgroup.
    *
@@ -41,7 +38,7 @@ export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIO
    * @method removeChild
    * @since 0.1
    */
-  removeChild(view: AbstractView): void;
+  removeChild(view: IView): void;
   /**
    * Removes all child views from viewgroup.
    *
@@ -113,7 +110,7 @@ export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIO
    * });
    * ````
    */
-  onViewAdded: (view: AbstractView) => void;
+  onViewAdded: (view: IView) => void;
   /**
    * This event is called when a view removed from this view's hierarchy.
    *
