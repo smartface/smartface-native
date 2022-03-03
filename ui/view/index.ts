@@ -6,6 +6,7 @@ import { INativeComponent } from 'core/inative-component';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
+import { ConstructorOf } from '../../core/constructorof';
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -15,7 +16,6 @@ export interface IViewState<Property = any> {
 }
 
 export type ViewAndroidProps = {
-  updateRippleEffectIfNeeded: () => void;
   overScrollMode: number;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -683,7 +683,7 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * });
    * ````
    */
-  onTouch: (e: Point2D) => void | boolean;
+  onTouch: (e?: Point2D) => void | boolean;
   /**
    * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
    *
@@ -980,74 +980,73 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>> ex
 /**
  * Only use for module export
  */
-export declare class AbstractView<TEvent extends string = ViewEvents, TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }>
-  implements IView<TEvent, TIOS, TAND>
-{
-  android: IView<TEvent, TIOS, TAND>['android'];
-  ios: IView<TEvent, TIOS, TAND>['ios'];
-  on(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
-  once(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
-  off(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback?: EventListenerCallback): void;
-  emit(event: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, ...args: any[]): void;
-  nativeObject: any;
-  transitionId: string;
-  accessible: boolean;
-  accessibilityLabel: string;
-  alpha: number;
-  backgroundColor: Color | IViewState<Color>;
-  borderColor: Color;
-  borderWidth: number;
-  borderRadius: number;
-  id: string;
-  testId: string;
-  visible: boolean;
-  rotation: number;
-  rotationX: number;
-  rotationY: number;
-  touchEnabled: boolean;
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  height: number;
-  width: number;
-  minWidth: number;
-  minHeight: number;
-  maxWidth: number;
-  maxHeight: number;
-  paddingTop: number;
-  paddingBottom: number;
-  paddingLeft: number;
-  paddingRight: number;
-  padding: number;
-  marginTop: number;
-  marginBottom: number;
-  marginLeft: number;
-  marginRight: number;
-  margin: number;
-  positionType: Flex.PositionType;
-  flexGrow: number;
-  aspectRatio: number;
-  flexShrink: number;
-  flexBasis: number;
-  scale: Point2D;
-  alignSelf: Flex.AlignSelf;
-  applyLayout(): void;
-  bringToFront(): void;
-  flipHorizontally(): void;
-  flipVertically(): void;
-  getScreenLocation(): Point2D;
-  getParent(): IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, { [key: string]: any }>;
-  onTouch: (e: Point2D) => boolean | void;
-  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
-  onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
-  dirty(): void;
-  masksToBounds: boolean;
-  maskedBorders: Border[];
-  getPosition: () => { left: number; top: number; width: number; height: number };
-}
-
-const View: typeof AbstractView = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
-type View<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> = AbstractView<TEvent, TIOS, TAND>;
+// export declare class AbstractView<TEvent extends string = ViewEvents, TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }>
+//   implements IView<TEvent, TIOS, TAND>
+// {
+//   android: IView<TEvent, TIOS, TAND>['android'];
+//   ios: IView<TEvent, TIOS, TAND>['ios'];
+//   on(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
+//   once(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
+//   off(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback?: EventListenerCallback): void;
+//   emit(event: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, ...args: any[]): void;
+//   nativeObject: any;
+//   transitionId: string;
+//   accessible: boolean;
+//   accessibilityLabel: string;
+//   alpha: number;
+//   backgroundColor: Color | IViewState<Color>;
+//   borderColor: Color;
+//   borderWidth: number;
+//   borderRadius: number;
+//   id: string;
+//   testId: string;
+//   visible: boolean;
+//   rotation: number;
+//   rotationX: number;
+//   rotationY: number;
+//   touchEnabled: boolean;
+//   left: number;
+//   top: number;
+//   right: number;
+//   bottom: number;
+//   height: number;
+//   width: number;
+//   minWidth: number;
+//   minHeight: number;
+//   maxWidth: number;
+//   maxHeight: number;
+//   paddingTop: number;
+//   paddingBottom: number;
+//   paddingLeft: number;
+//   paddingRight: number;
+//   padding: number;
+//   marginTop: number;
+//   marginBottom: number;
+//   marginLeft: number;
+//   marginRight: number;
+//   margin: number;
+//   positionType: Flex.PositionType;
+//   flexGrow: number;
+//   aspectRatio: number;
+//   flexShrink: number;
+//   flexBasis: number;
+//   scale: Point2D;
+//   alignSelf: Flex.AlignSelf;
+//   applyLayout(): void;
+//   bringToFront(): void;
+//   flipHorizontally(): void;
+//   flipVertically(): void;
+//   getScreenLocation(): Point2D;
+//   getParent(): IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, { [key: string]: any }>;
+//   onTouch: (e?: Point2D) => boolean | void;
+//   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
+//   onTouchCancelled: (point: Point2D) => boolean | void;
+//   onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
+//   dirty(): void;
+//   masksToBounds: boolean;
+//   maskedBorders: Border[];
+//   getPosition: () => { left: number; top: number; width: number; height: number };
+// }
+const View: ConstructorOf<IView, Partial<IView>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+type View<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> = IView<TEvent, TIOS, TAND>;
 export default View;

@@ -118,13 +118,9 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
     this.nativeObject.setSingleLine(true);
 
     /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-    this._touchCallbacks.onTouch = (x, y) => {
-        let result,
-        mEvent = {
-            x,
-            y
-        };
-        if (this.onTouch) result = this.onTouch(mEvent);
+    this.onTouch = (e) => {
+        let result: boolean | void;
+        if (this.onTouch) result = this.onTouch(e);
         return result === true;
     };
 
@@ -363,7 +359,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   get onActionButtonPress(): (e?: { actionKeyType: ActionKeyType }) => void {
     return this._onActionButtonPress;
   }
-  set onActionButtonPress(value: (e?: { actionKeyType: ActionKeyType })) {
+  set onActionButtonPress(value: (e?: { actionKeyType: ActionKeyType }) => void) {
     this._onActionButtonPress = value
 
     // TODO Old version has not declaration for this variable

@@ -262,7 +262,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents> extends V
 
   get autoCapitalize(): AutoCapitalize {
     // TODO Recheck after build
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'autocapitalizationType', [], 'NSInteger');
+    return Invocation.invokeInstanceMethod(this.nativeObject, 'autocapitalizationType', [], 'NSInteger') as AutoCapitalize;
   }
   set autoCapitalize(value: AutoCapitalize) {
     const argCapitalizationType = new Invocation.Argument({

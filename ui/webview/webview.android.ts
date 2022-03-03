@@ -9,7 +9,7 @@ import { WebViewEvents } from './webview-events';
 import WebView, { AndroidProps } from './webview';
 import IWebView from './webview';
 import { Scrollable } from '../../util';
-import { IScrollable } from '../../core/scrollable';
+import { IScrollable } from '../../core/scrollable.android';
 import { Point2D } from '../../primitive/point2d';
 import ListViewItem from '../listviewitem';
 
