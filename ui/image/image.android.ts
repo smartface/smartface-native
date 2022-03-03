@@ -100,13 +100,8 @@ class Image extends ImageBase {
       systemIcon?: any;
     };
   }) {
-    super();
+    super(params);
     if (typeof params !== 'object') throw new Error('Constructor parameters needed for Image!');
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
   }
 
   get height(): number {

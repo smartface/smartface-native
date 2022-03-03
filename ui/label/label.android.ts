@@ -4,9 +4,10 @@ import EllipsizeMode from '../ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../textalignment';
 import { ViewAndroid } from '../view/view.android';
-import { AbstractLabel, ILabel } from './label';
+import { ILabel, ILabelAndroid } from '.';
 import { TypeUtil, TypeValue } from '../../util';
 import { ViewEvents } from '../view/view-event';
+import { IViewState } from '../view';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -32,9 +33,9 @@ const MIDLEFT_GRAVITY = 16 | 3;
 const MIDCENTER_GRAVITY = 17;
 const MINIMUM_FONT_SIZE = 7;
 
-export default class LabelAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements ILabel {
-  private _ellipsizeMode: AbstractLabel['ellipsizeMode'];
-  protected _android: AbstractLabel['android'];
+export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = ILabelAndroid> extends ViewAndroid<TEvent, TNative & ILabelAndroid> implements ILabel {
+  private _ellipsizeMode: ILabel['ellipsizeMode'];
+  protected _android: ILabel['android'];
   protected _textAlignment: TextAlignment;
   protected viewNativeDefaultTextAlignment: number = null;
   private skipDefaults: boolean;
@@ -43,23 +44,15 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
   private _textDirection: TextDirection;
   private _adjustableFontSizeStep = 1;
   private fontInitial: Font = null;
-  private _textColor: AbstractLabel['textColor'] = Color.BLUE;
-  constructor(params: Partial<LabelAndroid> = {}) {
-    super();
+  private _textColor: ILabel['textColor'] = Color.BLUE;
+  constructor(params: Partial<ILabel> = {}) {
+    super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
 
     this.initWithlabelType();
     this.initAndroidProps();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
-  }
-
-  get android() {
-    return this._android;
   }
 
   toString() {
@@ -111,7 +104,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
     NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize, maximumTextSize, this.android.adjustableFontSizeStep, TypeValue.COMPLEX_UNIT_DIP);
   }
 
-  private createColorStateList(textColors: Record<string, Color> /**TODO: Change this after Button color states are done */) {
+  private createColorStateList(textColors: IViewState<Color>) {
     const colorsSets: Color[] = [];
     const statesSet: any[] = [];
     if (textColors.normal) {
@@ -145,63 +138,63 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
       size: textSize
     });
   }
-  set font(value: AbstractLabel['font']) {
+  set font(value: ILabel['font']) {
     this.fontInitial = value;
     this.nativeObject.setTypeface(value.nativeObject);
     if (value.size && typeof value.size === 'number') {
       this.nativeObject.setTextSize(TypeValue.COMPLEX_UNIT_DIP, value.size);
     }
   }
-  get multiline(): AbstractLabel['multiline'] {
+  get multiline(): ILabel['multiline'] {
     return this.nativeObject.getMaxLines() !== 1;
   }
-  set multiline(value: AbstractLabel['multiline']) {
+  set multiline(value: ILabel['multiline']) {
     this.nativeObject.setSingleLine(!value);
   }
-  get maxLines(): AbstractLabel['maxLines'] {
+  get maxLines(): ILabel['maxLines'] {
     const mMaxLines = this.nativeObject.getMaxLines();
     return mMaxLines === MAX_INT_VALUE ? 0 : mMaxLines;
   }
-  set maxLines(value: AbstractLabel['maxLines']) {
+  set maxLines(value: ILabel['maxLines']) {
     this.nativeObject.setMaxLines(value === 0 ? MAX_INT_VALUE : value);
   }
-  get ellipsizeMode(): AbstractLabel['ellipsizeMode'] {
+  get ellipsizeMode(): ILabel['ellipsizeMode'] {
     return this._ellipsizeMode;
   }
-  set ellipsizeMode(value: AbstractLabel['ellipsizeMode']) {
+  set ellipsizeMode(value: ILabel['ellipsizeMode']) {
     this._ellipsizeMode = value;
     this.nativeObject.setEllipsize(NativeEllipsizeMode[value]);
   }
-  get text(): AbstractLabel['text'] {
+  get text(): ILabel['text'] {
     return this.nativeObject.getText().toString();
   }
-  set text(value: AbstractLabel['text']) {
+  set text(value: ILabel['text']) {
     this.nativeObject.setText(String(value));
   }
-  get textAlignment(): AbstractLabel['textAlignment'] {
+  get textAlignment(): ILabel['textAlignment'] {
     return this._textAlignment;
   }
-  set textAlignment(value: AbstractLabel['textAlignment']) {
+  set textAlignment(value: ILabel['textAlignment']) {
     this._textAlignment = value;
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
   }
-  get textColor(): AbstractLabel['textColor'] {
+  get textColor(): ILabel['textColor'] {
     return this._textColor;
   }
-  set textColor(value: AbstractLabel['textColor']) {
-    if (value.nativeObject && value instanceof Color) {
+  set textColor(value: ILabel['textColor']) {
+    if (value instanceof Color && value.nativeObject) {
       this._textColor = value;
       this.nativeObject.setTextColor(value.nativeObject);
     } else if (TypeUtil.isObject(value)) {
       this._textColor = value;
-      const textColorStateListDrawable = this.createColorStateList(value as Record<string, Color>); /**TODO: Look after button typescript is finished */
+      const textColorStateListDrawable = this.createColorStateList(value as IViewState<Color>);
       this.nativeObject.setTextColor(textColorStateListDrawable);
     }
   }
-  get adjustFontSizeToFit(): AbstractLabel['adjustFontSizeToFit'] {
+  get adjustFontSizeToFit(): ILabel['adjustFontSizeToFit'] {
     return this._adjustFontSizeToFit;
   }
-  set adjustFontSizeToFit(value: AbstractLabel['adjustFontSizeToFit']) {
+  set adjustFontSizeToFit(value: ILabel['adjustFontSizeToFit']) {
     this._adjustFontSizeToFit = value;
     if (value) {
       this.setAutoSizeTextTypeUniformWithConfiguration();
@@ -209,10 +202,10 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
       NativeTextViewCompat.setAutoSizeTextTypeWithDefaults(this.nativeObject, AUTO_SIZE_TEXT_TYPE_NONE);
     }
   }
-  get minimumFontSize(): AbstractLabel['minimumFontSize'] {
+  get minimumFontSize(): ILabel['minimumFontSize'] {
     return this._minimumFontSize;
   }
-  set minimumFontSize(value: AbstractLabel['minimumFontSize']) {
+  set minimumFontSize(value: ILabel['minimumFontSize']) {
     this._minimumFontSize = value;
     if (this.adjustFontSizeToFit) {
       this.setAutoSizeTextTypeUniformWithConfiguration();
@@ -222,14 +215,14 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
   get padding() {
     return this.paddingLeft;
   }
-  set padding(value: AbstractLabel['padding']) {
+  set padding(value: ILabel['padding']) {
     const paddingNative = AndroidUnitConverter.dpToPixel(value);
     this.nativeObject.setPaddingRelative(paddingNative, paddingNative, paddingNative, paddingNative);
   }
   get paddingLeft() {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingLeft());
   }
-  set paddingLeft(value: AbstractLabel['paddingLeft']) {
+  set paddingLeft(value: ILabel['paddingLeft']) {
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
     const paddingTop = this.paddingTop;
@@ -243,7 +236,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
   get paddingRight() {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingRight());
   }
-  set paddingRight(value: AbstractLabel['paddingRight']) {
+  set paddingRight(value: ILabel['paddingRight']) {
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingTop = this.paddingTop;
@@ -257,7 +250,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
   get paddingTop() {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingTop());
   }
-  set paddingTop(value: AbstractLabel['paddingTop']) {
+  set paddingTop(value: ILabel['paddingTop']) {
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
@@ -271,7 +264,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents> extends Vi
   get paddingBottom() {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingBottom());
   }
-  set paddingBottom(value: AbstractLabel['paddingBottom']) {
+  set paddingBottom(value: ILabel['paddingBottom']) {
     const paddingLeft = this.paddingLeft;
     const paddingTop = this.paddingTop;
     const paddingRight = this.paddingRight;

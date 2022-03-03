@@ -1,15 +1,14 @@
-/* globals requireClass, array */
-const AndroidUnitConverter = require('../../../util/Android/unitconverter.js');
-const AndroidConfig = require('../../../util/Android/androidconfig');
+import View from '..';
+import { AndroidConfig, UnitConverter } from '../../../util';
 
 function DpToPixel(dp) {
-  return AndroidUnitConverter.dpToPixel(dp);
+  return UnitConverter.dpToPixel(dp);
 }
 
-function withRippleEffect(view) {
-  var _rippleEnabled = false,
-    _rippleColor = null,
-    _useForeground = false;
+export function withRippleEffect(view: View) {
+  let _rippleEnabled = false;
+  let _rippleColor = null;
+  let _useForeground = false;
 
   Object.defineProperties(view.android, {
     rippleEnabled: {
@@ -43,25 +42,25 @@ function withRippleEffect(view) {
         _rippleColor = value;
 
         if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-          var states = array([array([], 'int')]);
-          var colors = array([_rippleColor.nativeObject], 'int');
+          const states = array([array([], 'int')]);
+          const colors = array([_rippleColor.nativeObject], 'int');
 
           const NativeColorStateList = requireClass('android.content.res.ColorStateList');
           const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
-          var colorStateList = new NativeColorStateList(states, colors);
+          const colorStateList = new NativeColorStateList(states, colors);
 
-          var mask = getRippleMask(DpToPixel(view.borderRadius));
+          const mask = getRippleMask(DpToPixel(view.borderRadius));
 
           if (_useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
             /*
-                        Only supported for api level 23 and above
-                        */
-            let currentBackground = view.nativeObject.getForeground();
-            let rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+            Only supported for api level 23 and above
+            */
+            const currentBackground = view.nativeObject.getForeground();
+            const rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
             view.nativeObject.setForeground(rippleDrawableForegorund);
           } else {
-            let currentBackground = view.nativeObject.getBackground();
-            let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+            const currentBackground = view.nativeObject.getBackground();
+            const rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
             view.nativeObject.setBackground(rippleDrawableBackgorund);
           }
         }
@@ -81,14 +80,12 @@ function getRippleMask(borderRadius) {
   const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
   const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 
-  var outerRadii = [];
+  const outerRadii = [];
   outerRadii.length = 8;
   outerRadii.fill(borderRadius);
 
-  var roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
-  var shapeDrawable = new NativeShapeDrawable(roundRectShape);
+  const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
+  const shapeDrawable = new NativeShapeDrawable(roundRectShape);
 
   return shapeDrawable;
 }
-
-module.exports = RippleEffect;
