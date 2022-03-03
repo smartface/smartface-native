@@ -1,4 +1,4 @@
-import View from '../view';
+import View, { AbstractView, IView } from '../view';
 import Font from '../font';
 import TextAlignment from '../textalignment';
 import Color from '../color';
@@ -7,35 +7,106 @@ import KeyboardAppearance from '../keyboardappearance';
 import TextContentType from '../textcontenttype';
 import KeyboardType from '../keyboardtype';
 import ActionKeyType from '../actionkeytype';
-import TextView from '../textview';
+import { TextBoxEvents } from './textbox-events';
+import AutoCapitalize from './autocapitalize';
 
-declare enum TextBoxEvents {
-  ActionButtonPress = 'actionButtonPress',
-  ClearButtonPress = 'clearButtonPress',
-  EditBegins = 'editBegins',
-  EditEnds = 'editEnds',
-  TextChanged = 'textChanged'
-}
+export type AndroidProps = View['android'] & {
+  /**
+   * Set an input filter to constrain the text length to the specified number. This property works only for Android.
+   *
+   * @method maxLength
+   * @param {Number} value
+   * @android
+   * @since 2.0.10
+   */
+  maxLength?: (value: number) => void;
+};
 
-/**
- * @class UI.TextBox
- * @since 0.1
- * @extends UI.View
- * TextBox is a UI which users can edit the text.
- *
- *     @example
- *     const TextBox = require('@smartface/native/ui/textbox');
- *     var myTextBox = new TextBox({
- *         left:10, top:10, width:200, height:65,
- *         hint: "Your hint text",
- *         borderWidth: 1
- *     });
- *     myPage.layout.addChild(myTextBox);
- *
- */
+export type iOSProps = View['ios'] & {
+  /**
+   * This property adjusts font size according to view's fixed width. If you set it true,
+   * you should set minimum font size by changing the minimumFontSize property.
+   * This property works only for iOS.
+   *
+   * @property {Boolean} [adjustFontSizeToFit = false]
+   * @ios
+   * @since 0.1
+   */
+  adjustFontSizeToFit?: boolean;
+  /**
+   * Gets/sets minimum font size of TextBox.
+   * This property works only for iOS.
+   *
+   * @property {Number} [minimumFontSize = 7]
+   * @ios
+   * @since 0.1
+   */
+  minimumFontSize?: number;
+  /**
+   * Gets/sets the visibility of clear button. If enabled, clear button will be shown
+   * at right of the TextBox. This property works only for iOS only.
+   *
+   * @property {Boolean} [clearButtonEnabled = false]
+   * @ios
+   * @since 0.1
+   */
+  clearButtonEnabled?: boolean;
+  /**
+   * Gets/sets a layout to be displayed above the standard system keyboard
+   * when the textbox object became focus. This property works only for iOS only.
+   * Default is undefined.
+   *
+   * @property {UI.FlexLayout} [keyboardLayout = undefined]
+   * @ios
+   */
+  keyboardLayout?: FlexLayout | undefined;
+  /**
+   * The custom input view to display instead of system keyboard
+   * when the textbox object became focus. This property works only for iOS only.
+   * Default is undefined.
+   *
+   * @property {Object} inputView
+   * @property {Number} inputView.height
+   * @property {UI.View} inputView.view
+   * @ios
+   */
+  inputView?: {
+    height: number;
+    view: View;
+  };
 
-declare class TextBox extends View<TextBoxEvents> {
-  constructor(params?: Partial<TextBox>);
+  /**
+   * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
+   * This property works only for iOS.
+   *
+   * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
+   * @ios
+   * @since 0.1
+   */
+  keyboardAppearance?: KeyboardAppearance;
+  /**
+   * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+   * This property works only for iOS.
+   *
+   * @property {UI.iOS.TextContentType} textContentType
+   * @ios
+   * Creates a textContentType for ios.
+   *
+   *     @example
+   *     const TextContentType = require("@smartface/native/ui/ios/textcontenttype");
+   *     const System = require('@smartface/native/device/system');
+   *
+   *     if (System.OS == "iOS" && System.OSVersion >= 12){
+   *         textbox.ios.textContentType = TextContentType.ONETIMECODE;
+   *     }
+   *
+   * @since 4.1.3
+   *
+   */
+  textContentType?: TextContentType;
+};
+
+export declare interface ITextBox<TEvent extends string = TextBoxEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | TextBoxEvents, TIOS & iOSProps, TAND & AndroidProps> {
   /**
    * Gets/sets the font of the TextBox.
    * @property {UI.Font} [font = null]
@@ -59,7 +130,7 @@ declare class TextBox extends View<TextBoxEvents> {
    * @ios
    * @since 2.8
    */
-  autoCapitalize: TextBox.AutoCapitalize;
+  autoCapitalize: AutoCapitalize;
   /**
    * Gets/sets the text alignment of the TextBox.
    * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
@@ -120,109 +191,17 @@ declare class TextBox extends View<TextBoxEvents> {
    * @since 0.1
    */
   hint: string;
-  android: View['android'] & {
-    /**
-     * Gets/sets the color of the hint text.
-     *
-     * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    hintTextColor: Color;
-    /**
-     * Set an input filter to constrain the text length to the specified number. This property works only for Android.
-     *
-     * @method maxLength
-     * @param {Number} value
-     * @android
-     * @since 2.0.10
-     */
-    maxLength: number;
-  };
-  ios: View['ios'] & {
-    /**
-     * This property adjusts font size according to view's fixed width. If you set it true,
-     * you should set minimum font size by changing the minimumFontSize property.
-     * This property works only for iOS.
-     *
-     * @property {Boolean} [adjustFontSizeToFit = false]
-     * @ios
-     * @since 0.1
-     */
-    adjustFontSizeToFit: boolean;
-    /**
-     * Gets/sets minimum font size of TextBox.
-     * This property works only for iOS.
-     *
-     * @property {Number} [minimumFontSize = 7]
-     * @ios
-     * @since 0.1
-     */
-    minimumFontSize: number;
-    /**
-     * Gets/sets the visibility of clear button. If enabled, clear button will be shown
-     * at right of the TextBox. This property works only for iOS only.
-     *
-     * @property {Boolean} [clearButtonEnabled = false]
-     * @ios
-     * @since 0.1
-     */
-    clearButtonEnabled: boolean;
-    /**
-     * Gets/sets a layout to be displayed above the standard system keyboard
-     * when the textbox object became focus. This property works only for iOS only.
-     * Default is undefined.
-     *
-     * @property {UI.FlexLayout} [keyboardLayout = undefined]
-     * @ios
-     */
-    keyboardLayout: FlexLayout | undefined;
-    /**
-     * The custom input view to display instead of system keyboard
-     * when the textbox object became focus. This property works only for iOS only.
-     * Default is undefined.
-     *
-     * @property {Object} inputView
-     * @property {Number} inputView.height
-     * @property {UI.View} inputView.view
-     * @ios
-     */
-    inputView: {
-      height: number;
-      view: View;
-    };
 
-    /**
-     * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
-     * This property works only for iOS.
-     *
-     * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
-     * @ios
-     * @since 0.1
-     */
-    keyboardAppearance: KeyboardAppearance;
-    /**
-     * Use this property to give the keyboard and the system information about the expected semantic meaning for the content that users enter.
-     * This property works only for iOS.
-     *
-     * @property {UI.iOS.TextContentType} textContentType
-     * @ios
-     * Creates a textContentType for ios.
-     *
-     *     @example
-     *     const TextContentType = require("@smartface/native/ui/ios/textcontenttype");
-     *     const System = require('@smartface/native/device/system');
-     *
-     *     if (System.OS == "iOS" && System.OSVersion >= 12){
-     *         textbox.ios.textContentType = TextContentType.ONETIMECODE;
-     *     }
-     *
-     * @since 4.1.3
-     *
-     */
-    textContentType: TextContentType;
-  };
+  /**
+   * Gets/sets the color of the hint text.
+   *
+   * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  hintTextColor: Color;
+
   /**
    * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.
    *
@@ -371,9 +350,50 @@ declare class TextBox extends View<TextBoxEvents> {
   onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 }
 
-declare namespace TextBox {
-  enum AutoCapitalize {}
-  const Events: typeof TextBoxEvents & typeof TextView.Events;
-  type Events = typeof Events;
+export declare class AbstractTextBox<TEvent extends string = TextBoxEvents> extends AbstractView<TEvent> implements ITextBox<TEvent> {
+  constructor(params: Partial<ITextBox>);
+  font: Font;
+  text: string;
+  autoCapitalize: AutoCapitalize;
+  textAlignment: TextAlignment;
+  textColor: Color;
+  cursorPosition: { start: number; end: number };
+  hintTextColor: Color;
+  onEditBegins: () => void;
+  cursorColor: Color;
+  hint: string;
+  isPassword: boolean;
+  keyboardType: KeyboardType;
+  actionKeyType: ActionKeyType;
+  android: AndroidProps;
+  ios: iOSProps;
+  showKeyboard(): void;
+  hideKeyboard(): void;
+  requestFocus(): void;
+  removeFocus(): void;
+  onTextChanged: (e?: { insertedText: string; location: number }) => void;
+  onClearButtonPress: () => void;
+  onEditEnds: () => void;
+  onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 }
-export = TextBox;
+
+/**
+ * @class UI.TextBox
+ * @since 0.1
+ * @extends UI.View
+ * TextBox is a UI which users can edit the text.
+ *
+ *     @example
+ *     import TextBox from '@smartface/native/ui/textbox';
+ *     const myTextBox = new TextBox({
+ *         left: 10, top: 10, width: 200, height: 65,
+ *         hint: "Your hint text",
+ *         borderWidth: 1
+ *     });
+ *     myPage.layout.addChild(myTextBox);
+ *
+ */
+const TextBox: typeof AbstractTextBox = require(`./textbox.${Device.deviceOS.toLowerCase()}`).default;
+type TextBox = AbstractTextBox;
+
+export default TextBox;
