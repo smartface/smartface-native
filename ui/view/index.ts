@@ -7,6 +7,8 @@ import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
 import { ConstructorOf } from '../../core/constructorof';
+import { AndroidProps } from '../flexlayout';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -955,7 +957,11 @@ export enum SemanticContentAttribute {
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>> extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
+export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative = any, TMobileOS extends WithMobileOSProps = {}> extends NativeEventEmitterComponent<
+  TEvent | ExtractEventValues<ViewEvents>,
+  TNative,
+  WithMobileOSProps<Partial<IView>, Partial<ViewIOSProps> & TMobileOS['ios'], Partial<AndroidProps> & TMobileOS['android']>
+> {
   // export namespace ios {
   // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
   // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;

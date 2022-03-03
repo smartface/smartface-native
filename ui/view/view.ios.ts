@@ -1,9 +1,10 @@
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { IView, ViewBase } from '.';
+import View, { IView, ViewBase, ViewIOSProps } from '.';
 import { Invocation, Exception, YogaEnums } from '../../util';
 import { Size } from '../../primitive/size';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 const YGUnit = YogaEnums.YGUnit;
 
 declare const myLabelTitle: any;
@@ -16,8 +17,11 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = {}> extends ViewBase<TEvent> implements IView<TEvent, TNative> {
-  android = {};
+export default class ViewIOS<TEvent extends string = ViewEvents, TMobile extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<
+  TEvent,
+  any,
+  TMobile & Partial<ViewIOSProps>
+> {
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
   protected _nativeObject: any;
@@ -29,15 +33,13 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     y: 1.0
   };
 
-  protected _ios: View<TEvent, TNative>['ios'];
-
   onTouchHandler = (e: { point: Point2D }) => {
     const point = {
       x: e ? e.point.x : null,
       y: e ? e.point.y : null
     };
     this._onTouch?.(point);
-    this.emitter.emit(ViewEvents.Touch, point);
+    this.emit(ViewEvents.Touch, point);
   };
   onTouchEndedHandler = (e: { point: Point2D }) => {
     const inside = isInside(this.nativeObject.frame, e.point);
@@ -47,7 +49,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       isInside: inside
     };
     this._onTouchEnded?.(inside, event);
-    this.emitter.emit(ViewEvents.TouchEnded, event);
+    this.emit(ViewEvents.TouchEnded, event);
   };
   onTouchCancelledHandler = (e: { point: Point2D }) => {
     const point = {
@@ -55,7 +57,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       y: e && e.point ? e.point.y : null
     };
     this._onTouchCancelled?.(point);
-    this.emitter.emit(ViewEvents.TouchCancelled, point);
+    this.emit(ViewEvents.TouchCancelled, point);
   };
   onTouchMovedHandler = (e: { point: Point2D }) => {
     const inside = isInside(this.nativeObject.frame, e.point);
@@ -65,7 +67,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       isInside: inside
     };
     this._onTouchMoved?.(inside, event);
-    this.emitter.emit(ViewEvents.TouchMoved, event);
+    this.emit(ViewEvents.TouchMoved, event);
   };
   private gradientColor: any;
   private _parent: View;
@@ -76,8 +78,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     BOTTOM_RIGHT: 1 << 3
   } as const;
 
-  constructor(params?: Partial<View>) {
-    super();
+  constructor(params?: TMobile) {
+    super(params);
 
     // EventEmitterCreator(this, this.EventFunctions);
     if (!this.nativeObject) {
@@ -110,7 +112,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
     const self = this;
 
-    this._ios = {
+    this.addIOSProps({
       get shadowOffset() {
         return self.shadowOffset;
       },
@@ -164,11 +166,11 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       performWithoutAnimation(functionWithoutAnimation: Function) {
         __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
       }
-    } as View<TEvent, TNative>['ios'];
+    } as View<TEvent, TMobile>['ios']);
 
-    const {android:androidParams, ios, ...rest} = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this, rest);
+    // const {android:androidParams, ios, ...rest} = params;
+    // Object.assign(this._ios, ios);
+    // Object.assign(this, rest);
   }
 
   get uniqueId() {
@@ -213,10 +215,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       value: value
     });
     Invocation.invokeInstanceMethod(this.nativeObject, 'setIsAccessibilityElement:', [isAccessibility]);
-  }
-
-  get ios() {
-    return this._ios;
   }
 
   // ios

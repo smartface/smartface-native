@@ -15,7 +15,8 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
 import { EventEmitterWrapper } from '../../core/eventemitter';
-import View, { IView, ViewBase } from '.';
+import View, { IView, ViewAndroidProps, ViewBase } from '.';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -78,7 +79,7 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }> extends ViewBase<TEvent> implements IView<TEvent, {}, TNative> {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TMobileProps extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<TEvent, TNative, TMobileProps & ViewAndroidProps> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -93,8 +94,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
     STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
-  protected _ios: {[key: string]: any} = {};
-  readonly ios = {} as const;
   protected uniqueId: string;
   protected _maskedBorders = [];
   protected _masksToBounds: boolean = true;
@@ -119,11 +118,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private _rippleColor = null;
   private _useForeground = false;
   protected yogaNode: any;
-  protected _android;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
   constructor(params: Partial<IView> = {}) {
-    super();
+    super(params);
     // params = params || {};
     if (!this._nativeObject) {
       this._nativeObject = new NativeView(activity);
@@ -151,7 +149,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     const android = {
       updateRippleEffectIfNeeded: () => {
-        this._rippleEnabled && this._rippleColor && (this._android.rippleColor = this._rippleColor);
+        this._rippleEnabled && this._rippleColor && (this.android.rippleColor = this._rippleColor);
       },
       rippleColor: null,
       get zIndex() {
@@ -173,12 +171,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
         self.overScrollMode = mode;
       }
     };
-
-    this._android = android;
-
-    const { android: androidParams, ios, ...rest } = params;
-    Object.assign(this._android, androidParams);
-    Object.assign(this, rest);
   }
 
   get parent() {
@@ -250,13 +242,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
     }
   };
-
-  get android() {
-    return this._android;
-  }
-  get nativeObject() {
-    return this._nativeObject;
-  }
 
   // android
   get zIndex() {
@@ -358,7 +343,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   set borderRadius(value) {
     this._borderRadius = value;
     this._resetBackground();
-    this._android.updateRippleEffectIfNeeded && this._android.updateRippleEffectIfNeeded();
+    this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
   }
 
   get maskedBorders() {
@@ -367,7 +352,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   set maskedBorders(value) {
     this._maskedBorders = value;
     this._resetBackground();
-    this._android.updateRippleEffectIfNeeded && this._android.updateRippleEffectIfNeeded();
+    this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
   }
 
   get masksToBounds() {

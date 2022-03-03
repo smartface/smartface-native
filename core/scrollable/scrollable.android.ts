@@ -9,7 +9,7 @@ import { copyObjectPropertiesWithDescriptors } from '../../util';
 const NativeRecyclerView = requireClass('androidx.recyclerview.widget.RecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
 
-export default class ScrollableAndroid<TNative extends Record<string, any> = AndroidParams> extends NativeComponent<any, {}, TNative & AndroidParams> implements IScrollable {
+export default class ScrollableAndroid<TNative extends Record<string, any> = AndroidParams> implements IScrollable {
   protected getAndroidProps(): TNative & AndroidParams /* TODO: causes Error */ {
     const self = this;
     return {
