@@ -31,6 +31,7 @@ declare global {
   ): void;
 
   function requireClass(className: string): any;
+  function defineClass(className: string, opts?: any): any;
 
   interface ErrorType {
     message: string;

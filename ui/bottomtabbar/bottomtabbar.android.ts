@@ -1,9 +1,9 @@
-import { AbstractBottomTabBar } from '.';
 import NativeComponent from '../../core/native-component';
 import { AndroidConfig } from '../../util';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
-import BottomTabBar from '.';
+import BottomTabBar, { IBottomTabBar } from '.';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
@@ -11,7 +11,7 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
-export default class BottomTabBarAndroid extends NativeComponent implements AbstractBottomTabBar {
+export default class BottomTabBarAndroid extends NativeComponent implements IBottomTabBar  {
   private _itemColors: { normal: Color; selected: Color };
   private _backgroundColor = Color.WHITE;
   private _items: TabBarItem[] = [];

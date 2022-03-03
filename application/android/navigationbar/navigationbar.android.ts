@@ -1,8 +1,7 @@
-/* globals requireClass */
-const NativeBuild = requireClass('android.os.Build');
+import Color from '../../../ui/color';
+import { AndroidConfig } from '../../../util';
 
-import Color from 'sf-core/ui/color';
-import { activity } from 'sf-core/util/Android/androidconfig';
+const NativeBuild = requireClass('android.os.Build');
 
 export enum NavigationBarStyle {
   DARKCONTENT,
@@ -20,8 +19,8 @@ export default class NavigationBar {
   static set style(value: NavigationBarStyle) {
     NavigationBar._style = value;
     if (NativeBuild.VERSION.SDK_INT >= 26) {
-      var window = activity.getWindow();
-      var flags = window.getDecorView().getSystemUiVisibility();
+      const window = AndroidConfig.activity.getWindow();
+      let flags = window.getDecorView().getSystemUiVisibility();
       // 16 = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
       NavigationBar._style === NavigationBarStyle.DARKCONTENT ? (flags |= 16) : (flags &= ~16);
       window.getDecorView().setSystemUiVisibility(flags);
@@ -33,8 +32,7 @@ export default class NavigationBar {
   static set color(value: Color) {
     if (NativeBuild.VERSION.SDK_INT >= 21) {
       NavigationBar._color = value;
-      var window = activity.getWindow();
-      // TODO: nativeObject should be inside of color
+      const window = AndroidConfig.activity.getWindow();
       window.setNavigationBarColor(NavigationBar._color.nativeObject);
     }
   }
