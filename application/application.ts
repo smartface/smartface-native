@@ -6,6 +6,7 @@ import StatusBar from './statusbar/statusbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar.android';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
+import BottomTabBar from '../ui/bottomtabbar';
 
 declare enum Events {
   /**
@@ -245,6 +246,7 @@ declare enum KeyboardMode {
  * A set of collection for application based properties and methods.
  */
 export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
+  static currentPage: Page;
   on(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   once(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   off(eventName: ApplicationEvents, callback?: (...args: any) => void): void;
@@ -1118,4 +1120,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @since 4.3.6
    */
   static isVoiceOverEnabled: Boolean;
+  static currentPage: Page;
+  static registOnItemSelectedListener(): void;
+  static tabBar?: BottomTabBar;
 }

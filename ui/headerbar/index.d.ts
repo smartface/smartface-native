@@ -3,7 +3,7 @@ import Color from '../color';
 import Font from '../font';
 import View from '../view';
 import HeaderBarItem from '../headerbaritem';
-import Page from '../page';
+import Page, { AbstractPage } from '../page';
 import Image from '../image';
 
 /**
@@ -304,8 +304,8 @@ type HeaderBar = {
      * This property will work only for Android.
      *
      *     @example
-     *     const Page = require('@smartface/native/ui/page');
-     *     var myPage = new Page();
+     *     import Page from '@smartface/native/ui/page';
+     *     const myPage = new Page();
      *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
      *
      * @property {String} subtitle
@@ -313,6 +313,20 @@ type HeaderBar = {
      * @since 0.1
      */
     subtitle?: string;
+    /**
+     * Gets/sets subtitle color of the header bar. If not set subtitle will not show.
+     * This property will work only for Android.
+     *
+     *     @example
+     *     import Page from '@smartface/native/ui/page';
+     *     const myPage = new Page();
+     *     myPage.headerBar.android.subtitleColor = Color.create('#00A1F1');
+     *
+     * @property {Color} subtitleColor
+     * @android
+     * @since 0.1
+     */
+    subtitleColor?: Color;
 
     /**
      * Gets/sets elevation of the header bar.
@@ -336,7 +350,7 @@ type HeaderBar = {
      * @since 4.3.6
      * @see https://material.io/components/app-bars-top#specs
      */
-    contentInsetStartWithNavigation?: Number;
+    contentInsetStartWithNavigation?: number;
 
     /**
      * Gets/Sets the padding space on the all sides of a headerbar.
@@ -350,7 +364,7 @@ type HeaderBar = {
      * @android
      * @since 4.3.6
      */
-    padding?: { top?: Number; left?: Number; right?: Number; bottom?: Number };
+    padding?: { top?: number; left?: number; right?: number; bottom?: number };
   }>;
   ios: Partial<{
     /**
@@ -415,7 +429,7 @@ type HeaderBar = {
      * @ios
      * @since 0.1
      */
-    largeTitleDisplayMode?: Page.iOS.LargeTitleDisplayMode;
+    largeTitleDisplayMode?: typeof AbstractPage.iOS.LargeTitleDisplayMode;
 
     /**
      * Used to add a different Image in place of iOS default back action on NavigationController

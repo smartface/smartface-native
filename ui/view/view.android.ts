@@ -93,6 +93,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
     STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
+  protected _ios: {[key: string]: any} = {};
   readonly ios = {} as const;
   protected uniqueId: string;
   protected _maskedBorders = [];
@@ -108,12 +109,11 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _borderColor: Color;
   protected _borderWidth: number;
   protected _borderRadius: number;
-  protected _backgroundColor: Color = Color.TRANSPARENT;
+  protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
   private _overScrollMode: number = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
   private __isRecyclerView: any;
-  private nativeInner: any;
   private _touchEnabled: boolean = false;
   private _rippleEnabled = false;
   private _rippleColor = null;
@@ -122,7 +122,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _android;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
-  constructor(params?: IView) {
+  constructor(params: Partial<IView> = {}) {
     super();
     // params = params || {};
     if (!this._nativeObject) {
@@ -137,8 +137,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     }
 
     this._nativeObject.setId(NativeView.generateViewId());
-
-    Object.assign(this, params);
 
     // // Assign parameters given in constructor
     // if (params) {
@@ -177,6 +175,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     };
 
     this._android = android;
+
+    const { android: androidParams, ios, ...rest } = params;
+    Object.assign(this._android, androidParams);
+    Object.assign(this, rest);
   }
 
   get parent() {
@@ -188,6 +190,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
   private setTouchHandlers() {
     if (this.didSetTouchHandler) return;
+    //@ts-ignore TODO: Check nativeInner and refurbish the usage
     const touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);
@@ -287,10 +290,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     this._overScrollMode = mode;
   }
 
-  get backgroundColor() {
+  get backgroundColor(): IView['backgroundColor'] {
     return this._backgroundColor;
   }
-  set backgroundColor(color: Color) {
+  set backgroundColor(color: IView['backgroundColor']) {
     this._backgroundColor = color;
     this._resetBackground();
   }
