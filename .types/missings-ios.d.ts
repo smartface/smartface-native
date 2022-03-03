@@ -628,7 +628,32 @@ declare class __SF_MDCMultilineTextField extends __SF_UITextField {
 declare class __SF_MDCTextField extends __SF_UITextField {}
 
 declare class __SF_MDCTextInputControllerUnderline {
+  constructor(nativeObject: any);
   textInput: any;
+  expandsOnOverflow?: boolean;
+  minimumLines?: number;
+  characterCountMax?: number;
+  trailingUnderlineLabelTextColor?: __SF_UIColor;
+  textInputClearButtonTintColor?: __SF_UIColor | any;
+  leadingUnderlineLabelFont?: __SF_UIFont;
+  trailingUnderlineLabelFont?: __SF_UIFont | any;
+  inlinePlaceholderFont?: __SF_UIFont | any;
+  textInputFont?: __SF_UIFont | any;
+  floatingPlaceholderActiveColor?: __SF_UIColor;
+  inlinePlaceholderColor?: __SF_UIColor;
+  floatingPlaceholderNormalColor?: __SF_UIColor;
+  placeholderText?: string;
+  leadingViewTrailingPaddingConstantJS?: number;
+  trailingViewTrailingPaddingConstantJS?: number;
+  normalColor?: __SF_UIColor;
+  activeColor?: __SF_UIColor;
+  underlineHeightNormal?: number;
+  underlineHeightActive?: number;
+  errorColor?: __SF_UIColor;
+  leadingViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+  trailingViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+  setErrorTextErrorAccessibilityValue(errorMessage: string, replaceErrorMessage: string): void;
+  setErrorTextNil(): void;
 }
 
 declare class __SF_UINavigationBarAppearance {
