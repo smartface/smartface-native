@@ -157,7 +157,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         }
       },
       onRequestPermissionsResult: function (requestCode, permission, grantResult) {
-        let permissionResults = {};
+        const permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = grantResult === 0;
         ApplicationAndroid.android.onRequestPermissionsResult && ApplicationAndroid.android.onRequestPermissionsResult(permissionResults);
@@ -165,7 +165,7 @@ class ApplicationWrapper extends EventEmitter<string> {
       onActivityResult: function (requestCode, resultCode, data) {
         //TODO: check if this is correct
         if (requestCode === RequestCodes.Location.CHECK_SETTINGS_CODE) {
-          Location.__onActivityResult && Location.__onActivityResult(resultCode);
+          Location.__onActivityResult?.(resultCode);
         }
       },
       dispatchTouchEvent: function (actionType, x, y) {
@@ -222,6 +222,7 @@ class ApplicationWrapper extends EventEmitter<string> {
       _chooserTitle = chooserTitle;
       _action = action;
     } else {
+      //@ts-ignore TODO: Fix arguments down level iteration
       const [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
       _uriScheme = uriScheme;
       _data = data;
@@ -651,7 +652,7 @@ function configureIntent(uriScheme) {
 }
 
 function checkIsAppShortcut(e) {
-  return e && e.data && e.data.hasOwnProperty('AppShortcutType');
+  return e?.data?.hasOwnProperty('AppShortcutType');
 }
 
 const Application = new ApplicationWrapper();

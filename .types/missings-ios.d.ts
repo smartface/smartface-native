@@ -21,12 +21,15 @@ declare class __SF_UIColor extends __SF_NSOBject {
 
 declare namespace SF {
   export function requireClass(name: string): any;
+  export function dispatch_async(queue: any, action: () => void);
+  export function dispatch_get_main_queue(): any;
 }
 
 declare class __SF_UIImage extends __SF_NSOBject {
   constructor(fileName: string);
   static createName(fileName: string): __SF_UIImage;
   static createNSData(obj: any);
+  static getInstance(): any;
   imageWithRenderingMode(mode: number): __SF_UIImage;
   getInstance(): __SF_UIImage;
   size: { width: number; height: number };
@@ -109,7 +112,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   alpha: number;
   backgroundColor: __SF_UIColor;
   addFrameObserver(): void;
-  frameObserveHandler(handler: (e: { frame: __SF_NSRect }) => void): void;
+  frameObserveHandler(e: { frame: __SF_NSRect }): void;
   removeFrameObserver(): void;
   tag: string;
   scale(coordinates: { x: number; y: number }): void;
@@ -277,9 +280,11 @@ declare class __SF_UICollectionViewCell extends __SF_UICollectionReusableView {
   uuid: string;
   reuseIdentifier: any;
   row: any;
+  expandSwipeAnimated(direction: any, animated?: boolean);
 }
 
 declare class __SF_UIBarButtonItem extends __SF_UIView {
+  static createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   createWithSystemItem(systemItem: any): __SF_UIBarButtonItem;
   target: __SF_UIBarButtonItem;
   containerView: any;
@@ -313,6 +318,7 @@ declare class __SF_Label {
 
 declare interface iOSSharedApplication {
   statusBarFrame: __SF_NSRect;
+  statusBarOrientation: number;
   sf_statusBarStyle: any;
   sf_statusBarHidden: boolean;
   userInterfaceLayoutDirection: number;
@@ -474,7 +480,7 @@ declare class __SF_UITabBarAppearance extends __SF_UIView {
   configureWithOpaqueBackground(): void;
 }
 
-declare class __SF_UIButton {
+declare class __SF_UIButton extends __SF_UIView {
   setEnabled: boolean;
   textAlignmentNumber: number;
   contentVerticalAlignment: number;
@@ -483,6 +489,7 @@ declare class __SF_UIButton {
   setTitleColor(textColor: __SF_UIColor, buttonState: number /*TODO: Use ButtonState enum when button is converted*/): void;
   removeFrameObserver(): void;
   addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */): void;
+  setTitle(title: string, state: number);
 }
 
 declare class __SF_UIDatePicker {
@@ -511,6 +518,7 @@ declare class __SF_UIDatePicker {
 }
 
 declare class __SF_MFMailComposeViewController {
+  static canSendMail(): boolean;
   constructor();
   canSendMail(): boolean;
   setCcRecipients(cc: any): void;
@@ -658,7 +666,7 @@ declare class __SF_SMFNavigationControllerDelegate {
   navigationControllerDidShowViewControllerAnimated?: (navigationController: __SF_UINavigationController, viewController: __SF_UIViewController, animated: boolean) => void;
 }
 
-declare class __SF_UIViewController {
+declare class __SF_UIViewController extends __SF_NSOBject {
   automaticallyAdjustsScrollViewInsets: boolean;
   onViewSafeAreaInsetsDidChange: (e: any) => void;
   presentViewController(controllerToPresent: __SF_UIViewController, completionBlock: () => void, animated: boolean): void;
@@ -735,6 +743,7 @@ declare class __SF_UIDevice {
   static vibrate(): void;
   static takeSnapShot(): void;
   static forceTouchAvaliable(): boolean;
+  static changeOrientation(orientation: number): void;
 }
 
 declare class __SF_UIAccessibility {
@@ -1248,6 +1257,8 @@ declare class __SF_KeychainPasswordItem {
   deleteItemWithBlock(callback: (e: any) => void): void;
   savePasswordWithBlock(value: any, callback: (e: any) => void): void;
 }
+
+declare class __SF_UIApplicationWillResignActiveNotification {}
 
 declare const __SF_UIScrollViewDecelerationRateNormal: number;
 declare const __SF_UIScrollViewDecelerationRateFast: number;
