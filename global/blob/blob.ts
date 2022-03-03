@@ -66,28 +66,15 @@ interface IBlob extends INativeComponent {
   toString: () => string;
 }
 
-export class BlobBase implements IBlob {
+export declare class BlobBase implements IBlob {
+  constructor(params?: Partial<BlobBase>, options?: Record<string, any>);
   nativeObject: any;
-  get type(): string {
-    throw new Error('Method not implemented.');
-    return null;
-  }
-  get size(): number {
-    throw new Error('Method not implemented.');
-    return null;
-  }
-  slice(start: number, end: number): BlobBase {
-    throw new Error('Method not implemented.');
-  }
-  toBase64(): string {
-    throw new Error('Method not implemented.');
-  }
-  toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void {
-    throw new Error('Method not implemented.');
-  }
-  toString(): string {
-    throw new Error('Method not implemented.');
-  }
+  get type(): string;
+  get size(): number;
+  slice(start: number, end: number): BlobBase;
+  toBase64(): string;
+  toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void;
+  toString(): string;
   /**
    * Creates a blob object from given a base64String.
    *

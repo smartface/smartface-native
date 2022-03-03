@@ -2,6 +2,7 @@ import TabBarItem from '../tabbaritem';
 import Color from '../color';
 import Page from '../page';
 import OverScrollMode from '../android/overscrollmode';
+import { PageEvents } from '../page/page-events';
 
 declare enum TabbarControllerEvents {
   /**
@@ -278,7 +279,7 @@ declare class TabBarController extends Page {
 }
 
 declare namespace TabBarController {
-  const Events: typeof TabbarControllerEvents & typeof Page.Events;
+  const Events: typeof TabbarControllerEvents & typeof PageEvents;
   type Events = typeof Events;
   namespace iOS {
     enum BarTextTransform {

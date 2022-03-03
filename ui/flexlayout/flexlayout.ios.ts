@@ -1,17 +1,15 @@
 import IView from '../view';
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
-import IFlexLayout from './flexlayout';
+import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 
-// const YogaEnums = require('../../util').YogaEnums;
-
-class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents> extends ViewGroupIOS<TEvent | FlexLayoutEvents> implements IFlexLayout {
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative> implements IFlexLayout {
+  readonly android = {};
   constructor(params: Partial<IFlexLayout> = {}) {
     super({});
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    const { android, ...restParams } = params;
+    Object.assign(this, restParams);
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;

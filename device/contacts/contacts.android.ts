@@ -123,25 +123,25 @@ function getContactPhoneNumber(contactUri) {
   return number;
 }
 
-function addContactStructureName(contact: Contact, contentProviderOperation) {
+function addContactStructureName(contact: ContactAndroid, contentProviderOperation) {
   const { namePrefix = '', firstName = '', lastName = '', middleName = '', nameSuffix = '' } = contact;
   const cpo = SFContactUtil.addContactStructureName(uri, namePrefix, firstName, lastName, middleName, nameSuffix);
   contentProviderOperation.add(cpo);
 }
 
-function addContactWork(contact: Contact, contentProviderOperation) {
+function addContactWork(contact: ContactAndroid, contentProviderOperation) {
   const { title = '', organization = '', department = '' } = contact;
   const cpo = SFContactUtil.addContactWork(uri, title, organization, department);
   contentProviderOperation.add(cpo);
 }
 
-function addContactNickname(contact: Contact, contentProviderOperation) {
+function addContactNickname(contact: ContactAndroid, contentProviderOperation) {
   const { nickname = '' } = contact;
   const cpo = SFContactUtil.addContactNickname(uri, nickname);
   contentProviderOperation.add(cpo);
 }
 
-function addContactPhoto(contact: Contact, contentProviderOperation) {
+function addContactPhoto(contact: ContactAndroid, contentProviderOperation) {
   const { photo } = contact;
   if (photo) {
     const cpo = SFContactUtil.addContactPhoto(uri, photo.nativeObject.toByteArray());
@@ -210,8 +210,8 @@ function addContactAddress(address, contentProviderOperation) {
   }
 }
 
-export class Contact extends ContactBase {
-  constructor(params?: Partial<Contact>) {
+export class ContactAndroid extends ContactBase {
+  constructor(params?: Partial<ContactAndroid>) {
     super();
     for (const param in params) {
       if (param === 'ios' || param === 'android') {
@@ -230,11 +230,11 @@ class ContactsAndroid extends ContactsBase {
   private contentProviderOperation;
   private _onSuccess;
   private _onFailure;
-  public static readonly Contact = Contact;
+  public static readonly Contact = ContactAndroid;
   constructor() {
     super();
   }
-  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: (error) => void }) {
+  add(params: { contact: ContactAndroid; onSuccess?: () => void; onFailure?: (error) => void }) {
     const { contact, onSuccess, onFailure } = params;
     this._onSuccess = onSuccess;
     this._onFailure = onFailure;
@@ -255,7 +255,7 @@ class ContactsAndroid extends ContactsBase {
       uri = NativeContactsContract.Data.CONTENT_URI;
 
       let phoneNumbers, urlAddresses, emailAddresses, addresses;
-      if (contact instanceof Contact) {
+      if (contact instanceof ContactAndroid) {
         phoneNumbers = contact.phoneNumbers;
         urlAddresses = contact.urlAddresses;
         emailAddresses = contact.emailAddresses;
@@ -429,5 +429,4 @@ class ContactsAndroid extends ContactsBase {
     }
   }
 }
-
-export default ContactsAndroid;
+export default new ContactsAndroid();

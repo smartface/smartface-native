@@ -37,7 +37,8 @@ enum ImageCacheType {
     * @readonly
     * @since 3.0.3
     */
-  MEMORY
+  MEMORY,
+  NETWORK
 };
 
 export default ImageCacheType;
