@@ -1,16 +1,14 @@
-import { EventEmitter } from "./eventemitter";
-import { INativeComponent } from "./inative-component";
+import { EventEmitter } from './eventemitter';
+import { INativeComponent } from './inative-component';
 
+export default class NativeEventEmitterComponent<TEvent extends string, TNative = any> extends EventEmitter<TEvent> implements INativeComponent<TNative> {
+  protected _nativeObject: TNative;
 
-export default class NativeEventEmitterComponent<TEvent extends string> extends EventEmitter<TEvent> implements INativeComponent<TEvent> {
-  protected _nativeObject: any;
-
-  get nativeObject(): any {
+  get nativeObject(): TNative {
     return this._nativeObject;
   }
 
-  set nativeObject(value: any) {
+  set nativeObject(value: TNative) {
     this._nativeObject = value;
   }
 }
-
