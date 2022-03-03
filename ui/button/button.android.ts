@@ -1,11 +1,12 @@
 import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
-import { IButton, IButtonStates } from '.';
+import { IButton } from '.';
 import { ButtonEvents } from './button-events';
 import TextAlignment from '../textalignment';
 import { AndroidConfig } from '../../util';
 import LabelAndroid from '../label/label.android';
 import Image from '../image';
+import { IViewState } from '../view';
 
 const NativeButton = requireClass('android.widget.Button');
 const NativeView = requireClass('android.view.View');
@@ -40,7 +41,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
   private __didSetOnClickListener: boolean;
   private __didSetOnLongClickListener: boolean;
   constructor(params: Partial<IButton> = {}) {
-    super();
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeButton(AndroidConfig.activity);
     }
@@ -59,10 +60,6 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
 
     this.setOnClickListener();
     this.setOnLongClickListener();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   static Events = { ...ViewAndroid.Events, ...ButtonEvents };
   get backgroundColor(): IButton['backgroundColor'] {
@@ -317,6 +314,6 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
 /**
  * TODO: We might need to move this to a better place
  */
-function isStateObject<Property>(value: Property | IButtonStates<Property>): value is IButtonStates<Property> {
-  return (value as IButtonStates<Property>).normal !== undefined;
+function isStateObject<Property>(value: Property | IViewState<Property>): value is IViewState<Property> {
+  return (value as IViewState<Property>).normal !== undefined;
 }

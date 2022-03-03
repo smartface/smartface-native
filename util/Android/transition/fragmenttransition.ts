@@ -13,10 +13,10 @@ const API_LEVEL = System.android.apiLevel;
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
 
-var pageAnimationsCache = {},
-  pagePopUpAnimationsCache;
+const pageAnimationsCache: any = {};
+let pagePopUpAnimationsCache: any = {};
 
-var _addedFragmentsInContainer = {};
+let _addedFragmentsInContainer: any = {};
 
 namespace FragmentTransaction {
   export enum AnimationType {
@@ -31,13 +31,13 @@ namespace FragmentTransaction {
   export function push(params: any) {
     FragmentTransaction.checkBottomTabBarVisible(params.page);
 
-    var tag = params.page.pageID;
+    const tag = params.page.pageID;
     if (!tag) {
       throw new Error("This page doesn't have an unique ID!");
     }
 
-    let currentPage = (Application as any).currentPage;
-    if (currentPage && currentPage.pageID === tag) {
+    const currentPage = (Application as any).currentPage; //TODO: Check after application and page developments are complete
+    if (currentPage?.pageID === tag) {
       return;
     }
 
@@ -53,7 +53,7 @@ namespace FragmentTransaction {
       FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     } else {
       FragmentTransaction.popUpTransition(page, params.animated);
-      var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+      const isPresentLayoutFocused = page.layout.nativeObject.isFocused();
       currentPage.layout.nativeObject.setFocusableInTouchMode(false);
       !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
     }
@@ -69,8 +69,8 @@ namespace FragmentTransaction {
 
   export function replace(params: any) {
     // don't remove these variables. If they are global values, an exception occurs.
-    var fragmentManager = activity.getSupportFragmentManager();
-    var fragmentTransaction = fragmentManager.beginTransaction();
+    const fragmentManager = activity.getSupportFragmentManager();
+    const fragmentTransaction = fragmentManager.beginTransaction();
     if (!(params.animated === false)) {
       // check animation type
       let animationType = DirectionBasedConverter.getAnimationType(params.animationType);
@@ -105,9 +105,9 @@ namespace FragmentTransaction {
 
   export function revealTransition(transitionViews, page, animated = true) {
     FragmentTransaction.checkBottomTabBarVisible(page);
-    var rootViewId = NativeR.id.page_container;
-    var fragmentManager = activity.getSupportFragmentManager();
-    var fragmentTransaction = fragmentManager.beginTransaction();
+    const rootViewId = NativeR.id.page_container;
+    const fragmentManager = activity.getSupportFragmentManager();
+    const fragmentTransaction = fragmentManager.beginTransaction();
 
     if (API_LEVEL >= 21) {
       FragmentTransaction.addSharedElement({
@@ -126,9 +126,9 @@ namespace FragmentTransaction {
 
   export function popUpTransition(page, animation) {
     FragmentTransaction.checkBottomTabBarVisible(page);
-    var rootViewId = NativeR.id.page_container;
-    var fragmentManager = activity.getSupportFragmentManager();
-    var fragmentTransaction = fragmentManager.beginTransaction();
+    const rootViewId = NativeR.id.page_container;
+    const fragmentManager = activity.getSupportFragmentManager();
+    const fragmentTransaction = fragmentManager.beginTransaction();
 
     !pagePopUpAnimationsCache && FragmentTransaction.setPopUpAnimationsCache();
 
@@ -141,15 +141,15 @@ namespace FragmentTransaction {
   }
 
   export function dismissTransition(page, animation) {
-    let fragmentManager = activity.getSupportFragmentManager();
+    const fragmentManager = activity.getSupportFragmentManager();
     !pagePopUpAnimationsCache && FragmentTransaction.setPopUpAnimationsCache();
 
     let popupBackPage;
     if (page.parentController) {
-      let popupBackNavigator = page.parentController.popupBackNavigator;
+      const popupBackNavigator = page.parentController.popupBackNavigator;
       if (popupBackNavigator) {
         popupBackNavigator.__isActive = true;
-        let currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
+        const currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
         page.parentController.popUpBackPage = currentPageFromController;
       }
 
@@ -160,7 +160,7 @@ namespace FragmentTransaction {
         return;
       }
     }
-    var fragmentTransaction = fragmentManager.beginTransaction();
+    const fragmentTransaction = fragmentManager.beginTransaction();
 
     if (!(animation === false)) fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
 
@@ -188,20 +188,20 @@ namespace FragmentTransaction {
   }
 
   export function addSharedElement(params) {
-    let { animated, page, fragmentTransaction, transitionViews } = params;
+    const { animated, page, fragmentTransaction, transitionViews } = params;
     if (animated) {
-      var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-      var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+      const inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+      const inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
       page.nativeObject.setSharedElementEnterTransition(inflateTransition);
 
       const NativeAnimationUtils = requireClass('io.smartface.android.utils.AnimationUtil');
-      let sharedElementEnterTransition = page.nativeObject.getSharedElementEnterTransition();
+      const sharedElementEnterTransition = page.nativeObject.getSharedElementEnterTransition();
       if (page.android.transitionViewsCallback) NativeAnimationUtils.setSharedElementTransitionCallback(page.android.transitionViewsCallback, sharedElementEnterTransition);
     } else page.nativeObject.setSharedElementEnterTransition(null);
 
-    var lenght = transitionViews.length;
-    for (var i = 0; i < lenght; i++) {
-      var view = transitionViews[i];
+    const lenght = transitionViews.length;
+    for (let i = 0; i < lenght; i++) {
+      const view = transitionViews[i];
       fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
     }
   }
@@ -209,14 +209,14 @@ namespace FragmentTransaction {
   export function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache['LEFTTORIGHT']) {
       pageAnimationsCache['LEFTTORIGHT'] = {};
-      var packageName = activity.getPackageName();
-      var resources = AndroidConfig.activityResources;
+      const packageName = activity.getPackageName();
+      const resources = AndroidConfig.activityResources;
       pageAnimationsCache['LEFTTORIGHT'].rightEnter = resources.getIdentifier('slide_right_enter', 'anim', packageName);
       pageAnimationsCache['LEFTTORIGHT'].rightExit = resources.getIdentifier('slide_right_exit', 'anim', packageName);
     }
 
-    var rightExit = pageAnimationsCache['LEFTTORIGHT'].rightExit;
-    var rightEnter = pageAnimationsCache['LEFTTORIGHT'].rightEnter;
+    const rightExit = pageAnimationsCache['LEFTTORIGHT'].rightExit;
+    const rightEnter = pageAnimationsCache['LEFTTORIGHT'].rightEnter;
 
     if (rightEnter !== 0 && rightExit !== 0) {
       fragmentTransaction.setCustomAnimations(rightEnter, rightExit);
@@ -225,18 +225,18 @@ namespace FragmentTransaction {
   export function rightToLeftTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache['RIGHTTOLEFT']) {
       pageAnimationsCache['RIGHTTOLEFT'] = {};
-      var packageName = activity.getPackageName();
-      var resources = AndroidConfig.activityResources;
+      const packageName = activity.getPackageName();
+      const resources = AndroidConfig.activityResources;
       pageAnimationsCache['RIGHTTOLEFT'].leftEnter = resources.getIdentifier('slide_left_enter', 'anim', packageName);
       pageAnimationsCache['RIGHTTOLEFT'].leftExit = resources.getIdentifier('slide_left_exit', 'anim', packageName);
       pageAnimationsCache['RIGHTTOLEFT'].rightEnter = resources.getIdentifier('slide_right_enter', 'anim', packageName);
       pageAnimationsCache['RIGHTTOLEFT'].rightExit = resources.getIdentifier('slide_right_exit', 'anim', packageName);
     }
 
-    var leftEnter = pageAnimationsCache['RIGHTTOLEFT'].leftEnter;
-    var leftExit = pageAnimationsCache['RIGHTTOLEFT'].leftExit;
-    var rightExit = pageAnimationsCache['RIGHTTOLEFT'].rightExit;
-    var rightEnter = pageAnimationsCache['RIGHTTOLEFT'].rightEnter;
+    const leftEnter = pageAnimationsCache['RIGHTTOLEFT'].leftEnter;
+    const leftExit = pageAnimationsCache['RIGHTTOLEFT'].leftExit;
+    const rightExit = pageAnimationsCache['RIGHTTOLEFT'].rightExit;
+    const rightEnter = pageAnimationsCache['RIGHTTOLEFT'].rightEnter;
 
     if (leftEnter !== 0 && leftExit !== 0) {
       fragmentTransaction.setCustomAnimations(leftEnter, leftExit, rightEnter, rightExit);
@@ -244,8 +244,8 @@ namespace FragmentTransaction {
   }
 
   export function setPopUpAnimationsCache() {
-    var packageName = activity.getPackageName();
-    var resources = AndroidConfig.activityResources;
+    const packageName = activity.getPackageName();
+    const resources = AndroidConfig.activityResources;
     pagePopUpAnimationsCache = {};
     pagePopUpAnimationsCache.enter = resources.getIdentifier('onshow_animation', 'anim', packageName);
     pagePopUpAnimationsCache.exit = resources.getIdentifier('ondismiss_animation', 'anim', packageName);

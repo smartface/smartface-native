@@ -1,30 +1,11 @@
 import Image from '../../ui/image';
 
-export const OrientationTypeIOS = {
-  /**
-   * @property {String} FACEUP
-   * @static
-   * @ios
-   * @readonly
-   * @since 0.1
-   */
-  FACEUP: 'faceup',
-  /**
-   * @property {String} FACEDOWN
-   * @static
-   * @ios
-   * @readonly
-   * @since 0.1
-   */
-  FACEDOWN: 'facedown'
-} as const;
-
 /**
  * @enum {String} Device.Screen.OrientationType
  * @static
  * @since 0.1
  */
-export const OrientationType = {
+export enum OrientationType {
   /**
    * @property {String} PORTRAIT
    * @static
@@ -33,7 +14,7 @@ export const OrientationType = {
    * @readonly
    * @since 0.1
    */
-  PORTRAIT: 'portrait',
+  PORTRAIT = 'portrait',
   /**
    * @property {String} UPSIDEDOWN
    * @static
@@ -42,7 +23,7 @@ export const OrientationType = {
    * @readonly
    * @since 0.1
    */
-  UPSIDEDOWN: 'upsidedown',
+  UPSIDEDOWN = 'upsidedown',
   /**
    * @property {String} LANDSCAPELEFT
    * @static
@@ -51,7 +32,7 @@ export const OrientationType = {
    * @readonly
    * @since 0.1
    */
-  LANDSCAPELEFT: 'landspaceleft',
+  LANDSCAPELEFT = 'landspaceleft',
   /**
    * @property {String} LANDSCAPERIGHT
    * @static
@@ -60,9 +41,24 @@ export const OrientationType = {
    * @readonly
    * @since 0.1
    */
-  LANDSCAPERIGHT: 'landspaceright',
-  ios: OrientationTypeIOS
-} as const;
+  LANDSCAPERIGHT = 'landspaceright',
+  /**
+   * @property {String} FACEUP
+   * @static
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  FACEUP = 'faceup',
+  /**
+   * @property {String} FACEDOWN
+   * @static
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  FACEDOWN = 'facedown'
+}
 
 /**
  * @class Device.Screen
@@ -93,7 +89,7 @@ export declare class AbstractScreen {
    * @static
    * @since 0.1
    */
-  static readonly orientation: typeof OrientationType;
+  static readonly orientation: OrientationType;
   /**
    * Gets height of device screen.
    *

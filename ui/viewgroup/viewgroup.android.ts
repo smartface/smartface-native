@@ -10,7 +10,7 @@ const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.Roun
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 
-export class ViewGroup<TEvent extends string = ViewGroupEvents, TNative = {}> extends ViewAndroid<TEvent, TNative> {
+export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, TNative = {}> extends ViewAndroid<TEvent, TNative> {
   static Events = ViewGroupEvents;
   private _onViewAdded = null;
   private _onViewRemoved = null;
@@ -191,5 +191,3 @@ export class ViewGroup<TEvent extends string = ViewGroupEvents, TNative = {}> ex
     return shapeDrawable;
   }
 }
-
-module.exports = ViewGroup;

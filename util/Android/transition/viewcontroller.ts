@@ -1,52 +1,59 @@
 import Page from '../../../ui/page';
-import NavigationController from '../../../ui/navigationcontroller';
+import NavigationController, { IController, INavigationController } from '../../../ui/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 /** TODO: Check this out after bottomtabbar, navigationcontroller and page is completed */
 
-type PageWithController = Page & { childControllers: unknown[]; __isActive: boolean };
+type PageWithController = Page | INavigationController;
 
-type ControllerParams = { controller: NavigationController | Page | BottomTabBarController };
+export type ControllerParams = {
+  controller: IController;
+  animation?: boolean;
+  animated?: boolean;
+  isComingFromPresent?: boolean;
+  onCompleteCallback?: () => void;
+  animationType?: FragmentTransition.AnimationType;
+};
 namespace ViewController {
-  export function activateRootController(controller: PageWithController) {
+  export function activateRootController(controller: IController) {
     if (!controller) return;
-    controller.__isActive = true;
+    controller.isActive = true;
     let parentController = controller.parentController;
     while (parentController) {
-      parentController.__isActive = true;
+      parentController.isActive = true;
       parentController = parentController.parentController;
     }
   }
-  export function deactivateRootController(controller: PageWithController) {
+  export function deactivateRootController(controller: IController) {
     if (!controller) return;
-    controller.__isActive = false;
+    controller.isActive = false;
     let parentController = controller.parentController;
     while (parentController) {
-      parentController.__isActive = false;
+      parentController.isActive = false;
       parentController = parentController.parentController;
     }
   }
-  export function setIsActiveOfController(controller: PageWithController, __isActive: boolean) {
+  export function setIsActiveOfController(controller: IController, __isActive: boolean) {
     if (!controller || controller instanceof Page) return;
-    controller.__isActive = __isActive;
-    var childController = controller.getCurrentController();
+    controller.isActive = __isActive;
+    let childController = controller.getCurrentController();
     while (childController) {
-      childController.__isActive = __isActive;
+      childController.isActive = __isActive;
       if (childController instanceof Page) break;
       childController = controller.getCurrentController();
     }
   }
-  export function activateController(controller: PageWithController) {
+  export function activateController(controller: IController) {
     ViewController.setIsActiveOfController(controller, true);
   }
-  export function deactivateController(controller: PageWithController) {
+  export function deactivateController(controller: IController) {
     ViewController.setIsActiveOfController(controller, false);
   }
   export function setController(params: ControllerParams) {
     if (params.controller instanceof NavigationController) {
-      var childControllerStack = params.controller.childControllers;
-      var childControllerStackLenght = childControllerStack.length;
+      const childControllerStack = params.controller.childControllers;
+      const childControllerStackLenght = childControllerStack.length;
 
       // This check is requested by Smartface Router team.
       if (childControllerStackLenght === 0)
@@ -56,7 +63,7 @@ namespace ViewController {
       // show latest page or controller
       params.controller.show({
         controller: childControllerStack[childControllerStackLenght - 1],
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -66,7 +73,7 @@ namespace ViewController {
       // TODO: Check animation type. I am not sure about that!
       FragmentTransition.push({
         page: params.controller,
-        animated: params.animation,
+        animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
         onCompleteCallback: params.onCompleteCallback
       });
@@ -94,14 +101,14 @@ namespace ViewController {
     return null;
   }
 
-  export function setIsInsideBottomTabBarForAllChildren(controller: PageWithController) {
+  export function setIsInsideBottomTabBarForAllChildren(controller: IController) {
     controller.isInsideBottomTabBar = true;
     if (controller instanceof Page) {
       return;
     }
 
     // for NavigationController
-    controller.childControllers.forEach(function (childController: unknown) {
+    controller.childControllers.forEach((childController) => {
       childController.isInsideBottomTabBar = true;
       ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });
