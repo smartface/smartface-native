@@ -223,7 +223,10 @@ declare class __SF_FLAnimatedImageView {
   setLoopCompletionBlockWithJSValue(handler: (...args: any) => void): void;
 }
 
-declare class __SF_NSIndexPath extends __SF_NSOBject {}
+declare class __SF_NSIndexPath extends __SF_NSOBject {
+  row: any;
+  section: any;
+}
 
 declare class __SF_UIRefreshControl extends __SF_UIView {
   removeFromSuperview(): void;
@@ -296,9 +299,11 @@ declare class __SF_UIBarButtonItem extends __SF_UIView {
   setTitleTextAttributesForState(font: { NSFont: __SF_UIFont }, uiControlState: number /**TODO: Add after UIControlState is there */): any;
 }
 
-declare class __SF_UICollectionViewFlowLayout {
+declare class __SF_UICollectionViewLayout extends __SF_NSOBject {}
+
+declare class __SF_UICollectionViewFlowLayout extends __SF_UICollectionViewLayout {
   prepareLayoutCallback: () => void;
-  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x: number; y: number }, velocity: number) => number;
+  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x?: number; y?: number }, velocity: { x?: number; y?: number }) => { x?: number; y?: number };
 }
 
 declare class UIFont {
