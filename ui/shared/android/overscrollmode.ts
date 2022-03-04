@@ -4,4 +4,4 @@ declare enum OverScrollMode {
   NEVER
 }
 
-export = OverScrollMode;
+export default OverScrollMode;

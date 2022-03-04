@@ -1,7 +1,7 @@
-import OverScrollMode from '../android/overscrollmode';
+import OverScrollMode from '../shared/android/overscrollmode';
 import Page from '../page';
 import File from '../../io/file';
-import ContentInsetAdjustment from '../ios/contentinsetadjustment';
+import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
 import { Boundary } from '../../primitive/boundary';
 import { WebViewEvents } from './webview-events';
 import IView from '../view';

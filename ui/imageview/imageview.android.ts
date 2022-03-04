@@ -6,7 +6,7 @@ import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import Image from '../image';
-import { ImageCacheType } from '../imagecachetype';
+import ImageCacheType from '../shared/imagecachetype';
 import { ViewAndroid } from '../view/view.android';
 import { ImageViewEvents } from './imageview-events';
 
@@ -122,7 +122,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       });
     }
     if (!useHTTPCacheControl) {
-      if (!headers.hasOwnProperty('Cache-Control')) {
+      if (!Object.prototype.hasOwnProperty.call(headers, 'Cache-Control')) {
         headers['Cache-Control'] = 'no-cache';
       }
     }
@@ -145,17 +145,17 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  loadFromFile(params: { placeholder?: INativeComponent, file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
+  loadFromFile(params: { placeholder?: INativeComponent; file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
     const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
 
     if (file instanceof File) {
       const parameters = new LoadFromFileParameters(AndroidConfig.activity, this.nativeObject, placeholder ? placeholder.nativeObject : null, null, fade, useMemoryCache, width, height);
       const resolvedPath = file.resolvedPath;
-      if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
+      if (!AndroidConfig.isEmulator && resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
         const resources = AndroidConfig.activity.getResources();
         const drawableResourceId = resources.getIdentifier(resolvedPath.name, 'drawable', AndroidConfig.packageName);
         SFGlide.loadByResourceId(drawableResourceId, parameters);
-      } else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+      } else if (!AndroidConfig.isEmulator && resolvedPath.type === Path.FILE_TYPE.ASSET) {
         const assetPrefix = 'file:///android_asset/';
         const assetFilePath = assetPrefix + resolvedPath.name;
         SFGlide.loadFromAsset(assetFilePath, parameters);
@@ -207,7 +207,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       });
     }
     if (!useHTTPCacheControl) {
-      if (!headers.hasOwnProperty('Cache-Control')) {
+      if (!Object.prototype.hasOwnProperty.call(headers, 'Cache-Control')) {
         headers['Cache-Control'] = 'no-cache';
       }
     }

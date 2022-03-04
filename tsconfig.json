@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "lib": ["ES2015"]
   },
-  "include": ["./application", "./core", "./typings", "./device", "./global", "./ui", "./io", "./net", "./util", "./primitive", "./test.ts", "core/scrollable"],
+  "include": ["./application", "./core", "./typings", "./device", "./global", "./ui", "./io", "./net", "./util", "./primitive", "./test.ts"],
   "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"],
   "exclude": ["dist", "node_modules", "**/*.test.js", "**/analysis.js"]
 }

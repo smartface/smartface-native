@@ -24,21 +24,21 @@ enum KeyboardAppearance {
    * Default colored keyboard appearance. This constant corresponds to UI.KeyboardAppearance.LIGHT.
    * @since 0.1
    */
-  DEFAULT = 0,
+  DEFAULT,
 
   /**
    * @ios
    * Dark colored keyboard appearance.
    * @since 0.1
    */
-  DARK = 1,
+  DARK,
 
   /**
    * @ios
    * Light colored keyboard appearance.
    * @since 0.1
    */
-  LIGHT = 2
-};
+  LIGHT
+}
 
 export default KeyboardAppearance;
