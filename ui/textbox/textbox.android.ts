@@ -74,7 +74,7 @@ const NativeActionKeyType = [
   4 // EditorInfo.IME_ACTION_SEND
 ];
 
-export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> extends ViewAndroid<TEvent | TextBoxEvents, AndroidProps> implements ITextBox {
+export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}> extends ViewAndroid<TEvent | TextBoxEvents, TNative & AndroidProps> implements ITextBox {
   private __touchEnabled: boolean = true;
   private _isPassword: boolean = false;
   private _keyboardType: KeyboardType = KeyboardType.DEFAULT;
@@ -132,7 +132,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
     Object.assign(this, restParams);
   }
 
-  get androidProps() {
+  private get androidProps() {
     const self = this;
     return {
       maxLength(value: number): void {

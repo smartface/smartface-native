@@ -1,15 +1,44 @@
-import { IScrollable } from ".";
-import ListViewItem from "../../ui/listviewitem";
+import { IScrollable } from '.';
+import GridView from '../../ui/gridview';
+import ListView from '../../ui/listview';
+import ListViewItem from '../../ui/listviewitem';
+
+type ScrollableClasses = ListView | GridView;
 
 export default class ScrollableIOS implements IScrollable {
-  nativeObject: __SF_UIScrollView;
-  private _ios: any; /**TODO: Check out with Cenk */
-  constructor(customNativeObject: __SF_UIScrollView) {
-    this.nativeObject ||= customNativeObject;
-    this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+  constructor(private targetInstance: ScrollableClasses) {
+    this.targetInstance.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+  }
+  indexByListViewItem(listViewItem: ListViewItem): number {
+    throw new Error('Method not implemented.');
+  }
+  deleteRowRange(params: Record<string, any>): void {
+    throw new Error('Method not implemented.');
+  }
+  insertRowRange(params: Record<string, any>): void {
+    throw new Error('Method not implemented.');
+  }
+  refreshRowRange(params: Record<string, any>): void {
+    throw new Error('Method not implemented.');
+  }
+  get paginationEnabled(): boolean {
+    return this.targetInstance.nativeObject.valueForKey('pagingEnabled');
+  }
 
-    const self = this;
-    const ios = {
+  set paginationEnabled(value: boolean) {
+    this.targetInstance.nativeObject.setValueForKey(value, 'pagingEnabled');
+  }
+
+  get contentOffset(): __SF_NSRect {
+    return {
+      x: this.targetInstance.nativeObject.contentOffset.x + this.targetInstance.nativeObject.contentInsetDictionary.left,
+      y: this.targetInstance.nativeObject.contentOffset.y + this.targetInstance.nativeObject.contentInsetDictionary.top
+    };
+  }
+
+  applyParams() {
+    const self = this.targetInstance;
+    return {
       get decelerationRate(): number {
         return self.nativeObject.decelerationRate;
       },
@@ -22,15 +51,7 @@ export default class ScrollableIOS implements IScrollable {
       set bounces(value: boolean) {
         self.nativeObject.setValueForKey(value, 'bounces');
       },
-      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {
-        self.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          value(contentOffset);
-        };
-      },
+      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {},
       set onScrollBeginDecelerating(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
           const contentOffset = {
@@ -70,38 +91,6 @@ export default class ScrollableIOS implements IScrollable {
         };
       }
     };
-
-    Object.assign(this._ios, ios);
-  }
-  indexByListViewItem(listViewItem: ListViewItem): number {
-    throw new Error("Method not implemented.");
-  }
-  deleteRowRange(params: Record<string, any>): void {
-    throw new Error("Method not implemented.");
-  }
-  insertRowRange(params: Record<string, any>): void {
-    throw new Error("Method not implemented.");
-  }
-  refreshRowRange(params: Record<string, any>): void {
-    throw new Error("Method not implemented.");
-  }
-  get paginationEnabled(): boolean {
-    return this.nativeObject.valueForKey('pagingEnabled');
-  }
-
-  set paginationEnabled(value: boolean) {
-    this.nativeObject.setValueForKey(value, 'pagingEnabled');
-  }
-
-  get contentOffset(): __SF_NSRect {
-    return {
-      x: this.nativeObject.contentOffset.x + this.nativeObject.contentInsetDictionary.left,
-      y: this.nativeObject.contentOffset.y + this.nativeObject.contentInsetDictionary.top
-    };
-  }
-
-  get ios() {
-    return this._ios;
   }
 }
 

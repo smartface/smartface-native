@@ -1,6 +1,6 @@
 import Page from '../page';
 import View from '../view';
-import OverScrollMode from '../android/overscrollmode';
+import OverScrollMode from '../shared/overscrollmode';
 
 declare enum SwipeViewEvents {
   /**

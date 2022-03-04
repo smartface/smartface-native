@@ -4,9 +4,6 @@ import ListView from '../../ui/listview';
 import GridView from '../../ui/gridview';
 import NativeComponent from '.././native-component';
 import { AndroidParams } from '.';
-import WebView from '../../ui/webview';
-import MapView from '../../ui/mapview';
-import SwipeView from '../../ui/swipeview';
 
 const NativeRecyclerView = requireClass('androidx.recyclerview.widget.RecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
@@ -17,9 +14,10 @@ interface INativeInner {
   computeHorizontalScrollOffset(): any;
   computeVerticalScrollOffset(): any;
   getChildAdapterPosition(item: any): any;
+  setOverScrollMode(mode: number): void;
 }
 
-type ScrollableClasses = ListView | GridView | WebView | MapView | SwipeView;
+type ScrollableClasses = ListView | GridView;
 export default class ScrollableAndroid<TNative extends Record<string, any> = AndroidParams> extends NativeComponent {
   protected getIOSProps(): {} {
     return {};
@@ -35,6 +33,7 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
   constructor(nativeObject: TNative, private nativeInner?: INativeInner) {
     super();
     this._nativeObject = nativeObject;
+    //#region TODO: Implement these two methods in listview and gridview and delete from here
     this.nativeObject.setOnRefreshListener(
       NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: () => {
@@ -50,6 +49,7 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
         onTouchEvent: () => {}
       })
     );
+    //#endregion
   }
 
   applyParams(target: ScrollableClasses) {
@@ -75,8 +75,7 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
         return self._overScrollMode;
       },
       set overScrollMode(mode: ScrollableAndroid['_overScrollMode']) {
-        const nativeLayout = target instanceof ListView || target instanceof GridView ? self.nativeInner : self.nativeObject;
-        nativeLayout.setOverScrollMode(mode);
+        self.nativeInner.setOverScrollMode(mode);
         self._overScrollMode = mode;
       },
       saveInstanceState() {
