@@ -7,11 +7,11 @@
 // const { EventEmitterCreator } = require('../../core/eventemitter');
 import { AndroidProps, ITextBox } from '.';
 import { AndroidConfig, SystemServices } from '../../util';
-import ActionKeyType from '../actionkeytype';
+import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
-import KeyboardType from '../keyboardtype';
-import TextAlignment from '../textalignment';
+import KeyboardType from '../shared/keyboardtype';
+import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
 import { ViewAndroid } from '../view/view.android';
 import AutoCapitalize from './autocapitalize';
@@ -85,12 +85,12 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   private _textColor: Color;
   private _font: Font;
   private _textAlignment: TextAlignment;
-  private _onEditBegins:  () => void;
+  private _onEditBegins: () => void;
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
   private _hasEventsLocked: boolean = false;
   private _autoCapitalize: AutoCapitalize = AutoCapitalize.NONE;
-  private _didAddTextChangedListener: boolean =false;
+  private _didAddTextChangedListener: boolean = false;
   private _didSetOnEditorActionListener: boolean = false;
   private activity: any;
   constructor(params: Partial<ITextBox> = {}) {
@@ -119,9 +119,9 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
 
     /* Override the onTouch and make default returning false to prevent bug in other listener.*/
     this.onTouch = (e) => {
-        let result: boolean | void;
-        if (this.onTouch) result = this.onTouch(e);
-        return result === true;
+      let result: boolean | void;
+      if (this.onTouch) result = this.onTouch(e);
+      return result === true;
     };
 
     // Added for https://smartface.atlassian.net/browse/AND-3869
@@ -133,27 +133,27 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   }
 
   get androidProps() {
-      const self =this;
-      return {
-          maxLength(value: number): void {
-            const filterArray = toJSArray(self.nativeObject.getFilters());
-            for (let i = 0; i < filterArray.length; i++) {
-              if ((filterArray[i] + '').includes('android.text.InputFilter$LengthFilter')) {
-                filterArray.splice(i, 1);
-                break;
-              }
-            }
-            filterArray.push(new NativeInputFilter.LengthFilter(value));
-            self.nativeObject.setFilters(array(filterArray, 'android.text.InputFilter'));
+    const self = this;
+    return {
+      maxLength(value: number): void {
+        const filterArray = toJSArray(self.nativeObject.getFilters());
+        for (let i = 0; i < filterArray.length; i++) {
+          if ((filterArray[i] + '').includes('android.text.InputFilter$LengthFilter')) {
+            filterArray.splice(i, 1);
+            break;
           }
+        }
+        filterArray.push(new NativeInputFilter.LengthFilter(value));
+        self.nativeObject.setFilters(array(filterArray, 'android.text.InputFilter'));
       }
+    };
   }
 
   get font(): Font {
-      return this._font;
+    return this._font;
   }
   set font(value: Font) {
-      this._font = value;
+    this._font = value;
   }
 
   get text(): string {
@@ -162,54 +162,54 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   set text(value: string) {
     this._hasEventsLocked = true;
     if (typeof value !== 'string') value = '';
-    
+
     this.nativeObject.setText('' + value);
-    
+
     this.nativeObject.setSelection(value.length);
-    
+
     this._hasEventsLocked = false;
   }
 
   get autoCapitalize(): AutoCapitalize {
-      return this._autoCapitalize;
+    return this._autoCapitalize;
   }
   set autoCapitalize(value: AutoCapitalize) {
     const prevAutoCapitalize = this.autoCapitalize;
     this._autoCapitalize = value;
     this.updateInputType(prevAutoCapitalize, NativeAutoCapitalize[this.autoCapitalize]);
   }
-  
+
   get textAlignment(): TextAlignment {
-      return this._textAlignment;
+    return this._textAlignment;
   }
   set textAlignment(value: TextAlignment) {
-      this._textAlignment = value;
-  }
-  
-  get textColor(): Color {
-      return this._textColor
-  }
-  set textColor(value: Color) {
-      this._textColor = value;
+    this._textAlignment = value;
   }
 
-  get cursorPosition(): {start: number;end: number;} {
+  get textColor(): Color {
+    return this._textColor;
+  }
+  set textColor(value: Color) {
+    this._textColor = value;
+  }
+
+  get cursorPosition(): { start: number; end: number } {
     return {
-        start: this.nativeObject.getSelectionStart(),
-        end: this.nativeObject.getSelectionEnd()
-      };
+      start: this.nativeObject.getSelectionStart(),
+      end: this.nativeObject.getSelectionEnd()
+    };
   }
-  set cursorPosition(value: {start: number;end: number}) {
+  set cursorPosition(value: { start: number; end: number }) {
     if (value && value.start === parseInt(String(value.start), 10) && value.end === parseInt(String(value.end), 10)) {
-        if (value.start > this.text.length) {
-          value.start = 0;
-        }
-        if (value.end > this.text.length) {
-          value.end = 0;
-        }
-        this.nativeObject.setSelection(value.start, value.end);
+      if (value.start > this.text.length) {
+        value.start = 0;
+      }
+      if (value.end > this.text.length) {
+        value.end = 0;
+      }
+      this.nativeObject.setSelection(value.start, value.end);
+    }
   }
-}
 
   get touchEnabled(): boolean {
     return this.__touchEnabled;
@@ -220,9 +220,9 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
     this.nativeObject.setFocusableInTouchMode(value);
     this.nativeObject.setLongClickable(value);
   }
-  
+
   get onEditBegins(): () => void {
-      return this._onEditBegins;
+    return this._onEditBegins;
   }
   set onEditBegins(value: () => void) {
     this._onEditBegins = value;
@@ -230,13 +230,13 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   }
 
   get cursorColor(): Color {
-      return this._cursorColor;
+    return this._cursorColor;
   }
   set cursorColor(value: Color) {
     this._cursorColor = value;
     SFEditText.setCursorColor(this.nativeObject, value.nativeObject);
   }
-  
+
   get hint(): string {
     return this.nativeObject.getHint()?.toString();
   }
@@ -245,37 +245,37 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   }
 
   get hintTextColor(): Color {
-      return this._hintTextColor;
+    return this._hintTextColor;
   }
   set hintTextColor(value: Color) {
     this._hintTextColor = value;
     this.nativeObject.setHintTextColor(value.nativeObject);
   }
-  
+
   get isPassword(): boolean {
-      return this._isPassword;
+    return this._isPassword;
   }
   set isPassword(value: boolean) {
     this._isPassword = value;
     const typeface = this.nativeObject.getTypeface();
     const currentInputType = this.nativeObject.getInputType();
-    
+
     let passwordType;
     if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) != 0) passwordType = TYPE_TEXT_VARIATION_PASSWORD;
     else passwordType = TYPE_NUMBER_VARIATION_PASSWORD;
-    
+
     const removeTags = TYPE_TEXT_VARIATION_PASSWORD | TYPE_NUMBER_VARIATION_PASSWORD;
     if (this._isPassword) this.updateInputType(removeTags, passwordType);
-    else this.updateInputType( removeTags, 0);
+    else this.updateInputType(removeTags, 0);
     // Some devices might change the font.
     this.nativeObject.setTypeface(typeface);
   }
 
   get keyboardType(): KeyboardType {
-      return this._keyboardType;
+    return this._keyboardType;
   }
   set keyboardType(value: KeyboardType) {
-      this._keyboardType = value;
+    this._keyboardType = value;
   }
 
   get actionKeyType(): ActionKeyType {
@@ -285,7 +285,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
     this._actionKeyType = value;
     this.nativeObject.setImeOptions(NativeActionKeyType[this._actionKeyType]);
   }
-  
+
   showKeyboard(): void {
     this.requestFocus();
   }
@@ -293,7 +293,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   hideKeyboard(): void {
     this.removeFocus();
   }
-  
+
   requestFocus(): void {
     this.nativeObject.requestFocus();
     // Due to the requirements we should show keyboard when focus requested.
@@ -310,46 +310,46 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
   }
 
   get onTextChanged(): (e?: { insertedText: string; location: number }) => void {
-      return this._onTextChanged;
+    return this._onTextChanged;
   }
   set onTextChanged(value: (e?: { insertedText: string; location: number }) => void) {
-        this._onTextChanged = value;
-        if (!this._didAddTextChangedListener) {
-          this._didAddTextChangedListener = true;
-          this.nativeObject.addTextChangedListener(
-            NativeTextWatcher.implement({
-              // todo: Control insertedText after resolving story/AND-2508 issue.
-              onTextChanged: (charSequence, start, before, count) => {
-                if (!this._hasEventsLocked) {
-                  var insertedText = '';
-                  if (before == 0) {
-                    insertedText = charSequence.subSequence(start, start + count).toString();
-                  } else if (before <= count) {
-                    insertedText = charSequence.subSequence(before, count).toString();
-                  }
-                  if (this._onTextChanged) {
-                    this._onTextChanged({
-                      location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
-                      insertedText: insertedText
-                    });
-                    this.emit('textChanged', {
-                        location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
-                        insertedText: insertedText
-                    })
-                  }
-                }
-              },
-              beforeTextChanged: function (charSequence, start, count, after) {},
-              afterTextChanged: function (editable) {}
-            })
-          );
-        }
+    this._onTextChanged = value;
+    if (!this._didAddTextChangedListener) {
+      this._didAddTextChangedListener = true;
+      this.nativeObject.addTextChangedListener(
+        NativeTextWatcher.implement({
+          // todo: Control insertedText after resolving story/AND-2508 issue.
+          onTextChanged: (charSequence, start, before, count) => {
+            if (!this._hasEventsLocked) {
+              var insertedText = '';
+              if (before == 0) {
+                insertedText = charSequence.subSequence(start, start + count).toString();
+              } else if (before <= count) {
+                insertedText = charSequence.subSequence(before, count).toString();
+              }
+              if (this._onTextChanged) {
+                this._onTextChanged({
+                  location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
+                  insertedText: insertedText
+                });
+                this.emit('textChanged', {
+                  location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
+                  insertedText: insertedText
+                });
+              }
+            }
+          },
+          beforeTextChanged: function (charSequence, start, count, after) {},
+          afterTextChanged: function (editable) {}
+        })
+      );
+    }
   }
-  
-  onClearButtonPress() {  }
+
+  onClearButtonPress() {}
 
   get onEditEnds(): () => void {
-      return this._onEditEnds;
+    return this._onEditEnds;
   }
   set onEditEnds(value: () => void) {
     this._onEditEnds = value;
@@ -360,29 +360,29 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents> exten
     return this._onActionButtonPress;
   }
   set onActionButtonPress(value: (e?: { actionKeyType: ActionKeyType }) => void) {
-    this._onActionButtonPress = value
+    this._onActionButtonPress = value;
 
     // TODO Old version has not declaration for this variable
     if (this._didSetOnEditorActionListener) return;
-   
+
     this.nativeObject.setOnEditorActionListener(
       NativeTextView.OnEditorActionListener.implement({
         onEditorAction: (textView: TextView, actionId: number, event: any) => {
           if (actionId === NativeActionKeyType[this._actionKeyType]) {
-              value?.({
-                actionKeyType: this._actionKeyType
-              });
+            value?.({
+              actionKeyType: this._actionKeyType
+            });
           }
           return false;
         }
       })
     );
-   
+
     this._didSetOnEditorActionListener = true;
   }
 
   toString(): string {
-    return 'TextBox'
+    return 'TextBox';
   }
 
   updateInputType(unsetFlags: number, setFlags: number) {

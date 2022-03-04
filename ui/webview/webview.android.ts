@@ -4,14 +4,13 @@ import File from '../../io/file';
 import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import { WebViewEvents } from './webview-events';
-import WebView, { AndroidProps } from '.';
+import WebView from '.';
 import IWebView from '.';
 import { IScrollable } from '../../core/scrollable';
 import { Point2D } from '../../primitive/point2d';
 import ListViewItem from '../listviewitem';
 import ScrollableAndroid from '../../core/scrollable/scrollable.android';
-import OverScrollMode from '../android/overscrollmode';
-import { copyObjectPropertiesWithDescriptors } from '../../util';
+import OverScrollMode from '../shared/overscrollmode';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
