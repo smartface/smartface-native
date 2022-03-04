@@ -3,15 +3,21 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import ListView from '../../ui/listview';
 import GridView from '../../ui/gridview';
 import NativeComponent from '.././native-component';
-import { AndroidParams, IScrollable } from '.';
-import { copyObjectPropertiesWithDescriptors } from '../../util';
-import WebView from '../../ui/webview';
+import { AndroidParams } from '.';
 
 const NativeRecyclerView = requireClass('androidx.recyclerview.widget.RecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
-interface IScrollableAndroid {
-  
+
+interface INativeInner {
+  addOnItemTouchListener(param: any): void;
+  setJsCallbacks(param: any): void;
+  computeHorizontalScrollOffset(): any;
+  computeVerticalScrollOffset(): any;
+  getChildAdapterPosition(item: any): any;
+  setOverScrollMode(mode: number): void;
 }
+
+type ScrollableClasses = ListView | GridView;
 export default class ScrollableAndroid<TNative extends Record<string, any> = AndroidParams> extends NativeComponent {
   protected getIOSProps(): {} {
     return {};
@@ -24,18 +30,10 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
   private _onAttachedToWindow: (...args: any) => any;
   private _onDetachedFromWindow: (...args: any) => any;
 
-  constructor(
-    nativeObject: TNative, 
-    private nativeInner?: {
-      addOnItemTouchListener(param: any): void;
-      setJsCallbacks(param: any): void;
-      computeHorizontalScrollOffset(): any;
-      computeVerticalScrollOffset(): any;
-      getChildAdapterPosition(item: any): any;
-    }
-  ) {
+  constructor(nativeObject: TNative, private nativeInner?: INativeInner) {
     super();
     this._nativeObject = nativeObject;
+    //#region TODO: Implement these two methods in listview and gridview and delete from here
     this.nativeObject.setOnRefreshListener(
       NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: () => {
@@ -51,9 +49,10 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
         onTouchEvent: () => {}
       })
     );
+    //#endregion
   }
 
-  applyParams(target: ListView | GridView | WebView) {
+  applyParams(target: ScrollableClasses) {
     const self = this;
     return {
       get onGesture() {
@@ -76,8 +75,7 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
         return self._overScrollMode;
       },
       set overScrollMode(mode: ScrollableAndroid['_overScrollMode']) {
-        const nativeLayout = target instanceof ListView || target instanceof GridView ? self.nativeInner : self.nativeObject;
-        nativeLayout.setOverScrollMode(mode);
+        self.nativeInner.setOverScrollMode(mode);
         self._overScrollMode = mode;
       },
       saveInstanceState() {
@@ -102,9 +100,9 @@ export default class ScrollableAndroid<TNative extends Record<string, any> = And
       set onDetachedFromWindow(callback: ScrollableAndroid['_onDetachedFromWindow']) {
         self._onDetachedFromWindow = callback;
       }
-    }
+    };
   }
-  
+
   //TODO: There are a few known bugs if ListView's items are too much to handle.
   get contentOffset() {
     return {
