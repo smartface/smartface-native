@@ -1,12 +1,8 @@
+import { NavigationBarStyle } from '.';
 import Color from '../../../ui/color';
 import { AndroidConfig } from '../../../util';
 
 const NativeBuild = requireClass('android.os.Build');
-
-export enum NavigationBarStyle {
-  DARKCONTENT,
-  LIGHTCONTENT
-}
 
 export default class NavigationBar {
   private constructor() {}

@@ -1,4 +1,4 @@
-import EllipsizeMode from '../../ui/ellipsizemode';
+import EllipsizeMode from '../../ui/shared/ellipsizemode';
 
 namespace NSLineBreakMode {
   export const byWordWrapping = 0;
@@ -21,6 +21,8 @@ namespace NSLineBreakMode {
         return NSLineBreakMode.byWordWrapping;
       case EllipsizeMode.iOS.CHARWRAPPING:
         return NSLineBreakMode.byCharWrapping;
+      default:
+        return NSLineBreakMode.byTruncatingHead;
     }
   }
   export function nsLineBreakModeToEllipsizeMode(mode: number) {

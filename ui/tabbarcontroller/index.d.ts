@@ -1,7 +1,7 @@
 import TabBarItem from '../tabbaritem';
 import Color from '../color';
 import Page from '../page';
-import OverScrollMode from '../android/overscrollmode';
+import OverScrollMode from '../shared/overscrollmode';
 import { PageEvents } from '../page/page-events';
 
 declare enum TabbarControllerEvents {

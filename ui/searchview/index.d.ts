@@ -4,8 +4,8 @@ import Image from '../image';
 import Page from '../page';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
-import TextAlignment from '../textalignment';
-import KeyboardAppearance from '../keyboardappearance';
+import TextAlignment from '../shared/textalignment';
+import KeyboardAppearance from '../shared/keyboardappearance';
 
 declare enum SearchViewEvents {
   /**

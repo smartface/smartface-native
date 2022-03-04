@@ -1,0 +1,12 @@
+enum TextAlignment {
+  TOPLEFT,
+  TOPCENTER,
+  TOPRIGHT,
+  MIDLEFT,
+  MIDCENTER,
+  MIDRIGHT,
+  BOTTOMLEFT,
+  BOTTOMCENTER,
+  BOTTOMRIGHT
+}
+export default TextAlignment;

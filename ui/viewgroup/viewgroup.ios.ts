@@ -1,8 +1,8 @@
 import { EventEmitterWrapper } from 'core/eventemitter';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import IView from 'ui/view';
+import { IViewGroup } from '.';
 import View from '../view/view.ios';
-import { IViewGroup } from './viewgroup';
 import { ViewGroupEvents } from './viewgroup-events';
 
 function getKeyByValue(object, value) {
@@ -21,9 +21,9 @@ function getKeyByValue(object, value) {
 export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative> implements IViewGroup<ViewGroupEvents | ExtractEventValues<TEvent>> {
   private _children = {};
 
-  constructor(params?: Partial<IViewGroup>){
-    super();
-
+  constructor(params: Partial<IViewGroup> = {}){
+    super(params);
+    
     const EventFunctions = {
       [ViewGroupEvents.ViewAdded]: function (view) {
         this.onViewAdded = EventEmitterWrapper(this, ViewGroupEvents.ViewAdded, null, view);
@@ -38,33 +38,8 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
         this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null, view);
       },
     };
-    // EventEmitterCreator(this, EventFunctions);
     this.nativeObject.didAddSubview = this.onViewAddedHandler;
     this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
-
-    // TODO: Recheck after es6 compile
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
-    
-    //Android spec methods
-    
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-      value: (event, callback) => {
-        if (typeof EventFunctions[event] === 'function') {
-          EventFunctions[event].call(this);
-          this.emitter.on(event, callback);
-        }
-        else {
-          parentOnFunction(event, callback);
-        }
-      },
-      configurable: true
-    });
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;

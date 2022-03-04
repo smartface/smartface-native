@@ -4,12 +4,8 @@ import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 
 class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative> implements IFlexLayout {
-  readonly android = {};
   constructor(params: Partial<IFlexLayout> = {}) {
-    super({});
-
-    const { android, ...restParams } = params;
-    Object.assign(this, restParams);
+    super(params);
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
