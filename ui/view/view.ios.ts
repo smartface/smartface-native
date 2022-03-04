@@ -17,9 +17,9 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TMobile extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TMobile extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<
   TEvent,
-  any,
+  TNative,
   TMobile & Partial<ViewIOSProps>
 > {
   protected _uniqueId: string;
