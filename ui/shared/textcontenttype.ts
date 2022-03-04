@@ -1,4 +1,4 @@
-declare enum TextContentType {
+enum TextContentType {
   NAME,
   NAMEPREFIX,
   GIVENNAME,
@@ -28,4 +28,4 @@ declare enum TextContentType {
   ONETIMECODE
 }
 
-export = TextContentType;
+export default TextContentType;

@@ -1,6 +1,4 @@
-import { TextContentTypeType } from '.';
-
-const TextContentType: TextContentTypeType = {
+const TextContentType = {
   NAME: __SF_UITextContentTypeName,
   NAMEPREFIX: __SF_UITextContentTypeNamePrefix,
   GIVENNAME: __SF_UITextContentTypeGivenName,
