@@ -12,6 +12,7 @@ import ListViewItem from '../listviewitem';
 import ScrollableAndroid from '../../core/scrollable/scrollable.android';
 import OverScrollMode from '../android/overscrollmode';
 import { copyObjectPropertiesWithDescriptors } from '../../util';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
@@ -45,7 +46,12 @@ interface IWebChromeClientCallbacks {
   onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => boolean;
 }
 
-export default class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView, IScrollable {
+type WebViewAndroidProps = ReturnType<ScrollableAndroid['applyParams']>;
+
+export default class WebViewAndroid<TEvent extends string = WebViewEvents>
+  extends ViewAndroid<TEvent | WebViewEvents, any, WithMobileOSProps<Partial<IWebView>, IWebView['ios'], IWebView['android'] & WebViewAndroidProps>>
+  implements IWebView, IScrollable
+{
   private _canOpenLinkInside = true;
   private _onError: IWebView['onError'];
   private _onShow: IWebView['onShow'];
@@ -113,7 +119,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       })
     );
 
-    this.setAndroidParams();
+    this.addAndroidProps(this.getAndroidParams());
     this.setWebViewClientCallbacks();
     this.setWebChromeClientCallbacks();
 
@@ -128,10 +134,6 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     */
     this.nativeObject.setBackgroundColor(0);
     this.nativeObject.setScrollBarEnabled(this._scrollBarEnabled);
-
-    copyObjectPropertiesWithDescriptors(this._ios, ios);
-    copyObjectPropertiesWithDescriptors(this._android, android);
-    copyObjectPropertiesWithDescriptors(this, restParams);
   }
   get contentOffset(): Point2D {
     return this.scrollable.contentOffset;
@@ -298,9 +300,9 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     return imageFile;
   }
 
-  private setAndroidParams() {
+  private getAndroidParams() {
     const self = this;
-    const android = {
+    return {
       get page(): IWebView['android']['page'] {
         return self._page;
       },
@@ -333,9 +335,9 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       },
       setWebContentsDebuggingEnabled(enabled: boolean) {
         NativeWebView.setWebContentsDebuggingEnabled(enabled);
-      }
+      },
+      ...this.scrollable.applyParams(this)
     };
-    copyObjectPropertiesWithDescriptors(this._android, android);
   }
 
   private setWebViewClientCallbacks() {
@@ -420,7 +422,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
           messageLevel
         };
         this.emit('consoleMessage', params);
-        const result = this._android.onConsoleMessage?.(params);
+        const result = this.android.onConsoleMessage?.(params);
         return !!result;
       }
     };

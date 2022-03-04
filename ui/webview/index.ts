@@ -74,7 +74,7 @@ export type AndroidProps = Partial<{
    * });
    * ````
    */
-  onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void;
+  onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => boolean;
   /**
    * Removes the autocomplete popup from the currently focused form field, if present.
    *

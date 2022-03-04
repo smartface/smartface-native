@@ -30,6 +30,7 @@ export interface IScrollable {
   refreshRowRange(params: Record<string, any>): void;
 }
 
+
 // const Picker: ConstructorOf<IPicker, Partial<IPicker>> = require(`./scrollable.${Device.deviceOS.toLowerCase()}`).default;
 // type Picker = IPicker;
 // export default Picker;

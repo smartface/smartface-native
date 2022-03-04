@@ -1,4 +1,7 @@
-export default class ScrollableIOS {
+import { IScrollable } from ".";
+import ListViewItem from "../../ui/listviewitem";
+
+export default class ScrollableIOS implements IScrollable {
   nativeObject: __SF_UIScrollView;
   private _ios: any; /**TODO: Check out with Cenk */
   constructor(customNativeObject: __SF_UIScrollView) {
@@ -69,6 +72,18 @@ export default class ScrollableIOS {
     };
 
     Object.assign(this._ios, ios);
+  }
+  indexByListViewItem(listViewItem: ListViewItem): number {
+    throw new Error("Method not implemented.");
+  }
+  deleteRowRange(params: Record<string, any>): void {
+    throw new Error("Method not implemented.");
+  }
+  insertRowRange(params: Record<string, any>): void {
+    throw new Error("Method not implemented.");
+  }
+  refreshRowRange(params: Record<string, any>): void {
+    throw new Error("Method not implemented.");
   }
   get paginationEnabled(): boolean {
     return this.nativeObject.valueForKey('pagingEnabled');
