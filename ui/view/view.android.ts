@@ -17,6 +17,7 @@ const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.
 import { EventEmitterWrapper } from '../../core/eventemitter';
 import View, { IView, ViewAndroidProps, ViewBase } from '.';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
+import OverScrollMode from '../android/overscrollmode';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -79,7 +80,11 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TMobileProps extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<TEvent, TNative, TMobileProps & ViewAndroidProps> {
+export class ViewAndroid<
+  TEvent extends string = ViewEvents,
+  TNative extends { [key: string]: any } = { [key: string]: any },
+  TMobileProps extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>
+> extends ViewBase<TEvent, TNative, TMobileProps & ViewAndroidProps> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -109,7 +114,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _borderWidth: number;
   protected _borderRadius: number;
   protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
-  private _overScrollMode: number = 0;
+  protected _overScrollMode: OverScrollMode = 0;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
   private __isRecyclerView: any;

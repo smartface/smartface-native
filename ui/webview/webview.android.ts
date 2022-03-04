@@ -4,14 +4,9 @@ import File from '../../io/file';
 import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import { WebViewEvents } from './webview-events';
-import WebView, { AndroidProps } from '.';
+import WebView from '.';
 import IWebView from '.';
-import { IScrollable } from '../../core/scrollable';
-import { Point2D } from '../../primitive/point2d';
-import ListViewItem from '../listviewitem';
-import ScrollableAndroid from '../../core/scrollable/scrollable.android';
 import OverScrollMode from '../android/overscrollmode';
-import { copyObjectPropertiesWithDescriptors } from '../../util';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
@@ -46,11 +41,9 @@ interface IWebChromeClientCallbacks {
   onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => boolean;
 }
 
-type WebViewAndroidProps = ReturnType<ScrollableAndroid['applyParams']>;
-
 export default class WebViewAndroid<TEvent extends string = WebViewEvents>
-  extends ViewAndroid<TEvent | WebViewEvents, any, WithMobileOSProps<Partial<IWebView>, IWebView['ios'], IWebView['android'] & WebViewAndroidProps>>
-  implements IWebView, IScrollable
+  extends ViewAndroid<TEvent | WebViewEvents, any, WithMobileOSProps<Partial<IWebView>, IWebView['ios'], IWebView['android']>>
+  implements IWebView
 {
   private _canOpenLinkInside = true;
   private _onError: IWebView['onError'];
@@ -65,7 +58,6 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents>
   private webChromeClientCallbacks: IWebChromeClientCallbacks;
   private _onBackButtonPressedCallback: IWebView['android']['onBackButtonPressed'];
   private _page: IWebView['android']['page'];
-  private scrollable: ScrollableAndroid;
   private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
   private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
   static onActivityResult = function (requestCode, resultCode, data) {
@@ -126,29 +118,11 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents>
     if (!this.nativeObject) {
       this._nativeObject = new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
     }
-
-    this.scrollable = new ScrollableAndroid(this.nativeObject);
-
     /* Webview contains background color which draws all over given background drawbles.
     It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
     */
     this.nativeObject.setBackgroundColor(0);
     this.nativeObject.setScrollBarEnabled(this._scrollBarEnabled);
-  }
-  get contentOffset(): Point2D {
-    return this.scrollable.contentOffset;
-  }
-  indexByListViewItem(listViewItem: ListViewItem): number {
-    return this.scrollable.indexByListViewItem(listViewItem);
-  }
-  deleteRowRange(params: Record<string, any>): void {
-    this.scrollable.deleteRowRange(params);
-  }
-  insertRowRange(params: Record<string, any>): void {
-    this.scrollable.insertRowRange(params);
-  }
-  refreshRowRange(params: Record<string, any>): void {
-    this.scrollable.refreshRowRange(params);
   }
   onOpenNewWindow?: (e: { url: string }) => void;
   get scrollBarEnabled() {
@@ -327,6 +301,13 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents>
       set displayZoomControls(value: IWebView['android']['displayZoomControls']) {
         self.nativeObject.setDisplayZoomControls(value);
       },
+      get overScrollMode(): OverScrollMode {
+        return self._overScrollMode;
+      },
+      set overScrollMode(mode: OverScrollMode) {
+        self.nativeObject.setOverScrollMode(mode);
+        self._overScrollMode = mode;
+      },
       clearHistory() {
         self.nativeObject.clearHistory();
       },
@@ -335,8 +316,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents>
       },
       setWebContentsDebuggingEnabled(enabled: boolean) {
         NativeWebView.setWebContentsDebuggingEnabled(enabled);
-      },
-      ...this.scrollable.applyParams(this)
+      }
     };
   }
 
