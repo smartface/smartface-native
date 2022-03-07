@@ -10,10 +10,7 @@ import { SwitchEvents } from './switch-events';
 const NativeSwitch = requireClass('io.smartface.android.sfcore.ui.switchview.SFSwitch');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 
-export default class SwitchAndroid<TEvent extends string = SwitchEvents>
-  extends ViewAndroid<TEvent | SwitchEvents, any, WithMobileOSProps<Partial<ISwitch>, ISwitch['ios'], ISwitch['android']>>
-  implements ISwitch
-{
+export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends ViewAndroid<TEvent | SwitchEvents, any, WithMobileOSProps<Partial<ISwitch>, ISwitch['ios'], ISwitch['android']>> {
   private _thumbOnColor: Color;
   private _thumbOffColor: Color;
   private _toggleOnColor: Color;

@@ -48,7 +48,7 @@ export type SwitchAndroidProps = {
   toggleOffColor: Color;
 };
 
-export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}, TAND = SwitchAndroidProps> extends IView<TEvent | SwitchEvents, TIOS, TAND & SwitchAndroidProps> {
+export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}, TAND = Partial<SwitchAndroidProps>> extends IView<TEvent | SwitchEvents, TIOS, TAND & SwitchAndroidProps> {
   /**
    * Enables/disables the Switch.
    *

@@ -5,10 +5,11 @@ import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { SwitchEvents } from './switch-events';
 
-export default class SwitchIOS<TEvent extends string = SwitchEvents>
-  extends ViewIOS<TEvent | SwitchEvents, any, WithMobileOSProps<Partial<ISwitch>, ISwitch['ios'], ISwitch['android']>>
-  implements ISwitch
-{
+export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<
+  TEvent | SwitchEvents,
+  any,
+  WithMobileOSProps<Partial<ISwitch>, Partial<ISwitch['ios']>, Partial<ISwitch['android']>>
+> {
   private _toggleOnColor: Color = Color.GREEN;
   private _onToggleChanged: (toggle: boolean) => void;
 
