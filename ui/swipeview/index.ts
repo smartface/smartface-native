@@ -1,41 +1,34 @@
-import Page from '../page';
-import View from '../view';
-import OverScrollMode from '../shared/overscrollmode';
+import Page, { PageBase } from '../page';
+import { AbstractView, IView } from '../view';
+import OverScrollMode from '../shared/android/overscrollmode';
+import { SwipeViewEvents } from './swipeview-events';
 
-declare enum SwipeViewEvents {
+/**
+ * @enum UI.SwipeView.State
+ * @static
+ * @readonly
+ * @since 1.1.10
+ *
+ */
+export enum SwipeViewState {
   /**
-   * Gets/Sets the callback triggered when a page is selected after a swipe action.
-   *
-   * @event onPageSelected
-   * @param index
-   * @param page Selected page instance
+   * @property {Number} [IDLE = 0]
    * @android
    * @ios
+   * @static
+   * @readonly
    * @since 1.1.10
    */
-  PageSelected = 'pageSelected',
+  IDLE,
   /**
-   * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
-   * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
-   *
-   * @event onPageScrolled
-   * @param index  Index of the first page from the left that is currently visible.
-   * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
+   * @property {Number} [DRAGGING = 1]
    * @android
    * @ios
-   * @since 2.0.9
-   */
-  PageScrolled = 'pageScrolled',
-  /**
-   * Gets/Sets the callback triggered during swipe actions.
-   *
-   * @event onStateChanged
-   * @param {UI.SwipeView.State} state
-   * @android
-   * @ios
+   * @static
+   * @readonly
    * @since 1.1.10
    */
-  StateChanged = 'stateChanged'
+  DRAGGING
 }
 
 /**
@@ -70,19 +63,7 @@ declare enum SwipeViewEvents {
  * It is required to pass the current page to swipeview.
  *
  */
-declare class SwipeView extends View {
-  constructor(params?: Partial<SwipeView>);
-  page: Page | View;
-
-  /**
-   * Gets/Sets the array of the page classes will be displayed inside SwipeView. Pages parameter cannot be empty.
-   *
-   * @property {Array} pages
-   * @android
-   * @ios
-   * @since 1.1.10
-   */
-  pages: typeof Page[];
+export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extends Record<string, any> = {}, TAND extends Record<string, any> = {}> extends IView<TEvent | SwipeViewEvents, TIOS, TAND> {
   /**
    * Gets/Sets the callback triggered when a page is selected after a swipe action.
    *
@@ -103,6 +84,17 @@ declare class SwipeView extends View {
    * });
    * ````
    */
+  page: PageBase;
+
+  /**
+   * Gets/Sets the array of the page classes will be displayed inside SwipeView. Pages parameter cannot be empty.
+   *
+   * @property {Array} pages
+   * @android
+   * @ios
+   * @since 1.1.10
+   */
+  pages: typeof PageBase[];
   onPageSelected: (index: number, page: Page) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
@@ -145,7 +137,7 @@ declare class SwipeView extends View {
    * });
    * ````
    */
-  onStateChanged: (state: SwipeView.State) => void;
+  onStateChanged: (state: SwipeViewState) => void;
   /**
    * Gets the currently displayed page's index inside the page array.
    *
@@ -165,7 +157,7 @@ declare class SwipeView extends View {
    * @ios
    * @since 4.3.2
    */
-  pagingEnabled: Boolean;
+  pagingEnabled: boolean;
   /**
    * Swipes to the page inside the index of the array.
    *
@@ -180,35 +172,23 @@ declare class SwipeView extends View {
   overScrollMode: OverScrollMode;
 }
 
-declare namespace SwipeView {
-  const Events: typeof SwipeViewEvents & typeof View.Events;
-  type Events = typeof Events;
-  /**
-   * @enum UI.SwipeView.State
-   * @static
-   * @readonly
-   * @since 1.1.10
-   *
-   */
-  enum State {
-    /**
-     * @property {Number} [IDLE = 0]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 1.1.10
-     */
-    IDLE = 0,
-    /**
-     * @property {Number} [DRAGGING = 1]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 1.1.10
-     */
-    DRAGGING = 1
-  }
+export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, TIOS extends Record<string, any> = {}, TAND extends Record<string, any> = {}>
+  extends AbstractView<TEvent | SwipeViewEvents, TIOS, TAND>
+  implements ISwipeView
+{
+  page: PageBase;
+  pages: typeof PageBase[];
+  onPageSelected: (index: number, page: Page) => void;
+  onPageScrolled: (index: number, offset: number) => void;
+  onStateChanged: (state: SwipeViewState) => void;
+  currentIndex: number;
+  pagingEnabled: boolean;
+  swipeToIndex(index: number, animated: boolean): void;
+  overScrollMode: OverScrollMode;
+  static State: SwipeViewState;
 }
-export = SwipeView;
+// export = SwipeView;
+
+const SwipeView: typeof AbstractSwipeView = require(`./swipeview.${Device.deviceOS.toLowerCase()}`).default;
+type SwipeView = ISwipeView;
+export default SwipeView;

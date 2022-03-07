@@ -138,6 +138,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   getParentViewController(): __SF_UIViewController;
   removeFromParentViewController(): void;
   parentViewController(): __SF_UIViewController;
+  didScroll(e: any): void;
 }
 declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;
@@ -194,6 +195,11 @@ declare class __SF_NSBlockOperation extends __SF_NSOBject {
 
 declare class __SF_UIPasteboard {
   static generalPasteboard(): any;
+}
+
+declare class __SF_UIPageViewControllerDatasource {
+  viewControllerBeforeViewController: (e: any) => __SF_UIViewController | undefined;
+  viewControllerAfterViewController: (e: any) => __SF_UIViewController | undefined;
 }
 
 declare class __SF_UIFont {
@@ -938,6 +944,15 @@ declare class __SF_SliderDrawer {
 
 declare class __SF_UIPageViewController extends __SF_UIView {
   static createWithTransitionStyleNavigationOrientation(transitionStyle: any, navigationOrientation: any): __SF_UIPageViewController;
+  scrollToPageDirectionAnimatedCompletion(page: __SF_UIViewController, direction: number, animated: boolean, completion: () => void): void;
+  view: __SF_UIView;
+  dataSource: __SF_UIPageViewControllerDatasource;
+  delegate: __SF_UIPageViewControllerDelegate;
+}
+
+declare class __SF_UIPageViewControllerDelegate {
+  willTransitionToViewControllers(e: any): void;
+  didFinishAnimating(e: any): void;
 }
 
 declare class __SF_UIControl extends __SF_UIView {}
