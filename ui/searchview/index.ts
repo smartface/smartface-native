@@ -4,8 +4,8 @@ import Image from '../image';
 import Page from '../page';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
-import TextAlignment from '../textalignment';
-import KeyboardAppearance from '../keyboardappearance';
+import KeyboardAppearance from '../shared/keyboardappearance';
+import TextAlignment from '../shared/textalignment';
 import { SearchViewEvents } from './searchview-events';
 import { ImageBase } from '../image/image';
 
@@ -41,7 +41,7 @@ export enum SearchViewStyle {
   MINIMAL = 2
 }
 
-export type iOSProps = View['ios'] & {
+export type SearchViewIOSProps = View['ios'] & {
   /**
    * This function show loading indicator.
    *
@@ -128,7 +128,7 @@ export type iOSProps = View['ios'] & {
   keyboardAppearance?: KeyboardAppearance;
 };
 
-export type AndroidProps = View['android'] & {
+export type SearchViewAndroidProps = View['android'] & {
   /**
    * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
    * property should be true.
@@ -182,7 +182,8 @@ export type AndroidProps = View['android'] & {
   textFieldBorderRadius: number;
 };
 
-export declare interface ISearchView<TEvent extends string = SearchViewEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | SearchViewEvents, TIOS & iOSProps, TAND & AndroidProps> {
+export declare interface ISearchView<TEvent extends string = SearchViewEvents, TIOS = SearchViewIOSProps, TAND = SearchViewAndroidProps>
+  extends IView<TEvent | SearchViewEvents, TIOS & SearchViewIOSProps, TAND & SearchViewAndroidProps> {
   /**
    * Gets/sets text of SearchView.
    *
@@ -426,7 +427,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents, T
   onSearchButtonClicked: () => void;
 }
 
-export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent> implements ISearchView<TEvent> {
+export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent, SearchViewIOSProps, SearchViewAndroidProps> implements ISearchView<TEvent> {
   static iOS: {
     Style: typeof SearchViewStyle;
   };
@@ -436,8 +437,8 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   backgroundImage: ImageBase;
   iconImage: ImageBase;
   searchIcon: ImageBase;
-  ios: iOSProps;
-  android: AndroidProps;
+  ios: SearchViewIOSProps;
+  android: SearchViewAndroidProps;
   addToHeaderBar(page: Page): void;
   removeFromHeaderBar(page: Page): void;
   showKeyboard(): void;

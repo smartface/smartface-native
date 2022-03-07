@@ -1,8 +1,7 @@
 import File from 'io/file';
 import ViewIOS from 'ui/view/view.ios';
 import Invocation from 'util/iOS/invocation';
-import { UIScrollViewInheritance } from '../../util';
-import IWebView, { iOSProps } from './webview';
+import IWebView, { iOSProps } from '.';
 import { WebViewEvents } from './webview-events';
 
 function dataTypesToNSSet(dataTypes) {
@@ -141,13 +140,14 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
     }
   };
   constructor(params?: Partial<IWebView>) {
-    super();
+    super(params);
     const self = this;
     if (!this.nativeObject) {
       this._nativeObject = new __SF_WKWebView();
     }
+    const { ios, android, ...restParams } = params;
 
-    UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
+    // UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
     this.nativeObject.scrollView.setValueForKey(4, 'contentInsetAdjustmentBehavior');
 
     this.nativeObject.setValueForKey(false, 'opaque');
@@ -227,56 +227,9 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
         };
       }
     };
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
-
-    const ios = {
-      get() {
-        return self._ios;
-      },
-      set(value) {
-        if (typeof value === 'object') {
-          Object.assign(self._ios, value);
-        }
-      },
-      get safeAreaInsets() {
-        return self._safeAreaInsets;
-      },
-      set safeAreaInsets(value) {
-        if (typeof value === 'function') {
-          self._safeAreaInsets = value;
-          self.nativeObject.safeAreaInsetsCallback = value;
-        } else {
-          throw new Error('safeAreaInsets must be function');
-        }
-      },
-      get sslPinning() {
-        return self._sslPinning;
-      },
-      set sslPinning(values) {
-        self._sslPinning = values;
-        let trustPolicies = values
-          ? values.map((value) => {
-              const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
-              let nSURLCertificates = certificates.map(function (path) {
-                let certFile = new File({
-                  path: path
-                });
-                return certFile.ios.getNSURL();
-              });
-              return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(host, nSURLCertificates, validateCertificateChain, validateHost);
-            })
-          : undefined;
-        self.nativeObject.serverTrustPolicies = trustPolicies;
-      }
-    };
-
-    this._ios = Object.assign(this._ios, ios);
+    this.setNativeParams();
+    Object.assign(this, restParams);
+    Object.assign(this._ios, ios);
   }
   get onChangedURL() {
     return this._onChangedURL;
@@ -425,6 +378,42 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
       }
     }
     this.nativeObject.evaluateJavaScript(javascript, result);
+  }
+
+  private setNativeParams() {
+    const self = this;
+    const ios = {
+      get safeAreaInsets(): IWebView['ios']['safeAreaInsets'] {
+        return self._safeAreaInsets;
+      },
+      set safeAreaInsets(value: IWebView['ios']['safeAreaInsets']) {
+        if (typeof value === 'function') {
+          self._safeAreaInsets = value;
+          self.nativeObject.safeAreaInsetsCallback = value;
+        } else {
+          throw new Error('safeAreaInsets must be function');
+        }
+      },
+      get sslPinning(): IWebView['ios']['sslPinning'] {
+        return self._sslPinning;
+      },
+      set sslPinning(value: IWebView['ios']['sslPinnig']) {
+        self._sslPinning = value;
+        const trustPolicies = value.map?.((value) => {
+          const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
+          const nSURLCertificates = certificates.map((path) => {
+            const certFile = new File({
+              path: path
+            });
+            return certFile.ios.getNSURL();
+          });
+          return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(host, nSURLCertificates, validateCertificateChain, validateHost);
+        });
+        self.nativeObject.serverTrustPolicies = trustPolicies;
+      }
+    };
+
+    this._ios = Object.assign(this._ios, ios);
   }
 }
 

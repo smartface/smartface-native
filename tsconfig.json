@@ -1,32 +1,17 @@
 {
-	"compilerOptions": {
-		"noEmit": false,
-		"allowJs": false,
-		"baseUrl": ".",
-		"rootDir": ".",
-		"declaration": true,
-		"emitDeclarationOnly": true,
-		"outFile": "./dist/types",
-		"target": "ES5",
-		"esModuleInterop": true,
-		"lib": ["ES2015"]
-	},
-	"include": [
-		"./application",
-		"./typings",
-		"./device",
-		"./global",
-		"./ui",
-		"./io",
-		"./net",
-		"./util",
-		"./primitive",
-		"./test.ts"
-, "core/scrollable.ts"	],
-	"files": [
-		".types/typings.d.ts",
-		".types/missings-android.d.ts",
-		".types/missings-ios.d.ts"
-	],
-	"exclude": [".dist", "./ui/scrollview", "node_modules", "**/*.test.js", "**/analysis.js"]
+  "compilerOptions": {
+    "noEmit": false,
+    "allowJs": false,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outFile": "./dist/types",
+    "target": "ES5",
+    "esModuleInterop": true,
+    "lib": ["ES2015"]
+  },
+  "include": ["./application", "./core", "./typings", "./device", "./global", "./ui", "./io", "./net", "./util", "./primitive", "./test.ts"],
+  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"],
+  "exclude": ["dist", "node_modules", "**/*.test.js", "**/analysis.js"]
 }

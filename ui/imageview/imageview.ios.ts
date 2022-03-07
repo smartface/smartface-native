@@ -3,7 +3,7 @@ import File from '../../io/file';
 import Color from '../color';
 import Image from '../image';
 import IImage from '../image/image';
-import { ImageCacheType } from '../imagecachetype';
+import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 
@@ -51,8 +51,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
           let rendered: IImage = value.nativeObject.imageWithRenderingMode(2);
           this._imageTemplate = rendered;
           this.nativeObject.loadImage(rendered.nativeObject);
-        } else
-          this.nativeObject.loadImage(value.nativeObject);
+        } else this.nativeObject.loadImage(value.nativeObject);
       } else {
         this.nativeObject.loadImage(undefined);
       }
@@ -94,7 +93,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
-    cache?: ImageCacheType
+    cache?: ImageCacheType;
   }): void {
     if (typeof params.url === 'string') {
       // Deprecated: Use loadFromUrl(object);
@@ -123,7 +122,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
       this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, headers, options ? options : undefined, () => {
         if (!params.onFailure) {
           // TODO Recheck after build
-          if (params.cache == ImageCacheType.NONE && params.fade !== false) {
+          if (params.cache === ImageCacheType.NONE && params.fade !== false) {
             const alpha = this.nativeObject.alpha;
             this.nativeObject.alpha = 0;
             __SF_UIView.animation(
@@ -185,8 +184,8 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
-    image: any,
-    cache: ImageCacheType
+    image: any;
+    cache: ImageCacheType;
   }): void {
     let options = SDWebImageOptions.SDWebImageAvoidAutoSetImage;
     params.ios && params.ios.isRefreshCached && (options = options | SDWebImageOptions.SDWebImageRefreshCached); // Deprecated: Use useHTTPCacheControl option.
@@ -196,7 +195,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, headers, options ? options : undefined, () => {
       if (!params.onFailure) {
         if (typeof params.onSuccess === 'function') {
-          __SF_Dispatch.mainAsync(function (innerIndex) {
+          __SF_Dispatch.mainAsync((innerIndex) => {
             // TODO Recheck after build
             params.onSuccess(Image.createFromImage(params.image), params.cache);
           });

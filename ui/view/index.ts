@@ -6,6 +6,8 @@ import { INativeComponent } from 'core/inative-component';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
+import { ConstructorOf } from '../../core/constructorof';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -15,7 +17,6 @@ export interface IViewState<Property = any> {
 }
 
 export type ViewAndroidProps = {
-  updateRippleEffectIfNeeded: () => void;
   overScrollMode: number;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -683,7 +684,7 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * });
    * ````
    */
-  onTouch: (e: Point2D) => void | boolean;
+  onTouch: (e?: Point2D) => void | boolean;
   /**
    * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
    *
@@ -955,7 +956,11 @@ export enum SemanticContentAttribute {
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>> extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
+export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative = any, TMobileOS extends WithMobileOSProps = {}> extends NativeEventEmitterComponent<
+  TEvent | ExtractEventValues<ViewEvents>,
+  TNative,
+  WithMobileOSProps<Partial<IView>, Partial<ViewIOSProps> & TMobileOS['ios'], Partial<ViewAndroidProps> & TMobileOS['android']>
+> {
   // export namespace ios {
   // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
   // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
@@ -1038,7 +1043,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TIOS exten
   flipVertically(): void;
   getScreenLocation(): Point2D;
   getParent(): IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, { [key: string]: any }>;
-  onTouch: (e: Point2D) => boolean | void;
+  onTouch: (e?: Point2D) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
   onTouchCancelled: (point: Point2D) => boolean | void;
   onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
@@ -1047,7 +1052,6 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TIOS exten
   maskedBorders: Border[];
   getPosition: () => { left: number; top: number; width: number; height: number };
 }
-
-const View: typeof AbstractView = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
-type View<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> = AbstractView<TEvent, TIOS, TAND>;
+const View: ConstructorOf<IView, Partial<IView>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+type View<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> = IView<TEvent, TIOS, TAND>;
 export default View;
