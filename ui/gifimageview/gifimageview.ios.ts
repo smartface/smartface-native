@@ -8,7 +8,7 @@ import IImage from '../image';
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: GifImage;
   private _loopCompletionCallback: (loopCountRemain: number) => void;
-  constructor(params: Partial<IGifImageView> = {}) {
+  constructor(params?: IGifImageView) {
     super(params);
 
     if (!this.nativeObject) {

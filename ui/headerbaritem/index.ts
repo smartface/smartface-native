@@ -5,6 +5,7 @@ import Color from '../color';
 import Badge from '../badge';
 import { Point2D } from '../../primitive/point2d';
 import View from '../view';
+import NativeComponent from '../../core/native-component';
 
 /**
  * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
@@ -504,7 +505,7 @@ export interface IHeaderBarItem {
   accessibilityLabel: string;
 }
 
-export declare class AbstractHeaderBarItem implements IHeaderBarItem {
+export declare class AbstractHeaderBarItem extends NativeComponent implements IHeaderBarItem {
   constructor(params?: Partial<AbstractHeaderBarItem>);
   title: string;
   readonly size: {

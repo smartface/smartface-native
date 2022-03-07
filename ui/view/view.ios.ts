@@ -1,10 +1,10 @@
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { IView, ViewBase, ViewIOSProps } from '.';
+import View, { IView, IViewProps, ViewBase, ViewIOSProps } from '.';
 import { Invocation, Exception, YogaEnums } from '../../util';
 import { Size } from '../../primitive/size';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+
 const YGUnit = YogaEnums.YGUnit;
 
 declare const myLabelTitle: any;
@@ -17,10 +17,10 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TMobile extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>> extends ViewBase<
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps> extends ViewBase<
   TEvent,
   TNative,
-  TMobile & Partial<ViewIOSProps>
+  TProps
 > {
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
@@ -78,7 +78,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     BOTTOM_RIGHT: 1 << 3
   } as const;
 
-  constructor(params?: TMobile) {
+  constructor(params?: TProps) {
     super(params);
 
     // EventEmitterCreator(this, this.EventFunctions);
@@ -89,7 +89,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
         this._nativeObject = new __SF_UIView();
       }
     }
-
     this._uniqueId = this.nativeObject.uuid;
 
     // Defaults
@@ -103,12 +102,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.onTouchCancelled = this.onTouchCancelledHandler;
     this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
     this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
-
-    // if (params) {
-    //   for (const param in params) {
-    //     this[param] = params[param];
-    //   }
-    // }
 
     const self = this;
 
@@ -166,11 +159,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       performWithoutAnimation(functionWithoutAnimation: Function) {
         __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
       }
-    } as View<TEvent, TMobile>['ios']);
-
-    // const {android:androidParams, ios, ...rest} = params;
-    // Object.assign(this._ios, ios);
-    // Object.assign(this, rest);
+    });
   }
 
   get uniqueId() {
@@ -189,12 +178,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   //     return this.shadowOffset;
   // }
 
-  get nativeObject() {
-    return this._nativeObject;
-  }
+  // get nativeObject() {
+  //   return this._nativeObject;
+  // }
 
   get accessibilityLabel() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString') as string;
+    return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString');
   }
   set accessibilityLabel(value) {
     Invocation.invokeInstanceMethod(this.nativeObject, 'setAccessibilityLabel:', [

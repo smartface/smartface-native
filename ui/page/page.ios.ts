@@ -8,9 +8,9 @@ import { PageEvents } from './page-events';
 
 const UINavigationItem = requireClass('UINavigationItem');
 
-export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
-  extends PageBase<TEvent | PageEvents, __SF_UIViewController>
-  implements IPage<TEvent | PageEvents, TNative & PageIOSParams>
+export default class PageIOS<TEvent extends string = PageEvents, TNative extends {[key: string]: any} = {[key: string]: any}, TProps extends IPage = IPage>
+  extends PageBase<TEvent | PageEvents, __SF_UIViewController, TProps>
+  implements IPage<TEvent | PageEvents,  TProps, TNative>
 {
   private routerPath: any = null;
   private pageView = new FlexLayout();
@@ -22,10 +22,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   private _largeTitleDisplayMode = 0;
   private _leftItem: any;
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
-  protected _ios: TNative & PageIOSParams;
-  protected _android: PageAndroidParams;
-  constructor(params: Partial<IPage> = {}) {
-    super();
+  constructor(params?: TProps) {
+    super(params);
+    
     const { ios, android, ...restParams } = params;
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIViewController();
@@ -45,10 +44,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
     this.headerBar = {} as any;
     this.headerBar.android = {};
     this.headerBar.ios = {};
-
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
   }
 
   onLoad: () => void;
@@ -59,13 +54,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
-  get ios() {
-    return this._ios;
-  }
-
-  get android() {
-    return this._android;
-  }
   get layout(): IPage['layout'] {
     return this.pageView;
   }
@@ -167,7 +155,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
         self.nativeObject.modalTransitionStyle = value;
       }
     };
-    this._ios = Object.assign(this._ios, ios);
+    this.addIOSProps(ios);
   }
 
   private initPageNativeEvents() {
@@ -249,7 +237,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
       this.checkOrientation();
       this.onShow?.();
 
-      this.emitter.emit('show');
+      this.emit('show');
     };
 
     this.nativeObject.onHide = () => {

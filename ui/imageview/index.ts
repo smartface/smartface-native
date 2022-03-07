@@ -1,10 +1,13 @@
-import View, { AbstractView, IView } from '../view';
+import { AbstractView, IView, IViewProps } from '../view';
 import Image from '../image';
 import Color from '../color';
 import File from '../../io/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 import IImage from '../image';
+import { INativeComponent } from '../../core/inative-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import NativeComponent from '../../core/native-component';
 
 export enum ImageViewFillTypeIOS {
   REDRAW = 3,
@@ -169,7 +172,8 @@ export enum ImageViewFillType {
   ASPECTFILL = 3
 }
 
-export declare interface IImageView<TEvent extends string = ImageViewEvents, TIOS = {}, TAND = {}> extends IView<TEvent | ImageViewEvents, TIOS, TAND> {
+export interface IImageView<TEvent extends string = ImageViewEvents, TNative extends { [key: string]: any } = any, TMobile extends IViewProps<MobileOSProps> = IViewProps<MobileOSProps>>
+  extends IView<TEvent | ImageViewEvents, TNative, TMobile> {
   /**
    * Gets/sets the image. Path of image or Image object can be set. Setting "image path"
    * to this property will be beneficial in terms of performance.

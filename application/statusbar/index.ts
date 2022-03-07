@@ -13,3 +13,4 @@ declare class StatusBarBase {
 }
 
 export const StatusBar: typeof StatusBarBase = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
+export type StatusBar = StatusBarBase;

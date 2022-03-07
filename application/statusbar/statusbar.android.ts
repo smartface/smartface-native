@@ -21,7 +21,7 @@ export enum StatusBarStyle {
   LIGHTCONTENT
 }
 
-export default class StatusBar {
+export default class StatusBarAndroid {
   private constructor() {}
   private static _visible = true;
   private static _statusBarStyle = StatusBarStyle.LIGHTCONTENT;
@@ -29,7 +29,7 @@ export default class StatusBar {
   private static _transparent: boolean;
   static readonly Styles = StatusBarStyle;
   static get style(): StatusBarStyle {
-    return StatusBar._statusBarStyle;
+    return StatusBarAndroid._statusBarStyle;
   }
   static set style(value: StatusBarStyle) {
     if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
@@ -48,10 +48,10 @@ export default class StatusBar {
     }
   }
   static get visible(): boolean {
-    return StatusBar._visible;
+    return StatusBarAndroid._visible;
   }
   static set visible(value: boolean) {
-    StatusBar._visible = value;
+    StatusBarAndroid._visible = value;
     const window = AndroidConfig.activity.getWindow();
     if (value) {
       window.clearFlags(FLAG_FULLSCREEN);
@@ -60,10 +60,10 @@ export default class StatusBar {
     }
   }
   static get backgroundColor(): Color {
-    return StatusBar._color;
+    return StatusBarAndroid._color;
   }
   static set backgroundColor(color: Color) {
-    StatusBar._color = color;
+    StatusBarAndroid._color = color;
     if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
       const window = AndroidConfig.activity.getWindow();
       window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -87,10 +87,10 @@ export default class StatusBar {
   static get android() {
     return {
       get color() {
-        return StatusBar._color;
+        return StatusBarAndroid._color;
       },
       set color(value: Color) {
-        StatusBar._color = value;
+        StatusBarAndroid._color = value;
         if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
           const window = AndroidConfig.activity.getWindow();
           window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -99,12 +99,12 @@ export default class StatusBar {
         }
       },
       get transparent() {
-        return StatusBar._transparent;
+        return StatusBarAndroid._transparent;
       },
       set transparent(value: boolean) {
         const hideStatusBarBackground = true;
         let isSetFitsSystemWindows = true;
-        StatusBar._transparent = value;
+        StatusBarAndroid._transparent = value;
         let window = AndroidConfig.activity.getWindow();
         let flags = window.getDecorView().getSystemUiVisibility();
         if (value) {

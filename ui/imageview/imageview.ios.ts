@@ -6,12 +6,11 @@ import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 
-export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView> implements IImageView {
+export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
   private _imageTemplate: Image;
   private _isSetTintColor: boolean;
-  constructor(params: Partial<IImageView> = {}) {
-    super();
-
+  constructor(params?: IImageView) {
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIImageView();
     }
@@ -24,8 +23,6 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
 
     this.nativeObject.contentMode = ImageViewFillType.NORMAL;
     this.touchEnabled = true;
-
-    Object.assign(this, params);
   }
 
   get image(): Image | string | undefined {

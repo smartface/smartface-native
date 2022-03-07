@@ -3,8 +3,11 @@ import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 
-class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative> implements IFlexLayout {
-  constructor(params: Partial<IFlexLayout> = {}) {
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
+  extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative, TProps>
+  implements IFlexLayout
+{
+  constructor(params?: TProps) {
     super(params);
   }
   onViewAdded: (view: IView) => void;

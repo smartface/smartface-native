@@ -3,6 +3,7 @@ import { FlexLayoutEvents } from './flexlayout-events';
 import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import { IViewGroup } from '../viewgroup';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type FlexLayoutAndroidProps = Partial<{
   /**
@@ -120,7 +121,7 @@ export type FlexLayoutAndroidProps = Partial<{
  *     page.layout.addChild(myFlexLayout);
  *
  */
-export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TIOS = {}, TAND = {}> extends IViewGroup<TEvent | FlexLayoutEvents, TIOS, TAND & FlexLayoutAndroidProps> {
+export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobileProps extends MobileOSProps<IViewGroup['ios'], FlexLayoutAndroidProps> = MobileOSProps<{}, FlexLayoutAndroidProps>> extends IViewGroup<TEvent | FlexLayoutEvents, any, TMobileProps> {
   /**
    * This property specifies where items will start to be positioned.
    * If you set RTL(right to left) objects will be positioned by starting from right edge of the Flex.

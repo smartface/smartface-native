@@ -15,9 +15,8 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
 import { EventEmitterWrapper } from '../../core/eventemitter';
-import View, { IView, ViewAndroidProps, ViewBase } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
-import OverScrollMode from '../android/overscrollmode';
+import View, { IView, IViewProps, ViewAndroidProps, ViewBase } from '.';
+import OverScrollMode from '../shared/android/overscrollmode';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -83,8 +82,8 @@ const activity = AndroidConfig.activity;
 export class ViewAndroid<
   TEvent extends string = ViewEvents,
   TNative extends { [key: string]: any } = { [key: string]: any },
-  TMobileProps extends WithMobileOSProps<Partial<IView>> = WithMobileOSProps<Partial<IView>>
-> extends ViewBase<TEvent, TNative, TMobileProps & ViewAndroidProps> {
+  TProps extends IViewProps = IViewProps
+> extends ViewBase<TEvent, TNative, TProps> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -125,7 +124,7 @@ export class ViewAndroid<
   protected yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
-  constructor(params: Partial<IView> = {}) {
+  constructor(params?: TProps) {
     super(params);
     // params = params || {};
     if (!this._nativeObject) {

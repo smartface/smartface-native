@@ -5,7 +5,7 @@ export enum StatusBarStyle {
   LIGHTCONTENT
 }
 
-export default class StatusBar {
+export default class StatusBarIOS {
   static readonly Styles = StatusBarStyle;
   static get ios() {
     return {};
