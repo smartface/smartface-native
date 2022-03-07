@@ -4,7 +4,7 @@ import Image from '../image';
 import Color from '../color';
 import { GifImageViewEvents } from './gifimageview-events';
 
-export declare interface IGifImageView<TEvent extends string = GifImageViewEvents, TIOS = {}, TAND = {}> extends IImageView<TEvent | GifImageViewEvents, TIOS, TAND> {
+export declare interface IGifImageView<TEvent extends string = GifImageViewEvents> extends IImageView<TEvent | GifImageViewEvents> {
   /**
    * Gets/sets the gifImage. GifImage object can be set.
    *
