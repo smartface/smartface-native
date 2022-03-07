@@ -1,4 +1,4 @@
-import { HardwareBase } from './hardware';
+import { HardwareBase } from '.';
 
 class Hardware implements HardwareBase {
   static UID = __SF_UIDevice.currentDevice().UUID;

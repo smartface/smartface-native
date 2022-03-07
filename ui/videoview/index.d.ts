@@ -2,6 +2,7 @@ import View from '../view';
 import Color from '../color';
 import File from '../../io/file';
 import Page from '../page';
+import { ViewEvents } from '../view/view-event';
 
 declare enum VideoViewEvents {
   /**
@@ -613,7 +614,7 @@ declare class VideoView extends View<VideoViewEvents> {
 }
 
 declare namespace VideoView {
-  const Events: typeof VideoViewEvents & typeof View.Events;
+  const Events: typeof VideoViewEvents & typeof ViewEvents;
   type Events = typeof Events;
 }
 

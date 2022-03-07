@@ -1,7 +1,7 @@
 import Blob from '../../global/blob';
 import Page from '../../ui/page';
-import { RequestCodes } from '../../util';
-import { ContactBase, ContactsBase } from './contacts';
+import { AndroidConfig, RequestCodes } from '../../util';
+import { ContactBase, ContactsBase } from '.';
 
 /* global requireClass toJSArray array require module*/
 const NativeContactsContract = requireClass('android.provider.ContactsContract');

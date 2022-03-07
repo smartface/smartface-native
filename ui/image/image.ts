@@ -1,4 +1,5 @@
 import { INativeComponent } from 'core/inative-component';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import IBlob from '../../global/blob/blob';
 import { Rectangle } from '../../primitive/rectangle';
 
@@ -322,23 +323,23 @@ export type ImageIOSProps =
     }
   | {};
 
+
+type ImageParams = {
+  bitmap?: any;
+  roundedBitmapDrawable?: any;
+  drawable: any;
+  android?: {
+    systemIcon?: any;
+  };
+}
 /**
  * @since 4.5.0
  */
-export class ImageBase implements IImage {
+export class ImageBase<TNative extends {[key: string]: any} = any> extends NativeMobileComponent<TNative, WithMobileOSProps<Partial<ImageParams>>> implements IImage {
   constructor(
-    params: Partial<{
-      bitmap?: any;
-      roundedBitmapDrawable?: any;
-      drawable: any;
-      android?: {
-        systemIcon?: any;
-      };
-    }>
+    params: Partial<ImageParams>
   ) {
-    const { android, ...rest } = params;
-    Object.assign(this, android);
-    Object.assign(this, rest);
+    super(params);
   }
   resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
     throw new Error('Method not implemented.');
@@ -366,10 +367,7 @@ export class ImageBase implements IImage {
     throw new Error('Method not implemented.');
     return null;
   }
-  get android(): ImageAndroidProps {
-    throw new Error('Method not implemented.');
-    return null;
-  }
+
   toBlob(): IBlob {
     throw new Error('Method not implemented.');
   }
@@ -378,7 +376,6 @@ export class ImageBase implements IImage {
     return 'Image';
   }
 
-  nativeObject: __SF_UIImage;
   /**
    * Creates an Image object which built-in icon is created corresponding systemIcon value.
    * This method is Android only.
