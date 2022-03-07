@@ -11,7 +11,6 @@ import Font from '../font';
 import { AndroidConfig, SystemServices, TypeValue } from '../../util';
 import TextAlignment from '../shared/textalignment';
 import View from '../view';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -72,10 +71,7 @@ const NativeTextAlignment = [
   80 | 5 // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
 ];
 
-export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
-  extends ViewAndroid<TEvent | SearchViewEvents, any, WithMobileOSProps<Partial<ISearchView>, ISearchView['ios'], ISearchView['android']>>
-  implements ISearchView
-{
+export default class SearchViewAndroid<TEvent extends string = SearchViewEvents> extends ViewAndroid<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _hasEventsLocked: boolean = false;
   private _hint: string;
   private _textColor: Color;
@@ -111,7 +107,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _onSearchButtonClickedCallback: () => void;
   private skipDefaults: boolean;
 
-  constructor(params: Partial<ISearchView> = {}) {
+  constructor(params?: Partial<ISearchView>) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeSearchView(AndroidConfig.activity);
@@ -178,40 +174,6 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
 
     const self = this;
     this.addAndroidProps({
-      get hintTextColor(): Color {
-        return self._hintTextColor;
-      },
-      set hintTextColor(value: Color) {
-        if (!(value instanceof Color)) {
-          throw new TypeError(Exception.TypeError.DEFAULT + 'Color');
-        }
-        self._hintTextColor = value;
-        self.mSearchSrcTextView.setHintTextColor(value.nativeObject);
-      },
-      get keyboardType(): KeyboardType {
-        return self._keyboardType;
-      },
-      set keyboardType(value: KeyboardType) {
-        self._keyboardType = value;
-        this.nativeObject.setInputType(NativeKeyboardType[value]);
-      },
-      get font(): Font {
-        return self._font;
-      },
-      set font(value: Font) {
-        if (value instanceof Font) {
-          self._font = value;
-          self.mSearchSrcTextView.setTypeface(value.nativeObject);
-          self.mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, value.size);
-        }
-      },
-      get textalignment(): TextAlignment {
-        return self._textalignment;
-      },
-      set textalignment(value: TextAlignment) {
-        self._textalignment = value;
-        self.mSearchSrcTextView.setGravity(NativeTextAlignment[value]);
-      },
       get closeImage(): Image {
         return self._closeImage;
       },
@@ -264,6 +226,24 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
         self.nativeObject.setIconifiedByDefault(value);
       }
     });
+  }
+
+  get keyboardType(): KeyboardType {
+    return this._keyboardType;
+  }
+
+  set keyboardType(value: KeyboardType) {
+    this._keyboardType = value;
+    this.nativeObject.setInputType(NativeKeyboardType[value]);
+  }
+
+  get textalignment(): TextAlignment {
+    return this._textalignment;
+  }
+
+  set textalignment(value: TextAlignment) {
+    this._textalignment = value;
+    this.mSearchSrcTextView.setGravity(NativeTextAlignment[value]);
   }
 
   get text(): string {
@@ -331,9 +311,11 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     return this._font;
   }
   set font(value: Font) {
-    this._font = value;
-    this.mSearchSrcTextView.setTypeface(value.nativeObject);
-    this.mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, value.size);
+    if (value instanceof Font) {
+      this._font = value;
+      this.mSearchSrcTextView.setTypeface(value.nativeObject);
+      this.mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, value.size);
+    }
   }
 
   get textAlignment(): TextAlignment {

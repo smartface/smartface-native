@@ -1,4 +1,4 @@
-import { ISearchView } from '.';
+import { ISearchView, SearchViewStyle } from '.';
 import System from '../../device/system';
 import Color from '../color';
 import Font from '../font';
@@ -9,7 +9,6 @@ import { SearchViewEvents } from './searchview-events';
 import { Invocation, KeyboardAnimationDelegate } from '../../util';
 import Page from 'ui/page';
 import KeyboardAppearance from '../shared/keyboardappearance';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const UISearchBarStyle = {
   default: 0,
@@ -25,7 +24,7 @@ const UISearchBarIcon = {
 };
 
 export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
-  extends ViewIOS<TEvent | SearchViewEvents, any, WithMobileOSProps<Partial<ISearchView>, ISearchView['ios'], ISearchView['android']>>
+  extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView>
   implements ISearchView
 {
   private _textAligment: number = 3;
@@ -47,8 +46,10 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
   private _onSearchButtonClicked: () => void;
   private _onCancelButtonClicked: () => void;
   private _searchBarDelegate: __SF_UISearchBarDelegate;
-  private _searchViewStyle = UISearchBarStyle.default;
-  constructor(params: Partial<ISearchView> = {}) {
+  private _searchViewStyle: SearchViewStyle = UISearchBarStyle.default;
+  private textfield: any;
+  private keyboardanimationdelegate: any;
+  constructor(params?: Partial<ISearchView>) {
     super(params);
 
     if (!this.nativeObject) {
@@ -80,7 +81,6 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
     }
 
     // TODO Recheck textfield and keyboardanimationdelegate fields. Doesn't exists in this;
-
     this.textfield = this.nativeObject.valueForKey('searchField');
     this.textfield.addKeyboardObserver();
 
@@ -173,10 +173,10 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
       set loadingColor(value: Color) {
         self.nativeObject.activityIndicator.color = value.nativeObject;
       },
-      get searchViewStyle(): typeof UISearchBarStyle.default {
+      get searchViewStyle(): SearchViewStyle {
         return self._searchViewStyle;
       },
-      set searchViewStyle(value: typeof UISearchBarStyle.default) {
+      set searchViewStyle(value: SearchViewStyle) {
         self._searchViewStyle = value;
         self.nativeObject.searchBarStyle = value;
       },
@@ -233,7 +233,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
         this._constant = constant;
         const argConstant = new Invocation.Argument({
           type: 'CGFloat',
-          value: _constant
+          value: this._constant
         });
         Invocation.invokeInstanceMethod(this.nativeObject.activityIndicatorTrailingConstraint, 'setConstant:', [argConstant]);
       }
@@ -378,8 +378,11 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
   }
   set textAlignment(value: TextAlignment) {
     this._textAligment = value;
+    const numVal = value as number;
 
-    const vertical = parseInt(value / 3) === 0 ? 1 : parseInt(value / 3) === 1 ? 0 : 2;
+    // TODO: CHeck why parseInt was used because param is also a number value.
+    // const vertical = parseInt(numVal / 3) === 0 ? 1 : parseInt(value / 3) === 1 ? 0 : 2;
+    const vertical = numVal / 3 === 0 ? 1 : value / 3 === 1 ? 0 : 2;
     const horizontal = value % 3 === 0 ? 0 : value % 3 === 1 ? 1 : 2;
 
     this.textfield.setValueForKey(vertical, 'contentVerticalAlignment');

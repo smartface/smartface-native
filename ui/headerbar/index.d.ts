@@ -1,7 +1,7 @@
 import AttributedString from '../../global/attributedstring';
 import Color from '../color';
 import Font from '../font';
-import View from '../view';
+import View, { IView } from '../view';
 import HeaderBarItem from '../headerbaritem';
 import Page, { AbstractPage, LargeTitleDisplayMode } from '../page';
 import Image from '../image';
@@ -51,6 +51,8 @@ import Image from '../image';
  *
  */
 type HeaderBar = {
+  removeViewFromHeaderBar(view: IView): void;
+  addViewToHeaderBar(view: IView): void;
   /**
    * Defines the opacity of a view. The value of this property is a float number between 0.0 and 1.0. For iOS, you should access this property from page.parentController.
    * 0 represents view is completely transparent and 1 represents view is completely opaque.
