@@ -1,10 +1,10 @@
-import ListView from '../listview';
 import { ConstructorOf } from '../../core/constructorof';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import { IFlexLayout } from '../flexlayout';
+import { SwipeDirection } from '../swipeitem';
 
 export interface ListViewItemIOSProperties {
-  expandSwipe?(direction?: ListView.SwipeDirection): void;
+  expandSwipe?(direction?: SwipeDirection): void;
 }
 
 /**
