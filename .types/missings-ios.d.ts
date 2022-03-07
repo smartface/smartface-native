@@ -1275,6 +1275,10 @@ declare class __SF_UIUserNotificationTypeBadge {}
 
 declare class __SF_UIUserNotificationTypeAlert {}
 
+declare class __SF_SearchBarContainerView {
+  static createWithSearchBar(nativeObject: any): any;
+}
+
 declare class __SF_SMFUNUserNotificationCenterDelegate {
   static willPresentNotification: (e: any) => number;
   static didReceiveNotificationResponse: (e: any) => void;

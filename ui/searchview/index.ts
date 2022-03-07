@@ -1,76 +1,189 @@
-import View from '../view';
+import View, { AbstractView, IView } from '../view';
 import Color from '../color';
 import Image from '../image';
 import Page from '../page';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
-import TextAlignment from '../shared/textalignment';
 import KeyboardAppearance from '../shared/keyboardappearance';
+import TextAlignment from '../shared/textalignment';
+import { SearchViewEvents } from './searchview-events';
+import { ImageBase } from '../image/image';
 
-declare enum SearchViewEvents {
+/**
+ * Bar style that specifies the search bar’s appearance.
+ * @class UI.SearchView.iOS.Style
+ */
+export enum SearchViewStyle {
+  /**
+   * Default is prominent.
+   * @memberof UI.SearchView.iOS.Style
+   * @property DEFAULT
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  DEFAULT = 0,
+  /**
+   * The search bar has a transparent background.
+   * @property PROMINENT
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  PROMINENT = 1,
+  /**
+   * The search bar has no background.
+   * @property MINIMAL
+   * @ios
+   * @readonly
+   * @since 0.1
+   */
+  MINIMAL = 2
+}
+
+export type SearchViewIOSProps = View['ios'] & {
+  /**
+   * This function show loading indicator.
+   *
+   * @method showLoading
+   * @ios
+   * @since 3.0.2
+   */
+  showLoading?(): void;
+  /**
+   * This function hide loading indicator.
+   *
+   * @method hideLoading
+   * @ios
+   * @since 3.0.2
+   */
+  hideLoading?(): void;
+  /**
+   * Gets/sets the search view’s style. This property works only for IOS.
+   *
+   * @property {UI.SearchView.iOS.Style} searchViewStyle
+   * @ios
+   * @since 0.1
+   */
+  searchViewStyle?: typeof SearchViewStyle;
+  /**
+   * Gets/sets visibility of cancel button. This property works only for IOS.
+   *
+   * @property {boolean} showsCancelButton
+   * @ios
+   * @since 0.1
+   */
+  showsCancelButton?: boolean;
+  /**
+   * Gets/sets cursor color of searchview.
+   *
+   * @property {UI.Color} cursorColor
+   * @ios
+   * @android
+   * @since 3.2.1
+   */
+  cursorColor?: Color;
+  /**
+   * Gets/sets cancel button color of searchview. This property works only for IOS.
+   *
+   * @property {UI.Color} cancelButtonColor
+   * @ios
+   * @since 1.1.12
+   */
+  cancelButtonColor?: Color;
+  /**
+   * Gets/sets cancel button text of searchview. This property works only for IOS.
+   *
+   * @property {String} cancelButtonText
+   * @ios
+   * @since 3.2.1
+   */
+  cancelButtonText?: string;
   /**
    * This event is called when user clicks the cancel button.
    *
    * @ios
+   * @deprecated
    * @event onCancelButtonClicked
    * @since 0.1
-   */
-  CancelButtonClicked = 'cancelButtonClicked',
-  /**
-   * This event is called when user focus on the search view by selecting it.
+   * @example
+   * ````
+   * import SearchView from '@smartface/native/ui/searchview';
    *
-   * @event onSearchBegin
-   * @android
-   * @ios
-   * @since 0.1
+   * const searchView = new SearchView();
+   * searchView.on(SearchView.Events.CancelButtonClicked, () => {
+   * 	console.info('onCancelButtonClicked');
+   * });
+   * ````
    */
-  SearchBegin = 'searchBegin',
+  onCancelButtonClicked?: () => void;
   /**
-   * This event is called when user clicks search button on the keyboard. In Android, clicking on search action button does not {@link Application#hideKeyboard hide the keyboard}.
+   * Gets/sets the color of the loading indicator.
    *
-   * @event onSearchButtonClicked
-   * @android
+   * @property {UI.Color} loadingColor
    * @ios
-   * @since 0.1
+   * @since 3.0.2
    */
-  SearchButtonClicked = 'searchButtonClicked',
-  /**
-   * This event is called when searchview loses focus.
-   *
-   * @event onSearchEnd
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  SearchEnd = 'searchEnd',
-  /**
-   * This event is called when user changes the search text.
-   *
-   * @param {String} searchText The current text in the search text view.
-   * @android
-   * @ios
-   * @event onTextChanged
-   * @since 0.1
-   */
-  TextChanged = 'textChanged'
-}
+  loadingColor?: Color;
+  keyboardAppearance?: KeyboardAppearance;
+};
 
-/**
- * @class UI.SearchView
- * @extends UI.View
- * @since 0.1
- *
- * SearchView is a UI which user can enter a search query and submit a request to search provider.
- *
- *     @example
- *     const SearchView = require('@smartface/native/ui/searchview');
- *     var searchBar = new SearchView();
- *     searchBar.on(SearchView.Events.TextChanged, function(searchText){
- *         console.log("searched text : " + searchText);
- *     };
- *
- */
-declare interface SearchView extends View {
+export type SearchViewAndroidProps = View['android'] & {
+  /**
+   * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+   * property should be true.
+   *
+   * @property {UI.Image} searchButtonIcon
+   * @android
+   * @since 3.2.1
+   */
+  searchButtonIcon: Image;
+  /**
+   * This property makes the search view either iconified or expanded.
+   *
+   * @property {Boolean} [iconifiedByDefault = false ]
+   * @android
+   * @since 3.2.1
+   */
+  iconifiedByDefault: boolean;
+
+  /**
+   * Gets/sets clear icon of searchview.
+   *
+   * @property {UI.Image} clearIcon
+   * @android
+   * @since 3.2.1
+   * @deprecated 3.2.2 Use {@link UI.SearchView#closeIcon} instead.
+   */
+  clearIcon: Image;
+  /**
+   * Gets/sets clear/close icon of searchview.
+   *
+   * @property {UI.Image} closeIcon
+   * @android
+   * @since 3.2.2
+   */
+  closeIcon: Image;
+  /**
+   * This property allows you to override search icon of searchview by given icon or custom layout.
+   *
+   * @property {UI.Image | UI.FlexLayout} leftItem
+   * @android
+   * @since 3.2.2
+   */
+  leftItem: Image | FlexLayout;
+  /**
+   * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
+   *
+   * @property {Number} [textFieldBorderRadius = 15]
+   * @android
+   * @since 3.0.2
+   */
+  textFieldBorderRadius: number;
+};
+
+export declare interface ISearchView<TEvent extends string = SearchViewEvents, TIOS = SearchViewIOSProps, TAND = SearchViewAndroidProps>
+  extends IView<TEvent | SearchViewEvents, TIOS & SearchViewIOSProps, TAND & SearchViewAndroidProps> {
   /**
    * Gets/sets text of SearchView.
    *
@@ -197,145 +310,7 @@ declare interface SearchView extends View {
    * @since 1.1.8
    */
   removeFocus(): void;
-  ios: View['ios'] & {
-    /**
-     * This function show loading indicator.
-     *
-     * @method showLoading
-     * @ios
-     * @since 3.0.2
-     */
-    showLoading(): void;
-    /**
-     * This function hide loading indicator.
-     *
-     * @method hideLoading
-     * @ios
-     * @since 3.0.2
-     */
-    hideLoading(): void;
-    /**
-     * Gets/sets the search view’s style. This property works only for IOS.
-     *
-     * @property {UI.SearchView.iOS.Style} searchViewStyle
-     * @ios
-     * @since 0.1
-     */
-    searchViewStyle: SearchView.iOS.Style;
-    /**
-     * Gets/sets visibility of cancel button. This property works only for IOS.
-     *
-     * @property {boolean} showsCancelButton
-     * @ios
-     * @since 0.1
-     */
-    showsCancelButton: boolean;
-    /**
-     * Gets/sets cursor color of searchview.
-     *
-     * @property {UI.Color} cursorColor
-     * @ios
-     * @android
-     * @since 3.2.1
-     */
-    cursorColor: Color;
-    /**
-     * Gets/sets cancel button color of searchview. This property works only for IOS.
-     *
-     * @property {UI.Color} cancelButtonColor
-     * @ios
-     * @since 1.1.12
-     */
-    cancelButtonColor: Color;
-    /**
-     * Gets/sets cancel button text of searchview. This property works only for IOS.
-     *
-     * @property {String} cancelButtonText
-     * @ios
-     * @since 3.2.1
-     */
-    cancelButtonText: string;
-    /**
-     * This event is called when user clicks the cancel button.
-     *
-     * @ios
-     * @deprecated
-     * @event onCancelButtonClicked
-     * @since 0.1
-     * @example
-     * ````
-     * import SearchView from '@smartface/native/ui/searchview';
-     *
-     * const searchView = new SearchView();
-     * searchView.on(SearchView.Events.CancelButtonClicked, () => {
-     * 	console.info('onCancelButtonClicked');
-     * });
-     * ````
-     */
-    onCancelButtonClicked: () => void;
-    /**
-     * Gets/sets the color of the loading indicator.
-     *
-     * @property {UI.Color} loadingColor
-     * @ios
-     * @since 3.0.2
-     */
-    loadingColor: Color;
-    keyboardAppearance: KeyboardAppearance;
-  };
-  android: View['android'] & {
-    /**
-     * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
-     * property should be true.
-     *
-     * @property {UI.Image} searchButtonIcon
-     * @android
-     * @since 3.2.1
-     */
-    searchButtonIcon: Image;
-    /**
-     * This property makes the search view either iconified or expanded.
-     *
-     * @property {Boolean} [iconifiedByDefault = false ]
-     * @android
-     * @since 3.2.1
-     */
-    iconifiedByDefault: boolean;
 
-    /**
-     * Gets/sets clear icon of searchview.
-     *
-     * @property {UI.Image} clearIcon
-     * @android
-     * @since 3.2.1
-     * @deprecated 3.2.2 Use {@link UI.SearchView#closeIcon} instead.
-     */
-    clearIcon: Image;
-    /**
-     * Gets/sets clear/close icon of searchview.
-     *
-     * @property {UI.Image} closeIcon
-     * @android
-     * @since 3.2.2
-     */
-    closeIcon: Image;
-    /**
-     * This property allows you to override search icon of searchview by given icon or custom layout.
-     *
-     * @property {UI.Image | UI.FlexLayout} leftItem
-     * @android
-     * @since 3.2.2
-     */
-    leftItem: Image | FlexLayout;
-    /**
-     * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
-     *
-     * @property {Number} [textFieldBorderRadius = 15]
-     * @android
-     * @since 3.0.2
-     */
-    textFieldBorderRadius: number;
-  };
   /**
    * Gets/sets the font of the SearchView.
    *
@@ -452,50 +427,50 @@ declare interface SearchView extends View {
   onSearchButtonClicked: () => void;
 }
 
-declare class SearchView implements SearchView {
-  constructor(params?: Partial<SearchView>);
+export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent, SearchViewIOSProps, SearchViewAndroidProps> implements ISearchView<TEvent> {
+  static iOS: {
+    Style: typeof SearchViewStyle;
+  };
+  text: string;
+  hint: string;
+  textColor: Color;
+  backgroundImage: ImageBase;
+  iconImage: ImageBase;
+  searchIcon: ImageBase;
+  ios: SearchViewIOSProps;
+  android: SearchViewAndroidProps;
+  addToHeaderBar(page: Page): void;
+  removeFromHeaderBar(page: Page): void;
+  showKeyboard(): void;
+  hideKeyboard(): void;
+  requestFocus(): void;
+  removeFocus(): void;
+  font: Font;
+  textAlignment: TextAlignment;
+  hintTextColor: Color;
+  textFieldBackgroundColor: Color;
+  onSearchBegin: () => void;
+  onSearchEnd: () => void;
+  onTextChanged: (searchText: string) => void;
+  onSearchButtonClicked: () => void;
 }
 
-declare namespace SearchView {
-  /**
-   * iOS Specific Properties.
-   * @class UI.SearchView.iOS
-   */
-  namespace iOS {
-    /**
-     * Bar style that specifies the search bar’s appearance.
-     * @class UI.SearchView.iOS.Style
-     */
-    enum Style {
-      /**
-       * Default is prominent.
-       * @memberof UI.SearchView.iOS.Style
-       * @property DEFAULT
-       * @ios
-       * @readonly
-       * @since 0.1
-       */
-      DEFAULT = 0,
-      /**
-       * The search bar has a transparent background.
-       * @property PROMINENT
-       * @ios
-       * @readonly
-       * @since 0.1
-       */
-      PROMINENT = 1,
-      /**
-       * The search bar has no background.
-       * @property MINIMAL
-       * @ios
-       * @readonly
-       * @since 0.1
-       */
-      MINIMAL = 2
-    }
-  }
+/**
+ * @class UI.SearchView
+ * @extends UI.View
+ * @since 0.1
+ *
+ * SearchView is a UI which user can enter a search query and submit a request to search provider.
+ *
+ *     @example
+ *     import SearchView from '@smartface/native/ui/searchview';
+ *     const searchBar = new SearchView();
+ *     searchBar.on(SearchView.Events.TextChanged, (searchText) => {
+ *         console.log("searched text : " + searchText);
+ *     };
+ *
+ */
+const SearchView: typeof AbstractSearchView = require(`./searchview.${Device.deviceOS.toLowerCase()}`).default;
+type SearchView = AbstractSearchView;
 
-  const Events: typeof SearchViewEvents & typeof View.Events;
-  type Events = typeof Events;
-}
-export = SearchView;
+export default SearchView;
