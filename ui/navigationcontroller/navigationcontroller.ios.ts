@@ -16,6 +16,11 @@ export default class NavigationControllerIOS extends NativeComponent implements 
   view: NavigationView;
   protected model: NavigationModel;
   private _headerBar: HeaderBar;
+  pageID: number;
+  tabBar?: import('ui/tabbarcontroller');
+  isActive: boolean = false;
+  popupBackNavigator: boolean = false;
+
   constructor(params: Partial<INavigationController> & ControllerParams = { controller: undefined }) {
     super();
     this.view = new NavigationView({ viewModel: this });
@@ -28,16 +33,15 @@ export default class NavigationControllerIOS extends NativeComponent implements 
     this._nativeObject = this.view.nativeObject;
     Object.assign(this, params);
   }
-  pageID: number;
-  tabBar?: import("ui/tabbarcontroller");
+
   getCurrentController(): IController {
     return this.childControllers[this.childControllers.length - 1];
   }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; }) {
+
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }) {
     throw new Error('Method not implemented.');
   }
-  isActive: boolean = false;
-  popupBackNavigator: boolean = false;
+
   get android() {
     return this._android;
   }

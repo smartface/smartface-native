@@ -2,7 +2,7 @@ import View, { AbstractView, IView } from '../view';
 import Image from '../image';
 import Color from '../color';
 import File from '../../io/file';
-import { ImageCacheType } from '../imagecachetype';
+import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 
 export enum ImageViewFillTypeIOS {

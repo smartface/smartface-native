@@ -2,7 +2,7 @@ import ImageView from '../imageview';
 import GifImage from '../gifimage';
 import Image from '../image';
 import Color from '../color';
-import ImageCacheType from '../imagecachetype';
+import ImageCacheType from '../shared/imagecachetype';
 /**
  * @class UI.GifImageView
  * @extends UI.ImageView
