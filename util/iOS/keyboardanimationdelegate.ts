@@ -45,7 +45,7 @@ export default class KeyboardAnimationDelegate {
     return top;
   }
 
-  keyboardShowAnimation(keyboardHeight: number, e: KeyboardInfoParams, isBeginEditing: boolean) {
+  keyboardShowAnimation(keyboardHeight: number, e: KeyboardInfoParams, isBeginEditing?: boolean) {
     KeyboardAnimationDelegate.isKeyboardVisible = true;
     KeyboardAnimationDelegate.ApplicationKeyboardHeight = keyboardHeight;
     let height = this.nativeObject.frame.height;
@@ -323,7 +323,7 @@ export default class KeyboardAnimationDelegate {
       type: 'NSObject',
       value: undefined
     });
-    const statusBarWindowRect = Invocation.invokeInstanceMethod(viewWindow, 'convertRect:fromWindow:', [argRect, argWindow], 'CGRect') as __SF_NSRect;
+    const statusBarWindowRect = Invocation.invokeInstanceMethod(viewWindow, 'convertRect:fromWindow:', [argRect, argWindow], 'CGRect');
 
     const argRect1 = new Invocation.Argument({
       type: 'CGRect',
@@ -333,7 +333,7 @@ export default class KeyboardAnimationDelegate {
       type: 'NSObject',
       value: undefined
     });
-    const statusBarViewRect = Invocation.invokeInstanceMethod(view, 'convertRect:fromView:', [argRect1, argWindow1], 'CGRect') as __SF_NSRect;
+    const statusBarViewRect = Invocation.invokeInstanceMethod(view, 'convertRect:fromView:', [argRect1, argWindow1], 'CGRect');
 
     return {
       frame: statusBarFrame,

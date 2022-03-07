@@ -98,6 +98,7 @@ declare class __SF_CNContactPickerViewController {
 declare class __SF_NSRect extends __SF_GCRect {}
 
 declare class __SF_UIView extends __SF_NSOBject {
+  static setViewAppearanceSemanticContentAttribute(param?: number)
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
@@ -316,7 +317,7 @@ declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
 }
 
-declare interface iOSSharedApplication {
+declare interface iOSSharedApplication extends __SF_NSOBject {
   statusBarFrame: __SF_NSRect;
   statusBarOrientation: number;
   sf_statusBarStyle: any;
@@ -1259,6 +1260,8 @@ declare class __SF_KeychainPasswordItem {
 }
 
 declare class __SF_UIApplicationWillResignActiveNotification {}
+
+declare class __SF_UIDeviceOrientationDidChangeNotification {}
 
 declare const __SF_UIScrollViewDecelerationRateNormal: number;
 declare const __SF_UIScrollViewDecelerationRateFast: number;

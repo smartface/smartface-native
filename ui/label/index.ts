@@ -1,8 +1,8 @@
 import TextDirection from '../android/textdirection';
 import Color from '../color';
-import EllipsizeMode from '../ellipsizemode';
+import EllipsizeMode from '../shared/ellipsizemode';
 import Font from '../font';
-import TextAlignment from '../textalignment';
+import TextAlignment from '../shared/textalignment';
 import IView, { IViewState } from '../view';
 import { ViewEvents } from '../view/view-event';
 import { ConstructorOf } from '../../core/constructorof';

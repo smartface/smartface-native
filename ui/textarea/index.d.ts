@@ -1,6 +1,6 @@
 import TextBox from '../textbox';
-import KeyboardType from '../keyboardtype';
-import ActionKeyType from '../actionkeytype';
+import KeyboardType from '../shared/keyboardtype';
+import ActionKeyType from '../shared/android/actionkeytype';
 /**
  * @class UI.TextArea
  * @since 1.1.10

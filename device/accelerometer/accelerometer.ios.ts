@@ -1,7 +1,8 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { IAccelerometer } from './accelerometer';
+import { IAccelerometer } from '.';
 import { AccelerometerEvents } from './accelerometer-events';
+
 class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
   monitonManager = new __SF_CMMotionManager();
   android = {};

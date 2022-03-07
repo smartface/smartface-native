@@ -1,7 +1,7 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { Invocation } from '../../util';
-import { ILocation } from './location';
+import { ILocation } from '.';
 import { LocationEvents } from './location-events';
 const IOS_AUTHORIZATION_STATUS = {
   //deprecated
@@ -64,6 +64,7 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents> implements
     };
     eventCallbacksAssign(this, EventFunctions);
   }
+  __onActivityResult: (resultCode: number) => void;
   changeLocationListener(e) {
     this.onLocationChanged(e);
   }

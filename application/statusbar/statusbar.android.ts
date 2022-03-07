@@ -1,6 +1,6 @@
-import Color from 'sf-core/ui/color';
-import AndroidConfig from 'sf-core/util/Android/androidconfig';
-import AndroidUnitConverter from 'sf-core/util/Android/unitconverter';
+import Color from '../../ui/color';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 /* globals requireClass */
 const NativeBuildVersion = requireClass('android.os.Build');

@@ -7,7 +7,7 @@ const TypeUtil = require('../../util/type');
 /**
  * @since 4.5.0
  */
-class ImageiOS extends ImageBase {
+class ImageiOS extends ImageBase<__SF_UIImage> {
   static createFromFile = function (path) {
     const imageFile = new File({
       path: path
@@ -50,7 +50,7 @@ class ImageiOS extends ImageBase {
   private _autoMirrored: boolean = false;
 
   constructor(params: any) {
-    super();
+    super(params);
     if (params.path) {
       if (params.path.includes('.app')) {
         // Publish project image caching.
