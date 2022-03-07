@@ -3,12 +3,16 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter.js';
 import { RangeSliderEvents } from './rangeslider-events';
 import { ViewAndroid } from '../view/view.android';
-import { AndroidProps, IRangeSlider } from '.';
+import { IRangeSlider } from '.';
 import Color from '../color';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 
-export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents> extends ViewAndroid<TEvent | RangeSliderEvents, AndroidProps> implements IRangeSlider {
+export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents>
+  extends ViewAndroid<TEvent | RangeSliderEvents, any, WithMobileOSProps<Partial<IRangeSlider>, IRangeSlider['ios'], IRangeSlider['android']>>
+  implements IRangeSlider
+{
   private _snapStepSize: number = 1;
   private _minValue: number = 0;
   private _maxValue: number = 5;
@@ -26,14 +30,14 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   private _onValueChange: (value: number[]) => void;
 
   constructor(params: Partial<IRangeSlider> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new NativeSFRangeSlider(AndroidConfig.activity);
     }
 
     const self = this;
-    const _android = {
+    this.addAndroidProps({
       get thumbSize(): number {
         return self._thumbSize;
       },
@@ -69,10 +73,7 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
         self._outerTrackWeight = value;
         self.nativeObject.setBarWeight(AndroidUnitConverter.dpToPixel(self._outerTrackWeight));
       }
-    };
-    const { android, ...restParams } = this;
-    Object.assign(this._android, _android);
-    Object.assign(this, restParams);
+    });
 
     this.nativeObject.setOnValueChange({
       onValueChange: (leftPinValue: any, rightPinValue: any) => {

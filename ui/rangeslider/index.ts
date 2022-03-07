@@ -4,7 +4,7 @@ import Image from '../image';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
 
-export type iOSProps = View['ios'] &
+export type RangeSliderIOSProps = View['ios'] &
   Partial<{
     thumbShadowColor: Color;
     thumbShadowOpacity: number;
@@ -14,7 +14,7 @@ export type iOSProps = View['ios'] &
     applyThumbViewChanges: () => void;
   }>;
 
-export type AndroidProps = View['android'] &
+export type RangeSliderAndroidProps = View['android'] &
   Partial<{
     thumbSize: number;
     thumbColor: Color;
@@ -22,7 +22,8 @@ export type AndroidProps = View['android'] &
     thumbBorderWidth: number;
   }>;
 
-export declare interface IRangeSlider<TEvent extends string = RangeSliderEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | RangeSliderEvents, TIOS & iOSProps, TAND & AndroidProps> {
+export declare interface IRangeSlider<TEvent extends string = RangeSliderEvents, TIOS = RangeSliderIOSProps, TAND = RangeSliderAndroidProps>
+  extends IView<TEvent | RangeSliderEvents, TIOS & RangeSliderIOSProps, TAND & RangeSliderAndroidProps> {
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;

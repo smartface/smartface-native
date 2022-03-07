@@ -1,17 +1,21 @@
-import { iOSProps, IRangeSlider } from '.';
+import { IRangeSlider } from '.';
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import Image from '../image';
 import ViewIOS from '../view/view.ios';
 import { RangeSliderEvents } from './rangeslider-events';
 import { UIControlEvents } from '../../util';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
-export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> extends ViewIOS<TEvent | RangeSliderEvents, iOSProps> implements IRangeSlider {
+export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents>
+  extends ViewIOS<TEvent | RangeSliderEvents, any, WithMobileOSProps<Partial<IRangeSlider>, IRangeSlider['ios'], IRangeSlider['android']>>
+  implements IRangeSlider
+{
   private _rangeEnabled: boolean;
   private _thumbImage: Image;
   private _onValueChange: (value: number[]) => void;
   constructor(params: Partial<IRangeSlider> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_MultiSlider();
@@ -25,7 +29,7 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
     this._nativeObject.maximumValue = 5;
 
     const self = this;
-    const _ios = {
+    this.addIOSProps({
       get thumbShadowColor(): Color {
         return self.nativeObject.thumbShadowColor;
       },
@@ -67,10 +71,7 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
       applyThumbViewChanges: () => {
         self.nativeObject.applyThumbViewChanges();
       }
-    };
-    const { ios, ...restParams } = this;
-    Object.assign(this._ios, _ios);
-    Object.assign(this, restParams);
+    });
 
     const valueChangeHandler = () => {
       self.onValueChange?.(self.value);
