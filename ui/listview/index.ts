@@ -2,10 +2,11 @@ import OverScrollMode from '../shared/android/overscrollmode';
 import ListViewItem from '../listviewitem';
 import Color, { AbstractColor } from '../color';
 import ScrollState from '../shared/android/scrollstate';
-import { AbstractView, IView } from '../view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { Point2D } from '../../primitive/point2d';
 import { ListViewEvents } from './listview-events';
 import SwipeItem, { ISwipeItem, SwipeDirection } from '../swipeitem';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * The type of animation to use when rows are inserted or deleted or reloaded.
@@ -82,7 +83,7 @@ export enum RowAnimation {
   AUTOMATIC
 }
 
-type IListViewIOS = Partial<{
+type IListViewIOS = ViewIOSProps & Partial<{
   /**
    * Animates multiple insert, delete and refresh operations as a group.
    * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations.
@@ -184,7 +185,7 @@ type IListViewIOS = Partial<{
   onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: Point2D, targetContentOffset: __SF_NSRect) => void;
 }>;
 
-type IListViewAndroid = Partial<{
+type IListViewAndroid = ViewAndroidProps & Partial<{
   /**
    * Starts dragging the provided ListViewItem. By default, ListView starts a drag when a ListViewItem is long pressed.
    * You can disable that behavior by setting longPressDragEnabled.
@@ -352,8 +353,8 @@ type IListViewAndroid = Partial<{
  *
  *
  */
-export interface IListView<TEvent extends string = ListViewEvents, TIOS extends Record<string, any> = IListViewIOS, TAND extends Record<string, any> = IListViewAndroid>
-  extends IView<TEvent | ListViewEvents, TIOS & IListViewIOS, TAND & IListViewAndroid> {
+export interface IListView<TEvent extends string = ListViewEvents, TMobile extends MobileOSProps<IListViewIOS, IListViewAndroid> = MobileOSProps<IListViewIOS, IListViewAndroid>>
+  extends IView<TEvent | ListViewEvents, any, TMobile> {
   width: number;
   height: number;
   nativeInner: INativeInner;
@@ -840,8 +841,8 @@ export interface IListView<TEvent extends string = ListViewEvents, TIOS extends 
 }
 
 export declare class AbstractListView<TEvent extends string = ListViewEvents, TIOS extends Record<string, any> = IListViewIOS, TAND extends Record<string, any> = IListViewAndroid>
-  extends AbstractView<TEvent | ListViewEvents, TIOS & IListViewIOS, TAND & IListViewAndroid>
-  implements IListView<TEvent | ListViewEvents, TIOS & IListViewIOS, TAND & IListViewAndroid>
+  extends AbstractView<TEvent | ListViewEvents, any, IListView>
+  implements IListView<TEvent | ListViewEvents>
 {
   onRowSwipe: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => ISwipeItem[];
   onRowType: (index?: number) => number;

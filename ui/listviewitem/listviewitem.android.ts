@@ -8,12 +8,12 @@ const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 const SFRecyclerViewHolder = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder');
 
 export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}>
-  extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, WithMobileOSProps<Partial<IListViewItem>> & ListViewItemAndroid>
+  extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, IListViewItem>
   implements IListViewItem
 {
   nativeInner: any;
 
-  constructor(params: Partial<IListViewItem> = {}) {
+  constructor(params?: IListViewItem) {
     super(params);
 
     this.ios.expandSwipe = () => {};
