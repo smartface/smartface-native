@@ -1,5 +1,4 @@
 import { IListView, RowAnimation } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import ListViewItem from '../listviewitem';
