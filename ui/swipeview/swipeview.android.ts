@@ -111,6 +111,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
         return self._overScrollMode;
       },
       set overScrollMode(mode: OverScrollMode) {
+        self.nativeObject.setOverScrollMode(mode);
         self._overScrollMode = mode;
       }
     };
