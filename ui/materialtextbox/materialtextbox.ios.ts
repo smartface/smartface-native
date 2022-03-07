@@ -1,4 +1,5 @@
 import { IMaterialTextBox, iOSProps } from '.';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
@@ -6,9 +7,9 @@ import TextBoxIOS from '../textbox/textbox.ios';
 import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 
-export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents, TNative = iOSProps>
-  extends TextBoxIOS<TEvent | MaterialTextBoxEvents, TNative>
-  implements IMaterialTextBox<TEvent, TNative>
+export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents>
+  extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, WithMobileOSProps<Partial<IMaterialTextBox>, IMaterialTextBox['ios'], IMaterialTextBox['android']>>
+  implements IMaterialTextBox
 {
   private mdcTextInputControllerUnderline: __SF_MDCTextInputControllerUnderline;
   private _multiline: boolean;

@@ -1,4 +1,5 @@
 import { AndroidProps, IMaterialTextBox } from '.';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import { AndroidConfig, UnitConverter } from '../../util';
 import Color from '../color';
@@ -23,9 +24,9 @@ const state_unfocused = -16842908;
 // const GRAVITY_END = 8388613;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
-export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents, TNative = AndroidProps>
-  extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, TNative>
-  implements IMaterialTextBox<TEvent, {}, TNative>
+export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents>
+  extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, WithMobileOSProps<Partial<IMaterialTextBox>, IMaterialTextBox['ios'], IMaterialTextBox['android']>>
+  implements IMaterialTextBox
 {
   private sfTextBox: TextBox;
   private textBoxNativeObject: any;
