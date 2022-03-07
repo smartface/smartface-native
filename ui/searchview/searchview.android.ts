@@ -1,16 +1,17 @@
 /*globals requireClass*/
-import { AndroidProps, ISearchView } from '.';
+import { ISearchView } from '.';
 import Color from '../color';
 import Image from '../image';
-import KeyboardType from '../keyboardtype';
+import KeyboardType from '../shared/keyboardtype';
 import { ViewAndroid } from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
 import Page from 'ui/page';
 import Font from '../font';
-import { SystemServices, TypeValue } from '../../util';
-import TextAlignment from '../textalignment';
+import { AndroidConfig, SystemServices, TypeValue } from '../../util';
+import TextAlignment from '../shared/textalignment';
 import View from '../view';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -71,7 +72,10 @@ const NativeTextAlignment = [
   80 | 5 // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
 ];
 
-export default class SearchViewAndroid<TEvent extends string = SearchViewEvents> extends ViewAndroid<TEvent | SearchViewEvents, AndroidProps> implements ISearchView {
+export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
+  extends ViewAndroid<TEvent | SearchViewEvents, any, WithMobileOSProps<Partial<ISearchView>, ISearchView['ios'], ISearchView['android']>>
+  implements ISearchView
+{
   private _hasEventsLocked: boolean = false;
   private _hint: string;
   private _textColor: Color;
@@ -172,14 +176,8 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, this._hint);
     a.recycle();
 
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._android, this.androidProps, android);
-    Object.assign(this, restParams);
-  }
-
-  private get androidProps() {
     const self = this;
-    return {
+    this.addAndroidProps({
       get hintTextColor(): Color {
         return self._hintTextColor;
       },
@@ -265,7 +263,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
         self._iconifiedByDefault = value;
         self.nativeObject.setIconifiedByDefault(value);
       }
-    };
+    });
   }
 
   get text(): string {

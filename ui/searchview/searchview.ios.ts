@@ -1,14 +1,15 @@
-import { iOSProps, ISearchView } from '.';
+import { ISearchView } from '.';
 import System from '../../device/system';
 import Color from '../color';
 import Font from '../font';
 import Image from '../image';
-import TextAlignment from '../textalignment';
+import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import { SearchViewEvents } from './searchview-events';
 import { Invocation, KeyboardAnimationDelegate } from '../../util';
 import Page from 'ui/page';
-import KeyboardAppearance from '../keyboardappearance';
+import KeyboardAppearance from '../shared/keyboardappearance';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const UISearchBarStyle = {
   default: 0,
@@ -23,7 +24,10 @@ const UISearchBarIcon = {
   resultsList: 3
 };
 
-export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, iOSProps> implements ISearchView {
+export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
+  extends ViewIOS<TEvent | SearchViewEvents, any, WithMobileOSProps<Partial<ISearchView>, ISearchView['ios'], ISearchView['android']>>
+  implements ISearchView
+{
   private _textAligment: number = 3;
   private _constant: number = 0;
   private _hint: string;
@@ -153,14 +157,8 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     };
     this.nativeObject.delegate = this._searchBarDelegate;
 
-    const { ios, android, ...props } = params;
-    Object.assign(this._ios, this.iOSProps, ios);
-    Object.assign(this, props);
-  }
-
-  private get iOSProps() {
     const self = this;
-    return {
+    this.addIOSProps({
       get keyboardAppearance(): KeyboardAppearance {
         return self.nativeObject.valueForKey('keyboardAppearance');
       },
@@ -222,7 +220,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       hideLoading() {
         self.nativeObject.activityIndicator.stopAnimating();
       }
-    };
+    });
   }
 
   get text(): string {
