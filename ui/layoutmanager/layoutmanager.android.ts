@@ -1,12 +1,12 @@
 import { ILayoutManager, ScrollDirection } from '.';
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { UnitConverter } from '../../util';
 
 const NativeItemDecoration = requireClass('androidx.recyclerview.widget.RecyclerView$ItemDecoration');
 const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager');
 const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListener');
 
-export default class LayoutManagerAndroid extends NativeComponent implements ILayoutManager {
+export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>>  implements ILayoutManager {
   private _lineDecoration: any = null;
   private _itemDecoration: any = null;
   private _spanCount: ILayoutManager['spanCount'];
@@ -17,11 +17,9 @@ export default class LayoutManagerAndroid extends NativeComponent implements ILa
   private _onItemLength: ILayoutManager['onItemLength'];
   private _nativeRecyclerView = null;
   private _spanSize: number;
-  private _ios: ILayoutManager['ios'];
   private _onFullSpanCallback: ILayoutManager['onFullSpan'];
   constructor(params: Partial<ILayoutManager> = {}) {
-    super();
-    const { ios, ...restParams } = params;
+    super(params);
     if (!this.nativeObject) {
       this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
     }
@@ -34,11 +32,6 @@ export default class LayoutManagerAndroid extends NativeComponent implements ILa
     this._onItemLength = params.onItemLength;
     this._nativeRecyclerView = null;
     this._spanSize = 0;
-    Object.assign(this._ios, ios);
-    Object.assign(this, restParams);
-  }
-  get ios() {
-    return this._ios;
   }
   get spanCount(): ILayoutManager['spanCount'] {
     // Avoiding integer-float conflics of engine

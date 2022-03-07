@@ -1,8 +1,9 @@
 import { ILayoutManager, ScrollDirection } from '.';
 import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Invocation } from '../../util';
 
-export default class LayoutManagerIOS extends NativeComponent<__SF_UICollectionViewFlowLayout> implements ILayoutManager {
+export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>> implements ILayoutManager {
   onFullSpan: (type: number) => number;
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
@@ -13,12 +14,9 @@ export default class LayoutManagerIOS extends NativeComponent<__SF_UICollectionV
   private collectionView: any = null;
   private jsCollectionView: any = null;
   private _sectionInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
-  private _ios: Partial<ILayoutManager['ios']> = {};
   private _itemLength = 50;
   constructor(params: Partial<ILayoutManager> = {}) {
-    super();
-    const { ios, ...restParams } = params;
-
+    super(params);
     this._nativeObject = new __SF_UICollectionViewFlowLayout();
 
     this.nativeObject.prepareLayoutCallback = () => {
@@ -61,12 +59,6 @@ export default class LayoutManagerIOS extends NativeComponent<__SF_UICollectionV
     };
     this.lineSpacing = 0;
     this.itemSpacing = 0;
-
-    Object.assign(this._ios, ios);
-    Object.assign(this, restParams);
-  }
-  get ios() {
-    return this._ios;
   }
 
   get spanCount(): ILayoutManager['spanCount'] {
