@@ -2,17 +2,15 @@ import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
 import File from '../../io/file';
 import Color from '../color';
 import Image from '../image';
-import IImage from '../image/image';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 
-export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents> implements IImageView {
-  private _imageTemplate: IImage;
+export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
+  private _imageTemplate: Image;
   private _isSetTintColor: boolean;
-  constructor(params: Partial<IImageView> = {}) {
-    super();
-
+  constructor(params?: IImageView) {
+    super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIImageView();
     }
@@ -25,21 +23,19 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
 
     this.nativeObject.contentMode = ImageViewFillType.NORMAL;
     this.touchEnabled = true;
-
-    Object.assign(this, params);
   }
 
-  get image(): string | Image {
+  get image(): Image | string | undefined {
     return this.nativeObject.image ? Image.createFromImage(this.nativeObject.image) : undefined;
   }
-  set image(value: string | IImage) {
+  set image(value: Image | string | undefined) {
     this._imageTemplate = undefined;
 
     if (typeof value === 'string') {
       const image = Image.createFromFile(value);
       if (this._isSetTintColor) {
         // TODO Recheck after build
-        let rendered: IImage = image.nativeObject.imageWithRenderingMode(2);
+        let rendered: Image = image.nativeObject.imageWithRenderingMode(2);
         this._imageTemplate = rendered;
         this.nativeObject.loadImage(rendered.nativeObject);
       } else {
@@ -48,7 +44,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     } else {
       if (value) {
         if (this._isSetTintColor) {
-          let rendered: IImage = value.nativeObject.imageWithRenderingMode(2);
+          let rendered: Image = value.nativeObject.imageWithRenderingMode(2);
           this._imageTemplate = rendered;
           this.nativeObject.loadImage(rendered.nativeObject);
         } else this.nativeObject.loadImage(value.nativeObject);

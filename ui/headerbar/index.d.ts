@@ -3,7 +3,7 @@ import Color from '../color';
 import Font from '../font';
 import View from '../view';
 import HeaderBarItem from '../headerbaritem';
-import Page, { AbstractPage } from '../page';
+import Page, { AbstractPage, LargeTitleDisplayMode } from '../page';
 import Image from '../image';
 
 /**
@@ -429,7 +429,7 @@ type HeaderBar = {
      * @ios
      * @since 0.1
      */
-    largeTitleDisplayMode?: typeof AbstractPage.iOS.LargeTitleDisplayMode;
+    largeTitleDisplayMode?: LargeTitleDisplayMode;
 
     /**
      * Used to add a different Image in place of iOS default back action on NavigationController

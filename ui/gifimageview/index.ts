@@ -1,29 +1,10 @@
-import ImageView from '../imageview';
+import { AbstractImageView, IImageView } from '../imageview';
 import GifImage from '../gifimage';
 import Image from '../image';
 import Color from '../color';
-import ImageCacheType from '../shared/imagecachetype';
-/**
- * @class UI.GifImageView
- * @extends UI.ImageView
- * @since 3.2.0
- *
- * GifImageView is simply an gifimage container where UI.GifImage is displayed inside.
- *
- *     @example
- *     const GifImage = require('@smartface/native/ui/gifimage');
- *     const GifImageView = require('@smartface/native/ui/gifimageview');
- *
- *     var myGifImage = GifImage.createFromFile("assets://smartface.gif")
- *     var myGifImageView = new GifImageView({
- *         gifImage: myGifImage,
- *         width: 200, height: 200
- *     });
- *
- *     myPage.layout.addChild(myGifImageView);
- *
- */
-declare class GifImageView extends ImageView {
+import { GifImageViewEvents } from './gifimageview-events';
+
+export declare interface IGifImageView<TEvent extends string = GifImageViewEvents, TIOS = {}, TAND = {}> extends IImageView<TEvent | GifImageViewEvents, TIOS, TAND> {
   /**
    * Gets/sets the gifImage. GifImage object can be set.
    *
@@ -117,18 +98,49 @@ declare class GifImageView extends ImageView {
    * @since 3.2.0
    */
   loadFromUrl(params: { url: string; placeholder?: Image; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
-
-  // loadFromFile(params: {
-  // 	file: File;
-  // 	fade?: boolean;
-  // 	width?: number;
-  // 	height?: number;
-  // }): void;
-  // fetchFromUrl(params: {
-  //   url: string;
-  //   placeholder?: Image;
-  //   onSuccess: (e: {image: Image, cache: ImageCacheType}) => void;
-  //   onError: () => void;
-  // }):void;
 }
-export = GifImageView;
+
+export declare class AbstractGifImageView<TEvent extends string = GifImageViewEvents> extends AbstractImageView<TEvent> implements IImageView<TEvent> {
+  gifImage: undefined | GifImage;
+
+  readonly currentFrame: Image;
+
+  readonly currentFrameIndex: number;
+
+  isAnimating: boolean;
+
+  startAnimating(): void;
+
+  stopAnimating(): void;
+
+  loopCompletionCallback: (loopCountRemain: number) => void;
+
+  tintColor: Color;
+
+  loadFromUrl(params: { url: string; placeholder?: Image; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
+}
+
+/**
+ * @class UI.GifImageView
+ * @extends UI.ImageView
+ * @since 3.2.0
+ *
+ * GifImageView is simply an gifimage container where UI.GifImage is displayed inside.
+ *
+ *     @example
+ *     import GifImage from '@smartface/native/ui/gifimage';
+ *     import GifImageView from '@smartface/native/ui/gifimageview';
+ *
+ *     const myGifImage = GifImage.createFromFile("assets://smartface.gif")
+ *     const myGifImageView = new GifImageView({
+ *         gifImage: myGifImage,
+ *         width: 200, height: 200
+ *     });
+ *
+ *     myPage.layout.addChild(myGifImageView);
+ *
+ */
+const GifImageView: typeof AbstractGifImageView = require(`./gifimageview.${Device.deviceOS.toLowerCase()}`).default;
+type GifImageView = AbstractGifImageView;
+
+export default GifImageView;

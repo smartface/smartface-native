@@ -17,12 +17,20 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 
 const activity = AndroidConfig.activity;
 
-export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative> implements IFlexLayout {
-  private _onInterceptTouchEvent: (e: any) => void;
+export default class FlexLayoutAndroid<
+    TEvent extends string = FlexLayoutEvents,
+    TNative = any,
+    TProps extends IFlexLayout = IFlexLayout
+  >
+  extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
+  implements IFlexLayout
+{
+  private _onInterceptTouchEvent: () => boolean;
   private _flexWrap: number | null = null;
 
-  constructor(params: Partial<IFlexLayout> = {}) {
+  constructor(params: TProps) {
     super(params);
+    
 
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
@@ -32,15 +40,14 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     });
 
     const self = this;
-
     this.addAndroidProps({
-        get onInterceptTouchEvent() {
-          return self._onInterceptTouchEvent;
-        },
-        set onInterceptTouchEvent(value) {
-          self._onInterceptTouchEvent = value;
-        }
-    })
+      get onInterceptTouchEvent() {
+        return self._onInterceptTouchEvent;
+      },
+      set onInterceptTouchEvent(value) {
+        self._onInterceptTouchEvent = value;
+      }
+    });
   }
 
   get direction() {

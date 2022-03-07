@@ -1,6 +1,20 @@
-import IView, { AbstractView } from '../view';
+import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import {IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
+
+type ViewGroupAndroidProps = Partial<ViewAndroidProps & {
+  /**
+ * Called when a child does not want this parent and its ancestors to intercept touch events .
+ * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+ *
+ * @method requestDisallowInterceptTouchEvent
+ * @param {Boolean} disallow
+ * @android
+ * @since 4.0.3
+ */
+  requestDisallowInterceptTouchEvent(disallow: boolean): void;
+}>;
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -18,7 +32,7 @@ import { ViewGroupEvents } from './viewgroup-events';
  *     myFlexLayout.addChild(myLabel);
  */
 
-export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIOS = {}, TAND = {}> extends IView<TEvent | ViewGroupEvents, TIOS, TAND> {
+export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<{}, ViewGroupAndroidProps>> extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps>, ViewGroupAndroidProps {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -130,22 +144,9 @@ export declare interface IViewGroup<TEvent extends string = ViewGroupEvents, TIO
    * ````
    */
   onViewRemoved: (view: AbstractView) => void;
-
-  // android: IView<TEvent, TIOS, TAND>["android"] & {
-  //   /**
-  //  * Called when a child does not want this parent and its ancestors to intercept touch events .
-  //  * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
-  //  *
-  //  * @method requestDisallowInterceptTouchEvent
-  //  * @param {Boolean} disallow
-  //  * @android
-  //  * @since 4.0.3
-  //  */
-  //   requestDisallowInterceptTouchEvent(disallow: boolean): void;
-  // }
 }
 
-export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents> extends AbstractView<TEvent> implements IViewGroup<TEvent> {
+export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup> extends AbstractView<TEvent, TNative, TProps> {
   addChild(view: IView): void;
   removeChild(view: IView): void;
   removeAll(): void;
@@ -153,7 +154,7 @@ export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents> 
   getChildList(): IView[];
   findChildById(id: string): void;
   onViewAdded: (view: IView) => void;
-  onViewRemoved: (view: IView) => void;
+  onViewRemoved: (view: any) => void;
 }
 
 
