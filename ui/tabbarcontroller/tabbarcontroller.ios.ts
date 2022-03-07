@@ -1,21 +1,18 @@
-// const Page = require('../../ui/page');
-// const Color = require('../../ui/color');
-// const Events = require('./events');
-// const { EventEmitterCreator } = require('../../core/eventemitter');
-// TabBarController.Events = { ...Page.Events, ...Events };
-// TabBarController.prototype = Object.create(Page.prototype);
-
 import { BarTextTransform, ITabBarController } from '.';
-import OverScrollMode from '../android/overscrollmode';
+import OverScrollMode from '../shared/android/overscrollmode';
 import Color from '../color';
 import Page from '../page';
 import PageIOS from '../page/page.ios';
 import { ITabbarItem } from '../tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const UITabBarItem = SF.requireClass('UITabBarItem');
 
-export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents> implements ITabBarController {
+export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents>
+  extends PageIOS<TEvent | TabBarControllerEvents, any, WithMobileOSProps<Partial<ITabBarController>, ITabBarController['ios'], ITabBarController['android']>>
+  implements ITabBarController
+{
   private _items: ITabbarItem[];
   private _autoCapitalize: boolean;
   private _iconColor: { normal: Color; selected: Color } | Color;
@@ -28,14 +25,8 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       this._nativeObject = new __SF_TopTabViewController();
     }
 
-    const { ios, ...restParams } = params;
-    Object.assign(this._ios, ios, this.iOSProps);
-    Object.assign(this, restParams);
-  }
-
-  private get iOSProps() {
     const self = this;
-    return {
+    this.addIOSProps({
       get barTextTransform(): BarTextTransform {
         return self.nativeObject.topBar.valueForKey('titleTextTransform');
       },
@@ -44,7 +35,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
           self.nativeObject.topBar.setValueForKey(value, 'titleTextTransform');
         }
       }
-    };
+    });
   }
 
   get barHeight(): number {

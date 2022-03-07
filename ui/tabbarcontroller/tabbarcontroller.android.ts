@@ -1,9 +1,10 @@
 import OverScrollMode from 'ui/android/overscrollmode';
 import { ITabBarController } from '.';
 import Application from '../../application';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { AndroidConfig, UnitConverter } from '../../util';
 import Color, { AbstractColor } from '../color';
-import Page from '../page';
+import Page, { IPage } from '../page';
 import PageAndroid from '../page/page.android';
 import SwipeView from '../swipeview';
 import { ITabbarItem } from '../tabbaritem';
@@ -18,7 +19,11 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
-export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents> implements ITabBarController {
+export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents>
+  extends PageAndroid<TEvent | TabBarControllerEvents, any, WithMobileOSProps<Partial<IPage>, IPage['ios'], IPage['android']>>
+  implements IPage
+{
+  // export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
   private _onPageCreateCallback: (index: number) => Page;
   private _items: ITabbarItem[];
@@ -96,14 +101,8 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     });
     this.tabLayout.nativeObject.addOnTabSelectedListener(listener);
 
-    const { android, ...restParams } = params;
-    Object.assign(this._android, android, this.androidProps);
-    Object.assign(this, restParams);
-  }
-
-  private get androidProps() {
     const self = this;
-    return {
+    this.addAndroidProps({
       get dividerWidth(): number {
         return self._dividerWidth;
       },
@@ -147,7 +146,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         self.swipeView.android.overScrollMode = value;
         self.tabLayout.nativeObject.setOverScrollvalue(value);
       }
-    };
+    });
   }
 
   // TODO Unused fields
