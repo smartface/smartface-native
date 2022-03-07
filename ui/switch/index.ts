@@ -1,8 +1,9 @@
 import Color from '../color';
-import View, { AbstractView, IView } from '../view';
+import Image from '../image';
+import { AbstractView, IView } from '../view';
 import { SwitchEvents } from './switch-events';
 
-export type AndroidProps = View['android'] & {
+export type SwitchAndroidProps = {
   /**
    * Gets/sets color of the thumb when Switch is OFF.
    * It is set to gray by default.
@@ -21,7 +22,7 @@ export type AndroidProps = View['android'] & {
    * @since 3.2.1
    */
 
-  toggleImage: Color | string;
+  toggleImage: Image | string;
   /**
    * Gets/sets the thumb image of the switch. This property should be used before assigning colors.
    *
@@ -29,7 +30,7 @@ export type AndroidProps = View['android'] & {
    * @android
    * @since 3.2.1
    */
-  thumbImage: Color | string;
+  thumbImage: Image | string;
   /**
    * Gets/sets the background of the switch when it is OFF.  It is set to gray
    * by default. This property works only for Android.
@@ -47,7 +48,7 @@ export type AndroidProps = View['android'] & {
   toggleOffColor: Color;
 };
 
-export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}, TAND = AndroidProps> extends IView<TEvent | SwitchEvents, TIOS, TAND & AndroidProps> {
+export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}, TAND = SwitchAndroidProps> extends IView<TEvent | SwitchEvents, TIOS, TAND & SwitchAndroidProps> {
   /**
    * Enables/disables the Switch.
    *
@@ -128,7 +129,7 @@ export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}
   onToggleChanged: (toggle: boolean) => void;
 }
 
-export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent> implements ISwitch<TEvent> {
+export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent, {}, SwitchAndroidProps> implements ISwitch<TEvent> {
   get enabled(): boolean;
   set enabled(value: boolean);
 
