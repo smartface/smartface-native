@@ -1,6 +1,7 @@
 import Page from '../page';
+import OverScrollMode from '../shared/android/overscrollmode';
 import View from '../view';
-import OverScrollMode from '../shared/overscrollmode';
+import { ViewEvents } from '../view/view-event';
 
 declare enum SwipeViewEvents {
   /**
@@ -165,7 +166,7 @@ declare class SwipeView extends View {
    * @ios
    * @since 4.3.2
    */
-  pagingEnabled: Boolean;
+  pagingEnabled: boolean;
   /**
    * Swipes to the page inside the index of the array.
    *
@@ -178,10 +179,13 @@ declare class SwipeView extends View {
    */
   swipeToIndex(index: number, animated: boolean): void;
   overScrollMode: OverScrollMode;
+  onPageCreate: (position: number) => Page;
+  pageCount: number;
+  pagerAdapter: {notifyDataSetChanged: () => void;}
 }
 
 declare namespace SwipeView {
-  const Events: typeof SwipeViewEvents & typeof View.Events;
+  const Events: typeof SwipeViewEvents & typeof ViewEvents;
   type Events = typeof Events;
   /**
    * @enum UI.SwipeView.State

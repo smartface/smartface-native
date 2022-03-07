@@ -1,25 +1,31 @@
-import { BarTextTransform, ITabBarController } from '.';
+import { BarTextTransform, ITabBarController, LargeTitleDisplayMode, PresentationStyle } from '.';
 import OverScrollMode from '../shared/android/overscrollmode';
 import Color from '../color';
 import Page from '../page';
 import PageIOS from '../page/page.ios';
 import { ITabbarItem } from '../tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const UITabBarItem = SF.requireClass('UITabBarItem');
 
 export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents>
-  extends PageIOS<TEvent | TabBarControllerEvents, any, WithMobileOSProps<Partial<ITabBarController>, ITabBarController['ios'], ITabBarController['android']>>
+  extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController>
   implements ITabBarController
 {
+
+  static iOS: {
+    BarTextTransform: typeof BarTextTransform;
+    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+    PresentationStyle: typeof PresentationStyle;
+  };
   private _items: ITabbarItem[];
   private _autoCapitalize: boolean;
   private _iconColor: { normal: Color; selected: Color } | Color;
   private _textColor: { normal: Color; selected: Color } | Color;
   private _onPageCreate: (index: number) => Page;
   private _onSelected: (index: number) => void;
-  constructor(params: Partial<ITabBarController> = {}) {
+  private iOSProps: {barTextTransform?: BarTextTransform} = {};
+  constructor(params?: Partial<ITabBarController>) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_TopTabViewController();
@@ -52,7 +58,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       const nativeItems = [];
       for (let i in this._items) {
         if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i]._nativeObject = UITabBarItem.new();
+          this._items[i].nativeObject = UITabBarItem.new();
         }
         this._items[i].invalidate();
         nativeItems[i] = this._items[i].nativeObject;

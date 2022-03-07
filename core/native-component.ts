@@ -8,6 +8,7 @@ export default abstract class NativeComponent<TNative extends NativeInstance = N
     const { android = {}, ios = {}, ...rest} = params;
     rest && Object.assign(this, rest);
   }
+  
   get nativeObject(): any {
     return this._nativeObject;
   }

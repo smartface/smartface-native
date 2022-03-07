@@ -1,11 +1,10 @@
-import OverScrollMode from 'ui/android/overscrollmode';
 import { ITabBarController } from '.';
 import Application from '../../application';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { AndroidConfig, UnitConverter } from '../../util';
-import Color, { AbstractColor } from '../color';
-import Page, { IPage } from '../page';
+import Color from '../color';
+import type Page from '../page';
 import PageAndroid from '../page/page.android';
+import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeView from '../swipeview';
 import { ITabbarItem } from '../tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
@@ -20,8 +19,8 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents>
-  extends PageAndroid<TEvent | TabBarControllerEvents, any, WithMobileOSProps<Partial<IPage>, IPage['ios'], IPage['android']>>
-  implements IPage
+  extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController>
+  implements ITabBarController
 {
   // export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
@@ -43,7 +42,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   private swipeView: SwipeView;
   private dividerDrawable: typeof NativeGradientDrawable;
 
-  constructor(params: Partial<ITabBarController> = {}) {
+  constructor(params?: Partial<ITabBarController>) {
     super(params);
 
     this._items = [];
@@ -176,9 +175,15 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
 
     for (let i = 0; i < this._items.length; i++) {
       const item = this._items[i];
-      const itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
+      // TODO: no _attributedTitleBuilder property in ItemTabbar. Ask it.
+      // const itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
+      const itemTitle = item.title;
 
+      // TODO: no tabBarItemParent property in ItemTabbar. Ask it.
+      // @ts-ignore
       item.tabBarItemParent = this;
+      // TODO: no nativeObject property in ItemTabbar. Ask it.
+      // @ts-ignore
       item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
       item.setProperties({
         itemTitle,
