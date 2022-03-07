@@ -3,14 +3,18 @@
 import { TypeUtil } from '../../util';
 import { EventEmitterWrapper } from '../../core/eventemitter';
 import { ViewAndroid } from '../view/view.android';
-import { IViewGroup } from './viewgroup';
 import { ViewGroupEvents } from './viewgroup-events';
+import { IViewGroup } from '.';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 
-export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, TNative = {}> extends ViewAndroid<TEvent, TNative> {
+export default class ViewGroupAndroid<
+  TEvent extends string = ViewGroupEvents,
+  TNative extends { [key: string]: any } = { [key: string]: any },
+  TProps extends IViewGroup = IViewGroup
+> extends ViewAndroid<TEvent, TNative, TProps> {
   static Events = ViewGroupEvents;
   private _onViewAdded = null;
   private _onViewRemoved = null;
@@ -19,8 +23,8 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   private childViews = {};
   private didSetHierarchyChangeListener: boolean;
 
-  constructor(params?: Partial<IViewGroup>) {
-    super();
+  constructor(params?: TProps) {
+    super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
     }
@@ -45,20 +49,19 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
       }
     };
     // EventEmitterCreator(this, EventFunctions, eventEmitterCallback);
-
-    Object.defineProperties(this.android, {
-      requestDisallowInterceptTouchEvent: {
-        value: (disallow) => {
-          this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
-        },
-        enumerable: true
+    this.addAndroidProps({
+      requestDisallowInterceptTouchEvent: (disallow) => {
+        this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
       }
     });
-
-    // Assign parameters given in constructor
-    if (params) {
-      // TODO: Convert
-    }
+    // Object.defineProperties(this.android, {
+    //   requestDisallowInterceptTouchEvent: {
+    //     value: (disallow) => {
+    //       this.nativeObject.requestDisallowInterceptTouchEvent(disallow);
+    //     },
+    //     enumerable: true
+    //   }
+    // });
   }
 
   addChild = function (view) {

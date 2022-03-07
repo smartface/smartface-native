@@ -368,6 +368,6 @@ namespace Flex {
      */
     ABSOLUTE = 1
   }
-};
+}
 
 export default Flex;

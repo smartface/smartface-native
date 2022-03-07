@@ -1,12 +1,12 @@
 import View, { AbstractView, IView } from '../view';
 import Font from '../font';
-import TextAlignment from '../textalignment';
+import TextAlignment from '../shared/textalignment';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
-import KeyboardAppearance from '../keyboardappearance';
-import TextContentType from '../textcontenttype';
-import KeyboardType from '../keyboardtype';
-import ActionKeyType from '../actionkeytype';
+import KeyboardAppearance from '../shared/keyboardappearance';
+import TextContentType from '../shared/textcontenttype';
+import KeyboardType from '../shared/keyboardtype';
+import ActionKeyType from '../shared/android/actionkeytype';
 import { TextBoxEvents } from './textbox-events';
 import AutoCapitalize from './autocapitalize';
 import { ConstructorOf } from '../../core/constructorof';

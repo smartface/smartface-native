@@ -81,8 +81,8 @@ declare class __SF_UIApplicationDidChangeStatusBarOrientationNotification {}
 declare class __SF_GCRect {
   width?: number;
   height?: number;
-  x?: number;
-  y?: number;
+  x: number;
+  y: number;
   minX?: number;
   midX?: number;
   maxX?: number;
@@ -98,6 +98,7 @@ declare class __SF_CNContactPickerViewController {
 declare class __SF_NSRect extends __SF_GCRect {}
 
 declare class __SF_UIView extends __SF_NSOBject {
+  static setViewAppearanceSemanticContentAttribute(param?: number);
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
@@ -223,13 +224,39 @@ declare class __SF_FLAnimatedImageView {
   setLoopCompletionBlockWithJSValue(handler: (...args: any) => void): void;
 }
 
-declare class __SF_NSIndexPath extends __SF_NSOBject {}
+declare class __SF_NSIndexPath extends __SF_NSOBject {
+  row: number;
+  section: any;
+  static indexPathForRowInSection(row: number, section: number): __SF_NSIndexPath;
+}
 
 declare class __SF_UIRefreshControl extends __SF_UIView {
   removeFromSuperview(): void;
   endRefreshing(): void;
   tintColor: __SF_UIColor;
   addJSTarget(value: (...args: any[]) => any, uiControlEvent: unknown /*TODO: Add after UIControlEvent on Util is complete */): void;
+}
+
+declare class __SF_MGSwipeButton extends __SF_NSOBject {
+  static createMGSwipeButton(text: string, backgroundColor: __SF_UIColor, padding: number, action: (params: { index: number }) => void): __SF_MGSwipeButton;
+  static createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(
+    text: string,
+    icon: __SF_UIImage,
+    backgroundColor: __SF_UIColor,
+    padding: number,
+    action: (params: { index: number }) => void,
+    isAutoHide: boolean
+  ): __SF_MGSwipeButton;
+  static createMGSwipeButtonWithTitleColorPaddingJsActionIsAutoHide(
+    text: string,
+    backgroundColor: __SF_UIColor,
+    padding: number,
+    action: (params: { index: number }) => void,
+    isAutoHide: boolean
+  ): __SF_MGSwipeButton;
+  setTitleColor(color: __SF_UIColor, value: number): void;
+  centerIconOverTextWithSpacing(textSpacing: number): void;
+  titleLabel: __SF_SMFUILabel;
 }
 
 declare class __SF_UITableView extends __SF_UIScrollView {
@@ -242,23 +269,23 @@ declare class __SF_UITableView extends __SF_UIScrollView {
   itemCount: number;
   tableRowHeight: number;
   heightForRowAtIndex: (e: Record<string, any>) => number;
-  cellForRowAt: (e: Record<string, any>) => void;
-  cellIdentifierWithIndexPath: (e: Record<string, any>) => string;
+  cellForRowAt: (e: { cell: __SF_UICollectionViewCell; indexPath: __SF_NSIndexPath }) => void;
+  cellIdentifierWithIndexPath: (e: { cell: any; indexPath: __SF_NSIndexPath }) => string;
   getUUIDByIndex: (index: number) => string;
-  indexPathForCell(nativeCell: __SF_UICollectionViewCell): any;
+  indexPathForCell(nativeCell: __SF_UICollectionViewCell): __SF_NSIndexPath;
   didSelectRowAt: (e: Record<string, any>) => void;
   reloadData(): void;
   deleteRowIndexAnimation(index: number, animation: any /**TODO: UITableViewRowAnimation */): void;
   getVisibleIndexArray(): number[];
   getVisibleIndexArray(): number[];
-  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: string, style: number, animated?: boolean): void;
+  scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath: __SF_NSIndexPath, style: number, animated?: boolean): void;
   contentOffset: { x: number; y: number };
   isEditing: boolean;
   canMoveRowAt?: (value: any, e: any) => any;
   moveRowAt?: (value: any, e: any) => any;
   targetIndexPathForMoveFromRowAt?: (value: any, e: any) => any;
-  js_performBatchUpdates(updates: any, completion: any): void;
-  actionRowRange(style: number, positionStart: number, itemCount: number, animation?: boolean): void;
+  js_performBatchUpdates(updates: any, completion: { e: { finished: boolean } }): void;
+  actionRowRange(style: number, positionStart: number, itemCount: number, animation?: number): void;
 }
 
 declare class __SF_UICollectionView extends __SF_UIScrollView {
@@ -296,9 +323,11 @@ declare class __SF_UIBarButtonItem extends __SF_UIView {
   setTitleTextAttributesForState(font: { NSFont: __SF_UIFont }, uiControlState: number /**TODO: Add after UIControlState is there */): any;
 }
 
-declare class __SF_UICollectionViewFlowLayout {
+declare class __SF_UICollectionViewLayout extends __SF_NSOBject {}
+
+declare class __SF_UICollectionViewFlowLayout extends __SF_UICollectionViewLayout {
   prepareLayoutCallback: () => void;
-  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x: number; y: number }, velocity: number) => number;
+  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x?: number; y?: number }, velocity: { x?: number; y?: number }) => { x?: number; y?: number };
 }
 
 declare class UIFont {
@@ -316,7 +345,7 @@ declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
 }
 
-declare interface iOSSharedApplication {
+declare interface iOSSharedApplication extends __SF_NSOBject {
   statusBarFrame: __SF_NSRect;
   statusBarOrientation: number;
   sf_statusBarStyle: any;
@@ -862,7 +891,7 @@ declare class __SF_UIScrollView extends __SF_UIView {
   onScrollViewWillBeginDragging: (scrollView: any) => void;
   onScrollEndDecelerating: (scrollView: any) => void;
   onScrollViewDidEndDraggingWillDecelerate: (scrollView: any, decelerate?: any) => void;
-  onScrollViewWillEndDraggingWithVelocityTargetContentOffset: (scrollView: any, velocity: number, targetContentOffset: any) => void;
+  onScrollViewWillEndDraggingWithVelocityTargetContentOffset: (scrollView: any, velocity: { x?: number | null; y?: number | null }, targetContentOffset: any) => void;
   setContentOffsetAnimated(e: __SF_NSRect): void;
   scrollToBottom(): void;
   scrollToRight(): void;

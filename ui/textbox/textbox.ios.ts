@@ -1,16 +1,16 @@
 import { iOSProps, ITextBox } from '.';
-import ActionKeyType from '../actionkeytype';
+import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
-import KeyboardType from '../keyboardtype';
-import TextAlignment from '../textalignment';
+import KeyboardType from '../shared/keyboardtype';
+import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import AutoCapitalize from './autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import { Invocation, KeyboardAnimationDelegate } from '../../util';
 import FlexLayout from '../flexlayout';
-import KeyboardAppearance from '../keyboardappearance';
-import TextContentType from '../textcontenttype';
+import KeyboardAppearance from '../shared/keyboardappearance';
+import TextContentType from '../shared/textcontenttype';
 import View from '../view';
 
 const IOSKeyboardTypes = {

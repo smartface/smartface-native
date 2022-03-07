@@ -3,6 +3,7 @@ import File from '../../io/file';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
 import { AndroidConfig, RequestCodes, TypeUtil } from '../../util';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 /* global requireClass */
 const NativeMediaStore = requireClass('android.provider.MediaStore');

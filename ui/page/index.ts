@@ -1,8 +1,9 @@
-import StatusBar from '../../application/statusbar/statusbar';
+import StatusBarAndroid from '../../application/statusbar/statusbar.android';
 import { EventListenerCallback, IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import FlexLayout from '../flexlayout';
+import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import FlexLayout, { IFlexLayout } from '../flexlayout';
 import HeaderBar from '../headerbar';
 import NavigationController, { IController } from '../navigationcontroller';
 import TabBarController from '../tabbarcontroller';
@@ -103,10 +104,12 @@ export interface PageIOSParams {
   navigationItem: HeaderBar & HeaderBar['ios'];
 }
 
-export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TAND = {}, TNative = any> extends INativeComponent<TNative>, IEventEmitter<TEvent | PageEvents> {
+export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
+  extends INativeComponent<TNative>,
+    IEventEmitter<TEvent | PageEvents> {
+  android: TMobile['android'];
+  ios: TMobile['ios'];
   isInsideBottomTabBar: boolean;
-  android: Partial<TAND> & PageAndroidParams;
-  ios: Partial<TIOS> & PageIOSParams;
   /**
    * This event is called once when page is created.
    * You can create views and add them to page in this callback.
@@ -169,7 +172,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    * @readonly
    * @since 0.1
    */
-  readonly layout: FlexLayout;
+  readonly layout: IFlexLayout;
 
   /**
    * This event is called when a page appears on the screen (everytime).
@@ -284,7 +287,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    * @removed 4.0.0 Use {@link Application.statusBar} instead
    * @since 0.1
    */
-  statusBar: StatusBar;
+  statusBar: StatusBarAndroid;
   /**
    * Gets header bar object of a  page. This property is readonly, you can not
    * set header bar to a page but you can change properties of page's header bar.
@@ -338,17 +341,20 @@ export declare interface IPage<TEvent extends string = PageEvents, TIOS = {}, TA
    * ````
    */
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
-
+  skipDefaults?: boolean;
   readonly parentController: IController;
 }
 
-export class PageBase<TEvent extends string = PageEvents, TNative = any> extends NativeEventEmitterComponent<TEvent | PageEvents, TNative> implements IController {
+export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
+  extends NativeEventEmitterComponent<TEvent | PageEvents, TNative, TProps>
+  implements IController
+{
   headerBar?: HeaderBar;
   tabBar?: TabBarController;
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; }) {
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }) {
     throw new Error('Method not implemented.');
   }
   parentController: IController;
@@ -364,21 +370,19 @@ export class PageBase<TEvent extends string = PageEvents, TNative = any> extends
   isInsideBottomTabBar: boolean = false;
 }
 
-export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {}, TAND = {}, TNative = any>
-  implements IPage<TEvent | PageEvents, TIOS & PageIOSParams, TAND & PageAndroidParams, TNative>, IController
+export declare class AbstractPage<TEvent extends string = PageEvents, TProps extends WithMobileOSProps<IPage> = WithMobileOSProps<IPage>, TNative = any>
+  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
+  implements IPage<TEvent | PageEvents, TProps, TNative>, IController
 {
   childControllers?: IController[];
   tabBar?: TabBarController;
   getCurrentController(): IController;
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; });
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
   parentController: IController;
   pageID: number;
   popupBackNavigator: any;
   isActive: boolean;
   isInsideBottomTabBar: boolean;
-  android: Partial<TAND & PageAndroidParams> & PageAndroidParams;
-  ios: Partial<TIOS & PageIOSParams> & PageIOSParams;
-  nativeObject: TNative;
   on(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback: EventListenerCallback): () => void;
   once(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback: EventListenerCallback): () => void;
   off(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback?: EventListenerCallback): void;
@@ -392,7 +396,7 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TIOS = {},
   present(params?: ControllerParams): void;
   dismiss(params?: ControllerParams): void;
   readonly layout: FlexLayout;
-  readonly statusBar: StatusBar;
+  readonly statusBar: StatusBarAndroid;
   readonly headerBar: HeaderBar;
 
   static iOS: {

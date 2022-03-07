@@ -1,11 +1,11 @@
-import Color from 'sf-core/ui/color';
+import Color from '../../ui/color';
 
 export enum StatusBarStyle {
   DEFAULT,
   LIGHTCONTENT
 }
 
-export default class StatusBar {
+export default class StatusBarIOS {
   static readonly Styles = StatusBarStyle;
   static get ios() {
     return {};

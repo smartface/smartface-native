@@ -1,8 +1,9 @@
 import { EventEmitterWrapper } from 'core/eventemitter';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import IView from 'ui/view';
+import IView, { IViewProps } from 'ui/view';
+import { IViewGroup } from '.';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 import View from '../view/view.ios';
-import { IViewGroup } from './viewgroup';
 import { ViewGroupEvents } from './viewgroup-events';
 
 function getKeyByValue(object, value) {
@@ -18,11 +19,13 @@ function getKeyByValue(object, value) {
  * ViewGroup is an abstract class. You can't create instance from it.
  */
 // ViewGroup.prototype = Object.create(View.prototype);
-export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends {[key: string]: any} = {[key: string]: any}> extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative> implements IViewGroup<ViewGroupEvents | ExtractEventValues<TEvent>> {
+export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup>
+  extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
+{
   private _children = {};
 
-  constructor(params?: Partial<IViewGroup>){
-    super();
+  constructor(params?: TProps) {
+    super(params);
 
     const EventFunctions = {
       [ViewGroupEvents.ViewAdded]: function (view) {
@@ -36,35 +39,10 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
       },
       [ViewGroupEvents.ChildViewRemoved]: function (view) {
         this.onChildViewRemoved = EventEmitterWrapper(this, ViewGroupEvents.ChildViewRemoved, null, view);
-      },
+      }
     };
-    // EventEmitterCreator(this, EventFunctions);
     this.nativeObject.didAddSubview = this.onViewAddedHandler;
     this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
-
-    // TODO: Recheck after es6 compile
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
-    
-    //Android spec methods
-    
-    
-    const parentOnFunction = this.on;
-    Object.defineProperty(this, 'on', {
-      value: (event, callback) => {
-        if (typeof EventFunctions[event] === 'function') {
-          EventFunctions[event].call(this);
-          this.emitter.on(event, callback);
-        }
-        else {
-          parentOnFunction(event, callback);
-        }
-      },
-      configurable: true
-    });
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
@@ -75,6 +53,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
     this.nativeObject.addSubview(view.nativeObject);
   };
 
+  // TODO: Make View disposable and move that logic into
   removeChild = function (view) {
     view.nativeObject.removeFromSuperview();
     delete this._children[view.uniqueId];
@@ -101,7 +80,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
     return childList;
   };
 
-  findChildById = function (id) {
+  findChildById = function (id: string) {
     return getKeyByValue(this._children, id);
   };
 

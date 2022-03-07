@@ -1,8 +1,8 @@
 import TextDirection from 'ui/android/textdirection';
 import Color from '../color';
-import EllipsizeMode from '../ellipsizemode';
+import EllipsizeMode from '../shared/ellipsizemode';
 import Font from '../font';
-import TextAlignment from '../textalignment';
+import TextAlignment from '../shared/textalignment';
 import { ViewAndroid } from '../view/view.android';
 import { ILabel, ILabelAndroid } from '.';
 import { TypeUtil, TypeValue } from '../../util';

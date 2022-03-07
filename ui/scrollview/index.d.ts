@@ -1,7 +1,7 @@
-import OverScrollMode from '../android/overscrollmode';
+import OverScrollMode from '../shared/android/overscrollmode';
 import ViewGroup from '../viewgroup';
 import FlexLayout from '../flexlayout';
-import ContentInsetAdjustment from '../ios/contentinsetadjustment';
+import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
 import { IFlexLayout } from '../../primitive/iflexlayout';
 import { Point2D } from '../../primitive/point2d';
 

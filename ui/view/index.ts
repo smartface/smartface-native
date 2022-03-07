@@ -1,4 +1,4 @@
-import Color from '../color';
+import Color, { AbstractColor } from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { EventListenerCallback, IEventEmitter } from 'core/eventemitter';
 import NativeEventEmitterComponent from 'core/native-event-emitter-component';
@@ -7,6 +7,7 @@ import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
 import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
 import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -162,27 +163,7 @@ export type ViewIOSProps = {
   performWithoutAnimation: (functionWithoutAnimation: Function) => void;
 };
 
-/**
- * @class UI.View
- * @since 0.1
- *
- * View class represents a rectangular area on the screen and it is responsible
- * for event handling. View is the base of all UI classes.
- *
- *     @example
- *     const View = require('@smartface/native/ui/view');
- *     const Color = require('@smartface/native/ui/color');
- *     var myView = new View();
- *     myView.width = 300;
- *     myView.height = 500;
- *     myView.top = 50;
- *     myView.left = 50;
- *     myView.backgroundColor = Color.RED;
- *
- */
-export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<{ [key: string]: any }> = Partial<{ [key: string]: any }>, TAND extends { [key: string]: any } = { [key: string]: any }>
-  extends IEventEmitter<TEvent | ViewEvents>,
-    INativeComponent {
+export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndroidProps> = MobileOSProps<ViewIOSProps, ViewAndroidProps>> extends INativeComponent {
   /**
    * Gets/sets the transitionId to be used for transitionViews. See transitionViews for more information
    * @property {String} transitionId
@@ -588,6 +569,51 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * @since 0.1
    */
   alignSelf: Flex.AlignSelf;
+  android?: TProps['android'];
+  ios?: TProps['ios'];
+  /**
+   * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
+   * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
+   *
+   * @property {Boolean} [masksToBounds = true]
+   * @ios
+   * @android
+   * @since 4.1.4
+   */
+  masksToBounds: boolean;
+  /**
+   * Specified enums indicates that which corner of View will have radius.
+   *
+   * @property {UI.View.Border[]} [maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT]]
+   * @ios
+   * @android
+   * @since 4.1.4
+   */
+  maskedBorders: Border[];
+}
+
+/**
+ * @class UI.View
+ * @since 0.1
+ *
+ * View class represents a rectangular area on the screen and it is responsible
+ * for event handling. View is the base of all UI classes.
+ *
+ *     @example
+ *     const View = require('@smartface/native/ui/view');
+ *     const Color = require('@smartface/native/ui/color');
+ *     var myView = new View();
+ *     myView.width = 300;
+ *     myView.height = 500;
+ *     myView.top = 50;
+ *     myView.left = 50;
+ *     myView.backgroundColor = Color.RED;
+ *
+ */
+export interface IView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TMobileProps extends MobileOSProps<ViewIOSProps, ViewAndroidProps> = MobileOSProps<ViewIOSProps, ViewAndroidProps>>
+  extends Omit<IViewProps<TMobileProps>, 'nativeObject'>,
+    IEventEmitter<TEvent | ViewEvents>,
+    INativeComponent<TNative> {
   applyLayout(): void;
   /**
    * This method put a view to the top of other views in z-direction.
@@ -777,27 +803,6 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
    * @since 4.3.6
    */
   dirty(): void;
-  android: Partial<ViewAndroidProps> & TAND;
-  ios: Partial<ViewIOSProps> & TIOS;
-  /**
-   * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
-   * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
-   *
-   * @property {Boolean} [masksToBounds = true]
-   * @ios
-   * @android
-   * @since 4.1.4
-   */
-  masksToBounds: boolean;
-  /**
-   * Specified enums indicates that which corner of View will have radius.
-   *
-   * @property {UI.View.Border[]} [maskedBorders = [View.Border.TOP_LEFT, View.Border.TOP_RIGHT, View.Border.BOTTOM_RIGHT, View.Border.BOTTOM_LEFT]]
-   * @ios
-   * @android
-   * @since 4.1.4
-   */
-  maskedBorders: Border[];
 
   getPosition: () => {
     left: number;
@@ -805,6 +810,8 @@ export interface IView<TEvent extends string = ViewEvents, TIOS extends Partial<
     width: number;
     height: number;
   };
+  android?: TMobileProps['android'];
+  ios?: TMobileProps['ios'];
 }
 
 /**
@@ -955,7 +962,11 @@ export enum SemanticContentAttribute {
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>> extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>> {
+export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative extends Record<string, any> = Record<string, any>, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<
+  TEvent | ExtractEventValues<ViewEvents>,
+  TNative,
+  TProps
+> {
   // export namespace ios {
   // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
   // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
@@ -977,25 +988,28 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>> ex
   protected _onTouchMoved: IView['onTouchMoved'];
 }
 
-/**
- * Only use for module export
- */
-export declare class AbstractView<TEvent extends string = ViewEvents, TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }>
-  implements IView<TEvent, TIOS, TAND>
+export declare class AbstractView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps> = WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps>>
+  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
+  implements IView<TEvent, TNative, TProps>
 {
-  android: IView<TEvent, TIOS, TAND>['android'];
-  ios: IView<TEvent, TIOS, TAND>['ios'];
-  on(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
-  once(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback: EventListenerCallback): () => void;
-  off(eventName: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, callback?: EventListenerCallback): void;
-  emit(event: 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | TEvent, ...args: any[]): void;
-  nativeObject: any;
+  applyLayout(): void;
+  bringToFront(): void;
+  flipHorizontally(): void;
+  flipVertically(): void;
+  getScreenLocation(): Point2D;
+  getParent(): IView;
+  onTouch: (e?: Point2D) => boolean | void;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
+  onTouchCancelled: (point: Point2D) => boolean | void;
+  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
+  dirty(): void;
+  getPosition: () => { left: number; top: number; width: number; height: number };
   transitionId: string;
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: Color | IViewState<Color>;
-  borderColor: Color;
+  backgroundColor: AbstractColor | IViewState<AbstractColor>;
+  borderColor: AbstractColor;
   borderWidth: number;
   borderRadius: number;
   id: string;
@@ -1032,21 +1046,14 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TIOS exten
   flexBasis: number;
   scale: Point2D;
   alignSelf: Flex.AlignSelf;
-  applyLayout(): void;
-  bringToFront(): void;
-  flipHorizontally(): void;
-  flipVertically(): void;
-  getScreenLocation(): Point2D;
-  getParent(): IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, { [key: string]: any }>;
-  onTouch: (e?: Point2D) => boolean | void;
-  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
-  onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
-  dirty(): void;
   masksToBounds: boolean;
   maskedBorders: Border[];
-  getPosition: () => { left: number; top: number; width: number; height: number };
 }
-const View: ConstructorOf<IView, Partial<IView>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
-type View<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> = IView<TEvent, TIOS, TAND>;
+
+const View: ConstructorOf<IView, Partial<IViewProps>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;
+type View<
+  TEvent extends string = ViewEvents,
+  TNative extends { [key: string]: any } = { [key: string]: any },
+  TMobile extends WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps> = WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps>
+> = IView<TEvent, TNative, TMobile>;
 export default View;

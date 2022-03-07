@@ -18,8 +18,8 @@ import ViewController from '../../util/Android/transition/viewcontroller';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import Image from '../image';
 import SearchView from '../searchview';
-import StatusBar from '../../application/statusbar/statusbar';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import { StatusBar } from '../../application/statusbar';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const OrientationType = require('../../device/screen/orientationtype');
@@ -55,9 +55,9 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
-export default class PageAndroid<TEvent extends string = PageEvents, TNative = {}>
-  extends PageBase<TEvent | PageEvents, __SF_UIViewController>
-  implements IPage<TEvent | PageEvents, PageIOSParams, TNative & PageAndroidParams>
+export default class PageAndroid<TEvent extends string = PageEvents, TNative = {}, TProps extends IPage = IPage>
+  extends PageBase<TEvent | PageEvents, __SF_UIViewController, TProps>
+  // implements IPage<TEvent | PageEvents, PageIOSParams, TNative & PageAndroidParams>
 {
   headerBar: HeaderBar;
   private _isShown: boolean;
@@ -98,21 +98,21 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   private _headerBarLogoEnabled = false;
   private _tag: any;
   private _headerBarLeftItem: HeaderBarItem;
-  /**
+  /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
    * _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
    */
   private __onShowCallback: IPage['onShow'];
 
-  protected _ios: PageIOSParams;
-  protected _android: PageAndroidParams & TNative;
+  // protected _ios: PageIOSParams;
+  // protected _android: PageAndroidParams & TNative;
   onLoad: () => void;
   onHide: () => void;
   onShow: () => void;
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
-  constructor(params: Partial<IPage> & { skipDefaults?: boolean } = {}) {
-    super();
-    const { ios, android, ...restParams } = params;
+  constructor(params?: TProps) {
+    super(params);
+    // const { ios, android, ...restParams } = params;
 
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     this.skipDefaults = params.skipDefaults;
@@ -134,10 +134,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
     this.headerBarParams();
     this.nativeSpecificParams();
     this.layoutAssignments();
-
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
   }
   statusBar: StatusBar;
   parentController: IPage['parentController'];
@@ -154,12 +150,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   }
   get layout(): IPage['layout'] {
     return this.rootLayout;
-  }
-  get ios() {
-    return this._ios;
-  }
-  get android() {
-    return this._android;
   }
   get isShown(): boolean {
     return this._isShown;
@@ -376,7 +366,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
         self._transitionViewsCallback = value;
       }
     };
-    this._android = Object.assign(this._android, android);
+    this.addAndroidProps(android);
   }
 
   /**
