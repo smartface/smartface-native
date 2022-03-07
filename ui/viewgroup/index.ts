@@ -1,20 +1,21 @@
 import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
-import {IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
-
-type ViewGroupAndroidProps = Partial<ViewAndroidProps & {
-  /**
- * Called when a child does not want this parent and its ancestors to intercept touch events .
- * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
- *
- * @method requestDisallowInterceptTouchEvent
- * @param {Boolean} disallow
- * @android
- * @since 4.0.3
- */
-  requestDisallowInterceptTouchEvent(disallow: boolean): void;
-}>;
+type ViewGroupAndroidProps = Partial<
+  ViewAndroidProps & {
+    /**
+     * Called when a child does not want this parent and its ancestors to intercept touch events .
+     * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+     *
+     * @method requestDisallowInterceptTouchEvent
+     * @param {Boolean} disallow
+     * @android
+     * @since 4.0.3
+     */
+    requestDisallowInterceptTouchEvent(disallow: boolean): void;
+  }
+>;
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -32,7 +33,9 @@ type ViewGroupAndroidProps = Partial<ViewAndroidProps & {
  *     myFlexLayout.addChild(myLabel);
  */
 
-export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<{}, ViewGroupAndroidProps>> extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps>, ViewGroupAndroidProps {
+export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<{}, ViewGroupAndroidProps>>
+  extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps>,
+    ViewGroupAndroidProps {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -129,6 +132,7 @@ export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = a
    * This event is called when a view removed from this view's hierarchy.
    *
    * @param {UI.View} view The subview that will be removed.
+   * @deprecated
    * @event onViewRemoved
    * @android
    * @ios
@@ -156,7 +160,6 @@ export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, 
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: any) => void;
 }
-
 
 const ViewGroup: typeof AbstractViewGroup = require(`./viewgroup.${Device.deviceOS.toLowerCase()}`).default;
 type ViewGroup = AbstractViewGroup;

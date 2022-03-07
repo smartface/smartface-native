@@ -69,7 +69,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     this._onTouchMoved?.(inside, event);
     this.emit(ViewEvents.TouchMoved, event);
   };
-  private gradientColor: any;
+  gradientColor: any;
   private _parent: View;
   static Border = {
     TOP_LEFT: 1 << 0,

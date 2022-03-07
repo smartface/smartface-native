@@ -51,7 +51,15 @@ export default class ScrollableIOS implements IScrollable {
       set bounces(value: boolean) {
         self.nativeObject.setValueForKey(value, 'bounces');
       },
-      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {},
+      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {
+        self.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          value(contentOffset);
+        };
+      },
       set onScrollBeginDecelerating(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
           const contentOffset = {

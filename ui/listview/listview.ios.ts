@@ -8,10 +8,7 @@ import { ListViewEvents } from './listview-events';
 import { Invocation, UIControlEvents } from '../../util';
 import ListViewItemIOS from '../listviewitem/listviewitem.ios';
 
-export default class ListViewIOS<TEvent extends string = ListViewEvents>
-  extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView>
-  implements IListView
-{
+export default class ListViewIOS<TEvent extends string = ListViewEvents> extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView> implements IListView {
   nativeInner: INativeInner;
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: IListView['refreshEnabled'];
@@ -148,7 +145,16 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents>
       set bounces(value: boolean) {
         self.nativeObject.setValueForKey(value, 'bounces');
       },
-      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {},
+      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {
+        self.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
+          const contentOffset = {
+            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+          };
+          self.emit('scrollBeginDragging', contentOffset);
+          value(contentOffset);
+        };
+      },
       set onScrollBeginDecelerating(value: (contentOffset: __SF_NSRect) => void) {
         self.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
           const contentOffset = {

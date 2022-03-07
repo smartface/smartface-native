@@ -20,7 +20,7 @@ export default class ViewGroupAndroid<
   private _onViewRemoved = null;
   private _onChildViewAdded = null;
   private _onChildViewRemoved = null;
-  private childViews = {};
+  childViews: Record<string, ViewAndroid> = {};
   private didSetHierarchyChangeListener: boolean;
 
   constructor(params?: TProps) {
@@ -64,13 +64,13 @@ export default class ViewGroupAndroid<
     // });
   }
 
-  addChild = function (view) {
+  addChild(view) {
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof require('../flexlayout')) {
       this.nativeObject.addView(view.nativeObject, view.yogaNode);
     }
-  };
+  }
 
   // const parentOnFunction = this.on;
   // Object.defineProperty(this, 'on', {
