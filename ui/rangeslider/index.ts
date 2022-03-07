@@ -51,7 +51,7 @@ export declare interface IRangeSlider<TEvent extends string = RangeSliderEvents,
   onValueChange?: (value: number[]) => void;
 }
 
-export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEvents> extends AbstractView<TEvent> implements IRangeSlider<TEvent> {
+export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEvents> extends AbstractView<TEvent, RangeSliderIOSProps, RangeSliderAndroidProps> implements IRangeSlider<TEvent> {
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;
