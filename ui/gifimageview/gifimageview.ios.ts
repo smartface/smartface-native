@@ -3,6 +3,7 @@ import { GifImageViewEvents } from './gifimageview-events';
 import ImageViewIOS from '../imageview/imageview.ios';
 import { IGifImageView } from '.';
 import GifImage from '../gifimage';
+import IImage from '../image';
 
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: GifImage;
@@ -23,7 +24,7 @@ export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents>
     this.nativeObject.animatedImage = value.nativeObject;
   }
 
-  get currentFrame(): Image {
+  get currentFrame(): IImage {
     // TODO Recheck again after build
     return Image.createFromImage(this.nativeObject.currentFrame);
   }

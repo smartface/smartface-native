@@ -4,6 +4,7 @@ import Color from '../color';
 import File from '../../io/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
+import IImage from '../image';
 
 export enum ImageViewFillTypeIOS {
   REDRAW = 3,
@@ -190,7 +191,7 @@ export declare interface IImageView<TEvent extends string = ImageViewEvents, TIO
    * @ios
    * @since 0.1
    */
-  image: Image | string;
+  image: IImage | string | undefined;
   /**
    * Gets/sets the tintColor.
    *
