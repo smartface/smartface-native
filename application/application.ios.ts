@@ -63,33 +63,41 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
   private _onMinimize: (e: any) => void;
   constructor() {
     super();
-
+    // TODO: Reimplement that
+    // onUserActivityCallback = function (e) {
+    //   const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
+    //   const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
+    //   if (url && type === 'NSUserActivityTypeBrowsingWeb' && typeof value === 'function') {
+    //     return value(url.absoluteString);
+    //   }
+    //   return false;
+    // };
     listenAppShortcut((e) => {
-      ApplicationIOS.emit(ApplicationEvents.AppShortcutReceived, e);
+      this.emit(ApplicationEvents.AppShortcutReceived, e);
     });
 
     this.onUnhandledError = (e) => {
-      ApplicationIOS.emit(ApplicationEvents.UnhandledError, e);
+      this.emit(ApplicationEvents.UnhandledError, e);
     };
 
     this.onExit = function () {
-      ApplicationIOS.emit(ApplicationEvents.Exit);
+      this.emit(ApplicationEvents.Exit);
     };
 
     this.onReceivedNotification = function (e) {
-      ApplicationIOS.emit(ApplicationEvents.ReceivedNotification, e);
+      this.emit(ApplicationEvents.ReceivedNotification, e);
     };
 
     this.onApplicationCallReceived = function (e) {
-      ApplicationIOS.emit(ApplicationEvents.ApplicationCallReceived, e);
+      this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
 
     this.onMaximize = function (e) {
-      ApplicationIOS.emit(ApplicationEvents.Maximize, e);
+      this.emit(ApplicationEvents.Maximize, e);
     };
 
     this.onMinimize = function (e) {
-      ApplicationIOS.emit(ApplicationEvents.Minimize, e);
+      this.emit(ApplicationEvents.Minimize, e);
     };
   }
   private _sliderDrawer;
@@ -150,7 +158,8 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
       type: 'BOOL',
       value: true
     });
-    Invocation.invokeInstanceMethod(keyWindow, 'endEditing:', [argForce], 'BOOL');
+    // TODO: keyWindow must be __SF_NSOBject
+    Invocation.invokeInstanceMethod(keyWindow as any, 'endEditing:', [argForce], 'BOOL');
   }
   get byteReceived() {
     // TODO define SMFApplication globally
@@ -228,14 +237,7 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
   set onUserActivityWithBrowsingWeb(value) {
     this._onUserActivityWithBrowsingWeb = value;
     // TODO: Application Global
-    Application.onUserActivityCallback = function (e) {
-      const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
-      const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
-      if (url && type === 'NSUserActivityTypeBrowsingWeb' && typeof value === 'function') {
-        return value(url.absoluteString);
-      }
-      return false;
-    };
+   
   }
   get onApplicationCallReceived() {
     return this._onApplicationCallReceived;
@@ -272,16 +274,16 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
     return this._onMinimize;
   }
   get currentReleaseChannel() {
-    return Application.currentReleaseChannel;
+    return this.currentReleaseChannel;
   }
   get smartfaceAppName() {
-    return Application.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get appName() {
-    return Application.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get version() {
-    return Application.version;
+    return this.version;
   }
   get isVoiceOverEnabled() {
     return __SF_UIAccessibility.isVoiceOverRunning();

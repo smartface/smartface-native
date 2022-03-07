@@ -1,8 +1,8 @@
 import TabBarItem, { ITabbarItem } from '../tabbaritem';
 import Color from '../color';
 import Page, { AbstractPage, IPage } from '../page';
-import OverScrollMode from '../android/overscrollmode';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
+import OverScrollMode from '../shared/android/overscrollmode';
 
 export enum BarTextTransform {
   AUTO = 0,

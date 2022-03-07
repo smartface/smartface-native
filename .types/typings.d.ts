@@ -9,6 +9,8 @@ declare global {
     static deviceOS: DeviceOS;
   }
 
+  const SMFApplication: any;
+
   function long(value: number): number;
   function array(outerRadii: any, type?: string): any[];
   function toJSArray(val: any): any[];
@@ -24,7 +26,7 @@ declare global {
           message?: string;
           buttons?: {
             text: string;
-            type: AlertView.Android.ButtonType;
+            type: typeof AlertView.Android.ButtonType;
             onClick?: () => void;
           }[];
         }

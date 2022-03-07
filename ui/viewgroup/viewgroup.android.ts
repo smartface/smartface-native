@@ -3,14 +3,14 @@
 import { TypeUtil } from '../../util';
 import { EventEmitterWrapper } from '../../core/eventemitter';
 import { ViewAndroid } from '../view/view.android';
-import { IViewGroup } from './viewgroup';
 import { ViewGroupEvents } from './viewgroup-events';
+import { IViewGroup } from '.';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 
-export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, TNative = {}> extends ViewAndroid<TEvent, TNative> {
+export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, TNative extends Record<string, any> = {}> extends ViewAndroid<TEvent, TNative> {
   static Events = ViewGroupEvents;
   private _onViewAdded = null;
   private _onViewRemoved = null;
@@ -54,11 +54,6 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
         enumerable: true
       }
     });
-
-    // Assign parameters given in constructor
-    if (params) {
-      // TODO: Convert
-    }
   }
 
   addChild = function (view) {

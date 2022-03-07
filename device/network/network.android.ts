@@ -103,6 +103,7 @@ class Notifier extends NetworkNotifierBase {
 }
 
 class NetworkAndroid extends NetworkBase {
+
   public static readonly Notifier = Notifier;
   ConnectionType = ConnectionType;
   private isReceiverCreated = false;
@@ -110,6 +111,7 @@ class NetworkAndroid extends NetworkBase {
   constructor() {
     super();
   }
+
   get IMSI() {
     return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
   }

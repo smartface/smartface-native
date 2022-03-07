@@ -7,11 +7,11 @@
 // const { EventEmitterCreator } = require('../../core/eventemitter');
 import { AndroidProps, ITextBox } from '.';
 import { AndroidConfig, SystemServices } from '../../util';
-import ActionKeyType from '../actionkeytype';
+import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
-import KeyboardType from '../keyboardtype';
-import TextAlignment from '../textalignment';
+import KeyboardType from '../shared/keyboardtype';
+import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
 import { ViewAndroid } from '../view/view.android';
 import AutoCapitalize from './autocapitalize';
