@@ -5,6 +5,7 @@ import { ViewAndroid } from '../view/view.android';
 import { ISlider } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Image from '../image';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const SDK_VERSION = requireClass('android.os.Build').VERSION.SDK_INT;
 const PorterDuffMode = requireClass('android.graphics.PorterDuff').Mode.SRC_IN;
@@ -12,7 +13,10 @@ const SeekBar = requireClass('android.widget.SeekBar');
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 
-export default class SliderAndroid<TEvent extends string = SliderEvents> extends ViewAndroid<TEvent | SliderEvents> implements ISlider {
+export default class SliderAndroid<TEvent extends string = SliderEvents>
+  extends ViewAndroid<TEvent | SliderEvents, any, WithMobileOSProps<Partial<ISlider>, ISlider['ios'], ISlider['android']>>
+  implements ISlider
+{
   private _layerDrawable: any;
   private _defaultThumb: any;
   private _minValue: number;
@@ -23,7 +27,7 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   private _thumbColor: Color;
   private _onValueChange: () => void;
   constructor(params: Partial<ISlider> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new SeekBar(AndroidConfig.activity);

@@ -5,6 +5,7 @@ import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';
 
 import { UIControlEvents } from '../../util';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 enum SliderState {
   normal,
@@ -14,12 +15,15 @@ enum SliderState {
   focused // #available(iOS 9.0, *)
 }
 
-export default class SliderIOS<TEvent extends string = SliderEvents> extends ViewIOS<TEvent | SliderEvents> implements ISlider {
+export default class SliderIOS<TEvent extends string = SliderEvents>
+  extends ViewIOS<TEvent | SliderEvents, any, WithMobileOSProps<Partial<ISlider>, ISlider['ios'], ISlider['android']>>
+  implements ISlider
+{
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;
   constructor(params: Partial<ISlider>) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UISlider();
