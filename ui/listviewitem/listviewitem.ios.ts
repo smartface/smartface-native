@@ -1,23 +1,18 @@
 import { IListViewItem, ListViewItemIOSProperties } from '.';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 
-export default class ListViewIOS<TEvent extends string = FlexLayoutEvents, TNative = ListViewItemIOSProperties>
-  extends FlexLayoutIOS<TEvent | FlexLayoutEvents, TNative & ListViewItemIOSProperties>
+export default class ListViewItemIOS<TEvent extends string = FlexLayoutEvents, TNative = ListViewItemIOSProperties>
+  extends FlexLayoutIOS<TEvent | FlexLayoutEvents, TNative, WithMobileOSProps<Partial<IListViewItem>> & ListViewItemIOS>
   implements IListViewItem
 {
   nativeInner: any;
-  private __nativeCell: __SF_UICollectionViewCell;
+  __nativeCell: __SF_UICollectionViewCell;
   constructor(params: Partial<IListViewItem> = {}) {
     super(params);
-    const { ios, android, ...restParams } = params;
-
-    Object.assign(this._ios, ios);
-
-    this._ios.expandSwipe = (direction) => {
+    this.ios.expandSwipe = (direction) => {
       this.__nativeCell.expandSwipeAnimated(direction, true);
     };
-
-    Object.assign(this, restParams);
   }
 }
