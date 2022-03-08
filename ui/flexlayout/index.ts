@@ -5,7 +5,8 @@ import Color from '../color';
 import { IViewGroup } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type FlexLayoutAndroidProps = Partial<{
+export type FlexLayoutIOSProps = IViewGroup['ios'];
+export type FlexLayoutAndroidProps = IViewGroup['android'] & Partial<{
   readonly yogaNode: any;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -122,7 +123,7 @@ export type FlexLayoutAndroidProps = Partial<{
  *     page.layout.addChild(myFlexLayout);
  *
  */
-export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobileProps extends MobileOSProps<IViewGroup['ios'], FlexLayoutAndroidProps> = MobileOSProps<{}, FlexLayoutAndroidProps>> extends IViewGroup<TEvent | FlexLayoutEvents, any, TMobileProps> {
+export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobileProps extends MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps> = MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps>> extends IViewGroup<TEvent | FlexLayoutEvents, any, TMobileProps> {
   /**
    * This property specifies where items will start to be positioned.
    * If you set RTL(right to left) objects will be positioned by starting from right edge of the Flex.

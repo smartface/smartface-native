@@ -14,9 +14,8 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
   private _position = 0;
   private _enabled = true;
   private _drawerWidth = 100;
-  constructor(params: Partial<ISliderDrawer> = {}) {
-    super();
-    const { ...restParams } = params;
+  constructor(params?: Partial<ISliderDrawer>) {
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = __SF_SliderDrawer.new();
@@ -64,8 +63,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
 
       this.pageView.applyLayout();
     };
-
-    Object.assign(this, restParams);
   }
   pageView: FlexLayoutIOS;
   height: number;

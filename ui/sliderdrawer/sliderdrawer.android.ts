@@ -1,14 +1,17 @@
 import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from '.';
-import { IFlexLayout } from '../../primitive/iflexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 import Application from '../../application';
 import { UnitConverter } from '../../util';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
+import { IFlexLayout } from '../flexlayout';
 
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');
 
-export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEvents> extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents> implements ISliderDrawer {
+export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEvents, TProps extends ISliderDrawer = ISliderDrawer>
+  extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents, any, ISliderDrawer>
+  implements ISliderDrawer
+{
   private _layout: IFlexLayout;
   private _position;
   private _onShow;
@@ -19,9 +22,8 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   private _state = SliderDrawerAndroid.State.CLOSED;
   private drawerLayoutParams: any;
   drawerListener: any;
-  constructor(params: Partial<ISliderDrawer> = {}) {
-    super();
-    const { ...restParams } = params;
+  constructor(params?: Partial<ISliderDrawer>) {
+    super(params);
     this.drawerLayoutParams = new NativeDrawerLayout.LayoutParams(-1, -1);
     this.drawerLayoutParams.gravity = 3; // Gravity.LEFT
 
@@ -49,8 +51,6 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this.width = 200;
     this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
     this.layout.nativeObject.setFitsSystemWindows(true);
-
-    Object.assign(this, restParams);
   }
   backgroundColor: Color = new Color();
   show(): void {

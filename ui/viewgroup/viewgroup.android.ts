@@ -1,8 +1,7 @@
 import { ViewAndroid } from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
-import FlexLayout from '../flexlayout
-import View from '../view';
+import FlexLayout from '../flexlayout';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
@@ -38,7 +37,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof FlexLayout) {
-      this.nativeObject.addView(view.nativeObject, view.yogaNode);
+      this.nativeObject.addView(view.nativeObject, view.android.yogaNode);
     }
   }
   removeChild(view: ViewAndroid) {

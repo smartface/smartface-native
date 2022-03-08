@@ -1,5 +1,5 @@
 import FlexLayout from '../ui/flexlayout';
 
-export interface IFlexLayout {
+export interface ILayoutable {
   readonly layout: FlexLayout;
 }

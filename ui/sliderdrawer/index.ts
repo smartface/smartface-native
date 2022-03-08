@@ -1,9 +1,8 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { IFlexLayout } from '../../primitive/iflexlayout';
 import Color, { AbstractColor } from '../color';
-import FlexLayout from '../flexlayout';
+import { IFlexLayout } from '../flexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 
 export enum SliderDrawerPosition {
@@ -109,7 +108,7 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
    * @readonly
    * @since 0.1
    */
-  readonly layout: FlexLayout;
+  readonly layout: IFlexLayout;
   /**
    * Enables/disables the SliderDrawer.
    *
