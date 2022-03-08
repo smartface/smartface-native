@@ -50,7 +50,7 @@ const UITextAutocapitalizationType = {
   AllCharactes: 3
 };
 
-export default class TextBoxIOS<TEvent extends string = TextBoxEvents> extends ViewIOS<TEvent | TextBoxEvents, iOSProps> implements ITextBox {
+export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}> extends ViewIOS<TEvent | TextBoxEvents, TNative & iOSProps> implements ITextBox {
   private _textAligment: number = 3;
   private _hint: string;
   private _hintTextColor: Color;
