@@ -1,11 +1,9 @@
 import { ISlider } from '.';
 import Color from '../color';
-import Image from '../image/image';
 import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';
-
 import { UIControlEvents } from '../../util';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import Image from '../image';
 
 enum SliderState {
   normal,
@@ -16,13 +14,13 @@ enum SliderState {
 }
 
 export default class SliderIOS<TEvent extends string = SliderEvents>
-  extends ViewIOS<TEvent | SliderEvents, any, WithMobileOSProps<Partial<ISlider>, ISlider['ios'], ISlider['android']>>
+  extends ViewIOS<TEvent | SliderEvents, any, ISlider>
   implements ISlider
 {
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;
-  constructor(params: Partial<ISlider>) {
+  constructor(params?: Partial<ISlider>) {
     super(params);
 
     if (!this.nativeObject) {
@@ -35,11 +33,8 @@ export default class SliderIOS<TEvent extends string = SliderEvents>
     this.nativeObject.maximumValue = 100;
 
     this.nativeObject.addJSTarget(this.handleValueChange, UIControlEvents.valueChanged);
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
+  skipDefaults: boolean;
 
   get thumbColor(): Color {
     return new Color({

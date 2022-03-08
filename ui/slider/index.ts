@@ -4,6 +4,7 @@ import { AbstractView, IView } from '../view';
 import { SliderEvents } from './slider-events';
 
 export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}, TAND = {}> extends IView<TEvent | SliderEvents, TIOS, TAND> {
+  skipDefaults: boolean;
   /**
    * Gets/sets color of the thumb.
    *
@@ -143,10 +144,12 @@ export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}
    * });
    * ````
    */
-  onValueChange: () => void;
+  onValueChange: (value: number) => void;
 }
 
-export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent | SliderEvents> implements ISlider<TEvent> {
+export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent | SliderEvents, any, ISlider> implements ISlider<TEvent> {
+  constructor(params: Partial<ISlider>);
+  skipDefaults: boolean;
   thumbColor: Color;
   thumbImage: Image;
   minTrackColor: Color;

@@ -5,7 +5,6 @@ import { ViewAndroid } from '../view/view.android';
 import { ISlider } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Image from '../image';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const SDK_VERSION = requireClass('android.os.Build').VERSION.SDK_INT;
 const PorterDuffMode = requireClass('android.graphics.PorterDuff').Mode.SRC_IN;
@@ -14,7 +13,7 @@ const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 
 export default class SliderAndroid<TEvent extends string = SliderEvents>
-  extends ViewAndroid<TEvent | SliderEvents, any, WithMobileOSProps<Partial<ISlider>, ISlider['ios'], ISlider['android']>>
+  extends ViewAndroid<TEvent | SliderEvents, any, ISlider>
   implements ISlider
 {
   private _layerDrawable: any;
@@ -25,8 +24,8 @@ export default class SliderAndroid<TEvent extends string = SliderEvents>
   private _maxTrackColor: Color;
   private _thumbImage: Image;
   private _thumbColor: Color;
-  private _onValueChange: () => void;
-  constructor(params: Partial<ISlider> = {}) {
+  private _onValueChange: (value: number) => void;
+  constructor(params?: Partial<ISlider>) {
     super(params);
 
     if (!this.nativeObject) {
@@ -65,12 +64,8 @@ export default class SliderAndroid<TEvent extends string = SliderEvents>
         })
       );
     }
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
+  skipDefaults: boolean;
 
   get thumbColor(): Color {
     return this._thumbColor;
@@ -145,10 +140,10 @@ export default class SliderAndroid<TEvent extends string = SliderEvents>
     this.nativeObject.setMax(int(this._maxValue - this._minValue));
   }
 
-  get onValueChange(): () => void {
+  get onValueChange(): (value: number) => void {
     return this._onValueChange;
   }
-  set onValueChange(value: () => void) {
+  set onValueChange(value: (value: number) => void) {
     this._onValueChange = value;
   }
 
