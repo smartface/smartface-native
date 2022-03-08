@@ -8,7 +8,7 @@ import { UIControlEvents } from '../../util';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents>
-  extends ViewIOS<TEvent | RangeSliderEvents, any, WithMobileOSProps<Partial<IRangeSlider>, IRangeSlider['ios'], IRangeSlider['android']>>
+  extends ViewIOS<TEvent | RangeSliderEvents, any, IRangeSlider>
   implements IRangeSlider
 {
   private _rangeEnabled: boolean;

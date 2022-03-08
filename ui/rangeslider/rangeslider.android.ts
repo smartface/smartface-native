@@ -5,12 +5,11 @@ import { RangeSliderEvents } from './rangeslider-events';
 import { ViewAndroid } from '../view/view.android';
 import { IRangeSlider } from '.';
 import Color from '../color';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 
 export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents>
-  extends ViewAndroid<TEvent | RangeSliderEvents, any, WithMobileOSProps<Partial<IRangeSlider>, IRangeSlider['ios'], IRangeSlider['android']>>
+  extends ViewAndroid<TEvent | RangeSliderEvents, any, IRangeSlider>
   implements IRangeSlider
 {
   private _snapStepSize: number = 1;
@@ -29,7 +28,7 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   private _maxValueChanged: boolean = false;
   private _onValueChange: (value: number[]) => void;
 
-  constructor(params: Partial<IRangeSlider> = {}) {
+  constructor(params: Partial<IRangeSlider>) {
     super(params);
 
     if (!this.nativeObject) {

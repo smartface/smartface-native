@@ -3,6 +3,7 @@ import Color from '../color';
 import Image from '../image';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type RangeSliderIOSProps = View['ios'] &
   Partial<{
@@ -22,8 +23,10 @@ export type RangeSliderAndroidProps = View['android'] &
     thumbBorderWidth: number;
   }>;
 
-export declare interface IRangeSlider<TEvent extends string = RangeSliderEvents, TIOS = RangeSliderIOSProps, TAND = RangeSliderAndroidProps>
-  extends IView<TEvent | RangeSliderEvents, TIOS & RangeSliderIOSProps, TAND & RangeSliderAndroidProps> {
+export interface IRangeSlider<
+  TEvent extends string = RangeSliderEvents,
+  TProps extends MobileOSProps<RangeSliderIOSProps, RangeSliderAndroidProps> = MobileOSProps<RangeSliderIOSProps, RangeSliderAndroidProps>
+> extends IView<TEvent | RangeSliderEvents, any, TProps> {
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;
@@ -51,7 +54,8 @@ export declare interface IRangeSlider<TEvent extends string = RangeSliderEvents,
   onValueChange?: (value: number[]) => void;
 }
 
-export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEvents> extends AbstractView<TEvent, RangeSliderIOSProps, RangeSliderAndroidProps> implements IRangeSlider<TEvent> {
+export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEvents> extends AbstractView<TEvent | RangeSliderEvents, any, IRangeSlider> implements IRangeSlider<TEvent> {
+  constructor(props?: Partial<RangeSliderEvents>)
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;
