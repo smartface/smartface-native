@@ -46,6 +46,9 @@ export default class FlexLayoutAndroid<
       },
       set onInterceptTouchEvent(value) {
         self._onInterceptTouchEvent = value;
+      },
+      get yogaNode(){
+        return self.yogaNode;
       }
     });
   }

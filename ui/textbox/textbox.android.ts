@@ -5,7 +5,7 @@
 // const AutoCapitalize = require("./autocapitalize");
 // const Events = require('./events');
 // const { EventEmitterCreator } = require('../../core/eventemitter');
-import { AndroidProps, ITextBox } from '.';
+import { TextBoxAndroidProps, ITextBox } from '.';
 import { AndroidConfig, SystemServices } from '../../util';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
@@ -74,7 +74,7 @@ const NativeActionKeyType = [
   4 // EditorInfo.IME_ACTION_SEND
 ];
 
-export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}> extends ViewAndroid<TEvent | TextBoxEvents, TNative & AndroidProps> implements ITextBox {
+export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
   private __touchEnabled: boolean = true;
   private _isPassword: boolean = false;
   private _keyboardType: KeyboardType = KeyboardType.DEFAULT;
@@ -93,7 +93,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _didAddTextChangedListener: boolean = false;
   private _didSetOnEditorActionListener: boolean = false;
   private activity: any;
-  constructor(params: Partial<ITextBox> = {}) {
+  constructor(params: Partial<TProps>) {
     super(params);
 
     this.activity = AndroidConfig.activity;
@@ -127,9 +127,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     // Added for https://smartface.atlassian.net/browse/AND-3869
     this.actionKeyType = ActionKeyType.DEFAULT;
 
-    const { android, ...restParams } = params;
-    Object.assign(this._android, this.androidProps, android);
-    Object.assign(this, restParams);
+    // const { android, ...restParams } = params;
+    // Object.assign(this._android, this.androidProps, android);
+    // Object.assign(this, restParams);
+    this.addAndroidProps(this.androidProps);
   }
 
   private get androidProps() {

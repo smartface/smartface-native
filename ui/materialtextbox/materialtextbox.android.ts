@@ -1,5 +1,4 @@
-import { AndroidProps, IMaterialTextBox } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import { IMaterialTextBox } from '.';
 import { Point2D } from '../../primitive/point2d';
 import { AndroidConfig, UnitConverter } from '../../util';
 import Color from '../color';
@@ -7,7 +6,6 @@ import FlexLayout from '../flexlayout';
 import Font from '../font';
 import TextBox from '../textbox';
 import TextBoxAndroid from '../textbox/textbox.android';
-import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 
 const SFMaterialTextBoxWrapper = requireClass('io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper');
@@ -25,7 +23,7 @@ const state_unfocused = -16842908;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
 export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents>
-  extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, WithMobileOSProps<Partial<IMaterialTextBox>, IMaterialTextBox['ios'], IMaterialTextBox['android']>>
+  extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox>
   implements IMaterialTextBox
 {
   private sfTextBox: TextBox;
@@ -37,7 +35,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   private _errorColor: Color;
   private _characterRestrictionColor: Color;
   private __font: Font;
-  private _rightLayout: View = null;
+  private _rightLayout: FlexLayout = null;
   private _rightLayoutWidth: number;
   private _enableCounterMaxLength: number = 10;
   private _enableCounter: boolean = false;
@@ -66,9 +64,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     //Defaults
     this.multiline = false;
 
-    const { android, ...restParams } = params;
-    Object.assign(this._android, this.androidFields, android);
-    Object.assign(this, restParams);
+    // const { android, ...restParams } = params;
+    // Object.assign(this._android, this.androidFields, android);
+    // Object.assign(this, restParams);
+    this.addAndroidProps(this.androidFields);
   }
 
   get androidFields() {
@@ -216,18 +215,17 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.sfTextBox.enabled = value;
   }
 
-  get rightLayout(): { view: View; width: number; height?: number } {
+  get rightLayout(): { view: FlexLayout; width: number; height?: number } {
     return {
       view: this._rightLayout,
       width: this._rightLayoutWidth
     };
   }
-  set rightLayout(value: { view: View; width: number; height?: number }) {
+  set rightLayout(value: { view: FlexLayout; width: number; height?: number }) {
     this._rightLayout = value.view;
     this._rightLayoutWidth = value.width || 30;
     const parentFL = new FlexLayout();
-    // TODO yogaNode?
-    this.nativeObject.setRightLayout(this._rightLayout.nativeObject, this._rightLayout.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
+    this.nativeObject.setRightLayout(this._rightLayout.nativeObject, this._rightLayout.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
   }
 
   get onTouch(): (e?: Point2D) => boolean | void {
@@ -236,8 +234,14 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   set onTouch(value: (e?: Point2D) => boolean | void) {
     // TODO setTouchHandlers function not found
     this._onTouch = value;
+    // @ts-ignore
+    // TODO: Ask why setTouchHandlers is used here
     this.setTouchHandlers();
+    
+    // @ts-ignore
     this.sfTextBox._onTouch = value;
+    // @ts-ignore
+    // TODO: Ask why setTouchHandlers is used here
     this.sfTextBox.setTouchHandlers();
   }
 
@@ -246,8 +250,12 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   }
   set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean | void) {
     this._onTouchEnded = value;
+    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
+    // @ts-ignore
     this.setTouchHandlers();
+    // @ts-ignore
     this.sfTextBox._onTouchEnded = value;
+    // @ts-ignore
     this.sfTextBox.setTouchHandlers();
   }
 
@@ -255,9 +263,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     return this._onTouchMoved;
   }
   set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void) {
+    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
     this._onTouchMoved = value;
+    // @ts-ignore
     this.setTouchHandlers();
+    // @ts-ignore
     this.sfTextBox._onTouchMoved = value;
+    // @ts-ignore
     this.sfTextBox.setTouchHandlers();
   }
 
@@ -265,9 +277,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     return this._onTouchCancelled;
   }
   set onTouchCancelled(value: (point: Point2D) => boolean | void) {
+    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
     this._onTouchCancelled = value;
+    // @ts-ignore
     this.setTouchHandlers();
+    // @ts-ignore
     this.sfTextBox._onTouchCancelled = value;
+    // @ts-ignore
     this.sfTextBox.setTouchHandlers();
   }
 

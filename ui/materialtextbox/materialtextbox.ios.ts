@@ -1,5 +1,4 @@
-import { IMaterialTextBox, iOSProps } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import { IMaterialTextBox } from '.';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
@@ -8,7 +7,7 @@ import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 
 export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents>
-  extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, WithMobileOSProps<Partial<IMaterialTextBox>, IMaterialTextBox['ios'], IMaterialTextBox['android']>>
+  extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox>
   implements IMaterialTextBox
 {
   private mdcTextInputControllerUnderline: __SF_MDCTextInputControllerUnderline;
@@ -48,11 +47,12 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
 
-    this._ios.clearButtonEnabled = false;
+    this.addIOSProps(this.iosProps);
+    this.ios.clearButtonEnabled = false;
 
-    const { ios, ...restParams } = params;
-    Object.assign(this._ios, this.iosProps, ios);
-    Object.assign(this, restParams);
+    // const { ios, ...restParams } = params;
+    // Object.assign(this._ios, this.iosProps, ios);
+    // Object.assign(this, restParams);
   }
 
   get iosProps() {
@@ -147,6 +147,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
             flexContent.applyLayout();
           };
           flexMain.addChild(flexContent);
+          // TODO: Ask why flexMain.content is implemented, it looks a bad idea.
           flexMain.content = flexContent;
           self._leftLayoutMain = flexMain;
         } else {
@@ -160,7 +161,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
         self._leftLayoutMain.content.applyLayout();
         // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'leadingViewMode');
-        self.mdcTextInputControllerUnderline.textInput.setValueForKey(_leftLayoutMain.nativeObject, 'leadingView');
+        self.mdcTextInputControllerUnderline.textInput.setValueForKey(self._leftLayoutMain.nativeObject, 'leadingView');
         // } else {
         //     self.nativeObject.setValueForKey(3, "leftViewMode");
         //     self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject, "leftView");
@@ -387,7 +388,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
         this._rightLayoutMain.content.removeChild(childs[i]);
       }
     }
-    this._rightLayoutMain.content.addChild(object.view);
+    this._rightLayoutMain.content.addChild(value.view);
     this._rightLayoutMain.content.applyLayout();
     // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'trailingViewMode');

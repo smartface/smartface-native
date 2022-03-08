@@ -5,6 +5,7 @@ import { EventEmitterWrapper } from '../../core/eventemitter';
 import { ViewAndroid } from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
+import View from '../view';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
@@ -64,10 +65,14 @@ export default class ViewGroupAndroid<
     // });
   }
 
-  addChild = function (view) {
+  addChild = function (view: View) {
+    // TODO: View has no parent prop
+    // @ts-ignore
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof require('../flexlayout')) {
+      // TODO: View has no yogaNode prop
+      // @ts-ignore
       this.nativeObject.addView(view.nativeObject, view.yogaNode);
     }
   };

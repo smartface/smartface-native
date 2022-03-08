@@ -1,4 +1,4 @@
-import { iOSProps, ITextBox } from '.';
+import { TextBoxiOSProps, ITextBox } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
@@ -50,7 +50,10 @@ const UITextAutocapitalizationType = {
   AllCharactes: 3
 };
 
-export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}> extends ViewIOS<TEvent | TextBoxEvents, TNative & iOSProps> implements ITextBox {
+export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox>
+  extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps>
+  implements ITextBox
+{
   private _textAligment: number = 3;
   private _hint: string;
   private _hintTextColor: Color;
@@ -67,7 +70,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 
-  constructor(params: Partial<ITextBox> = {}) {
+  constructor(params?: Partial<TProps>) {
     super(params);
 
     if (!this.nativeObject) {
@@ -144,9 +147,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
 
     this._hintTextColor = Color.create(199, 199, 205);
 
-    const { ios, ...restParams } = params;
-    Object.assign(this._ios, this.iOSProps, ios);
-    Object.assign(this, restParams);
+    this.addIOSProps(this.iOSProps);
   }
 
   private get iOSProps() {
