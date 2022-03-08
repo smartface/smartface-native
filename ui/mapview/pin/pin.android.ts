@@ -26,14 +26,12 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
   private _title = '';
   private _visible = true;
   private _id = 0;
-  private _onPress: IPin['onPress'];
-  private _onInfoWindowPress: IPin['onInfoWindowPress'];
   /**
    * nativeObject will be taken from constructor as parameter since pin is created on mapview.
    */
-  constructor(params?: IPin, nativeObject?: any) {
+  constructor(params?: IPin) {
     super(params);
-    this.nativeObject = nativeObject;
+    // this.nativeObject = nativeObject; //Pin nativeObject is added from outside. write a setter for it when nativeObject any problem is fixed
   }
   get color(): ColorAndroid {
     return this._color;
@@ -112,6 +110,12 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
     if (this.nativeObject && !this.isClusterEnabled) {
       this.nativeObject.setVisible(value);
     }
+  }
+  get clusterColor(): ColorAndroid {
+    return this._clusterColor;
+  }
+  set clustercolor(value: ColorAndroid) {
+    this._clusterColor = value;
   }
   onPress: () => void;
   onInfoWindowPress: () => void;

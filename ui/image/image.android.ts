@@ -1,6 +1,6 @@
 import IBlob from '../../global/blob/blob';
 import BlobAndroid from '../../global/blob/blob.android';
-import IImage, { Format, ImageBase } from './image';
+import Image, { IImage, Format, ImageBase } from '.';
 
 /*globals requireClass*/
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
@@ -17,7 +17,7 @@ const Path = require('../../io/path');
 const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressFormat.PNG];
 const androidResources = AndroidConfig.activityResources;
 
-class Image extends ImageBase {
+export default class ImageAndroid extends ImageBase {
   static createFromFile = (path: string, width?: number, height?: number) => {
     const imageFile = new File({
       path: path
@@ -341,5 +341,3 @@ function calculateInSampleSize(options, reqWidth, reqHeight) {
 
   return inSampleSize;
 }
-
-module.exports = Image;

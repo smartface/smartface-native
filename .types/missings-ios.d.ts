@@ -613,9 +613,13 @@ declare class __SF_MKMapView extends __SF_UIView {
   }>;
 }
 
-declare class __SF_UITapGestureRecognizer {}
+declare class __SF_UIGesture {
+  handle: (e: any) => void;
+}
 
-declare class __SF_UILongPressGestureRecognizer {}
+declare class __SF_UITapGestureRecognizer extends __SF_UIGesture {}
+
+declare class __SF_UILongPressGestureRecognizer extends __SF_UIGesture {}
 
 declare class __SF_Cluster {
   static createCluster(): __SF_Cluster;

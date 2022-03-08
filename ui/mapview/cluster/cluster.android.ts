@@ -13,7 +13,7 @@ const NativeGoogleMapR = requireClass('com.google.maps.android.R');
 const COMPLEX_UNIT_SP = 2;
 const WRAP_CONTENT = -2;
 
-export default class ClusterIOS extends NativeComponent<any> implements ICluster {
+export default class ClusterAndroid extends NativeComponent<any> implements ICluster {
   constructor(params: Partial<ICluster> = {}, nativeObject?: __SF_Cluster) {
     super(params);
     this.nativeObject = nativeObject || __SF_Cluster.createCluster();
