@@ -19,7 +19,7 @@ const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.
 const SFOnScrollListener = requireClass('io.smartface.android.sfcore.ui.listview.SFOnScrollListener');
 
 export default class ListViewAndroid<TEvent extends string = ListViewEvents>
-  extends ViewAndroid<TEvent | ListViewEvents, any, WithMobileOSProps<Partial<IListView>, Partial<IListView['ios']>, Partial<IListView['android']>>>
+  extends ViewAndroid<TEvent | ListViewEvents, any, IListView>
   implements IListView
 {
   private _layoutManager: { nativeObject: any };
@@ -38,7 +38,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents>
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
   private sfSwipeItem: any;
-  constructor(params: Partial<IListView> = {}) {
+  constructor(params?: IListView) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);

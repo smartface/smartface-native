@@ -1,5 +1,4 @@
 import { IListView, RowAnimation } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import ListViewItem from '../listviewitem';
@@ -10,7 +9,7 @@ import { Invocation, UIControlEvents } from '../../util';
 import ListViewItemIOS from '../listviewitem/listviewitem.ios';
 
 export default class ListViewIOS<TEvent extends string = ListViewEvents>
-  extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, WithMobileOSProps<Partial<IListView>, Partial<IListView['ios']>, Partial<IListView['android']>>>
+  extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView>
   implements IListView
 {
   nativeInner: INativeInner;
@@ -19,7 +18,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents>
   private _onPullRefresh: IListView['onPullRefresh'];
   private _listItemArray: ListViewItemIOS[] = [];
   private _contentInset = { top: 0, bottom: 0 };
-  constructor(params: Partial<IListView> = {}) {
+  constructor(params?: IListView) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UITableView();

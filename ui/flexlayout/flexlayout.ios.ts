@@ -7,7 +7,7 @@ class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TPr
   extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
 {
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
   }
   onViewAdded: (view: IView) => void;

@@ -170,12 +170,18 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extend
    */
   swipeToIndex(index: number, animated: boolean): void;
   overScrollMode: OverScrollMode;
+  onPageCreate: (position: number) => Page;
+  pageCount: number;
+  pagerAdapter: { notifyDataSetChanged: () => void };
 }
 
 export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, TIOS extends Record<string, any> = {}, TAND extends Record<string, any> = {}>
   extends AbstractView<TEvent | SwipeViewEvents, TIOS, TAND>
   implements ISwipeView
 {
+  onPageCreate: (position: number) => Page;
+  pageCount: number;
+  pagerAdapter: { notifyDataSetChanged: () => void };
   page: PageBase;
   pages: typeof PageBase[];
   onPageSelected: (index: number, page: Page) => void;

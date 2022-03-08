@@ -28,7 +28,7 @@ export default class FlexLayoutAndroid<
   private _onInterceptTouchEvent: () => boolean;
   private _flexWrap: number | null = null;
 
-  constructor(params: TProps) {
+  constructor(params: Partial<TProps>) {
     super(params);
     
 

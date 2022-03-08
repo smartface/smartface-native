@@ -78,7 +78,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     BOTTOM_RIGHT: 1 << 3
   } as const;
 
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
 
     // EventEmitterCreator(this, this.EventFunctions);

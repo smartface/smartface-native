@@ -64,7 +64,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   headerBar: HeaderBar;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
-  private skipDefaults: boolean;
   private pageLayoutContainer: any;
   private toolbar: any;
   private isCreated = false;
@@ -112,7 +111,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   onHide: () => void;
   onShow: () => void;
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     // const { ios, android, ...restParams } = params;
 

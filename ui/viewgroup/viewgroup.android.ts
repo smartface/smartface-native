@@ -23,7 +23,7 @@ export default class ViewGroupAndroid<
   private childViews = {};
   private didSetHierarchyChangeListener: boolean;
 
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
