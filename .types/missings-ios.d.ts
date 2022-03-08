@@ -530,7 +530,7 @@ declare class __SF_UIDatePicker {
   textColor: __SF_UIColor;
   dialogBackgroundColor: __SF_UIColor;
   dialogLineColor: __SF_UIColor;
-  datePickerMode: boolean;
+  datePickerMode: number;
   show(
     title?: string | undefined,
     titleColor?: __SF_UIColor | undefined,
