@@ -17,20 +17,14 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 
 const activity = AndroidConfig.activity;
 
-export default class FlexLayoutAndroid<
-    TEvent extends string = FlexLayoutEvents,
-    TNative = any,
-    TProps extends IFlexLayout = IFlexLayout
-  >
+export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
   extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
 {
   private _onInterceptTouchEvent: () => boolean;
-  private _flexWrap: number | null = null;
-
+  private _flexWrap: number | null = null
   constructor(params: Partial<TProps>) {
     super(params);
-    
 
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {

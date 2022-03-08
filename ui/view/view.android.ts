@@ -79,11 +79,11 @@ function getRippleMask(borderRadius) {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<
-  TEvent extends string = ViewEvents,
-  TNative extends { [key: string]: any } = { [key: string]: any },
-  TProps extends IViewProps = IViewProps
-> extends ViewBase<TEvent, TNative, TProps> {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps> extends ViewBase<
+  TEvent,
+  TNative,
+  TProps
+> {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -121,7 +121,7 @@ export class ViewAndroid<
   private _rippleEnabled = false;
   private _rippleColor = null;
   private _useForeground = false;
-  protected yogaNode: any;
+  yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
   constructor(params?: Partial<TProps>) {
