@@ -1,9 +1,10 @@
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Image from '../image';
 import { AbstractView, IView } from '../view';
 import { SwitchEvents } from './switch-events';
 
-export type SwitchAndroidProps = {
+export type SwitchAndroidProps = IView['android'] & Partial<{
   /**
    * Gets/sets color of the thumb when Switch is OFF.
    * It is set to gray by default.
@@ -46,9 +47,12 @@ export type SwitchAndroidProps = {
    * @since 0.1
    */
   toggleOffColor: Color;
-};
+}>;
 
-export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}, TAND = Partial<SwitchAndroidProps>> extends IView<TEvent | SwitchEvents, TIOS, TAND & SwitchAndroidProps> {
+type SwitchIOSProps = IView['ios'];
+
+export declare interface ISwitch<TEvent extends string = SwitchEvents, TProps extends MobileOSProps<SwitchIOSProps, SwitchAndroidProps> = MobileOSProps<SwitchIOSProps, SwitchAndroidProps>>
+  extends IView<TEvent | SwitchEvents, any, TProps> {
   /**
    * Enables/disables the Switch.
    *
@@ -129,7 +133,7 @@ export declare interface ISwitch<TEvent extends string = SwitchEvents, TIOS = {}
   onToggleChanged: (toggle: boolean) => void;
 }
 
-export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent, {}, SwitchAndroidProps> implements ISwitch<TEvent> {
+export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent, any, ISwitch> implements ISwitch<TEvent> {
   get enabled(): boolean;
   set enabled(value: boolean);
 

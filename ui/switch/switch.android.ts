@@ -1,6 +1,5 @@
 /*globals requireClass*/
 import { ISwitch } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import Image from '../image';
@@ -10,7 +9,7 @@ import { SwitchEvents } from './switch-events';
 const NativeSwitch = requireClass('io.smartface.android.sfcore.ui.switchview.SFSwitch');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 
-export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends ViewAndroid<TEvent | SwitchEvents, any, WithMobileOSProps<Partial<ISwitch>, ISwitch['ios'], ISwitch['android']>> {
+export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends ViewAndroid<TEvent | SwitchEvents, any, ISwitch> {
   private _thumbOnColor: Color;
   private _thumbOffColor: Color;
   private _toggleOnColor: Color;
@@ -19,7 +18,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   private _thumbImage: Image;
   private _onToggleChangedCallback: (checked: boolean) => void;
 
-  constructor(params: Partial<ISwitch> = {}) {
+  constructor(params?: Partial<ISwitch>) {
     super(params);
 
     if (!this.nativeObject) {
