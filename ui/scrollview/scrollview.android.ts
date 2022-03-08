@@ -95,7 +95,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     this.nativeObject.addView(this._layout.nativeObject);
     this._layout.parent = this;
   }
-  private getAndroidProps() {
+  private getAndroidProps(): IScrollView['android'] {
     const self = this;
     return {
       get overScrollMode() {

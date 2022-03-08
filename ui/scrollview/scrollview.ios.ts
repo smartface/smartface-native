@@ -220,7 +220,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     copyObjectPropertiesWithDescriptors(this.layout, layoutParams);
   }
 
-  private getIOSProps() {
+  private getIOSProps(): IScrollView['ios'] {
     const self = this;
     return {
       get decelerationRate(): number {

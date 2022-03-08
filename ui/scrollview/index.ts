@@ -22,6 +22,7 @@ export enum ScrollViewEdge {
 
 type IScrollViewIOS = ViewGroupIOS &
   Partial<{
+    decelerationRate: number;
     /**
      * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
      *
@@ -326,6 +327,7 @@ export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents
   extends AbstractViewGroup<TEvent | ScrollViewEvents, any, IScrollView>
   implements IScrollView<TEvent | ScrollViewEvents>
 {
+  constructor(params?: IScrollView);
   overScrollMode: OverScrollMode;
   align: ScrollViewAlign;
   layout: FlexLayout;
