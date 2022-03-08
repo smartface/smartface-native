@@ -46,52 +46,50 @@ export enum MapViewType {
   HYBRID
 }
 
-export type IMapViewAdroid = ViewAndroidProps &
-  Partial<{
-    /**
-     * This property sets visibility of my location button.
-     * @property {Boolean} [locationButtonVisible = false]
-     * @android
-     * @since 3.0.1
-     */
-    locationButtonVisible: boolean;
-    /**
-     * Prepare the map asynchronously. You must call this method manually. Use this method after page onShow callback.
-     *
-     * @android
-     * @method prepareMap
-     * @since 3.1.0
-     */
-    prepareMap(): void;
-  }>;
+export type IMapViewAdroid = ViewAndroidProps & {
+  /**
+   * This property sets visibility of my location button.
+   * @property {Boolean} [locationButtonVisible = false]
+   * @android
+   * @since 3.0.1
+   */
+  locationButtonVisible: boolean;
+  /**
+   * Prepare the map asynchronously. You must call this method manually. Use this method after page onShow callback.
+   *
+   * @android
+   * @method prepareMap
+   * @since 3.1.0
+   */
+  prepareMap(): void;
+};
 
-export type IMapViewIOS = ViewIOSProps &
-  Partial<{
-    /**
-     * This property sets cluster borderWidth. Only works on ios.
-     *
-     * @property {Number} [clusterBorderWidth = 2]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterBorderWidth?: number;
-    /**
-     * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
-     *
-     * @property {Number} [clusterSize = 0]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterSize?: number;
-    /**
-     * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
-     *
-     * @property {Number} [clusterPadding = 15]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterPadding?: number;
-  }>;
+export type IMapViewIOS = ViewIOSProps & {
+  /**
+   * This property sets cluster borderWidth. Only works on ios.
+   *
+   * @property {Number} [clusterBorderWidth = 2]
+   * @ios
+   * @since 3.0.1
+   */
+  clusterBorderWidth?: number;
+  /**
+   * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
+   *
+   * @property {Number} [clusterSize = 0]
+   * @ios
+   * @since 3.0.1
+   */
+  clusterSize?: number;
+  /**
+   * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
+   *
+   * @property {Number} [clusterPadding = 15]
+   * @ios
+   * @since 3.0.1
+   */
+  clusterPadding?: number;
+};
 
 /**
  * @class UI.MapView
