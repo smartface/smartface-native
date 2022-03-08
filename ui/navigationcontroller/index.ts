@@ -1,9 +1,10 @@
-import Page from '../page';
-import HeaderBar from '../headerbar';
 import { INativeComponent } from '../../core/inative-component';
-import { IBottomTabBarController } from '../bottomtabbarcontroller';
 import TabBarController from '../tabbarcontroller';
 import { IBottomTabBar } from '../bottomtabbar';
+import { ControllerParams } from '../../util/Android/transition/viewcontroller';
+import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
+import NativeComponent from '../../core/native-component';
+import { HeaderBar } from './headerbar';
 
 /**
  * @enum {Number} UI.NavigationController.OperationType
@@ -36,23 +37,17 @@ export enum OperationType {
   POP = 1
 }
 
-
 export interface IController extends INativeComponent {
-  pageID?: number; 
+  pageID?: number;
   popupBackNavigator: any;
   isActive: boolean;
   parentController: IController;
-  childControllers?: IController[]; 
+  childControllers?: IController[];
   isInsideBottomTabBar?: boolean;
   headerBar?: HeaderBar;
-  tabBar?: IController | IBottomTabBar;
+  tabBar?: IController | IBottomTabBar | TabBarController;
   getCurrentController(): IController | null;
-  show(params?: {
-    controller: IController,
-    animated: any,
-    isComingFromPresent?: boolean,
-    onCompleteCallback?: () => void
-  })
+  show(params?: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
 }
 export type Controller = IController;
 // Page | INavigationController | IBottomTabBarController;
@@ -89,7 +84,7 @@ export type Controller = IController;
  *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
  *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
-export declare interface INavigationController extends INativeComponent, IController {
+export interface INavigationController extends INativeComponent, IController, ControllerParams {
   /**
    * Gets/sets child controllers of NavigationController instance.
    *
@@ -194,35 +189,49 @@ export declare interface INavigationController extends INativeComponent, IContro
    * @since 4.0.0
    */
   dismiss(params: { onComplete: () => void; animated: boolean }): void;
-  parentController: NavigationController;
+  parentController: INavigationController;
   isInsideBottomTabBar: boolean;
   isActive: boolean;
   popupBackNavigator: any;
 }
 
-export declare class AbstractNavigationController implements INavigationController {
-  constructor(params?: Partial<AbstractNavigationController>);
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void; });
+export abstract class AbstractNavigationController extends NativeComponent implements INavigationController {
+  constructor(params?: Partial<INavigationController>) {
+    super(params);
+  }
+  abstract push(params: { controller: IController; animated?: boolean }): void;
+  abstract pop(params?: { animated?: boolean }): void;
+  abstract popTo(params: { controller: IController; animated?: boolean }): void;
+  abstract present(params: { controller: IController; animated: boolean; onComplete: () => void }): void;
+  abstract dismiss(params: { onComplete: () => void; animated: boolean }): void;
+  abstract getCurrentController(): IController;
+  abstract show(params?: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }): void;
+  abstract childControllers: Controller[];
+  abstract willShow: (params: { controller: Controller; animated?: boolean }) => void;
+  abstract onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
+  abstract headerBar: HeaderBar;
+
+  protected __isActive: boolean = false;
+  protected _childControllers: Controller[] = [];
+  protected _willShowCallback: (opts?: { controller: IController; animated?: boolean }) => void;
+  protected _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
+  protected _headerBar: HeaderBar;
+
+  parentController: INavigationController;
+  controller: IController;
+  animation?: boolean;
+  animated?: boolean;
+  isComingFromPresent?: boolean;
+  onCompleteCallback?: () => void;
+  animationType?: FragmentTransaction.AnimationType;
   tabBar?: TabBarController;
-  getCurrentController(): IController;
   pageID: number;
   popupBackNavigator: boolean;
   isActive: boolean;
   isInsideBottomTabBar: boolean;
-  parentController: INavigationController;
-  nativeObject: any;
-  childControllers: Controller[];
-  headerBar: HeaderBar;
-  push(params: { controller: Controller; animated?: boolean }): void;
-  pop(params?: { animated: boolean }): void;
-  popTo(params: { controller: Controller; animated?: boolean }): void;
-  willShow: (params: { controller: Controller; animated?: boolean }) => void;
-  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
-  present(params: { controller: Controller; animated: boolean; onComplete: () => void }): void;
-  dismiss(params: { onComplete: () => void; animated: boolean }): void;
   static OperationType: typeof OperationType;
 }
 
 const NavigationController: typeof AbstractNavigationController = require(`./navigationcontroller.${Device.deviceOS.toLowerCase()}`).default;
-type NavigationController = INavigationController;
+type NavigationController = AbstractNavigationController;
 export default NavigationController;

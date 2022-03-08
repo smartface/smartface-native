@@ -1,3 +1,3 @@
-export type INativeComponent<T extends {[key: string]: any} = {[key: string]: any}>  =  {
+export interface INativeComponent<T extends {[key: string]: any} = {[key: string]: any}>  {
   nativeObject: T;
 };
