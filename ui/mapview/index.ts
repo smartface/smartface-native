@@ -1,17 +1,97 @@
-import View from '../view';
-import Color from '../color';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import Color, { AbstractColor } from '../color';
 import Font from '../font';
-import PinKlass from './pin';
 import Pin from './pin';
+import { MapViewEvents } from './mapview-events';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { AbstractFont } from '../font/font';
+import Cluster from './cluster';
 
-declare enum MapViewEvents {
-  CameraMoveEnded = 'cameraMoveEnded',
-  CameraMoveStarted = 'cameraMoveStarted',
-  ClusterPress = 'clusterPress',
-  Create = 'create',
-  LongPress = 'longPress',
-  Press = 'press'
+/**
+ * @enum UI.MapView.Type
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * This property indicates how map will be displayed.
+ *
+ */
+export enum MapViewType {
+  /**
+   * @property {Number} NORMAL
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 0.1
+   */
+  NORMAL,
+  /**
+   * @property {Number} SATELLITE
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 0.1
+   */
+  SATELLITE,
+  /**
+   * @property {Number} HYBRID
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 0.1
+   */
+  HYBRID
 }
+
+export type IMapViewAdroid = ViewAndroidProps &
+  Partial<{
+    /**
+     * This property sets visibility of my location button.
+     * @property {Boolean} [locationButtonVisible = false]
+     * @android
+     * @since 3.0.1
+     */
+    locationButtonVisible: boolean;
+    /**
+     * Prepare the map asynchronously. You must call this method manually. Use this method after page onShow callback.
+     *
+     * @android
+     * @method prepareMap
+     * @since 3.1.0
+     */
+    prepareMap(): void;
+  }>;
+
+export type IMapViewIOS = ViewIOSProps &
+  Partial<{
+    /**
+     * This property sets cluster borderWidth. Only works on ios.
+     *
+     * @property {Number} [clusterBorderWidth = 2]
+     * @ios
+     * @since 3.0.1
+     */
+    clusterBorderWidth?: number;
+    /**
+     * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
+     *
+     * @property {Number} [clusterSize = 0]
+     * @ios
+     * @since 3.0.1
+     */
+    clusterSize?: number;
+    /**
+     * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
+     *
+     * @property {Number} [clusterPadding = 15]
+     * @ios
+     * @since 3.0.1
+     */
+    clusterPadding?: number;
+  }>;
 
 /**
  * @class UI.MapView
@@ -51,8 +131,8 @@ declare enum MapViewEvents {
  *     myPage.layout.addChild(myMapView);
  *
  */
-declare class MapView extends View<MapViewEvents> {
-  constructor(params?: Partial<MapView>);
+export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends MobileOSProps<IMapViewIOS, IMapViewAdroid> = MobileOSProps<IMapViewIOS, IMapViewAdroid>>
+  extends IView<TEvent | MapViewEvents, any, TMobile> {
   /**
    * Enables/Disables scroll gestures so that map can be dragged.
    *
@@ -202,59 +282,6 @@ declare class MapView extends View<MapViewEvents> {
    * @since 2.0.9
    */
   maxZoomLevel: number;
-  readonly ios: View['ios'] & {
-    /**
-     * This property sets cluster borderWidth. Only works on ios.
-     *
-     * @property {Number} [clusterBorderWidth = 2]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterBorderWidth: number;
-    /**
-     * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
-     *
-     * @property {Number} [clusterSize = 0]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterSize: number;
-    /**
-     * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
-     *
-     * @property {Number} [clusterPadding = 15]
-     * @ios
-     * @since 3.0.1
-     */
-    clusterPadding: number;
-  };
-  readonly android: View['android'] & {
-    prepareMapAsync(): void;
-    /**
-     * Prepare the map later. This parameter must be given in constructor.
-     * @property {Boolean} [lazyLoading = false]
-     * @android
-     * @since 2.0.10
-     * @deprecated
-     */
-    lazyLoading: boolean;
-    /**
-     * This property sets visibility of my location button.
-     * @property {Boolean} [locationButtonVisible = false]
-     * @android
-     * @since 3.0.1
-     */
-    locationButtonVisible: boolean;
-
-    /**
-     * Prepare the map asynchronously. You must call this method manually. Use this method after page onShow callback.
-     *
-     * @android
-     * @method prepareMap
-     * @since 3.1.0
-     */
-    prepareMap(): void;
-  };
   /**
    * This property gets center location of the map to the given latitude & longitude. Getting this property must be
    * in onCreate event or after.
@@ -269,6 +296,7 @@ declare class MapView extends View<MapViewEvents> {
     latitude: number;
     longitude: number;
   };
+  zoomEnabled: boolean;
 
   /**
    * Contains the four points defining the four-sided polygon that is visible in a map's camera. This polygon can be a trapezoid instead of a rectangle, because a camera can have tilt. If the camera is directly over the center of the camera, the shape is rectangular, but if the camera is tilted, the shape will appear to be a trapezoid whose smallest side is closest to the point of view.
@@ -291,7 +319,7 @@ declare class MapView extends View<MapViewEvents> {
    * @readonly
    * @since 4.3.2
    */
-  visibleRegion: {
+  readonly visibleRegion: {
     topLeft: {
       latitude: number;
       longitude: number;
@@ -318,7 +346,7 @@ declare class MapView extends View<MapViewEvents> {
    * @method getVisiblePins
    * @since 2.0.7
    */
-  getVisiblePins(): MapView.Pin[];
+  getVisiblePins(): Pin[];
   /**
    * Adds a UI.MapView.Pin on the map.
    *
@@ -328,7 +356,7 @@ declare class MapView extends View<MapViewEvents> {
    * @method addPin
    * @since 0.1
    */
-  addPin(pin: MapView.Pin): void;
+  addPin(pin: Pin): void;
   /**
    * Removes the UI.MapView.Pin from the map.
    *
@@ -338,7 +366,7 @@ declare class MapView extends View<MapViewEvents> {
    * @ios
    * @since 0.1
    */
-  removePin(pin: MapView.Pin): void;
+  removePin(pin: Pin): void;
   /**
    * Removes all pins from the map.
    *
@@ -458,53 +486,47 @@ declare class MapView extends View<MapViewEvents> {
    * @ios
    * @since 0.1
    */
-  type: MapView.Type;
+  type: MapViewType;
 }
 
-declare namespace MapView {
-  const Events: typeof MapViewEvents & typeof View.Events;
-  type Events = typeof Events;
-  class Pin extends PinKlass {
-    constructor(params?: Partial<PinKlass>);
-  }
+export declare class AbstractMapView<TEvent extends string = MapViewEvents> extends AbstractView<TEvent | MapViewEvents, any, IMapView> implements IMapView<TEvent | MapViewEvents> {
+  zoomEnabled: boolean;
+  scrollEnabled: boolean;
+  rotateEnabled: boolean;
+  compassEnabled: boolean;
+  userLocationEnabled: boolean;
+  clusterEnabled: boolean;
+  clusterFillColor: AbstractColor;
+  clusterBorderColor: AbstractColor;
+  clusterTextColor: AbstractColor;
+  clusterFont: AbstractFont;
+  onClusterPress: (pins: Pin[]) => void;
+  setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
+  zoomLevel: number;
+  minZoomLevel: number;
+  maxZoomLevel: number;
+  centerLocation: { latitude: number; longitude: number };
+  visibleRegion: {
+    topLeft: { latitude: number; longitude: number };
+    topRight: { latitude: number; longitude: number };
+    bottomLeft: { latitude: number; longitude: number };
+    bottomRight: { latitude: number; longitude: number };
+  };
+  getVisiblePins(): Pin[];
+  addPin(pin: Pin): void;
+  removePin(pin: Pin): void;
+  removeAllPins(): void;
+  onPress: (location: { latitude: number; longitude: number }) => void;
+  onCameraMoveStarted: () => void;
+  onCameraMoveEnded: () => void;
+  onLongPress: (location: { latitude: number; longitude: number }) => void;
+  onCreate: () => void;
+  type: MapViewType;
 
-  /**
-   * @enum UI.MapView.Type
-   * @static
-   * @readonly
-   * @since 0.1
-   *
-   * This property indicates how map will be displayed.
-   *
-   */
-  enum Type {
-    /**
-     * @property {Number} NORMAL
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    NORMAL = 0,
-    /**
-     * @property {Number} SATELLITE
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    SATELLITE = 1,
-    /**
-     * @property {Number} HYBRID
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    HYBRID = 2
-  }
+  static Type: MapViewType;
+  static Pin: typeof Pin;
+  static Cluster: typeof Cluster;
 }
-export = MapView;
+const MapView: typeof AbstractMapView = require(`./mapview.${Device.deviceOS.toLowerCase()}`).default;
+type MapView = AbstractMapView;
+export default MapView;
