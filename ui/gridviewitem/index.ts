@@ -11,7 +11,7 @@ import { IFlexLayout } from '../flexlayout';
  * For example usage you can look {@link UI.ListView}.
  *
  */
-export declare interface IGridViewItem<TEvent extends string = FlexLayoutEvents, TIOS = {}, TAND = {}> extends IFlexLayout<TEvent | FlexLayoutEvents, TIOS, TAND> {
+export declare interface IGridViewItem<TEvent extends string = FlexLayoutEvents, TIOS = {}, TAND = {}> extends IFlexLayout<TEvent | FlexLayoutEvents> {
   /**
    * Inner nativeObject. This property is only available for Android.
    * @android

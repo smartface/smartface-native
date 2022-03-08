@@ -24,7 +24,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
 {
   private _children = {};
 
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
 
     const EventFunctions = {
