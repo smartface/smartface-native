@@ -490,6 +490,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
 }
 
 export declare class AbstractMapView<TEvent extends string = MapViewEvents> extends AbstractView<TEvent | MapViewEvents, any, IMapView> implements IMapView<TEvent | MapViewEvents> {
+  constructor(params?: Partial<IMapView>);
   zoomEnabled: boolean;
   scrollEnabled: boolean;
   rotateEnabled: boolean;
