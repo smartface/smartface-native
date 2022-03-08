@@ -1,4 +1,4 @@
-import EllipsizeMode from '../../ui/shared/ellipsizemode';
+import EllipsizeMode from "../../ui/shared/android/ellipsizemode";
 
 namespace NSLineBreakMode {
   export const byWordWrapping = 0;

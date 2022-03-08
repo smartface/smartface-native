@@ -1,12 +1,13 @@
 import TextDirection from '../android/textdirection';
 import Color from '../color';
-import EllipsizeMode from '../shared/ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import IView, { IViewState } from '../view';
 import { ViewEvents } from '../view/view-event';
 import { ConstructorOf } from '../../core/constructorof';
-export interface ILabelAndroid {
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IView, IViewState } from '../view';
+import EllipsizeMode from '../shared/android/ellipsizemode';
+export type LabelAndroidProps = IView['android'] & {
   /**
    * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
    *
@@ -24,9 +25,9 @@ export interface ILabelAndroid {
   textDirection?: TextDirection;
 }
 
-export interface ILabelIOS {}
+export type LabelIOSProps = IView['ios']
 
-export declare interface ILabel<TEvent extends string = ViewEvents, TIOS = {}, TAND = {}> extends IView<TEvent, TIOS, TAND & ILabelAndroid> {
+export declare interface ILabel<TEvent extends string = ViewEvents, TMobile extends MobileOSProps<LabelIOSProps, LabelAndroidProps> = MobileOSProps<LabelIOSProps, LabelAndroidProps>> extends IView<TEvent, any, TMobile> {
   /**
    * Gets/sets font of a Label. When set to null label uses system font.
    * It is set to null by default.

@@ -1,9 +1,10 @@
 import LabelIOS from '../label/label.ios';
 import { ITextView } from '.';
-import { Invocation, UIScrollViewInheritance } from '../../util';
+import { Invocation } from '../../util';
 import { Size } from '../../primitive/size';
 import { TextViewEvents } from './textview-events';
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
+import Color from '../color';
 
 enum NSUnderlineStyle {
   None = 0,
@@ -12,9 +13,8 @@ enum NSUnderlineStyle {
   Double = 9
 }
 
-export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS<TEvent | TextViewEvents> implements ITextView<TEvent | TextViewEvents> {
+export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelIOS<TEvent | TextViewEvents> implements ITextView<TEvent | TextViewEvents> {
   private _lastModifiedAttributedString: __SF_NSOBject;
-  protected _ios: ITextView['ios'];
   private __attributedText: ITextView['attributedText'];
   private _letterSpacing: ITextView['letterSpacing'];
   private _lineSpacing: ITextView['lineSpacing'];
@@ -26,8 +26,8 @@ export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UITextView();
     }
-
-    UIScrollViewInheritance.addPropertiesAndMethods.call(this); //TODO: Look at it after Cenk is done with Scrollable stuff
+    //TODO: Look at it after Cenk is done with Scrollable stuff
+    // UIScrollViewInheritance.addPropertiesAndMethods.call(this); 
 
     //Defaults
     this.nativeObject.setSelectable = false;
@@ -44,10 +44,6 @@ export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS
         this.onLinkClick(e.URL);
       }
     };
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   getAttributeTextSize(maxWidth: number): Size {
     if (!this._lastModifiedAttributedString) {
@@ -81,10 +77,20 @@ export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS
       set showScrollBar(value: ITextView['ios']['showScrollBar']) {
         self.nativeObject.showsHorizontalScrollIndicator = value;
         self.nativeObject.showsVerticalScrollIndicator = value;
+      },
+      get paginationEnabled(): boolean {
+        return self.nativeObject.valueForKey('pagingEnabled');
+      },
+      set paginationEnabled(value: boolean) {
+        self.nativeObject.setValueForKey(value, 'pagingEnabled');
+      },
+      get contentOffset(): __SF_NSRect {
+        return {
+          x: self.nativeObject.contentOffset.x + self.nativeObject.contentInsetDictionary.left,
+          y: self.nativeObject.contentOffset.y + self.nativeObject.contentInsetDictionary.top
+        };
       }
     };
-
-    this._ios = Object.assign(this._ios, ios);
   }
   set onLinkClick(value: ITextView['onLinkClick']) {
     this._onLinkClick = value;
@@ -124,9 +130,6 @@ export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS
   set htmlText(value: ITextView['htmlText']) {
     this.nativeObject.htmlText = value;
   }
-  get ios() {
-    return this._ios;
-  }
   get scrollEnabled(): boolean {
     return this.nativeObject.valueForKey('scrollEnabled');
   }
@@ -163,7 +166,8 @@ export default class TextViewIOS<TEvent extends TextViewEvents> extends LabelIOS
   set textColor(value: ITextView['textColor']) {
     this._textColor = value;
     this.nativeObject.setEditable = true;
-    this.nativeObject.textColor = value.nativeObject;
+    if(value instanceof Color)
+      this.nativeObject.textColor = value.nativeObject;
     this.nativeObject.setEditable = false;
     this.nativeObject.setSelectable = this.selectable;
   }

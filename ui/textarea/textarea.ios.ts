@@ -1,12 +1,14 @@
-import { iOSProps, ITextArea } from '.';
+import { ITextArea } from '.';
+import ActionKeyType from '../shared/android/actionkeytype';
+import KeyboardType from '../shared/keyboardtype';
+import TextAlignment from '../shared/textalignment';
 import TextBoxIOS from '../textbox/textbox.ios';
 import { TextAreaEvents } from './textarea-events';
-import { UIScrollViewInheritance } from '../../util';
-import TextAlignment from '../textalignment';
-import ActionKeyType from '../actionkeytype';
-import KeyboardType from '../keyboardtype';
 
-export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative = iOSProps> extends TextBoxIOS<TEvent | TextAreaEvents, TNative> implements ITextArea<TEvent, TNative> {
+export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative = __SF_UITextView, TProps extends ITextArea = ITextArea>
+  extends TextBoxIOS<TEvent | TextAreaEvents, TNative, TProps>
+  implements ITextArea<TEvent>
+{
   private _bounces: boolean;
   private __hint: string;
   private _actionKeyType: ActionKeyType;
@@ -15,22 +17,21 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   private _adjustFontSizeToFit: boolean;
   private _minimumFontSize: number;
   private __clearButtonEnabled: boolean;
-  constructor(params: Partial<ITextArea> = {}) {
+  constructor(params?: Partial<TProps>) {
     super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UITextView();
     }
 
-    UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
-    const { ios, ...restParams } = params;
-    ios.showScrollBar = false;
-    Object.assign(this._ios, ios, this.iosProps);
-    Object.assign(this, restParams);
+    // UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+    this.addIOSProps(this.iosProps);
+    this.ios.showScrollBar = false;
   }
+  enabled?: boolean;
 
-  get iosProps() {
+  get iosProps(): ITextArea['ios'] {
     const self = this;
     return {
       get showScrollBar(): ITextArea['ios']['showScrollBar'] {
@@ -52,7 +53,7 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
       set minimumFontSize(value: ITextArea['ios']['minimumFontSize']) {
         self._minimumFontSize = value;
       },
-      get clearButtonEnabled(): ITextArea['ios']['clearButtonEnabled'] {
+      get clearButtonEnabled(): boolean {
         return self.__clearButtonEnabled;
       },
       set clearButtonEnabled(value: ITextArea['ios']['clearButtonEnabled']) {

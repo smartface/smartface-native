@@ -1,13 +1,14 @@
 import TextDirection from 'ui/android/textdirection';
 import Color from '../color';
-import EllipsizeMode from '../shared/ellipsizemode';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import { ViewAndroid } from '../view/view.android';
-import { ILabel, ILabelAndroid } from '.';
-import { TypeUtil, TypeValue } from '../../util';
+import { ILabel, LabelAndroidProps } from '.';
+import { AndroidConfig, TypeUtil, TypeValue } from '../../util';
 import { ViewEvents } from '../view/view-event';
 import { IViewState } from '../view';
+import EllipsizeMode from '../shared/android/ellipsizemode';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -33,9 +34,8 @@ const MIDLEFT_GRAVITY = 16 | 3;
 const MIDCENTER_GRAVITY = 17;
 const MINIMUM_FONT_SIZE = 7;
 
-export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = ILabelAndroid> extends ViewAndroid<TEvent, TNative & ILabelAndroid> implements ILabel {
+export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel> extends ViewAndroid<TEvent, TNative, TProps> implements ILabel {
   private _ellipsizeMode: ILabel['ellipsizeMode'];
-  protected _android: ILabel['android'];
   protected _textAlignment: TextAlignment;
   protected viewNativeDefaultTextAlignment: number = null;
   private skipDefaults: boolean;
@@ -45,7 +45,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _adjustableFontSizeStep = 1;
   private fontInitial: Font = null;
   private _textColor: ILabel['textColor'] = Color.BLUE;
-  constructor(params: Partial<ILabel> = {}) {
+  constructor(params: Partial<TProps>) {
     super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
@@ -76,7 +76,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
 
   private initAndroidProps() {
     const self = this;
-    this._android = {
+    this.addAndroidProps({
       get textDirection(): TextDirection {
         return self._textDirection;
       },
@@ -93,7 +93,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
           self.setAutoSizeTextTypeUniformWithConfiguration();
         }
       }
-    };
+    });
   }
 
   private setAutoSizeTextTypeUniformWithConfiguration() {

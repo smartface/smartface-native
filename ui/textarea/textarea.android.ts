@@ -1,12 +1,12 @@
-import { AndroidProps, ITextArea } from '.';
-import ActionKeyType from '../actionkeytype';
-import KeyboardType from '../keyboardtype';
+import { TextareaAndroidProps, ITextArea } from '.';
+import ActionKeyType from '../shared/android/actionkeytype';
+import KeyboardType from '../shared/keyboardtype';
 import TextBoxAndroid from '../textbox/textbox.android';
 import { TextAreaEvents } from './textarea-events';
 
-export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNative = AndroidProps>
-  extends TextBoxAndroid<TEvent | TextAreaEvents, TNative>
-  implements ITextArea<TEvent, {}, TNative>
+export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNative = any, TProps extends ITextArea = ITextArea>
+  extends TextBoxAndroid<TEvent | TextAreaEvents, TNative, TProps>
+  implements ITextArea<TEvent>
 {
   private _bounces: boolean;
   private __hint: string;
@@ -14,7 +14,7 @@ export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNa
   private __keyboardType: KeyboardType;
   private __isPassword: boolean;
   private __onActionButtonPress: ITextArea['onActionButtonPress'];
-  constructor(params: Partial<ITextArea> = {}) {
+  constructor(params: Partial<TProps>) {
     super(params);
 
     this.nativeObject.setSingleLine(false);

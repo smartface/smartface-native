@@ -1,10 +1,11 @@
-import AttributedString from '../attributedstring';
-import { ILabel } from '../label/label';
+import { ILabel } from '../label';
 import { TextViewEvents } from './textview-events';
 import { ConstructorOf } from '../../core/constructorof';
 import { Size } from '../../primitive/size';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import AttributedString from '../../global/attributedstring';
 
-export interface TextViewiOSPRoperties {
+export type TextViewiOSPRoperties = ILabel['ios'] & {
   /**
    * Sets/gets visibiliy of scroll bar when text is too long.
    *
@@ -14,6 +15,8 @@ export interface TextViewiOSPRoperties {
    */
   showScrollBar?: boolean;
 }
+
+export type TextViewAndroidPRoperties = ILabel['android'];
 
 /**
  * @since 3.0.0
@@ -32,7 +35,7 @@ export interface TextViewiOSPRoperties {
  *     myTextview.left = 20,
  *     myTextview.backgroundColor = Color.GRAY;
  */
-export declare interface ITextView<TEvent extends string = TextViewEvents, TIOS = {}, TAND = {}> extends ILabel<TEvent | TextViewEvents, TIOS & TextViewiOSPRoperties, TAND> {
+export declare interface ITextView<TEvent extends string = TextViewEvents, TMobile extends MobileOSProps<TextViewiOSPRoperties, TextViewAndroidPRoperties> = MobileOSProps<TextViewiOSPRoperties, TextViewAndroidPRoperties>> extends ILabel<TEvent | TextViewEvents, TMobile> {
   /**
    * Gets/sets HTML text value of TextView. This property helps user showing HTML
    * texts on the screen. In Android, you must avoid to using selectable property to make the links clickable.

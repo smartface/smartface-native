@@ -20,3 +20,4 @@ export * as TextViewSizeCalculator from './Android/textviewsizecalculator';
 export { default as TypeValue } from './Android/typevalue';
 export { default as UnitConverter } from './Android/unitconverter';
 export { default as copyObjectPropertiesWithDescriptors } from './copyObjectPropertiesWithDescriptors';
+UIScrollViewInheritance: require("./iOS/uiscrollviewinheritance.js")

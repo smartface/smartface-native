@@ -1,17 +1,17 @@
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
 import Color from '../color';
-import TextAlignment from '../textalignment';
 import { ViewEvents } from '../view/view-event';
 import ViewIOS from '../view/view.ios';
 import { ILabel } from '.';
+import TextAlignment from '../shared/textalignment';
 
 const DEFAULT_MINIMUM_FONT_SIZE = 1;
 
-export default class LabelIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent> implements ILabel {
+export default class LabelIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends ILabel = ILabel> extends ViewIOS<TEvent, TNative, TProps> implements ILabel {
   private _minimumFontSize = DEFAULT_MINIMUM_FONT_SIZE;
   private _textAlignment = TextAlignment.MIDLEFT;
   protected _textColor: ILabel['textColor'] = Color.BLACK;
-  constructor(params: Partial<ILabel> = {}) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new __SF_SMFUILabel();

@@ -2,7 +2,7 @@ import { ITextView } from '.';
 import { Size } from '../../primitive/size';
 import { TextViewSizeCalculator, UnitConverter } from '../../util';
 import LabelAndroid from '../label/label.android';
-import TextAlignment from '../textalignment';
+import TextAlignment from '../shared/textalignment';
 import { TextViewEvents } from './textview-events';
 
 const NativeHtml = requireClass('android.text.Html');
@@ -27,7 +27,7 @@ const TextAlignmentDic = {
 const MAX_INT_VALUE = 2147483647;
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
-export default class TextViewAndroid<TEvent extends TextViewEvents> extends LabelAndroid<TEvent | TextViewEvents> implements ITextView {
+export default class TextViewAndroid<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelAndroid<TEvent | TextViewEvents, any, TProps> implements ITextView {
   private _attributedStringBuilder;
   private _attributedStringArray: ITextView['attributedText'];
   private _onLinkClick: ITextView['onLinkClick'];
@@ -37,13 +37,10 @@ export default class TextViewAndroid<TEvent extends TextViewEvents> extends Labe
   private _htmlText: ITextView['htmlText'];
   private linkMovementMethodCreated: boolean;
   private scrollableMovementMethodCreated: boolean;
-  constructor(params: Partial<ITextView> = {}) {
-    super();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
+  constructor(params?: Partial<TProps>) {
+    super(params);
   }
+  
   get htmlText(): ITextView['htmlText'] {
     return this._htmlText || '';
   }
@@ -149,6 +146,7 @@ export default class TextViewAndroid<TEvent extends TextViewEvents> extends Labe
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
     this.enableScrollable(value);
   }
+  
 
   /*
 ToDo: LinkMovementMethod makes the links clickable and scrollable but this case is restricted to mutually directed each other. 
