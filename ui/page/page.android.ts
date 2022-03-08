@@ -1,4 +1,4 @@
-import Page, { IPage, PageAndroidParams, PageBase, PageIOSParams, PageOrientation } from '.';
+import Page, { IPage, LargeTitleDisplayMode, Orientation, PageAndroidParams, PageBase, PageIOSParams, PageOrientation, PresentationStyle } from '.';
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
@@ -7,7 +7,6 @@ import Notifications from '../../global/notifications';
 import { AndroidConfig, LayoutParams, RequestCodes, SystemServices } from '../../util';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
-import HeaderBar from '../headerbar';
 import HeaderBarItem from '../headerbaritem';
 import { PageEvents } from './page-events';
 import SoundAndroid from '../../device/sound/sound.android';
@@ -20,6 +19,7 @@ import Image from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { StatusBar } from '../../application/statusbar';
+import { HeaderBar } from '../navigationcontroller/headerbar';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const OrientationType = require('../../device/screen/orientationtype');
@@ -55,12 +55,17 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
-export default class PageAndroid<TEvent extends string = PageEvents, TNative = {}, TProps extends IPage = IPage> extends PageBase<
+export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends PageBase<
   TEvent | PageEvents,
-  __SF_UIViewController,
-  TProps & { skipDefaults?: boolean }
+  TNative,
+  TProps
 > {
-  // implements IPage<TEvent | PageEvents, PageIOSParams, TNative & PageAndroidParams>
+  static iOS: {
+    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+    PresentationStyle: typeof PresentationStyle;
+  };
+  static Orientation: typeof Orientation;
+
   headerBar: HeaderBar;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
@@ -711,7 +716,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
     };
 
     this.headerBar = Object.assign(this.headerBar, headerbarParams);
-    this.headerBar.android = Object.assign(this.headerBar.android, headerBarAndroid);
+    Object.assign(this.headerBar.android, headerBarAndroid);
   }
 
   private layoutAssignments() {

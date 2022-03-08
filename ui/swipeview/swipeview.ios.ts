@@ -25,9 +25,6 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   extends ViewIOS<TEvent | SwipeViewEvents, TNative, TProps>
   implements ISwipeView
 {
-  onPageSelected: (index: number, page: Page) => void;
-  onPageScrolled: (index: number, offset: number) => void;
-  onStateChanged: (state: SwipeViewState) => void;
   private _currentIndex: number = 0;
   private _page: PageIOS;
   private currentState = SwipeViewState.IDLE;
@@ -52,6 +49,12 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
     this.setPageControllerDataSource();
     this.setViewControllerDelegate();
   }
+  onPageSelected: (index: number, page: Page) => void;
+  onPageScrolled: (index: number, offset: number) => void;
+  onStateChanged: (state: SwipeViewState) => void;
+  onPageCreate: (position: number) => Page;
+  pageCount: number;
+  pagerAdapter: { notifyDataSetChanged: () => void; };
 
   private setPageControllerDataSource() {
     this.pageControllerDatasource = new __SF_UIPageViewControllerDatasource();

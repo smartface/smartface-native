@@ -1,8 +1,8 @@
 import StatusBarAndroid from '../../application/statusbar/statusbar.android';
-import { EventListenerCallback, IEventEmitter } from '../../core/eventemitter';
+import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout, { IFlexLayout } from '../flexlayout';
 import NavigationController, { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
@@ -379,10 +379,11 @@ export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps 
   isInsideBottomTabBar: boolean = false;
 }
 
-export declare class AbstractPage<TEvent extends string = PageEvents, TProps extends WithMobileOSProps<IPage> = WithMobileOSProps<IPage>, TNative = any>
+export declare class AbstractPage<TEvent extends string = PageEvents, TProps extends IPage = IPage, TNative = any>
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IPage<TEvent | PageEvents, TProps, TNative>, IController
 {
+  constructor(params: IPage);
   childControllers?: IController[];
   tabBar?: TabBarController;
   getCurrentController(): IController;
@@ -392,10 +393,6 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TProps ext
   popupBackNavigator: any;
   isActive: boolean;
   isInsideBottomTabBar: boolean;
-  on(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback: EventListenerCallback): () => void;
-  once(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback: EventListenerCallback): () => void;
-  off(eventName: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, callback?: EventListenerCallback): void;
-  emit(event: 'hide' | 'load' | 'show' | 'orientationChange' | 'safeAreaPaddingChange' | TEvent, ...args: any[]): void;
   orientation: PageOrientation;
   transitionViews: View[];
   onOrientationChange(e: { orientation: PageOrientation[] }): void;

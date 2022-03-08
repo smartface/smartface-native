@@ -176,9 +176,10 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extend
 }
 
 export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, TIOS extends Record<string, any> = {}, TAND extends Record<string, any> = {}>
-  extends AbstractView<TEvent | SwipeViewEvents, TIOS, TAND>
+  extends AbstractView<TEvent | SwipeViewEvents, any, ISwipeView>
   implements ISwipeView
 {
+  constructor(params?: Partial<ISwipeView>);
   onPageCreate: (position: number) => Page;
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };

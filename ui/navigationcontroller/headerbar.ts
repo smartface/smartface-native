@@ -24,7 +24,7 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
   private _titleFont: Font = undefined;
   private _borderVisibility: boolean;
   leftItemEnabled: boolean;
-  titleLayout: View<any, {}, {}>;
+  titleLayout: View;
   title: string;
   setItems(items: IHeaderBarItem[]): void { }
   setLeftItem(item: IHeaderBarItem): void { }

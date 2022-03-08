@@ -1,4 +1,4 @@
-import { IPage, PageAndroidParams, PageBase, PageIOSParams, PageOrientation } from '.';
+import { IPage, LargeTitleDisplayMode, Orientation, PageAndroidParams, PageBase, PageIOSParams, PageOrientation, PresentationStyle } from '.';
 import Screen, { OrientationType } from '../../device/screen';
 import { Invocation } from '../../util';
 import FlexLayout from '../flexlayout';
@@ -8,10 +8,16 @@ import { PageEvents } from './page-events';
 
 const UINavigationItem = requireClass('UINavigationItem');
 
-export default class PageIOS<TEvent extends string = PageEvents, TNative extends {[key: string]: any} = {[key: string]: any}, TProps extends IPage = IPage>
-  extends PageBase<TEvent | PageEvents, __SF_UIViewController, TProps>
+export default class PageIOS<TEvent extends string = PageEvents, TNative extends {[key: string]: any} = __SF_UIViewController, TProps extends IPage = IPage>
+  extends PageBase<TEvent | PageEvents, TNative, TProps>
   implements IPage<TEvent | PageEvents,  TProps, TNative>
 {
+  static iOS: {
+    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+    PresentationStyle: typeof PresentationStyle;
+  };
+  static Orientation: typeof Orientation;
+
   private routerPath: any = null;
   private pageView = new FlexLayout();
   private _safeAreaLayoutMode: IPage['ios']['safeAreaLayoutMode'];
@@ -41,9 +47,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     };
 
-    this.headerBar = {} as any;
-    this.headerBar.android = {};
-    this.headerBar.ios = {};
+    // this.headerBar = {} as any;
+    // this.headerBar.android = {};
+    // this.headerBar.ios = {};
   }
 
   onLoad: () => void;
