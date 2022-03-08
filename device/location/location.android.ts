@@ -1,7 +1,7 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { RequestCodes, TypeUtil } from '../../util';
-import { ILocation } from './location';
+import { ILocation } from '.';
 import { LocationEvents } from './location-events';
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release

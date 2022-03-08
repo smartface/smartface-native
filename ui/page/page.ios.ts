@@ -1,4 +1,4 @@
-import { IPage, PageAndroidParams, PageBase, PageIOSParams, PageOrientation } from '.';
+import { IPage, LargeTitleDisplayMode, Orientation, PageAndroidParams, PageBase, PageIOSParams, PageOrientation, PresentationStyle } from '.';
 import Screen, { OrientationType } from '../../device/screen';
 import { Invocation } from '../../util';
 import FlexLayout from '../flexlayout';
@@ -8,10 +8,16 @@ import { PageEvents } from './page-events';
 
 const UINavigationItem = requireClass('UINavigationItem');
 
-export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
-  extends PageBase<TEvent | PageEvents, __SF_UIViewController>
-  implements IPage<TEvent | PageEvents, TNative & PageIOSParams>
+export default class PageIOS<TEvent extends string = PageEvents, TNative extends {[key: string]: any} = __SF_UIViewController, TProps extends IPage = IPage>
+  extends PageBase<TEvent | PageEvents, TNative, TProps>
+  implements IPage<TEvent | PageEvents,  TProps, TNative>
 {
+  static iOS: {
+    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+    PresentationStyle: typeof PresentationStyle;
+  };
+  static Orientation: typeof Orientation;
+
   private routerPath: any = null;
   private pageView = new FlexLayout();
   private _safeAreaLayoutMode: IPage['ios']['safeAreaLayoutMode'];
@@ -22,10 +28,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   private _largeTitleDisplayMode = 0;
   private _leftItem: any;
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
-  protected _ios: TNative & PageIOSParams;
-  protected _android: PageAndroidParams;
-  constructor(params: Partial<IPage> = {}) {
-    super();
+  constructor(params?: Partial<TProps>) {
+    super(params);
+    
     const { ios, android, ...restParams } = params;
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIViewController();
@@ -42,13 +47,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     };
 
-    this.headerBar = {} as any;
-    this.headerBar.android = {};
-    this.headerBar.ios = {};
-
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
+    // this.headerBar = {} as any;
+    // this.headerBar.android = {};
+    // this.headerBar.ios = {};
   }
 
   onLoad: () => void;
@@ -59,13 +60,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
   orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
-  get ios() {
-    return this._ios;
-  }
-
-  get android() {
-    return this._android;
-  }
   get layout(): IPage['layout'] {
     return this.pageView;
   }
@@ -167,7 +161,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
         self.nativeObject.modalTransitionStyle = value;
       }
     };
-    this._ios = Object.assign(this._ios, ios);
+    this.addIOSProps(ios);
   }
 
   private initPageNativeEvents() {
@@ -249,7 +243,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative = {}>
       this.checkOrientation();
       this.onShow?.();
 
-      this.emitter.emit('show');
+      this.emit('show');
     };
 
     this.nativeObject.onHide = () => {

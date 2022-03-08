@@ -1,30 +1,27 @@
-/*globals array,requireClass */
 import { ViewAndroid } from '../view/view.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
 import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
-import TypeUtil from '../../util/type';
 import { WebViewEvents } from './webview-events';
-import WebView, { AndroidProps } from './webview';
-import IWebView from './webview';
-import { Scrollable } from '../../util';
-import { IScrollable } from '../../core/scrollable';
-import { Point2D } from '../../primitive/point2d';
-import ListViewItem from '../listviewitem';
+import WebView from '.';
+import IWebView from '.';
+import OverScrollMode from '../shared/android/overscrollmode';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
 const NativeBuild = requireClass('android.os.Build');
-
+const NativeIntent = requireClass('android.content.Intent');
+const NativeURI = requireClass('android.net.Uri');
 const NativeSimpleDateFormat = requireClass('java.text.SimpleDateFormat');
 const NativeDate = requireClass('java.util.Date');
-const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
 const NativeWebView = requireClass('android.webkit.WebView');
 const SFWebView = requireClass('io.smartface.android.sfcore.ui.webview.SFWebView');
+const ValueCallback = requireClass('android.webkit.ValueCallback');
 
 const activity = AndroidConfig.activity;
 
@@ -32,40 +29,35 @@ let mFilePathCallback: any;
 let mCameraPhotoPath: any;
 let mUploadMessage: any;
 
-function createImageFile() {
-  const timeStamp = new NativeSimpleDateFormat('yyyyMMdd_HHmmss').format(new NativeDate());
-  const imageFileName = 'JPEG_' + timeStamp + '_';
-  const storageDir = activity.getExternalCacheDir();
-  const imageFile = NativeFile.createTempFile(imageFileName /* prefix */, '.jpg' /* suffix */, storageDir /* directory */);
-  return imageFile;
+interface IWebViewClientCallbacks {
+  onPageFinished: (url: string) => void;
+  onPageStarted: (url: string) => void;
+  shouldOverrideUrlLoading: (url: string) => boolean;
+  onReceivedError: (code: number, message: string, url: string) => void;
 }
 
-function overrideURLChange(url: string, _canOpenLinkInside: boolean) {
-  if (_canOpenLinkInside) {
-    return false;
-  } else {
-    const NativeIntent = requireClass('android.content.Intent');
-    const NativeURI = requireClass('android.net.Uri');
-    const action = NativeIntent.ACTION_VIEW;
-    const uri = NativeURI.parse(url);
-    const intent = new NativeIntent(action, uri);
-    activity.startActivity(intent);
-    return true;
-  }
+interface IWebChromeClientCallbacks {
+  onShowFileChooser: (filePathCallback: () => void) => boolean;
+  onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => boolean;
 }
-class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, AndroidProps> implements IWebView, IScrollable {
+
+export default class WebViewAndroid<TEvent extends string = WebViewEvents>
+  extends ViewAndroid<TEvent | WebViewEvents, any, WithMobileOSProps<Partial<IWebView>, IWebView['ios'], IWebView['android']>>
+  implements IWebView
+{
   private _canOpenLinkInside = true;
-  private _onError;
-  private _onShow;
-  private _onLoad;
-  private _onChangedURL;
-  private _onConsoleMessage;
+  private _onError: IWebView['onError'];
+  private _onShow: IWebView['onShow'];
+  private _onLoad: IWebView['onLoad'];
+  private _onChangedURL: IWebView['onChangedURL'];
+  private _onConsoleMessage: IWebView['android']['onConsoleMessage'];
   private _scrollBarEnabled = true;
   private _scrollEnabled = true;
   private _superTouchCallbacks;
-  private _onBackButtonPressedCallback;
-  private _page: any;
-  private scrollable: Scrollable;
+  private webViewClientCallbacks: IWebViewClientCallbacks;
+  private webChromeClientCallbacks: IWebChromeClientCallbacks;
+  private _onBackButtonPressedCallback: IWebView['android']['onBackButtonPressed'];
+  private _page: IWebView['android']['page'];
   private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
   private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
   static onActivityResult = function (requestCode, resultCode, data) {
@@ -102,233 +94,35 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
     }
   };
   constructor(params?: Partial<WebView>) {
-    super();
-    const self = this;
-
-    const EventFunctions = {
-      [WebViewEvents.BackButtonPressed]: function () {
-        if (this._onBackButtonPressedCallback === undefined) {
-          self.nativeObject.setOnKeyListener(
-            NativeView.OnKeyListener.implement({
-              onKey: function (view, keyCode, keyEvent) {
-                // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                if (keyCode === 4 && keyEvent.getAction() === 0) {
-                  typeof this._onBackButtonPressedCallback === 'function' && this._onBackButtonPressedCallback();
-                  return true;
-                } else {
-                  return false;
-                }
-              }
-            })
-          );
-        }
-        this._onBackButtonPressedCallback = (state) => {
-          this.emitter.emit(WebViewEvents.BackButtonPressed, state);
-        };
-      },
-      [WebViewEvents.ChangedURL]: function () {
-        this._onChangedURL = (state) => {
-          this.emitter.emit(WebViewEvents.ChangedURL, state);
-        };
-      },
-      [WebViewEvents.ConsoleMessage]: function () {
-        this._onConsoleMessage = (state) => {
-          this.emitter.emit(WebViewEvents.ConsoleMessage, state);
-        };
-      },
-      [WebViewEvents.Error]: function () {
-        this._onError = (state) => {
-          this.emitter.emit(WebViewEvents.Error, state);
-        };
-      },
-      [WebViewEvents.Load]: function () {
-        this._onLoad = (state) => {
-          this.emitter.emit(WebViewEvents.Load, state);
-        };
-      },
-      [WebViewEvents.Show]: function () {
-        this._onShow = (state) => {
-          this.emitter.emit(WebViewEvents.Show, state);
-        };
-      }
-    };
-
-    const android = {
-      get page() {
-        return self._page;
-      },
-      set page(value) {
-        self._page = value;
-      },
-      get onConsoleMessage() {
-        return self._onConsoleMessage;
-      },
-      set onConsoleMessage(callback) {
-        self._onConsoleMessage = callback;
-      },
-      get onBackButtonPressed() {
-        return self._onBackButtonPressedCallback;
-      },
-      set onBackButtonPressed(onBackButtonPressedCallback) {
-        if (self._onBackButtonPressedCallback === undefined) {
-          self._onBackButtonPressedCallback = onBackButtonPressedCallback;
-          self.nativeObject.setOnKeyListener(
-            NativeView.OnKeyListener.implement({
-              onKey: function (view, keyCode, keyEvent) {
-                // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                if (keyCode === 4 && keyEvent.getAction() === 0) {
-                  typeof self._onBackButtonPressedCallback === 'function' && self._onBackButtonPressedCallback();
-                  return true;
-                } else {
-                  return false;
-                }
-              }
-            })
-          );
-        } else {
-          self._onBackButtonPressedCallback = onBackButtonPressedCallback;
-        }
-      },
-      get displayZoomControls() {
-        return self.nativeObject.getDisplayZoomControls();
-      },
-      set displayZoomControls(displayZoomControls) {
-        self.nativeObject.setDisplayZoomControls(displayZoomControls);
-      },
-      clearHistory() {
-        self.nativeObject.clearHistory();
-      },
-      clearFormData() {
-        self.nativeObject.clearFormData();
-      },
-      setWebContentsDebuggingEnabled(enabled) {
-        NativeWebView.setWebContentsDebuggingEnabled(enabled);
-      }
-    };
-
-    const webViewClientCallbacks = {
-      onPageFinished: function (url: string) {
-        self._onShow &&
-          self._onShow({
-            url: url
-          });
-      },
-      onPageStarted: function (url: string) {
-        self._onLoad &&
-          self._onLoad({
-            url: url
-          });
-      },
-      shouldOverrideUrlLoading: function (url: string) {
-        let callbackValue = true;
-        self._onChangedURL &&
-          (callbackValue = self._onChangedURL({
-            url: url
-          }));
-        if (!callbackValue) return true;
-        return overrideURLChange(url, self._canOpenLinkInside);
-      },
-      onReceivedError: function (code: number, message: string, url: string) {
-        self._onError &&
-          self._onError({
-            code,
-            message,
-            url
-          });
-      }
-    };
-
-    const webChromeClientCallbacks = {
-      //For Android5.0+
-      onShowFileChooser: function (filePathCallback) {
-        if (mFilePathCallback !== null) {
-          mFilePathCallback.onReceiveValue(null);
-        }
-        mFilePathCallback = filePathCallback;
-
-        let takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(activity.getPackageManager()) !== null) {
-          // Create the File where the photo should go
-          let photoFile = null;
-          photoFile = createImageFile();
-          takePictureIntent.putExtra('PhotoPath', mCameraPhotoPath);
-
-          // Continue only if the File was successfully created
-          if (photoFile !== null) {
-            mCameraPhotoPath = 'file:' + photoFile.getAbsolutePath();
-            takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT, NativeUri.fromFile(photoFile));
+    super(params);
+    const { ios, android, ...restParams } = params;
+    this.nativeObject.setOnKeyListener(
+      NativeView.OnKeyListener.implement({
+        onKey: (view: any, keyCode: number, keyEvent: any) => {
+          // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+          if (keyCode === 4 && keyEvent.getAction() === 0) {
+            this._onBackButtonPressedCallback?.();
+            this.emit('backButtonPressed');
+            return true;
           } else {
-            takePictureIntent = null;
+            return false;
           }
         }
+      })
+    );
 
-        const contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-        contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
-        contentSelectionIntent.setType('image/*');
-
-        let intentArray;
-        const tempArr = [];
-        if (takePictureIntent !== null) {
-          tempArr.push(takePictureIntent);
-        }
-        intentArray = array(tempArr, 'android.content.Intent');
-
-        const chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
-        chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
-        chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, 'Image Chooser');
-        chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
-
-        self._page.nativeObject.startActivityForResult(chooserIntent, WebViewAndroid.REQUEST_CODE_LOLIPOP);
-        return true;
-      },
-      onConsoleMessage: function (sourceId: number, message: string, lineNumber: number, messageLevel: string) {
-        const result = self._android.onConsoleMessage
-          ? self._android.onConsoleMessage({
-              sourceId,
-              message,
-              lineNumber,
-              messageLevel
-            })
-          : false;
-        return TypeUtil.isBoolean(result) ? result : false;
-      }
-    };
+    this.addAndroidProps(this.getAndroidParams());
+    this.setWebViewClientCallbacks();
+    this.setWebChromeClientCallbacks();
 
     if (!this.nativeObject) {
-      this._nativeObject = new SFWebView(activity, webViewClientCallbacks, webChromeClientCallbacks);
+      this._nativeObject = new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
     }
-
-    this.scrollable = new Scrollable(this.nativeObject);
-
     /* Webview contains background color which draws all over given background drawbles.
     It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
     */
     this.nativeObject.setBackgroundColor(0);
     this.nativeObject.setScrollBarEnabled(this._scrollBarEnabled);
-
-    this._android = Object.assign(this._android, android);
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
-  }
-  get contentOffset(): Point2D {
-    return this.scrollable.contentOffset;
-  }
-  indexByListViewItem(listViewItem: ListViewItem): number {
-    return this.scrollable.indexByListViewItem(listViewItem);
-  }
-  deleteRowRange(params: Record<string, any>): void {
-    this.scrollable.deleteRowRange(params);
-  }
-  insertRowRange(params: Record<string, any>): void {
-    this.scrollable.insertRowRange(params);
-  }
-  refreshRowRange(params: Record<string, any>): void {
-    this.scrollable.refreshRowRange(params);
   }
   onOpenNewWindow?: (e: { url: string }) => void;
   get scrollBarEnabled() {
@@ -350,13 +144,13 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
     this.nativeObject.setUserAgent(value);
   }
   get bounceEnabled() {
-    return this.nativeObject.getOverScrollMode() !== 2; // OVER_SCROLL_NEVER
+    return this.nativeObject.getOverScrollMode() !== OverScrollMode.NEVER;
   }
   set bounceEnabled(value) {
     if (value) {
-      this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS
+      this.nativeObject.setOverScrollMode(OverScrollMode.ALWAYS);
     } else {
-      this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
+      this.nativeObject.setOverScrollMode(OverScrollMode.NEVER);
     }
   }
   get openLinkInside() {
@@ -430,7 +224,6 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
   }
   evaluateJS(javascript, callback) {
     if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
-      const ValueCallback = requireClass('android.webkit.ValueCallback');
       const valueCallback = ValueCallback.implement({
         onReceiveValue: function (value) {
           if (callback) callback(value);
@@ -461,6 +254,157 @@ class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<
       cookieManager.removeAllCookie();
     }
   }
-}
 
-export default WebViewAndroid;
+  private overrideURLChange(url: string, _canOpenLinkInside: boolean) {
+    if (_canOpenLinkInside) {
+      return false;
+    } else {
+      const action = NativeIntent.ACTION_VIEW;
+      const uri = NativeURI.parse(url);
+      const intent = new NativeIntent(action, uri);
+      activity.startActivity(intent);
+      return true;
+    }
+  }
+  private createImageFile() {
+    const timeStamp = new NativeSimpleDateFormat('yyyyMMdd_HHmmss').format(new NativeDate());
+    const imageFileName = 'JPEG_' + timeStamp + '_';
+    const storageDir = activity.getExternalCacheDir();
+    const imageFile = NativeFile.createTempFile(imageFileName /* prefix */, '.jpg' /* suffix */, storageDir /* directory */);
+    return imageFile;
+  }
+
+  private getAndroidParams() {
+    const self = this;
+    return {
+      get page(): IWebView['android']['page'] {
+        return self._page;
+      },
+      set page(value: IWebView['android']['page']) {
+        self._page = value;
+      },
+      get onConsoleMessage(): IWebView['android']['onConsoleMessage'] {
+        return self._onConsoleMessage;
+      },
+      set onConsoleMessage(value: IWebView['android']['onConsoleMessage']) {
+        self._onConsoleMessage = value;
+      },
+      get onBackButtonPressed(): IWebView['android']['onBackButtonPressed'] {
+        return self._onBackButtonPressedCallback;
+      },
+      set onBackButtonPressed(value: IWebView['android']['onBackButtonPressed']) {
+        self._onBackButtonPressedCallback = value;
+      },
+      get displayZoomControls(): IWebView['android']['displayZoomControls'] {
+        return self.nativeObject.getDisplayZoomControls();
+      },
+      set displayZoomControls(value: IWebView['android']['displayZoomControls']) {
+        self.nativeObject.setDisplayZoomControls(value);
+      },
+      get overScrollMode(): OverScrollMode {
+        return self._overScrollMode;
+      },
+      set overScrollMode(mode: OverScrollMode) {
+        self.nativeObject.setOverScrollMode(mode);
+        self._overScrollMode = mode;
+      },
+      clearHistory() {
+        self.nativeObject.clearHistory();
+      },
+      clearFormData() {
+        self.nativeObject.clearFormData();
+      },
+      setWebContentsDebuggingEnabled(enabled: boolean) {
+        NativeWebView.setWebContentsDebuggingEnabled(enabled);
+      }
+    };
+  }
+
+  private setWebViewClientCallbacks() {
+    this.webViewClientCallbacks = {
+      onPageFinished: (url: string) => {
+        const params = { url: url };
+        this._onShow?.(params);
+        this.emit('show', params);
+      },
+      onPageStarted: (url: string) => {
+        const params = { url: url };
+        this._onLoad?.(params);
+        this.emit('load', params);
+      },
+      shouldOverrideUrlLoading: (url: string) => {
+        const params = { url: url };
+        const callbackValue = this._onChangedURL?.(params) || true;
+        this.emit('changedURL', params);
+        if (!callbackValue) {
+          return true;
+        }
+        return this.overrideURLChange(url, this._canOpenLinkInside);
+      },
+      onReceivedError: (code: number, message: string, url: string) => {
+        const params = {
+          code,
+          message,
+          url
+        };
+        this.emit('error', params);
+        this._onError?.(params);
+      }
+    };
+  }
+  private setWebChromeClientCallbacks() {
+    this.webChromeClientCallbacks = {
+      //For Android5.0+
+      onShowFileChooser: (filePathCallback: () => void) => {
+        if (mFilePathCallback !== null) {
+          mFilePathCallback.onReceiveValue(null);
+        }
+        mFilePathCallback = filePathCallback;
+
+        let takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) !== null) {
+          // Create the File where the photo should go
+          let photoFile = null;
+          photoFile = this.createImageFile();
+          takePictureIntent.putExtra('PhotoPath', mCameraPhotoPath);
+
+          // Continue only if the File was successfully created
+          if (photoFile !== null) {
+            mCameraPhotoPath = 'file:' + photoFile.getAbsolutePath();
+            takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT, NativeUri.fromFile(photoFile));
+          } else {
+            takePictureIntent = null;
+          }
+        }
+
+        const contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType('image/*');
+
+        const tempArr = [];
+        if (takePictureIntent !== null) {
+          tempArr.push(takePictureIntent);
+        }
+        const intentArray = array(tempArr, 'android.content.Intent');
+
+        const chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
+        chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, 'Image Chooser');
+        chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
+        this._page.nativeObject.startActivityForResult(chooserIntent, WebViewAndroid.REQUEST_CODE_LOLIPOP);
+        return true;
+      },
+      onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => {
+        const params = {
+          sourceId,
+          message,
+          lineNumber,
+          messageLevel
+        };
+        this.emit('consoleMessage', params);
+        const result = this.android.onConsoleMessage?.(params);
+        return !!result;
+      }
+    };
+  }
+}

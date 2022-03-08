@@ -3,13 +3,12 @@ import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 
-class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative> implements IFlexLayout {
-  readonly android = {};
-  constructor(params: Partial<IFlexLayout> = {}) {
-    super({});
-
-    const { android, ...restParams } = params;
-    Object.assign(this, restParams);
+class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
+  extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative, TProps>
+  implements IFlexLayout
+{
+  constructor(params?: Partial<TProps>) {
+    super(params);
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;

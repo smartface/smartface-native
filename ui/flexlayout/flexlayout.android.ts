@@ -1,6 +1,6 @@
 import Flex from '../../core/flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
-import { IFlexLayout, AndroidProps } from '.';
+import { IFlexLayout, FlexLayoutAndroidProps } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 import Color from '../../ui/color';
 
@@ -17,12 +17,14 @@ const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout
 
 const activity = AndroidConfig.activity;
 
-export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}> extends ViewGroupAndroid<TEvent | FlexLayoutEvents, AndroidProps & TNative> implements IFlexLayout {
-  private _onInterceptTouchEvent: (e: any) => void;
-  private _flexWrap: number | null = null;
-
-  constructor(params: Partial<IFlexLayout> = {}) {
-    super();
+export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
+  extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
+  implements IFlexLayout
+{
+  private _onInterceptTouchEvent: () => boolean;
+  private _flexWrap: number | null = null
+  constructor(params?: Partial<TProps>) {
+    super(params);
 
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
@@ -32,19 +34,17 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     });
 
     const self = this;
-
-    const androidAddition = {
+    this.addAndroidProps({
       get onInterceptTouchEvent() {
         return self._onInterceptTouchEvent;
       },
       set onInterceptTouchEvent(value) {
         self._onInterceptTouchEvent = value;
+      },
+      get yogaNode(){
+        return self.yogaNode;
       }
-    };
-
-    const { android, ...restParams } = params;
-    Object.assign(this._android, androidAddition, android);
-    Object.assign(this, restParams);
+    });
   }
 
   get direction() {
@@ -88,17 +88,6 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   toString() {
     return 'FlexLayout';
   }
-
-  protected _android: Partial<{
-    [key: string]: any;
-    updateRippleEffectIfNeeded: () => void;
-    useForeground: boolean;
-    rippleEnabled: boolean;
-    rippleColor: Color;
-    onInterceptTouchEvent: () => boolean;
-    elevation: number;
-    zIndex: number;
-  }>;
   _maskedBorders: any[];
   protected _masksToBounds: boolean;
   _nativeObject: any;

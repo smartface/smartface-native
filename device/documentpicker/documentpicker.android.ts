@@ -1,7 +1,7 @@
 import File from '../../io/file';
 import Page from '../../ui/page';
 import { RequestCodes } from '../../util';
-import { DocumentPickerBase, Types } from './documentpicker';
+import { DocumentPickerBase, Types } from '.';
 
 class DocumentPickerAndroid implements DocumentPickerBase {
   static SFDocumentPicker = requireClass('io.smartface.android.sfcore.device.documentpicker.SFDocumentPicker');

@@ -1,12 +1,12 @@
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
-import Navigationbar from './android/navigationbar/navigationbar';
 import SliderDrawer from '../ui/sliderdrawer';
-import StatusBar from './statusbar/statusbar';
-import { NavigationBarStyle } from './android/navigationbar/navigationbar.android';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import BottomTabBar from '../ui/bottomtabbar';
+import { StatusBar } from './statusbar';
+import NavigationBar from './android/navigationbar/navigationbar.android';
+import { NavigationBarStyle } from './android/navigationbar';
 
 declare enum Events {
   /**
@@ -579,7 +579,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @since 1.2
      */
     onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
-    navigationBar: Navigationbar;
+    navigationBar: NavigationBar;
     /**
      * This function checks if one of the dangerous permissions is granted at beginning or not.
      * For android versions earlier than 6.0, it will return value exists in manifest or not.

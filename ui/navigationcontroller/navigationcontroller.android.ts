@@ -1,35 +1,26 @@
-import NavigationController, { Controller, IController, INavigationController, OperationType } from '.';
+import NavigationController, { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
 import Application from '../../application';
-import NativeComponent from '../../core/native-component';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import ViewController, { ControllerParams } from '../../util/Android/transition/viewcontroller';
 import BottomTabBarController from '../bottomtabbarcontroller';
-import HeaderBar from '../headerbar';
+import { HeaderBar } from './headerbar';
 import Page from '../page';
 
-export default class NavigationControllerAndroid extends NativeComponent implements INavigationController {
+export default class NavigationControllerAndroid extends AbstractNavigationController implements INavigationController {
   static NavCount = 0;
   static OperationType = OperationType;
   private pageIDCollectionInStack = {};
-  private _childControllers: Controller[] = [];
-  private _willShowCallback: (opts?: { controller: IController; animated?: boolean }) => void;
-  private _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
-  protected __isActive: boolean = false;
   private __navID: number;
   isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
   popUpBackPage: Page;
   constructor(params: Partial<INavigationController> = {}) {
-    super();
-    const { ...restParams } = params;
-
+    super(params);
     this.__isActive = false;
     this.__navID = ++NavigationControllerAndroid.NavCount;
-    Object.assign(this, restParams);
   }
   pageID: number;
   isActive: boolean = false;
-  parentController: INavigationController;
   headerBar: HeaderBar;
   get childControllers() {
     return this._childControllers;

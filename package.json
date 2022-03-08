@@ -44,7 +44,7 @@
     "prettier": "^2.5.1",
     "salep": "0.2.*",
     "source-map-support": "^0.5.16",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.2",
     "uglify-js": "2.8.12",
     "walk": "^2.3.9"
   }

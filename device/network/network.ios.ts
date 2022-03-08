@@ -78,6 +78,18 @@ class Notifier extends NetworkNotifierBase {
 }
 
 class NetworkIOS extends NetworkBase {
+  get SMSEnabled(): boolean {
+    return false;
+  }
+  get IMSI(): string {
+    return;
+  }
+  get bluetoothMacAddress(): string {
+    return;
+  }
+  get wirelessMacAddress(): string {
+    return;
+  }
   public static readonly Notifier = Notifier;
   ConnectionType = ConnectionType;
   constructor() {

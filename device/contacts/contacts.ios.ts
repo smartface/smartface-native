@@ -1,5 +1,5 @@
 import Page from '../../ui/page';
-import { ContactsBase, ContactBase } from './contacts';
+import { ContactsBase, ContactBase } from '.';
 
 function manageNativeContact(contact) {
   const returnValue = new Contact();

@@ -1,14 +1,21 @@
-import { EventEmitter } from './eventemitter';
-import { INativeComponent } from './inative-component';
+import { EventEmitter, EventListenerCallback, IEventEmitter } from './eventemitter';
+import { NativeMobileComponent, WithMobileOSProps } from './native-mobile-component';
 
-export default class NativeEventEmitterComponent<TEvent extends string, TNative = any> extends EventEmitter<TEvent> implements INativeComponent<TNative> {
-  protected _nativeObject: TNative;
-
-  get nativeObject(): TNative {
-    return this._nativeObject;
+export default class NativeEventEmitterComponent<TEvent extends string, TNative extends Record<string, any> =  Record<string, any>, TProps extends WithMobileOSProps = {}>
+  extends NativeMobileComponent<TNative, WithMobileOSProps<TProps>>
+  implements IEventEmitter<TEvent>
+{
+  private emitter = new EventEmitter<TEvent>();
+  on(eventName: TEvent, callback: EventListenerCallback): () => void {
+    return this.emitter.on(eventName, callback);
   }
-
-  set nativeObject(value: TNative) {
-    this._nativeObject = value;
+  once(eventName: TEvent, callback: EventListenerCallback): () => void {
+    return this.emitter.once(eventName, callback);
+  }
+  off(eventName: TEvent, callback?: EventListenerCallback): void {
+    return this.emitter.off(eventName, callback);
+  }
+  emit(event: TEvent, ...args: any[]): void {
+    this.emitter.emit(event, ...args);
   }
 }

@@ -1,10 +1,13 @@
-import ListView from '../listview';
 import { ConstructorOf } from '../../core/constructorof';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import { IFlexLayout } from '../flexlayout';
+import { SwipeDirection } from '../swipeitem';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IViewGroup } from '../viewgroup';
+import { ViewIOSProps } from '../view';
 
-export interface ListViewItemIOSProperties {
-  expandSwipe?(direction?: ListView.SwipeDirection): void;
+export interface ListViewItemIOSProperties extends ViewIOSProps {
+  expandSwipe?(direction?: SwipeDirection): void;
 }
 
 /**
@@ -16,7 +19,7 @@ export interface ListViewItemIOSProperties {
  * For example usage you can look {@link UI.ListView}.
  *
  */
-export declare interface IListViewItem<TEvent extends string = FlexLayoutEvents, TIOS = {}, TAND = {}> extends IFlexLayout<TEvent | FlexLayoutEvents, TIOS & ListViewItemIOSProperties, TAND> {
+export declare interface IListViewItem<TEvent extends string = FlexLayoutEvents, TMobile extends MobileOSProps<ListViewItemIOSProperties, IFlexLayout['android']> = MobileOSProps<ListViewItemIOSProperties, IFlexLayout['android']>> extends IFlexLayout<TEvent | FlexLayoutEvents, TMobile> {
   /**
    * Inner nativeObject. This property is only available for Android.
    * @android
