@@ -9,6 +9,7 @@ import KeyboardType from '../shared/keyboardtype';
 import ActionKeyType from '../shared/android/actionkeytype';
 import { TextBoxEvents } from './textbox-events';
 import AutoCapitalize from './autocapitalize';
+import { ConstructorOf } from '../../core/constructorof';
 
 export type AndroidProps = View['android'] & {
   /**
@@ -350,33 +351,6 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TIOS = 
   onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 }
 
-export declare class AbstractTextBox<TEvent extends string = TextBoxEvents> extends AbstractView<TEvent> implements ITextBox<TEvent> {
-  constructor(params: Partial<ITextBox>);
-  font: Font;
-  text: string;
-  autoCapitalize: AutoCapitalize;
-  textAlignment: TextAlignment;
-  textColor: Color;
-  cursorPosition: { start: number; end: number };
-  hintTextColor: Color;
-  onEditBegins: () => void;
-  cursorColor: Color;
-  hint: string;
-  isPassword: boolean;
-  keyboardType: KeyboardType;
-  actionKeyType: ActionKeyType;
-  android: AndroidProps;
-  ios: iOSProps;
-  showKeyboard(): void;
-  hideKeyboard(): void;
-  requestFocus(): void;
-  removeFocus(): void;
-  onTextChanged: (e?: { insertedText: string; location: number }) => void;
-  onClearButtonPress: () => void;
-  onEditEnds: () => void;
-  onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
-}
-
 /**
  * @class UI.TextBox
  * @since 0.1
@@ -393,7 +367,7 @@ export declare class AbstractTextBox<TEvent extends string = TextBoxEvents> exte
  *     myPage.layout.addChild(myTextBox);
  *
  */
-const TextBox: typeof AbstractTextBox = require(`./textbox.${Device.deviceOS.toLowerCase()}`).default;
-type TextBox = AbstractTextBox;
+const TextBox: ConstructorOf<ITextBox, Partial<ITextBox>> = require(`./textbox.${Device.deviceOS.toLowerCase()}`).default;
+type TextBox = ITextBox;
 
 export default TextBox;

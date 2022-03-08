@@ -1,34 +1,36 @@
 import { ITabbarItem } from '.';
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import AttributedString from '../../global/attributedstring';
 import { UnitConverter } from '../../util';
-import AttributedString from '../attributedstring';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
-import Font from '../font';
 import Image from '../image';
 import TabBarController from '../tabbarcontroller';
 
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 
-export default class TabbarItemAndroid extends NativeComponent implements ITabbarItem {
+export default class TabbarItemAndroid extends NativeMobileComponent<any, WithMobileOSProps<ITabbarItem>> implements ITabbarItem {
   private _title;
   private _icon;
   private _badgeObj = undefined;
   private _systemIcon;
-  private tabBarItemParent = null;
+  private _tabBarItemParent = null;
   private index = null;
   private badgeAdded = false;
-  private _android: Partial<{
-    attributedTitle: AttributedString;
-    systemIcon: number | string;
-  }> = {};
+  // private _android: Partial<{
+  //   attributedTitle: AttributedString;
+  //   systemIcon: number | string;
+  // }> = {};
+  // private _ios: Partial<{ font: Font }> = {};
+  private _attributedTitle?: AttributedString;
   private _route: string;
-  private _ios: Partial<{ font: Font }> = {};
+
   constructor(params?: Partial<ITabbarItem>) {
-    super();
+    super(params);
     const self = this;
-    this._android = {
+
+    const android = {
       get systemIcon() {
         return self._systemIcon;
       },
@@ -37,21 +39,27 @@ export default class TabbarItemAndroid extends NativeComponent implements ITabba
         self.nativeObject && self.nativeObject.setIcon(Image.systemDrawableId(self._systemIcon));
       },
       get attributedTitle() {
-        return self._android?.attributedTitle;
+        // TODO: Ask if _attributedTitleBuilder exists or not.
+        // return self._attributedTitleBuilder || self._android?.attributedTitle;
+        return self._attributedTitle;
       },
       set attributedTitle(value: AttributedString) {
-        self._android.attributedTitle = value;
+        self._attributedTitle = value;
       }
     };
+    this.addAndroidProps(android);
 
     // Assign parameters given in constructor
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
+    // const { ios, android, ...restParams } = params;
+    // Object.assign(this._ios, ios);
+    // Object.assign(this._android, android);
+    // Object.assign(this, restParams);
   }
-  get ios() {
-    return this._ios;
+  invalidate(): void {
+    throw new Error('Method not implemented.');
+  }
+  get tabBarItemParent() {
+    return this._tabBarItemParent;
   }
   get title() {
     return this._title;
@@ -104,17 +112,11 @@ export default class TabbarItemAndroid extends NativeComponent implements ITabba
 
     return this._badgeObj;
   }
-  get android() {
-    return this._android;
-  }
-  set android(value) {
-    Object.assign(this._android, value || {});
-  }
   titleSetter(title: string) {
     if (!this.nativeObject) return;
 
-    if (this.tabBarItemParent instanceof TabBarController) this.nativeObject.setText(title);
-    else if (this.tabBarItemParent instanceof BottomTabBar) this.nativeObject.setTitle(title);
+    if (this._tabBarItemParent instanceof TabBarController) this.nativeObject.setText(title);
+    else if (this._tabBarItemParent instanceof BottomTabBar) this.nativeObject.setTitle(title);
   }
   makeSelector(normalImage: Image, selectedImage: Image) {
     const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
@@ -122,7 +124,7 @@ export default class TabbarItemAndroid extends NativeComponent implements ITabba
 
     const res = new NativeStateListDrawable();
     let attrState;
-    if (this.tabBarItemParent instanceof TabBarController) attrState = 'state_selected';
+    if (this._tabBarItemParent instanceof TabBarController) attrState = 'state_selected';
     else attrState = 'state_checked';
     res.addState(array([NativeR.attr[attrState]], 'int'), selectedImage.nativeObject);
     res.addState(array([], 'int'), normalImage.nativeObject);
@@ -133,7 +135,7 @@ export default class TabbarItemAndroid extends NativeComponent implements ITabba
   }
   setBadgeToTabarItem(badgeObj: any) {
     this.badgeAdded = true;
-    if (this.tabBarItemParent !== null && this.index !== null) {
+    if (this._tabBarItemParent !== null && this.index !== null) {
       const TOP_CENTERHORIZANTAL = 1 | 48;
       const WRAP_CONTENT = -2;
       const layoutParams = new NativeFrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, TOP_CENTERHORIZANTAL);
@@ -141,7 +143,7 @@ export default class TabbarItemAndroid extends NativeComponent implements ITabba
       layoutParams.setMarginStart(UnitConverter.dpToPixel(12));
       badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
 
-      const nativeBottomTabarMenuView = this.tabBarItemParent.nativeObject.getChildAt(0);
+      const nativeBottomTabarMenuView = this._tabBarItemParent.nativeObject.getChildAt(0);
       const nativeMenuItem = nativeBottomTabarMenuView.getChildAt(this.index);
       nativeMenuItem.addView(badgeObj.nativeObject);
     }

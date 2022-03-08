@@ -124,7 +124,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     // params = params || {};
     if (!this._nativeObject) {

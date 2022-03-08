@@ -351,6 +351,15 @@ export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps 
 {
   headerBar?: HeaderBar;
   tabBar?: TabBarController;
+  private _skipDefaults: boolean;
+
+  public get skipDefaults(): boolean {
+    return this._skipDefaults;
+  }
+  public set skipDefaults(value: boolean) {
+    this._skipDefaults = value;
+  }
+
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }

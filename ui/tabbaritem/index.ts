@@ -4,6 +4,7 @@ import Badge from '../badge';
 import AttributedString from '../../global/attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
+import { IPage } from '../page';
 /**
  * @class UI.TabBarItem
  * @since 1.1.10
@@ -26,7 +27,6 @@ import { INativeComponent } from '../../core/inative-component';
  *     myTab.add('home', myItem);
  */
 export declare interface ITabbarItem extends INativeComponent {
-  _nativeObject: any;
   /**
    * Gets/sets the title of tab item.
    *
@@ -111,6 +111,8 @@ export declare interface ITabbarItem extends INativeComponent {
     font: Font;
   }>;
   invalidate(): void;
+  setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon: string | number }): void;
+  tabBarItemParent: IPage
 }
 
 const TabbarItem: ConstructorOf<ITabbarItem, Partial<ITabbarItem>> = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;

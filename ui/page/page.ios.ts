@@ -22,7 +22,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private _largeTitleDisplayMode = 0;
   private _leftItem: any;
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     
     const { ios, android, ...restParams } = params;

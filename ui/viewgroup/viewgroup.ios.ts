@@ -30,7 +30,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   onChildViewAdded: IViewGroup['onViewAdded'];
   onChildViewRemoved: IViewGroup['onViewRemoved'];
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     this.nativeObject.didAddSubview = this.onViewAddedHandler;
     this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;

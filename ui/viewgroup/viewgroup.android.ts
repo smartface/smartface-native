@@ -14,7 +14,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   static Events = ViewGroupEvents;
   childViews: Record<string, ViewAndroid> = {};
 
-  constructor(params?: TProps) {
+  constructor(params?: Partial<TProps>) {
     super(params);
     if (!this.nativeObject) {
       throw new Error("Can't create instance from ViewGroup. It is an abstract class.");

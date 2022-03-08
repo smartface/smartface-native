@@ -1,8 +1,9 @@
 import TabBarItem, { ITabbarItem } from '../tabbaritem';
 import Color from '../color';
-import Page, { AbstractPage, IPage } from '../page';
+import Page, { AbstractPage, IPage, PageAndroidParams, PageIOSParams } from '../page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 export enum BarTextTransform {
   AUTO = 0,
@@ -21,7 +22,13 @@ export enum PresentationStyle {
   PARTIALCURL = 3
 }
 
-export declare interface ITabBarController<TEvent extends string = TabBarControllerEvents, TIOS = {}, TAND = {}> extends IPage<TEvent | TabBarControllerEvents, TIOS, TAND> {
+export interface ITabBarControllerIOSProps extends PageIOSParams {
+  barTextTransform: BarTextTransform;
+}
+export interface ITabBarControllerAndroidProps extends PageAndroidParams {
+}
+
+export declare interface ITabBarController<TEvent extends string = TabBarControllerEvents> extends IPage<TEvent | TabBarControllerEvents, MobileOSProps<ITabBarControllerIOSProps, ITabBarControllerAndroidProps>> {
   /**
    * Gets the tab bar height of the TabBarController. You can change barHeight on Android, but not iOS.
    * This property is read-only for iOS.
