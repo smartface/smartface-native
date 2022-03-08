@@ -246,7 +246,6 @@ declare enum KeyboardMode {
  * A set of collection for application based properties and methods.
  */
 export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
-  static currentPage: Page;
   on(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   once(eventName: ApplicationEvents, callback: (...args: any) => void): () => void;
   off(eventName: ApplicationEvents, callback?: (...args: any) => void): void;
@@ -1120,8 +1119,10 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @since 4.3.6
    */
   static isVoiceOverEnabled: Boolean;
+  static currentPage: Page;
   static registOnItemSelectedListener(): void;
   static tabBar?: BottomTabBar;
+  static __mDrawerLayout: any;
 }
 
 const Application: typeof ApplicationBase = require(`./application.${Device.deviceOS.toLowerCase()}`).default;

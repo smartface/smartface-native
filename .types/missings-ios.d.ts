@@ -964,7 +964,12 @@ declare class __SF_SliderDrawer {
   enabled: boolean;
   onDrag: () => void;
   onShow: () => void;
+  onHide: () => void;
+  onLoad: () => void;
   show(): void;
+  hide(): void;
+  onViewLoad: () => __SF_UIView;
+  onViewLayoutSubviews: () => void;
 }
 
 declare class __SF_UIPageViewController extends __SF_UIView {

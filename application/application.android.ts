@@ -10,6 +10,8 @@ import { NavigationBar } from './android/navigationbar';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
 import { RequestCodes } from '../util';
+import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
+import { SystemServices } from '../util';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -44,14 +46,13 @@ const Permissions = {
 };
 
 //InputMethodManager to close softinput keyboard
-const { INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER } = require('../util/Android/systemservices');
 
 // Intent.ACTION_VIEW
 const ACTION_VIEW = 'android.intent.action.VIEW';
 // Intent.FLAG_ACTIVITY_NEW_TASK
 const FLAG_ACTIVITY_NEW_TASK = 268435456;
-const REQUEST_CODE_CALL_APPLICATION = 114,
-  FLAG_SECURE = 8192;
+const REQUEST_CODE_CALL_APPLICATION = 114;
+const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
 class ApplicationWrapper extends EventEmitter<string> {
@@ -179,19 +180,19 @@ class ApplicationWrapper extends EventEmitter<string> {
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
 
-  attachSliderDrawer(sliderDrawer) {
+  attachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
       sliderDrawer.__isAttached = true;
-      const sliderDrawerId = sliderDrawer.nativeObject.getId();
+      const sliderDrawerId = sliderDrawer.layout.nativeObject.getId();
       const isExists = this.__mDrawerLayout.findViewById(sliderDrawerId);
       if (!isExists) {
-        this.__mDrawerLayout.addView(sliderDrawer.nativeObject);
+        this.__mDrawerLayout.addView(sliderDrawer.layout.nativeObject);
         this.__mDrawerLayout.bringToFront();
         if (sliderDrawer.drawerListener) {
           this.__mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
         }
       }
-      sliderDrawer.onLoad && sliderDrawer.onLoad();
+      sliderDrawer.onLoad?.();
     }
   }
 
@@ -310,7 +311,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     const focusedView = this.activity.getCurrentFocus();
     if (!focusedView) return;
     const windowToken = focusedView.getWindowToken();
-    const inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+    const inputManager = AndroidConfig.getSystemService(SystemServices.INPUT_METHOD_SERVICE, SystemServices.INPUT_METHOD_MANAGER);
     inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0
   }
   registOnItemSelectedListener() {
@@ -641,8 +642,8 @@ const ApplicationAndroid = new ApplicationWrapper();
 function cancelAllBackgroundJobs() {
   Location.stop();
   Accelerometer.stop();
-  Http.__cancelAll();
-  Network.__cancelAll();
+  Http.cancelAll();
+  Network.cancelAll();
 }
 
 function configureIntent(uriScheme) {
@@ -652,7 +653,7 @@ function configureIntent(uriScheme) {
 }
 
 function checkIsAppShortcut(e) {
-  return e?.data?.hasOwnProperty('AppShortcutType');
+  return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
 }
 
 const Application = new ApplicationWrapper();

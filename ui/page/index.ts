@@ -383,7 +383,7 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TProps ext
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IPage<TEvent | PageEvents, TProps, TNative>, IController
 {
-  constructor(params: IPage);
+  constructor(params?: Partial<IPage>);
   childControllers?: IController[];
   tabBar?: TabBarController;
   getCurrentController(): IController;

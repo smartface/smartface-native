@@ -190,8 +190,8 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  // TODO: Not implemented, ask why this exists
-  // abstract get roamingEnabled(): boolean;
+  static roamingEnabled: boolean;
+  static cancelAll: () => void;
 }
 
 const Network: NetworkBase = require(`./network.${Device.deviceOS.toLowerCase()}`).default;
