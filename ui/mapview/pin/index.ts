@@ -1,36 +1,30 @@
-import { IEventEmitter } from 'core/eventemitter';
+import { ConstructorOf } from '../../../core/constructorof';
+import { IEventEmitter } from '../../../core/eventemitter';
+import { INativeComponent } from '../../../core/inative-component';
+import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../../core/native-mobile-component';
 import Color from '../../../ui/color';
 import Image from '../../../ui/image';
+import { PinEvents } from './pin-events';
 
-declare enum PinEvets {
-  InfoWindowPress = 'infoWindowPress',
-  /**
-   * This event will be fired when the pin is touched.
-   *
-   * @event onPress
-   * @android
-   * @ios
-   * @since 1.1.2
-   */
-  Press = 'press'
-}
-declare class Pin implements IEventEmitter<PinEvets> {
-  constructor(params?: Partial<Pin>);
-  on(eventName: PinEvets, callback: (...args: any) => void): () => void;
-  once(eventName: PinEvets, callback: (...args: any) => void): () => void;
-  off(eventName: PinEvets, callback?: (...args: any) => void): void;
-  emit(event: PinEvets, detail?: any[]): void;
+type IPinIOS = {
+  enableInfoWindow: boolean;
+};
+
+export interface IPin<TEvent extends string = PinEvents, TMobile extends MobileOSProps<IPinIOS, {}> = MobileOSProps<IPinIOS, {}>> extends INativeComponent, IEventEmitter<TEvent | PinEvents> {
   location: {
     latitude: number;
     longitude: number;
   };
+  android: TMobile['android'];
+  ios: TMobile['ios'];
   title: string;
   subtitle: string;
   color: Color;
   id: number;
   image: Image;
   visible: boolean;
-
+  isClusterEnabled: boolean;
   /**
    * This event will be fired when the pin is touched.
    *
@@ -64,7 +58,8 @@ declare class Pin implements IEventEmitter<PinEvets> {
    * ````
    */
   onInfoWindowPress: () => void;
-  static Events: typeof PinEvets;
 }
 
-export = Pin;
+const Pin: ConstructorOf<IPin, Partial<IPin>> = require(`./pin.${Device.deviceOS.toLowerCase()}`).default;
+type Pin = IPin;
+export default Pin;
