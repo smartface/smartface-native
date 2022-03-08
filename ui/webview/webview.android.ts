@@ -41,10 +41,7 @@ interface IWebChromeClientCallbacks {
   onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => boolean;
 }
 
-export default class WebViewAndroid<TEvent extends string = WebViewEvents>
-  extends ViewAndroid<TEvent | WebViewEvents, any, WithMobileOSProps<Partial<IWebView>, IWebView['ios'], IWebView['android']>>
-  implements IWebView
-{
+export default class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, any, IWebView> implements IWebView {
   private _canOpenLinkInside = true;
   private _onError: IWebView['onError'];
   private _onShow: IWebView['onShow'];
@@ -95,7 +92,6 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents>
   };
   constructor(params?: Partial<WebView>) {
     super(params);
-    const { ios, android, ...restParams } = params;
     this.nativeObject.setOnKeyListener(
       NativeView.OnKeyListener.implement({
         onKey: (view: any, keyCode: number, keyEvent: any) => {

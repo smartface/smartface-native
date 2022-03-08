@@ -67,7 +67,7 @@ function removeDataOfTypes(dataTypes) {
     }
   }
 }
-class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent | WebViewEvents, iOSProps> implements IWebView {
+class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent | WebViewEvents, any, IWebView> implements IWebView {
   private _scrollBarEnabled: boolean;
   private _onError;
   private _onShow;
@@ -141,7 +141,6 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
   };
   constructor(params?: Partial<IWebView>) {
     super(params);
-    const self = this;
     if (!this.nativeObject) {
       this._nativeObject = new __SF_WKWebView();
     }
@@ -152,84 +151,52 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
 
     this.nativeObject.setValueForKey(false, 'opaque');
 
-    self.onLoad = function () {};
-    self.nativeObject.onLoad = function (e) {
-      self.onLoad({
+    this.setEvents();
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private setEvents() {
+    this.nativeObject.onLoad = (e) => {
+      const params = {
         url: e.url.absoluteString
-      });
+      };
+      this.onLoad?.(params);
+      this.emit('load', params);
     };
 
-    self.onShow = function () {};
-    self.nativeObject.onShow = function (e) {
-      self.onShow({
+    this.nativeObject.onShow = (e) => {
+      const params = {
         url: e.url.absoluteString
-      });
+      };
+      this.onShow?.(params);
+      this.emit('show', params);
     };
 
-    self.onError = function () {};
-    self.nativeObject.onError = function (e) {
-      self.onError({
+    this.nativeObject.onError = (e: any) => {
+      const params = {
         code: e.error.code,
         message: e.error.localizedDescription
-      });
+      };
+      this.onError?.(params);
+      this.emit('error', params);
     };
 
-    self.ios.onOpenNewWindow = function () {};
-    self.nativeObject.onOpenNewWindow = function (e) {
-      const urlString = e.request.URL ? e.request.URL.absoluteString : undefined;
-      self.ios.onOpenNewWindow({
-        url: urlString
-      });
+    this.nativeObject.onOpenNewWindow = (e) => {
+      const params = {
+        url: e.request.URL ? e.request.URL.absoluteString : undefined
+      };
+      this.ios.onOpenNewWindow?.(params);
+      this.emit('openNewWindow', params);
     };
 
-    self.onChangedURL = function () {};
-    self.nativeObject.onChangedURL = function (e) {
-      const check = self.onChangedURL({
+    this.nativeObject.onChangedURL = (e) => {
+      const params = {
         url: e.url.absoluteString
-      });
-      if (check || check === undefined) {
-        return true;
-      } else {
-        return false;
-      }
+      };
+      this.emit('changedURL', params);
+      const check = this.onChangedURL?.(params);
+      return check || check === undefined;
     };
-
-    const EventFunctions = {
-      [WebViewEvents.BackButtonPressed]: function () {
-        //Android Only
-      },
-      [WebViewEvents.ChangedURL]: function () {
-        self.onChangedURL = function (state) {
-          this.emitter.emit(WebViewEvents.ChangedURL, state);
-        };
-      },
-      [WebViewEvents.ConsoleMessage]: function () {
-        //Android only
-      },
-      [WebViewEvents.Error]: function () {
-        self.onError = function (state) {
-          this.emitter.emit(WebViewEvents.Error, state);
-        };
-      },
-      [WebViewEvents.Load]: function () {
-        self.onLoad = function (state) {
-          this.emitter.emit(WebViewEvents.Load, state);
-        };
-      },
-      [WebViewEvents.OpenNewWindow]: function () {
-        self.ios.onOpenNewWindow = function (state) {
-          this.emitter.emit(WebViewEvents.OpenNewWindow, state);
-        };
-      },
-      [WebViewEvents.Show]: function () {
-        self.onShow = function (state) {
-          this.emitter.emit(WebViewEvents.Show, state);
-        };
-      }
-    };
-    this.setNativeParams();
-    Object.assign(this, restParams);
-    Object.assign(this._ios, ios);
   }
   get onChangedURL() {
     return this._onChangedURL;
@@ -301,11 +268,6 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
   }
   //Android specific enums object
   Android = { ConsoleMessageLevel: {} };
-  android = {
-    setWebContentsDebuggingEnabled: function (enabled) {},
-    clearHistory: function () {},
-    clearFormData: function () {}
-  };
   clearCache(deleteDiskFiles) {
     const dataTypes = ['WKWebsiteDataTypeMemoryCache'];
     if (deleteDiskFiles) {
@@ -379,10 +341,16 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
     }
     this.nativeObject.evaluateJavaScript(javascript, result);
   }
-
-  private setNativeParams() {
+  private getAndroidProps() {
+    return {
+      setWebContentsDebuggingEnabled: function () {},
+      clearHistory: function () {},
+      clearFormData: function () {}
+    };
+  }
+  private getIOSProps() {
     const self = this;
-    const ios = {
+    return {
       get safeAreaInsets(): IWebView['ios']['safeAreaInsets'] {
         return self._safeAreaInsets;
       },
@@ -397,7 +365,7 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
       get sslPinning(): IWebView['ios']['sslPinning'] {
         return self._sslPinning;
       },
-      set sslPinning(value: IWebView['ios']['sslPinnig']) {
+      set sslPinning(value: IWebView['ios']['sslPinning']) {
         self._sslPinning = value;
         const trustPolicies = value.map?.((value) => {
           const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
@@ -412,8 +380,6 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
         self.nativeObject.serverTrustPolicies = trustPolicies;
       }
     };
-
-    this._ios = Object.assign(this._ios, ios);
   }
 }
 
