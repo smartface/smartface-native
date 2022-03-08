@@ -1,7 +1,8 @@
 import { ViewAndroid } from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
-import FlexLayout from '../flexlayout';
+import FlexLayout from '../flexlayout
+import View from '../view';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');

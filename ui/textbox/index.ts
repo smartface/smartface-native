@@ -10,8 +10,9 @@ import ActionKeyType from '../shared/android/actionkeytype';
 import { TextBoxEvents } from './textbox-events';
 import AutoCapitalize from './autocapitalize';
 import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type AndroidProps = View['android'] & {
+export type TextBoxAndroidProps = View['android'] & {
   /**
    * Set an input filter to constrain the text length to the specified number. This property works only for Android.
    *
@@ -23,7 +24,7 @@ export type AndroidProps = View['android'] & {
   maxLength?: (value: number) => void;
 };
 
-export type iOSProps = View['ios'] & {
+export type TextBoxiOSProps = View['ios'] & {
   /**
    * This property adjusts font size according to view's fixed width. If you set it true,
    * you should set minimum font size by changing the minimumFontSize property.
@@ -107,7 +108,8 @@ export type iOSProps = View['ios'] & {
   textContentType?: TextContentType;
 };
 
-export declare interface ITextBox<TEvent extends string = TextBoxEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | TextBoxEvents, TIOS & iOSProps, TAND & AndroidProps> {
+export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps> = MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps>>
+  extends IView<TEvent | TextBoxEvents, any, TMobile> {
   /**
    * Gets/sets the font of the TextBox.
    * @property {UI.Font} [font = null]
@@ -349,6 +351,7 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TIOS = 
    * ````
    */
   onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
+  enabled?: boolean;
 }
 
 /**

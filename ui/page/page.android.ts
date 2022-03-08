@@ -55,10 +55,12 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
-export default class PageAndroid<TEvent extends string = PageEvents, TNative = {}, TProps extends IPage = IPage>
-  extends PageBase<TEvent | PageEvents, __SF_UIViewController, TProps>
+export default class PageAndroid<TEvent extends string = PageEvents, TNative = {}, TProps extends IPage = IPage> extends PageBase<
+  TEvent | PageEvents,
+  __SF_UIViewController,
+  TProps & { skipDefaults?: boolean }
+> {
   // implements IPage<TEvent | PageEvents, PageIOSParams, TNative & PageAndroidParams>
-{
   headerBar: HeaderBar;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
@@ -68,7 +70,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   private optionsMenu: any = null;
   private contextMenu: Record<string, any> = {};
   private actionBar: any = null;
-  private isSwipeViewPage = false;
+  isSwipeViewPage = false;
   private _orientation: PageOrientation;
   private rootLayout: FlexLayout;
   private _headerBarItems: HeaderBarItem[];
@@ -99,9 +101,9 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = {
   private _headerBarLeftItem: HeaderBarItem;
   /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
-   * _pageInstances[intPosition].__onShowCallback && _pageInstances[intPosition].__onShowCallback();
+   * _pageInstances[intPosition].__onShowCallback?.();
    */
-  private __onShowCallback: IPage['onShow'];
+  __onShowCallback: IPage['onShow'];
 
   // protected _ios: PageIOSParams;
   // protected _android: PageAndroidParams & TNative;

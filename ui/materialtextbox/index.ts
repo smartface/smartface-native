@@ -4,8 +4,9 @@ import Color from '../color';
 import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type iOSProps = Partial<{
+export type iOSProps = ITextBox['ios'] & Partial<{
   /**
    * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
    *
@@ -144,7 +145,7 @@ export type iOSProps = Partial<{
   expandsOnOverflow: boolean;
 }>;
 
-export type AndroidProps = Partial<{
+export type AndroidProps = ITextBox['android'] & Partial<{
   /**
    * Gets/sets the textBoxMaxHeight of the MaterialTextBox.This property is necessary because it has same reason with textBoxHeight property.
    *
@@ -191,7 +192,7 @@ export type AndroidProps = Partial<{
 }>;
 
 export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBoxEvents, TIOS = iOSProps, TAND = AndroidProps>
-  extends ITextBox<TEvent | MaterialTextBoxEvents, TIOS & iOSProps, TAND & AndroidProps> {
+  extends ITextBox<TEvent | MaterialTextBoxEvents, MobileOSProps<iOSProps, AndroidProps>> {
   /**
    * Gets/sets the lineCount of the MaterialTextBox. You can use this property when multiline is true.
    * @property {Number} [lineCount = 1]
