@@ -1,22 +1,19 @@
 import { AbstractDatePicker, DatePickerMode, IDatePicker, Style } from '.';
-import { DatePickerEvents } from './datepicker-events';
+import { AndroidConfig } from '../../util';
 
 const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
-export default class DatePickerAndroid<TEvent extends string = DatePickerEvents> extends AbstractDatePicker<TEvent> {
+export default class DatePickerAndroid extends AbstractDatePicker {
   private _onDateSelected: IDatePicker['onDateSelected'];
   private _onCancelled: IDatePicker['onCancelled'];
-  private _android: IDatePicker['android'];
-  private _ios: IDatePicker['ios'];
   constructor(params: Partial<IDatePicker> = {}) {
-    super();
-    const { ios, android, ...restParams } = params;
+    super(params);
 
     const today = new Date();
 
+    const androidStyle = (params && params.android && params.android.style) || DatePickerAndroid.Android.Style.DEFAULT;
     if (!this.nativeObject) {
-      const androidStyle = (params && params.android && params.android.style) || DatePickerAndroid.Android.Style.DEFAULT;
       this.nativeObject = new NativeDatePickerDialog(
         AndroidConfig.activity,
         androidStyle,
@@ -33,6 +30,14 @@ export default class DatePickerAndroid<TEvent extends string = DatePickerEvents>
       );
     }
 
+
+    this.addAndroidProps({
+      get style(){
+        return androidStyle
+      }
+    })
+
+
     this.nativeObject.setOnCancelListener(
       NativeDialogInterface.OnCancelListener.implement({
         onCancel: (dialogInterface: any) => {
@@ -41,19 +46,8 @@ export default class DatePickerAndroid<TEvent extends string = DatePickerEvents>
         }
       })
     );
-
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
   }
 
-  get ios() {
-    return this._ios;
-  }
-
-  get android() {
-    return this._android;
-  }
   show() {
     this.nativeObject.show();
   }
@@ -79,7 +73,4 @@ export default class DatePickerAndroid<TEvent extends string = DatePickerEvents>
   toString() {
     return 'DatePicker';
   }
-
-  static Android: { Style: typeof Style };
-  static iOS: { DatePickerMode: typeof DatePickerMode };
 }

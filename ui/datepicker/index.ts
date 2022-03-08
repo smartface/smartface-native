@@ -250,8 +250,8 @@ export interface DatePickerAndroidProperties {
 }
 
 export declare interface IDatePicker {
-  ios: DatePickerIOSProperties;
-  android: DatePickerAndroidProperties;
+  ios: Partial<DatePickerIOSProperties>;
+  android: Partial<DatePickerAndroidProperties>;
   /**
    * Sets the initial date avaliable on the picker.
    *
@@ -332,16 +332,17 @@ export declare interface IDatePicker {
   onCancelled: () => void;
 }
 
-export declare class AbstractDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent | DatePickerEvents> implements IDatePicker {
-  constructor(params?: Partial<IDatePicker>);
-  get ios(): DatePickerIOSProperties;
-  get android(): DatePickerAndroidProperties;
-  setDate(date: Date): void;
-  setMinDate(date: Date): void;
-  setMaxDate(date: Date): void;
-  show(): void;
+export abstract class AbstractDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent | DatePickerEvents, any, IDatePicker> implements IDatePicker {
+  constructor(params?: Partial<IDatePicker>){
+    super(params);
+  };
+  abstract setDate(date: Date): void;
+  abstract setMinDate(date: Date): void;
+  abstract setMaxDate(date: Date): void;
+  abstract show(): void;
   onDateSelected: (date: Date) => void;
   onCancelled: () => void;
+
   static Android: {
     Style: typeof Style;
   };
