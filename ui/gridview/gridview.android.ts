@@ -270,6 +270,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     this._onScrollListener = new SFOnScrollListener(overrideMethods);
     return this._onScrollListener;
   }
+  // TODO: Remove if not used
   private removeSnapHelper(nativeSnapHelper: any) {
     nativeSnapHelper?.attachToRecyclerView(null);
   }
