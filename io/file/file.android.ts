@@ -146,8 +146,7 @@ export default class FileAndroid extends FileBase {
       var destinationFile = new FileAndroid({
         path: destination
       });
-      // TODO: Invalid condition
-      if (destinationFile.type === Path.FILE_TYPE.FILE) {
+      if (destinationFile.isFile) {
         var destinationFileStream;
         if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
           var destinationConfigured;
@@ -241,7 +240,7 @@ export default class FileAndroid extends FileBase {
     return false;
   }
 
-  remove(withChilds: boolean): boolean {
+  remove(withChilds?: boolean): boolean {
     return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.removeFile(this, withChilds);
   }
 
@@ -268,8 +267,7 @@ export default class FileAndroid extends FileBase {
       var destinationFile = new FileAndroid({
         path: destination
       });
-      // TODO: Invalid condition
-      if (destinationFile === Path.FILE_TYPE.FILE) {
+      if (destinationFile.isFile) {
         if (this.isFile || this.isDirectory) {
           if (destinationFile.exists) {
             if (destinationFile.isDirectory) {
@@ -352,7 +350,7 @@ export default class FileAndroid extends FileBase {
     return true;
   }
 
-  removeFile(fileToRemove: any, withChilds: any) {
+  removeFile(fileToRemove: any, withChilds?: boolean) {
     if (fileToRemove.exists) {
       if (fileToRemove.isDirectory) {
         if (withChilds) {
