@@ -1,3 +1,4 @@
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color, { AbstractColor } from '../color';
 import View, { AbstractView, IView } from '../view';
 import { BlurViewEvents } from './blurview-events';
@@ -98,9 +99,11 @@ export type AndroidProps = View['android'] & {
   overlayColor: Color;
 };
 
-export declare interface IBlurView<TEvent extends string = BlurViewEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | BlurViewEvents, TIOS & iOSProps, TAND & AndroidProps> {}
+export declare interface IBlurView<TEvent extends string = BlurViewEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | BlurViewEvents, any, MobileOSProps<iOSProps, AndroidProps> > {
 
-export declare class AbstractBlurView<TEvent extends string = BlurViewEvents> extends AbstractView<TEvent> implements IBlurView<TEvent> {
+}
+
+export declare class AbstractBlurView<TEvent extends string = BlurViewEvents> extends AbstractView<TEvent, any, IBlurView> implements IBlurView<TEvent> {
   static iOS: {
     /**
      * Blur styles
@@ -109,12 +112,8 @@ export declare class AbstractBlurView<TEvent extends string = BlurViewEvents> ex
      * @ios
      */
     EffectStyle: typeof BlurViewEffectStyle;
-
     SemanticContentAttribute: typeof BlurViewSemanticContentAttribute;
   };
-
-  ios: iOSProps;
-  android: AndroidProps;
 }
 
 /**

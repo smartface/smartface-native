@@ -1,4 +1,4 @@
-import { AndroidProps, IBlurView } from '.';
+import { IBlurView } from '.';
 import { ViewAndroid } from '../view/view.android';
 import { BlurViewEvents } from './blurview-events';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -8,13 +8,13 @@ import View from '../view';
 const RenderScriptBlur = requireClass('eightbitlab.com.blurview.RenderScriptBlur');
 const NativeBlurView = requireClass('eightbitlab.com.blurview.BlurView');
 
-export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> extends ViewAndroid<TEvent | BlurViewEvents, AndroidProps> implements IBlurView {
+export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> extends ViewAndroid<TEvent | BlurViewEvents, any, IBlurView> implements IBlurView {
   private _overlayColor: Color;
   private _rootView: View;
   private _blurRadius: number = 16;
   private _blurRender: any;
-  constructor(params: Partial<IBlurView> = {}) {
-    super();
+  constructor(params?: Partial<IBlurView>) {
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new NativeBlurView(AndroidConfig.activity);
@@ -22,13 +22,8 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
 
     this._blurRender = new RenderScriptBlur(AndroidConfig.activity);
 
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
-
     const self = this;
-    const android = {
+    this.addAndroidProps({
       get overlayColor(): Color {
         return self._overlayColor;
       },
@@ -56,8 +51,7 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
         self._blurRadius = value;
         self.refreshBlurView();
       }
-    };
-    Object.assign(this._android, android);
+    });
   }
 
   refreshBlurView() {
