@@ -1,4 +1,3 @@
-import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { ButtonType, IAlertView } from './alertview';
 

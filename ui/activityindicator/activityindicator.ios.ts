@@ -2,21 +2,16 @@ import Color from '../../ui/color';
 import IView from '../view';
 import { ViewEvents } from '../view/view-event';
 import ViewIOS from '../view/view.ios';
-import { AbstractActivityIndicator } from './activityindicator';
+import { ActivityIndicatorBase, ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
 
-type iOSParams = {
-  activityIndicatorViewStyle: keyof typeof AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle;
-};
-
-export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent> {
-  protected _ios: iOSParams & ViewIOS['_ios'];
+export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent, any, IActivityIndicator> {
   private _color: Color;
   _nativeObject: __SF_UIActivityIndicatorView;
-  constructor(params: Partial<ActivityIndicatorIOS>) {
+  constructor(params?: Partial<IActivityIndicator>) {
     super(params);
 
     if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIActivityIndicatorView(AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL);
+      this._nativeObject = new __SF_UIActivityIndicatorView(ActivityIndicatorBase.iOS.ActivityIndicatorViewStyle.NORMAL);
     }
 
     this.nativeObject.startAnimating();
@@ -25,22 +20,15 @@ export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> ex
 
     const self = this;
 
-    const ios = {
+    this.addIOSProps({
       get activityIndicatorViewStyle() {
         return self.nativeObject.activityIndicatorViewStyle;
       },
-      set activityIndicatorViewStyle(value: typeof AbstractActivityIndicator.iOS.ActivityIndicatorViewStyle) {
+      set activityIndicatorViewStyle(value: ActivityIndicatorViewStyle) {
         self.nativeObject.activityIndicatorViewStyle = value;
         self.nativeObject.color = self._color.nativeObject;
       }
-    };
-
-    this._ios = Object.assign(this._ios, ios);
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    });
   }
 
   get color() {
@@ -61,12 +49,8 @@ export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> ex
       this.nativeObject.stopAnimating();
     }
   }
-
-  get nativeObject() {
-    return this._nativeObject;
-  }
-
-  get ios() {
-    return this._ios;
+  
+  toString() {
+    return 'ActivityIndicator';
   }
 }
