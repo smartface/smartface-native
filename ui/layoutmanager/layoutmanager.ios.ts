@@ -1,7 +1,9 @@
 import { ILayoutManager, ScrollDirection } from '.';
-import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Invocation } from '../../util';
+import GridViewIOS from '../gridview/gridview.ios';
+
+const DEFAULT_ITEM_LENGTH = 50;
 
 export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>> implements ILayoutManager {
   onFullSpan: (type: number) => number;
@@ -10,9 +12,9 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
   private _itemSpacing: ILayoutManager['itemSpacing'];
   private _scrollDirection: ILayoutManager['scrollDirection'] = ScrollDirection.VERTICAL;
   private _contentInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
-  private _onItemLength: ILayoutManager['onItemLength'] = () => 50;
-  private collectionView: any = null;
-  private jsCollectionView: any = null;
+  private _onItemLength: ILayoutManager['onItemLength'] = () => DEFAULT_ITEM_LENGTH;
+  collectionView: __SF_UICollectionView = null;
+  jsCollectionView: GridViewIOS; //TODO: Find a better solution. Normally we shouldn't need this.
   private _sectionInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
   private _itemLength = 50;
   constructor(params: Partial<ILayoutManager> = {}) {
@@ -25,7 +27,7 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
       if (this.onFullSpan) {
         const __fullSpanSize = this.calculateItemSize(1);
         this.collectionView.sizeForItemAtIndexPath = (collectionView: LayoutManagerIOS['collectionView'], indexPath: __SF_NSIndexPath) => {
-          const span = Number(this.jsCollectionView.onItemType(indexPath.row, indexPath.section));
+          const span = Number(this.jsCollectionView.onItemType(indexPath.row));
           const itemLength = this.onFullSpan(span);
           if (itemLength === undefined) {
             return retval;

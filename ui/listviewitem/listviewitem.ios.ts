@@ -1,5 +1,4 @@
 import { IListViewItem, ListViewItemIOSProperties } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 
@@ -16,6 +15,6 @@ export default class ListViewItemIOS<TEvent extends string = FlexLayoutEvents, T
       expandSwipe: (direction) => {
         this.__nativeCell.expandSwipeAnimated(direction, true);
       }
-    })
+    });
   }
 }

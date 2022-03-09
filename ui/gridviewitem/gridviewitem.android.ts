@@ -8,13 +8,13 @@ const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 const SFRecyclerViewHolder = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder');
 const StaggeredGridLayoutManagerLayoutParams = requireClass('androidx.recyclerview.widget.StaggeredGridLayoutManager$LayoutParams');
 
-export default class GridViewIOSAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}>
-  extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, IGridViewItem>
-  implements IGridViewItem<TEvent | FlexLayoutEvents, {}, TNative>
+export default class GridViewIOSAndroid<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IGridViewItem = IGridViewItem>
+  extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
+  implements IGridViewItem
 {
   nativeInner: any;
 
-  constructor(params?: Partial<IGridViewItem>) {
+  constructor(params?: Partial<TProps>) {
     super(params);
 
     if (!this.nativeInner) {
@@ -23,6 +23,11 @@ export default class GridViewIOSAndroid<TEvent extends string = FlexLayoutEvents
     }
 
     this.nativeObject.setLayoutParams(new StaggeredGridLayoutManagerLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+  }
+  viewType: number;
+  updateRippleEffectIfNeeded?: () => void;
+  requestDisallowInterceptTouchEvent?(disallow: boolean): void {
+    throw new Error('Method not implemented.');
   }
   toString() {
     return 'GridViewItem';

@@ -18,10 +18,7 @@ const SFItemTouchHelperCallback = requireClass('io.smartface.android.sfcore.ui.l
 const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.SFItemTouchHelper');
 const SFOnScrollListener = requireClass('io.smartface.android.sfcore.ui.listview.SFOnScrollListener');
 
-export default class ListViewAndroid<TEvent extends string = ListViewEvents>
-  extends ViewAndroid<TEvent | ListViewEvents, any, IListView>
-  implements IListView
-{
+export default class ListViewAndroid<TEvent extends string = ListViewEvents> extends ViewAndroid<TEvent | ListViewEvents, any, IListView> implements IListView {
   private _layoutManager: { nativeObject: any };
   private nativeDataAdapter: any;
   private _rowHeight: IListView['rowHeight'];
@@ -49,6 +46,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents>
     this.addAndroidProps(this.getAndroidParams());
     this.addIOSProps(this.getIOSParams());
     this.setItemTouchHelper();
+    this.createScrollListener();
   }
   nativeInner: INativeInner;
   onPullRefresh: IListView['onPullRefresh'];
@@ -254,7 +252,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents>
 
     this.nativeInner?.addOnItemTouchListener(
       NativeRecyclerView.OnItemTouchListener.implement({
-        onInterceptTouchEvent: () => !(this as any).touchEnabled /**TODO: Fix as any  */,
+        onInterceptTouchEvent: () => !this.touchEnabled,
         onRequestDisallowInterceptTouchEvent: () => {},
         onTouchEvent: () => {}
       })
