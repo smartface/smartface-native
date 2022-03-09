@@ -1,6 +1,7 @@
-import FileStream from '.';
 import { INativeComponent } from '../../core/inative-component';
+import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
+import File from '../file';
 
 export enum FileStreamType {
   APPEND,
@@ -101,8 +102,15 @@ export interface IFileStream extends INativeComponent {
   seekToEnd?: () => void;
 }
 
-export class FileStreamBase implements IFileStream {
-  constructor(params?: Partial<IFileStream>) {}
+export interface FileStreamParams extends IFileStream {
+  source: File,
+  streamType: FileStreamType,
+  contentMode: FileContentMode,
+}
+export class FileStreamBase extends NativeComponent implements IFileStream {
+  constructor(params?: Partial<FileStreamParams>) {
+    super(params);
+  }
   static StreamType = FileStreamType;
   static ContentMode = FileContentMode;
 
@@ -147,6 +155,4 @@ export class FileStreamBase implements IFileStream {
   seekToEnd?(): void {
     throw new Error('Method not implemented.');
   }
-
-  nativeObject: any;
 }

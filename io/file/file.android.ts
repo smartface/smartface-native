@@ -5,6 +5,7 @@ import TypeUtil from '../../util/type';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { FileBase, IFile } from './file';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
+import PathAndroid from '../path/path.android';
 const activity = AndroidConfig.activity;
 
 const NativeFile = requireClass('java.io.File');
@@ -12,6 +13,7 @@ const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
 
 export default class FileAndroid extends FileBase {
   nativeAssetsList = [];
+  private pathResolver = new PathAndroid()
   constructor(params?: Partial<IFile>) {
     super();
 
@@ -19,7 +21,7 @@ export default class FileAndroid extends FileBase {
       throw new Error('File path must be string');
     }
 
-    this.resolvedPath = Path.resolve(params.path);
+    this.resolvedPath = this.pathResolver.resolve(params.path);
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
@@ -144,38 +146,39 @@ export default class FileAndroid extends FileBase {
       var destinationFile = new FileAndroid({
         path: destination
       });
+      // TODO: Invalid condition
       if (destinationFile.type === Path.FILE_TYPE.FILE) {
         var destinationFileStream;
         if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
           var destinationConfigured;
           if (this.isDirectory) {
             destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
-            return destinationConfigured && copyDirectory(this, destinationFile);
+            return destinationConfigured && this.copyDirectory(this, destinationFile);
           } else if (this.isFile) {
             destinationConfigured = false;
             if (destinationFile.exists && destinationFile.isDirectory) {
-              destinationFile = new File({
+              destinationFile = new FileAndroid({
                 path: destinationFile.path + '/' + this.name
               });
               destinationConfigured = destinationFile.createFile(true);
             } else if (!destinationFile.exists) {
               destinationConfigured = destinationFile.createFile(true);
             }
-            return destinationConfigured && copyFile(this, destinationFile);
+            return destinationConfigured && this.copyFile(this, destinationFile);
           }
         } else if (this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
           if (destinationFile.exists && destinationFile.isDirectory) {
-            destinationFile = new File({
+            destinationFile = new FileAndroid({
               path: destination + '/' + this.name
             });
           }
           if (destinationFile.createFile(true)) {
-            copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
+            this.copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
             return true;
           }
         } else if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
           if (destinationFile.exists && destinationFile.isDirectory) {
-            destinationFile = new File({
+            destinationFile = new FileAndroid({
               path: destination + '/' + this.name + '.png'
             });
           }
@@ -201,12 +204,12 @@ export default class FileAndroid extends FileBase {
           if (destinationFile.exists && destinationFile.isDirectory) {
             var destinationFileName = destination + '/' + this.name;
             if (this.resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE) destinationFileName += '.png';
-            destinationFile = new File({
+            destinationFile = new FileAndroid({
               path: destinationFileName
             });
           }
           if (destinationFile.createFile(true)) {
-            return copyFile(this, destinationFile);
+            return this.copyFile(this, destinationFile);
           }
         }
       }
@@ -265,6 +268,7 @@ export default class FileAndroid extends FileBase {
       var destinationFile = new FileAndroid({
         path: destination
       });
+      // TODO: Invalid condition
       if (destinationFile === Path.FILE_TYPE.FILE) {
         if (this.isFile || this.isDirectory) {
           if (destinationFile.exists) {

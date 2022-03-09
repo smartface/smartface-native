@@ -4,7 +4,7 @@ import Path from '../path';
 import TypeUtil from '../../util/type';
 import Blob from '../../global/blob';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { FileStreamBase, IFileStream, FileStreamType, FileContentMode } from './filestream';
+import { FileStreamBase, IFileStream, FileStreamType, FileContentMode, FileStreamParams } from './filestream';
 
 const StringUtil = requireClass('io.smartface.android.utils.StringUtil');
 
@@ -13,7 +13,7 @@ export class FileStreamAndroid extends FileStreamBase {
   private _mode: FileStreamType;
   private _contentMode: FileContentMode;
   private _closed = false;
-  constructor(params?: Partial<IFileStream>) {
+  constructor(params?: Partial<FileStreamParams>) {
     super();
 
     this._mode = params.mode;
@@ -168,7 +168,7 @@ export class FileStreamAndroid extends FileStreamBase {
       throw new Error('FileStream already closed or streamType is not READ');
     }
     const fileContent = this.readToEnd();
-    if (this._contentMode === FileStreamAndroid.ContentMode.BINARY) {
+    if (this._contentMode === FileStreamAndroid.ContentMode.BINARY && fileContent instanceof Blob) {
       return new Blob(fileContent, { type: 'file' });
     } else {
       return new Blob(StringUtil.toByteArray(fileContent), {
@@ -211,7 +211,9 @@ export class FileStreamAndroid extends FileStreamBase {
         throw new Error('Parameter must be string');
       }
       this.nativeObject.write(data);
+      return true;
     }
+    return false;
   }
 
   seekToEnd() {}

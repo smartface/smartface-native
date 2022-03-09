@@ -1,5 +1,6 @@
 import { INativeComponent } from '../../core/inative-component';
 import FileStream from '../filestream';
+import { FileContentMode, FileStreamType } from '../filestream/filestream';
 
 export type iOSProps = Partial<{
   getNSURL: () => string;
@@ -180,7 +181,7 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  openStream(streamType: FileStream.StreamType, contentMode: FileStream.ContentMode): FileStream;
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream;
   /**
    * Rename the current file or directory to given name.
    *
@@ -264,7 +265,7 @@ export class FileBase implements IFile {
   move(destination: string): boolean {
     throw new Error('Method not implemented.');
   }
-  openStream(streamType: FileStream.StreamType, contentMode: FileStream.ContentMode): FileStream {
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream {
     throw new Error('Method not implemented.');
   }
   rename(newName: string): boolean {
