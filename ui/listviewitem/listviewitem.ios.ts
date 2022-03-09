@@ -1,5 +1,5 @@
 import { IListViewItem, ListViewItemIOSProperties } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import FlexLayout from '../flexlayout';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 
@@ -7,8 +7,8 @@ export default class ListViewItemIOS<TEvent extends string = FlexLayoutEvents, T
   extends FlexLayoutIOS<TEvent | FlexLayoutEvents, TNative, IListViewItem>
   implements IListViewItem
 {
-  nativeInner: any;
   __nativeCell: __SF_UICollectionViewCell;
+  nativeInner: any;
   constructor(params: IListViewItem) {
     super(params);
 

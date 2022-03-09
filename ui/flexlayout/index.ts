@@ -6,7 +6,7 @@ import { IViewGroup } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type FlexLayoutIOSProps = IViewGroup['ios'];
-export type FlexLayoutAndroidProps = IViewGroup['android'] & Partial<{
+export type FlexLayoutAndroidProps = IViewGroup['android'] & {
   readonly yogaNode: any;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
@@ -84,7 +84,7 @@ export type FlexLayoutAndroidProps = IViewGroup['android'] & Partial<{
    * @since 2.0.8
    */
   zIndex: number;
-}>;
+};
 
 /**
  * @class UI.FlexLayout
@@ -209,7 +209,7 @@ export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobilePr
    * @ios
    */
   applyLayout(): void;
-  content?: FlexLayout;
+  content: IFlexLayout;
 }
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
