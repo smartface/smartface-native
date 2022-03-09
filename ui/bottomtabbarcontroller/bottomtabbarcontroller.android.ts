@@ -8,6 +8,7 @@ import NavigationController, { IController } from '../navigationcontroller';
 import Page from '../page';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import { EventEmitter } from '../../core/eventemitter';
+import { HeaderBar } from '../navigationcontroller/headerbar';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
@@ -34,7 +35,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   popupBackNavigator: any;
   isActive: boolean;
   parentController: IController;
-  headerBar?: import("ui/headerbar");
+  headerBar?: HeaderBar;
   nativeObject: any;
   isInsideBottomTabBar: boolean;
   constructor(params?: Partial<IBottomTabBarController>) {

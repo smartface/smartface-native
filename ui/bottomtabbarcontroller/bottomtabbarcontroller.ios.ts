@@ -3,6 +3,7 @@ import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBar from '../bottomtabbar';
 import { IController, INavigationController } from '../navigationcontroller';
+import { HeaderBar } from '../navigationcontroller/headerbar';
 import Page from '../page';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
@@ -10,8 +11,6 @@ const UITabBarController = requireClass('UITabBarController');
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
-  ios = {};
-  android = {};
   private view;
   private model;
   private _tabBar;
@@ -26,7 +25,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   pageID: number;
   popupBackNavigator: any;
   isActive: boolean;
-  headerBar?: import("ui/headerbar");
+  headerBar?: HeaderBar;
   isInsideBottomTabBar: boolean = false;
 
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
@@ -45,53 +44,52 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       nativeObject: this.view.nativeObject.tabBar
     });
 
-    const self = this;
     // From View's Delegate
     this.shouldSelectByIndex = undefined;
-    this.shouldSelectViewController = function (index) {
+    this.shouldSelectViewController = (index) => {
       let retval = true;
-      if (typeof self.shouldSelectByIndex === 'function') {
-        retval = self.shouldSelectByIndex?.({
+      if (typeof this.shouldSelectByIndex === 'function') {
+        retval = this.shouldSelectByIndex?.({
           index: index
         });
-        self.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
+        this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
       }
       return retval;
     };
 
     this.didSelectByIndex = undefined;
-    this.didSelectViewController = function (index) {
-      if (typeof self.didSelectByIndex === 'function') {
-        self.didSelectByIndex?.({
+    this.didSelectViewController = (index) => {
+      if (typeof this.didSelectByIndex === 'function') {
+        this.didSelectByIndex?.({
           index: index
         });
-        self.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
+        this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
       }
     };
 
     params && Object.assign(this, params);
 
-    self.viewModel = undefined;
+    this.viewModel = undefined;
 
     if (params.viewModel) {
-      self.viewModel = params.viewModel;
+      this.viewModel = params.viewModel;
     }
 
-    self.nativeObject = UITabBarController.new();
-    self.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
-      tabBarControllerShouldSelectViewController: function (tabBarController, viewController) {
-        const index = self.nativeObject.viewControllers.indexOf(viewController);
-        return self.viewModel.shouldSelectViewController(index);
+    this.nativeObject = UITabBarController.new();
+    this.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
+      tabBarControllerShouldSelectViewController: (tabBarController, viewController) =>{
+        const index = this.nativeObject.viewControllers.indexOf(viewController);
+        return this.viewModel.shouldSelectViewController(index);
       },
-      tabBarControllerDidSelectViewController: function (tabBarController, viewController) {
-        const index = self.nativeObject.viewControllers.indexOf(viewController);
-        self.viewModel.didSelectViewController(index);
+      tabBarControllerDidSelectViewController: (tabBarController, viewController) => {
+        const index = this.nativeObject.viewControllers.indexOf(viewController);
+        this.viewModel.didSelectViewController(index);
       }
     }).new();
-    self.nativeObject.delegate = self.nativeObjectDelegate;
+    this.nativeObject.delegate = this.nativeObjectDelegate;
 
-    self.childControllers = [];
-    self.currentIndex = 0;
+    this.childControllers = [];
+    this.currentIndex = 0;
   }
   // TODO: not implemented yet
   getCurrentController(): INavigationController | Page | null {

@@ -1,9 +1,6 @@
-import { EventEmitterWrapper } from 'core/eventemitter';
 import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import IView, { IViewProps } from 'ui/view';
+import IView from 'ui/view';
 import { IViewGroup } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
-import ViewIOS from '../view/view.ios';
 import View from '../view/view.ios';
 import { ViewGroupEvents } from './viewgroup-events';
 
@@ -24,7 +21,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   ViewGroupEvents | ExtractEventValues<TEvent>,
   TNative,
   TProps
-> {
+> implements IViewGroup {
   private _children = {};
   onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
   onViewAddedInnerCallback: IViewGroup['onViewAdded'];
