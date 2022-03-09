@@ -234,6 +234,7 @@ declare class __SF_NSIndexPath extends __SF_NSOBject {
   row: number;
   section: any;
   static indexPathForRowInSection(row: number, section: number): __SF_NSIndexPath;
+  static indexPathForItemInSection(index: number, section: number): __SF_NSIndexPath;
 }
 
 declare class __SF_UIRefreshControl extends __SF_UIView {
@@ -297,12 +298,13 @@ declare class __SF_UITableView extends __SF_UIScrollView {
 declare class __SF_UICollectionView extends __SF_UIScrollView {
   constructor(layoutManager: __SF_UICollectionViewFlowLayout);
   numberOfSectionsCallback: (collectionView: any) => number;
-  cellForItemAtIndexPath(indexPath: string): any;
-  numberOfItemsInSectionCallback: (collectionView: any, section: any) => any;
-  cellForItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
-  didSelectItemAtIndexPathCallback: (collectionView: any, indexPath: string) => any;
-  registerClassForCellWithReuseIdentifier(cell: __SF_UICollectionViewCell, type: any): void;
-  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: string): __SF_UICollectionViewCell;
+  cellForItemAtIndexPath(indexPath: __SF_NSIndexPath): any;
+  numberOfItemsInSectionCallback: (collectionView: __SF_UICollectionView, section: any) => number;
+  cellForItemAtIndexPathCallback: (collectionView: __SF_UICollectionView, indexPath: __SF_NSIndexPath) => any;
+  didSelectItemAtIndexPathCallback: (collectionView: __SF_UICollectionView, indexPath: __SF_NSIndexPath) => any;
+  registerClassForCellWithReuseIdentifier(cell: typeof __SF_UICollectionViewCell, type: any): void;
+  dequeueReusableCellWithReuseIdentifierForIndexPath(type: any, indexPath: __SF_NSIndexPath): __SF_UICollectionViewCell;
+  indexPathsForVisibleItems(): __SF_NSIndexPath[];
   superview: any;
 }
 

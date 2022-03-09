@@ -33,21 +33,21 @@ export interface LayoutManagerIOSParams {
  */
 export enum ScrollDirection {
   /**
-   * @property {Number} VERTICAL
-   * @ios
-   * @static
-   * @readonly
-   * @since 3.0.2
-   */
-  VERTICAL = 0,
-  /**
    * @property {Number} HORIZONTAL
    * @ios
    * @static
    * @readonly
    * @since 3.0.2
    */
-  HORIZONTAL = 1
+  HORIZONTAL,
+  /**
+   * @property {Number} VERTICAL
+   * @ios
+   * @static
+   * @readonly
+   * @since 3.0.2
+   */
+  VERTICAL
 }
 
 /**
@@ -156,7 +156,7 @@ export declare class AbstractLayoutManager extends NativeComponent implements IL
   protected _nativeObject: any;
   get nativeObject(): any;
   set nativeObject(value: any);
-  static ScrollDirection: ScrollDirection;
+  static ScrollDirection: typeof ScrollDirection;
 }
 
 const LayoutManager: typeof AbstractLayoutManager = require(`./layoutmanager.${Device.deviceOS.toLowerCase()}`).default;

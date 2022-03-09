@@ -28,6 +28,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
+    this.setScrollEvents();
   }
   getFirstVisibleIndex(): number {
     const visibleIndexArray = this.nativeObject.getVisibleIndexArray();
@@ -145,58 +146,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       set bounces(value: boolean) {
         self.nativeObject.setValueForKey(value, 'bounces');
       },
-      set onScrollBeginDragging(value: (contentOffset: __SF_NSRect) => void) {
-        self.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          self.emit('scrollBeginDragging', contentOffset);
-          value(contentOffset);
-        };
-      },
-      set onScrollBeginDecelerating(value: (contentOffset: __SF_NSRect) => void) {
-        self.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          self.emit('scrollBeginDecelerating', contentOffset);
-          value(contentOffset);
-        };
-      },
-      set onScrollEndDecelerating(value: (contentOffset: __SF_NSRect) => void) {
-        self.nativeObject.onScrollEndDecelerating = (scrollView: __SF_UIScrollView) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          self.emit('scrollEndDecelerating', contentOffset);
-          value(contentOffset);
-        };
-      },
-      set onScrollEndDraggingWillDecelerate(value: (contentOffset: __SF_NSRect, decelerate: any) => void) {
-        self.nativeObject.onScrollViewDidEndDraggingWillDecelerate = (scrollView: __SF_UIScrollView, decelerate: any) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          self.emit('scrollEndDraggingWillDecelerate', contentOffset);
-          value(contentOffset, decelerate);
-        };
-      },
-      set onScrollEndDraggingWithVelocityTargetContentOffset(value: (contentOffset: __SF_NSRect, velocity: Point2D, targetContentOffset: __SF_NSRect) => void) {
-        self.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = (scrollView: __SF_UIScrollView, velocity: Point2D, targetContentOffset: __SF_NSRect) => {
-          const contentOffset = {
-            x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
-            y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
-          };
-          targetContentOffset.x += +scrollView.contentInsetDictionary.left;
-          targetContentOffset.y += +scrollView.contentInsetDictionary.top;
-          self.emit('scrollEndDraggingWithVelocityTargetContentOffset', contentOffset, velocity, targetContentOffset);
-          value(contentOffset, velocity, targetContentOffset);
-        };
-      },
       get leftToRightSwipeEnabled(): IListView['ios']['leftToRightSwipeEnabled'] {
         return self.nativeObject.leftToRightSwipeEnabled;
       },
@@ -219,6 +168,50 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       saveInstanceState: () => {},
       restoreInstanceState: () => {},
       startDrag: () => {}
+    };
+  }
+  private setScrollEvents() {
+    this.nativeObject.onScrollBeginDecelerating = (scrollView: __SF_UIScrollView) => {
+      const contentOffset = {
+        x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+        y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+      };
+      this.emit('scrollBeginDecelerating', contentOffset);
+      this.ios.onScrollBeginDragging?.(contentOffset);
+    };
+    this.nativeObject.onScrollViewWillBeginDragging = (scrollView: __SF_UIScrollView) => {
+      const contentOffset = {
+        x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+        y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+      };
+      this.ios.onScrollBeginDragging?.(contentOffset);
+      this.emit('scrollBeginDragging', contentOffset);
+    };
+    this.nativeObject.onScrollEndDecelerating = (scrollView: __SF_UIScrollView) => {
+      const contentOffset = {
+        x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+        y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+      };
+      this.emit('scrollEndDecelerating', contentOffset);
+      this.ios.onScrollBeginDragging?.(contentOffset);
+    };
+    this.nativeObject.onScrollViewDidEndDraggingWillDecelerate = (scrollView: __SF_UIScrollView, decelerate: any) => {
+      const contentOffset = {
+        x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+        y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+      };
+      this.emit('scrollEndDraggingWillDecelerate', contentOffset, decelerate);
+      this.ios.onScrollEndDraggingWillDecelerate?.(contentOffset, decelerate);
+    };
+    this.nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = (scrollView: __SF_UIScrollView, velocity: Point2D, targetContentOffset: __SF_NSRect) => {
+      const contentOffset = {
+        x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
+        y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
+      };
+      targetContentOffset.x += +scrollView.contentInsetDictionary.left;
+      targetContentOffset.y += +scrollView.contentInsetDictionary.top;
+      this.emit('scrollEndDraggingWithVelocityTargetContentOffset', contentOffset, velocity, targetContentOffset);
+      this.ios.onScrollEndDraggingWithVelocityTargetContentOffset?.(contentOffset, velocity, targetContentOffset);
     };
   }
   private setNativeObjectParams() {

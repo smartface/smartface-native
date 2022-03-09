@@ -6,7 +6,7 @@ const NativeItemDecoration = requireClass('androidx.recyclerview.widget.Recycler
 const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager');
 const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListener');
 
-export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>>  implements ILayoutManager {
+export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>> implements ILayoutManager {
   private _lineDecoration: any = null;
   private _itemDecoration: any = null;
   private _spanCount: ILayoutManager['spanCount'];
@@ -69,10 +69,10 @@ export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UIC
     this._scrollDirection = scrollDirection;
     this.nativeObject.setOrientation(scrollDirection);
   }
-  get nativeRecyclerView() {
+  get nativeRecyclerView(): INativeInner {
     return this._nativeRecyclerView;
   }
-  set nativeRecyclerView(nativeRecyclerView) {
+  set nativeRecyclerView(nativeRecyclerView: INativeInner) {
     this._nativeRecyclerView = nativeRecyclerView;
     if (nativeRecyclerView) {
       this.setLayoutChangeListener();

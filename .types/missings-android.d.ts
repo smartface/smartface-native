@@ -61,8 +61,11 @@ declare namespace java {
 
 declare interface INativeLayoutManager {
   findLastVisibleItemPosition(): number;
+  findFirstVisibleItemPositions(...args: any[]): any;
+  findLastVisibleItemPositions(...args: any[]): any;
   findFirstVisibleItemPosition(): number;
   setCanScrollVerically(value: boolean): void;
+  setCanScrollHorizontally(value: boolean): void;
 }
 
 declare interface INativeInner {
@@ -87,4 +90,6 @@ declare interface INativeInner {
   setClipToPadding(value: boolean): void;
   setAdapter(adapter: any): void;
   setPaddingRelative(paddingLeft: number, paddingTop: number, paddingRight: number, paddingBottom: number): void;
+  setScrollBarStyle(style: number): void;
+  setHorizontalScrollBarEnabled(enabled: boolean): void;
 }

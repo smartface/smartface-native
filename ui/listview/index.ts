@@ -1,6 +1,6 @@
 import OverScrollMode from '../shared/android/overscrollmode';
 import ListViewItem from '../listviewitem';
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import ScrollState from '../shared/android/scrollstate';
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { Point2D } from '../../primitive/point2d';
@@ -83,7 +83,7 @@ export enum RowAnimation {
   AUTOMATIC
 }
 
-type IListViewIOS = ViewIOSProps & Partial<{
+export interface IListViewIOS extends ViewIOSProps {
   /**
    * Animates multiple insert, delete and refresh operations as a group.
    * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations.
@@ -183,9 +183,9 @@ type IListViewIOS = ViewIOSProps & Partial<{
    * @since 3.2.1
    */
   onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: Point2D, targetContentOffset: __SF_NSRect) => void;
-}>;
+}
 
-type IListViewAndroid = ViewAndroidProps & Partial<{
+export interface IListViewAndroid extends ViewAndroidProps {
   /**
    * Starts dragging the provided ListViewItem. By default, ListView starts a drag when a ListViewItem is long pressed.
    * You can disable that behavior by setting longPressDragEnabled.
@@ -281,7 +281,7 @@ type IListViewAndroid = ViewAndroidProps & Partial<{
    * @since 3.0.2
    */
   overScrollMode: OverScrollMode;
-}>;
+}
 
 /**
  * @class UI.ListView
