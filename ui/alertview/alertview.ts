@@ -1,3 +1,5 @@
+import { INativeComponent } from "../../core/inative-component";
+
 /**
  * @enum {Number} UI.AlertView.Android.ButtonType
  * @since 0.1
@@ -63,7 +65,7 @@ export enum ButtonType {
  *
  *     myAlertView.show();
  */
-export interface IAlertView {
+export interface IAlertView extends INativeComponent {
   /**
    * Gets showing status of AlertView. It is set to true if AlertView is
    * currently displayed on screen, false otherwise.

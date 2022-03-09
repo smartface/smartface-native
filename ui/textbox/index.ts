@@ -13,6 +13,10 @@ import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type TextBoxAndroidProps = View['android'] & {
+  cursorPosition: {
+    start: number,
+    end: number
+  };
   /**
    * Set an input filter to constrain the text length to the specified number. This property works only for Android.
    *
