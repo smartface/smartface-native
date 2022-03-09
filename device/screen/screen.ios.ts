@@ -7,8 +7,8 @@ const orientationArray = [
   OrientationType.UPSIDEDOWN,
   OrientationType.LANDSCAPELEFT,
   OrientationType.LANDSCAPERIGHT,
-  OrientationType.ios.FACEUP,
-  OrientationType.ios.FACEDOWN
+  OrientationType.FACEUP,
+  OrientationType.FACEDOWN
 ];
 
 class ScreenIOS implements AbstractScreen {

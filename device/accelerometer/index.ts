@@ -60,7 +60,7 @@ import { AccelerometerEvents } from './accelerometer-events';
    */
   onAccelerate: (e: { x: number; y: number; z: number }) => void;
 
-  ios: {
+  ios: Partial<{
     /**
      * The interval, in millisecond, for providing accelerometer updates to the block handler.
      *
@@ -69,7 +69,7 @@ import { AccelerometerEvents } from './accelerometer-events';
      * @since 4.0.2
      */
     accelerometerUpdateInterval: number;
-  };
+  }>;
 }
 
 const Accelerometer: IAccelerometer = require(`./accelerometer.${Device.deviceOS.toLowerCase()}`).default;

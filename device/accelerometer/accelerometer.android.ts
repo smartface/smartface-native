@@ -1,27 +1,24 @@
 /* globals requireClass */
 const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
 
+import { IAccelerometer } from '.';
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { IAccelerometer } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
 class AccelerometerAndroid extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
-  monitonManager = new __SF_CMMotionManager();
-  ios = { accelerometerUpdateInterval: 0 };
-  android = {};
+  private monitonManager = new __SF_CMMotionManager();
   private _nativeSFAccelerometerListener = new NativeSFAccelerometerListener();
   private _isSetCallback = false;
   private _isStarted = false;
   private _callback;
   constructor() {
     super();
-    const EventFunctions = {
-      [AccelerometerEvents.Accelerate]: (e) => {
-        this._nativeSFAccelerometerListener.onAccelerateCallback?.(e);
-      }
-    };
 
-    eventCallbacksAssign(this, EventFunctions);
+    this.nativeObject.onAccelerate = (e) => {
+      this.emit(AccelerometerEvents.Accelerate, e);
+      this.monitonManager.callback?.(e);
+    }
+
   }
   start() {
     if (this._isStarted) return;

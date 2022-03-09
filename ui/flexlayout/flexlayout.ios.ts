@@ -10,6 +10,7 @@ class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TPr
   constructor(params?: Partial<TProps>) {
     super(params);
   }
+  
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
 }

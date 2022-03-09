@@ -33,7 +33,7 @@ type ViewGroupAndroidProps = Partial<
  *     myFlexLayout.addChild(myLabel);
  */
 
-export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<{}, ViewGroupAndroidProps>>
+export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewIOSProps, ViewGroupAndroidProps>>
   extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps>,
     ViewGroupAndroidProps {
   /**
