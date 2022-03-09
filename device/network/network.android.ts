@@ -1,4 +1,5 @@
 import { ConnectionType, NetworkBase, NetworkNotifierBase } from '.';
+import NativeComponent from '../../core/native-component';
 import { AndroidConfig } from '../../util';
 
 const SFNetworkNotifier = requireClass('io.smartface.android.sfcore.device.network.SFNetworkNotifier');
@@ -30,7 +31,7 @@ function getTelephonyManager() {
   return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
-class Notifier extends NetworkNotifierBase {
+class Notifier extends NativeComponent implements NetworkNotifierBase {
   private isReceiverCreated = false;
   private _connectionTypeChanged;
   private _initialCacheEnabled = false;
@@ -102,16 +103,14 @@ class Notifier extends NetworkNotifierBase {
   }
 }
 
-class NetworkAndroid extends NetworkBase {
+class NetworkAndroid extends NativeComponent implements NetworkBase {
 
-  public static readonly Notifier = Notifier;
   ConnectionType = ConnectionType;
-  private isReceiverCreated = false;
-  private _connectionTypeChanged;
+  readonly roamingEnabled = false;
   constructor() {
     super();
   }
-
+  public readonly Notifier = new Notifier();
   get IMSI() {
     return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
   }
@@ -155,7 +154,7 @@ class NetworkAndroid extends NetworkBase {
     const wifiInfo = wifiManager.getConnectionInfo();
     return wifiInfo.getMacAddress();
   }
-  static cancelAll() {
+  cancelAll() {
     for (let i = 0; i < instanceCollection.length; i++) {
       instanceCollection[i].unsubscribe();
     }

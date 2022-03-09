@@ -101,7 +101,7 @@ export declare class NetworkNotifierBase extends NativeComponent {
  *
  *
  */
-export abstract class NetworkBase extends NativeComponent {
+export declare class NetworkBase extends NativeComponent {
   /**
    * @class Device.Network.Notifier
    * @since 3.0.1
@@ -118,7 +118,7 @@ export abstract class NetworkBase extends NativeComponent {
    *     });
    *
    */
-  public readonly Notifier = NetworkNotifierBase;
+  public readonly Notifier: NetworkNotifierBase;
   /**
    *
    * Returns the carrier name of the GSM connection.
@@ -127,7 +127,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get carrier(): string;
+  get carrier(): string;
   /**
    *
    * Returns the current connection type.
@@ -136,7 +136,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get connectionType(): ConnectionType;
+  get connectionType(): ConnectionType;
   /**
    *
    * Returns the IP address of the current connection.
@@ -145,7 +145,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get connectionIP(): string;
+  get connectionIP(): string;
   /**
    *
    * Returns if the device is capable of SMS operations.
@@ -154,7 +154,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get SMSEnabled(): boolean;
+  get SMSEnabled(): boolean;
   /**
    *
    * Returns the 'International Mobile Subscriber Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
@@ -163,7 +163,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get IMSI(): string;
+  get IMSI(): string;
   /**
    *
    * Returns the MAC address of the bluetooth adaptor on the device.
@@ -172,7 +172,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get bluetoothMacAddress(): string;
+  get bluetoothMacAddress(): string;
   /**
    *
    * Returns the MAC address of the wireless adaptor on the device.
@@ -181,7 +181,7 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  abstract get wirelessMacAddress(): string;
+  get wirelessMacAddress(): string;
   /**
    *
    * Returns whether roaming is enabled on the device
@@ -190,10 +190,9 @@ export abstract class NetworkBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static roamingEnabled: boolean;
-  static cancelAll: () => void;
+  roamingEnabled: boolean;
+  cancelAll: () => void;
 }
 
 const Network: NetworkBase = require(`./network.${Device.deviceOS.toLowerCase()}`).default;
-
 export default Network;

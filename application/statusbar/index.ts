@@ -11,6 +11,6 @@ declare class StatusBarBase {
   visible: boolean;
   style: StatusBarStyle;
 }
-
-export const StatusBar: typeof StatusBarBase = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
-export type StatusBar = StatusBarBase;
+const StatusBarClass: typeof StatusBarBase = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
+export const Statusbar = new StatusBarClass();
+export type Statusbar = StatusBarBase;

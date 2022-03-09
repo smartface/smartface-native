@@ -1,35 +1,37 @@
-import { NavigationBarStyle } from '.';
 import Color from '../../../ui/color';
 import { AndroidConfig } from '../../../util';
+import { NavigationBarBase, NavigationBarStyle } from './navigationbar';
 
 const NativeBuild = requireClass('android.os.Build');
 
-export default class NavigationBar {
-  private constructor() {}
-  static readonly Styles = NavigationBarStyle;
-  private static _style: NavigationBarStyle = NavigationBarStyle.DARKCONTENT;
-  private static _color: Color = Color.BLACK;
-  static get style(): NavigationBarStyle {
-    return NavigationBar._style;
+class NavigationBarAndroid implements NavigationBarBase {
+  readonly Styles = NavigationBarStyle;
+  private _style: NavigationBarStyle = NavigationBarStyle.DARKCONTENT;
+  private _color: Color = Color.BLACK;
+  get style(): NavigationBarStyle {
+    return this._style;
   }
-  static set style(value: NavigationBarStyle) {
-    NavigationBar._style = value;
+  set style(value: NavigationBarStyle) {
+    this._style = value;
     if (NativeBuild.VERSION.SDK_INT >= 26) {
       const window = AndroidConfig.activity.getWindow();
       let flags = window.getDecorView().getSystemUiVisibility();
       // 16 = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-      NavigationBar._style === NavigationBarStyle.DARKCONTENT ? (flags |= 16) : (flags &= ~16);
+      this._style === NavigationBarStyle.DARKCONTENT ? (flags |= 16) : (flags &= ~16);
       window.getDecorView().setSystemUiVisibility(flags);
     }
   }
-  static get color(): Color {
-    return NavigationBar._color;
+  get color(): Color {
+    return this._color;
   }
-  static set color(value: Color) {
+  set color(value: Color) {
     if (NativeBuild.VERSION.SDK_INT >= 21) {
-      NavigationBar._color = value;
+      this._color = value;
       const window = AndroidConfig.activity.getWindow();
       window.setNavigationBarColor(NavigationBar._color.nativeObject);
     }
   }
 }
+
+const NavigationBar = new NavigationBarAndroid();
+export default NavigationBar;

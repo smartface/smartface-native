@@ -840,10 +840,11 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   onRowCanSwipe: (index: number) => [SwipeDirection];
 }
 
-export declare class AbstractListView<TEvent extends string = ListViewEvents, TIOS extends Record<string, any> = IListViewIOS, TAND extends Record<string, any> = IListViewAndroid>
-  extends AbstractView<TEvent | ListViewEvents, any, IListView>
+export declare class AbstractListView<TEvent extends string = ListViewEvents, TProps extends IListView = IListView>
+  extends AbstractView<TEvent | ListViewEvents, any, TProps>
   implements IListView<TEvent | ListViewEvents>
 {
+  constructor(params?: Partial<TProps>);
   onRowSwipe: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => ISwipeItem[];
   onRowType: (index?: number) => number;
   onRowCreate: (type?: number) => ListViewItem;

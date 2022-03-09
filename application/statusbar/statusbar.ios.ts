@@ -5,18 +5,18 @@ export enum StatusBarStyle {
   LIGHTCONTENT
 }
 
-export default class StatusBarIOS {
-  static readonly Styles = StatusBarStyle;
-  static get ios() {
+class StatusBarIOS {
+  readonly Styles = StatusBarStyle;
+  get ios() {
     return {};
   }
-  static get android() {
+  get android() {
     return {};
   }
-  static get height(): number {
+  get height(): number {
     return __SF_UIApplication.sharedApplication().statusBarFrame.height;
   }
-  static get backgroundColor(): Color {
+  get backgroundColor(): Color {
     const statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey('statusBarWindow');
     if (statusBarWindow) {
       const statusBar = statusBarWindow.valueForKey('statusBar');
@@ -32,7 +32,7 @@ export default class StatusBarIOS {
     }
     return undefined;
   }
-  static set backgroundColor(value: Color) {
+  set backgroundColor(value: Color) {
     const statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey('statusBarWindow');
     if (statusBarWindow) {
       const statusBar = statusBarWindow.valueForKey('statusBar');
@@ -47,16 +47,19 @@ export default class StatusBarIOS {
       }
     }
   }
-  static get visible(): boolean {
+  get visible(): boolean {
     return !__SF_UIApplication.sharedApplication().sf_statusBarHidden;
   }
-  static set visible(value: boolean) {
+  set visible(value: boolean) {
     __SF_UIApplication.sharedApplication().sf_statusBarHidden = !value;
   }
-  static get style(): StatusBarStyle {
+  get style(): StatusBarStyle {
     return __SF_UIApplication.sharedApplication().sf_statusBarStyle;
   }
-  static set style(value: StatusBarStyle) {
+  set style(value: StatusBarStyle) {
     __SF_UIApplication.sharedApplication().sf_statusBarStyle = value;
   }
 }
+
+const StatusBar = new StatusBarIOS();
+export default StatusBar;

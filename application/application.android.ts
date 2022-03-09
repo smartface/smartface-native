@@ -5,13 +5,15 @@ import AndroidConfig from '../util/Android/androidconfig';
 import Http from '../net/http';
 import Network from '../device/network';
 import { EventEmitter } from 'core/eventemitter';
-import { StatusBar } from './statusbar';
-import { NavigationBar } from './android/navigationbar';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
 import { RequestCodes } from '../util';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import { SystemServices } from '../util';
+import { Statusbar } from './statusbar';
+import ApplicationBase from '.';
+import NavigationBar from './android/navigationbar';
+import { IBottomTabBar } from '../ui/bottomtabbar';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -43,7 +45,7 @@ const Permissions = {
   WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
   USE_FINGERPRINT: 'android.permission.USE_FINGERPRINT',
   WRITE_APN_SETTINGS: 'android.permission.WRITE_APN_SETTINGS'
-};
+} as const;
 
 //InputMethodManager to close softinput keyboard
 
@@ -55,8 +57,8 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
-class ApplicationWrapper extends EventEmitter<string> {
-  public statusBar = StatusBar;
+class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements ApplicationBase {
+  public statusBar:Statusbar = Statusbar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
   private _onExit: any;
@@ -72,7 +74,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   private _onRequestPermissionsResult: any;
   private _keyboardMode: any;
   private _secureWindowContent = false;
-  private __mDrawerLayout: any;
+  __mDrawerLayout: any;
   private activity = AndroidConfig.activity;
   private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
   readonly LayoutDirection = {
@@ -143,11 +145,13 @@ class ApplicationWrapper extends EventEmitter<string> {
         if (this._onMaximize) {
           this._onMaximize();
         }
+        this.emitter.emit(ApplicationEvents.Maximize);
       },
       onPause: function () {
         if (this._onMinimize) {
           this._onMinimize();
         }
+        this.emitter.emit(ApplicationEvents.Minimize);
       },
       onStop: function () {},
       onStart: function () {},
@@ -179,6 +183,9 @@ class ApplicationWrapper extends EventEmitter<string> {
     // Attaching Activity Lifecycle event
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
+  setAppTheme: (theme: string) => void;
+  Events = ApplicationEvents;
+  tabBar?: IBottomTabBar;
 
   attachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
@@ -196,7 +203,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
   }
 
-  detachSliderDrawer(sliderDrawer) {
+  detachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
       sliderDrawer.__isAttached = false;
       this.__mDrawerLayout.removeView(sliderDrawer.nativeObject);
@@ -281,7 +288,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
     _onSuccess && _onSuccess();
   }
-  canOpenUrl(url) {
+  canOpenUrl(url: string) {
     if (!url) {
       throw new Error("url parameter can't be empty.");
     }
@@ -410,29 +417,20 @@ class ApplicationWrapper extends EventEmitter<string> {
     return this._onMaximize;
   }
   set onMaximize(onMaximize) {
-    this._onMaximize = (e) => {
-      onMaximize && onMaximize(e);
-      this.emitter.emit(ApplicationEvents.Maximize, e);
-    };
+    this._onMaximize = onMaximize;
   }
   get onMinimize() {
     return this._onMinimize;
   }
   set onMinimize(onMinimize) {
-    this._onMinimize = (e) => {
-      onMinimize && onMinimize(e);
-      this.emitter.emit(ApplicationEvents.Minimize, e);
-    };
+    this._onMinimize = onMinimize;
   }
   get onReceivedNotification() {
     return this._onReceivedNotification;
   }
   set onReceivedNotification(callback) {
     if (TypeUtil.isFunction(callback) || callback === null) {
-      this._onReceivedNotification = (e) => {
-        callback && callback(e);
-        this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
-      };
+      this._onReceivedNotification = callback;
     }
   }
   get onUnhandledError() {
@@ -599,7 +597,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
         AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
         AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
-      },
+      } as const,
       Permissions: {
         READ_CALENDAR: 'android.permission.READ_CALENDAR',
         WRITE_CALENDAR: 'android.permission.WRITE_CALENDAR',
@@ -627,12 +625,14 @@ class ApplicationWrapper extends EventEmitter<string> {
         WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
         USE_FINGERPRINT: 'android.permission.USE_FINGERPRINT',
         WRITE_APN_SETTINGS: 'android.permission.WRITE_APN_SETTINGS'
-      }
+      } as const
     };
   }
   get ios() {
     return {
-      onUserActivityWithBrowsingWeb() {}
+      onUserActivityWithBrowsingWeb: () => {
+        return false;
+      }
     };
   }
 }
