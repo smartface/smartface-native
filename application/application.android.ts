@@ -11,9 +11,9 @@ import { RequestCodes } from '../util';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import { SystemServices } from '../util';
 import { Statusbar } from './statusbar';
-import ApplicationBase from '.';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar';
+import { ApplicationBase } from './application';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -57,7 +57,7 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
-class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements ApplicationBase {
+class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements ApplicationBase {
   public statusBar:Statusbar = Statusbar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
@@ -94,39 +94,39 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
     };
 
     this._onApplicationCallReceived = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.ApplicationCallReceived, e);
+      this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
 
     this._onAppShortcutReceived = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.AppShortcutReceived, e);
+      this.emit(ApplicationEvents.AppShortcutReceived, e);
     };
 
     this._onBackButtonPressed = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.BackButtonPressed, e);
+      this.emit(ApplicationEvents.BackButtonPressed, e);
     };
 
     this.onUnhandledError = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.UnhandledError, e);
+      this.emit(ApplicationEvents.UnhandledError, e);
     };
 
     this._onExit = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Exit, e);
+      this.emit(ApplicationEvents.Exit, e);
     };
 
     this._onMaximize = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Maximize, e);
+      this.emit(ApplicationEvents.Maximize, e);
     };
 
     this._onMinimize = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Minimize, e);
+      this.emit(ApplicationEvents.Minimize, e);
     };
 
     this._onReceivedNotification = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.ReceivedNotification, e);
+      this.emit(ApplicationEvents.ReceivedNotification, e);
     };
 
     this._onRequestPermissionsResult = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.RequestPermissionResult, e);
+      this.emit(ApplicationEvents.RequestPermissionResult, e);
     };
 
     this.spratAndroidActivityInstance.attachBackPressedListener({
@@ -136,7 +136,7 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
     });
 
     const mDrawerLayout = this.activity.findViewById(NativeR.id.layout_root);
-    ApplicationAndroid.drawerLayout = mDrawerLayout;
+    this.drawerLayout = mDrawerLayout;
 
     // Creating Activity Lifecycle listener
     const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -165,7 +165,7 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
         const permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = grantResult === 0;
-        ApplicationAndroid.android.onRequestPermissionsResult && ApplicationAndroid.android.onRequestPermissionsResult(permissionResults);
+        this.android.onRequestPermissionsResult && this.android.onRequestPermissionsResult(permissionResults);
       },
       onActivityResult: function (requestCode, resultCode, data) {
         //TODO: check if this is correct
@@ -175,7 +175,7 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
       },
       dispatchTouchEvent: function (actionType, x, y) {
         let dispatchTouchEvent;
-        if (ApplicationAndroid.android.dispatchTouchEvent) dispatchTouchEvent = ApplicationAndroid.android.dispatchTouchEvent();
+        if (this.android.dispatchTouchEvent) dispatchTouchEvent = this.android.dispatchTouchEvent();
         return typeof dispatchTouchEvent === 'boolean' ? dispatchTouchEvent : false;
       }
     });
@@ -388,19 +388,19 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.currentReleaseChannel;
+    return this.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.version;
+    return this.version;
   }
   // events
   // We can not handle application calls for now, so let SMFApplication handle this
@@ -434,11 +434,11 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
     }
   }
   get onUnhandledError() {
-    return ApplicationAndroid.onUnhandledError;
+    return this.onUnhandledError;
   }
   set onUnhandledError(onUnhandledError) {
     if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-      ApplicationAndroid.onUnhandledError = (e) => {
+      this.onUnhandledError = (e) => {
         onUnhandledError(e);
         this.emitter.emit(ApplicationEvents.UnhandledError, e);
       };
@@ -637,7 +637,6 @@ class ApplicationWrapper extends EventEmitter<ApplicationEvents> implements Appl
   }
 }
 
-const ApplicationAndroid = new ApplicationWrapper();
 
 function cancelAllBackgroundJobs() {
   Location.stop();
@@ -656,6 +655,6 @@ function checkIsAppShortcut(e) {
   return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
 }
 
-const Application = new ApplicationWrapper();
+const Application = new ApplicationAndroid();
 
 export default Application;
