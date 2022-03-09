@@ -1,8 +1,8 @@
 import Color from '../color';
-import { AbstractView } from '../view';
+import { AbstractView, IView } from '../view';
 import { ViewEvents } from '../view/view-event';
 
-enum ActivityIndicatorViewStyle {
+export enum ActivityIndicatorViewStyle {
   /**
    * @property {Number} LARGE
    * @ios
@@ -20,7 +20,20 @@ enum ActivityIndicatorViewStyle {
    */
   NORMAL = 1
 }
-export class AbstractActivityIndicator<TEvent extends string = ViewEvents> extends AbstractView<TEvent> {
+
+export interface IActivityIndicator extends IView<undefined, any, IActivityIndicator> {
+  ios: IView['ios'] & {
+    /**
+     * Gets/sets style of the activity indicator.
+     *
+     * @ios
+     * @since 3.2.1
+     */
+    activityIndicatorViewStyle: ActivityIndicatorViewStyle;
+  };
+  android: IView['android'];
+}
+export declare class ActivityIndicatorBase<TEvent extends string = ViewEvents> extends AbstractView<TEvent> {
   /**
    * Gets/sets color of the activity indicator.
    *
@@ -29,14 +42,7 @@ export class AbstractActivityIndicator<TEvent extends string = ViewEvents> exten
    * @since 0.1
    */
   color: Color;
-  static iOS = {
-    ...AbstractView.iOS,
-    /**
-     * Gets/sets style of the activity indicator.
-     *
-     * @ios
-     * @since 3.2.1
-     */
-    ActivityIndicatorViewStyle: ActivityIndicatorViewStyle
+  static iOS: {
+    ActivityIndicatorViewStyle: typeof ActivityIndicatorViewStyle;
   };
 }

@@ -6,8 +6,8 @@ export default class ListViewItemIOS<TEvent extends string = FlexLayoutEvents, T
   extends FlexLayoutIOS<TEvent | FlexLayoutEvents, TNative, IListViewItem>
   implements IListViewItem
 {
-  nativeInner: any;
   __nativeCell: __SF_UICollectionViewCell;
+  nativeInner: any;
   constructor(params: IListViewItem) {
     super(params);
 

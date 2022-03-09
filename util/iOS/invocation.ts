@@ -21,13 +21,17 @@ namespace Invocation {
   export function invokeInstanceMethod( target: __SF_NSOBject,
     selector: string,
     argumentsArray: Invocation.Argument[],
+    returnValueType?: 'BOOL'): boolean;
+  export function invokeInstanceMethod( target: __SF_NSOBject,
+    selector: string,
+    argumentsArray: Invocation.Argument[],
     returnValueType?: string): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument;
   export function invokeInstanceMethod(
     target: __SF_NSOBject,
     selector: string,
     argumentsArray: Invocation.Argument[],
     returnValueType?: string
-  ): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument {
+  ): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument | boolean {
     const invocation = __SF_NSInvocation.createInvocationWithSelectorInstance(selector, target);
     if (invocation) {
       invocation.target = target;

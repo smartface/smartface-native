@@ -1,8 +1,9 @@
 import { AbstractSound } from '.';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
 
-export default class SoundIOS extends AbstractSound {
+export default class SoundIOS  extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
   public static Events = SoundEvents;
   private addCallbackFunction: () => void;
   private avPlayerItem: __SF_AVPlayerItem;
@@ -10,7 +11,7 @@ export default class SoundIOS extends AbstractSound {
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
   constructor(params?: Partial<SoundIOS>) {
-    super();
+    super(params);
     const self = this;
     this.addCallbackFunction = function () {
       self.nativeObject.onItemReady = function () {

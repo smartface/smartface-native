@@ -1,16 +1,15 @@
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { ButtonType, IAlertView } from './alertview';
 
 enum MethodNames {
   onDismiss = 'onDismiss'
 }
 
-export default class AlertViewIOS extends NativeComponent implements IAlertView {
+export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView> implements IAlertView {
   private delegate: (method: { name: string }) => void;
   private _onDismiss: (alertView: AlertViewIOS) => void;
-  android = {};
-  constructor(params: Partial<IAlertView> = {}) {
-    super();
+  constructor(params?: Partial<IAlertView>) {
+    super(params);
     this.nativeObject = __SF_UIAlertController.createAlertController(1);
     this.title = '';
     this.delegate = (method: { name: string }) => {
@@ -18,10 +17,6 @@ export default class AlertViewIOS extends NativeComponent implements IAlertView 
         this.onDismiss();
       }
     };
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   isShowing(): void {
     return this.nativeObject.isBeingPresented;

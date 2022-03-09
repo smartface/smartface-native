@@ -1,13 +1,12 @@
-import NativeComponent from '../../core/native-component';
 import TextBox from '../textbox';
 import { ButtonType, IAlertView } from './alertview';
-import { LayoutParams, UnitConverter } from '../../util';
+import { AndroidConfig, LayoutParams, UnitConverter } from '../../util';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 
 const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview.SFAlertView');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
-export default class AlertViewAndroid extends NativeComponent implements IAlertView {
-  private _android: IAlertView['android'];
+export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertView> implements IAlertView {
   private __didSetOnDismissListener = true;
   private __buttonCallbacks: Array<() => void> = [];
   private __title = '';
@@ -15,15 +14,12 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
   private __textBoxes: TextBox[];
   private __onDismiss: IAlertView['onDismiss'];
   private _cancellable: IAlertView['android']['cancellable'];
-  constructor(params: Partial<IAlertView> = {}) {
-    super();
+  constructor(params?: Partial<IAlertView>) {
+    super(params);
     if (!this.nativeObject) {
       this.nativeObject = new NativeAlertDialog(AndroidConfig.activity);
     }
     this.androidSpecificProperties();
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   isShowing(): void {
     return this.nativeObject.isShowing();
@@ -113,7 +109,7 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
 
   private androidSpecificProperties() {
     const self = this;
-    this._android = {
+    this.addAndroidProps({
       get cancellable(): IAlertView['android']['cancellable'] {
         return self._cancellable;
       },
@@ -122,7 +118,7 @@ export default class AlertViewAndroid extends NativeComponent implements IAlertV
         self.nativeObject.setCancelable(value);
         self.nativeObject.setCanceledOnTouchOutside(value);
       }
-    };
+    });
   }
 
   get textBoxes(): IAlertView['textBoxes'] {

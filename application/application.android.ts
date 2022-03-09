@@ -5,13 +5,15 @@ import AndroidConfig from '../util/Android/androidconfig';
 import Http from '../net/http';
 import Network from '../device/network';
 import { EventEmitter } from 'core/eventemitter';
-import { StatusBar } from './statusbar';
-import { NavigationBar } from './android/navigationbar';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
 import { RequestCodes } from '../util';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import { SystemServices } from '../util';
+import { Statusbar } from './statusbar';
+import NavigationBar from './android/navigationbar';
+import { IBottomTabBar } from '../ui/bottomtabbar';
+import { ApplicationBase } from './application';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -43,7 +45,7 @@ const Permissions = {
   WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
   USE_FINGERPRINT: 'android.permission.USE_FINGERPRINT',
   WRITE_APN_SETTINGS: 'android.permission.WRITE_APN_SETTINGS'
-};
+} as const;
 
 //InputMethodManager to close softinput keyboard
 
@@ -55,8 +57,8 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
-class ApplicationWrapper extends EventEmitter<string> {
-  public statusBar = StatusBar;
+class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements ApplicationBase {
+  public statusBar:Statusbar = Statusbar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
   private _onExit: any;
@@ -72,7 +74,7 @@ class ApplicationWrapper extends EventEmitter<string> {
   private _onRequestPermissionsResult: any;
   private _keyboardMode: any;
   private _secureWindowContent = false;
-  private __mDrawerLayout: any;
+  __mDrawerLayout: any;
   private activity = AndroidConfig.activity;
   private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
   readonly LayoutDirection = {
@@ -92,39 +94,39 @@ class ApplicationWrapper extends EventEmitter<string> {
     };
 
     this._onApplicationCallReceived = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.ApplicationCallReceived, e);
+      this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
 
     this._onAppShortcutReceived = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.AppShortcutReceived, e);
+      this.emit(ApplicationEvents.AppShortcutReceived, e);
     };
 
     this._onBackButtonPressed = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.BackButtonPressed, e);
+      this.emit(ApplicationEvents.BackButtonPressed, e);
     };
 
     this.onUnhandledError = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.UnhandledError, e);
+      this.emit(ApplicationEvents.UnhandledError, e);
     };
 
     this._onExit = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Exit, e);
+      this.emit(ApplicationEvents.Exit, e);
     };
 
     this._onMaximize = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Maximize, e);
+      this.emit(ApplicationEvents.Maximize, e);
     };
 
     this._onMinimize = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.Minimize, e);
+      this.emit(ApplicationEvents.Minimize, e);
     };
 
     this._onReceivedNotification = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.ReceivedNotification, e);
+      this.emit(ApplicationEvents.ReceivedNotification, e);
     };
 
     this._onRequestPermissionsResult = (e) => {
-      ApplicationAndroid.emit(ApplicationEvents.RequestPermissionResult, e);
+      this.emit(ApplicationEvents.RequestPermissionResult, e);
     };
 
     this.spratAndroidActivityInstance.attachBackPressedListener({
@@ -134,7 +136,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     });
 
     const mDrawerLayout = this.activity.findViewById(NativeR.id.layout_root);
-    ApplicationAndroid.drawerLayout = mDrawerLayout;
+    this.drawerLayout = mDrawerLayout;
 
     // Creating Activity Lifecycle listener
     const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -143,11 +145,13 @@ class ApplicationWrapper extends EventEmitter<string> {
         if (this._onMaximize) {
           this._onMaximize();
         }
+        this.emitter.emit(ApplicationEvents.Maximize);
       },
       onPause: function () {
         if (this._onMinimize) {
           this._onMinimize();
         }
+        this.emitter.emit(ApplicationEvents.Minimize);
       },
       onStop: function () {},
       onStart: function () {},
@@ -161,7 +165,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         const permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = grantResult === 0;
-        ApplicationAndroid.android.onRequestPermissionsResult && ApplicationAndroid.android.onRequestPermissionsResult(permissionResults);
+        this.android.onRequestPermissionsResult && this.android.onRequestPermissionsResult(permissionResults);
       },
       onActivityResult: function (requestCode, resultCode, data) {
         //TODO: check if this is correct
@@ -171,7 +175,7 @@ class ApplicationWrapper extends EventEmitter<string> {
       },
       dispatchTouchEvent: function (actionType, x, y) {
         let dispatchTouchEvent;
-        if (ApplicationAndroid.android.dispatchTouchEvent) dispatchTouchEvent = ApplicationAndroid.android.dispatchTouchEvent();
+        if (this.android.dispatchTouchEvent) dispatchTouchEvent = this.android.dispatchTouchEvent();
         return typeof dispatchTouchEvent === 'boolean' ? dispatchTouchEvent : false;
       }
     });
@@ -179,6 +183,9 @@ class ApplicationWrapper extends EventEmitter<string> {
     // Attaching Activity Lifecycle event
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
+  setAppTheme: (theme: string) => void;
+  Events = ApplicationEvents;
+  tabBar?: IBottomTabBar;
 
   attachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
@@ -196,7 +203,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
   }
 
-  detachSliderDrawer(sliderDrawer) {
+  detachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
       sliderDrawer.__isAttached = false;
       this.__mDrawerLayout.removeView(sliderDrawer.nativeObject);
@@ -281,7 +288,7 @@ class ApplicationWrapper extends EventEmitter<string> {
     }
     _onSuccess && _onSuccess();
   }
-  canOpenUrl(url) {
+  canOpenUrl(url: string) {
     if (!url) {
       throw new Error("url parameter can't be empty.");
     }
@@ -381,19 +388,19 @@ class ApplicationWrapper extends EventEmitter<string> {
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.currentReleaseChannel;
+    return this.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.smartfaceAppName;
+    return this.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return ApplicationAndroid.version;
+    return this.version;
   }
   // events
   // We can not handle application calls for now, so let SMFApplication handle this
@@ -410,37 +417,28 @@ class ApplicationWrapper extends EventEmitter<string> {
     return this._onMaximize;
   }
   set onMaximize(onMaximize) {
-    this._onMaximize = (e) => {
-      onMaximize && onMaximize(e);
-      this.emitter.emit(ApplicationEvents.Maximize, e);
-    };
+    this._onMaximize = onMaximize;
   }
   get onMinimize() {
     return this._onMinimize;
   }
   set onMinimize(onMinimize) {
-    this._onMinimize = (e) => {
-      onMinimize && onMinimize(e);
-      this.emitter.emit(ApplicationEvents.Minimize, e);
-    };
+    this._onMinimize = onMinimize;
   }
   get onReceivedNotification() {
     return this._onReceivedNotification;
   }
   set onReceivedNotification(callback) {
     if (TypeUtil.isFunction(callback) || callback === null) {
-      this._onReceivedNotification = (e) => {
-        callback && callback(e);
-        this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
-      };
+      this._onReceivedNotification = callback;
     }
   }
   get onUnhandledError() {
-    return ApplicationAndroid.onUnhandledError;
+    return this.onUnhandledError;
   }
   set onUnhandledError(onUnhandledError) {
     if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-      ApplicationAndroid.onUnhandledError = (e) => {
+      this.onUnhandledError = (e) => {
         onUnhandledError(e);
         this.emitter.emit(ApplicationEvents.UnhandledError, e);
       };
@@ -599,7 +597,7 @@ class ApplicationWrapper extends EventEmitter<string> {
         KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
         AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
         AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
-      },
+      } as const,
       Permissions: {
         READ_CALENDAR: 'android.permission.READ_CALENDAR',
         WRITE_CALENDAR: 'android.permission.WRITE_CALENDAR',
@@ -627,17 +625,18 @@ class ApplicationWrapper extends EventEmitter<string> {
         WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
         USE_FINGERPRINT: 'android.permission.USE_FINGERPRINT',
         WRITE_APN_SETTINGS: 'android.permission.WRITE_APN_SETTINGS'
-      }
+      } as const
     };
   }
   get ios() {
     return {
-      onUserActivityWithBrowsingWeb() {}
+      onUserActivityWithBrowsingWeb: () => {
+        return false;
+      }
     };
   }
 }
 
-const ApplicationAndroid = new ApplicationWrapper();
 
 function cancelAllBackgroundJobs() {
   Location.stop();
@@ -656,6 +655,6 @@ function checkIsAppShortcut(e) {
   return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
 }
 
-const Application = new ApplicationWrapper();
+const Application = new ApplicationAndroid();
 
 export default Application;

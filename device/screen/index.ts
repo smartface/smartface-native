@@ -158,7 +158,6 @@ export declare class AbstractScreen {
   }>;
 }
 
-const Screen: typeof AbstractScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
-type Screen = AbstractScreen;
+const Screen: AbstractScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
 
 export default Screen;

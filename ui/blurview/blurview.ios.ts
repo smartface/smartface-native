@@ -1,8 +1,8 @@
-import { IBlurView, iOSProps } from '.';
+import { IBlurView } from '.';
 import ViewIOS from '../view/view.ios';
 import { BlurViewEvents } from './blurview-events';
 
-export default class BlurViewIOS<TEvent extends string = BlurViewEvents> extends ViewIOS<TEvent | BlurViewEvents, iOSProps> implements IBlurView {
+export default class BlurViewIOS<TEvent extends string = BlurViewEvents> extends ViewIOS<TEvent | BlurViewEvents, __SF_SMFVisualEffectView, IBlurView> implements IBlurView {
   private _effectStyle: number = 1;
   constructor(params: Partial<IBlurView> = {}) {
     super();
@@ -12,12 +12,8 @@ export default class BlurViewIOS<TEvent extends string = BlurViewEvents> extends
       this.nativeObject.setBlurStyle(1);
     }
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
-
     const self = this;
-    const ios = {
+    this.addIOSProps({
       get effectStyle(): number {
         return self._effectStyle;
       },
@@ -25,7 +21,6 @@ export default class BlurViewIOS<TEvent extends string = BlurViewEvents> extends
         self._effectStyle = value;
         self.nativeObject.setBlurStyle(value);
       }
-    };
-    Object.assign(this._ios, ios);
+    });
   }
 }

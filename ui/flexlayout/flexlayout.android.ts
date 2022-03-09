@@ -1,6 +1,6 @@
 import Flex from '../../core/flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
-import { IFlexLayout, FlexLayoutAndroidProps } from '.';
+import FlexLayout, { IFlexLayout, FlexLayoutAndroidProps } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 import Color from '../../ui/color';
 
@@ -46,6 +46,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
       }
     });
   }
+  content?: FlexLayout;
 
   get direction() {
     return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), Flex.Direction);

@@ -1,9 +1,8 @@
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
-type ViewGroupAndroidProps = Partial<
-  ViewAndroidProps & {
+type ViewGroupAndroidProps = ViewAndroidProps & {
     /**
      * Called when a child does not want this parent and its ancestors to intercept touch events .
      * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
@@ -14,8 +13,7 @@ type ViewGroupAndroidProps = Partial<
      * @since 4.0.3
      */
     requestDisallowInterceptTouchEvent(disallow: boolean): void;
-  }
->;
+  };
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -33,9 +31,8 @@ type ViewGroupAndroidProps = Partial<
  *     myFlexLayout.addChild(myLabel);
  */
 
-export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<{}, ViewGroupAndroidProps>>
-  extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps>,
-    ViewGroupAndroidProps {
+export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewIOSProps, ViewGroupAndroidProps>>
+  extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps> {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -147,10 +144,10 @@ export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = a
    * });
    * ````
    */
-  onViewRemoved: (view: AbstractView) => void;
+  onViewRemoved: (view: IView) => void;
 }
 
-export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup> extends AbstractView<TEvent, TNative, TProps> {
+export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup> extends AbstractView<TEvent, TNative, TProps> implements IViewGroup<TEvent> {
   addChild(view: IView): void;
   removeChild(view: IView): void;
   removeAll(): void;

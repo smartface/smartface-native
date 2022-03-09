@@ -1,5 +1,5 @@
-import { AbstractActivityIndicator } from './activityindicator';
+import { ActivityIndicatorBase } from './activityindicator';
 
-const ActivityIndicator: typeof AbstractActivityIndicator = require(`./activityindicator.${Device.deviceOS.toLowerCase()}`).default;
+const ActivityIndicator: typeof ActivityIndicatorBase = require(`./activityindicator.${Device.deviceOS.toLowerCase()}`).default;
 
 export default ActivityIndicator;

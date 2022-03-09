@@ -1,5 +1,7 @@
 import { AbstractSound } from '.';
 import Application from '../../application';
+import { EventListenerCallback } from '../../core/eventemitter';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import { AndroidConfig, RequestCodes } from '../../util';
 import { SoundEvents } from './sound-events';
@@ -13,16 +15,15 @@ function getCurrentPageFragment() {
   return Application.currentPage.nativeObject;
 }
 
-export default class SoundAndroid extends AbstractSound {
+export default class SoundAndroid extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
   public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
   private _volume = 1.0;
-  private _android;
   constructor(params?: Partial<SoundAndroid>) {
-    super();
-    this.nativeObject = new NativeMediaPlayer();
+    super(params);
+    this._nativeObject = new NativeMediaPlayer();
 
     const self = this;
     this.nativeObject.setOnPreparedListener(
@@ -63,6 +64,35 @@ export default class SoundAndroid extends AbstractSound {
       }
     };
     Object.assign(this._android, android);
+  }
+  on(eventName: 'ready' | 'finish', callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  once(eventName: 'ready' | 'finish', callback: EventListenerCallback): () => void {
+    throw new Error('Method not implemented.');
+  }
+  off(eventName: 'ready' | 'finish', callback?: EventListenerCallback): void {
+    throw new Error('Method not implemented.');
+  }
+  emit(event: 'ready' | 'finish', ...args: any[]): void {
+    throw new Error('Method not implemented.');
+  }
+  protected _android: Partial<{ [key: string]: any; }>;
+  protected addAndroidProps(props: Partial<{ [key: string]: any; }>): void {
+    throw new Error('Method not implemented.');
+  }
+  protected addIOSProps(props: Partial<{ [key: string]: any; }>): void {
+    throw new Error('Method not implemented.');
+  }
+  get ios(): Partial<Partial<{ [key: string]: any; }>> {
+    throw new Error('Method not implemented.');
+  }
+  protected _nativeObject: any;
+  get nativeObject(): any {
+    throw new Error('Method not implemented.');
+  }
+  set nativeObject(value: any) {
+    throw new Error('Method not implemented.');
   }
   get android() {
     return this._android;

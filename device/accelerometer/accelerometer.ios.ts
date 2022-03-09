@@ -1,32 +1,28 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { IAccelerometer } from '.';
 import { AccelerometerEvents } from './accelerometer-events';
 
-class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
-  monitonManager = new __SF_CMMotionManager();
-  android = {};
-  readonly ios: { accelerometerUpdateInterval: number };
-  constructor() {
-    super();
+class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, any, IAccelerometer> implements IAccelerometer {
+  private monitonManager = new __SF_CMMotionManager();
+  constructor(params?: Partial<IAccelerometer>) {
+    super(params);
     this.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
-    const EventFunctions = {
-      [AccelerometerEvents.Accelerate]: (e) => {
-        this.monitonManager.callback?.();
-      }
-    };
 
-    eventCallbacksAssign(this, EventFunctions);
+    this.nativeObject.onAccelerate = () => {
+      this.emit(AccelerometerEvents.Accelerate);
+      this.monitonManager.callback?.();
+    }
+
+    // eventCallbacksAssign(this, EventFunctions);
     const self = this;
-    const ios = {
+    this.addIOSProps({
       get accelerometerUpdateInterval() {
         return self.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
       },
       set accelerometerUpdateInterval(value) {
         self.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
       }
-    };
-    Object.assign(this.ios, ios);
+    });
   }
   start() {
     this.monitonManager.startAccelerometerUpdates();

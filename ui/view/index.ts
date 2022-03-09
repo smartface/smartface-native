@@ -988,7 +988,7 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
   protected _onTouchMoved: IView['onTouchMoved'];
 }
 
-export declare class AbstractView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps> = WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps>>
+export declare class AbstractView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
@@ -1001,9 +1001,9 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   onTouch: (e?: Point2D) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
   onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
+  onTouchMoved: (e: boolean | { isInside: boolean; }, point?: Point2D) => boolean | void;
   dirty(): void;
-  getPosition: () => { left: number; top: number; width: number; height: number };
+  getPosition: () => { left: number; top: number; width: number; height: number; };
   transitionId: string;
   accessible: boolean;
   accessibilityLabel: string;
@@ -1048,6 +1048,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   alignSelf: Flex.AlignSelf;
   masksToBounds: boolean;
   maskedBorders: Border[];
+  
 }
 
 const View: ConstructorOf<IView, Partial<IViewProps>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;

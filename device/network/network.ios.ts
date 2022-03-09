@@ -1,11 +1,9 @@
 import { ConnectionType, NetworkBase, NetworkNotifierBase } from '.';
-let notifierInstance: any;
+import NativeComponent from '../../core/native-component';
 
-class Notifier extends NetworkNotifierBase {
+class Notifier extends NativeComponent implements NetworkNotifierBase {
   private _connectionTypeChanged: (type: ConnectionType) => void;
-  subscribe: (callback: (type: ConnectionType) => void) => void;
-  unsubscribe: () => void;
-  android = {
+  readonly android = {
     isInitialStickyNotification() {
       return false;
     },
@@ -13,22 +11,20 @@ class Notifier extends NetworkNotifierBase {
   };
   constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
     super();
-    const self = this;
     if (!this.nativeObject) {
       this.nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
       this.nativeObject.observeFromNotificationCenter();
     }
 
-    if (notifierInstance) {
-      notifierInstance.stopNotifier();
-      notifierInstance.removeObserver();
+    if (this.nativeObject) {
+      this.nativeObject.stopNotifier();
+      this.nativeObject.removeObserver();
     }
-    notifierInstance = this.nativeObject;
 
     if (this.nativeObject) {
-      this.nativeObject.reachabilityChangedCallback = function () {
+      this.nativeObject.reachabilityChangedCallback = () => {
         let sfStatus;
-        const status = self.nativeObject.currentReachabilityStatus();
+        const status = this.nativeObject.currentReachabilityStatus();
         switch (status) {
           case 0:
             sfStatus = Network.ConnectionType.NONE;
@@ -43,25 +39,26 @@ class Notifier extends NetworkNotifierBase {
             break;
         }
 
-        if (self.connectionTypeChanged) {
-          self.connectionTypeChanged(sfStatus);
+        if (this.connectionTypeChanged) {
+          this.connectionTypeChanged(sfStatus);
         }
       };
     }
-
-    this.subscribe = function (callback) {
-      self.connectionTypeChanged = callback;
-    };
-
-    this.unsubscribe = function () {
-      self.connectionTypeChanged = null;
-    };
 
     if (params) {
       for (const param in params) {
         this[param] = params[param];
       }
     }
+  }
+  subscribe(callback) {
+    this.connectionTypeChanged = callback;
+  };
+
+  unsubscribe() {
+    this.nativeObject.stopNotifier();
+    this.nativeObject.removeObserver();
+    this.connectionTypeChanged = null;
   }
   get connectionTypeChanged() {
     return this._connectionTypeChanged;
@@ -77,7 +74,13 @@ class Notifier extends NetworkNotifierBase {
   }
 }
 
-class NetworkIOS extends NetworkBase {
+class NetworkIOS extends NativeComponent implements NetworkBase {
+  ConnectionType = ConnectionType;
+  public readonly Notifier: NetworkNotifierBase = new Notifier();
+  constructor() {
+    super();
+  }
+  roamingEnabled: boolean = false;
   get SMSEnabled(): boolean {
     return false;
   }
@@ -90,11 +93,6 @@ class NetworkIOS extends NetworkBase {
   get wirelessMacAddress(): string {
     return;
   }
-  public static readonly Notifier = Notifier;
-  ConnectionType = ConnectionType;
-  constructor() {
-    super();
-  }
   get carrier() {
     const info = new __SF_CTTelephonyNetworkInfo();
     return info.subscriberCellularProvider.carrierName;
@@ -105,10 +103,9 @@ class NetworkIOS extends NetworkBase {
   get connectionIP() {
     return __SF_UIDevice.getIFAddresses()[0];
   }
-  static cancelAll() {
-    if (notifierInstance) {
-      notifierInstance.stopNotifier();
-      notifierInstance.removeObserver();
+  cancelAll() {
+    if (this.Notifier) {
+      this.Notifier.unsubscribe();
     }
   }
 }

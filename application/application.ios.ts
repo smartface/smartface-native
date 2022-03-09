@@ -1,4 +1,3 @@
-import { StatusBar } from './statusbar';
 import Location from '../device/location';
 import Accelerometer from '../device/accelerometer';
 import Network from '../device/network';
@@ -7,6 +6,11 @@ import { Invocation } from '../util';
 import { ApplicationEvents } from './application-events';
 import { EventEmitter } from 'core/eventemitter';
 import { INativeComponent } from 'core/inative-component';
+import { Statusbar } from './statusbar';
+import { ApplicationBase } from './application';
+import Page from '../ui/page';
+import NavigationController from '../ui/navigationcontroller';
+import { IBottomTabBar } from '../ui/bottomtabbar';
 
 //Application Direction Manager (RTL Support)
 (function () {
@@ -53,14 +57,29 @@ const EventFunctions = {
   // },
 };
 
-class SFApplication extends EventEmitter<ApplicationEvents> {
+class ApplicationIOS extends EventEmitter<ApplicationEvents> implements ApplicationBase {
   private _onUnhandledError: any;
   private _onExit: () => void;
   private _onReceivedNotification: (e: any) => void;
   private _onApplicationCallReceived: any;
   private _onAppShortcutReceived: any;
-  private _onMaximize: (e: any) => void;
-  private _onMinimize: (e: any) => void;
+  private _onMaximize: () => void;
+  private _onMinimize: () => void;
+  readonly emulator = {
+    globalObjectWillReset(state: EmulatorResetState) {
+      cancelAllBackgroundJobs();
+      switch (state) {
+        case EmulatorResetState.scan:
+          break;
+        case EmulatorResetState.update:
+          break;
+        case EmulatorResetState.clear:
+          break;
+        default:
+          break;
+      }
+    }
+  } as const;
   constructor() {
     super();
     // TODO: Reimplement that
@@ -92,19 +111,27 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
       this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
 
-    this.onMaximize = function (e) {
-      this.emit(ApplicationEvents.Maximize, e);
+    this.onMaximize = function () {
+      this.emit(ApplicationEvents.Maximize);
     };
 
-    this.onMinimize = function (e) {
-      this.emit(ApplicationEvents.Minimize, e);
+    this.onMinimize = function () {
+      this.emit(ApplicationEvents.Minimize);
     };
   }
+  setAppTheme: (theme: string) => void;
+  Events: { readonly Exit: 'exit'; readonly Maximize: 'maximize'; readonly Minimize: 'minimize'; readonly ReceivedNotification: 'receivedNotification'; readonly UnhandledError: 'unhandledError'; readonly ApplicationCallReceived: 'applicationCallReceived'; readonly AppShortcutReceived: 'appShortcutReceived'; readonly BackButtonPressed: 'backButtonPressed'; readonly RequestPermissionResult: 'requestPermissionResult'; };
+  currentPage: Page;
+  registOnItemSelectedListener(): void {
+    throw new Error('Method not implemented.');
+  }
+  tabBar?: IBottomTabBar;
+  __mDrawerLayout: any;
   private _sliderDrawer;
   private _rootPage;
   private _onUserActivityWithBrowsingWeb;
   // TODO: typescript error
-  public statusBar = StatusBar;
+  public statusBar:Statusbar = Statusbar;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
@@ -123,7 +150,7 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
     // TODO define SMFApplication globally
     SMFApplication.restart();
   }
-  setRootController(params: { controller: INativeComponent }) {
+  setRootController(params: NavigationController) {
     if (params && params.controller) {
       this.rootPage = params.controller;
       keyWindow.rootViewController = params.controller.nativeObject;
@@ -256,18 +283,18 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
     return this._onUserActivityWithBrowsingWeb;
   }
   set onMaximize(value) {
-    this._onMaximize = (e) => {
-      value && value(e);
-      this.emitter.emit(ApplicationEvents.Maximize, e);
+    this._onMaximize = () => {
+      value && value();
+      this.emitter.emit(ApplicationEvents.Maximize);
     };
   }
   get onMaximize() {
     return this._onMaximize;
   }
   set onMinimize(value) {
-    this._onMinimize = (e) => {
-      value && value(e);
-      this.emitter.emit(ApplicationEvents.Minimize, e);
+    this._onMinimize = () => {
+      value && value();
+      this.emitter.emit(ApplicationEvents.Minimize);
     };
   }
   get onMinimize() {
@@ -302,26 +329,10 @@ class SFApplication extends EventEmitter<ApplicationEvents> {
     };
   }
   get android() {
-    const self = this;
-    return {
-      checkPermission() {},
-      requestPermissions() {},
-      shouldShowRequestPermissionRationale() {},
-      onRequestPermissionsResult() {},
-      Permissions: {},
-      navigationBar: {},
-      setAppTheme(e) {
-        // TODO: EventEmitter
-        self.emitter.emit(ApplicationEvents.UnhandledError, e);
-      }
-    };
+    return {};
   }
   get Android() {
-    return {
-      KeyboardMode: {},
-      NavigationBar: { Style: {} },
-      Permissions: {}
-    };
+    return {};
   }
 }
 //EventEmitterCreator(SFApplication, EventFunctions);
@@ -355,21 +366,6 @@ enum EmulatorResetState {
   clear
 }
 
-Application.emulator = {};
-Application.emulator.globalObjectWillReset = function (state: EmulatorResetState) {
-  cancelAllBackgroundJobs();
-  switch (state) {
-    case EmulatorResetState.scan:
-      break;
-    case EmulatorResetState.update:
-      break;
-    case EmulatorResetState.clear:
-      break;
-    default:
-      break;
-  }
-};
-
 function cancelAllBackgroundJobs() {
   Timer.clearAllTimer();
 
@@ -380,14 +376,11 @@ function cancelAllBackgroundJobs() {
   Accelerometer.stop();
 
   //TODO: notifierInstance not exists
-  if (Network.notifierInstance) {
-    Network.notifierInstance.stopNotifier();
-    Network.notifierInstance.removeObserver();
+  if (Network) {
+    Network.cancelAll();
   }
-
-  // Http.__cancelAll();
 }
 
-const ApplicationIOS = new SFApplication();
+const Application = new ApplicationIOS();
 
-export default ApplicationIOS;
+export default Application;
