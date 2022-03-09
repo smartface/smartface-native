@@ -83,205 +83,207 @@ export enum RowAnimation {
   AUTOMATIC
 }
 
-type IListViewIOS = ViewIOSProps & Partial<{
-  /**
-   * Animates multiple insert, delete and refresh operations as a group.
-   * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations.
-   * Use the block passed in the updates parameter to specify all of the operations you want to perform.
-   * Deletes are processed before inserts in batch operations.
-   * This means the indexes for the deletions are processed relative to the indexes of the table view’s state before the batch operation, and the indexes for the insertions are processed relative to the indexes of the state after all the deletions in the batch operation.
-   *
-   * @param {Function} updates
-   * @param {Function} completion A completion handler block to execute when all of the operations are finished.
-   * @param {Object} completion.e
-   * @param {Boolean} completion.e.finished
-   * @method performBatchUpdates
-   * @ios
-   * @since 4.1.4
-   */
-  performBatchUpdates(updates: () => void, completion: { e: { finished: boolean } }): void;
-  /**
-   * Gets/sets leftToRightSwipeEnabled
-   *
-   * @property {Boolean} [leftToRightSwipeEnabled = false]
-   * @ios
-   * @since 0.1
-   */
-  leftToRightSwipeEnabled: boolean;
-  /**
-   * Gets/sets rightToLeftSwipeEnabled
-   *
-   * @property {Boolean} [rightToLeftSwipeEnabled = false]
-   * @ios
-   * @since 0.1
-   */
-  rightToLeftSwipeEnabled: boolean;
-  /**
-   * This event is called when the list view is about to start scrolling the content.
-   *
-   * @deprecated
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @event onScrollBeginDragging
-   * @ios
-   * @since 3.2.1
-   */
-  onScrollBeginDragging: (contentOffset: __SF_NSRect) => void;
-  /**
-   * This event is called when the list view is starting to decelerate the scrolling movement.
-   *
-   * @deprecated
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @event onScrollBeginDecelerating
-   * @ios
-   * @since 3.2.1
-   */
-  onScrollBeginDecelerating: (contentOffset: __SF_NSRect) => void;
-  /**
-   * This event is called when the list view has ended decelerating the scrolling movement.
-   *
-   * @deprecated
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @event onScrollEndDecelerating
-   * @ios
-   * @since 3.2.1
-   */
-  onScrollEndDecelerating: (contentOffset: __SF_NSRect) => void;
-  /**
-   * This event is called when dragging ended in the list view.
-   *
-   * @deprecated
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @param {Boolean} decelerate
-   * @event onScrollEndDraggingWillDecelerate
-   * @ios
-   * @since 3.2.1
-   */
-  onScrollEndDraggingWillDecelerate: (contentOffset: __SF_NSRect, decelerate: boolean) => void;
-  /**
-   * This event is called when the user finishes scrolling the content.
-   *
-   * @deprecated
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @param {Object} velocity
-   * @param {Number} velocity.x
-   * @param {Number} velocity.y
-   * @param {Object} targetContentOffset
-   * @param {Number} targetContentOffset.x
-   * @param {Number} targetContentOffset.y
-   * @event onScrollEndDraggingWithVelocityTargetContentOffset
-   * @ios
-   * @since 3.2.1
-   */
-  onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: Point2D, targetContentOffset: __SF_NSRect) => void;
-}>;
+type IListViewIOS = ViewIOSProps &
+  Partial<{
+    /**
+     * Animates multiple insert, delete and refresh operations as a group.
+     * Use this method in cases where you want to make multiple changes to the table view in one single animated operation, as opposed to several separate animations.
+     * Use the block passed in the updates parameter to specify all of the operations you want to perform.
+     * Deletes are processed before inserts in batch operations.
+     * This means the indexes for the deletions are processed relative to the indexes of the table view’s state before the batch operation, and the indexes for the insertions are processed relative to the indexes of the state after all the deletions in the batch operation.
+     *
+     * @param {Function} updates
+     * @param {Function} completion A completion handler block to execute when all of the operations are finished.
+     * @param {Object} completion.e
+     * @param {Boolean} completion.e.finished
+     * @method performBatchUpdates
+     * @ios
+     * @since 4.1.4
+     */
+    performBatchUpdates(updates: () => void, completion: { e: { finished: boolean } }): void;
+    /**
+     * Gets/sets leftToRightSwipeEnabled
+     *
+     * @property {Boolean} [leftToRightSwipeEnabled = false]
+     * @ios
+     * @since 0.1
+     */
+    leftToRightSwipeEnabled: boolean;
+    /**
+     * Gets/sets rightToLeftSwipeEnabled
+     *
+     * @property {Boolean} [rightToLeftSwipeEnabled = false]
+     * @ios
+     * @since 0.1
+     */
+    rightToLeftSwipeEnabled: boolean;
+    /**
+     * This event is called when the list view is about to start scrolling the content.
+     *
+     * @deprecated
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @event onScrollBeginDragging
+     * @ios
+     * @since 3.2.1
+     */
+    onScrollBeginDragging: (contentOffset: __SF_NSRect) => void;
+    /**
+     * This event is called when the list view is starting to decelerate the scrolling movement.
+     *
+     * @deprecated
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @event onScrollBeginDecelerating
+     * @ios
+     * @since 3.2.1
+     */
+    onScrollBeginDecelerating: (contentOffset: __SF_NSRect) => void;
+    /**
+     * This event is called when the list view has ended decelerating the scrolling movement.
+     *
+     * @deprecated
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @event onScrollEndDecelerating
+     * @ios
+     * @since 3.2.1
+     */
+    onScrollEndDecelerating: (contentOffset: __SF_NSRect) => void;
+    /**
+     * This event is called when dragging ended in the list view.
+     *
+     * @deprecated
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @param {Boolean} decelerate
+     * @event onScrollEndDraggingWillDecelerate
+     * @ios
+     * @since 3.2.1
+     */
+    onScrollEndDraggingWillDecelerate: (contentOffset: __SF_NSRect, decelerate: boolean) => void;
+    /**
+     * This event is called when the user finishes scrolling the content.
+     *
+     * @deprecated
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @param {Object} velocity
+     * @param {Number} velocity.x
+     * @param {Number} velocity.y
+     * @param {Object} targetContentOffset
+     * @param {Number} targetContentOffset.x
+     * @param {Number} targetContentOffset.y
+     * @event onScrollEndDraggingWithVelocityTargetContentOffset
+     * @ios
+     * @since 3.2.1
+     */
+    onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: Point2D, targetContentOffset: __SF_NSRect) => void;
+  }>;
 
-type IListViewAndroid = ViewAndroidProps & Partial<{
-  /**
-   * Starts dragging the provided ListViewItem. By default, ListView starts a drag when a ListViewItem is long pressed.
-   * You can disable that behavior by setting longPressDragEnabled.
-   *
-   * @method startDrag
-   * @param {UI.ListViewItem} listViewItem
-   * @android
-   * @since 4.1.3
-   */
-  startDrag(item: ListViewItem): void;
-  /**
-   * This event is called when a scroll occurs.
-   *
-   * @deprecated
-   * @param {Object} params
-   * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
-   * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
-   * @return {Boolean} Return true if the event is consumed.
-   * @event onGesture
-   * @android
-   * @since 4.0.0
-   */
-  onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
-  /**
-   * Called when the ListView should save its layout state. This is a good time to save your scroll position,
-   * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
-   *
-   * @method saveInstanceState
-   * @android
-   * @return {Object}
-   * @since 4.0.2
-   */
-  saveInstanceState(): any;
-  /**
-   * Called when the ListView should restore its layout state. This is a good time to restore your scroll position,
-   * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
-   *
-   * @param {Object} state
-   * @method restoreInstanceState
-   * @android
-   * @since 4.0.2
-   */
-  restoreInstanceState(state: any): void;
-  /**
-   * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
-   * For better performance, don't set any callback if does not
-   * necessary
-   *
-   * @deprecated
-   * @event onScrollStateChanged
-   * @param {UI.Android.ScrollState} newState
-   * @param {Object} contentOffset
-   * @param {Number} contentOffset.x
-   * @param {Number} contentOffset.y
-   * @android
-   * @since 3.2.1
-   */
-  onScrollStateChanged: (newState?: ScrollState, contentOffset?: Point2D) => void;
-  /**
-   * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing.
-   *
-   * @event onAttachedToWindow
-   * @deprecated
-   * @android
-   * @since 4.0.2
-   */
-  onAttachedToWindow: () => void;
-  /**
-   * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
-   *
-   * @event onDetachedFromWindow
-   * @deprecated
-   * @android
-   * @since 4.0.2
-   */
-  onDetachedFromWindow: () => void;
-  /**
-   * This event is called when user long selects a row at specific index.
-   *
-   * @deprecated
-   * @param {UI.ListViewItem} listViewItem
-   * @param {Number} index
-   * @event onRowLongSelected
-   * @android
-   * @since 2.0.4
-   */
-  onRowLongSelected: (item: ListViewItem, index: number) => void;
-  /**
-   * Gets/sets over-scroll mode for this view.
-   *
-   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-   * @android
-   * @since 3.0.2
-   */
-  overScrollMode: OverScrollMode;
-}>;
+type IListViewAndroid = ViewAndroidProps &
+  Partial<{
+    /**
+     * Starts dragging the provided ListViewItem. By default, ListView starts a drag when a ListViewItem is long pressed.
+     * You can disable that behavior by setting longPressDragEnabled.
+     *
+     * @method startDrag
+     * @param {UI.ListViewItem} listViewItem
+     * @android
+     * @since 4.1.3
+     */
+    startDrag(item: ListViewItem): void;
+    /**
+     * This event is called when a scroll occurs.
+     *
+     * @deprecated
+     * @param {Object} params
+     * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+     * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+     * @return {Boolean} Return true if the event is consumed.
+     * @event onGesture
+     * @android
+     * @since 4.0.0
+     */
+    onGesture: (params: { distanceX: number; distanceY: number }) => boolean;
+    /**
+     * Called when the ListView should save its layout state. This is a good time to save your scroll position,
+     * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+     *
+     * @method saveInstanceState
+     * @android
+     * @return {Object}
+     * @since 4.0.2
+     */
+    saveInstanceState(): any;
+    /**
+     * Called when the ListView should restore its layout state. This is a good time to restore your scroll position,
+     * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+     *
+     * @param {Object} state
+     * @method restoreInstanceState
+     * @android
+     * @since 4.0.2
+     */
+    restoreInstanceState(state: any): void;
+    /**
+     * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
+     * For better performance, don't set any callback if does not
+     * necessary
+     *
+     * @deprecated
+     * @event onScrollStateChanged
+     * @param {UI.Android.ScrollState} newState
+     * @param {Object} contentOffset
+     * @param {Number} contentOffset.x
+     * @param {Number} contentOffset.y
+     * @android
+     * @since 3.2.1
+     */
+    onScrollStateChanged: (newState?: ScrollState, contentOffset?: Point2D) => void;
+    /**
+     * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing.
+     *
+     * @event onAttachedToWindow
+     * @deprecated
+     * @android
+     * @since 4.0.2
+     */
+    onAttachedToWindow: () => void;
+    /**
+     * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+     *
+     * @event onDetachedFromWindow
+     * @deprecated
+     * @android
+     * @since 4.0.2
+     */
+    onDetachedFromWindow: () => void;
+    /**
+     * This event is called when user long selects a row at specific index.
+     *
+     * @deprecated
+     * @param {UI.ListViewItem} listViewItem
+     * @param {Number} index
+     * @event onRowLongSelected
+     * @android
+     * @since 2.0.4
+     */
+    onRowLongSelected: (item: ListViewItem, index: number) => void;
+    /**
+     * Gets/sets over-scroll mode for this view.
+     *
+     * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+     * @android
+     * @since 3.0.2
+     */
+    overScrollMode: OverScrollMode;
+  }>;
 
 /**
  * @class UI.ListView
@@ -840,7 +842,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   onRowCanSwipe: (index: number) => [SwipeDirection];
 }
 
-export declare class AbstractListView<TEvent extends string = ListViewEvents, TIOS extends Record<string, any> = IListViewIOS, TAND extends Record<string, any> = IListViewAndroid>
+export declare class AbstractListView<TEvent extends string = ListViewEvents, TMobile extends MobileOSProps<IListViewIOS, IListViewAndroid> = MobileOSProps<IListViewIOS, IListViewAndroid>>
   extends AbstractView<TEvent | ListViewEvents, any, IListView>
   implements IListView<TEvent | ListViewEvents>
 {
