@@ -3,34 +3,25 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
 
-export default class SoundIOS  extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
+export default class SoundIOS extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
   public static Events = SoundEvents;
-  private addCallbackFunction: () => void;
   private avPlayerItem: __SF_AVPlayerItem;
   private _isLooping = false;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
   constructor(params?: Partial<SoundIOS>) {
     super(params);
-    const self = this;
-    this.addCallbackFunction = function () {
-      self.nativeObject.onItemReady = function () {
-        if (typeof self.onReady === 'function') {
-          self.onReady?.();
-          self.emit(SoundEvents.Ready);
-        }
-      };
-
-      this.nativeObject.AVPlayerItemDidPlayToEndTime = function () {
-        if (typeof self.onFinish === 'function') {
-          self.onFinish?.();
-          self.emit(SoundEvents.Finish);
-        }
-        if (self.isLooping === true) {
-          self.seekTo(0);
-          self.play();
-        }
-      };
+    this.nativeObject.onItemReady = () => {
+      this.onReady?.();
+      this.emit('ready');
+    };
+    this.nativeObject.AVPlayerItemDidPlayToEndTime = () => {
+      this.onFinish?.();
+      this.emit(SoundEvents.Finish);
+      if (this.isLooping) {
+        this.seekTo(0);
+        this.play();
+      }
     };
   }
   get onReady() {
@@ -78,7 +69,6 @@ export default class SoundIOS  extends NativeEventEmitterComponent<SoundEvents> 
       this.nativeObject.replaceCurrentItem(this.avPlayerItem);
     } else {
       this.nativeObject = new __SF_AVPlayer(this.avPlayerItem);
-      this.addCallbackFunction();
     }
     this.nativeObject.addObserver();
   }
@@ -91,7 +81,6 @@ export default class SoundIOS  extends NativeEventEmitterComponent<SoundEvents> 
       this.nativeObject.replaceCurrentItem(this.avPlayerItem);
     } else {
       this.nativeObject = new __SF_AVPlayer(this.avPlayerItem);
-      this.addCallbackFunction();
     }
     this.nativeObject.addObserver();
   }
@@ -105,10 +94,10 @@ export default class SoundIOS  extends NativeEventEmitterComponent<SoundEvents> 
     this.nativeObject.pause();
     this.seekTo(0);
   }
-  seekTo(milliseconds): void {
+  seekTo(milliseconds: number): void {
     this.nativeObject.seekToMillisecond(milliseconds);
   }
-  setVolume(value): void {
+  setVolume(value: number): void {
     this.nativeObject.volume = value;
   }
 }

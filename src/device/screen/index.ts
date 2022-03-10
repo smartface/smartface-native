@@ -1,4 +1,5 @@
-import DatePicker from '../../ui/datepicker';
+import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Image from '../../ui/image';
 
 /**
@@ -56,6 +57,18 @@ export enum OrientationType {
   FACEDOWN = 'facedown'
 }
 
+export interface ISCreenIOSProps {
+  /**
+   * Gets if device screen has support for force touch feature.
+   *
+   * @ios
+   * @property {Boolean} forceTouchAvaliable
+   * @readonly
+   * @since 0.1
+   */
+  readonly forceTouchAvaliable?: boolean;
+}
+
 /**
  * @class Device.Screen
  * @since 0.1
@@ -74,7 +87,7 @@ export enum OrientationType {
  *
  *
  */
-export abstract class AbstractScreen {
+export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = MobileOSProps<ISCreenIOSProps, {}>> {
   /**
    * Gets current device screen orientation.
    *
@@ -84,7 +97,7 @@ export abstract class AbstractScreen {
    * @readonly
    * @since 0.1
    */
-  abstract readonly orientation: OrientationType;
+  readonly orientation: OrientationType;
   /**
    * Gets height of device screen.
    *
@@ -94,7 +107,7 @@ export abstract class AbstractScreen {
    * @readonly
    * @since 0.1
    */
-  abstract readonly height: number;
+  readonly height: number;
   /**
    * Gets width of device screen.
    *
@@ -104,7 +117,7 @@ export abstract class AbstractScreen {
    * @readonly
    * @since 0.1
    */
-  abstract readonly width: number;
+  readonly width: number;
   /**
    * Gets if device screen has feature support for touching.
    *
@@ -114,7 +127,7 @@ export abstract class AbstractScreen {
    * @readonly
    * @since 0.1
    */
-  abstract readonly touchSupported: number;
+  readonly touchSupported: number;
   /**
    * Gets dpi of device screen.
    *
@@ -124,7 +137,7 @@ export abstract class AbstractScreen {
    * @readonly
    * @since 0.1
    */
-  abstract readonly dpi: number;
+  readonly dpi: number;
   /**
    * Captures screen and returns result image.
    *
@@ -134,20 +147,9 @@ export abstract class AbstractScreen {
    * @return {UI.Image} captured image.
    * @since 0.1
    */
-  abstract capture(): Image;
-  abstract readonly ios: Partial<{
-    /**
-     * Gets if device screen has support for force touch feature.
-     *
-     * @ios
-     * @property {Boolean} forceTouchAvaliable
-     * @readonly
-       * @since 0.1
-     */
-    readonly forceTouchAvaliable?: boolean;
-  }>;
+  capture(): Image;
+  ios?: TProps['ios'];
 }
-
-const Screen: AbstractScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
-
+const Screen: ConstructorOf<IScreen, Partial<IScreen>> = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
+type Screen = IScreen;
 export default Screen;

@@ -1,4 +1,4 @@
-import { OrientationType, AbstractScreen } from '.';
+import { OrientationType, IScreen } from '.';
 import Image from '../../ui/image';
 
 const orientationArray = [
@@ -11,7 +11,7 @@ const orientationArray = [
   OrientationType.FACEDOWN
 ] as const;
 
-class ScreenIOS implements AbstractScreen {
+class ScreenIOS implements IScreen {
   OrientationType = OrientationType;
   ios = { forceTouchAvaliable: __SF_UIDevice.forceTouchAvaliable() };
   constructor() {}

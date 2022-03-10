@@ -1,5 +1,57 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { LocationEvents } from './location-events';
+
+export interface ILocationAndroidProps {
+  /**
+   * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
+   * Shows an dialog to open the location service when the location service is off.
+   *
+   * @method checkSettings
+   * @param {Object} params
+   * @param {Function} params.onSuccess
+   * @param {Function} params.onFailure
+   * @param {Object} params.onFailure.params
+   * @param {Device.Location.Android.SettingsStatusCodes} params.onFailure.params.statusCode
+   * @android
+   * @static
+   * @since 4.0.2
+   */
+  checkSettings(handlers: { onSuccess: () => void; onFailure: (e: { statusCode: LocationBase.Android.SettingsStatusCodes }) => void }): void;
+}
+
+export interface ILocationIOSProps {
+  /**
+   * Callback to capture authorization status changes.
+   * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
+   *
+   * @event onChangeAuthorizationStatus
+   * @param {Boolean} status
+   * @ios
+   * @since 2.0.11
+   */
+  onChangeAuthorizationStatus?(status: boolean): void;
+  /**
+   * Gets authorization status.
+   *
+   * @method getAuthorizationStatus
+   * @return {Device.Location.iOS.AuthorizationStatus} status
+   * @ios
+   * @static
+   * @since 2.0.11
+   */
+  getAuthorizationStatus(): LocationBase.iOS.AuthorizationStatus;
+  /**
+   * Returns a Boolean value indicating whether location services are enabled on the device.
+   *
+   * @method locationServicesEnabled
+   * @return {Boolean} status
+   * @ios
+   * @static
+   * @since 2.0.11
+   */
+  locationServicesEnabled(): boolean;
+}
 
 /**
  * @class Device.Location
@@ -22,24 +74,8 @@ import { LocationEvents } from './location-events';
  *     });
  *
  */
-export interface ILocation extends NativeEventEmitterComponent<LocationEvents> {
-  android: Partial<{
-    /**
-     * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
-     * Shows an dialog to open the location service when the location service is off.
-     *
-     * @method checkSettings
-     * @param {Object} params
-     * @param {Function} params.onSuccess
-     * @param {Function} params.onFailure
-     * @param {Object} params.onFailure.params
-     * @param {Device.Location.Android.SettingsStatusCodes} params.onFailure.params.statusCode
-     * @android
-     * @static
-     * @since 4.0.2
-     */
-    checkSettings(handlers: { onSuccess: () => void; onFailure: (e: { statusCode: LocationBase.Android.SettingsStatusCodes }) => void }): void;
-  }>;
+export interface ILocation<TEvent extends string = LocationEvents, TMobile extends MobileOSProps<ILocationIOSProps, ILocationAndroidProps> = MobileOSProps<ILocationIOSProps, ILocationAndroidProps>>
+  extends NativeEventEmitterComponent<TEvent | LocationEvents, TMobile> {
   /**
    * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;
    * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
@@ -83,7 +119,7 @@ export interface ILocation extends NativeEventEmitterComponent<LocationEvents> {
    * });
    * ````
    */
-  onLocationChanged(e: { latitude: number; longitude: number }): void;
+  onLocationChanged: (e: { latitude: number; longitude: number }) => void;
   /**
    * Gets last known location. The onFailure function will be triggered if no location data has ever been retrieved or unexpected error occurred.
    *
@@ -98,39 +134,6 @@ export interface ILocation extends NativeEventEmitterComponent<LocationEvents> {
    * @since 4.0.2
    */
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void): void;
-  ios: Partial<{
-    /**
-     * Callback to capture authorization status changes.
-     * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
-     *
-     * @event onChangeAuthorizationStatus
-     * @param {Boolean} status
-     * @ios
-     * @since 2.0.11
-     */
-    onChangeAuthorizationStatus?(status: boolean): void;
-    /**
-     * Gets authorization status.
-     *
-     * @method getAuthorizationStatus
-     * @return {Device.Location.iOS.AuthorizationStatus} status
-     * @ios
-     * @static
-     * @since 2.0.11
-     */
-    getAuthorizationStatus(): LocationBase.iOS.AuthorizationStatus;
-    /**
-     * Returns a Boolean value indicating whether location services are enabled on the device.
-     *
-     * @method locationServicesEnabled
-     * @return {Boolean} status
-     * @ios
-     * @static
-     * @since 2.0.11
-     */
-    locationServicesEnabled(): boolean;
-  }>;
-  Events: typeof LocationEvents;
   __onActivityResult: (resultCode: number) => void;
 }
 

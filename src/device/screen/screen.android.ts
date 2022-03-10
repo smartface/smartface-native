@@ -1,4 +1,4 @@
-import { OrientationType, AbstractScreen } from '.';
+import { IScreen, OrientationType } from '.';
 import Image from '../../ui/image';
 import { AndroidConfig, UnitConverter } from '../../util';
 
@@ -12,9 +12,8 @@ const windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANA
 const display = windowManager.getDefaultDisplay();
 const metrics = new NativeDisplayMetrics();
 
-class ScreenAndroid implements AbstractScreen {
+class ScreenAndroid implements IScreen {
   OrientationType = OrientationType;
-  ios = {};
   constructor() {}
   get dpi() {
     display.getRealMetrics(metrics);

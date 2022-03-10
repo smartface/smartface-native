@@ -2,9 +2,9 @@ import File from '../../io/file';
 import Page from '../../ui/page';
 import { RequestCodes } from '../../util';
 import { DocumentPickerBase, Types } from '.';
+const SFDocumentPicker = requireClass('io.smartface.android.sfcore.device.documentpicker.SFDocumentPicker');
 
 class DocumentPickerAndroid implements DocumentPickerBase {
-  static SFDocumentPicker = requireClass('io.smartface.android.sfcore.device.documentpicker.SFDocumentPicker');
   static readonly Types = Types;
   static _onSuccess: (file: File) => void;
   static _onCancel: () => void;
@@ -26,7 +26,7 @@ class DocumentPickerAndroid implements DocumentPickerBase {
     DocumentPickerAndroid._onFailure = onFailure;
 
     if (page) {
-      DocumentPickerAndroid.SFDocumentPicker.pick(page.nativeObject, array(type, 'java.lang.String'), RequestCodes.DocumentPicker.PICK_DOCUMENT_CODE);
+      SFDocumentPicker.pick(page.nativeObject, array(type, 'java.lang.String'), RequestCodes.DocumentPicker.PICK_DOCUMENT_CODE);
     } else throw Error('page parameter cannot be null');
   }
   static onActivityResult(requestCode, resultCode, data) {
@@ -36,13 +36,13 @@ class DocumentPickerAndroid implements DocumentPickerBase {
     }
     try {
       const uri = data.getData();
-      const filePath = DocumentPickerAndroid.SFDocumentPicker.getFilePathFromUri(uri);
+      const filePath = SFDocumentPicker.getFilePathFromUri(uri);
       const pickedFile = new File({
         path: filePath
       });
-      DocumentPickerAndroid._onSuccess && DocumentPickerAndroid._onSuccess(pickedFile);
+      DocumentPickerAndroid._onSuccess?.(pickedFile);
     } catch (e) {
-      DocumentPickerAndroid._onFailure && DocumentPickerAndroid._onFailure(e);
+      DocumentPickerAndroid._onFailure?.(e);
     }
   }
 }

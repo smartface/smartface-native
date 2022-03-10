@@ -10,6 +10,8 @@ const NativeLocale = requireClass('java.util.Locale');
 //NativeIntent.ACTION_BATTERY_CHANGED
 const ACTION_BATTERY_CHANGED = 'android.intent.action.BATTERY_CHANGED';
 const SFBiometricPrompt = requireClass('io.smartface.android.sfcore.device.system.SFBiometricPrompt');
+const NativeFingerprintAuthenticationDialogFragment = requireClass('com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment');
+const NativeFingerPrintListener = requireClass('com.android.fingerprintdialog.FingerPrintListener');
 
 // Context.CLIPBOARD_SERVICE
 const CLIPBOARD_SERVICE = 'clipboard';
@@ -170,9 +172,6 @@ class SystemAndroid implements AbstractSystem {
     onError: () => void;
   }) {
     if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable) {
-      const NativeFingerprintAuthenticationDialogFragment = requireClass('com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment');
-      const NativeFingerPrintListener = requireClass('com.android.fingerprintdialog.FingerPrintListener');
-
       const fragmentManager = AndroidConfig.activity.getFragmentManager();
       const fragment = new NativeFingerprintAuthenticationDialogFragment();
 

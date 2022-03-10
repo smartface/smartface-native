@@ -195,4 +195,5 @@ export declare class NetworkBase extends NativeComponent {
 }
 
 const Network: NetworkBase = require(`./network.${Device.deviceOS.toLowerCase()}`).default;
+type Network = NetworkBase;
 export default Network;
