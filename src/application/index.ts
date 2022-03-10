@@ -1,4 +1,4 @@
-import { ApplicationBase } from "./application";
+import { ApplicationBase } from './application';
 
 const Application: ApplicationBase = require(`./application.${Device.deviceOS.toLowerCase()}`).default;
 

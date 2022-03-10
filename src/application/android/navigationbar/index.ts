@@ -1,6 +1,5 @@
-import { NavigationBarBase } from "./navigationbar";
+import { NavigationBarBase } from './navigationbar';
 
-//TODO: Only android exists what to do?
-const NavigationBar: NavigationBarBase = require('./navigationbar').default;
+const NavigationBar: NavigationBarBase = require(`./navigationbar.${Device.deviceOS.toLowerCase()}`).default;
 type NavigationBar = NavigationBarBase;
 export default NavigationBar;

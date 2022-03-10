@@ -9,15 +9,14 @@ import { ApplicationBase } from './application';
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
 import { IBottomTabBar } from '../ui/bottomtabbar';
+import { EventEmitter } from '../core/eventemitter';
 
 //Application Direction Manager (RTL Support)
-(function () {
-  let userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
-  let viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
-  if (viewAppearanceSemanticContentAttribute !== undefined) {
-    __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
-  }
-})();
+const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
+const viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
+if (viewAppearanceSemanticContentAttribute !== undefined) {
+  __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
+}
 
 let _rootPage;
 let _sliderDrawer;
@@ -38,22 +37,6 @@ function listenAppShortcut(callback) {
     return returnValue;
   };
 }
-
-const EventFunctions = {
-  // [Events.ApplicationCallReceived]: () => {
-  //     Application.onApplicationCallReceived = (e) => {
-  //         this.emitter.emit(Events.ApplicationCallReceived, e);
-  //     };
-  // },
-  // [Events.AppShortcutReceived]: () => {
-  //     listenAppShortcut((e) => {
-  //         this.emitter.emit(Events.AppShortcutReceived, e);
-  //     });
-  // },
-  // [Events.BackButtonPressed]: () => {
-  //     // Android only
-  // },
-};
 
 class ApplicationIOS extends EventEmitter<ApplicationEvents> implements ApplicationBase {
   private _onUnhandledError: any;
@@ -118,7 +101,17 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
     };
   }
   setAppTheme: (theme: string) => void;
-  Events: { readonly Exit: 'exit'; readonly Maximize: 'maximize'; readonly Minimize: 'minimize'; readonly ReceivedNotification: 'receivedNotification'; readonly UnhandledError: 'unhandledError'; readonly ApplicationCallReceived: 'applicationCallReceived'; readonly AppShortcutReceived: 'appShortcutReceived'; readonly BackButtonPressed: 'backButtonPressed'; readonly RequestPermissionResult: 'requestPermissionResult'; };
+  Events: {
+    readonly Exit: 'exit';
+    readonly Maximize: 'maximize';
+    readonly Minimize: 'minimize';
+    readonly ReceivedNotification: 'receivedNotification';
+    readonly UnhandledError: 'unhandledError';
+    readonly ApplicationCallReceived: 'applicationCallReceived';
+    readonly AppShortcutReceived: 'appShortcutReceived';
+    readonly BackButtonPressed: 'backButtonPressed';
+    readonly RequestPermissionResult: 'requestPermissionResult';
+  };
   currentPage: Page;
   registOnItemSelectedListener(): void {
     throw new Error('Method not implemented.');
@@ -129,7 +122,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   private _rootPage;
   private _onUserActivityWithBrowsingWeb;
   // TODO: typescript error
-  public statusBar:Statusbar = Statusbar;
+  public statusBar: Statusbar = Statusbar;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
@@ -262,7 +255,6 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onUserActivityWithBrowsingWeb(value) {
     this._onUserActivityWithBrowsingWeb = value;
     // TODO: Application Global
-   
   }
   get onApplicationCallReceived() {
     return this._onApplicationCallReceived;
