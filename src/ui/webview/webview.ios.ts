@@ -1,6 +1,6 @@
-import File from 'io/file';
-import ViewIOS from 'ui/view/view.ios';
-import Invocation from 'util/iOS/invocation';
+import File from '../../io/file';
+import ViewIOS from '../../ui/view/view.ios';
+import Invocation from '../../util/iOS/invocation';
 import IWebView, { iOSProps } from '.';
 import { WebViewEvents } from './webview-events';
 

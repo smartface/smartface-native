@@ -3,15 +3,15 @@
     "noEmit": false,
     "allowJs": false,
     "baseUrl": ".",
-    "rootDir": ".",
+    "rootDir": "src",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outFile": "./dist/types",
+    "outFile": "dist",
     "target": "ES5",
     "esModuleInterop": true,
     "lib": ["ES2015"]
   },
-  "include": ["./application", "./core", "./typings", "./device", "./global", "./ui", "./io", "./net", "./util", "./primitive", "./test.ts"],
+  "include": ["./src/**/*"],
   "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"],
-  "exclude": ["dist", "node_modules", "**/*.test.js", "**/analysis.js"]
+  "exclude": ["dist", "node_modules", "tests/**/*", "**/analysis.js"]
 }

@@ -1,5 +1,5 @@
 import Screen from '../../device/screen';
-import Invocation from '../../util/iOS/invocation';
+import Invocation from './invocation';
 
 interface KeyboardInfoParams {
   userInfo?: {
