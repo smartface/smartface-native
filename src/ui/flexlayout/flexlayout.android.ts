@@ -29,7 +29,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
-        return !!this.android.onInterceptTouchEvent?.();
+        return !!this.android?.onInterceptTouchEvent?.();
       }
     });
 
@@ -46,7 +46,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
       }
     });
   }
-  content?: FlexLayout;
+  content: FlexLayout;
 
   get direction() {
     return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), Flex.Direction);

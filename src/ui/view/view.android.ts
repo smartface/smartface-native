@@ -15,8 +15,9 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
 import { EventEmitterWrapper } from '../../core/eventemitter';
-import View, { IView, IViewProps, ViewAndroidProps, ViewBase } from '.';
+import View, { IView, IViewProps, ViewBase } from '.';
 import OverScrollMode from '../shared/android/overscrollmode';
+import ScrollView, { ScrollViewAlign } from '../scrollview';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -63,13 +64,13 @@ const YogaEdge = {
   ALL: NativeYogaEdge.ALL
 };
 
-function getRippleMask(borderRadius) {
+function getRippleMask(borderRadius: number) {
   const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
   const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 
-  const outerRadii = [];
+  const outerRadii: number[] = [];
   outerRadii.length = 8;
-  outerRadii.fill(borderRadius);
+  outerRadii.fill(borderRadius, 0, 8);
 
   const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
   const shapeDrawable = new NativeShapeDrawable(roundRectShape);
@@ -101,7 +102,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected uniqueId: string;
   protected _maskedBorders = [];
   protected _masksToBounds: boolean = true;
-  private _parent?: View & { align?: any };
+  private _parent?: View;
   private _rotation: number = 0;
   private _rotationX: number = 0;
   private _rotationY: number = 0;
@@ -615,8 +616,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    const ScrollView = require('../scrollview');
-    if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.HORIZONTAL) {
+    if (this._parent instanceof ScrollView && this._parent.align === ScrollViewAlign.HORIZONTAL) {
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
@@ -628,8 +628,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     this.yogaNode.setWidth(DpToPixel(width));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    const ScrollView = require('../scrollview');
-    if (this._parent instanceof ScrollView && this._parent.align === ScrollView.Align.VERTICAL) {
+    if (this._parent instanceof ScrollView && this._parent.align === ScrollViewAlign.VERTICAL) {
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.width = -2);
     }

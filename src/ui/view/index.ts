@@ -569,8 +569,8 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @since 0.1
    */
   alignSelf: Flex.AlignSelf;
-  android?: TProps['android'];
-  ios?: TProps['ios'];
+  android: TProps['android'];
+  ios: TProps['ios'];
   /**
    * A Boolean indicating whether sublayers are clipped to the layer’s bounds. Android sublayers still overlaps the border's width and
    * as known issue,if {@link UI.View#maskedBorders maskedBorders} is used then sublayer won't be clipped.
@@ -614,6 +614,9 @@ export interface IView<TEvent extends string = ViewEvents, TNative extends { [ke
   extends Omit<IViewProps<TMobileProps>, 'nativeObject'>,
     IEventEmitter<TEvent | ViewEvents>,
     INativeComponent<TNative> {
+  
+  parent: IView | undefined;
+  readonly uniqueId: string;
   applyLayout(): void;
   /**
    * This method put a view to the top of other views in z-direction.
@@ -678,7 +681,7 @@ export interface IView<TEvent extends string = ViewEvents, TNative extends { [ke
    * @ios
    * @since 0.1
    */
-  getParent(): IView;
+  getParent(): IView | null;
   /**
    * This event is called when a touch screen motion event starts.
    *
@@ -810,8 +813,8 @@ export interface IView<TEvent extends string = ViewEvents, TNative extends { [ke
     width: number;
     height: number;
   };
-  android?: TMobileProps['android'];
-  ios?: TMobileProps['ios'];
+  android: TMobileProps['android'];
+  ios: TMobileProps['ios'];
 }
 
 /**
@@ -995,12 +998,14 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
+  parent: IView | undefined;
+  get uniqueId(): string;
   applyLayout(): void;
   bringToFront(): void;
   flipHorizontally(): void;
   flipVertically(): void;
   getScreenLocation(): Point2D;
-  getParent(): IView;
+  getParent(): IView | null;
   onTouch: (e?: Point2D) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
   onTouchCancelled: (point: Point2D) => boolean | void;

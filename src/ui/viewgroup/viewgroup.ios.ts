@@ -1,6 +1,6 @@
-import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import IView from 'ui/view';
 import { IViewGroup } from '.';
+import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
+import { IView } from '../view';
 import View from '../view/view.ios';
 import { ViewGroupEvents } from './viewgroup-events';
 
@@ -17,12 +17,11 @@ function getKeyByValue(object, value) {
  * ViewGroup is an abstract class. You can't create instance from it.
  */
 // ViewGroup.prototype = Object.create(View.prototype);
-export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup> extends View<
-  ViewGroupEvents | ExtractEventValues<TEvent>,
-  TNative,
-  TProps
-> implements IViewGroup {
-  private _children = {};
+export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup>
+  extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
+  implements IViewGroup
+{
+  private _children: Record<string, IView> = {};
   onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
   onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   onChildViewAdded: IViewGroup['onViewAdded'];
@@ -34,7 +33,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
-  addChild(view: View): void {
+  addChild(view: IView): void {
     view.parent = this;
     const uniqueId = view.uniqueId;
     this._children[uniqueId] = view;
@@ -61,11 +60,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
 
   getChildList() {
-    const childList = [];
-    for (const i in this._children) {
-      childList.push(this._children[i]);
-    }
-    return childList;
+    return Object.values(this._children);
   }
 
   findChildById(id: string) {
@@ -74,9 +69,11 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
 
   onViewAddedHandler(e: __SF_UIView) {
     const view = this._children[e.subview.uuid];
-    this.onViewAdded?.(view);
-    this.onChildViewAdded?.(view);
-    this.onViewAddedInnerCallback?.(view);
+    if (view) {
+      this.onViewAdded?.(view);
+      this.onChildViewAdded?.(view);
+      this.onViewAddedInnerCallback?.(view);
+    }
   }
 
   onViewRemovedHandler(e: __SF_UIView) {

@@ -1,9 +1,9 @@
-import Flex from '../../core/flex';
 import { FlexLayoutEvents } from './flexlayout-events';
 import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import { IViewGroup } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import Flex from '../../core/flex';
 
 export type FlexLayoutIOSProps = IViewGroup['ios'];
 export type FlexLayoutAndroidProps = IViewGroup['android'] & {
@@ -209,10 +209,10 @@ export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobilePr
    * @ios
    */
   applyLayout(): void;
-  content: IFlexLayout;
+  content: IFlexLayout | undefined;
 }
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
 type FlexLayout = IFlexLayout;
-
+const c = new FlexLayout()
 export default FlexLayout;

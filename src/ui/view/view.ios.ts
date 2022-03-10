@@ -1,7 +1,7 @@
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import View, { IView, IViewProps, ViewBase, ViewIOSProps } from '.';
+import View, { IView, IViewProps, ViewBase } from '.';
 import { Invocation, Exception, YogaEnums } from '../../util';
 import { Size } from '../../primitive/size';
 
@@ -21,7 +21,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   TEvent,
   TNative,
   TProps
-> {
+> implements IView {
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
   protected _nativeObject: any;
@@ -34,43 +34,43 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
   };
 
   onTouchHandler = (e: { point: Point2D }) => {
-    const point = {
-      x: e ? e.point.x : null,
-      y: e ? e.point.y : null
+    const point: Point2D = {
+      x: e.point.x ?? null,
+      y: e.point.y ?? null
     };
     this._onTouch?.(point);
     this.emit(ViewEvents.Touch, point);
   };
-  onTouchEndedHandler = (e: { point: Point2D }) => {
-    const inside = isInside(this.nativeObject.frame, e.point);
+  onTouchEndedHandler = (e?: { point: Point2D }) => {
+    const inside = isInside(this.nativeObject.frame, e?.point);
     const event = {
-      x: e && e.point ? e.point.x : null,
-      y: e && e.point ? e.point.y : null,
+      x: e?.point.x ?? null,
+      y: e?.point.y ?? null,
       isInside: inside
     };
     this._onTouchEnded?.(inside, event);
     this.emit(ViewEvents.TouchEnded, event);
   };
-  onTouchCancelledHandler = (e: { point: Point2D }) => {
+  onTouchCancelledHandler = (e?: { point: Point2D }) => {
     const point = {
-      x: e && e.point ? e.point.x : null,
-      y: e && e.point ? e.point.y : null
+      x: e?.point.x ?? null,
+      y: e?.point.y ?? null
     };
     this._onTouchCancelled?.(point);
     this.emit(ViewEvents.TouchCancelled, point);
   };
-  onTouchMovedHandler = (e: { point: Point2D }) => {
-    const inside = isInside(this.nativeObject.frame, e.point);
+  onTouchMovedHandler = (e?: { point: Point2D }) => {
+    const inside = isInside(this.nativeObject.frame, e?.point);
     const event = {
-      x: e && e.point ? e.point.x : null,
-      y: e && e.point ? e.point.y : null,
+      x: e?.point.x ?? null,
+      y: e?.point.y ?? null,
       isInside: inside
     };
     this._onTouchMoved?.(inside, event);
     this.emit(ViewEvents.TouchMoved, event);
   };
   gradientColor: any;
-  private _parent: View;
+  private _parent?: View;
   static Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -170,7 +170,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     return this._parent;
   }
 
-  set parent(view: View) {
+  set parent(view: View | undefined) {
     this._parent = view;
   }
 
