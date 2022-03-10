@@ -2,14 +2,14 @@ import { OrientationType, AbstractScreen } from '.';
 import Image from '../../ui/image';
 
 const orientationArray = [
-  'unknown',
+  OrientationType.UNKNOWN,
   OrientationType.PORTRAIT,
   OrientationType.UPSIDEDOWN,
   OrientationType.LANDSCAPELEFT,
   OrientationType.LANDSCAPERIGHT,
   OrientationType.FACEUP,
   OrientationType.FACEDOWN
-];
+] as const;
 
 class ScreenIOS implements AbstractScreen {
   OrientationType = OrientationType;

@@ -1,7 +1,7 @@
 import { EventEmitter, EventListenerCallback, IEventEmitter } from './eventemitter';
 import { NativeMobileComponent, WithMobileOSProps } from './native-mobile-component';
 
-export default class NativeEventEmitterComponent<TEvent extends string, TNative extends Record<string, any> =  Record<string, any>, TProps extends WithMobileOSProps = {}>
+export default abstract class NativeEventEmitterComponent<TEvent extends string, TNative extends Record<string, any> =  Record<string, any>, TProps extends WithMobileOSProps = {}>
   extends NativeMobileComponent<TNative, WithMobileOSProps<TProps>>
   implements IEventEmitter<TEvent>
 {

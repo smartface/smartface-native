@@ -6,9 +6,9 @@ import Image from '../../ui/image';
  * @since 0.1
  */
 export enum OrientationType {
+  UNKNOWN = 'unknown',
   /**
    * @property {String} PORTRAIT
-   * @static
    * @ios
    * @android
    * @readonly
@@ -17,7 +17,6 @@ export enum OrientationType {
   PORTRAIT = 'portrait',
   /**
    * @property {String} UPSIDEDOWN
-   * @static
    * @ios
    * @android
    * @readonly
@@ -26,7 +25,6 @@ export enum OrientationType {
   UPSIDEDOWN = 'upsidedown',
   /**
    * @property {String} LANDSCAPELEFT
-   * @static
    * @ios
    * @android
    * @readonly
@@ -35,7 +33,6 @@ export enum OrientationType {
   LANDSCAPELEFT = 'landspaceleft',
   /**
    * @property {String} LANDSCAPERIGHT
-   * @static
    * @ios
    * @android
    * @readonly
@@ -44,7 +41,6 @@ export enum OrientationType {
   LANDSCAPERIGHT = 'landspaceright',
   /**
    * @property {String} FACEUP
-   * @static
    * @ios
    * @readonly
    * @since 0.1
@@ -52,7 +48,6 @@ export enum OrientationType {
   FACEUP = 'faceup',
   /**
    * @property {String} FACEDOWN
-   * @static
    * @ios
    * @readonly
    * @since 0.1
@@ -78,7 +73,7 @@ export enum OrientationType {
  *
  *
  */
-export declare class AbstractScreen {
+export abstract class AbstractScreen {
   /**
    * Gets current device screen orientation.
    *
@@ -86,10 +81,9 @@ export declare class AbstractScreen {
    * @ios
    * @property {Device.Screen.OrientationType} orientation
    * @readonly
-   * @static
    * @since 0.1
    */
-  static readonly orientation: OrientationType;
+  abstract readonly orientation: OrientationType;
   /**
    * Gets height of device screen.
    *
@@ -97,10 +91,9 @@ export declare class AbstractScreen {
    * @ios
    * @property {Number} height
    * @readonly
-   * @static
    * @since 0.1
    */
-  static readonly height: number;
+  abstract readonly height: number;
   /**
    * Gets width of device screen.
    *
@@ -108,10 +101,9 @@ export declare class AbstractScreen {
    * @ios
    * @property {Number} width
    * @readonly
-   * @static
    * @since 0.1
    */
-  static readonly width: number;
+  abstract readonly width: number;
   /**
    * Gets if device screen has feature support for touching.
    *
@@ -119,10 +111,9 @@ export declare class AbstractScreen {
    * @ios
    * @property {Boolean} touchSupported
    * @readonly
-   * @static
    * @since 0.1
    */
-  static readonly touchSupported: number;
+  abstract readonly touchSupported: number;
   /**
    * Gets dpi of device screen.
    *
@@ -130,10 +121,9 @@ export declare class AbstractScreen {
    * @ios
    * @property {Number} dpi
    * @readonly
-   * @static
    * @since 0.1
    */
-  static readonly dpi: number;
+  abstract readonly dpi: number;
   /**
    * Captures screen and returns result image.
    *
@@ -143,16 +133,15 @@ export declare class AbstractScreen {
    * @return {UI.Image} captured image.
    * @since 0.1
    */
-  static capture(): Image;
-  static readonly ios: Partial<{
+  abstract capture(): Image;
+  abstract readonly ios: Partial<{
     /**
      * Gets if device screen has support for force touch feature.
      *
      * @ios
      * @property {Boolean} forceTouchAvaliable
      * @readonly
-     * @static
-     * @since 0.1
+       * @since 0.1
      */
     readonly forceTouchAvaliable?: boolean;
   }>;

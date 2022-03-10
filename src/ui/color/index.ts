@@ -59,7 +59,9 @@ type ConstructorParams = { color: Color | __SF_UIColor };
 export abstract class AbstractColor extends NativeComponent {
   constructor(params?: ConstructorParams) {
     super(params);
-  } //TODO: Writing iOS specific class isn't best practice. Find something better.
+  } 
+  
+  //TODO: Writing iOS specific class isn't best practice. Find something better.
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -282,7 +284,7 @@ export abstract class AbstractColor extends NativeComponent {
 //   direction: GradientDirection;
 // }
 
-const Color: ConstructorOf<AbstractColor, ConstructorParams> = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+const Color: ConstructorOf<AbstractColor, ConstructorParams> & typeof AbstractColor = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
 type Color = AbstractColor;
 
 export default Color;

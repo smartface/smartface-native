@@ -3,6 +3,7 @@ import { DatePickerEvents } from './datepicker-events';
 import Color from '../color';
 import Font from '../font';
 import { ConstructorOf } from '../../core/constructorof';
+import NativeComponent from '../../core/native-component';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -250,7 +251,7 @@ export interface DatePickerAndroidProperties {
   style: Style;
 }
 
-export declare interface IDatePicker {
+export declare interface IDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent> {
   ios: Partial<DatePickerIOSProperties>;
   android: Partial<DatePickerAndroidProperties>;
   /**
@@ -333,7 +334,7 @@ export declare interface IDatePicker {
   onCancelled: () => void;
 }
 
-export abstract class AbstractDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent | DatePickerEvents, any, IDatePicker> implements IDatePicker {
+export abstract class AbstractDatePicker extends NativeEventEmitterComponent<DatePickerEvents, any, IDatePicker> implements IDatePicker {
   constructor(params?: Partial<IDatePicker>){
     super(params);
   };
@@ -352,8 +353,7 @@ export abstract class AbstractDatePicker<TEvent extends string = DatePickerEvent
   };
 }
 
-const DatePicker: ConstructorOf<AbstractDatePicker, Partial<IDatePicker>> = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
-type DatePicker = AbstractDatePicker;
+const DatePicker: ConstructorOf<AbstractDatePicker, Partial<IDatePicker>> & typeof AbstractDatePicker = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
+type DatePicker = IDatePicker;
 export default DatePicker;
-
-const p = new DatePicker();
+const c = new DatePicker();

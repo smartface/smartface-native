@@ -2,7 +2,7 @@ import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, IDatePicke
 import Color from '../color';
 import { DatePickerEvents } from './datepicker-events';
 
-export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends AbstractDatePicker<TEvent> {
+export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends AbstractDatePicker implements IDatePicker<TEvent | DatePickerEvents> {
   protected _nativeObject: __SF_UIDatePicker;
   private _titleColor: IDatePicker['ios']['titleColor'];
   private _titleFont: IDatePicker['ios']['titleFont'];
