@@ -1,11 +1,12 @@
 import { IMapView, MapViewType } from '.';
 import Color from '../color';
-import Font from '../font';
 import { ViewAndroid } from '../view/view.android';
 import { MapViewEvents } from './mapview-events';
 import PinAndroid from './pin/pin.android';
 import Cluster from './cluster';
 import { AndroidConfig } from '../../util';
+import ColorAndroid from '../color/color.android';
+import FontAndroid from '../font/font.android';
 
 // TODO: [AND-3663] Create a java wrapper class for google map
 const NativeClusterItem = requireClass('io.smartface.android.sfcore.ui.mapview.MapClusterItem');
@@ -38,12 +39,12 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   onCreate: () => void;
   protected savedBundles: any;
   protected activityIntent: any;
-  protected _borderColor = Color.WHITE;
+  protected _borderColor: Color = ColorAndroid.WHITE;
   private lazyLoading = true; // lazyLoading is true by default after smartface-native 3.0.2 version.
-  private _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
-  private _fillColor = Color.RED;
-  private _textColor = Color.WHITE;
-  private _nativeCustomMarkerRenderer: Cluster = null;
+  private _font: FontAndroid = FontAndroid.create(FontAndroid.DEFAULT, 20, FontAndroid.BOLD);
+  private _fillColor = ColorAndroid.RED;
+  private _textColor = ColorAndroid.WHITE;
+  private _nativeCustomMarkerRenderer: Cluster | null = null;
   private _nativeGoogleMap: any;
   private _clusterEnabled: IMapView['clusterEnabled'] = false;
   private _pins: PinAndroid[];
@@ -73,7 +74,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this.addAndroidProps(this.getandroidProps());
   }
   getVisiblePins(): PinAndroid[] {
-    const result = [];
+    const result: PinAndroid[] = [];
     if (this._nativeGoogleMap) {
       const latLongBounds = this._nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
 
@@ -266,7 +267,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
             })
           );
 
-          this.setCenterLocationWithZoomLevel(this._centerLocation, this._zoomLevel, false);
+          this._zoomLevel && this.setCenterLocationWithZoomLevel(this._centerLocation, this._zoomLevel, false);
           this.compassEnabled = this._compassEnabled;
           this.rotateEnabled = this._rotateEnabled;
           this.scrollEnabled = this._scrollEnabled;
@@ -335,7 +336,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this._nativeClusterManager.setOnClusterClickListener(
       NativeClusterManager.OnClusterClickListener.implement({
         onClusterClick: (cluster: any) => {
-          const pinArray = [];
+          const pinArray: PinAndroid[] = [];
           const clusterArray = toJSArray(cluster.getItems().toArray());
           for (let i = 0; i < clusterArray.length; i++) {
             pinArray.push(this._pinArray[clusterArray[i]]);
@@ -440,12 +441,12 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this._nativeGoogleMap?.setMinZoomPreference(value + 2);
   }
 
-  get zoomLevel(): number {
+  get zoomLevel(): number | undefined {
     return this._nativeGoogleMap?.getCameraPosition().zoom - 2 || undefined;
   }
-  set zoomLevel(value: number) {
+  set zoomLevel(value: number | undefined) {
     this._zoomLevel = value;
-    if (this._nativeGoogleMap) {
+    if (this._nativeGoogleMap && value) {
       const zoomCameraUpdateFactory = NativeCameraUpdateFactory.zoomTo(value + 2);
       this._nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
     }
@@ -493,7 +494,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     return this._font;
   }
   set clusterFont(value) {
-    if (value instanceof Font) {
+    if (value instanceof FontAndroid) {
       this._font = value;
     }
   }

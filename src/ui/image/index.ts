@@ -338,7 +338,7 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   constructor(params: Partial<ImageParams>) {
     super(params);
   }
-  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | undefined {
+  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | void {
     throw new Error('Method not implemented.');
   }
   rotate(angle: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | null | void {

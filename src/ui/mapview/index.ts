@@ -263,7 +263,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 1.1.10
    */
-  readonly zoomLevel: number;
+  readonly zoomLevel: number | undefined;
   /**
    * Gets/sets minimum zoom level.
    * @property {Number} [minZoomLevel = 0]
@@ -334,7 +334,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
       latitude: number;
       longitude: number;
     };
-  };
+  } | undefined;
   /**
    * Get visible pins on MapView.
    *
@@ -501,7 +501,7 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   clusterFont: AbstractFont;
   onClusterPress: (pins: Pin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
-  zoomLevel: number;
+  zoomLevel: number | undefined;
   minZoomLevel: number;
   maxZoomLevel: number;
   centerLocation: { latitude: number; longitude: number };
@@ -510,7 +510,7 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
     topRight: { latitude: number; longitude: number };
     bottomLeft: { latitude: number; longitude: number };
     bottomRight: { latitude: number; longitude: number };
-  };
+  } | undefined;
   getVisiblePins(): Pin[];
   addPin(pin: Pin): void;
   removePin(pin: Pin): void;

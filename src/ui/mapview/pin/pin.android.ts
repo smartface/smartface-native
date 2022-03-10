@@ -19,9 +19,9 @@ const HueDic = {
 
 export default class PinAndroid<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, any> implements IPin {
   private _color: ColorAndroid;
-  private _image: ImageAndroid = null;
+  private _image: ImageAndroid | null = null;
   private _location: IPin['location'];
-  private _clusterColor: ColorAndroid = null;
+  private _clusterColor: ColorAndroid | null = null;
   private _subtitle = '';
   private _title = '';
   private _visible = true;
@@ -55,10 +55,10 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
   set id(value: number) {
     this._id = value;
   }
-  get image(): ImageAndroid {
+  get image(): ImageAndroid | null {
     return this._image;
   }
-  set image(value: ImageAndroid) {
+  set image(value: ImageAndroid | null) {
     this._image = value;
     if (this.nativeObject && !this.isClusterEnabled && value instanceof ImageAndroid) {
       const iconBitmap = value.nativeObject.getBitmap();
@@ -111,10 +111,10 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
       this.nativeObject.setVisible(value);
     }
   }
-  get clusterColor(): ColorAndroid {
+  get clusterColor(): ColorAndroid | null {
     return this._clusterColor;
   }
-  set clustercolor(value: ColorAndroid) {
+  set clustercolor(value: ColorAndroid | null) {
     this._clusterColor = value;
   }
   onPress: () => void;

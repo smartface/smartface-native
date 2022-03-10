@@ -52,7 +52,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     const annotationSet = Invocation.invokeInstanceMethod(this.nativeObject, 'annotationsInMapRect:', [argAnnotationVisibleRect], 'id') as __SF_NSOBject;
 
     const annotationArray = Invocation.invokeInstanceMethod(annotationSet, 'allObjects', [], 'id') as any[];
-    const pinArray = [];
+    const pinArray: Pin[] = [];
     for (const i in annotationArray) {
       if (annotationArray[i].toString() !== '[object MKClusterAnnotation]') {
         //Check cluster
@@ -160,31 +160,34 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     const centerPixelY = this.latitudeToPixelSpaceY(centerCoordinate.latitude);
 
     // determine the scale value from the zoom level
-    const zoomExponent = 20.0 - zoomLevel;
-    const zoomScale = Math.pow(2.0, zoomExponent);
+    if (zoomLevel) {
+      const zoomExponent = 20.0 - zoomLevel;
+      const zoomScale = Math.pow(2.0, zoomExponent);
 
-    // scale the map’s size in pixel space
-    const mapSizeInPixels = this.nativeObject.bounds;
-    const scaledMapWidth = parseFloat(mapSizeInPixels.width) * zoomScale;
-    const scaledMapHeight = parseFloat(mapSizeInPixels.height) * zoomScale;
+      // scale the map’s size in pixel space
+      const mapSizeInPixels = this.nativeObject.bounds;
+      const scaledMapWidth = parseFloat(mapSizeInPixels.width) * zoomScale;
+      const scaledMapHeight = parseFloat(mapSizeInPixels.height) * zoomScale;
 
-    // figure out the position of the top-left pixel
-    const topLeftPixelX = centerPixelX - scaledMapWidth / 2.0;
-    const topLeftPixelY = centerPixelY - scaledMapHeight / 2.0;
+      // figure out the position of the top-left pixel
+      const topLeftPixelX = centerPixelX - scaledMapWidth / 2.0;
+      const topLeftPixelY = centerPixelY - scaledMapHeight / 2.0;
 
-    // find delta between left and right longitudes
-    const minLng = this.pixelSpaceXToLongitude(topLeftPixelX);
-    const maxLng = this.pixelSpaceXToLongitude(topLeftPixelX + scaledMapWidth);
-    const longitudeDelta = maxLng - minLng;
+      // find delta between left and right longitudes
+      const minLng = this.pixelSpaceXToLongitude(topLeftPixelX);
+      const maxLng = this.pixelSpaceXToLongitude(topLeftPixelX + scaledMapWidth);
+      const longitudeDelta = maxLng - minLng;
 
-    const minLat = this.pixelSpaceYToLatitude(topLeftPixelY);
-    const maxLat = this.pixelSpaceYToLatitude(topLeftPixelY + scaledMapHeight);
-    const latitudeDelta = -1.0 * (maxLat - minLat);
+      const minLat = this.pixelSpaceYToLatitude(topLeftPixelY);
+      const maxLat = this.pixelSpaceYToLatitude(topLeftPixelY + scaledMapHeight);
+      const latitudeDelta = -1.0 * (maxLat - minLat);
+      return {
+        latitudeDelta: latitudeDelta,
+        longitudeDelta: longitudeDelta
+      };
+    }
 
-    return {
-      latitudeDelta: latitudeDelta,
-      longitudeDelta: longitudeDelta
-    };
+    return null;
   }
 
   private longitudeToPixelSpaceX(longitude: number) {
@@ -204,16 +207,19 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   }
 
   private setZoomLevelWithAnimated(centerLocation: IMapView['centerLocation'], zoomLevel: IMapView['zoomLevel'], animated?: boolean) {
-    const zoomLevelClamped = Math.min(zoomLevel, MAX_POSSIBLE_ZOOM_LEVEL); // clamp large numbers to 28
-    // use the zoom level to compute the region
-    const span = this.coordinateSpanWithCenterCoordinate(centerLocation, zoomLevelClamped);
-    this.nativeObject.centerLocation = {
-      latitudeDelta: span.latitudeDelta,
-      longitudeDelta: span.longitudeDelta,
-      latitude: centerLocation.latitude,
-      longitude: centerLocation.longitude,
-      animated: animated
-    };
+    if (zoomLevel) {
+      const zoomLevelClamped = Math.min(zoomLevel, MAX_POSSIBLE_ZOOM_LEVEL); // clamp large numbers to 28
+      // use the zoom level to compute the region
+      const span = this.coordinateSpanWithCenterCoordinate(centerLocation, zoomLevelClamped);
+      if (span)
+        this.nativeObject.centerLocation = {
+          latitudeDelta: span.latitudeDelta,
+          longitudeDelta: span.longitudeDelta,
+          latitude: centerLocation.latitude,
+          longitude: centerLocation.longitude,
+          animated: animated
+        };
+    }
   }
   private setNativeEvents() {
     this.nativeObject.mapViewFinishRender = () => {
@@ -247,15 +253,15 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
         return;
       }
 
-      if (this.minZoomLevel > DEFAULT_MIN_ZOOM_LEVEL && this.zoomLevel < this.minZoomLevel) {
+      if (this.zoomLevel && this.minZoomLevel > DEFAULT_MIN_ZOOM_LEVEL && this.zoomLevel < this.minZoomLevel) {
         this.zoomLevel = this.minZoomLevel;
-      } else if (this.maxZoomLevel < DEFAULT_MAX_ZOOM_LEVEL && this.zoomLevel > this.maxZoomLevel) {
+      } else if (this.zoomLevel && this.maxZoomLevel < DEFAULT_MAX_ZOOM_LEVEL && this.zoomLevel > this.maxZoomLevel) {
         this.zoomLevel = this.maxZoomLevel;
       }
     };
 
     this.cluster.nativeObject.onPress = (e: any) => {
-      const pinArray = [];
+      const pinArray: Pin[] = [];
       for (const i in e.memberAnnotations) {
         pinArray.push(this._pinArray[e.memberAnnotations[i].uuid]);
       }
@@ -345,7 +351,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   }
   set zoomLevel(value) {
     this._zoomLevel = value;
-    this.setZoomLevelWithAnimated(this.centerLocation, value + 1, false);
+    value && this.setZoomLevelWithAnimated(this.centerLocation, value + 1, false);
   }
   get minZoomLevel() {
     return this._minZoomLevel;
