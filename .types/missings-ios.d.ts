@@ -19,6 +19,10 @@ declare class __SF_UIColor extends __SF_NSOBject {
   frame: __SF_NSRect;
 }
 
+declare class __SF_Snackbar extends __SF_NSOBject {
+  dismissed: () => void;
+}
+
 declare namespace SF {
   export function requireClass(name: string): any;
   export function dispatch_async(queue: any, action: () => void);
