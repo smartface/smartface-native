@@ -1,6 +1,5 @@
 import { AbstractSound } from '.';
 import Application from '../../application';
-import { EventListenerCallback } from '../../core/eventemitter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import { AndroidConfig, RequestCodes } from '../../util';
@@ -25,32 +24,27 @@ export default class SoundAndroid extends NativeEventEmitterComponent<SoundEvent
     super(params);
     this._nativeObject = new NativeMediaPlayer();
 
-    const self = this;
     this.nativeObject.setOnPreparedListener(
       NativeMediaPlayer.OnPreparedListener.implement({
-        onPrepared: function () {
-          self._onReadyCallback?.();
-          self.emit(SoundEvents.Ready);
+        onPrepared: () => {
+          this._onReadyCallback?.();
+          this.emit('ready');
         }
       })
     );
 
     this.nativeObject.setOnCompletionListener(
       NativeMediaPlayer.OnCompletionListener.implement({
-        onCompletion: function () {
-          self._onFinishCallback?.();
-          self.emit(SoundEvents.Finish);
+        onCompletion: () => {
+          this._onFinishCallback?.();
+          this.emit('finish');
         }
       })
     );
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
-
-    const android = {
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private getAndroidProps(): AbstractSound['android'] {
+    return {
       pick(params: Parameters<typeof AbstractSound.android['pick']>['0']) {
         SoundAndroid._pickParams = params;
         const intent = new NativeIntent();
@@ -63,39 +57,6 @@ export default class SoundAndroid extends NativeEventEmitterComponent<SoundEvent
         }
       }
     };
-    Object.assign(this._android, android);
-  }
-  on(eventName: 'ready' | 'finish', callback: EventListenerCallback): () => void {
-    throw new Error('Method not implemented.');
-  }
-  once(eventName: 'ready' | 'finish', callback: EventListenerCallback): () => void {
-    throw new Error('Method not implemented.');
-  }
-  off(eventName: 'ready' | 'finish', callback?: EventListenerCallback): void {
-    throw new Error('Method not implemented.');
-  }
-  emit(event: 'ready' | 'finish', ...args: any[]): void {
-    throw new Error('Method not implemented.');
-  }
-  protected _android: Partial<{ [key: string]: any; }>;
-  protected addAndroidProps(props: Partial<{ [key: string]: any; }>): void {
-    throw new Error('Method not implemented.');
-  }
-  protected addIOSProps(props: Partial<{ [key: string]: any; }>): void {
-    throw new Error('Method not implemented.');
-  }
-  get ios(): Partial<Partial<{ [key: string]: any; }>> {
-    throw new Error('Method not implemented.');
-  }
-  protected _nativeObject: any;
-  get nativeObject(): any {
-    throw new Error('Method not implemented.');
-  }
-  set nativeObject(value: any) {
-    throw new Error('Method not implemented.');
-  }
-  get android() {
-    return this._android;
   }
   get volume(): number {
     return this._volume;

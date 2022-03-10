@@ -53,7 +53,7 @@ class Notifier extends NativeComponent implements NetworkNotifierBase {
   }
   subscribe(callback) {
     this.connectionTypeChanged = callback;
-  };
+  }
 
   unsubscribe() {
     this.nativeObject.stopNotifier();

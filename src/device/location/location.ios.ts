@@ -15,54 +15,49 @@ const IOS_AUTHORIZATION_STATUS_B = { NOTDETERMINED: 0, RESTRICTED: 1, DENIED: 2,
 
 class LocationIOS extends NativeEventEmitterComponent<LocationEvents> implements ILocation {
   delegate: __SF_CLLocationManagerDelegate;
-  android = {
-    checkSettings() {},
-    Provider: {}
-  };
   Android = { Provider: {}, Priority: {}, SettingsStatusCodes: {} };
-  ios = {
-    authorizationStatus: IOS_AUTHORIZATION_STATUS,
-    native: { authorizationStatus: IOS_NATIVE_AUTHORIZATION_STATUS },
-    locationServicesEnabled() {
-      return __SF_CLLocationManager.locationServicesEnabled();
-    },
-    getAuthorizationStatus() {
-      const authorizationStatus = Invocation.invokeClassMethod('CLLocationManager', 'authorizationStatus', [], 'int') as unknown as number;
-      let status;
-      switch (authorizationStatus) {
-        case this.ios.native.authorizationStatus.AuthorizedAlways:
-        case this.ios.native.authorizationStatus.AuthorizedWhenInUse:
-          status = this.ios.authorizationStatus.Authorized;
-          break;
-        case this.ios.native.authorizationStatus.NotDetermined:
-          status = this.ios.authorizationStatus.NotDetermined;
-          break;
-        case this.ios.native.authorizationStatus.Restricted:
-          status = this.ios.authorizationStatus.Restricted;
-          break;
-        case this.ios.native.authorizationStatus.Denied:
-          status = this.ios.authorizationStatus.Denied;
-          break;
-        default:
-          break;
-      }
-      return status;
-    },
-    onChangeAuthorizationStatus(...args: any[]) {}
-  };
   iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
   _nativeObject = new __SF_CLLocationManager();
-  Events = LocationEvents;
   _authorizationStatus = this.ios.authorizationStatus.NotDetermined;
   onLocationChanged: (...args: any[]) => {};
   constructor() {
     super();
-    const EventFunctions = {
-      [LocationEvents.LocationChanged]: function ({ latitude, longitude }) {
-        this.onLocationChanged?.({ latitude, longitude });
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps({
+      checkSettings() {},
+      Provider: {}
+    });
+  }
+  private getIOSProps(): ILocation['ios'] {
+    return {
+      authorizationStatus: IOS_AUTHORIZATION_STATUS,
+      native: { authorizationStatus: IOS_NATIVE_AUTHORIZATION_STATUS },
+      locationServicesEnabled() {
+        return __SF_CLLocationManager.locationServicesEnabled();
+      },
+      getAuthorizationStatus() {
+        const authorizationStatus = Invocation.invokeClassMethod('CLLocationManager', 'authorizationStatus', [], 'int') as unknown as number;
+        let status;
+        switch (authorizationStatus) {
+          case this.ios.native.authorizationStatus.AuthorizedAlways:
+          case this.ios.native.authorizationStatus.AuthorizedWhenInUse:
+            status = this.ios.authorizationStatus.Authorized;
+            break;
+          case this.ios.native.authorizationStatus.NotDetermined:
+            status = this.ios.authorizationStatus.NotDetermined;
+            break;
+          case this.ios.native.authorizationStatus.Restricted:
+            status = this.ios.authorizationStatus.Restricted;
+            break;
+          case this.ios.native.authorizationStatus.Denied:
+            status = this.ios.authorizationStatus.Denied;
+            break;
+          default:
+            break;
+        }
+        return status;
       }
     };
-    eventCallbacksAssign(this, EventFunctions);
   }
   __onActivityResult: (resultCode: number) => void;
   changeLocationListener(e) {

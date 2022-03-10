@@ -9,7 +9,7 @@ class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> 
     super();
     this.callObserverDelegate = new __SF_CallObserverDelegate();
     this.callObserverDelegate.callObserverCallChanged = (observer, call) => {
-      let state;
+      let state: State;
       if (call.hasEnded) {
         state = State.DISCONNECTED;
       } else if (call.hasConnected) {

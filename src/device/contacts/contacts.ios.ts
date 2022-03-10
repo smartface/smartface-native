@@ -11,7 +11,7 @@ function manageNativeContact(contact) {
   for (const number in contact.phoneNumbers) {
     // Added this check to resolve the sonar issue.
     // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-    if (contact.phoneNumbers.hasOwnProperty(number)) {
+    if (Object.prototype.hasOwnProperty.call(contact.phoneNumbers, number)) {
       phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
     }
   }
@@ -21,7 +21,7 @@ function manageNativeContact(contact) {
   for (const email in contact.emailAddresses) {
     // Added this check to resolve the sonar issue.
     // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-    if (contact.emailAddresses.hasOwnProperty(email)) {
+    if (Object.prototype.hasOwnProperty.call(contact.emailAddresses, email)) {
       emailAddresses.push(contact.emailAddresses[email].value);
     }
   }
@@ -30,7 +30,7 @@ function manageNativeContact(contact) {
   const urlAddresses = [];
   for (const urlAddress in contact.urlAddresses) {
     // Added this check to resolve the sonar issue.
-    if (contact.urlAddresses.hasOwnProperty(urlAddress)) {
+    if (Object.prototype.hasOwnProperty.call(contact.urlAddresses, urlAddress)) {
       urlAddresses.push(contact.urlAddresses[urlAddress].value);
     }
   }
@@ -39,7 +39,7 @@ function manageNativeContact(contact) {
   const addresses = [];
   for (const address in contact.postalAddresses) {
     // Added this check to resolve the sonar issue.
-    if (contact.postalAddresses.hasOwnProperty(address)) {
+    if (Object.prototype.hasOwnProperty.call(contact.postalAddresses, address)) {
       const addressStr =
         contact.postalAddresses[address].value.street +
         ' ' +
@@ -147,10 +147,7 @@ class ContactsIOS extends ContactsBase {
           function (allContactsNativeArray) {
             const allContactsManagedArray = [];
             for (const index in allContactsNativeArray) {
-              // Added this check to resolve the sonar issue.
-              // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-              //TODO:  hasOwnProperty
-              if (allContactsNativeArray.hasOwnProperty(index)) {
+              if (Object.prototype.hasOwnProperty.call(allContactsNativeArray, index)) {
                 const jsContact = new ContactsIOS.Contact({
                   nativeObject: allContactsNativeArray[index].mutableCopy()
                 });
@@ -184,7 +181,7 @@ class ContactsIOS extends ContactsBase {
             for (const index in allContactsNativeArray) {
               // Added this check to resolve the sonar issue.
               // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-              if (allContactsNativeArray.hasOwnProperty(index)) {
+              if (Object.prototype.hasOwnProperty.call(allContactsNativeArray, index)) {
                 const jsContact = new ContactsIOS.Contact({
                   nativeObject: allContactsNativeArray[index].mutableCopy()
                 });
@@ -217,10 +214,7 @@ class ContactsIOS extends ContactsBase {
           const parameterContact = params.contact;
 
           for (const propertyName in parameterContact) {
-            // Added this check to resolve the sonar issue.
-            // It says that the body of every for...in statement should be wrapped
-            // in an if statement that filters which properties are acted upon.
-            if (parameterContact.hasOwnProperty(propertyName)) {
+            if (Object.prototype.hasOwnProperty.call(parameterContact, propertyName)) {
               switch (propertyName) {
                 case 'displayName':
                   contact.givenName = parameterContact[propertyName];
@@ -234,11 +228,12 @@ class ContactsIOS extends ContactsBase {
                 case 'urlAddress':
                   contact.urlAddresses = [new __SF_CNLabeledValue(__SF_CNLabelURLAddressHomePage, parameterContact[propertyName])];
                   break;
-                case 'address':
-                  let addressValue = __SF_CNMutablePostalAddress.new();
+                case 'address': {
+                  const addressValue = __SF_CNMutablePostalAddress.new();
                   addressValue.street = parameterContact[propertyName];
                   contact.postalAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, addressValue)];
                   break;
+                }
                 default:
               }
             }
@@ -299,7 +294,7 @@ class ContactsIOS extends ContactsBase {
             for (const index in allContactsNativeArray) {
               // Added this check to resolve the sonar issue.
               // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-              if (allContactsNativeArray.hasOwnProperty(index)) {
+              if (Object.prototype.hasOwnProperty.call(allContactsNativeArray, index)) {
                 const managedContact = manageNativeContact(allContactsNativeArray[index]);
                 allContactsManagedArray.push(managedContact);
               }

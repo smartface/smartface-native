@@ -329,6 +329,7 @@ type ImageParams = {
   android?: {
     systemIcon?: any;
   };
+  path: any;
 };
 /**
  * @since 4.5.0
@@ -337,19 +338,19 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   constructor(params: Partial<ImageParams>) {
     super(params);
   }
-  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob; }) => void, onFailure?: (e?: { message: string; }) => void): IBlob | null | undefined {
+  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | undefined {
     throw new Error('Method not implemented.');
   }
-  rotate(angle: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): IImage | null | void {
+  rotate(angle: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | null | void {
     throw new Error('Method not implemented.');
   }
-  resize(width: number, height: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): null | IImage | void {
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): null | IImage | void {
     throw new Error('Method not implemented.');
-  };
+  }
   crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): null | IImage | void {
     throw new Error('Method not implemented.');
   }
-  
+
   get height(): number {
     return this.nativeObject.size.height;
   }

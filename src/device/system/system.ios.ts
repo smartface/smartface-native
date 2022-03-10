@@ -1,4 +1,5 @@
 import { AbstractSystem, BiometryType, OSType } from '.';
+import Application from '../../application';
 import { Invocation } from '../../util';
 
 class SystemIOS implements AbstractSystem {
@@ -53,22 +54,16 @@ class SystemIOS implements AbstractSystem {
     __SF_UIPasteboard.generalPasteboard().string = value;
   }
   get isEmulator() {
-    const Application = require('../../application');
     const isBundleIdEmulator = Application.ios.bundleIdentifier === 'io.smartface.SmartfaceEnterpriseApp';
-    //TODO: SMFApplication global?
-    return SMFApplication && typeof SMFApplication.isEmulator === 'function' ? SMFApplication.isEmulator() : isBundleIdEmulator;
+    return SMFApplication?.isEmulator?.() || isBundleIdEmulator;
   }
   get fingerPrintAvaliable() {
     return this.biometricsAvailable;
   }
   get biometricType() {
-    if (parseFloat(System.OSVersion) >= 11.0) {
-      const context = new __SF_LAContext();
-      context.canEvaluatePolicy();
-      return Invocation.invokeInstanceMethod(context, 'biometryType', [], 'NSInteger');
-    } else {
-      throw new Error('System.ios.LAContextBiometricType property only available iOS 11.0+');
-    }
+    const context = new __SF_LAContext();
+    context.canEvaluatePolicy();
+    return Invocation.invokeInstanceMethod(context, 'biometryType', [], 'NSInteger');
   }
   get ios() {
     return this._ios;

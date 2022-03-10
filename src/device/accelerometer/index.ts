@@ -18,7 +18,7 @@ import { AccelerometerEvents } from './accelerometer-events';
  *     };
  *
  */
- export interface IAccelerometer extends NativeEventEmitterComponent<AccelerometerEvents> {
+export interface IAccelerometer extends NativeEventEmitterComponent<AccelerometerEvents> {
   /**
    * Starts capturing accelerometer values.
    *

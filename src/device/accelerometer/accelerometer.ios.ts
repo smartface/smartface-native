@@ -8,10 +8,10 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, 
     super(params);
     this.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
 
-    this.nativeObject.onAccelerate = () => {
-      this.emit(AccelerometerEvents.Accelerate);
-      this.monitonManager.callback?.();
-    }
+    this.monitonManager.callback = (params: Parameters<IAccelerometer['onAccelerate']>['0']) => {
+      this.emit('accelerate', params);
+      this.onAccelerate?.(params);
+    };
 
     // eventCallbacksAssign(this, EventFunctions);
     const self = this;
@@ -24,14 +24,12 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, 
       }
     });
   }
+  onAccelerate: (e: { x: number; y: number; z: number }) => void;
   start() {
     this.monitonManager.startAccelerometerUpdates();
   }
   stop() {
     this.monitonManager.stopAccelerometerUpdates();
-  }
-  set onAccelerate(value: (...args: any[]) => void) {
-    this.monitonManager.callback = value;
   }
 }
 

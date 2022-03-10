@@ -1,14 +1,11 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { RequestCodes, TypeUtil } from '../../util';
+import { RequestCodes } from '../../util';
 import { ILocation } from '.';
 import { LocationEvents } from './location-events';
-const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
-const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 const PROVIDER = {
   AUTO: 'auto',
-  GPS: GPS_PROVIDER,
-  NETWORK: NETWORK_PROVIDER
+  GPS: 'gps', //ToDo: Deprecated, remove next release
+  NETWORK: 'network' //ToDo: Deprecated, remove next release
 };
 const PRIORITY = {
   HIGH_ACCURACY: 100, // PRIORITY_HIGH_ACCURACY
@@ -23,38 +20,30 @@ const SETTINGS_STATUS_CODES = {
 const SFLocationCallback = requireClass('io.smartface.android.sfcore.device.location.SFLocationCallback');
 
 class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implements ILocation {
-  android;
   readonly Android = {
     Provider: PROVIDER,
     Priority: PRIORITY,
     SettingsStatusCodes: SETTINGS_STATUS_CODES
   };
-  ios;
   iOS = {};
   private _instance: any;
   CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
   Events = LocationEvents;
-  _onLocationChanged: (e: { latitude: number; longitude: number }) => void;
   _onFailureCallback: (e: { statusCode }) => void;
   _onSuccessCallback: () => void;
   constructor() {
     super();
-    const EventFunctions = {
-      [LocationEvents.LocationChanged]: function ({ latitude, longitude }) {
-        this._onLocationChanged?.({ latitude, longitude });
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
-
-    const ios = {
+    this.addIOSProps({
       locationServicesEnabled() {},
       getAuthorizationStatus() {},
       authorizationStatus: {}
-    };
-    Object.assign(this.ios, ios);
-
+    });
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  onLocationChanged: (e: { latitude: number; longitude: number }) => void;
+  private getAndroidProps() {
     const self = this;
-    const android = {
+    return {
       Provider: PROVIDER,
       checkSettings: (params: { onSuccess: () => void; onFailure: (e: { statusCode }) => void }) => {
         params.onSuccess && (self._onSuccessCallback = params.onSuccess);
@@ -73,29 +62,27 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
         });
       }
     };
-    Object.assign(this.android, android);
   }
-  locationCallback = (latitude, longitude) => {
-    this._onLocationChanged &&
-      this._onLocationChanged({
-        latitude,
-        longitude
-      });
-  };
   __onActivityResult(resultCode) {
     if (resultCode === -1) {
       // -1 = OK
-      this._onSuccessCallback && this._onSuccessCallback();
+      this._onSuccessCallback?.();
     } else {
-      this._onFailureCallback &&
-        this._onFailureCallback({
-          statusCode: 'DENIED'
-        });
+      this._onFailureCallback?.({
+        statusCode: 'DENIED'
+      });
     }
   }
   __getInstance() {
     if (!this._instance) {
-      this._instance = new SFLocationCallback(this.locationCallback);
+      this._instance = new SFLocationCallback((latitude: number, longitude: number) => {
+        const params = {
+          latitude,
+          longitude
+        };
+        this.onLocationChanged?.(params);
+        this.emit('locationChanged', params);
+      });
     }
     return this._instance;
   }
@@ -104,14 +91,6 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
   }
   stop() {
     this.__getInstance().stop();
-  }
-  get onLocationChanged() {
-    return this._onLocationChanged;
-  }
-  set onLocationChanged(callback: (e: { latitude: number; longitude: number }) => void) {
-    if (TypeUtil.isFunction(callback)) {
-      this._onLocationChanged = callback;
-    }
   }
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void) {
     this.__getInstance().getLastKnownLocation({

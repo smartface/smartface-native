@@ -3,7 +3,6 @@ import Page from '../../ui/page';
 import { AndroidConfig, RequestCodes } from '../../util';
 import { ContactBase, ContactsBase } from '.';
 
-/* global requireClass toJSArray array require module*/
 const NativeContactsContract = requireClass('android.provider.ContactsContract');
 const NativeArrayList = requireClass('java.util.ArrayList');
 const NativeContentProviderOperation = requireClass('android.content.ContentProviderOperation');
