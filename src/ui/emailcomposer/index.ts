@@ -1,6 +1,33 @@
 import File from '../../io/file';
 import Blob from '../../global/blob';
 import Page from '../page';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+
+type EmailComposerAndroidProps = {
+  /**
+   * Attach the given file to email composer.
+   *
+   * @param {IO.File} file
+   * @android
+   * @method addAttachmentForAndroid
+   * @since 3.0.3
+   */
+  addAttachmentForAndroid(file: File): void;
+};
+type EmailComposerIOSProps = {
+  /**
+   * Attach the given file to email composer.
+   * For Images; if you have multiple sizes of image resource (e.g smartface@2x.png, smartface@3x.png); you should give exact path of an image file.
+   *
+   * @param {Blob} blob
+   * @param {String} mimeType mimeType's "image/jpeg","image/png","image/gif","image/tiff","image/tiff","application/pdf","application/vnd","text/plain",
+   * @param {String} fileName
+   * @ios
+   * @method addAttachmentForiOS
+   * @since 3.0.3
+   */
+  addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string): void;
+};
 
 /**
  * @class UI.EmailComposer
@@ -41,7 +68,7 @@ import Page from '../page';
  *     }
  *     
  */
-export declare class AbstractEmailComposer {
+export abstract class AbstractEmailComposer extends NativeMobileComponent<any, MobileOSProps<EmailComposerIOSProps, EmailComposerAndroidProps>> {
   /**
    * Sets the initial recipients to include in the email’s “CC” field.
    *
@@ -51,7 +78,7 @@ export declare class AbstractEmailComposer {
    * @method setCC
    * @since 3.0.3
    */
-  setCC(cc: string[]): void;
+  abstract setCC(cc: string[]): void;
   /**
    * Sets the initial recipients to include in the email’s “BCC” field.
    *
@@ -61,7 +88,7 @@ export declare class AbstractEmailComposer {
    * @method setBCC
    * @since 3.0.3
    */
-  setBCC(bcc: string[]): void;
+  abstract setBCC(bcc: string[]): void;
   /**
    * Sets the initial recipients to include in the email’s “TO” field.
    *
@@ -71,7 +98,7 @@ export declare class AbstractEmailComposer {
    * @method setTO
    * @since 3.0.3
    */
-  setTO(to: string[]): void;
+  abstract setTO(to: string[]): void;
   /**
    * Sets the initial body text to include in the email composer.
    *
@@ -82,7 +109,7 @@ export declare class AbstractEmailComposer {
    * @method setMessage
    * @since 3.0.3
    */
-  setMessage(text: string, isHtmlText?: boolean): void;
+  abstract setMessage(text: string, isHtmlText?: boolean): void;
   /**
    * Sets the initial text for the subject line of the email composer.
    *
@@ -92,18 +119,7 @@ export declare class AbstractEmailComposer {
    * @method setSubject
    * @since 3.0.3
    */
-  setSubject(subject: string): void;
-  android: Partial<{
-    /**
-     * Attach the given file to email composer.
-     *
-     * @param {IO.File} file
-     * @android
-     * @method addAttachmentForAndroid
-     * @since 3.0.3
-     */
-    addAttachmentForAndroid(file: File): void;
-  }>;
+  abstract setSubject(subject: string): void;
   /**
    * This function will be triggered when email composer is closed.
    *
@@ -112,21 +128,7 @@ export declare class AbstractEmailComposer {
    * @method onClose
    * @since 3.0.3
    */
-  onClose: () => void;
-  ios: Partial<{
-    /**
-     * Attach the given file to email composer.
-     * For Images; if you have multiple sizes of image resource (e.g smartface@2x.png, smartface@3x.png); you should give exact path of an image file.
-     *
-     * @param {Blob} blob
-     * @param {String} mimeType mimeType's "image/jpeg","image/png","image/gif","image/tiff","image/tiff","application/pdf","application/vnd","text/plain",
-     * @param {String} fileName
-     * @ios
-     * @method addAttachmentForiOS
-     * @since 3.0.3
-     */
-    addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string): void;
-  }>;
+  abstract onClose: () => void;
 
   /**
    * This function shows email composer on the given UI.Page.
@@ -137,7 +139,7 @@ export declare class AbstractEmailComposer {
    * @method show
    * @since 3.0.3
    */
-  show(page: Page): void;
+  abstract show(page: Page): void;
   /**
    * You should call this method before attempting to display the email composition interface. If it returns NO, you must not display the email composition interface.
    *
@@ -148,10 +150,20 @@ export declare class AbstractEmailComposer {
    * @static
    * @since 3.0.3
    */
+  abstract canSendMail(): boolean;
+}
+declare class EmailComposerImpl extends AbstractEmailComposer {
+  setCC(cc: string[]): void;
+  setBCC(bcc: string[]): void;
+  setTO(to: string[]): void;
+  setMessage(text: string, isHtmlText?: boolean): void;
+  setSubject(subject: string): void;
+  onClose: () => void;
+  show(page: Page): void;
   canSendMail(): boolean;
 }
 
-const EmailComposer: typeof AbstractEmailComposer = require(`./emailcomposer.${Device.deviceOS.toLowerCase()}`).default;
-type EmailComposer = AbstractEmailComposer;
+const EmailComposer: typeof EmailComposerImpl = require(`./emailcomposer.${Device.deviceOS.toLowerCase()}`).default;
+type EmailComposer = EmailComposerImpl;
 
 export default EmailComposer;

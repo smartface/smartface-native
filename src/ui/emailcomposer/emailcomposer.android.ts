@@ -17,34 +17,32 @@ const EXTRA_SUBJECT = 'android.intent.extra.SUBJECT';
 const EXTRA_STREAM = 'android.intent.extra.STREAM';
 const ACTION_VIEW = 'android.intent.action.VIEW';
 
-export default class EmailComposerAndroid extends NativeComponent implements AbstractEmailComposer {
+export default class EmailComposerAndroid extends AbstractEmailComposer {
   static EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
   private _closeCallback: () => void;
-  private _android: Partial<{
-    addAttachmentForAndroid(file: File): void;
-  }> = {};
-  private _ios: Partial<{ addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string): void }> = { addAttachmentForiOS() {} };
   constructor() {
     super();
     const self = this;
     this.nativeObject = new NativeIntent(ACTION_VIEW);
     this.nativeObject.setData(NativeUri.parse('mailto:'));
 
-    this._android = {
+    this.addAndroidProps({
       addAttachmentForAndroid(attachment: File) {
         if (attachment instanceof File) {
           const absulotePath = attachment.nativeObject.getAbsolutePath();
           self.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse('file://' + absulotePath));
         }
       }
-    };
+    });
+    this.addIOSProps({
+      addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string) {}
+    });
   }
-  get ios() {
-    return this._ios;
+
+  canSendMail(): boolean {
+    throw false;
   }
-  get android() {
-    return this._android;
-  }
+
   get onClose() {
     return this._closeCallback;
   }
