@@ -3,8 +3,11 @@ import Image from '../image';
 import { ButtonEvents } from './button-events';
 import { ILabel } from '../label';
 import { IViewState } from '../view';
+import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
-export declare interface IButton<TEvent extends string = ButtonEvents, TIOS = {}, TAND = {}> extends ILabel<TEvent | ButtonEvents, TIOS, TAND> {
+type MobileProps = MobileOSProps<ILabel['ios'], ILabel['android']>;
+export declare interface IButton<TEvent extends string = ButtonEvents, TMobile extends MobileProps = MobileProps> extends ILabel<TEvent | ButtonEvents, TMobile> {
   /**
    * Enables/disables the Button. This will dim the button color. You can set the dim property on Button style.
    *
@@ -68,7 +71,7 @@ export declare interface IButton<TEvent extends string = ButtonEvents, TIOS = {}
   onLongPress: () => void;
 }
 
-const Button: IButton = require(`./button.${Device.deviceOS.toLowerCase()}`).default;
+const Button: ConstructorOf<IButton, Partial<IButton>> = require(`./button.${Device.deviceOS.toLowerCase()}`).default;
 type Button = IButton;
 
 export default Button;

@@ -1,11 +1,8 @@
-import Color from '.';
-import { AbstractColor, GradientDirection } from '.';
+import Color, { AbstractColor } from '.';
+import { GradientDirection } from '.';
 
 export default class ColorIOS extends AbstractColor {
-  constructor(params: { color: __SF_UIColor | __SF_CAGradientLayer }) {
-    super();
-    this.nativeObject = params.color;
-  }
+
   static create(alpha: number, red: number, green: number, blue: number): ColorIOS;
   static create(red: number, green: number, blue: number): ColorIOS;
   static create(hexCode: string): ColorIOS;
@@ -92,4 +89,22 @@ export default class ColorIOS extends AbstractColor {
   static WHITE = new ColorIOS({
     color: __SF_UIColor.whiteColor()
   });
+
+  constructor(params: { color: __SF_UIColor | __SF_CAGradientLayer }) {
+    super();
+    this.nativeObject = params.color;
+  }
+
+  red(): number {
+    return this.nativeObject.components().red * 255;
+  }
+  green(): number {
+    return this.nativeObject.components().green * 255;
+  }
+  blue(): number {
+    return this.nativeObject.components().blue * 255;
+  }
+  alpha(): number {
+    return this.nativeObject.components().alpha * 255;
+  }
 }

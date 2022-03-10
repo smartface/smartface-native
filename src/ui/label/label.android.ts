@@ -1,4 +1,3 @@
-import TextDirection from 'ui/android/textdirection';
 import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
@@ -9,6 +8,7 @@ import { ViewEvents } from '../view/view-event';
 import { IViewState } from '../view';
 import EllipsizeMode from '../shared/android/ellipsizemode';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import TextDirection from '../shared/textdirection';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');

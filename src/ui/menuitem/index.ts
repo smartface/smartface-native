@@ -1,4 +1,4 @@
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
 /**
@@ -112,7 +112,7 @@ export declare class AbstractMenuItem implements IMenuItem {
      * @android
      * @since 1.1.8
      */
-    titleColor: AbstractColor;
+    titleColor: Color;
   }>;
   ios: Partial<{
     /**

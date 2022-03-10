@@ -1,5 +1,5 @@
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import Font from '../font';
 import Pin from './pin';
 import { MapViewEvents } from './mapview-events';
@@ -495,9 +495,9 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   compassEnabled: boolean;
   userLocationEnabled: boolean;
   clusterEnabled: boolean;
-  clusterFillColor: AbstractColor;
-  clusterBorderColor: AbstractColor;
-  clusterTextColor: AbstractColor;
+  clusterFillColor: Color;
+  clusterBorderColor: Color;
+  clusterTextColor: Color;
   clusterFont: AbstractFont;
   onClusterPress: (pins: Pin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;

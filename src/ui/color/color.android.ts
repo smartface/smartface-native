@@ -1,4 +1,4 @@
-import { AbstractColor } from '.';
+import Color, { AbstractColor } from '.';
 
 const NativeColor = requireClass('android.graphics.Color');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
@@ -12,29 +12,17 @@ const GradientDrawableDirection = [
 ];
 
 interface GradientParams {
-  startColor: AbstractColor;
-  endColor: AbstractColor;
-  direction: AbstractColor['direction'];
+  startColor: Color;
+  endColor: Color;
+  direction: Color['direction'];
 }
 
 interface ColorAndroidConstructorParams {
   color: any;
-  isGradient: AbstractColor['isGradient'];
+  isGradient: Color['isGradient'];
 }
 
 export default class ColorAndroid extends AbstractColor {
-  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
-    super();
-    if (params.isGradient) {
-      this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];
-      const index = params.direction || 0;
-      this.direction = GradientDrawableDirection[index];
-      this.nativeObject = new NativeGradientDrawable(this.direction, array(this.colors, 'int'));
-    } else {
-      this.nativeObject = params.color;
-    }
-  }
-
   static create(alpha: number, red: number, green: number, blue: number): ColorAndroid;
   static create(red: number, green: number, blue: number): ColorAndroid;
   static create(hexCode: string): ColorAndroid;
@@ -124,4 +112,28 @@ export default class ColorAndroid extends AbstractColor {
   static WHITE = new ColorAndroid({
     color: NativeColor.WHITE
   });
+  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
+    super();
+    if (params.isGradient) {
+      this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];
+      const index = params.direction || 0;
+      this.direction = GradientDrawableDirection[index];
+      this.nativeObject = new NativeGradientDrawable(this.direction, array(this.colors, 'int'));
+    } else {
+      this.nativeObject = params.color;
+    }
+  }
+
+  red(): number {
+    return NativeColor.red(this.nativeObject);
+  }
+  green(): number {
+    return NativeColor.green(this.nativeObject);
+  }
+  blue(): number {
+    return NativeColor.blue(this.nativeObject);
+  }
+  alpha(): number {
+    return NativeColor.alpha(this.nativeObject);
+  }
 }

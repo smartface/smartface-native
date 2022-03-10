@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
-import { AbstractColor } from '../color';
+import Color from '../color';
 import FlexLayout from '../flexlayout';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
@@ -339,7 +339,7 @@ export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents
   contentOffset: Point2D;
   useForeground?: boolean;
   rippleEnabled?: boolean;
-  rippleColor?: AbstractColor;
+  rippleColor?: Color;
   elevation?: number;
   zIndex?: number;
   static Align: ScrollViewAlign;

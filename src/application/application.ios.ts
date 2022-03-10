@@ -4,8 +4,6 @@ import Network from '../device/network';
 import Timer from '../global/timer';
 import { Invocation } from '../util';
 import { ApplicationEvents } from './application-events';
-import { EventEmitter } from 'core/eventemitter';
-import { INativeComponent } from 'core/inative-component';
 import { Statusbar } from './statusbar';
 import { ApplicationBase } from './application';
 import Page from '../ui/page';

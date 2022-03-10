@@ -1,7 +1,7 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import { IFlexLayout } from '../flexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 
@@ -203,7 +203,7 @@ export declare class AbstractSliderDrawer<TEvent extends string = SliderDrawerEv
   implements ISliderDrawer<TEvent | SliderDrawerEvents>
 {
   constructor(params?: Partial<ISliderDrawer>);
-  backgroundColor: AbstractColor;
+  backgroundColor: Color;
   readonly state: SliderDrawerState;
   width: number;
   height: number;

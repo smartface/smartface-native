@@ -1,6 +1,6 @@
 import { ISelectablePicker } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { AbstractColor } from '../color';
+import Color from '../color';
 import { AbstractFont } from '../font/font';
 import { SelectablePickerEvents } from './selectablepicker-events';
 
@@ -12,16 +12,16 @@ export default class SelectablePickerIOS<TEvent extends string = SelectablePicke
   items: string[];
   onSelected: (index?: number, selected?: boolean) => void;
   title: string;
-  titleColor: AbstractColor;
+  titleColor: Color;
   titleFont: AbstractFont;
   multiSelectEnabled: boolean;
   cancelable: boolean;
   checkedItems: number | number[];
-  backgroundColor: AbstractColor;
-  cancelButtonColor: AbstractColor;
+  backgroundColor: Color;
+  cancelButtonColor: Color;
   cancelButtonFont: AbstractFont;
   cancelButtonText: string;
-  doneButtonColor: AbstractColor;
+  doneButtonColor: Color;
   doneButtonText: string;
   doneButtonFont: AbstractFont;
   show(): void {

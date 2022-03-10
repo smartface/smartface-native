@@ -2,11 +2,11 @@ import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { IButton } from '.';
 import { ButtonEvents } from './button-events';
-import TextAlignment from '../textalignment';
 import { AndroidConfig } from '../../util';
 import LabelAndroid from '../label/label.android';
 import Image from '../image';
 import { IViewState } from '../view';
+import TextAlignment from '../shared/textalignment';
 
 const NativeButton = requireClass('android.widget.Button');
 const NativeView = requireClass('android.view.View');
@@ -30,7 +30,7 @@ const TextAlignmentDic = {
   [TextAlignment.BOTTOMRIGHT]: 80 | 5 // Gravity.BOTTOM | Gravity.RIGHT
 };
 
-export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends LabelAndroid<ButtonEvents> implements IButton<TEvent> {
+export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative = any, TProps extends IButton = IButton> extends LabelAndroid<ButtonEvents, TNative, TProps> implements IButton<TEvent> {
   private __onPress: IButton['onPress'];
   private __onLongPress: IButton['onLongPress'];
   protected _backgroundColor: IButton['backgroundColor'];
@@ -40,7 +40,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents> extends
   private backgroundDrawable: any;
   private __didSetOnClickListener: boolean;
   private __didSetOnLongClickListener: boolean;
-  constructor(params: Partial<IButton> = {}) {
+  constructor(params: Partial<TProps> = {}) {
     super(params);
     if (!this.nativeObject) {
       this._nativeObject = new NativeButton(AndroidConfig.activity);

@@ -86,7 +86,7 @@ export default class BottomTabBarIOS extends NativeComponent implements IBottomT
       for (const i in this._items) {
         //TODO: update once tabbaritem merged
         if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i]._nativeObject = this.nativeObject.items[i];
+          this._items[i].nativeObject = this.nativeObject.items[i];
         }
         this._items[i].invalidate();
       }

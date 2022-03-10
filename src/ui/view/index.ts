@@ -1,13 +1,13 @@
-import Color, { AbstractColor } from '../color';
+import Color from '../color';
 import { Point2D } from '../../primitive/point2d';
-import { EventListenerCallback, IEventEmitter } from 'core/eventemitter';
-import NativeEventEmitterComponent from 'core/native-event-emitter-component';
-import { INativeComponent } from 'core/inative-component';
-import { ExtractEventValues } from 'core/eventemitter/extract-event-values';
-import Flex from 'core/flex';
 import { ViewEvents } from './view-event';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { IEventEmitter } from '../../core/eventemitter';
+import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
+import Flex from '../../core/flex';
+import { INativeComponent } from '../../core/inative-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 export interface IViewState<Property = any> {
   normal?: Property;
   disabled?: Property;
@@ -967,6 +967,9 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
   TNative,
   TProps
 > {
+  constructor(params?: Partial<TProps>){
+    super(params);
+  }
   // export namespace ios {
   // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
   // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
@@ -1008,8 +1011,8 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: AbstractColor | IViewState<AbstractColor>;
-  borderColor: AbstractColor;
+  backgroundColor: Color | IViewState<Color>;
+  borderColor: Color;
   borderWidth: number;
   borderRadius: number;
   id: string;
