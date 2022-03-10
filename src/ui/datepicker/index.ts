@@ -2,6 +2,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { DatePickerEvents } from './datepicker-events';
 import Color from '../color';
 import Font from '../font';
+import { ConstructorOf } from '../../core/constructorof';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -351,6 +352,8 @@ export abstract class AbstractDatePicker<TEvent extends string = DatePickerEvent
   };
 }
 
-const DatePicker: typeof AbstractDatePicker = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
+const DatePicker: ConstructorOf<AbstractDatePicker, Partial<IDatePicker>> = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
 type DatePicker = AbstractDatePicker;
 export default DatePicker;
+
+const p = new DatePicker();

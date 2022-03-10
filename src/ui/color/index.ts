@@ -1,3 +1,4 @@
+import { ConstructorOf } from '../../core/constructorof';
 import NativeComponent from '../../core/native-component';
 
 /**
@@ -42,6 +43,8 @@ export enum GradientDirection {
   DIAGONAL_RIGHT
 }
 
+type ConstructorParams = { color: Color | __SF_UIColor };
+
 /**
  * @since 0.1
  * Color is used to color UI objects and its elements. A Color instance is created by
@@ -53,8 +56,10 @@ export enum GradientDirection {
  *     const myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
  *     const myHEXColor = Color.create("#FFAACC");
  */
-export declare class ColorBase extends NativeComponent {
-  constructor(params?: { color: Color | __SF_UIColor }); //TODO: Writing iOS specific class isn't best practice. Find something better.
+export abstract class AbstractColor extends NativeComponent {
+  constructor(params?: ConstructorParams) {
+    super(params);
+  } //TODO: Writing iOS specific class isn't best practice. Find something better.
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -68,7 +73,7 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(alpha: number, red: number, green: number, blue: number): ColorBase;
+  static create(alpha: number, red: number, green: number, blue: number): Color;
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -82,7 +87,7 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(red: number, green: number, blue: number): ColorBase;
+  static create(red: number, green: number, blue: number): Color;
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -96,7 +101,10 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(color: string): ColorBase;
+  static create(color: string): Color;
+  static create(color: any): Color {
+    throw new Error('Not implemented');
+  }
   /**
    * @android
    * @ios
@@ -105,11 +113,14 @@ export declare class ColorBase extends NativeComponent {
    * can specify start-end colors and direction of gradient.
    * @since 0.1
    */
-  static createGradient(params: { direction: GradientDirection; startColor: ColorBase; endColor: ColorBase }): ColorBase;
-  red(): number;
-  green(): number;
-  blue(): number;
-  alpha(): number;
+  static createGradient(params: { direction: GradientDirection; startColor: Color; endColor: Color }): Color {
+    throw new Error('Not implemented');
+  }
+
+  abstract red(): number;
+  abstract green(): number;
+  abstract blue(): number;
+  abstract alpha(): number;
   isGradient?: boolean;
   direction: GradientDirection;
 
@@ -118,73 +129,73 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static BLACK: ColorBase;
+  static BLACK: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static BLUE: ColorBase;
+  static BLUE: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static CYAN: ColorBase;
+  static CYAN: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static DARKGRAY: ColorBase;
+  static DARKGRAY: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static GRAY: ColorBase;
+  static GRAY: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static GREEN: ColorBase;
+  static GREEN: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static LIGHTGRAY: ColorBase;
+  static LIGHTGRAY: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static MAGENTA: ColorBase;
+  static MAGENTA: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static RED: ColorBase;
+  static RED: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static TRANSPARENT: ColorBase;
+  static TRANSPARENT: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static YELLOW: ColorBase;
+  static YELLOW: Color;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static WHITE: ColorBase;
+  static WHITE: Color;
 
   /**
    * Returns the red value of a color instance.
@@ -201,7 +212,9 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static red(color: ColorBase): number;
+  static red(color: Color): number {
+    throw new Error('Not implemented');
+  }
   /**
       * Returns the green value of a color instance.
       *
@@ -217,7 +230,9 @@ export declare class ColorBase extends NativeComponent {
       * @ios
       * @since 0.1
       */
-  static green(color: ColorBase): number;
+  static green(color: Color): number {
+    throw new Error('Not implemented');
+  }
   /**
    * Returns the blue value of a color instance.
    *
@@ -232,7 +247,9 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static blue(color: ColorBase): number;
+  static blue(color: Color): number {
+    throw new Error('Not implemented');
+  }
 
   /**
    * Returns the alpha value of a color instance.
@@ -248,22 +265,24 @@ export declare class ColorBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static alpha(color: ColorBase): number;
+  static alpha(color: Color): number {
+    throw new Error('Not implemented');
+  }
 
   static GradientDirection: GradientDirection;
 }
 
-export abstract class AbstractColor extends NativeComponent implements ColorBase {
-  abstract red(): number;
-  abstract green(): number;
-  abstract blue(): number;
-  abstract alpha(): number;
-  isGradient?: boolean;
-  protected colors?: ColorBase[];
-  direction: GradientDirection;
-}
+// export abstract class AbstractColor extends NativeComponent implements ColorBase {
+//   abstract red(): number;
+//   abstract green(): number;
+//   abstract blue(): number;
+//   abstract alpha(): number;
+//   isGradient?: boolean;
+//   protected colors?: ColorBase[];
+//   direction: GradientDirection;
+// }
 
-const Color: typeof ColorBase = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
-type Color = ColorBase;
+const Color: ConstructorOf<AbstractColor, ConstructorParams> = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+type Color = AbstractColor;
 
 export default Color;

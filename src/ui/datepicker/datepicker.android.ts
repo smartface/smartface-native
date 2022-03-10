@@ -1,4 +1,4 @@
-import { AbstractDatePicker, DatePickerMode, IDatePicker, Style } from '.';
+import { AbstractDatePicker, IDatePicker } from '.';
 import { AndroidConfig } from '../../util';
 
 const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
