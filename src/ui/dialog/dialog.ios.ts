@@ -3,10 +3,12 @@ import Color from '../color';
 import FlexLayout from '../flexlayout';
 
 export default class DialogIOS extends AbstractDialog {
+  setShowListener(): void {
+  }
   private dialogView: FlexLayout;
   private _android = {};
-  constructor(params: Partial<DialogIOS> = {}) {
-    super();
+  constructor(params?: Partial<DialogIOS>) {
+    super(params);
 
     this.dialogView = new FlexLayout();
     this.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;

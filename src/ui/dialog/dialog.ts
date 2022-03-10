@@ -67,9 +67,11 @@ export enum DialogStyle {
   ThemeNoHeaderBarWithTranslucentDecor = 16974306
 }
 
-export declare class AbstractDialog extends NativeComponent {
-  constructor(params?: Partial<AbstractDialog>);
-  setShowListener(): void;
+export abstract class AbstractDialog extends NativeComponent {
+  constructor(params?: Partial<AbstractDialog>) {
+    super(params);
+  }
+  abstract setShowListener(): void;
   /**
    * Gets the layout of Dialog. You should add views to the layout of the dialog instance.
    *
@@ -77,7 +79,7 @@ export declare class AbstractDialog extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  get layout(): FlexLayout;
+  abstract get layout(): FlexLayout;
   /**
    * Hides the dialog.
    *
@@ -85,7 +87,7 @@ export declare class AbstractDialog extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  hide(): void;
+  abstract hide(): void;
   /**
    * Shows the dialog.
    *
@@ -93,11 +95,11 @@ export declare class AbstractDialog extends NativeComponent {
    * @android
    * @ios
    */
-  show(): void;
+  abstract show(): void;
 
   static Style: DialogStyle;
 
-  get android(): Partial<{
+  abstract get android(): Partial<{
     /**
      * Sets the theme style of dialog.
      *
