@@ -77,7 +77,7 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
     this.nodePlayer.pause();
   }
   //TODO: rename this or view.start
-  start() {
+  play() {
     this.nodePlayer.start();
   }
   stop() {

@@ -1,5 +1,5 @@
 import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
+import { AndroidConfig } from '../../util';
 import { ViewAndroid } from '../view/view.android';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 
@@ -8,7 +8,7 @@ const SFLiveMediaPlayerDelegate = requireClass('io.smartface.android.sfcore.ui.l
 const NodePlayerView = requireClass('cn.nodemedia.NodePlayerView');
 const NodePlayer = requireClass('cn.nodemedia.NodePlayer');
 
-export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPlayerEvents> extends ViewAndroid<TEvent | LiveMediaPlayerEvents, {}> implements ILiveMediaPlayer {
+export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPlayerEvents> extends ViewAndroid<TEvent | LiveMediaPlayerEvents, any> implements ILiveMediaPlayer {
   static ScaleType = {
     STRETCH: NodePlayerView.UIViewContentMode.ScaleToFill,
     ASPECTFIT: NodePlayerView.UIViewContentMode.ScaleAspectFit,
@@ -84,7 +84,7 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
     this.nodePlayer.pause();
   }
   //TODO: rename this or view.start
-  start() {
+  play() {
     this.nodePlayer.start();
   }
   stop() {

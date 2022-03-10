@@ -59,7 +59,7 @@ export enum ScaleType {
  *
  */
 
-export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents, TIOS = {}, TAND = {}> extends IView<TEvent | LiveMediaPlayerEvents, TIOS & {}, TAND & {}> {
+export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents> extends IView<TEvent | LiveMediaPlayerEvents> {
   /**
    * Set whether video is enabled
    *
@@ -103,12 +103,13 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents,
   /**
    * Start playing.
    *
-   * @method start
+   * @method play
    * @android
    * @ios
+   * @deprecated
    * @since 4.2.2
    */
-  start(): void;
+  play(): void;
 
   /**
    * Pause playback.
@@ -174,14 +175,14 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents,
   onChange: (params: { event: number; message: string }) => void;
 }
 
-export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents> extends AbstractView<TEvent> implements ILiveMediaPlayer<TEvent, {}, {}> {
+export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents> extends AbstractView<TEvent> implements ILiveMediaPlayer<TEvent> {
   static Events: LiveMediaPlayerEvents & ViewEvents;
   static ScaleType: ScaleType;
   videoEnabled: boolean;
   inputUrl: string;
   audioEnabled: boolean;
   scaleType: ScaleType;
-  start(): void;
+  play(): void;
   pause(): void;
   isPlaying(): boolean;
   release(): void;
