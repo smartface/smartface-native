@@ -1,13 +1,14 @@
 import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
 import File from '../../io/file';
 import Color from '../color';
-import Image from '../image';
+import { IImage } from '../image';
+import ImageiOS from '../image/image.ios';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 
 export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
-  private _imageTemplate: Image;
+  private _imageTemplate: IImage | undefined;
   private _isSetTintColor: boolean;
   constructor(params?: IImageView) {
     super(params);
@@ -25,33 +26,36 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this.touchEnabled = true;
   }
 
-  get image(): Image | string | undefined {
-    return this.nativeObject.image ? Image.createFromImage(this.nativeObject.image) : undefined;
+  get image(): IImage | null {
+    return this.nativeObject.image ? ImageiOS.createFromImage(this.nativeObject.image) as IImage : null;
   }
-  set image(value: Image | string | undefined) {
+
+  set image(value: IImage | null) {
     this._imageTemplate = undefined;
 
-    if (typeof value === 'string') {
-      const image = Image.createFromFile(value);
+    // if (typeof value === 'string') {
+    //   const image = Image.createFromFile(value);
+    //   if (image) {
+    //     if (this._isSetTintColor) {
+    //       // TODO Recheck after build
+    //       let rendered: Image = image.nativeObject.imageWithRenderingMode(2);
+    //       this._imageTemplate = rendered;
+    //       this.nativeObject.loadImage(rendered.nativeObject);
+    //     } else {
+    //       this.nativeObject.loadImage(image.nativeObject);
+    //     }
+    //   }
+    // } else {
+    if (value) {
       if (this._isSetTintColor) {
-        // TODO Recheck after build
-        let rendered: Image = image.nativeObject.imageWithRenderingMode(2);
+        let rendered: IImage = value.nativeObject.imageWithRenderingMode(2);
         this._imageTemplate = rendered;
         this.nativeObject.loadImage(rendered.nativeObject);
-      } else {
-        this.nativeObject.loadImage(image.nativeObject);
-      }
+      } else this.nativeObject.loadImage(value.nativeObject);
     } else {
-      if (value) {
-        if (this._isSetTintColor) {
-          let rendered: Image = value.nativeObject.imageWithRenderingMode(2);
-          this._imageTemplate = rendered;
-          this.nativeObject.loadImage(rendered.nativeObject);
-        } else this.nativeObject.loadImage(value.nativeObject);
-      } else {
-        this.nativeObject.loadImage(undefined);
-      }
+      this.nativeObject.loadImage(undefined);
     }
+    // }
   }
 
   get tintColor(): Color {
@@ -65,7 +69,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
         this.nativeObject.image = this._imageTemplate.nativeObject;
       } else {
         this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
-        this.nativeObject.image = this._imageTemplate.nativeObject;
+        this.nativeObject.image = this._imageTemplate?.nativeObject;
       }
     }
     this._isSetTintColor = true;
@@ -82,7 +86,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -132,13 +136,13 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
           }
           if (typeof params.onSuccess === 'function') {
             __SF_Dispatch.mainAsync(function (innerIndex) {
-              params.onSuccess();
+              params.onSuccess?.();
             });
           }
         } else {
           if (typeof params.onFailure === 'function') {
             __SF_Dispatch.mainAsync(function (innerIndex) {
-              params.onFailure();
+              params.onFailure?.();
             });
           }
         }
@@ -150,10 +154,10 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     if (params.file) {
       const file = params.file;
       const filePath = file.nativeObject.getActualPath();
-      const image = Image.createFromFile(filePath);
+      const image = ImageiOS.createFromFile(filePath);
       const fade = typeof params.fade === 'boolean' ? params.fade : true;
 
-      if (fade) {
+      if (fade && image) {
         this.nativeObject.loadImage(image.nativeObject);
         const alpha = this.nativeObject.alpha;
         this.nativeObject.alpha = 0;
@@ -166,7 +170,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
           function () {}
         );
       } else {
-        this.nativeObject.loadImage(image.nativeObject);
+        image && this.nativeObject.loadImage(image.nativeObject);
       }
     }
   }
@@ -174,9 +178,9 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image, cache: ImageCacheType) => void;
+    onSuccess?: (image: IImage | null, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
@@ -193,13 +197,13 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
         if (typeof params.onSuccess === 'function') {
           __SF_Dispatch.mainAsync((innerIndex) => {
             // TODO Recheck after build
-            params.onSuccess(Image.createFromImage(params.image), params.cache);
+            params.onSuccess?.(ImageiOS.createFromImage(params.image), params.cache);
           });
         }
       } else {
         if (typeof params.onFailure === 'function') {
           __SF_Dispatch.mainAsync(function (innerIndex) {
-            params.onFailure();
+            params.onFailure?.();
           });
         }
       }

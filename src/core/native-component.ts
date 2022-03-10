@@ -8,11 +8,11 @@ export default abstract class NativeComponent<TNative extends NativeInstance = N
     rest && Object.assign(this, rest);
   }
 
-  get nativeObject(): TNative {
+  get nativeObject(): any {
     return this._nativeObject;
   }
 
-  set nativeObject(value: TNative) {
+  set nativeObject(value: any) {
     this._nativeObject = value;
   }
 }

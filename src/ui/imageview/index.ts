@@ -1,13 +1,10 @@
-import { AbstractView, IView, IViewProps } from '../view';
-import Image from '../image';
+import { AbstractView, IView } from '../view';
+import type { IImage } from '../image';
 import Color from '../color';
 import File from '../../io/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
-import IImage from '../image';
-import { INativeComponent } from '../../core/inative-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import NativeComponent from '../../core/native-component';
 
 export enum ImageViewFillTypeIOS {
   REDRAW = 3,
@@ -172,8 +169,11 @@ export enum ImageViewFillType {
   ASPECTFILL = 3
 }
 
-export interface IImageView<TEvent extends string = ImageViewEvents, TNative extends { [key: string]: any } = any, TMobile extends IViewProps<MobileOSProps> = IViewProps<MobileOSProps>>
-  extends IView<TEvent | ImageViewEvents, TNative, TMobile> {
+export interface IImageView<
+  TEvent extends string = ImageViewEvents,
+  TNative extends { [key: string]: any } = any,
+  TMobile extends MobileOSProps<IView['ios'], IView['android']> = MobileOSProps<IView['ios'], IView['android']>
+> extends IView<TEvent | ImageViewEvents, TNative, TMobile> {
   /**
    * Gets/sets the image. Path of image or Image object can be set. Setting "image path"
    * to this property will be beneficial in terms of performance.
@@ -190,12 +190,12 @@ export interface IImageView<TEvent extends string = ImageViewEvents, TNative ext
    *
    *     myPage.layout.addChild(myImageView);
    *
-   * @property {UI.Image | String}  [image = null]
+   * @property {UI.Image | Null}  [image = null]
    * @android
    * @ios
    * @since 0.1
    */
-  image: IImage | string | undefined;
+  image: IImage | null;
   /**
    * Gets/sets the tintColor.
    *
@@ -263,7 +263,7 @@ export interface IImageView<TEvent extends string = ImageViewEvents, TNative ext
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -326,10 +326,12 @@ export interface IImageView<TEvent extends string = ImageViewEvents, TNative ext
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image, cache: ImageCacheType) => void;
+    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
     onFailure?: () => void;
+    image: any;
+    cache: ImageCacheType;
     android?: {
       useDiskCache?: boolean;
       useMemoryCache?: boolean;
@@ -343,7 +345,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
     ios: typeof ImageViewFillTypeIOS;
   } & typeof ImageViewFillType;
 
-  image: string | Image;
+  image: null | IImage;
 
   tintColor: Color;
 
@@ -352,7 +354,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -366,9 +368,9 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image, cache: ImageCacheType) => void;
+    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
