@@ -6,190 +6,192 @@ import { MaterialTextBoxEvents } from './materialtextbox-events';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type iOSProps = ITextBox['ios'] & Partial<{
-  /**
-   * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
-   *
-   * @property {Object} leftLayout
-   * @property {UI.View} leftLayout.view
-   * @property {Number} leftLayout.width
-   * @property {Number} leftLayout.height
-   * @android
-   * @ios
-   * @since 3.2.1
-   */
-  leftLayout: {
-    view: View;
-    width: number;
-    height?: number;
-  };
-  /**
-   * This event is called when positioning leftLayout. This event can be called multiple times.
-   * @param {Object} bounds MaterialTextBox bounds.
-   * @param {Number} bounds.x
-   * @param {Number} bounds.y
-   * @param {Number} bounds.width
-   * @param {Number} bounds.height
-   * @param {Object} defaultRect
-   * @param {Number} defaultRect.x
-   * @param {Number} defaultRect.y
-   * @param {Number} defaultRect.width
-   * @param {Number} defaultRect.height
-   * @return {Object} Rect
-   * @return {Number} return.x
-   * @return {Number} return.y
-   * @return {Number} return.width
-   * @return {Number} return.height
-   * @event onLeftLayoutRectForBounds
-   * @deprecated
-   * @ios
-   * @since 4.3.0
-   * @example
-   * ````
-   * import MaterialTextBox from '@smartface/native/ui/materialtextbox';
-   *
-   * const materialTextBox = new MaterialTextBox();
-   * materialTextBox.on(MaterialTextBox.Events.LeftLayoutRectForBounds, (params) => {
-   *  console.info('onLeftLayoutRectForBounds', params);
-   * });
-   * ````
-   */
-  onLeftLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
-  /**
-   * This event is called when positioning rightLayout. This event can be called multiple times.
-   * @param {Object} bounds MaterialTextBox bounds.
-   * @param {Number} bounds.x
-   * @param {Number} bounds.y
-   * @param {Number} bounds.width
-   * @param {Number} bounds.height
-   * @param {Object} defaultRect
-   * @param {Number} defaultRect.x
-   * @param {Number} defaultRect.y
-   * @param {Number} defaultRect.width
-   * @param {Number} defaultRect.height
-   * @return {Object} Rect
-   * @return {Number} return.x
-   * @return {Number} return.y
-   * @return {Number} return.width
-   * @return {Number} return.height
-   * @event onRightLayoutRectForBounds
-   * @deprecated
-   * @ios
-   * @since 4.3.0
-   * @example
-   * ````
-   * import MaterialTexBox from '@smartface/native/ui/materialtextbox';
-   *
-   * const materialTextBox = new MaterialTextBox();
-   * materialTextBox.on(MaterialTextBox.Events.RightLayoutRectForBounds, (params) => {
-   *  console.info('onRightLayoutRectForBounds', params);
-   * });
-   * ````
-   */
-  onRightLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
-  /**
-   * Gets/sets the rightLayoutLeftPadding of the MaterialTextBox.
-   * @property {Number} rightLayoutLeftPadding
-   * @ios
-   * @since 4.3.0
-   */
-  rightLayoutLeftPadding: number;
-  /**
-   * Gets/sets the leftLayoutRightPadding of the MaterialTextBox.
-   * @property {Number} leftLayoutRightPadding
-   * @ios
-   * @since 4.3.0
-   */
-  leftLayoutRightPadding: number;
-  /**
-   * Gets/sets the inlineHintFont of the MaterialTextBox. This property overrides the labelsFont property for characterRestriction.
-   * @property {UI.Font} inlineHintFont
-   * @ios
-   * @since 4.3.0
-   */
-  inlineHintFont: Font;
-  /**
-   * Gets/sets the underlineLabelsFont of the MaterialTextBox. This property overrides the labelsFont property for error and characterRestriction font.
-   * @property {UI.Font} underlineLabelsFont
-   * @ios
-   * @since 4.3.0
-   */
-  underlineLabelsFont: Font;
-  /**
-   * Gets/sets the clearButtonColor of the MaterialTextBox.
-   * @property {UI.Color} clearButtonColor
-   * @ios
-   * @since 4.3.0
-   */
-  clearButtonColor: Color;
-  /**
-   * Gets/sets the lineHeight of the MaterialTextBox.
-   * @property {Number} lineHeight
-   * @ios
-   * @since 3.1.2
-   */
-  lineHeight: number;
-  /**
-   * Gets/sets the selectedLineHeight of the MaterialTextBox.
-   * @property {Number} selectedLineHeight
-   * @ios
-   * @since 3.1.2
-   */
-  selectedLineHeight: number;
-  /**
-   * Gets/sets the expandsOnOverflow of the MaterialTextBox.
-   * @property {Boolean} expandsOnOverflow
-   * @ios
-   * @since 4.3.6
-   */
-  expandsOnOverflow: boolean;
-}>;
+export type iOSProps = ITextBox['ios'] &
+  Partial<{
+    /**
+     * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
+     *
+     * @property {Object} leftLayout
+     * @property {UI.View} leftLayout.view
+     * @property {Number} leftLayout.width
+     * @property {Number} leftLayout.height
+     * @android
+     * @ios
+     * @since 3.2.1
+     */
+    leftLayout: {
+      view: View;
+      width: number;
+      height?: number;
+    };
+    /**
+     * This event is called when positioning leftLayout. This event can be called multiple times.
+     * @param {Object} bounds MaterialTextBox bounds.
+     * @param {Number} bounds.x
+     * @param {Number} bounds.y
+     * @param {Number} bounds.width
+     * @param {Number} bounds.height
+     * @param {Object} defaultRect
+     * @param {Number} defaultRect.x
+     * @param {Number} defaultRect.y
+     * @param {Number} defaultRect.width
+     * @param {Number} defaultRect.height
+     * @return {Object} Rect
+     * @return {Number} return.x
+     * @return {Number} return.y
+     * @return {Number} return.width
+     * @return {Number} return.height
+     * @event onLeftLayoutRectForBounds
+     * @deprecated
+     * @ios
+     * @since 4.3.0
+     * @example
+     * ````
+     * import MaterialTextBox from '@smartface/native/ui/materialtextbox';
+     *
+     * const materialTextBox = new MaterialTextBox();
+     * materialTextBox.on(MaterialTextBox.Events.LeftLayoutRectForBounds, (params) => {
+     *  console.info('onLeftLayoutRectForBounds', params);
+     * });
+     * ````
+     */
+    onLeftLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+    /**
+     * This event is called when positioning rightLayout. This event can be called multiple times.
+     * @param {Object} bounds MaterialTextBox bounds.
+     * @param {Number} bounds.x
+     * @param {Number} bounds.y
+     * @param {Number} bounds.width
+     * @param {Number} bounds.height
+     * @param {Object} defaultRect
+     * @param {Number} defaultRect.x
+     * @param {Number} defaultRect.y
+     * @param {Number} defaultRect.width
+     * @param {Number} defaultRect.height
+     * @return {Object} Rect
+     * @return {Number} return.x
+     * @return {Number} return.y
+     * @return {Number} return.width
+     * @return {Number} return.height
+     * @event onRightLayoutRectForBounds
+     * @deprecated
+     * @ios
+     * @since 4.3.0
+     * @example
+     * ````
+     * import MaterialTexBox from '@smartface/native/ui/materialtextbox';
+     *
+     * const materialTextBox = new MaterialTextBox();
+     * materialTextBox.on(MaterialTextBox.Events.RightLayoutRectForBounds, (params) => {
+     *  console.info('onRightLayoutRectForBounds', params);
+     * });
+     * ````
+     */
+    onRightLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+    /**
+     * Gets/sets the rightLayoutLeftPadding of the MaterialTextBox.
+     * @property {Number} rightLayoutLeftPadding
+     * @ios
+     * @since 4.3.0
+     */
+    rightLayoutLeftPadding: number;
+    /**
+     * Gets/sets the leftLayoutRightPadding of the MaterialTextBox.
+     * @property {Number} leftLayoutRightPadding
+     * @ios
+     * @since 4.3.0
+     */
+    leftLayoutRightPadding: number;
+    /**
+     * Gets/sets the inlineHintFont of the MaterialTextBox. This property overrides the labelsFont property for characterRestriction.
+     * @property {UI.Font} inlineHintFont
+     * @ios
+     * @since 4.3.0
+     */
+    inlineHintFont: Font;
+    /**
+     * Gets/sets the underlineLabelsFont of the MaterialTextBox. This property overrides the labelsFont property for error and characterRestriction font.
+     * @property {UI.Font} underlineLabelsFont
+     * @ios
+     * @since 4.3.0
+     */
+    underlineLabelsFont: Font;
+    /**
+     * Gets/sets the clearButtonColor of the MaterialTextBox.
+     * @property {UI.Color} clearButtonColor
+     * @ios
+     * @since 4.3.0
+     */
+    clearButtonColor: Color | null;
+    /**
+     * Gets/sets the lineHeight of the MaterialTextBox.
+     * @property {Number} lineHeight
+     * @ios
+     * @since 3.1.2
+     */
+    lineHeight: number;
+    /**
+     * Gets/sets the selectedLineHeight of the MaterialTextBox.
+     * @property {Number} selectedLineHeight
+     * @ios
+     * @since 3.1.2
+     */
+    selectedLineHeight: number;
+    /**
+     * Gets/sets the expandsOnOverflow of the MaterialTextBox.
+     * @property {Boolean} expandsOnOverflow
+     * @ios
+     * @since 4.3.6
+     */
+    expandsOnOverflow: boolean;
+  }>;
 
-export type AndroidProps = ITextBox['android'] & Partial<{
-  /**
-   * Gets/sets the textBoxMaxHeight of the MaterialTextBox.This property is necessary because it has same reason with textBoxHeight property.
-   *
-   * @property {Number} textBoxMaxHeight
-   * @android
-   * @since 3.1.2
-   * @deprecated 3.2.1 TextBox grows as its wrapper
-   */
-  textBoxMaxHeight: number;
-  /**
-   * Gets/sets the enableErrorMessage of the MaterialTextBox. To change error dynamically, you should set this property at the creation moment.
-   *
-   * @property {Boolean} enableErrorMessage
-   * @android
-   * @since 3.1.2
-   */
-  enableErrorMessage: boolean;
-  /**
-   * Gets/sets the enableCharacterRestriction of the MaterialTextBox. To change counter dynamically at runtime, you should set this property at the creation moment.
-   *
-   * @property {Boolean} enableCharacterRestriction
-   * @android
-   * @since 3.1.2
-   */
-  enableCharacterRestriction: boolean;
-  /**
-   * Gets/sets the textBoxHeight of the MaterialTextBox. This property is necessary because of the textbox does not grow its height with wrapper container(MaterialTextBox actually is a wrapper of views in Android).
-   *
-   * @property {Number} textBoxHeight
-   * @android
-   * @since 3.1.2
-   * @deprecated 3.2.1 TextBox grows as its wrapper
-   */
-  textBoxHeight: number;
-  /**
-   * Gets/sets the maxLines of the MaterialTextBox.
-   * Setting this value overrides previous maximum height configurations.
-   *
-   * @property {Number} maxLines
-   * @android
-   * @since 4.3.6
-   */
-  maxLines: number;
-}>;
+export type AndroidProps = ITextBox['android'] &
+  Partial<{
+    /**
+     * Gets/sets the textBoxMaxHeight of the MaterialTextBox.This property is necessary because it has same reason with textBoxHeight property.
+     *
+     * @property {Number} textBoxMaxHeight
+     * @android
+     * @since 3.1.2
+     * @deprecated 3.2.1 TextBox grows as its wrapper
+     */
+    textBoxMaxHeight: number;
+    /**
+     * Gets/sets the enableErrorMessage of the MaterialTextBox. To change error dynamically, you should set this property at the creation moment.
+     *
+     * @property {Boolean} enableErrorMessage
+     * @android
+     * @since 3.1.2
+     */
+    enableErrorMessage: boolean;
+    /**
+     * Gets/sets the enableCharacterRestriction of the MaterialTextBox. To change counter dynamically at runtime, you should set this property at the creation moment.
+     *
+     * @property {Boolean} enableCharacterRestriction
+     * @android
+     * @since 3.1.2
+     */
+    enableCharacterRestriction: boolean;
+    /**
+     * Gets/sets the textBoxHeight of the MaterialTextBox. This property is necessary because of the textbox does not grow its height with wrapper container(MaterialTextBox actually is a wrapper of views in Android).
+     *
+     * @property {Number} textBoxHeight
+     * @android
+     * @since 3.1.2
+     * @deprecated 3.2.1 TextBox grows as its wrapper
+     */
+    textBoxHeight: number;
+    /**
+     * Gets/sets the maxLines of the MaterialTextBox.
+     * Setting this value overrides previous maximum height configurations.
+     *
+     * @property {Number} maxLines
+     * @android
+     * @since 4.3.6
+     */
+    maxLines: number;
+  }>;
 
 export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBoxEvents, TIOS = iOSProps, TAND = AndroidProps>
   extends ITextBox<TEvent | MaterialTextBoxEvents, MobileOSProps<iOSProps, AndroidProps>> {
@@ -216,7 +218,7 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @android
    * @since 3.1.2
    */
-  selectedHintTextColor: Color;
+  selectedHintTextColor: Color | null;
   /**
    * This property used to assign a view right of MaterialTextBox. The given view's width & height must be specified.
    *
@@ -229,7 +231,7 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @since 3.2.1
    */
   rightLayout: {
-    view: View;
+    view: View | null;
     width: number;
     height?: number;
   };
@@ -243,8 +245,8 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @since 3.1.2
    */
   lineColor: {
-    normal: Color;
-    selected: Color;
+    normal: Color | null;
+    selected: Color | null;
   };
   /**
    * Gets/sets the errorColor of the MaterialTextBox. In Android, hint text color does not changed as iOS.
@@ -253,7 +255,7 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @ios
    * @since 3.1.2
    */
-  errorColor: Color;
+  errorColor: Color | null;
   /**
    * Gets/sets the errorMessage of the MaterialTextBox.
    * @property {String} errorMessage
@@ -269,7 +271,7 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @ios
    * @since 3.1.2
    */
-  characterRestriction: number;
+  characterRestriction: number | undefined;
   /**
    * Gets/sets the characterRestrictionColor of the MaterialTextBox.
    * @property {UI.Color} characterRestrictionColor
@@ -277,7 +279,7 @@ export declare interface IMaterialTextBox<TEvent extends string = MaterialTextBo
    * @ios
    * @since 3.1.2
    */
-  characterRestrictionColor: Color;
+  characterRestrictionColor: Color | null;
   /**
    * Gets/sets the labelsFont of the MaterialTextBox. In Android, sets the font to hint and any other labels (such as error and counter labels) but size of font does not take into account except for hint text size.
    * Before using this property you should enable counter, error and give hint text. For iOS, this property overrides the underlineLabelsFont property for error and characterRestriction font.

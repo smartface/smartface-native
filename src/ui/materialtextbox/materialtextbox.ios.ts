@@ -6,10 +6,7 @@ import TextBoxIOS from '../textbox/textbox.ios';
 import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 
-export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents>
-  extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox>
-  implements IMaterialTextBox
-{
+export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents> extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private mdcTextInputControllerUnderline: __SF_MDCTextInputControllerUnderline;
   private _multiline: boolean;
   private _lineCount: number;
@@ -46,18 +43,9 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
 
     this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
-
-    this.addIOSProps(this.iosProps);
-    this.ios.clearButtonEnabled = false;
-
-    // const { ios, ...restParams } = params;
-    // Object.assign(this._ios, this.iosProps, ios);
-    // Object.assign(this, restParams);
-  }
-
-  get iosProps() {
     const self = this;
-    return {
+
+    this.addIOSProps({
       get clearButtonColor(): Color {
         return self.mdcTextInputControllerUnderline.textInputClearButtonTintColor;
       },
@@ -150,15 +138,15 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
           // TODO: Ask why flexMain.content is implemented, it looks a bad idea.
           flexMain.content = flexContent;
           self._leftLayoutMain = flexMain;
-        } else {
+        } else if (self._leftLayoutMain.content) {
           const childs = self._leftLayoutMain.content.getChildList();
           for (const i in childs) {
             self._leftLayoutMain.content.removeChild(childs[i]);
           }
         }
 
-        self._leftLayoutMain.content.addChild(value.view);
-        self._leftLayoutMain.content.applyLayout();
+        self._leftLayoutMain.content?.addChild(value.view);
+        self._leftLayoutMain.content?.applyLayout();
         // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'leadingViewMode');
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(self._leftLayoutMain.nativeObject, 'leadingView');
@@ -168,41 +156,50 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
         // }
       },
       // TODO Old version has not this encapsulation.
-      get normallineColor(): Color {
-        return new Color({
-          color: self.mdcTextInputControllerUnderline.normalColor
-        });
+      get normallineColor(): Color | null {
+        return self.mdcTextInputControllerUnderline.normalColor
+          ? new Color({
+              color: self.mdcTextInputControllerUnderline.normalColor
+            })
+          : null;
       },
-      set normallineColor(value: Color) {
-        self.mdcTextInputControllerUnderline.normalColor = value.nativeObject;
+      set normallineColor(value: Color | null) {
+        if (value) self.mdcTextInputControllerUnderline.normalColor = value.nativeObject;
       },
-      get selectedLineColor(): Color {
-        return new Color({
-          color: self.mdcTextInputControllerUnderline.activeColor
-        });
+      get selectedLineColor(): Color | null {
+        return self.mdcTextInputControllerUnderline.activeColor
+          ? new Color({
+              color: self.mdcTextInputControllerUnderline.activeColor
+            })
+          : null;
       },
-      set selectedLineColor(value: Color) {
-        self.mdcTextInputControllerUnderline.activeColor = value.nativeObject;
+      set selectedLineColor(value: Color | null) {
+        if (value) self.mdcTextInputControllerUnderline.activeColor = value.nativeObject;
       },
-      get lineHeight(): number {
+      get lineHeight(): number | undefined {
         return self.mdcTextInputControllerUnderline.underlineHeightNormal;
       },
-      set lineHeight(value: number) {
+      set lineHeight(value: number | undefined) {
         self.mdcTextInputControllerUnderline.underlineHeightNormal = value;
       },
-      get selectedLineHeight(): number {
+      get selectedLineHeight(): number | undefined {
         return self.mdcTextInputControllerUnderline.underlineHeightActive;
       },
-      set selectedLineHeight(value: number) {
+      set selectedLineHeight(value: number | undefined) {
         self.mdcTextInputControllerUnderline.underlineHeightActive = value;
       },
-      get expandsOnOverflow(): boolean {
+      get expandsOnOverflow(): boolean | undefined {
         return self.mdcTextInputControllerUnderline.expandsOnOverflow;
       },
-      set expandsOnOverflow(value: boolean) {
+      set expandsOnOverflow(value: boolean | undefined) {
         self.mdcTextInputControllerUnderline.expandsOnOverflow = value;
       }
-    };
+    });
+    this.ios.clearButtonEnabled = false;
+
+    // const { ios, ...restParams } = params;
+    // Object.assign(this._ios, this.iosProps, ios);
+    // Object.assign(this, restParams);
   }
 
   // TODO Old version has not typing for this encapsulation
@@ -328,20 +325,22 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this.nativeObject.secureTextEntry = value;
   }
 
-  get characterRestriction(): number {
+  get characterRestriction(): number | undefined {
     return this.mdcTextInputControllerUnderline.characterCountMax;
   }
-  set characterRestriction(value: number) {
+  set characterRestriction(value: number | undefined) {
     this.mdcTextInputControllerUnderline.characterCountMax = value;
   }
 
-  get characterRestrictionColor(): Color {
-    return new Color({
-      color: this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor
-    });
+  get characterRestrictionColor(): Color | null {
+    return this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor
+      ? new Color({
+          color: this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor
+        })
+      : null;
   }
-  set characterRestrictionColor(value: Color) {
-    this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor = value.nativeObject;
+  set characterRestrictionColor(value: Color | null) {
+    if (value) this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor = value.nativeObject;
   }
 
   get rightLayout(): { view: View; width: number; height?: number } {
@@ -382,14 +381,14 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
       // TODO Recheck after build. There is no content property.
       flexMain.content = flexContent;
       this._rightLayoutMain = flexMain;
-    } else {
+    } else if (this._rightLayoutMain.content) {
       const childs = this._rightLayoutMain.content.getChildList();
       for (const i in childs) {
         this._rightLayoutMain.content.removeChild(childs[i]);
       }
     }
-    this._rightLayoutMain.content.addChild(value.view);
-    this._rightLayoutMain.content.applyLayout();
+    this._rightLayoutMain.content?.addChild(value.view);
+    this._rightLayoutMain.content?.applyLayout();
     // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'trailingViewMode');
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(this._rightLayoutMain.nativeObject, 'trailingView');
@@ -416,33 +415,37 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this.mdcTextInputControllerUnderline.textInputFont = value;
   }
 
-  get selectedHintTextColor(): Color {
-    return new Color({
-      color: this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor
-    });
+  get selectedHintTextColor(): Color | null {
+    return this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor
+      ? new Color({
+          color: this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor
+        })
+      : null;
   }
-  set selectedHintTextColor(value: Color) {
-    this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor = value.nativeObject;
+  set selectedHintTextColor(value: Color | null) {
+    if (value) this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor = value.nativeObject;
   }
 
-  get lineColor(): { normal: Color; selected: Color } {
+  get lineColor(): { normal: Color | null; selected: Color | null } {
     return {
-      normal: this.iosProps.normallineColor,
-      selected: this.iosProps.selectedLineColor
+      normal: this.ios.normallineColor,
+      selected: this.ios.selectedLineColor
     };
   }
-  set lineColor(value: { normal: Color; selected: Color }) {
-    value.normal && (this.iosProps.normallineColor = value.normal);
-    value.selected && (this.iosProps.selectedLineColor = value.normal);
+  set lineColor(value: { normal: Color | null; selected: Color | null }) {
+    value.normal && (this.ios.normallineColor = value.normal);
+    value.selected && (this.ios.selectedLineColor = value.normal);
   }
 
-  get errorColor(): Color {
-    return new Color({
-      color: this.mdcTextInputControllerUnderline.errorColor
-    });
+  get errorColor(): Color | null {
+    return this.mdcTextInputControllerUnderline.errorColor
+      ? new Color({
+          color: this.mdcTextInputControllerUnderline.errorColor
+        })
+      : null;
   }
-  set errorColor(value: Color) {
-    this.mdcTextInputControllerUnderline.errorColor = value.nativeObject;
+  set errorColor(value: Color | null) {
+    if (value) this.mdcTextInputControllerUnderline.errorColor = value.nativeObject;
   }
 
   get errorMessage(): string {

@@ -22,20 +22,17 @@ const state_unfocused = -16842908;
 // const GRAVITY_END = 8388613;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
-export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents>
-  extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox>
-  implements IMaterialTextBox
-{
+export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private sfTextBox: TextBox;
   private textBoxNativeObject: any;
   private __hintTextColor: Color;
-  private _hintFocusedTextColor: Color;
+  private _hintFocusedTextColor: Color | null;
   private _errorText: string;
-  private _lineColorObj: { normal: Color; selected: Color };
-  private _errorColor: Color;
+  private _lineColorObj: { normal: Color | null; selected: Color | null } = { normal: null, selected: null };
+  private _errorColor: Color | null = null;
   private _characterRestrictionColor: Color;
   private __font: Font;
-  private _rightLayout: FlexLayout = null;
+  private _rightLayout: FlexLayout | null = null;
   private _rightLayoutWidth: number;
   private _enableCounterMaxLength: number = 10;
   private _enableCounter: boolean = false;
@@ -67,12 +64,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     // const { android, ...restParams } = params;
     // Object.assign(this._android, this.androidFields, android);
     // Object.assign(this, restParams);
-    this.addAndroidProps(this.androidFields);
-  }
-
-  get androidFields() {
     const self = this;
-    return {
+
+    this.addAndroidProps({
       get labelsFont(): Font {
         return self.__font;
       },
@@ -109,7 +103,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
       set maxLines(value: number) {
         self.textBoxNativeObject.setMaxLines(value);
       }
-    };
+    });
   }
 
   get hint(): string {
@@ -130,23 +124,25 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.nativeObject.changedErrorTextColor(hintTextColorFieldName, value.nativeObject);
   }
 
-  get selectedHintTextColor(): Color {
+  get selectedHintTextColor(): Color | null {
     return this._hintFocusedTextColor;
   }
-  set selectedHintTextColor(value: Color) {
-    this._hintFocusedTextColor = value;
-    this.nativeObject.changedErrorTextColor(hintFocusedTextColorFieldName, value.nativeObject);
+  set selectedHintTextColor(value: Color | null) {
+    if (value) {
+      this._hintFocusedTextColor = value;
+      this.nativeObject.changedErrorTextColor(hintFocusedTextColorFieldName, value.nativeObject);
+    }
   }
 
-  get lineColor(): { normal: Color; selected: Color } {
+  get lineColor(): { normal: Color | null; selected: Color | null } {
     return this._lineColorObj;
   }
-  set lineColor(value: { normal: Color; selected: Color }) {
+  set lineColor(value: { normal: Color | null; selected: Color | null }) {
     this._lineColorObj = value;
 
-    const jsColorArray = [];
-    const jsStateArray = [];
-    if (this._lineColorObj.normal) {
+    const jsColorArray: any[] = [];
+    const jsStateArray: any[] = [];
+    if (this.lineColor.normal) {
       jsColorArray.push(this.lineColor.normal.nativeObject);
       jsStateArray.push(array([state_unfocused], 'int'));
     }
@@ -177,14 +173,19 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.textBoxNativeObject.setSingleLine(!value);
   }
 
-  get errorColor(): Color {
+  get errorColor(): Color | null {
     return this._errorColor;
   }
-  set errorColor(value: Color) {
+  set errorColor(value: Color | null) {
     this._errorColor = value;
-    if (this._enableErrorMessage !== true) this.android.enableErrorMessage = true;
-    const errorView = this.nativeObject.getReCreatedErrorView();
-    errorView.setTextColor(value.nativeObject);
+    if (value) {
+      if (this._enableErrorMessage !== true) this.android.enableErrorMessage = true;
+      const errorView = this.nativeObject.getReCreatedErrorView();
+      errorView.setTextColor(value.nativeObject);
+    } else {
+      const errorView = this.nativeObject.getReCreatedErrorView();
+      errorView.setTextColor(undefined);
+    }
   }
 
   get labelsFont(): Font {
@@ -215,17 +216,17 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.sfTextBox.enabled = value;
   }
 
-  get rightLayout(): { view: FlexLayout; width: number; height?: number } {
+  get rightLayout(): { view: FlexLayout | null; width: number; height?: number } {
     return {
       view: this._rightLayout,
       width: this._rightLayoutWidth
     };
   }
-  set rightLayout(value: { view: FlexLayout; width: number; height?: number }) {
+  set rightLayout(value: { view: FlexLayout | null; width: number; height?: number }) {
     this._rightLayout = value.view;
     this._rightLayoutWidth = value.width || 30;
     const parentFL = new FlexLayout();
-    this.nativeObject.setRightLayout(this._rightLayout.nativeObject, this._rightLayout.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
+    this.nativeObject.setRightLayout(this._rightLayout?.nativeObject, this._rightLayout?.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
   }
 
   get onTouch(): (e?: Point2D) => boolean | void {
@@ -237,7 +238,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     // @ts-ignore
     // TODO: Ask why setTouchHandlers is used here
     this.setTouchHandlers();
-    
+
     // @ts-ignore
     this.sfTextBox._onTouch = value;
     // @ts-ignore
