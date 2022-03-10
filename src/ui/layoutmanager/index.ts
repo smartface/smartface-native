@@ -2,6 +2,7 @@ import { Point2D } from '../../primitive/point2d';
 import { Boundary } from '../../primitive/boundary';
 import NativeComponent from '../../core/native-component';
 import { INativeComponent } from '../../core/inative-component';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 
 export interface LayoutManagerIOSParams {
   /**
@@ -70,8 +71,7 @@ export enum ScrollDirection {
  *
  *
  */
-export declare interface ILayoutManager extends INativeComponent {
-  ios: Partial<LayoutManagerIOSParams>;
+export declare interface ILayoutManager extends INativeComponent, MobileOSProps<LayoutManagerIOSParams, {}> {
   /**
    * User must return a length value for scrollDirection that user lays out the objects.
    * If vertical, length value will be height of item. If horizontal, length value will be width of item.
@@ -90,7 +90,7 @@ export declare interface ILayoutManager extends INativeComponent {
    * });
    * ````
    */
-  onItemLength: (length: number) => number;
+  onItemLength: null | ((length: number) => number);
   /**
    * This event used to define specified gridview item  to fully occupy width/height  based on direction. According to direction return value must be either desired height or width of gridview item. If the direction
    * is {@link UI.LayoutManager.ScrollDirection#VERTICAL VERTICAL} then return value must be height or vice versa. Returning undefined indicates that
@@ -110,7 +110,7 @@ export declare interface ILayoutManager extends INativeComponent {
    * });
    * ````
    */
-  onFullSpan: (type: number) => number;
+  onFullSpan: null | ((type: number) => number);
 
   /**
    * Gets/sets colon or row count depends on scrolling direction of layout.
@@ -144,18 +144,14 @@ export declare interface ILayoutManager extends INativeComponent {
   itemSpacing: number;
 }
 
-export declare class AbstractLayoutManager extends NativeComponent implements ILayoutManager {
-  lineSpacing: number;
-  itemSpacing: number;
-  ios: Partial<LayoutManagerIOSParams>;
-  onItemLength: (length: number) => number;
-  onFullSpan: (type: number) => number;
-  spanCount: number;
-  contentInset: Boundary;
-  scrollDirection: ScrollDirection;
-  protected _nativeObject: any;
-  get nativeObject(): any;
-  set nativeObject(value: any);
+export abstract class AbstractLayoutManager<TNative = any> extends NativeMobileComponent<TNative, ILayoutManager> implements ILayoutManager {
+  abstract lineSpacing: number;
+  abstract itemSpacing: number;
+  abstract onItemLength: null | ((length: number) => number);
+  abstract onFullSpan: null | ((type: number) => number);
+  abstract spanCount: number;
+  abstract contentInset: Boundary;
+  abstract scrollDirection: ScrollDirection;
   static ScrollDirection: typeof ScrollDirection;
 }
 

@@ -1,4 +1,4 @@
-import { ILayoutManager, ScrollDirection } from '.';
+import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { UnitConverter } from '../../util';
 
@@ -6,7 +6,7 @@ const NativeItemDecoration = requireClass('androidx.recyclerview.widget.Recycler
 const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager');
 const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListener');
 
-export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>> implements ILayoutManager {
+export default class LayoutManagerAndroid extends AbstractLayoutManager implements ILayoutManager {
   private _lineDecoration: any = null;
   private _itemDecoration: any = null;
   private _spanCount: ILayoutManager['spanCount'];
@@ -14,8 +14,8 @@ export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UIC
   private _itemSpacing: ILayoutManager['itemSpacing'];
   private _scrollDirection: ILayoutManager['scrollDirection'];
   private _contentInset: ILayoutManager['contentInset'];
-  private _onItemLength: ILayoutManager['onItemLength'];
-  private _nativeRecyclerView = null;
+  private _onItemLength: ILayoutManager['onItemLength'] | null = null;
+  private _nativeRecyclerView: INativeInner | null = null;
   private _spanSize: number;
   private _onFullSpanCallback: ILayoutManager['onFullSpan'];
   constructor(params: Partial<ILayoutManager> = {}) {
@@ -25,15 +25,11 @@ export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UIC
     }
 
     this._spanCount = params.spanCount !== undefined ? params.spanCount : 1;
-    this._lineSpacing = params.lineSpacing;
     this._itemSpacing = params?.itemSpacing || 0;
     this._scrollDirection = params?.scrollDirection !== undefined ? params.scrollDirection : 1; //LTR
-    this._contentInset = params.contentInset;
-    this._onItemLength = params.onItemLength;
-    this._nativeRecyclerView = null;
     this._spanSize = 0;
   }
-  get spanCount(): ILayoutManager['spanCount'] {
+  get spanCount() {
     // Avoiding integer-float conflics of engine
     return this._spanCount;
   }
@@ -69,10 +65,10 @@ export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UIC
     this._scrollDirection = scrollDirection;
     this.nativeObject.setOrientation(scrollDirection);
   }
-  get nativeRecyclerView(): INativeInner {
+  get nativeRecyclerView() {
     return this._nativeRecyclerView;
   }
-  set nativeRecyclerView(nativeRecyclerView: INativeInner) {
+  set nativeRecyclerView(nativeRecyclerView: INativeInner | null) {
     this._nativeRecyclerView = nativeRecyclerView;
     if (nativeRecyclerView) {
       this.setLayoutChangeListener();
@@ -220,19 +216,19 @@ export default class LayoutManagerAndroid extends NativeMobileComponent<__SF_UIC
   private setLayoutChangeListener() {
     if (this._onItemLength) {
       if (this._scrollDirection === ScrollDirection.HORIZONTAL) {
-        const initialHeight = this._nativeRecyclerView.getHeight();
-        if (initialHeight > 0) {
+        const initialHeight = this._nativeRecyclerView?.getHeight();
+        if (initialHeight) {
           this.setSpanSizeForHorizontal(initialHeight);
         }
       } else {
-        const initialWidth = this._nativeRecyclerView.getWidth();
-        if (initialWidth > 0) {
+        const initialWidth = this._nativeRecyclerView?.getWidth();
+        if (initialWidth) {
           this.setSpanSizeForVertical(initialWidth);
         }
       }
     }
 
-    this._nativeRecyclerView.addOnLayoutChangeListener(
+    this._nativeRecyclerView?.addOnLayoutChangeListener(
       LayoutChangeListener.implement({
         onLayoutChange: (view: any, left: number, top: number, right: number, bottom: number, oldLeft: number, oldTop: number, oldRight: number, oldBottom: number) => {
           if (this._onItemLength || this._spanSize === 0) {

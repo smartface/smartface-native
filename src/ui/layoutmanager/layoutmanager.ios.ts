@@ -1,11 +1,12 @@
-import { ILayoutManager, ScrollDirection } from '.';
+import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Invocation } from '../../util';
+import { isNotEmpty } from '../../util/type';
 import GridViewIOS from '../gridview/gridview.ios';
 
 const DEFAULT_ITEM_LENGTH = 50;
 
-export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UICollectionViewFlowLayout, Partial<ILayoutManager>> implements ILayoutManager {
+export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UICollectionViewFlowLayout> implements ILayoutManager {
   onFullSpan: (type: number) => number;
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
@@ -13,7 +14,7 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
   private _scrollDirection: ILayoutManager['scrollDirection'] = ScrollDirection.VERTICAL;
   private _contentInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
   private _onItemLength: ILayoutManager['onItemLength'] = () => DEFAULT_ITEM_LENGTH;
-  collectionView: __SF_UICollectionView = null;
+  collectionView: __SF_UICollectionView | null = null;
   jsCollectionView: GridViewIOS; //TODO: Find a better solution. Normally we shouldn't need this.
   private _sectionInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
   private _itemLength = 50;
@@ -24,7 +25,7 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
     this.nativeObject.prepareLayoutCallback = () => {
       const retval = this.calculateItemSize(this.spanCount);
 
-      if (this.onFullSpan) {
+      if (this.onFullSpan && this.collectionView) {
         const __fullSpanSize = this.calculateItemSize(1);
         this.collectionView.sizeForItemAtIndexPath = (collectionView: LayoutManagerIOS['collectionView'], indexPath: __SF_NSIndexPath) => {
           const span = Number(this.jsCollectionView.onItemType(indexPath.row));
@@ -37,7 +38,7 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
             height: this.scrollDirection === ScrollDirection.VERTICAL ? itemLength : __fullSpanSize.height
           };
         };
-      } else {
+      } else if (this.collectionView) {
         this.collectionView.sizeForItemAtIndexPath = undefined;
         const argumentSize = new Invocation.Argument({
           type: 'CGSize',
@@ -53,8 +54,8 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
       };
       if (this.ios.targetContentOffset) {
         const returnValue = this.ios.targetContentOffset(proposedContentOffsetWithInset, velocity);
-        returnValue.x -= this.contentInset.left;
-        returnValue.y -= this.contentInset.top;
+        if (isNotEmpty(this.contentInset.left) && isNotEmpty(returnValue.x)) returnValue.x -= this.contentInset.left;
+        if (isNotEmpty(this.contentInset.top) && isNotEmpty(returnValue.y)) returnValue.y -= this.contentInset.top;
         return returnValue;
       }
       return proposedContentOffset;
@@ -132,27 +133,31 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
     };
     let insetSize = 0;
     if (this.scrollDirection === ScrollDirection.VERTICAL) {
-      const calculatedSizes = this.calculateSize(this.collectionView.frame.width, spanCount);
-      retval.width = calculatedSizes.cellSize;
-      retval.height = this.onItemLength(retval.width);
-      insetSize = calculatedSizes.insetSize / 2;
-      this.sectionInset = {
-        top: 0,
-        left: insetSize,
-        bottom: 0,
-        right: insetSize
-      };
+      if (isNotEmpty(this.collectionView) && isNotEmpty(this.collectionView.frame.width) && isNotEmpty(this.onItemLength)) {
+        const calculatedSizes = this.calculateSize(this.collectionView.frame.width, spanCount);
+        retval.width = calculatedSizes.cellSize;
+        retval.height = this.onItemLength(retval.width);
+        insetSize = calculatedSizes.insetSize / 2;
+        this.sectionInset = {
+          top: 0,
+          left: insetSize,
+          bottom: 0,
+          right: insetSize
+        };
+      }
     } else if (this.scrollDirection === ScrollDirection.HORIZONTAL) {
-      const calculatedSizes = this.calculateSize(this.collectionView.frame.height, spanCount);
-      retval.height = calculatedSizes.cellSize;
-      retval.width = this.onItemLength(retval.height);
-      insetSize = calculatedSizes.insetSize / 2;
-      this.sectionInset = {
-        top: insetSize,
-        left: 0,
-        bottom: insetSize,
-        right: 0
-      };
+      if (isNotEmpty(this.collectionView) && isNotEmpty(this.collectionView.frame.height) && isNotEmpty(this.onItemLength)) {
+        const calculatedSizes = this.calculateSize(this.collectionView.frame.height, spanCount);
+        retval.height = calculatedSizes.cellSize;
+        retval.width = this.onItemLength(retval.height);
+        insetSize = calculatedSizes.insetSize / 2;
+        this.sectionInset = {
+          top: insetSize,
+          left: 0,
+          bottom: insetSize,
+          right: 0
+        };
+      }
     }
     return retval;
   }
@@ -186,14 +191,14 @@ export default class LayoutManagerIOS extends NativeMobileComponent<__SF_UIColle
 
     if (this.scrollDirection === ScrollDirection.VERTICAL) {
       const columnCount = this.spanCount;
-      const itemWidth = collectionView.frame.width / columnCount;
+      const itemWidth = columnCount ? (collectionView?.frame.width || 0) / columnCount : 0;
       const itemHeight = 0;
       // itemHeight = sfSelf.onItemLength();
       retval.width = itemWidth;
       retval.height = itemHeight;
     } else if (this.scrollDirection === ScrollDirection.HORIZONTAL) {
       const rowCount = this.spanCount;
-      const itemHeight = collectionView.frame.height / rowCount;
+      const itemHeight = rowCount ? (collectionView?.frame.height || 0) / rowCount : 0;
       const itemWidth = 0;
       // itemWidth = sfSelf.onItemLength();
       retval.width = itemWidth;

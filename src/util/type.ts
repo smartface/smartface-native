@@ -32,4 +32,8 @@ namespace TypeUtil {
   }
 }
 
+export function isNotEmpty<TValue = any>(value: TValue): value is TValue extends undefined | null ? never : TValue{
+  return value !== null && value !== undefined;
+}
+
 export default TypeUtil;

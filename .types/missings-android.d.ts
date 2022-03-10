@@ -69,6 +69,11 @@ declare interface INativeLayoutManager {
 }
 
 declare interface INativeInner {
+  addOnLayoutChangeListener(llistener: any);
+  getHeight():number;
+  getWidth():number;
+  removeItemDecoration(item: any): void;
+  addItemDecoration(item: any): void;
   addOnItemTouchListener(param: any): void;
   setJsCallbacks(param: any): void;
   computeHorizontalScrollOffset(): any;

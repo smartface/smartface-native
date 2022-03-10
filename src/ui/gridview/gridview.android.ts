@@ -24,14 +24,14 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   nativeDataAdapter: any;
   private _onScroll: IGridView['onScroll'];
   private _onScrollStateChanged: IGridView['android']['onScrollStateChanged'];
-  private _layoutManager: LayoutManagerAndroid;
+  private _layoutManager: LayoutManagerAndroid | undefined;
   private _gridViewItems: Record<string, GridViewItem> = {};
   private _itemCount: IGridView['itemCount'] = 0;
   private isScrollListenerAdded = false;
   private _scrollBarEnabled: IGridView['scrollBarEnabled'] = false;
   private _scrollEnabled: IGridView['scrollBarEnabled'];
   private _nativePagerSnapHelper: any;
-  private _paginationEnabled: boolean = null;
+  private _paginationEnabled: boolean = false;
   private _onScrollListener: any;
   private _snapToAlignment: any;
   private _nativeLinearSnapHelper: any;
@@ -43,7 +43,6 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     this.setNativeInner();
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
-    this._layoutManager = params.layoutManager as unknown as LayoutManagerAndroid; //Done this way due to layoutmanager having too much private methods for Android only
     this.nativeObject.addView(this.nativeInner);
     this.setNativeEvents();
     this.setDataAdapter();
@@ -111,9 +110,9 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
         const itemCreateReturn = this.onItemCreate?.(viewType);
         // There used to be try-catch. If we encounter with crash, wrap this with try-catch with application.onHundandledError trigger
         const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
-        let spanSize = this._layoutManager.spanSize;
-        if (spanSize === 0) {
-          if (this._layoutManager.scrollDirection === LayoutManager.ScrollDirection.VERTICAL) {
+        let spanSize = this._layoutManager?.spanSize;
+        if (spanSize === 0 && this._layoutManager) {
+          if (this._layoutManager?.scrollDirection === LayoutManager.ScrollDirection.VERTICAL) {
             this._layoutManager.viewWidth = this.width;
           } else {
             this._layoutManager.viewHeight = this.height;
@@ -159,8 +158,10 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
         return self._overScrollMode;
       },
       set overScrollMode(mode: IGridView['android']['overScrollMode']) {
-        self.nativeInner.setOverScrollMode(mode);
-        self._overScrollMode = mode;
+        if (mode) {
+          self.nativeInner.setOverScrollMode(mode);
+          self._overScrollMode = mode;
+        }
       },
       get snapToAlignment(): IGridView['android']['snapToAlignment'] {
         return self._snapToAlignment;
@@ -181,11 +182,11 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
       },
       saveInstanceState() {
         return {
-          nativeObject: self._layoutManager.nativeObject?.onSaveInstanceState()
+          nativeObject: self._layoutManager?.nativeObject?.onSaveInstanceState()
         };
       },
       restoreInstanceState(savedInstance: any) {
-        self._layoutManager.nativeObject.onRestoreInstanceSltate(savedInstance.nativeObject);
+        self._layoutManager?.nativeObject.onRestoreInstanceSltate(savedInstance.nativeObject);
       },
       get onScrollStateChanged(): IGridView['android']['onScrollStateChanged'] {
         return self._onScrollStateChanged;
@@ -219,11 +220,11 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     layoutParams.setFullSpan(true);
   }
   private assignSizeBasedOnDirection(holderViewLayout: any, viewType: number) {
-    const spanSize = this._layoutManager.spanSize;
-    const isVertical = this._layoutManager.scrollDirection === LayoutManager.ScrollDirection.VERTICAL;
-    const fullSpanLength = this._layoutManager.onFullSpan?.(viewType) || null;
+    const spanSize = this._layoutManager?.spanSize;
+    const isVertical = this._layoutManager?.scrollDirection === LayoutManager.ScrollDirection.VERTICAL;
+    const fullSpanLength = this._layoutManager?.onFullSpan?.(viewType) || null;
     const layoutParams = holderViewLayout.nativeObject.getLayoutParams();
-    const itemLength = this._layoutManager.onItemLength?.(spanSize) || null;
+    const itemLength = (spanSize && this._layoutManager?.onItemLength?.(spanSize)) || null;
     const spanLength = Number(fullSpanLength) || itemLength;
     if (isVertical) {
       holderViewLayout.height = spanLength;
@@ -322,7 +323,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   stopRefresh(): void {
     this.nativeObject.setRefreshing(false);
   }
-  itemByIndex(index: number): GridViewItem {
+  itemByIndex(index: number): GridViewItem | undefined {
     const viewHolder = this.nativeInner.findViewHolderForAdapterPosition(index);
     return viewHolder ? this._gridViewItems[viewHolder.itemView.hashCode()] : undefined; // undefined return is to mimic ios
   }
