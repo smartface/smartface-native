@@ -3,12 +3,7 @@ import { AbstractFont, FontStyle } from './font';
 import File from '../../io/file';
 
 export default class FontIOS extends AbstractFont {
-  static _ios: typeof AbstractFont.ios;
-  constructor() {
-    super();
-  }
-
-  static create(fontFamily: string, size: number, style?: FontStyle): FontIOS {
+  static create(fontFamily: string, size: number, style: FontStyle): FontIOS | null {
     if (style === this.NORMAL) {
       if (fontFamily === FontIOS.DEFAULT) {
         return __SF_UIFont.systemFontOfSize(size);
@@ -92,14 +87,12 @@ export default class FontIOS extends AbstractFont {
 
   static ios = {
     allFontNames() {
-      const retval = [];
+      let retval: string[] = [];
       const UIFont: typeof __SF_UIFont = requireClass('UIFont');
       const familyNames = UIFont.familyNames();
       for (const familyNameindex in familyNames) {
         const fontNames = UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
-        for (const fontNameindex in fontNames) {
-          retval.push(fontNames[fontNameindex]);
-        }
+        retval = retval.concat(Object.values(fontNames));
       }
       return retval;
     }

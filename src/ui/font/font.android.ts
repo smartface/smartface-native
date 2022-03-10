@@ -1,6 +1,5 @@
 import { AbstractFont, FontStyle } from './font';
 import AndroidConfig from '../../util/Android/androidconfig';
-import * as SizeCalculator from '../../util/Android/textviewsizecalculator';
 import File from '../../io/file';
 import Path from '../../io/path';
 
@@ -9,33 +8,7 @@ const NativeTypeface = requireClass('android.graphics.Typeface');
 const fontCache = new Map();
 
 export default class FontAndroid extends AbstractFont {
-  private _size: number;
-  constructor(params: any) {
-    super();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
-  }
-
-  get size(): number {
-    return this._size;
-  }
-
-  set size(value: number) {
-    this._size = value;
-  }
-
-  sizeOfString(string: string, maxWidth: number): { width: number; height: number } {
-    return SizeCalculator.calculateStringSize({
-      text: string,
-      maxWidth: maxWidth,
-      textSize: this.size,
-      typeface: this
-    });
-  }
-
-  static create(fontFamily: string, size: number, style?: FontStyle): FontAndroid {
+  static create(fontFamily: string, size: number, style: FontStyle): FontAndroid {
     const fromCache = getFromCache(fontFamily, style, size);
     if (fromCache) {
       return fromCache;
@@ -81,7 +54,7 @@ export default class FontAndroid extends AbstractFont {
       const convertedFontName3 = base + fontSuffix + '.otf';
       const convertedFontName4 = base + fontSuffix2 + '.otf';
 
-      let selectedFont = undefined;
+      let selectedFont: File | undefined;
 
       const fontFile = new File({
         path: 'assets://' + convertedFontName
