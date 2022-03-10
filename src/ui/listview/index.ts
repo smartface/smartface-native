@@ -707,7 +707,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * @ios
    * @since 0.1
    */
-  listViewItemByIndex(index: number): ListViewItem;
+  listViewItemByIndex(index: number): ListViewItem | undefined;
   /**
    * This method returns ListViewItem's index.
    *
@@ -875,7 +875,7 @@ export declare class AbstractListView<TEvent extends string = ListViewEvents, TP
   onScroll: ((params?: { translation: Point2D; contentOffset: Point2D }) => void) | null;
   onPullRefresh: () => void;
   contentInset: { top: number; bottom: number };
-  listViewItemByIndex(index: number): ListViewItem;
+  listViewItemByIndex(index: number): ListViewItem | undefined;
   indexByListViewItem(item: ListViewItem): number;
   onAttachedToWindow: () => void;
   onDetachedFromWindow: () => void;

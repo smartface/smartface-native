@@ -3,6 +3,7 @@ import { WithMobileOSProps } from '../../core/native-mobile-component';
 import { AndroidConfig, LayoutParams, UnitConverter } from '../../util';
 import Color from '../color';
 import ListViewItem from '../listviewitem';
+import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeItem, { SwipeDirection } from '../swipeitem';
 import { ViewAndroid } from '../view/view.android';
 import { ListViewEvents } from './listview-events';
@@ -23,7 +24,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private nativeDataAdapter: any;
   private _rowHeight: IListView['rowHeight'];
   private _onScroll: IListView['onScroll'];
-  private _onScrollListener: IListView['onScroll'] = undefined;
+  private _onScrollListener: IListView['onScroll'] | undefined = undefined;
   private _onScrollStateChanged: IListView['android']['onScrollStateChanged'];
   private _itemCount: IListView['itemCount'] = 0;
   private _contentInset: IListView['contentInset'] = { top: 0, bottom: 0 };
@@ -94,7 +95,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
       this.nativeInner.scrollToPosition(index);
     }
   }
-  listViewItemByIndex(index: number): ListViewItem {
+  listViewItemByIndex(index: number): ListViewItem | undefined {
     const viewHolder = this.nativeInner.findViewHolderForAdapterPosition(index);
     return viewHolder ? this._listViewItems[viewHolder.itemView.hashCode()] : undefined; //Undefined is for iOS adaptation
   }
@@ -281,7 +282,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
       get overScrollMode() {
         return self._overScrollMode;
       },
-      set overScrollMode(mode: IListView['android']['overScrollMode']) {
+      set overScrollMode(mode: OverScrollMode) {
         self.nativeInner.setOverScrollMode(mode);
         self._overScrollMode = mode;
       },
@@ -296,9 +297,9 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
         }
         self._onScrollListener = self._onScrollListener || self.createScrollListener();
         if (value) {
-          self.nativeInner.setOnScrollListener(self._onScrollListener);
+          self._onScrollListener && self.nativeInner.setOnScrollListener(self._onScrollListener);
         } else if (!self._onScroll) {
-          self.nativeInner.removeOnScrollListener(self._onScrollListener);
+          self._onScrollListener && self.nativeInner.removeOnScrollListener(self._onScrollListener);
         }
       }
     };
@@ -466,7 +467,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     this._onScroll = value;
     if (value) {
       const scrollListener = this._onScrollListener || this.createScrollListener();
-      this.nativeInner.setOnScrollListener(scrollListener);
+      scrollListener && this.nativeInner.setOnScrollListener(scrollListener);
     } else if (!this._onScrollStateChanged && this._onScrollListener) {
       this.nativeInner.removeOnScrollListener(this._onScrollListener);
     }

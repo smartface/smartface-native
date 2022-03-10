@@ -18,7 +18,7 @@ import { EventEmitterWrapper } from '../../core/eventemitter';
 import View, { IView, IViewProps, ViewBase } from '.';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ScrollView, { ScrollViewAlign } from '../scrollview';
-import { getRippleMask } from '../../helper/get-ripple-mask';
+import { getRippleMask } from '../../helper/getrippleeffect';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -101,7 +101,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _borderWidth: number;
   protected _borderRadius: number;
   protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
-  protected _overScrollMode: OverScrollMode = 0;
+  protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
   private __isRecyclerView: any;

@@ -1,5 +1,5 @@
-import { IEventEmitter } from 'core/eventemitter';
 import { ConstructorOf } from '../../core/constructorof';
+import { IEventEmitter } from '../../core/eventemitter';
 import Color from '../color';
 import Font from '../font';
 import Image from '../image';
@@ -53,7 +53,7 @@ export interface ISwipeItemIOSParams {
   isAutoHide: boolean;
 }
 
-export declare interface ISwipeItem extends IEventEmitter<SwipeItemEvents> {
+export interface ISwipeItem extends IEventEmitter<SwipeItemEvents> {
   text: string;
   backgroundColor: Color;
   textColor: Color;
