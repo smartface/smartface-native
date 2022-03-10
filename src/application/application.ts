@@ -8,129 +8,6 @@ import { Statusbar } from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar';
 
-declare enum Events {
-  /**
-   * Triggered before exiting application.
-   *
-   * @since 0.1
-   * @event onExit
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Exit = 'exit',
-  /**
-   * Triggered after application bring to foreground state. In Android, it triggered even the user is leaving another activity(even the activities launched by your app).
-   * That means Permissions & derived from Dialog components are makes this callback to triggered.
-   *
-   * @since 0.1
-   * @event onMaximize
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Maximize = 'maximize',
-  /**
-   * Triggered after application bring to background state. Background state means that user is in another app or on the home screen. In Android, it triggered even the user is launching another activity(even the activities launched by your app).
-   * That means Permissions & derived from Dialog components are make this callback to triggered.
-   *
-   * @since 0.1
-   * @event onMinimize
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  Minimize = 'minimize',
-  /**
-   * Triggered after a push (remote) notification recieved. This event will be
-   * fired only if application is active and running.
-   *
-   * @event onReceivedNotification
-   * @param {Object} data
-   * @param {Object} data.remote
-   * @param {Object} data.local
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  ReceivedNotification = 'receivedNotification',
-  /**
-   * Triggered when unhandelled error occurs.
-   *
-   * @since 1.2
-   * @event onUnhandledError
-   * @param {Object} error
-   * @param {String} error.message
-   * @param {String} error.stack
-   * @android
-   * @ios
-   * @since 1.2
-   */
-  UnhandledError = 'unhandledError',
-  /**
-   * Triggered when application is called by another application.
-   * For Android, onApplicationCallReceived will be triggered when
-   * the application started from System Launcher. For this reason,
-   * if data does not contain key that you can handle, you should ignore this call.
-   *
-   * @event onApplicationCallReceived
-   * @param {Object} e
-   * @param {Object} e.data Data sent by application.
-   * @param {String} e.eventType Can be "call" or "callback".
-   * This parameter is available only for Android. For iOS this always returns "call".
-   * For example; Application A calls application B, eventType becomes "call" for application B.
-   * When application B is done its job and application A comes foreground and eventType becomes
-   * "callback" for Android.
-   * @param {Number} e.result This parameter is available only for Android and when eventType is
-   * "callback". Returns Android Activity result code.
-   * @see https://developer.android.com/training/basics/intents/result.html
-   *
-   * @android
-   * @ios
-   * @since 1.1.13
-   * @see https://developer.android.com/training/sharing/receive.html
-   */
-  ApplicationCallReceived = 'applicationCallReceived',
-  /**
-   * Triggered when application is opened by an app shortcut.
-   * App shortcuts is also named Home Screen Quick Actions in iOS.
-   *
-   * @event onAppShortcutReceived
-   * @param {Object} e
-   * @param {Object} e.data Data comes from extras of app shortcut intent in Android
-   * or UserInfo of app shortcut in iOS.
-   *
-   * @android
-   * @ios
-   * @since 4.3.6
-   * @see https://developer.android.com/guide/topics/ui/shortcuts
-   * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
-   */
-  AppShortcutReceived = 'AppShortcutReceived',
-  /**
-   * Triggered when user press back key. The default implementation finishes the application,
-   * but you can override this to do whatever you want.
-   *
-   * @event onBackButtonPressed
-   * @android
-   * @since 3.2.0
-   */
-  BackButtonPressed = 'backButtonPressed',
-  /**
-   * This event is called after Application.requestPermissions function. This event is
-   * fired asynchronous way, there is no way to make sure which request is answered.
-   *
-   * @since 1.2
-   * @event onRequestPermissionsResult
-   * @param {Object} e
-   * @param {Number} e.requestCode
-   * @param {Boolean} e.result
-   * @android
-   * @since 1.2
-   */
-  RequestPermissionResult = 'requestPermissionResult'
-}
-
 /**
  * @enum {Number} Application.LayoutDirection
  * @since 3.1.3
@@ -360,15 +237,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @ios
    * @since 0.1
    */
-  call: (params: {
-    uriScheme?: string;
-    data?: {};
-    onSuccess?: (value?: any) => void;
-    onFailure?: (value?: any) => void;
-    isShowChooser?: boolean;
-    chooserTitle?: string;
-    action?: string;
-  }) => void;
+  call: (params: { uriScheme?: string; data?: {}; onSuccess?: (value?: any) => void; onFailure?: (value?: any) => void; isShowChooser?: boolean; chooserTitle?: string; action?: string }) => void;
   /**
    * Checks URL's scheme can be handled or not by some app that installed on the device.
    *
@@ -418,7 +287,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @param {String} url Universal link.
      * @return {Boolean} YES to indicate that your app handled the activity or NO to let iOS know that your app did not handle the activity.
      * @ios
-       * @since 3.1.2
+     * @since 3.1.2
      */
     onUserActivityWithBrowsingWeb: (url: string) => boolean;
     /**
@@ -427,7 +296,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @property {String} bundleIdentifier
      * @readonly
      * @ios
-       * @since 3.0.2
+     * @since 3.0.2
      */
     bundleIdentifier: any;
     /**
@@ -436,7 +305,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @property {Application.LayoutDirection} userInterfaceLayoutDirection
      * @readonly
      * @ios
-       * @since 3.1.3
+     * @since 3.1.3
      */
     userInterfaceLayoutDirection: any;
     registeredRemoteWithSuccessCallback: any;
@@ -461,7 +330,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @property {String} locale
      * @readonly
      * @android
-       * @since 3.1.3
+     * @since 3.1.3
      */
     locale: string;
     /**
@@ -470,7 +339,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @property {Application.LayoutDirection} getLayoutDirection
      * @readonly
      * @android
-       * @since 3.1.3
+     * @since 3.1.3
      */
     readonly getLayoutDirection: LayoutDirection;
     /**
@@ -479,7 +348,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @property {String} packageName
      * @readonly
      * @android
-       * @since 0.1
+     * @since 0.1
      */
     packageName: string;
     /**
@@ -490,7 +359,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @param {String} permission
      * @return {Boolean}
      * @android
-       * @since 1.2
+     * @since 1.2
      */
     shouldShowRequestPermissionRationale: (permission: string) => boolean;
     /**
@@ -499,7 +368,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      *
      * @event onBackButtonPressed
      * @android
-       * @deprecated
+     * @deprecated
      * @since 3.2.0
      * @example
      * ````
@@ -523,7 +392,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      *
      * @event dispatchTouchEvent
      * @android
-       * @return {Boolean}
+     * @return {Boolean}
      * @since 4.0.3
      */
     dispatchTouchEvent: () => boolean;
@@ -538,7 +407,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @param {Boolean} e.result
      * @android
      * @deprecated
-       * @since 1.2
+     * @since 1.2
      */
     onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
     navigationBar?: NavigationBar;
@@ -552,7 +421,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @param {String} permission
      * @return {Boolean}
      * @android
-       * @since 1.2
+     * @since 1.2
      */
     checkPermission: (permission: string) => boolean;
     /**
@@ -571,7 +440,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * @param {Number} requestIdentifier This number  will be returned in {@link Application.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not.
      * @param {String} permission
      * @android
-       * @since 1.2
+     * @since 1.2
      */
     requestPermissions: (
       requestIdentifier: number,
@@ -598,7 +467,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows to read the calendar data.
        *
        * @property READ_CALENDAR
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_CALENDAR: any;
@@ -606,7 +475,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to write the user's calendar data.
        *
        * @property WRITE_CALENDAR
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly WRITE_CALENDAR: any;
@@ -615,7 +484,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Required to be able to access the camera device.
        *
        * @property CAMERA
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly CAMERA: any;
@@ -623,7 +492,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to read the user's contacts data.
        *
        * @property READ_CONTACTS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_CONTACTS: any;
@@ -631,7 +500,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to write the user's contacts data.
        *
        * @property WRITE_CONTACTS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly WRITE_CONTACTS: any;
@@ -639,7 +508,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows access to the list of accounts in the Accounts Service.
        *
        * @property GET_ACCOUNTS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly GET_ACCOUNTS: any;
@@ -647,7 +516,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an app to access precise location.
        *
        * @property ACCESS_FINE_LOCATION
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly ACCESS_FINE_LOCATION: any;
@@ -655,7 +524,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an app to access approximate location.
        *
        * @property ACCESS_COARSE_LOCATION
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly ACCESS_COARSE_LOCATION: any;
@@ -663,7 +532,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to record audio.
        *
        * @property RECORD_AUDIO
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly RECORD_AUDIO: any;
@@ -673,7 +542,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * of any PhoneAccounts registered on the device.
        *
        * @property READ_PHONE_STATE
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_PHONE_STATE: any;
@@ -683,7 +552,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Dialer user interface for the user to confirm the call.
        *
        * @property CALL_PHONE
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly CALL_PHONE: any;
@@ -691,7 +560,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to read the user's call log.
        *
        * @property READ_CALL_LOG
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_CALL_LOG: any;
@@ -699,7 +568,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to write (but not read) the user's call log data.
        *
        * @property WRITE_CALL_LOG
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly WRITE_CALL_LOG: any;
@@ -707,7 +576,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to add voicemails into the system.
        *
        * @property ADD_VOICEMAIL
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly ADD_VOICEMAIL: any;
@@ -716,7 +585,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to use SIP service.
        *
        * @property USE_SIP
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly USE_SIP: any;
@@ -726,7 +595,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * number or abort the call altogether.
        *
        * @property PROCESS_OUTGOING_CALLS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly PROCESS_OUTGOING_CALLS: any;
@@ -736,7 +605,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * his/her body, such as heart rate.
        *
        * @property BODY_SENSORS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly BODY_SENSORS: any;
@@ -744,7 +613,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to send SMS messages.
        *
        * @property SEND_SMS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly SEND_SMS: any;
@@ -752,7 +621,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to receive SMS messages.
        *
        * @property RECEIVE_SMS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly RECEIVE_SMS: any;
@@ -760,7 +629,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to read SMS messages.
        *
        * @property READ_SMS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_SMS: any;
@@ -769,7 +638,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to receive WAP push messages.
        *
        * @property RECEIVE_WAP_PUSH
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly RECEIVE_WAP_PUSH: any;
@@ -777,7 +646,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows an application to monitor incoming MMS messages.
        *
        * @property RECEIVE_MMS
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly RECEIVE_MMS: any;
@@ -787,7 +656,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * you don't need this to granted this permission.
        *
        * @property READ_EXTERNAL_STORAGE
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly READ_EXTERNAL_STORAGE: any;
@@ -795,7 +664,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows to write to external storage.
        *
        * @property WRITE_EXTERNAL_STORAGE
-           * @readonly
+       * @readonly
        * @since 1.1.16
        */
       readonly WRITE_EXTERNAL_STORAGE: any;
@@ -804,7 +673,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
        * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
        *
        * @property WRITE_APN_SETTINGS
-           * @readonly
+       * @readonly
        * @since 4.3.2
        */
       readonly WRITE_APN_SETTINGS: any;

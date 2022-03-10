@@ -4,7 +4,7 @@ import TypeUtil from '../util/type';
 import AndroidConfig from '../util/Android/androidconfig';
 import Http from '../net/http';
 import Network from '../device/network';
-import { EventEmitter } from 'core/eventemitter';
+import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
 import { RequestCodes } from '../util';
@@ -58,7 +58,7 @@ const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
 class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements ApplicationBase {
-  public statusBar:Statusbar = Statusbar;
+  public statusBar: Statusbar = Statusbar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
   private _onExit: any;
@@ -636,7 +636,6 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
     };
   }
 }
-
 
 function cancelAllBackgroundJobs() {
   Location.stop();

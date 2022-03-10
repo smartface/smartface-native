@@ -33,9 +33,9 @@ class StatusBarAndroid {
   set style(value: StatusBarStyle) {
     if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
       this._statusBarStyle = value;
-      let decorView = AndroidConfig.activity.getWindow().getDecorView();
+      const decorView = AndroidConfig.activity.getWindow().getDecorView();
       let systemUiVisibilityFlags = decorView.getSystemUiVisibility();
-      if (this._statusBarStyle == StatusBarStyle.DEFAULT) {
+      if (this._statusBarStyle === StatusBarStyle.DEFAULT) {
         // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
         systemUiVisibilityFlags |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
       } else {
