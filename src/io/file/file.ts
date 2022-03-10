@@ -3,7 +3,7 @@ import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 
 export type iOSProps = Partial<{
-  getNSURL: () => string;
+  getNSURL: () => __SF_NSURL;
 }>;
 
 export interface IFile extends INativeComponent {
