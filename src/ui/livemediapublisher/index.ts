@@ -334,7 +334,7 @@ export enum AudioProfile {
  *     liveMediaPublisher.start(); // Start streaming
  */
 
-export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents, TIOS = {}, TAND = {}> extends IView<TEvent | LiveMediaPublisherEvents, TIOS & {}, TAND & {}> {
+export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends IView<TEvent | LiveMediaPublisherEvents, any> {
   /**
    * The camera starts to preview.
    *
@@ -508,7 +508,7 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
   onChange: (params: { event: number; message: string }) => void;
 }
 
-export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends AbstractView<TEvent> implements ILiveMediaPublisher<TEvent, {}, {}> {
+export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends AbstractView<TEvent> implements ILiveMediaPublisher<TEvent | LiveMediaPublisherEvents> {
   startPreview(): void;
   stopPreview(): void;
   switchCamera(): void;
