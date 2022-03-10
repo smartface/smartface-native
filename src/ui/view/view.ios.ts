@@ -305,7 +305,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       color: this.nativeObject.layer.borderUIColor
     });
   }
-  set borderColor(value) {
+  set borderColor(value: Color) {
     this.nativeObject.layer.borderUIColor = value.nativeObject;
   }
 

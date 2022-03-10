@@ -274,17 +274,17 @@ export abstract class AbstractColor extends NativeComponent {
   static GradientDirection: GradientDirection;
 }
 
-// export abstract class AbstractColor extends NativeComponent implements ColorBase {
-//   abstract red(): number;
-//   abstract green(): number;
-//   abstract blue(): number;
-//   abstract alpha(): number;
-//   isGradient?: boolean;
-//   protected colors?: ColorBase[];
-//   direction: GradientDirection;
-// }
+/**
+ * Only to use type of export
+ */
+declare class DatePickerImpl extends AbstractColor {
+  red(): number;
+  green(): number;
+  blue(): number;
+  alpha(): number;
+}
 
-const Color: ConstructorOf<AbstractColor, ConstructorParams> & typeof AbstractColor = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
-type Color = AbstractColor;
+const Color: typeof DatePickerImpl = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+type Color = DatePickerImpl;
 
 export default Color;

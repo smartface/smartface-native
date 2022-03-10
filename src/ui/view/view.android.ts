@@ -323,7 +323,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   get borderColor() {
     return this._borderColor;
   }
-  set borderColor(value) {
+  set borderColor(value: Color) {
     this._borderColor = value;
 
     this._resetBackground();

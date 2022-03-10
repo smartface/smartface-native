@@ -353,7 +353,16 @@ export abstract class AbstractDatePicker extends NativeEventEmitterComponent<Dat
   };
 }
 
-const DatePicker: ConstructorOf<AbstractDatePicker, Partial<IDatePicker>> & typeof AbstractDatePicker = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
-type DatePicker = IDatePicker;
+/**
+ * Only to use type of export
+ */
+declare class DatePickerImpl extends AbstractDatePicker {
+  setDate(date: Date): void;
+  setMinDate(date: Date): void;
+  setMaxDate(date: Date): void;
+  show(): void;
+}
+
+const DatePicker: typeof DatePickerImpl = require(`./datepicker.${Device.deviceOS.toLowerCase()}`).default;
+type DatePicker = DatePickerImpl;
 export default DatePicker;
-const c = new DatePicker();
