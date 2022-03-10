@@ -277,14 +277,14 @@ export abstract class AbstractColor extends NativeComponent {
 /**
  * Only to use type of export
  */
-declare class DatePickerImpl extends AbstractColor {
+declare class ColorImpl extends AbstractColor {
   red(): number;
   green(): number;
   blue(): number;
   alpha(): number;
 }
 
-const Color: typeof DatePickerImpl = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
-type Color = DatePickerImpl;
+const Color: typeof ColorImpl = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
+type Color = ColorImpl;
 
 export default Color;

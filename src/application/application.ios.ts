@@ -4,7 +4,7 @@ import Network from '../device/network';
 import Timer from '../global/timer';
 import { Invocation } from '../util';
 import { ApplicationEvents } from './application-events';
-import { Statusbar } from './statusbar';
+import { StatusBar } from './statusbar';
 import { ApplicationBase } from './application';
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
@@ -122,7 +122,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   private _rootPage;
   private _onUserActivityWithBrowsingWeb;
   // TODO: typescript error
-  public statusBar: Statusbar = Statusbar;
+  public statusBar: StatusBar = StatusBar;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1

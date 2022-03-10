@@ -1,3 +1,4 @@
+import { AbstractStatusBar } from '.';
 import Color from '../../ui/color';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
@@ -21,10 +22,10 @@ export enum StatusBarStyle {
   LIGHTCONTENT
 }
 
-class StatusBarAndroid {
+class StatusBarAndroid implements AbstractStatusBar {
   private _visible = true;
-  private _statusBarStyle = StatusBarStyle.LIGHTCONTENT;
-  private _color: Color;
+  private _statusBarStyle: StatusBarStyle = StatusBarStyle.LIGHTCONTENT;
+  private _color: Color = Color.WHITE;
   private _transparent: boolean;
   readonly Styles = StatusBarStyle;
   get style(): StatusBarStyle {
@@ -61,13 +62,15 @@ class StatusBarAndroid {
   get backgroundColor(): Color {
     return this._color;
   }
-  set backgroundColor(color: Color) {
-    this._color = color;
-    if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-      const window = AndroidConfig.activity.getWindow();
-      window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      // TODO: color needs nativeObject
-      window.setStatusBarColor(color.nativeObject);
+  set backgroundColor(color: Color ) {
+    if (color) {
+      this._color = color;
+      if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+        const window = AndroidConfig.activity.getWindow();
+        window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // TODO: color needs nativeObject
+        window.setStatusBarColor(color.nativeObject);
+      }
     }
   }
   get height(): number {
@@ -83,27 +86,30 @@ class StatusBarAndroid {
       style: null
     };
   }
-  get android() {
+  get android(): AbstractStatusBar['android'] {
+    const self = this;
     return {
-      get color() {
-        return this._color;
+      get color(): Color {
+        return self._color;
       },
       set color(value: Color) {
-        this._color = value;
-        if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-          const window = AndroidConfig.activity.getWindow();
-          window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-          // TODO: color needs nativeObject
-          window.setStatusBarColor(value.nativeObject);
+        if (value) {
+          self._color = value;
+          if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+            const window = AndroidConfig.activity.getWindow();
+            window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            // TODO: color needs nativeObject
+            window.setStatusBarColor(value.nativeObject);
+          }
         }
       },
-      get transparent() {
-        return this._transparent;
+      get transparent(): boolean {
+        return self._transparent;
       },
       set transparent(value: boolean) {
         const hideStatusBarBackground = true;
         let isSetFitsSystemWindows = true;
-        this._transparent = value;
+        self._transparent = value;
         let window = AndroidConfig.activity.getWindow();
         let flags = window.getDecorView().getSystemUiVisibility();
         if (value) {

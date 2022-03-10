@@ -1,16 +1,28 @@
 import Color from '../../ui/color';
 
-declare enum StatusBarStyle {
+enum StatusBarStyle {
   DEFAULT,
   LIGHTCONTENT
 }
 
-declare class StatusBarBase {
+export abstract class AbstractStatusBar {
+  abstract height: number;
+  abstract backgroundColor: Color;
+  abstract visible: boolean;
+  abstract style: StatusBarStyle;
+  android: {
+    color?: Color;
+    transparent?: boolean;
+  }
+}
+
+class StatusBarImpl extends AbstractStatusBar{
   height: number;
   backgroundColor: Color;
   visible: boolean;
   style: StatusBarStyle;
 }
-const StatusBarClass: typeof StatusBarBase = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
-export const Statusbar = new StatusBarClass();
-export type Statusbar = StatusBarBase;
+
+const StatusBarClass: typeof StatusBarImpl = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
+export const StatusBar = new StatusBarClass();
+export type StatusBar = StatusBarImpl;

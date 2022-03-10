@@ -13,10 +13,10 @@ class StatusBarIOS {
   get android() {
     return {};
   }
-  get height(): number {
+  get height(): number | undefined {
     return __SF_UIApplication.sharedApplication().statusBarFrame.height;
   }
-  get backgroundColor(): Color {
+  get backgroundColor(): Color | undefined {
     const statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey('statusBarWindow');
     if (statusBarWindow) {
       const statusBar = statusBarWindow.valueForKey('statusBar');
@@ -32,9 +32,9 @@ class StatusBarIOS {
     }
     return undefined;
   }
-  set backgroundColor(value: Color) {
+  set backgroundColor(value: Color | undefined) {
     const statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey('statusBarWindow');
-    if (statusBarWindow) {
+    if (statusBarWindow && value) {
       const statusBar = statusBarWindow.valueForKey('statusBar');
       if (statusBar) {
         value
