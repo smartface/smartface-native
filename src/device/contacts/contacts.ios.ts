@@ -1,8 +1,8 @@
 import Page from '../../ui/page';
-import { ContactsBase, ContactBase } from '.';
+import { ContactsBase, Contact, ManagedContact } from '.';
 
-function manageNativeContact(contact) {
-  const returnValue = new Contact();
+function manageNativeContact(contact: ContactIOS) {
+  const returnValue: { displayName?: string; phoneNumbers?: string[]; emailAddresses?: string[]; urlAddresses?: string[]; addresses?: string[] } = {};
   if (contact.givenName) {
     returnValue.displayName = contact.givenName + ' ' + contact.familyName;
   }
@@ -17,7 +17,7 @@ function manageNativeContact(contact) {
   }
   returnValue.phoneNumbers = phoneNumbers;
 
-  const emailAddresses = [];
+  const emailAddresses: any[] = [];
   for (const email in contact.emailAddresses) {
     // Added this check to resolve the sonar issue.
     // hasOwnProperty() is used to filter out properties from the object's prototype chain.
@@ -27,7 +27,7 @@ function manageNativeContact(contact) {
   }
   returnValue.emailAddresses = emailAddresses;
 
-  const urlAddresses = [];
+  const urlAddresses: string[] = [];
   for (const urlAddress in contact.urlAddresses) {
     // Added this check to resolve the sonar issue.
     if (Object.prototype.hasOwnProperty.call(contact.urlAddresses, urlAddress)) {
@@ -36,7 +36,7 @@ function manageNativeContact(contact) {
   }
   returnValue.urlAddresses = urlAddresses;
 
-  const addresses = [];
+  const addresses: string[] = [];
   for (const address in contact.postalAddresses) {
     // Added this check to resolve the sonar issue.
     if (Object.prototype.hasOwnProperty.call(contact.postalAddresses, address)) {
@@ -58,8 +58,8 @@ function manageNativeContact(contact) {
   return returnValue;
 }
 
-export class Contact extends ContactBase {
-  constructor(params?: Partial<Contact>) {
+export class ContactIOS extends Contact {
+  constructor(params?: Partial<ContactIOS>) {
     super();
     params = params || {};
     if (params.nativeObject) {
@@ -85,7 +85,7 @@ class ContactsIOS extends ContactsBase {
     __pickerDelegate: new __SF_CNContactPickerDelegate()
   };
   static android: {};
-  public static readonly Contact = Contact;
+  public static readonly Contact = ContactIOS;
   constructor(params?: Partial<ContactsBase>) {
     super();
     params = params || {};
@@ -98,7 +98,7 @@ class ContactsIOS extends ContactsBase {
   pickContact(
     page: Page,
     handlers: {
-      onSuccess: (contact: Contact) => void;
+      onSuccess: (contact: ContactIOS) => void;
       onFailure?: () => void;
     }
   ) {
@@ -124,7 +124,7 @@ class ContactsIOS extends ContactsBase {
         function () {
           if (typeof handlers.onFailure === 'function') {
             __SF_Dispatch.mainAsync(function () {
-              handlers.onFailure();
+              handlers.onFailure?.();
             });
           }
         }
@@ -136,7 +136,7 @@ class ContactsIOS extends ContactsBase {
   getContactsByPhoneNumber(
     phoneNumber: string,
     handlers: {
-      onSuccess: (contacts: Contact[]) => void;
+      onSuccess: (contacts: ContactIOS[]) => void;
       onFailure?: (error: string) => void;
     }
   ) {
@@ -145,14 +145,14 @@ class ContactsIOS extends ContactsBase {
       function () {
         store.fetchAllContacts(
           function (allContactsNativeArray) {
-            const allContactsManagedArray = [];
+            const allContactsManagedArray: ContactIOS[] = [];
             for (const index in allContactsNativeArray) {
               if (Object.prototype.hasOwnProperty.call(allContactsNativeArray, index)) {
                 const jsContact = new ContactsIOS.Contact({
                   nativeObject: allContactsNativeArray[index].mutableCopy()
                 });
-                const isMatch = jsContact.phoneNumbers.find((a) => a.includes(phoneNumber));
-                if (isMatch !== undefined) {
+                const isMatch = jsContact.phoneNumbers?.find((a) => a.includes(phoneNumber));
+                if (isMatch !== undefined && jsContact) {
                   allContactsManagedArray.push(jsContact);
                 }
               }
@@ -160,7 +160,7 @@ class ContactsIOS extends ContactsBase {
             handlers.onSuccess(allContactsManagedArray);
           },
           function (error) {
-            handlers.onFailure(error);
+            handlers.onFailure?.(error);
           }
         );
       },
@@ -177,7 +177,7 @@ class ContactsIOS extends ContactsBase {
       function () {
         store.fetchAllContacts(
           function (allContactsNativeArray) {
-            const allContactsManagedArray = [];
+            const allContactsManagedArray: ContactIOS[] = [];
             for (const index in allContactsNativeArray) {
               // Added this check to resolve the sonar issue.
               // hasOwnProperty() is used to filter out properties from the object's prototype chain.
@@ -202,7 +202,7 @@ class ContactsIOS extends ContactsBase {
       }
     );
   }
-  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: (...args: any[]) => void; page?: Page }) {
+  add(params: { contact: ContactIOS; onSuccess?: () => void; onFailure?: (...args: any[]) => void; page?: Page }) {
     const store = __SF_CNContactStore.new();
     store.requestAccess(
       function () {
@@ -277,20 +277,20 @@ class ContactsIOS extends ContactsBase {
         }
       },
       function () {
-        params.onFailure({
+        params.onFailure?.({
           message: 'Contact access is declined by user.'
         });
       }
     );
   }
-  getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: Contact[]) => void }) {
+  getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: ManagedContact[]) => void }) {
     //Depracated on 4.1.5
     const store = __SF_CNContactStore.new();
     store.requestAccess(
       function () {
-        store.fetchAllContacts(
+        store.fetchAllContacts<ContactIOS>(
           function (allContactsNativeArray) {
-            const allContactsManagedArray = [];
+            const allContactsManagedArray: ManagedContact[] = [];
             for (const index in allContactsNativeArray) {
               // Added this check to resolve the sonar issue.
               // hasOwnProperty() is used to filter out properties from the object's prototype chain.

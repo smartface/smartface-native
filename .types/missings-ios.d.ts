@@ -433,20 +433,20 @@ declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {}
 declare class __SF_CNLabelHome extends __SF_CNLabelParent {}
 declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {}
 
-declare class ContactNative {
-  private constructor();
+declare interface ContactNative {
   mutableCopy: () => any;
+  [key: string]: any;
 }
 
-declare class __SF_CNContactPickerDelegate {
-  contactPickerDidSelectContact: (contact: ContactNative) => void;
+declare class __SF_CNContactPickerDelegate<TContact = ContactNative> {
+  contactPickerDidSelectContact: (contact: TContact) => void;
   contactPickerDidCancel(): void;
 }
 
 declare class __SF_CNContactStore {
   static new(): __SF_CNContactStore;
   requestAccess: (value: () => void, failure: (...args: any[]) => void) => void;
-  fetchAllContacts: (value: (allContactsNativeArray: ContactNative[]) => void, failure: (...args: any[]) => void) => void;
+  fetchAllContacts: <TContact = ContactNative>(value: (allContactsNativeArray: TContact[]) => void, failure: (...args: any[]) => void) => void;
   executeSave(saveRequest: __SF_CNSaveRequest): any;
 }
 

@@ -2,12 +2,29 @@ import Page from '../../ui/page';
 import Blob from '../../global/blob';
 import NativeComponent from '../../core/native-component';
 
-export declare class ContactBase extends NativeComponent {
-  constructor(params?: Partial<ContactBase>);
+
+export type ManagedContact = {
+  nickname?: string,
+  photo?: Blob | null,
+  displayName?: string | undefined;
+  phoneNumbers?: string[] | undefined;
+  emailAddresses?: string[] | undefined;
+  urlAddresses?: string[] | undefined;
+  phoneNumber?: string[];
+  address?: string;
+  addresses?: string[] | undefined;
+}
+
+export class Contact extends NativeComponent {
+  constructor(params?: Partial<Contact>){
+    super();
+  };
   phoneNumbers?: string[];
-  emailAddresses?: string[];
-  addresses?: string[];
-  urlAddresses?: string[];
+  emailAddresses?: any;
+  givenName?: string;
+  familyName?: string;
+  addresses?: any;
+  urlAddresses?: any;
   firstName?: string;
   lastName?: string;
   middleName?: string;
@@ -18,7 +35,8 @@ export declare class ContactBase extends NativeComponent {
   department?: string;
   nickname?: string;
   displayName?: string;
-  photo?: Blob;
+  photo?: Blob | null;
+  postalAddresses: any;
 }
 
 /**
@@ -45,7 +63,7 @@ export declare class ContactBase extends NativeComponent {
  *
  */
 export class ContactsBase extends NativeComponent {
-  public static readonly Contact = ContactBase;
+  public static readonly Contact = Contact;
   /**
    * This function adds a contact to contact list with specified properties. You need check
    * {@link Application.Android.Permissions#WRITE_CONTACTS} before adding contact.
@@ -87,7 +105,7 @@ export class ContactsBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  add(params: { contact: ContactBase; onSuccess?: () => void; onFailure?: () => void }): void {
+  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: () => void }): void {
     throw new Error('Method not implemented.');
   }
   /**
@@ -121,7 +139,7 @@ export class ContactsBase extends NativeComponent {
   pickContact(
     page: Page,
     handlers: {
-      onSuccess: (contact: ContactBase) => void;
+      onSuccess: (contact: Contact) => void;
       onFailure?: () => void;
     }
   ): void {
@@ -153,7 +171,7 @@ export class ContactsBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  fetchAll(handlers: { onSuccess: (contacts: ContactBase[]) => void; onFailure?: (error: string) => void }): void {
+  fetchAll(handlers: { onSuccess: (contacts: Contact[]) => void; onFailure?: (error: string) => void }): void {
     throw new Error('Method not implemented.');
   }
 
@@ -184,9 +202,9 @@ export class ContactsBase extends NativeComponent {
    * @since 4.3.0
    */
   getContactsByPhoneNumber(
-    phoneNumber: String,
+    phoneNumber: string,
     handlers: {
-      onSuccess: (contacts: ContactsBase[]) => void;
+      onSuccess: (contacts: Contact[]) => void;
       onFailure?: (error: string) => void;
     }
   ): void {

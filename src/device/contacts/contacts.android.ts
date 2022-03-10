@@ -1,7 +1,7 @@
 import Blob from '../../global/blob';
 import Page from '../../ui/page';
 import { AndroidConfig, RequestCodes } from '../../util';
-import { ContactBase, ContactsBase } from '.';
+import { Contact, ContactsBase, ManagedContact } from '.';
 
 const NativeContactsContract = requireClass('android.provider.ContactsContract');
 const NativeArrayList = requireClass('java.util.ArrayList');
@@ -209,8 +209,8 @@ function addContactAddress(address, contentProviderOperation) {
   }
 }
 
-export class ContactAndroid extends ContactBase {
-  constructor(params?: Partial<ContactAndroid>) {
+export class ContactAndroid extends Contact {
+  constructor(params?: Partial<Contact>) {
     super();
     for (const param in params) {
       if (param === 'ios' || param === 'android') {
@@ -332,7 +332,7 @@ class ContactsAndroid extends ContactsBase {
       const cursor = contentResolver.query(uri, array(projection, 'java.lang.String'), null, null, null);
       if (cursor === null) throw new Error('query returns null.');
       const firstRow = cursor.moveToFirst();
-      const contacts = [];
+      const contacts: ManagedContact[] = [];
       if (firstRow) {
         do {
           let index = cursor.getColumnIndex(projection[0]);
@@ -364,7 +364,7 @@ class ContactsAndroid extends ContactsBase {
   }
   fetchAll(params: { onSuccess: (contacts: any[]) => void; onFailure: (error) => void }) {
     const { onFailure, onSuccess } = params;
-    const contacts = [];
+    const contacts: Contact[] = [];
     try {
       const contentResolver = AndroidConfig.activity.getContentResolver();
       const projection = [
@@ -418,7 +418,7 @@ class ContactsAndroid extends ContactsBase {
       this._onFailure && this._onFailure(error);
     }
   }
-  getContactsByPhoneNumber(phoneNumber = '', callbacks: { onSuccess: (contacts: any[]) => void; onFailure: (error) => void }) {
+  getContactsByPhoneNumber(phoneNumber: string = '', callbacks: { onSuccess: (contacts: any[]) => void; onFailure: (error) => void }) {
     const { onFailure, onSuccess } = callbacks;
     try {
       const contacts = toJSArray(SFContactUtil.getContactIdsByPhoneNumber(phoneNumber.replace(/\s/g, ''))).map((contactId) => createContactById(contactId));
