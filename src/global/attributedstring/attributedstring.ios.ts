@@ -1,5 +1,5 @@
-import Color from 'ui/color';
-import Font from 'ui/font';
+import Color from '../../ui/color';
+import Font from '../../ui/font';
 import { AttributedStringBase, IAttributedString } from './attributedstring';
 
 class AttributedStringIOS extends AttributedStringBase {

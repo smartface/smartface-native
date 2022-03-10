@@ -1,5 +1,3 @@
-import AlertView from '../ui/alertview';
-
 export {};
 
 declare global {
@@ -17,7 +15,7 @@ declare global {
   function float(val: any): number;
   function int(val: any): number;
   function release(value: any): any;
-
+  function arrayLength(array: any[]): number;
   function alert(
     params:
       | string
@@ -26,7 +24,7 @@ declare global {
           message?: string;
           buttons?: {
             text: string;
-            type: typeof AlertView.Android.ButtonType;
+            type: number;
             onClick?: () => void;
           }[];
         }

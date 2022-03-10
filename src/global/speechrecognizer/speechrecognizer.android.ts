@@ -1,3 +1,4 @@
+import { AndroidConfig } from '../../util';
 import { SpeechRecognizerAndroidError, SpeechRecognizerBase, SpeechRecognizerError } from './speechrecognizer';
 
 const NativeSpeechRecognizer = requireClass('android.speech.SpeechRecognizer');

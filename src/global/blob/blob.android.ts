@@ -3,6 +3,7 @@ import { BlobBase } from './blob';
 
 const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
 const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
+const NativeBase64 = requireClass('android.util.Base64');
 
 class BlobAndroid extends BlobBase {
   private _parts: string[];
@@ -26,7 +27,6 @@ class BlobAndroid extends BlobBase {
     return this._type;
   }
   get size(): number {
-    //TODO: arrayLength
     return this.nativeObject && arrayLength(this.nativeObject.toByteArray());
   }
   slice(start: number, end: number): BlobBase {
@@ -36,7 +36,6 @@ class BlobAndroid extends BlobBase {
     return newBlob;
   }
   toBase64() {
-    const NativeBase64 = requireClass('android.util.Base64');
     const byteArray = this.nativeObject.toByteArray();
     const encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.NO_WRAP);
     return encodedString;
@@ -52,7 +51,6 @@ class BlobAndroid extends BlobBase {
    * Error: Attempt to invoke virtual method 'int io.smartface.ExposingEngine.FastArray.size()' on a null object reference
    */
   static createFromBase64(base64String: string) {
-    const NativeBase64 = requireClass('android.util.Base64');
     const byteArray = NativeBase64.decode(base64String, NativeBase64.NO_WRAP);
     const newBlob = new BlobAndroid(byteArray, {
       type: 'image'

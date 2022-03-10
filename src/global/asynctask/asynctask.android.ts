@@ -1,95 +1,60 @@
-import { TypeUtil } from '../../util';
-import { AsyncTaskBase, IAsyncTask } from './asynctask';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IAsyncTask, IAsyncTaskAndroidProps, Status } from './asynctask';
 import { AsyncTaskEvents } from './asynctask-events';
 
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
 
-export class AsyncTaskAndroid extends AsyncTaskBase {
+export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
+  extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
+  implements IAsyncTask
+{
   static Events = AsyncTaskEvents;
   protected _android;
-  constructor(params?: Partial<IAsyncTask>) {
+  private _task: IAsyncTask['task'];
+  constructor(params: Partial<IAsyncTask> = {}) {
     super();
+    const { ios, android, ...rest } = params;
     this.nativeObject = new SFAsyncTask();
-    const EventFunctions = {
-      [AsyncTaskEvents.Cancelled]: function () {
-        this._onCancelled = (state) => {
-          this.emitter.emit(AsyncTaskEvents.Cancelled, state);
-        };
-      },
-      [AsyncTaskEvents.Complete]: function () {
-        this._onComplete = (state) => {
-          this.emitter.emit(AsyncTaskEvents.Complete, state);
-        };
-      },
-      [AsyncTaskEvents.PreExecute]: function () {
-        this._onPreExecute = (state) => {
-          this.emitter.emit(AsyncTaskEvents.PreExecute, state);
-        };
-      }
-    };
-    const self = this;
-    const android = {
-      getStatus() {
-        self.nativeObject.getStatus();
-      },
-      get onPreExecute() {
-        return self._onPreExecute;
-      },
-      set onPreExecute(value) {
-        if (TypeUtil.isFunction(value)) {
-          self._onPreExecute = value;
-        }
-      }
-    };
-
-    this._android = Object.assign(this._android, android);
+    Object.assign(this, rest);
 
     const callbacks = {
-      onPreExecute: function () {
-        this._onPreExecute && this._onPreExecute();
+      onPreExecute: () => {
+        this.onPreExecute();
+        this.emit('preExecute');
       },
-      doInBackground: function (objects) {
-        this._task && this._task(objects);
+      doInBackground: () => {
+        this.task();
       },
-      onPostExecute: function () {
-        this._onComplete && this._onComplete();
+      onPostExecute: () => {
+        this.onComplete?.();
+        this.emit('complete');
       },
-      onCancelled: function () {
-        this._onCancelled && this._onCancelled();
+      onCancelled: () => {
+        this.onCancelled?.();
+        this.emit('cancelled');
       }
     };
     this.nativeObject.setJsCallback(callbacks);
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+    this.addAndroidProps(this.getAndroidProps());
   }
+  private getAndroidProps(): IAsyncTask['android'] {
+    const self = this;
+    return {
+      getStatus() {
+        return self.nativeObject.getStatus();
+      }
+    };
+  }
+  onComplete: () => void;
+  onCancelled: () => void;
+  onPreExecute: () => void;
+  getStatus?: () => Status;
   get task() {
     return this._task;
   }
   set task(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._task = value;
-    }
-  }
-  get onComplete() {
-    return this._onComplete;
-  }
-  set onComplete(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._onComplete = value;
-    }
-  }
-  get onCancelled() {
-    return this._onCancelled;
-  }
-  set onCancelled(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._onCancelled = value;
-    }
+    this._task = value;
   }
   run() {
     this.nativeObject.executeTask();

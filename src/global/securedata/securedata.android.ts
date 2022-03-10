@@ -1,3 +1,4 @@
+import { AndroidConfig } from '../../util';
 import { SecureDataBase } from './securedata';
 const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyStore');
 

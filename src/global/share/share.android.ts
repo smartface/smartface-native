@@ -3,6 +3,7 @@ import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
+import { AndroidConfig } from '../../util';
 import { ShareBase } from './share';
 
 const NativeIntent = requireClass('android.content.Intent');
@@ -232,7 +233,7 @@ export class ShareAndroid implements ShareBase {
     shareIntent.putExtra(NativeIntent.EXTRA_MIME_TYPES, array(contentSharing.mimeTypes, 'java.lang.String'));
     AndroidConfig.activity.startActivity(shareIntent);
   }
-  static shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
+  static shareContacts(params: { items: typeof Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
     const NativeURI = requireClass('android.net.Uri');
 
     const itemList = params.items || [];
