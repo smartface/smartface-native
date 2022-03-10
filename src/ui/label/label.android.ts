@@ -37,13 +37,13 @@ const MINIMUM_FONT_SIZE = 7;
 export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel> extends ViewAndroid<TEvent, TNative, TProps> implements ILabel {
   private _ellipsizeMode: ILabel['ellipsizeMode'];
   protected _textAlignment: TextAlignment;
-  protected viewNativeDefaultTextAlignment: number = null;
+  protected viewNativeDefaultTextAlignment: number = TextAlignment.TOPLEFT;
   private skipDefaults: boolean;
   private _adjustFontSizeToFit = false;
   private _minimumFontSize = MINIMUM_FONT_SIZE;
   private _textDirection: TextDirection;
   private _adjustableFontSizeStep = 1;
-  private fontInitial: Font = null;
+  private fontInitial: Font | null = null;
   private _textColor: ILabel['textColor'] = Color.BLUE;
   constructor(params: Partial<TProps>) {
     super(params);

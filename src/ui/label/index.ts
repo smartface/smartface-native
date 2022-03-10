@@ -1,4 +1,3 @@
-import TextDirection from '../android/textdirection';
 import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
@@ -7,6 +6,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, IViewState } from '../view';
 import EllipsizeMode from '../shared/android/ellipsizemode';
+import TextDirection from '../shared/textdirection';
 export type LabelAndroidProps = IView['android'] & {
   /**
    * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
