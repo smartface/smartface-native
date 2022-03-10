@@ -2,6 +2,7 @@ import { ViewAndroid } from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
 import FlexLayout from '../flexlayout';
+import View, { IView } from '../view';
 
 const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
 const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
@@ -12,7 +13,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   implements IViewGroup
 {
   static Events = ViewGroupEvents;
-  childViews: Record<string, ViewAndroid> = {};
+  childViews: Record<string, View> = {};
 
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -33,14 +34,14 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
     throw new Error('Method not implemented.');
   }
 
-  addChild(view: ViewAndroid) {
+  addChild(view: View) {
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof FlexLayout) {
       this.nativeObject.addView(view.nativeObject, view.android.yogaNode);
     }
   }
-  removeChild(view: ViewAndroid) {
+  removeChild(view: IView) {
     this.nativeObject.removeView(view.nativeObject);
     if (this.childViews[view.id]) {
       delete this.childViews[view.id];
@@ -63,11 +64,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   }
 
   getChildList() {
-    const childList = [];
-    for (let i in this.childViews) {
-      childList.push(this.childViews[i]);
-    }
-    return childList;
+    return Object.values(this.childViews);
   }
   findChildById(id) {
     return this.childViews[id] ? this.childViews[id] : null;
@@ -91,17 +88,5 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
         }
       })
     );
-  }
-
-  // This method is needed to respect border radius of the view.
-  private getRippleMask(borderRadius) {
-    const outerRadii = [];
-    outerRadii.length = 8;
-    outerRadii.fill(borderRadius);
-
-    const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
-    const shapeDrawable = new NativeShapeDrawable(roundRectShape);
-
-    return shapeDrawable;
   }
 }

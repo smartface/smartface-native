@@ -25,11 +25,10 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   private _flexWrap: number | null = null
   constructor(params?: Partial<TProps>) {
     super(params);
-
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
-        return !!this.android?.onInterceptTouchEvent?.();
+        return this.android?.onInterceptTouchEvent && this.android?.onInterceptTouchEvent();
       }
     });
 
@@ -40,9 +39,6 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
       },
       set onInterceptTouchEvent(value) {
         self._onInterceptTouchEvent = value;
-      },
-      get yogaNode(){
-        return self.yogaNode;
       }
     });
   }
@@ -89,7 +85,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   toString() {
     return 'FlexLayout';
   }
-  _maskedBorders: any[];
+  // _maskedBorders: any[] = [];
   protected _masksToBounds: boolean;
   _nativeObject: any;
 }

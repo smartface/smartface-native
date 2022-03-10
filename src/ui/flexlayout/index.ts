@@ -198,7 +198,7 @@ export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobilePr
    * @ios
    * @since 0.1
    */
-  flexWrap: Flex.FlexWrap;
+  flexWrap: Flex.FlexWrap | null;
   /**
    * This functions recalculates the positioning parameters.
    * It is useful to call this method when you want to change layout parameters on runtime.

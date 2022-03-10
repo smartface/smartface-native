@@ -17,6 +17,7 @@ export interface IViewState<Property = any> {
 }
 
 export type ViewAndroidProps = {
+  readonly yogaNode: any;
   overScrollMode: number;
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.

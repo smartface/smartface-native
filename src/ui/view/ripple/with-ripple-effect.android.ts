@@ -1,5 +1,7 @@
 import View from '..';
+import { getRippleMask } from '../../../helper/get-ripple-mask';
 import { AndroidConfig, UnitConverter } from '../../../util';
+import Color from '../../color';
 
 function DpToPixel(dp) {
   return UnitConverter.dpToPixel(dp);
@@ -7,7 +9,7 @@ function DpToPixel(dp) {
 
 export function withRippleEffect(view: View) {
   let _rippleEnabled = false;
-  let _rippleColor = null;
+  let _rippleColor: Color | null = null;
   let _useForeground = false;
 
   Object.defineProperties(view.android, {
@@ -43,7 +45,7 @@ export function withRippleEffect(view: View) {
 
         if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
           const states = array([array([], 'int')]);
-          const colors = array([_rippleColor.nativeObject], 'int');
+          const colors = array([_rippleColor?.nativeObject], 'int');
 
           const NativeColorStateList = requireClass('android.content.res.ColorStateList');
           const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
@@ -75,17 +77,3 @@ export function withRippleEffect(view: View) {
   };
 }
 
-// This method is needed to respect border radius of the view.
-function getRippleMask(borderRadius) {
-  const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
-  const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
-
-  const outerRadii = [];
-  outerRadii.length = 8;
-  outerRadii.fill(borderRadius);
-
-  const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
-  const shapeDrawable = new NativeShapeDrawable(roundRectShape);
-
-  return shapeDrawable;
-}

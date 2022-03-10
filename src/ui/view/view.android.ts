@@ -18,6 +18,7 @@ import { EventEmitterWrapper } from '../../core/eventemitter';
 import View, { IView, IViewProps, ViewBase } from '.';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ScrollView, { ScrollViewAlign } from '../scrollview';
+import { getRippleMask } from '../../helper/get-ripple-mask';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {
@@ -64,27 +65,13 @@ const YogaEdge = {
   ALL: NativeYogaEdge.ALL
 };
 
-function getRippleMask(borderRadius: number) {
-  const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
-  const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
-
-  const outerRadii: number[] = [];
-  outerRadii.length = 8;
-  outerRadii.fill(borderRadius, 0, 8);
-
-  const roundRectShape = new NativeRoundRectShape(array(outerRadii, 'float'), null, null);
-  const shapeDrawable = new NativeShapeDrawable(roundRectShape);
-
-  return shapeDrawable;
-}
-
 const activity = AndroidConfig.activity;
 
 export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps> extends ViewBase<
   TEvent,
   TNative,
   TProps
-> {
+> implements IView {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -99,7 +86,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
     STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
-  protected uniqueId: string;
+  uniqueId: string;
   protected _maskedBorders = [];
   protected _masksToBounds: boolean = true;
   private _parent?: View;
@@ -120,9 +107,9 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   private __isRecyclerView: any;
   private _touchEnabled: boolean = false;
   private _rippleEnabled = false;
-  private _rippleColor = null;
+  private _rippleColor?: Color;
   private _useForeground = false;
-  yogaNode: any;
+  protected yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
 
   constructor(params?: Partial<TProps>) {
@@ -152,11 +139,31 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
     const self = this;
 
-    const android = {
+    this.addAndroidProps({
+      get yogaNode() {
+        return self.yogaNode;
+      },
+      get rippleEnabled(){
+        return self.rippleEnabled;
+      },
+      set rippleEnabled(value: boolean){
+        self.rippleEnabled = value;
+      },
+      get useForeground(){
+        return self.useForeground;
+      },
+      set useForeground(value: boolean){
+        self.useForeground = value;
+      },
       updateRippleEffectIfNeeded: () => {
         this._rippleEnabled && this._rippleColor && (this.android.rippleColor = this._rippleColor);
       },
-      rippleColor: null,
+      get rippleColor(){
+        return self.rippleColor;
+      },
+      set rippleColor(value: Color | undefined){
+        self.rippleColor = value;;
+      },
       get zIndex() {
         return self.zIndex;
       },
@@ -175,13 +182,13 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       set overScrollMode(mode) {
         self.overScrollMode = mode;
       }
-    };
+    });
   }
 
   get parent() {
     return this._parent;
   }
-  set parent(view: View) {
+  set parent(view: View | undefined) {
     this._parent = view;
   }
 
@@ -265,12 +272,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     SFViewUtil.setElevation(this._nativeObject, value);
   }
 
-  get aspectRatio() {
-    return null;
-  }
-
-  set aspectRatio(value) {}
-
+  aspectRatio: number;
   // android
   get overScrollMode() {
     return this._overScrollMode;
@@ -874,10 +876,10 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   get rippleColor() {
     return this._rippleColor;
   }
-  set rippleColor(value) {
+  set rippleColor(value: Color | undefined) {
     this._rippleColor = value;
 
-    if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+    if (this._rippleColor && this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
       const states = array([array([], 'int')]);
       const colors = array([this._rippleColor.nativeObject], 'int');
 
