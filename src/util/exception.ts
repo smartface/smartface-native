@@ -7,7 +7,8 @@ namespace Exception {
     OBJECT = 'Parameter type must be object',
     ARRAY = 'Parameter type must be array',
     FUNCTION = 'Parameter type must be function',
-    URL = 'URL is not valid'
+    URL = 'URL is not valid',
+    FILE = 'File is not valid'
   }
 }
 

@@ -132,6 +132,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   layoutIfNeeded(): void;
   sizeToFit(): void;
   subviews: __SF_UIView[];
+  view: __SF_UIView;
   className(): any;
   becomeFirstResponder(): void;
   resignFirstResponder(): void;
@@ -1064,7 +1065,7 @@ declare class __SF_AVPlayerViewController extends __SF_UIView {
   willStopPictureInPicture(): void;
   willStartPictureInPicture(): void;
   shouldAutomaticallyDismissAtPictureInPictureStart: boolean;
-  restoreUserInterfaceForPictureInPictureStopWithCompletionHandler: boolean;
+  restoreUserInterfaceForPictureInPictureStopWithCompletionHandler(callback?: (shouldFinish?: boolean) => void): void;
 }
 
 declare class __SF_SMFSFSafariViewController {
@@ -1267,6 +1268,8 @@ declare class __SF_NodePlayer {}
 
 declare class __SF_AVPlayer {
   constructor(avPlayerItem: __SF_AVPlayerItem);
+  static createFromURL(url: __SF_NSURL): __SF_AVPlayer;
+  addObserver(): void;
   removeObserver(): void;
   replaceCurrentItem(avPlayer: __SF_AVPlayerItem): void;
   play(): void;
@@ -1277,6 +1280,7 @@ declare class __SF_AVPlayer {
   getCurrentTime(): number;
   onItemReady: () => void;
   AVPlayerItemDidPlayToEndTime: () => void;
+  onItemFailed: () => void;
   volume: number;
   rate: number;
 }
