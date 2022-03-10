@@ -1,15 +1,22 @@
 import { copyObjectPropertiesWithDescriptors } from '../util';
 import NativeComponent from './native-component';
 
-export type MobileOSProps<TIOS extends { [key: string]: any } = {[key: string]: any}, TAND extends { [key: string]: any } = {[key: string]: any}> = {
+export type MobileOSProps<TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }> = {
   ios: Partial<TIOS>;
   android: Partial<TAND>;
 };
-export type WithMobileOSProps<TProps extends Record<string, any> = {}, TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }> = MobileOSProps<TIOS, TAND> & TProps;
-export abstract class NativeMobileComponent<TNative extends Record<string, any> = Record<string, any>, TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>> extends NativeComponent<TNative> {
+export type WithMobileOSProps<
+  TProps extends Record<string, any> = {},
+  TIOS extends { [key: string]: any } = { [key: string]: any },
+  TAND extends { [key: string]: any } = { [key: string]: any }
+> = MobileOSProps<TIOS, TAND> & TProps;
+export abstract class NativeMobileComponent<
+  TNative extends Record<string, any> = Record<string, any>,
+  TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>
+> extends NativeComponent<TNative> {
   private _ios: TProps['ios'] = {};
   protected _android: TProps['android'] = {};
-  constructor({ android = {}, ios = {}, ...rest }: Partial<TProps>= {}) {
+  constructor({ android = {}, ios = {}, ...rest }: Partial<TProps> = {}) {
     super(rest);
 
     this._ios && copyObjectPropertiesWithDescriptors(this._ios, ios);
