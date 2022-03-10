@@ -1,4 +1,6 @@
 import { INativeComponent } from '../../core/inative-component';
+import NativeComponent from '../../core/native-component';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import { BlobBase } from '../../global/blob/blob';
 import File from '../../io/file';
@@ -48,7 +50,7 @@ export type AndroidProps = {
   reset?(): void;
 };
 
-export interface IGifImage extends INativeComponent {
+export interface IGifImage extends INativeComponent, MobileOSProps<iOSProps, AndroidProps> {
   /**
    * Gets/Sets the loopCount of gifImage. This property is readonly on iOS.
    * @android
@@ -87,11 +89,13 @@ export interface IGifImage extends INativeComponent {
    * @ios
    * @since 3.2.0
    */
-  toBlob(): Blob;
+  toBlob(): Blob | null;
 }
 
-export class GifImageBase implements IGifImage {
-  constructor(params: Partial<IGifImage> = {}) {}
+export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifImage> implements IGifImage {
+  constructor(params?: Partial<IGifImage>) {
+    super(params)
+  }
 
   /**
    * Creates an gifImage object from given a blob.
@@ -104,7 +108,7 @@ export class GifImageBase implements IGifImage {
    * @ios
    * @since 3.2.0
    */
-  static createFromBlob(blob: Blob): GifImageBase {
+  static createFromBlob(blob: Blob): AbstractGifImage | null {
     throw new Error('Method not implemented.');
   }
 
@@ -123,7 +127,7 @@ export class GifImageBase implements IGifImage {
    * @static
    * @since 3.2.0
    */
-  static createFromFile(path: string, width?: number, height?: number): GifImageBase {
+  static createFromFile(path: string, width?: number, height?: number): AbstractGifImage | null{
     throw new Error('Method not implemented.');
   }
 
@@ -142,7 +146,7 @@ export class GifImageBase implements IGifImage {
   get instrinsicSize(): Size {
     throw new Error('Method not implemented.');
   }
-  toBlob(): BlobBase {
+  toBlob(): BlobBase | null {
     throw new Error('Method not implemented.');
   }
   static get android(): AndroidProps | undefined {
@@ -151,8 +155,9 @@ export class GifImageBase implements IGifImage {
   static get ios(): iOSProps | undefined {
     throw new Error('Method not implemented.');
   }
-  nativeObject: any;
 }
+
+
 
 /**
  * @class UI.GifImage
@@ -175,7 +180,8 @@ export class GifImageBase implements IGifImage {
  *     myPage.layout.addChild(myGifImageView);
  *
  */
-const GifImage: typeof GifImageBase = require(`./gifimage.${Device.deviceOS.toLowerCase()}`).default;
-type GifImage = GifImageBase;
+class GifImageImpl extends AbstractGifImage { }
+const GifImage: typeof GifImageImpl = require(`./gifimage.${Device.deviceOS.toLowerCase()}`).default;
+type GifImage = GifImageImpl;
 
 export default GifImage;

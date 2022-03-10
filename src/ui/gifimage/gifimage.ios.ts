@@ -2,21 +2,23 @@ import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Image from '../../ui/image';
 import Blob from '../../global/blob';
-import { AndroidProps, GifImageBase, IGifImage, iOSProps } from '.';
+import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
 import { Size } from '../../primitive/size';
+import ImageiOS from '../image/image.ios';
 
-export default class GifImageIOS extends GifImageBase {
+export default class GifImageIOS extends AbstractGifImage {
   constructor(params: Partial<IGifImage> = {}) {
     super(params);
 
     this.nativeObject = params.nativeObject;
   }
 
-  static createFromFile(path: string, width?: number, height?: number): GifImageIOS {
+  static createFromFile(path: string): GifImageIOS {
     const file: File = typeof path === 'string' ? new File({ path }) : path;
     const fileStream = file.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-    const blob = fileStream.readToEnd();
+    const blob = fileStream.readToEnd() as Blob;
     const nativeObject = __SF_FLAnimatedImage.animatedImageWithGIFData(blob.nativeObject);
+    
     return new GifImageIOS({ nativeObject: nativeObject });
   }
 
@@ -36,7 +38,7 @@ export default class GifImageIOS extends GifImageBase {
   }
 
   get posterImage(): Image {
-    return Image.createFromImage(this.nativeObject.posterImage);
+    return ImageiOS.createFromImage(this.nativeObject.posterImage);
   }
 
   get instrinsicSize(): Size {

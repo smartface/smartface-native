@@ -1,6 +1,7 @@
 import { IGifImageView } from '.';
 import GifImage from '../gifimage';
-import Image from '../image';
+import { IImage } from '../image';
+import ImageAndroid from '../image/image.android';
 import ImageViewAndroid from '../imageview/imageview.android';
 import { GifImageViewEvents } from './gifimageview-events';
 
@@ -21,9 +22,9 @@ export default class GifImageViewAndroid<TEvent extends string = GifImageViewEve
     this.nativeObject.setImageDrawable(this._gifImage.nativeObject);
   }
 
-  get currentFrame(): Image {
+  get currentFrame(): IImage {
     // TODO Recheck after build
-    return new Image({
+    return new ImageAndroid({
       bitmap: this.gifImage.nativeObject.getCurrentFrame()
     });
   }

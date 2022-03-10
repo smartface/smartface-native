@@ -76,7 +76,7 @@ export interface IImage extends NativeMobileComponent {
    * @return Blob
    * @since 0.1
    */
-  toBlob(): IBlob;
+  toBlob(): IBlob | null;
 
   /**
    * Creates a new image from existing image with specified width and height.
@@ -114,7 +114,7 @@ export interface IImage extends NativeMobileComponent {
    * @ios
    * @since 0.1
    */
-  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | false;
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | null | void;
   /**
    * Returns a cropped image from existing image with specified rectangle.
    * onSuccess and onFailure are optional parameters.
@@ -135,7 +135,7 @@ export interface IImage extends NativeMobileComponent {
    * @ios
    * @since 0.1
    */
-  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): IImage | false;
+  crop(x: number, y: number, width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | null | void;
   /**
    * Returns a compressed blob from existing image with given quality.
    * onSuccess and onFailure are optional parameters.
@@ -160,7 +160,7 @@ export interface IImage extends NativeMobileComponent {
    * @ios
    * @since 0.1
    */
-  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): IBlob | false;
+  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | void;
   /**
    * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
    * onSuccess and onFailure are optional parameters.
@@ -178,7 +178,7 @@ export interface IImage extends NativeMobileComponent {
    * @ios
    * @since 0.1
    */
-  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): IImage | false;
+  rotate(angle: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): IImage | null | void;
 }
 
 /**
@@ -322,7 +322,6 @@ export type ImageIOSProps =
     }
   | {};
 
-
 type ImageParams = {
   bitmap?: any;
   roundedBitmapDrawable?: any;
@@ -330,50 +329,45 @@ type ImageParams = {
   android?: {
     systemIcon?: any;
   };
-}
+};
 /**
  * @since 4.5.0
  */
-export class ImageBase<TNative extends {[key: string]: any} = any> extends NativeMobileComponent<TNative, WithMobileOSProps<Partial<ImageParams>>> implements IImage {
-  constructor(
-    params: Partial<ImageParams>
-  ) {
+export abstract class AbstractImage<TNative extends { [key: string]: any } = any> extends NativeMobileComponent<TNative, WithMobileOSProps<Partial<ImageParams>>> implements IImage {
+  constructor(params: Partial<ImageParams>) {
     super(params);
   }
-  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
+  compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob; }) => void, onFailure?: (e?: { message: string; }) => void): IBlob | null | undefined {
     throw new Error('Method not implemented.');
   }
-  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
+  rotate(angle: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): IImage | null | void {
     throw new Error('Method not implemented.');
   }
-  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): false | IBlob {
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage; }) => void, onFailure?: (e?: { message: string; }) => void): null | IImage | void {
+    throw new Error('Method not implemented.');
+  };
+  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): null | IImage | void {
     throw new Error('Method not implemented.');
   }
-  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
-    throw new Error('Method not implemented.');
-  }
+  
   get height(): number {
     return this.nativeObject.size.height;
   }
   get width(): number {
     return this.nativeObject.size.width;
   }
-  set autoMirrored(value) {
-    throw new Error('Method not implemented.');
-  }
+  abstract autoMirrored: boolean;
 
-  get autoMirrored() {
-    throw new Error('Method not implemented.');
-    return null;
-  }
-
-  toBlob(): IBlob {
+  toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
   }
 
   toString() {
     return 'Image';
   }
+  static android: {
+    createRoundedImage(params): IImage | null;
+  };
 
   /**
    * Creates an Image object which built-in icon is created corresponding systemIcon value.
@@ -400,7 +394,7 @@ export class ImageBase<TNative extends {[key: string]: any} = any> extends Nativ
    * @ios
    * @since 0.1
    */
-  static createFromBlob(blob: IBlob): IImage {
+  static createFromBlob(blob: IBlob): IImage | null {
     throw new Error('Method not implemented.');
   }
 
@@ -472,7 +466,7 @@ export class ImageBase<TNative extends {[key: string]: any} = any> extends Nativ
    * @since 0.1
    * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
    */
-  static createFromFile(path: string, width?: number, height?: number): IImage {
+  static createFromFile(path: string, width?: number, height?: number): IImage | null {
     throw new Error('Method not implemented.');
   }
   static systemDrawableId(systemIcon: number) {
@@ -488,13 +482,13 @@ export class ImageBase<TNative extends {[key: string]: any} = any> extends Nativ
     RenderingMode,
     Format
   };
-
-  get ios() {
-    return {};
-  }
 }
 
-const Image: typeof ImageBase = require(`./image.${Device.deviceOS.toLowerCase()}`).default;
-type Image = ImageBase;
+class Imageimpl extends AbstractImage {
+  autoMirrored: boolean;
+}
+
+const Image: typeof Imageimpl = require(`./image.${Device.deviceOS.toLowerCase()}`).default;
+type Image = Imageimpl;
 
 export default Image;

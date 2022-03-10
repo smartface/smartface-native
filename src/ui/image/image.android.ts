@@ -1,6 +1,6 @@
 import IBlob from '../../global/blob/blob';
 import BlobAndroid from '../../global/blob/blob.android';
-import Image, { IImage, Format, ImageBase } from '.';
+import { IImage, Format, AbstractImage } from '.';
 
 /*globals requireClass*/
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
@@ -17,8 +17,8 @@ const Path = require('../../io/path');
 const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressFormat.PNG];
 const androidResources = AndroidConfig.activityResources;
 
-export default class ImageAndroid extends ImageBase {
-  static createFromFile = (path: string, width?: number, height?: number) => {
+export default class ImageAndroid extends AbstractImage {
+  static createFromFile(path: string, width?: number, height?: number) {
     const imageFile = new File({
       path: path
     });
@@ -33,15 +33,15 @@ export default class ImageAndroid extends ImageBase {
           bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
         }
       }
-      return new Image({
+      return new ImageAndroid({
         bitmap: bitmap
       });
     }
     return null;
-  };
+  }
 
-  static createSystemIcon(systemIcon) {
-    return new Image({
+  static createSystemIcon(systemIcon: number | string) {
+    return new ImageAndroid({
       android: {
         systemIcon: systemIcon
       }
@@ -50,7 +50,7 @@ export default class ImageAndroid extends ImageBase {
   static createFromBlob(blob) {
     const newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
     if (newBitmap)
-      return new Image({
+      return new ImageAndroid({
         bitmap: newBitmap
       });
     return null;
@@ -64,11 +64,11 @@ export default class ImageAndroid extends ImageBase {
         path: params.path
       });
       if (imageFile.type === Path.FILE_TYPE.ASSET || imageFile.type === Path.FILE_TYPE.DRAWABLE) {
-        const image = Image.createFromFile(params.path);
-        return image.android.round(params.radius);
+        const image = ImageAndroid.createFromFile(params.path);
+        return image?.android.round(params.radius) || null;
       } else {
         const roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
-        return new Image({
+        return new ImageAndroid({
           roundedBitmapDrawable: roundedBitmapDrawable
         });
       }
@@ -76,7 +76,7 @@ export default class ImageAndroid extends ImageBase {
   };
 
   static createImageFromPath = (path) => {
-    if (typeof path === 'string') path = Image.createFromFile(path);
+    if (typeof path === 'string') path = ImageAndroid.createFromFile(path);
     return path;
   };
 
@@ -121,7 +121,7 @@ export default class ImageAndroid extends ImageBase {
     });
   }
 
-  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void): false | IImage {
+  resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void) {
     let success = true;
     let newBitmap: any;
     try {
@@ -138,18 +138,18 @@ export default class ImageAndroid extends ImageBase {
     if (success && !!newBitmap) {
       if (onSuccess)
         onSuccess({
-          image: new Image({
+          image: new ImageAndroid({
             bitmap: newBitmap
           })
         });
       else
-        return new Image({
+        return new ImageAndroid({
           bitmap: newBitmap
         });
     }
   }
 
-  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
+  crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void) {
     let success = true;
     let newBitmap: any;
     try {
@@ -166,18 +166,20 @@ export default class ImageAndroid extends ImageBase {
     if (success) {
       if (onSuccess)
         onSuccess({
-          image: new Image({
+          image: new ImageAndroid({
             bitmap: newBitmap
           })
         });
       else
-        return new Image({
+        return new ImageAndroid({
           bitmap: newBitmap
         });
     }
+
+    return null;
   }
 
-  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void): false | IImage {
+  rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void) {
     let success = true;
     let newBitmap: any;
     try {
@@ -196,20 +198,20 @@ export default class ImageAndroid extends ImageBase {
       else return null;
     }
     if (success) {
-      if (onSuccess)
+      if (onSuccess) {
         onSuccess({
-          image: new Image({
+          image: new ImageAndroid({
             bitmap: newBitmap
           })
         });
-      else
-        return new Image({
+      } else
+        return new ImageAndroid({
           bitmap: newBitmap
         });
     }
   }
 
-  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void): false | IBlob {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void) {
     let success = true;
     let byteArray;
     try {
@@ -271,7 +273,7 @@ export default class ImageAndroid extends ImageBase {
         if (typeof radius !== 'number') throw new Error('radius value must be a number.');
 
         const roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
-        return new Image({
+        return new ImageAndroid({
           roundedBitmapDrawable: roundedBitmapDrawable
         });
       },
@@ -281,24 +283,24 @@ export default class ImageAndroid extends ImageBase {
       set systemIcon(systemIcon) {
         const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
         this._systemIcon = systemIcon;
-        self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, Image.systemDrawableId(this._systemIcon));
+        self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, ImageAndroid.systemDrawableId(this._systemIcon));
       }
     };
   }
 
-  get ios() {
-    return {
-      resizableImageWithCapInsetsResizingMode: () => {
-        return this;
-      },
-      imageFlippedForRightToLeftLayoutDirection: () => {
-        return this;
-      },
-      imageWithRenderingMode: () => {
-        return this;
-      }
-    };
-  }
+  // get ios() {
+  //   return {
+  //     resizableImageWithCapInsetsResizingMode: () => {
+  //       return this;
+  //     },
+  //     imageFlippedForRightToLeftLayoutDirection: () => {
+  //       return this;
+  //     },
+  //     imageWithRenderingMode: () => {
+  //       return this;
+  //     }
+  //   };
+  // }
 }
 
 // Assign parameters given in constructor

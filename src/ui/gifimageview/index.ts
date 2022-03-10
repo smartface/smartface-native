@@ -1,10 +1,10 @@
 import { AbstractImageView, IImageView } from '../imageview';
 import GifImage from '../gifimage';
-import Image from '../image';
+import { IImage } from '../image';
 import Color from '../color';
 import { GifImageViewEvents } from './gifimageview-events';
 
-export declare interface IGifImageView<TEvent extends string = GifImageViewEvents> extends IImageView<TEvent | GifImageViewEvents> {
+export interface IGifImageView<TEvent extends string = GifImageViewEvents> extends IImageView<TEvent | GifImageViewEvents> {
   /**
    * Gets/sets the gifImage. GifImage object can be set.
    *
@@ -23,7 +23,7 @@ export declare interface IGifImageView<TEvent extends string = GifImageViewEvent
    * @ios
    * @since 3.2.0
    */
-  readonly currentFrame: Image;
+  readonly currentFrame: IImage;
   /**
    * Gets the currentFrameIndex.
    *
@@ -97,27 +97,23 @@ export declare interface IGifImageView<TEvent extends string = GifImageViewEvent
    * @ios
    * @since 3.2.0
    */
-  loadFromUrl(params: { url: string; placeholder?: Image; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
+  loadFromUrl(params: { url: string; placeholder?: IImage; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
 }
 
-export declare class AbstractGifImageView<TEvent extends string = GifImageViewEvents> extends AbstractImageView<TEvent> implements IImageView<TEvent> {
+export abstract class AbstractGifImageView<TEvent extends string = GifImageViewEvents> extends AbstractImageView<TEvent> implements IGifImageView<TEvent> {
+  startAnimating(): void {
+    throw new Error('Method not implemented.');
+  }
+  stopAnimating(): void {
+    throw new Error('Method not implemented.');
+  }
+
   gifImage: undefined | GifImage;
-
-  readonly currentFrame: Image;
-
+  readonly currentFrame: IImage;
   readonly currentFrameIndex: number;
-
   isAnimating: boolean;
-
-  startAnimating(): void;
-
-  stopAnimating(): void;
-
   loopCompletionCallback: (loopCountRemain: number) => void;
-
   tintColor: Color;
-
-  loadFromUrl(params: { url: string; placeholder?: Image; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
 }
 
 /**
@@ -140,7 +136,8 @@ export declare class AbstractGifImageView<TEvent extends string = GifImageViewEv
  *     myPage.layout.addChild(myGifImageView);
  *
  */
-const GifImageView: typeof AbstractGifImageView = require(`./gifimageview.${Device.deviceOS.toLowerCase()}`).default;
-type GifImageView = AbstractGifImageView;
+class GifImageViewImpl extends AbstractGifImageView {}
+const GifImageView: typeof GifImageViewImpl = require(`./gifimageview.${Device.deviceOS.toLowerCase()}`).default;
+type GifImageView = GifImageViewImpl;
 
 export default GifImageView;

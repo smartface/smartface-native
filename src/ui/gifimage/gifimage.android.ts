@@ -5,10 +5,10 @@ import FileStream from '../../io/filestream';
 import File from '../../io/file';
 import Blob from '../../global/blob';
 import Image from '../../ui/image';
-import { AndroidProps, GifImageBase, IGifImage, iOSProps } from '.';
+import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
 import { Size } from '../../primitive/size';
 
-export default class GifImageAndroid extends GifImageBase {
+export default class GifImageAndroid extends AbstractGifImage {
   private _content: File | Blob;
   private _seekPosition: number;
   private _speed: number;
@@ -19,8 +19,8 @@ export default class GifImageAndroid extends GifImageBase {
     params?.android?.content && (this._content = params.android.content);
   }
 
-  static createFromFile(path: string, width?: number, height?: number): GifImageAndroid {
-    const file: File = typeof path === 'string' ? new File({ path }) : undefined;
+  static createFromFile(path: string, width?: number, height?: number) {
+    const file: File | undefined = typeof path === 'string' ? new File({ path }) : undefined;
     if (file && file.nativeObject) {
       return new GifImageAndroid({
         android: {
@@ -31,7 +31,7 @@ export default class GifImageAndroid extends GifImageBase {
     } else return null;
   }
 
-  static createFromBlob(blob: Blob): GifImageAndroid {
+  static createFromBlob(blob: Blob) {
     const byteArray = blob.nativeObject.toByteArray();
     if (byteArray)
       return new GifImageAndroid({
@@ -65,13 +65,14 @@ export default class GifImageAndroid extends GifImageBase {
     return { width, height };
   }
 
-  toBlob(): Blob {
+  toBlob() {
     if (this._content instanceof File) {
       const myFileStream = this._content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
       return myFileStream.readToEnd() as Blob;
     } else if (this._content instanceof Blob) {
       return this._content;
     }
+    return null;
   }
 
   get android(): AndroidProps {
