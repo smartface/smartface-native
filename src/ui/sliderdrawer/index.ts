@@ -1,6 +1,7 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import { IFlexLayout } from '../flexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
@@ -79,7 +80,7 @@ export enum SliderDrawerState {
   DRAGGED = 2
 }
 
-export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvents> extends IEventEmitter<TEvent | SliderDrawerEvents>, INativeComponent {
+export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvents> extends IEventEmitter<TEvent | SliderDrawerEvents>, INativeComponent, MobileOSProps {
   /**
    * Gets/sets position of the SliderDrawer.
    *

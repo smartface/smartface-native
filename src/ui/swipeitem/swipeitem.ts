@@ -5,29 +5,28 @@ import Color from '../color';
 import Font from '../font';
 import Image from '../image';
 import { SwipeItemEvents } from './swipeitem-events';
-
 export default class SwipeItem
   extends NativeEventEmitterComponent<SwipeItemEvents, any, WithMobileOSProps<Partial<ISwipeItem>, Partial<ISwipeItemIOSParams>, Partial<ISwipeItemAndroidParams>>>
   implements ISwipeItem
 {
-  private _text = 'Button';
-  private _backgroundColor = Color.GRAY;
-  private _textColor = Color.WHITE;
-  private _icon: Image;
-  private _font = Font.create(Font.DEFAULT, 14);
-  private _onPress: (params: { index: number }) => void;
-  private _padding: number;
-  private _iconTextSpacing: number;
-  private _isAutoHide: boolean;
-  private _threshold = 0.5;
-  private _borderBottomLeftRadius = 0;
-  private _borderBottomRightRadius = 0;
-  private _borderTopRightRadius = 0;
-  private _borderTopLeftRadius = 0;
-  private _paddingLeft = 0;
-  private _paddingRight = 0;
-  private _paddingBottom = 0;
-  private _paddingTop = 0;
+  private _text: string = 'Button';
+  private _backgroundColor: Color = Color.GRAY;
+  private _textColor: Color = Color.WHITE;
+  private _icon?: Image;
+  private _font: Font | null = Font.create(Font.DEFAULT, 14);
+  private _onPress: ISwipeItem['onPress'];
+  private _padding: number = 0;
+  private _iconTextSpacing: ISwipeItem['ios']['iconTextSpacing'];
+  private _isAutoHide: ISwipeItem['ios']['isAutoHide'];
+  private _threshold: ISwipeItem['android']['threshold'] = 0.5;
+  private _borderBottomLeftRadius: ISwipeItem['android']['borderBottomLeftRadius'] = 0;
+  private _borderBottomRightRadius: ISwipeItem['android']['borderBottomRightRadius'] = 0;
+  private _borderTopRightRadius: ISwipeItem['android']['borderTopRightRadius'] = 0;
+  private _borderTopLeftRadius: ISwipeItem['android']['borderTopLeftRadius'] = 0;
+  private _paddingLeft: ISwipeItem['android']['paddingLeft'] = 0;
+  private _paddingRight: ISwipeItem['android']['paddingRight'] = 0;
+  private _paddingBottom: ISwipeItem['android']['paddingBottom'] = 0;
+  private _paddingTop: ISwipeItem['android']['paddingTop'] = 0;
   constructor(params: Partial<ISwipeItem> = {}) {
     super(params);
     this.addIOSProps(this.getIOSParams());
@@ -43,41 +42,41 @@ export default class SwipeItem
   get font() {
     return this._font;
   }
-  set font(value) {
+  set font(value: Font | null) {
     this._font = value;
   }
   get backgroundColor() {
     return this._backgroundColor;
   }
-  set backgroundColor(value) {
+  set backgroundColor(value: Color) {
     this._backgroundColor = value;
   }
   get textColor() {
     return this._textColor;
   }
-  set textColor(value) {
+  set textColor(value: Color) {
     this._textColor = value;
   }
   get onPress() {
     return this._onPress;
   }
-  set onPress(value) {
+  set onPress(value: ISwipeItem['onPress']) {
     this._onPress = value;
   }
   get icon() {
     return this._icon;
   }
-  set icon(value) {
+  set icon(value: ISwipeItem['icon']) {
     this._icon = value;
   }
 
   private getIOSParams() {
     const self = this;
     return {
-      get padding(): ISwipeItem['ios']['padding'] {
+      get padding(): number {
         return self._padding;
       },
-      set padding(value: ISwipeItem['ios']['padding']) {
+      set padding(value: number) {
         self._padding = value;
       },
       get iconTextSpacing(): ISwipeItem['ios']['iconTextSpacing'] {

@@ -1,5 +1,6 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
 import Image from '../image';
@@ -53,15 +54,13 @@ export interface ISwipeItemIOSParams {
   isAutoHide: boolean;
 }
 
-export interface ISwipeItem extends IEventEmitter<SwipeItemEvents> {
+export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProps<ISwipeItemIOSParams, ISwipeItemAndroidParams> {
   text: string;
   backgroundColor: Color;
   textColor: Color;
-  icon: undefined | Image;
-  font: Font;
+  icon?: Image;
+  font: Font | null;
   onPress: (params: { index: number }) => void;
-  readonly ios: Partial<ISwipeItemIOSParams>;
-  readonly android: Partial<ISwipeItemAndroidParams>;
 }
 
 const SwipeItem: ConstructorOf<ISwipeItem, Partial<ISwipeItem>> = require('./swipeitem').default;

@@ -3,7 +3,7 @@ import Image from '../image';
 import { AbstractView, IView } from '../view';
 import { SliderEvents } from './slider-events';
 
-export declare interface ISlider<TEvent extends string = SliderEvents, TIOS = {}, TAND = {}> extends IView<TEvent | SliderEvents, TIOS, TAND> {
+export declare interface ISlider<TEvent extends string = SliderEvents> extends IView {
   skipDefaults: boolean;
   /**
    * Gets/sets color of the thumb.

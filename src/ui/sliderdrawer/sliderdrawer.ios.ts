@@ -30,8 +30,9 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     this.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
     this.nativeObject.onViewLoad = () => this.pageView.nativeObject;
     this.nativeObject.onViewLayoutSubviews = () => {
+      const screenWidth = __SF_UIScreen.mainScreen().bounds.width;
       this.pageView.nativeObject.frame = {
-        x: this.drawerPosition ? __SF_UIScreen.mainScreen().bounds.width - this.pageView.nativeObject.frame.width : 0,
+        x: this.drawerPosition &&  screenWidth ? screenWidth - this.pageView.nativeObject.frame.width : 0,
         y: 0,
         height: __SF_UIScreen.mainScreen().bounds.height,
         width: this.width
