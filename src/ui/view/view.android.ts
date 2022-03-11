@@ -67,11 +67,10 @@ const YogaEdge = {
 
 const activity = AndroidConfig.activity;
 
-export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps> extends ViewBase<
-  TEvent,
-  TNative,
-  TProps
-> implements IView {
+export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
+  extends ViewBase<TEvent, TNative, TProps>
+  implements IView
+{
   static readonly Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
@@ -86,6 +85,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
     STATE_PRESSED: array([NativeR.attr.state_pressed, NativeR.attr.state_enabled], 'int'),
     STATE_FOCUSED: array([NativeR.attr.state_focused, NativeR.attr.state_enabled], 'int')
   };
+  nativeInner: any;
   uniqueId: string;
   protected _maskedBorders = [];
   protected _masksToBounds: boolean = true;
@@ -104,7 +104,6 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
   protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
-  private __isRecyclerView: any;
   private _touchEnabled: boolean = false;
   private _rippleEnabled = false;
   private _rippleColor?: Color;
@@ -143,26 +142,26 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
       get yogaNode() {
         return self.yogaNode;
       },
-      get rippleEnabled(){
+      get rippleEnabled() {
         return self.rippleEnabled;
       },
-      set rippleEnabled(value: boolean){
+      set rippleEnabled(value: boolean) {
         self.rippleEnabled = value;
       },
-      get useForeground(){
+      get useForeground() {
         return self.useForeground;
       },
-      set useForeground(value: boolean){
+      set useForeground(value: boolean) {
         self.useForeground = value;
       },
       updateRippleEffectIfNeeded: () => {
         this._rippleEnabled && this._rippleColor && (this.android.rippleColor = this._rippleColor);
       },
-      get rippleColor(){
+      get rippleColor() {
         return self.rippleColor;
       },
-      set rippleColor(value: Color | undefined){
-        self.rippleColor = value;;
+      set rippleColor(value: Color | undefined) {
+        self.rippleColor = value;
       },
       get zIndex() {
         return self.zIndex;
@@ -194,8 +193,7 @@ export class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [
 
   private setTouchHandlers() {
     if (this.didSetTouchHandler) return;
-    //@ts-ignore TODO: Check nativeInner and refurbish the usage
-    const touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
+    const touchableView = this.nativeInner || this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
