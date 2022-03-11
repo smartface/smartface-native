@@ -66,20 +66,20 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       mUploadMessage.onReceiveValue(uri);
       mUploadMessage = null;
     } else if (requestCode === WebViewAndroid.REQUEST_CODE_LOLIPOP) {
-      let results = null;
+      let results: any = null;
       // Check that the response is a good one
       if (resultCode === -1) {
         // Activity.RESULT_OK
         if (data === null) {
           // If there is not data, then we may have taken a photo
           if (mCameraPhotoPath !== null) {
-            const parsedUri = [];
+            const parsedUri: any[] = [];
             parsedUri.push(NativeUri.parse(mCameraPhotoPath));
             results = array(parsedUri, 'android.net.Uri');
           }
         } else {
           const dataString = data.getDataString();
-          const parsedUri2 = [];
+          const parsedUri2: any[] = [];
           parsedUri2.push(NativeUri.parse(dataString));
           if (dataString !== null) {
             results = array(parsedUri2, 'android.net.Uri');
@@ -239,8 +239,8 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
   clearAllData() {
     this.clearCache(true);
     this.clearCookie();
-    this.android.clearHistory();
-    this.android.clearFormData();
+    this.android.clearHistory?.();
+    this.android.clearFormData?.();
   }
   clearCookie() {
     const cookieManager = NativeCookieManager.getInstance();
@@ -360,7 +360,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
         let takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) !== null) {
           // Create the File where the photo should go
-          let photoFile = null;
+          let photoFile: File;
           photoFile = this.createImageFile();
           takePictureIntent.putExtra('PhotoPath', mCameraPhotoPath);
 
@@ -377,7 +377,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
         contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
         contentSelectionIntent.setType('image/*');
 
-        const tempArr = [];
+        const tempArr: any[] = [];
         if (takePictureIntent !== null) {
           tempArr.push(takePictureIntent);
         }
@@ -387,7 +387,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
         chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
         chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, 'Image Chooser');
         chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
-        this._page.nativeObject.startActivityForResult(chooserIntent, WebViewAndroid.REQUEST_CODE_LOLIPOP);
+        this._page?.nativeObject.startActivityForResult(chooserIntent, WebViewAndroid.REQUEST_CODE_LOLIPOP);
         return true;
       },
       onConsoleMessage: (sourceId: number, message: string, lineNumber: number, messageLevel: string) => {

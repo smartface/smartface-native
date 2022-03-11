@@ -1,7 +1,7 @@
 import File from '../../io/file';
 import ViewIOS from '../../ui/view/view.ios';
 import Invocation from '../../util/iOS/invocation';
-import IWebView, { iOSProps } from '.';
+import IWebView from '.';
 import { WebViewEvents } from './webview-events';
 
 function dataTypesToNSSet(dataTypes) {
@@ -144,8 +144,6 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
     if (!this.nativeObject) {
       this._nativeObject = new __SF_WKWebView();
     }
-    const { ios, android, ...restParams } = params;
-
     // UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
     this.nativeObject.scrollView.setValueForKey(4, 'contentInsetAdjustmentBehavior');
 
@@ -367,13 +365,13 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
       },
       set sslPinning(value: IWebView['ios']['sslPinning']) {
         self._sslPinning = value;
-        const trustPolicies = value.map?.((value) => {
+        const trustPolicies = value?.map?.((value) => {
           const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
           const nSURLCertificates = certificates.map((path) => {
             const certFile = new File({
               path: path
             });
-            return certFile.ios.getNSURL();
+            return certFile.ios.getNSURL!();
           });
           return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(host, nSURLCertificates, validateCertificateChain, validateHost);
         });

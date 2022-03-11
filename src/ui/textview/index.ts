@@ -17,7 +17,7 @@ export type TextViewiOSProps = ILabel['ios'] & {
   showScrollBar: boolean;
   contentOffset: Point2D;
   paginationEnabled: boolean;
-}
+};
 
 export type TextViewAndroidPRoperties = ILabel['android'];
 
@@ -38,7 +38,10 @@ export type TextViewAndroidPRoperties = ILabel['android'];
  *     myTextview.left = 20,
  *     myTextview.backgroundColor = Color.GRAY;
  */
-export declare interface ITextView<TEvent extends string = TextViewEvents, TMobile extends MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties> = MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties>> extends ILabel<TEvent | TextViewEvents, TMobile> {
+export declare interface ITextView<
+  TEvent extends string = TextViewEvents,
+  TMobile extends MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties> = MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties>
+> extends ILabel<TEvent | TextViewEvents, TMobile> {
   /**
    * Gets/sets HTML text value of TextView. This property helps user showing HTML
    * texts on the screen. In Android, you must avoid to using selectable property to make the links clickable.

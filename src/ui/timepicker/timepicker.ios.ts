@@ -4,8 +4,8 @@ import { UIDatePickerMode } from '../../util';
 import { TimePickerEvents } from './timepicker-events';
 
 export default class TimePickerIOS<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {
-  private _hours: number = null;
-  private _minutes: number = null;
+  private _hours: number | null = null;
+  private _minutes: number | null = null;
   constructor(params: Partial<ITimePicker> = {}) {
     super();
 

@@ -9,7 +9,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   protected avPlayerViewController: __SF_AVPlayerViewController;
   protected avPlayer: __SF_AVPlayer;
   private _loopEnabled: boolean;
-  private _page: IVideoView['page'];
+  private _page: IVideoView['page'] = null;
   constructor(params: Partial<IVideoView> = {}) {
     super(params);
     this.backgroundModeEnabled = false;
@@ -47,7 +47,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
         return self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart;
       },
       set shouldAutomaticallyDismissAtPictureInPictureStart(value: IVideoView['ios']['shouldAutomaticallyDismissAtPictureInPictureStart']) {
-        self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart = value;
+        if (value) self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart = value;
       }
     };
   }
@@ -126,15 +126,17 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   loadFile(file: File): void {
     this.avPlayer?.removeObserver();
 
-    const url = file.ios.getNSURL();
-    this.avPlayer = __SF_AVPlayer.createFromURL(url);
-    this.avPlayerViewController.player = this.avPlayer;
-    this.avPlayerViewController.videoGravity = 'AVLayerVideoGravityResizeAspect';
-    this.avPlayer.addObserver();
-    this.avPlayer.onItemFailed = () => {
-      this.onFailure?.();
-      this.emit('failure');
-    };
+    const url = file.ios.getNSURL?.();
+    if (url) {
+      this.avPlayer = __SF_AVPlayer.createFromURL(url);
+      this.avPlayerViewController.player = this.avPlayer;
+      this.avPlayerViewController.videoGravity = 'AVLayerVideoGravityResizeAspect';
+      this.avPlayer.addObserver();
+      this.avPlayer.onItemFailed = () => {
+        this.onFailure?.();
+        this.emit('failure');
+      };
+    }
   }
   seekTo(time: number): void {
     this.avPlayer?.seekToMillisecond(time);
@@ -152,13 +154,13 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   isPlaying() {
     return this.avPlayer?.rate !== 0;
   }
-  get page(): Page {
+  get page(): Page | null {
     return this._page;
   }
-  set page(value: Page) {
+  set page(value: Page | null) {
     this._page = value;
     this.avPlayerViewController.removeFromParentViewController();
-    value.nativeObject.addChildViewController(this.avPlayerViewController);
+    value?.nativeObject.addChildViewController(this.avPlayerViewController);
   }
   get totalDuration() {
     return this.avPlayer.duration() * 1000;

@@ -69,7 +69,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
 
     return Invocation.invokeInstanceMethod(this._lastModifiedAttributedString, 'boundingRectWithSize:options:context:', [argSize, argOptions, argContext], 'CGRect') as Size;
   }
-  assignIOSSpecificParameters() {
+  private assignIOSSpecificParameters() {
     const self = this;
     this.addIOSProps({
       get showScrollBar() {

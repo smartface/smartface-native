@@ -26,12 +26,12 @@ export class WebBrowserIOS implements AbstractWebBrowser {
     const safariViewController = __SF_SMFSFSafariViewController.create(nsURL, false);
     const argBarColor = new Invocation.Argument({
       type: 'NSObject',
-      value: options.barColor.nativeObject
+      value: options.barColor?.nativeObject
     });
     Invocation.invokeInstanceMethod(safariViewController, 'setPreferredBarTintColor:', [argBarColor]);
     const argItemColor = new Invocation.Argument({
       type: 'NSObject',
-      value: options.itemColor.nativeObject
+      value: options.itemColor?.nativeObject
     });
     Invocation.invokeInstanceMethod(safariViewController, 'setPreferredControlTintColor:', [argItemColor]);
     const argPresentationStyle = new Invocation.Argument({

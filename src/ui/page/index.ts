@@ -437,7 +437,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   static Orientation: typeof Orientation;
 }
 
-declare class PageImpl extends AbstractPage {
+declare class PageImpl extends AbstractPage implements IPage {
   orientation: PageOrientation;
   transitionViews: View<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, WithMobileOSProps<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>, ViewIOSProps, ViewAndroidProps>>[];
   layout: FlexLayout;

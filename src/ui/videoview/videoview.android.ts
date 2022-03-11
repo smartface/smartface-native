@@ -2,7 +2,7 @@ import { IVideoView } from '.';
 import File from '../../io/file';
 import { AndroidConfig, Exception } from '../../util';
 import Color from '../color';
-import Page from '../page';
+import type Page from '../page';
 import { ViewAndroid } from '../view/view.android';
 import { VideoViewEvents } from './videoview-events';
 
@@ -189,7 +189,7 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
   get page() {
     return this._page;
   }
-  set page(value) {
+  set page(value: Page) {
     this._page = value;
     this.nativeInner.setPage(value.nativeObject);
   }
@@ -207,9 +207,9 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
   set backgroundImage(value) {}
   // Overridden property because videoview does not support background stuff.
   get borderColor() {
-    return new Color();
+    return Color.BLACK;
   }
-  set borderColor(value) {}
+  set borderColor(value: Color) {}
   // Overridden property because videoview does not support background stuff.
   get borderRadius() {
     return 0;
