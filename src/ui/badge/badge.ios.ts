@@ -11,20 +11,18 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   private _textColor: IBadge['textColor'];
   private _font: IBadge['font'];
   private _borderRadius: number;
-  private _borderWidth: number;
+  private _borderWidth: number = 0;
   private _height = 0;
   private _isBadgeFirstLoad = false;
   private _isRTL: boolean;
   constructor(params: Partial<IBadge> = {}) {
-    super();
+    super(params);
 
     const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
     const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
 
     const isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
     this._isRTL = !isLTR;
-
-    Object.assign(this, params);
   }
   get text(): IBadge['text'] {
     return this._text;
@@ -145,7 +143,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
       this._borderColor = value;
 
       __SF_Dispatch.mainAsyncAfter(() => {
-        this.nativeObject.pp_setBorderColor(this._borderColor.nativeObject);
+        this.nativeObject.pp_setBorderColor(this._borderColor!.nativeObject);
       }, 1);
     }
   }

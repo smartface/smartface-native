@@ -1,6 +1,6 @@
 import Font from '../font';
 import Image from '../image';
-import Badge from '../badge';
+import { IBadge } from '../badge';
 import AttributedString from '../../global/attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
@@ -46,7 +46,7 @@ export declare interface ITabbarItem extends INativeComponent {
    * @ios
    * @since 1.1.10
    */
-  icon: { normal: Image | string; selected: Image | string } | Image | string;
+  icon: { normal: Image | string; selected: Image | string } | Image | string | undefined;
   /**
    * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge usage isn't currently supported if this TabBarItem is belongs to TabBarController.
    * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.
@@ -61,7 +61,7 @@ export declare interface ITabbarItem extends INativeComponent {
    * @readonly
    * @since 4.0.1
    */
-  badge: Badge;
+  badge: IBadge;
   /**
    * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown.
    *
@@ -111,8 +111,8 @@ export declare interface ITabbarItem extends INativeComponent {
     font: Font;
   }>;
   invalidate(): void;
-  setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon: string | number }): void;
-  tabBarItemParent: IPage
+  setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon?: string | number }): void;
+  tabBarItemParent: IPage | null
 }
 
 const TabbarItem: ConstructorOf<ITabbarItem, Partial<ITabbarItem>> = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;

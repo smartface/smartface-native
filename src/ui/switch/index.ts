@@ -4,7 +4,7 @@ import Image from '../image';
 import { AbstractView, IView } from '../view';
 import { SwitchEvents } from './switch-events';
 
-export type SwitchAndroidProps = IView['android'] & Partial<{
+export type SwitchAndroidProps = IView['android'] & {
   /**
    * Gets/sets color of the thumb when Switch is OFF.
    * It is set to gray by default.
@@ -47,7 +47,7 @@ export type SwitchAndroidProps = IView['android'] & Partial<{
    * @since 0.1
    */
   toggleOffColor: Color;
-}>;
+};
 
 type SwitchIOSProps = IView['ios'];
 

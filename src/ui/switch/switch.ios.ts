@@ -37,7 +37,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this.nativeObject.setEnabled = value;
   }
 
-  get thumbOnColor(): Color {
+  get thumbOnColor(): Color | null {
     if (this.nativeObject.thumbTintColor === undefined) {
       return null;
     } else {
@@ -46,7 +46,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
       });
     }
   }
-  set thumbOnColor(value: Color) {
+  set thumbOnColor(value: Color | undefined | null) {
     if (value === null || value === undefined) {
       this.nativeObject.thumbTintColor = undefined;
     } else {

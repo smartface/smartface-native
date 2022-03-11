@@ -80,8 +80,10 @@ export declare interface IBadge extends INativeComponent {
    * @since 3.0.0
    */
   move(x: number, y: number): void;
+  moveX?: any;
+  moveY?: any;
 }
 
-const Badge: ConstructorOf<IBadge, Partial<IBadge>> = require(`./badge.${Device.deviceOS.toLowerCase()}`).default;
+const Badge: ConstructorOf<IBadge, Partial<IBadge> & {parameters?: any}> = require(`./badge.${Device.deviceOS.toLowerCase()}`).default;
 type Badge = IBadge;
 export default Badge;

@@ -55,7 +55,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     if (typeof value === 'object') {
       this._items = value;
 
-      const nativeItems = [];
+      const nativeItems: any[] = [];
       for (let i in this._items) {
         if (typeof this._items[i].nativeObject === 'undefined') {
           this._items[i].nativeObject = UITabBarItem.new();

@@ -1,21 +1,22 @@
 import { ITabbarItem } from '.';
-import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AttributedString from '../../global/attributedstring';
 import { UnitConverter } from '../../util';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
 import Image from '../image';
+import { IPage } from '../page';
 import TabBarController from '../tabbarcontroller';
 
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 
-export default class TabbarItemAndroid extends NativeMobileComponent<any, WithMobileOSProps<ITabbarItem>> implements ITabbarItem {
+export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   private _title;
   private _icon;
-  private _badgeObj = undefined;
+  private _badgeObj: Badge;
   private _systemIcon;
-  private _tabBarItemParent = null;
+  private _tabBarItemParent: IPage | null = null;
   private index = null;
   private badgeAdded = false;
   // private _android: Partial<{
@@ -43,17 +44,11 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, WithMo
         // return self._attributedTitleBuilder || self._android?.attributedTitle;
         return self._attributedTitle;
       },
-      set attributedTitle(value: AttributedString) {
+      set attributedTitle(value: AttributedString | undefined) {
         self._attributedTitle = value;
       }
     };
     this.addAndroidProps(android);
-
-    // Assign parameters given in constructor
-    // const { ios, android, ...restParams } = params;
-    // Object.assign(this._ios, ios);
-    // Object.assign(this._android, android);
-    // Object.assign(this, restParams);
   }
   invalidate(): void {
     throw new Error('Method not implemented.');

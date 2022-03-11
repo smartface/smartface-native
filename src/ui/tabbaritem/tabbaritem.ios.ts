@@ -1,37 +1,42 @@
-import { AbstractTabBarItem } from '.';
-import NativeComponent from '../../core/native-component';
-import { AttributedStringBase } from '../../global/attributedstring/attributedstring';
+import { ITabbarItem } from '.';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Invocation } from '../../util';
-import Badge from '../badge';
+import Badge, { IBadge } from '../badge';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import Image from '../image';
+import { IPage } from '../page';
 
-export default class TabbarItemIOS extends NativeComponent implements AbstractTabBarItem {
+export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   private _nativeView;
-  private _title = '';
-  private _icon;
-  private _badge;
+  private _title: string = '';
+  private _icon: any;
+  private _badge: IBadge | Record<string, any>;
   private _route: string;
-  private _android: Partial<{ attributedTitle: AttributedStringBase; systemIcon: string | number }> = {};
-  private _ios: Partial<{ font: Font }> = {};
   constructor(params?: Partial<TabbarItemIOS>) {
-    super();
+    super(params);
     this.nativeObject = undefined;
     if (params && params.nativeObject) {
       this.nativeObject = params.nativeObject;
     }
 
     this._badge = this.nativeObject
-      ? new Badge({ nativeObject: self.nativeObject })
+      ? new Badge({ nativeObject: this.nativeObject })
       : {
+          backgroundColor: null,
+          borderColor: null,
+          borderWidth: 0,
+          textColor: null,
+          visible: false,
+          moveX: undefined,
+          moveY: undefined,
           move: function (x, y) {
             this.moveX = x;
             this.moveY = y;
           }
-        };
+        } as unknown as IBadge;
 
-    this._ios = {
+    this.addIOSProps({
       get font(): Font {
         return this._ios?.font;
       },
@@ -49,17 +54,14 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
           }
         }
       }
-    };
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
+    });
   }
+  setProperties(params: { itemTitle: string; itemIcon: string | { normal: string | Image; selected: string | Image } | Image; systemIcon?: string | number | undefined }): void {
+    throw new Error('Method not implemented.');
+  }
+  tabBarItemParent: IPage | null = null;
   get android() {
     return this._android;
-  }
-  get ios() {
-    return this._ios;
   }
   get route(): string {
     return this._route;
@@ -107,7 +109,8 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
             this.nativeObject.image = this._icon.normal.nativeObject;
           } else if (typeof this._icon.normal === 'string') {
             const image = Image.createFromFile(this._icon.normal);
-            this.nativeObject.image = image.nativeObject;
+            if(image)
+              this.nativeObject.image = image.nativeObject;
           } else {
             this.nativeObject.image = undefined;
           }
@@ -116,7 +119,8 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
             this.nativeObject.selectedImage = this._icon.selected.nativeObject;
           } else if (typeof this._icon.selected === 'string') {
             const image = Image.createFromFile(this._icon.selected);
-            this.nativeObject.selectedImage = image.nativeObject;
+            if(image)
+              this.nativeObject.selectedImage = image.nativeObject;
           } else {
             this.nativeObject.selectedImage = undefined;
           }
@@ -126,25 +130,28 @@ export default class TabbarItemIOS extends NativeComponent implements AbstractTa
             this.nativeObject.selectedImage = this._icon ? this._icon.nativeObject : undefined;
           } else if (typeof this._icon === 'string') {
             const image = Image.createFromFile(this._icon);
-            this.nativeObject.image = image.nativeObject ? image.nativeObject : undefined;
-            this.nativeObject.selectedImage = image.nativeObject ? image.nativeObject : undefined;
+            if (image) {
+              this.nativeObject.image = image.nativeObject ? image.nativeObject : undefined;
+              this.nativeObject.selectedImage = image.nativeObject ? image.nativeObject : undefined;
+            }
           }
         }
       }
     }
   }
-  get badge(): Badge {
-    return this._badge;
+  get badge(): IBadge {
+    return this._badge as IBadge;
   }
   getScreenLocation() {
     return this.layout.getScreenLocation();
   }
   invalidate() {
-    if (this._badge.constructor.name !== 'Badge') {
+    if (this._badge && !(this._badge instanceof Badge)) {
+      // @ts-ignore
       delete this._badge['move'];
       const _badgeWithNativeObject = new Badge({
         nativeObject: this.nativeObject,
-        parameters: this._badge
+        ...(this._badge as any)
       });
       this._badge.moveX !== undefined && _badgeWithNativeObject.move(this._badge.moveX, this._badge.moveY);
       this._badge = _badgeWithNativeObject;

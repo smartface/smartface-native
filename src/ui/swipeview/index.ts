@@ -172,7 +172,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    */
   swipeToIndex(index: number, animated: boolean): void;
   overScrollMode: OverScrollMode;
-  onPageCreate: (position: number) => Page;
+  onPageCreate: (position: number) => Page | null;
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };
 }
