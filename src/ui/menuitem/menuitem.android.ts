@@ -1,4 +1,4 @@
-import MenuItem, { AbstractMenuItem, Style } from '.';
+import MenuItem, { AbstractMenuItem, IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { Exception, TypeUtil } from '../../util';
 import Color from '../color';
@@ -8,21 +8,17 @@ const NativeSpannable = requireClass('android.text.Spanned');
 const NativeColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
-export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents> implements AbstractMenuItem {
+export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
   static Events = MenuItemEvents;
   static Styles = {
     DEFAULT: Style.DEFAULT,
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private _android: Partial<{ titleColor: Color }> = {};
-  private _ios: Partial<{ style: Style }> = {
-    style: Style.DEFAULT
-  };
   private _title: string;
   private _onSelected: () => void;
   constructor(params?: Partial<MenuItem>) {
-    super();
+    super(params);
     const self = this;
 
     const callbackWrapper = () => {
@@ -31,11 +27,11 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
 
     this._onSelected = callbackWrapper;
 
-    const android = {
-      get titleColor(): Color {
+    this.addAndroidProps({
+      get titleColor(): Color | undefined {
         return self._android.titleColor;
       },
-      set titleColor(color: Color) {
+      set titleColor(color: Color | undefined) {
         self._android.titleColor = color;
       },
       spanTitle() {
@@ -50,7 +46,7 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
         }
         return spannableStringBuilder;
       }
-    };
+    });
 
     Object.assign(this._android, android);
 
@@ -83,11 +79,5 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   }
   toString() {
     return 'MenuItem';
-  }
-  get android() {
-    return this._android;
-  }
-  get ios() {
-    return this._ios;
   }
 }

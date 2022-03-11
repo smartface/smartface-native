@@ -1,4 +1,4 @@
-import StatusBarAndroid from '../../application/statusbar/statusbar.android';
+import { StatusBar } from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
@@ -107,6 +107,10 @@ export interface PageIOSParams {
 export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
   extends INativeComponent<TNative>,
     IEventEmitter<TEvent | PageEvents> {
+  contextMenu: {
+    items: any[];
+    headerTitle: string;
+  }
   android: TMobile['android'];
   ios: TMobile['ios'];
   isInsideBottomTabBar: boolean;
@@ -287,7 +291,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @removed 4.0.0 Use {@link Application.statusBar} instead
    * @since 0.1
    */
-  statusBar: StatusBarAndroid;
+  statusBar: StatusBar;
   /**
    * Gets header bar object of a  page. This property is readonly, you can not
    * set header bar to a page but you can change properties of page's header bar.
@@ -347,7 +351,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
 
 export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
   extends NativeEventEmitterComponent<TEvent | PageEvents, TNative, TProps>
-  implements IController
+  implements IController, IPage
 {
   headerBar?: HeaderBar;
   tabBar?: TabBarController;
@@ -384,6 +388,8 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TProps ext
   implements IPage<TEvent | PageEvents, TProps, TNative>, IController
 {
   constructor(params?: Partial<IPage>);
+  contextMenu: { items: any[]; headerTitle: string; };
+  skipDefaults?: boolean | undefined;
   childControllers?: IController[];
   tabBar?: TabBarController;
   getCurrentController(): IController;
@@ -402,7 +408,7 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TProps ext
   present(params?: ControllerParams): void;
   dismiss(params?: ControllerParams): void;
   readonly layout: FlexLayout;
-  readonly statusBar: StatusBarAndroid;
+  readonly statusBar: StatusBar;
   readonly headerBar: HeaderBar;
 
   static iOS: {

@@ -66,7 +66,7 @@ export interface IMenuItem {
      * @android
      * @since 1.1.8
      */
-    titleColor: Color;
+    titleColor: Color | undefined;
   }>;
   ios: Partial<{
     /**

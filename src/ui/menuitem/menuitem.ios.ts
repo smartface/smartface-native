@@ -1,35 +1,31 @@
-import MenuItem, { AbstractMenuItem, Style } from '.';
+import MenuItem, { AbstractMenuItem, IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
-export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents> implements AbstractMenuItem {
+export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
   static Events = MenuItemEvents;
   static Styles = {
     DEFAULT: Style.DEFAULT,
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private _android: Partial<{ titleColor: Color }> = {};
-  private _ios: Partial<{ style: Style }> = {
-    style: Style.DEFAULT
-  };
+  private style:Style = Style.DEFAULT;
+
   private _title: string = '';
   private _onSelected: () => void;
   constructor(params?: Partial<MenuItem>) {
     super();
     const self = this;
 
-    const ios = {
+    this.addIOSProps({
       get style(): Style {
-        return self._ios.style;
+        return self.style;
       },
       set style(color: Style) {
-        self._ios.style = color;
+        self.style = color;
       }
-    };
-
-    Object.assign(this._ios, ios);
+    });
 
     // Assign parameters given in constructor
     if (params) {
@@ -56,11 +52,5 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
   onSelectedListener() {
     this.onSelected?.();
     this.emit(MenuItemEvents.Selected);
-  }
-  get android() {
-    return this._android;
-  }
-  get ios() {
-    return this._ios;
   }
 }

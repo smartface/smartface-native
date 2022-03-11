@@ -31,8 +31,12 @@ export default class MenuIOS extends NativeComponent implements AbstractMenu {
     }
 
     for (let i = 0; i < this.items.length; i++) {
-      const action = __SF_UIAlertAction.createAction(this.items[i].title, this.items[i].ios.style, this.items[i].onSelectedListener);
-      this.nativeObject.addAction(action);
+      const style = this.items[i].ios.style;
+      const listener = this.items[i].onSelectedListener;
+      if (style && listener) {
+        const action = __SF_UIAlertAction.createAction(this.items[i].title, style, listener);
+        this.nativeObject.addAction(action);
+      }
     }
 
     const popOver = this.nativeObject.valueForKey('popoverPresentationController');

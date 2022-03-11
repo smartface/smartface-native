@@ -28,7 +28,7 @@ export default class MenuAndroid implements AbstractMenu {
     this._headerTitle = value;
   }
   show(page: Page) {
-    if (!(page instanceof require('../page'))) {
+    if (!(page instanceof Page)) {
       throw new TypeError('Parameter must be instance of page');
     }
     const layout = page.layout;
