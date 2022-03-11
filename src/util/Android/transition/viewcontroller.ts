@@ -86,13 +86,13 @@ namespace ViewController {
     }
   }
 
-  export function getCurrentPageFromController(controller: PageWithController) {
+  export function getCurrentPageFromController(controller: PageWithController): Page | IController | null {
     if (controller instanceof Page) {
       return controller;
     }
 
     if (controller.childControllers.length > 0) {
-      let childController = controller.childControllers[controller.childControllers.length - 1];
+      let childController: IController | null = controller.childControllers[controller.childControllers.length - 1];
       while (childController instanceof BottomTabBarController) {
         childController = childController.getCurrentController();
       }
@@ -108,7 +108,7 @@ namespace ViewController {
     }
 
     // for NavigationController
-    controller.childControllers.forEach((childController) => {
+    controller.childControllers?.forEach((childController) => {
       childController.isInsideBottomTabBar = true;
       ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });
