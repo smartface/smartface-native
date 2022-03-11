@@ -64,16 +64,16 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   set visible(value: IBadge['visible']) {
     this.nativeObject.setVisibility(value ? 0 : 4);
   }
-  get backgroundColor(): IBadge['backgroundColor'] {
+  get backgroundColor(): IBadge['backgroundColor'] | null {
     return this._backgroundColor;
   }
-  set backgroundColor(value: IBadge['backgroundColor']) {
+  set backgroundColor(value: IBadge['backgroundColor'] | null) {
     this._backgroundColor = value;
     if (this.nativeObject && value) {
       this.nativeGradientDrawable.setColor(value.nativeObject);
-    } else if (value.nativeObject) {
+    } else if (value?.nativeObject) {
       this.nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
-      this.nativeGradientDrawable.setStroke(this._borderWidth, this.borderColor.nativeObject);
+      this.nativeGradientDrawable.setStroke(this._borderWidth, this.borderColor?.nativeObject);
     }
     this.nativeObject.setBackground(this.nativeGradientDrawable);
   }
@@ -125,8 +125,8 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     this.backgroundColor = null; //re-set Drawable
   }
   private createColorStateList(textColors: IViewState<Color>) {
-    const statesSet = [];
-    const colorsSets = [];
+    const statesSet: any[] = [];
+    const colorsSets: any[] = [];
     if (textColors.normal) {
       statesSet.push(ViewAndroid.State.STATE_NORMAL);
       colorsSets.push(textColors.normal.nativeObject);

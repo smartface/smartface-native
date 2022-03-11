@@ -8,7 +8,7 @@ const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertView> implements IAlertView {
   private __didSetOnDismissListener = true;
-  private __buttonCallbacks: Array<() => void> = [];
+  private __buttonCallbacks: {[key: number]: () => void} = {};
   private __title = '';
   private __message = '';
   private __textBoxes: TextBox[];
@@ -36,7 +36,8 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
     const text = params.text || '';
     const buttonType = params.type || params.index;
-    this.__buttonCallbacks[buttonType] = params.onClick;
+    if(buttonType && params.onClick)
+      this.__buttonCallbacks[buttonType] = params.onClick;
     let nativeButtonIndex = -3;
     switch (buttonType) {
       case AlertViewAndroid.Android.ButtonType.POSITIVE:
@@ -88,8 +89,8 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
     Object.keys(viewSpacings).map((key) => {
       viewSpacingsInPx[key] = UnitConverter.dpToPixel(viewSpacings[key]);
     });
-    const dpHeight = this.dpToPixel(height);
-    const dpWidth = this.dpToPixel(width);
+    const dpHeight = this.dpToPixel(height || 0);
+    const dpWidth = this.dpToPixel(width || 0);
     this.nativeObject.addTextBox(mTextBox.nativeObject, dpWidth, dpHeight, viewSpacingsInPx.left, viewSpacingsInPx.top, viewSpacingsInPx.right, viewSpacingsInPx.bottom);
     this.__textBoxes.push(mTextBox);
   }

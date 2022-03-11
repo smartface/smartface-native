@@ -1,4 +1,5 @@
 import { INativeComponent } from "../../core/inative-component";
+import { MobileOSProps } from "../../core/native-mobile-component";
 
 /**
  * @enum {Number} UI.AlertView.Android.ButtonType
@@ -65,7 +66,7 @@ export enum ButtonType {
  *
  *     myAlertView.show();
  */
-export interface IAlertView extends INativeComponent {
+export interface IAlertView extends INativeComponent, MobileOSProps {
   /**
    * Gets showing status of AlertView. It is set to true if AlertView is
    * currently displayed on screen, false otherwise.
@@ -162,7 +163,7 @@ export interface IAlertView extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  addButton(params: { type: ButtonType; text: string; onClick?: () => void; index: number }): void;
+  addButton(params: { type: ButtonType; text: string; onClick: () => void; index: number }): void;
   /**
    * Allows to add TextBox to AlertView. In iOS, maximum two textbox can be added. It is not applied to Android but 2 textboxes recommended.
    *
@@ -198,6 +199,7 @@ export interface IAlertView extends INativeComponent {
 
 export declare class AbstractAlertView implements IAlertView {
   constructor(params?: Partial<IAlertView>);
+  ios: Partial<{ [key: string]: any; }>;
   isShowing(): void;
   show(): void;
   dismiss(): void;
