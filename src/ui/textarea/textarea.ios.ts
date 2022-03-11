@@ -1,4 +1,4 @@
-import { ITextArea } from '.';
+import { ITextArea, TextareaiOSProps } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
@@ -14,8 +14,8 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   private _actionKeyType: ActionKeyType;
   private _keyboardType: KeyboardType;
   private _isPassword: boolean;
-  private _adjustFontSizeToFit: boolean;
-  private _minimumFontSize: number;
+  private _adjustFontSizeToFit: boolean = false;
+  private _minimumFontSize: number = 7;
   private __clearButtonEnabled: boolean;
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -24,39 +24,37 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
       this._nativeObject = new __SF_UITextView();
     }
 
-
-    // UIScrollViewInheritance.addPropertiesAndMethods.call(this);
     this.addIOSProps(this.iosProps);
     this.ios.showScrollBar = false;
   }
   enabled?: boolean;
 
-  get iosProps(): ITextArea['ios'] {
+  get iosProps(): TextareaiOSProps {
     const self = this;
     return {
-      get showScrollBar(): ITextArea['ios']['showScrollBar'] {
+      get showScrollBar(): TextareaiOSProps['showScrollBar'] {
         return self.nativeObject.showsHorizontalScrollIndicator;
       },
-      set showScrollBar(value: ITextArea['ios']['showScrollBar']) {
+      set showScrollBar(value: TextareaiOSProps['showScrollBar']) {
         self.nativeObject.showsHorizontalScrollIndicator = value;
         self.nativeObject.showsVerticalScrollIndicator = value;
       },
-      get adjustFontSizeToFit(): ITextArea['ios']['adjustFontSizeToFit'] {
+      get adjustFontSizeToFit(): TextareaiOSProps['adjustFontSizeToFit'] {
         return self._adjustFontSizeToFit;
       },
-      set adjustFontSizeToFit(value: ITextArea['ios']['adjustFontSizeToFit']) {
-        self._adjustFontSizeToFit = value;
+      set adjustFontSizeToFit(value: TextareaiOSProps['adjustFontSizeToFit']) {
+        self._adjustFontSizeToFit = !!value;
       },
-      get minimumFontSize(): ITextArea['ios']['minimumFontSize'] {
+      get minimumFontSize(): TextareaiOSProps['minimumFontSize'] {
         return self._minimumFontSize;
       },
-      set minimumFontSize(value: ITextArea['ios']['minimumFontSize']) {
+      set minimumFontSize(value: TextareaiOSProps['minimumFontSize']) {
         self._minimumFontSize = value;
       },
       get clearButtonEnabled(): boolean {
         return self.__clearButtonEnabled;
       },
-      set clearButtonEnabled(value: ITextArea['ios']['clearButtonEnabled']) {
+      set clearButtonEnabled(value: TextareaiOSProps['clearButtonEnabled']) {
         self.__clearButtonEnabled = value;
       }
     };

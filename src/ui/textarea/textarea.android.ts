@@ -1,4 +1,4 @@
-import { TextareaAndroidProps, ITextArea } from '.';
+import { ITextArea } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import KeyboardType from '../shared/keyboardtype';
 import TextBoxAndroid from '../textbox/textbox.android';
@@ -18,22 +18,16 @@ export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNa
     super(params);
 
     this.nativeObject.setSingleLine(false);
-
-    const { android, ...restParams } = params;
-    Object.assign(this._android, this.androidFields, android);
-    Object.assign(this, restParams);
-  }
-
-  private get androidFields() {
     const self = this;
-    return {
+
+    this.addAndroidProps({
       get hint(): string {
         return self.__hint;
       },
       set hint(value: string) {
         self.__hint = value;
       }
-    };
+    });
   }
 
   get isPassword(): boolean {

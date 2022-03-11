@@ -38,7 +38,7 @@ export type TextBoxiOSProps = View['ios'] & {
    * @ios
    * @since 0.1
    */
-  adjustFontSizeToFit?: boolean;
+  adjustFontSizeToFit: boolean;
   /**
    * Gets/sets minimum font size of TextBox.
    * This property works only for iOS.
@@ -47,7 +47,7 @@ export type TextBoxiOSProps = View['ios'] & {
    * @ios
    * @since 0.1
    */
-  minimumFontSize?: number;
+  minimumFontSize: number;
   /**
    * Gets/sets the visibility of clear button. If enabled, clear button will be shown
    * at right of the TextBox. This property works only for iOS only.
@@ -226,7 +226,7 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @ios
    * @since 0.1
    */
-  keyboardType: KeyboardType;
+  keyboardType: KeyboardType | null;
   /**
    * Gets/sets action key type for TextBox.
    *

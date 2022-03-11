@@ -77,7 +77,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
       this._nativeObject = new __SF_UITextField();
     }
 
-    this.nativeObject.textBoxDelegate = (method: { name?: string; range?: number; replacementString?: string }) => {
+    this.nativeObject.textBoxDelegate = (method: { name?: string; range: number; replacementString: string }) => {
       if (method.name === 'textFieldShouldBeginEditing') {
         this.keyboardanimationdelegate.textFieldShouldBeginEditing();
         this.onEditBegins?.();
@@ -102,7 +102,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         if (typeof this.onTextChanged !== 'function') {
           return true;
         }
-        this.onTextChanged({
+        this.onTextChanged?.({
           location: method.range,
           insertedText: method.replacementString
         });
@@ -128,7 +128,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
 
       if (this._keyboardLayout) {
         __SF_UIView.performWithoutAnimationWrapper(() => {
-          this._keyboardLayout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+          this._keyboardLayout?.nativeObject.yoga.applyLayoutPreservingOrigin(true);
         });
       }
 
@@ -460,7 +460,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         returnValue = KeyboardType.EMAILADDRESS;
         break;
       default:
-        returnValue = null;
+        returnValue = KeyboardType.DEFAULT;
     }
     return returnValue;
   }
@@ -511,7 +511,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         returnValue = ActionKeyType.SEND;
         break;
       default:
-        returnValue = null;
+        returnValue = ActionKeyType.DEFAULT;
     }
     return returnValue;
   }
