@@ -1,4 +1,3 @@
-import { ConstructorOf } from '../../core/constructorof';
 import NativeComponent from '../../core/native-component';
 
 /**
@@ -284,7 +283,7 @@ declare class ColorImpl extends AbstractColor {
   alpha(): number;
 }
 
-const Color: typeof ColorImpl = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
 type Color = ColorImpl;
+const Color: typeof ColorImpl = require(`./color.${Device.deviceOS.toLowerCase()}`).default;
 
 export default Color;

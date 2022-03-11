@@ -2,12 +2,12 @@ import { StatusBar } from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout, { IFlexLayout } from '../flexlayout';
+import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import FlexLayout, { FlexLayoutAndroidProps, IFlexLayout } from '../flexlayout';
 import NavigationController, { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
-import View from '../view';
+import View, { IViewProps, ViewAndroidProps, ViewIOSProps } from '../view';
 import { PageEvents } from './page-events';
 
 export enum PageOrientation {
@@ -304,7 +304,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @readonly
    * @since 0.1
    */
-  readonly headerBar: HeaderBar;
+  readonly headerBar?: HeaderBar;
   /**
    * Gets/sets the orientation of the Page. This property must be set as constructor parameter.
    * {@link UI.Page.Orientation Orientation} constants can use with bitwise or operator. The default value of the
@@ -349,13 +349,54 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
   readonly parentController: IController;
 }
 
-export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
-  extends NativeEventEmitterComponent<TEvent | PageEvents, TNative, TProps>
-  implements IController, IPage
+// export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
+//   extends NativeEventEmitterComponent<TEvent | PageEvents, TNative, TProps>
+//   implements IController, IPage
+// {
+//   contextMenu: { items: any[]; headerTitle: string; };
+//   onLoad: () => void;
+//   transitionViews: View<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, WithMobileOSProps<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>, ViewIOSProps, ViewAndroidProps>>[];
+//   layout: IFlexLayout<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved' | 'interceptTouchEvent' | 'viewAdded' | 'viewRemoved', MobileOSProps<Partial<ViewIOSProps>, FlexLayoutAndroidProps>>;
+//   onShow: () => void;
+//   onHide: () => void;
+//   present(params: ControllerParams): void {
+//     throw new Error('Method not implemented.');
+//   }
+//   dismiss(params?: ControllerParams): void {
+//     throw new Error('Method not implemented.');
+//   }
+//   statusBar: StatusBar;
+//   orientation: PageOrientation;
+//   onOrientationChange(e: { orientation: PageOrientation[]; }): void {
+//     throw new Error('Method not implemented.');
+//   }
+//   headerBar?: HeaderBar;
+//   tabBar?: TabBarController;
+
+//   getCurrentController(): IController {
+//     throw new Error('Method not implemented.');
+//   }
+//   show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }) {
+//     throw new Error('Method not implemented.');
+//   }
+//   parentController: IController;
+//   childControllers?: IController[] = [];
+//   pageID: number;
+//   popupBackNavigator: any;
+//   isActive: boolean = false;
+//   static iOS: {
+//     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+//     PresentationStyle: typeof PresentationStyle;
+//   };
+//   static Orientation: typeof Orientation;
+//   isInsideBottomTabBar: boolean = false;
+// }
+
+export abstract class AbstractPage<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
+  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
+  implements IPage<TEvent | PageEvents, TProps, TNative>, IController
 {
-  headerBar?: HeaderBar;
-  tabBar?: TabBarController;
-  private _skipDefaults: boolean;
+  private _skipDefaults: boolean = false;
 
   public get skipDefaults(): boolean {
     return this._skipDefaults;
@@ -364,52 +405,30 @@ export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps 
     this._skipDefaults = value;
   }
 
-  getCurrentController(): IController {
-    throw new Error('Method not implemented.');
-  }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }) {
-    throw new Error('Method not implemented.');
-  }
-  parentController: IController;
-  childControllers?: IController[] = [];
-  pageID: number;
-  popupBackNavigator: any;
-  isActive: boolean = false;
-  static iOS: {
-    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
-    PresentationStyle: typeof PresentationStyle;
+  constructor(params?: Partial<TProps>){
+    super(params);
   };
-  static Orientation: typeof Orientation;
-  isInsideBottomTabBar: boolean = false;
-}
-
-export declare class AbstractPage<TEvent extends string = PageEvents, TProps extends IPage = IPage, TNative = any>
-  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
-  implements IPage<TEvent | PageEvents, TProps, TNative>, IController
-{
-  constructor(params?: Partial<IPage>);
   contextMenu: { items: any[]; headerTitle: string; };
-  skipDefaults?: boolean | undefined;
   childControllers?: IController[];
   tabBar?: TabBarController;
-  getCurrentController(): IController;
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
+  abstract getCurrentController(): IController;
+  abstract show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
   parentController: IController;
   pageID: number;
   popupBackNavigator: any;
   isActive: boolean;
   isInsideBottomTabBar: boolean;
-  orientation: PageOrientation;
-  transitionViews: View[];
-  onOrientationChange(e: { orientation: PageOrientation[] }): void;
+  abstract orientation: PageOrientation;
+  abstract transitionViews: View[];
+  abstract onOrientationChange(e: { orientation: PageOrientation[] }): void;
   onLoad: () => void;
   onShow: () => void;
   onHide: () => void;
-  present(params?: ControllerParams): void;
-  dismiss(params?: ControllerParams): void;
-  readonly layout: FlexLayout;
-  readonly statusBar: StatusBar;
-  readonly headerBar: HeaderBar;
+  abstract present(params?: ControllerParams): void;
+  abstract dismiss(params?: ControllerParams): void;
+  abstract readonly layout: FlexLayout;
+  abstract readonly statusBar: StatusBar;
+  abstract readonly headerBar?: HeaderBar;
 
   static iOS: {
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
@@ -418,6 +437,19 @@ export declare class AbstractPage<TEvent extends string = PageEvents, TProps ext
   static Orientation: typeof Orientation;
 }
 
-const Page: typeof AbstractPage = require(`./page.${Device.deviceOS.toLowerCase()}`).default;
-type Page = AbstractPage;
+declare class PageImpl extends AbstractPage {
+  orientation: PageOrientation;
+  transitionViews: View<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, WithMobileOSProps<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>, ViewIOSProps, ViewAndroidProps>>[];
+  layout: FlexLayout;
+  statusBar: StatusBar;
+  headerBar?: HeaderBar | undefined;
+  getCurrentController(): IController;
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined; });
+  onOrientationChange(e: { orientation: PageOrientation[]; }): void;
+  present(params?: ControllerParams): void;
+  dismiss(params?: ControllerParams): void;
+}
+
+const Page: typeof PageImpl = require(`./page.${Device.deviceOS.toLowerCase()}`).default;
+type Page = PageImpl;
 export default Page;

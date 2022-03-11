@@ -6,14 +6,12 @@ import { default as IHeaderBar } from '../headerbar';
 import Font from '../font';
 import View, { IView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { IHeaderBarItem } from '../headerbaritem';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import NavigationControllerIOS from './navigationcontroller.ios';
 
-export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements IHeaderBar {
-  appearance: __SF_UINavigationBarAppearance = undefined;
-  navigationController: NavigationControllerIOS;
-  private _android: IHeaderBar['android'] = {};
-  private _ios: IHeaderBar['ios'] = {};
+export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHeaderBar> implements IHeaderBar {
+  appearance?: __SF_UINavigationBarAppearance;
+  navigationController?: NavigationControllerIOS;
   private _transparent = false;
   private _transparentEmptyImage: __SF_UIImage;
   private _titleColor: Color;
@@ -21,15 +19,15 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
   private _prefersLargeTitles = false;
   private _backIndicatorImage: Image;
   private _backIndicatorTransitionMaskImage: Image;
-  private _titleFont: Font = undefined;
+  private _titleFont?: Font;
   private _borderVisibility: boolean;
   leftItemEnabled: boolean;
-  titleLayout: View;
+  titleLayout?: View;
   title: string;
   setItems(items: IHeaderBarItem[]): void { }
   setLeftItem(item: IHeaderBarItem): void { }
   constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS; }) {
-    super();
+    super(params);
     const { ios, android, ...restParams } = params;
 
     if (params.navigationController) {
@@ -45,8 +43,6 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
     this.navigationController = params.navigationController;
     this.iosProperties();
 
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
     Object.assign(this, restParams);
   }
   removeViewFromHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
@@ -55,13 +51,6 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
   addViewToHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
     throw new Error('Method not implemented.');
   }
-  get ios() {
-    return this._ios;
-  }
-  get android() {
-    return this._android;
-  }
-
   get transparent(): IHeaderBar['transparent'] {
     return this._transparent;
   }
@@ -107,7 +96,7 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
   }
   set visible(value: IHeaderBar['visible']) {
     this._visible = value;
-    this.navigationController.nativeObject.setNavigationBarHiddenAnimated(!value, true);
+    this.navigationController?.nativeObject.setNavigationBarHiddenAnimated(!value, true);
   }
   get itemColor(): IHeaderBar['itemColor'] {
     return new Color({
@@ -126,7 +115,8 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
     if (value instanceof Color) {
       // Xcode 13.1 background bug fixes [NTVE-398]
       if (parseInt(System.OSVersion) >= 15) {
-        this.appearance.backgroundColor = value.nativeObject;
+        if(this.appearance)
+          this.appearance.backgroundColor = value.nativeObject;
         this.nativeObject.standardAppearance = this.appearance;
         this.nativeObject.scrollEdgeAppearance = this.appearance;
       } else {
@@ -168,7 +158,8 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
 
     // Xcode 13.1 background bug fixes [NTVE-398]
     if (parseInt(System.OSVersion) >= 15) {
-      this.appearance.titleTextAttributes = titleTextAttributes;
+      if(this.appearance)
+        this.appearance.titleTextAttributes = titleTextAttributes;
 
       this.nativeObject.standardAppearance = this.appearance;
       this.nativeObject.scrollEdgeAppearance = this.appearance;
@@ -178,7 +169,7 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
   }
   private iosProperties() {
     const self = this;
-    const ios = {
+    this.addIOSProps({
       get translucent(): IHeaderBar['ios']['translucent'] {
         return self.nativeObject.translucent;
       },
@@ -196,7 +187,7 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
         return self._prefersLargeTitles;
       },
       set prefersLargeTitles(value: IHeaderBar['ios']['prefersLargeTitles']) {
-        self._prefersLargeTitles = value;
+        self._prefersLargeTitles = !!value;
         self.nativeObject.prefersLargeTitles = self._prefersLargeTitles;
       },
       get backIndicatorImage(): IHeaderBar['ios']['backIndicatorImage'] {
@@ -224,10 +215,9 @@ export class HeaderBar extends NativeComponent<__SF_UINavigationBar> implements 
         if (typeof visible === 'boolean') {
           self._visible = visible;
           const _animated = !!animated;
-          self.navigationController.nativeObject.setNavigationBarHiddenAnimated(!self._visible, _animated);
+          self.navigationController?.nativeObject.setNavigationBarHiddenAnimated(!self._visible, _animated);
         }
       }
-    };
-    this._ios = Object.assign(this._ios, ios);
+    });
   }
 }

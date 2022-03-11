@@ -20,14 +20,14 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
   protected _onSelectedCallback: IPicker['onSelected'];
   private pickerDelegate: __SF_UIPickerViewDelegate;
   private pickerDataSource: __SF_UIPickerViewDataSource;
-  private _cancelHighlightedColor: Color;
-  private _okHighlightedColor: Color;
+  private _cancelHighlightedColor?: Color;
+  private _okHighlightedColor?: Color;
   get nativeObject(): __SF_UIPickerView {
     return this._nativeObject;
   }
 
   constructor(params: Partial<IPicker> = {}) {
-    super();
+    super(params);
 
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIPickerView();
@@ -53,12 +53,7 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     this.nativeObject.delegate = this.pickerDelegate;
     //#endregion
 
-    this.android = {};
     this.setIOSProperties();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   show(ok?: (param?: { index: number }) => void, cancel?: () => void): void {
     const okFunc = function (e) {
@@ -124,7 +119,7 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     });
   }
   set textColor(value: IPicker['textColor']) {
-    this.nativeObject.textColor = value.nativeObject || undefined;
+    this.nativeObject.textColor = value?.nativeObject || undefined;
     this.nativeObject.reloadAllComponents();
   }
   get dialogBackgroundColor(): IPicker['dialogBackgroundColor'] {
@@ -133,7 +128,8 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     });
   }
   set dialogBackgroundColor(value: IPicker['dialogBackgroundColor']) {
-    this.nativeObject.dialogBackgroundColor = value.nativeObject;
+    if(value instanceof Color)
+      this.nativeObject.dialogBackgroundColor = value.nativeObject;
   }
   get cancelColor(): IPicker['cancelColor'] {
     return this._cancelColor;
@@ -187,20 +183,20 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
   private setIOSProperties() {
     const self = this;
 
-    const ios = {
+    this.addIOSProps({
       get dialogLineColor(): IPicker['ios']['dialogLineColor'] {
         return new Color({
           color: self.nativeObject.dialogLineColor
         });
       },
       set dialogLineColor(value: IPicker['ios']['dialogLineColor']) {
-        self.nativeObject.dialogLineColor = value.nativeObject;
+        self.nativeObject.dialogLineColor = value?.nativeObject;
       },
       get rowHeight(): IPicker['ios']['rowHeight'] {
         return self.nativeObject.delegate.rowHeight;
       },
       set rowHeight(value: IPicker['ios']['rowHeight']) {
-        self.nativeObject.delegate.rowHeight = value;
+        self.nativeObject.delegate.rowHeight = value || 0;
       },
       get cancelHighlightedColor(): IPicker['ios']['cancelHighlightedColor'] {
         return self._cancelHighlightedColor;
@@ -214,8 +210,6 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
       set okHighlightedColor(value: IPicker['ios']['okHighlightedColor']) {
         self._okHighlightedColor = value;
       }
-    };
-
-    this._ios = Object.assign(this._ios, ios);
+    });
   }
 }

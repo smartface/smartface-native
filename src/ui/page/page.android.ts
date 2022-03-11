@@ -1,4 +1,4 @@
-import Page, { IPage, LargeTitleDisplayMode, Orientation, PageAndroidParams, PageBase, PageIOSParams, PageOrientation, PresentationStyle } from '.';
+import Page, { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from '.';
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
@@ -20,6 +20,7 @@ import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { StatusBar } from '../../application/statusbar';
 import { HeaderBar } from '../navigationcontroller/headerbar';
+import { IController } from '../navigationcontroller';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const OrientationType = require('../../device/screen/orientationtype');
@@ -55,11 +56,20 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
-export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends PageBase<
-  TEvent | PageEvents,
-  TNative,
-  TProps
-> {
+export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: {
+    // for better performance. Remove if statement.
+    // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
+    controller: IController;
+    animated: any;
+    isComingFromPresent?: boolean | undefined;
+    onCompleteCallback?: (() => void) | undefined; // deprecated
+  }) {
+    throw new Error('Method not implemented.');
+  }
   static iOS: {
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
     PresentationStyle: typeof PresentationStyle;
@@ -73,17 +83,16 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private toolbar: any;
   private isCreated = false;
   private optionsMenu: any = null;
-  private contextMenu: Record<string, any> = {};
   private actionBar: any = null;
   isSwipeViewPage = false;
-  private _orientation: PageOrientation;
+  private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayout;
   private _headerBarItems: HeaderBarItem[];
   private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
   private _headerBarColor: Color;
   private _headerBarImage: Image;
-  private _titleLayout: IPage['headerBar']['titleLayout'];
+  private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
   private _transitionViewsCallback: IPage['android']['transitionViewsCallback'];
   private _borderVisibility = true;
@@ -103,7 +112,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _attributedSubtitleBuilder: any;
   private _headerBarLogoEnabled = false;
   private _tag: any;
-  private _headerBarLeftItem: HeaderBarItem;
+  private _headerBarLeftItem: HeaderBarItem | null = null;
   /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
    * _pageInstances[intPosition].__onShowCallback?.();
@@ -118,10 +127,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
   constructor(params?: Partial<TProps>) {
     super(params);
-    // const { ios, android, ...restParams } = params;
 
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
-    this.skipDefaults = params.skipDefaults;
     const pageLayout = this.pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     this.pageLayout = pageLayout;
     this.rootLayout = new FlexLayout({
@@ -204,7 +211,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     }
     FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
     (Application.currentPage as any) = this.popUpBackPage; //TODO: Find a better fix
-    params.onComplete && params.onComplete();
+    params?.onComplete();
   }
   private setCallbacks() {
     this._nativeObject = new SFFragment();
@@ -358,12 +365,12 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
 
   private nativeSpecificParams() {
     const self = this;
-    const android = {
+    this.addAndroidProps({
       get onBackButtonPressed(): IPage['android']['onBackButtonPressed'] {
         return self._onBackButtonPressed;
       },
       set onBackButtonPressed(value: IPage['android']['onBackButtonPressed']) {
-        self._onBackButtonPressed = value.bind(self);
+        self._onBackButtonPressed = value?.bind(self);
       },
       get transitionViewsCallback(): IPage['android']['transitionViewsCallback'] {
         return self._transitionViewsCallback;
@@ -371,8 +378,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       set transitionViewsCallback(value: IPage['android']['transitionViewsCallback']) {
         self._transitionViewsCallback = value;
       }
-    };
-    this.addAndroidProps(android);
+    });
   }
 
   /**
@@ -381,48 +387,48 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private headerBarParams() {
     const self = this;
     const headerbarParams = {
-      get backgroundColor(): IPage['headerBar']['backgroundColor'] {
+      get backgroundColor(): HeaderBar['backgroundColor'] {
         return self._headerBarColor;
       },
-      set backgroundColor(value: IPage['headerBar']['backgroundColor']) {
+      set backgroundColor(value: HeaderBar['backgroundColor']) {
         self.toolbar.setBackgroundColor(value.nativeObject);
       },
-      get backgroundImage(): IPage['headerBar']['backgroundImage'] {
+      get backgroundImage(): HeaderBar['backgroundImage'] {
         return self._headerBarImage;
       },
-      set backgroundImage(value: IPage['headerBar']['backgroundImage']) {
+      set backgroundImage(value: HeaderBar['backgroundImage']) {
         self._headerBarImage = value;
         self.toolbar.setBackground(value.nativeObject);
       },
-      get titleLayout(): IPage['headerBar']['titleLayout'] {
+      get titleLayout(): HeaderBar['titleLayout'] {
         return self._titleLayout;
       },
-      set titleLayout(value: IPage['headerBar']['titleLayout']) {
+      set titleLayout(value: HeaderBar['titleLayout']) {
         if (self._titleLayout) {
           self.toolbar.removeView(self._titleLayout.nativeObject);
         }
         const toolbarParams = new ToolbarLayoutParams(8388611); // Gravity.START
 
-        self.toolbar.addView(value.nativeObject, toolbarParams);
+        value && self.toolbar.addView(value.nativeObject, toolbarParams);
       },
-      get borderVisibility(): IPage['headerBar']['borderVisibility'] {
+      get borderVisibility(): HeaderBar['borderVisibility'] {
         return self._borderVisibility;
       },
-      set borderVisibility(value: IPage['headerBar']['borderVisibility']) {
+      set borderVisibility(value: HeaderBar['borderVisibility']) {
         self._borderVisibility = value;
         self.actionBar.setElevation(value ? AndroidUnitConverter.dpToPixel(4) : 0);
       },
-      get alpha(): IPage['headerBar']['alpha'] {
+      get alpha(): HeaderBar['alpha'] {
         return self._alpha;
       },
-      set alpha(value: IPage['headerBar']['alpha']) {
+      set alpha(value: HeaderBar['alpha']) {
         self._alpha = value;
         self.toolbar.setAlpha(value);
       },
-      get transparent(): IPage['headerBar']['transparent'] {
+      get transparent(): HeaderBar['transparent'] {
         return self._transparent;
       },
-      set transparent(value: IPage['headerBar']['transparent']) {
+      set transparent(value: HeaderBar['transparent']) {
         if (value === self._transparent) {
           return;
         }
@@ -435,10 +441,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         }
         pageLayoutParams && self.pageLayout.setLayoutParams(pageLayoutParams);
       },
-      get leftItemEnabled(): IPage['headerBar']['leftItemEnabled'] {
+      get leftItemEnabled(): HeaderBar['leftItemEnabled'] {
         return self._leftItemEnabled;
       },
-      set leftItemEnabled(value: IPage['headerBar']['leftItemEnabled']) {
+      set leftItemEnabled(value: HeaderBar['leftItemEnabled']) {
         self._leftItemEnabled = value;
         self.actionBar.setDisplayHomeAsUpEnabled(self._leftItemEnabled);
       },
@@ -446,16 +452,16 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         const resources = AndroidConfig.activityResources;
         return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
       },
-      get title(): IPage['headerBar']['title'] {
+      get title(): HeaderBar['title'] {
         return self.toolbar.getTitle();
       },
-      set title(value: IPage['headerBar']['title']) {
+      set title(value: HeaderBar['title']) {
         self.toolbar.setTitle(value || '');
       },
-      get titleColor(): IPage['headerBar']['titleColor'] {
+      get titleColor(): HeaderBar['titleColor'] {
         return self._headerBarTitleColor;
       },
-      set titleColor(value: IPage['headerBar']['titleColor']) {
+      set titleColor(value: HeaderBar['titleColor']) {
         self._headerBarTitleColor = value;
         self.toolbar.setTitleTextColor(value.nativeObject);
       },
@@ -467,21 +473,21 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         drawable?.setColorFilter(value.nativeObject, PorterDuff.Mode.SRC_ATOP);
       },
 
-      get itemColor(): IPage['headerBar']['itemColor'] {
+      get itemColor(): HeaderBar['itemColor'] {
         return self._itemColor;
       },
-      set itemColor(value: IPage['headerBar']['itemColor']) {
+      set itemColor(value: HeaderBar['itemColor']) {
         (self.headerBar as any).leftItemColor = value; //TODO: lefItemColor is an internal value. Consider opening it back.
         for (let i = 0; i < self._headerBarItems.length; i++) {
           self._headerBarItems[i].color = value;
         }
         (HeaderBarItem as any).itemColor = value; //TODO: itemColor is an internal property of HeaderBarItem. Consider moving it in HeaderBarItem.
       },
-      get visible(): IPage['headerBar']['visible'] {
+      get visible(): HeaderBar['visible'] {
         // View.VISIBLE
         return self.toolbar.getVisibility() === 0;
       },
-      set visible(value: IPage['headerBar']['visible']) {
+      set visible(value: HeaderBar['visible']) {
         self.toolbar.setVisibility(value ? 0 : 8); // 0=View.VISIBLE 8=View.GONE
       },
       /**
@@ -575,7 +581,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         });
       },
       setLeftItem(leftItem: HeaderBarItem) {
-        if (!leftItem && !(leftItem instanceof HeaderBarItem)) {
+        if (!leftItem || !(leftItem instanceof HeaderBarItem)) {
           throw new Error('leftItem must be null or an instance of UI.HeaderBarItem');
         }
 
@@ -601,42 +607,46 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       }
     };
     const headerBarAndroid = {
-      get elevation(): IPage['headerBar']['android']['elevation'] {
+      get elevation(): HeaderBar['android']['elevation'] {
         return self._headerBarElevation === null ? AndroidUnitConverter.pixelToDp(self.actionBar.getElevation()) : self._headerBarElevation;
       },
-      set elevation(value: IPage['headerBar']['android']['elevation']) {
-        self._headerBarElevation = value;
-        self.actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
+      set elevation(value: HeaderBar['android']['elevation']) {
+        if (value) {
+          self._headerBarElevation = value;
+          self.actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
+        }
       },
-      get subtitle(): IPage['headerBar']['android']['subtitle'] {
+      get subtitle(): HeaderBar['android']['subtitle'] {
         return self.toolbar.getSubTitle();
       },
-      set subtitle(value: IPage['headerBar']['android']['subtitle']) {
+      set subtitle(value: HeaderBar['android']['subtitle']) {
         self.toolbar.setSubTitle(value || '');
       },
-      get subtitleColor(): IPage['headerBar']['android']['subtitleColor'] {
+      get subtitleColor(): HeaderBar['android']['subtitleColor'] {
         return self._headerBarSubtitleColor;
       },
-      set subtitleColor(value: IPage['headerBar']['android']['subtitleColor']) {
-        self.toolbar.setSubtitleTextColor(value.nativeObject);
+      set subtitleColor(value: HeaderBar['android']['subtitleColor']) {
+        value && self.toolbar.setSubtitleTextColor(value.nativeObject);
       },
-      get logo(): IPage['headerBar']['android']['logo'] {
+      get logo(): HeaderBar['android']['logo'] {
         return self._headerBarLogo;
       },
-      set logo(value: IPage['headerBar']['android']['logo']) {
-        self._headerBarLogo = value;
-        self.actionBar.setLogo(value.nativeObject);
+      set logo(value: HeaderBar['android']['logo']) {
+        if (value) {
+          self._headerBarLogo = value;
+          self.actionBar.setLogo(value.nativeObject);
+        }
       },
-      get contentInset(): IPage['headerBar']['android']['contentInset'] {
+      get contentInset(): HeaderBar['android']['contentInset'] {
         return {
           left: AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStart()),
           right: AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetEnd())
         };
       },
-      set contentInset(value: IPage['headerBar']['android']['contentInset']) {
+      set contentInset(value: HeaderBar['android']['contentInset']) {
         // API Level 21+
-        const cotentInsetStart = value.left === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStart()) : value.left;
-        const cotentInsetEnd = value.right === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetEnd()) : value.right;
+        const cotentInsetStart = value?.left === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStart()) : value.left;
+        const cotentInsetEnd = value?.right === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetEnd()) : value.right;
 
         self.toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
       },
@@ -647,19 +657,19 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         // API Level 24+
         self.toolbar.setContentInsetStartWithNavigation(AndroidUnitConverter.dpToPixel(value));
       },
-      get padding(): IPage['headerBar']['android']['padding'] {
+      get padding(): HeaderBar['android']['padding'] {
         const top = AndroidUnitConverter.pixelToDp(self.toolbar.getPaddingTop());
         const left = AndroidUnitConverter.pixelToDp(self.toolbar.getPaddingLeft());
         const right = AndroidUnitConverter.pixelToDp(self.toolbar.getPaddingRight());
         const bottom = AndroidUnitConverter.pixelToDp(self.toolbar.getPaddingBottom());
         return { top, left, right, bottom };
       },
-      set padding(value: IPage['headerBar']['android']['padding']) {
+      set padding(value: HeaderBar['android']['padding']) {
         const _top = self.toolbar.getPaddingTop();
         const _left = self.toolbar.getPaddingLeft();
         const _right = self.toolbar.getPaddingRight();
         const _bottom = self.toolbar.getPaddingBottom();
-        let { top, left, right, bottom } = value;
+        let { top, left, right, bottom } = value || {};
         top = top ? AndroidUnitConverter.dpToPixel(top) : _top;
         left = left ? AndroidUnitConverter.dpToPixel(left) : _left;
         right = right ? AndroidUnitConverter.dpToPixel(right) : _right;
@@ -667,10 +677,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         self.toolbar.setPadding(left, top, right, bottom);
       },
 
-      get attributedTitle(): IPage['headerBar']['android']['attributedTitle'] {
+      get attributedTitle(): HeaderBar['android']['attributedTitle'] {
         return self._attributedTitle;
       },
-      set attributedTitle(value: IPage['headerBar']['android']['attributedTitle']) {
+      set attributedTitle(value: HeaderBar['android']['attributedTitle']) {
         self._attributedTitle = value;
         if (!value) {
           return;
@@ -685,10 +695,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         self.toolbar.setTitle(self._attributedTitleBuilder);
       },
 
-      get attributedSubtitle(): IPage['headerBar']['android']['attributedSubtitle'] {
+      get attributedSubtitle(): HeaderBar['android']['attributedSubtitle'] {
         return self._attributedSubtitle;
       },
-      set attributedSubtitle(value: IPage['headerBar']['android']['attributedSubtitle']) {
+      set attributedSubtitle(value: HeaderBar['android']['attributedSubtitle']) {
         if (!value) {
           return;
         }
@@ -700,11 +710,12 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         self._attributedSubtitleBuilder.setSpan(self._attributedSubtitleBuilder);
         self.toolbar.setSubtitle(self._attributedSubtitleBuilder);
       },
-      get logoEnabled(): IPage['headerBar']['android']['logoEnabled'] {
+      get logoEnabled(): HeaderBar['android']['logoEnabled'] {
         return self._headerBarLogoEnabled;
       },
-      set logoEnabled(value: IPage['headerBar']['android']['logoEnabled']) {
-        self._headerBarLogoEnabled = value;
+      set logoEnabled(value: HeaderBar['android']['logoEnabled']) {
+        if(value)
+          self._headerBarLogoEnabled = value;
         self.actionBar.setDisplayUseLogoEnabled(self._headerBarLogoEnabled);
       },
       get tag(): any {

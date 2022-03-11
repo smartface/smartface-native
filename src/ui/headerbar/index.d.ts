@@ -175,7 +175,7 @@ type HeaderBar = {
    * @since 3.2.1
    */
   // TODO: if it can be only FlexLayout its type must be FlexLayout instead of View
-  titleLayout: View<any>;
+  titleLayout?: View<any>;
   /**
    * Gets/sets title of the header bar.
    *
@@ -478,6 +478,7 @@ type HeaderBar = {
      * @since 0.1
      */
     prefersLargeTitles?: boolean;
+    setVisible(visible: boolean, animated?: boolean): void;
   }>;
 };
 

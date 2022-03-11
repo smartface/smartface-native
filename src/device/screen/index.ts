@@ -150,6 +150,5 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
   capture(): Image;
   ios?: TProps['ios'];
 }
-const Screen: ConstructorOf<IScreen, Partial<IScreen>> = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
-type Screen = IScreen;
+const Screen: IScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;
 export default Screen;

@@ -1,7 +1,8 @@
 import { ConstructorOf } from '../../core/constructorof';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
-import { IView } from '../view';
+import { IView, IViewState } from '../view';
 import { PickerEvents } from './picker-events';
 
 export interface PickerAndroidProperties {
@@ -73,8 +74,13 @@ export interface PickerIOSProperties {
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-export declare interface IPicker<TEvent extends string = PickerEvents, TIOS = PickerIOSProperties, TAND = PickerAndroidProperties>
-  extends IView<TEvent | PickerEvents, TIOS & PickerIOSProperties, TAND & PickerAndroidProperties> {
+export declare interface IPicker<
+  TEvent extends string = PickerEvents,
+  TMobile extends MobileOSProps<IView['ios'] & PickerIOSProperties, IView['android'] & PickerAndroidProperties> = MobileOSProps<
+    IView['ios'] & PickerIOSProperties,
+    IView['android'] & PickerAndroidProperties
+  >
+> extends IView<TEvent | PickerEvents, any, TMobile> {
   /**
    * Gets/sets items of the picker.
    *
@@ -110,7 +116,7 @@ export declare interface IPicker<TEvent extends string = PickerEvents, TIOS = Pi
    * @ios
    * @since 4.2.3
    */
-  dialogBackgroundColor: Color;
+  dialogBackgroundColor: Color | IViewState<Color>;
   /**
    * This event is called when scroll ends & an item is selected on a picker.
    *

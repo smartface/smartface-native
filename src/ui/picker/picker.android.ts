@@ -1,5 +1,5 @@
 import { IPicker } from '.';
-import { LayoutParams, TypeValue } from '../../util';
+import { AndroidConfig, LayoutParams, TypeValue } from '../../util';
 import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { PickerEvents } from './picker-events';
@@ -31,13 +31,9 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   protected dialogInstance: any;
 
   constructor(params: Partial<IPicker> = {}) {
-    super();
+    super(params);
     this.setOnSelectedEvent();
     this.androidProperties();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
   get items(): IPicker['items'] {
     return this._items; //TODO: Returns self.nativeObject.getDisplayValues() after string problem is solved.
@@ -69,14 +65,15 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     return this._textColor;
   }
   set textColor(value: IPicker['textColor']) {
-    this.nativeObject.setTextColor(value.nativeObject);
+    this.nativeObject.setTextColor(value?.nativeObject);
   }
   get dialogBackgroundColor(): IPicker['dialogBackgroundColor'] {
     return this._backgroundColor;
   }
   set dialogBackgroundColor(value: IPicker['dialogBackgroundColor']) {
     this._backgroundColor = value;
-    this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
+    if(this._backgroundColor instanceof Color)
+      this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
   }
   get cancelColor(): IPicker['cancelColor'] {
     return this._cancelColor;
@@ -179,16 +176,14 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
 
   private androidProperties() {
     const self = this;
-    const android = {
+    this.addAndroidProps({
       get enabled(): IPicker['android']['enabled'] {
         return self.nativeObject.isEnabled();
       },
       set enabled(value: IPicker['android']['enabled']) {
         self.nativeObject.setEnabled(value);
       }
-    };
-
-    this._android = Object.assign(this._android, android);
+    });
   }
 
   private __createTitleView() {
