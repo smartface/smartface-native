@@ -1,9 +1,8 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import { Invocation } from '../../util';
 
-// import { EventEmitterCreator } from '../../core/eventemitter/';
-import { IWebSocket, WebSocketBase } from './websocket';
+import { WebSocketBase } from './websocket';
 import { WebSocketEvents } from './websocket-events';
 
 enum SRReadyState {
@@ -12,19 +11,15 @@ enum SRReadyState {
   SR_CLOSING,
   SR_CLOSED
 }
-
-const Events = {
-  ...WebSocketEvents
-};
-
-export default class WebSocketAndroid extends WebSocketBase {
-  delegateInstance: any;
-  constructor(params?: Partial<IWebSocket>) {
+export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProps extends MobileOSProps = MobileOSProps> extends WebSocketBase<TEvent | WebSocketEvents, TProps> {
+  private delegateInstance: any;
+  private socket: any;
+  constructor(params?: TProps) {
     super(params);
 
     if (!this.nativeObject) {
-      var alloc;
-      var invocationAlloc = __SF_NSInvocation.createClassInvocationWithSelectorInstance('alloc', 'SRWebSocket');
+      let alloc: any;
+      const invocationAlloc = __SF_NSInvocation.createClassInvocationWithSelectorInstance('alloc', 'SRWebSocket');
       if (invocationAlloc) {
         invocationAlloc.setClassTargetFromString('SRWebSocket');
         invocationAlloc.setSelectorWithString('alloc');
@@ -38,11 +33,10 @@ export default class WebSocketAndroid extends WebSocketBase {
         throw new Error('invalid arguments');
       }
 
-      let nsURL = __SF_NSURL.URLWithString(this.url);
+      const nsURL = __SF_NSURL.URLWithString(this.url);
       let nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
 
       if (this.headers) {
-        const Invocation = require('../../util').Invocation;
         const mutableRequest = Invocation.invokeInstanceMethod(nsURLRequest, 'mutableCopy', [], 'NSObject');
         for (const key in this.headers) {
           const headerField = this.getHeaderKeyValue(key, this.headers[key]);
@@ -51,9 +45,7 @@ export default class WebSocketAndroid extends WebSocketBase {
 
         nsURLRequest = Invocation.invokeInstanceMethod(mutableRequest, 'copy', [], 'NSObject');
       }
-
-      let socket: any;
-      var invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance('initWithURLRequest:', alloc);
+      const invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance('initWithURLRequest:', alloc);
       if (invocationInit) {
         invocationInit.target = alloc;
         invocationInit.setSelectorWithString('initWithURLRequest:');
@@ -61,64 +53,54 @@ export default class WebSocketAndroid extends WebSocketBase {
         invocationInit.setNSObjectArgumentAtIndex(nsURLRequest, 2);
 
         invocationInit.invoke();
-        socket = invocationInit.getReturnValue();
+        this.socket = invocationInit.getReturnValue();
       }
-      this.nativeObject = socket;
+      this.nativeObject = this.socket;
     }
 
-    this.onOpen();
+    this.onOpen?.();
+    this.emit('open');
 
-    const EventFunctions = {
-      [Events.Close]: (e) => {
-        this.emitter.emit(Events.Close, e);
-      },
-      [Events.Failure]: (e) => {
-        this.emitter.emit(Events.Failure, e);
-      },
-      [Events.Message]: (e) => {
-        this.emitter.emit(Events.Message, e);
-      },
-      [Events.Open]: (e) => {
-        this.emitter.emit(Events.Open, e);
-      }
-    };
-    eventCallbacksAssign(this, EventFunctions);
-
-    var WebSocketDelegate = SF.defineClass('WebSocketControllerDelegate : NSObject <SRWebSocketDelegate>', {
-      webSocketDidOpen: (webSocket) => {
+    const WebSocketDelegate = defineClass('WebSocketControllerDelegate : NSObject <SRWebSocketDelegate>', {
+      webSocketDidOpen: (webSocket: WebSocketIOS) => {
+        this.emit('open');
         this.onOpen?.();
       },
-      webSocketDidReceiveMessageWithString: (webSocket, string) => {
-        this.onMessage?.({
-          string: string
-        });
+      webSocketDidReceiveMessageWithString: (webSocket: WebSocketIOS, string: string) => {
+        const params = {
+          string
+        };
+        this.onMessage?.(params);
+        this.emit('message', params);
       },
-      webSocketDidReceiveMessageWithData: (webSocket, data) => {
-        const blob = new Blob(data);
-        this.onMessage?.({
-          blob: blob
-        });
+      webSocketDidReceiveMessageWithData: (webSocket: WebSocketIOS, data: any) => {
+        const params = {
+          blob: new Blob(data)
+        };
+        this.onMessage?.(params);
+        this.emit('message', params);
       },
-      webSocketDidFailWithError: (webSocket, error) => {
-        this.onFailure?.({
+      webSocketDidFailWithError: (webSocket: WebSocketIOS, error) => {
+        const params = {
           code: error.code,
           message: error.localizedDescription
-        });
+        };
+        this.onFailure?.(params);
+        this.emit('failure', params);
       },
-      webSocketDidCloseWithCodeReasonWasClean: function (webSocket, code, reason, wasClean) {
-        const tempReason = reason !== 'undefined' ? reason : undefined;
+      webSocketDidCloseWithCodeReasonWasClean: (webSocket: WebSocketIOS, code: number, reason?: number, wasClean?: boolean) => {
         this.onClose?.({
           code: code,
-          reason: tempReason
+          reason: String(reason || 0)
         });
       }
     });
 
     this.delegateInstance = WebSocketDelegate.new();
 
-    var invocationDelegate = __SF_NSInvocation.createInvocationWithSelectorInstance('setDelegate:', socket);
+    const invocationDelegate = __SF_NSInvocation.createInvocationWithSelectorInstance('setDelegate:', this.socket);
     if (invocationDelegate) {
-      invocationDelegate.target = socket;
+      invocationDelegate.target = this.socket;
       invocationDelegate.setSelectorWithString('setDelegate:');
       invocationDelegate.retainArguments();
       invocationDelegate.setNSObjectArgumentAtIndex(this.delegateInstance, 2);
@@ -168,8 +150,8 @@ export default class WebSocketAndroid extends WebSocketBase {
   }
 
   close(params: { code: number; reason?: string }): void {
-    var readyState;
-    var invocationReadyState = __SF_NSInvocation.createInvocationWithSelectorInstance('readyState', this.nativeObject);
+    let readyState;
+    const invocationReadyState = __SF_NSInvocation.createInvocationWithSelectorInstance('readyState', this.nativeObject);
     if (invocationReadyState) {
       invocationReadyState.target = this.nativeObject;
       invocationReadyState.setSelectorWithString('readyState');
@@ -181,23 +163,21 @@ export default class WebSocketAndroid extends WebSocketBase {
 
     if (params && params.code) {
       if (readyState === SRReadyState.SR_CONNECTING) {
-        var invocationDelegate = __SF_NSInvocation.createInvocationWithSelectorInstance('setDelegate:', socket);
+        const invocationDelegate = __SF_NSInvocation.createInvocationWithSelectorInstance('setDelegate:', this.socket);
         if (invocationDelegate) {
-          invocationDelegate.target = socket;
+          invocationDelegate.target = this.socket;
           invocationDelegate.setSelectorWithString('setDelegate:');
           invocationDelegate.retainArguments();
           invocationDelegate.setNSObjectArgumentAtIndex(undefined, 2);
 
           invocationDelegate.invoke();
         }
-        if (typeof this.onClose === 'function') {
-          this.onClose({
-            code: params.code,
-            reason: params.reason
-          });
-        }
+        this.onClose?.({
+          code: params.code,
+          reason: params.reason || '0'
+        });
       } else {
-        var invocationcloseWithCode = __SF_NSInvocation.createInvocationWithSelectorInstance('closeWithCode:reason:', this.nativeObject);
+        const invocationcloseWithCode = __SF_NSInvocation.createInvocationWithSelectorInstance('closeWithCode:reason:', this.nativeObject);
         if (invocationcloseWithCode) {
           invocationcloseWithCode.target = this.nativeObject;
           invocationcloseWithCode.setSelectorWithString('closeWithCode:reason:');
@@ -218,8 +198,8 @@ export default class WebSocketAndroid extends WebSocketBase {
   }
 
   send(params: { data: any }): boolean {
-    let error;
-    if (params && params.data instanceof Blob) {
+    let error = true;
+    if (params?.data instanceof Blob) {
       const invocationSendData = __SF_NSInvocation.createInvocationWithSelectorInstance('sendData:', this.nativeObject);
       if (invocationSendData) {
         invocationSendData.target = this.nativeObject;

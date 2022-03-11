@@ -64,6 +64,10 @@ class BlobAndroid extends BlobBase {
       type: 'text'
     });
   }
+
+  get parts() {
+    return this._parts;
+  }
 }
 
 export default BlobAndroid;

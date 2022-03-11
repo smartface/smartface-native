@@ -1,12 +1,12 @@
 /*globals requireClass*/
 import Blob from '../../global/blob';
-import Network from '../../device/network';
+import Network, { ConnectionType } from '../../device/network';
 import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Path from '../../io/path';
-import Image from '../../ui/image';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { HttpBase, HttpRequestBase, IHttp } from './http';
+import { HttpBase, HttpRequest, IHttp } from './http';
+import BlobAndroid from '../../global/blob/blob.android';
 import ImageAndroid from '../../ui/image/image.android';
 
 const OkHttpClientBuilder = requireClass('okhttp3.OkHttpClient$Builder');
@@ -16,6 +16,7 @@ const TimeUnit = requireClass('java.util.concurrent.TimeUnit');
 const MediaType = requireClass('okhttp3.MediaType');
 const SFHttpCallback = requireClass('io.smartface.android.sfcore.net.SFHttpCallback');
 const SFHttp = requireClass('io.smartface.android.sfcore.net.SFHttp');
+const NativeCookieJar = requireClass('okhttp3.CookieJar');
 
 enum WITHOUT_BODY_METHODS {
   GET,
@@ -27,18 +28,12 @@ enum WITHOUT_BODY_METHODS {
 const CONTENT_TYPE_KEY = 'CONTENT-TYPE';
 const activity = AndroidConfig.activity;
 
-export class HttpRequest extends HttpRequestBase {
-  cancel(): void {
-    this.nativeObject.cancel();
-  }
-}
-
 const _instanceCollection: HttpAndroid[] = [];
 
 export default class HttpAndroid extends HttpBase {
   private _clientBuilder: any;
   private _timeout: number;
-  private _defaultHeaders: { [key: string]: string };
+  private _defaultHeaders: Record<string, string>;
   private _cookiePersistenceEnabled = false;
   private _client: any;
   constructor(params?: Partial<IHttp>) {
@@ -70,10 +65,10 @@ export default class HttpAndroid extends HttpBase {
     this._clientBuilder.writeTimeout(this._timeout, TimeUnit.MILLISECONDS);
   }
 
-  get headers(): { [key: string]: string } {
+  get headers(): Record<string, string> {
     return this._defaultHeaders;
   }
-  set headers(value: { [key: string]: string }) {
+  set headers(value: Record<string, string>) {
     value && (this._defaultHeaders = value);
   }
 
@@ -86,7 +81,6 @@ export default class HttpAndroid extends HttpBase {
     if (this._cookiePersistenceEnabled) {
       this._clientBuilder.cookieJar(SFHttp.createCookieJar());
     } else {
-      const NativeCookieJar = requireClass('okhttp3.CookieJar');
       this._clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
     }
   }
@@ -102,44 +96,42 @@ export default class HttpAndroid extends HttpBase {
     dispatcher && dispatcher.cancelAll();
   }
 
-  upload(
-    params: { url: string } & { body: { name: string; fileName: string; contentType: string; value: Blob; user: string; password: string } } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body: Blob; statusCode: number; headers?: { [key: string]: string } }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    } & { params: { url: string; headers?: { [key: string]: string }; method: string; body: any[] | Blob } }
-  ) {
+  upload(params: Parameters<IHttp['upload']>['0']) {
     params && (params.params.method = 'POST');
-    return this.request(params, true, true);
+    return this.request(params, true);
   }
 
   requestString(params: Parameters<IHttp['requestString']>['0']) {
-    if (!params) throw new Error('Required request parameters.');
+    if (!params) {
+      throw new Error('Required request parameters.');
+    }
     const requestOnLoad = params.onLoad;
     params.onLoad = (e) => {
-      if (e && e.body) e.string = e.body.toString();
-      requestOnLoad && requestOnLoad(e);
+      if (e?.body) {
+        e.string = e.body.toString();
+      }
+      requestOnLoad?.(e);
     };
-    return this.request(params, false, false);
+    return this.request(params, false);
   }
 
-  requestImage(params: ) {
-    if (!params) throw new Error('Required request parameters.');
+  requestImage(params: Parameters<IHttp['requestImage']>['0']) {
+    if (!params) {
+      throw new Error('Required request parameters.');
+    }
 
     const requestOnLoad = params.onLoad;
 
     params.onLoad = (e) => {
-      if (e && e.body) {
+      if (e?.body) {
         e.image = ImageAndroid.createFromBlob(e.body);
       }
-
-      requestOnLoad && requestOnLoad(e);
+      requestOnLoad?.(e);
     };
-    return this.request(params, false, false);
+    return this.request(params, false);
   }
 
-  requestJSON(
-    params: Parameters<IHttp['requestJSON']>['0']
-  ) {
+  requestJSON(params: Parameters<IHttp['requestJSON']>['0']) {
     if (!params) throw new Error('Required request parameters.');
 
     const requestOnLoad = params.onLoad;
@@ -147,17 +139,12 @@ export default class HttpAndroid extends HttpBase {
       if (e && e.body) {
         e.JSON = JSON.parse(e.string);
       }
-      requestOnLoad && requestOnLoad(e);
+      requestOnLoad?.(e);
     };
-    return this.requestString(params, false, false);
+    return this.requestString(params);
   }
 
-  requestFile(
-    params: { url: string } & { fileName?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { file?: File }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ) {
+  requestFile(params: Parameters<IHttp['requestFile']>['0']) {
     if (!params) throw new Error('Required request parameters.');
 
     const requestOnLoad = params.onLoad;
@@ -169,33 +156,28 @@ export default class HttpAndroid extends HttpBase {
       const file = new File({
         path: path
       });
-      if (e && e.body) {
+      if (e?.body) {
         const stream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
-        stream.write(e.body);
-        stream.close();
+        stream?.write(e.body as unknown as string);
+        stream?.close();
         e.file = file;
       }
 
       requestOnLoad && requestOnLoad(e);
     };
 
-    return this.request(params, false, false);
+    return this.request(params, false);
   }
 
-  request(
-    params: { url: string } & { method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'; headers?: { [key: string]: string }; user?: string; password?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body?: Blob }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ) {
+  request(params: Parameters<IHttp['request']>['0'], isMultipart?: boolean) {
     if (!this.checkInternet()) {
       params?.onError?.({
         message: 'No network connection'
       });
-      return;
+      return new HttpRequest({ nativeObject: this.nativeObject });
     }
 
-    const request = new HttpRequest();
+    const request = new HttpRequest({ nativeObject: this.nativeObject });
     const callback = SFHttpCallback.getCallback({
       onFailure: (msg) => {
         params?.onError?.({
@@ -207,7 +189,7 @@ export default class HttpAndroid extends HttpBase {
         const statusCode = code;
         const responseHeaders = this.getResponseHeaders(headers);
 
-        if (statusCode != 304 && bytes) {
+        if (statusCode !== 304 && bytes) {
           responseBody = new Blob(bytes, {
             type: {}
           });
@@ -235,7 +217,7 @@ export default class HttpAndroid extends HttpBase {
     return request;
   }
 
-  createRequest(params, isMultipart, httpManagerHeaders) {
+  private createRequest(params: any, isMultipart?: boolean, httpManagerHeaders?: Record<string, string>) {
     if (!params || !params.url) {
       throw new Error('URL parameter is required.');
     }
@@ -243,7 +225,7 @@ export default class HttpAndroid extends HttpBase {
     let builder = new OkHttpRequestBuilder();
     builder = builder.url(params.url);
 
-    let contentType = null;
+    let contentType = '';
     if (params.headers) {
       keys = Object.keys(params.headers);
       for (let i = 0; i < keys.length; i++) {
@@ -255,7 +237,9 @@ export default class HttpAndroid extends HttpBase {
     if (httpManagerHeaders) {
       keys = Object.keys(httpManagerHeaders);
       for (let i = 0; i < keys.length; i++) {
-        if (keys[i].toUpperCase() === CONTENT_TYPE_KEY) contentType = httpManagerHeaders[keys[i]];
+        if (keys[i].toUpperCase() === CONTENT_TYPE_KEY) {
+          contentType = httpManagerHeaders[keys[i]];
+        }
         builder.addHeader(keys[i], httpManagerHeaders[keys[i]]);
       }
     }
@@ -275,12 +259,17 @@ export default class HttpAndroid extends HttpBase {
     if (!body) {
       return RequestBody.create(null, array([], 'byte'));
     }
-    if (!isMultipart || body instanceof Blob) {
+    if (!isMultipart || body instanceof BlobAndroid) {
       let mediaType = null;
-      if (contentType) mediaType = MediaType.parse(contentType);
-      let content = null;
-      if (body instanceof Blob) content = array(body.parts, 'byte');
-      else if (typeof body === 'string') content = body;
+      if (contentType) {
+        mediaType = MediaType.parse(contentType);
+      }
+      let content: any = null;
+      if (body instanceof BlobAndroid) {
+        content = array(body.parts, 'byte');
+      } else if (typeof body === 'string') {
+        content = body;
+      }
       return RequestBody.create(mediaType, content);
     } else {
       return this.createMultipartBody(body);
@@ -322,6 +311,6 @@ export default class HttpAndroid extends HttpBase {
   }
 
   checkInternet() {
-    return !(Network.connectionType === Network.ConnectionType.None);
+    return !(Network.connectionType === ConnectionType.None);
   }
 }

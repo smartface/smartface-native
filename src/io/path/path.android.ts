@@ -1,10 +1,11 @@
-/*globals requireClass*/
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
 import { AndroidProps, IPath, PathBase } from './path';
 
 const NativeFile = requireClass('java.io.File');
 const NativeEnvironment = requireClass('android.os.Environment');
+const NativeDisplayMetrics = requireClass('android.util.DisplayMetrics');
+const NativeConfiguration = requireClass('android.content.res.Configuration');
 
 interface IStorageType {
   internal: string;
@@ -35,19 +36,19 @@ export default class PathAndroid extends PathBase {
     this.setScreenConfigs();
   }
 
-  get ImagesUriScheme(): string {
+  static get ImagesUriScheme(): string {
     return 'images://';
   }
 
-  get AssetsUriScheme(): string {
+  static get AssetsUriScheme(): string {
     return 'assets://';
   }
 
-  get Separator(): string {
+  static get Separator(): string {
     return '/';
   }
 
-  get DataDirectory(): string {
+  static get DataDirectory(): string {
     const filesDir = AndroidConfig.activity.getFilesDir();
     return filesDir ? filesDir.getAbsolutePath() : null;
   }
@@ -79,11 +80,11 @@ export default class PathAndroid extends PathBase {
     };
   }
 
-  resolve(path: string) {
+  private resolve(path: string) {
     return TypeUtil.isString(path) ? this.getResolvedPath(path) : null;
   }
 
-  getResolvedPath(path) {
+  private getResolvedPath(path) {
     if (resolvedPaths[path]) {
       return resolvedPaths[path];
     }
@@ -139,23 +140,23 @@ export default class PathAndroid extends PathBase {
     return resolvedPaths[path];
   }
 
-  getExternalFilesDirPath() {
+  private getExternalFilesDirPath() {
     return externalFilesDirPath;
   }
 
-  getEmulatorAssetsPath() {
+  private getEmulatorAssetsPath() {
     return emulatorPath + '/assets';
   }
 
-  getEmulatorDrawablePath() {
+  private getEmulatorDrawablePath() {
     return emulatorPath + '/res';
   }
 
-  getRauAssetsPath() {
+  private getRauAssetsPath() {
     return playerRauPath + '/system/rau/assets';
   }
 
-  findDrawableAtDirectory(path, drawableName) {
+  private findDrawableAtDirectory(path, drawableName) {
     // searching drawable on device density and screen size
     let targetPath = this.checkDrawableVariations(path, drawableSizes[desiredDrawableSizeIndex], drawableDensities[desiredDrawableDensityIndex], drawableName);
     if (targetPath) {
@@ -191,7 +192,7 @@ export default class PathAndroid extends PathBase {
     return null;
   }
 
-  checkDrawableVariations(path, drawableSize, drawableDensity, drawableName) {
+  private checkDrawableVariations(path, drawableSize, drawableDensity, drawableName) {
     let targetPath = path + '/drawable-' + drawableDensity + '/' + drawableName + '.png';
     if (this.checkFileExistsInPath(targetPath)) {
       return targetPath;
@@ -224,16 +225,13 @@ export default class PathAndroid extends PathBase {
     return null;
   }
 
-  checkFileExistsInPath(path) {
+  private checkFileExistsInPath(path) {
     // for preventing loop between File and Path, one of them must use native.
     const fileInPath = new NativeFile(path);
     return fileInPath.exists();
   }
 
-  setScreenConfigs() {
-    const NativeDisplayMetrics = requireClass('android.util.DisplayMetrics');
-    const NativeConfiguration = requireClass('android.content.res.Configuration');
-
+  private setScreenConfigs() {
     const configuration = AndroidConfig.activityResources.getConfiguration();
     if ((configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
       desiredDrawableSizeIndex = 0;
