@@ -7,10 +7,10 @@
     "baseUrl": ".",
     "rootDir": "src",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "outFile": "dist",
+    "outDir": "dist",
     "target": "ES5",
     "esModuleInterop": true,
+    "sourceMap": true,
     "lib": ["ES2015"]
   },
   "include": ["./src/**/*"],
