@@ -1,5 +1,5 @@
-import { ViewBase } from '../../ui/view';
 import Application from '../../application';
+import View from '../../ui/view';
 import FragmentTransaction from './transition/fragmenttransition';
 
 const applicationDirection = Application.android.getLayoutDirection;
@@ -15,7 +15,7 @@ namespace DirectionBasedConverter {
     return RTL ? array.length - 1 - index : index;
   }
 
-  export function getAnimationType(animationType: keyof typeof FragmentTransaction.AnimationType) {
+  export function getAnimationType(animationType: FragmentTransaction.AnimationType) {
     if (LTR) {
       return animationType;
     }
@@ -26,13 +26,13 @@ namespace DirectionBasedConverter {
     }
   }
 
-  export function setLayoutDirection(nativeLayout: ViewBase) {
+  export function setLayoutDirection(nativeLayout: any) {
     if (RTL) {
       nativeLayout.setLayoutDirection(Application.LayoutDirection.RIGHTTOLEFT);
     }
   }
 
-  export function flipHorizontally(view: ViewBase) {
+  export function flipHorizontally(view: View) {
     return RTL ? view.flipHorizontally() : view;
   }
 

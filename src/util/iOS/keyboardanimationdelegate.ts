@@ -14,7 +14,7 @@ export default class KeyboardAnimationDelegate {
   private _topDistance = 0;
   private _isKeyboadAnimationCompleted = false;
   private parentView: __SF_UIView;
-  private parentDialog: __SF_UIView; /** Might be wrong type */
+  private parentDialog?: __SF_UIView; /** Might be wrong type */
   nativeObject: any;
   constructor(params: any) {
     this.nativeObject = params.nativeObject;
@@ -62,8 +62,8 @@ export default class KeyboardAnimationDelegate {
 
       if (!this.parentDialog) {
         if (this.getParentViewController().tabBarController) {
-          if (this._topDistance + this.getParentViewController().tabBarController.tabBar.frame.height > keyboardHeight) {
-            this._topDistance = keyboardHeight - this.getParentViewController().tabBarController.tabBar.frame.height;
+          if (this._topDistance + (this.getParentViewController().tabBarController.tabBar.frame.height || 0) > keyboardHeight) {
+            this._topDistance = keyboardHeight - (this.getParentViewController().tabBarController.tabBar.frame.height || 0);
           }
         } else {
           if (this._topDistance > keyboardHeight) {
@@ -197,7 +197,7 @@ export default class KeyboardAnimationDelegate {
       } else if (view.superview.constructor.name === 'SMFUIScrollView') {
         this._top += view.frame.y;
         if (this._top + this.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
-          var newTop = this._top - view.superview.frame.height + this.nativeObject.frame.height;
+          var newTop = this._top - (view.superview.frame.height || 0) + this.nativeObject.frame.height;
           view.superview.setContentOffsetAnimated(
             {
               x: 0,
@@ -228,7 +228,7 @@ export default class KeyboardAnimationDelegate {
           this._top += rect.y;
 
           if (this._top + this.nativeObject.frame.height > tableView.contentOffset.y + tableView.frame.height) {
-            var newTop = this._top - tableView.frame.height + this.nativeObject.frame.height;
+            var newTop = this._top - (tableView.frame.height || 0) + this.nativeObject.frame.height;
             tableView.setContentOffsetAnimated(
               {
                 x: 0,
@@ -270,7 +270,7 @@ export default class KeyboardAnimationDelegate {
     }
 
     var statusBar = KeyboardAnimationDelegate.statusBarFrames(this);
-    this._top += statusBar.viewRect.height > 20 ? 20 : 0;
+    this._top += statusBar.viewRect.height! > 20 ? 20 : 0;
 
     var temp = this._top;
     this._top = 0;
@@ -285,14 +285,14 @@ export default class KeyboardAnimationDelegate {
     }
 
     const statusBar = KeyboardAnimationDelegate.statusBarFrames(instance);
-    if (instance.getParentViewController().navigationController && instance.getParentViewController().navigationController.navigationBar.visible) {
+    if (instance && instance.getParentViewController().navigationController && instance.getParentViewController().navigationController.navigationBar.visible) {
       if (!instance.getParentViewController().statusBarHidden) {
         //44 point = iPhone X
         return (
-          (statusBar.viewRect.height == 44 ? 44 : statusBar.viewRect.height > 20 ? 20 : statusBar.frame.height) + instance.getParentViewController().navigationController.navigationBar.frame.height
+          (statusBar.viewRect.height == 44 ? 44 : statusBar.viewRect.height || 0 > 20 ? 20 : statusBar.frame.height) || 0 + (instance.getParentViewController().navigationController.navigationBar.frame.height || 0)
         );
       } else {
-        return instance.getParentViewController().navigationController.navigationBar.frame.height;
+        return instance.getParentViewController().navigationController.navigationBar.frame.height || 0;
       }
     } else {
       return 0;

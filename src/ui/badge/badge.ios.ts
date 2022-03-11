@@ -73,7 +73,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
           value: (label: __SF_SMFUILabel) => {
             const argColor = new Invocation.Argument({
               type: 'NSObject',
-              value: this._backgroundColor.nativeObject
+              value: this._backgroundColor?.nativeObject
             });
             Invocation.invokeInstanceMethod(label, 'setBackgroundColor:', [argColor]);
           }

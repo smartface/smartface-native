@@ -1,36 +1,13 @@
 import { INativeComponent } from '../../core/inative-component';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 
-export type iOSProps = Partial<{
+export interface FileiOSProps {
   getNSURL: () => __SF_NSURL;
-}>;
+}
 
 export interface IFile extends INativeComponent {
-  /**
-   * @android
-   * @ios
-   */
-  resolvedPath: any;
-
-  /**
-   * @android
-   * @ios
-   */
-  type: string;
-
-  /**
-   * @android
-   * @ios
-   */
-  fullPath: string;
-
-  /**
-   * @android
-   * @ios
-   */
-  drawableResourceId: number;
-
   /**
    * Gets creation date of the File instance. If the file doesn't exist returns -1.
    * @android
@@ -86,7 +63,7 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  parent: FileBase;
+  parent: IFile | null;
   /**
    * Gets the path given on constructor. This property required for creating the File instance.
    * @android
@@ -158,7 +135,7 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  getFiles(): FileBase[];
+  getFiles(): IFile[] | null;
   /**
    * Move the current file or directory to destination path.
    *
@@ -181,7 +158,7 @@ export interface IFile extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream;
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined;
   /**
    * Rename the current file or directory to given name.
    *
@@ -195,55 +172,27 @@ export interface IFile extends INativeComponent {
   readonly writable: boolean;
   rename(newName: string): boolean;
 
-  ios: iOSProps;
+  ios?: Partial<FileiOSProps>;
 }
 
-export class FileBase implements IFile {
-  constructor(params: Partial<IFile> = {}) {}
-  static getDocumentsDirectory: () => string;
-  static getMainBundleDirectory: () => string;
+interface FileParams {
+  path?: string;
+}
 
-  resolvedPath: any;
-  type: string;
-  fullPath: string;
-  drawableResourceId: number;
-
-  get creationDate(): number {
-    throw new Error('Method not implemented.');
+export abstract class FileBase extends NativeMobileComponent<any, WithMobileOSProps<FileiOSProps, {}>> implements IFile {
+  constructor(params: Partial<IFile> & FileParams) {
+    super(params);
   }
-  get exists(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get extension(): string {
-    throw new Error('Method not implemented.');
-  }
-  get isDirectory(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get isFile(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get modifiedDate(): number {
-    throw new Error('Method not implemented.');
-  }
-  get name(): string {
-    throw new Error('Method not implemented.');
-  }
-  get parent(): FileBase {
-    throw new Error('Method not implemented.');
-  }
-  get writable(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get size(): number {
-    throw new Error('Method not implemented.');
-  }
-  get path(): string {
-    throw new Error('Method not implemented.');
-  }
-  set path(value: string) {
-    throw new Error('Method not implemented.');
-  }
+  creationDate: number;
+  exists: boolean;
+  extension: string;
+  isDirectory: boolean;
+  isFile: boolean;
+  modifiedDate: number;
+  name: string;
+  parent: IFile | null;
+  path: string;
+  size: number;
   getAbsolutePath(): string {
     throw new Error('Method not implemented.');
   }
@@ -259,20 +208,25 @@ export class FileBase implements IFile {
   remove(withChilds: boolean): boolean {
     throw new Error('Method not implemented.');
   }
-  getFiles(): FileBase[] {
+  getFiles(): IFile[] | null {
     throw new Error('Method not implemented.');
   }
   move(destination: string): boolean {
     throw new Error('Method not implemented.');
   }
-  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream {
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined {
     throw new Error('Method not implemented.');
   }
+  readonly writable: boolean;
   rename(newName: string): boolean {
     throw new Error('Method not implemented.');
   }
-  get ios(): iOSProps {
+
+  static getDocumentsDirectory(): any {
     throw new Error('Method not implemented.');
   }
-  nativeObject: any;
+
+  static getMainBundleDirectory(): any {
+    throw new Error('Method not implemented.');
+  }
 }

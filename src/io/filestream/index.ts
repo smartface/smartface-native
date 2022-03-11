@@ -18,7 +18,9 @@ import { FileStreamBase } from './filestream';
  *     myFileStream.close();
  *
  */
-const FileStream: typeof FileStreamBase = require(`./filestream.${Device.deviceOS.toLowerCase()}`).default;
-type FileStream = FileStreamBase;
+class FileStreamImpl extends FileStreamBase {}
+
+const FileStream: typeof FileStreamImpl = require(`./filestream.${Device.deviceOS.toLowerCase()}`).default;
+type FileStream = FileStreamImpl;
 
 export default FileStream;

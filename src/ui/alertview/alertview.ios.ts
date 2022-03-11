@@ -46,7 +46,7 @@ export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView>
     __SF_UIAlertController.dismissAlert(this.nativeObject, this.delegate);
   }
   get textBoxes(): { text: string }[] {
-    const returnArray = [];
+    const returnArray: any[] = [];
     if (Array.isArray(this.nativeObject.textFields)) {
       this.nativeObject.textFields.forEach((textfield: __SF_UITextField) => {
         returnArray.push({ text: textfield.valueForKey('text') });
@@ -54,11 +54,13 @@ export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView>
     }
     return returnArray;
   }
-  addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
-    const action = __SF_UIAlertAction.createAction(params.text, params.index, params.onClick);
-    this.nativeObject.addAction(action);
+  addButton(params: Parameters<IAlertView['addButton']>['0']): void {
+    if (params.text) {
+      const action = __SF_UIAlertAction.createAction(params.text, params.index, params.onClick);
+      this.nativeObject.addAction(action);
+    }
   }
-  addTextBox(params: Partial<Parameters<IAlertView['addTextBox']>['0']>): void {
+  addTextBox(params: Parameters<IAlertView['addTextBox']>['0']): void {
     __SF_UIAlertController.addTextFieldArea(this.nativeObject, params.text, params.hint, params.isPassword);
   }
 

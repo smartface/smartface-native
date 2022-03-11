@@ -82,7 +82,7 @@ export interface IAttributedString extends INativeComponent {
    * @ios
    * @since 3.0.0
    */
-  link: string;
+  link?: string;
   /**
    * Gets/sets strikethrough on AttributedString.
    *
@@ -121,49 +121,43 @@ export interface IAttributedString extends INativeComponent {
   }>;
 }
 
-export class AttributedStringBase implements IAttributedString {
-  get backgroundColor(): Color {
-    throw new Error('Method not implemented.');
-  }
-  set backgroundColor(value: Color) {
-    throw new Error('Method not implemented.');
-  }
-  get string(): string {
-    throw new Error('Method not implemented.');
-  }
-  set string(value: string) {
-    throw new Error('Method not implemented.');
-  }
-  get font(): Font {
-    throw new Error('Method not implemented.');
-  }
-  set font(value: Font) {
-    throw new Error('Method not implemented.');
-  }
-  get foregroundColor(): Color {
-    throw new Error('Method not implemented.');
-  }
-  set foregroundColor(value: Color) {
-    throw new Error('Method not implemented.');
-  }
-  get link(): string {
-    throw new Error('Method not implemented.');
-  }
-  set link(value: string) {
-    throw new Error('Method not implemented.');
-  }
-  get strikethrough(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  set strikethrough(value: boolean) {
-    throw new Error('Method not implemented.');
-  }
-  get underline(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  set underline(value: boolean) {
-    throw new Error('Method not implemented.');
-  }
-  ios: iOSProps;
-  nativeObject: any;
-}
+// export class AttributedStringBase implements IAttributedString {
+//   get backgroundColor(): Color {
+//     throw new Error('Method not implemented.');
+//   }
+//   set backgroundColor(value: Color) {
+//     throw new Error('Method not implemented.');
+//   }
+//   get string(): string {
+//     throw new Error('Method not implemented.');
+//   }
+//   set string(value: string) {
+//     throw new Error('Method not implemented.');
+//   }
+//   get font(): Font {
+//     throw new Error('Method not implemented.');
+//   }
+//   set font(value: Font) {
+//     throw new Error('Method not implemented.');
+//   }
+//   get foregroundColor(): Color {
+//     throw new Error('Method not implemented.');
+//   }
+//   set foregroundColor(value: Color) {
+//     throw new Error('Method not implemented.');
+//   }
+//   get strikethrough(): boolean {
+//     throw new Error('Method not implemented.');
+//   }
+//   set strikethrough(value: boolean) {
+//     throw new Error('Method not implemented.');
+//   }
+//   get underline(): boolean {
+//     throw new Error('Method not implemented.');
+//   }
+//   set underline(value: boolean) {
+//     throw new Error('Method not implemented.');
+//   }
+//   ios: iOSProps;
+//   nativeObject: any;
+// }

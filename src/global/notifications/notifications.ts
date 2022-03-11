@@ -1,5 +1,6 @@
 import Color from '../../ui/color';
 import { NotificationEvents } from './notifications-events';
+import { UnauthorizationStatus } from './unauthorization-status';
 
 /**
  * @class Notifications
@@ -130,6 +131,7 @@ export declare class NotificationsBase {
   static removeAllDeliveredNotifications(): void;
 
   public static readonly ios: Partial<{
+    authorizationStatus: typeof UnauthorizationStatus
     /**
      * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
      *

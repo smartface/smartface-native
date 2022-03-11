@@ -51,7 +51,7 @@ export class ShareIOS implements ShareBase {
     ShareIOS.ios__presentViewController(page, activity);
   }
   static shareImage() {}
-  static shareContacts(object: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
+  static shareContacts(object: { items: typeof Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
     const items = object.items;
     const page = object.page;
     const blacklist = object.blacklist;
@@ -82,7 +82,7 @@ export class ShareIOS implements ShareBase {
     const page = object.page;
     const blacklist = object.blacklist;
 
-    const _itemsNativeObject = [];
+    const _itemsNativeObject: (__SF_NSURL | INativeComponent)[] = [];
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       if (item instanceof File) {

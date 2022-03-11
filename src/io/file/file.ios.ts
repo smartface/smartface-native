@@ -1,17 +1,12 @@
-import { FileBase, IFile } from './file';
+import { FileiOSProps, IFile } from './file';
 import FileStream from '../../io/filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 
-export default class FileIOS extends FileBase {
+export default class FileIOS extends NativeMobileComponent<any, WithMobileOSProps<IFile, FileiOSProps, {}>> implements IFile {
   constructor(params?: Partial<IFile>) {
-    super();
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (var param in params) {
-        this[param] = params[param];
-      }
-    }
+    super(params);
+    this.addIOSProps(this.getIOSParams());
   }
 
   static getDocumentsDirectory(): any {
@@ -22,9 +17,9 @@ export default class FileIOS extends FileBase {
     return __SF_File.getMainBundleDirectory();
   }
 
-  get ios() {
+  getIOSParams() {
     return {
-      getNSURL: (): any => {
+      getNSURL: (): __SF_NSURL => {
         if (this.nativeObject.getActualPath()) {
           return __SF_NSURL.fileURLWithPath(this.nativeObject.getActualPath());
         } else {
@@ -63,8 +58,8 @@ export default class FileIOS extends FileBase {
   }
 
   get parent() {
-    var parentNativeObject = this.nativeObject.getParent();
-    var parent = new FileIOS();
+    const parentNativeObject = this.nativeObject.getParent();
+    const parent = new FileIOS();
     parent.nativeObject = parentNativeObject;
     return parent;
   }
@@ -108,7 +103,7 @@ export default class FileIOS extends FileBase {
     const typeValue = 0;
 
     const nativeObjectArray = this.nativeObject.getFiles(filterValue, typeValue);
-    return nativeObjectArray.map((nativeObject: any) => {
+    return nativeObjectArray?.map((nativeObject: any) => {
       const file = new FileIOS();
       file.nativeObject = nativeObject;
       return file;
@@ -123,7 +118,7 @@ export default class FileIOS extends FileBase {
     return this.nativeObject.rename(newName);
   }
 
-  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream {
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined {
     return FileStream.create(this.nativeObject.getActualPath(), streamType, contentMode);
   }
 

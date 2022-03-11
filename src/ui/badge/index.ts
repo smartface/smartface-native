@@ -31,7 +31,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  backgroundColor: Color;
+  backgroundColor: Color | null;
   /**
    * Gets/sets textColor of badge.
    *

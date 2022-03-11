@@ -3,6 +3,7 @@ import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
+import { AndroidConfig } from '../../util';
 import { ShareBase } from './share';
 
 const NativeIntent = requireClass('android.content.Intent');
@@ -37,7 +38,8 @@ function writeContactsToFile(contacts, vCardFileName) {
   const file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/` + (vCardFileName + '.vcf') });
   if (!file.exists) file.createFile(true);
   const fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
-
+  if(!fileStream)
+    return;
   contacts.forEach((contact) => {
     const {
       namePrefix = '',
@@ -57,8 +59,8 @@ function writeContactsToFile(contacts, vCardFileName) {
     } = contact;
     const UTF_8_QUOTED_PRINTABLE = 'CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE';
 
-    fileStream.write('BEGIN:VCARD\r\n');
-    fileStream.write('VERSION:2.1\r\n');
+    fileStream?.write('BEGIN:VCARD\r\n');
+    fileStream?.write('VERSION:2.1\r\n');
 
     if (
       NativeStringUtil.isUsAscii(lastName) &&
@@ -67,9 +69,9 @@ function writeContactsToFile(contacts, vCardFileName) {
       NativeStringUtil.isUsAscii(namePrefix) &&
       NativeStringUtil.isUsAscii(nameSuffix)
     ) {
-      fileStream.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`);
+      fileStream?.write(`N:${lastName};${firstName};${middleName};${namePrefix};${nameSuffix}\r\n`);
     } else {
-      fileStream.write(
+      fileStream?.write(
         `N;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(lastName)};${NativeStringUtil.encodeToUTF8QuotedPrintable(
           firstName
         )};${NativeStringUtil.encodeToUTF8QuotedPrintable(middleName)};${NativeStringUtil.encodeToUTF8QuotedPrintable(namePrefix)};${NativeStringUtil.encodeToUTF8QuotedPrintable(nameSuffix)}\r\n`
@@ -77,7 +79,7 @@ function writeContactsToFile(contacts, vCardFileName) {
     }
 
     const vcard_firstName = NativeStringUtil.isUsAscii(firstName) ? `FN:${firstName}\r\n` : `FN;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(firstName)}\r\n`;
-    fileStream.write(vcard_firstName);
+    fileStream?.write(vcard_firstName);
 
     if (NativeStringUtil.isUsAscii(organization) && NativeStringUtil.isUsAscii(department)) fileStream.write(`ORG:${organization};${department}\r\n`);
     else fileStream.write(`ORG;${UTF_8_QUOTED_PRINTABLE}:${NativeStringUtil.encodeToUTF8QuotedPrintable(organization)};${NativeStringUtil.encodeToUTF8QuotedPrintable(department)}\r\n`);
@@ -203,7 +205,10 @@ export class ShareAndroid implements ShareBase {
     const shareIntent = new NativeIntent(NativeIntent.ACTION_SEND_MULTIPLE);
     shareIntent.setType('*/*');
 
-    const contentSharing = {
+    const contentSharing: {
+      mimeTypes: string[],
+      parcelabels: any
+    } = {
       mimeTypes: [],
       parcelabels: new NativeArrayList()
     };
@@ -232,7 +237,7 @@ export class ShareAndroid implements ShareBase {
     shareIntent.putExtra(NativeIntent.EXTRA_MIME_TYPES, array(contentSharing.mimeTypes, 'java.lang.String'));
     AndroidConfig.activity.startActivity(shareIntent);
   }
-  static shareContacts(params: { items: Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
+  static shareContacts(params: { items: typeof Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
     const NativeURI = requireClass('android.net.Uri');
 
     const itemList = params.items || [];

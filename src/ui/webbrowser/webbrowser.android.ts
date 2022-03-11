@@ -26,7 +26,7 @@ export class WebBrowserAndroid implements AbstractWebBrowser {
       const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance();
 
       const builder = new NativeCustomTabsIntent.Builder();
-      builder.setToolbarColor(options.barColor.nativeObject);
+      builder.setToolbarColor(options.barColor?.nativeObject);
       builder.setShowTitle(true);
 
       try {

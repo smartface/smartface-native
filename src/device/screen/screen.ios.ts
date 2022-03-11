@@ -26,11 +26,11 @@ class ScreenIOS implements IScreen {
   }
 
   get height() {
-    return __SF_UIScreen.mainScreen().bounds.height;
+    return __SF_UIScreen.mainScreen().bounds.height || 0;
   }
 
   get width() {
-    return __SF_UIScreen.mainScreen().bounds.width;
+    return __SF_UIScreen.mainScreen().bounds.width || 0;
   }
 
   get touchSupported() {

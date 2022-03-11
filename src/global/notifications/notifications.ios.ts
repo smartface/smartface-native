@@ -3,22 +3,14 @@ import NativeComponent from '../../core/native-component';
 import { Invocation } from '../../util';
 import { NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
-
-enum UNAuthorizationStatus {
-  // The user has not yet made a choice regarding whether the application may post user notifications.
-  NotDetermined = 0,
-  // The application is not authorized to post user notifications.
-  Denied = 1,
-  // The application is authorized to post user notifications.
-  Authorized = 2
-}
+import { UnauthorizationStatus } from './unauthorization-status';
 
 class NotificationsIOS implements NotificationsBase {
   public readonly android: {};
   static Events = NotificationEvents;
-  static ios = {
+  static ios: typeof NotificationsBase.ios & {UNUserNotificationCenterDelegate: any,_didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any} = {
     _willPresentNotification: undefined,
-    authorizationStatus: UNAuthorizationStatus,
+    authorizationStatus: UnauthorizationStatus,
     _didReceiveNotificationResponse: undefined,
     UNUserNotificationCenterDelegate: {
       ...new __SF_SMFUNUserNotificationCenterDelegate(),
@@ -101,7 +93,7 @@ class NotificationsIOS implements NotificationsBase {
     }
   }
   get scheduledLocalNotifications() {
-    const retval = [];
+    const retval: any[] = [];
 
     const nativeNotifications = __SF_UIApplication.sharedApplication().scheduledLocalNotifications;
     const arrayLength = nativeNotifications.length;

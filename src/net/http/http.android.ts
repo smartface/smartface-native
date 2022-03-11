@@ -7,6 +7,7 @@ import Path from '../../io/path';
 import Image from '../../ui/image';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { HttpBase, HttpRequestBase, IHttp } from './http';
+import ImageAndroid from '../../ui/image/image.android';
 
 const OkHttpClientBuilder = requireClass('okhttp3.OkHttpClient$Builder');
 const OkHttpRequestBuilder = requireClass('okhttp3.Request$Builder');
@@ -111,12 +112,7 @@ export default class HttpAndroid extends HttpBase {
     return this.request(params, true, true);
   }
 
-  requestString(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { string: string }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ) {
+  requestString(params: Parameters<IHttp['requestString']>['0']) {
     if (!params) throw new Error('Required request parameters.');
     const requestOnLoad = params.onLoad;
     params.onLoad = (e) => {
@@ -126,19 +122,14 @@ export default class HttpAndroid extends HttpBase {
     return this.request(params, false, false);
   }
 
-  requestImage(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { image: Image }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ) {
+  requestImage(params: ) {
     if (!params) throw new Error('Required request parameters.');
 
     const requestOnLoad = params.onLoad;
 
     params.onLoad = (e) => {
       if (e && e.body) {
-        e.image = Image.createFromBlob(e.body);
+        e.image = ImageAndroid.createFromBlob(e.body);
       }
 
       requestOnLoad && requestOnLoad(e);
@@ -147,10 +138,7 @@ export default class HttpAndroid extends HttpBase {
   }
 
   requestJSON(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { JSON: { [key: string]: string | number | boolean } }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
+    params: Parameters<IHttp['requestJSON']>['0']
   ) {
     if (!params) throw new Error('Required request parameters.');
 

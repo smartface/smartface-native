@@ -284,56 +284,23 @@ export interface IHttp extends INativeComponent {
   upload: (params: UploadParams) => HttpRequest;
 }
 
-export class HttpBase implements IHttp {
+export abstract class HttpBase implements IHttp {
   constructor(params?: Partial<IHttp>) {}
-  get cookiePersistenceEnabled(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  set cookiePersistenceEnabled(value: boolean) {
-    throw new Error('Method not implemented.');
-  }
-  get timeout(): number {
-    throw new Error('Method not implemented.');
-  }
-  set timeout(value: number) {
-    throw new Error('Method not implemented.');
-  }
-  get headers(): { [key: string]: string } {
-    throw new Error('Method not implemented.');
-  }
-  set headers(value: { [key: string]: string }) {
-    throw new Error('Method not implemented.');
-  }
-  get ios(): iOSProps {
-    throw new Error('Method not implemented.');
-  }
-  set ios(value: iOSProps) {
-    throw new Error('Method not implemented.');
-  }
-  cancelAll() {
-    throw new Error('Method not implemented.');
-  }
+  cookiePersistenceEnabled: boolean;
+  timeout: number;
+  headers: { [key: string]: string; };
+  ios: Partial<{ sslPinning?: { host: string; certificates: string[]; validateCertificateChain?: boolean | undefined; validateHost?: boolean | undefined; }[] | undefined; }>;
+  abstract requestFile: (params: FileRequestParams) => HttpRequest;
+  abstract requestImage: (params: ImageRequestParams) => HttpRequest;
+  abstract requestString: (params: StringRequestParams) => HttpRequest;
+  abstract requestJSON: (params: JSONRequestParams) => HttpRequest;
+  abstract request: (params: RequestParams) => HttpRequest;
+  abstract upload: (params: UploadParams) => HttpRequest;
+  abstract cancelAll();
 
   static cancelAll() {
     throw new Error('Method not implemented.');
   }
-  requestFile(params: FileRequestParams): HttpRequest {
-    throw new Error('Method not implemented.');
-  }
-  requestImage(params: ImageRequestParams): HttpRequest {
-    throw new Error('Method not implemented');
-  }
-  requestString(params: StringRequestParams): HttpRequest {
-    throw new Error('Method not implemented');
-  }
-  requestJSON(params: JSONRequestParams): HttpRequest {
-    throw new Error('Method not implemented');
-  }
-  request(params: RequestParams): HttpRequest {
-    throw new Error('Method not implemented');
-  }
-  upload(params: UploadParams): HttpRequest {
-    throw new Error('Method not implemented');
-  }
+  
   nativeObject: any;
 }

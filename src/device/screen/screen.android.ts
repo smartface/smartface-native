@@ -1,5 +1,6 @@
 import { IScreen, OrientationType } from '.';
 import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import { AndroidConfig, UnitConverter } from '../../util';
 
 const NativeBitmap = requireClass('android.graphics.Bitmap');
@@ -14,7 +15,6 @@ const metrics = new NativeDisplayMetrics();
 
 class ScreenAndroid implements IScreen {
   OrientationType = OrientationType;
-  constructor() {}
   get dpi() {
     display.getRealMetrics(metrics);
     return metrics.densityDpi;
@@ -39,7 +39,7 @@ class ScreenAndroid implements IScreen {
     return orientationArray[display.getRotation()];
   }
 
-  capture = () => {
+  capture() {
     const content = NativeR.id.content;
     const rootView = AndroidConfig.activity.findViewById(content).getRootView();
     rootView.setDrawingCacheEnabled(true);
@@ -47,7 +47,7 @@ class ScreenAndroid implements IScreen {
     const bitmap = NativeBitmap.createBitmap(cachedBitmap);
     rootView.setDrawingCacheEnabled(false);
 
-    return new Image({
+    return new ImageAndroid({
       bitmap: bitmap
     });
   };

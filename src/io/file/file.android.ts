@@ -1,27 +1,39 @@
-/*globals requireClass*/
 import Path from '../path';
 import FileStream from '../filestream';
-import TypeUtil from '../../util/type';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { FileBase, IFile } from './file';
+import { IFile } from './file';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import PathAndroid from '../path/path.android';
+import NativeComponent from '../../core/native-component';
 const activity = AndroidConfig.activity;
 
 const NativeFile = requireClass('java.io.File');
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
-
-export default class FileAndroid extends FileBase {
-  nativeAssetsList = [];
-  private pathResolver = new PathAndroid()
+const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
+const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
+const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
+const NativeBitmap = requireClass('android.graphics.Bitmap');
+const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
+const NativeFileInputStream = requireClass('java.io.FileInputStream');
+const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
+export default class FileAndroid extends NativeComponent implements IFile {
+  nativeAssetsList: any[] = [];
+  resolvedPath: any;
+  type: string;
+  fullPath: string;
+  drawableResourceId: number;
+  ios: {
+    getNSURL: () => __SF_NSURL;
+  };
+  private pathResolver = new PathAndroid();
   constructor(params?: Partial<IFile>) {
     super();
-
-    if (!TypeUtil.isString(params.path)) {
+    const { ...rest } = params;
+    if (typeof params?.path !== 'string') {
       throw new Error('File path must be string');
     }
 
-    this.resolvedPath = this.pathResolver.resolve(params.path);
+    this.resolvedPath = this.pathResolver.resolve(params?.path);
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
@@ -31,24 +43,25 @@ export default class FileAndroid extends FileBase {
         // Checking assets list loaded.
         if (!this.nativeAssetsList) {
           this.nativeAssetsList = activity.getAssets().list('');
-          if (this.nativeAssetsList) this.nativeAssetsList = toJSArray(this.nativeAssetsList);
         }
-
-        this.nativeAssetsList &&
-          this.nativeAssetsList.forEach((assetName) => {
-            if (this.resolvedPath.name === assetName) {
-              // this.nativeObject = this.resolvedPath.name;
-              this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
-              this.copyAssetFile(this.nativeObject, assetName);
-            }
-          });
+        if (this.nativeAssetsList) {
+          this.nativeAssetsList = toJSArray(this.nativeAssetsList);
+        }
+        this.nativeAssetsList?.forEach((assetName) => {
+          if (this.resolvedPath.name === assetName) {
+            // this.nativeObject = this.resolvedPath.name;
+            this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
+            this.copyAssetFile(this.nativeObject, assetName);
+          }
+        });
         break;
-      case Path.FILE_TYPE.DRAWABLE:
+      case Path.FILE_TYPE.DRAWABLE: {
         // this.nativeObject will be Bitmap
         const resources = AndroidConfig.activityResources;
         this.drawableResourceId = resources.getIdentifier(this.resolvedPath.name, 'drawable', AndroidConfig.packageName);
         this.nativeObject = this.drawableResourceId !== 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
         break;
+      }
       case Path.FILE_TYPE.RAU_ASSETS:
       case Path.FILE_TYPE.RAU_DRAWABLE:
       case Path.FILE_TYPE.EMULATOR_ASSETS:
@@ -57,7 +70,10 @@ export default class FileAndroid extends FileBase {
         // this.nativeObject will be File
         this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
         break;
+      default:
+        break;
     }
+    Object.assign(this, rest);
   }
 
   get creationDate(): number {
@@ -97,12 +113,14 @@ export default class FileAndroid extends FileBase {
     return this.resolvedPath.name;
   }
 
-  get parent(): FileAndroid {
-    return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject
-      ? new FileAndroid({
-          path: this.nativeObject.getParent().getAbsolutePath()
-        })
-      : null;
+  get parent() {
+    if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject) {
+      return new FileAndroid({
+        path: this.nativeObject.getParent().getAbsolutePath()
+      });
+    } else {
+      return null;
+    }
   }
 
   get path(): string {
@@ -113,24 +131,27 @@ export default class FileAndroid extends FileBase {
   }
 
   get size(): number {
-    if (this.nativeObject) {
-      switch (this.resolvedPath.type) {
-        case Path.FILE_TYPE.ASSET:
-          const assetsInputStream = activity.getAssets().open(this.nativeObject);
-          const size = assetsInputStream.available();
-          assetsInputStream.close();
-          return size;
-        case Path.FILE_TYPE.DRAWABLE:
-          return this.nativeObject.getByteCount();
-        case Path.FILE_TYPE.FILE:
-        case Path.FILE_TYPE.EMULATOR_ASSETS:
-        case Path.FILE_TYPE.EMULATOR_DRAWABLE:
-        case Path.FILE_TYPE.RAU_ASSETS:
-        case Path.FILE_TYPE.RAU_DRAWABLE:
-          return this.nativeObject.length();
-      }
+    if (!this.nativeObject) {
+      return -1;
     }
-    return -1;
+    switch (this.resolvedPath.type) {
+      case Path.FILE_TYPE.ASSET: {
+        const assetsInputStream = activity.getAssets().open(this.nativeObject);
+        const size = assetsInputStream.available();
+        assetsInputStream.close();
+        return size;
+      }
+      case Path.FILE_TYPE.DRAWABLE:
+        return this.nativeObject.getByteCount();
+      case Path.FILE_TYPE.FILE:
+      case Path.FILE_TYPE.EMULATOR_ASSETS:
+      case Path.FILE_TYPE.EMULATOR_DRAWABLE:
+      case Path.FILE_TYPE.RAU_ASSETS:
+      case Path.FILE_TYPE.RAU_DRAWABLE:
+        return this.nativeObject.length();
+      default:
+        return -1;
+    }
   }
 
   get writable(): boolean {
@@ -143,13 +164,13 @@ export default class FileAndroid extends FileBase {
 
   copy(destination: string): boolean {
     if (this.nativeObject) {
-      var destinationFile = new FileAndroid({
+      let destinationFile = new FileAndroid({
         path: destination
       });
       if (destinationFile.isFile) {
-        var destinationFileStream;
+        let destinationFileStream;
         if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
-          var destinationConfigured;
+          let destinationConfigured;
           if (this.isDirectory) {
             destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
             return destinationConfigured && this.copyDirectory(this, destinationFile);
@@ -182,16 +203,11 @@ export default class FileAndroid extends FileBase {
             });
           }
           if (destinationFile.createFile(true)) {
-            const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
-            const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
-            const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
-            const NativeBitmap = requireClass('android.graphics.Bitmap');
-
-            var drawableByteArrayStream = new NativeByteArrayOutputStream();
+            const drawableByteArrayStream = new NativeByteArrayOutputStream();
             this.nativeObject.compress(NativeBitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, drawableByteArrayStream);
-            var bitmapdata = drawableByteArrayStream.toByteArray();
+            const bitmapdata = drawableByteArrayStream.toByteArray();
 
-            var destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
+            const destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
             destinationFileStream = new NativeBufferedOutputStream(destinationFileOutputStream);
             destinationFileStream.write(bitmapdata);
             destinationFileStream.flush();
@@ -201,8 +217,10 @@ export default class FileAndroid extends FileBase {
           }
         } else {
           if (destinationFile.exists && destinationFile.isDirectory) {
-            var destinationFileName = destination + '/' + this.name;
-            if (this.resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE) destinationFileName += '.png';
+            let destinationFileName = destination + '/' + this.name;
+            if (this.resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE) {
+              destinationFileName += '.png';
+            }
             destinationFile = new FileAndroid({
               path: destinationFileName
             });
@@ -244,18 +262,17 @@ export default class FileAndroid extends FileBase {
     return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.removeFile(this, withChilds);
   }
 
-  getFiles(): FileAndroid[] {
+  getFiles(): IFile[] | null {
     if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists) {
-      const allJSFiles = [];
+      const allJSFiles: FileAndroid[] = [];
       const allNativeFiles = toJSArray(this.nativeObject.listFiles());
-      allNativeFiles &&
-        allNativeFiles.forEach(function (tmpFile) {
-          allJSFiles.push(
-            new FileAndroid({
-              path: tmpFile.getAbsolutePath()
-            })
-          );
-        });
+      allNativeFiles?.forEach((tmpFile) => {
+        allJSFiles.push(
+          new FileAndroid({
+            path: tmpFile.getAbsolutePath()
+          })
+        );
+      });
 
       return allJSFiles;
     }
@@ -264,7 +281,7 @@ export default class FileAndroid extends FileBase {
 
   move(destination: string): boolean {
     if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
-      var destinationFile = new FileAndroid({
+      let destinationFile = new FileAndroid({
         path: destination
       });
       if (destinationFile.isFile) {
@@ -291,7 +308,7 @@ export default class FileAndroid extends FileBase {
     return false;
   }
 
-  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream {
+  openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined {
     return new FileStream({
       source: this,
       streamType: streamType,
@@ -314,9 +331,6 @@ export default class FileAndroid extends FileBase {
 
   //
   copyAssetFile(destinationFile: any, filename: any) {
-    const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
-    const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
-
     const assetsInputStream = activity.getAssets().open(filename);
     const assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
     const destinationFileStream = new NativeFileOutputStream(destinationFile, false);
@@ -368,8 +382,6 @@ export default class FileAndroid extends FileBase {
   }
 
   copyStream(sourceFileStream: any, destinationFileStream: any) {
-    const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
-
     NativeFileUtil.copyStream(sourceFileStream, destinationFileStream); // TODO: After fixing  AND-3271 issue, need to implement by Native Api Access
 
     // var buffer = [];
@@ -383,8 +395,6 @@ export default class FileAndroid extends FileBase {
 
   copyFile(sourceFile: any, destinationFile: any) {
     if (sourceFile.isFile && destinationFile.isFile) {
-      const NativeFileInputStream = requireClass('java.io.FileInputStream');
-      const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
       const sourceFileStream = new NativeFileInputStream(sourceFile.nativeObject);
       const destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
       this.copyStream(sourceFileStream, destinationFileStream);

@@ -1,74 +1,41 @@
-import { TypeUtil } from '../../util';
-import { AsyncTaskBase, IAsyncTask } from './asynctask';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IAsyncTask, IAsyncTaskAndroidProps } from './asynctask';
 import { AsyncTaskEvents } from './asynctask-events';
 
-export class AsyncTaskIOS extends AsyncTaskBase {
+export class AsyncTaskIOS<TEvent extends string = AsyncTaskEvents, TProps extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
+  extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
+  implements IAsyncTask
+{
   static Events = AsyncTaskEvents;
-  constructor(params?: Partial<IAsyncTask>) {
+  constructor(params: Partial<IAsyncTask> = {}) {
     super();
+    const { android, ios, ...rest } = params;
     this.nativeObject = new __SF_NSOperationQueue();
-    const EventFunctions = {
-      [AsyncTaskEvents.Cancelled]: function () {
-        this._onCancelled = function (state) {
-          this.emitter.emit(AsyncTaskEvents.Cancelled, state);
-        };
-      },
-      [AsyncTaskEvents.Complete]: function () {
-        this._onComplete = function (state) {
-          this.emitter.emit(AsyncTaskEvents.Complete, state);
-        };
-      }
-    };
 
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+    Object.assign(this, rest);
   }
-  get task() {
-    return this._task;
-  }
-  set task(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._task = value;
-    }
-  }
-  get onComplete() {
-    return this._onComplete;
-  }
-  set onComplete(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._onComplete = value;
-    }
-  }
-  get onCancelled() {
-    return this._onCancelled;
-  }
-  set onCancelled(value) {
-    if (TypeUtil.isFunction(value)) {
-      this._onCancelled = value;
-    }
-  }
+  task: () => void;
+  onComplete: () => void;
+  onCancelled: () => void;
+  onPreExecute: () => void;
   run() {
     const self = this;
     if (this.nativeObject.operationCount === 0) {
-      const operation = __SF_NSBlockOperation.blockOperationWithJSValue(function () {
-        self.task && self.task();
+      const operation = __SF_NSBlockOperation.blockOperationWithJSValue(() => {
+        this.task?.();
       });
 
       operation.setCompletionBlockWithJSValue(
         function () {
-          __SF_NSOperationQueue.mainQueue().addOperationWithJSValue(
-            function () {
-              this.cancelled ? self.onCancelled && self.onCancelled() : self.onComplete && self.onComplete();
-            }.bind(this)
-          );
+          __SF_NSOperationQueue.mainQueue().addOperationWithJSValue(() => {
+            this.cancelled ? self.onCancelled?.() : self.onComplete?.();
+            this.cancelled ? self.emit('cancelled') : self.emit('complete');
+          });
         }.bind(operation)
       );
 
-      self.nativeObject.addOperation(operation);
+      this.nativeObject.addOperation(operation);
     } else {
       throw new Error('Cannot execute task: the task is already running.');
     }

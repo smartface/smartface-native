@@ -1,7 +1,8 @@
 import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
-import File from '../file';
+import { BlobBase } from '../../global/blob/blob';
+import { IFile } from '../file/file';
 
 export enum FileStreamType {
   APPEND,
@@ -103,56 +104,29 @@ export interface IFileStream extends INativeComponent {
 }
 
 export interface FileStreamParams extends IFileStream {
-  source: File,
-  streamType: FileStreamType,
-  contentMode: FileContentMode,
+  source: IFile;
+  streamType: FileStreamType;
+  contentMode: FileContentMode;
 }
-export class FileStreamBase extends NativeComponent implements IFileStream {
+export abstract class FileStreamBase extends NativeComponent implements IFileStream {
   constructor(params?: Partial<FileStreamParams>) {
     super(params);
   }
+  mode: FileStreamType;
+  contentMode: FileContentMode;
+  isReadable: boolean;
+  isWritable: boolean;
+  name: string;
+  path: string;
+  offset: number;
+  close: () => void;
+  readBlob: () => BlobBase;
+  readToEnd: () => string | BlobBase;
+  write: (content: string | BlobBase) => boolean;
+  seekToEnd?: (() => void) | undefined;
   static StreamType = FileStreamType;
   static ContentMode = FileContentMode;
-
-  static create(path: any, streamMode: any, contentMode: number): FileStreamBase {
-    throw new Error('Method not implemented.');
-  }
-
-  get mode(): FileStreamType {
-    throw new Error('Method not implemented.');
-  }
-  get contentMode(): FileContentMode {
-    throw new Error('Method not implemented.');
-  }
-  get isReadable(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get isWritable(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  get name(): string {
-    throw new Error('Method not implemented.');
-  }
-  get path(): string {
-    throw new Error('Method not implemented.');
-  }
-  get offset(): number {
-    throw new Error('Method not implemented.');
-  }
-
-  close(): void {
-    throw new Error('Method not implemented.');
-  }
-  readBlob(): Blob {
-    throw new Error('Method not implemented.');
-  }
-  readToEnd(): string | Blob {
-    throw new Error('Method not implemented.');
-  }
-  write(content: string | Blob): boolean {
-    throw new Error('Method not implemented.');
-  }
-  seekToEnd?(): void {
+  static create(path: any, streamMode: any, contentMode: number): FileStreamBase | undefined {
     throw new Error('Method not implemented.');
   }
 }
