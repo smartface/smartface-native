@@ -1,4 +1,5 @@
 import { INativeComponent } from '../../core/inative-component';
+import NativeComponent from '../../core/native-component';
 
 enum PATH_FILE_TYPE {
   FILE = 0,
@@ -19,60 +20,47 @@ export type AndroidProps = Partial<{
   };
 }>;
 
-export interface IPath extends INativeComponent {
+export interface IPath extends INativeComponent {}
+
+export class PathBase extends NativeComponent implements IPath {
+  constructor(params?: Partial<IPath>) {
+    super(params);
+  }
+
+  static FILE_TYPE = PATH_FILE_TYPE;
   /**
    * Gets data directory path of the application.
    * @android
    * @ios
    * @since 0.1
    */
-  DataDirectory: string;
-
+  static get DataDirectory(): string {
+    throw new Error('Method not implemented.');
+  }
   /**
    * Gets URI scheme for files under assets folder.
    * @android
    * @ios
    * @since 0.1
    */
-  AssetsUriScheme: string;
-
+  static get AssetsUriScheme(): string {
+    throw new Error('Method not implemented.');
+  }
   /**
    * Gets path separator for the running environment.
    * @android
    * @ios
    * @since 0.1
    */
-  Separator: string;
-
-  ImagesUriScheme: string;
-
-  android: AndroidProps;
-}
-
-export class PathBase implements IPath {
-  constructor(params?: Partial<IPath>) {}
-
-  static FILE_TYPE = PATH_FILE_TYPE;
-
-  get DataDirectory(): string {
+  static get Separator(): string {
     throw new Error('Method not implemented.');
   }
 
-  get AssetsUriScheme(): string {
-    throw new Error('Method not implemented.');
-  }
-
-  get Separator(): string {
-    throw new Error('Method not implemented.');
-  }
-
-  get ImagesUriScheme(): string {
+  static get ImagesUriScheme(): string {
     throw new Error('Method not implemented.');
   }
 
   get android(): AndroidProps {
     throw new Error('Method not implemented.');
   }
-
-  nativeObject: any;
 }

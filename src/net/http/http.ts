@@ -1,4 +1,6 @@
 import { INativeComponent } from '../../core/inative-component';
+import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import Image from '../../ui/image';
@@ -16,51 +18,42 @@ import Image from '../../ui/image';
  * @ios
  * @since 4.3.4
  */
-export type iOSProps = Partial<{
+export interface iOSProps {
   sslPinning?: { host: string; certificates: string[]; validateCertificateChain?: boolean; validateHost?: boolean }[];
-}>;
+}
 
 type RequestOnload<T = {}> = (
   e: {
     statusCode: number;
-    headers: { [key: string]: string };
+    headers?: Record<string, string>;
+    body?: Record<string, any>;
   } & T
 ) => void;
+
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type RequestParamsType<B = {}, L = {}> = {
   url: string;
+  method: RequestMethod;
 } & B & {
     onLoad: RequestOnload<L>;
-    onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
+    onError: (e: { message?: string; body?: any; statusCode?: number; headers?: Record<string, string> }) => void;
   };
-type ImageRequestParams = RequestParamsType<{}, { image: Image }>;
+
+type ImageRequestParams = RequestParamsType<{}, { image: Image | null }>;
 type StringRequestParams = RequestParamsType<{}, { string: string }>;
 type JSONType = { [key: string]: string | number | null | boolean };
 type FileRequestParams = RequestParamsType<{ fileName?: string }, { file?: File }>;
-type JSONRequestParams = RequestParamsType<{}, { JSON: JSONType }>;
+type JSONRequestParams = RequestParamsType<{}, { JSON: JSONType; string: string }>;
 type RequestParams = RequestParamsType<
   {
     method: RequestMethod;
-    headers?: { [key: string]: string };
+    headers?: Record<string, string>;
     user?: string;
     password?: string;
   },
-  { body?: Blob }
+  { [key: string]: any }
 >;
 /**
- * @param {Object} params
- * @param {String} params.url URL
- * @param {Object} params.headers Headers
- * @param {String} params.method Http request method
- * @param {Object[]|Blob} params.body
- *
- * @param {String} params.body.name
- * @param {String} params.body.fileName
- * @param {String} params.body.contentType
- * @param {Blob} params.body.value
- * @param {String} params.user Username for authorization if needed
- * @param {String} params.password Password for authorization if needed
- * @param {Function} params.onLoad Callback for success case
  *
  */
 type UploadParams = RequestParamsType<
@@ -72,21 +65,103 @@ type UploadParams = RequestParamsType<
       value: Blob;
       user: string;
       password: string;
+      nativeObject?: any; //TODO: Added because it was used, no idea where.
     };
   },
   {
     body: Blob;
     statusCode: number;
-    headers?: { [key: string]: string };
+    headers?: Record<string, string>;
   }
 > & {
   params: {
     url: string;
-    headers?: { [key: string]: string };
+    headers?: Record<string, string>;
     method: string;
     body: any[] | Blob;
   };
 };
+
+export interface IHttp extends INativeComponent {
+  cookiePersistenceEnabled: boolean;
+  timeout: number;
+  headers: Record<string, string>;
+  ios: Partial<iOSProps>;
+  /**
+   * Cancels all requests.
+   *
+   * @method cancelAll
+   * @android
+   * @ios
+   */
+  cancelAll(): void;
+  /**
+   * @method requestFile
+   *
+   * Sends an http request to given url and saves response file
+   * to temp directory of application. If request ends successfully
+   * onLoad callback will be called with received File object.
+   * @since 0.1
+   */
+  requestFile(params: FileRequestParams): HttpRequest;
+  /**
+   * @method requestImage
+   *
+   * Sends an http request to given url. If request ends successfully
+   * onLoad callback will be called with received UI.Image object.
+   *
+   * @since 0.1
+   */
+  requestImage(params: ImageRequestParams): HttpRequest;
+  /**
+   * @method requestString
+   *
+   * Sends an http request to given url. If request ends successfully
+   * onLoad callback will be called with received string.
+   *
+   * @since 0.1
+   */
+  requestString(params: StringRequestParams): HttpRequest;
+  /**
+   * @method requestJSON
+   *
+   * Sends an http request to given url. If request ends successfully
+   * onLoad callback will be called with received JSON object.
+   *
+   * @since 0.1
+   */
+  requestJSON(params: JSONRequestParams): HttpRequest;
+  /**
+   * @method request
+   *
+   * Sends an http request defined with parameters.
+   *
+   * @since 0.1
+   */
+  request(params: RequestParams, isMultipart?: boolean): HttpRequest;
+  upload(params: UploadParams): HttpRequest;
+}
+
+export abstract class HttpBase extends NativeMobileComponent<any, WithMobileOSProps<IHttp, iOSProps, {}>> implements IHttp {
+  constructor(params?: Partial<IHttp>) {
+    super(params);
+  }
+  abstract cookiePersistenceEnabled: boolean;
+  abstract get timeout(): number;
+  abstract set timeout(value);
+  abstract get headers(): Record<string, string>;
+  abstract requestFile(params: FileRequestParams): HttpRequest;
+  abstract requestImage(params: ImageRequestParams): HttpRequest;
+  abstract requestString(params: StringRequestParams): HttpRequest;
+  abstract requestJSON(params: JSONRequestParams): HttpRequest;
+  abstract request(params: RequestParams): HttpRequest;
+  abstract upload(params: UploadParams): HttpRequest;
+  abstract cancelAll(): void;
+
+  static cancelAll(): void {
+    throw new Error('Method not implemented.');
+  }
+}
 
 /**
  * @class Net.HttpRequest
@@ -102,205 +177,21 @@ type UploadParams = RequestParamsType<
  *     request.cancel();
  *
  */
-export class HttpRequestBase implements INativeComponent {
-  constructor(params?: Partial<INativeComponent>) {}
-  /**
-   * @method cancel
-   *
-   * Stops listening the response of the request.
-   *
-   * @since 0.1
-   */
-  cancel() {
-    throw new Error('Method not implemented');
+export class HttpRequest extends NativeComponent {
+  constructor(params: { nativeObject?: any }) {
+    super(params);
+    this.nativeObject = params?.nativeObject;
   }
-  suspend() {
-    throw new Error('Method not implemented');
+
+  suspend(): void {
+    this.nativeObject?.cancel();
   }
-  resume() {
-    throw new Error('Method not implemented');
+
+  resume(): void {
+    this.nativeObject?.resume();
   }
-  nativeObject: any;
-}
 
-export interface IHttp extends INativeComponent {
-  cookiePersistenceEnabled: boolean;
-  timeout: number;
-  headers: { [key: string]: string };
-  ios: iOSProps;
-  /**
-   * Cancels all requests.
-   *
-   * @method cancelAll
-   * @android
-   * @ios
-   */
-  cancelAll: () => void;
-  /**
-   * @method requestFile
-   *
-   * Sends an http request to given url and saves response file
-   * to temp directory of application. If request ends successfully
-   * onLoad callback will be called with received File object.
-   *
-   * @param {Object} params
-   * @param {String} params.url URL of file
-   * @param {String} params.fileName File name
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {IO.File} params.onLoad.e.file
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {String} params.onError.e.message
-   * @param {Object} params.onError.e.body
-   * @param {Number} params.onError.e.statusCode
-   * @param {Object} params.onError.e.headers
-   * @return {Net.HttpRequest}
-   * @since 0.1
-   */
-  requestFile: (params: FileRequestParams) => HttpRequest;
-  /**
-   * @method requestImage
-   *
-   * Sends an http request to given url. If request ends successfully
-   * onLoad callback will be called with received UI.Image object.
-   *
-   * @param {Object} params
-   * @param {String} params.url URL of file
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {UI.Image} params.onLoad.e.image
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {String} params.onError.e.message
-   * @param {Object} params.onError.e.body
-   * @param {Number} params.onError.e.statusCode
-   * @param {Object} params.onError.e.headers
-   * @return {Net.HttpRequest}
-   * @since 0.1
-   */
-  requestImage: (params: ImageRequestParams) => HttpRequest;
-  /**
-   * @method requestString
-   *
-   * Sends an http request to given url. If request ends successfully
-   * onLoad callback will be called with received string.
-   *
-   * @param {Object} params
-   * @param {String} params.url URL of file
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {String} params.onLoad.e.string
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {String} params.onError.e.message
-   * @param {Object} params.onError.e.body
-   * @param {Number} params.onError.e.statusCode
-   * @param {Object} params.onError.e.headers
-   * @return {Net.HttpRequest}
-   * @since 0.1
-   */
-  requestString: (params: StringRequestParams) => HttpRequest;
-  /**
-   * @method requestJSON
-   *
-   * Sends an http request to given url. If request ends successfully
-   * onLoad callback will be called with received JSON object.
-   *
-   * @param {Object} params
-   * @param {String} params.url URL of file
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {Object} params.onLoad.e.JSON
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {String} params.onError.e.message
-   * @param {Object} params.onError.e.body
-   * @param {Number} params.onError.e.statusCode
-   * @param {Object} params.onError.e.headers
-   * @return {Net.HttpRequest}
-   * @since 0.1
-   */
-  requestJSON: (params: JSONRequestParams) => HttpRequest;
-  /**
-   * @method request
-   *
-   * Sends an http request defined with parameters.
-   *
-   * @param {Object} params Parameters
-   * @param {String} params.url URL
-   * @param {Object} params.headers Headers
-   * @param {String} params.method Http request method
-   * @param {String} params.body Http request body
-   * @param {String} params.user Username for authorization if needed
-   * @param {String} params.password Password for authorization if needed
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {Blob} params.onLoad.e.body
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {String} params.onError.e.message Message of the error
-   * @param {Object} params.onError.e.body Body of the error
-   * @param {Number} params.onError.e.statusCode Error status code
-   * @param {Object} params.onError.e.headers Headers sent with error
-   * @return {Net.HttpRequest}
-   * @since 0.1
-   */
-  request: (params: RequestParams) => HttpRequest;
-
-  /**
-   * @param {Object} params
-   * @param {String} params.url URL
-   * @param {Object} params.headers Headers
-   * @param {String} params.method Http request method
-   * @param {Object[]|Blob} params.body
-   * @param {String} params.body.name
-   * @param {String} params.body.fileName
-   * @param {String} params.body.contentType
-   * @param {Blob} params.body.value
-   * @param {String} params.user Username for authorization if needed
-   * @param {String} params.password Password for authorization if needed
-   * @param {Function} params.onLoad Callback for success case
-   * @param {Object} params.onLoad.e
-   * @param {Blob} params.onLoad.e.body
-   * @param {Number} params.onLoad.e.statusCode
-   * @param {Object} params.onLoad.e.headers
-   * @param {Function} params.onError Callback for error case
-   * @param {Object} params.onError.e
-   * @param {Object} params.onError.e.body Body of the error
-   * @param {Number} params.onError.e.statusCode Error status code
-   * @param {Object} params.onError.e.headers Headers sent with error
-   */
-  upload: (params: UploadParams) => HttpRequest;
-}
-
-export abstract class HttpBase implements IHttp {
-  constructor(params?: Partial<IHttp>) {}
-  cookiePersistenceEnabled: boolean;
-  timeout: number;
-  headers: { [key: string]: string; };
-  ios: Partial<{ sslPinning?: { host: string; certificates: string[]; validateCertificateChain?: boolean | undefined; validateHost?: boolean | undefined; }[] | undefined; }>;
-  abstract requestFile: (params: FileRequestParams) => HttpRequest;
-  abstract requestImage: (params: ImageRequestParams) => HttpRequest;
-  abstract requestString: (params: StringRequestParams) => HttpRequest;
-  abstract requestJSON: (params: JSONRequestParams) => HttpRequest;
-  abstract request: (params: RequestParams) => HttpRequest;
-  abstract upload: (params: UploadParams) => HttpRequest;
-  abstract cancelAll();
-
-  static cancelAll() {
-    throw new Error('Method not implemented.');
+  cancel(): void {
+    this.nativeObject?.cancel();
   }
-  
-  nativeObject: any;
 }

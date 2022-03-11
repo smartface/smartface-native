@@ -1,23 +1,47 @@
-import { INativeComponent } from '../../core/inative-component';
 import Blob from '../../global/blob';
-import { BlobBase } from '../../global/blob/blob';
 import File from '../../io/file';
-import { FileBase } from '../../io/file/file';
+import FileIOS from '../../io/file/file.ios';
 import Image from '../../ui/image';
-import { HttpBase, HttpRequestBase, IHttp, iOSProps } from './http';
+import { HttpBase, HttpRequest, IHttp } from './http';
 
 export default class HttpIOS extends HttpBase {
-  private _sslPinning: iOSProps;
+  cookiePersistenceEnabled: boolean;
+  private _sslPinning: IHttp['ios']['sslPinning'];
   constructor(params?: Partial<IHttp>) {
     super(params);
 
     if (!this.nativeObject) {
       this.nativeObject = new __SF_Http();
     }
+    this.addIOSProps(this.getIOSProps());
+  }
 
-    for (const param in params) {
-      this[param] = params[param];
-    }
+  private getIOSProps(): IHttp['ios'] {
+    const self = this;
+    return {
+      get sslPinning() {
+        return self._sslPinning;
+      },
+      set sslPinning(value) {
+        self._sslPinning = value;
+        let trustPolicies: __SF_SMFServerTrustPolicy[] | undefined = undefined;
+        if (Array.isArray(value)) {
+          trustPolicies = value.map((value) => {
+            const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
+
+            const nSURLCertificates = certificates.map((path) => {
+              const certFile = new FileIOS({
+                path: path
+              });
+              return certFile.ios.getNSURL?.();
+            });
+            return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(host, nSURLCertificates, validateCertificateChain, validateHost);
+          });
+        }
+
+        self.nativeObject.serverTrustPolicies = trustPolicies;
+      }
+    };
   }
 
   get timeout(): number {
@@ -34,78 +58,37 @@ export default class HttpIOS extends HttpBase {
     this.nativeObject.defaultHTTPHeaders = value;
   }
 
-  get ios(): iOSProps {
-    return this._sslPinning;
-  }
-  set ios(value: iOSProps) {
-    this._sslPinning = value;
-
-    const trustPolicies =
-      Array.isArray(value) && value.length > 0
-        ? value.map((value) => {
-            const { certificates, host, validateCertificateChain = true, validateHost = true } = value;
-
-            const nSURLCertificates = certificates.map((path) => {
-              const certFile = new File({
-                path: path
-              });
-              return certFile.ios.getNSURL();
-            });
-            return __SF_SMFServerTrustPolicy.createServerTrustPolicyWithHostCertificateURLsValidateCertificateChainValidateHost(host, nSURLCertificates, validateCertificateChain, validateHost);
-          })
-        : undefined;
-
-    this.nativeObject.serverTrustPolicies = trustPolicies;
-  }
-
   cancelAll() {
     this.nativeObject.cancelAll();
   }
 
-  requestFile(
-    params: { url: string } & { fileName?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { file?: FileBase }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ): HttpRequest {
+  requestFile(params: Parameters<IHttp['requestFile']>['0']): HttpRequest {
     const url = params.url;
     const fileName = params.fileName;
-    const onLoad = params.onLoad;
-    const onError = params.onError;
+    const onLoad = (e: any) => {
+      // Native returns file path first.
+      // Convert to sf-core file object.
+      if (e.file) {
+        e.file = new File({
+          path: e.file
+        });
+      }
+      if (e.body) {
+        e.body = new Blob(e.body);
+      }
+      params.onLoad?.(e);
+    };
+    const onError = (e: any) => {
+      if (e.body) {
+        e.body = new Blob(e.body);
+      }
+      params.onError?.(e);
+    };
 
-    return new HttpRequest(
-      this.nativeObject.requestFile(
-        url,
-        fileName,
-        (e: any) => {
-          // Native returns file path first.
-          // Convert to sf-core file object.
-          if (e.file) {
-            e.file = new File({
-              path: e.file
-            });
-          }
-          if (e.body) {
-            e.body = new Blob(e.body);
-          }
-          onLoad?.(e);
-        },
-        (e: any) => {
-          if (e.body) {
-            e.body = new Blob(e.body);
-          }
-          onError?.(e);
-        }
-      )
-    );
+    return new HttpRequest(this.nativeObject.requestFile(url, fileName, onLoad, onError));
   }
 
-  requestImage(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { image: ImageBase }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ): HttpRequest {
+  requestImage(params: Parameters<IHttp['requestImage']>['0']): HttpRequest {
     const url = params.url;
     const onLoad = params.onLoad;
     const onError = params.onError;
@@ -134,12 +117,7 @@ export default class HttpIOS extends HttpBase {
     );
   }
 
-  requestString(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { string: string }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ): HttpRequest {
+  requestString(params: Parameters<IHttp['requestString']>['0']): HttpRequest {
     const url = params.url;
     const onLoad = params.onLoad;
     const onError = params.onError;
@@ -163,12 +141,7 @@ export default class HttpIOS extends HttpBase {
     );
   }
 
-  requestJSON(
-    params: { url: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { JSON: { [key: string]: string | number | boolean } }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ): HttpRequest {
+  requestJSON(params: Parameters<IHttp['requestJSON']>['0']): HttpRequest {
     const url = params.url;
     const onLoad = params.onLoad;
     const onError = params.onError;
@@ -192,12 +165,7 @@ export default class HttpIOS extends HttpBase {
     );
   }
 
-  request(
-    params: { url: string } & { method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'; headers?: { [key: string]: string }; user?: string; password?: string } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body?: BlobBase }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    }
-  ): HttpRequest {
+  request(params: Parameters<IHttp['request']>['0']): HttpRequest {
     const onLoad = params.onLoad;
     const onError = params.onError;
 
@@ -220,17 +188,11 @@ export default class HttpIOS extends HttpBase {
     );
   }
 
-  upload(
-    params: { url: string } & { body: { name: string; fileName: string; contentType: string; value: BlobBase; user: string; password: string } } & {
-      onLoad: (e: { statusCode: number; headers: { [key: string]: string } } & { body: BlobBase; statusCode: number; headers?: { [key: string]: string } }) => void;
-      onError: (e: { message: string; body: any; statusCode: number; headers: { [key: string]: string } }) => void;
-    } & { params: { url: string; headers?: { [key: string]: string }; method: string; body: any[] | BlobBase } }
-  ): HttpRequest {
+  upload(params: Parameters<IHttp['upload']>['0']): HttpRequest {
     const onLoad = params.onLoad;
     const onError = params.onError;
 
-    // Get NSData inside JS object
-    if (Object.prototype.toString.call(params.body) === '[object Array]') {
+    if (Array.isArray(params.body)) {
       for (let i = 0; i < params.body.length; i++) {
         params.body[i].value = params.body[i].value.nativeObject;
       }
@@ -255,26 +217,5 @@ export default class HttpIOS extends HttpBase {
         }
       )
     );
-  }
-}
-
-export class HttpRequest extends HttpRequestBase {
-  constructor(params?: Partial<INativeComponent>) {
-    super(params);
-    if (params.nativeObject) {
-      this.nativeObject = params.nativeObject;
-    }
-  }
-
-  suspend(): void {
-    this.nativeObject && this.nativeObject.cancel();
-  }
-
-  resume(): void {
-    this.nativeObject && this.nativeObject.resume();
-  }
-
-  cancel(): void {
-    this.nativeObject && this.nativeObject.cancel();
   }
 }
