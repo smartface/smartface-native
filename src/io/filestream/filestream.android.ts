@@ -4,16 +4,26 @@ import Path from '../path';
 import TypeUtil from '../../util/type';
 import Blob from '../../global/blob';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { FileStreamBase, IFileStream, FileStreamType, FileContentMode, FileStreamParams } from './filestream';
+import { IFileStream, FileStreamType, FileContentMode, FileStreamParams } from './filestream';
+import NativeComponent from '../../core/native-component';
 
 const StringUtil = requireClass('io.smartface.android.utils.StringUtil');
-
-export class FileStreamAndroid extends FileStreamBase {
+const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
+const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
+const NativeOutputStreamWriter = requireClass('java.io.OutputStreamWriter');
+const NativeBufferedWriter = requireClass('java.io.BufferedWriter');
+const NativeInputStreamReader = requireClass('java.io.InputStreamReader');
+const NativeBufferedReader = requireClass('java.io.BufferedReader');
+const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
+const NativeFileInputStream = requireClass('java.io.FileInputStream');
+const NativeFileReader = requireClass('java.io.FileReader');
+export class FileStreamAndroid extends NativeComponent implements IFileStream {
   private _fileObject: any;
   private _mode: FileStreamType;
   private _contentMode: FileContentMode;
   private _closed = false;
-  constructor(params?: Partial<FileStreamParams>) {
+  constructor(params: FileStreamParams) {
+    //The constructor isn't used externally. The parameters are required to call .
     super();
 
     this._mode = params.mode;
@@ -40,10 +50,6 @@ export class FileStreamAndroid extends FileStreamBase {
       if (this._fileObject.type !== Path.FILE_TYPE.FILE) {
         throw new Error('FileStream.StreamType.APPEND can be used for only files.');
       }
-      const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
-      const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
-      const NativeOutputStreamWriter = requireClass('java.io.OutputStreamWriter');
-      const NativeBufferedWriter = requireClass('java.io.BufferedWriter');
 
       if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
         const fileOutputStream = new NativeFileOutputStream(this._fileObject.nativeObject, true);
@@ -55,10 +61,6 @@ export class FileStreamAndroid extends FileStreamBase {
       }
     } else if (this._mode === FileStreamAndroid.StreamType.READ) {
       if (this._fileObject.type === Path.FILE_TYPE.ASSET) {
-        const NativeInputStreamReader = requireClass('java.io.InputStreamReader');
-        const NativeBufferedReader = requireClass('java.io.BufferedReader');
-        const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
-        const NativeFileInputStream = requireClass('java.io.FileInputStream');
         if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
           const inputStreamReader = new NativeInputStreamReader(this._fileObject.nativeObject);
           this.nativeObject = new NativeBufferedReader(inputStreamReader);
@@ -67,10 +69,6 @@ export class FileStreamAndroid extends FileStreamBase {
           this.nativeObject = new NativeBufferedInputStream(fileInputStream);
         }
       } else if (this._fileObject.type === Path.FILE_TYPE.DRAWABLE) {
-        const NativeInputStreamReader = requireClass('java.io.InputStreamReader');
-        const NativeBufferedReader = requireClass('java.io.BufferedReader');
-        const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
-
         const inputStream = AndroidConfig.activityResources.openRawResource(this._fileObject.drawableResourceId);
         if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
           const inputStreamReader = new NativeInputStreamReader(inputStream);
@@ -79,11 +77,6 @@ export class FileStreamAndroid extends FileStreamBase {
           this.nativeObject = new NativeBufferedInputStream(inputStream);
         }
       } else {
-        const NativeBufferedReader = requireClass('java.io.BufferedReader');
-        const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
-        const NativeFileInputStream = requireClass('java.io.FileInputStream');
-        const NativeFileReader = requireClass('java.io.FileReader');
-
         if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
           const fileReader = new NativeFileReader(this._fileObject.nativeObject);
           this.nativeObject = new NativeBufferedReader(fileReader);
@@ -96,10 +89,6 @@ export class FileStreamAndroid extends FileStreamBase {
       if (this._fileObject.type !== Path.FILE_TYPE.FILE) {
         throw new Error('FileStream.StreamType.WRITE can be used for only files.');
       }
-      const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
-      const NativeFileOutputStream = requireClass('java.io.FileOutputStream');
-      const NativeOutputStreamWriter = requireClass('java.io.OutputStreamWriter');
-      const NativeBufferedWriter = requireClass('java.io.BufferedWriter');
 
       if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
         const fileOutputStream = new NativeFileOutputStream(this._fileObject.nativeObject, false);
@@ -113,6 +102,7 @@ export class FileStreamAndroid extends FileStreamBase {
       throw new Error('Mode must be FileStream.StreamType');
     }
   }
+  offset: number;
 
   static StreamType = {
     ...FileStreamType,
@@ -131,7 +121,7 @@ export class FileStreamAndroid extends FileStreamBase {
     }
   };
 
-  static create(path: any, streamMode: any, contentMode: number): FileStreamAndroid {
+  static create(path: any, streamMode: any, contentMode: number): FileStreamAndroid | undefined {
     return;
   }
 
@@ -184,7 +174,7 @@ export class FileStreamAndroid extends FileStreamBase {
     if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
       let readLine = this.nativeObject.readLine();
       let fileContent = '';
-      while (readLine != null) {
+      while (readLine !== null) {
         fileContent += readLine + '\n';
         readLine = this.nativeObject.readLine();
       }

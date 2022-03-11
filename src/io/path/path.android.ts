@@ -6,10 +6,17 @@ import { AndroidProps, IPath, PathBase } from './path';
 const NativeFile = requireClass('java.io.File');
 const NativeEnvironment = requireClass('android.os.Environment');
 
-const storages = {
-  internal: null,
-  external: null,
-  usb: null,
+interface IStorageType {
+  internal: string;
+  external: string;
+  usb: string;
+  isResolved: boolean;
+}
+
+const storages: IStorageType = {
+  internal: '',
+  external: '',
+  usb: '',
   isResolved: false
 };
 const resolvedPaths = {};

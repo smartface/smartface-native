@@ -1,6 +1,11 @@
 import { FileBase } from './file';
 
-const File: typeof FileBase = require(`./file.${Device.deviceOS.toLowerCase()}`).default;
-type File = FileBase;
+class FileImpl extends FileBase {
+  constructor(params: ConstructorParameters<typeof FileBase>['0']) {
+    super(params);
+  }
+}
 
+const File: typeof FileImpl = require(`./file.${Device.deviceOS.toLowerCase()}`).default;
+type File = FileImpl;
 export default File;
