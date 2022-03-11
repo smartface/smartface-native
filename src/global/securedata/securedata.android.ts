@@ -3,10 +3,10 @@ import { SecureDataBase } from './securedata';
 const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyStore');
 
 class SecureDataAndroid extends SecureDataBase {
-  constructor(params?: { key: string }) {
+  constructor(params: { key: string }) {
     super();
-    if (!params && params.key) {
-      throw new Error('Constructor must have key parameter.');
+    if (!params || !params.key) {
+      throw new Error('Constructor parameters must have key parameter.');
     }
 
     if (!this.nativeObject) {

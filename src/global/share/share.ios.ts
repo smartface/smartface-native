@@ -82,7 +82,7 @@ export class ShareIOS implements ShareBase {
     const page = object.page;
     const blacklist = object.blacklist;
 
-    const _itemsNativeObject = [];
+    const _itemsNativeObject: (__SF_NSURL | INativeComponent)[] = [];
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       if (item instanceof File) {

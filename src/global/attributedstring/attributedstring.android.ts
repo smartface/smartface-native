@@ -1,28 +1,27 @@
 import Color from '../../ui/color';
 import Font from '../../ui/font';
-import { AttributedStringBase, IAttributedString } from './attributedstring';
+import { IAttributedString } from './attributedstring';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
-class AttributedStringAndroid extends AttributedStringBase {
+class AttributedStringAndroid implements IAttributedString {
   private _string = '';
   private _foregroundColor = Color.BLACK;
   private _backgroundColor = Color.TRANSPARENT;
-  private _font = Font.create(Font.DEFAULT, 14, Font.NORMAL);
+  private _font: Font = Font.create(Font.DEFAULT, 14, Font.NORMAL) as Font;
   private _underline = false;
   private _strikethrough = false;
-  private _link?: string = undefined;
+  private _link?: string;
   private textView: any;
   ios = {};
   android = {};
   constructor(params?: Partial<IAttributedString>) {
-    super();
-
     if (params) {
       for (const param in params) {
         this[param] = params[param];
       }
     }
   }
+  nativeObject: { [key: string]: any; };
   get string() {
     return this._string;
   }
@@ -62,7 +61,7 @@ class AttributedStringAndroid extends AttributedStringBase {
   get link() {
     return this._link;
   }
-  set link(value: string) {
+  set link(value: string | undefined) {
     this._link = value;
   }
   setSpan(stringBuilder: any) {

@@ -23,10 +23,10 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativePendingIntent = requireClass('android.app.PendingIntent');
 const nativeNotificationReceiverClass = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 
-const selectedNotificationIds = [];
+const selectedNotificationIds: any[] = [];
 // Generate unique random number
 function getNewNotificationId() {
-  let randomnumber = Math.ceil(Math.random() * 1000 + 1000);
+  let randomnumber: number = Math.ceil(Math.random() * 1000 + 1000);
   while (selectedNotificationIds.indexOf(randomnumber) !== -1) {
     randomnumber = Math.ceil(Math.random() * 1000 + 1000);
   }
