@@ -1,3 +1,4 @@
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import { AbstractView, IView } from '../view';
@@ -186,8 +187,13 @@ export interface ShimmerFlexLayoutIOSParams {
   endFadeDuration: number;
 }
 
-export declare interface IShimmerFlexLayout<TEvent extends string = ViewEvents, TIOS = ShimmerFlexLayoutIOSParams, TAND = ShimmerFlexLayoutAndroidParams>
-  extends IView<TEvent, TIOS & Partial<ShimmerFlexLayoutIOSParams>, TAND & Partial<ShimmerFlexLayoutAndroidParams>> {
+export declare interface IShimmerFlexLayout<
+  TEvent extends string = ViewEvents,
+  TMobile extends MobileOSProps<IView['ios'] & ShimmerFlexLayoutIOSParams, IView['android'] & ShimmerFlexLayoutAndroidParams> = MobileOSProps<
+    IView['ios'] & ShimmerFlexLayoutIOSParams,
+    IView['android'] & ShimmerFlexLayoutAndroidParams
+  >
+> extends IView<TEvent, any, TMobile> {
   /**
    * Starts the shimmer animation
    *
@@ -319,7 +325,7 @@ export declare interface IShimmerFlexLayout<TEvent extends string = ViewEvents, 
  *     shimmer.startShimmering();
  *
  */
-export declare class AbstractShimmerFlexLayout<TEvent extends string = ViewEvents> extends AbstractView<TEvent> implements IShimmerFlexLayout {
+export declare class AbstractShimmerFlexLayout<TEvent extends string = ViewEvents> extends AbstractView<TEvent | ViewEvents> implements IShimmerFlexLayout {
   constructor(params?: Partial<IShimmerFlexLayout>);
   shimmeringDirection: ShimmeringDirection;
   startShimmering(): void;

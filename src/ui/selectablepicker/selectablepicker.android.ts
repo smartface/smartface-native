@@ -2,7 +2,7 @@ import { ISelectablePicker } from '.';
 import { EventListenerCallback } from '../../core/eventemitter';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { TypeValue } from '../../util';
+import { AndroidConfig, TypeValue } from '../../util';
 import Color from '../color';
 import Font from '../font';
 import { SelectablePickerEvents } from './selectablepicker-events';

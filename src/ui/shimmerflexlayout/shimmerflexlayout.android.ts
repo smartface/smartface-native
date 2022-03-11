@@ -10,31 +10,27 @@ const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
 
 export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams>
   extends ViewAndroid<TEvent, TNative>
-  implements IShimmerFlexLayout<TEvent, {}, TNative>
+  implements IShimmerFlexLayout
 {
   private _layout = new FlexLayout();
   private _baseAlpha: number;
   private _direction: ShimmeringDirection;
   private _repeatDelay = 400;
   private _contentLayout: IShimmerFlexLayout['contentLayout'];
-  private _duration: number;
-  private _intensity: number;
-  private _repeatCount: number;
-  private _tilt: number;
-  private _highlightColor: Color;
-  private _baseColor: Color;
+  private _duration?: number;
+  private _intensity?: number;
+  private _repeatCount?: number;
+  private _tilt?: number;
+  private _highlightColor?: Color;
+  private _baseColor?: Color;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
   constructor(params: Partial<IShimmerFlexLayout> = {}) {
-    super();
+    super(params);
     this._nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
     this.nativeObject.addView(this._layout.nativeObject);
 
     this.androidSpecificProperties();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
 
   get contentLayout(): IShimmerFlexLayout['contentLayout'] {
@@ -92,7 +88,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
 
   private androidSpecificProperties() {
     const self = this;
-    const android = {
+    this.addAndroidProps({
       build(shimmerEnum: ShimmerHighlight) {
         self._shimmerBuilder = self.shimmerBuilder(shimmerEnum);
         self._shimmerBuilder.setAutoStart(false);
@@ -153,7 +149,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
       set highlightAlpha(value: IShimmerFlexLayout['android']['highlightAlpha']) {
         self._baseColor = value;
       }
-    };
+    });
 
     this._android = Object.assign(this._android, android);
   }

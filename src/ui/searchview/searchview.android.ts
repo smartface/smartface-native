@@ -6,11 +6,11 @@ import KeyboardType from '../shared/keyboardtype';
 import { ViewAndroid } from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
-import Page from 'ui/page';
 import Font from '../font';
 import { AndroidConfig, SystemServices, TypeValue } from '../../util';
 import TextAlignment from '../shared/textalignment';
 import View from '../view';
+import Page from '../page';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -381,14 +381,14 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   addToHeaderBar(page: Page): void {
     if (page) {
       // TODO Recheck after talk with Furkan
-      page.headerBar.addViewToHeaderBar(this);
+      page.headerBar?.addViewToHeaderBar(this);
     }
   }
 
   removeFromHeaderBar(page: Page): void {
     if (page) {
       // TODO Recheck after talk with Furkan
-      page.headerBar.removeViewFromHeaderBar(this);
+      page.headerBar?.removeViewFromHeaderBar(this);
     }
   }
 
@@ -409,7 +409,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.clearFocus();
   }
 
-  updateQueryHint(mSearchSrcTextView: any, icon: Image, hint: string) {
+  updateQueryHint(mSearchSrcTextView: any, icon: Image | null, hint: string) {
     if (icon) {
       const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
       const NativeImageSpan = requireClass('android.text.style.ImageSpan');

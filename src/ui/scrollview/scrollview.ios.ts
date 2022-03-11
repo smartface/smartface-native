@@ -54,7 +54,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   private _frame: __SF_UIView['frame'] = { x: 0, y: 0 };
   private _align: ScrollType;
   private _autoSizeEnabled: boolean;
-  gradientColorFrameObserver: (e: any) => void;
+  gradientColorFrameObserver?: (e: any) => void;
   constructor(params?: IScrollView) {
     super(params);
     if (!this.nativeObject) {
