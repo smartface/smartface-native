@@ -1,11 +1,16 @@
 import File from '../../io/file';
 import Color from '../../ui/color';
 import Application from '../../application';
-import { IQuickLook, QuickLookBase } from '.';
+import { IQuickLook } from '.';
 import Page from '../page';
+import NativeComponent from '../../core/native-component';
+import { StatusBar } from '../../application/statusbar';
 
-export default class QuickLookIOS extends QuickLookBase {
+export default class QuickLookIOS extends NativeComponent implements IQuickLook {
   private _document: string[] = [];
+  barColor: boolean;
+  statusBar: StatusBar | null;
+
   constructor(params?: Partial<IQuickLook>) {
     super(params);
 
@@ -27,7 +32,7 @@ export default class QuickLookIOS extends QuickLookBase {
   }
   set document(value: string[]) {
     this._document = value;
-    const uRLArray = [];
+    const uRLArray: __SF_NSURL[] = [];
     for (let i = 0; i < value.length; i++) {
       const filePath = new File({
         path: value[i]

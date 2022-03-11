@@ -1,4 +1,4 @@
-import StatusBar from '../../application/statusbar/statusbar';
+import { StatusBar } from '../../application/statusbar';
 import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import Page from '../page';
@@ -51,7 +51,7 @@ export interface IQuickLook extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  itemColor: Color;
+  itemColor: Color | null;
 
   /**
    * Gets status bar object. This property is readonly, you can not set
@@ -63,7 +63,7 @@ export interface IQuickLook extends INativeComponent {
    * @readonly
    * @since 0.1
    */
-  statusBar: StatusBar;
+  statusBar: StatusBar | null;
 
   /**
    * This function shows QuickLook on the given UI.Page.
@@ -74,41 +74,15 @@ export interface IQuickLook extends INativeComponent {
   show(page: Page): void;
 }
 
-export class QuickLookBase implements IQuickLook {
-  constructor(params?: Partial<IQuickLook>) {}
-  get document(): string[] {
-    throw new Error('Method not implemented.');
-  }
-  set document(value: string[]) {
-    throw new Error('Method not implemented.');
-  }
-  get barColor(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  set barColor(value: boolean) {
-    throw new Error('Method not implemented.');
-  }
-  get titleColor(): Color {
-    throw new Error('Method not implemented.');
-  }
-  set titleColor(value: Color) {
-    throw new Error('Method not implemented.');
-  }
-  get itemColor(): Color {
-    throw new Error('Method not implemented.');
-  }
-  set itemColor(value: Color) {
-    throw new Error('Method not implemented.');
-  }
-  get statusBar(): StatusBar {
-    throw new Error('Method not implemented.');
-  }
-  set statusBar(value: StatusBar) {
-    throw new Error('Method not implemented.');
-  }
-  show(page: Page): void {
-    throw new Error('Method not implemented.');
-  }
+export declare class QuickLookBase implements IQuickLook {
+  constructor(params?: Partial<IQuickLook>);
+  document: string[];
+  barColor: boolean;
+  titleColor: Color;
+  itemColor: Color | null;
+  statusBar: StatusBar | null;
+  show(page: Page): void;
+  
   nativeObject: any;
 }
 

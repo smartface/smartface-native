@@ -16,12 +16,13 @@ export abstract class AbstractStatusBar {
   }
 }
 
-export class StatusBar extends AbstractStatusBar{
+class StatusBarImpl extends AbstractStatusBar{
   height: number;
   backgroundColor: Color;
   visible: boolean;
   style: StatusBarStyle;
 }
 
-const StatusBarClass: typeof StatusBar = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
-export const StatusBarInstance = new StatusBarClass();
+const StatusBarClass: typeof StatusBarImpl = require(`./statusbar.${Device.deviceOS.toLowerCase()}`).default;
+export type StatusBar = StatusBarImpl;
+export const StatusBar: StatusBar = new StatusBarClass();
