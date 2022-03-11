@@ -217,7 +217,7 @@ export abstract class FileBase extends NativeMobileComponent<any, WithMobileOSPr
   openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined {
     throw new Error('Method not implemented.');
   }
-  writable: boolean;
+  readonly writable: boolean;
   rename(newName: string): boolean {
     throw new Error('Method not implemented.');
   }

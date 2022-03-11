@@ -264,7 +264,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
 
   getFiles(): IFile[] | null {
     if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists) {
-      const allJSFiles: any[] = [];
+      const allJSFiles: FileAndroid[] = [];
       const allNativeFiles = toJSArray(this.nativeObject.listFiles());
       allNativeFiles?.forEach((tmpFile) => {
         allJSFiles.push(

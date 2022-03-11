@@ -2,7 +2,7 @@ import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
 import { BlobBase } from '../../global/blob/blob';
-import File from '../file';
+import { IFile } from '../file/file';
 
 export enum FileStreamType {
   APPEND,
@@ -104,7 +104,7 @@ export interface IFileStream extends INativeComponent {
 }
 
 export interface FileStreamParams extends IFileStream {
-  source: File;
+  source: IFile;
   streamType: FileStreamType;
   contentMode: FileContentMode;
 }
