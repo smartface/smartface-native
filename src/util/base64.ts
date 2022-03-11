@@ -23,6 +23,7 @@ const Base64Util = {
         ch = ch & (0x3f >> extra);
         for (; extra > 0; extra -= 1) {
           const chx = data[index++] as unknown as number;
+          // eslint-disable-next-line eqeqeq
           if ((chx & 0xc0) != 0x80) return null;
 
           ch = (ch << 6) | (chx & 0x3f);
@@ -35,7 +36,7 @@ const Base64Util = {
     return str;
   },
   StrToUtf8Array: (str: string): string[] => {
-    const utf8 = [];
+    const utf8: any[] = [];
     for (let i = 0; i < str.length; i++) {
       let charcode = str.charCodeAt(i);
       if (charcode < 0x80) utf8.push(charcode);
