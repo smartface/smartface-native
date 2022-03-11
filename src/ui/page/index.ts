@@ -3,7 +3,7 @@ import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout, { FlexLayoutAndroidProps, IFlexLayout } from '../flexlayout';
+import FlexLayout, { IFlexLayout } from '../flexlayout';
 import NavigationController, { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
@@ -98,10 +98,10 @@ export interface PageIOSParams {
    * });
    * ````
    */
-  onSafeAreaPaddingChange?(padding: { left: number; top: number; right: number; bottom: number }): void;
-  present?(): void;
+  onSafeAreaPaddingChange: ((padding: { left: number; top: number; right: number; bottom: number }) => void) | undefined;
+  present(): void;
   presentationStyle: number;
-  navigationItem: HeaderBar & HeaderBar['ios'];
+  navigationItem: HeaderBar;
 }
 
 export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
@@ -393,8 +393,8 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
 // }
 
 export abstract class AbstractPage<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
-  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
-  implements IPage<TEvent | PageEvents, TProps, TNative>, IController
+  extends NativeEventEmitterComponent<TEvent | PageEvents, TNative, TProps>
+  implements IController, IPage
 {
   private _skipDefaults: boolean = false;
 

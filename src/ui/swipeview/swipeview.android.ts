@@ -1,6 +1,6 @@
 import { ISwipeView, SwipeViewState } from '.';
 import { AndroidConfig, UnitConverter } from '../../util';
-import { PageBase } from '../page';
+import Page from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { ViewAndroid } from '../view/view.android';
@@ -26,7 +26,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     this.nativeObject.setCurrentItem(index, animated);
   }
   private _page: PageAndroid;
-  private _pages: typeof PageAndroid[];
+  private _pages: PageAndroid[];
   private _lastIndex = -1;
   private _pageCount: number;
   private _pageInstances: PageAndroid[] = [];
@@ -137,8 +137,8 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   set page(value) {
     this._page = value;
   }
-  get pages(): typeof PageBase[] {
-    return this._pages as typeof PageBase[]; //TODO: PageBase and PageAndroid no overlap
+  get pages(): Page[] {
+    return this._pages as Page[]; //TODO: PageBase and PageAndroid no overlap
   }
   set pages(value) {
     if (Array.isArray(value)) {

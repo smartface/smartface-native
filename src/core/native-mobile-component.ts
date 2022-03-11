@@ -1,7 +1,7 @@
 import { copyObjectPropertiesWithDescriptors } from '../util';
 import NativeComponent from './native-component';
 
-export type MobileOSProps<TIOS extends { [key: string]: any } = { [key: string]: any }, TAND extends { [key: string]: any } = { [key: string]: any }> = {
+export type MobileOSProps<TIOS = { [key: string]: any }, TAND = { [key: string]: any }> = {
   ios: Partial<TIOS>;
   android: Partial<TAND>;
 };
@@ -28,10 +28,10 @@ export abstract class NativeMobileComponent<
   protected addIOSProps(props: TProps['ios']) {
     this._ios && props && copyObjectPropertiesWithDescriptors(this._ios, props);
   }
-  get ios(): Partial<TProps['ios']> {
+  get ios(): TProps['ios'] {
     return this._ios;
   }
-  get android(): Partial<TProps['android']> {
+  get android(): TProps['android'] {
     return this._android;
   }
 }

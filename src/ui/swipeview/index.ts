@@ -1,7 +1,8 @@
-import Page, { PageBase } from '../page';
+import Page from '../page';
 import { AbstractView, IView } from '../view';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { SwipeViewEvents } from './swipeview-events';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * @enum UI.SwipeView.State
@@ -63,7 +64,8 @@ export enum SwipeViewState {
  * It is required to pass the current page to swipeview.
  *
  */
-export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extends Record<string, any> = {}, TAND extends Record<string, any> = {}> extends IView<TEvent | SwipeViewEvents, TIOS, TAND> {
+export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile extends MobileOSProps<IView['ios'], IView['android']> = MobileOSProps<IView['ios'], IView['android']>>
+  extends IView<TEvent | SwipeViewEvents, any, TMobile> {
   /**
    * Gets/Sets the callback triggered when a page is selected after a swipe action.
    *
@@ -84,7 +86,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extend
    * });
    * ````
    */
-  page: PageBase;
+  page: Page;
 
   /**
    * Gets/Sets the array of the page classes will be displayed inside SwipeView. Pages parameter cannot be empty.
@@ -94,7 +96,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TIOS extend
    * @ios
    * @since 1.1.10
    */
-  pages: typeof PageBase[];
+  pages: Page[];
   onPageSelected: (index: number, page: Page) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
@@ -183,8 +185,8 @@ export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, 
   onPageCreate: (position: number) => Page;
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };
-  page: PageBase;
-  pages: typeof PageBase[];
+  page: Page;
+  pages: Page[];
   onPageSelected: (index: number, page: Page) => void;
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;

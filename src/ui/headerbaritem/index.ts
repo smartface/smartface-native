@@ -6,6 +6,7 @@ import Badge from '../badge';
 import { Point2D } from '../../primitive/point2d';
 import View from '../view';
 import NativeComponent from '../../core/native-component';
+import { INativeComponent } from '../../core/inative-component';
 
 /**
  * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
@@ -266,7 +267,7 @@ export enum SystemItem {
  *     });
  *     myPage.headerBar.setItems([myItem]);
  */
-export interface IHeaderBarItem {
+export interface IHeaderBarItem extends INativeComponent {
   /**
    * Gets/sets title of header bar item. If image is not set, title will be
    * shown in the header bar.
@@ -293,7 +294,7 @@ export interface IHeaderBarItem {
   readonly size: {
     readonly width: number;
     readonly height: number;
-  };
+  } | undefined;
   android: Partial<{
     /**
      * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
@@ -423,7 +424,7 @@ export interface IHeaderBarItem {
    * @ios
    * @since 0.1
    */
-  image: Image | string;
+  image: Image | string | null;
   /**
    * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}.
    * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
@@ -433,7 +434,7 @@ export interface IHeaderBarItem {
    * @ios
    * @since 4.1.5
    */
-  customView: View;
+  customView: View | undefined;
   /**
    * Gets/sets enabled status of header bar item. Enabled is set to true as
    * default.
@@ -528,7 +529,7 @@ export declare class AbstractHeaderBarItem extends NativeComponent implements IH
     titleFont: Font;
     backBarButtonItem: IHeaderBarItem;
   }>;
-  image: Image | string;
+  image: Image | string | null;
   customView: View;
   enabled: boolean;
   getScreenLocation(): Point2D;

@@ -1,17 +1,27 @@
-import { IPage, LargeTitleDisplayMode, Orientation, PageAndroidParams, PageBase, PageIOSParams, PageOrientation, PresentationStyle } from '.';
+import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from '.';
 import Screen, { OrientationType } from '../../device/screen';
-import { Invocation } from '../../util';
+import { copyObjectPropertiesWithDescriptors, Invocation } from '../../util';
 import FlexLayout from '../flexlayout';
-import HeaderBar from '../headerbar';
 import HeaderBarItem from '../headerbaritem';
+import { IController } from '../navigationcontroller';
+import { HeaderBar } from '../navigationcontroller/headerbar';
 import { PageEvents } from './page-events';
 
 const UINavigationItem = requireClass('UINavigationItem');
 
-export default class PageIOS<TEvent extends string = PageEvents, TNative extends {[key: string]: any} = __SF_UIViewController, TProps extends IPage = IPage>
-  extends PageBase<TEvent | PageEvents, TNative, TProps>
-  implements IPage<TEvent | PageEvents,  TProps, TNative>
+export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
+  extends AbstractPage<TEvent | PageEvents, TNative, TProps>
+  implements IPage<TEvent | PageEvents>
 {
+  layout: FlexLayout;
+  headerBar?: HeaderBar | undefined;
+
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
+    throw new Error('Method not implemented.');
+  }
   static iOS: {
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
     PresentationStyle: typeof PresentationStyle;
@@ -23,15 +33,15 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private _safeAreaLayoutMode: IPage['ios']['safeAreaLayoutMode'];
   private _safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
   private _transitionViews: IPage['transitionViews'];
-  private _titleView: IPage['headerBar']['titleLayout'];
+  private _titleView: HeaderBar['titleLayout'];
   private _presentationStyle = 0;
   private _largeTitleDisplayMode = 0;
   private _leftItem: any;
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
   constructor(params?: Partial<TProps>) {
     super(params);
-    
-    const { ios, android, ...restParams } = params;
+
+    const { ios, android, ...restParams } = params || {};
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UIViewController();
     }
@@ -60,11 +70,10 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
-  get layout(): IPage['layout'] {
-    return this.pageView;
-  }
+  // get layout(): IPage['layout'] {
+  //   return this.pageView;
+  // }
   statusBar: IPage['statusBar'];
-  headerBar: IPage['headerBar'];
 
   get transitionViews(): IPage['transitionViews'] {
     return this._transitionViews;
@@ -132,7 +141,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
 
   private setNativeParams() {
     const self = this;
-    const ios = {
+    const ios: IPage['ios'] = {
       get safeAreaLayoutMode(): IPage['ios']['safeAreaLayoutMode'] {
         return self._safeAreaLayoutMode;
       },
@@ -157,9 +166,12 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         return self._presentationStyle;
       },
       set presentationStyle(value: IPage['ios']['presentationStyle']) {
-        self._presentationStyle = value;
-        self.nativeObject.modalTransitionStyle = value;
-      }
+        if (value) {
+          self._presentationStyle = value;
+          self.nativeObject.modalTransitionStyle = value;
+        }
+      },
+      onSafeAreaPaddingChange: undefined
     };
     this.addIOSProps(ios);
   }
@@ -276,16 +288,16 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private headerBarProperties() {
     const self = this;
     const headerBar = {
-      get title(): IPage['headerBar']['title'] {
+      get title(): HeaderBar['title'] {
         return self.nativeObject.navigationItem.title;
       },
-      set title(value: IPage['headerBar']['title']) {
+      set title(value: HeaderBar['title']) {
         self.nativeObject.navigationItem.title = value;
       },
-      get titleLayout(): IPage['headerBar']['titleLayout'] {
+      get titleLayout(): HeaderBar['titleLayout'] {
         return self._titleView;
       },
-      set titleLayout(value: IPage['headerBar']['titleLayout']) {
+      set titleLayout(value: HeaderBar['titleLayout']) {
         if (typeof value === 'object') {
           self._titleView = value;
           self._titleView.applyLayout();
@@ -303,15 +315,15 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
           self.nativeObject.navigationItem.titleView = undefined;
         }
       },
-      get leftItemEnabled(): IPage['headerBar']['leftItemEnabled'] {
+      get leftItemEnabled(): HeaderBar['leftItemEnabled'] {
         return !self.nativeObject.navigationItem.hidesBackButton;
       },
-      set leftItemEnabled(value: IPage['headerBar']['leftItemEnabled']) {
+      set leftItemEnabled(value: HeaderBar['leftItemEnabled']) {
         self.nativeObject.navigationItem.hidesBackButton = !value;
         self.nativeObject.navigationItem.leftBarButtonItem = self._leftItem;
       },
       setItems(value: Parameters<HeaderBar['setItems']>['0']) {
-        const nativeObjectArray = [];
+        const nativeObjectArray: any[] = [];
 
         for (let i = value.length - 1; i >= 0; i--) {
           //Bug : IOS-2399
@@ -323,7 +335,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       setLeftItem(value: Parameters<HeaderBar['setLeftItem']>['0']) {
         if (value) {
           if (value instanceof HeaderBarItem) {
-            if (self.ios.navigationItem.leftItemEnabled) {
+            if (self.ios.navigationItem?.leftItemEnabled) {
               self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
             }
             self._leftItem = value.nativeObject;
@@ -334,17 +346,19 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       }
     };
     const headerBarIOS = {
-      get largeTitleDisplayMode(): IPage['headerBar']['ios']['largeTitleDisplayMode'] {
+      get largeTitleDisplayMode(): HeaderBar['ios']['largeTitleDisplayMode'] {
         return self._largeTitleDisplayMode;
       },
-      set largeTitleDisplayMode(value: IPage['headerBar']['ios']['largeTitleDisplayMode']) {
+      set largeTitleDisplayMode(value: HeaderBar['ios']['largeTitleDisplayMode']) {
         if (UINavigationItem.instancesRespondToSelector('largeTitleDisplayMode')) {
-          self._largeTitleDisplayMode = value;
-          self.nativeObject.navigationItem.largeTitleDisplayMode = self._largeTitleDisplayMode;
+          if (value) {
+            self._largeTitleDisplayMode = value;
+            self.nativeObject.navigationItem.largeTitleDisplayMode = self._largeTitleDisplayMode;
+          }
         }
       },
-      get backBarButtonItem(): IPage['headerBar']['ios']['backBarButtonItem'] {
-        let retval = undefined;
+      get backBarButtonItem(): HeaderBar['ios']['backBarButtonItem'] {
+        let retval: HeaderBarItem | undefined = undefined;
 
         const nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
 
@@ -357,16 +371,16 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
 
         return retval;
       },
-      set backBarButtonItem(value: IPage['headerBar']['ios']['backBarButtonItem']) {
+      set backBarButtonItem(value: HeaderBar['ios']['backBarButtonItem']) {
         if (typeof value === 'object') {
           self.nativeObject.navigationItem.backBarButtonItem = value.nativeObject;
         }
       }
     };
 
-    Object.assign(self.headerBar, headerBar);
-    Object.assign(self.headerBar.ios, headerBarIOS);
-    Object.assign(self.ios.navigationItem, headerBar);
-    Object.assign(self.ios.navigationItem, headerBarIOS);
+    self.headerBar && copyObjectPropertiesWithDescriptors(self.headerBar, headerBar);
+    self.headerBar?.ios && copyObjectPropertiesWithDescriptors(self.headerBar?.ios, headerBarIOS);
+    self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBar);
+    self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBarIOS);
   }
 }

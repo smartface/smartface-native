@@ -35,7 +35,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   private pageControllerDatasource: __SF_UIPageViewControllerDatasource;
   private _pageArray: any[] = []; //TODO: PageIOS and PageBase isn't compatible
   private _instanceArray: PageIOS[] = [];
-  private _pageNativeObjectArray: PageIOS['nativeObject'][] = [];
+  private _pageNativeObjectArray: any[] = [];
   private _pagingEnabled = true;
   private _isPageTransaction = false;
   private pageControllerDelegate: __SF_UIPageViewControllerDelegate;
@@ -194,7 +194,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
 
     if (selectedIndex !== this.currentIndex) {
       this._currentIndex = selectedIndex;
-      this.onPageSelected?.(this.currentIndex, this._instanceArray[this.currentIndex]);
+      this._instanceArray[this.currentIndex] && this.onPageSelected?.(this.currentIndex, this._instanceArray[this.currentIndex]);
       this.emit('pageSelected', this.currentIndex, this._instanceArray[this.currentIndex]);
     }
   }
@@ -280,7 +280,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
 }
 
 function bypassPageSpecificProperties(page: PageIOS) {
-  Object.keys(page.headerBar).forEach(function (key) {
+  page.headerBar && Object.keys(page.headerBar).forEach(function (key) {
     Object.defineProperty(page.headerBar, key, {
       set: function () {},
       get: function () {

@@ -57,6 +57,8 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
       }
     }
   }
+  getActionView: any;
+  onSelectedListener?: (() => void) | undefined;
   get title(): string {
     return this._title;
   }

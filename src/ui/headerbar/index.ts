@@ -50,7 +50,7 @@ import Image from '../image';
  *     });
  *
  */
-type HeaderBar = {
+type IHeaderBar = {
   removeViewFromHeaderBar(view: IView): void;
   addViewToHeaderBar(view: IView): void;
   /**
@@ -479,7 +479,8 @@ type HeaderBar = {
      */
     prefersLargeTitles?: boolean;
     setVisible(visible: boolean, animated?: boolean): void;
+    leftItemEnabled: boolean;
   }>;
 };
 
-export = HeaderBar;
+export default IHeaderBar;

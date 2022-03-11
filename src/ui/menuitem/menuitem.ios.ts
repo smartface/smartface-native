@@ -34,6 +34,7 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
       }
     }
   }
+  getActionView: any;
   get title(): string {
     return this._title;
   }

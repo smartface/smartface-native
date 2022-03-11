@@ -1,14 +1,14 @@
-import HeaderBarItem, { IHeaderBarItem, SystemItem } from '.';
-import NativeComponent from '../../core/native-component';
+import HeaderBarItem, { IHeaderBarItem } from '.';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Invocation } from '../../util';
-import AttributedString from '../attributedstring';
 import Badge from '../badge';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import Image from '../image';
+import { IView } from '../view';
 
-export default class HeaderBarItemIOS extends NativeComponent implements IHeaderBarItem {
+export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
   iOS = {
     SystemItem: {
       DONE: 0,
@@ -39,27 +39,12 @@ export default class HeaderBarItemIOS extends NativeComponent implements IHeader
   private _systemItem;
   private _badge: Badge;
   private _nativeView;
-  private _font = undefined;
-  private _customView = undefined;
-  private _onPress = null;
-  private _android: Partial<{
-    attributedTitle: AttributedString;
-    systemIcon: number | string;
-    elevation: number;
-    contentInset: { left: number; right: number };
-    logoEnabled: boolean;
-    subtitle: string;
-    subtitleFont: Font;
-  }> = {};
-  private _ios: Partial<{
-    systemItem: SystemItem;
-    font: Font;
-    translucent: boolean;
-    titleFont: Font;
-    backBarButtonItem: IHeaderBarItem;
-  }> = {};
+  private _font: Font | undefined;
+  private _customView: IView | undefined;
+  private _onPress: HeaderBarItem['onPress'] = null;
+
   constructor(params?: Partial<HeaderBarItem>) {
-    super();
+    super(params);
     if (params && params.ios && params.ios.systemItem) {
       this._systemItem = params.ios.systemItem;
       this.nativeObject = __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
@@ -72,14 +57,14 @@ export default class HeaderBarItemIOS extends NativeComponent implements IHeader
     this._badge = new Badge({ nativeObject: this.nativeObject });
 
     const self = this;
-    this._ios = {
+    this.addIOSProps({
       get systemItem() {
         return self._systemItem;
       },
       get font() {
         return self._font;
       },
-      set font(value: Font) {
+      set font(value: Font | undefined) {
         self._font = value;
         if (self._font) {
           self.nativeObject.setTitleTextAttributesForState({ NSFont: self._font }, 0); //UIControlStateNormal
@@ -91,39 +76,9 @@ export default class HeaderBarItemIOS extends NativeComponent implements IHeader
           self.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
         }
       }
-    };
+    });
 
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
-  }
-  set android(
-    and: Partial<{
-      attributedTitle: AttributedString;
-      systemIcon: number | string;
-      elevation: number;
-      contentInset: { left: number; right: number };
-      logoEnabled: boolean;
-      subtitle: string;
-      subtitleFont: Font;
-    }>
-  ) {
-    this._android = and;
-  }
-  get ios() {
-    return this._ios;
-  }
-  set ios(
-    ios: Partial<{
-      systemItem: SystemItem;
-      font: Font;
-      translucent: boolean;
-      titleFont: Font;
-      backBarButtonItem: IHeaderBarItem;
-    }>
-  ) {
-    this._ios = ios;
+    const { ios, android, ...restParams } = params || {};
   }
   get layout() {
     let retval;
@@ -153,11 +108,11 @@ export default class HeaderBarItemIOS extends NativeComponent implements IHeader
   }
   set customView(value: any) {
     this._customView = value;
-    this._customView.applyLayout();
-    this.nativeObject.setValueForKey(this._customView.nativeObject, 'customView');
+    this._customView?.applyLayout();
+    this._customView && this.nativeObject.setValueForKey(this._customView.nativeObject, 'customView');
   }
   get image() {
-    let retval = undefined;
+    let retval: any = undefined;
     if (this.nativeObject.image) {
       retval = Image.createFromImage(this.nativeObject.image);
     }
@@ -166,7 +121,8 @@ export default class HeaderBarItemIOS extends NativeComponent implements IHeader
   set image(value: string | Image) {
     if (typeof value === 'string') {
       const image = Image.createFromFile(value);
-      this.nativeObject.image = image.nativeObject;
+      if(image)
+        this.nativeObject.image = image.nativeObject;
     } else if (value instanceof Image) {
       {
         this.nativeObject.image = value.nativeObject;

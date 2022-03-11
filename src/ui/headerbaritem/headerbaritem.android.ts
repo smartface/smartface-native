@@ -1,12 +1,13 @@
 import HeaderBarItem, { IHeaderBarItem, SystemItem } from '.';
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import { AndroidConfig, HeaderBarItemPadding, LayoutParams } from '../../util';
-import AttributedString from '../attributedstring';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Badge from '../badge';
 import Color from '../color';
-import Font from '../font';
 import Image from '../image';
+import MenuItem from '../menuitem';
+import SearchView from '../searchview';
 import View from '../view';
 
 const SFView = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
@@ -22,42 +23,27 @@ function PixelToDp(px) {
   return AndroidUnitConverter.pixelToDp(px);
 }
 
-export default class HeaderBarItemAndroid extends NativeComponent implements IHeaderBarItem {
+export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
   iOS = { SystemItem: {} };
   private _title: string = '';
-  private _image?: Image | string = null;
+  private _image: Image | string | null;
   private _customView?: View = undefined;
   private _enabled: boolean = true;
-  private _onPress?: () => void = null;
-  private _color?: Color = null;
+  private _onPress: IHeaderBarItem['onPress'] = null;
+  private _color: Color | null = null;
   private _badge?: Badge = undefined;
   private _accessibilityLabel: string;
-  private isLeftItem = false;
+  private isLeftItem: boolean = false;
   private isBadgeEnabled = false;
-  private actionBar = null;
+  private actionBar: any | null = null;
   private _imageButton = false;
-  private _searchView = null;
-  private _menuItem = null;
+  private _searchView: SearchView | null = null;
+  private _menuItem: MenuItem | null = null;
   private nativeBadgeContainer: any;
   private _itemColor = Color.WHITE;
-  private _android: Partial<{
-    attributedTitle: AttributedString;
-    systemIcon: number | string;
-    elevation: number;
-    contentInset: { left: number; right: number };
-    logoEnabled: boolean;
-    subtitle: string;
-    subtitleFont: Font;
-  }> = {};
-  private _ios: Partial<{
-    systemItem: SystemItem;
-    font: Font;
-    translucent: boolean;
-    titleFont: Font;
-    backBarButtonItem: IHeaderBarItem;
-  }> = {};
+
   constructor(params?: Partial<HeaderBarItem>) {
-    super();
+    super(params);
 
     const self = this;
     this._android = {
@@ -72,62 +58,25 @@ export default class HeaderBarItemAndroid extends NativeComponent implements IHe
           self.updateAccessibilityLabel(self._accessibilityLabel);
         }
 
-        self.nativeObject && self.nativeObject.setImageResource(Image.systemDrawableId(self._android.systemIcon));
+        if(typeof self._android.systemIcon === "number")
+          self.nativeObject && self.nativeObject.setImageResource(Image.systemDrawableId(self._android.systemIcon));
       }
     };
-
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
-  }
-  get android() {
-    return this._android;
-  }
-  set android(
-    and: Partial<{
-      attributedTitle: AttributedString;
-      systemIcon: number | string;
-      elevation: number;
-      contentInset: { left: number; right: number };
-      logoEnabled: boolean;
-      subtitle: string;
-      subtitleFont: Font;
-    }>
-  ) {
-    this._android = and;
-  }
-  get ios() {
-    return this._ios;
-  }
-  set ios(
-    ios: Partial<{
-      systemItem: SystemItem;
-      font: Font;
-      translucent: boolean;
-      titleFont: Font;
-      backBarButtonItem: IHeaderBarItem;
-    }>
-  ) {
-    this._ios = ios;
   }
   get color() {
     return this._color;
   }
-  set color(value: Color) {
-    if (value === null) return;
-    // TODO: Fix it for new router.
-    if (!(typeof value === 'number' || value instanceof Color)) {
-      throw new TypeError('color must be Color instance');
-    }
-    this._color = value;
-    if (this.nativeObject) {
-      if (this._image || this._android.systemIcon) {
-        const imageCopy = this.nativeObject.getDrawable().mutate();
-        imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-        this.nativeObject.setImageDrawable(imageCopy);
-      } else {
-        this.nativeObject.setTextColor(this._color.nativeObject);
+  set color(value: Color | null) {
+    if (!value) {
+      this._color = value;
+      if (this.nativeObject && this.color) {
+        if (this._image || this._android.systemIcon) {
+          const imageCopy = this.nativeObject.getDrawable().mutate();
+          imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+          this.nativeObject.setImageDrawable(imageCopy);
+        } else {
+          this.nativeObject.setTextColor(this.color.nativeObject);
+        }
       }
     }
   }
@@ -156,8 +105,10 @@ export default class HeaderBarItemAndroid extends NativeComponent implements IHe
   get image() {
     return this._image;
   }
-  set image(value: Image | string) {
-    value = Image.createImageFromPath(value); //IDE requires this implementation.
+  set image(value: Image | string | null) {
+
+    if(value)
+      value = Image.createImageFromPath(value); //IDE requires this implementation.
     if (value === null || value instanceof Image) {
       this._image = value;
       if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
@@ -189,7 +140,7 @@ export default class HeaderBarItemAndroid extends NativeComponent implements IHe
     if (searchView) {
       this._searchView = searchView;
       if (this.nativeObject) {
-        this.nativeObject.setActionView(this._searchView.nativeObject);
+        this.nativeObject.setActionView(this._searchView?.nativeObject);
       }
     }
   }
@@ -205,7 +156,7 @@ export default class HeaderBarItemAndroid extends NativeComponent implements IHe
   get onPress() {
     return this._onPress;
   }
-  set onPress(value) {
+  set onPress(value: IHeaderBarItem['onPress']) {
     if (value instanceof Function) {
       this._onPress = value;
     } else {

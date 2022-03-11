@@ -49,6 +49,7 @@ export enum Style {
  *
  */
 export interface IMenuItem {
+  getActionView: any;
   /**
    * Gets/sets the title of a menu item.
    *
@@ -103,6 +104,8 @@ export declare class AbstractMenuItem implements IMenuItem {
   static Styles: Style;
   static Events: MenuItemEvents;
   constructor(params?: Partial<AbstractMenuItem>);
+  // TODO: No implemented getActionView
+  getActionView: any;
   title: string;
   android: Partial<{
     /**
