@@ -1,4 +1,7 @@
+import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { AsyncTaskEvents } from './asynctask-events';
 
 export enum Status {
@@ -31,6 +34,18 @@ export enum Status {
   RUNNING
 }
 
+export interface IAsyncTaskAndroidProps {
+  /**
+   * Returns the current status of this task.
+   *
+   * @method getStatus
+   * @android
+   * @since 3.2.2
+   * @return {AsyncTask.Android.Status} status
+   */
+  getStatus?: () => Status;
+}
+
 /**
  * @class AsyncTask
  * @since 3.1.0
@@ -48,11 +63,9 @@ export enum Status {
  *
  *     asynctask.run();
  */
-export interface IAsyncTask extends INativeComponent {
-  on(eventName: AsyncTaskEvents, callback: (...args: any) => void): () => void;
-  once(eventName: AsyncTaskEvents, callback: (...args: any) => void): () => void;
-  off(eventName: AsyncTaskEvents, callback?: (...args: any) => void): void;
-  emit(event: AsyncTaskEvents, detail?: any[]): void;
+export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
+  extends INativeComponent,
+    IEventEmitter<TEvent | AsyncTaskEvents> {
   /**
    * This event describes task of AsyncTask instance.
    *
@@ -119,15 +132,6 @@ export interface IAsyncTask extends INativeComponent {
    */
   onCancelled: () => void;
   /**
-   * Returns the current status of this task.
-   *
-   * @method getStatus
-   * @android
-   * @since 3.2.2
-   * @return {AsyncTask.Android.Status} status
-   */
-  getStatus?: () => Status;
-  /**
    * Runs the task.
    *
    * @method run
@@ -149,58 +153,22 @@ export interface IAsyncTask extends INativeComponent {
    * @return {Boolean} false For Android, if the task could not be cancelled, typically because it has already completed normally; true otherwise.
    */
   cancel(): void;
+  ios: TMobile['ios'];
+  android: TMobile['android'];
 }
 
-export class AsyncTaskBase implements IAsyncTask {
-  protected _task: (...args) => void;
-  protected _onComplete: (...args) => void;
-  protected _onCancelled: (...args) => void;
-  protected _onPreExecute: (...args) => void;
-  on(eventName: 'complete' | 'cancelled' | 'preExecute', callback: (...args: any) => void): () => void {
-    throw new Error('Method not implemented.');
-  }
-  once(eventName: 'complete' | 'cancelled' | 'preExecute', callback: (...args: any) => void): () => void {
-    throw new Error('Method not implemented.');
-  }
-  off(eventName: 'complete' | 'cancelled' | 'preExecute', callback?: (...args: any) => void): void {
-    throw new Error('Method not implemented.');
-  }
-  emit(event: 'complete' | 'cancelled' | 'preExecute', detail?: any[]): void {
-    throw new Error('Method not implemented.');
-  }
-  get task(): (...args) => void {
-    throw new Error('Method not implemented.');
-  }
-  set task(value: (...args) => void) {
-    throw new Error('Method not implemented.');
-  }
-  get onComplete(): (...args) => void {
-    throw new Error('Method not implemented.');
-  }
-  set onComplete(value: (...args) => void) {
-    throw new Error('Method not implemented.');
-  }
-  get onCancelled(): (...args) => void {
-    throw new Error('Method not implemented.');
-  }
-  set onCancelled(value: (...args) => void) {
-    throw new Error('Method not implemented.');
-  }
-  get onPreExecute(): (...args) => void {
-    throw new Error('Method not implemented.');
-  }
-  set onPreExecute(value: (...args) => void) {
-    throw new Error('Method not implemented.');
-  }
+export declare class AbstractAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
+  extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TMobile>
+  implements IAsyncTask
+{
+  task: () => void;
+  onComplete: () => void;
+  onPreExecute: () => void;
+  onCancelled: () => void;
   getStatus?: () => Status;
-  run(): void {
-    throw new Error('Method not implemented.');
-  }
-  cancel(): void {
-    throw new Error('Method not implemented.');
-  }
-  nativeObject: any;
-  static readonly Android = {
-    Status
+  run(): void;
+  cancel(): void;
+  static readonly Android: {
+    Status: Status;
   };
 }

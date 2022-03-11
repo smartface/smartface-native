@@ -1,5 +1,5 @@
-import Color from 'ui/color';
-import Font from 'ui/font';
+import Color from '../../ui/color';
+import Font from '../../ui/font';
 import { AttributedStringBase, IAttributedString } from './attributedstring';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
@@ -105,7 +105,6 @@ class AttributedStringAndroid extends AttributedStringBase {
       const NativeAbsoluteSizeSpan = requireClass('android.text.style.AbsoluteSizeSpan');
       const SFTypefaceSpan = requireClass('io.smartface.android.sfcore.ui.textview.SFTypefaceSpan');
 
-      //@ts-ignore TODO: font should have nativeObject
       const _typeSpan = new SFTypefaceSpan('SF', this.font.nativeObject);
       stringBuilder.setSpan(_typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
       stringBuilder.setSpan(new NativeAbsoluteSizeSpan(this.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);

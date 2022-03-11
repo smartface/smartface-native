@@ -19,15 +19,11 @@ class BlobIOS extends BlobBase {
   toBase64Async(handlers: { onComplete: (base64: string) => void; onFailure?: (base64: string) => void }) {
     const onComplete = handlers.onComplete;
     const onFailure = handlers.onFailure;
-    this.nativeObject.toBase64Async(function (base64: string) {
+    this.nativeObject.toBase64Async((base64: string) => {
       if (base64) {
-        if (typeof onComplete == 'function') {
-          onComplete(base64);
-        }
+        onComplete?.(base64);
       } else {
-        if (typeof onFailure == 'function') {
-          onFailure(base64);
-        }
+        onFailure?.(base64);
       }
     });
   }
@@ -35,11 +31,9 @@ class BlobIOS extends BlobBase {
     return str + Array(((4 - (str.length % 4)) % 4) + 1).join('=');
   }
   static createFromBase64(base64: string) {
-    //TODO: __SF
     return new BlobIOS(__SF_NSData.base64Encoded(BlobIOS.__base64AddPadding(base64)));
   }
   static createFromUTF8String(utf8String: string) {
-    //TODO: __SF
     return new BlobIOS(__SF_NSData.dataFromUTF8String(utf8String));
   }
 }

@@ -1,8 +1,3 @@
-const NativeR = requireClass(AndroidConfig.packageName + '.R');
-const NativeNotificationCompat = requireClass('androidx.core.app.NotificationCompat');
-const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
-const Runnable = requireClass('java.lang.Runnable');
-
 // android.content.Context.NOTIFICATION_SERVICE;
 const NOTIFICATION_SERVICE = 'notification';
 const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
@@ -13,10 +8,20 @@ import Application from '../../application';
 import NativeComponent from '../../core/native-component';
 import Color from '../../ui/color';
 import Image from '../../ui/image';
-import { TypeUtil } from '../../util';
+import { AndroidConfig, TypeUtil } from '../../util';
 import { NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 import { Priority } from './priority';
+
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
+const NativeNotificationCompat = requireClass('androidx.core.app.NotificationCompat');
+const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
+const Runnable = requireClass('java.lang.Runnable');
+const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+const NativeIntent = requireClass('android.content.Intent');
+const NativePendingIntent = requireClass('android.app.PendingIntent');
+const nativeNotificationReceiverClass = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 
 const selectedNotificationIds = [];
 // Generate unique random number
@@ -30,17 +35,13 @@ function getNewNotificationId() {
 }
 
 function unregisterPushNotification() {
-  const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
-  const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
   NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
   NativeFCMListenerService.unregisterRemoteNotificationListener();
 }
 
 function registerPushNotification(onSuccessCallback, onFailureCallback) {
-  const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
   NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
     onSuccess: function (token) {
-      const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
       NativeFCMListenerService.registerRemoteNotificationListener({
         onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
           const parsedJson = JSON.parse(data);
@@ -72,12 +73,9 @@ function removeAllNotifications() {
 }
 
 function startNotificationIntent(self, params) {
-  const NativeIntent = requireClass('android.content.Intent');
-  const NativePendingIntent = requireClass('android.app.PendingIntent');
   /** @todo throw exception here
    * Error: An exception occured
    */
-  const nativeNotificationReceiverClass = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
   const notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
   Object.keys(params).forEach(function (key) {
     notificationIntent.putExtra(key.toString(), params[key]);
