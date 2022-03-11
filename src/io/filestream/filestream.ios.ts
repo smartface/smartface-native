@@ -1,7 +1,8 @@
+import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
-import { FileContentMode, FileStreamType, FileStreamBase, IFileStream } from './filestream';
+import { FileContentMode, FileStreamType, IFileStream } from './filestream';
 
-export default class FileStreamIOS extends FileStreamBase {
+export default class FileStreamIOS extends NativeComponent implements IFileStream {
   static create(path: any, streamMode: any, contentMode: number): FileStreamIOS {
     const fileStreamInstance = new FileStreamIOS();
     fileStreamInstance.nativeObject = __SF_FileStream.createWithPathWithStreamModeWithContentMode(path, streamMode, contentMode);
@@ -44,7 +45,6 @@ export default class FileStreamIOS extends FileStreamBase {
   }
 
   readBlob(): Blob {
-    // TODO Recheck
     return new Blob(this.nativeObject.getBlob());
   }
 
@@ -54,14 +54,13 @@ export default class FileStreamIOS extends FileStreamBase {
   }
 
   write(content: string | Blob): boolean {
-    let retval = null;
+    let retval = false;
     switch (this.contentMode) {
       case FileStreamIOS.ContentMode.TEXT:
         retval = this.nativeObject.writeString(content);
         break;
       case FileStreamIOS.ContentMode.BINARY:
-        if(content instanceof Blob)
-          retval = this.nativeObject.writeBinary(content.nativeObject);
+        if (content instanceof Blob) retval = this.nativeObject.writeBinary(content.nativeObject);
         break;
       default:
         break;
@@ -72,4 +71,7 @@ export default class FileStreamIOS extends FileStreamBase {
   seekToEnd(): void {
     return this.nativeObject.seekToEnd();
   }
+
+  static StreamType = FileStreamType;
+  static ContentMode = FileContentMode;
 }
