@@ -140,7 +140,7 @@ class NotificationsIOS implements NotificationsBase {
             }
           }
         });
-        Invocation.invokeInstanceMethod(current, 'getNotificationSettingsWithCompletionHandler:', [argBlock]);
+        Invocation.invokeInstanceMethod(current!, 'getNotificationSettingsWithCompletionHandler:', [argBlock]);
       }
     }
   };

@@ -1,4 +1,4 @@
-import { ViewEvents } from 'ui/view/view-event';
+import { ViewEvents } from "../view/view-event";
 
 export const WebViewEvents = {
   BackButtonPressed: 'backButtonPressed',

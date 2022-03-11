@@ -47,7 +47,7 @@ export enum ConnectionType {
   MOBILE = 1
 }
 
-export declare class NetworkNotifierBase extends NativeComponent {
+export declare class NetworkNotifier extends NativeComponent {
   constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void });
   subscribe: (callback: (type: ConnectionType) => void) => void;
   android: Partial<{
@@ -79,8 +79,8 @@ export declare class NetworkNotifierBase extends NativeComponent {
    * @since 3.0.1
    */
   unsubscribe(): void;
-  get connectionTypeChanged(): (type: ConnectionType) => void;
-  set connectionTypeChanged(callback: (type: ConnectionType) => void);
+  get connectionTypeChanged(): ((type: ConnectionType) => void) | null;
+  set connectionTypeChanged(callback: ((type: ConnectionType) => void) | null);
 }
 /**
  * @class Device.Network
@@ -118,7 +118,7 @@ export declare class NetworkBase extends NativeComponent {
    *     });
    *
    */
-  public readonly Notifier: NetworkNotifierBase;
+  public readonly notifier: NetworkNotifier;
   /**
    *
    * Returns the carrier name of the GSM connection.

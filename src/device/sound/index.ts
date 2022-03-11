@@ -21,8 +21,10 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
  *     mySound.loadURL(your-url);
  *
  */
-export declare class AbstractSound extends NativeEventEmitterComponent<SoundEvents> {
-  constructor(params?: Partial<Sound>);
+export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEvents> {
+  constructor(params?: Partial<Sound>){
+    super(params);
+  };
   static Events: typeof SoundEvents;
   /**
    * Checks whether the sound is playing.
@@ -33,7 +35,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  get isPlaying(): boolean;
+  abstract get isPlaying(): boolean;
   /**
    * Gets/sets whether the sound is looping or non-looping.
    *
@@ -43,7 +45,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  get isLooping(): boolean;
+  abstract get isLooping(): boolean;
   /**
    * Gets/sets whether the sound is looping or non-looping.
    *
@@ -53,7 +55,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  set isLooping(isLooping: boolean);
+  abstract set isLooping(isLooping: boolean);
   /**
    * Gets/sets the volume of the sound. The range is between {0.0, 1.0}
    *
@@ -62,16 +64,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  get volume(): number;
-  /**
-   * Gets/sets the volume of the sound. The range is between {0.0, 1.0}
-   *
-   * @property {Number} volume
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  set volume(volume: number);
+  abstract volume: number;
   /**
    * Gets the duration in milliseconds.
    *
@@ -81,7 +74,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public get totalDuration(): number;
+  abstract get totalDuration(): number;
   /**
    * Gets the current duration in milliseconds.
    *
@@ -91,8 +84,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public get currentDuration(): number;
-  public get onReady(): () => void;
+  abstract get currentDuration(): number;
   /**
    * Triggered when the sound is ready for playing.
    *
@@ -111,7 +103,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * });
    * ````
    */
-  public set onReady(callback: () => void);
+   abstract onReady: () => void;
   /**
    *
    * Triggered when the sound complited playing.
@@ -131,8 +123,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * });
    * ````
    */
-  public set onFinish(callback: () => void);
-  public get onFinish(): () => void;
+  abstract onFinish: () => void;
   /**
    * Pauses the sound.
    *
@@ -141,7 +132,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public pause(): void;
+  abstract pause(): void;
   /**
    * Seeks to specified time position.
    *
@@ -151,7 +142,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public seekTo(milliseconds: number): void;
+  abstract seekTo(milliseconds: number): void;
   /**
    * Stops the sound.
    *
@@ -160,7 +151,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public stop(): void;
+  abstract stop(): void;
   /**
    * plays the sound.
    *
@@ -169,7 +160,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public play(): void;
+  abstract play(): void;
   /**
    * Loads the source. {@link Application.Android.Permissions#READ_EXTERNAL_STORAGE} permission is required to load local files.
    *
@@ -179,7 +170,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public loadFile(file: File): void;
+  abstract loadFile(file: File): void;
   /**
    * Loads the source.
    *
@@ -189,7 +180,7 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
    * @ios
    * @since 0.1
    */
-  public loadURL(url: string): void;
+  abstract loadURL(url: string): void;
   static android: {
     /**
      * Picks a sound on the device.
@@ -218,7 +209,24 @@ export declare class AbstractSound extends NativeEventEmitterComponent<SoundEven
   };
 }
 
-const Sound: typeof AbstractSound = require(`./sound.${Device.deviceOS.toLowerCase()}`).default;
-type Sound = AbstractSound;
+declare class AbstractSoundImpl extends AbstractSound{
+  get isPlaying(): boolean;
+  get isLooping(): boolean;
+  set isLooping(isLooping: boolean);
+  volume: number;
+  get totalDuration(): number;
+  get currentDuration(): number;
+  onReady: () => void;
+  onFinish: () => void;
+  pause(): void;
+  seekTo(milliseconds: number): void;
+  stop(): void;
+  play(): void;
+  loadFile(file: File): void;
+  loadURL(url: string): void;
+}
+
+const Sound: typeof AbstractSoundImpl = require(`./sound.${Device.deviceOS.toLowerCase()}`).default;
+type Sound = AbstractSoundImpl;
 
 export default Sound;

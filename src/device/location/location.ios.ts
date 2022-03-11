@@ -14,7 +14,7 @@ const IOS_NATIVE_AUTHORIZATION_STATUS = { NotDetermined: 0, Restricted: 1, Denie
 const IOS_AUTHORIZATION_STATUS_B = { NOTDETERMINED: 0, RESTRICTED: 1, DENIED: 2, AUTHORIZED: 3 };
 
 class LocationIOS extends NativeEventEmitterComponent<LocationEvents> implements ILocation {
-  delegate: __SF_CLLocationManagerDelegate;
+  delegate?: __SF_CLLocationManagerDelegate;
   Android = { Provider: {}, Priority: {}, SettingsStatusCodes: {} };
   iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
   _nativeObject = new __SF_CLLocationManager();

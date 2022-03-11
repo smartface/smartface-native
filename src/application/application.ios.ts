@@ -309,7 +309,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
     return {
       get bundleIdentifier() {
         const mainBundle = Invocation.invokeClassMethod('NSBundle', 'mainBundle', [], 'NSObject');
-        const bundleIdentifier = Invocation.invokeInstanceMethod(mainBundle, 'bundleIdentifier', [], 'NSString');
+        const bundleIdentifier = Invocation.invokeInstanceMethod(mainBundle!, 'bundleIdentifier', [], 'NSString');
         return bundleIdentifier;
       },
       get userInterfaceLayoutDirection() {

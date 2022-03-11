@@ -1,7 +1,7 @@
-import { FileBase } from './file';
+import { AbstractFile, IFile } from './file';
 
-class FileImpl extends FileBase {
-  constructor(params: ConstructorParameters<typeof FileBase>['0']) {
+class FileImpl extends AbstractFile {
+  constructor(params: Partial<IFile>) {
     super(params);
   }
 }

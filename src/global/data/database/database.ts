@@ -97,7 +97,7 @@ export interface IDatabase extends INativeComponent {
    * @see https://sqlite.org/lang.html
    * @since 1.0
    */
-  query(query: string): Database.QueryResult;
+  query(query: string): Database.QueryResult | undefined;
 }
 
 export class BaseDatabase implements IDatabase {
@@ -112,7 +112,7 @@ export class BaseDatabase implements IDatabase {
   execute(query: string): void {
     throw new Error('Method not implemented.');
   }
-  query(query: string): Database.QueryResult {
+  query(query: string): Database.QueryResult | undefined {
     throw new Error('Method not implemented.');
   }
   nativeObject: any;
@@ -156,7 +156,7 @@ export declare namespace Database {
      * @ios
      * @since 1.0
      */
-    getFirst(): DatabaseObject;
+    getFirst(): DatabaseObject | null;
     /**
      * Returns last match from Query. If no result match with Query, will return null.
      *
@@ -166,7 +166,7 @@ export declare namespace Database {
      * @ios
      * @since 1.0
      */
-    getLast(): DatabaseObject;
+    getLast(): DatabaseObject | null;
     /**
      * Returns the element at the specified index in this query result. If index greater than count, it will throw exception
      *
@@ -178,7 +178,7 @@ export declare namespace Database {
      * @throws {Error}
      * @since 1.0
      */
-    get(index: number): DatabaseObject;
+    get(index: number): DatabaseObject | null;
     android: Partial<{
       /**
        * Closes the QueryResult, releasing all of its resources and making it completely invalid.

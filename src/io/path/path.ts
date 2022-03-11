@@ -1,7 +1,7 @@
 import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
 
-enum PATH_FILE_TYPE {
+export enum PATH_FILE_TYPE {
   FILE = 0,
   ASSET = 1,
   DRAWABLE = 2,

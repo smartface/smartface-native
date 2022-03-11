@@ -5,9 +5,9 @@ class DatabaseIOS extends BaseDatabase {
   constructor(params?: { file?: File; inMemory?: boolean }) {
     super();
     if (!this.nativeObject) {
-      if (params.inMemory) {
+      if (params?.inMemory) {
         this.nativeObject = new __SF_Database(':memory:');
-      } else {
+      } else if(params?.file){
         //TODO: file needs nativeObject
         this.nativeObject = new __SF_Database(params.file.nativeObject.getActualPath());
       }
@@ -21,7 +21,8 @@ class DatabaseIOS extends BaseDatabase {
       throw new Error(e.message);
     };
 
-    this.file = params.file;
+    if(params?.file)
+      this.file = params.file;
   }
   close() {}
   execute(sqlCommand: string) {
@@ -43,7 +44,7 @@ class DatabaseIOS extends BaseDatabase {
 export class QueryResult implements Database.QueryResult {
   private _data: any;
   constructor(params?: { data: any }) {
-    this._data = params.data;
+    this._data = params?.data;
   }
   android = {
     close() {}
@@ -86,10 +87,11 @@ export class QueryResult implements Database.QueryResult {
 
 export class DatabaseObject implements Database.DatabaseObject {
   private _data: any;
-  private _columnNames: string[];
+  private _columnNames: string[] = [];
   constructor(params?: { data: any; columnNames: string[] }) {
-    this._data = params.data;
-    this._columnNames = params.columnNames;
+    this._data = params?.data;
+    if(params?.columnNames)
+      this._columnNames = params?.columnNames;
   }
   getString(columnName: string) {
     return this.getData(columnName);

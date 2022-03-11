@@ -26,8 +26,8 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
   static recognitionTask: any;
   static recognitionRequest: any;
   static avaudiosession: any;
-  static avaudioengine: __SF_AVAudioEngine;
-  static speechRecognizer: __SF_SFSpeechRecognizer;
+  static avaudioengine: __SF_AVAudioEngine | undefined;
+  static speechRecognizer: __SF_SFSpeechRecognizer | undefined;
   static speechDelegate: __SF_SFSpeechRecognizerDelegate;
   static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void {
     SpeechRecognizerIOS.stop();
@@ -35,7 +35,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
 
     __SF_SFSpeechRecognizer.speechRequestAuthorization(function (e: { status: SFSpeechRecognizerAuthorizationStatus }) {
       if (e.status === SFSpeechRecognizerAuthorizationStatus.authorized) {
-        Hardware.ios.microphone.requestRecordPermission(function (granted) {
+        Hardware.ios.microphone?.requestRecordPermission?.(function (granted) {
           if (granted) {
             __SF_Dispatch.mainAsyncAfter(function () {
               SpeechRecognizerIOS.createRecognizer(params);

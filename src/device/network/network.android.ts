@@ -1,4 +1,4 @@
-import { ConnectionType, NetworkBase, NetworkNotifierBase } from '.';
+import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
 import { AndroidConfig } from '../../util';
 
@@ -31,7 +31,7 @@ function getTelephonyManager() {
   return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
-class Notifier extends NativeComponent implements NetworkNotifierBase {
+class Notifier extends NativeComponent implements NetworkNotifier {
   private isReceiverCreated = false;
   private _connectionTypeChanged;
   private _initialCacheEnabled = false;
@@ -110,7 +110,7 @@ class NetworkAndroid extends NativeComponent implements NetworkBase {
   constructor() {
     super();
   }
-  public readonly Notifier = new Notifier();
+  public readonly notifier = new Notifier();
   get IMSI() {
     return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
   }

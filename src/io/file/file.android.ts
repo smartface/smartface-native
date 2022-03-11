@@ -5,6 +5,7 @@ import { IFile } from './file';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import PathAndroid from '../path/path.android';
 import NativeComponent from '../../core/native-component';
+import { PATH_FILE_TYPE } from '../path/path';
 const activity = AndroidConfig.activity;
 
 const NativeFile = requireClass('java.io.File');
@@ -19,7 +20,7 @@ const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
 export default class FileAndroid extends NativeComponent implements IFile {
   nativeAssetsList: any[] = [];
   resolvedPath: any;
-  type: string;
+  type: PATH_FILE_TYPE;
   fullPath: string;
   drawableResourceId: number;
   ios: {
@@ -33,7 +34,8 @@ export default class FileAndroid extends NativeComponent implements IFile {
       throw new Error('File path must be string');
     }
 
-    this.resolvedPath = this.pathResolver.resolve(params?.path);
+    if(params?.path)
+      this.resolvedPath = this.pathResolver.resolve(params?.path);
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
@@ -75,6 +77,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
     }
     Object.assign(this, rest);
   }
+  android: Partial<{}>;
 
   get creationDate(): number {
     return this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1;

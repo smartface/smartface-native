@@ -477,7 +477,7 @@ declare class __SF_CNSaveRequest {
 declare class __SF_UIDocumentPickerViewController {
   constructor(type: any[], number: number);
   documentDelegate: __SF_UIDocumentPickerViewControllerDelegate;
-  delegate: __SF_UIDocumentPickerViewControllerDelegate;
+  delegate?: __SF_UIDocumentPickerViewControllerDelegate;
 }
 
 declare class __SF_UIDocumentPickerViewControllerDelegate {
@@ -1107,7 +1107,7 @@ declare class __SF_AVAudioSession extends __SF_NSOBject {
 
 declare class __SF_CLLocationManager {
   static locationServicesEnabled(): boolean;
-  delegate: __SF_CLLocationManagerDelegate;
+  delegate?: __SF_CLLocationManagerDelegate;
   startUpdatingLocation(): void;
   stopUpdatingLocation(): void;
   lastKnownLocation(): any;

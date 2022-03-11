@@ -1,5 +1,5 @@
 import View from '..';
-import { getRippleMask } from '../../../helper/get-ripple-mask';
+import { getRippleMask } from '../../../helper/getrippleeffect';
 import { AndroidConfig, UnitConverter } from '../../../util';
 import Color from '../../color';
 

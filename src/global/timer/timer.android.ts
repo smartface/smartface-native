@@ -1,4 +1,4 @@
-import NativeComponent from 'core/native-component';
+import NativeComponent from '../../core/native-component';
 import { TimerBase } from './timer';
 
 /* global requireClass */
@@ -6,7 +6,7 @@ const NativeSFHandler = requireClass('io.smartface.android.sfcore.global.SFHandl
 const NativeRunnable = requireClass('java.lang.Runnable');
 
 class TimerAndroid extends NativeComponent implements TimerBase {
-  private repeat: boolean;
+  private repeat: boolean = false;
   private task: any;
   private delay: number;
   static handler = NativeSFHandler.getHandler();
@@ -29,7 +29,8 @@ class TimerAndroid extends NativeComponent implements TimerBase {
   }
   constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
     super();
-    this.repeat = params.repeat;
+    if(params?.repeat)
+      this.repeat = params?.repeat;
 
     if (params) {
       this.task = params.task;

@@ -240,7 +240,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   // ios
   private get shadowOpacity() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'float');
+    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'CGFloat');
   }
   private set shadowOpacity(shadowOpacity) {
     const argShadowOpacity = new Invocation.Argument({

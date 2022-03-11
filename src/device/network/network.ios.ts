@@ -1,8 +1,8 @@
-import { ConnectionType, NetworkBase, NetworkNotifierBase } from '.';
+import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
 
-class Notifier extends NativeComponent implements NetworkNotifierBase {
-  private _connectionTypeChanged: (type: ConnectionType) => void;
+class Notifier extends NativeComponent implements NetworkNotifier {
+  private _connectionTypeChanged: ((type: ConnectionType) => void) | null;
   readonly android = {
     isInitialStickyNotification() {
       return false;
@@ -76,7 +76,7 @@ class Notifier extends NativeComponent implements NetworkNotifierBase {
 
 class NetworkIOS extends NativeComponent implements NetworkBase {
   ConnectionType = ConnectionType;
-  public readonly Notifier: NetworkNotifierBase = new Notifier();
+  public readonly notifier: NetworkNotifier = new Notifier();
   constructor() {
     super();
   }
@@ -85,13 +85,13 @@ class NetworkIOS extends NativeComponent implements NetworkBase {
     return false;
   }
   get IMSI(): string {
-    return;
+    return "";
   }
   get bluetoothMacAddress(): string {
-    return;
+    return "";
   }
   get wirelessMacAddress(): string {
-    return;
+    return "";
   }
   get carrier() {
     const info = new __SF_CTTelephonyNetworkInfo();
@@ -104,8 +104,8 @@ class NetworkIOS extends NativeComponent implements NetworkBase {
     return __SF_UIDevice.getIFAddresses()[0];
   }
   cancelAll() {
-    if (this.Notifier) {
-      this.Notifier.unsubscribe();
+    if (this.notifier) {
+      this.notifier.unsubscribe();
     }
   }
 }

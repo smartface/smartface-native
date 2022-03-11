@@ -1,8 +1,9 @@
 import { AndroidConfig } from '../../util';
-import { SecureDataBase } from './securedata';
+import { AbstractSecureData } from './securedata';
 const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyStore');
 
-class SecureDataAndroid extends SecureDataBase {
+class SecureDataAndroid extends AbstractSecureData {
+  service: string | undefined;
   constructor(params: { key: string }) {
     super();
     if (!params || !params.key) {

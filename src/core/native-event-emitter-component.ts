@@ -12,7 +12,7 @@ export default abstract class NativeEventEmitterComponent<TEvent extends string,
   once(eventName: TEvent, callback: EventListenerCallback): () => void {
     return this.emitter.once(eventName, callback);
   }
-  off(eventName: TEvent, callback?: EventListenerCallback): void {
+  off(eventName: TEvent, callback: EventListenerCallback): void {
     return this.emitter.off(eventName, callback);
   }
   emit(event: TEvent, ...args: any[]): void {

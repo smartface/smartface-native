@@ -1,9 +1,15 @@
 import TabBarItem, { ITabbarItem } from '../tabbaritem';
 import Color from '../color';
-import Page, { AbstractPage, IPage, PageAndroidParams, PageIOSParams } from '../page';
+import Page, { AbstractPage, IPage, PageAndroidParams, PageIOSParams, PageOrientation } from '../page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import FlexLayout from '../flexlayout';
+import { IController } from '../navigationcontroller';
+import { HeaderBar } from '../navigationcontroller/headerbar';
+import View, { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view';
+import { StatusBar } from '../../application/statusbar';
+import { ControllerParams } from '../../util/Android/transition/viewcontroller';
 
 export enum BarTextTransform {
   AUTO = 0,
@@ -215,7 +221,12 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
   onSelected: (index: number) => void;
 }
 
-export declare class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
+export declare abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
+  orientation: PageOrientation;
+  transitionViews: View[];
+  layout: FlexLayout;
+  statusBar: StatusBar;
+  headerBar?: HeaderBar | undefined;
   static iOS: {
     BarTextTransform: typeof BarTextTransform;
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
@@ -234,12 +245,33 @@ export declare class AbstractTabBarController<TEvent extends string = TabBarCont
   barColor: Color;
   scrollEnabled: boolean;
   selectedIndex: number;
-  setSelectedIndex(index: number, animated: boolean): void;
+  abstract setSelectedIndex(index: number, animated: boolean): void;
   iconColor: { normal: Color; selected: Color } | Color;
   textColor: { normal: Color; selected: Color } | Color;
   pagingEnabled: boolean;
   onPageCreate: (index: number) => Page;
   onSelected: (index: number) => void;
+}
+
+class TabBarControllerImpl extends AbstractTabBarController {
+  setSelectedIndex(index: number, animated: boolean): void {
+    throw new Error('Method not implemented.');
+  }
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined; }) {
+    throw new Error('Method not implemented.');
+  }
+  onOrientationChange(e: { orientation: PageOrientation[]; }): void {
+    throw new Error('Method not implemented.');
+  }
+  present(params?: ControllerParams): void {
+    throw new Error('Method not implemented.');
+  }
+  dismiss(params?: ControllerParams): void {
+    throw new Error('Method not implemented.');
+  }
 }
 
 /**
@@ -314,7 +346,7 @@ export declare class AbstractTabBarController<TEvent extends string = TabBarCont
  *     }
  *
  */
-const TabBarController: typeof AbstractTabBarController = require(`./tabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
-type TabBarController = AbstractTabBarController;
+const TabBarController: typeof TabBarControllerImpl = require(`./tabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type TabBarController = TabBarControllerImpl;
 
 export default TabBarController;

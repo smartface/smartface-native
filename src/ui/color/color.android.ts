@@ -26,7 +26,7 @@ export default class ColorAndroid extends AbstractColor {
   static create(alpha: number, red: number, green: number, blue: number): ColorAndroid;
   static create(red: number, green: number, blue: number): ColorAndroid;
   static create(hexCode: string): ColorAndroid;
-  static create(hexOrAlphaOrRed: number | string, redOrGreen?: number, greenOrBlue?: number, blue?: number): ColorAndroid {
+  static create(hexOrAlphaOrRed: number | string, redOrGreen?: number, greenOrBlue?: number, blue?: number): any {
     if (arguments.length === 1 && typeof hexOrAlphaOrRed === 'string') {
       // Color created with hex value
       if (hexOrAlphaOrRed.charAt(0) !== '#') {
@@ -38,7 +38,7 @@ export default class ColorAndroid extends AbstractColor {
     } else if (arguments.length === 3 && typeof hexOrAlphaOrRed === 'number') {
       if (NativeBuild.VERSION.SDK_INT >= 26) {
         return new ColorAndroid({
-          color: NativeColor.rgb(float(hexOrAlphaOrRed / 255), float(redOrGreen / 255), float(greenOrBlue / 255))
+          color: NativeColor.rgb(float(hexOrAlphaOrRed / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255))
         });
       } else {
         return new ColorAndroid({
@@ -49,7 +49,7 @@ export default class ColorAndroid extends AbstractColor {
       const alpha = (hexOrAlphaOrRed / 100) * 255;
       if (NativeBuild.VERSION.SDK_INT >= 26) {
         return new ColorAndroid({
-          color: NativeColor.argb(float(alpha / 255), float(redOrGreen / 255), float(greenOrBlue / 255), float(blue / 255))
+          color: NativeColor.argb(float(alpha / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255), float(blue! / 255))
         });
       } else {
         return new ColorAndroid({
@@ -112,14 +112,15 @@ export default class ColorAndroid extends AbstractColor {
   static WHITE = new ColorAndroid({
     color: NativeColor.WHITE
   });
+  private colors: any[];
   constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
     super();
-    if (params.isGradient) {
+    if (params.isGradient && params.startColor && params.endColor) {
       this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];
       const index = params.direction || 0;
       this.direction = GradientDrawableDirection[index];
       this.nativeObject = new NativeGradientDrawable(this.direction, array(this.colors, 'int'));
-    } else {
+    } else if(params.color) {
       this.nativeObject = params.color;
     }
   }

@@ -412,7 +412,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         NSColor: this._hintTextColor.nativeObject
       }
     });
-    const nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, 'initWithString:attributes:', [argString, argAttributes], 'NSObject');
+    const nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString!, 'initWithString:attributes:', [argString, argAttributes], 'NSObject');
     this.nativeObject.setValueForKey(nativeAttributeString, 'attributedPlaceholder');
   }
 

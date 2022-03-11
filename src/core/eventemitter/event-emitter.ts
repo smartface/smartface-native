@@ -45,7 +45,7 @@ export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent
     this.emitter.once(eventName, callback);
     return () => this.off(eventName, callback);
   }
-  off(eventName: TEvent, callback?: EventListenerCallback) {
+  off(eventName: TEvent, callback: EventListenerCallback) {
     this.emitter.removeListener(eventName, callback);
   }
   emit(event: TEvent, ...args: any[]) {

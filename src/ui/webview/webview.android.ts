@@ -208,7 +208,6 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
   }
   loadFile(file: File) {
     if (file instanceof File) {
-      //@ts-ignore TODO: something wrong with typings or broken if-else logic
       if (file.type === Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
         //Generate FILE PATH
         this.nativeObject.loadUrl('file:///' + file.fullPath);

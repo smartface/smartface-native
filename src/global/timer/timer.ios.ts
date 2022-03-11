@@ -1,18 +1,19 @@
-import NativeComponent from 'core/native-component';
+import NativeComponent from '../../core/native-component';
 import { TimerBase } from './timer';
 
 class TimerIOS extends NativeComponent implements TimerBase {
   static createTimer(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
     const timer = new __SF_Timer();
-    timer.scheduledTimer(
-      params.delay / 1000,
-      function () {
-        if (params.task) {
-          params.task();
-        }
-      },
-      params.repeat
-    );
+    if (params?.delay && params.repeat)
+      timer.scheduledTimer(
+        params.delay / 1000,
+        function () {
+          if (params.task) {
+            params.task();
+          }
+        },
+        params.repeat
+      );
 
     TimerIOS.timerArray.push(timer);
     return timer;
@@ -35,7 +36,7 @@ class TimerIOS extends NativeComponent implements TimerBase {
       }
     }
   }
-  static timerArray = [];
+  static timerArray: any[] = [];
 }
 
 export default TimerIOS;

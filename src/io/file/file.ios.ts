@@ -1,10 +1,11 @@
-import { FileiOSProps, IFile } from './file';
+import { AbstractFile, FileParams, IFile } from './file';
 import FileStream from '../../io/filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 
-export default class FileIOS extends NativeMobileComponent<any, WithMobileOSProps<IFile, FileiOSProps, {}>> implements IFile {
-  constructor(params?: Partial<IFile>) {
+export default class FileIOS extends AbstractFile implements IFile {
+  fullPath: string;
+  constructor(params?: Partial<IFile> & FileParams) {
     super(params);
     this.addIOSProps(this.getIOSParams());
   }
@@ -98,7 +99,7 @@ export default class FileIOS extends NativeMobileComponent<any, WithMobileOSProp
     return this.nativeObject.remove(value);
   }
 
-  getFiles(): FileIOS[] {
+  getFiles(): IFile[] {
     const filterValue = '';
     const typeValue = 0;
 

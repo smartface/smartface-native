@@ -1,13 +1,13 @@
 import { INativeComponent } from '../../core/inative-component';
-import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
+import { PATH_FILE_TYPE } from '../path/path';
 
-export interface FileiOSProps {
+export interface FileiOSProps{
   getNSURL: () => __SF_NSURL;
 }
-
-export interface IFile extends INativeComponent {
+export interface IFile extends INativeComponent, MobileOSProps<FileiOSProps, {}> {
   /**
    * Gets creation date of the File instance. If the file doesn't exist returns -1.
    * @android
@@ -171,18 +171,20 @@ export interface IFile extends INativeComponent {
    */
   readonly writable: boolean;
   rename(newName: string): boolean;
-
-  ios?: Partial<FileiOSProps>;
+  type: PATH_FILE_TYPE;
+  fullPath: string;
 }
 
-interface FileParams {
+export interface FileParams {
   path?: string;
 }
 
-export abstract class FileBase extends NativeMobileComponent<any, WithMobileOSProps<FileiOSProps, {}>> implements IFile {
-  constructor(params: Partial<IFile> & FileParams) {
+export abstract class AbstractFile extends NativeMobileComponent<any, IFile> implements IFile {
+  constructor(params?: Partial<IFile> & FileParams) {
     super(params);
   }
+  fullPath: string;
+  type: PATH_FILE_TYPE;
   creationDate: number;
   exists: boolean;
   extension: string;

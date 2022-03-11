@@ -1,5 +1,6 @@
 import NativeComponent from '../../../core/native-component';
 import File from '../../../io/file';
+import Path from '../../../io/path';
 import { Database, BaseDatabase } from './database';
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
@@ -9,11 +10,12 @@ class DatabaseAndroid extends BaseDatabase {
   constructor(params?: { file?: File; inMemory?: boolean }) {
     super();
     this.nativeObject = null;
-    this._file = params.file;
+    if(params?.file)
+      this._file = params?.file;
 
-    if (typeof params.inMemory === 'boolean' && params.inMemory) {
+    if (typeof params?.inMemory === 'boolean' && params.inMemory) {
       this.nativeObject = NativeSQLiteDatabase.create(null);
-    } else if (params.file instanceof File) {
+    } else if (params?.file instanceof File) {
       if (params.file.type === Path.FILE_TYPE.FILE) {
         //TODO: file needs nativeObject
         this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
@@ -23,7 +25,7 @@ class DatabaseAndroid extends BaseDatabase {
         }
         //TODO: file needs nativeObject
         this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
-      } else if (params.file.type === Path.FILE_TYPE.ASSETS) {
+      } else if (params.file.type === Path.FILE_TYPE.ASSET) {
         const destinationOnRoot = new File({
           path: Path.DataDirectory + '/' + params.file.name
         });

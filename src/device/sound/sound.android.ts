@@ -1,7 +1,8 @@
-import { AbstractSound } from '.';
+import Sound, { AbstractSound } from '.';
 import Application from '../../application';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
+import Page from '../../ui/page';
 import { AndroidConfig, RequestCodes } from '../../util';
 import { SoundEvents } from './sound-events';
 
@@ -14,7 +15,7 @@ function getCurrentPageFragment() {
   return Application.currentPage.nativeObject;
 }
 
-export default class SoundAndroid extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
+export default class SoundAndroid extends AbstractSound {
   public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
   private _onReadyCallback: () => void;
@@ -45,7 +46,7 @@ export default class SoundAndroid extends NativeEventEmitterComponent<SoundEvent
   }
   private getAndroidProps(): AbstractSound['android'] {
     return {
-      pick(params: Parameters<typeof AbstractSound.android['pick']>['0']) {
+      pick(params: { page: Page; onSuccess: (e: { sound: SoundAndroid }) => void; onFailure: () => void }) {
         SoundAndroid._pickParams = params;
         const intent = new NativeIntent();
         intent.setType('audio/*');

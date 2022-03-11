@@ -80,11 +80,11 @@ export default class PathAndroid extends PathBase {
     };
   }
 
-  private resolve(path: string) {
+  resolve(path: string) {
     return TypeUtil.isString(path) ? this.getResolvedPath(path) : null;
   }
 
-  private getResolvedPath(path) {
+  getResolvedPath(path) {
     if (resolvedPaths[path]) {
       return resolvedPaths[path];
     }

@@ -371,10 +371,10 @@ class MultimediaIOS extends MultimediaBase {
     ypImagePickerConfig.libraryMediaType = libraryMediaType;
     ypImagePickerConfig.maxNumberOfItems = Number.MAX_SAFE_INTEGER;
 
-    let ypImagePicker = new __SF_YPImagePicker(ypImagePickerConfig);
+    let ypImagePicker: __SF_YPImagePicker | undefined = new __SF_YPImagePicker(ypImagePickerConfig);
 
     ypImagePicker.didFinishPicking = function (data) {
-      ypImagePicker.picker.dismissViewController(function () {
+      ypImagePicker?.picker.dismissViewController(function () {
         if (data.cancelled) {
           onCancel && onCancel();
           return;
@@ -444,7 +444,7 @@ class MultimediaIOS extends MultimediaBase {
       throw new TypeError('Parameter type mismatch. params.asset must be File or Image instance');
     }
 
-    let toCropViewController = __SF_TOCropViewController.createWithCroppingStyleImage(croppingStyle, image.nativeObject);
+    let toCropViewController: __SF_TOCropViewController | undefined = __SF_TOCropViewController.createWithCroppingStyleImage(croppingStyle, image.nativeObject);
     toCropViewController.title = title;
 
     toCropViewController.setCustomAspect({
@@ -478,7 +478,7 @@ class MultimediaIOS extends MultimediaBase {
 
     const delegate = new __SF_TOCropViewControllerDelegate();
     delegate.didCropToImage = function (data) {
-      toCropViewController.dismissViewController(function () {
+      toCropViewController?.dismissViewController(function () {
         const image = Image.createFromImage(data.image);
         onSuccess && onSuccess({ image: image });
       }, true);
@@ -486,7 +486,7 @@ class MultimediaIOS extends MultimediaBase {
     };
 
     delegate.didCropToCircularImage = function (data) {
-      toCropViewController.dismissViewController(function () {
+      toCropViewController?.dismissViewController(function () {
         const image = Image.createFromImage(data.image);
         onSuccess && onSuccess({ image: image });
       }, true);
@@ -494,7 +494,7 @@ class MultimediaIOS extends MultimediaBase {
     };
 
     delegate.didFinishCancelled = function () {
-      toCropViewController.dismissViewController(function () {
+      toCropViewController?.dismissViewController(function () {
         onCancel && onCancel();
       }, true);
       toCropViewController = undefined;

@@ -1,6 +1,6 @@
-import { SecureDataBase } from './securedata';
+import { AbstractSecureData } from './securedata';
 
-class SecureDataIOS extends SecureDataBase {
+class SecureDataIOS extends AbstractSecureData {
   static _iOS = {
     _Message: {
       NOPASSWORD: 'The specified item could not be found in the keychain.',

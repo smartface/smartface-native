@@ -1,9 +1,8 @@
 import { AbstractSound } from '.';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
 
-export default class SoundIOS extends NativeEventEmitterComponent<SoundEvents> implements AbstractSound {
+export default class SoundIOS extends AbstractSound {
   public static Events = SoundEvents;
   private avPlayerItem: __SF_AVPlayerItem;
   private _isLooping = false;

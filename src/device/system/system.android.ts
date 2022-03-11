@@ -105,13 +105,13 @@ class SystemAndroid implements AbstractSystem {
       return null;
     }
   }
-  set clipboard(text: string) {
+  set clipboard(text: string | null) {
     const clip = NativeClipData.newPlainText('sf-core', text);
     const clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
     clipboard.setPrimaryClip(clip);
   }
   vibrate(options?: { millisecond: number }) {
-    const millisecond = options.millisecond || 500;
+    const millisecond = options?.millisecond || 500;
     const vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
     vibrator.vibrate(millisecond);
   }

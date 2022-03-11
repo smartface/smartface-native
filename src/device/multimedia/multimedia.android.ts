@@ -110,7 +110,7 @@ class MultimediaAndroid extends MultimediaBase {
     if (this._action === ActionType.IMAGE_CAPTURE) {
       this._imageFileUri = NativeSFMultimedia.createImageFile(activity);
       const takePictureIntent = NativeSFMultimedia.getCameraIntent(activity, this._imageFileUri);
-      page.nativeObject.startActivityForResult(takePictureIntent, this.CAMERA_REQUEST);
+      page?.nativeObject.startActivityForResult(takePictureIntent, this.CAMERA_REQUEST);
     } else this.startRecordVideoWithExtraField({ _captureParams: this._captureParams });
   }
   recordVideo(params: RecordVideoParams) {
@@ -328,7 +328,7 @@ class MultimediaAndroid extends MultimediaBase {
 
     if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
       try {
-        const uris = [];
+        const uris: any[] = [];
         const clipData = data.getClipData();
         if (clipData === null) {
           uris.push(data.getData());

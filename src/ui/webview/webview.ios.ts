@@ -11,7 +11,7 @@ function dataTypesToNSSet(dataTypes) {
     type: 'id',
     value: dataTypes
   });
-  return Invocation.invokeInstanceMethod(alloc, 'initWithArray:', [argDataTypes], 'id');
+  return Invocation.invokeInstanceMethod(alloc!, 'initWithArray:', [argDataTypes], 'id');
 }
 
 function removeDataOfTypes(dataTypes) {

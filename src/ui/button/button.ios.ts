@@ -31,11 +31,11 @@ const BackgroundColorsInitial: IViewState<Color> = {
 };
 
 const BackgroundImagesInitial: IViewState<Image> = {
-  normal: null,
-  disabled: null,
-  selected: null,
-  pressed: null,
-  focused: null
+  normal: undefined,
+  disabled: undefined,
+  selected: undefined,
+  pressed: undefined,
+  focused: undefined
 };
 export default class ButtonIOS<TEvent extends string = ButtonEvents> extends LabelIOS<ButtonEvents> implements IButton<TEvent> {
   protected _backgroundImage: IButton['backgroundImage'] = BackgroundImagesInitial;
@@ -122,11 +122,11 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
     if (value instanceof Color) {
       this.checkAndSetBackground(value, ButtonState.NORMAL);
     } else {
-      this.checkAndSetBackground(value.normal, ButtonState.NORMAL);
-      this.checkAndSetBackground(value.disabled, ButtonState.DISABLED);
-      this.checkAndSetBackground(value.selected, ButtonState.SELECTED);
-      this.checkAndSetBackground(value.pressed, ButtonState.PRESSED);
-      this.checkAndSetBackground(value.focused, ButtonState.FOCUSED);
+      value.normal && this.checkAndSetBackground(value.normal, ButtonState.NORMAL);
+      value.disabled && this.checkAndSetBackground(value.disabled, ButtonState.DISABLED);
+      value.selected && this.checkAndSetBackground(value.selected, ButtonState.SELECTED);
+      value.pressed && this.checkAndSetBackground(value.pressed, ButtonState.PRESSED);
+      value.focused && this.checkAndSetBackground(value.focused, ButtonState.FOCUSED);
     }
   }
 

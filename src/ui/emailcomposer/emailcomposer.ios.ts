@@ -3,7 +3,7 @@ import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
 import { BlobBase } from '../../global/blob/blob';
 import File from '../../io/file';
-import { FileBase } from '../../io/file/file';
+import { AbstractFile } from '../../io/file/file';
 import Page from '../page';
 
 export default class EmailComposerIOS extends AbstractEmailComposer {

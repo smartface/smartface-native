@@ -9,7 +9,7 @@ const NativeTransitionInflater = requireClass('androidx.transition.TransitionInf
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeAndroidR = requireClass('android.R');
 
-const API_LEVEL = System.android.apiLevel;
+const API_LEVEL = System.android.apiLevel || 0;
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
 

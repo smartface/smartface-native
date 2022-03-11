@@ -1,8 +1,14 @@
 import { Point2D } from '../../primitive/point2d';
 import { Size } from '../../primitive/size';
+import Color from '../../ui/color';
 
 namespace Invocation {
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'NSObject'): __SF_NSOBject;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'id'): __SF_NSOBject;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGFloat'): number;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGSize'): Size;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGPoint'): Point2D;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGColor'): Color;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGRect'): __SF_NSRect;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'NSInteger'): number;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'NSString'): string;
@@ -16,7 +22,7 @@ namespace Invocation {
     selector: string,
     argumentsArray: Invocation.Argument[],
     returnValueType?: string
-  ): __SF_NSOBject | number | string | Point2D | Size | Invocation.Argument | boolean | undefined {
+  ): any {
     const invocation = __SF_NSInvocation.createInvocationWithSelectorInstance(selector, target);
     if (invocation) {
       invocation.target = target;

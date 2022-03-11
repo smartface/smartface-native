@@ -96,7 +96,7 @@ export function EventEmitterMixin(TargetClass: ConstructorOf<any>) {
       this.emitter.once(eventName, callback);
       return () => this.off(eventName, callback);
     }
-    off(eventName: TEvent, callback?: EventListenerCallback) {
+    off(eventName: TEvent, callback: EventListenerCallback) {
       this.emitter.off(eventName, callback);
     }
     emit(event: TEvent, ...args: any[]) {

@@ -181,7 +181,7 @@ export declare class AbstractSystem {
      * @static
      * @since 0.1
      */
-    apiLevel?: number;
+    apiLevel: number;
     /**
      *
      * An ordered list of 64 bit ABIs supported by this device. The most preferred ABI is the first element in the list.
@@ -404,7 +404,7 @@ export declare class AbstractSystem {
    * @static
    * @since 0.1
    */
-  static clipboard: string;
+  static clipboard: string | null;
 
   /**
    * Determine if the current running platform is Smartface Emulator or published application

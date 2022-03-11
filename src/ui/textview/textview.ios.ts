@@ -187,7 +187,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
 
   private setText(value: ITextView['attributedText']) {
     const paragraphAlloc = Invocation.invokeClassMethod('NSMutableParagraphStyle', 'alloc', [], 'id');
-    const paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc, 'init', [], 'NSObject') as __SF_NSOBject;
+    const paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc!, 'init', [], 'NSObject') as __SF_NSOBject;
     const argLineSpacing = new Invocation.Argument({
       type: 'CGFloat',
       value: this.lineSpacing
@@ -195,7 +195,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
     Invocation.invokeInstanceMethod(paragraphStyle, 'setLineSpacing:', [argLineSpacing]);
 
     const alloc = Invocation.invokeClassMethod('NSMutableAttributedString', 'alloc', [], 'id');
-    const mutableString = Invocation.invokeInstanceMethod(alloc, 'init', [], 'NSObject') as __SF_NSOBject;
+    const mutableString = Invocation.invokeInstanceMethod(alloc!, 'init', [], 'NSObject') as __SF_NSOBject;
 
     for (const i in value) {
       const attributeString = value[i];
@@ -222,7 +222,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
           NSParagraphStyle: paragraphStyle
         }
       });
-      const nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, 'initWithString:attributes:', [argString, argAttributes], 'NSObject');
+      const nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString!, 'initWithString:attributes:', [argString, argAttributes], 'NSObject');
 
       const argAppend = new Invocation.Argument({
         type: 'NSObject',

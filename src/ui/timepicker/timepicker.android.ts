@@ -8,8 +8,8 @@ const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
 export default class TimePickerAndroid<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {
   private _is24HourFormat = true;
   private _onTimeSelected: ITimePicker['onTimeSelected'];
-  private _hour: number = null;
-  private _minutes: number = null;
+  private _hour: number | null = null;
+  private _minutes: number | null = null;
   constructor(params: Partial<ITimePicker> = {}) {
     super();
 
@@ -21,10 +21,12 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
       this[param] = params[param];
     }
   }
+  
   setTime(params: { hour: number; minute: number }): void {
     this.hour = params.hour;
     this.minutes = params.minute;
   }
+
   show(): void {
     this.createTimerDialog();
     this.nativeObject.show();
@@ -33,6 +35,7 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
   get onTimeSelected(): ITimePicker['onTimeSelected'] {
     return this._onTimeSelected;
   }
+
   set onTimeSelected(value: ITimePicker['onTimeSelected']) {
     this._onTimeSelected = value;
   }
@@ -45,23 +48,23 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
     this.nativeObject && this.nativeObject.setIs24HourView(value);
   }
 
-  get hour(): number {
+  get hour(): number | null {
     return this._hour;
   }
-  set hour(value: number) {
+  set hour(value: number | null) {
     this._hour = value;
   }
 
-  get minutes(): number {
+  get minutes(): number | null {
     return this._minutes;
   }
-  set minutes(value: number) {
+  set minutes(value: number | null) {
     this._minutes = value;
   }
 
   private createTimerDialog() {
-    let hour: number;
-    let minutes: number;
+    let hour: number | null;
+    let minutes: number | null;
     if (this._hour === null && this._minutes === null) {
       const _date = new Date();
       hour = _date.getHours();
