@@ -5,6 +5,7 @@ import { Size } from '../../primitive/size';
 import { TextViewEvents } from './textview-events';
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
 import Color from '../color';
+import { Point2D } from '../../primitive/point2d';
 
 enum NSUnderlineStyle {
   None = 0,
@@ -13,7 +14,7 @@ enum NSUnderlineStyle {
   Double = 9
 }
 
-export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelIOS<TEvent | TextViewEvents> implements ITextView<TEvent | TextViewEvents> {
+export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelIOS<TEvent | TextViewEvents, any, TProps> implements ITextView<TEvent | TextViewEvents> {
   private _lastModifiedAttributedString: __SF_NSOBject;
   private __attributedText: ITextView['attributedText'];
   private _letterSpacing: ITextView['letterSpacing'];
@@ -45,7 +46,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
       }
     };
   }
-  getAttributeTextSize(maxWidth: number): Size {
+  getAttributeTextSize(maxWidth: number): Size | null {
     if (!this._lastModifiedAttributedString) {
       return null;
     }
@@ -70,7 +71,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
   }
   assignIOSSpecificParameters() {
     const self = this;
-    const ios = {
+    this.addIOSProps({
       get showScrollBar() {
         return self.nativeObject.showsHorizontalScrollIndicator;
       },
@@ -84,13 +85,13 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
       set paginationEnabled(value: boolean) {
         self.nativeObject.setValueForKey(value, 'pagingEnabled');
       },
-      get contentOffset(): __SF_NSRect {
+      get contentOffset(): Point2D {
         return {
           x: self.nativeObject.contentOffset.x + self.nativeObject.contentInsetDictionary.left,
           y: self.nativeObject.contentOffset.y + self.nativeObject.contentInsetDictionary.top
         };
       }
-    };
+    });
   }
   set onLinkClick(value: ITextView['onLinkClick']) {
     this._onLinkClick = value;
@@ -215,8 +216,8 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
           NSStrikethrough: attributeString.strikethrough ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
           NSLink: attributeString.link,
           NSBackgroundColor: attributeString.backgroundColor.nativeObject,
-          NSUnderlineColor: attributeString.ios.underlineColor.nativeObject,
-          NSStrikethroughColor: attributeString.ios.strikethroughColor.nativeObject,
+          NSUnderlineColor: attributeString.ios.underlineColor?.nativeObject,
+          NSStrikethroughColor: attributeString.ios.strikethroughColor?.nativeObject,
           NSKern: this.letterSpacing,
           NSParagraphStyle: paragraphStyle
         }

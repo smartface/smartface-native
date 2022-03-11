@@ -4,8 +4,9 @@ import { ConstructorOf } from '../../core/constructorof';
 import { Size } from '../../primitive/size';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import AttributedString from '../../global/attributedstring';
+import { Point2D } from '../../primitive/point2d';
 
-export type TextViewiOSPRoperties = ILabel['ios'] & {
+export type TextViewiOSProps = ILabel['ios'] & {
   /**
    * Sets/gets visibiliy of scroll bar when text is too long.
    *
@@ -13,7 +14,9 @@ export type TextViewiOSPRoperties = ILabel['ios'] & {
    * @ios
    * @since 3.0.0
    */
-  showScrollBar?: boolean;
+  showScrollBar: boolean;
+  contentOffset: Point2D;
+  paginationEnabled: boolean;
 }
 
 export type TextViewAndroidPRoperties = ILabel['android'];
@@ -35,7 +38,7 @@ export type TextViewAndroidPRoperties = ILabel['android'];
  *     myTextview.left = 20,
  *     myTextview.backgroundColor = Color.GRAY;
  */
-export declare interface ITextView<TEvent extends string = TextViewEvents, TMobile extends MobileOSProps<TextViewiOSPRoperties, TextViewAndroidPRoperties> = MobileOSProps<TextViewiOSPRoperties, TextViewAndroidPRoperties>> extends ILabel<TEvent | TextViewEvents, TMobile> {
+export declare interface ITextView<TEvent extends string = TextViewEvents, TMobile extends MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties> = MobileOSProps<TextViewiOSProps, TextViewAndroidPRoperties>> extends ILabel<TEvent | TextViewEvents, TMobile> {
   /**
    * Gets/sets HTML text value of TextView. This property helps user showing HTML
    * texts on the screen. In Android, you must avoid to using selectable property to make the links clickable.
@@ -126,7 +129,7 @@ export declare interface ITextView<TEvent extends string = TextViewEvents, TMobi
    * @ios
    * @since 3.2.1
    */
-  getAttributeTextSize(maxWidth: number): Size;
+  getAttributeTextSize(maxWidth: number): Size | null;
   /**
    * This event is called when user click link string. onLinkClick only works with attributedText.
    * Use this with EventEmitter

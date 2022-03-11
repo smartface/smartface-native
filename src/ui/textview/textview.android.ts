@@ -37,7 +37,7 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
   private _htmlText: ITextView['htmlText'];
   private linkMovementMethodCreated: boolean;
   private scrollableMovementMethodCreated: boolean;
-  constructor(params?: Partial<TProps>) {
+  constructor(params: Partial<TProps> = {}) {
     super(params);
   }
   
@@ -91,7 +91,7 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
     this.scrollEnabled = this._scrollEnabled;
     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
   }
-  getAttributeTextSize(maxWidth: number): Size {
+  getAttributeTextSize(maxWidth: number): Size | null {
     if (!this._attributedStringBuilder) {
       return null;
     }
