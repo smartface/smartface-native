@@ -8,7 +8,7 @@
     "rootDir": "src",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outFile": "dist",
+    "outDir": "dist",
     "target": "ES5",
     "esModuleInterop": true,
     "lib": ["ES2015"]
