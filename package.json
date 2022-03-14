@@ -8,7 +8,7 @@
     "browserify": "browserify index.js -o bundle.js --standalone sf-core && uglifyjs bundle.js -o bundle.ugly.js -c -m",
     "beautify": "find . -type f -name '*.js' ! -path '*node_modules*' ! -path '*git*' ! -path '*docs_resource*' ! -path '*tests*' -exec js-beautify -r {} +",
     "build": "node bundler.js && rm -rf ./.tmp",
-    "dev": "npx tsc -w",
+    "dev": "npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
     "lint:write": "npx prettier --write ./**/*"
   },
