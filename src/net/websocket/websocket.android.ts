@@ -1,7 +1,8 @@
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import BlobAndroid from '../../global/blob/blob.android';
-import { IWebSocket, WebSocketBase } from './websocket';
+import { IWebSocket } from './websocket';
 import { WebSocketEvents } from './websocket-events';
 
 /*globals requireClass*/
@@ -10,7 +11,10 @@ const OkHttpClient = requireClass('okhttp3.OkHttpClient');
 const ByteString = requireClass('okio.ByteString');
 const SFWebSocketListener = requireClass('io.smartface.android.sfcore.net.SFWebSocketListener');
 
-export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, TProps extends MobileOSProps = MobileOSProps> extends WebSocketBase<TEvent | WebSocketEvents, TProps> {
+export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, TProps extends MobileOSProps = MobileOSProps>
+  extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any, TProps>
+  implements IWebSocket
+{
   private _listener: any;
   private _request: any;
   private _client: any;
@@ -29,6 +33,11 @@ export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, T
     this.createWebSocketListener();
     this.nativeObject = this._client.newWebSocket(this._request, this._listener);
   }
+  onOpen: () => void;
+  onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;
+  onClose: (e: { code: number; reason: string }) => void;
+  onFailure: (e: { code: number; message: string }) => void;
+  headers: Record<string, string>;
 
   get url(): string {
     return this._url;

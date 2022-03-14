@@ -30,7 +30,10 @@ const TextAlignmentDic = {
   [TextAlignment.BOTTOMRIGHT]: 80 | 5 // Gravity.BOTTOM | Gravity.RIGHT
 };
 
-export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative = any, TProps extends IButton = IButton> extends LabelAndroid<ButtonEvents, TNative, TProps> implements IButton<TEvent> {
+export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative = any, TProps extends IButton = IButton>
+  extends LabelAndroid<ButtonEvents, TNative, TProps>
+  implements IButton<TEvent>
+{
   private __onPress: IButton['onPress'];
   private __onLongPress: IButton['onLongPress'];
   protected _backgroundColor: IButton['backgroundColor'];
@@ -51,7 +54,6 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     this.borderShapeDrawable = SFViewUtil.getShapeDrawable(0, 0, this._borderRadius);
 
     this.layerDrawable = this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
-    this.__backgroundImages = null;
     this._borderColor = Color.BLACK;
     this._borderWidth = 0;
 
@@ -274,7 +276,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   }
 
   private createNewLayerDrawable(drawables: any[]) {
-    const drawablesForObjectCreate = [];
+    const drawablesForObjectCreate: any[] = [];
 
     drawables.forEach(() => drawablesForObjectCreate.push(drawables[0]));
     const layerDrawable = new NativeLayerDrawable(array(drawablesForObjectCreate));

@@ -163,30 +163,23 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       const animation = params.animated;
       const onComplete = params.onComplete;
 
-      if (typeof controller === 'object') {
-        const _animationNeed = animation ? animation : true;
-        const _completionBlock = onComplete
-          ? function () {
-              onComplete();
-            }
-          : undefined;
+      const _animationNeed = animation ? animation : true;
+      const _completionBlock = onComplete?.() || undefined;
+      let controllerToPresent: __SF_UIViewController;
+      if (controller?.nativeObject) {
+        controllerToPresent = controller.nativeObject;
 
-        let controllerToPresent;
-        if (controller && controller.nativeObject) {
-          controllerToPresent = controller.nativeObject;
+        const currentPage = this.getVisiblePage(this.childControllers[this.selectedIndex] as any);
 
-          const currentPage = this.getVisiblePage(this.childControllers[this.selectedIndex]);
-
-          if (typeof currentPage.transitionViews !== 'undefined') {
-            controllerToPresent.setValueForKey(true, 'isHeroEnabled');
-          }
-
-          this.view.present(controllerToPresent, _animationNeed, _completionBlock);
+        if (currentPage instanceof Page && currentPage.transitionViews) {
+          controllerToPresent.setValueForKey(true, 'isHeroEnabled');
         }
+
+        this.view.present(controllerToPresent, _animationNeed, _completionBlock);
       }
     }
   }
-  getVisiblePage(currentController: BottomTabbarController | NavigationController | Page) {
+  getVisiblePage(currentController: BottomTabbarController | NavigationController | Page): NavigationController | Page | BottomTabbarController {
     let retval: NavigationController | Page | BottomTabbarController;
     if (currentController instanceof BottomTabbarController) {
       const controller = currentController.childControllers[currentController.selectedIndex];
@@ -202,11 +195,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   dismiss(params) {
     if (typeof params === 'object') {
       const onComplete = params.onComplete;
-      const _completionBlock = onComplete
-        ? function () {
-            onComplete();
-          }
-        : undefined;
+      const _completionBlock = onComplete?.() || undefined;
       this.view.dismiss(_completionBlock);
     }
   }

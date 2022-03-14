@@ -1,12 +1,14 @@
-import { BlobBase } from './blob';
+import IBlob from './blob';
 
-class BlobIOS extends Abstrablo {
+class BlobIOS implements IBlob {
   constructor(parts: string[], properties?: { type: string }) {
-    super();
     if (!this.nativeObject) {
       this.nativeObject = parts;
     }
   }
+  type: string;
+  slice?: ((start: number, end: number) => IBlob) | undefined;
+  nativeObject: { [key: string]: any };
   get size() {
     return this.nativeObject.length;
   }

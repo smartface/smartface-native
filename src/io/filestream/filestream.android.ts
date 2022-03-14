@@ -16,6 +16,7 @@ const NativeInputStreamReader = requireClass('java.io.InputStreamReader');
 const NativeBufferedReader = requireClass('java.io.BufferedReader');
 const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
 const NativeFileInputStream = requireClass('java.io.FileInputStream');
+const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
 const NativeFileReader = requireClass('java.io.FileReader');
 export class FileStreamAndroid extends NativeComponent implements IFileStream {
   private _fileObject: any;
@@ -167,7 +168,7 @@ export class FileStreamAndroid extends NativeComponent implements IFileStream {
     }
   }
 
-  readToEnd(): string | Blob {
+  readToEnd<ContentType = string | Blob>(): ContentType {
     if (this._closed || this._mode !== FileStreamAndroid.StreamType.READ) {
       throw new Error('FileStream already closed or streamType is not READ');
     }
@@ -178,12 +179,11 @@ export class FileStreamAndroid extends NativeComponent implements IFileStream {
         fileContent += readLine + '\n';
         readLine = this.nativeObject.readLine();
       }
-      return fileContent;
+      return fileContent as unknown as ContentType;
     } else {
-      const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
       // toByteArray method handle large files by copying the bytes into blocks of 4KiB.
       const bytes = NativeFileUtil.toByteArray(this.nativeObject);
-      return new Blob(bytes, { type: 'file' });
+      return new Blob(bytes, { type: 'file' }) as unknown as ContentType;
     }
   }
 

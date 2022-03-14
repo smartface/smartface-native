@@ -1,16 +1,15 @@
 import Base64Util from 'src/util/base64';
-import { BlobBase } from './blob';
+import IBlob from './blob';
 
 const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
 const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
 const NativeBase64 = requireClass('android.util.Base64');
 
-class BlobAndroid extends BlobBase {
+class BlobAndroid implements IBlob {
   private _parts: string[];
   private _type: string;
   constructor(parts?: string[], properties?: { type: string }) {
-    super();
-    if (parts && properties && properties.type) {
+    if (parts && properties?.type) {
       this._type = properties.type;
       this.nativeObject = new NativeByteArrayOutputStream();
       if (Array.isArray(parts)) {
@@ -23,13 +22,14 @@ class BlobAndroid extends BlobBase {
       this._parts = parts;
     }
   }
+  nativeObject: { [key: string]: any };
   get type(): string {
     return this._type;
   }
   get size(): number {
     return this.nativeObject && arrayLength(this.nativeObject.toByteArray());
   }
-  slice(start: number, end: number): BlobBase {
+  slice(start: number, end: number): IBlob {
     const newBlob = new BlobAndroid();
     const byteArray = this.nativeObject.toByteArray();
     newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)

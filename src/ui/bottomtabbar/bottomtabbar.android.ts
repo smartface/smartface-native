@@ -1,9 +1,9 @@
-import NativeComponent from '../../core/native-component';
 import { AndroidConfig } from '../../util';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 import BottomTabBar, { IBottomTabBar } from '.';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
@@ -11,37 +11,25 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
-export default class BottomTabBarAndroid extends NativeComponent implements IBottomTabBar  {
-  private _itemColors: { normal: Color; selected: Color };
+export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
+  private _itemColors = {
+    normal: Color.GRAY,
+    selected: Color.create('#00a1f1')
+  }; // Do not remove. COR-1931 describes what happening.
   private _backgroundColor = Color.WHITE;
   private _items: TabBarItem[] = [];
-  private _android;
-  private _ios;
   constructor(params?: Partial<BottomTabBar>) {
-    super();
+    super(params);
     this.nativeObject = new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
-
+    this.addAndroidProps(this.getAndroidParams());
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.
-    this.itemColor = {
-      normal: Color.GRAY,
-      selected: Color.create('#00a1f1')
-    }; // Do not remove. COR-1931 describes what happening.
-    this._android = {
+  }
+  private getAndroidParams(): IBottomTabBar['android'] {
+    return {
       get maxItemCount() {
         return MAXITEMCOUNT;
       }
     };
-
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
-  }
-  get android() {
-    return this._android;
-  }
-  get ios() {
-    return this._ios;
   }
   get height() {
     let result = 0;

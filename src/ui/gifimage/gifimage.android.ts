@@ -7,6 +7,7 @@ import Blob from '../../global/blob';
 import Image from '../../ui/image';
 import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
 import { Size } from '../../primitive/size';
+import IBlob from '../../global/blob/blob';
 
 export default class GifImageAndroid extends AbstractGifImage {
   private _content: File | Blob;
@@ -65,10 +66,10 @@ export default class GifImageAndroid extends AbstractGifImage {
     return { width, height };
   }
 
-  toBlob() {
+  toBlob(): IBlob | null {
     if (this._content instanceof File) {
       const myFileStream = this._content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-      return myFileStream?.readToEnd() as Blob || null;
+      return (myFileStream?.readToEnd() as Blob) || null;
     } else if (this._content instanceof Blob) {
       return this._content;
     }

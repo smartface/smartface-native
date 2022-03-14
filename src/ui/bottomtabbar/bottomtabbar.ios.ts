@@ -1,35 +1,26 @@
 import { IBottomTabBar } from '.';
 import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import System from '../../device/system';
 import Color from '../color';
 import ColorIOS from '../color/color.ios';
 import Image from '../image';
 import TabBarItem from '../tabbaritem';
 
-const UITabBar = requireClass('UITabBar');
-
-export default class BottomTabBarIOS extends NativeComponent implements IBottomTabBar {
-  private _android: Partial<{
-    maxItemCount: boolean;
-    disableItemAnimation: boolean;
-  }> = {};
-  private _ios: Partial<{
-    translucent: boolean;
-  }> = {};
+export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
   private appearance;
   private _items: TabBarItem[];
   private _borderVisibility: boolean = true;
   private _itemColor = {
-    normal: undefined,
-    selected: undefined
-  };
+    normal: Color.GRAY,
+    selected: Color.create('#00a1f1')
+  }; // Do not remove. COR-1931 describes what happening.
   private _selectionIndicatorImage: any;
   constructor(params?: Partial<IBottomTabBar> & Partial<NativeComponent>) {
-    super();
-
+    super(params);
     this.nativeObject = undefined;
     this.appearance = undefined;
-    if (params.nativeObject) {
+    if (params?.nativeObject) {
       this.nativeObject = params.nativeObject;
 
       // Xcode 13.1 background bug fixes [NTVE-398]
@@ -44,9 +35,17 @@ export default class BottomTabBarIOS extends NativeComponent implements IBottomT
     }
 
     this.nativeObject.translucent = false;
-
+    this.addIOSProps(this.getIOSParams());
+  }
+  get height() {
+    return this.nativeObject.frame.height;
+  }
+  get items() {
+    return this._items;
+  }
+  getIOSParams(): IBottomTabBar['ios'] {
     const self = this;
-    this._ios = {
+    return {
       get translucent() {
         return self.nativeObject.translucent;
       },
@@ -56,28 +55,6 @@ export default class BottomTabBarIOS extends NativeComponent implements IBottomT
         }
       }
     };
-
-    this.itemColor = {
-      normal: Color.GRAY,
-      selected: Color.create('#00a1f1')
-    }; // Do not remove. COR-1931 describes what happening.
-
-    const { ios, android, ...restParams } = params;
-    Object.assign(this._ios, ios);
-    Object.assign(this._android, android);
-    Object.assign(this, restParams);
-  }
-  get android() {
-    return this._android;
-  }
-  get ios() {
-    return this._ios;
-  }
-  get height() {
-    return this.nativeObject.frame.height;
-  }
-  get items() {
-    return this._items;
   }
   set items(value: TabBarItem[]) {
     if (typeof value === 'object') {
@@ -123,7 +100,7 @@ export default class BottomTabBarIOS extends NativeComponent implements IBottomT
         this.items[i].nativeObject = this.nativeObject.items[i];
       }
     } else {
-      const itemsArray = [];
+      const itemsArray: TabBarItem[] = [];
       for (const i in this.nativeObject.items) {
         const sfTabBarItem = new TabBarItem({
           nativeObject: this.nativeObject.items[i]

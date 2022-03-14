@@ -2,11 +2,10 @@ import Color, { AbstractColor } from '.';
 import { GradientDirection } from '.';
 
 export default class ColorIOS extends AbstractColor {
-
   static create(alpha: number, red: number, green: number, blue: number): ColorIOS;
   static create(red: number, green: number, blue: number): ColorIOS;
   static create(hexCode: string): ColorIOS;
-  static create(hexOrAlphaOrRed: number | string, redOrGreen?: number, greenOrBlue?: number, blue?: number): ColorIOS {
+  static create(hexOrAlphaOrRed: number | string, redOrGreen?: number, greenOrBlue?: number, blue?: number): ColorIOS | undefined {
     if (arguments.length === 1 && typeof hexOrAlphaOrRed === 'string') {
       // Color created with hex value
       if (hexOrAlphaOrRed.charAt(0) !== '#') {
@@ -15,12 +14,12 @@ export default class ColorIOS extends AbstractColor {
       return new ColorIOS({
         color: __SF_UIColor.hexColor(hexOrAlphaOrRed)
       });
-    } else if (arguments.length === 3 && typeof hexOrAlphaOrRed === 'number') {
+    } else if (arguments.length === 3 && typeof hexOrAlphaOrRed === 'number' && typeof redOrGreen === 'number' && typeof greenOrBlue === 'number') {
       // Color created with rgb value
       return new ColorIOS({
         color: new __SF_UIColor(hexOrAlphaOrRed / 255, redOrGreen / 255, greenOrBlue / 255, 1)
       });
-    } else if (arguments.length === 4 && typeof hexOrAlphaOrRed === 'number') {
+    } else if (arguments.length === 4 && typeof hexOrAlphaOrRed === 'number' && typeof blue === 'number' && typeof redOrGreen === 'number' && typeof greenOrBlue === 'number') {
       // Color created with rgba value
       return new ColorIOS({
         color: new __SF_UIColor(redOrGreen / 255, greenOrBlue / 255, blue / 255, hexOrAlphaOrRed / 100)

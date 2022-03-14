@@ -37,13 +37,11 @@ export default class PinIOS<TEvent extends string = PinEvents> extends NativeEve
     this.nativeObject.tag = value;
   }
   get image(): IImage | null {
-    if(this.nativeObject.image)
-      return ImageiOS.createFromImage(this.nativeObject.image);
+    if (this.nativeObject.image) return ImageiOS.createFromImage(this.nativeObject.image) as IImage;
     return null;
   }
   set image(value: IImage | null) {
-    if(value) 
-      this.nativeObject.image = value.nativeObject;
+    if (value) this.nativeObject.image = value.nativeObject;
   }
 
   isClusterEnabled: boolean;

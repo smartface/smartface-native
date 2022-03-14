@@ -1,3 +1,4 @@
+import IBlob from '../../global/blob/blob';
 import { FileStreamBase } from './filestream';
 
 /**
@@ -18,7 +19,20 @@ import { FileStreamBase } from './filestream';
  *     myFileStream.close();
  *
  */
-class FileStreamImpl extends FileStreamBase {}
+class FileStreamImpl extends FileStreamBase {
+  close(): void {
+    throw new Error('Method not implemented.');
+  }
+  readBlob(): IBlob {
+    throw new Error('Method not implemented.');
+  }
+  readToEnd<ContentType = string | IBlob>(): ContentType {
+    throw new Error('Method not implemented.');
+  }
+  write(content: string | IBlob): boolean {
+    throw new Error('Method not implemented.');
+  }
+}
 
 const FileStream: typeof FileStreamImpl = require(`./filestream.${Device.deviceOS.toLowerCase()}`).default;
 type FileStream = FileStreamImpl;

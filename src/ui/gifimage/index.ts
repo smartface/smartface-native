@@ -1,8 +1,7 @@
 import { INativeComponent } from '../../core/inative-component';
-import NativeComponent from '../../core/native-component';
 import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
-import { BlobBase } from '../../global/blob/blob';
+import IBlob from '../../global/blob/blob';
 import File from '../../io/file';
 import { Size } from '../../primitive/size';
 import Image from '../image';
@@ -89,12 +88,12 @@ export interface IGifImage extends INativeComponent, MobileOSProps<iOSProps, And
    * @ios
    * @since 3.2.0
    */
-  toBlob(): Blob | null;
+  toBlob(): IBlob | null;
 }
 
 export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifImage> implements IGifImage {
   constructor(params?: Partial<IGifImage>) {
-    super(params)
+    super(params);
   }
 
   /**
@@ -127,7 +126,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
    * @static
    * @since 3.2.0
    */
-  static createFromFile(path: string, width?: number, height?: number): AbstractGifImage | null{
+  static createFromFile(path: string, width?: number, height?: number): AbstractGifImage | null {
     throw new Error('Method not implemented.');
   }
 
@@ -146,7 +145,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
   get instrinsicSize(): Size {
     throw new Error('Method not implemented.');
   }
-  toBlob(): BlobBase | null {
+  toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
   }
   static get android(): AndroidProps | undefined {
@@ -156,8 +155,6 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
     throw new Error('Method not implemented.');
   }
 }
-
-
 
 /**
  * @class UI.GifImage
@@ -180,7 +177,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
  *     myPage.layout.addChild(myGifImageView);
  *
  */
-class GifImageImpl extends AbstractGifImage { }
+class GifImageImpl extends AbstractGifImage {}
 const GifImage: typeof GifImageImpl = require(`./gifimage.${Device.deviceOS.toLowerCase()}`).default;
 type GifImage = GifImageImpl;
 

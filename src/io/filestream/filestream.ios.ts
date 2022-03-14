@@ -48,7 +48,7 @@ export default class FileStreamIOS extends NativeComponent implements IFileStrea
     return new Blob(this.nativeObject.getBlob());
   }
 
-  readToEnd(): string | Blob {
+  readToEnd<ContentType = string | Blob>(): ContentType {
     const retval = this.nativeObject.readToEnd(); //It will return string or nsdata depends on content mode.
     return this.contentMode === FileStreamIOS.ContentMode.BINARY ? new Blob(retval) : retval;
   }

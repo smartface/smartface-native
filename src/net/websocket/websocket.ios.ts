@@ -1,8 +1,9 @@
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import { Invocation } from '../../util';
 
-import { WebSocketBase } from './websocket';
+import { IWebSocket } from './websocket';
 import { WebSocketEvents } from './websocket-events';
 
 enum SRReadyState {
@@ -11,7 +12,10 @@ enum SRReadyState {
   SR_CLOSING,
   SR_CLOSED
 }
-export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProps extends MobileOSProps = MobileOSProps> extends WebSocketBase<TEvent | WebSocketEvents, TProps> {
+export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProps extends MobileOSProps = MobileOSProps>
+  extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any, TProps>
+  implements IWebSocket
+{
   private delegateInstance: any;
   private socket: any;
   constructor(params?: TProps) {
@@ -108,6 +112,10 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
       invocationDelegate.invoke();
     }
   }
+  headers: Record<string, string>;
+  onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;
+  onClose: (e: { code: number; reason: string }) => void;
+  onFailure: (e: { code: number; message: string }) => void;
 
   get url(): string {
     let url: any;

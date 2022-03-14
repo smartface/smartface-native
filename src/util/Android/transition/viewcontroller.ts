@@ -47,8 +47,10 @@ namespace ViewController {
   export function activateController(controller: IController) {
     ViewController.setIsActiveOfController(controller, true);
   }
-  export function deactivateController(controller: IController) {
-    ViewController.setIsActiveOfController(controller, false);
+  export function deactivateController(controller: IController | null) {
+    if (controller) {
+      ViewController.setIsActiveOfController(controller, false);
+    }
   }
   export function setController(params: ControllerPresentParams) {
     if (params.controller instanceof NavigationController) {

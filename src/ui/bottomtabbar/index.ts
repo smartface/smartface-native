@@ -3,6 +3,30 @@ import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 
+interface IBottomTabBarAndroidProps {
+  maxItemCount: number;
+  /**
+   * Enable/disable the default animation of BottomTabBar item. Might be used while badge being used.
+   *
+   * @since 4.0.1
+   * @property {Boolean} disableItemAnimation
+   * @android
+   * @removed since 4.2.2
+   */
+  disableItemAnimation?: boolean; //TODO: Find out why this exists because it isn't used on bottomtabbar.android.ts
+}
+
+interface IBottomTabBarIOSProps {
+  /**
+   * A Boolean value that indicates whether the tab bar is translucent.
+   *
+   * @property {Boolean} translucent
+   * @ios
+   * @since 4.0.2
+   */
+  translucent: boolean;
+}
+
 /**
  * @class UI.BottomTabBar
  * @since 1.1.10
@@ -30,18 +54,7 @@ export declare interface IBottomTabBar extends INativeComponent {
    * @android
    * @readonly
    */
-  android: Partial<{
-    maxItemCount: boolean;
-    /**
-     * Enable/disable the default animation of BottomTabBar item. Might be used while badge being used.
-     *
-     * @since 4.0.1
-     * @property {Boolean} disableItemAnimation
-     * @android
-     * @removed since 4.2.2
-     */
-    disableItemAnimation: boolean;
-  }>;
+  android: IBottomTabBarAndroidProps;
   /**
    * Gets/sets title and icon color of the tab bar items.
    *
@@ -64,16 +77,7 @@ export declare interface IBottomTabBar extends INativeComponent {
    * @since 3.2.0
    */
   items: TabBarItem[] | null;
-  ios: Partial<{
-    /**
-     * A Boolean value that indicates whether the tab bar is translucent.
-     *
-     * @property {Boolean} translucent
-     * @ios
-     * @since 4.0.2
-     */
-    translucent: boolean;
-  }>;
+  ios: Partial<IBottomTabBarIOSProps>;
 }
 
 const BottomTabBar: ConstructorOf<IBottomTabBar, Partial<IBottomTabBar>> = require(`./bottomtabbar.${Device.deviceOS.toLowerCase()}`).default;

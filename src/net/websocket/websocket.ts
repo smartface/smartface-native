@@ -4,7 +4,6 @@ import { IEventEmitter } from '../../core/eventemitter/event-emitter';
 import { WebSocketEvents } from './websocket-events';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { BlobBase } from '../../global/blob/blob';
 
 export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEvents> {
   /**
@@ -61,7 +60,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * });
    * ````
    */
-  onOpen(): void;
+  onOpen: () => void;
   /**
    * Invoked when a message has been received.
    * @param {Object} params
@@ -80,7 +79,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * });
    * ````
    */
-  onMessage(e: { string?: string; blob?: Blob }): void;
+  onMessage: (e: { string?: string; blob?: Blob }) => void;
   /**
    * Invoked when the web socket has been closed.
    * @param {Object} e
@@ -99,7 +98,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * });
    * ````
    */
-  onClose(e: { code: number; reason: string }): void;
+  onClose: (e: { code: number; reason: string }) => void;
   /**
    * Invoked when an error occured on reading or writing to the network.
    * @param {Object} e
@@ -118,7 +117,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * });
    * ````
    */
-  onFailure(e: { code: number; message: string }): void;
+  onFailure: (e: { code: number; message: string }) => void;
 }
 
 export abstract class WebSocketBase<TEvent extends string = WebSocketEvents, TMobile extends MobileOSProps = MobileOSProps>
@@ -128,29 +127,13 @@ export abstract class WebSocketBase<TEvent extends string = WebSocketEvents, TMo
   constructor(params?: TMobile) {
     super(params);
   }
-  headers: Record<string, string>;
-  get url(): string {
-    throw new Error('Method not implemented.');
-  }
-  set url(value: string) {
-    throw new Error('Method not implemented.');
-  }
-  close(params: { code: number; reason?: string | undefined }): void {
-    throw new Error('Method not implemented.');
-  }
-  send(params: { data: string | BlobBase }): boolean {
-    throw new Error('Method not implemented.');
-  }
-  onOpen(): void {
-    throw new Error('Method not implemented.');
-  }
-  onMessage(e: { string?: string | undefined; blob?: BlobBase | undefined }): void {
-    throw new Error('Method not implemented.');
-  }
-  onClose(e: { code: number; reason: string }): void {
-    throw new Error('Method not implemented.');
-  }
-  onFailure(e: { code: number; message: string }): void {
-    throw new Error('Method not implemented.');
-  }
+  onOpen: () => void;
+  onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;
+  onClose: (e: { code: number; reason: string }) => void;
+  onFailure: (e: { code: number; message: string }) => void;
+  abstract headers: Record<string, string>;
+  abstract get url(): string;
+  abstract set url(value: string);
+  abstract close(params: { code: number; reason?: string | undefined }): void;
+  abstract send(params: { data: string | Blob }): boolean;
 }

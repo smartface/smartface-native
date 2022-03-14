@@ -1,7 +1,6 @@
 import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
-import Blob from '../../global/blob';
-import IBlob, { BlobBase } from '../../global/blob/blob';
+import IBlob from '../../global/blob/blob';
 import { IFile } from '../file/file';
 
 export enum FileStreamType {
@@ -79,7 +78,7 @@ export interface IFileStream extends INativeComponent {
    * @ios
    * @deprecated since 1.1.10, you may use FileStream.readToEnd() function after you change contentMode of FileStream to FileStream.ContentMode.BINARY.
    */
-  readBlob(): Blob;
+  readBlob(): IBlob;
   /**
    * Gets all characters or blob content from the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
    * If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode, returns null.
@@ -87,7 +86,7 @@ export interface IFileStream extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  readToEnd(): string | Blob;
+  readToEnd<ContentType = string | IBlob>(): ContentType;
   /**
    * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
    * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false.
@@ -95,7 +94,7 @@ export interface IFileStream extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  write(content: string | Blob): boolean;
+  write(content: string | IBlob): boolean;
   /**
    * iOS only metthod
    * @iOS
@@ -112,6 +111,7 @@ export abstract class FileStreamBase extends NativeComponent implements IFileStr
   constructor(params?: Partial<FileStreamParams>) {
     super(params);
   }
+  abstract readToEnd<ContentType = string | IBlob>(): ContentType;
   mode: FileStreamType;
   contentMode: FileContentMode;
   isReadable: boolean;
@@ -121,7 +121,6 @@ export abstract class FileStreamBase extends NativeComponent implements IFileStr
   offset: number;
   abstract close(): void;
   abstract readBlob(): IBlob;
-  abstract readToEnd(): string | IBlob;
   abstract write(content: string | IBlob): boolean;
   seekToEnd?: (() => void) | undefined;
   static StreamType = FileStreamType;

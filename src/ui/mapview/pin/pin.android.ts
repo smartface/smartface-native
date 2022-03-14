@@ -2,6 +2,7 @@ import { IPin } from '.';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
 import { TypeUtil } from '../../../util';
 import ColorAndroid from '../../color/color.android';
+import { IImage } from '../../image';
 import ImageAndroid from '../../image/image.android';
 import { PinEvents } from './pin-events';
 
@@ -55,11 +56,11 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
   set id(value: number) {
     this._id = value;
   }
-  get image(): ImageAndroid | null {
-    return this._image;
+  get image(): IImage | null {
+    return this._image as IImage;
   }
-  set image(value: ImageAndroid | null) {
-    this._image = value;
+  set image(value: IImage | null) {
+    this._image = value as ImageAndroid;
     if (this.nativeObject && !this.isClusterEnabled && value instanceof ImageAndroid) {
       const iconBitmap = value.nativeObject.getBitmap();
       const icon = NativeDescriptorFactory.fromBitmap(iconBitmap);

@@ -191,7 +191,7 @@ export default class HttpAndroid extends HttpBase {
 
         if (statusCode !== 304 && bytes) {
           responseBody = new Blob(bytes, {
-            type: {}
+            type: ''
           });
         }
 
