@@ -4,6 +4,7 @@ import Color from '../color';
 import Font from '../font';
 import { ConstructorOf } from '../../core/constructorof';
 import NativeComponent from '../../core/native-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -251,9 +252,11 @@ export interface DatePickerAndroidProperties {
   style: Style;
 }
 
-export declare interface IDatePicker<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent> {
-  ios: Partial<DatePickerIOSProperties>;
-  android: Partial<DatePickerAndroidProperties>;
+export declare interface IDatePicker<
+  TEvent extends string = DatePickerEvents,
+  TNative = any,
+  TMobile extends MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties> = MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties>
+> extends NativeEventEmitterComponent<TEvent | DatePickerEvents, TNative, TMobile> {
   /**
    * Sets the initial date avaliable on the picker.
    *
@@ -335,9 +338,9 @@ export declare interface IDatePicker<TEvent extends string = DatePickerEvents> e
 }
 
 export abstract class AbstractDatePicker extends NativeEventEmitterComponent<DatePickerEvents, any, IDatePicker> implements IDatePicker {
-  constructor(params?: Partial<IDatePicker>){
+  constructor(params?: Partial<IDatePicker>) {
     super(params);
-  };
+  }
   abstract setDate(date: Date): void;
   abstract setMinDate(date: Date): void;
   abstract setMaxDate(date: Date): void;

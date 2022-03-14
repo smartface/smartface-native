@@ -20,10 +20,10 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     if (!this.nativeObject) {
       this._nativeObject = new __SF_UITableView();
       this.refreshControl = new __SF_UIRefreshControl();
-      this.nativeObject.addSubview(this.refreshControl);
-      this.nativeObject.separatorStyle = 0;
-      this.nativeObject.showsVerticalScrollIndicator = false;
-      this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+      this._nativeObject.addSubview(this.refreshControl);
+      this._nativeObject.separatorStyle = 0;
+      this._nativeObject.showsVerticalScrollIndicator = false;
+      this._nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
     }
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
@@ -99,13 +99,13 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   private __onRowSwipeWrapper(object: Parameters<IListView['onRowSwipe']>['0']) {
     const items = this.onRowSwipe?.(object);
 
-    const nativeItems = [];
+    const nativeItems: __SF_MGSwipeButton[] = [];
     items.forEach((swipeItem) => {
       const text = swipeItem.text;
       const backgroundColor = swipeItem.backgroundColor;
       const onPress = swipeItem.onPress;
-      const padding = swipeItem.ios.padding;
-      const isAutoHide = swipeItem.ios.isAutoHide;
+      const padding = swipeItem.ios.padding || 0;
+      const isAutoHide = !!swipeItem.ios.isAutoHide;
       const icon = swipeItem.icon;
       let nativeSwipeItem;
       if (icon) {
@@ -150,13 +150,13 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
         return self.nativeObject.leftToRightSwipeEnabled;
       },
       set leftToRightSwipeEnabled(value: IListView['ios']['leftToRightSwipeEnabled']) {
-        self.nativeObject.leftToRightSwipeEnabled = value;
+        self.nativeObject.leftToRightSwipeEnabled = !!value;
       },
       get rightToLeftSwipeEnabled(): IListView['ios']['rightToLeftSwipeEnabled'] {
         return self.nativeObject.rightToLeftSwipeEnabled;
       },
       set rightToLeftSwipeEnabled(value: IListView['ios']['rightToLeftSwipeEnabled']) {
-        self.nativeObject.rightToLeftSwipeEnabled = value;
+        self.nativeObject.rightToLeftSwipeEnabled = !!value;
       },
       performBatchUpdates(updates: any, completion: { e: { finished: boolean } }) {
         self.nativeObject.js_performBatchUpdates(updates, completion);

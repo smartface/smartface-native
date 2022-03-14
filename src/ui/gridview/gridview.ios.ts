@@ -173,7 +173,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     visibleIndexArray.sort((a, b) => a.section - b.section);
 
     const visibleIndex = visibleIndexArray[0];
-    return visibleIndex?.row || undefined;
+    return visibleIndex?.row || 0;
   }
   getLastVisibleIndex(): number {
     const visibleIndexArray: __SF_NSIndexPath[] = this.nativeObject.indexPathsForVisibleItems();
@@ -183,7 +183,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     visibleIndexArray.sort((a, b) => a.section - b.section);
 
     const visibleIndex = visibleIndexArray[visibleIndexArray.length - 1];
-    return visibleIndex?.row || undefined;
+    return visibleIndex?.row || 0;
   }
   setPullRefreshColors(color: Color[] | Color): void {
     this.refreshControl.tintColor = Array.isArray(color) ? color[0].nativeObject : color.nativeObject;
@@ -211,10 +211,10 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   stopRefresh(): void {
     this.refreshControl.endRefreshing();
   }
-  itemByIndex(index: number): GridViewItem {
+  itemByIndex(index: number): GridViewItem | undefined {
     const indexPath = __SF_NSIndexPath.indexPathForRowInSection(index, 0);
     const cell = this.nativeObject.cellForItemAtIndexPath(indexPath);
-    return cell ? this.collectionViewItems[cell.uuid] : null;
+    return cell ? this.collectionViewItems[cell.uuid] : undefined;
   }
 
   get itemCount(): number {

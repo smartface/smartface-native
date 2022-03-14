@@ -1,4 +1,4 @@
-import NativeComponent from 'core/native-component';
+import NativeComponent from '../../core/native-component';
 
 /**
  * @class Timer

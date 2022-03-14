@@ -13,7 +13,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   tabBar?: TabBarController;
   isActive: boolean = false;
   popupBackNavigator: boolean = false;
-  parentController = undefined;
+  parentController: IController = undefined;
   isInsideBottomTabBar: boolean;
 
   constructor(params: Partial<INavigationController>) {
@@ -50,7 +50,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     if (typeof value === 'object') {
       this.model.childControllers = value as any; //TODO: Fix typing issue
 
-      const nativeChildPageArray = [];
+      const nativeChildPageArray: any[] = [];
       for (const i in this.model.childControllers) {
         this.model.childControllers[i].parentController = this;
         nativeChildPageArray.push(this.model.childControllers[i].nativeObject);
@@ -71,7 +71,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
       params.controller.parentController = this;
     }
   }
-  pop(params?: { animated: boolean }): void {
+  pop(params: { animated: boolean } = { animated: true }): void {
     this.view.pop(!!params.animated);
     this.model.popPage();
   }
@@ -114,15 +114,13 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     this.view.dismiss(_completionBlock, animation);
   }
   private getVisiblePage(currentPage: Controller) {
-    let retval = null;
+    let retval = currentPage;
     if (currentPage instanceof BottomTabbarController) {
       const controller = currentPage.childControllers[currentPage.selectedIndex];
       retval = this.getVisiblePage(controller);
     } else if (currentPage instanceof NavigationControllerIOS) {
       const controller = currentPage.childControllers[currentPage.childControllers.length - 1] as IController;
       retval = this.getVisiblePage(controller);
-    } else if (currentPage instanceof Page) {
-      retval = currentPage;
     }
     return retval;
   }
@@ -167,9 +165,9 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
 }
 
 class NavigationView extends NativeComponent<__SF_UINavigationController> {
-  viewModel = undefined;
+  viewModel: any = undefined;
   private __navigationControllerDelegate: __SF_SMFNavigationControllerDelegate;
-  constructor(params?: { viewModel?: any }) {
+  constructor(params: { viewModel?: any } = {}) {
     super();
     this.viewModel = params.viewModel;
     this._nativeObject = new __SF_UINavigationController();
@@ -215,7 +213,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
 }
 
 class NavigationModel {
-  pageToPush: IController = undefined;
+  pageToPush: IController | null = null;
   childControllers: IController[];
   pushPage(page: IController) {
     this.pageToPush = page;
@@ -223,7 +221,9 @@ class NavigationModel {
   }
   popPage() {
     const poppedPage = this.childControllers.pop();
-    poppedPage.parentController = null;
+    if (poppedPage) {
+      poppedPage.parentController = null;
+    }
   }
   popToPage(page: IController) {
     const index = this.childControllers.indexOf(page);
@@ -234,7 +234,9 @@ class NavigationModel {
   popToIndex(index: number) {
     for (let i = this.childControllers.length - 1; i > index; --i) {
       const poppedPage = this.childControllers.pop();
-      poppedPage.parentController = null;
+      if (poppedPage) {
+        poppedPage.parentController = null;
+      }
     }
   }
   pageForIndex(index: number) {

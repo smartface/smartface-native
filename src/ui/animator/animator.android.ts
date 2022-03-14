@@ -9,10 +9,11 @@ const NativeAutoTransition = requireClass('androidx.transition.AutoTransition');
 const NativeAlphaTransition = requireClass('io.smartface.android.anims.AlphaTransition');
 const NativeRotateTransition = requireClass('io.smartface.android.anims.RotateTransition');
 const NativeScaleTransition = requireClass('io.smartface.android.anims.ScaleTransition');
-
+const NativeViewGroup = requireClass('android.view.ViewGroup');
+const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 export default class AnimatorAndroid extends AnimatorBase {
   private _layout: ViewGroup;
-  private _duration: number;
+  private _duration = 0;
   private _animFn: () => void;
   private _nextAnimator: AnimatorAndroid;
   private _completeFn: () => void;
@@ -20,9 +21,9 @@ export default class AnimatorAndroid extends AnimatorBase {
   constructor(params: Partial<AnimatorParams>) {
     super(params);
 
-    this._layout = params.layout;
-    this._duration = params.duration;
-    this._animFn = params.animFn;
+    this._layout = params.layout || new ViewGroup();
+    this._duration = params.duration || 0;
+    this._animFn = params.animFn || (() => {});
 
     this._onComplete = () => {
       if (this._nextAnimator) {
@@ -93,7 +94,7 @@ export default class AnimatorAndroid extends AnimatorBase {
   }
 
   applyLayoutInners(rootLayout: ViewGroup) {
-    const innerGroups = [];
+    const innerGroups: any[] = [];
     this.addInnerNativeViewGroups(rootLayout.nativeObject, innerGroups);
     innerGroups.forEach((viewGroup) => {
       viewGroup.requestLayout();
@@ -102,9 +103,6 @@ export default class AnimatorAndroid extends AnimatorBase {
   }
 
   addInnerNativeViewGroups(viewGroup: any, viewGroups: ViewGroup[]) {
-    const NativeViewGroup = requireClass('android.view.ViewGroup');
-    const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
-
     for (let i = 0; i < viewGroup.getChildCount(); i++) {
       const innerView = viewGroup.getChildAt(i);
       const innerClass = innerView.getClass();

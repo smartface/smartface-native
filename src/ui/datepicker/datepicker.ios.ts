@@ -165,7 +165,7 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
       set cancelText(value: IDatePicker['ios']['cancelText']) {
         self._cancelText = value;
       },
-      title: ""
+      title: ''
     };
   }
 }

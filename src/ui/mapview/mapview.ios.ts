@@ -51,7 +51,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
 
     const annotationSet = Invocation.invokeInstanceMethod(this.nativeObject, 'annotationsInMapRect:', [argAnnotationVisibleRect], 'id') as __SF_NSOBject;
 
-    const annotationArray = Invocation.invokeInstanceMethod(annotationSet, 'allObjects', [], 'id') as any[];
+    const annotationArray = Invocation.invokeInstanceMethod(annotationSet, 'allObjects', [], 'id') as unknown as any[];
     const pinArray: Pin[] = [];
     for (const i in annotationArray) {
       if (annotationArray[i].toString() !== '[object MKClusterAnnotation]') {

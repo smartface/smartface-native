@@ -468,7 +468,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   }
   set clusterFillColor(value) {
     //cant set after added mapview
-    if (value instanceof Color) {
+    if (value instanceof ColorAndroid) {
       this._fillColor = value;
     }
   }
@@ -486,7 +486,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   }
   set clusterTextColor(value) {
     //cant set after added mapview
-    if (value instanceof Color) {
+    if (value instanceof ColorAndroid) {
       this._textColor = value;
     }
   }

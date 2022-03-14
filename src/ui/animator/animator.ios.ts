@@ -2,23 +2,23 @@ import ViewGroup from '../viewgroup';
 import { AnimatorBase, AnimatorParams } from '.';
 
 export default class AnimatorIOS extends AnimatorBase {
-  private _layout: ViewGroup;
-  private _duration: number;
-  private _animFn: () => void;
+  private _layout: ViewGroup | undefined;
+  private _duration = 0;
+  private _animFn: (() => void) | undefined;
   private _thenAnimator: AnimatorIOS;
   private _completeFn: () => void;
-  constructor(params: Partial<AnimatorParams>) {
+  constructor(params: Partial<AnimatorParams> = {}) {
     super(params);
 
     this._layout = params.layout;
-    this._duration = params.duration;
+    this._duration = params.duration || 0;
     this._animFn = params.animFn;
   }
 
   perform(): AnimatorBase {
     const animateCallback = () => {
-      this._animFn();
-      this._layout.applyLayout();
+      this._animFn?.();
+      this._layout?.applyLayout();
     };
     const thenCallback = () => {
       if (this._thenAnimator) {

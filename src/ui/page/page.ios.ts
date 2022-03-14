@@ -201,7 +201,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.nativeObject.onViewDidAppear = function () {
       if (this.nativeObject.navigationController) {
         //COR-1627 for iOS 11 badge
-        const subviews: any[] = Invocation.invokeInstanceMethod(this.nativeObject.navigationController.navigationBar, 'subviews', [], 'id') as any[];
+        const subviews: any[] = Invocation.invokeInstanceMethod(this.nativeObject.navigationController.navigationBar, 'subviews', [], 'id') as unknown as any[];
         for (let i = 0; i < subviews.length; i++) {
           if (subviews[i].constructor.name === '_UINavigationBarContentView') {
             const argConstant = new Invocation.Argument({

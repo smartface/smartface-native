@@ -21,7 +21,7 @@ export enum ActivityIndicatorViewStyle {
   NORMAL = 1
 }
 
-export interface IActivityIndicator extends IView<undefined, any, IActivityIndicator> {
+export interface IActivityIndicator extends IView<ViewEvents, any, IActivityIndicator> {
   ios: IView['ios'] & {
     /**
      * Gets/sets style of the activity indicator.

@@ -41,7 +41,7 @@ export interface IController extends INativeComponent {
   pageID?: number;
   popupBackNavigator: any;
   isActive: boolean;
-  parentController: IController;
+  parentController: IController | null;
   childControllers?: IController[];
   isInsideBottomTabBar?: boolean;
   headerBar?: HeaderBar;
@@ -204,7 +204,7 @@ export abstract class AbstractNavigationController extends NativeComponent imple
   abstract popTo(params: { controller: IController; animated?: boolean }): void;
   abstract present(params: { controller: IController; animated: boolean; onComplete: () => void }): void;
   abstract dismiss(params: { onComplete: () => void; animated: boolean }): void;
-  abstract getCurrentController(): IController;
+  abstract getCurrentController(): IController | null;
   abstract show(params?: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }): void;
   abstract childControllers: Controller[];
   abstract willShow: (params: { controller: Controller; animated?: boolean }) => void;

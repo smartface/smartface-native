@@ -7,15 +7,14 @@ import { AbstractFile } from '../../io/file/file';
 import Page from '../page';
 
 export default class EmailComposerIOS extends AbstractEmailComposer {
-
   private _cc: string[];
   private _bcc: string[];
   private _to: string[];
   private _message: { message: string; isHtmlText: boolean };
   private _subject: string;
-  private _attaches = [];
+  private _attaches: any = [];
   private _closeCallback: () => void;
-  
+
   private nativeObjectDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
   constructor() {
     super();

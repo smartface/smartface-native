@@ -2,6 +2,7 @@
 import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
 import { INativeComponent } from '../../core/inative-component';
 import File from '../../io/file';
+import FileAndroid from '../../io/file/file.android';
 import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
@@ -28,7 +29,7 @@ const ImageFillTypeDic = {
 
 export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> extends ViewAndroid<TEvent | ImageViewEvents> implements IImageView {
   private _fillType: ImageViewFillType | ImageViewFillTypeIOS;
-  private _image: Image;
+  private _image: Image | null;
   private _adjustViewBounds: boolean = false;
   private _tintColor: Color;
   private _newImageLoaded: boolean = false;
@@ -40,19 +41,20 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  get image(): string | Image {
+  get image(): string | Image | null {
     if (!this._image || this._newImageLoaded) {
       this._newImageLoaded = false;
-      const drawable = this.nativeObject.getDrawable();
-      return (this._image = drawable
+      const drawable = !!this.nativeObject.getDrawable();
+
+      this._image = drawable
         ? new Image({
             // TODO Recheck after build
             drawable: drawable
           })
-        : null);
+        : null;
     } else return this._image;
   }
-  set image(value: string | Image) {
+  set image(value: string | Image | null) {
     // We don't use backgroundImage of view. Because, it breaks image fill type.
     if (value instanceof Image) {
       this._image = value;
@@ -104,7 +106,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     };
     ios?: { isRefreshCached?: boolean };
   }): void {
-    const { url, headers, placeholder, fade, useHTTPCacheControl, onSuccess, onFailure, android } = params;
+    const { url, headers = {}, placeholder, fade, useHTTPCacheControl, onSuccess, onFailure, android = {} } = params;
     //TODO: Paramters should be object this usage is deprecated
     if (!url) {
       onFailure?.();
@@ -148,7 +150,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   loadFromFile(params: { placeholder?: INativeComponent; file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
     const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
 
-    if (file instanceof File) {
+    if (file instanceof FileAndroid) {
       const parameters = new LoadFromFileParameters(AndroidConfig.activity, this.nativeObject, placeholder ? placeholder.nativeObject : null, null, fade, useMemoryCache, width, height);
       const resolvedPath = file.resolvedPath;
       if (!AndroidConfig.isEmulator && resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {

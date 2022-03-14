@@ -4,7 +4,7 @@ import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import { PATH_FILE_TYPE } from '../path/path';
 
-export interface FileiOSProps{
+export interface FileiOSProps {
   getNSURL: () => __SF_NSURL;
 }
 export interface IFile extends INativeComponent, MobileOSProps<FileiOSProps, {}> {
@@ -183,18 +183,31 @@ export abstract class AbstractFile extends NativeMobileComponent<any, IFile> imp
   constructor(params?: Partial<IFile> & FileParams) {
     super(params);
   }
-  fullPath: string;
-  type: PATH_FILE_TYPE;
-  creationDate: number;
-  exists: boolean;
-  extension: string;
-  isDirectory: boolean;
-  isFile: boolean;
-  modifiedDate: number;
-  name: string;
-  parent: IFile | null;
-  path: string;
-  size: number;
+  abstract get name(): string;
+  abstract set name(value: string);
+  abstract get fullPath(): string;
+  abstract set fullPath(value: string);
+  abstract get type(): PATH_FILE_TYPE;
+  abstract set type(value: PATH_FILE_TYPE);
+  abstract get creationDate(): number;
+  abstract set creationDate(value: number);
+  abstract get exists(): boolean;
+  abstract set exists(value: boolean);
+  abstract get extension(): string;
+  abstract set extension(value: string);
+  abstract get isDirectory(): boolean;
+  abstract set isDirectory(value: boolean);
+  abstract get isFile(): boolean;
+  abstract set isFile(value: boolean);
+  abstract get modifiedDate(): number;
+  abstract set modifiedDate(value: number);
+  abstract get parent(): IFile | null;
+  abstract set parent(value: IFile | null);
+  abstract get path(): string;
+  abstract set path(value: string);
+  abstract get size(): number;
+  abstract set size(value: number);
+  abstract get writable(): boolean;
   getAbsolutePath(): string {
     throw new Error('Method not implemented.');
   }
@@ -219,7 +232,6 @@ export abstract class AbstractFile extends NativeMobileComponent<any, IFile> imp
   openStream(streamType: FileStreamType, contentMode: FileContentMode): FileStream | undefined {
     throw new Error('Method not implemented.');
   }
-  readonly writable: boolean;
   rename(newName: string): boolean {
     throw new Error('Method not implemented.');
   }

@@ -7,7 +7,7 @@ import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import { SearchViewEvents } from './searchview-events';
 import { Invocation, KeyboardAnimationDelegate } from '../../util';
-import Page from 'ui/page';
+import Page from '../page';
 import KeyboardAppearance from '../shared/keyboardappearance';
 
 const UISearchBarStyle = {
@@ -23,10 +23,7 @@ const UISearchBarIcon = {
   resultsList: 3
 };
 
-export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
-  extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView>
-  implements ISearchView
-{
+export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _textAligment: number = 3;
   private _constant: number = 0;
   private _hint: string;
@@ -246,7 +243,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents>
   }
   set hint(value: string) {
     this._hint = value;
-    const allocNSAttributedString = Invocation.invokeClassMethod('NSAttributedString', 'alloc', [], 'id');
+    const allocNSAttributedString = Invocation.invokeClassMethod('NSAttributedString', 'alloc', [], 'id') as __SF_NSOBject;
     const argString = new Invocation.Argument({
       type: 'NSString',
       value

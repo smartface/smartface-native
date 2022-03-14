@@ -13,7 +13,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   private __navID: number;
   isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
-  popUpBackPage: Page;
+  popUpBackPage: Page | null;
   constructor(params: Partial<INavigationController> = {}) {
     super(params);
     this.__isActive = false;
@@ -72,8 +72,8 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   // Use this function to show page or controller without back stack operation.
   // Show page or controller that exists in history
   // Call this function from BottomTabBarController
-  show(params?: ControllerParams) {
-    if (!this.pageIDCollectionInStack[params.controller.pageID]) {
+  show(params: ControllerParams = { controller: this }) {
+    if (params.controller.pageID && !this.pageIDCollectionInStack[params.controller.pageID]) {
       throw new Error("This page doesn't exist in history!");
     }
     if (!this.__isActive) {
@@ -94,7 +94,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     ViewController.activateController(params.controller);
 
     this.showController(params);
-    let currentController;
+    let currentController = this._childControllers[0];
     if (this._childControllers.length > 1) {
       currentController = this._childControllers[this._childControllers.length - 1];
     }
@@ -171,7 +171,9 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     FragmentTransaction.dismissTransition(this.getCurrentController(), params.animated);
     FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
 
-    Application.currentPage = this.popUpBackPage;
+    if (this.popUpBackPage) {
+      Application.currentPage = this.popUpBackPage;
+    }
     ViewController.activateRootController(Application.currentPage);
     this.popUpBackPage = null;
     this.popupBackNavigator = null;
@@ -179,19 +181,19 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     ViewController.deactivateController(this);
     params.onComplete && params.onComplete();
   }
-  pop(params: Parameters<INavigationController['pop']>['0']) {
+  pop(params: Parameters<INavigationController['pop']>['0'] = {}) {
     if (this._childControllers.length < 2) {
       throw new Error('There is no page in history!');
     }
     // remove current page from history and its id from collection
     const poppedController = this._childControllers.pop();
-    this.pageIDCollectionInStack[poppedController.pageID] = null;
+    if (poppedController?.pageID) {
+      this.pageIDCollectionInStack[poppedController.pageID] = null;
+    }
     if (!this.__isActive) {
       return;
     }
-
-    !params && (params = {});
-    this.popFromHistoryController(poppedController, {animated: params.animated});
+    poppedController && this.popFromHistoryController(poppedController, { animated: !!params.animated });
   }
   popTo(params) {
     if (this._childControllers.length < 2) {
@@ -208,13 +210,17 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     // remove current controller from history and its id from collection
     while (this._childControllers[this._childControllers.length - 1].pageID !== params.controller.pageID) {
       const controller = this._childControllers.pop();
-      this.pageIDCollectionInStack[controller.pageID] = null;
+      if (controller?.pageID) {
+        this.pageIDCollectionInStack[controller.pageID] = null;
+      }
     }
 
     if (!this.__isActive) {
       return;
     }
-    this.popFromHistoryController(currentController, params);
+    if (currentController) {
+      this.popFromHistoryController(currentController, params);
+    }
   }
   // TODO: Use getCurrentController for all possible case
   getCurrentController() {
@@ -223,7 +229,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     }
     return null;
   }
-  popFromHistoryController(currentController: Controller, params: {animated: boolean}) {
+  popFromHistoryController(currentController: Controller, params: { animated: boolean }) {
     const targetController = this._childControllers[this._childControllers.length - 1];
     this._willShowCallback?.({ controller: targetController, animated: params.animated });
     if (targetController instanceof Page) {
