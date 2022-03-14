@@ -2,7 +2,7 @@
   "name": "@smartface/native",
   "version": "4.4.1-alpha.12",
   "description": "Core Modules of Native Libraries..",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "browserify": "browserify index.js -o bundle.js --standalone sf-core && uglifyjs bundle.js -o bundle.ugly.js -c -m",
