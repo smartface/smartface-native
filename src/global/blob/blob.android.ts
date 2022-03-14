@@ -1,4 +1,4 @@
-import Base64Util from 'src/util/base64';
+import Base64Util from '../../util/base64';
 import IBlob from './blob';
 
 const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
