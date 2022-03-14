@@ -82,7 +82,7 @@ export default class EmailComposerAndroid extends AbstractEmailComposer {
       page.nativeObject.startActivityForResult(this.nativeObject, EmailComposerAndroid.EMAIL_REQUESTCODE);
     }
   }
-  static _closeCallback: () => void = undefined;
+  static _closeCallback?: () => void;
   static canSendMail(): boolean {
     return true;
   }

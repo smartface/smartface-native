@@ -16,7 +16,9 @@ export default class GifImageIOS extends AbstractGifImage {
   static createFromFile(path: string): GifImageIOS {
     const file: File = typeof path === 'string' ? new File({ path }) : path;
     const fileStream = file.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-    const blob = fileStream.readToEnd() as Blob;
+    const blob = fileStream?.readToEnd();
+    if(blob === undefined)
+      throw new Error();
     const nativeObject = __SF_FLAnimatedImage.animatedImageWithGIFData(blob.nativeObject);
     
     return new GifImageIOS({ nativeObject: nativeObject });

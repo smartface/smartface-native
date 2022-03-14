@@ -195,7 +195,8 @@ export interface IImageView<
    * @ios
    * @since 0.1
    */
-  image: IImage | null;
+  get image(): IImage | null;
+  set image(img: IImage | null | string);
   /**
    * Gets/sets the tintColor.
    *

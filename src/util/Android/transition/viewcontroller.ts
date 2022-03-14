@@ -7,12 +7,12 @@ import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
 
 type PageWithController = Page | INavigationController;
 
-export type ControllerParams = {
+export type ControllerPresentParams = {
   controller: IController;
   animation?: boolean;
   animated?: boolean;
   isComingFromPresent?: boolean;
-  onCompleteCallback?: () => void;
+  onComplete?: () => void;
   animationType?: FragmentTransition.AnimationType;
 };
 namespace ViewController {
@@ -50,7 +50,7 @@ namespace ViewController {
   export function deactivateController(controller: IController) {
     ViewController.setIsActiveOfController(controller, false);
   }
-  export function setController(params: ControllerParams) {
+  export function setController(params: ControllerPresentParams) {
     if (params.controller instanceof NavigationController) {
       const childControllerStack = params.controller.childControllers;
       const childControllerStackLenght = childControllerStack.length;
@@ -65,7 +65,7 @@ namespace ViewController {
         controller: childControllerStack[childControllerStackLenght - 1],
         animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
-        onCompleteCallback: params.onCompleteCallback
+        onCompleteCallback: params.onComplete
       });
     } else if (params.controller instanceof Page) {
       // TODO: Check pageID settings! Code duplicate exists
@@ -75,7 +75,7 @@ namespace ViewController {
         page: params.controller,
         animated: params.animated,
         isComingFromPresent: params.isComingFromPresent,
-        onCompleteCallback: params.onCompleteCallback
+        onCompleteCallback: params.onComplete
       });
     } else if (params.controller instanceof BottomTabBarController) {
       // BottomTabBarController doesn't support pop-up or reveal animation yet.

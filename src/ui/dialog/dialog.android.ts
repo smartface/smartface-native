@@ -22,7 +22,7 @@ interface IDialogAndroid {
 export default class DialogAndroid extends AbstractDialog {
   private _android: IDialogAndroid;
   private _isTransparent: boolean;
-  private _themeStyle = DialogAndroid.Android.Style.ThemeDefault;
+  private _themeStyle: DialogStyle = DialogAndroid.Android.Style.ThemeDefault;
   private _layout: FlexLayout;
   private _onShowCallback: () => void;
   private _isSetListener = false;
@@ -35,7 +35,7 @@ export default class DialogAndroid extends AbstractDialog {
     super();
     this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
     this._isTransparent = params?.android?.isTransparent || false;
-    this._themeStyle ||= params?.android?.themeStyle;
+    this._themeStyle = params?.android?.themeStyle || DialogAndroid.Android.Style.ThemeDefault;
 
     this.nativeObject = this.nativeObject || new NativeDialog(AndroidConfig.activity, this._themeStyle);
 

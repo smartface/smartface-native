@@ -68,7 +68,7 @@ export default class GifImageAndroid extends AbstractGifImage {
   toBlob() {
     if (this._content instanceof File) {
       const myFileStream = this._content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-      return myFileStream.readToEnd() as Blob;
+      return myFileStream?.readToEnd() as Blob || null;
     } else if (this._content instanceof Blob) {
       return this._content;
     }

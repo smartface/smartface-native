@@ -1,4 +1,4 @@
-import { GridViewSnapAlignment, IGridView } from '.';
+import { GridViewSnapAlignment, IGridView, ScrollEventHandler } from '.';
 import { Point2D } from '../../primitive/point2d';
 import { UIControlEvents } from '../../util';
 import Color from '../color';
@@ -15,7 +15,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   onItemBind: (item?: GridViewItem, index?: number) => void;
   onItemType: (index?: number) => number;
   onItemSelected: (gridViewItem: GridViewItem, index?: number) => void;
-  onScroll: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void;
+  onScroll?: ScrollEventHandler;
   onPullRefresh: () => void;
   private _sectionCount: number;
   private registeredIndentifier: any = [];
@@ -160,7 +160,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
       this.emit('pullRefresh');
       this.onPullRefresh?.();
     }, UIControlEvents.valueChanged);
-    this.nativeObject.didScroll = (e: Parameters<IGridView['onScroll']>['0']) => {
+    this.nativeObject.didScroll = (e: Parameters<ScrollEventHandler>[0]) => {
       this.emit('scroll', e);
       this.onScroll?.(e);
     };

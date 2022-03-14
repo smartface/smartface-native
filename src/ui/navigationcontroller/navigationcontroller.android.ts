@@ -1,7 +1,7 @@
 import NavigationController, { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
 import Application from '../../application';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import ViewController, { ControllerParams } from '../../util/Android/transition/viewcontroller';
+import ViewController, { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 import BottomTabBarController from '../bottomtabbarcontroller';
 import { HeaderBar } from './headerbar';
 import Page from '../page';
@@ -72,7 +72,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   // Use this function to show page or controller without back stack operation.
   // Show page or controller that exists in history
   // Call this function from BottomTabBarController
-  show(params: ControllerParams = { controller: this }) {
+  show(params: ControllerPresentParams = { controller: this }) {
     if (params.controller.pageID && !this.pageIDCollectionInStack[params.controller.pageID]) {
       throw new Error("This page doesn't exist in history!");
     }
@@ -130,7 +130,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     this._childControllers.push(params.controller);
     this.show(params);
   }
-  showController(params: ControllerParams) {
+  showController(params: ControllerPresentParams) {
     if (params.controller instanceof Page) {
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
       FragmentTransaction.push({
@@ -147,7 +147,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     }
   }
 
-  present(params: Parameters<INavigationController['present']>['0']) {
+  present(params?: Parameters<INavigationController['present']>['0']) {
     if (!params || !this.__isActive) {
       return;
     }
@@ -161,14 +161,14 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       isComingFromPresent: true
     });
 
-    params.onComplete && params.onComplete();
+    params?.onComplete?.();
   }
   dismiss(params: Parameters<INavigationController['dismiss']>['0']) {
     if (!this.popupBackNavigator) {
       return;
     }
 
-    FragmentTransaction.dismissTransition(this.getCurrentController(), params.animated);
+    FragmentTransaction.dismissTransition(this.getCurrentController(), !!params?.animated);
     FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
 
     if (this.popUpBackPage) {
@@ -179,7 +179,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     this.popupBackNavigator = null;
 
     ViewController.deactivateController(this);
-    params.onComplete && params.onComplete();
+    params?.onComplete && params.onComplete();
   }
   pop(params: Parameters<INavigationController['pop']>['0'] = {}) {
     if (this._childControllers.length < 2) {

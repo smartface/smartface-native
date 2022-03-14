@@ -209,7 +209,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
   };
 }
 
-declare class AbstractSoundImpl extends AbstractSound{
+declare class SoundImpl extends AbstractSound{
   get isPlaying(): boolean;
   get isLooping(): boolean;
   set isLooping(isLooping: boolean);
@@ -226,7 +226,7 @@ declare class AbstractSoundImpl extends AbstractSound{
   loadURL(url: string): void;
 }
 
-const Sound: typeof AbstractSoundImpl = require(`./sound.${Device.deviceOS.toLowerCase()}`).default;
-type Sound = AbstractSoundImpl;
+const Sound: typeof SoundImpl = require(`./sound.${Device.deviceOS.toLowerCase()}`).default;
+type Sound = SoundImpl;
 
 export default Sound;

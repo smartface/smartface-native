@@ -1,10 +1,10 @@
-import { IBottomTabBarController } from '.';
+import BottomTabbarController, { IBottomTabBarController } from '.';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBar from '../bottomtabbar';
-import { IController, INavigationController } from '../navigationcontroller';
+import NavigationController, { IController, INavigationController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
-import Page from '../page';
+import Page, { IPage } from '../page';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 const UITabBarController = requireClass('UITabBarController');
@@ -12,7 +12,7 @@ const UITabBarController = requireClass('UITabBarController');
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
   private view;
-  private model;
+  private model: BottomTabBarModel;
   private _tabBar;
   private _shouldSelectByIndex;
   private _didSelectByIndex;
@@ -71,13 +71,13 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
     this.viewModel = undefined;
 
-    if (params.viewModel) {
+    if (params?.viewModel) {
       this.viewModel = params.viewModel;
     }
 
     this.nativeObject = UITabBarController.new();
     this.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
-      tabBarControllerShouldSelectViewController: (tabBarController, viewController) =>{
+      tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
         const index = this.nativeObject.viewControllers.indexOf(viewController);
         return this.viewModel.shouldSelectViewController(index);
       },
@@ -92,13 +92,13 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     this.currentIndex = 0;
   }
   // TODO: not implemented yet
-  getCurrentController(): INavigationController | Page | null {
+  getCurrentController(): IController | null {
     if (this.childControllers.length > 0) {
       return this.childControllers[this.childControllers.length - 1];
     }
-    
+
     return null;
-  };
+  }
   get didSelectByIndex() {
     return this._didSelectByIndex;
   }
@@ -130,7 +130,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     if (typeof childControllers === 'object') {
       this.model.childControllers = childControllers;
 
-      const nativeChildPageArray = [];
+      const nativeChildPageArray: any[] = [];
       for (const i in this.model.childControllers) {
         this.model.childControllers[i].parentController = this;
         nativeChildPageArray.push(this.model.childControllers[i].nativeObject);
@@ -186,17 +186,16 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       }
     }
   }
-  getVisiblePage(currentPage) {
-    let retval = null;
-    if (currentPage.constructor.name === 'BottomTabBarController') {
-      const controller = currentPage.childControllers[currentPage.selectedIndex];
-      retval = this.getVisiblePage(controller);
-    } else if (currentPage.constructor.name === 'NavigatonController') {
-      const controller = currentPage.childControllers[currentPage.childControllers.length - 1];
-      retval = this.getVisiblePage(controller);
+  getVisiblePage(currentController: BottomTabbarController | NavigationController | Page) {
+    let retval: NavigationController | Page | BottomTabbarController;
+    if (currentController instanceof BottomTabbarController) {
+      const controller = currentController.childControllers[currentController.selectedIndex];
+      retval = this.getVisiblePage(controller as NavigationController | Page);
+    } else if (currentController instanceof NavigationController) {
+      const controller = currentController.childControllers[currentController.childControllers.length - 1];
+      retval = this.getVisiblePage(controller as NavigationController | Page);
     } else {
-      // Page
-      retval = currentPage;
+      retval = currentController;
     }
     return retval;
   }
@@ -214,12 +213,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 }
 
 class BottomTabBarModel {
-  childControllers: any[];
-  currentIndex: number;
-  constructor() {
-    this.childControllers = [];
-    this.currentIndex = 0;
-  }
+  constructor(public childControllers: (INavigationController | IPage)[] = [], public currentIndex: number = 0) {}
 }
 
 class BottomTabBarView extends NativeComponent {
@@ -231,7 +225,7 @@ class BottomTabBarView extends NativeComponent {
     const self = this;
     self.viewModel = undefined;
 
-    if (params.viewModel) {
+    if (params?.viewModel) {
       self.viewModel = params.viewModel;
     }
 

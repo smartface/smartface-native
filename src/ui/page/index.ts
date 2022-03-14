@@ -99,18 +99,18 @@ export interface PageIOSParams {
    * ````
    */
   onSafeAreaPaddingChange: ((padding: { left: number; top: number; right: number; bottom: number }) => void) | undefined;
-  present(): void;
+  present(params?: ControllerParams): void;
   presentationStyle: number;
   navigationItem: HeaderBar;
 }
 
 export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
-  extends INativeComponent<TNative>,
-    IEventEmitter<TEvent | PageEvents> {
+  extends IEventEmitter<TEvent | PageEvents>, 
+    IController<TNative> {
   contextMenu: {
     items: any[];
     headerTitle: string;
-  }
+  };
   android: TMobile['android'];
   ios: TMobile['ios'];
   isInsideBottomTabBar: boolean;
@@ -267,7 +267,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @since 3.1.1
    *
    */
-  present(params: ControllerParams): void;
+  present(params?: ControllerParams): void;
   /**
    * This function dismiss presently shown pop-up page.
    *
@@ -279,7 +279,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @since 3.1.1
    * @deprecated
    */
-  dismiss(params?: ControllerParams): void;
+  dismiss(params?: { onComplete: () => void, animated?: boolean }): void;
   /**
    * Gets status bar object. This property is readonly, you can not set
    * status bar to a page but you can change properties of page's status bar.
@@ -346,7 +346,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    */
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
   skipDefaults?: boolean;
-  readonly parentController: IController;
+  parentController: IController;
 }
 
 // export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>
@@ -405,11 +405,11 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
     this._skipDefaults = value;
   }
 
-  constructor(params?: Partial<TProps>){
+  constructor(params?: Partial<TProps>) {
     super(params);
-  };
-  contextMenu: { items: any[]; headerTitle: string; };
-  childControllers?: IController[];
+  }
+  childControllers: IController<any>[] = [];
+  contextMenu: { items: any[]; headerTitle: string };
   tabBar?: TabBarController;
   abstract getCurrentController(): IController;
   abstract show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
@@ -425,7 +425,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   onShow: () => void;
   onHide: () => void;
   abstract present(params?: ControllerParams): void;
-  abstract dismiss(params?: ControllerParams): void;
+  abstract dismiss(params?: { onComplete: () => void }): void;
   abstract readonly layout: FlexLayout;
   abstract readonly statusBar: StatusBar;
   abstract readonly headerBar?: HeaderBar;
@@ -444,8 +444,8 @@ declare class PageImpl extends AbstractPage implements IPage {
   statusBar: StatusBar;
   headerBar?: HeaderBar | undefined;
   getCurrentController(): IController;
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined; });
-  onOrientationChange(e: { orientation: PageOrientation[]; }): void;
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined });
+  onOrientationChange(e: { orientation: PageOrientation[] }): void;
   present(params?: ControllerParams): void;
   dismiss(params?: ControllerParams): void;
 }

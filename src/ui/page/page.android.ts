@@ -176,7 +176,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   set transitionViews(value: IPage['transitionViews']) {
     this._transitionViews = value;
   }
-  present(params: Parameters<IPage['present']>['0']) {
+  present(params?: Parameters<IPage['present']>['0']) {
     if (!params) {
       return;
     }
@@ -191,7 +191,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       controller: controller as any, //params.controller,
       animation: !!params.animated,
       isComingFromPresent: true,
-      onCompleteCallback: params.onComplete
+      onComplete: params.onComplete
     });
   }
   dismiss(params: Parameters<IPage['dismiss']>['0']) {

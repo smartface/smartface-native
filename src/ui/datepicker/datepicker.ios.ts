@@ -4,14 +4,14 @@ import { DatePickerEvents } from './datepicker-events';
 
 export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends AbstractDatePicker implements IDatePicker<TEvent | DatePickerEvents> {
   protected _nativeObject: __SF_UIDatePicker;
-  private _titleColor: IDatePicker['ios']['titleColor'];
-  private _titleFont: IDatePicker['ios']['titleFont'];
-  private _cancelColor: IDatePicker['ios']['cancelColor'];
-  private _cancelHighlightedColor: IDatePicker['ios']['cancelHighlightedColor'];
-  private _cancelFont: IDatePicker['ios']['cancelFont'];
-  private _okColor: IDatePicker['ios']['okColor'];
-  private _okHighlightedColor: IDatePicker['ios']['okHighlightedColor'];
-  private _okFont: IDatePicker['ios']['okFont'];
+  private _titleColor: DatePickerIOSProperties['titleColor'];
+  private _titleFont: DatePickerIOSProperties['titleFont'];
+  private _cancelColor: DatePickerIOSProperties['cancelColor'];
+  private _cancelHighlightedColor: DatePickerIOSProperties['cancelHighlightedColor'];
+  private _cancelFont: DatePickerIOSProperties['cancelFont'];
+  private _okColor: DatePickerIOSProperties['okColor'];
+  private _okHighlightedColor: DatePickerIOSProperties['okHighlightedColor'];
+  private _okFont: DatePickerIOSProperties['okFont'];
   private _okText: string;
   private _cancelText: string;
   private onDateSelectedListener: (e: { date: Date }) => void;
@@ -72,7 +72,7 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
     const self = this;
 
     return {
-      get textColor(): IDatePicker['ios']['textColor'] {
+      get textColor(): DatePickerIOSProperties['textColor'] {
         if (self.nativeObject.textColor === undefined) {
           return undefined;
         }
@@ -80,89 +80,89 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
           color: self.nativeObject.textColor
         });
       },
-      set textColor(value: IDatePicker['ios']['textColor']) {
+      set textColor(value: DatePickerIOSProperties['textColor']) {
         self.nativeObject.textColor = value?.nativeObject;
       },
-      get dialogBackgroundColor(): IDatePicker['ios']['dialogBackgroundColor'] {
+      get dialogBackgroundColor(): DatePickerIOSProperties['dialogBackgroundColor'] {
         return new Color({
           color: self.nativeObject.dialogBackgroundColor
         });
       },
-      set dialogBackgroundColor(value: IDatePicker['ios']['dialogBackgroundColor']) {
+      set dialogBackgroundColor(value: DatePickerIOSProperties['dialogBackgroundColor']) {
         self.nativeObject.dialogBackgroundColor = value.nativeObject;
       },
-      get dialogLineColor(): IDatePicker['ios']['dialogLineColor'] {
+      get dialogLineColor(): DatePickerIOSProperties['dialogLineColor'] {
         return new Color({
           color: self.nativeObject.dialogLineColor
         });
       },
-      set dialogLineColor(value: IDatePicker['ios']['dialogLineColor']) {
+      set dialogLineColor(value: DatePickerIOSProperties['dialogLineColor']) {
         self.nativeObject.dialogLineColor = value.nativeObject;
       },
-      get titleColor(): IDatePicker['ios']['titleColor'] {
+      get titleColor(): DatePickerIOSProperties['titleColor'] {
         return self._titleColor;
       },
-      set titleColor(value: IDatePicker['ios']['titleColor']) {
+      set titleColor(value: DatePickerIOSProperties['titleColor']) {
         self._titleColor = value;
       },
-      get titleFont(): IDatePicker['ios']['titleFont'] {
+      get titleFont(): DatePickerIOSProperties['titleFont'] {
         return self._titleFont;
       },
-      set titleFont(value: IDatePicker['ios']['titleFont']) {
+      set titleFont(value: DatePickerIOSProperties['titleFont']) {
         self._titleFont = value;
       },
-      get cancelColor(): IDatePicker['ios']['cancelColor'] {
+      get cancelColor(): DatePickerIOSProperties['cancelColor'] {
         return self._cancelColor;
       },
-      set cancelColor(value: IDatePicker['ios']['cancelColor']) {
+      set cancelColor(value: DatePickerIOSProperties['cancelColor']) {
         self._cancelColor = value;
       },
-      get cancelHighlightedColor(): IDatePicker['ios']['cancelHighlightedColor'] {
+      get cancelHighlightedColor(): DatePickerIOSProperties['cancelHighlightedColor'] {
         return self._cancelHighlightedColor;
       },
-      set cancelHighlightedColor(value: IDatePicker['ios']['cancelHighlightedColor']) {
+      set cancelHighlightedColor(value: DatePickerIOSProperties['cancelHighlightedColor']) {
         self._cancelHighlightedColor = value;
       },
-      get cancelFont(): IDatePicker['ios']['cancelFont'] {
+      get cancelFont(): DatePickerIOSProperties['cancelFont'] {
         return self._cancelFont;
       },
-      set cancelFont(value: IDatePicker['ios']['cancelFont']) {
+      set cancelFont(value: DatePickerIOSProperties['cancelFont']) {
         self._cancelFont = value;
       },
-      get okColor(): IDatePicker['ios']['okColor'] {
+      get okColor(): DatePickerIOSProperties['okColor'] {
         return self._okColor;
       },
-      set okColor(value: IDatePicker['ios']['okColor']) {
+      set okColor(value: DatePickerIOSProperties['okColor']) {
         self._okColor = value;
       },
-      get okHighlightedColor(): IDatePicker['ios']['okHighlightedColor'] {
+      get okHighlightedColor(): DatePickerIOSProperties['okHighlightedColor'] {
         return self._okHighlightedColor;
       },
-      set okHighlightedColor(value: IDatePicker['ios']['okHighlightedColor']) {
+      set okHighlightedColor(value: DatePickerIOSProperties['okHighlightedColor']) {
         self._okHighlightedColor = value;
       },
-      get okFont(): IDatePicker['ios']['okFont'] {
+      get okFont(): DatePickerIOSProperties['okFont'] {
         return self._okFont;
       },
-      set okFont(value: IDatePicker['ios']['okFont']) {
+      set okFont(value: DatePickerIOSProperties['okFont']) {
         self._okFont = value;
       },
-      get datePickerMode(): IDatePicker['ios']['datePickerMode'] {
+      get datePickerMode(): DatePickerIOSProperties['datePickerMode'] {
         return self.nativeObject.datePickerMode;
       },
-      set datePickerMode(value: IDatePicker['ios']['datePickerMode']) {
+      set datePickerMode(value: DatePickerIOSProperties['datePickerMode']) {
         self.nativeObject.datePickerMode = value;
       },
-      get okText(): IDatePicker['ios']['okText'] {
+      get okText(): DatePickerIOSProperties['okText'] {
         return self._okText;
       },
-      set okText(value: IDatePicker['ios']['okText']) {
+      set okText(value: DatePickerIOSProperties['okText']) {
         self._okText = value;
       },
-      get cancelText(): IDatePicker['ios']['cancelText'] {
+      get cancelText(): DatePickerIOSProperties['cancelText'] {
         return self._cancelText;
       },
-      set cancelText(value: IDatePicker['ios']['cancelText']) {
+      set cancelText(value: DatePickerIOSProperties['cancelText']) {
         self._cancelText = value;
       },
       title: ''

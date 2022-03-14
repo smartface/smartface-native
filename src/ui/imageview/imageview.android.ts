@@ -41,7 +41,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  get image(): string | Image | null {
+  get image(): Image | null {
     if (!this._image || this._newImageLoaded) {
       this._newImageLoaded = false;
       const drawable = !!this.nativeObject.getDrawable();
@@ -52,7 +52,8 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
             drawable: drawable
           })
         : null;
-    } else return this._image;
+    } 
+    return this._image;
   }
   set image(value: string | Image | null) {
     // We don't use backgroundImage of view. Because, it breaks image fill type.

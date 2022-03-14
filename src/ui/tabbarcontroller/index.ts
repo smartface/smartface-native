@@ -9,7 +9,7 @@ import { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import View, { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view';
 import { StatusBar } from '../../application/statusbar';
-import { ControllerParams } from '../../util/Android/transition/viewcontroller';
+import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 
 export enum BarTextTransform {
   AUTO = 0,
@@ -31,10 +31,10 @@ export enum PresentationStyle {
 export interface ITabBarControllerIOSProps extends PageIOSParams {
   barTextTransform: BarTextTransform;
 }
-export interface ITabBarControllerAndroidProps extends PageAndroidParams {
-}
+export interface ITabBarControllerAndroidProps extends PageAndroidParams {}
 
-export declare interface ITabBarController<TEvent extends string = TabBarControllerEvents> extends IPage<TEvent | TabBarControllerEvents, MobileOSProps<ITabBarControllerIOSProps, ITabBarControllerAndroidProps>> {
+export declare interface ITabBarController<TEvent extends string = TabBarControllerEvents>
+  extends IPage<TEvent | TabBarControllerEvents, MobileOSProps<ITabBarControllerIOSProps, ITabBarControllerAndroidProps>> {
   /**
    * Gets the tab bar height of the TabBarController. You can change barHeight on Android, but not iOS.
    * This property is read-only for iOS.
@@ -254,24 +254,25 @@ export declare abstract class AbstractTabBarController<TEvent extends string = T
 }
 
 class TabBarControllerImpl extends AbstractTabBarController {
+  present(params?: ControllerPresentParams): void {
+    throw new Error('Method not implemented.');
+  }
+  dismiss(params?: { onComplete: () => void }): void {
+    throw new Error('Method not implemented.');
+  }
   setSelectedIndex(index: number, animated: boolean): void {
     throw new Error('Method not implemented.');
   }
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined; }) {
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
     throw new Error('Method not implemented.');
   }
-  onOrientationChange(e: { orientation: PageOrientation[]; }): void {
+  onOrientationChange(e: { orientation: PageOrientation[] }): void {
     throw new Error('Method not implemented.');
   }
-  present(params?: ControllerParams): void {
-    throw new Error('Method not implemented.');
-  }
-  dismiss(params?: ControllerParams): void {
-    throw new Error('Method not implemented.');
-  }
+
 }
 
 /**

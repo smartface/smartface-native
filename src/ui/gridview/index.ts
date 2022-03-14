@@ -10,6 +10,8 @@ import DecelerationRate from '../shared/ios/decelerationrate';
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { GridViewEvents } from './gridview-events';
 
+
+export type ScrollEventHandler = (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void
 /**
  * @enum UI.GridView.Android.SnapAlignment
  * @since 1.1.16
@@ -460,7 +462,7 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
    * @ios
    * @since 3.1.3
    */
-  onScroll: undefined | ((e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void);
+  onScroll?: ScrollEventHandler;
 
   /**
    * This event is called when user pulls down and releases a GridView
@@ -509,7 +511,7 @@ export abstract class AbstractGridView<TEvent extends string = GridViewEvents, T
   abstract refreshData(): void;
   abstract scrollTo(index: number, animated?: boolean): void;
   abstract stopRefresh(): void;
-  onScroll: undefined | ((e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void);
+  onScroll?: ((e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void);
   onPullRefresh: () => void;
   abstract itemByIndex(index: number): GridViewItem | undefined;
   static Android: {

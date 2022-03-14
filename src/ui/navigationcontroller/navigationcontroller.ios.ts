@@ -4,6 +4,7 @@ import Page from '../page';
 import BottomTabbarController from '../bottomtabbarcontroller';
 import TabBarController from '../tabbarcontroller';
 import { HeaderBar } from './headerbar';
+import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 export default class NavigationControllerIOS extends AbstractNavigationController implements INavigationController, IController {
   private _android = {};
   private _ios = {};
@@ -13,7 +14,6 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   tabBar?: TabBarController;
   isActive: boolean = false;
   popupBackNavigator: boolean = false;
-  parentController: IController = undefined;
   isInsideBottomTabBar: boolean;
 
   constructor(params: Partial<INavigationController>) {
@@ -83,7 +83,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   }
   willShow: (params: { controller: Controller; animated?: boolean }) => void;
   onTransition: (e: { controller?: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
-  present(params: { controller: Controller; animated: boolean; onComplete: () => void }): void {
+  present(params?: ControllerPresentParams): void {
     if (typeof params === 'object') {
       const controller = params.controller;
       const animation = params.animated;
@@ -126,7 +126,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   }
   private willShowViewController(index: number, animated?: boolean) {
     const page = this.model.pageForIndex(index);
-    this.willShow?.({
+    page && this.willShow?.({
       controller: page,
       animated: animated
     });
@@ -155,7 +155,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   private animationControllerForOperationFromViewControllerToViewController(operation: number, fromIndex: number, toIndex: number) {
     const fromController = this.model.childControllers[fromIndex];
     const toController = this.model.pageForIndex(toIndex);
-    this.onTransition?.({
+    toController && this.onTransition?.({
       currentController: fromController,
       targetController: toController,
       operation: operation

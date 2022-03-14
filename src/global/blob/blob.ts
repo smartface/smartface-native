@@ -66,15 +66,14 @@ interface IBlob extends INativeComponent {
   toString: () => string;
 }
 
-export declare class BlobBase implements IBlob {
-  constructor(params?: Partial<BlobBase>, options?: Record<string, any>);
+export abstract class BlobBase implements IBlob {
   nativeObject: any;
-  get type(): string;
-  get size(): number;
-  slice(start: number, end: number): BlobBase;
-  toBase64(): string;
-  toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void;
-  toString(): string;
+  abstract get type(): string;
+  abstract get size(): number;
+  abstract slice(start: number, end: number): BlobBase;
+  abstract toBase64(): string;
+  abstract toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void;
+  abstract toString(): string;
   /**
    * Creates a blob object from given a base64String.
    *
@@ -84,7 +83,9 @@ export declare class BlobBase implements IBlob {
    * @static
    * @since 0.1
    */
-  static createFromBase64: (Base64String: string) => BlobBase;
+  static createFromBase64(Base64String: string) {
+    throw new Error("Method not implemented")
+  };
   /**
    * Creates a blob object from given a utf8 string.
    *
@@ -94,7 +95,9 @@ export declare class BlobBase implements IBlob {
    * @static
    * @since 0.1
    */
-  static createFromUTF8String: (utf8String: string) => BlobBase;
+  static createFromUTF8String(utf8String: string) {
+    throw new Error("Method not implemented")
+  }
 }
 
 export default IBlob;

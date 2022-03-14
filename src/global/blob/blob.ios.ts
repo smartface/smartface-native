@@ -1,6 +1,6 @@
 import { BlobBase } from './blob';
 
-class BlobIOS extends BlobBase {
+class BlobIOS extends Abstrablo {
   constructor(parts: string[], properties?: { type: string }) {
     super();
     if (!this.nativeObject) {

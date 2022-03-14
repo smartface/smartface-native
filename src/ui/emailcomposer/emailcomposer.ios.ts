@@ -1,9 +1,6 @@
 import { AbstractEmailComposer } from '.';
-import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
-import { BlobBase } from '../../global/blob/blob';
 import File from '../../io/file';
-import { AbstractFile } from '../../io/file/file';
 import Page from '../page';
 
 export default class EmailComposerIOS extends AbstractEmailComposer {
@@ -51,7 +48,7 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   setMessage(text: string, isHtmlText?: boolean) {
     this._message = {
       message: text,
-      isHtmlText: isHtmlText
+      isHtmlText: !!isHtmlText
     };
   }
   setSubject(subject: string) {

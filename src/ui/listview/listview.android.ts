@@ -35,7 +35,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private _listViewItems: Record<string, ListViewItem> = {};
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
-  private sfSwipeItem: any;
+  private nativeSwipeItemInstance: any;
   constructor(params?: IListView) {
     super(params);
     if (!this.nativeObject) {
@@ -358,18 +358,19 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
             } = {},
             onPress
           } = result[0];
-          if (!this.sfSwipeItem) {
-            this.sfSwipeItem = new SFItemTouchHelperCallback.SFSwipeItem();
+          if (!this.nativeSwipeItemInstance) {
+            this.nativeSwipeItemInstance = new SFItemTouchHelperCallback.SFSwipeItem();
           }
-          this.sfSwipeItem.resetVariables();
+          this.nativeSwipeItemInstance.resetVariables();
           const bitmap = icon ? icon.nativeObject.getBitmap() : null;
-          this.sfSwipeItem.setSwipeItemProps(font.nativeObject, font.size, backgroundColor.nativeObject, text, textColor.nativeObject, bitmap, threshold, {
-            onPress: (index: number) => {
-              const params = { index };
-              onPress?.(params);
-              result[0].emit('press');
-            }
-          });
+          font &&
+            this.nativeSwipeItemInstance.setSwipeItemProps(font.nativeObject, font.size, backgroundColor.nativeObject, text, textColor.nativeObject, bitmap, threshold, {
+              onPress: (index: number) => {
+                const params = { index };
+                onPress?.(params);
+                result[0].emit('press');
+              }
+            });
           const borderRadii = array(
             [
               borderTopLeftRadius,
@@ -387,9 +388,9 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
             [paddingLeft, paddingRight, paddingTop, paddingBottom].map((p) => UnitConverter.dpToPixel(p)),
             'float'
           );
-          this.sfSwipeItem.setSwipeItemDimensions(paddings, borderRadii);
+          this.nativeSwipeItemInstance.setSwipeItemDimensions(paddings, borderRadii);
 
-          return this.sfSwipeItem;
+          return this.nativeSwipeItemInstance;
         },
         onRowCanSwipe: (index: number) => {
           const result = this.onRowCanSwipe?.(index);

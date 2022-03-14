@@ -107,7 +107,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   dismiss(params?: Parameters<IPage['dismiss']>['0']) {
     if (typeof params === 'object') {
       const onComplete = params.onComplete;
-      const animation = params.animated;
+      const animation = params?.animated;
       const _completionBlock = onComplete;
       this.nativeObject.dismissViewController(_completionBlock, animation);
     }
