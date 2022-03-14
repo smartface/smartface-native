@@ -1,13 +1,14 @@
 {
   "name": "@smartface/native",
-  "version": "4.4.1-alpha.12",
+  "version": "5.0.0-alpha.2",
   "description": "Core Modules of Native Libraries..",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "browserify": "browserify index.js -o bundle.js --standalone sf-core && uglifyjs bundle.js -o bundle.ugly.js -c -m",
     "beautify": "find . -type f -name '*.js' ! -path '*node_modules*' ! -path '*git*' ! -path '*docs_resource*' ! -path '*tests*' -exec js-beautify -r {} +",
-    "build": "node bundler.js && rm -rf ./.tmp",
+    "build": "rm -rf dist && tsc && cp ./package.json ./dist/package.json",
+    "deploy": "npm run build && cd ./dist && npm publish",
     "dev": "npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
     "lint:write": "npx prettier --write ./**/*"
