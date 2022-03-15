@@ -7,7 +7,7 @@ import { INativeComponent } from '../../core/inative-component';
  * Blob is a binary large object.
  *
  *     @example
- *     const Blob = require('@smartface/native/blob');
+ *     import Blob from '@smartface/native/blob';
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */

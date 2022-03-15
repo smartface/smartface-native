@@ -59,8 +59,8 @@ export type Controller = IController;
  * @since 3.2
  *
  *     @example
- *     const Page = require('@smartface/native/ui/page');
- *     const NavigationController = require('@smartface/native/ui/navigationcontroller');
+ *     import Page from '@smartface/native/ui/page';
+ *     import NavigationController from '@smartface/native/ui/navigationcontroller';
  *
  *     var page1 = new Page();
  *     var navigationController = new NavigationController(); //// OR IT CAN TAKES a controller object like tabbarcontroller AS AN ARGUMENT
@@ -202,7 +202,7 @@ export abstract class AbstractNavigationController extends NativeComponent imple
     super(params);
   }
   abstract present(params?: ControllerPresentParams): void;
-  abstract dismiss(params?: { onComplete: () => void;}): void;
+  abstract dismiss(params?: { onComplete: () => void }): void;
   abstract push(params: { controller: IController; animated?: boolean }): void;
   abstract pop(params?: { animated?: boolean }): void;
   abstract popTo(params: { controller: IController; animated?: boolean }): void;

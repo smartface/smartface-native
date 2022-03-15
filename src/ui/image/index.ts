@@ -10,8 +10,8 @@ import { Rectangle } from '../../primitive/rectangle';
  * It can be set to UI objects' properties (e.g. UI.ImageView.image).
  *
  *     @example
- *     const Image = require('@smartface/native/ui/image');
- *     const ImageView = require('@smartface/native/ui/imageview');
+ *     import Image from '@smartface/native/ui/image';
+ *     import ImageView from '@smartface/native/ui/imageview';
  *
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({
@@ -83,15 +83,15 @@ export interface IImage extends NativeMobileComponent {
    * onSuccess and onFailure are optional parameters.
    *
    *     @example
-   *     const Image = require('@smartface/native/ui/image');
-   *     const ImageView = require('@smartface/native/ui/imageview');
+   *     import Image from '@smartface/native/ui/image';
+   *     import ImageView from '@smartface/native/ui/imageview';
    *     var myImage = Image.createFromFile("images://smartface.png")
    *     var myImageView = new ImageView();
    *     myImageView.image = myImage.resize(myImage.width/2, myImage.height/2); // resize example without callback
    *
    *
-   *     const Image = require('@smartface/native/ui/image');
-   *     const ImageView = require('@smartface/native/ui/imageview');
+   *     import Image from '@smartface/native/ui/image';
+   *     import ImageView from '@smartface/native/ui/imageview';
    *     var myImage = Image.createFromFile("images://smartface.png")
    *     var myImageView = new ImageView();
    *     myImage.resize(myImage.width/2, myImage.height/2, onSuccess);
@@ -141,7 +141,7 @@ export interface IImage extends NativeMobileComponent {
    * onSuccess and onFailure are optional parameters.
    *
    *     @example
-   *     const Image = require('@smartface/native/ui/image');
+   *     import Image from '@smartface/native/ui/image';
    *     var myImage = Image.createFromFile("images://smartface.png")
    *     var myBlob = myImage.compress(Image.Format.JPEG, 50);
    *     var myCompressedImage = Image.createFromBlob(myBlob);
@@ -453,7 +453,7 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
    * These parameters are used loading large bitmaps efficiently. If you pass these parameters, the bitmap will scaled down.
    *
    *     @example
-   *     const Image = require('@smartface/native/ui/image');
+   *     import Image from '@smartface/native/ui/image';
    *     var myImage = Image.createFromFile("images://smartface.png");
    *
    * @param {String} path Image file path

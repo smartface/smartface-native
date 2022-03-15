@@ -13,8 +13,8 @@ import File from '../../../io/file';
  *
  *
  *     @example
- *     const File = require("@smartface/native/io/file");
- *     const Database = require('@smartface/native/data').Database;
+ *     import File from '@smartface/native/io/file';
+ *     import Database from '@smartface/native/data'.Database;
  *
  *     var database = new Database({
  *         file: new File({path: 'assets://database.sqlite'})

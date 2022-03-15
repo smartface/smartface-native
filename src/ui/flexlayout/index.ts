@@ -98,13 +98,13 @@ export type FlexLayoutAndroidProps = IViewGroup['android'] & {
  * fill the available space.
  *
  *     @example
- *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+ *     import FlexLayout from '@smartface/native/ui/flexlayout';
  *     var myFlexLayout = new FlexLayout({
  *         flexGrow:1
  *     });
  *
- *     const Label = require('@smartface/native/ui/label');
- *     const Color = require('@smartface/native/ui/color');
+ *     import Label from '@smartface/native/ui/label';
+ *     import Color from '@smartface/native/ui/color';
  *     var myLabel1 = new Label({
  *         width: 100,
  *         height: 50,
@@ -123,14 +123,17 @@ export type FlexLayoutAndroidProps = IViewGroup['android'] & {
  *     page.layout.addChild(myFlexLayout);
  *
  */
-export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobileProps extends MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps> = MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps>> extends IViewGroup<TEvent | FlexLayoutEvents, any, TMobileProps> {
+export interface IFlexLayout<
+  TEvent extends string = FlexLayoutEvents,
+  TMobileProps extends MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps> = MobileOSProps<FlexLayoutIOSProps, FlexLayoutAndroidProps>
+> extends IViewGroup<TEvent | FlexLayoutEvents, any, TMobileProps> {
   /**
    * This property specifies where items will start to be positioned.
    * If you set RTL(right to left) objects will be positioned by starting from right edge of the Flex.
    * If you set LTR(left to right) objects will be positioned by starting from left edge of the Flex.
    *
    *     @example
-   *     const FlexLayout = require('@smartface/native/ui/flexlayout');
+   *     import FlexLayout from '@smartface/native/ui/flexlayout';
    *     var myFlexLayout = new FlexLayout({
    *         flexGrow : 1
    *         direction: Flex.Direction.RTL
@@ -214,5 +217,5 @@ export interface IFlexLayout<TEvent extends string = FlexLayoutEvents, TMobilePr
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
 type FlexLayout = IFlexLayout;
-const c = new FlexLayout()
+const c = new FlexLayout();
 export default FlexLayout;

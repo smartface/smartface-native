@@ -17,7 +17,7 @@ export declare class ShareBase {
    * Shares a text.
    *
    *     @example
-   *     const Share = require('@smartface/native/share');
+   *     import Share from '@smartface/native/share';
    *     Share.shareText("Hello from @smartface/native", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
    *
    * @method shareText
@@ -33,8 +33,8 @@ export declare class ShareBase {
    * Shares an image.
    *
    *     @example
-   *     const Share = require('@smartface/native/share');
-   *     const Image = require('@smartface/native/ui/image');
+   *     import Share from '@smartface/native/share';
+   *     import Image from '@smartface/native/ui/image';
    *
    *     var image = Image.createFromFile('path to the image');
    *     Share.shareImage(image, myPage, []);
@@ -52,8 +52,8 @@ export declare class ShareBase {
    * Shares a file.
    *
    *     @example
-   *     const Share = require('@smartface/native/share');
-   *     const File = require('@smartface/native/io/file');
+   *     import Share from '@smartface/native/share';
+   *     import File from '@smartface/native/io/file';
    *
    *     var file = new File({path: 'path to the file'});
    *     Share.shareFile(file, myPage, []);
@@ -87,8 +87,8 @@ export declare class ShareBase {
    * Shares file, image & text.
    *
    *     @example
-   *     const Share = require('@smartface/native/share');
-   *     const File = require('@smartface/native/io/file');
+   *     import Share from '@smartface/native/share';
+   *     import File from '@smartface/native/io/file';
    *
    *     var myPage = this; // in page scope
    *     var file = new File({

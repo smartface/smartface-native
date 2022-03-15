@@ -265,8 +265,8 @@ export interface IVideoViewAndroidProps extends ViewAndroidProps {
  * Supported formats for both platforms are 3GPP (.3gp) and MPEG-4 (.mp4).
  *
  *     @example
- *     const Flex      = require('@smartface/native/ui/flexlayout');
- *     const VideoView = require('@smartface/native/ui/videoview');
+ *     import Flex      from '@smartface/native/ui/flexlayout';
+ *     import VideoView from '@smartface/native/ui/videoview';
  *
  *     var myVideoView = new VideoView({
  *         left:10, top:10, height:250, width:250,

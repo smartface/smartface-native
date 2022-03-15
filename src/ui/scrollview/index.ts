@@ -171,10 +171,10 @@ type IScrollViewIOS = ViewGroupIOS &
  * than one.
  *
  *     @example
- *     const FlexLayout = require('@smartface/native/ui/flexlayout');
- *     const ScrollView = require('@smartface/native/ui/scrollview');
- *     const Button = require('@smartface/native/ui/button');
- *     const Color = require('@smartface/native/ui/color');
+ *     import FlexLayout from '@smartface/native/ui/flexlayout';
+ *     import ScrollView from '@smartface/native/ui/scrollview';
+ *     import Button from '@smartface/native/ui/button';
+ *     import Color from '@smartface/native/ui/color';
  *
  *     var scrollView = new ScrollView({
  *        flexGrow: 1,

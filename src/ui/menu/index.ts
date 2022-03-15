@@ -9,8 +9,8 @@ import Page from '../page';
  *
  *
  *     @example
- *     const Menu = require('@smartface/native/ui/menu');
- *     const MenuItem = require('@smartface/native/ui/menuitem');
+ *     import Menu from '@smartface/native/ui/menu';
+ *     import MenuItem from '@smartface/native/ui/menuitem';
  *
  *     var menu = new Menu();
  *     menu.headerTitle = "My Menu Title";

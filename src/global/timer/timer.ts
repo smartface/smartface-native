@@ -7,8 +7,8 @@ import NativeComponent from '../../core/native-component';
  * Timer allows you to create, start and clear timers.
  *
  *     @example
- *     const Button = require("@smartface/native/ui/button")
- *     const Timer = require("@smartface/native/timer");
+ *     import Button from '@smartface/native/ui/button'
+ *     import Timer from '@smartface/native/timer';
  *     var myButton = new Button({
  *         onPress: setTimer
  *     });
@@ -20,7 +20,7 @@ import NativeComponent from '../../core/native-component';
  *         });
  *     }
  *
- *     const Color = require("@smartface/native/ui/color");
+ *     import Color from '@smartface/native/ui/color';
  *     function changeBackgroundColor() {
  *         myButton.backgroundColor = Color.RED;
  *     }

@@ -540,11 +540,11 @@ export declare class MultimediaBase {
    * Allows pick item from gallery.
    *
    *     @example
-   *     const Image = require("@smartface/native/ui/image");
-   *     const Multimedia = require("@smartface/native/device/multimedia");
-   *     const Page = require("@smartface/native/ui/page");
+   *     import Image from '@smartface/native/ui/image';
+   *     import Multimedia from '@smartface/native/device/multimedia';
+   *     import Page from '@smartface/native/ui/page';
    *     const extend = require("js-base/core/extend");
-   *     const Button = require('@smartface/native/ui/button');
+   *     import Button from '@smartface/native/ui/button';
    *
    *     var Page1 = extend(Page)(
    *        function(_super) {

@@ -40,7 +40,7 @@ export enum SwipeViewState {
  * actions.
  *
  *     @example
- *     const SwipeView = require('@smartface/native/ui/swipeview');
+ *     import SwipeView from '@smartface/native/ui/swipeview';
  *     var swipeView = new SwipeView({
  *       page: currentPage,
  *       width:300, height:300,

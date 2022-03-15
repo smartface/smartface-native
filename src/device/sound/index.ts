@@ -12,7 +12,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
  * Controls sound files.
  *
  *     @example
- *     const Sound = require("@smartface/native/device/sound");
+ *     import Sound from '@smartface/native/device/sound';
  *     var mySound = new Sound();
  *     mySound.onReady = function() {
  *         mySound.play();
@@ -186,7 +186,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
      * Picks a sound on the device.
      *
      *     @example
-     *     const Sound = require("@smartface/native/device/sound");
+     *     import Sound from '@smartface/native/device/sound';
      *     Sound.android.pick({onSuccess: soundPicked});
      *
      *     function soundPicked(e) {

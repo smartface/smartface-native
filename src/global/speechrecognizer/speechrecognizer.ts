@@ -21,11 +21,11 @@ export enum SpeechRecognizerAndroidError {
  * SpeechRecognizer class provides access to the speech recognition service.
  *
  *     @example
- *     const TextArea = require('@smartface/native/ui/textarea');
- *     const SpeechRecognizer = require("@smartface/native/speechrecognizer");
- *     const Application = require("@smartface/native/application");
- *     const Button = require('@smartface/native/ui/button');
- *     const System = require('@smartface/native/device/system');
+ *     import TextArea from '@smartface/native/ui/textarea';
+ *     import SpeechRecognizer from '@smartface/native/speechrecognizer';
+ *     import Application from '@smartface/native/application';
+ *     import Button from '@smartface/native/ui/button';
+ *     import System from '@smartface/native/device/system';
  *     var myButton = new Button({
  *         height: 100,
  *         text: "Start Recording"

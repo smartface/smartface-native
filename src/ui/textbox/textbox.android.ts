@@ -1,10 +1,3 @@
-/*globals requireClass*/
-// const TextView = require('../textview');
-// const KeyboardType = require('../keyboardtype');
-// const ActionKeyType = require('../actionkeytype');
-// const AutoCapitalize = require("./autocapitalize");
-// const Events = require('./events');
-// const { EventEmitterCreator } = require('../../core/eventemitter');
 import { TextBoxAndroidProps, ITextBox } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';

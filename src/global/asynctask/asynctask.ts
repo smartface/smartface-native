@@ -52,7 +52,7 @@ export interface IAsyncTaskAndroidProps {
  * AsyncTask enables proper and easy use of concurrency to improve speed and performance.
  *
  *     @example
- *     const AsyncTask = require("@smartface/native/asynctask");
+ *     import AsyncTask from '@smartface/native/asynctask';
  *     var asynctask = new AsyncTask();
  *     asynctask.task = function () {
  *         // do something

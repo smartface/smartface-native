@@ -3,17 +3,17 @@ import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
 type ViewGroupAndroidProps = ViewAndroidProps & {
-    /**
-     * Called when a child does not want this parent and its ancestors to intercept touch events .
-     * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
-     *
-     * @method requestDisallowInterceptTouchEvent
-     * @param {Boolean} disallow
-     * @android
-     * @since 4.0.3
-     */
-    requestDisallowInterceptTouchEvent(disallow: boolean): void;
-  };
+  /**
+   * Called when a child does not want this parent and its ancestors to intercept touch events .
+   * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+   *
+   * @method requestDisallowInterceptTouchEvent
+   * @param {Boolean} disallow
+   * @android
+   * @since 4.0.3
+   */
+  requestDisallowInterceptTouchEvent(disallow: boolean): void;
+};
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -22,8 +22,8 @@ type ViewGroupAndroidProps = ViewAndroidProps & {
  * ViewGroup is parent class of all layouts. ViewGroup is an abstract class. You can't create instance from it.
  *
  *     @example
- *     const FlexLayout = require('@smartface/native/ui/flexlayout');
- *     const Label = require('@smartface/native/ui/label');
+ *     import FlexLayout from '@smartface/native/ui/flexlayout';
+ *     import Label from '@smartface/native/ui/label';
  *     var myFlexLayout = new FlexLayout();
  *     var myLabel = new Label({
  *          text: "Smartface Label"
@@ -31,8 +31,11 @@ type ViewGroupAndroidProps = ViewAndroidProps & {
  *     myFlexLayout.addChild(myLabel);
  */
 
-export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewIOSProps, ViewGroupAndroidProps>>
-  extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps> {
+export interface IViewGroup<
+  TEvent extends string = ViewGroupEvents,
+  TNative = any,
+  TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewIOSProps, ViewGroupAndroidProps>
+> extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps> {
   /**
    * This function adds a child view to a viewgroup.
    *
@@ -87,8 +90,8 @@ export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = a
    * Finds a child view with specified id within the layout.
    *
    *     @example
-   *     const FlexLayout = require('@smartface/native/ui/flexlayout');
-   *     const Label = require('@smartface/native/ui/label');
+   *     import FlexLayout from '@smartface/native/ui/flexlayout';
+   *     import Label from '@smartface/native/ui/label';
    *     var myFlexLayout = new FlexLayout();
    *     var myLabel = new Label({
    *          text: "Smartface Label",
@@ -147,7 +150,10 @@ export interface IViewGroup<TEvent extends string = ViewGroupEvents, TNative = a
   onViewRemoved: (view: IView) => void;
 }
 
-export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup> extends AbstractView<TEvent, TNative, TProps> implements IViewGroup<TEvent> {
+export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup>
+  extends AbstractView<TEvent, TNative, TProps>
+  implements IViewGroup<TEvent>
+{
   addChild(view: IView): void;
   removeChild(view: IView): void;
   removeAll(): void;

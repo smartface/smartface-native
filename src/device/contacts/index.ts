@@ -2,10 +2,9 @@ import Page from '../../ui/page';
 import Blob from '../../global/blob';
 import NativeComponent from '../../core/native-component';
 
-
 export type ManagedContact = {
-  nickname?: string,
-  photo?: Blob | null,
+  nickname?: string;
+  photo?: Blob | null;
   displayName?: string | undefined;
   phoneNumbers?: string[] | undefined;
   emailAddresses?: string[] | undefined;
@@ -13,12 +12,12 @@ export type ManagedContact = {
   phoneNumber?: string[];
   address?: string;
   addresses?: string[] | undefined;
-}
+};
 
 export class Contact extends NativeComponent {
-  constructor(params?: Partial<Contact>){
+  constructor(params?: Partial<Contact>) {
     super();
-  };
+  }
   phoneNumbers?: string[];
   emailAddresses?: any;
   givenName?: string;
@@ -45,8 +44,8 @@ export class Contact extends NativeComponent {
  * This class allows user to add a contact to contact list or to select a contact from list.
  *
  *     @example
- *	   const Contacts = require("@smartface/native/device/contacts");
- *     const Application = require("@smartface/native/application");
+ *	   import Contacts from '@smartface/native/device/contacts';
+ *     import Application from '@smartface/native/application';
  *
  *     const READ_CONTACTS_CODE = 1002;
  *     Application.android.requestPermissions(READ_CONTACTS_CODE, Application.Android.Permissions.READ_CONTACTS);
@@ -70,7 +69,7 @@ export class ContactsBase extends NativeComponent {
    *
    *
    *     @example
-   *     const Contacts = require("@smartface/native/device/contacts");
+   *     import Contacts from '@smartface/native/device/contacts';
    *
    *     let myContact = new Contacts.Contact({
    *         firstName: 'Smartface',
@@ -114,7 +113,7 @@ export class ContactsBase extends NativeComponent {
    *
    *
    *     @example
-   *     const Contacts = require("@smartface/native/device/contacts");
+   *     import Contacts from '@smartface/native/device/contacts';
    *     Contacts.pick({
    *         page : myPage,
    *         onSuccess : function(contact){
@@ -151,7 +150,7 @@ export class ContactsBase extends NativeComponent {
    *
    *
    *     @example
-   *     const Contacts = require("@smartface/native/device/contacts");
+   *     import Contacts from '@smartface/native/device/contacts';
    *     Contacts.fetchAll({
    *         onSuccess : function(contacts){
    *             var count = contacts.length;
@@ -181,7 +180,7 @@ export class ContactsBase extends NativeComponent {
    *
    *
    *     @example
-   *     const Contacts = require("@smartface/native/device/contacts");
+   *     import Contacts from '@smartface/native/device/contacts';
    *     Contacts.getContactsByPhoneNumber("5555555555",{
    *         onSuccess : function(contacts){
    *             console.log("Successfully found ", contacts);

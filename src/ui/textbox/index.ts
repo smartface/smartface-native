@@ -14,8 +14,8 @@ import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type TextBoxAndroidProps = View['android'] & {
   cursorPosition: {
-    start: number,
-    end: number
+    start: number;
+    end: number;
   };
   /**
    * Set an input filter to constrain the text length to the specified number. This property works only for Android.
@@ -99,8 +99,8 @@ export type TextBoxiOSProps = View['ios'] & {
    * Creates a textContentType for ios.
    *
    *     @example
-   *     const TextContentType = require("@smartface/native/ui/ios/textcontenttype");
-   *     const System = require('@smartface/native/device/system');
+   *     import TextContentType from '@smartface/native/ui/ios/textcontenttype';
+   *     import System from '@smartface/native/device/system';
    *
    *     if (System.OS == "iOS" && System.OSVersion >= 12){
    *         textbox.ios.textContentType = TextContentType.ONETIMECODE;

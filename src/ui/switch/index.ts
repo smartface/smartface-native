@@ -37,8 +37,8 @@ export type SwitchAndroidProps = IView['android'] & {
    * by default. This property works only for Android.
    *
    *     @example
-   *     const Switch = require('@smartface/native/ui/switch');
-   *     const Color = require('@smartface/native/ui/color');
+   *     import Switch from '@smartface/native/ui/switch';
+   *     import Color from '@smartface/native/ui/color';
    *     var mySwitch = new Switch();
    *     mySwitch.android.toggleOffColor = Color.DARKGRAY;
    *
@@ -57,7 +57,7 @@ export declare interface ISwitch<TEvent extends string = SwitchEvents, TProps ex
    * Enables/disables the Switch.
    *
    *     @example
-   *     const Switch = require('@smartface/native/ui/switch');
+   *     import Switch from '@smartface/native/ui/switch';
    *     var mySwitch = new Switch();
    *     mySwitch.enabled = false;
    *

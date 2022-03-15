@@ -23,9 +23,9 @@ import Image from '../image';
  * behaviour of the {@link UI.StatusBar}.
  *
  *     @example
- *     const Page = require('@smartface/native/ui/page');
- *     const Color = require('@smartface/native/ui/color');
- *     const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
+ *     import Page from '@smartface/native/ui/page';
+ *     import Color from '@smartface/native/ui/color';
+ *     import HeaderBarItem from '@smartface/native/ui/headerbaritem';
  *
  *     var myPage = new Page({
  *         onLoad: function() {
@@ -86,8 +86,8 @@ type IHeaderBar = {
    * background color depending on device's OS and OS version. For iOS, you should access this property from page.parentController.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
-   *     const Color = require('@smartface/native/ui/color');
+   *     import Page from '@smartface/native/ui/page';
+   *     import Color from '@smartface/native/ui/color';
    *     var myPage = new Page({
    *         onLoad: function() {
    *             var page = this;
@@ -106,8 +106,8 @@ type IHeaderBar = {
    * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
-   *     const Color = require('@smartface/native/ui/color');
+   *     import Page from '@smartface/native/ui/page';
+   *     import Color from '@smartface/native/ui/color';
    *     var myPage = new Page({
    *         onLoad: function() {
    *             var page = this;
@@ -126,8 +126,8 @@ type IHeaderBar = {
    * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
-   *     const Image = require('@smartface/native/ui/image');
+   *     import Page from '@smartface/native/ui/page';
+   *     import Image from '@smartface/native/ui/image';
    *     var myPage = new Page({
    *         onLoad: function() {
    *             var page = this;
@@ -218,8 +218,8 @@ type IHeaderBar = {
    * Sets left item of header bar to given item.
    *
    *     @example
-   *      const Page = require('@smartface/native/ui/page');
-   *      const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
+   *      import Page from '@smartface/native/ui/page';
+   *      import HeaderBarItem from '@smartface/native/ui/headerbaritem';
    *      var myPage = new Page();
    *      myPage.onLoad = function(e){
    *          var leftItem = new HeaderBarItem();
@@ -280,8 +280,8 @@ type IHeaderBar = {
      * This property will work only for Android.
      *
      *     @example
-     *     const Page = require('@smartface/native/ui/page');
-     *     const Image = require('@smartface/native/ui/image');
+     *     import Page from '@smartface/native/ui/page';
+     *     import Image from '@smartface/native/ui/image';
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://icon.png');
      *     myPage.headerBar.android.logoEnabled = true;
@@ -334,7 +334,7 @@ type IHeaderBar = {
      * Gets/sets elevation of the header bar.
      *
      *     @example
-     *     const Page = require('@smartface/native/ui/page');
+     *     import Page from '@smartface/native/ui/page';
      *     var myPage = new Page();
      *     myPage.headerBar.android.elevation = 10;
      *
@@ -373,8 +373,8 @@ type IHeaderBar = {
      * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
      *
      *     @example
-     *     const Page = require('@smartface/native/ui/page');
-     *     const Font = require("@smartface/native/ui/font");
+     *     import Page from '@smartface/native/ui/page';
+     *     import Font from '@smartface/native/ui/font';
      *     var myPage = new Page({
      *         onLoad: function() {
      *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
@@ -403,8 +403,8 @@ type IHeaderBar = {
      * This property will work only for iOS.
      *
      *     @example
-     *      const HeaderBarItem = require('@smartface/native/ui/headerbaritem');
-     *     const Page = require('@smartface/native/ui/page');
+     *      import HeaderBarItem from '@smartface/native/ui/headerbaritem';
+     *     import Page from '@smartface/native/ui/page';
      *
      *     var myPage = new Page();
      *     var backBarButtonItem = new HeaderBarItem({
@@ -423,7 +423,7 @@ type IHeaderBar = {
      * If "prefersLargeTitles" property of navigator is false, this property has no effect and title will display as small title.
      *
      *     @example
-     *     const Page = require('@smartface/native/ui/page');
+     *     import Page from '@smartface/native/ui/page';
      *     var myPage = new Page();
      *     myPage.headerBar.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.ALWAYS;
      *
@@ -439,7 +439,7 @@ type IHeaderBar = {
      * Setting this as something else(like null) will set the backIndicatorTransitionMaskImage as false.
      *
      * @example
-     *     const Page = require('@smartface/native/ui/page');
+     *     import Page from '@smartface/native/ui/page';
      *     var myPage = new Page();
      *     myPage.headerBar.ios.backIndicatorImage = Image.createFromFile("images://smartface.png");
      *
@@ -453,7 +453,7 @@ type IHeaderBar = {
      * This property will be set automatically if backIndicatorImage is set as a valid image.
      *
      * @example
-     *     const Page = require('@smartface/native/ui/page');
+     *     import Page from '@smartface/native/ui/page';
      *     var myPage = new Page();
      *     myPage.headerBar.ios.backIndicatorImage = Image.createFromFile("images://smartface.png");
      *     //myPage.headerBar.ios.backIndicatorTransitionMaskImage = true; //Above line will set this to true, therefore no need to state this.
@@ -469,7 +469,7 @@ type IHeaderBar = {
      * Use the largeTitleDisplayMode property to configure the title's appearance.
      *
      * @example
-     *     const Page = require('@smartface/native/ui/page');
+     *     import Page from '@smartface/native/ui/page';
      *     var myPage = new Page();
      *     myPage.headerBar.ios.prefersLargeTitles = true;
      *

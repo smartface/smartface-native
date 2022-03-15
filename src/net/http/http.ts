@@ -169,7 +169,7 @@ export abstract class HttpBase extends NativeMobileComponent<any, WithMobileOSPr
  * Http Request CANNOT be initialized. Use http's request methods instead.
  *
  *     @example
- *     const Http = require("@smartface/native/net/http");
+ *     import Http from '@smartface/native/net/http';
  *
  *     var http = new Http();
  *     var myImageUrl = your-image-url;
