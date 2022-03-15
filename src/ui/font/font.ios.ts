@@ -1,8 +1,12 @@
 /* eslint-disable eqeqeq */
 import { AbstractFont, FontStyle } from './font';
 import File from '../../io/file';
+import { Size } from '../../primitive/size';
 
 export default class FontIOS extends AbstractFont {
+  sizeOfString(string: string, maxWidth: number): Size {
+    throw new Error('Method not implemented.');
+  }
   static create(fontFamily: string, size: number, style: FontStyle): FontIOS | null {
     if (style === this.NORMAL) {
       if (fontFamily === FontIOS.DEFAULT) {

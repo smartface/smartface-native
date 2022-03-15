@@ -2,12 +2,22 @@ import { AbstractFont, FontStyle } from './font';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
 import Path from '../../io/path';
+import { Size } from '../../primitive/size';
+import * as TextViewSizeCalculator from '../../util/Android/textviewsizecalculator';
 
 const NativeTypeface = requireClass('android.graphics.Typeface');
 
 const fontCache = new Map();
 
 export default class FontAndroid extends AbstractFont {
+  sizeOfString(string: string, maxWidth: number): Size {
+    return TextViewSizeCalculator.calculateStringSize({
+      text: string,
+      maxWidth: maxWidth,
+      textSize: this.size,
+      typeface: this
+    });
+  }
   static create(fontFamily: string, size: number, style: FontStyle): FontAndroid {
     const fromCache = getFromCache(fontFamily, style, size);
     if (fromCache) {

@@ -1,6 +1,5 @@
 import NativeComponent from '../../core/native-component';
 import { Size } from '../../primitive/size';
-import * as TextViewSizeCalculator from '../../util/Android/textviewsizecalculator';
 
 export enum FontStyle {
   DEFAULT = 'DEFAULT',
@@ -39,14 +38,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 1.1.18
    */
-  sizeOfString(string: string, maxWidth: number): Size {
-    return TextViewSizeCalculator.calculateStringSize({
-      text: string,
-      maxWidth: maxWidth,
-      textSize: this.size,
-      typeface: this
-    });
-  }
+  abstract sizeOfString(string: string, maxWidth: number): Size;
 
   /**
    * @android
@@ -68,7 +60,7 @@ export abstract class AbstractFont extends NativeComponent {
    */
 
   static create(fontFamily: string, size: number, style?: FontStyle): AbstractFont | null {
-    throw new Error('Methof not implemented');
+    throw new Error('Method not implemented');
   }
   /**
    * @android
@@ -88,7 +80,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @static
    */
   static createFromFile(path: string, size: number): AbstractFont {
-    throw new Error('Methof not implemented');
+    throw new Error('Method not implemented');
   }
 
   /**
