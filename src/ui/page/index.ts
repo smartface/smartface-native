@@ -421,9 +421,9 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   abstract orientation: PageOrientation;
   abstract transitionViews: View[];
   abstract onOrientationChange(e: { orientation: PageOrientation[] }): void;
-  onLoad: () => void;
-  onShow: () => void;
-  onHide: () => void;
+  abstract onLoad(): void;
+  abstract onShow(): void;
+  abstract onHide(): void;
   abstract present(params?: ControllerParams): void;
   abstract dismiss(params?: { onComplete: () => void }): void;
   abstract readonly layout: FlexLayout;
@@ -438,6 +438,9 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
 }
 
 declare class PageImpl extends AbstractPage implements IPage {
+  onLoad(): void;
+  onShow(): void;
+  onHide(): void;
   orientation: PageOrientation;
   transitionViews: View[];
   layout: FlexLayout;

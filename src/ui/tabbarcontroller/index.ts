@@ -254,6 +254,15 @@ export declare abstract class AbstractTabBarController<TEvent extends string = T
 }
 
 class TabBarControllerImpl extends AbstractTabBarController {
+  onLoad(): void {
+    throw new Error('Method not implemented.');
+  }
+  onShow(): void {
+    throw new Error('Method not implemented.');
+  }
+  onHide(): void {
+    throw new Error('Method not implemented.');
+  }
   present(params?: ControllerPresentParams): void {
     throw new Error('Method not implemented.');
   }
