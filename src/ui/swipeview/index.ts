@@ -41,10 +41,13 @@ export enum SwipeViewState {
  *
  *     @example
  *     import SwipeView from '@smartface/native/ui/swipeview';
- *     var swipeView = new SwipeView({
+ *     import SwipePage1 from 'pages/PgSwipe1';
+ *     import SwipePage2 from 'pages/PgSwipe2';
+ *     import SwipePage3 from 'pages/PgSwipe3';
+ *     const swipeView = new SwipeView({
  *       page: currentPage,
  *       width:300, height:300,
- *       pages: [require("../ui/ui_swipePage1"), require("../ui/ui_swipePage2"), require("../ui/ui_swipePage3")],
+ *       pages: [SwipePage1, SwipePage2, SwipePage3],
  *       onPageSelected: function(index,page) {
  *         console.log("Selected Page Index : " + index);
  *         console.log("Selected Page Instance : " + page);

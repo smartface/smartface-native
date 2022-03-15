@@ -151,7 +151,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     // Don't remove this line to top of the page.
     // NavigationController requires BottomTabBarController.
     // TODO: should this be lazy import?
-    // const NavigationController = require('../../ui/navigationcontroller');
+    // const NavigationController = import('../../ui/navigationcontroller');
     childController.isInsideBottomTabBar = true;
     if (childController instanceof Page) {
       //TODO: Page needs __isActive and pageID

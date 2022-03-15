@@ -10,7 +10,7 @@ export declare interface ISlider<TEvent extends string = SliderEvents> extends I
    *
    *     @example
    *     import Slider from '@smartface/native/ui/slider';
-   *     var Color = require('@smartface/native/ui/color');
+   *     import Color from '@smartface/native/ui/color';
    *     var mySlider = new Slider();
    *     mySlider.thumbColor = Color.GRAY;
    *
@@ -39,7 +39,7 @@ export declare interface ISlider<TEvent extends string = SliderEvents> extends I
    *
    *     @example
    *     import Slider from '@smartface/native/ui/slider';
-   *     var Color = require('@smartface/native/ui/color');
+   *     import Color from '@smartface/native/ui/color';
    *     var mySlider = new Slider();
    *     mySlider.minTrackColor = Color.BLUE;
    *
@@ -54,7 +54,7 @@ export declare interface ISlider<TEvent extends string = SliderEvents> extends I
    *
    *     @example
    *     import Slider from '@smartface/native/ui/slider';
-   *     var Color = require('@smartface/native/ui/color');
+   *     import Color from '@smartface/native/ui/color';
    *     var mySlider = new Slider();
    *     mySlider.maxTrackColor = Color.GREEN;
    *

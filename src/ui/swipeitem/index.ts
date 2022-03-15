@@ -63,6 +63,6 @@ export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProp
   onPress: (params: { index: number }) => void;
 }
 
-const SwipeItem: ConstructorOf<ISwipeItem, Partial<ISwipeItem>> = require('./swipeitem').default;
+const SwipeItem: ConstructorOf<ISwipeItem, Partial<ISwipeItem>> = require(`./swipeitem`).default;
 type SwipeItem = ISwipeItem;
 export default SwipeItem;
