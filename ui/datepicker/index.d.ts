@@ -157,8 +157,23 @@ declare class DatePicker
 	android: Partial<{
 		/**
 		 * According to your requirements, this property enables you to specify native built-in styles.
-		 *
-		 * @property {UI.DatePicker.Android.Style} style
+		 * This property must be given with constructor.
+		 * 
+		 * 		@example
+		 * 		````
+		 * 		import DatePicker from "@smartface/native/ui/datepicker";
+		 * 		const myDatePicker = new DatePicker({
+   		 * 				android: {
+     	 * 					style: DatePicker.Android.Style.DEFAULT_DARK
+   		 * 				}
+		 * 		});
+		 * 		myDatePicker.onDateSelected = function(date) {
+    	 * 				console.log('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
+		 * 		};
+		 * 		myDatePicker.show();	
+		 * 		````
+		 * 
+		 * @property {UI.DatePicker.Android.Style} [style = UI.DatePicker.Android.Style.DEFAULT]
 		 * @android
 		 * @since 3.1.3
 		 */
