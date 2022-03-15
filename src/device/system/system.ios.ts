@@ -10,7 +10,7 @@ class SystemIOS implements AbstractSystem {
   android = {
     isApplicationInstalled() {}
   };
-  private _ios;
+  private _ios = {};
   constructor() {
     const self = this;
     const ios = {

@@ -1,7 +1,7 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Invocation from '../../util/iOS/invocation';
-import { ILocation } from '.';
+import { ILocation, LocationBase } from '.';
 import { LocationEvents } from './location-events';
 const IOS_AUTHORIZATION_STATUS = {
   //deprecated
@@ -13,12 +13,12 @@ const IOS_AUTHORIZATION_STATUS = {
 const IOS_NATIVE_AUTHORIZATION_STATUS = { NotDetermined: 0, Restricted: 1, Denied: 2, AuthorizedAlways: 3, AuthorizedWhenInUse: 4 };
 const IOS_AUTHORIZATION_STATUS_B = { NOTDETERMINED: 0, RESTRICTED: 1, DENIED: 2, AUTHORIZED: 3 };
 
-class LocationIOS extends NativeEventEmitterComponent<LocationEvents> implements ILocation {
+class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILocation> implements ILocation {
   delegate?: __SF_CLLocationManagerDelegate;
   Android = { Provider: {}, Priority: {}, SettingsStatusCodes: {} };
   iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
   _nativeObject = new __SF_CLLocationManager();
-  _authorizationStatus = this.ios.authorizationStatus.NotDetermined;
+  private _authorizationStatus: LocationBase.iOS.AuthorizationStatus;
   onLocationChanged: (...args: any[]) => {};
   constructor() {
     super();
@@ -27,6 +27,7 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents> implements
       checkSettings() {},
       Provider: {}
     });
+    this._authorizationStatus = this.ios?.authorizationStatus.NotDetermined;
   }
   private getIOSProps(): ILocation['ios'] {
     return {
