@@ -767,12 +767,14 @@ declare class __SF_UINavigationItem {
   hidesBackButton: boolean;
   leftBarButtonItem: __SF_UIBarButtonItem;
   rightBarButtonItems: __SF_UIBarButtonItem[];
+  static instancesRespondToSelector(selector: string): boolean;
 }
 
 declare class __SF_NSOBject {
   instancesRespondToSelector(selector: string): any;
   setValueForKey(value: any, key: string): void;
   valueForKey(key: string): any;
+  static alloc(): __SF_NSOBject;
   [key: string]: any;
 }
 
@@ -826,9 +828,10 @@ declare class __SF_UITabbarItem {
   image: __SF_UIImage;
   selectedImage: __SF_UIImage;
   setTitleTextAttributesForState(font: { NSFont: any }, uiControlState: number /**TODO: Add after UIControlState is there */): any;
+  static new(): __SF_UITabbarItem;
 }
 
-declare class __SF_UIActivityViewController {
+declare class __SF_UIActivityViewController extends __SF_NSOBject {
   delegate: __SF_UIActivityViewControllerDelegate;
   static new(): __SF_UIActivityViewController;
 }

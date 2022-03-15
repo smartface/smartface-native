@@ -208,7 +208,6 @@ class BottomTabBarView extends NativeComponent {
   nativeObjectDelegate: any;
   constructor(params?: Partial<{ viewModel: any }>) {
     super();
-    const UITabBarController = SF.requireClass('UITabBarController');
     const self = this;
     self.viewModel = undefined;
 
@@ -216,7 +215,7 @@ class BottomTabBarView extends NativeComponent {
       self.viewModel = params.viewModel;
     }
 
-    self.nativeObject = UITabBarController.new();
+    self.nativeObject = __SF_UITabBarController.new();
     self.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
       tabBarControllerShouldSelectViewController: function (tabBarController, viewController) {
         const index = self.nativeObject.viewControllers.indexOf(viewController);

@@ -92,10 +92,9 @@ export default class FontIOS extends AbstractFont {
   static ios = {
     allFontNames() {
       let retval: string[] = [];
-      const UIFont: typeof __SF_UIFont = requireClass('UIFont');
-      const familyNames = UIFont.familyNames();
+      const familyNames = __SF_UIFont.familyNames();
       for (const familyNameindex in familyNames) {
-        const fontNames = UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
+        const fontNames = __SF_UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
         retval = retval.concat(Object.values(fontNames));
       }
       return retval;

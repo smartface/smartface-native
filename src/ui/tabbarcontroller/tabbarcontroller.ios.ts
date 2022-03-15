@@ -6,13 +6,7 @@ import PageIOS from '../page/page.ios';
 import { ITabbarItem } from '../tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 
-const UITabBarItem = SF.requireClass('UITabBarItem');
-
-export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents>
-  extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController>
-  implements ITabBarController
-{
-
+export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
   static iOS: {
     BarTextTransform: typeof BarTextTransform;
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
@@ -24,7 +18,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
   private _textColor: { normal: Color; selected: Color } | Color;
   private _onPageCreate: (index: number) => Page;
   private _onSelected: (index: number) => void;
-  private iOSProps: {barTextTransform?: BarTextTransform} = {};
+  private iOSProps: { barTextTransform?: BarTextTransform } = {};
   constructor(params?: Partial<ITabBarController>) {
     super(params);
     if (!this.nativeObject) {
@@ -58,7 +52,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       const nativeItems: any[] = [];
       for (let i in this._items) {
         if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i].nativeObject = UITabBarItem.new();
+          this._items[i].nativeObject = __SF_UITabbarItem.new();
         }
         this._items[i].invalidate();
         nativeItems[i] = this._items[i].nativeObject;

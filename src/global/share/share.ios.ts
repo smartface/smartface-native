@@ -5,8 +5,6 @@ import Page from '../../ui/page';
 import Invocation from '../../util/iOS/invocation';
 import { ShareBase } from './share';
 
-const UIActivityViewController = SF.requireClass('UIActivityViewController');
-
 const UIActivityType = {
   addToReadingList: 'com.apple.UIKit.activity.AddToReadingList',
   airDrop: 'com.apple.UIKit.activity.AirDrop',
@@ -32,7 +30,7 @@ export class ShareIOS implements ShareBase {
     });
   }
   static createActivity(activityItems) {
-    const alloc = UIActivityViewController.alloc();
+    const alloc = __SF_UIActivityViewController.alloc();
     const argActivityItems = new Invocation.Argument({
       type: 'id',
       value: activityItems

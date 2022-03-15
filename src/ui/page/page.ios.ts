@@ -8,8 +8,6 @@ import { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { PageEvents } from './page-events';
 
-const UINavigationItem = requireClass('UINavigationItem');
-
 export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
   extends AbstractPage<TEvent | PageEvents, TNative, TProps>
   implements IPage<TEvent | PageEvents>
@@ -350,7 +348,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         return self._largeTitleDisplayMode;
       },
       set largeTitleDisplayMode(value: HeaderBar['ios']['largeTitleDisplayMode']) {
-        if (UINavigationItem.instancesRespondToSelector('largeTitleDisplayMode')) {
+        if (__SF_UINavigationItem.instancesRespondToSelector('largeTitleDisplayMode')) {
           if (value) {
             self._largeTitleDisplayMode = value;
             self.nativeObject.navigationItem.largeTitleDisplayMode = self._largeTitleDisplayMode;
