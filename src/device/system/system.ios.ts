@@ -1,6 +1,6 @@
 import { AbstractSystem, BiometryType, OSType } from '.';
 import Application from '../../application';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 
 class SystemIOS implements AbstractSystem {
   OSVersion = __SF_UIDevice.currentDevice().systemVersion;

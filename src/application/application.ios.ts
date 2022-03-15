@@ -2,7 +2,7 @@ import Location from '../device/location';
 import Accelerometer from '../device/accelerometer';
 import Network from '../device/network';
 import Timer from '../global/timer';
-import { Invocation } from '../util';
+import Invocation from '../util/ios/invocation';
 import { ApplicationEvents } from './application-events';
 import { StatusBar } from './statusbar';
 import { ApplicationBase } from './application';

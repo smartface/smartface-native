@@ -1,6 +1,6 @@
 import { IMapView, MapViewType } from '.';
 import { Location } from '../../device';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import ViewIOS from '../view/view.ios';
 import ClusterIOS from './cluster/cluster.ios';
 import { MapViewEvents } from './mapview-events';

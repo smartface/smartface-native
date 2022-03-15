@@ -1,6 +1,6 @@
 import LabelIOS from '../label/label.ios';
 import { ITextView } from '.';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { Size } from '../../primitive/size';
 import { TextViewEvents } from './textview-events';
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
@@ -14,7 +14,10 @@ enum NSUnderlineStyle {
   Double = 9
 }
 
-export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelIOS<TEvent | TextViewEvents, any, TProps> implements ITextView<TEvent | TextViewEvents> {
+export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends ITextView = ITextView>
+  extends LabelIOS<TEvent | TextViewEvents, any, TProps>
+  implements ITextView<TEvent | TextViewEvents>
+{
   private _lastModifiedAttributedString: __SF_NSOBject;
   private __attributedText: ITextView['attributedText'];
   private _letterSpacing: ITextView['letterSpacing'];
@@ -28,7 +31,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
       this._nativeObject = new __SF_UITextView();
     }
     //TODO: Look at it after Cenk is done with Scrollable stuff
-    // UIScrollViewInheritance.addPropertiesAndMethods.call(this); 
+    // UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
     //Defaults
     this.nativeObject.setSelectable = false;
@@ -167,8 +170,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
   set textColor(value: ITextView['textColor']) {
     this._textColor = value;
     this.nativeObject.setEditable = true;
-    if(value instanceof Color)
-      this.nativeObject.textColor = value.nativeObject;
+    if (value instanceof Color) this.nativeObject.textColor = value.nativeObject;
     this.nativeObject.setEditable = false;
     this.nativeObject.setSelectable = this.selectable;
   }

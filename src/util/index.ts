@@ -1,12 +1,6 @@
 export { default as Exception } from './exception';
 export { default as TypeUtil } from './type';
 
-export { default as UIControlEvents } from './iOS/uicontrolevents.js';
-export * as YogaEnums from './iOS/yogaenums';
-export { default as UIDatePickerMode } from './iOS/uidatepickermode.js';
-export { default as KeyboardAnimationDelegate } from './iOS/keyboardanimationdelegate.js';
-export { default as Invocation } from './iOS/invocation.js';
-
 export { default as FragmentTransition } from './Android/transition/fragmenttransition';
 export { default as viewController } from './Android/transition/viewcontroller';
 export { default as AndroidConfig } from './Android/androidconfig';
@@ -19,4 +13,5 @@ export { default as SystemServices } from './Android/systemservices';
 export * as TextViewSizeCalculator from './Android/textviewsizecalculator';
 export { default as TypeValue } from './Android/typevalue';
 export { default as UnitConverter } from './Android/unitconverter';
+
 export { default as copyObjectPropertiesWithDescriptors } from './copyObjectPropertiesWithDescriptors';

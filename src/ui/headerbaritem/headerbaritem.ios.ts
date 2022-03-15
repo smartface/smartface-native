@@ -1,6 +1,6 @@
 import HeaderBarItem, { IHeaderBarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import Badge from '../badge';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
@@ -121,8 +121,7 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
   set image(value: string | Image) {
     if (typeof value === 'string') {
       const image = Image.createFromFile(value);
-      if(image)
-        this.nativeObject.image = image.nativeObject;
+      if (image) this.nativeObject.image = image.nativeObject;
     } else if (value instanceof Image) {
       {
         this.nativeObject.image = value.nativeObject;

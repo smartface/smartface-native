@@ -1,6 +1,6 @@
 import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { isNotEmpty } from '../../util/type';
 import GridViewIOS from '../gridview/gridview.ios';
 

@@ -2,7 +2,7 @@ import { MultimediaBase } from '.';
 import File from '../../io/file';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 
 const UIImagePickerControllerSourceType = {
   photoLibrary: 0,
