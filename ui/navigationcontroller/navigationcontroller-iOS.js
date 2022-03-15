@@ -548,13 +548,8 @@ function NavigationView(params) {
         self.nativeObject.presentViewController(controllerToPresent, completionBlock, animated);
     };
 
-    this.presentBottomShet = (controllerToPresent, animated, completionBlock, options) => {
-        // let opitonss = {
-        //     cornerRadius: 60,
-        //     detents: ["medium", "large"]
-        //     isGrabberVisible: false
-        // }
-        self.nativeObject.presentSheetController(this.applySheetOptions(controllerToPresent, opitonss), completionBlock, animated);
+    this.presentBottomSheet = (controllerToPresent, animated, completionBlock, options) => {
+        self.nativeObject.presentSheetController(this.applySheetOptions(controllerToPresent, options), completionBlock, animated);
     }
     
     this.applySheetOptions = (controller, options) => {
