@@ -1,4 +1,4 @@
-import { StatusBar } from '../../application/statusbar';
+import StatusBar from '../../application/statusbar';
 import { INativeComponent } from '../../core/inative-component';
 import Color from '../color';
 import Page from '../page';
@@ -63,7 +63,7 @@ export interface IQuickLook extends INativeComponent {
    * @readonly
    * @since 0.1
    */
-  statusBar: StatusBar | null;
+  statusBar: typeof StatusBar | null;
 
   /**
    * This function shows QuickLook on the given UI.Page.
@@ -80,9 +80,9 @@ export declare class QuickLookBase implements IQuickLook {
   barColor: boolean;
   titleColor: Color;
   itemColor: Color | null;
-  statusBar: StatusBar | null;
+  statusBar: typeof StatusBar | null;
   show(page: Page): void;
-  
+
   nativeObject: any;
 }
 

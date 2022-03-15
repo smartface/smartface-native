@@ -1,4 +1,4 @@
-import { StatusBar } from '../../application/statusbar';
+import StatusBar from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
@@ -291,7 +291,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @removed 4.0.0 Use {@link Application.statusBar} instead
    * @since 0.1
    */
-  statusBar: StatusBar;
+  statusBar: typeof StatusBar;
   /**
    * Gets header bar object of a  page. This property is readonly, you can not
    * set header bar to a page but you can change properties of page's header bar.
@@ -427,7 +427,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   abstract present(params?: ControllerParams): void;
   abstract dismiss(params?: { onComplete: () => void }): void;
   abstract readonly layout: FlexLayout;
-  abstract readonly statusBar: StatusBar;
+  abstract readonly statusBar: typeof StatusBar;
   abstract readonly headerBar?: HeaderBar;
 
   static iOS: {
@@ -441,7 +441,7 @@ declare class PageImpl extends AbstractPage implements IPage {
   orientation: PageOrientation;
   transitionViews: View[];
   layout: FlexLayout;
-  statusBar: StatusBar;
+  statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;
   getCurrentController(): IController;
   show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined });

@@ -14,7 +14,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   extends AbstractPage<TEvent | PageEvents, TNative, TProps>
   implements IPage<TEvent | PageEvents>
 {
-  layout: FlexLayout;
   headerBar?: HeaderBar | undefined;
 
   getCurrentController(): IController {
@@ -71,9 +70,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
-  // get layout(): IPage['layout'] {
-  //   return this.pageView;
-  // }
+  get layout(): IPage['layout'] {
+    return this.pageView;
+  }
   statusBar: IPage['statusBar'];
 
   get transitionViews(): IPage['transitionViews'] {

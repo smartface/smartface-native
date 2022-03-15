@@ -8,7 +8,7 @@ import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
-import { StatusBar } from './statusbar';
+import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar';
 import { ApplicationBase } from './application';
@@ -59,7 +59,7 @@ const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
 class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements ApplicationBase {
-  public statusBar: StatusBar = StatusBar;
+  public statusBar: typeof StatusBar = StatusBar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
   private _onExit: any;

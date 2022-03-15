@@ -4,7 +4,7 @@ import SliderDrawer from '../ui/sliderdrawer';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import BottomTabBar from '../ui/bottomtabbar';
-import { StatusBar } from './statusbar';
+import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar';
 
@@ -321,7 +321,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @readonly
    * @since 3.2.0
    */
-  statusBar: StatusBar;
+  statusBar: typeof StatusBar;
   LayoutDirection: typeof LayoutDirection;
   android: Partial<{
     /**

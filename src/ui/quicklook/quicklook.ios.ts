@@ -4,12 +4,12 @@ import Application from '../../application';
 import { IQuickLook } from '.';
 import Page from '../page';
 import NativeComponent from '../../core/native-component';
-import { StatusBar } from '../../application/statusbar';
+import StatusBar from '../../application/statusbar';
 
 export default class QuickLookIOS extends NativeComponent implements IQuickLook {
   private _document: string[] = [];
   barColor: boolean;
-  statusBar: StatusBar | null;
+  statusBar: typeof StatusBar | null;
 
   constructor(params?: Partial<IQuickLook>) {
     super(params);

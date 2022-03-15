@@ -17,7 +17,7 @@ import FragmentTransaction from '../../util/Android/transition/fragmenttransitio
 import Image from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import { StatusBar } from '../../application/statusbar';
+import StatusBar from '../../application/statusbar';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IController } from '../navigationcontroller';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -150,7 +150,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     this.nativeSpecificParams();
     this.layoutAssignments();
   }
-  statusBar: StatusBar;
+  statusBar: typeof StatusBar;
   parentController: IPage['parentController'];
   get orientation(): PageOrientation {
     return this._orientation;

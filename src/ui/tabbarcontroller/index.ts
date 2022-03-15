@@ -8,7 +8,7 @@ import FlexLayout from '../flexlayout';
 import { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import View, { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view';
-import { StatusBar } from '../../application/statusbar';
+import StatusBar from '../../application/statusbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 
 export enum BarTextTransform {
@@ -225,7 +225,7 @@ export declare abstract class AbstractTabBarController<TEvent extends string = T
   orientation: PageOrientation;
   transitionViews: View[];
   layout: FlexLayout;
-  statusBar: StatusBar;
+  statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;
   static iOS: {
     BarTextTransform: typeof BarTextTransform;
@@ -272,7 +272,6 @@ class TabBarControllerImpl extends AbstractTabBarController {
   onOrientationChange(e: { orientation: PageOrientation[] }): void {
     throw new Error('Method not implemented.');
   }
-
 }
 
 /**
