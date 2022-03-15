@@ -1,7 +1,7 @@
 import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from '.';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 import Application from '../../application';
-import { UnitConverter } from '../../util';
+import UnitConverter from '../../util/Android/unitconverter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
 import { IFlexLayout } from '../flexlayout';

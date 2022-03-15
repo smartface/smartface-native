@@ -601,8 +601,8 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
  * for event handling. View is the base of all UI classes.
  *
  *     @example
- *     const View = require('@smartface/native/ui/view');
- *     const Color = require('@smartface/native/ui/color');
+ *     import View from '@smartface/native/ui/view';
+ *     import Color from '@smartface/native/ui/color';
  *     var myView = new View();
  *     myView.width = 300;
  *     myView.height = 500;
@@ -611,11 +611,13 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
  *     myView.backgroundColor = Color.RED;
  *
  */
-export interface IView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TMobileProps extends MobileOSProps<ViewIOSProps, ViewAndroidProps> = MobileOSProps<ViewIOSProps, ViewAndroidProps>>
-  extends Omit<IViewProps<TMobileProps>, 'nativeObject'>,
+export interface IView<
+  TEvent extends string = ViewEvents,
+  TNative extends { [key: string]: any } = { [key: string]: any },
+  TMobileProps extends MobileOSProps<ViewIOSProps, ViewAndroidProps> = MobileOSProps<ViewIOSProps, ViewAndroidProps>
+> extends Omit<IViewProps<TMobileProps>, 'nativeObject'>,
     IEventEmitter<TEvent | ViewEvents>,
     INativeComponent<TNative> {
-  
   parent: IView | undefined;
   readonly uniqueId: string;
   applyLayout(): void;
@@ -664,8 +666,8 @@ export interface IView<TEvent extends string = ViewEvents, TNative extends { [ke
    * Gets the parent view of a view.
    *
    *     @example
-   *     const FlexLayout = require('@smartface/native/ui/flexlayout');
-   *     const Label = require('@smartface/native/ui/label');
+   *     import FlexLayout from '@smartface/native/ui/flexlayout';
+   *     import Label from '@smartface/native/ui/label';
    *
    *     var myFlexLayout = new FlexLayout();
    *     myFlexLayout.id = 5432;
@@ -966,12 +968,12 @@ export enum SemanticContentAttribute {
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative extends Record<string, any> = Record<string, any>, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<
-  TEvent | ExtractEventValues<ViewEvents>,
-  TNative,
-  TProps
-> {
-  constructor(params?: Partial<TProps>){
+export class ViewBase<
+  TEvent extends string = ExtractEventValues<ViewEvents>,
+  TNative extends Record<string, any> = Record<string, any>,
+  TProps extends IViewProps = IViewProps
+> extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>, TNative, TProps> {
+  constructor(params?: Partial<TProps>) {
     super(params);
   }
   // export namespace ios {
@@ -1010,9 +1012,9 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   onTouch: (e?: Point2D) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
   onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean; }, point?: Point2D) => boolean | void;
+  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
   dirty(): void;
-  getPosition: () => { left: number; top: number; width: number; height: number; };
+  getPosition: () => { left: number; top: number; width: number; height: number };
   transitionId: string;
   accessible: boolean;
   accessibilityLabel: string;
@@ -1057,7 +1059,6 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative ex
   alignSelf: Flex.AlignSelf;
   masksToBounds: boolean;
   maskedBorders: Border[];
-  
 }
 
 const View: ConstructorOf<IView, Partial<IViewProps>> = require(`./view.${Device.deviceOS.toLowerCase()}`).default;

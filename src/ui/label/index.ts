@@ -23,11 +23,12 @@ export type LabelAndroidProps = IView['android'] & {
    * @since 4.0.2
    */
   textDirection?: TextDirection;
-}
+};
 
-export type LabelIOSProps = IView['ios']
+export type LabelIOSProps = IView['ios'];
 
-export declare interface ILabel<TEvent extends string = ViewEvents, TMobile extends MobileOSProps<LabelIOSProps, LabelAndroidProps> = MobileOSProps<LabelIOSProps, LabelAndroidProps>> extends IView<TEvent, any, TMobile> {
+export declare interface ILabel<TEvent extends string = ViewEvents, TMobile extends MobileOSProps<LabelIOSProps, LabelAndroidProps> = MobileOSProps<LabelIOSProps, LabelAndroidProps>>
+  extends IView<TEvent, any, TMobile> {
   /**
    * Gets/sets font of a Label. When set to null label uses system font.
    * It is set to null by default.
@@ -88,8 +89,8 @@ export declare interface ILabel<TEvent extends string = ViewEvents, TMobile exte
    * can be used. Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.
    *
    *     @example
-   *     const Label = require('@smartface/native/ui/label');
-   *     const TextAlignment = require('@smartface/native/ui/textalignment');
+   *     import Label from '@smartface/native/ui/label';
+   *     import TextAlignment from '@smartface/native/ui/textalignment';
    *     var myLabel = new Label();
    *     myLabel.textAlignment = TextAlignment.MIDCENTER;
    *

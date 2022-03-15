@@ -1,5 +1,5 @@
 import { AbstractDatePicker, IDatePicker } from '.';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
@@ -30,13 +30,11 @@ export default class DatePickerAndroid extends AbstractDatePicker {
       );
     }
 
-
     this.addAndroidProps({
-      get style(){
-        return androidStyle
+      get style() {
+        return androidStyle;
       }
-    })
-
+    });
 
     this.nativeObject.setOnCancelListener(
       NativeDialogInterface.OnCancelListener.implement({

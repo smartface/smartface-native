@@ -4,12 +4,9 @@ import Color from '../color';
 import Image from '../image';
 import ViewIOS from '../view/view.ios';
 import { RangeSliderEvents } from './rangeslider-events';
-import { UIControlEvents } from '../../util';
+import UIControlEvents from '../../util/ios/uicontrolevents';
 
-export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents>
-  extends ViewIOS<TEvent | RangeSliderEvents, any, IRangeSlider>
-  implements IRangeSlider
-{
+export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> extends ViewIOS<TEvent | RangeSliderEvents, any, IRangeSlider> implements IRangeSlider {
   private _rangeEnabled: boolean;
   private _thumbImage: Image;
   private _onValueChange: (value: number[]) => void;

@@ -1,6 +1,7 @@
 import { IListView, RowAnimation } from '.';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
-import { AndroidConfig, LayoutParams, UnitConverter } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import LayoutParams from '../../util/Android/layoutparams';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Color from '../color';
 import ListViewItem from '../listviewitem';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -134,8 +135,8 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     let topInset = 0;
     let bottomInset = 0;
     if (this.nativeInner) {
-      topInset = UnitConverter.dpToPixel(this.contentInset?.top || 0);
-      bottomInset = UnitConverter.dpToPixel(this.contentInset?.bottom || 0);
+      topInset = AndroidUnitConverter.dpToPixel(this.contentInset?.top || 0);
+      bottomInset = AndroidUnitConverter.dpToPixel(this.contentInset?.bottom || 0);
     }
     this.nativeInner?.setPaddingRelative(0, topInset, 0, bottomInset);
   }
@@ -147,8 +148,8 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           return;
         }
         //Remove  due to the incorrect onScrolled's return parameter. Such as scrollTo(0) causes it to return fault dx & dy parameters.
-        const dY = UnitConverter.pixelToDp(dy);
-        const dX = UnitConverter.pixelToDp(dx);
+        const dY = AndroidUnitConverter.pixelToDp(dy);
+        const dX = AndroidUnitConverter.pixelToDp(dx);
         const params = {
           translation: {
             x: dX,
@@ -381,11 +382,11 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
               borderBottomRightRadius,
               borderBottomLeftRadius,
               borderBottomLeftRadius
-            ].map((r) => UnitConverter.dpToPixel(r)),
+            ].map((r) => AndroidUnitConverter.dpToPixel(r)),
             'float'
           );
           const paddings = array(
-            [paddingLeft, paddingRight, paddingTop, paddingBottom].map((p) => UnitConverter.dpToPixel(p)),
+            [paddingLeft, paddingRight, paddingTop, paddingBottom].map((p) => AndroidUnitConverter.dpToPixel(p)),
             'float'
           );
           this.nativeSwipeItemInstance.setSwipeItemDimensions(paddings, borderRadii);
@@ -479,8 +480,8 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   }
   get contentOffset() {
     return {
-      x: UnitConverter.pixelToDp(this.nativeInner?.computeHorizontalScrollOffset()),
-      y: UnitConverter.pixelToDp(this.nativeInner?.computeVerticalScrollOffset())
+      x: AndroidUnitConverter.pixelToDp(this.nativeInner?.computeHorizontalScrollOffset()),
+      y: AndroidUnitConverter.pixelToDp(this.nativeInner?.computeVerticalScrollOffset())
     };
   }
   static SwipeItem = typeof SwipeItem;

@@ -13,9 +13,9 @@ import { IPage } from '../page';
  * UI.TabBarItem.page when the tab bar item is clicked.
  *
  *     @example
- *     const TabBarItem = require('@smartface/native/ui/tabbaritem');
- *     const BottomTabBar = require('@smartface/native/ui/bottomtabbar');
- *     const Image = require('@smartface/native/ui/image');
+ *     import TabBarItem from '@smartface/native/ui/tabbaritem';
+ *     import BottomTabBar from '@smartface/native/ui/bottomtabbar';
+ *     import Image from '@smartface/native/ui/image';
  *
  *     var myHomeImage = Image.createFromFile("images://home.png");
  *     var myTab = new BottomTabBar();
@@ -112,7 +112,7 @@ export declare interface ITabbarItem extends INativeComponent {
   }>;
   invalidate(): void;
   setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon?: string | number }): void;
-  tabBarItemParent: IPage | null
+  tabBarItemParent: IPage | null;
 }
 
 const TabbarItem: ConstructorOf<ITabbarItem, Partial<ITabbarItem>> = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;

@@ -48,7 +48,7 @@ export declare class AbstractWebBrowserOptions {
  * An object that provides a standard interface for browsing the web.
  *
  *       @example
- *       const WebBrowser = require('@smartface/native/ui/webbrowser');
+ *       import WebBrowser from '@smartface/native/ui/webbrowser';
  *       var webOptions = new WebBrowser.Options();
  *       webOptions.url = "https://smartface.io"
  *       webOptions.barColor = Color.RED;

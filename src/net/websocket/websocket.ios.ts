@@ -1,7 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 
 import { IWebSocket } from './websocket';
 import { WebSocketEvents } from './websocket-events';

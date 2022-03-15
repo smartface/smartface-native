@@ -537,44 +537,6 @@ export declare class MultimediaBase {
   /**
    * @method pickFromGallery
    *
-   * Allows pick item from gallery.
-   *
-   *     @example
-   *     const Image = require("@smartface/native/ui/image");
-   *     const Multimedia = require("@smartface/native/device/multimedia");
-   *     const Page = require("@smartface/native/ui/page");
-   *     const extend = require("js-base/core/extend");
-   *     const Button = require('@smartface/native/ui/button');
-   *
-   *     var Page1 = extend(Page)(
-   *        function(_super) {
-   *            _super(this, {
-   *                onShow: function(params) {
-   *                },
-   *                onLoad: function(){
-   *                    var self = this;
-   *                    var button = new Button();
-   *                    button.flexGrow = 1;
-   *                    button.text = "Button"
-   *
-   *                    button.onPress = function(){
-   *                        Multimedia.pickFromGallery({
-   *                            type: Multimedia.Type.IMAGE,
-   *                            onSuccess: onSuccess,
-   *                            page : self
-   *                         });
-   *
-   *                        function onSuccess(picked) {
-   *                            var image = picked.image;
-   *                        }
-   *                    }
-   *                    this.layout.addChild(button);
-   *                }
-   *            });
-   *        }
-   *     );
-   *
-   *     module.exports = Page1;
    *
    * @param {Object} params Object describing parameters for the function.
    * @param {UI.Page} params.page

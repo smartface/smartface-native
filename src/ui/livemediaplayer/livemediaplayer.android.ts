@@ -1,5 +1,5 @@
 import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import { ViewAndroid } from '../view/view.android';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 

@@ -1,10 +1,11 @@
 import View from '..';
 import { getRippleMask } from '../../../helper/getrippleeffect';
-import { AndroidConfig, UnitConverter } from '../../../util';
+import AndroidConfig from '../../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../../util/Android/unitconverter';
 import Color from '../../color';
 
 function DpToPixel(dp) {
-  return UnitConverter.dpToPixel(dp);
+  return AndroidUnitConverter.dpToPixel(dp);
 }
 
 export function withRippleEffect(view: View) {
@@ -76,4 +77,3 @@ export function withRippleEffect(view: View) {
     _rippleEnabled && _rippleColor && (view.android.rippleColor = _rippleColor);
   };
 }
-

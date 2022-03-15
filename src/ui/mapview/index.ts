@@ -98,7 +98,7 @@ export type IMapViewIOS = ViewIOSProps & {
  * MapView is a view that shows Apple Maps on iOS and Google Maps on Android.
  *
  *     @example
- *     const MapView = require('@smartface/native/ui/mapview');
+ *     import MapView from '@smartface/native/ui/mapview';
  *     var myMapView = new MapView({
  *         flexGrow: 1,
  *         alignSelf: FlexLayout.AlignSelf.STRETCH,
@@ -117,7 +117,7 @@ export type IMapViewIOS = ViewIOSProps & {
  *                 subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
  *                 color: Color.RED,
  *                 onPress: function() {
- *                     const Application = require('@smartface/native/application');
+ *                     import Application from '@smartface/native/application';
  *                     Application.call("geo:" + myPin.location.latitude + ',' + myPin.location.longitude, {
  *                         'hl': 'en',
  *                     });
@@ -317,24 +317,26 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @readonly
    * @since 4.3.2
    */
-  readonly visibleRegion: {
-    topLeft: {
-      latitude: number;
-      longitude: number;
-    };
-    topRight: {
-      latitude: number;
-      longitude: number;
-    };
-    bottomLeft: {
-      latitude: number;
-      longitude: number;
-    };
-    bottomRight: {
-      latitude: number;
-      longitude: number;
-    };
-  } | undefined;
+  readonly visibleRegion:
+    | {
+        topLeft: {
+          latitude: number;
+          longitude: number;
+        };
+        topRight: {
+          latitude: number;
+          longitude: number;
+        };
+        bottomLeft: {
+          latitude: number;
+          longitude: number;
+        };
+        bottomRight: {
+          latitude: number;
+          longitude: number;
+        };
+      }
+    | undefined;
   /**
    * Get visible pins on MapView.
    *
@@ -505,12 +507,14 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   minZoomLevel: number;
   maxZoomLevel: number;
   centerLocation: { latitude: number; longitude: number };
-  visibleRegion: {
-    topLeft: { latitude: number; longitude: number };
-    topRight: { latitude: number; longitude: number };
-    bottomLeft: { latitude: number; longitude: number };
-    bottomRight: { latitude: number; longitude: number };
-  } | undefined;
+  visibleRegion:
+    | {
+        topLeft: { latitude: number; longitude: number };
+        topRight: { latitude: number; longitude: number };
+        bottomLeft: { latitude: number; longitude: number };
+        bottomRight: { latitude: number; longitude: number };
+      }
+    | undefined;
   getVisiblePins(): Pin[];
   addPin(pin: Pin): void;
   removePin(pin: Pin): void;

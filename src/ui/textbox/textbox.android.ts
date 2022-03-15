@@ -1,12 +1,4 @@
-/*globals requireClass*/
-// const TextView = require('../textview');
-// const KeyboardType = require('../keyboardtype');
-// const ActionKeyType = require('../actionkeytype');
-// const AutoCapitalize = require("./autocapitalize");
-// const Events = require('./events');
-// const { EventEmitterCreator } = require('../../core/eventemitter');
 import { TextBoxAndroidProps, ITextBox } from '.';
-import { AndroidConfig, SystemServices } from '../../util';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
@@ -16,8 +8,9 @@ import TextView from '../textview';
 import { ViewAndroid } from '../view/view.android';
 import AutoCapitalize from './autocapitalize';
 import { TextBoxEvents } from './textbox-events';
+import SystemServices from '../../util/Android/systemservices';
+import AndroidConfig from '../../util/Android/androidconfig';
 
-const NativeView = requireClass('android.view.View');
 const NativeTextWatcher = requireClass('android.text.TextWatcher');
 const NativeTextView = requireClass('android.widget.TextView');
 const NativeInputFilter = requireClass('android.text.InputFilter');
@@ -74,7 +67,10 @@ const NativeActionKeyType = [
   4 // EditorInfo.IME_ACTION_SEND
 ];
 
-export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
+export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox>
+  extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
+  implements ITextBox
+{
   private __touchEnabled: boolean = true;
   private _isPassword: boolean = false;
   private _keyboardType: KeyboardType = KeyboardType.DEFAULT;
@@ -262,7 +258,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     const currentInputType = this.nativeObject.getInputType();
 
     let passwordType;
-    if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) != 0) passwordType = TYPE_TEXT_VARIATION_PASSWORD;
+    if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) !== 0) passwordType = TYPE_TEXT_VARIATION_PASSWORD;
     else passwordType = TYPE_NUMBER_VARIATION_PASSWORD;
 
     const removeTags = TYPE_TEXT_VARIATION_PASSWORD | TYPE_NUMBER_VARIATION_PASSWORD;
@@ -322,8 +318,8 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
           // todo: Control insertedText after resolving story/AND-2508 issue.
           onTextChanged: (charSequence, start, before, count) => {
             if (!this._hasEventsLocked) {
-              var insertedText = '';
-              if (before == 0) {
+              let insertedText = '';
+              if (before === 0) {
                 insertedText = charSequence.subSequence(start, start + count).toString();
               } else if (before <= count) {
                 insertedText = charSequence.subSequence(before, count).toString();

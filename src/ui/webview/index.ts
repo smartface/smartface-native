@@ -166,8 +166,8 @@ export type iOSProps = ViewIOSProps & {
  * It also holds some of the common functionalities of browsers like refresh, go back and etc.
  *
  *     @example
- *     const WebView = require('@smartface/native/ui/webview');
- *     const Flex = require('@smartface/native/ui/flexlayout')
+ *     import WebView from '@smartface/native/ui/webview';
+ *     import Flex from '@smartface/native/ui/flexlayout'
  *
  *     var myWebView = new WebView({
  *         left:10, top:10, right:10, bottom:10,
@@ -313,8 +313,8 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * Runs a javascript code. Return value must be inside a function.
    *
    *     @example
-   *     const WebView = require('@smartface/native/ui/webview');
-   *     const Flex = require('@smartface/native/ui/flexlayout');
+   *     import WebView from '@smartface/native/ui/webview';
+   *     import Flex from '@smartface/native/ui/flexlayout';
    *
    *     var myScript = `
    *         function doSomething() {

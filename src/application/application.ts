@@ -43,7 +43,7 @@ declare enum LayoutDirection {
  * Enable to change keyboard mode.
  *
  *     @example
- *     const Application  =require("@smartface/native/application");
+ *     import Application  from '@smartface/native/application';
  *     Application.android.keyboardMode = Application.Android.KeyboardMode.KeyboardAdjustResize;
  *
  */
@@ -253,7 +253,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    *      </array>
    *
    *      After entry add on, urlScheme can be check;
-   * 	 	const Application = require("@smartface/native/application");
+   * 	 	import Application from '@smartface/native/application';
    *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
    *
    * 		(AndroidManifest.xml entry)
@@ -267,7 +267,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * 			</queries>
    * 		</manifest>
    *
-   * 	 	const Application = require("@smartface/native/application");
+   * 	 	import Application from '@smartface/native/application';
    *      var isAppAvaible = Application.canOpenUrl("geo://");
    *
    * @method canOpenUrl
@@ -385,7 +385,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
      *
      *     @example
-     *     const Application = require("@smartface/native/application");
+     *     import Application from '@smartface/native/application';
      *     Application.android.dispatchTouchEvent = function(){
      *        return true; //Consume all touches & do not pass to window
      *     }
@@ -430,7 +430,7 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
      * {@link Application.android#onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
      *
      *     @example
-     *     const Application = require("@smartface/native/application");
+     *     import Application from '@smartface/native/application';
      *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
      *     Application.android.onRequestPermissionsResult = function(e){
      *         console.log(JSON.stringify(e));

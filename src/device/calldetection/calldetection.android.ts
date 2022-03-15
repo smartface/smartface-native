@@ -1,7 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { ICallDetection, State } from '.';
 import { CallDetectionEvents } from './calldetection-events';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const SFPhoneStateListener = requireClass('io.smartface.android.sfcore.device.calldetection.SFPhoneStateListener');
 const TELEPHONY_SERVICE = 'phone';

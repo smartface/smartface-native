@@ -1,9 +1,10 @@
 import { AbstractEmailComposer } from '.';
 import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
+import * as RequestCodes from '../../util/Android/requestcodes';
 import File from '../../io/file';
-import { RequestCodes, TypeUtil } from '../../util';
 import Page from '../page';
+import TypeUtil from '../../util/type';
 
 const NativeIntent = requireClass('android.content.Intent');
 const NativeUri = requireClass('android.net.Uri');

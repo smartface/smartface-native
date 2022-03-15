@@ -1,5 +1,6 @@
 import { ISwipeView, SwipeViewState } from '.';
-import { AndroidConfig, UnitConverter } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Page from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -63,7 +64,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
           this.emit('pageSelected', position, this._pageInstances[position]);
         },
         onPageScrolled: (position: number, positionOffset: number, positionOffsetPixels: number) => {
-          const offsetPixels = UnitConverter.pixelToDp(positionOffsetPixels);
+          const offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
           this.onPageScrolled?.(position, offsetPixels);
           this.emit('pageScrolled', position, offsetPixels);
           const intPosition = position;

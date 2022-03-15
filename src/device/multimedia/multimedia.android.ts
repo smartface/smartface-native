@@ -2,8 +2,11 @@ import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams,
 import File from '../../io/file';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
-import { AndroidConfig, RequestCodes, TypeUtil } from '../../util';
+
+import AndroidConfig from '../../util/Android/androidconfig';
+import * as RequestCodes from '../../util/Android/requestcodes';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import TypeUtil from '../../util/type';
 
 /* global requireClass */
 const NativeMediaStore = requireClass('android.provider.MediaStore');

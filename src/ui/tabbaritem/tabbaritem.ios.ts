@@ -1,6 +1,6 @@
 import { ITabbarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import Badge, { IBadge } from '../badge';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
@@ -22,7 +22,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
 
     this._badge = this.nativeObject
       ? new Badge({ nativeObject: this.nativeObject })
-      : {
+      : ({
           backgroundColor: null,
           borderColor: null,
           borderWidth: 0,
@@ -34,7 +34,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
             this.moveX = x;
             this.moveY = y;
           }
-        } as unknown as IBadge;
+        } as unknown as IBadge);
 
     this.addIOSProps({
       get font(): Font {
@@ -109,8 +109,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
             this.nativeObject.image = this._icon.normal.nativeObject;
           } else if (typeof this._icon.normal === 'string') {
             const image = Image.createFromFile(this._icon.normal);
-            if(image)
-              this.nativeObject.image = image.nativeObject;
+            if (image) this.nativeObject.image = image.nativeObject;
           } else {
             this.nativeObject.image = undefined;
           }
@@ -119,8 +118,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
             this.nativeObject.selectedImage = this._icon.selected.nativeObject;
           } else if (typeof this._icon.selected === 'string') {
             const image = Image.createFromFile(this._icon.selected);
-            if(image)
-              this.nativeObject.selectedImage = image.nativeObject;
+            if (image) this.nativeObject.selectedImage = image.nativeObject;
           } else {
             this.nativeObject.selectedImage = undefined;
           }

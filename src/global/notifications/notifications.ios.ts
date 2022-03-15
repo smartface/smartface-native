@@ -1,6 +1,6 @@
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 import { UnauthorizationStatus } from './unauthorization-status';
@@ -8,7 +8,7 @@ import { UnauthorizationStatus } from './unauthorization-status';
 class NotificationsIOS implements NotificationsBase {
   public readonly android: {};
   static Events = NotificationEvents;
-  static ios: typeof NotificationsBase.ios & {UNUserNotificationCenterDelegate: any,_didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any} = {
+  static ios: typeof NotificationsBase.ios & { UNUserNotificationCenterDelegate: any; _didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any } = {
     _willPresentNotification: undefined,
     authorizationStatus: UnauthorizationStatus,
     _didReceiveNotificationResponse: undefined,

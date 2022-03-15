@@ -1,6 +1,6 @@
 import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { UnitConverter } from '../../util';
+import UnitConverter from '../../util/Android/unitconverter';
 
 const NativeItemDecoration = requireClass('androidx.recyclerview.widget.RecyclerView$ItemDecoration');
 const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager');

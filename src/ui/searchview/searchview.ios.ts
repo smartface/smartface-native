@@ -6,9 +6,10 @@ import Image from '../image';
 import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import { SearchViewEvents } from './searchview-events';
-import { Invocation, KeyboardAnimationDelegate } from '../../util';
 import Page from '../page';
 import KeyboardAppearance from '../shared/keyboardappearance';
+import Invocation from '../../util/iOS/invocation';
+import KeyboardAnimationDelegate from '../../util/iOS/keyboardanimationdelegate';
 
 const UISearchBarStyle = {
   default: 0,
@@ -53,29 +54,27 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       this._nativeObject = new __SF_SMFUISearchBar();
     }
 
-    if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+    if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
-    } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
+    } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
       this.nativeObject.setValueForKey(4, 'semanticContentAttribute');
     }
 
-    if (parseInt(System.OSVersion) >= 11) {
-      const heightAnchor = Invocation.invokeInstanceMethod(this.nativeObject, 'heightAnchor', [], 'NSObject');
+    const heightAnchor = Invocation.invokeInstanceMethod(this.nativeObject, 'heightAnchor', [], 'NSObject');
 
-      const argConstant = new Invocation.Argument({
-        type: 'CGFloat',
-        value: 44
-      });
-      // TODO Recheck after build
-      const layoutConstraint = Invocation.invokeInstanceMethod(heightAnchor, 'constraintLessThanOrEqualToConstant:', [argConstant], 'NSObject');
+    const argConstant = new Invocation.Argument({
+      type: 'CGFloat',
+      value: 44
+    });
+    // TODO Recheck after build
+    const layoutConstraint = Invocation.invokeInstanceMethod(heightAnchor, 'constraintLessThanOrEqualToConstant:', [argConstant], 'NSObject');
 
-      const argIsActive = new Invocation.Argument({
-        type: 'BOOL',
-        value: true
-      });
-      // TODO Recheck after build
-      Invocation.invokeInstanceMethod(layoutConstraint, 'setActive:', [argIsActive]);
-    }
+    const argIsActive = new Invocation.Argument({
+      type: 'BOOL',
+      value: true
+    });
+    // TODO Recheck after build
+    Invocation.invokeInstanceMethod(layoutConstraint, 'setActive:', [argIsActive]);
 
     // TODO Recheck textfield and keyboardanimationdelegate fields. Doesn't exists in this;
     this.textfield = this.nativeObject.valueForKey('searchField');
@@ -135,7 +134,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       if (this.nativeObject.activityIndicatorTrailingConstraint) {
         let constant: any;
         searchText === '' ? (constant = 0) : (constant = -20);
-        if (constant != _constant) {
+        if (constant !== _constant) {
           _constant = constant;
           const argConstant = new Invocation.Argument({
             type: 'CGFloat',
@@ -226,7 +225,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
   set text(value: string) {
     if (this.nativeObject.activityIndicatorTrailingConstraint) {
       const constant = value === '' ? 0 : -20;
-      if (constant != this._constant) {
+      if (constant !== this._constant) {
         this._constant = constant;
         const argConstant = new Invocation.Argument({
           type: 'CGFloat',
@@ -328,7 +327,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this._isAddedHeaderBar = true;
     if (parseInt(System.OSVersion) >= 13) {
       // Workaround For iOS 13, increase height navbar issue
-      if (this._searchContainerView == undefined) {
+      if (this._searchContainerView === undefined) {
         this._searchContainerView = __SF_SearchBarContainerView.createWithSearchBar(this.nativeObject);
       }
       page.nativeObject.navigationItem.titleView = this._searchContainerView;

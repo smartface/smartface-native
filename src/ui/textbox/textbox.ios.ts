@@ -1,4 +1,4 @@
-import { TextBoxiOSProps, ITextBox } from '.';
+import { ITextBox } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
@@ -7,11 +7,12 @@ import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import AutoCapitalize from './autocapitalize';
 import { TextBoxEvents } from './textbox-events';
-import { Invocation, KeyboardAnimationDelegate } from '../../util';
 import FlexLayout from '../flexlayout';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextContentType from '../shared/textcontenttype';
 import View from '../view';
+import KeyboardAnimationDelegate from '../../util/iOS/keyboardanimationdelegate';
+import Invocation from '../../util/iOS/invocation';
 
 const IOSKeyboardTypes = {
   default: 0, // Default type for the current input method.
@@ -50,10 +51,7 @@ const UITextAutocapitalizationType = {
   AllCharactes: 3
 };
 
-export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox>
-  extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps>
-  implements ITextBox
-{
+export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
   private _textAligment: number = 3;
   private _hint: string;
   private _hintTextColor: Color;

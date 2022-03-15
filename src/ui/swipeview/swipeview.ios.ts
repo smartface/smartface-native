@@ -3,8 +3,10 @@ import Page from '../page';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
 import { SwipeViewEvents } from './swipeview-events';
-import { Invocation, YogaEnums, Exception } from '../../util';
+import Invocation from '../../util/ios/invocation';
+import * as YogaEnums from '../../util/ios/yogaenums';
 import PageIOS from '../page/page.ios';
+import Exception from '../../util/exception';
 
 enum UIPageViewControllerTransitionStyle {
   PageCurl,
@@ -54,7 +56,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   onStateChanged: (state: SwipeViewState) => void;
   onPageCreate: (position: number) => Page;
   pageCount: number;
-  pagerAdapter: { notifyDataSetChanged: () => void; };
+  pagerAdapter: { notifyDataSetChanged: () => void };
 
   private setPageControllerDataSource() {
     this.pageControllerDatasource = new __SF_UIPageViewControllerDatasource();
@@ -280,12 +282,13 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
 }
 
 function bypassPageSpecificProperties(page: PageIOS) {
-  page.headerBar && Object.keys(page.headerBar).forEach(function (key) {
-    Object.defineProperty(page.headerBar, key, {
-      set: function () {},
-      get: function () {
-        return {};
-      }
+  page.headerBar &&
+    Object.keys(page.headerBar).forEach(function (key) {
+      Object.defineProperty(page.headerBar, key, {
+        set: function () {},
+        get: function () {
+          return {};
+        }
+      });
     });
-  });
 }

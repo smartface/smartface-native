@@ -1,6 +1,7 @@
 import { IVideoView } from '.';
 import File from '../../io/file';
-import { Exception, TypeUtil } from '../../util';
+import Exception from '../../util/exception';
+import TypeUtil from '../../util/type';
 import Page from '../page';
 import ViewIOS from '../view/view.ios';
 import { VideoViewEvents } from './videoview-events';

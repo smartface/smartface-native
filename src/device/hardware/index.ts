@@ -5,7 +5,7 @@
  * Hardware is used to retrieve hardware specific information of the device.
  *
  *     @example
- *     const Hardware = require('@smartface/native/device/hardware');
+ *     import Hardware from '@smartface/native/device/hardware';
  *     console.log("Device.Hardware.IMEI: "       + Hardware.android.IMEI);
  *     console.log("Device.Hardware.UID: "        + Hardware.UID);
  *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);

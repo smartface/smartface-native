@@ -290,12 +290,12 @@ export interface IListViewAndroid extends ViewAndroidProps {
  * ListView is a View that displays given items as a one-column vertical list.
  *
  *     @example
- *     const Color = require('@smartface/native/ui/color');
- *     const ListView = require('@smartface/native/ui/listview');
- *     const ListViewItem = require('@smartface/native/ui/listviewitem');
- *     const Label = require('@smartface/native/ui/label');
- *     const FlexLayout = require('@smartface/native/ui/flexlayout');
- *     const TextAlignment     = require("@smartface/native/ui/textalignment");
+ *     import Color from '@smartface/native/ui/color';
+ *     import ListView from '@smartface/native/ui/listview';
+ *     import ListViewItem from '@smartface/native/ui/listviewitem';
+ *     import Label from '@smartface/native/ui/label';
+ *     import FlexLayout from '@smartface/native/ui/flexlayout';
+ *     import TextAlignment     from '@smartface/native/ui/textalignment';
  *
  *     var myDataSet = [
  *         {

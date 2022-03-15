@@ -2,7 +2,7 @@ import { INativeComponent } from '../../core/inative-component';
 import Contacts from '../../device/contacts';
 import File from '../../io/file';
 import Page from '../../ui/page';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { ShareBase } from './share';
 
 const UIActivityViewController = SF.requireClass('UIActivityViewController');

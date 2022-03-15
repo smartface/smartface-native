@@ -1,6 +1,6 @@
 import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const SFNetworkNotifier = requireClass('io.smartface.android.sfcore.device.network.SFNetworkNotifier');
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
@@ -104,7 +104,6 @@ class Notifier extends NativeComponent implements NetworkNotifier {
 }
 
 class NetworkAndroid extends NativeComponent implements NetworkBase {
-
   ConnectionType = ConnectionType;
   readonly roamingEnabled = false;
   constructor() {

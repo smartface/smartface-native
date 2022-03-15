@@ -1,9 +1,9 @@
-import Sound, { AbstractSound } from '.';
+import { AbstractSound } from '.';
 import Application from '../../application';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import Page from '../../ui/page';
-import { AndroidConfig, RequestCodes } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import * as RequestCodes from '../../util/Android/requestcodes';
 import { SoundEvents } from './sound-events';
 
 /* globals requireClass */
@@ -51,7 +51,7 @@ export default class SoundAndroid extends AbstractSound {
         const intent = new NativeIntent();
         intent.setType('audio/*');
         intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-        if (!(params && params.page instanceof require('../../ui/page'))) {
+        if (!(params?.page instanceof Page)) {
           getCurrentPageFragment().startActivityForResult(intent, SoundAndroid.PICK_SOUND);
         } else {
           params.page.nativeObject.startActivityForResult(intent, SoundAndroid.PICK_SOUND);

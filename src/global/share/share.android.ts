@@ -3,7 +3,7 @@ import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Image from '../../ui/image';
 import Page from '../../ui/page';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import { ShareBase } from './share';
 
 const NativeIntent = requireClass('android.content.Intent');
@@ -38,8 +38,7 @@ function writeContactsToFile(contacts, vCardFileName) {
   const file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/` + (vCardFileName + '.vcf') });
   if (!file.exists) file.createFile(true);
   const fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
-  if(!fileStream)
-    return;
+  if (!fileStream) return;
   contacts.forEach((contact) => {
     const {
       namePrefix = '',
@@ -206,8 +205,8 @@ export class ShareAndroid implements ShareBase {
     shareIntent.setType('*/*');
 
     const contentSharing: {
-      mimeTypes: string[],
-      parcelabels: any
+      mimeTypes: string[];
+      parcelabels: any;
     } = {
       mimeTypes: [],
       parcelabels: new NativeArrayList()

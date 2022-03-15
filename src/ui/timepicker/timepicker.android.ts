@@ -1,6 +1,6 @@
 import { ITimePicker } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import { TimePickerEvents } from './timepicker-events';
 
 const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
@@ -21,7 +21,7 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
       this[param] = params[param];
     }
   }
-  
+
   setTime(params: { hour: number; minute: number }): void {
     this.hour = params.hour;
     this.minutes = params.minute;

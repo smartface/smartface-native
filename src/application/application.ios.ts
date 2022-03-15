@@ -2,7 +2,7 @@ import Location from '../device/location';
 import Accelerometer from '../device/accelerometer';
 import Network from '../device/network';
 import Timer from '../global/timer';
-import { Invocation } from '../util';
+import Invocation from '../util/ios/invocation';
 import { ApplicationEvents } from './application-events';
 import { StatusBar } from './statusbar';
 import { ApplicationBase } from './application';
@@ -328,7 +328,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
 //EventEmitterCreator(SFApplication, EventFunctions);
 
 // function getProjectJsonObject(){
-//     const File = require("../io/file");
+//     imporr File from "../io/file";
 //     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
 
 //     // Publish case
@@ -338,7 +338,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
 
 //     var retval = {};
 //     if(projectFile.exists){
-//         const FileStream = require("../io/filestream");
+//         import FileStream from "../io/filestream";
 //         var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
 //         var projectFileContent = projectFileStream.readToEnd();
 //         if (projectFileContent) {

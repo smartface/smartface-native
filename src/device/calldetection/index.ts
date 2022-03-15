@@ -77,7 +77,7 @@ export enum State {
  * Required {@link Application.Android.Permissions-static-property-READ_PHONE_STATE READ_PHONE_STATE} permission for Android.
  *
  *     @example
- *     const CallDetection = require("@smartface/native/device/calldetection");
+ *     import CallDetection from '@smartface/native/device/calldetection';
  *
  *     const callDetection = new CallDetection();
  *     callDetection.onCallStateChanged = (params) => {

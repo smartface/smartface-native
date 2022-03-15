@@ -56,7 +56,7 @@ export enum Types {
  * This class provides access to documents.
  *
  * @example
- *     const DocumentPicker = require("@smartface/native/device/documentpicker");
+ *     import DocumentPicker from '@smartface/native/device/documentpicker';
  *
  *     DocumentPicker.pick({
  *      page,

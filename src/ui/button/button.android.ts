@@ -2,18 +2,18 @@ import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { IButton } from '.';
 import { ButtonEvents } from './button-events';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
 import Image from '../image';
 import { IViewState } from '../view';
 import TextAlignment from '../shared/textalignment';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const NativeButton = requireClass('android.widget.Button');
 const NativeView = requireClass('android.view.View');
 const NativeLayerDrawable = requireClass('android.graphics.drawable.LayerDrawable');
 const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
-const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
 const NativeRoundedBitmapFactory = requireClass('androidx.core.graphics.drawable.RoundedBitmapDrawableFactory');
 
 const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');

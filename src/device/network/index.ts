@@ -89,7 +89,7 @@ export declare class NetworkNotifier extends NativeComponent {
  * Device.Network provides several information about the network connections and adaptors on the device.
  *
  *     @example
- *     const Network = require('@smartface/native/device/network');
+ *     import Network from '@smartface/native/device/network';
  *     console.log("Device.Network.IMSI: "                + Network.IMSI);
  *     console.log("Device.Network.SMSEnabled: "          + Network.SMSEnabled);
  *     console.log("Device.Network.bluetoothMacAddress: " + Network.bluetoothMacAddress);
@@ -110,7 +110,7 @@ export declare class NetworkBase extends NativeComponent {
    * value could be missed when application is frozen. However it can be checked by {@link Device.Network.createNotifier#isInitialStickyNotification isInitialStickyNotification} .
    *
    *     @example
-   *     const Network = require("@smartface/native/device/network");
+   *     import Network from '@smartface/native/device/network';
    *     var notifier = new Network.Notifier();
    *
    *     notifier.subscribe(function(connectionType) {

@@ -8,7 +8,7 @@ import { UnauthorizationStatus } from './unauthorization-status';
  * Notification is a message belongs to an application.
  *
  *     @example
- *     const Notifications = require("@smartface/native/notifications");
+ *     import Notifications from '@smartface/native/notifications';
  *     Notifications.registerForPushNotifications(function(e){
  *         console.log("Successfully registered. The token is: " + e.token);
  *     },function(){
@@ -131,7 +131,7 @@ export declare class NotificationsBase {
   static removeAllDeliveredNotifications(): void;
 
   public static readonly ios: Partial<{
-    authorizationStatus: typeof UnauthorizationStatus
+    authorizationStatus: typeof UnauthorizationStatus;
     /**
      * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
      *
@@ -219,7 +219,7 @@ export declare namespace Notifications {
    *
    *
    *     @example
-   *     const Notifications = require("@smartface/native/notifications");
+   *     import Notifications from '@smartface/native/notifications';
    *     var notification = new Notifications.LocalNotification();
    *     notification.alertAction = "Notification alertAction";
    *     notification.alertBody = "Notification alertBody";

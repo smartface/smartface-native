@@ -1,7 +1,7 @@
 import { AbstractWebBrowser } from '.';
 import Page from '../page';
 import Color from '../color';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { WebBrowserOptions } from './webbrowseroptions';
 
 export class WebBrowserIOS implements AbstractWebBrowser {

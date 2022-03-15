@@ -2,8 +2,10 @@ import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import { ViewEvents } from './view-event';
 import View, { IView, IViewProps, ViewBase } from '.';
-import { Invocation, Exception, YogaEnums } from '../../util';
 import { Size } from '../../primitive/size';
+import * as YogaEnums from '../../util/iOS/yogaenums';
+import Invocation from '../../util/iOS/invocation';
+import Exception from '../../util/exception';
 
 const YGUnit = YogaEnums.YGUnit;
 
@@ -17,11 +19,10 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps> extends ViewBase<
-  TEvent,
-  TNative,
-  TProps
-> implements IView {
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
+  extends ViewBase<TEvent, TNative, TProps>
+  implements IView
+{
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
   protected _nativeObject: any;

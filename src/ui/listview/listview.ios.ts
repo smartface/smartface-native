@@ -5,8 +5,10 @@ import ListViewItem from '../listviewitem';
 import SwipeItem, { SwipeDirection, ISwipeItem } from '../swipeitem';
 import ViewIOS from '../view/view.ios';
 import { ListViewEvents } from './listview-events';
-import { Invocation, UIControlEvents } from '../../util';
+
 import ListViewItemIOS from '../listviewitem/listviewitem.ios';
+import Invocation from '../../util/iOS/invocation';
+import UIControlEvents from '../../util/iOS/uicontrolevents';
 
 export default class ListViewIOS<TEvent extends string = ListViewEvents> extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView> implements IListView {
   nativeInner: INativeInner;

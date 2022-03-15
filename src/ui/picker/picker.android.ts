@@ -1,5 +1,7 @@
 import { IPicker } from '.';
-import { AndroidConfig, LayoutParams, TypeValue } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import LayoutParams from '../../util/Android/layoutparams';
+import TypeValue from '../../util/Android/typevalue';
 import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { PickerEvents } from './picker-events';
@@ -72,8 +74,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   }
   set dialogBackgroundColor(value: IPicker['dialogBackgroundColor']) {
     this._backgroundColor = value;
-    if(this._backgroundColor instanceof Color)
-      this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
+    if (this._backgroundColor instanceof Color) this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
   }
   get cancelColor(): IPicker['cancelColor'] {
     return this._cancelColor;

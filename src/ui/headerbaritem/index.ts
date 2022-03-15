@@ -257,7 +257,7 @@ export enum SystemItem {
  * can enable/disable items and listen press event.
  *
  *     @example
- *     const UI = require('@smartface/native/ui');
+ *     import UI from '@smartface/native/ui';
  *     var myPage = new UI.Page();
  *     var myItem = new UI.HeaderBarItem({
  *         title: "Smartface",
@@ -291,10 +291,12 @@ export interface IHeaderBarItem extends INativeComponent {
    * @ios
    * @since 4.0.1
    */
-  readonly size: {
-    readonly width: number;
-    readonly height: number;
-  } | undefined;
+  readonly size:
+    | {
+        readonly width: number;
+        readonly height: number;
+      }
+    | undefined;
   android: Partial<{
     /**
      * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
@@ -333,7 +335,7 @@ export interface IHeaderBarItem extends INativeComponent {
 		 * Gets/sets elevation of the header bar.
 		 * @android
 		 * @example
-		 * ```const Page = require('@smartface/native/ui/page');
+		 * ```import Page from '@smartface/native/ui/page';
 					const myPage = new Page();
 					myPage.headerBar.android.elevation = 10;
 					```
@@ -354,7 +356,7 @@ export interface IHeaderBarItem extends INativeComponent {
     /**
            * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
            * @example
-           * ```const Page = require('@smartface/native/ui/page');
+           * ```import Page from '@smartface/native/ui/page';
               const myPage = new Page();
               myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
               ```

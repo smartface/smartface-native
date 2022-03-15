@@ -1,6 +1,6 @@
-// import { EventEmitter } = require('./emitterClass');
-// const EventEmitterMixin = require('./mixin');
-// const { EventEmitterCreator, EventEmitterWrapper } = require('./emitterFactory');
+// import { EventEmitter } from './emitterClass';
+// import EventEmitterMixin from './mixin';
+// import { EventEmitterCreator, EventEmitterWrapper } from './emitterFactory';
 
 // module.exports = {
 //     EventEmitterCreator,

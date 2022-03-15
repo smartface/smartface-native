@@ -7,13 +7,14 @@ import Network from '../device/network';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
-import { RequestCodes } from '../util';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
-import { SystemServices } from '../util';
 import { StatusBar } from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar';
 import { ApplicationBase } from './application';
+import SystemServices from '../util/Android/systemservices';
+import * as RequestCodes from '../util/Android/requestcodes';
+import ViewController from '../util/Android/transition/viewcontroller';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -338,7 +339,6 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
   }
   // TODO: Beautify the class. It is too complex! It is not a readable file!
   setRootController(params) {
-    const ViewController = require('../util/Android/transition/viewcontroller');
     ViewController.deactivateRootController(this.currentPage);
     // ViewController.activateController(params.controller);
     params.controller.__isActive = true;

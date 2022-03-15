@@ -2,7 +2,7 @@ import { ISlider } from '.';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';
-import { UIControlEvents } from '../../util';
+import UIControlEvents from '../../util/ios/uicontrolevents';
 import Image from '../image';
 
 enum SliderState {
@@ -13,10 +13,7 @@ enum SliderState {
   focused // #available(iOS 9.0, *)
 }
 
-export default class SliderIOS<TEvent extends string = SliderEvents>
-  extends ViewIOS<TEvent | SliderEvents, any, ISlider>
-  implements ISlider
-{
+export default class SliderIOS<TEvent extends string = SliderEvents> extends ViewIOS<TEvent | SliderEvents, any, ISlider> implements ISlider {
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;

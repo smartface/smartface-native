@@ -3,10 +3,15 @@ import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
 import Color from '../color';
 import { ViewEvents } from './view-event';
+import { EventEmitterWrapper } from '../../core/eventemitter';
+import View, { IView, IViewProps, ViewBase } from '.';
+import OverScrollMode from '../shared/android/overscrollmode';
+import ScrollView, { ScrollViewAlign } from '../scrollview';
+import { getRippleMask } from '../../helper/getrippleeffect';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
+import TypeUtil from '../../util/type';
 
-const AndroidUnitConverter = require('../../util/Android/unitconverter.js');
-const AndroidConfig = require('../../util/Android/androidconfig');
-const TypeUtil = require('../../util/type');
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
@@ -14,11 +19,6 @@ const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 
-import { EventEmitterWrapper } from '../../core/eventemitter';
-import View, { IView, IViewProps, ViewBase } from '.';
-import OverScrollMode from '../shared/android/overscrollmode';
-import ScrollView, { ScrollViewAlign } from '../scrollview';
-import { getRippleMask } from '../../helper/getrippleeffect';
 const LOLLIPOP_AND_LATER = AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP;
 
 const EventFunctions = {

@@ -1,6 +1,6 @@
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { Invocation } from '../../util';
+import Invocation from '../../util/ios/invocation';
 import { ILocation } from '.';
 import { LocationEvents } from './location-events';
 const IOS_AUTHORIZATION_STATUS = {

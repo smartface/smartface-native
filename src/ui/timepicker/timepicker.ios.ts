@@ -1,6 +1,6 @@
 import { ITimePicker } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { UIDatePickerMode } from '../../util';
+import UIDatePickerMode from '../../util/iOS/uidatepickermode';
 import { TimePickerEvents } from './timepicker-events';
 
 export default class TimePickerIOS<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {

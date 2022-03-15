@@ -1,4 +1,4 @@
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 import BottomTabBar, { IBottomTabBar } from '.';

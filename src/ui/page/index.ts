@@ -105,7 +105,7 @@ export interface PageIOSParams {
 }
 
 export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
-  extends IEventEmitter<TEvent | PageEvents>, 
+  extends IEventEmitter<TEvent | PageEvents>,
     IController<TNative> {
   contextMenu: {
     items: any[];
@@ -136,7 +136,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * from a removed or hidden {@link UI.Page Page} to a {@link UI.View View} from a shown or added {@link UI.Page Page}.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
+   *     import Page from '@smartface/native/ui/page';
    *     var myPage = new Page({
    *         var page = this;
    *         onShow: function() {
@@ -183,8 +183,8 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * It will be better to set headerBar and statusBar properties in this callback.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
-   *     const Application = require('@smartface/native/application');
+   *     import Page from '@smartface/native/ui/page';
+   *     import Application from '@smartface/native/application';
    *     var myPage = new Page({
    *         onShow: function() {
    *             this.headerBar.visible = true;
@@ -227,12 +227,12 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    *
    *     @example
    *     const self = this; //Current page
-   *     const Color = require('@smartface/native/ui/color');
+   *     import Color from '@smartface/native/ui/color';
    *
    *     var popuPage = new Page();
    *     popuPage.layout.backgroundColor = Color.BLUE;
    *
-   *     const Button = require('@smartface/native/ui/button');
+   *     import Button from '@smartface/native/ui/button';
    *     var myButton = new Button({
    *     width: 150,
    *     height: 80,
@@ -279,7 +279,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @since 3.1.1
    * @deprecated
    */
-  dismiss(params?: { onComplete: () => void, animated?: boolean }): void;
+  dismiss(params?: { onComplete: () => void; animated?: boolean }): void;
   /**
    * Gets status bar object. This property is readonly, you can not set
    * status bar to a page but you can change properties of page's status bar.
@@ -311,7 +311,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * orientation defined in project.json.
    *
    *     @example
-   *     const Page = require('@smartface/native/ui/page');
+   *     import Page from '@smartface/native/ui/page';
    *     var myPage1 = new Page({
    *          orientation: Page.Orientation.LANDSCAPELEFT
    *     });

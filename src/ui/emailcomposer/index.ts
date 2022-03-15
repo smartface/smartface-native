@@ -35,10 +35,10 @@ type EmailComposerIOSProps = {
  * A standard interface for managing, editing, and sending an email message. When email composer is dismiss, page's onShow will be triggered.
  *     
  *     @example
- *     const File = require('@smartface/native/io/file');
- *     const FileStream = require('@smartface/native/io/filestream');
- *     const EmailComposer = require('@smartface/native/ui/emailcomposer');
- *     const System = require('@smartface/native/device/system');
+ *     import File from '@smartface/native/io/file';
+ *     import FileStream from '@smartface/native/io/filestream';
+ *     import EmailComposer from '@smartface/native/ui/emailcomposer';
+ *     import System from '@smartface/native/device/system';
  *              
  *     if (EmailComposer.canSendMail()) {
  *         var emailcomposer = new EmailComposer();
