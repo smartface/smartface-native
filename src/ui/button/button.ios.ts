@@ -4,7 +4,7 @@ import { IViewState } from '../view';
 import LabelIOS from '../label/label.ios';
 import { ButtonEvents } from './button-events';
 import Image from '../image';
-import UIControlEvents from '../../util/ios/uicontrolevents';
+import UIControlEvents from '../../util/iOS/uicontrolevents';
 
 enum ButtonState {
   NORMAL,

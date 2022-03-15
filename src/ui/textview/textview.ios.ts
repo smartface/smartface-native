@@ -1,6 +1,6 @@
 import LabelIOS from '../label/label.ios';
 import { ITextView } from '.';
-import Invocation from '../../util/ios/invocation';
+import Invocation from '../../util/iOS/invocation';
 import { Size } from '../../primitive/size';
 import { TextViewEvents } from './textview-events';
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';

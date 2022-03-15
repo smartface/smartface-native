@@ -3,7 +3,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import { IViewGroup } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Flex from '../../core/flex';
+import Flex from '../../core/Flex';
 
 export type FlexLayoutIOSProps = IViewGroup['ios'];
 export type FlexLayoutAndroidProps = IViewGroup['android'] & {

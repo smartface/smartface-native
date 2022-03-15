@@ -5,7 +5,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import { IEventEmitter } from '../../core/eventemitter';
 import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
-import Flex from '../../core/flex';
+import Flex from '../../core/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 export interface IViewState<Property = any> {

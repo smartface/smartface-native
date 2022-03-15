@@ -1,6 +1,6 @@
 import Menu, { AbstractMenu } from '.';
 import NativeComponent from '../../core/native-component';
-import Invocation from '../../util/ios/invocation';
+import Invocation from '../../util/iOS/invocation';
 import MenuItem from '../menuitem';
 import Page from '../page';
 

@@ -1,6 +1,6 @@
 import { ITabbarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import Invocation from '../../util/ios/invocation';
+import Invocation from '../../util/iOS/invocation';
 import Badge, { IBadge } from '../badge';
 import FlexLayout from '../flexlayout';
 import Font from '../font';

@@ -3,8 +3,8 @@ import Page from '../page';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
 import { SwipeViewEvents } from './swipeview-events';
-import Invocation from '../../util/ios/invocation';
-import * as YogaEnums from '../../util/ios/yogaenums';
+import Invocation from '../../util/iOS/invocation';
+import * as YogaEnums from '../../util/iOS/yogaenums';
 import PageIOS from '../page/page.ios';
 import Exception from '../../util/exception';
 

@@ -2,7 +2,7 @@ import { ISlider } from '.';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';
-import UIControlEvents from '../../util/ios/uicontrolevents';
+import UIControlEvents from '../../util/iOS/uicontrolevents';
 import Image from '../image';
 
 enum SliderState {

@@ -1,4 +1,4 @@
-import Flex from '../../core/flex';
+import Flex from '../../core/Flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
 import FlexLayout, { IFlexLayout, FlexLayoutAndroidProps } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
@@ -22,7 +22,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   implements IFlexLayout
 {
   private _onInterceptTouchEvent: () => boolean;
-  private _flexWrap: number | null = null
+  private _flexWrap: number | null = null;
   constructor(params?: Partial<TProps>) {
     super(params);
     this._nativeObject = new NativeYogaLayout(activity, {

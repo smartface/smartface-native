@@ -1,6 +1,6 @@
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
-import Invocation from '../../util/ios/invocation';
+import Invocation from '../../util/iOS/invocation';
 import { NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 import { UnauthorizationStatus } from './unauthorization-status';
