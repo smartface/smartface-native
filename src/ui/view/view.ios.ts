@@ -104,9 +104,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
     this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
     this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
 
-    const self = this;
+    this.addIOSProps(this.getIOSProperties());
+  }
 
-    this.addIOSProps({
+  private getIOSProperties() {
+    const self = this;
+    return {
       get shadowOffset() {
         return self.shadowOffset;
       },
@@ -160,7 +163,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
       performWithoutAnimation(functionWithoutAnimation: Function) {
         __SF_UIView.performWithoutAnimationWrapper(functionWithoutAnimation);
       }
-    });
+    };
   }
 
   get uniqueId() {

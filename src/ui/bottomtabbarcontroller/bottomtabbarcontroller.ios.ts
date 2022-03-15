@@ -7,8 +7,6 @@ import { HeaderBar } from '../navigationcontroller/headerbar';
 import Page, { IPage } from '../page';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
-const UITabBarController = requireClass('UITabBarController');
-
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
   private view;
@@ -75,7 +73,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       this.viewModel = params.viewModel;
     }
 
-    this.nativeObject = UITabBarController.new();
+    this.nativeObject = __SF_UITabBarController.new();
     this.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
       tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
         const index = this.nativeObject.viewControllers.indexOf(viewController);
