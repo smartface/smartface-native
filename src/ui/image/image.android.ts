@@ -1,6 +1,9 @@
 import IBlob from '../../global/blob/blob';
 import BlobAndroid from '../../global/blob/blob.android';
 import { IImage, Format, AbstractImage } from '.';
+import AndroidConfig from '../../util/Android/androidconfig';
+import File from '../../io/file';
+import Path from '../../io/path';
 
 /*globals requireClass*/
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
@@ -9,10 +12,6 @@ const NativeBitmap = requireClass('android.graphics.Bitmap');
 const NativeMatrix = requireClass('android.graphics.Matrix');
 const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
 const SFImage = requireClass('io.smartface.android.sfcore.ui.image.SFImage');
-
-const AndroidConfig = require('../../util/Android/androidconfig');
-const File = require('../../io/file');
-const Path = require('../../io/path');
 
 const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressFormat.PNG];
 const androidResources = AndroidConfig.activityResources;

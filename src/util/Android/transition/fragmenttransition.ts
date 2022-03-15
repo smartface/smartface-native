@@ -1,9 +1,8 @@
 import AndroidConfig from '../androidconfig';
 import System from '../../../device/system';
 import Application from '../../../application';
-
-const DirectionBasedConverter = require('../directionbasedconverter');
-const ViewController = require('./viewcontroller');
+import ViewController from './viewcontroller';
+import DirectionBasedConverter from '../directionbasedconverter';
 
 const NativeTransitionInflater = requireClass('androidx.transition.TransitionInflater');
 const NativeR = requireClass(AndroidConfig.packageName + '.R');

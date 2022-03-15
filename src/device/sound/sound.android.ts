@@ -51,7 +51,7 @@ export default class SoundAndroid extends AbstractSound {
         const intent = new NativeIntent();
         intent.setType('audio/*');
         intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-        if (!(params && params.page instanceof require('../../ui/page'))) {
+        if (!(params?.page instanceof Page)) {
           getCurrentPageFragment().startActivityForResult(intent, SoundAndroid.PICK_SOUND);
         } else {
           params.page.nativeObject.startActivityForResult(intent, SoundAndroid.PICK_SOUND);
