@@ -1,5 +1,6 @@
 import Menu, { AbstractMenu } from '.';
-import { Exception, TypeUtil } from '../../util';
+import Exception from '../../util/exception';
+import TypeUtil from '../../util/type';
 import MenuItem from '../menuitem';
 import Page from '../page';
 

@@ -1,4 +1,5 @@
-import { AndroidConfig, TypeUtil } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import TypeUtil from '../../util/type';
 import { BaseData } from './data';
 
 class DataAndroid implements BaseData {

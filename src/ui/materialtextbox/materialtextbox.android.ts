@@ -1,6 +1,8 @@
 import { IMaterialTextBox } from '.';
 import { Point2D } from '../../primitive/point2d';
-import { AndroidConfig, UnitConverter } from '../../util';
+
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
@@ -78,13 +80,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
         return self.nativeTextInputEditText.getHeight();
       },
       set textBoxHeight(value: number) {
-        self.nativeTextInputEditText.setHeight(UnitConverter.dpToPixel(value));
+        self.nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(value));
       },
       get textBoxMaxHeight(): number {
         return self.nativeTextInputEditText.getMaxHeight();
       },
       set textBoxMaxHeight(value: number) {
-        self.nativeTextInputEditText.setMaxHeight(UnitConverter.dpToPixel(value));
+        self.nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(value));
       },
       get enableErrorMessage(): boolean {
         return self._enableErrorMessage;
@@ -194,7 +196,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   set labelsFont(value: Font) {
     this.__font = value;
     this.nativeObject.setTypeface(value.nativeObject);
-    this.nativeObject.setExpandedHintTextSize(UnitConverter.dpToPixel(value.size));
+    this.nativeObject.setExpandedHintTextSize(AndroidUnitConverter.dpToPixel(value.size));
   }
 
   get testId(): any {

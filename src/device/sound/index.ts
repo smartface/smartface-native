@@ -22,9 +22,9 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
  *
  */
 export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEvents> {
-  constructor(params?: Partial<Sound>){
+  constructor(params?: Partial<Sound>) {
     super(params);
-  };
+  }
   static Events: typeof SoundEvents;
   /**
    * Checks whether the sound is playing.
@@ -103,7 +103,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * });
    * ````
    */
-   abstract onReady: () => void;
+  abstract onReady: () => void;
   /**
    *
    * Triggered when the sound complited playing.
@@ -209,7 +209,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
   };
 }
 
-declare class SoundImpl extends AbstractSound{
+declare class SoundImpl extends AbstractSound {
   get isPlaying(): boolean;
   get isLooping(): boolean;
   set isLooping(isLooping: boolean);

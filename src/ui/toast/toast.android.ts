@@ -1,7 +1,8 @@
 import { IToast } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { AndroidConfig, UnitConverter } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Color from '../color';
 import { ToastEvents } from './toast-events';
 
@@ -71,7 +72,7 @@ export default class ToastAndroid<TEvent extends string = ToastEvents, TProps ex
   }
   set bottomOffset(value: number) {
     this._bottomOffset = value;
-    this.nativeObject.getView().setTranslationY(UnitConverter.dpToPixel(-value));
+    this.nativeObject.getView().setTranslationY(AndroidUnitConverter.dpToPixel(-value));
   }
   get bottomOffset(): number {
     return this._bottomOffset;

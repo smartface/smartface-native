@@ -1,14 +1,16 @@
 import TextBox from '../textbox';
 import { ButtonType, IAlertView } from './alertview';
-import { AndroidConfig, LayoutParams, UnitConverter } from '../../util';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
+import LayoutParams from '../../util/Android/layoutparams';
 
 const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview.SFAlertView');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertView> implements IAlertView {
   private __didSetOnDismissListener = true;
-  private __buttonCallbacks: {[key: number]: () => void} = {};
+  private __buttonCallbacks: { [key: number]: () => void } = {};
   private __title = '';
   private __message = '';
   private __textBoxes: TextBox[];
@@ -36,8 +38,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
     const text = params.text || '';
     const buttonType = params.type || params.index;
-    if(buttonType && params.onClick)
-      this.__buttonCallbacks[buttonType] = params.onClick;
+    if (buttonType && params.onClick) this.__buttonCallbacks[buttonType] = params.onClick;
     let nativeButtonIndex = -3;
     switch (buttonType) {
       case AlertViewAndroid.Android.ButtonType.POSITIVE:
@@ -87,7 +88,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
     }
     const viewSpacingsInPx = { left: 0, right: 0, top: 0, bottom: 0 };
     Object.keys(viewSpacings).map((key) => {
-      viewSpacingsInPx[key] = UnitConverter.dpToPixel(viewSpacings[key]);
+      viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
     });
     const dpHeight = this.dpToPixel(height || 0);
     const dpWidth = this.dpToPixel(width || 0);
@@ -96,7 +97,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   }
 
   private dpToPixel(size: number) {
-    return size !== undefined ? UnitConverter.dpToPixel(size) : LayoutParams.MATCH_PARENT;
+    return size !== undefined ? AndroidUnitConverter.dpToPixel(size) : LayoutParams.MATCH_PARENT;
   }
 
   private setOnDismissListener() {

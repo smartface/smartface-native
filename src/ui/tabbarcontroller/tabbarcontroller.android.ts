@@ -1,6 +1,7 @@
 import { ITabBarController } from '.';
 import Application from '../../application';
-import { AndroidConfig, UnitConverter } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Color from '../color';
 import type Page from '../page';
 import PageAndroid from '../page/page.android';
@@ -18,10 +19,7 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
-export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents>
-  extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController>
-  implements ITabBarController
-{
+export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
   // export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
   private _onPageCreateCallback: (index: number) => Page;
@@ -112,9 +110,9 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         self.dividerDrawable = new NativeGradientDrawable();
         self.dividerDrawable.setColor(self._dividerColor.nativeObject);
 
-        let px = UnitConverter.dpToPixel(value);
+        let px = AndroidUnitConverter.dpToPixel(value);
         self.dividerDrawable.setSize(px, 1);
-        px = UnitConverter.dpToPixel(self._dividerPadding);
+        px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
         self.divider.setDividerPadding(px);
         self.divider.setDividerDrawable(self.dividerDrawable);
       },
@@ -133,7 +131,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
       set dividerPadding(value: number) {
         self._dividerPadding = value;
         if (self.dividerDrawable) {
-          const px = UnitConverter.dpToPixel(self._dividerPadding);
+          const px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
           self.divider.setDividerPadding(px);
         }
       },
@@ -154,10 +152,10 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   dividerWidth: number;
 
   get barHeight(): number {
-    return UnitConverter.pixelToDp(this.tabLayout.nativeObject.getHeight());
+    return AndroidUnitConverter.pixelToDp(this.tabLayout.nativeObject.getHeight());
   }
   set barHeight(value: number) {
-    this.tabLayout.yogaNode.setHeight(UnitConverter.dpToPixel(value));
+    this.tabLayout.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(value));
   }
 
   get items(): ITabbarItem[] {
@@ -219,7 +217,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
   set indicatorHeight(value: number) {
     this._indicatorHeight = value;
-    const px = UnitConverter.dpToPixel(value);
+    const px = AndroidUnitConverter.dpToPixel(value);
     this.tabLayout.nativeObject.setSelectedTabIndicatorHeight(px);
   }
 
@@ -260,8 +258,8 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
   set iconColor(value: Color | { normal: Color; selected: Color }) {
     this._iconColor = value;
-    var normalColor = value instanceof Color ? value : value.normal;
-    var selectedColor = value instanceof Color ? value : value.selected;
+    const normalColor = value instanceof Color ? value : value.normal;
+    const selectedColor = value instanceof Color ? value : value.selected;
     for (let i = 0; i < this._items.length; i++) {
       const tabIcon = this.tabLayout.nativeObject.getTabAt(i).getIcon();
       if (i === this.selectedIndex) {

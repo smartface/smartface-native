@@ -1,9 +1,10 @@
 import { ITextView } from '.';
 import { Size } from '../../primitive/size';
-import { TextViewSizeCalculator, UnitConverter } from '../../util';
 import LabelAndroid from '../label/label.android';
 import TextAlignment from '../shared/textalignment';
 import { TextViewEvents } from './textview-events';
+import * as TextViewSizeCalculator from '../../util/Android/textviewsizecalculator';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const NativeHtml = requireClass('android.text.Html');
 const NativeBuild = requireClass('android.os.Build');
@@ -40,7 +41,7 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
   constructor(params: Partial<TProps> = {}) {
     super(params);
   }
-  
+
   get htmlText(): ITextView['htmlText'] {
     return this._htmlText || '';
   }
@@ -125,8 +126,8 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
     }
     const lineSpan = NativeLineHeightSpan.implement({
       chooseHeight: function (text, start, end, spanstartv, v, fm) {
-        fm.ascent -= UnitConverter.dpToPixel(this._lineSpacing);
-        fm.descent += UnitConverter.dpToPixel(this._lineSpacing);
+        fm.ascent -= AndroidUnitConverter.dpToPixel(this._lineSpacing);
+        fm.descent += AndroidUnitConverter.dpToPixel(this._lineSpacing);
       }
     });
     this._attributedStringBuilder.setSpan(lineSpan, 0, this._attributedStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -146,7 +147,6 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
     this.enableScrollable(value);
   }
-  
 
   /*
 ToDo: LinkMovementMethod makes the links clickable and scrollable but this case is restricted to mutually directed each other. 

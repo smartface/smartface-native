@@ -1,6 +1,6 @@
 import NativeComponent from '../../core/native-component';
 import { Size } from '../../primitive/size';
-import { TextViewSizeCalculator } from '../../util';
+import * as TextViewSizeCalculator from '../../util/Android/textviewsizecalculator';
 
 export enum FontStyle {
   DEFAULT = 'DEFAULT',
@@ -12,7 +12,7 @@ export enum FontStyle {
 }
 
 export abstract class AbstractFont extends NativeComponent {
-  constructor(params?: Partial<AbstractFont>){
+  constructor(params?: Partial<AbstractFont>) {
     super(params);
   }
   /**
@@ -22,38 +22,38 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 4.2.3
    */
-   private _size: number;
+  private _size: number;
 
-   get size(): number {
-     return this._size;
-   }
- 
-   set size(value: number) {
-     this._size = value;
-   }
+  get size(): number {
+    return this._size;
+  }
 
-   /**
+  set size(value: number) {
+    this._size = value;
+  }
+
+  /**
    * This method returns the string size
    *
    * @android
    * @ios
    * @since 1.1.18
    */
-   sizeOfString(string: string, maxWidth: number): Size {
-     return TextViewSizeCalculator.calculateStringSize({
-       text: string,
-       maxWidth: maxWidth,
-       textSize: this.size,
-       typeface: this
-     });
-   }
+  sizeOfString(string: string, maxWidth: number): Size {
+    return TextViewSizeCalculator.calculateStringSize({
+      text: string,
+      maxWidth: maxWidth,
+      textSize: this.size,
+      typeface: this
+    });
+  }
 
   /**
    * @android
    * @ios
    * @since 0.1
-   * Creates a font instance with the given family name, size and style. 
-   * Assigning font style is deprecated usage (may not work mostly) instead 
+   * Creates a font instance with the given family name, size and style.
+   * Assigning font style is deprecated usage (may not work mostly) instead
    * font name parameter must be specified according to actual name of font.
    * To obtain actual font name for iOS, use {@link UI.Font#allFontNames  allFontNames} method.
    * The actual name is same as named of font file in Android.
@@ -68,8 +68,8 @@ export abstract class AbstractFont extends NativeComponent {
    */
 
   static create(fontFamily: string, size: number, style?: FontStyle): AbstractFont | null {
-    throw new Error("Methof not implemented")
-  };
+    throw new Error('Methof not implemented');
+  }
   /**
    * @android
    * @ios
@@ -88,8 +88,8 @@ export abstract class AbstractFont extends NativeComponent {
    * @static
    */
   static createFromFile(path: string, size: number): AbstractFont {
-    throw new Error("Methof not implemented")
-  };
+    throw new Error('Methof not implemented');
+  }
 
   /**
    * iOS Only Static Properties

@@ -4,7 +4,7 @@ import { ViewAndroid } from '../view/view.android';
 import { MapViewEvents } from './mapview-events';
 import PinAndroid from './pin/pin.android';
 import Cluster from './cluster';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import ColorAndroid from '../color/color.android';
 import FontAndroid from '../font/font.android';
 

@@ -1,6 +1,7 @@
 import { IVideoView } from '.';
 import File from '../../io/file';
-import { AndroidConfig, Exception } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import Exception from '../../util/exception';
 import Color from '../color';
 import type Page from '../page';
 import { ViewAndroid } from '../view/view.android';

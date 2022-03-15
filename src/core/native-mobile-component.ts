@@ -1,4 +1,4 @@
-import { copyObjectPropertiesWithDescriptors } from '../util';
+import copyObjectPropertiesWithDescriptors from '../util/copyObjectPropertiesWithDescriptors';
 import NativeComponent from './native-component';
 
 export type MobileOSProps<TIOS = { [key: string]: any }, TAND = { [key: string]: any }> = {

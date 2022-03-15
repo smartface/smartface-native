@@ -7,13 +7,13 @@ import Network from '../device/network';
 import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import SliderDrawer from '../ui/sliderdrawer';
-import { RequestCodes } from '../util';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
-import { SystemServices } from '../util';
 import { StatusBar } from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar';
 import { ApplicationBase } from './application';
+import SystemServices from '../util/Android/systemservices';
+import * as RequestCodes from '../util/Android/requestcodes';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');

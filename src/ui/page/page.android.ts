@@ -2,9 +2,8 @@ import Page, { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrie
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
-import Screen from '../../device/screen';
+import Screen, { OrientationType } from '../../device/screen';
 import Notifications from '../../global/notifications';
-import { AndroidConfig, LayoutParams, RequestCodes, SystemServices } from '../../util';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import HeaderBarItem from '../headerbaritem';
@@ -21,9 +20,12 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { StatusBar } from '../../application/statusbar';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IController } from '../navigationcontroller';
+import AndroidConfig from '../../util/Android/androidconfig';
+import * as RequestCodes from '../../util/Android/requestcodes';
+import LayoutParams from '../../util/Android/layoutparams';
+import SystemServices from '../../util/Android/systemservices';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
-const OrientationType = require('../../device/screen/orientationtype');
 const NativeView = requireClass('android.view.View');
 const NativeSFR = requireClass(AndroidConfig.packageName + '.R');
 const NativeSupportR = requireClass('androidx.appcompat.R');
@@ -714,8 +716,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         return self._headerBarLogoEnabled;
       },
       set logoEnabled(value: HeaderBar['android']['logoEnabled']) {
-        if(value)
-          self._headerBarLogoEnabled = value;
+        if (value) self._headerBarLogoEnabled = value;
         self.actionBar.setDisplayUseLogoEnabled(self._headerBarLogoEnabled);
       },
       get tag(): any {

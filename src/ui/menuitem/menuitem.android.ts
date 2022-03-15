@@ -1,6 +1,7 @@
 import MenuItem, { AbstractMenuItem, IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { Exception, TypeUtil } from '../../util';
+import Exception from '../../util/exception';
+import TypeUtil from '../../util/type';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 

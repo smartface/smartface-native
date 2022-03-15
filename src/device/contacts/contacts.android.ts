@@ -1,7 +1,8 @@
 import Blob from '../../global/blob';
 import Page from '../../ui/page';
-import { AndroidConfig, RequestCodes } from '../../util';
 import { Contact, ContactsBase, ManagedContact } from '.';
+import AndroidConfig from '../../util/Android/androidconfig';
+import * as RequestCodes from '../../util/Android/requestcodes';
 
 const NativeContactsContract = requireClass('android.provider.ContactsContract');
 const NativeArrayList = requireClass('java.util.ArrayList');

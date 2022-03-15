@@ -1,5 +1,5 @@
 import { HardwareBase } from '.';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeSettings = requireClass('android.provider.Settings');
 const NativeBuild = requireClass('android.os.Build');

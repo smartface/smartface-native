@@ -1,14 +1,16 @@
 import HeaderBarItem, { IHeaderBarItem, SystemItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
-import { AndroidConfig, HeaderBarItemPadding, LayoutParams } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import HeaderBarItemPadding from '../../util/Android/headerbaritempadding';
 import Badge from '../badge';
 import Color from '../color';
 import Image from '../image';
 import MenuItem from '../menuitem';
 import SearchView from '../searchview';
 import View from '../view';
+import LayoutParams from '../../util/Android/layoutparams';
 
 const SFView = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
 const NativeTextButton = requireClass('android.widget.Button');
@@ -58,8 +60,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
           self.updateAccessibilityLabel(self._accessibilityLabel);
         }
 
-        if(typeof self._android.systemIcon === "number")
-          self.nativeObject && self.nativeObject.setImageResource(Image.systemDrawableId(self._android.systemIcon));
+        if (typeof self._android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(Image.systemDrawableId(self._android.systemIcon));
       }
     };
   }
@@ -106,9 +107,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return this._image;
   }
   set image(value: Image | string | null) {
-
-    if(value)
-      value = Image.createImageFromPath(value); //IDE requires this implementation.
+    if (value) value = Image.createImageFromPath(value); //IDE requires this implementation.
     if (value === null || value instanceof Image) {
       this._image = value;
       if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {

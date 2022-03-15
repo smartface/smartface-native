@@ -1,7 +1,7 @@
 import { ICluster } from '.';
 import MapView from '..';
 import NativeComponent from '../../../core/native-component';
-import { TypeValue } from '../../../util';
+import TypeValue from '../../../util/Android/typevalue';
 
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance().getApplicationContext();

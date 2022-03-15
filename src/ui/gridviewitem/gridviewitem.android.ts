@@ -1,5 +1,5 @@
 import { IGridViewItem } from '.';
-import { LayoutParams } from '../../util';
+import LayoutParams from '../../util/Android/layoutparams';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';

@@ -1,6 +1,6 @@
 import { IPin } from '.';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
-import { TypeUtil } from '../../../util';
+import TypeUtil from '../../../util/type';
 import ColorAndroid from '../../color/color.android';
 import { IImage } from '../../image';
 import ImageAndroid from '../../image/image.android';

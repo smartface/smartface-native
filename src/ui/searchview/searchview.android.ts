@@ -7,14 +7,15 @@ import { ViewAndroid } from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
 import Font from '../font';
-import { AndroidConfig, SystemServices, TypeValue } from '../../util';
 import TextAlignment from '../shared/textalignment';
 import View from '../view';
 import Page from '../page';
+import SystemServices from '../../util/Android/systemservices';
+import TypeValue from '../../util/Android/typevalue';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
-const SFEditText = requireClass('io.smartface.android.sfcore.ui.textbox.SFEditText');
 const NativeSearchView = requireClass('androidx.appcompat.widget.SearchView');
 const NativeSupportR = requireClass('androidx.appcompat.R');
 const NativeTextView = requireClass('android.widget.TextView');
@@ -179,7 +180,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       },
       set closeImage(value: Image) {
         // If setting null to icon, default search icon will be displayed.
-        if (value == null || value instanceof Image) {
+        if (value === null || value instanceof Image) {
           self._closeImage = value;
           self.mCloseButton.setImageDrawable(value.nativeObject);
         }
@@ -289,7 +290,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   set iconImage(value: Image) {
     this._searchIconAssigned = true;
     // If setting null to icon, default search icon will be displayed.
-    if (value == null || value instanceof Image) {
+    if (value === null || value instanceof Image) {
       this._searchIcon = value;
       this.updateQueryHint(this.mSearchSrcTextView, this.searchIcon, this.hint);
     }
@@ -302,7 +303,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this._searchIcon = value;
     this._searchIconAssigned = true;
     // If setting null to icon, default search icon will be displayed.
-    if (value == null || value instanceof Image) {
+    if (value === null || value instanceof Image) {
       this.updateQueryHint(this.mSearchSrcTextView, this.searchIcon, this.hint);
     }
   }

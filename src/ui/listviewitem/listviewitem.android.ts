@@ -1,16 +1,13 @@
 import { IListViewItem } from '.';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
-import { UnitConverter } from '../../util';
+import UnitConverter from '../../util/Android/unitconverter';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 
 const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 const SFRecyclerViewHolder = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder');
 
-export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}>
-  extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, IListViewItem>
-  implements IListViewItem
-{
+export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvents, TNative = {}> extends FlexLayoutAndroid<TEvent | FlexLayoutEvents, TNative, IListViewItem> implements IListViewItem {
   nativeInner: any;
 
   constructor(params?: IListViewItem) {

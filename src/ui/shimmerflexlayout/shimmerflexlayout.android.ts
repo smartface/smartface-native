@@ -1,17 +1,14 @@
 import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutAndroidParams, ShimmerHighlight, ShimmeringDirection } from '.';
 import { ViewEvents } from '../view/view-event';
 import { ViewAndroid } from '../view/view.android';
-import { AndroidConfig } from '../../util';
 import FlexLayout from '../flexlayout';
 import Color from '../color';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrameLayout');
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
 
-export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams>
-  extends ViewAndroid<TEvent, TNative>
-  implements IShimmerFlexLayout
-{
+export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams> extends ViewAndroid<TEvent, TNative> implements IShimmerFlexLayout {
   private _layout = new FlexLayout();
   private _baseAlpha: number;
   private _direction: ShimmeringDirection;

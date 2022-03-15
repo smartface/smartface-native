@@ -1,5 +1,5 @@
 import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 

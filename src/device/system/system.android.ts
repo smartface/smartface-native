@@ -1,5 +1,6 @@
 import { AbstractSystem, OSType } from '.';
-import { AndroidConfig, TypeUtil } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import TypeUtil from '../../util/type';
 
 const NativeBuild = requireClass('android.os.Build');
 const NativeIntentFilter = requireClass('android.content.IntentFilter');

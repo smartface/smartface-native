@@ -1,5 +1,5 @@
 import Color from '../../../ui/color';
-import { AndroidConfig } from '../../../util';
+import AndroidConfig from '../../../util/Android/androidconfig';
 import { NavigationBarBase, NavigationBarStyle } from './navigationbar';
 
 const NativeBuild = requireClass('android.os.Build');

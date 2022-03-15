@@ -2,10 +2,11 @@ import { IScrollView, ScrollViewAlign, ScrollViewEdge } from '.';
 import { Point2D } from '../../primitive/point2d';
 import ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import { ScrollViewEvents } from './scrollview-events';
-import { UnitConverter, AndroidConfig } from '../../util';
 import OverScrollMode from '../shared/android/overscrollmode';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import { ViewAndroid } from '../view/view.android';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
+import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeHorizontalScroll = requireClass('io.smartface.android.sfcore.SFHorizontalScrollView');
 const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
@@ -30,7 +31,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     this.nativeObject.fullScroll(NativeViewFocus[edge]);
   }
   scrollToCoordinate(coordinate: number, animate: boolean): void {
-    coordinate = UnitConverter.dpToPixel(coordinate);
+    coordinate = AndroidUnitConverter.dpToPixel(coordinate);
     const _animate = !!animate;
     if (this._align === ScrollViewAlign.HORIZONTAL) {
       _animate ? this.nativeObject.smoothScrollTo(coordinate, 0) : this.nativeObject.scrollTo(coordinate, 0);
@@ -54,11 +55,11 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
           const oldXPixelPositive = Math.max(oldXPixel, 0);
           const oldYPixelPositive = Math.max(oldYPixel, 0);
 
-          const newX_DP = UnitConverter.pixelToDp(newX);
-          const newY_DP = UnitConverter.pixelToDp(newY);
+          const newX_DP = AndroidUnitConverter.pixelToDp(newX);
+          const newY_DP = AndroidUnitConverter.pixelToDp(newY);
 
-          const oldX = UnitConverter.pixelToDp(oldXPixel);
-          const oldY = UnitConverter.pixelToDp(oldYPixel);
+          const oldX = AndroidUnitConverter.pixelToDp(oldXPixel);
+          const oldY = AndroidUnitConverter.pixelToDp(oldYPixel);
 
           isXSameCoordinate = this.prevX === newX_DP && this.prevOldX === oldX; //This is avoid unnecessary triggers
           isYSameCoordinate = this.prevY === newY_DP && this.prevOldY === oldY; //This is avoid unnecessary triggers
@@ -114,8 +115,8 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     if (this.align === ScrollViewAlign.VERTICAL) {
       let layoutHeight = this.height;
       for (let i = 0; i < arrayLenght; i++) {
-        const viewY = UnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
-        const viewHeight = UnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
+        const viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
+        const viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
         const viewBottomMargin = childViews[keys[i]].marginBottom || 0;
         const layoutPaddingBottom = this.layout.paddingBottom || 0;
 
@@ -128,8 +129,8 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     } else {
       let layoutWidth = this.width;
       for (let i = 0; i < arrayLenght; i++) {
-        const viewX = UnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
-        const viewWidth = UnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
+        const viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
+        const viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
         const viewRightMargin = childViews[keys[i]].marginRight || 0;
         const layoutPaddingRight = this.layout.paddingRight || 0;
         const measuredWidth = viewX + viewWidth + viewRightMargin + layoutPaddingRight;
@@ -185,8 +186,8 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
   }
   get contentOffset() {
     return {
-      x: UnitConverter.pixelToDp(this.nativeObject.computeHorizontalScrollOffset()),
-      y: UnitConverter.pixelToDp(this.nativeObject.computeVerticalScrollOffset())
+      x: AndroidUnitConverter.pixelToDp(this.nativeObject.computeHorizontalScrollOffset()),
+      y: AndroidUnitConverter.pixelToDp(this.nativeObject.computeVerticalScrollOffset())
     };
   }
 

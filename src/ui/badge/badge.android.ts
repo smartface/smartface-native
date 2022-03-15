@@ -4,8 +4,9 @@ import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { IViewState } from '../view';
 import Font from '../font';
-import { AndroidConfig, TypeValue } from '../../util';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import AndroidConfig from '../../util/Android/androidconfig';
+import TypeValue from '../../util/Android/typevalue';
 
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');

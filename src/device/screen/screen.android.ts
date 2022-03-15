@@ -1,7 +1,7 @@
 import { IScreen, OrientationType } from '.';
-import Image from '../../ui/image';
 import ImageAndroid from '../../ui/image/image.android';
-import { AndroidConfig, UnitConverter } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 
 const NativeBitmap = requireClass('android.graphics.Bitmap');
 const NativeR = requireClass('android.R');
@@ -22,12 +22,12 @@ class ScreenAndroid implements IScreen {
 
   get height() {
     display.getRealMetrics(metrics);
-    return UnitConverter.pixelToDp(metrics.heightPixels);
+    return AndroidUnitConverter.pixelToDp(metrics.heightPixels);
   }
 
   get width() {
     display.getRealMetrics(metrics);
-    return UnitConverter.pixelToDp(metrics.widthPixels);
+    return AndroidUnitConverter.pixelToDp(metrics.widthPixels);
   }
 
   get touchSupported() {
@@ -50,7 +50,7 @@ class ScreenAndroid implements IScreen {
     return new ImageAndroid({
       bitmap: bitmap
     });
-  };
+  }
 }
 
 const Screen = new ScreenAndroid();

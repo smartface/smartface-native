@@ -2,7 +2,7 @@ import Color from '../color';
 import { ViewAndroid } from '../view/view.android';
 import { IButton } from '.';
 import { ButtonEvents } from './button-events';
-import { AndroidConfig } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
 import Image from '../image';
 import { IViewState } from '../view';

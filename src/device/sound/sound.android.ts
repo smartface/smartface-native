@@ -1,9 +1,9 @@
-import Sound, { AbstractSound } from '.';
+import { AbstractSound } from '.';
 import Application from '../../application';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import File from '../../io/file';
 import Page from '../../ui/page';
-import { AndroidConfig, RequestCodes } from '../../util';
+import AndroidConfig from '../../util/Android/androidconfig';
+import * as RequestCodes from '../../util/Android/requestcodes';
 import { SoundEvents } from './sound-events';
 
 /* globals requireClass */

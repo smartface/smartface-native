@@ -1,6 +1,7 @@
 import { IScrollView, ScrollViewAlign, ScrollViewEdge } from '.';
 import { Point2D } from '../../primitive/point2d';
-import { copyObjectPropertiesWithDescriptors, TypeUtil } from '../../util';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import TypeUtil from '../../util/type';
 import Color from '../color';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import OverScrollMode from '../shared/android/overscrollmode';
