@@ -6,19 +6,19 @@ export default class PathIOS extends PathBase {
     super(params);
   }
 
-  get ImagesUriScheme(): string {
+  static get ImagesUriScheme(): string {
     return 'images://';
   }
 
-  get AssetsUriScheme(): string {
+  static get AssetsUriScheme(): string {
     return 'assets://';
   }
 
-  get Separator(): string {
+  static get Separator(): string {
     return '/';
   }
 
-  get DataDirectory(): string {
+  static get DataDirectory(): string {
     return File.getDocumentsDirectory();
   }
 
