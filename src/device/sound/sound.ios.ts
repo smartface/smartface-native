@@ -1,14 +1,19 @@
 import { AbstractSound } from '.';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
 
-export default class SoundIOS extends AbstractSound {
+export default class SoundIOS<TEvent extends string = SoundEvents, TProps extends MobileOSProps = MobileOSProps>
+  extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
+  implements AbstractSound
+{
   public static Events = SoundEvents;
   private avPlayerItem: __SF_AVPlayerItem;
   private _isLooping = false;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
-  constructor(params?: Partial<SoundIOS>) {
+  constructor(params?: TProps) {
     super(params);
     this.nativeObject.onItemReady = () => {
       this.onReady?.();

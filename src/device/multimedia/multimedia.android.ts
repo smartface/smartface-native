@@ -58,7 +58,7 @@ function getRealPathFromURI(uri) {
   }
 }
 
-class MultimediaAndroid extends MultimediaBase {
+class MultimediaAndroid implements MultimediaBase {
   ios = {
     requestGalleryAuthorization() {},
     requestCameraAuthorization() {},
@@ -88,9 +88,7 @@ class MultimediaAndroid extends MultimediaBase {
   // when we use intent with MediaStore.EXTRA_OUTPUT.
   // https://github.com/ArthurHub/Android-Image-Cropper/wiki/FAQ#why-image-captured-from-camera-is-blurred-or-low-quality
   private _imageFileUri = null;
-  constructor() {
-    super();
-  }
+  constructor() {}
   get hasCameraFeature() {
     const NativeContext = requireClass('android.content.Context');
     const context = AndroidConfig.activity;

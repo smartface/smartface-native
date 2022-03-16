@@ -213,14 +213,14 @@ export enum GalleryAuthorizationStatus {
    */
   AUTHORIZED = 3
 }
-export declare type ConvertToMp4Params = {
+export type ConvertToMp4Params = {
   videoFile: File;
   outputFileName: string;
   onCompleted: (params: { video: File }) => void;
   onFailure?: () => void;
 };
 
-export declare type PickMultipleFromGalleryParams = {
+export type PickMultipleFromGalleryParams = {
   type?: Type;
   page: Page;
   android?: {
@@ -232,7 +232,7 @@ export declare type PickMultipleFromGalleryParams = {
   onFailure?: (e: [{ message: string; fileName: string | null; uri: string }]) => void;
 };
 
-export declare type LaunchCropperParams = {
+export type LaunchCropperParams = {
   page: Page;
   asset: File | Image;
   aspectRatio?: { x: number; y: number };
@@ -268,7 +268,7 @@ export declare type LaunchCropperParams = {
   onFailure?: (e: { message: string }) => void;
 };
 
-export declare type RecordVideoParams = {
+export type RecordVideoParams = {
   page: Page;
   maximumDuration?: Number;
   videoQuality?: Number;
@@ -281,7 +281,7 @@ export declare type RecordVideoParams = {
   onFailure?: (e: { message: string }) => void;
 };
 
-export declare type MultimediaParams = {
+export type MultimediaParams = {
   type?: Type;
   page: Page;
   action?: ActionType;

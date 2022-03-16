@@ -1,5 +1,7 @@
 import { AbstractSound } from '.';
 import Application from '../../application';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import File from '../../io/file';
 import Page from '../../ui/page';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -15,13 +17,16 @@ function getCurrentPageFragment() {
   return Application.currentPage.nativeObject;
 }
 
-export default class SoundAndroid extends AbstractSound {
+export default class SoundAndroid<TEvent extends string = SoundEvents, TProps extends MobileOSProps = MobileOSProps>
+  extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
+  implements AbstractSound
+{
   public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
   private _volume = 1.0;
-  constructor(params?: Partial<SoundAndroid>) {
+  constructor(params?: TProps) {
     super(params);
     this._nativeObject = new NativeMediaPlayer();
 

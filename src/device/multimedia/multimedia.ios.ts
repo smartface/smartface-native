@@ -55,7 +55,7 @@ const PHAuthorizationStatus = {
   Authorized: 3 // User has authorized this application to access photos data.
 };
 
-class MultimediaIOS extends MultimediaBase {
+class MultimediaIOS implements MultimediaBase {
   CropShape = {
     RECTANGLE: 0,
     OVAL: 1
@@ -146,7 +146,6 @@ class MultimediaIOS extends MultimediaBase {
     Invocation.invokeClassMethod('UIImagePickerController', 'isCameraDeviceAvailable:', 0 as any, 'BOOL') ||
     Invocation.invokeClassMethod('UIImagePickerController', 'isCameraDeviceAvailable:', 1 as any, 'BOOL');
   constructor() {
-    super();
     const self = this;
     const ios = {
       _fixVideoOrientation(e) {
