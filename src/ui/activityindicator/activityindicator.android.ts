@@ -2,7 +2,8 @@ import { ViewAndroid } from '../view/view.android';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { ViewEvents } from '../view/view-event';
-import { IActivityIndicator } from './activityindicator';
+import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
+import { SemanticContentAttribute } from '../view';
 
 const NativeProgressBar = requireClass('android.widget.ProgressBar');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
@@ -32,4 +33,8 @@ export default class ActivityIndicatorAndroid<TEvent extends string = ViewEvents
   toString() {
     return 'ActivityIndicator';
   }
+  static iOS = {
+    SemanticContentAttribute: SemanticContentAttribute,
+    ActivityIndicatorViewStyle: ActivityIndicatorViewStyle
+  };
 }

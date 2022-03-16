@@ -1,5 +1,5 @@
 /*globals requireClass*/
-import { ISearchView } from '.';
+import { ISearchView, SearchViewStyle } from '.';
 import Color from '../color';
 import Image from '../image';
 import KeyboardType from '../shared/keyboardtype';
@@ -8,7 +8,7 @@ import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import View from '../view';
+import View, { SemanticContentAttribute } from '../view';
 import Page from '../page';
 import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
@@ -468,4 +468,9 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   toString(): string {
     return 'SearchView';
   }
+
+  static iOS = {
+    SemanticContentAttribute: SemanticContentAttribute,
+    Style: SearchViewStyle
+  };
 }

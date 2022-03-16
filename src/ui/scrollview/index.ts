@@ -342,8 +342,8 @@ export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents
   rippleColor?: Color;
   elevation?: number;
   zIndex?: number;
-  static Align: ScrollViewAlign;
-  static Edge: ScrollViewEdge;
+  static Align: typeof ScrollViewAlign;
+  static Edge: typeof ScrollViewEdge;
 }
 
 const ScrollView: typeof AbstractScrollView = require(`./scrollview.${Device.deviceOS.toLowerCase()}`).default;

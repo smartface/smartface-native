@@ -429,4 +429,8 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
   set onSearchButtonClicked(value: () => void) {
     this._onSearchButtonClicked = value;
   }
+  static iOS = {
+    Style: SearchViewStyle,
+    ...ViewIOS.iOS
+  };
 }

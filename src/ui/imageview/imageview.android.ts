@@ -1,5 +1,5 @@
 /*globals requireClass, array*/
-import { IImageView, ImageViewFillType, ImageViewFillTypeIOS } from '.';
+import { IImageView, ImageFillType, ImageViewFillTypeIOS } from '.';
 import { INativeComponent } from '../../core/inative-component';
 import File from '../../io/file';
 import FileAndroid from '../../io/file/file.android';
@@ -21,14 +21,14 @@ const NativeColorStateListUtil = requireClass('io.smartface.android.utils.ColorS
 const GlideRequestListener = requireClass('io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener');
 
 const ImageFillTypeDic = {
-  [ImageViewFillType.NORMAL]: NativeImageView.ScaleType.CENTER,
-  [ImageViewFillType.STRETCH]: NativeImageView.ScaleType.FIT_XY,
-  [ImageViewFillType.ASPECTFIT]: NativeImageView.ScaleType.FIT_CENTER, // should be fit().centerInside()
-  [ImageViewFillType.ASPECTFILL]: NativeImageView.ScaleType.CENTER_CROP //should be centerCrop
+  [ImageFillType.NORMAL]: NativeImageView.ScaleType.CENTER,
+  [ImageFillType.STRETCH]: NativeImageView.ScaleType.FIT_XY,
+  [ImageFillType.ASPECTFIT]: NativeImageView.ScaleType.FIT_CENTER, // should be fit().centerInside()
+  [ImageFillType.ASPECTFILL]: NativeImageView.ScaleType.CENTER_CROP //should be centerCrop
 };
 
 export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> extends ViewAndroid<TEvent | ImageViewEvents> implements IImageView {
-  private _fillType: ImageViewFillType | ImageViewFillTypeIOS;
+  private _fillType: ImageFillType | ImageViewFillTypeIOS;
   private _image: Image | null;
   private _adjustViewBounds: boolean = false;
   private _tintColor: Color;
@@ -52,7 +52,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
             drawable: drawable
           })
         : null;
-    } 
+    }
     return this._image;
   }
   set image(value: string | Image | null) {
@@ -78,15 +78,15 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(this._tintColor.nativeObject));
   }
 
-  get imageFillType(): ImageViewFillTypeIOS | ImageViewFillType {
+  get imageFillType(): ImageViewFillTypeIOS | ImageFillType {
     return this._fillType === undefined ? this.nativeObject.getScaleType() : this._fillType;
   }
-  set imageFillType(value: ImageViewFillTypeIOS | ImageViewFillType) {
+  set imageFillType(value: ImageViewFillTypeIOS | ImageFillType) {
     if (!(value in ImageFillTypeDic)) {
-      value = ImageViewFillType.NORMAL;
+      value = ImageFillType.NORMAL;
     }
     this._fillType = value;
-    if (value === ImageViewFillType.ASPECTFILL && !this._adjustViewBounds) {
+    if (value === ImageFillType.ASPECTFILL && !this._adjustViewBounds) {
       this.nativeObject.setAdjustViewBounds(true);
       this._adjustViewBounds = true;
     }
@@ -264,4 +264,8 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   toString(): string {
     return 'ImageView';
   }
+  static FillType = {
+    ios: ImageViewFillTypeIOS,
+    ...ImageFillType
+  };
 }

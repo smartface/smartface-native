@@ -1,6 +1,6 @@
 import Color from '../../ui/color';
 
-enum StatusBarStyle {
+export enum StatusBarStyle {
   DEFAULT,
   LIGHTCONTENT
 }

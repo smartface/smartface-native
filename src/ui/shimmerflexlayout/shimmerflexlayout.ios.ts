@@ -13,7 +13,6 @@ export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TN
     }
 
     this.nativeSpecificProperties();
-
   }
   get nativeObject() {
     return this._nativeObject;
@@ -101,5 +100,5 @@ export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TN
   static Android: typeof AbstractShimmerFlexLayout.Android = {
     Shimmer: AbstractShimmerFlexLayout.Android.Shimmer
   };
-  static ShimmeringDirection = typeof AbstractShimmerFlexLayout.ShimmeringDirection;
+  static ShimmeringDirection = AbstractShimmerFlexLayout.ShimmeringDirection;
 }

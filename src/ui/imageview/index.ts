@@ -118,7 +118,7 @@ export enum ImageViewFillTypeIOS {
  *     myPage.layout.addChild(myImageView);
  *
  */
-export enum ImageViewFillType {
+export enum ImageFillType {
   /**
    * @property {Number} NORMAL
    * @android
@@ -240,7 +240,7 @@ export interface IImageView<
    * @ios
    * @since 0.1
    */
-  imageFillType: ImageViewFillTypeIOS | ImageViewFillType;
+  imageFillType: ImageViewFillTypeIOS | ImageFillType;
   /**
    * Load image from the server and place the returned image into the ImageView.
    * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded.
@@ -344,13 +344,13 @@ export interface IImageView<
 export declare class AbstractImageView<TEvent extends string = ImageViewEvents> extends AbstractView<TEvent> implements IImageView<TEvent> {
   static FillType: {
     ios: typeof ImageViewFillTypeIOS;
-  } & typeof ImageViewFillType;
+  } & typeof ImageFillType;
 
   image: null | IImage;
 
   tintColor: Color;
 
-  imageFillType: ImageViewFillTypeIOS | ImageViewFillType;
+  imageFillType: ImageViewFillTypeIOS | ImageFillType;
 
   loadFromUrl(params: {
     url: string;

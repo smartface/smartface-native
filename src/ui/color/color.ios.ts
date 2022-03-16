@@ -88,6 +88,7 @@ export default class ColorIOS extends AbstractColor {
   static WHITE = new ColorIOS({
     color: __SF_UIColor.whiteColor()
   });
+  static GradientDirection = GradientDirection;
 
   constructor(params: { color: __SF_UIColor | __SF_CAGradientLayer }) {
     super();

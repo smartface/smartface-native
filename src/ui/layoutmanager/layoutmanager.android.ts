@@ -276,4 +276,5 @@ export default class LayoutManagerAndroid extends AbstractLayoutManager implemen
     }
     this._spanSize = newWidth / this._spanCount - paddingsHorizontal;
   }
+  static ScrollDirection = ScrollDirection;
 }

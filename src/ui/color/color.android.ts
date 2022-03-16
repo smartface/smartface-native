@@ -1,4 +1,4 @@
-import Color, { AbstractColor } from '.';
+import Color, { AbstractColor, GradientDirection } from '.';
 
 const NativeColor = requireClass('android.graphics.Color');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
@@ -113,6 +113,7 @@ export default class ColorAndroid extends AbstractColor {
     color: NativeColor.WHITE
   });
   private colors: any[];
+  static GradientDirection = GradientDirection;
   constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
     super();
     if (params.isGradient && params.startColor && params.endColor) {
@@ -120,7 +121,7 @@ export default class ColorAndroid extends AbstractColor {
       const index = params.direction || 0;
       this.direction = GradientDrawableDirection[index];
       this.nativeObject = new NativeGradientDrawable(this.direction, array(this.colors, 'int'));
-    } else if(params.color) {
+    } else if (params.color) {
       this.nativeObject = params.color;
     }
   }

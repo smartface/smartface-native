@@ -270,7 +270,7 @@ export abstract class AbstractColor extends NativeComponent {
     throw new Error('Not implemented');
   }
 
-  static GradientDirection: GradientDirection;
+  static GradientDirection: typeof GradientDirection;
 }
 
 /**

@@ -1,5 +1,4 @@
 import Color from '../../ui/color';
-import IView from '../view';
 import { ViewEvents } from '../view/view-event';
 import ViewIOS from '../view/view.ios';
 import { ActivityIndicatorBase, ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
@@ -49,8 +48,12 @@ export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> ex
       this.nativeObject.stopAnimating();
     }
   }
-  
+
   toString() {
     return 'ActivityIndicator';
   }
+  static iOS = {
+    ActivityIndicatorViewStyle: ActivityIndicatorViewStyle,
+    ...ViewIOS.iOS
+  };
 }
