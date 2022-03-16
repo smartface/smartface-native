@@ -72,11 +72,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   }) {
     throw new Error('Method not implemented.');
   }
-  static iOS: {
-    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
-    PresentationStyle: typeof PresentationStyle;
+  static iOS = {
+    LargeTitleDisplayMode: LargeTitleDisplayMode,
+    PresentationStyle: PresentationStyle
   };
-  static Orientation: typeof Orientation;
+  static Orientation = Orientation;
 
   headerBar: HeaderBar;
   private _isShown: boolean;

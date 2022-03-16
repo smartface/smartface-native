@@ -20,11 +20,11 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
     throw new Error('Method not implemented.');
   }
-  static iOS: {
-    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
-    PresentationStyle: typeof PresentationStyle;
+  static iOS = {
+    LargeTitleDisplayMode: LargeTitleDisplayMode,
+    PresentationStyle: PresentationStyle
   };
-  static Orientation: typeof Orientation;
+  static Orientation = Orientation;
 
   private routerPath: any = null;
   private pageView = new FlexLayout();
@@ -148,7 +148,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
           // Prevents unnecessary applyLayout() calls.
           self._safeAreaLayoutMode = value;
           if (self._safeAreaLayoutMode === true) {
-            self.calculateSafeAreaPaddings(this._safeAreaPaddingObject);
+            self.calculateSafeAreaPaddings(self._safeAreaPaddingObject);
           } else {
             self.calculateSafeAreaPaddings({
               top: 0,
