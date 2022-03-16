@@ -5,7 +5,7 @@ import { ViewEvents } from '../view/view-event';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, IViewState } from '../view';
-import EllipsizeMode from '../shared/android/ellipsizemode';
+import EllipsizeMode from '../shared/ellipsizemode';
 import TextDirection from '../shared/textdirection';
 export type LabelAndroidProps = IView['android'] & {
   /**

@@ -5,7 +5,7 @@ import { ViewAndroid } from '../view/view.android';
 import { ILabel, LabelAndroidProps } from '.';
 import { ViewEvents } from '../view/view-event';
 import { IViewState } from '../view';
-import EllipsizeMode from '../shared/android/ellipsizemode';
+import EllipsizeMode from '../shared/ellipsizemode';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import TextDirection from '../shared/textdirection';
 import AndroidConfig from '../../util/Android/androidconfig';

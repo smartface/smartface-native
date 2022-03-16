@@ -152,7 +152,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   }
 
   static Android: typeof AbstractShimmerFlexLayout.Android = {
-    Shimmer: AbstractShimmerFlexLayout.Android.Shimmer
+    Shimmer: ShimmerHighlight
   };
-  static ShimmeringDirection = AbstractShimmerFlexLayout.ShimmeringDirection;
+  static ShimmeringDirection = ShimmeringDirection;
 }

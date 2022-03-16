@@ -15,5 +15,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["./src/**/*"],
-  "files": ["src/.types/typings.d.ts", "src/.types/missings-android.d.ts", "src/.types/missings-ios.d.ts"]
+  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"]
 }

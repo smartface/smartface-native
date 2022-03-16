@@ -1,5 +1,3 @@
-declare type EllipsizeMode = 'start' | 'middle' | 'end' | 'none' | 'ios_wordwrapping' | 'ios_charwrapping';
-
 /**
  * @enum {Number} UI.EllipsizeMode
  * @static
@@ -23,9 +21,10 @@ declare type EllipsizeMode = 'start' | 'middle' | 'end' | 'none' | 'ios_wordwrap
  *     myPage.layout.addChild(myTextView);
  *
  */
-declare const EllipsizeMode: {
+
+enum EllipsizeMode {
   /**
-   * End of text fits in the container and the missing text at the beginning of the line is indicated by 
+   * End of text fits in the container and the missing text at the beginning of the line is indicated by
    * an ellipsis glyph. Such as "...smrtfc"
    * @android
    * @ios
@@ -33,10 +32,10 @@ declare const EllipsizeMode: {
    * @readonly
    * @since 4.0.2
    */
-  START: 'start';
+  START = 'start',
 
   /**
-   * End & start of text fits in the container and the missing middle of the text  is indicated by 
+   * End & start of text fits in the container and the missing middle of the text  is indicated by
    * an ellipsis glyph. Such as "smrt...fc"
    * @android
    * @ios
@@ -44,10 +43,10 @@ declare const EllipsizeMode: {
    * @readonly
    * @since 4.0.2
    */
-  MIDDLE: 'middle';
+  MIDDLE = 'middle',
 
   /**
-   * Start of text fits in the container and the missing end of the text  is indicated by 
+   * Start of text fits in the container and the missing end of the text  is indicated by
    * an ellipsis glyph. Such as "smrtfc..."
    * @android
    * @ios
@@ -55,7 +54,7 @@ declare const EllipsizeMode: {
    * @since 4.0.2
    * @readonly
    */
-  END: 'end';
+  END = 'end',
 
   /**
    * Turns off ellipsizing
@@ -65,28 +64,7 @@ declare const EllipsizeMode: {
    * @since 4.0.2
    * @readonly
    */
-  NONE: 'none';
-  iOS: {
-    /**
-     * Wrapping occurs at word boundaries, unless the word itself doesn’t fit on a single line. This mode may not work correctly when the maxLines value is 1.
-     * 
-     * @property {Number} WORDWRAPPING
-     * @ios
-     * @static
-     * @since 4.0.2
-     * @readonly
-     */
-    WORDWRAPPING: 'ios_wordwrapping';
-
-    /**
-     * Wrap at character boundaries. This mode may not work correctly when the maxLines value is 1.
-     * @ios
-     * @static
-     * @since 4.0.2
-     * @readonly
-     */
-    CHARWRAPPING: 'ios_charwrapping';
-  };
+  NONE = 'none',
 
   /**
    * Wrapping occurs at word boundaries, unless the word itself doesn’t fit on a single line. This mode may not work correctly when the maxLines value is 1.
@@ -95,7 +73,7 @@ declare const EllipsizeMode: {
    * @since 4.0.2
    * @readonly
    */
-  WORDWRAPPING: 'ios_wordwrapping';
+  WORDWRAPPING = 'ios_wordwrapping',
 
   /**
    * Wrap at character boundaries. This mode may not work correctly when the maxLines value is 1.
@@ -104,7 +82,7 @@ declare const EllipsizeMode: {
    * @since 4.0.2
    * @readonly
    */
-  CHARWRAPPING: 'ios_charwrapping';
-};
+  CHARWRAPPING = 'ios_charwrapping'
+}
 
 export default EllipsizeMode;

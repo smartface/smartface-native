@@ -1,4 +1,4 @@
-import EllipsizeMode from "../../ui/shared/android/ellipsizemode";
+import EllipsizeMode from '../../ui/shared/ellipsizemode';
 
 namespace NSLineBreakMode {
   export const byWordWrapping = 0;
@@ -17,15 +17,15 @@ namespace NSLineBreakMode {
         return NSLineBreakMode.byTruncatingTail;
       case EllipsizeMode.NONE:
         return NSLineBreakMode.byClipping;
-      case EllipsizeMode.iOS.WORDWRAPPING:
+      case EllipsizeMode.WORDWRAPPING:
         return NSLineBreakMode.byWordWrapping;
-      case EllipsizeMode.iOS.CHARWRAPPING:
+      case EllipsizeMode.CHARWRAPPING:
         return NSLineBreakMode.byCharWrapping;
       default:
         return NSLineBreakMode.byTruncatingHead;
     }
   }
-  export function nsLineBreakModeToEllipsizeMode(mode: number) {
+  export function nsLineBreakModeToEllipsizeMode(mode: number): EllipsizeMode {
     switch (mode) {
       case NSLineBreakMode.byTruncatingHead:
         return EllipsizeMode.START;
@@ -36,9 +36,9 @@ namespace NSLineBreakMode {
       case NSLineBreakMode.byClipping:
         return EllipsizeMode.NONE;
       case NSLineBreakMode.byWordWrapping:
-        return EllipsizeMode.iOS.WORDWRAPPING;
+        return EllipsizeMode.WORDWRAPPING;
       case NSLineBreakMode.byCharWrapping:
-        return EllipsizeMode.iOS.CHARWRAPPING;
+        return EllipsizeMode.CHARWRAPPING;
       default:
         return EllipsizeMode.NONE;
     }
