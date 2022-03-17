@@ -1,4 +1,5 @@
 import { AbstractSystem, OSType } from '.';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
 
@@ -34,19 +35,22 @@ function getBatteryIntent() {
   return AndroidConfig.activity.registerReceiver(null, intentFilter);
 }
 
-class SystemAndroid implements AbstractSystem {
+class SystemAndroid extends NativeMobileComponent implements AbstractSystem {
   OSVersion = NativeBuild.VERSION.RELEASE;
   OS = OSType.ANDROID;
   OSType = OSType;
   BiometryType = { BIOMETRICS: SFBiometricPrompt.BiometricType.BIOMETRICS, NONE: SFBiometricPrompt.BiometricType.NONE };
-  ios = {
-    validateFingerPrint() {},
-    LAContextBiometricType() {},
-    LABiometryType: {}
-  };
-  private _android;
   constructor() {
-    const android = {
+    super();
+    this.addAndroidProps(this.getAndroidProps());
+    this.addIOSProps({
+      validateFingerPrint() {},
+      LAContextBiometricType() {},
+      LABiometryType: {}
+    });
+  }
+  private getAndroidProps() {
+    return {
       get apiLevel() {
         return NativeBuild.VERSION.SDK_INT;
       },
@@ -79,7 +83,6 @@ class SystemAndroid implements AbstractSystem {
         }
       }
     };
-    Object.assign(this._android, android);
   }
   get region() {
     return NativeLocale.getDefault().getCountry();

@@ -8,6 +8,7 @@ declare global {
   }
 
   const SMFApplication: any;
+  const Application: any;
 
   function long(value: number): number;
   function array(outerRadii: any, type?: string): any[];

@@ -33,9 +33,9 @@ export interface IEventEmitter<TEvent extends string = string> {
    */
   emit(event: TEvent, ...args: any[]): void;
 }
- 
+
 export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent> {
-  protected emitter: Events.EventEmitter = new Events();
+  private emitter: Events.EventEmitter = new Events();
 
   on(eventName: TEvent, callback: EventListenerCallback) {
     this.emitter.on(eventName, callback);
@@ -60,5 +60,3 @@ export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent
   static Events: { [key: string]: string } = {};
   // static Events: any;
 }
-
-

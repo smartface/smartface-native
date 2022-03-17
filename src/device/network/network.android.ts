@@ -1,5 +1,6 @@
 import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 
 const SFNetworkNotifier = requireClass('io.smartface.android.sfcore.device.network.SFNetworkNotifier');
@@ -31,20 +32,14 @@ function getTelephonyManager() {
   return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
-class Notifier extends NativeComponent implements NetworkNotifier {
+class Notifier extends NativeMobileComponent implements NetworkNotifier {
   private isReceiverCreated = false;
   private _connectionTypeChanged;
   private _initialCacheEnabled = false;
   subscribe: (callback: (type: ConnectionType) => void) => void;
   unsubscribe: () => void;
-  android: { isInitialStickyNotification(): boolean; initialCacheEnabled: boolean };
-  constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
-    super();
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+  constructor(params?: NetworkNotifier) {
+    super(params);
     const self = this;
     if (!self.nativeObject) {
       const callback = {
@@ -61,7 +56,21 @@ class Notifier extends NativeComponent implements NetworkNotifier {
       self.nativeObject = new SFNetworkNotifier(callback);
     }
 
-    const android = {
+    this.addAndroidProps(this.getAndroidProps());
+    instanceCollection.push(this);
+
+    this.subscribe = function (callback) {
+      self.connectionTypeChanged = callback;
+    };
+
+    this.unsubscribe = function () {
+      self.connectionTypeChanged = null;
+    };
+  }
+
+  private getAndroidProps() {
+    const self = this;
+    return {
       get isInitialStickyNotification() {
         return self.nativeObject.isInitialStickyBroadcast();
       },
@@ -71,17 +80,6 @@ class Notifier extends NativeComponent implements NetworkNotifier {
       set initialCacheEnabled(value) {
         self._initialCacheEnabled = value;
       }
-    };
-    Object.assign(this.android, android);
-
-    instanceCollection.push(this);
-
-    this.subscribe = function (callback) {
-      self.connectionTypeChanged = callback;
-    };
-
-    this.unsubscribe = function () {
-      self.connectionTypeChanged = null;
     };
   }
   get connectionTypeChanged() {

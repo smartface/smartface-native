@@ -7,6 +7,167 @@ import BottomTabBar from '../ui/bottomtabbar';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { NavigationBarStyle } from './android/navigationbar/navigationbar';
+import NativeEventEmitterComponent from '../core/native-event-emitter-component';
+import { MobileOSProps } from '../core/native-mobile-component';
+
+export interface ApplicationIOSProps {
+  /**
+   * The event is called when a user taps a universal link.
+   *
+   * @event onUserActivityWithBrowsingWeb
+   * @param {String} url Universal link.
+   * @return {Boolean} YES to indicate that your app handled the activity or NO to let iOS know that your app did not handle the activity.
+   * @ios
+   * @since 3.1.2
+   */
+  onUserActivityWithBrowsingWeb: (url: string) => boolean;
+  /**
+   * Application bundle identifier.
+   *
+   * @property {String} bundleIdentifier
+   * @readonly
+   * @ios
+   * @since 3.0.2
+   */
+  bundleIdentifier: any;
+  /**
+   * It indicates the directionality of the language in the user interface of the app.
+   *
+   * @property {Application.LayoutDirection} userInterfaceLayoutDirection
+   * @readonly
+   * @ios
+   * @since 3.1.3
+   */
+  userInterfaceLayoutDirection: any;
+  registeredRemoteWithSuccessCallback: any;
+  registeredRemoteWithFailureCallback: any;
+}
+export interface ApplicationAndroidProps {
+  /**
+   * Set/Get the layout direction from a Locale.
+   *
+   * @property {String} locale
+   * @readonly
+   * @android
+   * @since 3.1.3
+   */
+  locale: string;
+  /**
+   * Get current layout direction.
+   *
+   * @property {Application.LayoutDirection} getLayoutDirection
+   * @readonly
+   * @android
+   * @since 3.1.3
+   */
+  readonly getLayoutDirection: LayoutDirection;
+  /**
+   * Application package name.
+   *
+   * @property {String} packageName
+   * @readonly
+   * @android
+   * @since 0.1
+   */
+  packageName: string;
+  /**
+   * This method checks for a permission is shown before to user
+   * and the program is about to request the same permission again.
+   *
+   * @method shouldShowRequestPermissionRationale
+   * @param {String} permission
+   * @return {Boolean}
+   * @android
+   * @since 1.2
+   */
+  shouldShowRequestPermissionRationale: (permission: string) => boolean;
+  /**
+   * Triggered when user press back key. The default implementation finishes the application,
+   * but you can override this to do whatever you want.
+   *
+   * @event onBackButtonPressed
+   * @android
+   * @deprecated
+   * @since 3.2.0
+   * @example
+   * ````
+   * import Application from '@smartface/native/application';
+   *
+   * Application.on(Application.Events.BackButtonPressed, () => {
+   * 	console.info('onBackButtonPressed');
+   * });
+   * ````
+   */
+  onBackButtonPressed: () => void;
+  /**
+   * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.).
+   * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
+   *
+   *     @example
+   *     import Application from '@smartface/native/application';
+   *     Application.android.dispatchTouchEvent = function(){
+   *        return true; //Consume all touches & do not pass to window
+   *     }
+   *
+   * @event dispatchTouchEvent
+   * @android
+   * @return {Boolean}
+   * @since 4.0.3
+   */
+  dispatchTouchEvent: () => boolean;
+  /**
+   * This event is called after Application.requestPermissions function. This event is
+   * fired asynchronous way, there is no way to make sure which request is answered.
+   *
+   * @since 1.2
+   * @event onRequestPermissionsResult
+   * @param {Object} e
+   * @param {Number} e.requestCode
+   * @param {Boolean} e.result
+   * @android
+   * @deprecated
+   * @since 1.2
+   */
+  onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
+  navigationBar?: NavigationBar;
+  /**
+   * This function checks if one of the dangerous permissions is granted at beginning or not.
+   * For android versions earlier than 6.0, it will return value exists in manifest or not.
+   * For permissions in same category with one of the permissions is approved earlier, checking
+   * will return as it is not required to request for the same category permission.
+   *
+   * @method checkPermission
+   * @param {String} permission
+   * @return {Boolean}
+   * @android
+   * @since 1.2
+   */
+  checkPermission: (permission: string) => boolean;
+  /**
+   * With requestPermissions, the System Dialog will appear to ask for
+   * permission grant by user for dangerous(privacy) permissions.
+   * {@link Application.android#onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
+   *
+   *     @example
+   *     import Application from '@smartface/native/application';
+   *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
+   *     Application.android.onRequestPermissionsResult = function(e){
+   *         console.log(JSON.stringify(e));
+   *     }
+   *
+   * @method requestPermissions
+   * @param {Number} requestIdentifier This number  will be returned in {@link Application.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not.
+   * @param {String} permission
+   * @android
+   * @since 1.2
+   */
+  requestPermissions: (
+    requestIdentifier: number,
+
+    permission: string
+  ) => void;
+  keyboardMode: KeyboardMode;
+}
 
 /**
  * @enum {Number} Application.LayoutDirection
@@ -105,7 +266,7 @@ declare enum KeyboardMode {
  *
  * A set of collection for application based properties and methods.
  */
-export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
+export declare class ApplicationBase extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
   /**
    * The received bytes from the application.
    *
@@ -279,38 +440,6 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    * @see https://developer.android.com/training/package-visibility
    */
   canOpenUrl: (url: string) => boolean;
-  ios: Partial<{
-    /**
-     * The event is called when a user taps a universal link.
-     *
-     * @event onUserActivityWithBrowsingWeb
-     * @param {String} url Universal link.
-     * @return {Boolean} YES to indicate that your app handled the activity or NO to let iOS know that your app did not handle the activity.
-     * @ios
-     * @since 3.1.2
-     */
-    onUserActivityWithBrowsingWeb: (url: string) => boolean;
-    /**
-     * Application bundle identifier.
-     *
-     * @property {String} bundleIdentifier
-     * @readonly
-     * @ios
-     * @since 3.0.2
-     */
-    bundleIdentifier: any;
-    /**
-     * It indicates the directionality of the language in the user interface of the app.
-     *
-     * @property {Application.LayoutDirection} userInterfaceLayoutDirection
-     * @readonly
-     * @ios
-     * @since 3.1.3
-     */
-    userInterfaceLayoutDirection: any;
-    registeredRemoteWithSuccessCallback: any;
-    registeredRemoteWithFailureCallback: any;
-  }>;
   /**
    * Gets status bar object. This property is readonly, you can not set
    * status bar but you can change properties of status bar of application.
@@ -323,132 +452,6 @@ export declare class ApplicationBase extends EventEmitter<ApplicationEvents> {
    */
   statusBar: typeof StatusBar;
   LayoutDirection: typeof LayoutDirection;
-  android: Partial<{
-    /**
-     * Set/Get the layout direction from a Locale.
-     *
-     * @property {String} locale
-     * @readonly
-     * @android
-     * @since 3.1.3
-     */
-    locale: string;
-    /**
-     * Get current layout direction.
-     *
-     * @property {Application.LayoutDirection} getLayoutDirection
-     * @readonly
-     * @android
-     * @since 3.1.3
-     */
-    readonly getLayoutDirection: LayoutDirection;
-    /**
-     * Application package name.
-     *
-     * @property {String} packageName
-     * @readonly
-     * @android
-     * @since 0.1
-     */
-    packageName: string;
-    /**
-     * This method checks for a permission is shown before to user
-     * and the program is about to request the same permission again.
-     *
-     * @method shouldShowRequestPermissionRationale
-     * @param {String} permission
-     * @return {Boolean}
-     * @android
-     * @since 1.2
-     */
-    shouldShowRequestPermissionRationale: (permission: string) => boolean;
-    /**
-     * Triggered when user press back key. The default implementation finishes the application,
-     * but you can override this to do whatever you want.
-     *
-     * @event onBackButtonPressed
-     * @android
-     * @deprecated
-     * @since 3.2.0
-     * @example
-     * ````
-     * import Application from '@smartface/native/application';
-     *
-     * Application.on(Application.Events.BackButtonPressed, () => {
-     * 	console.info('onBackButtonPressed');
-     * });
-     * ````
-     */
-    onBackButtonPressed: () => void;
-    /**
-     * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.).
-     * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
-     *
-     *     @example
-     *     import Application from '@smartface/native/application';
-     *     Application.android.dispatchTouchEvent = function(){
-     *        return true; //Consume all touches & do not pass to window
-     *     }
-     *
-     * @event dispatchTouchEvent
-     * @android
-     * @return {Boolean}
-     * @since 4.0.3
-     */
-    dispatchTouchEvent: () => boolean;
-    /**
-     * This event is called after Application.requestPermissions function. This event is
-     * fired asynchronous way, there is no way to make sure which request is answered.
-     *
-     * @since 1.2
-     * @event onRequestPermissionsResult
-     * @param {Object} e
-     * @param {Number} e.requestCode
-     * @param {Boolean} e.result
-     * @android
-     * @deprecated
-     * @since 1.2
-     */
-    onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
-    navigationBar?: NavigationBar;
-    /**
-     * This function checks if one of the dangerous permissions is granted at beginning or not.
-     * For android versions earlier than 6.0, it will return value exists in manifest or not.
-     * For permissions in same category with one of the permissions is approved earlier, checking
-     * will return as it is not required to request for the same category permission.
-     *
-     * @method checkPermission
-     * @param {String} permission
-     * @return {Boolean}
-     * @android
-     * @since 1.2
-     */
-    checkPermission: (permission: string) => boolean;
-    /**
-     * With requestPermissions, the System Dialog will appear to ask for
-     * permission grant by user for dangerous(privacy) permissions.
-     * {@link Application.android#onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
-     *
-     *     @example
-     *     import Application from '@smartface/native/application';
-     *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
-     *     Application.android.onRequestPermissionsResult = function(e){
-     *         console.log(JSON.stringify(e));
-     *     }
-     *
-     * @method requestPermissions
-     * @param {Number} requestIdentifier This number  will be returned in {@link Application.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not.
-     * @param {String} permission
-     * @android
-     * @since 1.2
-     */
-    requestPermissions: (
-      requestIdentifier: number,
-
-      permission: string
-    ) => void;
-    keyboardMode: KeyboardMode;
-  }>;
   Android: Partial<{
     KeyboardMode: typeof KeyboardMode;
     NavigationBar: {

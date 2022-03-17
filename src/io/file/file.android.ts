@@ -34,8 +34,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
       throw new Error('File path must be string');
     }
 
-    if(params?.path)
-      this.resolvedPath = this.pathResolver.resolve(params?.path);
+    if (params?.path) this.resolvedPath = this.pathResolver.resolve(params?.path);
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
@@ -315,6 +314,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
     return new FileStream({
       source: this,
       streamType: streamType,
+      mode: streamType,
       contentMode: contentMode
     });
   }
