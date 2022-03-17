@@ -316,6 +316,10 @@ function Page(params) {
         this.emitter.emit(Events.DimissComplete, { target: "bottomSheet" });
     }
 
+    self.nativeObject.dismissStart = () => {
+        this.emitter.emit(Events.DismissStart, { target: "bottomSheet" });
+    }
+
     function getParentViewController(controller) {
         var parent = Invocation.invokeInstanceMethod(controller, "parentViewController", [], "NSObject");
         if (parent) {
