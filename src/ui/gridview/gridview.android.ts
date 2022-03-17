@@ -3,7 +3,7 @@ import { GridViewSnapAlignment, IGridView } from '.';
 import Color from '../color';
 import GridViewItem from '../gridviewitem';
 import LayoutManager, { ScrollDirection } from '../layoutmanager';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { GridViewEvents } from './gridview-events';
 import LayoutManagerAndroid from '../layoutmanager/layoutmanager.android';
 import AndroidUnitConverter from '../../util/Android/unitconverter';

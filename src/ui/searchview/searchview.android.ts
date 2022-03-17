@@ -3,7 +3,7 @@ import { ISearchView, SearchViewStyle } from '.';
 import Color from '../color';
 import Image from '../image';
 import KeyboardType from '../shared/keyboardtype';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
 import Font from '../font';

@@ -1,5 +1,5 @@
 import Color from '../color';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { IButton } from '.';
 import { ButtonEvents } from './button-events';
 import AndroidConfig from '../../util/Android/androidconfig';

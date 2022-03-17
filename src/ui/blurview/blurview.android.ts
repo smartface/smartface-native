@@ -1,5 +1,5 @@
 import { IBlurView } from '.';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { BlurViewEvents } from './blurview-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';

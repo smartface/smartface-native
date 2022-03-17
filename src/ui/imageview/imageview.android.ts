@@ -8,7 +8,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import Image from '../image';
 import ImageCacheType from '../shared/imagecachetype';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ImageViewEvents } from './imageview-events';
 
 const NativeImageView = requireClass('android.widget.ImageView');

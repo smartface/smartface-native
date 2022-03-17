@@ -2,16 +2,13 @@
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter.js';
 import { RangeSliderEvents } from './rangeslider-events';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { IRangeSlider } from '.';
 import Color from '../color';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 
-export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents>
-  extends ViewAndroid<TEvent | RangeSliderEvents, any, IRangeSlider>
-  implements IRangeSlider
-{
+export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents> extends ViewAndroid<TEvent | RangeSliderEvents, any, IRangeSlider> implements IRangeSlider {
   private _snapStepSize: number = 1;
   private _minValue: number = 0;
   private _maxValue: number = 5;

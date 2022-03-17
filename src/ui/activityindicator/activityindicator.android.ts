@@ -1,4 +1,4 @@
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { ViewEvents } from '../view/view-event';

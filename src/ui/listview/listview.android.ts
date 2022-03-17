@@ -6,7 +6,7 @@ import Color from '../color';
 import ListViewItem from '../listviewitem';
 import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeItem, { SwipeDirection } from '../swipeitem';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ListViewEvents } from './listview-events';
 
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');

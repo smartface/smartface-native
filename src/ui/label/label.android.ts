@@ -1,7 +1,7 @@
 import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ILabel, LabelAndroidProps } from '.';
 import { ViewEvents } from '../view/view-event';
 import { IViewState } from '../view';

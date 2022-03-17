@@ -4,7 +4,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import Exception from '../../util/exception';
 import Color from '../color';
 import type Page from '../page';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { VideoViewEvents } from './videoview-events';
 
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');

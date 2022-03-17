@@ -1,7 +1,7 @@
 import { IViewGroup } from '.';
 import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import { IView } from '../view';
-import View from '../view/view.ios';
+import ViewIOS from '../view/view.ios';
 import { ViewGroupEvents } from './viewgroup-events';
 
 function getKeyByValue(object, value) {
@@ -18,7 +18,7 @@ function getKeyByValue(object, value) {
  */
 // ViewGroup.prototype = Object.create(View.prototype);
 export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup>
-  extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
+  extends ViewIOS<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
   implements IViewGroup
 {
   private _children: Record<string, IView> = {};
@@ -41,7 +41,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
 
   // TODO: Make View disposable and move that logic into
-  removeChild(view: View) {
+  removeChild(view: ViewIOS) {
     view.nativeObject.removeFromSuperview();
     delete this._children[view.uniqueId];
     view.parent = undefined;

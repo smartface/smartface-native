@@ -4,7 +4,7 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Page from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { SwipeViewEvents } from './swipeview-events';
 
 const NativeView = requireClass('android.view.View');

@@ -3,7 +3,7 @@ import { ISwitch } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import Image from '../image';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { SwitchEvents } from './switch-events';
 
 const NativeSwitch = requireClass('io.smartface.android.sfcore.ui.switchview.SFSwitch');

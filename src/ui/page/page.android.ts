@@ -129,7 +129,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
   constructor(params?: Partial<TProps>) {
     super(params);
-
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     const pageLayout = this.pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     this.pageLayout = pageLayout;
@@ -216,8 +215,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     params?.onComplete();
   }
   private setCallbacks() {
-    this._nativeObject = new SFFragment();
-    this.nativeObject.setCallback({
+    this.nativeObject = new SFFragment();
+    this.nativeObject.setCallbacks({
       onCreate: () => {},
       onCreateView: () => {
         const layoutDirection = this.nativeObject.getResources().getConfiguration().getLayoutDirection();
@@ -619,10 +618,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         }
       },
       get subtitle(): HeaderBar['android']['subtitle'] {
-        return self.toolbar.getSubTitle();
+        return self.toolbar.getSubtitle();
       },
       set subtitle(value: HeaderBar['android']['subtitle']) {
-        self.toolbar.setSubTitle(value || '');
+        self.toolbar.setSubtitle(value || '');
       },
       get subtitleColor(): HeaderBar['android']['subtitleColor'] {
         return self._headerBarSubtitleColor;

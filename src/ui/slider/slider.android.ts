@@ -1,7 +1,7 @@
 /*globals requireClass*/
 import Color from '../color';
 import { SliderEvents } from './slider-events';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ISlider } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Image from '../image';
@@ -12,10 +12,7 @@ const SeekBar = requireClass('android.widget.SeekBar');
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 
-export default class SliderAndroid<TEvent extends string = SliderEvents>
-  extends ViewAndroid<TEvent | SliderEvents, any, ISlider>
-  implements ISlider
-{
+export default class SliderAndroid<TEvent extends string = SliderEvents> extends ViewAndroid<TEvent | SliderEvents, any, ISlider> implements ISlider {
   private _layerDrawable: any;
   private _defaultThumb: any;
   private _minValue: number;

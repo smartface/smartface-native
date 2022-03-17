@@ -1,4 +1,5 @@
-import { IScrollView, ScrollViewAlign, ScrollViewEdge } from '.';
+import { IScrollView, ScrollViewEdge } from '.';
+import { ScrollViewAlign } from './scrollviewalign';
 import { Point2D } from '../../primitive/point2d';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import TypeUtil from '../../util/type';

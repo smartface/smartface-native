@@ -1,6 +1,6 @@
 import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 
 const SFLiveMediaPlayerDelegate = requireClass('io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPlayerDelegate');
