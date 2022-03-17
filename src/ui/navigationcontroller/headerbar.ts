@@ -28,7 +28,6 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   setLeftItem(item: IHeaderBarItem): void { }
   constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS; }) {
     super(params);
-    const { ios, android, ...restParams } = params;
 
     if (params.navigationController) {
       this.nativeObject = params.navigationController.view.nativeObject.navigationBar;
@@ -42,8 +41,6 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     }
     this.navigationController = params.navigationController;
     this.iosProperties();
-
-    Object.assign(this, restParams);
   }
   removeViewFromHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
     throw new Error('Method not implemented.');

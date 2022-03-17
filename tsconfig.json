@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "lib": ["ES2015"],
+    "types": ["node"],
     "forceConsistentCasingInFileNames": true
   },
   "include": ["./src/**/*"],

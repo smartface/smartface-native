@@ -17,7 +17,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   isInsideBottomTabBar: boolean;
 
   constructor(params: Partial<INavigationController>) {
-    super();
+    super(params);
     this.view = new NavigationView({ viewModel: this });
     this.model = new NavigationModel();
     this._headerBar = new HeaderBar({
@@ -26,7 +26,6 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     this._headerBar.ios.translucent = false;
 
     this._nativeObject = this.view.nativeObject;
-    Object.assign(this, params);
   }
 
   getCurrentController(): IController {
@@ -214,7 +213,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
 
 class NavigationModel {
   pageToPush: IController | null = null;
-  childControllers: IController[];
+  childControllers: IController[] = [];
   pushPage(page: IController) {
     this.pageToPush = page;
     this.childControllers.push(page);
