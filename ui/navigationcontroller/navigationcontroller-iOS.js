@@ -63,10 +63,13 @@ function NavigatonController(params) {
         enumerable: true
     });
     ////////////////////////////////////////////////////////////////////////////
-
+    let dismissComplete = false;
     // Functions
     this.push = function(params) {
         if (params.controller && typeof params.controller === 'object') {
+            params.controller.once("dismissComplete", () => {
+                this.dismissComplete();
+            });
             self.view.push(params.controller, params.animated ? true : false);
             self.model.pushPage(params.controller);
             params.controller.parentController = self;
@@ -85,7 +88,7 @@ function NavigatonController(params) {
         }
     };
 
-    this.present = function(params) {
+    this.present = function(params, bottomSheet = false) {
         if (typeof params === "object") {
             var controller = params.controller;
             var animation = params.animated;
@@ -109,6 +112,10 @@ function NavigatonController(params) {
                         } else if (currentPage.constructor.name === "NavigatonController") {
                             var controller = currentPage.childControllers[currentPage.childControllers.length - 1];
                             retval = getVisiblePage(controller);
+                            currentPage.dismissComplete = () => {
+                                console.log("dismissComplete");
+                                this.dismissComplete();
+                            };
                         } else {
                             // Page
                             retval = currentPage;
@@ -121,8 +128,9 @@ function NavigatonController(params) {
                     if (typeof currentPage.transitionViews !== "undefined") {
                         controllerToPresent.setValueForKey(true, "isHeroEnabled");
                     }
-
-                    self.view.present(controllerToPresent, _animationNeed, _completionBlock);
+                    !bottomSheet ?
+                        self.view.present(controllerToPresent, _animationNeed, _completionBlock) :
+                        self.view.presentBottomSheet(controllerToPresent, _animationNeed, _completionBlock, params.options || {});
                 }
             }
         }
