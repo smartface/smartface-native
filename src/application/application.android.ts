@@ -15,7 +15,7 @@ import { ApplicationBase } from './application';
 import SystemServices from '../util/Android/systemservices';
 import * as RequestCodes from '../util/Android/requestcodes';
 import ViewController from '../util/Android/transition/viewcontroller';
-
+import NativeEventEmitterComponent from '../core/native-event-emitter-component';
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
@@ -58,7 +58,7 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
-class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements ApplicationBase {
+class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
   public statusBar: typeof StatusBar = StatusBar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;
@@ -141,22 +141,22 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
 
     // Creating Activity Lifecycle listener
     const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
-      onCreate: function () {},
-      onResume: function () {
+      onCreate: () => {},
+      onResume: () => {
         if (this._onMaximize) {
           this._onMaximize();
         }
-        this.emitter.emit(ApplicationEvents.Maximize);
+        this.emit(ApplicationEvents.Maximize);
       },
-      onPause: function () {
+      onPause: () => {
         if (this._onMinimize) {
           this._onMinimize();
         }
-        this.emitter.emit(ApplicationEvents.Minimize);
+        this.emit(ApplicationEvents.Minimize);
       },
-      onStop: function () {},
-      onStart: function () {},
-      onDestroy: function () {
+      onStop: () => {},
+      onStart: () => {},
+      onDestroy: () => {
         cancelAllBackgroundJobs();
         if (this._onExit) {
           this._onExit();
@@ -184,6 +184,7 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
     // Attaching Activity Lifecycle event
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
+  onUnhandledError: (error: UnhandledError) => void;
   setAppTheme: (theme: string) => void;
   Events = ApplicationEvents;
   tabBar?: IBottomTabBar;
@@ -410,7 +411,7 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
   set onExit(onExit) {
     this._onExit = (e) => {
       onExit && onExit(e);
-      this.emitter.emit(ApplicationEvents.Exit, e);
+      this.emit(ApplicationEvents.Exit, e);
     };
   }
   get onMaximize() {
@@ -433,24 +434,13 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
       this._onReceivedNotification = callback;
     }
   }
-  get onUnhandledError() {
-    return this.onUnhandledError;
-  }
-  set onUnhandledError(onUnhandledError) {
-    if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
-      this.onUnhandledError = (e) => {
-        onUnhandledError(e);
-        this.emitter.emit(ApplicationEvents.UnhandledError, e);
-      };
-    }
-  }
   get onApplicationCallReceived() {
     return this._onApplicationCallReceived;
   }
   set onApplicationCallReceived(callback) {
     this._onApplicationCallReceived = (e) => {
       callback && callback(e);
-      this.emitter.emit(ApplicationEvents.ApplicationCallReceived, e);
+      this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
   }
   get onAppShortcutReceived() {
@@ -459,7 +449,7 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
   set onAppShortcutReceived(callback) {
     this._onAppShortcutReceived = (e) => {
       callback && callback(e);
-      this.emitter.emit(ApplicationEvents.AppShortcutReceived, e);
+      this.emit(ApplicationEvents.AppShortcutReceived, e);
     };
   }
   get isVoiceOverEnabled() {
@@ -490,7 +480,7 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
       set onBackButtonPressed(callback) {
         self._onBackButtonPressed = (e) => {
           callback && callback(e);
-          self.emitter.emit(ApplicationEvents.BackButtonPressed, e);
+          self.emit(ApplicationEvents.BackButtonPressed, e);
         };
         self.spratAndroidActivityInstance.attachBackPressedListener({
           onBackPressed: function () {
@@ -546,7 +536,7 @@ class ApplicationAndroid extends EventEmitter<ApplicationEvents> implements Appl
         if (TypeUtil.isFunction(callback) || callback === null) {
           self._onRequestPermissionsResult = (e) => {
             callback && callback(e);
-            self.emitter.emit(ApplicationEvents.RequestPermissionResult, e);
+            self.emit(ApplicationEvents.RequestPermissionResult, e);
           };
         }
       },
@@ -653,7 +643,6 @@ function configureIntent(uriScheme) {
 function checkIsAppShortcut(e) {
   return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
 }
-
 const Application = new ApplicationAndroid();
 
 export default Application;

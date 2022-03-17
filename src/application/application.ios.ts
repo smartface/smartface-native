@@ -10,6 +10,7 @@ import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
 import { IBottomTabBar } from '../ui/bottomtabbar';
 import { EventEmitter } from '../core/eventemitter';
+import NativeEventEmitterComponent from '../core/native-event-emitter-component';
 
 //Application Direction Manager (RTL Support)
 const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
@@ -38,7 +39,7 @@ function listenAppShortcut(callback) {
   };
 }
 
-class ApplicationIOS extends EventEmitter<ApplicationEvents> implements ApplicationBase {
+class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
   private _onUnhandledError: any;
   private _onExit: () => void;
   private _onReceivedNotification: (e: any) => void;
@@ -231,13 +232,13 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onUnhandledError(value) {
     this._onUnhandledError = (e) => {
       value && value(e);
-      this.emitter.emit(ApplicationEvents.UnhandledError, e);
+      this.emit(ApplicationEvents.UnhandledError, e);
     };
   }
   set onExit(value) {
     this._onExit = () => {
       value && value();
-      this.emitter.emit(ApplicationEvents.Exit);
+      this.emit(ApplicationEvents.Exit);
     };
   }
   get onExit() {
@@ -246,7 +247,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onReceivedNotification(value) {
     this._onReceivedNotification = (e) => {
       value && value(e);
-      this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
+      this.emit(ApplicationEvents.ReceivedNotification, e);
     };
   }
   get onReceivedNotification() {
@@ -262,7 +263,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onApplicationCallReceived(value) {
     this._onApplicationCallReceived = (e) => {
       value && value(e);
-      this.emitter.emit(ApplicationEvents.ApplicationCallReceived, e);
+      this.emit(ApplicationEvents.ApplicationCallReceived, e);
     };
   }
   set onAppShortcutReceived(value) {
@@ -275,7 +276,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onMaximize(value) {
     this._onMaximize = () => {
       value && value();
-      this.emitter.emit(ApplicationEvents.Maximize);
+      this.emit(ApplicationEvents.Maximize);
     };
   }
   get onMaximize() {
@@ -284,7 +285,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   set onMinimize(value) {
     this._onMinimize = () => {
       value && value();
-      this.emitter.emit(ApplicationEvents.Minimize);
+      this.emit(ApplicationEvents.Minimize);
     };
   }
   get onMinimize() {

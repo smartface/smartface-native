@@ -112,9 +112,9 @@ export default class ColorAndroid extends AbstractColor {
   static WHITE = new ColorAndroid({
     color: NativeColor.WHITE
   });
-  private colors: any[];
+  colors: any[];
   static GradientDirection = GradientDirection;
-  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
+  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams> = {}) {
     super();
     if (params.isGradient && params.startColor && params.endColor) {
       this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];

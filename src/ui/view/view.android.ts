@@ -223,10 +223,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return borderRadiuses;
   }
   private _resetBackground() {
-    console.warn({
-      child: this.constructor.name,
-      nativeObject: this.nativeObject === undefined
-    });
     if (this.backgroundColor instanceof ColorAndroid) {
       const color = this.backgroundColor;
       const bitwiseBorders = this.maskedBorders?.reduce((acc, cValue) => acc | cValue, 0);
@@ -236,13 +232,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       const borderColor = this.borderColor?.nativeObject || Color.BLACK.nativeObject;
       const backgroundColor = this.backgroundColor.nativeObject;
 
-      console.info({
-        nativeObject: this.nativeObject === undefined,
-        backgroundColor: backgroundColor === undefined,
-        borderColor: borderColor === undefined,
-        borderWidth,
-        borderRadiuses: borderRadiuses
-      });
       if (color.isGradient) {
         const colors = array(color.colors, 'int');
         SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));

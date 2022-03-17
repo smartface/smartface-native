@@ -1,11 +1,9 @@
 import Flex from '../../core/Flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
-import FlexLayout, { IFlexLayout, FlexLayoutAndroidProps } from '.';
+import FlexLayout, { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
-import Color from '../../ui/color';
-
-// /*globals requireClass*/
 import AndroidConfig from '../../util/Android/androidconfig';
+
 // TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
 const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
 // const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
@@ -28,10 +26,9 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     this._nativeObject = new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
-        return this.android?.onInterceptTouchEvent && this.android?.onInterceptTouchEvent();
+        return this.android?.onInterceptTouchEvent?.();
       }
     });
-
     const self = this;
     this.addAndroidProps({
       get onInterceptTouchEvent() {

@@ -221,7 +221,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
   onSelected: (index: number) => void;
 }
 
-export declare abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
+export abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
   orientation: PageOrientation;
   transitionViews: View[];
   layout: FlexLayout;

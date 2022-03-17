@@ -217,5 +217,4 @@ export interface IFlexLayout<
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
 type FlexLayout = IFlexLayout;
-const c = new FlexLayout();
 export default FlexLayout;

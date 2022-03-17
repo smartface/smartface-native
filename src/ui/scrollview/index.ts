@@ -7,11 +7,7 @@ import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
 import { AbstractViewGroup, IViewGroup } from '../viewgroup';
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { ScrollViewEvents } from './scrollview-events';
-
-export enum ScrollViewAlign {
-  VERTICAL = 'verticall',
-  HORIZONTAL = 'horizontal'
-}
+import { ScrollViewAlign } from './scrollviewalign';
 
 export enum ScrollViewEdge {
   LEFT = 'left',

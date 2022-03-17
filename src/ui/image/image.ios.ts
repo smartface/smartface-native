@@ -8,7 +8,7 @@ import TypeUtil from '../../util/type';
  * @since 4.5.0
  */
 class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
-  static createFromFile = function (path) {
+  static createFromFile(path) {
     const imageFile = new File({
       path: path
     });
@@ -21,13 +21,13 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
       });
     }
     return retval;
-  };
+  }
 
-  static createFromName = function (name: string) {
+  static createFromName(name: string) {
     return new ImageiOS({
       name: name
     });
-  };
+  }
 
   static createFromImage(image: string) {
     return new ImageiOS({

@@ -3,7 +3,7 @@ import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 
-class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
+export default class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
   extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
 {
@@ -221,4 +221,3 @@ Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
 });
 ////////////////////////////////////////////////////////////////////////
  */
-export default FlexLayoutIOS;
