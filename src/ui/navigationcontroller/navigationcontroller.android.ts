@@ -14,6 +14,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
   popUpBackPage: Page | null;
+  protected _childControllers: INavigationController['childControllers'] = [];
   constructor(params: Partial<INavigationController> = {}) {
     super(params);
     this.__isActive = false;
@@ -121,11 +122,9 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       // console.log("This page exist in history! PageID: " + params.controller.pageID);
     }
 
-    if (params.controller instanceof NavigationController) {
-      this.__isActive && ViewController.deactivateController(this.getCurrentController() as any);
-      params.controller.parentController = this;
-      params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
-    }
+    this.__isActive && ViewController.deactivateController(this.getCurrentController() as any);
+    params.controller.parentController = this;
+    params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
     this.pageIDCollectionInStack[params.controller.pageID] = params.controller;
     this._childControllers.push(params.controller);
     this.show(params);

@@ -12,7 +12,8 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "lib": ["ES2015"],
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
   "include": ["./src/**/*"],
   "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"]
