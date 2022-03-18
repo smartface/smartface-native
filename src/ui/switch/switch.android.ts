@@ -2,7 +2,7 @@
 import { ISwitch } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
-import Image from '../image';
+import Image, { IImage } from '../image';
 import ViewAndroid from '../view/view.android';
 import { SwitchEvents } from './switch-events';
 
@@ -14,8 +14,8 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   private _thumbOffColor: Color;
   private _toggleOnColor: Color;
   private _toggleOffColor: Color;
-  private _toggleImage: Image;
-  private _thumbImage: Image;
+  private _toggleImage: IImage;
+  private _thumbImage: IImage;
   private _onToggleChangedCallback: (checked: boolean) => void;
 
   constructor(params?: Partial<ISwitch>) {
@@ -34,19 +34,19 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
 
     const self = this;
     this.addAndroidProps({
-      get toggleImage(): Image {
+      get toggleImage(): IImage {
         return self._toggleImage;
       },
-      set toggleImage(value: Image) {
+      set toggleImage(value: IImage) {
         self._toggleImage = value;
         // TODO Recheck after build
         self._toggleImage = Image.createImageFromPath(value);
         self.nativeObject.setTrackDrawable(self._toggleImage.nativeObject);
       },
-      get thumbImage(): Image {
+      get thumbImage(): IImage {
         return self._thumbImage;
       },
-      set thumbImage(value: Image) {
+      set thumbImage(value: IImage) {
         self._thumbImage = value;
         // TODO Recheck after build
         self._thumbImage = Image.createImageFromPath(value);

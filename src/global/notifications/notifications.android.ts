@@ -157,6 +157,10 @@ class NotificationsAndroid implements NotificationsBase {
 }
 
 class LocalNotification extends NativeComponent {
+  protected createNativeObject() {
+    const nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
+    return nativeObject.setSmallIcon(NativeR.drawable.icon);
+  }
   private _android: any;
   private _id = getNewNotificationId();
   private _alertBody = '';
@@ -182,8 +186,6 @@ class LocalNotification extends NativeComponent {
     // via its pending intent and its notification object.
     this.mPendingIntent = null;
     this.mNotification = null;
-    this.nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
-    this.nativeObject = this.nativeObject.setSmallIcon(NativeR.drawable.icon);
 
     const android = {
       get color() {

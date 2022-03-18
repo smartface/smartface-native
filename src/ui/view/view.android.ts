@@ -94,19 +94,18 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _useForeground = false;
   protected yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
+  protected createNativeObject() {
+    const nativeObject = new NativeView(activity);
+    this.yogaNode = NativeYogaNodeFactory.create();
+    return nativeObject;
+  }
 
   constructor(params?: Partial<TProps>) {
     super(params);
-    // params = params || {};
-    if (!this._nativeObject) {
-      this._nativeObject = new NativeView(activity);
-      this.yogaNode = NativeYogaNodeFactory.create();
+    if (this._nativeObject?.toString().indexOf('YogaLayout') !== -1) {
+      this.yogaNode = this._nativeObject.getYogaNode();
     } else {
-      if (this._nativeObject.toString().indexOf('YogaLayout') !== -1) {
-        this.yogaNode = this._nativeObject.getYogaNode();
-      } else {
-        this.yogaNode = NativeYogaNodeFactory.create();
-      }
+      this.yogaNode = NativeYogaNodeFactory.create();
     }
 
     this._nativeObject.setId(NativeView.generateViewId());
@@ -172,9 +171,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return this._parent;
   }
   set parent(view: View | undefined) {
+    this._parent = view;
     // eslint-disable-next-line no-console
     console.log('ViewAndroid.parent set parentname: ', this._parent?.constructor.name);
-    this._parent = view;
   }
 
   private setTouchHandlers() {
@@ -224,19 +223,27 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   private _resetBackground() {
     if (this.backgroundColor instanceof ColorAndroid) {
-      const color = this.backgroundColor;
+      const backgroundColor = this.backgroundColor;
       const bitwiseBorders = this.maskedBorders?.reduce((acc, cValue) => acc | cValue, 0);
       //Provide backward support in case of diff behavior of border radius.
       const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
       const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-      const borderColor = this.borderColor?.nativeObject || Color.BLACK.nativeObject;
-      const backgroundColor = this.backgroundColor.nativeObject;
+      const borderColorNative = this.borderColor?.nativeObject || Color.BLACK.nativeObject;
 
-      if (color.isGradient) {
-        const colors = array(color.colors, 'int');
-        SFViewUtil.setBackground(this.nativeObject, colors, color.direction, borderColor, borderWidth, array(borderRadiuses, 'float'));
+      if (backgroundColor.isGradient) {
+        const colors = array(backgroundColor.colors, 'int');
+        SFViewUtil.setBackground(this.nativeObject, colors, backgroundColor.direction, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
       } else {
-        SFViewUtil.setBackground(this.nativeObject, backgroundColor, borderColor, borderWidth, array(borderRadiuses, 'float'));
+        console.log('setbackground before: ', this.constructor.name, {
+          backgroundColor: backgroundColor.nativeObject,
+          borderColorNative,
+          nativeObject: this.nativeObject,
+          borderWidth,
+          parent: this._parent?.constructor.name
+        });
+
+        SFViewUtil.setBackground(this.nativeObject, backgroundColor.nativeObject, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
+        console.log('setbackground later');
       }
     }
   }
@@ -601,6 +608,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this._nativeObject.getHeight());
   }
   set height(height) {
+    console.info('set height: ', height);
+
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
@@ -613,7 +622,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this._nativeObject.getWidth());
   }
   set width(width) {
+    console.info('set width: ', width);
     this.yogaNode.setWidth(DpToPixel(width));
+
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
     if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as any).align === ScrollViewAlign.VERTICAL) {

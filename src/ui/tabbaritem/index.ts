@@ -1,10 +1,10 @@
 import Font from '../font';
-import Image from '../image';
 import { IBadge } from '../badge';
 import AttributedString from '../../global/attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
 import { IPage } from '../page';
+import { IImage } from '../image';
 /**
  * @class UI.TabBarItem
  * @since 1.1.10
@@ -46,7 +46,7 @@ export declare interface ITabbarItem extends INativeComponent {
    * @ios
    * @since 1.1.10
    */
-  icon: { normal: Image | string; selected: Image | string } | Image | string | undefined;
+  icon: { normal: IImage | string; selected: IImage | string } | IImage | string | undefined;
   /**
    * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge usage isn't currently supported if this TabBarItem is belongs to TabBarController.
    * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.

@@ -18,6 +18,9 @@ const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
 const NativeFileInputStream = requireClass('java.io.FileInputStream');
 const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
 export default class FileAndroid extends NativeComponent implements IFile {
+  protected createNativeObject() {
+    return null;
+  }
   nativeAssetsList: any[] = [];
   resolvedPath: any;
   type: PATH_FILE_TYPE;
@@ -28,13 +31,14 @@ export default class FileAndroid extends NativeComponent implements IFile {
   };
   private pathResolver = new PathAndroid();
   constructor(params?: Partial<IFile>) {
-    super();
-    const { ...rest } = params;
+    super(params);
     if (typeof params?.path !== 'string') {
       throw new Error('File path must be string');
     }
 
-    if (params?.path) this.resolvedPath = this.pathResolver.resolve(params?.path);
+    if (params?.path) {
+      this.resolvedPath = this.pathResolver.resolve(params.path);
+    }
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
@@ -74,7 +78,6 @@ export default class FileAndroid extends NativeComponent implements IFile {
       default:
         break;
     }
-    Object.assign(this, rest);
   }
   android: Partial<{}>;
 
@@ -129,7 +132,9 @@ export default class FileAndroid extends NativeComponent implements IFile {
     return this.resolvedPath.path;
   }
   set path(value: string) {
-    this.resolvedPath.path = value;
+    if (this.resolvedPath) {
+      this.resolvedPath.path = value;
+    }
   }
 
   get size(): number {

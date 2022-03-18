@@ -224,6 +224,7 @@ declare class SoundImpl extends AbstractSound {
   play(): void;
   loadFile(file: File): void;
   loadURL(url: string): void;
+  protected createNativeObject(): any;
 }
 
 const Sound: typeof SoundImpl = require(`./sound.${Device.deviceOS.toLowerCase()}`).default;

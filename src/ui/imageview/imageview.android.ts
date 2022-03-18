@@ -6,7 +6,7 @@ import FileAndroid from '../../io/file/file.android';
 import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
-import Image from '../image';
+import Image, { IImage } from '../image';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewAndroid from '../view/view.android';
 import { ImageViewEvents } from './imageview-events';
@@ -172,9 +172,9 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image, cache: ImageCacheType) => void;
+    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: {

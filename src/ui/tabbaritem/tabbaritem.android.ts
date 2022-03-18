@@ -4,14 +4,19 @@ import AttributedString from '../../global/attributedstring';
 import UnitConverter from '../../util/Android/unitconverter';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
-import Image from '../image';
+import Image, { IImage } from '../image';
 import { IPage } from '../page';
 import TabBarController from '../tabbarcontroller';
 
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 
+type IconType = { normal: IImage | string; selected: IImage | string };
+
 export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
+  protected createNativeObject() {
+    return null;
+  }
   private _title;
   private _icon;
   private _badgeObj: Badge;
@@ -72,24 +77,24 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   get icon() {
     return this._icon;
   }
-  set icon(value: { normal: Image | string; selected: Image | string } | Image | string) {
+  set icon(value: { normal: IImage | string; selected: IImage | string } | IImage | string) {
     this._icon = value;
     const EmptyImage = {
       nativeObject: NativeDrawable.createFromPath(null)
     } as Image;
 
     let icon = value;
-    if (icon.constructor === String) {
+    if (typeof icon === 'string') {
       //IDE requires this implementation.
       icon = Image.createImageFromPath(icon);
-    } else if (icon instanceof Object && !(icon instanceof Image)) {
+    } else if (isIconType(icon)) {
       icon.normal = Image.createImageFromPath(icon.normal);
       icon.selected = Image.createImageFromPath(icon.selected);
     } else {
-      throw new Error('icon should be an instance of Image or given icon path should be properly.');
+      throw new Error('icon should be an instance of Image or given icon path should be properly defined.');
     }
 
-    if (icon instanceof Object) {
+    if (isIconType(icon)) {
       // TODO: Refactor this implemenation. Discuss with ios team.
       if (!(icon instanceof Image) && icon.normal instanceof Image && icon.selected instanceof Image) {
         icon = { ...icon, ...this.makeSelector(icon.normal, icon.selected) };
@@ -153,4 +158,8 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     if (itemIcon) this.icon = itemIcon;
     if (systemIcon) this.android.systemIcon = systemIcon;
   }
+}
+
+function isIconType<Property>(value: Property | IconType): value is IconType {
+  return (value as IconType).normal !== undefined;
 }

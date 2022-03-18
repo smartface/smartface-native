@@ -1,6 +1,8 @@
 import { TimerBase } from './timer';
 
-const Timer: typeof TimerBase = require(`./timer.${Device.deviceOS.toLowerCase()}`).default;
-type Timer = TimerBase;
+class Timerimpl extends TimerBase {}
+
+const Timer: typeof Timerimpl = require(`./timer.${Device.deviceOS.toLowerCase()}`).default;
+type Timer = Timerimpl;
 
 export default Timer;

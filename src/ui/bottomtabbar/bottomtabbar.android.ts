@@ -12,6 +12,9 @@ const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
 export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
+  protected createNativeObject() {
+    return new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
+  }
   private _itemColors = {
     normal: Color.GRAY,
     selected: Color.create('#00a1f1')
@@ -20,7 +23,6 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   private _items: TabBarItem[] = [];
   constructor(params?: Partial<BottomTabBar>) {
     super(params);
-    this.nativeObject = new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
     this.addAndroidProps(this.getAndroidParams());
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.
   }
@@ -88,8 +90,11 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
       const tabbarItem = tabBarItems[i];
       tabbarItem.tabBarItemParent = this;
       let title;
-      if (tabbarItem._attributedTitleBuilder !== undefined) title = tabbarItem._attributedTitleBuilder;
-      else title = tabbarItem.title ? tabbarItem.title : 'Title ' + i;
+      if (tabbarItem._attributedTitleBuilder !== undefined) {
+        title = tabbarItem._attributedTitleBuilder;
+      } else {
+        title = tabbarItem.title ? tabbarItem.title : 'Title ' + i;
+      }
 
       tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
       tabbarItem.setProperties({

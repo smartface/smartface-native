@@ -6,7 +6,7 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import HeaderBarItemPadding from '../../util/Android/headerbaritempadding';
 import Badge from '../badge';
 import Color from '../color';
-import Image from '../image';
+import Image, { IImage } from '../image';
 import MenuItem from '../menuitem';
 import SearchView from '../searchview';
 import View from '../view';
@@ -26,9 +26,12 @@ function PixelToDp(px) {
 }
 
 export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
+  protected createNativeObject() {
+    return null;
+  }
   iOS = { SystemItem: {} };
   private _title: string = '';
-  private _image: Image | string | null;
+  private _image: IImage | string | null;
   private _customView?: View = undefined;
   private _enabled: boolean = true;
   private _onPress: IHeaderBarItem['onPress'] = null;
@@ -106,8 +109,10 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   get image() {
     return this._image;
   }
-  set image(value: Image | string | null) {
-    if (value) value = Image.createImageFromPath(value); //IDE requires this implementation.
+  set image(value: IImage | string | null) {
+    if (value) {
+      value = Image.createImageFromPath(value); //IDE requires this implementation.
+    }
     if (value === null || value instanceof Image) {
       this._image = value;
       if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {

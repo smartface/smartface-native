@@ -6,11 +6,11 @@ import ImageiOS from '../../image/image.ios';
 import { PinEvents } from './pin-events';
 
 export default class PinIOS<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, __SF_Annotation, IPin> implements IPin {
+  protected createNativeObject() {
+    return __SF_Annotation.createAnnotation();
+  }
   constructor(params?: IPin) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = __SF_Annotation.createAnnotation();
-    }
     this.nativeObject.onInfoPress = () => {
       this.onPress?.();
       this.emit('press');

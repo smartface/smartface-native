@@ -5,16 +5,19 @@ import { TimerBase } from './timer';
 const NativeSFHandler = requireClass('io.smartface.android.sfcore.global.SFHandler');
 const NativeRunnable = requireClass('java.lang.Runnable');
 
-class TimerAndroid extends NativeComponent implements TimerBase {
+class TimerAndroid extends TimerBase {
+  protected createNativeObject(): any {
+    return null;
+  }
   private repeat: boolean = false;
   private task: any;
   private delay: number;
   static handler = NativeSFHandler.getHandler();
   static setTimeout(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({ ...params, repeat: false });
+    return new TimerAndroid({ ...params, repeat: false }) as TimerBase;
   }
   static setInterval(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({ ...params, repeat: true });
+    return new TimerAndroid({ ...params, repeat: true }) as TimerBase;
   }
   static clearTimer(timer: TimerAndroid) {
     if (timer && timer.nativeObject) {
@@ -28,9 +31,10 @@ class TimerAndroid extends NativeComponent implements TimerBase {
     TimerAndroid.handler.removeCallbacksAndMessages(null);
   }
   constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
-    super();
-    if(params?.repeat)
+    super(params);
+    if (params?.repeat) {
       this.repeat = params?.repeat;
+    }
 
     if (params) {
       this.task = params.task;

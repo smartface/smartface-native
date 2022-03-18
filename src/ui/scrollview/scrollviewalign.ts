@@ -1,4 +1,4 @@
 export enum ScrollViewAlign {
-  VERTICAL = 'vertical',
+  VERTICAL = 'verticall',
   HORIZONTAL = 'horizontal'
 }

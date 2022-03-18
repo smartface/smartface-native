@@ -151,15 +151,11 @@ class NotificationsIOS implements NotificationsBase {
 }
 
 class LocalNotification extends NativeComponent {
-  private _ios: any;
+  protected createNativeObject() {
+    return new __SF_UILocalNotification();
+  }
   constructor(params?: any) {
-    super();
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_UILocalNotification();
-    }
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    super(params);
     const ios = {
       get applicationIconBadgeNumber() {
         return this.nativeObject.applicationIconBadgeNumber;
@@ -186,11 +182,6 @@ class LocalNotification extends NativeComponent {
         }
       }
     };
-
-    this._ios = Object.assign(this._ios, ios);
-  }
-  get ios() {
-    return this._ios;
   }
   get alertBody() {
     return this.nativeObject.alertBody;
@@ -249,7 +240,6 @@ class LocalNotification extends NativeComponent {
   cancel() {
     __SF_UIApplication.sharedApplication().cancelLocalNotification(this.nativeObject);
   }
-  android: {};
 }
 
 export default NotificationsIOS;

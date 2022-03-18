@@ -12,6 +12,9 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents, any, ISliderDrawer>
   implements ISliderDrawer
 {
+  protected createNativeObject() {
+    return null;
+  }
   private _layout: IFlexLayout;
   private _position;
   private _onShow;

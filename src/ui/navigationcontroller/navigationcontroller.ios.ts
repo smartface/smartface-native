@@ -27,6 +27,9 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     this._nativeObject = this.view.nativeObject;
     Object.assign(this, params);
   }
+  protected createNativeObject() {
+    return null;
+  }
 
   getCurrentController(): IController {
     return this.childControllers[this.childControllers.length - 1];
@@ -168,6 +171,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     super();
     this.viewModel = params.viewModel;
     this._nativeObject = new __SF_UINavigationController();
+
     this.__navigationControllerDelegate = new __SF_SMFNavigationControllerDelegate();
     this.__navigationControllerDelegate.navigationControllerWillShowViewControllerAnimated = (navigationController, viewController, animated) => {
       const index = this.nativeObject.viewControllers.indexOf(viewController);
@@ -180,6 +184,9 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     };
 
     this.nativeObject.delegate = this.__navigationControllerDelegate;
+  }
+  protected createNativeObject() {
+    return null;
   }
   push(page: IController, animated?: boolean) {
     if (page.nativeObject) {

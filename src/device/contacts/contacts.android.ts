@@ -227,6 +227,9 @@ export class ContactAndroid extends Contact {
 
 //TODO: all functions assigning to class callbacks. They shouldn't
 class ContactsAndroid extends ContactsBase {
+  protected createNativeObject() {
+    return null;
+  }
   private contentProviderOperation;
   private _onSuccess;
   private _onFailure;

@@ -1,4 +1,4 @@
-import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
+import { ConnectionType, NetworkBase, INetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -32,29 +32,29 @@ function getTelephonyManager() {
   return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
-class Notifier extends NativeMobileComponent implements NetworkNotifier {
+class Notifier extends NativeMobileComponent implements INetworkNotifier {
+  protected createNativeObject() {
+    const callback = {
+      onConnectionTypeChanged: (connectionType) => {
+        if (!this.connectionTypeChanged) return;
+        const cTypeEnum = getConnectionTypeEnum(connectionType);
+        const isInitialStickyNotification = this.android.isInitialStickyNotification();
+
+        if (!this.android.initialCacheEnabled && isInitialStickyNotification) return;
+
+        this.connectionTypeChanged(cTypeEnum);
+      }
+    };
+    return new SFNetworkNotifier(callback);
+  }
   private isReceiverCreated = false;
   private _connectionTypeChanged;
   private _initialCacheEnabled = false;
   subscribe: (callback: (type: ConnectionType) => void) => void;
   unsubscribe: () => void;
-  constructor(params?: NetworkNotifier) {
+  constructor(params?: INetworkNotifier) {
     super(params);
     const self = this;
-    if (!self.nativeObject) {
-      const callback = {
-        onConnectionTypeChanged: function (connectionType) {
-          if (!self.connectionTypeChanged) return;
-          const cTypeEnum = getConnectionTypeEnum(connectionType);
-          const isInitialStickyNotification = self.android.isInitialStickyNotification();
-
-          if (!self.android.initialCacheEnabled && isInitialStickyNotification) return;
-
-          self.connectionTypeChanged(cTypeEnum);
-        }
-      };
-      self.nativeObject = new SFNetworkNotifier(callback);
-    }
 
     this.addAndroidProps(this.getAndroidProps());
     instanceCollection.push(this);
@@ -102,6 +102,9 @@ class Notifier extends NativeMobileComponent implements NetworkNotifier {
 }
 
 class NetworkAndroid extends NativeComponent implements NetworkBase {
+  protected createNativeObject() {
+    return;
+  }
   ConnectionType = ConnectionType;
   readonly roamingEnabled = false;
   constructor() {

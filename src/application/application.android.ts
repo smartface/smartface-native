@@ -59,6 +59,9 @@ const FLAG_SECURE = 8192;
 
 //TODO: event type should be given correctly
 class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
+  protected createNativeObject() {
+    return {};
+  }
   public statusBar: typeof StatusBar = StatusBar;
   private _sliderDrawer: any;
   private _keepScreenAwake = false;

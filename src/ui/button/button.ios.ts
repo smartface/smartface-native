@@ -47,15 +47,13 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   private _onPressFunc: IButton['onPress'];
   constructor(params: Partial<IButton> = {}) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIButton();
-    }
-
     this.nativeObject.addJSTarget(() => {
       this.emit('press');
       this.onPress?.();
     }, UIControlEvents.touchUpInside);
+  }
+  protected createNativeObject() {
+    return new __SF_UIButton();
   }
   onLongPress: () => void;
 

@@ -522,7 +522,7 @@ declare class __SF_UITabBarAppearance extends __SF_UIView {
   configureWithOpaqueBackground(): void;
 }
 
-declare class __SF_UIButton extends __SF_UIView {
+declare class __SF_UIButton extends __SF_SMFUILabel {
   setEnabled: boolean;
   textAlignmentNumber: number;
   contentVerticalAlignment: number;

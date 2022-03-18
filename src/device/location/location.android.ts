@@ -20,6 +20,9 @@ const SETTINGS_STATUS_CODES = {
 const SFLocationCallback = requireClass('io.smartface.android.sfcore.device.location.SFLocationCallback');
 
 class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implements ILocation {
+  protected createNativeObject() {
+    return null;
+  }
   readonly Android = {
     Provider: PROVIDER,
     Priority: PRIORITY,

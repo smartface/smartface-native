@@ -266,7 +266,7 @@ declare enum KeyboardMode {
  *
  * A set of collection for application based properties and methods.
  */
-export declare class ApplicationBase extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
+export interface ApplicationBase extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
   /**
    * The received bytes from the application.
    *

@@ -5,11 +5,13 @@ import MenuItem from '../menuitem';
 import Page from '../page';
 
 export default class MenuIOS extends NativeComponent implements AbstractMenu {
+  protected createNativeObject() {
+    return null;
+  }
   private _items: MenuItem[] = [];
   private _headerTitle = '';
   constructor(params?: Partial<Menu>) {
-    super();
-    Object.assign(this, params);
+    super(params);
   }
   get items() {
     return this._items;

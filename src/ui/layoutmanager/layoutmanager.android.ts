@@ -7,6 +7,9 @@ const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sf
 const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListener');
 
 export default class LayoutManagerAndroid extends AbstractLayoutManager implements ILayoutManager {
+  protected createNativeObject() {
+    return new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
+  }
   private _lineDecoration: any = null;
   private _itemDecoration: any = null;
   private _spanCount: ILayoutManager['spanCount'];
@@ -20,10 +23,6 @@ export default class LayoutManagerAndroid extends AbstractLayoutManager implemen
   private _onFullSpanCallback: ILayoutManager['onFullSpan'];
   constructor(params: Partial<ILayoutManager> = {}) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
-    }
-
     this._spanCount = params.spanCount !== undefined ? params.spanCount : 1;
     this._itemSpacing = params?.itemSpacing || 0;
     this._scrollDirection = params?.scrollDirection !== undefined ? params.scrollDirection : 1; //LTR

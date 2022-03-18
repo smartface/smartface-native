@@ -325,6 +325,9 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   get Android() {
     return {};
   }
+  protected createNativeObject() {
+    return null;
+  }
 }
 //EventEmitterCreator(SFApplication, EventFunctions);
 

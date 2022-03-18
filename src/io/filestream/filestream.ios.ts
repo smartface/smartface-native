@@ -3,6 +3,9 @@ import Blob from '../../global/blob';
 import { FileContentMode, FileStreamType, IFileStream } from './filestream';
 
 export default class FileStreamIOS extends NativeComponent implements IFileStream {
+  protected createNativeObject() {
+    return null;
+  }
   static create(path: any, streamMode: any, contentMode: number): FileStreamIOS {
     const fileStreamInstance = new FileStreamIOS();
     fileStreamInstance.nativeObject = __SF_FileStream.createWithPathWithStreamModeWithContentMode(path, streamMode, contentMode);

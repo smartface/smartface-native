@@ -8,7 +8,6 @@ import Color from '../color';
 import Font from '../font';
 import { SelectablePickerEvents } from './selectablepicker-events';
 
-const NativeAlertDialog = requireClass('android.app.AlertDialog');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 const NativeTextView = requireClass('android.widget.TextView');
 const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
@@ -26,6 +25,9 @@ export default class SelectablePickerAndroid<TEvent extends SelectablePickerEven
   extends NativeEventEmitterComponent<TEvent | SelectablePickerEvents>
   implements ISelectablePicker<TEvent | SelectablePickerEvents>
 {
+  protected createNativeObject() {
+    return null;
+  }
   private _items: ISelectablePicker['items'] = [];
   private _multiSelectEnabled: ISelectablePicker['multiSelectEnabled'] = false;
   private _cancelable: ISelectablePicker['cancelable'] = true;
@@ -46,11 +48,7 @@ export default class SelectablePickerAndroid<TEvent extends SelectablePickerEven
   private _titleColor: ISelectablePicker['titleColor'] = Color.BLACK;
   private _title: ISelectablePicker['title'];
   constructor(params: Partial<ISelectablePicker> = {}) {
-    super();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    super(params);
   }
   get items(): ISelectablePicker['items'] {
     return this._items;

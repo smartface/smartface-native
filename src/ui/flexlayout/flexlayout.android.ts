@@ -21,14 +21,16 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
 {
   private _onInterceptTouchEvent: () => boolean;
   private _flexWrap: number | null = null;
-  constructor(params?: Partial<TProps>) {
-    super(params);
-    this._nativeObject = new NativeYogaLayout(activity, {
+  protected createNativeObject() {
+    return new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
         return this.android?.onInterceptTouchEvent?.();
       }
     });
+  }
+  constructor(params?: Partial<TProps>) {
+    super(params);
     const self = this;
     this.addAndroidProps({
       get onInterceptTouchEvent() {
@@ -84,7 +86,6 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   }
   // _maskedBorders: any[] = [];
   protected _masksToBounds: boolean;
-  _nativeObject: any;
 }
 
 function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {

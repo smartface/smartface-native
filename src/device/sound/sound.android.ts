@@ -21,6 +21,9 @@ export default class SoundAndroid<TEvent extends string = SoundEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
   implements AbstractSound
 {
+  protected createNativeObject() {
+    return new NativeMediaPlayer();
+  }
   public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
   private _onReadyCallback: () => void;
@@ -28,7 +31,6 @@ export default class SoundAndroid<TEvent extends string = SoundEvents, TProps ex
   private _volume = 1.0;
   constructor(params?: TProps) {
     super(params);
-    this._nativeObject = new NativeMediaPlayer();
 
     this.nativeObject.setOnPreparedListener(
       NativeMediaPlayer.OnPreparedListener.implement({

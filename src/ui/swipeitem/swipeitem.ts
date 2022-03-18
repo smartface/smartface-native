@@ -9,6 +9,9 @@ export default class SwipeItem
   extends NativeEventEmitterComponent<SwipeItemEvents, any, WithMobileOSProps<Partial<ISwipeItem>, Partial<ISwipeItemIOSParams>, Partial<ISwipeItemAndroidParams>>>
   implements ISwipeItem
 {
+  protected createNativeObject() {
+    return null;
+  }
   private _text: string = 'Button';
   private _backgroundColor: Color = Color.GRAY;
   private _textColor: Color = Color.WHITE;

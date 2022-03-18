@@ -7,6 +7,9 @@ import { HeaderBar } from './headerbar';
 import Page from '../page';
 
 export default class NavigationControllerAndroid extends AbstractNavigationController implements INavigationController {
+  protected createNativeObject() {
+    return null;
+  }
   static NavCount = 0;
   static OperationType = OperationType;
   private pageIDCollectionInStack = {};

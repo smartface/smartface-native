@@ -7,11 +7,13 @@ export class AsyncTaskIOS<TEvent extends string = AsyncTaskEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
   implements IAsyncTask
 {
+  protected createNativeObject() {
+    return new __SF_NSOperationQueue();
+  }
   static Events = AsyncTaskEvents;
   constructor(params: Partial<IAsyncTask> = {}) {
     super();
     const { android, ios, ...rest } = params;
-    this.nativeObject = new __SF_NSOperationQueue();
 
     Object.assign(this, rest);
   }

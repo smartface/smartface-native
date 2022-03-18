@@ -1,5 +1,5 @@
 import { ISwipeView, SwipeViewState } from '.';
-import Page from '../page';
+import Page, { IPage } from '../page';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
 import { SwipeViewEvents } from './swipeview-events';
@@ -28,7 +28,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   implements ISwipeView
 {
   private _currentIndex: number = 0;
-  private _page: PageIOS;
+  private _page: IPage;
   private currentState = SwipeViewState.IDLE;
   private pageController: __SF_UIPageViewController;
   private transactionIndex = 0;
@@ -36,7 +36,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   private previousViewControllerIndex = 0;
   private pageControllerDatasource: __SF_UIPageViewControllerDatasource;
   private _pageArray: any[] = []; //TODO: PageIOS and PageBase isn't compatible
-  private _instanceArray: PageIOS[] = [];
+  private _instanceArray: IPage[] = [];
   private _pageNativeObjectArray: any[] = [];
   private _pagingEnabled = true;
   private _isPageTransaction = false;
@@ -51,7 +51,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
     this.setPageControllerDataSource();
     this.setViewControllerDelegate();
   }
-  onPageSelected: (index: number, page: Page) => void;
+  onPageSelected: (index: number, page: IPage) => void;
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
   onPageCreate: (position: number) => Page;

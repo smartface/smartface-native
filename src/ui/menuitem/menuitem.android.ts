@@ -10,6 +10,9 @@ const NativeColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
 export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
+  protected createNativeObject() {
+    return null;
+  }
   static Events = MenuItemEvents;
   static Styles = {
     DEFAULT: Style.DEFAULT,
@@ -48,15 +51,6 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
         return spannableStringBuilder;
       }
     });
-
-    Object.assign(this._android, android);
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
   }
   getActionView: any;
   onSelectedListener?: (() => void) | undefined;

@@ -31,6 +31,9 @@ const activity = AndroidConfig.activity;
 const _instanceCollection: HttpAndroid[] = [];
 
 export default class HttpAndroid extends HttpBase {
+  protected createNativeObject() {
+    return null;
+  }
   private _clientBuilder: any;
   private _timeout: number;
   private _defaultHeaders: Record<string, string>;
@@ -39,11 +42,6 @@ export default class HttpAndroid extends HttpBase {
   constructor(params?: Partial<IHttp>) {
     super(params);
     this._clientBuilder = new OkHttpClientBuilder();
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
 
     _instanceCollection.push(this);
 

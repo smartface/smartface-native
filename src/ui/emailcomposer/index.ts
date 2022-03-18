@@ -151,6 +151,9 @@ export abstract class AbstractEmailComposer extends NativeMobileComponent<any, M
    * @since 3.0.3
    */
   abstract canSendMail(): boolean;
+  protected createNativeObject() {
+    throw new Error('Method not implemented');
+  }
 }
 declare class EmailComposerImpl extends AbstractEmailComposer {
   setCC(cc: string[]): void;

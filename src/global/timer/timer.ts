@@ -1,5 +1,11 @@
 import NativeComponent from '../../core/native-component';
 
+export interface TimerParams {
+  task: () => void;
+  repeat?: boolean;
+  delay: number;
+}
+
 /**
  * @class Timer
  * @since 0.1
@@ -27,8 +33,10 @@ import NativeComponent from '../../core/native-component';
  *
  *
  */
-export declare class TimerBase extends NativeComponent {
-  constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>);
+export abstract class TimerBase extends NativeComponent {
+  constructor(params?: Partial<TimerParams>) {
+    super(params);
+  }
   /**
    * @method setTimeout
    *
@@ -41,7 +49,9 @@ export declare class TimerBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static setTimeout(params: { task: () => void; delay: number }): Timer;
+  static setTimeout(params: TimerParams): TimerBase {
+    throw new Error('Method not implemented.');
+  }
   /**
    * @method setInterval
    *
@@ -54,7 +64,9 @@ export declare class TimerBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static setInterval(params: { task: () => void; delay: number }): Timer;
+  static setInterval(params: TimerParams): TimerBase {
+    throw new Error('Method not implemented.');
+  }
   /**
    * @method clearTimer
    *
@@ -64,7 +76,9 @@ export declare class TimerBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static clearTimer(timer: Timer): void;
+  static clearTimer(timer: any): void {
+    throw new Error('Method not implemented.');
+  }
   /**
    * @method clearAllTimer
    *
@@ -73,5 +87,10 @@ export declare class TimerBase extends NativeComponent {
    * @static
    * @since 0.1
    */
-  static clearAllTimer(): void;
+  static clearAllTimer(): void {
+    throw new Error('Method not implemented.');
+  }
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
 }

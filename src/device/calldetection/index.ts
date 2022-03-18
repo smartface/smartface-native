@@ -86,7 +86,7 @@ export enum State {
  *
  */
 
-export class ICallDetection extends NativeEventEmitterComponent<CallDetectionEvents> {
+export interface ICallDetection extends NativeEventEmitterComponent<CallDetectionEvents> {
   /**
    * Triggers when device call state changes.
    *

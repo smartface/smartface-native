@@ -8,6 +8,9 @@ import TypeUtil from '../../util/type';
  * @since 4.5.0
  */
 class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
+  protected createNativeObject() {
+    return null;
+  }
   static createFromFile(path) {
     const imageFile = new File({
       path: path

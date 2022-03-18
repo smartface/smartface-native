@@ -59,7 +59,9 @@ export abstract class AbstractColor extends NativeComponent {
   constructor(params?: ConstructorParams) {
     super(params);
   }
-
+  protected createNativeObject() {
+    return null;
+  }
   //TODO: Writing iOS specific class isn't best practice. Find something better.
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters

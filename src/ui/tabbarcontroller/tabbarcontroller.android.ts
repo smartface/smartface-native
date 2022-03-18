@@ -20,7 +20,6 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
-  // export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
   private _onPageCreateCallback: (index: number) => Page;
   private _items: ITabbarItem[];
@@ -59,7 +58,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
 
     if (!this.swipeView) {
       this.swipeView = new SwipeView({
-        page: this,
+        page: this as any, //TODO: Fix typing
         flexGrow: 1,
         onPageCreate: (position: number) => {
           this.emit('pageCreate', position);

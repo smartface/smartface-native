@@ -19,10 +19,10 @@ function isInside(frame, point) {
   return !(x > w || x < 0 || y > h || y < 0);
 }
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
-  extends ViewBase<TEvent, TNative, TProps>
-  implements IView
-{
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
+  protected createNativeObject(): any {
+    return new __SF_UIView();
+  }
   protected _uniqueId: string;
   protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
   protected _nativeObject: any;
@@ -81,15 +81,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative extends
 
   constructor(params?: Partial<TProps>) {
     super(params);
-
-    // EventEmitterCreator(this, this.EventFunctions);
-    if (!this.nativeObject) {
-      if (params && params.nativeObject) {
-        this._nativeObject = params.nativeObject;
-      } else {
-        this._nativeObject = new __SF_UIView();
-      }
-    }
     this._uniqueId = this.nativeObject.uuid;
 
     // Defaults

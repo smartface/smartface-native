@@ -24,9 +24,9 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   leftItemEnabled: boolean;
   titleLayout?: View;
   title: string;
-  setItems(items: IHeaderBarItem[]): void { }
-  setLeftItem(item: IHeaderBarItem): void { }
-  constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS; }) {
+  setItems(items: IHeaderBarItem[]): void {}
+  setLeftItem(item: IHeaderBarItem): void {}
+  constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS }) {
     super(params);
     const { ios, android, ...restParams } = params;
 
@@ -39,17 +39,20 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
         this.nativeObject.standardAppearance = this.appearance;
         this.nativeObject.scrollEdgeAppearance = this.appearance;
       }
+      this.navigationController = params.navigationController;
     }
-    this.navigationController = params.navigationController;
     this.iosProperties();
 
     Object.assign(this, restParams);
   }
-  removeViewFromHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
+  removeViewFromHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
     throw new Error('Method not implemented.');
   }
-  addViewToHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any; }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
+  addViewToHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
     throw new Error('Method not implemented.');
+  }
+  protected createNativeObject() {
+    return null;
   }
   get transparent(): IHeaderBar['transparent'] {
     return this._transparent;
@@ -115,8 +118,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     if (value instanceof Color) {
       // Xcode 13.1 background bug fixes [NTVE-398]
       if (parseInt(System.OSVersion) >= 15) {
-        if(this.appearance)
-          this.appearance.backgroundColor = value.nativeObject;
+        if (this.appearance) this.appearance.backgroundColor = value.nativeObject;
         this.nativeObject.standardAppearance = this.appearance;
         this.nativeObject.scrollEdgeAppearance = this.appearance;
       } else {
@@ -158,8 +160,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
 
     // Xcode 13.1 background bug fixes [NTVE-398]
     if (parseInt(System.OSVersion) >= 15) {
-      if(this.appearance)
-        this.appearance.titleTextAttributes = titleTextAttributes;
+      if (this.appearance) this.appearance.titleTextAttributes = titleTextAttributes;
 
       this.nativeObject.standardAppearance = this.appearance;
       this.nativeObject.scrollEdgeAppearance = this.appearance;

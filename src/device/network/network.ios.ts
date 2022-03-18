@@ -1,7 +1,7 @@
-import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
+import { ConnectionType, NetworkBase, INetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
 
-class Notifier extends NativeComponent implements NetworkNotifier {
+class Notifier extends NativeComponent implements INetworkNotifier {
   private _connectionTypeChanged: ((type: ConnectionType) => void) | null;
   readonly android = {
     isInitialStickyNotification() {
@@ -10,18 +10,11 @@ class Notifier extends NativeComponent implements NetworkNotifier {
     initialCacheEnabled: false
   };
   constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
-    super();
-    if (!this.nativeObject) {
-      this.nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
-      this.nativeObject.observeFromNotificationCenter();
-    }
+    super(params);
 
     if (this.nativeObject) {
       this.nativeObject.stopNotifier();
       this.nativeObject.removeObserver();
-    }
-
-    if (this.nativeObject) {
       this.nativeObject.reachabilityChangedCallback = () => {
         let sfStatus;
         const status = this.nativeObject.currentReachabilityStatus();
@@ -44,12 +37,11 @@ class Notifier extends NativeComponent implements NetworkNotifier {
         }
       };
     }
-
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+  }
+  protected createNativeObject(): any {
+    const nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
+    nativeObject.observeFromNotificationCenter();
+    return nativeObject;
   }
   subscribe(callback) {
     this.connectionTypeChanged = callback;
@@ -74,24 +66,21 @@ class Notifier extends NativeComponent implements NetworkNotifier {
   }
 }
 
-class NetworkIOS extends NativeComponent implements NetworkBase {
+class NetworkIOS implements NetworkBase {
   ConnectionType = ConnectionType;
-  public readonly notifier: NetworkNotifier = new Notifier();
-  constructor() {
-    super();
-  }
+  public readonly notifier: INetworkNotifier = new Notifier();
   roamingEnabled: boolean = false;
   get SMSEnabled(): boolean {
     return false;
   }
   get IMSI(): string {
-    return "";
+    return '';
   }
   get bluetoothMacAddress(): string {
-    return "";
+    return '';
   }
   get wirelessMacAddress(): string {
-    return "";
+    return '';
   }
   get carrier() {
     const info = new __SF_CTTelephonyNetworkInfo();

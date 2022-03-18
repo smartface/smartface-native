@@ -5,13 +5,12 @@ import { Database, BaseDatabase } from './database';
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
 
-class DatabaseAndroid extends BaseDatabase {
+export default class DatabaseAndroid extends BaseDatabase {
   private _file: File;
   constructor(params?: { file?: File; inMemory?: boolean }) {
     super();
     this.nativeObject = null;
-    if(params?.file)
-      this._file = params?.file;
+    if (params?.file) this._file = params?.file;
 
     if (typeof params?.inMemory === 'boolean' && params.inMemory) {
       this.nativeObject = NativeSQLiteDatabase.create(null);
@@ -68,6 +67,9 @@ class DatabaseAndroid extends BaseDatabase {
 }
 
 export class QueryResult extends NativeComponent implements Database.QueryResult {
+  protected createNativeObject() {
+    return null;
+  }
   constructor(params?: { isInternal: boolean; cursor: any }) {
     super();
     if (!params || !params.isInternal) {
@@ -111,6 +113,9 @@ export class QueryResult extends NativeComponent implements Database.QueryResult
 }
 
 export class DatabaseObject extends NativeComponent implements Database.DatabaseObject {
+  protected createNativeObject() {
+    return null;
+  }
   constructor(params?: { isInternal: boolean; cursor: any }) {
     super();
     if (!params || !params.isInternal) {
@@ -163,5 +168,3 @@ export class DatabaseObject extends NativeComponent implements Database.Database
     }
   }
 }
-
-export default DatabaseAndroid;

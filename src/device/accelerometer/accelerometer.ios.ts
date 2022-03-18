@@ -24,6 +24,9 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, 
       }
     });
   }
+  protected createNativeObject() {
+    return null;
+  }
   onAccelerate: (e: { x: number; y: number; z: number }) => void;
   start() {
     this.monitonManager.startAccelerometerUpdates();

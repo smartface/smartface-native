@@ -15,6 +15,9 @@ export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, T
   extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any, TProps>
   implements IWebSocket
 {
+  protected createNativeObject() {
+    return null;
+  }
   private _listener: any;
   private _request: any;
   private _client: any;

@@ -4,6 +4,9 @@ import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
 export default class BadgeAndroid extends NativeComponent implements IBadge {
+  protected createNativeObject() {
+    return null;
+  }
   private _visible = false;
   private _text = '';
   private _backgroundColor: IBadge['backgroundColor'];

@@ -1,4 +1,4 @@
-import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import IBlob from '../../global/blob/blob';
 import { Rectangle } from '../../primitive/rectangle';
 
@@ -22,7 +22,7 @@ import { Rectangle } from '../../primitive/rectangle';
  *     myPage.layout.addChild(myImageView);
  *
  */
-export interface IImage extends NativeMobileComponent {
+export interface IImage extends INativeMobileComponent {
   /**
    * Gets the height of image in pixels.
    *
@@ -357,7 +357,12 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   get width(): number {
     return this.nativeObject.size.width;
   }
-  abstract autoMirrored: boolean;
+  get autoMirrored(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  set autoMirrored(value: boolean) {
+    throw new Error('Method not implemented.');
+  }
 
   toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
@@ -474,6 +479,10 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
     throw new Error('Method not implemented.');
   }
 
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
+
   /**
    * iOS Specific Properties.
    * @class UI.Image.iOS
@@ -485,9 +494,7 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   };
 }
 
-class Imageimpl extends AbstractImage {
-  autoMirrored: boolean;
-}
+class Imageimpl extends AbstractImage {}
 
 const Image: typeof Imageimpl = require(`./image.${Device.deviceOS.toLowerCase()}`).default;
 type Image = Imageimpl;

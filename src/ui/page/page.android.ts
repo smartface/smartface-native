@@ -14,7 +14,7 @@ import DocumentPickerAndroid from '../../device/documentpicker/documentpicker.an
 import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
 import ViewController from '../../util/Android/transition/viewcontroller';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import Image from '../image';
+import Image, { IImage } from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import StatusBar from '../../application/statusbar';
@@ -59,6 +59,9 @@ const NativeOrientationDictionary = {
 };
 
 export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
+  protected createNativeObject() {
+    return new SFFragment();
+  }
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }
@@ -89,11 +92,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   isSwipeViewPage = false;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayout;
-  private _headerBarItems: HeaderBarItem[];
+  private _headerBarItems: HeaderBarItem[] = [];
   private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
   private _headerBarColor: Color;
-  private _headerBarImage: Image;
+  private _headerBarImage: IImage;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
   private _transitionViewsCallback: IPage['android']['transitionViewsCallback'];
@@ -104,7 +107,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _leftItemEnabled: boolean;
   private _leftItemColor = Color.WHITE;
   private _itemColor = Color.WHITE;
-  private _headerBarLogo: Image;
+  private _headerBarLogo: IImage;
   private _headerBarElevation: number;
   private _headerBarSubtitleColor: Color;
   private pageLayout: any;
@@ -215,8 +218,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     params?.onComplete();
   }
   private setCallbacks() {
-    this.nativeObject = new SFFragment();
-    this.nativeObject.setCallbacks({
+    this.nativeObject?.setCallbacks({
       onCreate: () => {},
       onCreateView: () => {
         const layoutDirection = this.nativeObject.getResources().getConfiguration().getLayoutDirection();

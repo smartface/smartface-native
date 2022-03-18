@@ -19,6 +19,9 @@ const HueDic = {
 };
 
 export default class PinAndroid<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, any> implements IPin {
+  protected createNativeObject() {
+    return null;
+  }
   private _color: ColorAndroid;
   private _image: ImageAndroid | null = null;
   private _location: IPin['location'];

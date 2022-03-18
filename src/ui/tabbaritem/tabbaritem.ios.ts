@@ -8,16 +8,20 @@ import Image from '../image';
 import { IPage } from '../page';
 
 export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
+  protected createNativeObject() {
+    return null;
+  }
   private _nativeView;
   private _title: string = '';
   private _icon: any;
   private _badge: IBadge | Record<string, any>;
   private _route: string;
+
   constructor(params?: Partial<TabbarItemIOS>) {
     super(params);
     this.nativeObject = undefined;
-    if (params && params.nativeObject) {
-      this.nativeObject = params.nativeObject;
+    if (params?.nativeObject) {
+      this._nativeObject = params.nativeObject;
     }
 
     this._badge = this.nativeObject

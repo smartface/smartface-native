@@ -22,6 +22,9 @@ const TextViewContentPadding = {
 };
 
 export default class BadgeAndroid extends NativeComponent implements IBadge {
+  protected createNativeObject() {
+    return new NativeTextView(AndroidConfig.activity);
+  }
   private _borderColor = Color.WHITE;
   private _visible = false;
   private _text = '';
@@ -35,7 +38,6 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     super();
     const { ...restParams } = params;
 
-    this.nativeObject = new NativeTextView(AndroidConfig.activity);
     this.nativeObject.setGravity(CENTER);
     this.nativeObject.setPaddingRelative(TextViewContentPadding.start, TextViewContentPadding.top, TextViewContentPadding.end, TextViewContentPadding.bottom);
 

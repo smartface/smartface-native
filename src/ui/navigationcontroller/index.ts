@@ -235,6 +235,9 @@ export abstract class AbstractNavigationController extends NativeComponent imple
 }
 
 class NavigationControllerImpl extends AbstractNavigationController {
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
   present(params?: ControllerPresentParams): void {
     throw new Error('Method not implemented.');
   }

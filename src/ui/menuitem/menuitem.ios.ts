@@ -4,18 +4,21 @@ import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
 export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
+  protected createNativeObject() {
+    return null;
+  }
   static Events = MenuItemEvents;
   static Styles = {
     DEFAULT: Style.DEFAULT,
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private style:Style = Style.DEFAULT;
+  private style: Style = Style.DEFAULT;
 
   private _title: string = '';
   private _onSelected: () => void;
   constructor(params?: Partial<MenuItem>) {
-    super();
+    super(params);
     const self = this;
 
     this.addIOSProps({
@@ -26,13 +29,6 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
         self.style = color;
       }
     });
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
   }
   getActionView: any;
   get title(): string {

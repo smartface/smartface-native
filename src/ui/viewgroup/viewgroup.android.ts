@@ -12,6 +12,9 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
 {
   static Events = ViewGroupEvents;
   childViews: Record<string, View> = {};
+  protected createNativeObject() {
+    return null;
+  }
 
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -72,7 +75,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   }
 
   private setHierarchyChangeListener() {
-    this.nativeObject.setOnHierarchyChangeListener?.(
+    this.nativeObject.setOnHierarchyChangeListener(
       NativeViewGroup.OnHierarchyChangeListener.implement({
         onChildViewAdded: (parent, child) => {
           const childView = this.childViews[child.getId()];

@@ -1,5 +1,4 @@
 import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
-import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { isNotEmpty } from '../../util/type';
 import GridViewIOS from '../gridview/gridview.ios';
@@ -7,6 +6,9 @@ import GridViewIOS from '../gridview/gridview.ios';
 const DEFAULT_ITEM_LENGTH = 50;
 
 export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UICollectionViewFlowLayout> implements ILayoutManager {
+  protected createNativeObject() {
+    return new __SF_UICollectionViewFlowLayout();
+  }
   onFullSpan: (type: number) => number;
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
@@ -20,7 +22,6 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
   private _itemLength = 50;
   constructor(params: Partial<ILayoutManager> = {}) {
     super(params);
-    this._nativeObject = new __SF_UICollectionViewFlowLayout();
 
     this.nativeObject.prepareLayoutCallback = () => {
       const retval = this.calculateItemSize(this.spanCount);

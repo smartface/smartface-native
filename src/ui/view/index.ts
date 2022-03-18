@@ -968,11 +968,14 @@ export enum SemanticContentAttribute {
 
 // const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
-export class ViewBase<
-  TEvent extends string = ExtractEventValues<ViewEvents>,
-  TNative extends Record<string, any> = Record<string, any>,
-  TProps extends IViewProps = IViewProps
-> extends NativeEventEmitterComponent<TEvent | ExtractEventValues<ViewEvents>, TNative, TProps> {
+export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative = any, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<
+  TEvent | ExtractEventValues<ViewEvents>,
+  TNative,
+  TProps
+> {
+  protected createNativeObject(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(params?: Partial<TProps>) {
     super(params);
   }
@@ -997,10 +1000,11 @@ export class ViewBase<
   protected _onTouchMoved: IView['onTouchMoved'];
 }
 
-export declare class AbstractView<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
+export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
+  protected createNativeObject(): any;
   parent: IView | undefined;
   get uniqueId(): string;
   applyLayout(): void;
