@@ -312,6 +312,9 @@ function Page(params) {
         this.emitter.emit(Events.Hide);
     };
 
+    self.nativeObject.dismissStart = () => {
+        this.emitter.emit(Events.DismissStart, { target: "bottomSheet" });
+    }
     self.nativeObject.dismissComplete = () => {
         this.emitter.emit(Events.DimissComplete, { target: "bottomSheet" });
     }

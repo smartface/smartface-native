@@ -67,8 +67,8 @@ function NavigatonController(params) {
     // Functions
     this.push = function(params) {
         if (params.controller && typeof params.controller === 'object') {
-            params.controller.once("dismissComplete", () => {
-                this.dismissComplete();
+            params.controller.once("dismissStart", () => {
+                this.dismissStart();
             });
             self.view.push(params.controller, params.animated ? true : false);
             self.model.pushPage(params.controller);
@@ -112,9 +112,13 @@ function NavigatonController(params) {
                         } else if (currentPage.constructor.name === "NavigatonController") {
                             var controller = currentPage.childControllers[currentPage.childControllers.length - 1];
                             retval = getVisiblePage(controller);
+                            currentPage.dismissStart = () => {
+                                this.dismissStart();
+                                currentPage.dismissStart = null;
+                            };
                             currentPage.dismissComplete = () => {
-                                console.log("dismissComplete");
                                 this.dismissComplete();
+                                currentPage.dismissComplete = null;
                             };
                         } else {
                             // Page
