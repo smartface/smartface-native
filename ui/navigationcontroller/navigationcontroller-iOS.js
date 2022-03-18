@@ -63,10 +63,13 @@ function NavigatonController(params) {
         enumerable: true
     });
     ////////////////////////////////////////////////////////////////////////////
-
+    let dismissComplete = false;
     // Functions
     this.push = function(params) {
         if (params.controller && typeof params.controller === 'object') {
+            params.controller.once("dismissStart", () => {
+                this.dismissStart();
+            });
             self.view.push(params.controller, params.animated ? true : false);
             self.model.pushPage(params.controller);
             params.controller.parentController = self;
@@ -85,7 +88,7 @@ function NavigatonController(params) {
         }
     };
 
-    this.present = function(params) {
+    this.present = function(params, bottomSheet = false) {
         if (typeof params === "object") {
             var controller = params.controller;
             var animation = params.animated;
@@ -109,6 +112,14 @@ function NavigatonController(params) {
                         } else if (currentPage.constructor.name === "NavigatonController") {
                             var controller = currentPage.childControllers[currentPage.childControllers.length - 1];
                             retval = getVisiblePage(controller);
+                            currentPage.dismissStart = () => {
+                                this.dismissStart();
+                                currentPage.dismissStart = null;
+                            };
+                            currentPage.dismissComplete = () => {
+                                this.dismissComplete();
+                                currentPage.dismissComplete = null;
+                            };
                         } else {
                             // Page
                             retval = currentPage;
@@ -121,8 +132,9 @@ function NavigatonController(params) {
                     if (typeof currentPage.transitionViews !== "undefined") {
                         controllerToPresent.setValueForKey(true, "isHeroEnabled");
                     }
-
-                    self.view.present(controllerToPresent, _animationNeed, _completionBlock);
+                    !bottomSheet ?
+                        self.view.present(controllerToPresent, _animationNeed, _completionBlock) :
+                        self.view.presentBottomSheet(controllerToPresent, _animationNeed, _completionBlock, params.options || {});
                 }
             }
         }
@@ -547,6 +559,33 @@ function NavigationView(params) {
     this.present = function(controllerToPresent, animated, completionBlock) {
         self.nativeObject.presentViewController(controllerToPresent, completionBlock, animated);
     };
+
+    this.presentBottomSheet = (controllerToPresent, animated, completionBlock, options) => {
+        self.nativeObject.presentSheetController(this.applySheetOptions(controllerToPresent, options), completionBlock, animated);
+    }
+    
+    this.applySheetOptions = (controller, options) => {
+        if(options.cornerRadius) controller.sheetPresentationController.cornerRadius(controller.sheetPresentationController, options.cornerRadius)
+        if(options.detents && options.detents.length > 0) {
+            let customDetents = [];
+            options.detents.map((key) => {
+                if (key == "medium") {
+                    customDetents.push(controller.sheetPresentationController.medium());
+                }
+                if (key == "large") {
+                    customDetents.push(controller.sheetPresentationController.large());
+                }
+            })
+            if (customDetents.length > 0) {
+                controller.sheetPresentationController.detents = customDetents
+            }
+        }
+        if (typeof options.isGrabberVisible == "boolean") {
+            controller.sheetPresentationController.prefersGrabberVisible = options.isGrabberVisible;
+        }
+
+        return controller;
+    }
 
     this.dismiss = function(completionBlock, animated) {
         self.nativeObject.dismissViewController(completionBlock, animated);
