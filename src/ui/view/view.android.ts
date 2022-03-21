@@ -234,16 +234,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         const colors = array(backgroundColor.colors, 'int');
         SFViewUtil.setBackground(this.nativeObject, colors, backgroundColor.direction, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
       } else {
-        console.log('setbackground before: ', this.constructor.name, {
-          backgroundColor: backgroundColor.nativeObject,
-          borderColorNative,
-          nativeObject: this.nativeObject,
-          borderWidth,
-          parent: this._parent?.constructor.name
-        });
-
         SFViewUtil.setBackground(this.nativeObject, backgroundColor.nativeObject, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
-        console.log('setbackground later');
       }
     }
   }
@@ -608,8 +599,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this._nativeObject.getHeight());
   }
   set height(height) {
-    console.info('set height: ', height);
-
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
@@ -622,7 +611,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this._nativeObject.getWidth());
   }
   set width(width) {
-    console.info('set width: ', width);
     this.yogaNode.setWidth(DpToPixel(width));
 
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.

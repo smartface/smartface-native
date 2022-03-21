@@ -24,6 +24,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import LayoutParams from '../../util/Android/layoutparams';
 import SystemServices from '../../util/Android/systemservices';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -89,7 +90,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private isCreated = false;
   private optionsMenu: any = null;
   private actionBar: any = null;
-  isSwipeViewPage = false;
+  isSwipeViewPage = true;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayout;
   private _headerBarItems: HeaderBarItem[] = [];
@@ -142,7 +143,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     pageLayout.addView(this.rootLayout.nativeObject);
     this.toolbar = this.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     this.setCallbacks();
-    this.isSwipeViewPage = false;
     this.headerBar = { android: {}, ios: {} } as any;
     this.__onShowCallback = () => {
       this.onShow?.();
@@ -727,9 +727,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         self._tag = value;
       }
     };
-
-    this.headerBar = Object.assign(this.headerBar, headerbarParams);
-    Object.assign(this.headerBar.android, headerBarAndroid);
+    copyObjectPropertiesWithDescriptors(this.headerBar, headerbarParams);
+    copyObjectPropertiesWithDescriptors(this.headerBar.android, headerBarAndroid);
   }
 
   private layoutAssignments() {

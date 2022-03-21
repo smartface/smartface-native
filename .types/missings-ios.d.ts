@@ -106,37 +106,23 @@ declare class __SF_UIView extends __SF_NSOBject {
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
-  yoga: any;
-  frame: __SF_NSRect;
-  bounds: __SF_NSRect;
-  layer: any;
+
   onTouch: (e: any) => void;
   onTouchCancelled: (e: any) => void;
   onTouchMoved: (e: any) => void;
   onTouchEnded: (e: any) => void;
-  alpha: number;
-  backgroundColor: __SF_UIColor;
   addFrameObserver(): void;
   frameObserveHandler(e: { frame: __SF_NSRect }): void;
   removeFrameObserver(): void;
-  tag: string;
   scale(coordinates: { x: number; y: number }): void;
-  touchEnabled: boolean;
   flipHorizontally(): void;
   flipVertically(): void;
-  superview: __SF_UIView;
   addSubview(view: __SF_UIView): void;
   removeFromSuperview(): void;
   willRemoveSubview: (e: any) => void;
-  widthAnchor: any;
-  heightAnchor: any;
-  viewControllers: __SF_UIViewController[];
-  navigationBar: any; /**TODO: NavigationBar Type */
   endEditing(animated: boolean): void;
   layoutIfNeeded(): void;
   sizeToFit(): void;
-  subviews: __SF_UIView[];
-  view: __SF_UIView;
   className(): any;
   becomeFirstResponder(): void;
   resignFirstResponder(): void;
@@ -144,6 +130,23 @@ declare class __SF_UIView extends __SF_NSOBject {
   removeFromParentViewController(): void;
   parentViewController(): __SF_UIViewController;
   didScroll(e: any): void;
+  widthAnchor: any;
+  heightAnchor: any;
+  viewControllers: __SF_UIViewController[];
+  navigationBar: any; /**TODO: NavigationBar Type */
+  subviews: __SF_UIView[];
+  superview: __SF_UIView;
+  subview: __SF_UIView;
+  touchEnabled: boolean;
+  tag: string;
+  view: __SF_UIView;
+  alpha: number;
+  backgroundColor: __SF_UIColor;
+  yoga: any;
+  frame: __SF_NSRect;
+  bounds: __SF_NSRect;
+  layer: any;
+  uuid: string;
 }
 declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;

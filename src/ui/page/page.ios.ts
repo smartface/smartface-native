@@ -40,7 +40,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
   constructor(params?: Partial<TProps>) {
     super(params);
-    const { ios, android, ...restParams } = params || {};
     this.nativeObject.automaticallyAdjustsScrollViewInsets = false;
 
     this.setNativeParams();
@@ -189,7 +188,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       this.calculatePosition();
     };
 
-    this.nativeObject.onViewDidAppear = function () {
+    this.nativeObject.onViewDidAppear = () => {
       if (this.nativeObject.navigationController) {
         //COR-1627 for iOS 11 badge
         const subviews: any[] = Invocation.invokeInstanceMethod(this.nativeObject.navigationController.navigationBar, 'subviews', [], 'id') as unknown as any[];

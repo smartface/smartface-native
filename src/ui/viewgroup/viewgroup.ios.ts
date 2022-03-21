@@ -4,11 +4,6 @@ import { IView } from '../view';
 import ViewIOS from '../view/view.ios';
 import { ViewGroupEvents } from './viewgroup-events';
 
-function getKeyByValue(object, value) {
-  for (const prop in object) {
-    if (object[prop].id === value) return object[prop];
-  }
-}
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -22,14 +17,24 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   implements IViewGroup
 {
   private _children: Record<string, IView> = {};
-  onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
-  onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   onChildViewAdded: IViewGroup['onViewAdded'];
   onChildViewRemoved: IViewGroup['onViewRemoved'];
   constructor(params?: Partial<TProps>) {
     super(params);
-    this.nativeObject.didAddSubview = this.onViewAddedHandler;
-    this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
+    this.nativeObject.didAddSubview = (e: __SF_UIView) => {
+      const view = this._children[e.subview.uuid];
+      if (view) {
+        this.onViewAdded?.(view);
+        this.onChildViewAdded?.(view);
+      }
+    };
+    this.nativeObject.willRemoveSubview = (e: __SF_UIView) => {
+      const view = this._children[e.subview.uuid];
+      if (view) {
+        this.onViewRemoved?.(view);
+        this.onChildViewRemoved?.(view);
+      }
+    };
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
@@ -64,22 +69,10 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
 
   findChildById(id: string) {
-    return getKeyByValue(this._children, id);
-  }
-
-  onViewAddedHandler(e: __SF_UIView) {
-    const view = this._children[e.subview.uuid];
-    if (view) {
-      this.onViewAdded?.(view);
-      this.onChildViewAdded?.(view);
-      this.onViewAddedInnerCallback?.(view);
+    for (const prop in this._children) {
+      if (this._children[prop].id === id) {
+        return this._children[prop];
+      }
     }
-  }
-
-  onViewRemovedHandler(e: __SF_UIView) {
-    const view = this._children[e.subview.uuid];
-    this.onViewRemoved?.(view);
-    this.onChildViewRemoved?.(view);
-    this.onViewRemovedInnerCallback?.(view);
   }
 }

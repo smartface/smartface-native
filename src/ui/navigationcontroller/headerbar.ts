@@ -88,10 +88,10 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     }
   }
   get titleColor(): IHeaderBar['titleColor'] {
-    return this.titleColor;
+    return this._titleColor;
   }
   set titleColor(value: IHeaderBar['titleColor']) {
-    this.titleColor = value;
+    this._titleColor = value;
     this.__updateTitleTextAttributes();
   }
   get visible(): IHeaderBar['visible'] {

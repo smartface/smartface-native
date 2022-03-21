@@ -289,7 +289,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     this.__isSetOnItemSelectedListener = true;
     this.spratAndroidActivityInstance.attachItemSelectedListener({
       onOptionsItemSelected: () => {
-        const leftItem = this._currentPage._headerBarLeftItem;
+        const leftItem = this._currentPage?._headerBarLeftItem; //currentpage is undefined at start
         leftItem?.onPress?.();
       }
     });
