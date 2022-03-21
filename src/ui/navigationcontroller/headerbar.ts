@@ -28,7 +28,6 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   setLeftItem(item: IHeaderBarItem): void {}
   constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS }) {
     super(params);
-    const { ios, android, ...restParams } = params;
 
     if (params.navigationController) {
       this.nativeObject = params.navigationController.view.nativeObject.navigationBar;
@@ -41,14 +40,12 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
       }
       this.navigationController = params.navigationController;
     }
-    this.iosProperties();
-
-    Object.assign(this, restParams);
+    this.addIOSProps(this.iosProperties());
   }
-  removeViewFromHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
+  removeViewFromHeaderBar(view: Parameters<IHeaderBar['removeViewFromHeaderBar']>['0']): void {
     throw new Error('Method not implemented.');
   }
-  addViewToHeaderBar(view: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>): void {
+  addViewToHeaderBar(view: Parameters<IHeaderBar['addViewToHeaderBar']>['0']): void {
     throw new Error('Method not implemented.');
   }
   protected createNativeObject() {
@@ -118,7 +115,9 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     if (value instanceof Color) {
       // Xcode 13.1 background bug fixes [NTVE-398]
       if (parseInt(System.OSVersion) >= 15) {
-        if (this.appearance) this.appearance.backgroundColor = value.nativeObject;
+        if (this.appearance) {
+          this.appearance.backgroundColor = value.nativeObject;
+        }
         this.nativeObject.standardAppearance = this.appearance;
         this.nativeObject.scrollEdgeAppearance = this.appearance;
       } else {
@@ -147,30 +146,27 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     this.nativeObject.shadowImage = value ? undefined : __SF_UIImage.getInstance();
   }
   private __updateTitleTextAttributes() {
-    const titleTextAttributes = {
-      NSFont: __SF_UIFont,
-      NSColor: __SF_UIColor
-    };
-    if (this._titleColor instanceof Color) {
-      titleTextAttributes['NSColor'] = this._titleColor.nativeObject;
-    }
-    if (this._titleFont instanceof Font) {
-      titleTextAttributes['NSFont'] = this._titleFont as any; //TODO: There's something wrong with font types. Talk to Guven about the correct type.
-    }
-
     // Xcode 13.1 background bug fixes [NTVE-398]
     if (parseInt(System.OSVersion) >= 15) {
-      if (this.appearance) this.appearance.titleTextAttributes = titleTextAttributes;
+      if (this.appearance) {
+        this.appearance.titleTextAttributes = {
+          NSColor: this._titleColor.nativeObject,
+          NSFont: this._titleFont as __SF_UIFont
+        };
+      }
 
       this.nativeObject.standardAppearance = this.appearance;
       this.nativeObject.scrollEdgeAppearance = this.appearance;
     } else {
-      this.nativeObject.titleTextAttributes = titleTextAttributes;
+      this.nativeObject.titleTextAttributes = {
+        NSColor: this._titleColor.nativeObject,
+        NSFont: this._titleFont as any
+      };
     }
   }
   private iosProperties() {
     const self = this;
-    this.addIOSProps({
+    return {
       get translucent(): IHeaderBar['ios']['translucent'] {
         return self.nativeObject.translucent;
       },
@@ -219,6 +215,6 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
           self.navigationController?.nativeObject.setNavigationBarHiddenAnimated(!self._visible, _animated);
         }
       }
-    });
+    };
   }
 }

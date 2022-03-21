@@ -727,7 +727,7 @@ declare class __SF_MDCTextInputControllerUnderline {
 
 declare class __SF_UINavigationBarAppearance {
   configureWithOpaqueBackground(): void;
-  titleTextAttributes: any;
+  titleTextAttributes: { NSColor: __SF_UIColor; NSFont: __SF_UIFont };
   backgroundColor: __SF_UIColor;
   barTintColor: __SF_UIColor;
 }
