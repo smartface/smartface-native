@@ -19,6 +19,8 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   private _children: Record<string, IView> = {};
   onChildViewAdded: IViewGroup['onViewAdded'];
   onChildViewRemoved: IViewGroup['onViewRemoved'];
+  onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
+  onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   constructor(params?: Partial<TProps>) {
     super(params);
     this.nativeObject.didAddSubview = (e: __SF_UIView) => {
@@ -26,6 +28,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
       if (view) {
         this.onViewAdded?.(view);
         this.onChildViewAdded?.(view);
+        this.onViewAddedInnerCallback?.(view);
       }
     };
     this.nativeObject.willRemoveSubview = (e: __SF_UIView) => {
@@ -33,6 +36,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
       if (view) {
         this.onViewRemoved?.(view);
         this.onChildViewRemoved?.(view);
+        this.onViewRemovedInnerCallback?.(view);
       }
     };
   }
