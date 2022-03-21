@@ -137,7 +137,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
       FragmentTransaction.push({
         page: params.controller,
-        animated: params.animated,
+        animated: !params.animated,
         animationType: params.animationType,
         isComingFromPresent: params.isComingFromPresent
       });

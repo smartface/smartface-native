@@ -28,7 +28,7 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
   private _closed = false;
   constructor(params: FileStreamParams) {
     //The constructor isn't used externally. The parameters are required to call .
-    super(params);
+    super();
 
     this._mode = params.mode;
     this._contentMode = FileStreamAndroid.ContentMode.hasValue(params.contentMode) ? params.contentMode : FileStreamAndroid.ContentMode.TEXT;

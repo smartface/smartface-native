@@ -3,7 +3,7 @@ import Color from '../color';
 import { ViewEvents } from './view-event';
 import View, { IView, IViewProps, ViewBase } from '.';
 import { Size } from '../../primitive/size';
-import * as YogaEnums from '../../util/iOS/yogaenums';
+import * as YogaEnums from '../shared/ios/yogaenums';
 import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 

@@ -17,11 +17,16 @@ const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressF
 const androidResources = AndroidConfig.activityResources;
 
 export default class ImageAndroid extends AbstractImage {
+  protected createNativeObject(): any {
+    return null;
+  }
   static createFromFile(path: string, width?: number, height?: number) {
+    console.info('test');
     const imageFile = new File({
       path: path
     });
-    if (imageFile && imageFile.nativeObject) {
+    console.info(imageFile.constructor.name);
+    if (imageFile?.nativeObject) {
       let bitmap;
       if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
         bitmap = imageFile.nativeObject;
@@ -100,7 +105,9 @@ export default class ImageAndroid extends AbstractImage {
     };
   }) {
     super(params);
-    if (typeof params !== 'object') throw new Error('Constructor parameters needed for Image!');
+    if (typeof params !== 'object') {
+      throw new Error('Constructor parameters needed for Image!');
+    }
   }
 
   get height(): number {

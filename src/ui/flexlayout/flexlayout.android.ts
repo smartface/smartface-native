@@ -1,19 +1,20 @@
-import Flex from '../../core/Flex';
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
 import FlexLayout, { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 import AndroidConfig from '../../util/Android/androidconfig';
-
-// TODO: [AND-3663] Create a java wrapper class for yoga. Otherwise, we have to keep all classes under com.facebook.yoga package.
-const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
-// const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
-// const NativeYogaFlexDirection = requireClass('com.facebook.yoga.YogaFlexDirection');
-// const NativeYogaJustify = requireClass('com.facebook.yoga.YogaJustify');
-// const NativeYogaAlign = requireClass('com.facebook.yoga.YogaAlign');
-// const NativeYogaWrap = requireClass('com.facebook.yoga.YogaWrap');
-// const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
-
+import {
+  NativeAlignContent,
+  NativeAlignItems,
+  NativeAlignSelf,
+  NativeDirection,
+  NativeFlexDirection,
+  NativeFlexWrap,
+  NativeJustifyContent,
+  NativePositionType
+} from '../shared/android/nativeflexprops';
 const activity = AndroidConfig.activity;
+
+const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');
 
 export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
   extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
@@ -44,31 +45,31 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   content: FlexLayout;
 
   get direction() {
-    return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), Flex.Direction);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), NativeDirection);
   }
   set direction(direction) {
     this.yogaNode.setDirection(direction);
   }
   get flexDirection() {
-    return convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), Flex.FlexDirection);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), NativeFlexDirection);
   }
   set flexDirection(flexDirection) {
     this.yogaNode.setFlexDirection(flexDirection);
   }
   get justifyContent() {
-    return convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), Flex.JustifyContent);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), NativeJustifyContent);
   }
   set justifyContent(justifyContent) {
     this.yogaNode.setJustifyContent(justifyContent);
   }
   get alignContent() {
-    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), Flex.AlignContent);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), NativeAlignContent);
   }
   set alignContent(alignContent) {
     this.yogaNode.setAlignContent(alignContent);
   }
   get alignItems() {
-    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), Flex.AlignItems);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), NativeAlignItems);
   }
   set alignItems(alignItems) {
     this.yogaNode.setAlignItems(alignItems);
@@ -86,14 +87,23 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   }
   // _maskedBorders: any[] = [];
   protected _masksToBounds: boolean;
-}
 
-function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
-  const jsKeys = Object.keys(jsEnums);
-  for (let i = 0; i < jsKeys.length; i++) {
-    if (javaEnum.equals(jsEnums[jsKeys[i]])) {
-      return jsEnums[jsKeys[i]];
+  private convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
+    const jsKeys = Object.keys(jsEnums);
+    for (let i = 0; i < jsKeys.length; i++) {
+      if (javaEnum.equals(jsEnums[jsKeys[i]])) {
+        return jsEnums[jsKeys[i]];
+      }
     }
+    return null;
   }
-  return null;
+
+  static Direction = NativeDirection;
+  static FlexDirection = NativeFlexDirection;
+  static JustifyContent = NativeJustifyContent;
+  static AlignContent = NativeAlignContent;
+  static FlexWrap = NativeFlexWrap;
+  static AlignItems = NativeAlignItems;
+  static AlignSelf = NativeAlignSelf;
+  static PositionType = NativePositionType;
 }

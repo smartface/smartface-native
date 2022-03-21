@@ -306,7 +306,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   set onUnhandledError(value) {
     this._onUnhandledError = value;
-    Application.onUnhandedError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+    Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
       this.emit('unhandledError', e);
       this._onUnhandledError?.(e);
     };

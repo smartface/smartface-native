@@ -281,8 +281,8 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     drawables.forEach(() => drawablesForObjectCreate.push(drawables[0]));
     const layerDrawable = new NativeLayerDrawable(array(drawablesForObjectCreate));
     drawables.forEach((drawable: any, index: number) => {
-      layerDrawable.setId(index, index);
-      layerDrawable.setDrawableByLayerId(index, drawable);
+      layerDrawable?.setId(index, index);
+      layerDrawable?.setDrawableByLayerId(index, drawable);
     });
     return layerDrawable;
   }
