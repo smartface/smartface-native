@@ -68,12 +68,14 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       }
       return false;
     };
-    __SF_UIApplication.sharedInstance().performActionForShortcutItemShortcutItem = (shortcutItem: any) => {
-      const params = { data: shortcutItem.userInfo };
-      this.emit('appShortcutReceived', params);
-      const innerReturnValue = this.onAppShortcutReceived?.(params);
-      return typeof innerReturnValue === 'boolean' ? innerReturnValue : true;
-    };
+    if (__SF_UIApplication.sharedInstance) {
+      __SF_UIApplication.sharedInstance().performActionForShortcutItemShortcutItem = (shortcutItem: any) => {
+        const params = { data: shortcutItem.userInfo };
+        this.emit('appShortcutReceived', params);
+        const innerReturnValue = this.onAppShortcutReceived?.(params);
+        return typeof innerReturnValue === 'boolean' ? innerReturnValue : true;
+      };
+    }
 
     __SF_UIApplication.onAppShortcutReceive = (e) => {
       //TODO: Check isEmulator

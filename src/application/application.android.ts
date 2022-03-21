@@ -161,9 +161,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     // Attaching Activity Lifecycle event
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
-  onExit(): void {
-    throw new Error('Method not implemented.');
-  }
+  onExit: () => void;
   onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
   onAppShortcutReceived: (e: { data: { [key: string]: any } }) => void;
   onMaximize: () => void;
