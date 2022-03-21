@@ -358,28 +358,48 @@ declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
 }
 
-declare interface iOSSharedApplication extends __SF_NSOBject {
-  statusBarFrame: __SF_NSRect;
-  statusBarOrientation: number;
-  sf_statusBarStyle: any;
-  sf_statusBarHidden: boolean;
-  userInterfaceLayoutDirection: number;
-  statusBarOrientationAnimationDuration: number;
-  keyWindow: { addSubview(view: __SF_UIView): void; rootViewController: any; makeKeyAndVisible: (...args: any[]) => void };
-  scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
-  presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
-  cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
-  cancelAllLocalNotifications(): void;
-  applicationIconBadgeNumber: number;
-  scheduledLocalNotifications: __SF_UILocalNotification[];
-  registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
-  registerForRemoteNotifications(): void;
-  unregisterForRemoteNotifications(): void;
-  canOpenURL(value: __SF_NSURL): boolean;
+declare class __SF_UIWindow extends __SF_NSOBject {
+  addSubview(view: __SF_UIView): void;
+  rootViewController: any;
+  makeKeyAndVisible: (...args: any[]) => void;
 }
 
 declare class __SF_UIApplication extends __SF_NSOBject {
-  static sharedApplication(): iOSSharedApplication;
+  static statusBarFrame: __SF_NSRect;
+  static statusBarOrientation: number;
+  static sf_statusBarStyle: any;
+  static sf_statusBarHidden: boolean;
+  static userInterfaceLayoutDirection: number;
+  static statusBarOrientationAnimationDuration: number;
+  static keyWindow: __SF_UIWindow;
+  static scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
+  static presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
+  static cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
+  static cancelAllLocalNotifications(): void;
+  static applicationIconBadgeNumber: number;
+  static scheduledLocalNotifications: __SF_UILocalNotification[];
+  static registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
+  static registerForRemoteNotifications(): void;
+  static unregisterForRemoteNotifications(): void;
+
+  static sharedInstance(): __SF_UIApplication;
+  static sharedApplication(): __SF_UIApplication;
+  static onAppShortcutReceive: (params: { data: Record<string, any> }) => void;
+  static onUnhandledError: (error: UnhandledError) => void;
+  static onReceivedNotification: (data: { remote: Record<string, any>; local: Record<string, any> }) => void;
+  static onApplicationCallReceived: (params: { data: Record<string, any> }) => void;
+  static onAppShortcutReceived: (params: { data: Record<string, any> }) => void;
+  static onUserActivityCallback: (params: { userActivity: __SF_NSOBject }) => void;
+  static onMaximize: () => void;
+  static onMinimize: () => void;
+  static onExit: () => void;
+  static canOpenUrl(url: string): boolean; //TODO: This should be wrong, check with iOS team
+  static canOpenURL(url: __SF_NSURL): boolean;
+  static exit(): void;
+  static restart(): void;
+  static dataCounters(): { WiFiSent: number; WWANSent: number; WWANReceived: number; WiFiReceived: number };
+  static call(uriScheme: string, data: Record<string, any>, onSuccess?: (...args: any[]) => void, onFailure?: (...args: any[]) => void): void;
+  static isEmulator(): boolean;
 }
 
 declare class __SF_CMMotionManager {

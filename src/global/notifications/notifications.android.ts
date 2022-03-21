@@ -41,18 +41,17 @@ function unregisterPushNotification() {
 
 function registerPushNotification(onSuccessCallback, onFailureCallback) {
   NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
-    onSuccess: function (token) {
+    onSuccess: (token) => {
       NativeFCMListenerService.registerRemoteNotificationListener({
         onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
           const parsedJson = JSON.parse(data);
           if (isReceivedByOnClick) {
-            NotificationsAndroid.onNotificationClick && NotificationsAndroid.onNotificationClick(parsedJson);
+            NotificationsAndroid.onNotificationClick?.(parsedJson);
           } else {
-            NotificationsAndroid.onNotificationReceive && NotificationsAndroid.onNotificationReceive(parsedJson);
-            Application.onReceivedNotification &&
-              Application.onReceivedNotification({
-                remote: parsedJson
-              });
+            NotificationsAndroid.onNotificationReceive?.(parsedJson);
+            Application.onReceivedNotification?.({
+              remote: parsedJson
+            });
           }
         }
       });

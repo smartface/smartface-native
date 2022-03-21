@@ -10,6 +10,16 @@ import { NavigationBarStyle } from './android/navigationbar/navigationbar';
 import NativeEventEmitterComponent from '../core/native-event-emitter-component';
 import { MobileOSProps } from '../core/native-mobile-component';
 
+interface ApplicationCallParams {
+  uriScheme: string;
+  data?: {};
+  onSuccess?: (value?: any) => void;
+  onFailure?: (value?: any) => void;
+  isShowChooser?: boolean;
+  chooserTitle?: string;
+  action?: string;
+}
+
 export interface ApplicationIOSProps {
   /**
    * The event is called when a user taps a universal link.
@@ -208,7 +218,7 @@ declare enum LayoutDirection {
  *     Application.android.keyboardMode = Application.Android.KeyboardMode.KeyboardAdjustResize;
  *
  */
-declare enum KeyboardMode {
+export enum KeyboardMode {
   /**
    * Set to have a screen not adjust for a shown keyboard.
    *
@@ -260,6 +270,220 @@ declare enum KeyboardMode {
    */
   AlwaysHidden = 3
 }
+
+export enum ApplicationAndroidPermissions {
+  /**
+   * Allows to read the calendar data.
+   *
+   * @property READ_CALENDAR
+   * @readonly
+   * @since 1.1.16
+   */ READ_CALENDAR = 'android.permission.READ_CALENDAR',
+  /**
+   * Allows an application to write the user's calendar data.
+   *
+   * @property WRITE_CALENDAR
+   * @readonly
+   * @since 1.1.16
+   */
+  WRITE_CALENDAR = 'android.permission.WRITE_CALENDAR',
+
+  /**
+   * Required to be able to access the camera device.
+   *
+   * @property CAMERA
+   * @readonly
+   * @since 1.1.16
+   */
+  CAMERA = 'android.permission.CAMERA',
+  /**
+   * Allows an application to read the user's contacts data.
+   *
+   * @property READ_CONTACTS
+   * @readonly
+   * @since 1.1.16
+   */
+  READ_CONTACTS = 'android.permission.READ_CONTACTS',
+  /**
+   * Allows an application to write the user's contacts data.
+   *
+   * @property WRITE_CONTACTS
+   * @readonly
+   * @since 1.1.16
+   */
+  WRITE_CONTACTS = 'android.permission.WRITE_CONTACTS',
+  /**
+   * Allows access to the list of accounts in the Accounts Service.
+   *
+   * @property GET_ACCOUNTS
+   * @readonly
+   * @since 1.1.16
+   */
+  GET_ACCOUNTS = 'android.permission.GET_ACCOUNTS',
+  /**
+   * Allows an app to access precise location.
+   *
+   * @property ACCESS_FINE_LOCATION
+   * @readonly
+   * @since 1.1.16
+   */
+  ACCESS_FINE_LOCATION = 'android.permission.ACCESS_FINE_LOCATION',
+  /**
+   * Allows an app to access approximate location.
+   *
+   * @property ACCESS_COARSE_LOCATION
+   * @readonly
+   * @since 1.1.16
+   */
+  ACCESS_COARSE_LOCATION = 'android.permission.ACCESS_COARSE_LOCATION',
+  /**
+   * Allows an application to record audio.
+   *
+   * @property RECORD_AUDIO
+   * @readonly
+   * @since 1.1.16
+   */
+  RECORD_AUDIO = 'android.permission.RECORD_AUDIO',
+  /**
+   * Allows read only access to phone state, including the phone number of the device,
+   * current cellular network information, the status of any ongoing calls, and a list
+   * of any PhoneAccounts registered on the device.
+   *
+   * @property READ_PHONE_STATE
+   * @readonly
+   * @since 1.1.16
+   */
+  READ_PHONE_STATE = 'android.permission.READ_PHONE_STATE',
+  /**
+   * Allows an application to initiate a phone call without going through the
+   * Dialer user interface for the user to confirm the call.
+   *
+   * @property CALL_PHONE
+   * @readonly
+   * @since 1.1.16
+   */
+  CALL_PHONE = 'android.permission.CALL_PHONE',
+  /**
+   * Allows an application to read the user's call log.
+   *
+   * @property READ_CALL_LOG
+   * @readonly
+   * @since 1.1.16
+   */
+  READ_CALL_LOG = 'android.permission.READ_CALL_LOG',
+  /**
+   * Allows an application to write (but not read) the user's call log data.
+   *
+   * @property WRITE_CALL_LOG
+   * @readonly
+   * @since 1.1.16
+   */
+  WRITE_CALL_LOG = 'android.permission.WRITE_CALL_LOG',
+  /**
+   * Allows an application to add voicemails into the system.
+   *
+   * @property ADD_VOICEMAIL
+   * @readonly
+   * @since 1.1.16
+   */
+  ADD_VOICEMAIL = 'com.android.voicemail.permission.ADD_VOICEMAIL',
+  /**
+   * Allows an application to use SIP service.
+   *
+   * @property USE_SIP
+   * @readonly
+   * @since 1.1.16
+   */
+  USE_SIP = 'android.permission.USE_SIP',
+  /**
+   * Allows an application to see the number being dialed during an
+   * outgoing call with the option to redirect the call to a different
+   * number or abort the call altogether.
+   *
+   * @property PROCESS_OUTGOING_CALLS
+   * @readonly
+   * @since 1.1.16
+   */
+  PROCESS_OUTGOING_CALLS = 'android.permission.PROCESS_OUTGOING_CALLS',
+  /**
+   * Allows an application to access data from sensors
+   * that the user uses to measure what is happening inside
+   * his/her body, such as heart rate.
+   *
+   * @property BODY_SENSORS
+   * @readonly
+   * @since 1.1.16
+   */
+  BODY_SENSORS = 'android.permission.BODY_SENSORS',
+  /**
+   * Allows an application to send SMS messages.
+   *
+   * @property SEND_SMS
+   * @readonly
+   * @since 1.1.16
+   */
+  SEND_SMS = 'android.permission.SEND_SMS',
+  /**
+   * Allows an application to receive SMS messages.
+   *
+   * @property RECEIVE_SMS
+   * @readonly
+   * @since 1.1.16
+   */
+  RECEIVE_SMS = 'android.permission.RECEIVE_SMS',
+  /**
+   * Allows an application to read SMS messages.
+   *
+   * @property READ_SMS
+   * @readonly
+   * @since 1.1.16
+   */
+  READ_SMS = 'android.permission.READ_SMS',
+  /**
+   * Allows an application to receive WAP push messages.
+   *
+   * @property RECEIVE_WAP_PUSH
+   * @readonly
+   * @since 1.1.16
+   */
+  RECEIVE_WAP_PUSH = 'android.permission.RECEIVE_WAP_PUSH',
+  /**
+   * Allows an application to monitor incoming MMS messages.
+   *
+   * @property RECEIVE_MMS
+   * @readonly
+   * @since 1.1.16
+   */
+  RECEIVE_MMS = 'android.permission.RECEIVE_MMS',
+  /**
+   * Allows to read from external storage.
+   * If you granted {@link Application.Android.Permissions#WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission,
+   * you don't need this to granted this permission.
+   *
+   * @property READ_EXTERNAL_STORAGE
+   * @readonly
+   * @since 1.1.16
+   */
+  READ_EXTERNAL_STORAGE = 'android.permission.READ_EXTERNAL_STORAGE',
+  /**
+   * Allows to write to external storage.
+   *
+   * @property WRITE_EXTERNAL_STORAGE
+   * @readonly
+   * @since 1.1.16
+   */
+  WRITE_EXTERNAL_STORAGE = 'android.permission.WRITE_EXTERNAL_STORAGE',
+  /**
+   * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+   *
+   * @property WRITE_APN_SETTINGS
+   * @readonly
+   * @since 4.3.2
+   */
+  USE_FINGERPRINT = 'android.permission.USE_FINGERPRINT',
+  WRITE_APN_SETTINGS = 'android.permission.WRITE_APN_SETTINGS'
+}
+
 /**
  * @class Application
  * @since 0.1
@@ -398,7 +622,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @ios
    * @since 0.1
    */
-  call: (params: { uriScheme?: string; data?: {}; onSuccess?: (value?: any) => void; onFailure?: (value?: any) => void; isShowChooser?: boolean; chooserTitle?: string; action?: string }) => void;
+  call: (params: ApplicationCallParams) => void;
   /**
    * Checks URL's scheme can be handled or not by some app that installed on the device.
    *
@@ -465,222 +689,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
      * Permission managements should be developed OS specific in the applications.
      * Application.android.Permissions deprecated since 1.1.16. Use Application.Android.Permissions instead.
      */
-    Permissions: {
-      /**
-       * Allows to read the calendar data.
-       *
-       * @property READ_CALENDAR
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_CALENDAR: any;
-      /**
-       * Allows an application to write the user's calendar data.
-       *
-       * @property WRITE_CALENDAR
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly WRITE_CALENDAR: any;
-
-      /**
-       * Required to be able to access the camera device.
-       *
-       * @property CAMERA
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly CAMERA: any;
-      /**
-       * Allows an application to read the user's contacts data.
-       *
-       * @property READ_CONTACTS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_CONTACTS: any;
-      /**
-       * Allows an application to write the user's contacts data.
-       *
-       * @property WRITE_CONTACTS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly WRITE_CONTACTS: any;
-      /**
-       * Allows access to the list of accounts in the Accounts Service.
-       *
-       * @property GET_ACCOUNTS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly GET_ACCOUNTS: any;
-      /**
-       * Allows an app to access precise location.
-       *
-       * @property ACCESS_FINE_LOCATION
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly ACCESS_FINE_LOCATION: any;
-      /**
-       * Allows an app to access approximate location.
-       *
-       * @property ACCESS_COARSE_LOCATION
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly ACCESS_COARSE_LOCATION: any;
-      /**
-       * Allows an application to record audio.
-       *
-       * @property RECORD_AUDIO
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly RECORD_AUDIO: any;
-      /**
-       * Allows read only access to phone state, including the phone number of the device,
-       * current cellular network information, the status of any ongoing calls, and a list
-       * of any PhoneAccounts registered on the device.
-       *
-       * @property READ_PHONE_STATE
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_PHONE_STATE: any;
-
-      /**
-       * Allows an application to initiate a phone call without going through the
-       * Dialer user interface for the user to confirm the call.
-       *
-       * @property CALL_PHONE
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly CALL_PHONE: any;
-      /**
-       * Allows an application to read the user's call log.
-       *
-       * @property READ_CALL_LOG
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_CALL_LOG: any;
-      /**
-       * Allows an application to write (but not read) the user's call log data.
-       *
-       * @property WRITE_CALL_LOG
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly WRITE_CALL_LOG: any;
-      /**
-       * Allows an application to add voicemails into the system.
-       *
-       * @property ADD_VOICEMAIL
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly ADD_VOICEMAIL: any;
-
-      /**
-       * Allows an application to use SIP service.
-       *
-       * @property USE_SIP
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly USE_SIP: any;
-      /**
-       * Allows an application to see the number being dialed during an
-       * outgoing call with the option to redirect the call to a different
-       * number or abort the call altogether.
-       *
-       * @property PROCESS_OUTGOING_CALLS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly PROCESS_OUTGOING_CALLS: any;
-      /**
-       * Allows an application to access data from sensors
-       * that the user uses to measure what is happening inside
-       * his/her body, such as heart rate.
-       *
-       * @property BODY_SENSORS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly BODY_SENSORS: any;
-      /**
-       * Allows an application to send SMS messages.
-       *
-       * @property SEND_SMS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly SEND_SMS: any;
-      /**
-       * Allows an application to receive SMS messages.
-       *
-       * @property RECEIVE_SMS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly RECEIVE_SMS: any;
-      /**
-       * Allows an application to read SMS messages.
-       *
-       * @property READ_SMS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_SMS: any;
-
-      /**
-       * Allows an application to receive WAP push messages.
-       *
-       * @property RECEIVE_WAP_PUSH
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly RECEIVE_WAP_PUSH: any;
-      /**
-       * Allows an application to monitor incoming MMS messages.
-       *
-       * @property RECEIVE_MMS
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly RECEIVE_MMS: any;
-      /**
-       * Allows to read from external storage.
-       * If you granted {@link Application.Android.Permissions#WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission,
-       * you don't need this to granted this permission.
-       *
-       * @property READ_EXTERNAL_STORAGE
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly READ_EXTERNAL_STORAGE: any;
-      /**
-       * Allows to write to external storage.
-       *
-       * @property WRITE_EXTERNAL_STORAGE
-       * @readonly
-       * @since 1.1.16
-       */
-      readonly WRITE_EXTERNAL_STORAGE: any;
-
-      /**
-       * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
-       *
-       * @property WRITE_APN_SETTINGS
-       * @readonly
-       * @since 4.3.2
-       */
-      readonly WRITE_APN_SETTINGS: any;
-    };
+    Permissions: typeof ApplicationAndroidPermissions;
   }>;
   /**
    * Set the configure the native theme.
@@ -696,10 +705,6 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    *
    * @since 1.2
    * @event onUnhandledError
-   * @param {Object} error
-   * @param {String} error.message
-   * @param {String} error.stack
-   * @deprecated
    * @android
    * @ios
    * @since 1.2
@@ -901,7 +906,6 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 0.1
    */
   version: string;
-  Events: typeof ApplicationEvents;
   /**
    * Indicates whether the voiceover is enabled. Voiceover is also called a screen reader on Android.
    *
@@ -915,5 +919,4 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
   currentPage: Page;
   registOnItemSelectedListener(): void;
   tabBar?: BottomTabBar;
-  __mDrawerLayout: any;
 }

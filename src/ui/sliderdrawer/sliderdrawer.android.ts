@@ -1,6 +1,6 @@
 import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from '.';
 import { SliderDrawerEvents } from './sliderdrawer-events';
-import Application from '../../application';
+import ApplicationAndroid from '../../application/application.android';
 import UnitConverter from '../../util/Android/unitconverter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
@@ -83,7 +83,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this._enabled = value;
     if (!this.__isAttached) return;
 
-    Application.__mDrawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
+    ApplicationAndroid.__mDrawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
     !value && this.state === SliderDrawerAndroid.State.OPEN && this.__hideSliderDrawer();
   }
   get layout(): ISliderDrawer['layout'] {
@@ -124,10 +124,10 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this.drawerLayoutParams.width = UnitConverter.dpToPixel(value);
   }
   private __hideSliderDrawer() {
-    Application.__mDrawerLayout.closeDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
+    ApplicationAndroid.__mDrawerLayout.closeDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
   }
   private __showSliderDrawer() {
-    Application.__mDrawerLayout.openDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
+    ApplicationAndroid.__mDrawerLayout.openDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
   }
 
   static State = SliderDrawerState;

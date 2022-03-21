@@ -117,7 +117,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _attributedSubtitleBuilder: any;
   private _headerBarLogoEnabled = false;
   private _tag: any;
-  private _headerBarLeftItem: HeaderBarItem | null = null;
+  _headerBarLeftItem: HeaderBarItem | null = null;
   /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
    * _pageInstances[intPosition].__onShowCallback?.();

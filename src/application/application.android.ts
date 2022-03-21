@@ -11,14 +11,28 @@ import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar';
-import { ApplicationBase } from './application';
+import { ApplicationAndroidPermissions, ApplicationBase, KeyboardMode } from './application';
 import SystemServices from '../util/Android/systemservices';
 import * as RequestCodes from '../util/Android/requestcodes';
 import ViewController from '../util/Android/transition/viewcontroller';
 import NativeEventEmitterComponent from '../core/native-event-emitter-component';
+import PageAndroid from '../ui/page/page.android';
+import Page from '../ui/page';
+
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
+const NativeAccessibilityServiceInfo = requireClass('android.accessibilityservice.AccessibilityServiceInfo');
+const NativeContext = requireClass('android.content.Context');
+const NativeIntent = requireClass('android.content.Intent');
+const NativeUri = requireClass('android.net.Uri');
+const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
+const NativeTrafficStats = requireClass('android.net.TrafficStats');
+const NativePreferenceManager = requireClass('android.preference.PreferenceManager');
+const LocaleHelperUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
+const LocaleConfigurationUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
+
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
+
 const Permissions = {
   READ_CALENDAR: 'android.permission.READ_CALENDAR',
   WRITE_CALENDAR: 'android.permission.WRITE_CALENDAR',
@@ -57,30 +71,23 @@ const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
-//TODO: event type should be given correctly
 class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
   protected createNativeObject() {
     return {};
   }
-  public statusBar: typeof StatusBar = StatusBar;
-  private _sliderDrawer: any;
+  statusBar: typeof StatusBar = StatusBar;
+  private _sliderDrawer: SliderDrawer;
   private _keepScreenAwake = false;
-  private _onExit: any;
-  private _onMaximize: any;
-  private _onMinimize: any;
-  private _onReceivedNotification: any;
-  private _onApplicationCallReceived: any;
-  private _onAppShortcutReceived: any;
-  private __isSetOnItemSelectedListener: any;
-  currentPage: any;
-  private _dispatchTouchEvent: any;
-  private _onBackButtonPressed: any;
-  private _onRequestPermissionsResult: any;
-  private _keyboardMode: any;
+  private _onUnhandledError: ApplicationBase['onUnhandledError'];
+  private _currentPage: PageAndroid;
+  private _dispatchTouchEvent: ApplicationBase['android']['dispatchTouchEvent'];
+  private __isSetOnItemSelectedListener: boolean;
+  private _onReceivedNotification: ApplicationBase['onReceivedNotification'];
+  private _keyboardMode: ApplicationBase['android']['keyboardMode'];
   private _secureWindowContent = false;
-  __mDrawerLayout: any;
   private activity = AndroidConfig.activity;
   private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
+  __mDrawerLayout: any;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
@@ -89,53 +96,24 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   constructor() {
     super();
 
-    this.onApplicationCallReceived = (e) => {
-      if (checkIsAppShortcut(e)) {
-        if (this._onAppShortcutReceived) this._onAppShortcutReceived(e);
+    Application.onApplicationCallReceived = (e) => {
+      if (this.checkIsAppShortcut(e)) {
+        this.onAppShortcutReceived?.(e);
+        this.emit('appShortcutReceived', e);
       } else {
-        if (this._onApplicationCallReceived) this._onApplicationCallReceived(e);
+        this.onApplicationCallReceived?.(e);
+        this.emit('applicationCallReceived', e);
       }
-    };
-
-    this._onApplicationCallReceived = (e) => {
-      this.emit(ApplicationEvents.ApplicationCallReceived, e);
-    };
-
-    this._onAppShortcutReceived = (e) => {
-      this.emit(ApplicationEvents.AppShortcutReceived, e);
-    };
-
-    this._onBackButtonPressed = (e) => {
-      this.emit(ApplicationEvents.BackButtonPressed, e);
-    };
-
-    this.onUnhandledError = (e) => {
-      this.emit(ApplicationEvents.UnhandledError, e);
-    };
-
-    this._onExit = (e) => {
-      this.emit(ApplicationEvents.Exit, e);
-    };
-
-    this._onMaximize = (e) => {
-      this.emit(ApplicationEvents.Maximize, e);
-    };
-
-    this._onMinimize = (e) => {
-      this.emit(ApplicationEvents.Minimize, e);
     };
 
     this._onReceivedNotification = (e) => {
       this.emit(ApplicationEvents.ReceivedNotification, e);
     };
 
-    this._onRequestPermissionsResult = (e) => {
-      this.emit(ApplicationEvents.RequestPermissionResult, e);
-    };
-
     this.spratAndroidActivityInstance.attachBackPressedListener({
-      onBackPressed: function () {
-        this._onBackButtonPressed && this._onBackButtonPressed();
+      onBackPressed: () => {
+        this.android.onBackButtonPressed?.();
+        this.emit('backButtonPressed');
       }
     });
 
@@ -146,40 +124,36 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     const activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
       onCreate: () => {},
       onResume: () => {
-        if (this._onMaximize) {
-          this._onMaximize();
-        }
-        this.emit(ApplicationEvents.Maximize);
+        this.onMaximize?.();
+        this.emit('maximize');
       },
       onPause: () => {
-        if (this._onMinimize) {
-          this._onMinimize();
-        }
-        this.emit(ApplicationEvents.Minimize);
+        this.onMinimize?.();
+        this.emit('minimize');
       },
       onStop: () => {},
       onStart: () => {},
       onDestroy: () => {
-        cancelAllBackgroundJobs();
-        if (this._onExit) {
-          this._onExit();
-        }
+        this.cancelAllBackgroundJobs();
+        this.onExit?.();
+        this.emit('exit');
       },
-      onRequestPermissionsResult: function (requestCode, permission, grantResult) {
-        const permissionResults = {};
-        permissionResults['requestCode'] = requestCode;
-        permissionResults['result'] = grantResult === 0;
-        this.android.onRequestPermissionsResult && this.android.onRequestPermissionsResult(permissionResults);
+      onRequestPermissionsResult: (requestCode, permission, grantResult) => {
+        const permissionResults = {
+          requestCode,
+          result: grantResult === 0
+        };
+        this.android.onRequestPermissionsResult?.(permissionResults);
+        this.emit('requestPermissionResult', permissionResults);
       },
-      onActivityResult: function (requestCode, resultCode, data) {
+      onActivityResult: (requestCode, resultCode, data) => {
         //TODO: check if this is correct
         if (requestCode === RequestCodes.Location.CHECK_SETTINGS_CODE) {
           Location.__onActivityResult?.(resultCode);
         }
       },
-      dispatchTouchEvent: function (actionType, x, y) {
-        let dispatchTouchEvent;
-        if (this.android.dispatchTouchEvent) dispatchTouchEvent = this.android.dispatchTouchEvent();
+      dispatchTouchEvent: (actionType, x, y) => {
+        const dispatchTouchEvent = this.android.dispatchTouchEvent?.();
         return typeof dispatchTouchEvent === 'boolean' ? dispatchTouchEvent : false;
       }
     });
@@ -187,7 +161,13 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     // Attaching Activity Lifecycle event
     this.spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
   }
-  onUnhandledError: (error: UnhandledError) => void;
+  onExit(): void {
+    throw new Error('Method not implemented.');
+  }
+  onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
+  onAppShortcutReceived: (e: { data: { [key: string]: any } }) => void;
+  onMaximize: () => void;
+  onMinimize: () => void;
   setAppTheme: (theme: string) => void;
   Events = ApplicationEvents;
   tabBar?: IBottomTabBar;
@@ -217,81 +197,61 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       }
     }
   }
-  call() {
-    let _uriScheme,
-      _data,
-      _onSuccess,
-      _onFailure,
-      _isShowChooser,
-      _chooserTitle,
-      _action = ACTION_VIEW;
-    if (arguments.length === 1 && typeof arguments[0] === 'object') {
-      const { uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW } = arguments[0];
-      _uriScheme = uriScheme;
-      _data = data;
-      _onSuccess = onSuccess;
-      _onFailure = onFailure;
-      _isShowChooser = isShowChooser;
-      _chooserTitle = chooserTitle;
-      _action = action;
-    } else {
-      //@ts-ignore TODO: Fix arguments down level iteration
-      const [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
-      _uriScheme = uriScheme;
-      _data = data;
-      _onSuccess = onSuccess;
-      _onFailure = onFailure;
-      _isShowChooser = isShowChooser;
-      _chooserTitle = chooserTitle;
-      _action = action;
-    }
+  call(params: Parameters<ApplicationBase['call']>['0']) {
+    const _uriScheme = params.uriScheme;
+    const _data = params.data || {};
+    const _onSuccess = params.onSuccess;
+    const _onFailure = params.onFailure;
+    const _isShowChooser = params.isShowChooser;
+    const _chooserTitle = params.chooserTitle;
+    const _action = params.action || ACTION_VIEW;
+
     if (!TypeUtil.isString(_uriScheme)) {
       throw new TypeError('uriScheme must be string');
     }
 
-    const NativeIntent = requireClass('android.content.Intent');
-    const NativeUri = requireClass('android.net.Uri');
-
     const intent = new NativeIntent(_action);
-    let uriObject;
+    let uriObject: any;
+
     if (TypeUtil.isObject(_data) && Object.keys(_data).length > 0) {
       // we should use intent.putExtra but it causes native crash.
-      const params = Object.keys(_data)
-        .map(function (k) {
-          return k + '=' + _data[k];
-        })
+      const dataStringified = Object.keys(_data)
+        .map((k) => `${k}=${_data[k]}`)
         .join('&');
 
       if (_uriScheme.indexOf('|') !== -1) {
-        configureIntent.call(intent, _uriScheme);
-        uriObject = NativeUri.parse(params);
+        this.configureIntent(intent, _uriScheme);
+        uriObject = NativeUri.parse(dataStringified);
       } else {
-        const uri = _uriScheme + '?' + params;
+        const uri = `${_uriScheme}?${dataStringified}}`;
         uriObject = NativeUri.parse(uri);
       }
     } else {
-      if (_uriScheme.indexOf('|') !== -1) configureIntent.call(intent, _uriScheme);
-      else uriObject = NativeUri.parse(_uriScheme);
+      if (_uriScheme.indexOf('|') !== -1) {
+        this.configureIntent(intent, _uriScheme);
+      } else {
+        uriObject = NativeUri.parse(_uriScheme);
+      }
     }
     uriObject && intent.setData(uriObject);
-    if (TypeUtil.isBoolean(_isShowChooser) && _isShowChooser) {
+    if (TypeUtil.isBoolean(_isShowChooser)) {
       const title = TypeUtil.isString(_chooserTitle) ? _chooserTitle : 'Select and application';
       const chooserIntent = NativeIntent.createChooser(intent, title);
       try {
         this.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
-        _onFailure && _onFailure();
+        _onFailure?.(e);
         return;
       }
     } else {
       try {
         this.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
-        _onFailure && _onFailure();
+        _onFailure?.(e);
         return;
       }
     }
-    _onSuccess && _onSuccess();
+    _onSuccess?.();
   }
   canOpenUrl(url: string) {
     if (!url) {
@@ -300,8 +260,6 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     if (!TypeUtil.isString(url)) {
       throw new Error('url parameter must be string.');
     }
-    const NativeIntent = requireClass('android.content.Intent');
-    const NativeUri = requireClass('android.net.Uri');
     const launchIntent = new NativeIntent(NativeIntent.ACTION_VIEW);
     launchIntent.setData(NativeUri.parse(url));
     const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
@@ -327,17 +285,14 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0
   }
   registOnItemSelectedListener() {
-    const self = this;
     if (this.__isSetOnItemSelectedListener) {
       return;
     }
     this.__isSetOnItemSelectedListener = true;
     this.spratAndroidActivityInstance.attachItemSelectedListener({
-      onOptionsItemSelected: function () {
-        const leftItem = self.currentPage._headerBarLeftItem;
-        if (leftItem) {
-          leftItem.onPress && leftItem.onPress();
-        }
+      onOptionsItemSelected: () => {
+        const leftItem = this._currentPage._headerBarLeftItem;
+        leftItem?.onPress?.();
       }
     });
   }
@@ -348,6 +303,23 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     params.controller.__isActive = true;
     ViewController.setController(params);
   }
+  get onUnhandledError() {
+    return this._onUnhandledError;
+  }
+  set onUnhandledError(value) {
+    this._onUnhandledError = value;
+    Application.onUnhandedError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+      this.emit('unhandledError', e);
+      this._onUnhandledError?.(e);
+    };
+  }
+  get currentPage() {
+    return this._currentPage as unknown as Page;
+  }
+  set currentPage(value: Page) {
+    this._currentPage = value as unknown as PageAndroid;
+  }
+
   get drawerLayout() {
     return this.__mDrawerLayout;
   }
@@ -355,14 +327,13 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     this.__mDrawerLayout = value;
   }
   get sliderDrawer() {
-    return this._sliderDrawer;
+    return this._sliderDrawer as SliderDrawer;
   }
   set sliderDrawer(drawer) {
     if (drawer instanceof SliderDrawer) {
-      this.detachSliderDrawer(this._sliderDrawer);
-
+      this.detachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid); //TODO: Fix as unknown problem
       this._sliderDrawer = drawer;
-      this.attachSliderDrawer(this._sliderDrawer);
+      this.attachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid);
     } else {
       throw TypeError('Object must be SliderDrawer instance');
     }
@@ -381,83 +352,40 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     }
   }
   get byteReceived() {
-    const NativeTrafficStats = requireClass('android.net.TrafficStats');
     const UID = this.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
   }
   get byteSent() {
-    const NativeTrafficStats = requireClass('android.net.TrafficStats');
     const UID = this.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return this.currentReleaseChannel;
+    return Application.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return this.smartfaceAppName;
+    return Application.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return this.smartfaceAppName;
+    return Application.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return this.version;
+    return Application.version;
   }
   // events
-  // We can not handle application calls for now, so let SMFApplication handle this
-  get onExit() {
-    return this._onExit;
-  }
-  set onExit(onExit) {
-    this._onExit = (e) => {
-      onExit && onExit(e);
-      this.emit(ApplicationEvents.Exit, e);
-    };
-  }
-  get onMaximize() {
-    return this._onMaximize;
-  }
-  set onMaximize(onMaximize) {
-    this._onMaximize = onMaximize;
-  }
-  get onMinimize() {
-    return this._onMinimize;
-  }
-  set onMinimize(onMinimize) {
-    this._onMinimize = onMinimize;
-  }
   get onReceivedNotification() {
     return this._onReceivedNotification;
   }
   set onReceivedNotification(callback) {
-    if (TypeUtil.isFunction(callback) || callback === null) {
-      this._onReceivedNotification = callback;
-    }
-  }
-  get onApplicationCallReceived() {
-    return this._onApplicationCallReceived;
-  }
-  set onApplicationCallReceived(callback) {
-    this._onApplicationCallReceived = (e) => {
-      callback && callback(e);
-      this.emit(ApplicationEvents.ApplicationCallReceived, e);
-    };
-  }
-  get onAppShortcutReceived() {
-    return this._onAppShortcutReceived;
-  }
-  set onAppShortcutReceived(callback) {
-    this._onAppShortcutReceived = (e) => {
-      callback && callback(e);
-      this.emit(ApplicationEvents.AppShortcutReceived, e);
+    this._onReceivedNotification = (data: Parameters<ApplicationBase['onReceivedNotification']>['0']) => {
+      callback?.(data);
+      this.emit('receivedNotification', data);
     };
   }
   get isVoiceOverEnabled() {
-    const NativeAccessibilityServiceInfo = requireClass('android.accessibilityservice.AccessibilityServiceInfo');
-    const NativeContext = requireClass('android.content.Context');
     const context = AndroidConfig.activity;
     const accessibilityManager = context.getSystemService(NativeContext.ACCESSIBILITY_SERVICE);
     if (accessibilityManager !== null && accessibilityManager.isEnabled()) {
@@ -466,7 +394,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     }
     return false;
   }
-  get android() {
+  get android(): ApplicationBase['android'] {
     const self = this;
     return {
       Permissions,
@@ -477,27 +405,12 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       set dispatchTouchEvent(callback) {
         self._dispatchTouchEvent = callback;
       },
-      get onBackButtonPressed() {
-        return self._onBackButtonPressed;
-      },
-      set onBackButtonPressed(callback) {
-        self._onBackButtonPressed = (e) => {
-          callback && callback(e);
-          self.emit(ApplicationEvents.BackButtonPressed, e);
-        };
-        self.spratAndroidActivityInstance.attachBackPressedListener({
-          onBackPressed: function () {
-            self._onBackButtonPressed && self._onBackButtonPressed();
-          }
-        });
-      },
       checkPermission(permission) {
         if (!TypeUtil.isString(permission)) {
           throw new Error('Permission must be Application.Permission type');
         }
         if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
           // PackageManager.PERMISSION_GRANTED
-          const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
           return NativeContextCompat.checkSelfPermission(self.activity, permission) === 0;
         } else {
           const packageManager = self.activity.getPackageManager();
@@ -514,7 +427,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
           self.android.onRequestPermissionsResult &&
             self.android.onRequestPermissionsResult({
               requestCode: requestCode,
-              result: self.android.checkPermission(permissions)
+              result: self.android.checkPermission?.(permissions) || false
             });
         } else {
           self.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
@@ -527,21 +440,9 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         return AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW && self.activity.shouldShowRequestPermissionRationale(permission);
       },
       setAppTheme(currentTheme) {
-        const NativePreferenceManager = requireClass('android.preference.PreferenceManager');
         const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
         const _themeRes = self.activity.getResources().getIdentifier(currentTheme, 'style', self.activity.getPackageName());
         sharedPreferences.edit().putInt('SFCurrentBaseTheme', _themeRes).commit();
-      },
-      get onRequestPermissionsResult() {
-        return self._onRequestPermissionsResult;
-      },
-      set onRequestPermissionsResult(callback) {
-        if (TypeUtil.isFunction(callback) || callback === null) {
-          self._onRequestPermissionsResult = (e) => {
-            callback && callback(e);
-            self.emit(ApplicationEvents.RequestPermissionResult, e);
-          };
-        }
       },
       get navigationBar() {
         return NavigationBar;
@@ -555,13 +456,10 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         self.activity.getWindow().setSoftInputMode(modeEnum);
       },
       get locale() {
-        const LocaleConfigurationUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
         return LocaleConfigurationUtil.getDeviceLanguage();
       },
       set locale(languageCode) {
         if (TypeUtil.isString(languageCode)) {
-          const NativePreferenceManager = requireClass('android.preference.PreferenceManager');
-          const LocaleHelperUtil = requireClass('io.smartface.android.utils.LocaleConfigurationUtil');
           const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
           sharedPreferences.edit().putString('AppLocale', languageCode).commit();
           LocaleHelperUtil.changeConfigurationLocale(self.activity);
@@ -583,69 +481,31 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   get Android() {
     return {
       NavigationBar: NavigationBar,
-      KeyboardMode: {
-        KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
-        KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
-        KeyboardAdjustResize: 16, //SOFT_INPUT_ADJUST_RESIZE
-        KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
-        AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
-        AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
-      } as const,
-      Permissions: {
-        READ_CALENDAR: 'android.permission.READ_CALENDAR',
-        WRITE_CALENDAR: 'android.permission.WRITE_CALENDAR',
-        CAMERA: 'android.permission.CAMERA',
-        READ_CONTACTS: 'android.permission.READ_CONTACTS',
-        WRITE_CONTACTS: 'android.permission.WRITE_CONTACTS',
-        GET_ACCOUNTS: 'android.permission.GET_ACCOUNTS',
-        ACCESS_FINE_LOCATION: 'android.permission.ACCESS_FINE_LOCATION',
-        ACCESS_COARSE_LOCATION: 'android.permission.ACCESS_COARSE_LOCATION',
-        RECORD_AUDIO: 'android.permission.RECORD_AUDIO',
-        READ_PHONE_STATE: 'android.permission.READ_PHONE_STATE',
-        CALL_PHONE: 'android.permission.CALL_PHONE',
-        READ_CALL_LOG: 'android.permission.READ_CALL_LOG',
-        WRITE_CALL_LOG: 'android.permission.WRITE_CALL_LOG',
-        ADD_VOICEMAIL: 'com.android.voicemail.permission.ADD_VOICEMAIL',
-        USE_SIP: 'android.permission.USE_SIP',
-        PROCESS_OUTGOING_CALLS: 'android.permission.PROCESS_OUTGOING_CALLS',
-        BODY_SENSORS: 'android.permission.BODY_SENSORS',
-        SEND_SMS: 'android.permission.SEND_SMS',
-        RECEIVE_SMS: 'android.permission.RECEIVE_SMS',
-        READ_SMS: 'android.permission.READ_SMS',
-        RECEIVE_WAP_PUSH: 'android.permission.RECEIVE_WAP_PUSH',
-        RECEIVE_MMS: 'android.permission.RECEIVE_MMS',
-        READ_EXTERNAL_STORAGE: 'android.permission.READ_EXTERNAL_STORAGE',
-        WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
-        USE_FINGERPRINT: 'android.permission.USE_FINGERPRINT',
-        WRITE_APN_SETTINGS: 'android.permission.WRITE_APN_SETTINGS'
-      } as const
+      KeyboardMode: KeyboardMode,
+      Permissions: ApplicationAndroidPermissions
     };
   }
   get ios() {
     return {
-      onUserActivityWithBrowsingWeb: () => {
-        return false;
-      }
+      onUserActivityWithBrowsingWeb: () => false
     };
+  }
+
+  private configureIntent(intent: any, uriScheme: string) {
+    const classActivityNameArray = uriScheme.split('|');
+    intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
+  }
+  private cancelAllBackgroundJobs() {
+    Location.stop();
+    Accelerometer.stop();
+    Http.cancelAll();
+    Network.cancelAll();
+  }
+  private checkIsAppShortcut(e: Record<string, any>) {
+    return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
   }
 }
 
-function cancelAllBackgroundJobs() {
-  Location.stop();
-  Accelerometer.stop();
-  Http.cancelAll();
-  Network.cancelAll();
-}
+const ApplicationInstance = new ApplicationAndroid();
 
-function configureIntent(uriScheme) {
-  const intent = this;
-  const classActivityNameArray = uriScheme.split('|');
-  intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
-}
-
-function checkIsAppShortcut(e) {
-  return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
-}
-const Application = new ApplicationAndroid();
-
-export default Application;
+export default ApplicationInstance;

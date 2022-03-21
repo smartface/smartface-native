@@ -7,7 +7,7 @@ declare global {
     static deviceOS: DeviceOS;
   }
 
-  const SMFApplication: any;
+  const SMFApplication: typeof __SF_UIApplication;
   const Application: any;
 
   function long(value: number): number;
