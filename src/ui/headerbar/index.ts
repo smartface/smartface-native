@@ -3,8 +3,8 @@ import Color from '../color';
 import Font from '../font';
 import View, { IView } from '../view';
 import HeaderBarItem from '../headerbaritem';
-import Page, { AbstractPage, LargeTitleDisplayMode } from '../page';
-import { IImage } from '../image';
+import { LargeTitleDisplayMode } from '../page';
+import Image from '../image';
 
 /**
  * @class UI.HeaderBar
@@ -141,7 +141,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  backgroundImage: IImage;
+  backgroundImage: Image;
   /**
    * Gets/sets the navigation indicator visibility of the headerBar.
    * If false navigation indicator will not show, otherwise will show
@@ -291,7 +291,7 @@ type IHeaderBar = {
      * @android
      * @since 0.1
      */
-    logo?: IImage | null;
+    logo?: Image | null;
     /**
      * Gets/sets the logo visibility of the HeaderBar. If logo is disable,
      * logo image will newer shown. This property will work only for Android.
@@ -447,7 +447,7 @@ type IHeaderBar = {
      * @ios
      * @since 0.1
      */
-    backIndicatorImage?: IImage;
+    backIndicatorImage?: Image;
     /**
      * The image used as a mask for content during push and pop transitions.
      * This property will be set automatically if backIndicatorImage is set as a valid image.
@@ -462,7 +462,7 @@ type IHeaderBar = {
      * @ios
      * @since 0.1
      */
-    backIndicatorTransitionMaskImage?: IImage;
+    backIndicatorTransitionMaskImage?: Image;
     /**
      * When this property is set to true, the navigation bar allows the title to be displayed out-of-line and using a larger font.
      * The navigation item used to build the bar must specify whether it wants its title displayed in the large or small format.

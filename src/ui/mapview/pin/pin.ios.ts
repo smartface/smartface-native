@@ -1,7 +1,7 @@
 import { IPin } from '.';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
 import ColorIOS from '../../color/color.ios';
-import { IImage } from '../../image';
+import Image from '../../image';
 import ImageiOS from '../../image/image.ios';
 import { PinEvents } from './pin-events';
 
@@ -36,11 +36,11 @@ export default class PinIOS<TEvent extends string = PinEvents> extends NativeEve
   set id(value: number) {
     this.nativeObject.tag = value;
   }
-  get image(): IImage | null {
-    if (this.nativeObject.image) return ImageiOS.createFromImage(this.nativeObject.image) as IImage;
+  get image(): Image | null {
+    if (this.nativeObject.image) return ImageiOS.createFromImage(this.nativeObject.image);
     return null;
   }
-  set image(value: IImage | null) {
+  set image(value: Image | null) {
     if (value) this.nativeObject.image = value.nativeObject;
   }
 

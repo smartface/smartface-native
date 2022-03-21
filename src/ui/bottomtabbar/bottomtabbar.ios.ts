@@ -4,7 +4,7 @@ import { NativeMobileComponent } from '../../core/native-mobile-component';
 import System from '../../device/system';
 import Color from '../color';
 import ColorIOS from '../color/color.ios';
-import Image, { IImage } from '../image';
+import ImageIOS from '../image/image.ios';
 import TabBarItem from '../tabbaritem';
 
 export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
@@ -137,9 +137,9 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomT
     this.nativeObject.unselectedItemTintColor = value.nativeObject;
   }
   get backgroundImage() {
-    return Image.createFromImage(this.nativeObject.backgroundImage);
+    return ImageIOS.createFromImage(this.nativeObject.backgroundImage);
   }
-  set backgroundImage(value: IImage) {
+  set backgroundImage(value: ImageIOS) {
     this.nativeObject.backgroundImage = value.nativeObject;
   }
   get borderVisibility() {

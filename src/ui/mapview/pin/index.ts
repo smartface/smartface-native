@@ -3,7 +3,7 @@ import { IEventEmitter } from '../../../core/eventemitter';
 import { INativeComponent } from '../../../core/inative-component';
 import { MobileOSProps } from '../../../core/native-mobile-component';
 import Color from '../../../ui/color';
-import { IImage } from '../../../ui/image';
+import Image from '../../../ui/image';
 import { PinEvents } from './pin-events';
 
 type IPinIOS = {
@@ -21,7 +21,7 @@ export interface IPin<TEvent extends string = PinEvents, TMobile extends MobileO
   subtitle: string;
   color: Color;
   id: number;
-  image: IImage | null;
+  image: Image | null;
   visible: boolean;
   isClusterEnabled: boolean;
   /**

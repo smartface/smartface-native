@@ -4,7 +4,7 @@ import { SliderEvents } from './slider-events';
 import ViewAndroid from '../view/view.android';
 import { ISlider } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
-import Image from '../image';
+import ImageAndroid from '../image/image.android';
 
 const SDK_VERSION = requireClass('android.os.Build').VERSION.SDK_INT;
 const PorterDuffMode = requireClass('android.graphics.PorterDuff').Mode.SRC_IN;
@@ -19,7 +19,7 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   private _maxValue: number;
   private _minTrackColor: Color;
   private _maxTrackColor: Color;
-  private _thumbImage: Image;
+  private _thumbImage: ImageAndroid;
   private _thumbColor: Color;
   private _onValueChange: (value: number) => void;
   constructor(params?: Partial<ISlider>) {
@@ -75,11 +75,11 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
     }
   }
 
-  get thumbImage(): Image {
+  get thumbImage(): ImageAndroid {
     return this._thumbImage;
   }
-  set thumbImage(value: Image) {
-    if (value instanceof Image && value.nativeObject) {
+  set thumbImage(value: ImageAndroid) {
+    if (value instanceof ImageAndroid && value.nativeObject) {
       this._thumbImage = value;
       this.nativeObject.setThumb(value.nativeObject);
     } else if (value === null) {

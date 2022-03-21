@@ -837,7 +837,7 @@ declare class __SF_UIDevice {
   static currentReachabilityStatus(): number;
   static getIFAddresses(): string[];
   static vibrate(): void;
-  static takeSnapShot(): void;
+  static takeSnapShot(): __SF_UIImage;
   static forceTouchAvaliable(): boolean;
   static changeOrientation(orientation: number): void;
 }

@@ -14,7 +14,8 @@ import DocumentPickerAndroid from '../../device/documentpicker/documentpicker.an
 import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
 import ViewController from '../../util/Android/transition/viewcontroller';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import Image, { IImage } from '../image';
+import ImageAndroid from '../image/image.android';
+import type Image from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import StatusBar from '../../application/statusbar';
@@ -97,7 +98,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
   private _headerBarColor: Color;
-  private _headerBarImage: IImage;
+  private _headerBarImage: Image;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
   private _transitionViewsCallback: IPage['android']['transitionViewsCallback'];
@@ -108,7 +109,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _leftItemEnabled: boolean;
   private _leftItemColor = Color.WHITE;
   private _itemColor = Color.WHITE;
-  private _headerBarLogo: IImage;
+  private _headerBarLogo: Image;
   private _headerBarElevation: number;
   private _headerBarSubtitleColor: Color;
   private pageLayout: any;
@@ -549,7 +550,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               }
               customViewContainer.addChild(item.customView);
               item.nativeObject = customViewContainer.nativeObject;
-            } else if (item.image instanceof Image && (item.image?.nativeObject || (item.android as any).systemIcon)) {
+            } else if (item.image instanceof ImageAndroid && (item.image?.nativeObject || (item.android as any).systemIcon)) {
               item.nativeObject = new NativeImageButton(AndroidConfig.activity);
             } else {
               item.nativeObject = new NativeTextButton(AndroidConfig.activity);
@@ -593,7 +594,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
           //TODO: check out after headerbaritem is complete
           (self._headerBarLeftItem as any).isLeftItem = true;
           (self._headerBarLeftItem as any).actionBar = self.actionBar;
-          if (self._headerBarLeftItem.image instanceof Image) {
+          if (self._headerBarLeftItem.image instanceof ImageAndroid) {
             self.actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
           }
           self.actionBar.setHomeActionContentDescription(self._headerBarLeftItem.accessibilityLabel);

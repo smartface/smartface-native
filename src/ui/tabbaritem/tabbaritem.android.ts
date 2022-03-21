@@ -4,14 +4,14 @@ import AttributedString from '../../global/attributedstring';
 import UnitConverter from '../../util/Android/unitconverter';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
-import Image, { IImage } from '../image';
+import ImageAndroid from '../image/image.android';
 import { IPage } from '../page';
 import TabBarController from '../tabbarcontroller';
 
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 
-type IconType = { normal: IImage | string; selected: IImage | string };
+type IconType = { normal: ImageAndroid | string; selected: ImageAndroid | string };
 
 export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   protected createNativeObject() {
@@ -42,7 +42,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       },
       set systemIcon(systemIcon) {
         self._systemIcon = systemIcon;
-        self.nativeObject && self.nativeObject.setIcon(Image.systemDrawableId(self._systemIcon));
+        self.nativeObject && self.nativeObject.setIcon(ImageAndroid.systemDrawableId(self._systemIcon));
       },
       get attributedTitle() {
         // TODO: Ask if _attributedTitleBuilder exists or not.
@@ -77,30 +77,30 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   get icon() {
     return this._icon;
   }
-  set icon(value: { normal: IImage | string; selected: IImage | string } | IImage | string) {
+  set icon(value: { normal: ImageAndroid | string; selected: ImageAndroid | string } | ImageAndroid | string) {
     this._icon = value;
-    const EmptyImage = {
-      nativeObject: NativeDrawable.createFromPath(null)
-    } as Image;
+    const EmptyImage = new ImageAndroid({
+      path: null
+    });
 
     let icon = value;
     if (typeof icon === 'string') {
       //IDE requires this implementation.
-      icon = Image.createImageFromPath(icon);
+      icon = ImageAndroid.createImageFromPath(icon);
     } else if (isIconType(icon)) {
-      icon.normal = Image.createImageFromPath(icon.normal);
-      icon.selected = Image.createImageFromPath(icon.selected);
+      icon.normal = ImageAndroid.createImageFromPath(icon.normal);
+      icon.selected = ImageAndroid.createImageFromPath(icon.selected);
     } else {
       throw new Error('icon should be an instance of Image or given icon path should be properly defined.');
     }
 
     if (isIconType(icon)) {
       // TODO: Refactor this implemenation. Discuss with ios team.
-      if (!(icon instanceof Image) && icon.normal instanceof Image && icon.selected instanceof Image) {
+      if (!(icon instanceof ImageAndroid) && icon.normal instanceof ImageAndroid && icon.selected instanceof ImageAndroid) {
         icon = { ...icon, ...this.makeSelector(icon.normal, icon.selected) };
-      } else if (!(icon instanceof Image) && icon.normal instanceof Image) {
+      } else if (!(icon instanceof ImageAndroid) && icon.normal instanceof ImageAndroid) {
         icon = { ...icon, ...this.makeSelector(icon.normal, EmptyImage) };
-      } else if (!(icon instanceof Image) && icon.selected instanceof Image) {
+      } else if (!(icon instanceof ImageAndroid) && icon.selected instanceof ImageAndroid) {
         icon = { ...icon, ...this.makeSelector(EmptyImage, icon.selected) };
       }
     }
@@ -118,7 +118,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     if (this._tabBarItemParent instanceof TabBarController) this.nativeObject.setText(title);
     else if (this._tabBarItemParent instanceof BottomTabBar) this.nativeObject.setTitle(title);
   }
-  makeSelector(normalImage: Image, selectedImage: Image) {
+  makeSelector(normalImage: ImageAndroid, selectedImage: ImageAndroid) {
     const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
     const NativeR = requireClass('android.R');
 
@@ -151,7 +151,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   toString() {
     return 'TabBarItem';
   }
-  setProperties(params: { itemTitle: string; itemIcon: Image; systemIcon: string | number }) {
+  setProperties(params: { itemTitle: string; itemIcon: ImageAndroid; systemIcon: string | number }) {
     const { itemTitle, itemIcon, systemIcon } = params;
 
     if (itemTitle) this.title = itemTitle;

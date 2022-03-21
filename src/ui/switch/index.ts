@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
-import { IImage } from '../image';
+import IImage from '../image';
 import { AbstractView, IView } from '../view';
 import { SwitchEvents } from './switch-events';
 

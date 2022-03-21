@@ -1,5 +1,5 @@
 import AttributedString from '../../global/attributedstring';
-import { IImage } from '../image';
+import Image from '../image';
 import Font from '../font';
 import Color from '../color';
 import Badge from '../badge';
@@ -426,7 +426,7 @@ export interface IHeaderBarItem extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  image: IImage | string | null;
+  image: Image | string | null;
   /**
    * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}.
    * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
@@ -532,7 +532,7 @@ export declare class AbstractHeaderBarItem extends NativeComponent implements IH
     titleFont: Font;
     backBarButtonItem: IHeaderBarItem;
   }>;
-  image: IImage | string | null;
+  image: Image | string | null;
   customView: View;
   enabled: boolean;
   getScreenLocation(): Point2D;

@@ -7,7 +7,7 @@ const ALARM_MANAGER = 'android.app.AlarmManager';
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
 import Color from '../../ui/color';
-import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
 import { NotificationsBase } from './notifications';
@@ -303,7 +303,7 @@ class LocalNotification extends NativeComponent {
   }
   set launchImage(value) {
     if (TypeUtil.isString(value)) {
-      const largeImage = Image.createFromFile(value);
+      const largeImage = ImageAndroid.createFromFile(value);
       if (largeImage && largeImage.nativeObject) {
         const largeImageBitmap = largeImage.nativeObject.getBitmap();
         if (largeImageBitmap) {

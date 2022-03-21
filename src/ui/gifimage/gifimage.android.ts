@@ -4,7 +4,7 @@ const NativeGifDrawable = requireClass('pl.droidsonroids.gif.GifDrawable');
 import FileStream from '../../io/filestream';
 import File from '../../io/file';
 import Blob from '../../global/blob';
-import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
 import { Size } from '../../primitive/size';
 import IBlob from '../../global/blob/blob';
@@ -55,9 +55,9 @@ export default class GifImageAndroid extends AbstractGifImage {
     return this.nativeObject.getNumberOfFrames();
   }
 
-  get posterImage(): Image {
+  get posterImage(): ImageAndroid {
     const bitmap = this.nativeObject.seekToFrameAndGet(0);
-    return new Image({ bitmap });
+    return new ImageAndroid({ bitmap });
   }
 
   get instrinsicSize(): Size {

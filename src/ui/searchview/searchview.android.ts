@@ -1,7 +1,7 @@
 /*globals requireClass*/
 import { ISearchView, SearchViewStyle } from '.';
 import Color from '../color';
-import Image from '../image';
+import ImageAndroid from '../image/image.android';
 import KeyboardType from '../shared/keyboardtype';
 import ViewAndroid from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
@@ -86,13 +86,13 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private mCompatImageView: any;
   private _hintTextColor: Color;
   private _keyboardType: KeyboardType;
-  private _closeImage: Image;
-  private _backgroundImage: Image;
+  private _closeImage: ImageAndroid;
+  private _backgroundImage: ImageAndroid;
   private _textFieldBackgroundColor: Color;
   private _textFieldBorderRadius: number;
-  private _searchButtonIcon: Image;
-  private _closeIcon: Image;
-  private _searchIcon: Image;
+  private _searchButtonIcon: ImageAndroid;
+  private _closeIcon: ImageAndroid;
+  private _searchIcon: ImageAndroid;
   private _iconifiedByDefault: boolean = false;
   private _searchIconAssigned: boolean = true;
   private _isNotSetTextWatcher: boolean = false;
@@ -169,18 +169,18 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchEditFrame.removeViewAt(0);
     let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
     const mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
-    this._searchIcon = new Image({ roundedBitmapDrawable: mSearchHintIcon });
+    this._searchIcon = new ImageAndroid({ roundedBitmapDrawable: mSearchHintIcon });
     this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, this._hint);
     a.recycle();
 
     const self = this;
     this.addAndroidProps({
-      get closeImage(): Image {
+      get closeImage(): ImageAndroid {
         return self._closeImage;
       },
-      set closeImage(value: Image) {
+      set closeImage(value: ImageAndroid) {
         // If setting null to icon, default search icon will be displayed.
-        if (value === null || value instanceof Image) {
+        if (value === null || value instanceof ImageAndroid) {
           self._closeImage = value;
           self.mCloseButton.setImageDrawable(value.nativeObject);
         }
@@ -192,17 +192,17 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
         self._textFieldBorderRadius = value;
         self.setTextFieldBackgroundDrawable();
       },
-      get searchButtonIcon(): Image {
+      get searchButtonIcon(): ImageAndroid {
         return self._searchButtonIcon;
       },
-      set searchButtonIcon(value: Image) {
+      set searchButtonIcon(value: ImageAndroid) {
         self._searchButtonIcon = value;
         self.mSearchButton.setImageDrawable(value.nativeObject);
       },
-      get closeIcon(): Image {
+      get closeIcon(): ImageAndroid {
         return self._closeIcon;
       },
-      set closeIcon(value: Image) {
+      set closeIcon(value: ImageAndroid) {
         self._closeIcon = value;
         self.mCloseButton.setImageDrawable(value.nativeObject);
       },
@@ -211,7 +211,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       },
       set leftItem(value: any) {
         self._leftItem = value;
-        if (value instanceof Image) {
+        if (value instanceof ImageAndroid) {
           self.mCompatImageView.setImageDrawable(value.nativeObject);
           self.mSearchEditFrame.addView(self.mCompatImageView, 0);
         } else self.mSearchEditFrame.addView(value.nativeObject, 0);
@@ -277,33 +277,33 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setTextColor(value.nativeObject);
   }
 
-  get backgroundImage(): Image {
+  get backgroundImage(): ImageAndroid {
     return this._backgroundImage;
   }
-  set backgroundImage(value: Image) {
+  set backgroundImage(value: ImageAndroid) {
     this._backgroundImage = value;
   }
 
-  get iconImage(): Image {
+  get iconImage(): ImageAndroid {
     return this._searchIcon;
   }
-  set iconImage(value: Image) {
+  set iconImage(value: ImageAndroid) {
     this._searchIconAssigned = true;
     // If setting null to icon, default search icon will be displayed.
-    if (value === null || value instanceof Image) {
+    if (value === null || value instanceof ImageAndroid) {
       this._searchIcon = value;
       this.updateQueryHint(this.mSearchSrcTextView, this.searchIcon, this.hint);
     }
   }
 
-  get searchIcon(): Image {
+  get searchIcon(): ImageAndroid {
     return this._searchIcon;
   }
-  set searchIcon(value: Image) {
+  set searchIcon(value: ImageAndroid) {
     this._searchIcon = value;
     this._searchIconAssigned = true;
     // If setting null to icon, default search icon will be displayed.
-    if (value === null || value instanceof Image) {
+    if (value === null || value instanceof ImageAndroid) {
       this.updateQueryHint(this.mSearchSrcTextView, this.searchIcon, this.hint);
     }
   }
@@ -410,7 +410,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.clearFocus();
   }
 
-  updateQueryHint(mSearchSrcTextView: any, icon: Image | null, hint: string) {
+  updateQueryHint(mSearchSrcTextView: any, icon: ImageAndroid | null, hint: string) {
     if (icon) {
       const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
       const NativeImageSpan = requireClass('android.text.style.ImageSpan');

@@ -1,12 +1,11 @@
-import NativeComponent from '../../core/native-component';
 import System from '../../device/system';
 import Color from '../../ui/color';
-import Image from '../../ui/image';
+import ImageIOS from '../../ui/image/image.ios';
 import { default as IHeaderBar } from '../headerbar';
 import Font from '../font';
-import View, { IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import View from '../view';
 import { IHeaderBarItem } from '../headerbaritem';
-import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import NavigationControllerIOS from './navigationcontroller.ios';
 
 export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHeaderBar> implements IHeaderBar {
@@ -17,8 +16,8 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   private _titleColor: Color;
   private _visible = true;
   private _prefersLargeTitles = false;
-  private _backIndicatorImage: Image;
-  private _backIndicatorTransitionMaskImage: Image;
+  private _backIndicatorImage: ImageIOS;
+  private _backIndicatorTransitionMaskImage: ImageIOS;
   private _titleFont?: Font;
   private _borderVisibility: boolean;
   leftItemEnabled: boolean;
@@ -130,7 +129,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     }
   }
   get backgroundImage(): IHeaderBar['backgroundImage'] {
-    return Image.createFromImage(this.nativeObject.backgroundImage);
+    return ImageIOS.createFromImage(this.nativeObject.backgroundImage);
   }
   set backgroundImage(value: IHeaderBar['backgroundImage']) {
     this.nativeObject.backgroundImage = value.nativeObject;
@@ -191,7 +190,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
         return self._backIndicatorImage;
       },
       set backIndicatorImage(value: IHeaderBar['ios']['backIndicatorImage']) {
-        if (value instanceof Image) {
+        if (value instanceof ImageIOS) {
           self._backIndicatorImage = value;
           self.nativeObject.backIndicatorImage = self._backIndicatorImage.nativeObject;
 
@@ -203,7 +202,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
         return self._backIndicatorTransitionMaskImage;
       },
       set backIndicatorTransitionMaskImage(value: IHeaderBar['ios']['backIndicatorTransitionMaskImage']) {
-        if (value instanceof Image) {
+        if (value instanceof ImageIOS) {
           self._backIndicatorTransitionMaskImage = value;
           self.nativeObject.backIndicatorTransitionMaskImage = self._backIndicatorTransitionMaskImage.nativeObject;
         }

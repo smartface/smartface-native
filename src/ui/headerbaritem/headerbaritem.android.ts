@@ -1,4 +1,4 @@
-import HeaderBarItem, { IHeaderBarItem, SystemItem } from '.';
+import HeaderBarItem, { IHeaderBarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -6,7 +6,7 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import HeaderBarItemPadding from '../../util/Android/headerbaritempadding';
 import Badge from '../badge';
 import Color from '../color';
-import Image, { IImage } from '../image';
+import ImageAndroid from '../image/image.android';
 import MenuItem from '../menuitem';
 import SearchView from '../searchview';
 import View from '../view';
@@ -31,7 +31,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   }
   iOS = { SystemItem: {} };
   private _title: string = '';
-  private _image: IImage | string | null;
+  private _image: ImageAndroid | string | null;
   private _customView?: View = undefined;
   private _enabled: boolean = true;
   private _onPress: IHeaderBarItem['onPress'] = null;
@@ -63,7 +63,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
           self.updateAccessibilityLabel(self._accessibilityLabel);
         }
 
-        if (typeof self._android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(Image.systemDrawableId(self._android.systemIcon));
+        if (typeof self._android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(ImageAndroid.systemDrawableId(self._android.systemIcon));
       }
     };
   }
@@ -109,11 +109,11 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   get image() {
     return this._image;
   }
-  set image(value: IImage | string | null) {
+  set image(value: ImageAndroid | string | null) {
     if (value) {
-      value = Image.createImageFromPath(value); //IDE requires this implementation.
+      value = ImageAndroid.createImageFromPath(value); //IDE requires this implementation.
     }
-    if (value === null || value instanceof Image) {
+    if (value === null || value instanceof ImageAndroid) {
       this._image = value;
       if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
         this.nativeObject = this.createNativeImageButton();
@@ -121,7 +121,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
       }
       if (this.nativeObject && this.imageButton) {
         if (this._image) {
-          const imageCopy = (this._image as Image).nativeObject.mutate();
+          const imageCopy = (this._image as ImageAndroid).nativeObject.mutate();
           this.nativeObject.setImageDrawable(imageCopy);
         } else {
           this.nativeObject.setImageDrawable(null);
@@ -134,7 +134,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
         }
       }
     } else {
-      throw new TypeError('image must be Image instance or image path should be given properly.');
+      throw new TypeError('image must be ImageAndroid instance or image path should be given properly.');
     }
   }
   get searchView() {

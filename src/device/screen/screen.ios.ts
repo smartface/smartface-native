@@ -1,5 +1,5 @@
 import { OrientationType, IScreen } from '.';
-import Image from '../../ui/image';
+import ImageIOS from '../../ui/image/image.ios';
 
 const orientationArray = [
   OrientationType.UNKNOWN,
@@ -42,7 +42,7 @@ class ScreenIOS implements IScreen {
   }
 
   capture = () => {
-    return Image.createFromImage(__SF_UIDevice.takeSnapShot());
+    return ImageIOS.createFromImage(__SF_UIDevice.takeSnapShot() as unknown as ImageIOS);
   };
 }
 
