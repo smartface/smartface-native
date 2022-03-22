@@ -1,11 +1,8 @@
-/*globals requireClass, array*/
 import { IImageView, ImageFillType, ImageViewFillTypeIOS } from '.';
-import { INativeComponent } from '../../core/inative-component';
-import File from '../../io/file';
 import FileAndroid from '../../io/file/file.android';
-import Path from '../../io/path';
+import PathAndroid from '../../io/path/path.android';
 import AndroidConfig from '../../util/Android/androidconfig';
-import Color from '../color';
+import ColorAndroid from '../color/color.android';
 import type Image from '../image';
 import ImageAndroid from '../image/image.android';
 import ImageCacheType from '../shared/imagecachetype';
@@ -20,6 +17,7 @@ const LoadFromFileParameters = requireClass('io.smartface.android.sfcore.ui.imag
 const NativeImageCompat = requireClass('androidx.core.widget.ImageViewCompat');
 const NativeColorStateListUtil = requireClass('io.smartface.android.utils.ColorStateListUtil');
 const GlideRequestListener = requireClass('io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener');
+const GlideTarget = requireClass('io.smartface.android.sfcore.ui.imageview.listeners.GlideTarget');
 
 const ImageFillTypeDic = {
   [ImageFillType.NORMAL]: NativeImageView.ScaleType.CENTER,
@@ -32,27 +30,21 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   private _fillType: ImageFillType | ImageViewFillTypeIOS;
   private _image: ImageAndroid | null;
   private _adjustViewBounds: boolean = false;
-  private _tintColor: Color;
+  private _tintColor: ColorAndroid;
   private _newImageLoaded: boolean = false;
+  protected createNativeObject() {
+    return new NativeImageView(AndroidConfig.activity);
+  }
   constructor(params?: Partial<IImageView>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeImageView(AndroidConfig.activity);
-    }
   }
 
   get image(): ImageAndroid | null {
     if (!this._image || this._newImageLoaded) {
       this._newImageLoaded = false;
       const drawable = !!this.nativeObject.getDrawable();
-
-      this._image = drawable
-        ? new ImageAndroid({
-            // TODO Recheck after build
-            drawable: drawable
-          })
-        : null;
+      // TODO Recheck after build
+      this._image = drawable ? new ImageAndroid({ drawable }) : null;
     }
     return this._image;
   }
@@ -62,19 +54,19 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       this._image = value;
       this.nativeObject.setImageDrawable(value.nativeObject);
     } else if (typeof value === 'string') {
-      const imageFile = new File({ path: value });
-      this.loadFromFile({ file: imageFile });
+      const imageFile = new FileAndroid({ path: value });
+      this.loadFromFile({ file: imageFile as any });
     } else {
       this._image = null;
       this.nativeObject.setImageDrawable(null);
     }
   }
 
-  get tintColor(): Color {
+  get tintColor(): ColorAndroid {
     return this._tintColor;
   }
-  set tintColor(value: Color) {
-    if (!(value instanceof Color)) return;
+  set tintColor(value: ColorAndroid) {
+    if (!(value instanceof ColorAndroid)) return;
     this._tintColor = value;
     NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(this._tintColor.nativeObject));
   }
@@ -151,15 +143,15 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
 
   loadFromFile(params: Parameters<IImageView['loadFromFile']>['0']): void {
     const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
-
     if (file instanceof FileAndroid) {
-      const parameters = new LoadFromFileParameters(AndroidConfig.activity, this.nativeObject, placeholder ? placeholder.nativeObject : null, null, fade, useMemoryCache, width, height);
+      const parameters = new LoadFromFileParameters(AndroidConfig.activity, this.nativeObject, placeholder?.nativeObject || null, null, fade, useMemoryCache, width, height);
+      // console.info('parameters: ', parameters.width, ' ', parameters.height);
       const resolvedPath = file.resolvedPath;
-      if (!AndroidConfig.isEmulator && resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
+      if (!AndroidConfig.isEmulator && resolvedPath.type === PathAndroid.FILE_TYPE.DRAWABLE) {
         const resources = AndroidConfig.activity.getResources();
         const drawableResourceId = resources.getIdentifier(resolvedPath.name, 'drawable', AndroidConfig.packageName);
         SFGlide.loadByResourceId(drawableResourceId, parameters);
-      } else if (!AndroidConfig.isEmulator && resolvedPath.type === Path.FILE_TYPE.ASSET) {
+      } else if (!AndroidConfig.isEmulator && resolvedPath.type === PathAndroid.FILE_TYPE.ASSET) {
         const assetPrefix = 'file:///android_asset/';
         const assetFilePath = assetPrefix + resolvedPath.name;
         SFGlide.loadFromAsset(assetFilePath, parameters);
@@ -199,7 +191,6 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
     let glideTarget = null;
     if (onSuccess) {
-      const GlideTarget = requireClass('io.smartface.android.sfcore.ui.imageview.listeners.GlideTarget');
       glideTarget = GlideTarget.implement({
         onResourceReady(resource, transition) {},
         onLoadStarted(placeholder) {
@@ -217,7 +208,6 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
     let glideRequestListener = null;
     if (onFailure) {
-      const GlideRequestListener = requireClass('io.smartface.android.sfcore.ui.imageview.listeners.GlideRequestListener');
       glideRequestListener = GlideRequestListener.implement({
         onSuccess: function (resource, model, target, dataSource, isFirstResource) {
           const cacheName = dataSource.toString();

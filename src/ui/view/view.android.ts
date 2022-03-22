@@ -172,8 +172,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set parent(view: View | undefined) {
     this._parent = view;
-    // eslint-disable-next-line no-console
-    console.log('ViewAndroid.parent set parentname: ', this._parent?.constructor.name);
   }
 
   private setTouchHandlers() {
