@@ -6,7 +6,6 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
-import TextBox from '../textbox';
 import TextBoxAndroid from '../textbox/textbox.android';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
 
@@ -25,7 +24,7 @@ const state_unfocused = -16842908;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
 export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
-  private sfTextBox: TextBox;
+  private sfTextBox: TextBoxAndroid;
   private textBoxNativeObject: any;
   private __hintTextColor: Color;
   private _hintFocusedTextColor: Color | null;
@@ -53,7 +52,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this._nativeObject = new SFMaterialTextBoxWrapper(activity);
 
     this.textBoxNativeObject = this.nativeObject.getTextInputEditTextInstance();
-    this.sfTextBox = new TextBox({ nativeObject: this.textBoxNativeObject });
+    this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
 
     if (!AndroidConfig.isEmulator) {
       let SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId('SFMaterialTextBoxHintAppearance', 'style');
@@ -235,17 +234,11 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     return this._onTouch;
   }
   set onTouch(value: (e?: Point2D) => boolean | void) {
-    // TODO setTouchHandlers function not found
     this._onTouch = value;
-    // @ts-ignore
-    // TODO: Ask why setTouchHandlers is used here
     this.setTouchHandlers();
 
-    // @ts-ignore
-    this.sfTextBox._onTouch = value;
-    // @ts-ignore
-    // TODO: Ask why setTouchHandlers is used here
-    this.sfTextBox.setTouchHandlers();
+    this.sfTextBox.onTouch = value;
+    this.sfTextBox.setTouchHandlers(); // TODO: Ask why setTouchHandlers is used here
   }
 
   get onTouchEnded(): (isInside: boolean, point: Point2D) => boolean | void {
@@ -253,12 +246,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   }
   set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean | void) {
     this._onTouchEnded = value;
-    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
-    // @ts-ignore
+    // TODO: Ask why setTouchHandlers is used here. It must emit a touch event
     this.setTouchHandlers();
-    // @ts-ignore
-    this.sfTextBox._onTouchEnded = value;
-    // @ts-ignore
+    this.sfTextBox.onTouchEnded = value;
     this.sfTextBox.setTouchHandlers();
   }
 
@@ -267,12 +257,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   }
   set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void) {
     // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
-    this._onTouchMoved = value;
-    // @ts-ignore
+    this.onTouchMoved = value;
     this.setTouchHandlers();
-    // @ts-ignore
-    this.sfTextBox._onTouchMoved = value;
-    // @ts-ignore
+    this.sfTextBox.onTouchMoved = value;
     this.sfTextBox.setTouchHandlers();
   }
 
@@ -281,12 +268,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   }
   set onTouchCancelled(value: (point: Point2D) => boolean | void) {
     // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
-    this._onTouchCancelled = value;
-    // @ts-ignore
+    this.onTouchCancelled = value;
     this.setTouchHandlers();
-    // @ts-ignore
-    this.sfTextBox._onTouchCancelled = value;
-    // @ts-ignore
+    this.sfTextBox.onTouchCancelled = value;
     this.sfTextBox.setTouchHandlers();
   }
 

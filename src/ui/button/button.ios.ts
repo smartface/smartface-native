@@ -43,10 +43,11 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   protected _backgroundColor: IButton['backgroundColor'] = BackgroundColorsInitial;
   protected _nativeObject: __SF_UIButton;
   protected _text: IButton['text'];
-  private gradientColorObject: Record<string, any>;
-  private _onPressFunc: IButton['onPress'];
+  private gradientColorObject: Record<string, any> = {};
+  onPress: IButton['onPress'];
   constructor(params: Partial<IButton> = {}) {
     super(params);
+
     this.nativeObject.addJSTarget(() => {
       this.emit('press');
       this.onPress?.();
@@ -177,14 +178,6 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
       value.pressed && this.checkAndSetBackground(value.pressed, ButtonState.PRESSED);
       value.focused && this.checkAndSetBackground(value.focused, ButtonState.FOCUSED);
     }
-  }
-
-  get onPress(): IButton['onPress'] {
-    return this._onPressFunc;
-  }
-
-  set onPress(value: IButton['onPress']) {
-    this._onPressFunc = value;
   }
   get font(): IButton['font'] {
     return this.nativeObject.titleLabel.font as IButton['font'];

@@ -20,27 +20,17 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
 {
-  private _onInterceptTouchEvent: () => boolean;
   private _flexWrap: number | null = null;
   protected createNativeObject() {
     return new NativeYogaLayout(activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
-        return this.android?.onInterceptTouchEvent?.();
+        return this.android?.onInterceptTouchEvent?.() || undefined;
       }
     });
   }
   constructor(params?: Partial<TProps>) {
     super(params);
-    const self = this;
-    this.addAndroidProps({
-      get onInterceptTouchEvent() {
-        return self._onInterceptTouchEvent;
-      },
-      set onInterceptTouchEvent(value) {
-        self._onInterceptTouchEvent = value;
-      }
-    });
   }
   content: FlexLayout;
 

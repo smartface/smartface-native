@@ -110,18 +110,15 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
     this._nativeObject.setId(NativeView.generateViewId());
 
-    // // Assign parameters given in constructor
-    // if (params) {
-    //   for (var param in params) {
-    //     this[param] = params[param];
-    //   }
-    // }
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
     this.setTouchHandlers();
 
-    const self = this;
+    this.addAndroidProps(this.getAndroidSpecificProps());
+  }
 
-    this.addAndroidProps({
+  protected getAndroidSpecificProps() {
+    const self = this;
+    return {
       get yogaNode() {
         return self.yogaNode;
       },
@@ -164,7 +161,31 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       set overScrollMode(mode) {
         self.overScrollMode = mode;
       }
-    });
+    };
+  }
+  get onTouch() {
+    return this._onTouch;
+  }
+  set onTouch(onTouch) {
+    this._onTouch = onTouch;
+  }
+  get onTouchEnded() {
+    return this._onTouchEnded;
+  }
+  set onTouchEnded(onTouchEnded) {
+    this._onTouchEnded = onTouchEnded;
+  }
+  get onTouchMoved() {
+    return this._onTouchMoved;
+  }
+  set onTouchMoved(onTouchMoved) {
+    this._onTouchMoved = onTouchMoved;
+  }
+  get onTouchCancelled() {
+    return this._onTouchCancelled;
+  }
+  set onTouchCancelled(onTouchCancelled) {
+    this._onTouchCancelled = onTouchCancelled.bind(this);
   }
 
   get parent() {
@@ -174,8 +195,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._parent = view;
   }
 
-  private setTouchHandlers() {
-    if (this.didSetTouchHandler) return;
+  setTouchHandlers() {
+    if (this.didSetTouchHandler) {
+      return;
+    }
     const touchableView = this.nativeInner || this.nativeObject;
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     touchableView.setOnTouchListener(this._sfOnTouchViewManager);
@@ -354,42 +377,42 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   private _touchCallbacks = {
     onTouchEnded: (isInside: boolean, x: number, y: number) => {
-      let result,
-        mEvent = {
-          x,
-          y,
-          isInside
-        };
-      this._onTouchEnded && (result = this._onTouchEnded(isInside, mEvent));
-      return result === true;
+      const mEvent = {
+        x,
+        y,
+        isInside
+      };
+      this.emit('touchEnded', mEvent);
+      const result = this.onTouchEnded?.(isInside, mEvent);
+      return !!result;
     },
     onTouch: (x: number, y: number) => {
-      let result,
-        mEvent = {
-          x,
-          y
-        };
-      this._onTouch && (result = this._onTouch(mEvent));
-      return !(result === false);
+      const mEvent = {
+        x,
+        y
+      };
+      this.emit('touch', mEvent);
+      const result = this.onTouch?.(mEvent);
+      return !!result;
     },
     onTouchMoved: (isInside: boolean, x: number, y: number) => {
-      let result,
-        mEvent = {
-          x,
-          y,
-          isInside
-        };
-      // this._onTouchMoved && (result = this._onTouchMoved(isInside, mEvent));
-      return this._onTouchMoved ? !!this._onTouchMoved(isInside, mEvent) : false;
+      const mEvent = {
+        x,
+        y,
+        isInside
+      };
+      this.emit('touchMoved', mEvent);
+      const result = this.onTouchMoved?.(isInside, mEvent);
+      return !!result;
     },
     onTouchCancelled: (x: number, y: number) => {
-      let result,
-        mEvent = {
-          x,
-          y
-        };
-      this._onTouchCancelled && (result = this._onTouchCancelled(mEvent));
-      return result === true;
+      const mEvent = {
+        x,
+        y
+      };
+      this.emit('touchCancelled', mEvent);
+      const result = this.onTouchCancelled?.(mEvent);
+      return !!result;
     }
   };
 
@@ -481,30 +504,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   set touchEnabled(value) {
     this._touchEnabled = value;
     this._sfOnTouchViewManager.setTouchEnabled(value);
-  }
-  get onTouch() {
-    return this._onTouch;
-  }
-  set onTouch(onTouch) {
-    this._onTouch = onTouch;
-  }
-  get onTouchEnded() {
-    return this._onTouchEnded;
-  }
-  set onTouchEnded(onTouchEnded) {
-    this._onTouchEnded = onTouchEnded;
-  }
-  get onTouchMoved() {
-    return this._onTouchMoved;
-  }
-  set onTouchMoved(onTouchMoved) {
-    this._onTouchMoved = onTouchMoved;
-  }
-  get onTouchCancelled() {
-    return this._onTouchCancelled;
-  }
-  set onTouchCancelled(onTouchCancelled) {
-    this._onTouchCancelled = onTouchCancelled.bind(this);
   }
   get visible() {
     // View.VISIBLE is 0

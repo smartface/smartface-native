@@ -37,15 +37,11 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   protected createNativeObject() {
     return new NativeButton(AndroidConfig.activity);
   }
-  private __onPress: IButton['onPress'];
-  private __onLongPress: IButton['onLongPress'];
   protected _backgroundColor: IButton['backgroundColor'];
   private __backgroundImages: IButton['backgroundImage'];
   private borderShapeDrawable: any;
   private layerDrawable: any;
   private backgroundDrawable = new NativeGradientDrawable();
-  private __didSetOnClickListener: boolean;
-  private __didSetOnLongClickListener: boolean;
   constructor(params: Partial<TProps> = {}) {
     super(params);
     if (this._backgroundColor instanceof Color) {
@@ -115,16 +111,8 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     this._textAlignment = value in TextAlignmentDic ? value : this.viewNativeDefaultTextAlignment;
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
   }
-  get onPress() {
-    return this.__onPress;
-  }
-  set onPress(value: IButton['onPress']) {
-    this.__onPress = value.bind(this);
-    if (!this.__didSetOnClickListener) {
-      this.setOnClickListener();
-    }
-  }
-  onLongPress: () => void;
+  onPress: IButton['onPress'];
+  onLongPress: IButton['onLongPress'];
 
   private setBackgroundColor() {
     const backgroundColors: any = this._backgroundColor;
@@ -295,11 +283,10 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
       NativeView.OnClickListener.implement({
         onClick: () => {
           this.emit('press');
-          this.__onPress?.();
+          this.onPress?.();
         }
       })
     );
-    this.__didSetOnClickListener = true;
   }
 
   private setOnLongClickListener() {
@@ -307,12 +294,11 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
       NativeView.OnLongClickListener.implement({
         onLongClick: () => {
           this.emit('longPress');
-          this.__onLongPress?.();
+          this.onLongPress?.();
           return true; // Returns always true to solve AND-2713 bug.
         }
       })
     );
-    this.__didSetOnLongClickListener = true;
   }
 }
 

@@ -91,7 +91,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private isCreated = false;
   private optionsMenu: any = null;
   private actionBar: any = null;
-  isSwipeViewPage = true;
+  isSwipeViewPage = false;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayout;
   private _headerBarItems: HeaderBarItem[] = [];
