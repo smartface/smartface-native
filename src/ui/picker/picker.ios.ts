@@ -4,6 +4,9 @@ import ViewIOS from '../view/view.ios';
 import { PickerEvents } from './picker-events';
 
 export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEvent | PickerEvents, PickerIOSProperties> implements IPicker<TEvent | PickerEvents> {
+  protected createNativeObject() {
+    return new __SF_UIPickerView();
+  }
   protected _items: IPicker['items'] = [];
   protected _onSelected: IPicker['onSelected'];
   protected _okColor: IPicker['okColor'];
@@ -22,16 +25,9 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
   private pickerDataSource: __SF_UIPickerViewDataSource;
   private _cancelHighlightedColor?: Color;
   private _okHighlightedColor?: Color;
-  get nativeObject(): __SF_UIPickerView {
-    return this._nativeObject;
-  }
 
   constructor(params: Partial<IPicker> = {}) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIPickerView();
-    }
 
     //#region UIPickerViewDataSource
     this.pickerDataSource = new __SF_UIPickerViewDataSource();
@@ -128,8 +124,7 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     });
   }
   set dialogBackgroundColor(value: IPicker['dialogBackgroundColor']) {
-    if(value instanceof Color)
-      this.nativeObject.dialogBackgroundColor = value.nativeObject;
+    if (value instanceof Color) this.nativeObject.dialogBackgroundColor = value.nativeObject;
   }
   get cancelColor(): IPicker['cancelColor'] {
     return this._cancelColor;

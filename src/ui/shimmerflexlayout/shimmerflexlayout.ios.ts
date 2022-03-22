@@ -6,16 +6,13 @@ import ViewIOS from '../view/view.ios';
 export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutIOSParams> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
   private _contentLayout: FlexLayout;
   protected _nativeObject: __SF_FBShimmeringView;
+  protected createNativeObject() {
+    return new __SF_FBShimmeringView();
+  }
   constructor(params: Partial<IShimmerFlexLayout> = {}) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_FBShimmeringView();
-    }
 
     this.nativeSpecificProperties();
-  }
-  get nativeObject() {
-    return this._nativeObject;
   }
   startShimmering(): void {
     __SF_Dispatch.mainAsync(() => {

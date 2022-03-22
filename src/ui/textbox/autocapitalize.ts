@@ -6,7 +6,7 @@
  * @since 2.8
  *
  */
-declare const AutoCapitalize: {
+enum AutoCapitalize {
   /**
    * @property {Number} NONE
    * Don't auto capitalize anything.
@@ -16,7 +16,7 @@ declare const AutoCapitalize: {
    * @readonly
    * @since 2.8
    */
-  NONE: 0;
+  NONE,
 
   /**
    * @property {Number} WORDS
@@ -27,7 +27,7 @@ declare const AutoCapitalize: {
    * @readonly
    * @since 2.8
    */
-  WORDS: 1;
+  WORDS,
 
   /**
    * @property {Number} SENTENCES
@@ -39,7 +39,7 @@ declare const AutoCapitalize: {
    * @readonly
    * @since 2.8
    */
-  SENTENCES: 2;
+  SENTENCES,
 
   /**
    * @property {Number} CHARACTERS
@@ -50,8 +50,8 @@ declare const AutoCapitalize: {
    * @readonly
    * @since 2.8
    */
-  CHARACTERS: 3;
-};
+  CHARACTERS
+}
 
 /**
  * @enum {Number} UI.TextBox.AutoCapitalize
@@ -61,5 +61,4 @@ declare const AutoCapitalize: {
  * @since 2.8
  *
  */
-type AutoCapitalize = ExtractValues<typeof AutoCapitalize>;
 export default AutoCapitalize;

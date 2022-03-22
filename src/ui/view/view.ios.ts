@@ -169,14 +169,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this._parent = view;
   }
 
-  // get shadowOffset() {
-  //     return this.shadowOffset;
-  // }
-
-  // get nativeObject() {
-  //   return this._nativeObject;
-  // }
-
   get accessibilityLabel() {
     return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString');
   }

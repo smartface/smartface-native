@@ -11,6 +11,15 @@ import Invocation from '../../util/iOS/invocation';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
 
 export default class ListViewIOS<TEvent extends string = ListViewEvents> extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView> implements IListView {
+  protected createNativeObject() {
+    const nativeObject = new __SF_UITableView();
+    this.refreshControl = new __SF_UIRefreshControl();
+    this._nativeObject.addSubview(this.refreshControl);
+    this._nativeObject.separatorStyle = 0;
+    this._nativeObject.showsVerticalScrollIndicator = false;
+    this._nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+    return nativeObject;
+  }
   nativeInner: INativeInner;
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: IListView['refreshEnabled'];
@@ -19,14 +28,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   private _contentInset = { top: 0, bottom: 0 };
   constructor(params?: IListView) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UITableView();
-      this.refreshControl = new __SF_UIRefreshControl();
-      this._nativeObject.addSubview(this.refreshControl);
-      this._nativeObject.separatorStyle = 0;
-      this._nativeObject.showsVerticalScrollIndicator = false;
-      this._nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
-    }
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
@@ -72,7 +73,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   startRefresh(): void {
     throw new Error('Method not implemented.');
   }
-  listViewItemByIndex(index: number): ListViewItem {
+  listViewItemByIndex(index: number): ListViewItem | undefined {
     const uuid = this.nativeObject.getUUIDByIndex(index);
     return uuid ? this._listItemArray[uuid] : undefined;
   }
@@ -270,11 +271,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   }
   private deleteRow(index: number) {
     this.nativeObject.deleteRowIndexAnimation(index, RowAnimation.LEFT);
-  }
-  //TODO: Remove nativeObject after TNative can properly take nativeObject type.
-  protected _nativeObject: __SF_UITableView;
-  get nativeObject(): __SF_UITableView {
-    return this._nativeObject;
   }
   get paginationEnabled(): boolean {
     return this.nativeObject.valueForKey('pagingEnabled');

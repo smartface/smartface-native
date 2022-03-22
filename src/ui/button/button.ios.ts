@@ -57,9 +57,6 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   }
   onLongPress: () => void;
 
-  get nativeObject() {
-    return this._nativeObject;
-  }
   get enabled(): IButton['enabled'] {
     return this.nativeObject.setEnabled;
   }
