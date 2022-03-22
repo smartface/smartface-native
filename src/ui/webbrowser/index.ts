@@ -84,41 +84,6 @@ export declare class AbstractWebBrowser {
    */
   static show(page: Page, options: AbstractWebBrowserOptions): void;
   constructor(params?: AbstractWebBrowserOptions);
-  /**
-   * Only HTTP and HTTPS URLs are supported.
-   *
-   * @property {String} [url = ""]
-   * @android
-   * @ios
-   * @since 2.0.11
-   */
-  url: string;
-  /**
-   * The color to tint the background of the header bar and bottom bar.
-   *
-   * @property {UI.Color} [barColor = UI.Color.WHITE]
-   * @android
-   * @ios
-   * @since 2.0.11
-   */
-  barColor: Color;
-  /**
-   * The color to tint the the control buttons on the header bar and bottom bar.
-   *
-   * @property {UI.Color} [itemColor = UI.Color.create("#00A1F1")]
-   * @ios
-   * @since 0.1
-   */
-  itemColor: Color;
-  /**
-   * Gets/sets visibility of the status bar.
-   *
-   * @property {Boolean} [statusBarVisible = true]
-   * @removed 4.0.0 Use {@link Application.statusBar} instead
-   * @ios
-   * @since 0.1
-   */
-  statusBarVisible: boolean;
 }
 
 const WebBrowser: typeof AbstractWebBrowser = require(`./webbrowser.${Device.deviceOS.toLowerCase()}`).default;
