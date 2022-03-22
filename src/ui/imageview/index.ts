@@ -272,6 +272,7 @@ export interface IImageView<
     android?: {
       useDiskCache?: boolean;
       useMemoryCache?: boolean;
+      cacheSignature?: string | null;
     };
     ios?: {
       isRefreshCached?: boolean;
@@ -299,6 +300,7 @@ export interface IImageView<
     height?: number;
     android?: {
       useMemoryCache?: boolean;
+      cacheSignature?: string | null;
     };
     placeholder?: Image;
   }): void;
@@ -337,6 +339,7 @@ export interface IImageView<
     android?: {
       useDiskCache?: boolean;
       useMemoryCache?: boolean;
+      cacheSignature?: string | null;
     };
     ios?: { isRefreshCached?: boolean };
   }): void;

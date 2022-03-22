@@ -86,22 +86,17 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
   }
 
-  loadFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: ImageAndroid;
-    fade?: boolean;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: () => void;
-    onFailure?: () => void;
-    android?: {
-      useDiskCache?: boolean;
-      useMemoryCache?: boolean;
-    };
-    ios?: { isRefreshCached?: boolean };
-  }): void {
-    const { url, headers = {}, placeholder, fade, useHTTPCacheControl, onSuccess, onFailure, android = {} } = params;
-    //TODO: Paramters should be object this usage is deprecated
+  loadFromUrl(params: Parameters<IImageView['loadFromUrl']>['0']): void {
+    const {
+      url = null,
+      headers = {},
+      placeholder = null,
+      fade = true,
+      onFailure = null,
+      onSuccess = null,
+      useHTTPCacheControl = false,
+      android = { useMemoryCache: true, useDiskCache: true, cacheSignature: null }
+    } = params;
     if (!url) {
       onFailure?.();
       return;
@@ -142,10 +137,19 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   }
 
   loadFromFile(params: Parameters<IImageView['loadFromFile']>['0']): void {
-    const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
+    const { file = null, placeholder = null, fade = true, width = -1, height = -1, android = { useMemoryCache: true, cacheSignature: null } } = params;
     if (file instanceof FileAndroid) {
-      const parameters = new LoadFromFileParameters(AndroidConfig.activity, this.nativeObject, placeholder?.nativeObject || null, null, fade, useMemoryCache, width, height);
-      // console.info('parameters: ', parameters.width, ' ', parameters.height);
+      const parameters = new LoadFromFileParameters(
+        AndroidConfig.activity,
+        this.nativeObject,
+        placeholder?.nativeObject || null,
+        null,
+        fade,
+        android.useMemoryCache,
+        width,
+        height,
+        android.cacheSignature
+      );
       const resolvedPath = file.resolvedPath;
       if (!AndroidConfig.isEmulator && resolvedPath.type === PathAndroid.FILE_TYPE.DRAWABLE) {
         const resources = AndroidConfig.activity.getResources();
@@ -162,18 +166,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  fetchFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: Image;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image, cache: ImageCacheType) => void;
-    onFailure?: () => void;
-    android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
-    ios?: {
-      isRefreshCached?: boolean;
-    };
-  }): void {
+  fetchFromUrl(params: Parameters<IImageView['fetchFromUrl']>['0']): void {
     const self = this;
     const {
       url = null,
@@ -182,7 +175,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       onSuccess = null,
       onFailure = null,
       useHTTPCacheControl = false,
-      android: { useDiskCache, useMemoryCache } = { useMemoryCache: true, useDiskCache: true }
+      android = { useMemoryCache: true, useDiskCache: true, cacheSignature: null }
     } = params;
 
     if (!url) {
@@ -229,9 +222,10 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       true,
       headers,
       useHTTPCacheControl,
-      useHTTPCacheControl ? false : useDiskCache,
-      useMemoryCache,
-      glideTarget
+      useHTTPCacheControl ? false : android.useDiskCache,
+      android.useMemoryCache,
+      glideTarget,
+      android.cacheSignature
     );
     try {
       SFGlide.fetchFromUrl(parameters);
