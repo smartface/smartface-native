@@ -1,10 +1,13 @@
 import { INativeComponent } from './inative-component';
 
-type NativeInstance = Partial<Record<any, any>>;
-export default abstract class NativeComponent<TNative extends NativeInstance = NativeInstance, TProps extends Record<string, any> = Record<string, any>> {
+export default abstract class NativeComponent<TNative = any, TProps extends Record<string, any> = Record<string, any>> {
   protected _nativeObject: any;
   constructor(params?: TProps) {
-    const { android = {}, ios = {}, ...rest } = params || {ios: {}, android: {}};
+    const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
+    const nativeObject = this.createNativeObject();
+    if (nativeObject) {
+      this.nativeObject = nativeObject;
+    }
     rest && Object.assign(this, rest);
   }
 
@@ -15,4 +18,6 @@ export default abstract class NativeComponent<TNative extends NativeInstance = N
   set nativeObject(value: any) {
     this._nativeObject = value;
   }
+
+  protected abstract createNativeObject(): any;
 }

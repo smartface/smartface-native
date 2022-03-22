@@ -1,3 +1,4 @@
+import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
 
 /**
@@ -47,8 +48,7 @@ export enum ConnectionType {
   MOBILE = 1
 }
 
-export declare class NetworkNotifier extends NativeComponent {
-  constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void });
+export interface INetworkNotifier extends INativeComponent {
   subscribe: (callback: (type: ConnectionType) => void) => void;
   android: Partial<{
     /** Returns true if the notifier is currently processing the initial value which is currently held in the sticky cache,
@@ -101,7 +101,7 @@ export declare class NetworkNotifier extends NativeComponent {
  *
  *
  */
-export declare class NetworkBase extends NativeComponent {
+export declare class NetworkBase {
   /**
    * @class Device.Network.Notifier
    * @since 3.0.1
@@ -118,7 +118,7 @@ export declare class NetworkBase extends NativeComponent {
    *     });
    *
    */
-  public readonly notifier: NetworkNotifier;
+  public readonly notifier: INetworkNotifier;
   /**
    *
    * Returns the carrier name of the GSM connection.

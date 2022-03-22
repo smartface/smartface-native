@@ -16,6 +16,9 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
   extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any, TProps>
   implements IWebSocket
 {
+  protected createNativeObject() {
+    return null;
+  }
   private delegateInstance: any;
   private socket: any;
   constructor(params?: TProps) {

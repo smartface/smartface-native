@@ -3,7 +3,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
 import { IViewGroup } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Flex from '../../core/Flex';
+import Flex from '../shared/Flex';
 
 export type FlexLayoutIOSProps = IViewGroup['ios'];
 export type FlexLayoutAndroidProps = IViewGroup['android'] & {
@@ -217,5 +217,4 @@ export interface IFlexLayout<
 
 const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
 type FlexLayout = IFlexLayout;
-const c = new FlexLayout();
 export default FlexLayout;

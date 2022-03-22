@@ -3,9 +3,12 @@ import MapView from '..';
 import NativeComponent from '../../../core/native-component';
 
 export default class ClusterIOS extends NativeComponent<__SF_Cluster> implements ICluster {
-  constructor(params: Partial<ICluster> = {}, nativeObject?: __SF_Cluster) {
+  protected createNativeObject() {
+    return null;
+  }
+  constructor(params: Partial<ICluster> = {}) {
     super(params);
-    this.nativeObject = nativeObject || __SF_Cluster.createCluster();
+    this.nativeObject = params?.nativeObject || __SF_Cluster.createCluster();
   }
   get title(): string {
     return this.nativeObject.title;

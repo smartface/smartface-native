@@ -1,6 +1,6 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Image, { IImage } from '../../ui/image';
+import Image from '../../ui/image';
 
 /**
  * @enum {String} Device.Screen.OrientationType
@@ -147,7 +147,7 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    * @return {UI.Image} captured image.
    * @since 0.1
    */
-  capture(): IImage;
+  capture(): Image;
   ios?: TProps['ios'];
 }
 const Screen: IScreen = require(`./screen.${Device.deviceOS.toLowerCase()}`).default;

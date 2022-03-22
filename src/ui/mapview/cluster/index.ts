@@ -1,4 +1,4 @@
-import MapView from '..';
+import { IMapView } from '..';
 import { ConstructorOf } from '../../../core/constructorof';
 import { INativeComponent } from '../../../core/inative-component';
 
@@ -7,7 +7,7 @@ export interface ICluster extends INativeComponent {
   subtitle: string;
   canShowCallout: boolean;
   count: number;
-  setDefaultClusterRenderer(mapView: MapView, nativeGoogleMap: any, nativeClusterManager: any): any;
+  setDefaultClusterRenderer(mapView: IMapView, nativeGoogleMap: any, nativeClusterManager: any): any;
 }
 
 const Cluster: ConstructorOf<ICluster, Partial<ICluster>> = require(`./cluster.${Device.deviceOS.toLowerCase()}`).default;

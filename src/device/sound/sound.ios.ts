@@ -8,6 +8,9 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
   implements AbstractSound
 {
+  protected createNativeObject() {
+    return null;
+  }
   public static Events = SoundEvents;
   private avPlayerItem: __SF_AVPlayerItem;
   private _isLooping = false;

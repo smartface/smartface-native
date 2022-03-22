@@ -6,20 +6,15 @@ import { TimePickerEvents } from './timepicker-events';
 const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
 
 export default class TimePickerAndroid<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {
+  protected createNativeObject() {
+    return this.createTimerDialog();
+  }
   private _is24HourFormat = true;
   private _onTimeSelected: ITimePicker['onTimeSelected'];
   private _hour: number | null = null;
   private _minutes: number | null = null;
   constructor(params: Partial<ITimePicker> = {}) {
-    super();
-
-    if (!this.nativeObject) {
-      this.createTimerDialog();
-    }
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    super(params);
   }
 
   setTime(params: { hour: number; minute: number }): void {
@@ -73,7 +68,7 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
       hour = this.hour;
       minutes = this.minutes;
     }
-    this.nativeObject = new NativeTimePickerDialog(
+    const nativeObject = new NativeTimePickerDialog(
       AndroidConfig.activity,
       NativeTimePickerDialog.OnTimeSetListener.implement({
         onTimeSet: (timePicker: any, hour: number, minute: number) => {
@@ -90,5 +85,6 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
       this._is24HourFormat
     );
     this.nativeObject.setTitle('');
+    return nativeObject;
   }
 }

@@ -1,6 +1,6 @@
 import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from '.';
 import File from '../../io/file';
-import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import Page from '../../ui/page';
 
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -175,7 +175,7 @@ class MultimediaAndroid implements MultimediaBase {
       android: { rotateText: rotateText, scaleText: scaleText, cropText: cropText, maxResultSize: maxResultSize = {}, hideBottomControls: hideBottomControls = false } = {}
     } = params;
 
-    if (!asset || (!(asset instanceof File) && !(asset instanceof Image))) throw new TypeError('Asset parameter must be typeof File or Image');
+    if (!asset || (!(asset instanceof File) && !(asset instanceof ImageAndroid))) throw new TypeError('Asset parameter must be typeof File or Image');
 
     this._captureParams = {};
     this._pickParams = params;
@@ -194,7 +194,7 @@ class MultimediaAndroid implements MultimediaBase {
         hideBottomControls,
         enableFreeStyleCrop
       },
-      asset instanceof Image ? { onFailure } : {}
+      asset instanceof ImageAndroid ? { onFailure } : {}
     );
 
     this.startCropActivityHelper(startCropActivityParams);
@@ -243,7 +243,7 @@ class MultimediaAndroid implements MultimediaBase {
       //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
       NativeSFMultimedia.getBitmapFromUriAsync(activity, resultUri, maxImageSize, fixOrientation, {
         onCompleted: (bitmap) => {
-          let croppedImage = new Image({
+          let croppedImage = new ImageAndroid({
             bitmap
           });
           onSuccess &&
@@ -266,23 +266,22 @@ class MultimediaAndroid implements MultimediaBase {
     const { onSuccess, onFailure, onCancel, android: { fixOrientation: fixOrientation = false, maxImageSize: maxImageSize = -1 } = {} } = _pickParams;
 
     if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
-      let resultUri = NativeUCrop.getOutput(data);
+      const resultUri = NativeUCrop.getOutput(data);
       //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
       NativeSFMultimedia.getBitmapFromUriAsync(activity, resultUri, maxImageSize, fixOrientation, {
         onCompleted: (bitmap) => {
-          let croppedImage = new Image({
+          const croppedImage = new ImageAndroid({
             bitmap
           });
-          onSuccess &&
-            onSuccess({
-              image: croppedImage
-            });
+
+          onSuccess?.({
+            image: croppedImage
+          });
         },
         onFailure: (err) => {
-          onFailure &&
-            onFailure({
-              message: err
-            });
+          onFailure?.({
+            message: err
+          });
         }
       });
     } else {
@@ -346,7 +345,7 @@ class MultimediaAndroid implements MultimediaBase {
               const assets = toJSArray(mAssets).map((asset) => {
                 if (type === this.Type.IMAGE) {
                   return {
-                    image: new Image({
+                    image: new ImageAndroid({
                       bitmap: asset.bitmap
                     }),
                     file: new File({
@@ -421,7 +420,7 @@ class MultimediaAndroid implements MultimediaBase {
             if (!allowsEditing) {
               NativeSFMultimedia.getBitmapFromUriAsync(activity, uri, maxImageSize, fixOrientation, {
                 onCompleted: (bitmap) => {
-                  let image = new Image({
+                  const image = new ImageAndroid({
                     bitmap
                   });
                   onSuccess({
@@ -516,7 +515,7 @@ class MultimediaAndroid implements MultimediaBase {
               } else {
                 NativeSFMultimedia.getBitmapFromUriAsync(activity, this._imageFileUri, maxImageSize, fixOrientation, {
                   onCompleted: (bitmap) => {
-                    let image = new Image({
+                    let image = new ImageAndroid({
                       bitmap
                     });
                     onSuccess({

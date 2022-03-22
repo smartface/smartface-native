@@ -354,6 +354,9 @@ export abstract class AbstractDatePicker extends NativeEventEmitterComponent<Dat
   static iOS: {
     DatePickerMode: typeof DatePickerMode;
   };
+  protected createNativeObject() {
+    throw new Error('Method not implemented');
+  }
 }
 
 /**

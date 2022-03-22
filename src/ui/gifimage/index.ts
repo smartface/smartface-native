@@ -154,6 +154,9 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
   static get ios(): iOSProps | undefined {
     throw new Error('Method not implemented.');
   }
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
 }
 
 /**

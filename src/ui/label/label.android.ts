@@ -1,7 +1,7 @@
 import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ILabel, LabelAndroidProps } from '.';
 import { ViewEvents } from '../view/view-event';
 import { IViewState } from '../view';
@@ -47,33 +47,20 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _adjustableFontSizeStep = 1;
   private fontInitial: Font | null = null;
   private _textColor: ILabel['textColor'] = Color.BLUE;
+  protected createNativeObject() {
+    return new NativeTextView(AndroidConfig.activity);
+  }
   constructor(params: Partial<TProps>) {
     super(params);
-    if (!this.nativeObject) {
-      throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
-    }
 
-    this.initWithlabelType();
+    this._textAlignment = TextAlignment.MIDLEFT;
+    this.nativeObject.setGravity(MIDLEFT_GRAVITY);
+    this.viewNativeDefaultTextAlignment = MIDLEFT_GRAVITY;
     this.initAndroidProps();
   }
 
   toString() {
     return 'Label';
-  }
-
-  private initWithlabelType() {
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeTextView(AndroidConfig.activity);
-      this._textAlignment = TextAlignment.MIDLEFT;
-      this.nativeObject.setGravity(MIDLEFT_GRAVITY);
-      this.viewNativeDefaultTextAlignment = MIDLEFT_GRAVITY;
-    } else {
-      if (!this.skipDefaults) {
-        this._textAlignment = TextAlignment.MIDCENTER;
-        this.nativeObject.setGravity(MIDCENTER_GRAVITY);
-        this.viewNativeDefaultTextAlignment = MIDCENTER_GRAVITY;
-      }
-    }
   }
 
   private initAndroidProps() {

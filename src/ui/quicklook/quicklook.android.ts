@@ -7,6 +7,9 @@ import Color from '../color';
 import Page from '../page';
 
 export default class QuickLookAndroid extends NativeComponent implements IQuickLook {
+  protected createNativeObject() {
+    return null;
+  }
   document: string[] = [];
   barColor: boolean = false;
   titleColor: Color = Color.TRANSPARENT;

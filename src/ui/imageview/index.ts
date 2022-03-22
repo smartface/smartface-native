@@ -1,10 +1,10 @@
 import { AbstractView, IView } from '../view';
-import type { IImage } from '../image';
 import Color from '../color';
 import File from '../../io/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import Image from '../image';
 
 export enum ImageViewFillTypeIOS {
   REDRAW = 3,
@@ -195,8 +195,8 @@ export interface IImageView<
    * @ios
    * @since 0.1
    */
-  get image(): IImage | null;
-  set image(img: IImage | null | string);
+  get image(): Image | null;
+  set image(img: Image | null | string);
   /**
    * Gets/sets the tintColor.
    *
@@ -264,7 +264,7 @@ export interface IImageView<
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: Image;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -300,6 +300,7 @@ export interface IImageView<
     android?: {
       useMemoryCache?: boolean;
     };
+    placeholder?: Image;
   }): void;
   /**
    * Fetch image from the server.
@@ -327,9 +328,9 @@ export interface IImageView<
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: Image;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
+    onSuccess?: (image: Image, cache: ImageCacheType) => void;
     onFailure?: () => void;
     image: any;
     cache: ImageCacheType;
@@ -346,7 +347,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
     ios: typeof ImageViewFillTypeIOS;
   } & typeof ImageFillType;
 
-  image: null | IImage;
+  image: null | Image;
 
   tintColor: Color;
 
@@ -355,7 +356,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: Image;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -369,9 +370,9 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: Image;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
+    onSuccess?: (image: Image, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };

@@ -1,4 +1,4 @@
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
 import Path from '../../io/path';

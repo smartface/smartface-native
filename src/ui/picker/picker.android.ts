@@ -3,7 +3,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
 import TypeValue from '../../util/Android/typevalue';
 import Color from '../color';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { PickerEvents } from './picker-events';
 
 const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');

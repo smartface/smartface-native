@@ -1,10 +1,10 @@
 import Color from '../color';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { IButton } from '.';
 import { ButtonEvents } from './button-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
-import Image from '../image';
+import ImageAndroid from '../image/image.android';
 import { IViewState } from '../view';
 import TextAlignment from '../shared/textalignment';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
@@ -34,27 +34,29 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   extends LabelAndroid<ButtonEvents, TNative, TProps>
   implements IButton<TEvent>
 {
+  protected createNativeObject() {
+    return new NativeButton(AndroidConfig.activity);
+  }
   private __onPress: IButton['onPress'];
   private __onLongPress: IButton['onLongPress'];
   protected _backgroundColor: IButton['backgroundColor'];
   private __backgroundImages: IButton['backgroundImage'];
   private borderShapeDrawable: any;
   private layerDrawable: any;
-  private backgroundDrawable: any;
+  private backgroundDrawable = new NativeGradientDrawable();
   private __didSetOnClickListener: boolean;
   private __didSetOnLongClickListener: boolean;
   constructor(params: Partial<TProps> = {}) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeButton(AndroidConfig.activity);
+    if (this._backgroundColor instanceof Color) {
+      this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     }
-
-    this._borderRadius = 0;
     this._borderRadius = 0;
     this.borderShapeDrawable = SFViewUtil.getShapeDrawable(0, 0, this._borderRadius);
 
     this.layerDrawable = this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
     this._borderColor = Color.BLACK;
+
     this._borderWidth = 0;
 
     this.nativeObject.setBackground(this.layerDrawable);
@@ -197,14 +199,14 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     const resources = AndroidConfig.activityResources;
     let bitmap: any;
     const backgroundImages: any = this.__backgroundImages;
-    if (backgroundImages instanceof Image) {
+    if (backgroundImages instanceof ImageAndroid) {
       bitmap = backgroundImages.nativeObject.getBitmap();
       this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
       this.backgroundDrawable.setCornerRadius(this._borderRadius);
       this.setBackground(0);
-    } else if (isStateObject<Image>(backgroundImages)) {
+    } else if (isStateObject<ImageAndroid>(backgroundImages)) {
       let stateDrawable: any;
-      let image: Image;
+      let image: ImageAndroid;
       release(this.backgroundDrawable);
       this.backgroundDrawable = new NativeStateListDrawable();
       if (backgroundImages.normal) {
@@ -257,8 +259,9 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   }
 
   private setBackground(layerIndex: number) {
-    const constantStateForCopy = this.nativeObject.getBackground().getConstantState();
-    const layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
+    const background = this.nativeObject.getBackground();
+    const constantStateForCopy = background?.getConstantState() || null;
+    const layerDrawableNative = constantStateForCopy?.newDrawable() || this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
     switch (layerIndex) {
       case 0:
         layerDrawableNative.setDrawableByLayerId(0, this.backgroundDrawable);
@@ -281,8 +284,8 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     drawables.forEach(() => drawablesForObjectCreate.push(drawables[0]));
     const layerDrawable = new NativeLayerDrawable(array(drawablesForObjectCreate));
     drawables.forEach((drawable: any, index: number) => {
-      layerDrawable.setId(index, index);
-      layerDrawable.setDrawableByLayerId(index, drawable);
+      layerDrawable?.setId(index, index);
+      layerDrawable?.setDrawableByLayerId(index, drawable);
     });
     return layerDrawable;
   }

@@ -302,7 +302,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   }
   get cluster(): ClusterIOS {
     if (this._cluster.length === 0) {
-      const cluster = new ClusterIOS({}, this.nativeObject.getCluster());
+      const cluster = new ClusterIOS({ nativeObject: this.nativeObject.getCluster() });
       this._cluster.push(cluster);
     }
     return this._cluster[0];

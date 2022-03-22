@@ -92,7 +92,7 @@ export default class ColorIOS extends AbstractColor {
 
   constructor(params: { color: __SF_UIColor | __SF_CAGradientLayer }) {
     super();
-    this.nativeObject = params.color;
+    this._nativeObject = params.color;
   }
 
   red(): number {

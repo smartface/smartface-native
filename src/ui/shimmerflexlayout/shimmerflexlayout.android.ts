@@ -1,6 +1,6 @@
 import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutAndroidParams, ShimmerHighlight, ShimmeringDirection } from '.';
 import { ViewEvents } from '../view/view-event';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import FlexLayout from '../flexlayout';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';

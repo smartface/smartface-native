@@ -161,6 +161,7 @@ export declare class AbstractAsyncTask<TEvent extends string = AsyncTaskEvents, 
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TMobile>
   implements IAsyncTask
 {
+  protected createNativeObject(): any;
   task: () => void;
   onComplete: () => void;
   onPreExecute: () => void;

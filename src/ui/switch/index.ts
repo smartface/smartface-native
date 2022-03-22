@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
-import Image from '../image';
+import IImage from '../image';
 import { AbstractView, IView } from '../view';
 import { SwitchEvents } from './switch-events';
 
@@ -23,7 +23,7 @@ export type SwitchAndroidProps = IView['android'] & {
    * @since 3.2.1
    */
 
-  toggleImage: Image | string;
+  toggleImage: IImage | string;
   /**
    * Gets/sets the thumb image of the switch. This property should be used before assigning colors.
    *
@@ -31,7 +31,7 @@ export type SwitchAndroidProps = IView['android'] & {
    * @android
    * @since 3.2.1
    */
-  thumbImage: Image | string;
+  thumbImage: IImage | string;
   /**
    * Gets/sets the background of the switch when it is OFF.  It is set to gray
    * by default. This property works only for Android.

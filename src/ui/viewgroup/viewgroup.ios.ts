@@ -1,14 +1,9 @@
 import { IViewGroup } from '.';
 import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import { IView } from '../view';
-import View from '../view/view.ios';
+import ViewIOS from '../view/view.ios';
 import { ViewGroupEvents } from './viewgroup-events';
 
-function getKeyByValue(object, value) {
-  for (const prop in object) {
-    if (object[prop].id === value) return object[prop];
-  }
-}
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -18,18 +13,32 @@ function getKeyByValue(object, value) {
  */
 // ViewGroup.prototype = Object.create(View.prototype);
 export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup>
-  extends View<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
+  extends ViewIOS<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
   implements IViewGroup
 {
   private _children: Record<string, IView> = {};
-  onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
-  onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   onChildViewAdded: IViewGroup['onViewAdded'];
   onChildViewRemoved: IViewGroup['onViewRemoved'];
+  onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
+  onViewAddedInnerCallback: IViewGroup['onViewAdded'];
   constructor(params?: Partial<TProps>) {
     super(params);
-    this.nativeObject.didAddSubview = this.onViewAddedHandler;
-    this.nativeObject.willRemoveSubview = this.onViewRemovedHandler;
+    this.nativeObject.didAddSubview = (e: __SF_UIView) => {
+      const view = this._children[e.subview.uuid];
+      if (view) {
+        this.onViewAdded?.(view);
+        this.onChildViewAdded?.(view);
+        this.onViewAddedInnerCallback?.(view);
+      }
+    };
+    this.nativeObject.willRemoveSubview = (e: __SF_UIView) => {
+      const view = this._children[e.subview.uuid];
+      if (view) {
+        this.onViewRemoved?.(view);
+        this.onChildViewRemoved?.(view);
+        this.onViewRemovedInnerCallback?.(view);
+      }
+    };
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
@@ -41,7 +50,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
 
   // TODO: Make View disposable and move that logic into
-  removeChild(view: View) {
+  removeChild(view: ViewIOS) {
     view.nativeObject.removeFromSuperview();
     delete this._children[view.uniqueId];
     view.parent = undefined;
@@ -64,22 +73,10 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   }
 
   findChildById(id: string) {
-    return getKeyByValue(this._children, id);
-  }
-
-  onViewAddedHandler(e: __SF_UIView) {
-    const view = this._children[e.subview.uuid];
-    if (view) {
-      this.onViewAdded?.(view);
-      this.onChildViewAdded?.(view);
-      this.onViewAddedInnerCallback?.(view);
+    for (const prop in this._children) {
+      if (this._children[prop].id === id) {
+        return this._children[prop];
+      }
     }
-  }
-
-  onViewRemovedHandler(e: __SF_UIView) {
-    const view = this._children[e.subview.uuid];
-    this.onViewRemoved?.(view);
-    this.onChildViewRemoved?.(view);
-    this.onViewRemovedInnerCallback?.(view);
   }
 }

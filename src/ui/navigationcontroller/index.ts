@@ -235,30 +235,33 @@ export abstract class AbstractNavigationController extends NativeComponent imple
 }
 
 class NavigationControllerImpl extends AbstractNavigationController {
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
   present(params?: ControllerPresentParams): void {
     throw new Error('Method not implemented.');
   }
-  dismiss(params?: { onComplete: () => void; }): void {
+  dismiss(params?: { onComplete: () => void }): void {
     throw new Error('Method not implemented.');
   }
-  push(params: { controller: IController<any>; animated?: boolean | undefined; }): void {
+  push(params: { controller: IController<any>; animated?: boolean | undefined }): void {
     throw new Error('Method not implemented.');
   }
-  pop(params?: { animated?: boolean | undefined; }): void {
+  pop(params?: { animated?: boolean | undefined }): void {
     throw new Error('Method not implemented.');
   }
-  popTo(params: { controller: IController<any>; animated?: boolean | undefined; }): void {
+  popTo(params: { controller: IController<any>; animated?: boolean | undefined }): void {
     throw new Error('Method not implemented.');
   }
   getCurrentController(): IController<any> | null {
     throw new Error('Method not implemented.');
   }
-  show(params?: { controller: IController<any>; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined; }): void {
+  show(params?: { controller: IController<any>; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }): void {
     throw new Error('Method not implemented.');
   }
   childControllers: Controller[];
-  willShow: (params: { controller: Controller; animated?: boolean | undefined; }) => void;
-  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller | undefined; targetController?: Controller | undefined; }) => void;
+  willShow: (params: { controller: Controller; animated?: boolean | undefined }) => void;
+  onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller | undefined; targetController?: Controller | undefined }) => void;
   headerBar: HeaderBar;
 }
 

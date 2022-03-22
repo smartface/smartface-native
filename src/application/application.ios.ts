@@ -9,7 +9,14 @@ import { ApplicationBase } from './application';
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
 import { IBottomTabBar } from '../ui/bottomtabbar';
-import { EventEmitter } from '../core/eventemitter';
+import NativeEventEmitterComponent from '../core/native-event-emitter-component';
+import SliderDrawer from '../ui/sliderdrawer';
+
+enum EmulatorResetState {
+  scan,
+  update,
+  clear
+}
 
 //Application Direction Manager (RTL Support)
 const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
@@ -18,37 +25,27 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
   __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
 }
 
-let _rootPage;
-let _sliderDrawer;
-const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
-
-function listenAppShortcut(callback) {
-  //TODO: Check isEmulator
-  if (!SMFApplication.sharedInstance) return;
-
-  SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = function (shortcutItem) {
-    let returnValue = true;
-    if (typeof callback === 'function') {
-      const innerReturnValue = callback({ data: shortcutItem.userInfo });
-      if (typeof innerReturnValue === 'boolean') {
-        returnValue = innerReturnValue;
-      }
-    }
-    return returnValue;
-  };
-}
-
-class ApplicationIOS extends EventEmitter<ApplicationEvents> implements ApplicationBase {
-  private _onUnhandledError: any;
-  private _onExit: () => void;
-  private _onReceivedNotification: (e: any) => void;
-  private _onApplicationCallReceived: any;
-  private _onAppShortcutReceived: any;
-  private _onMaximize: () => void;
-  private _onMinimize: () => void;
+class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
+  onUnhandledError: ApplicationBase['onUnhandledError'];
+  onExit: ApplicationBase['onExit'];
+  onReceivedNotification: ApplicationBase['onReceivedNotification'];
+  onApplicationCallReceived: ApplicationBase['onApplicationCallReceived'];
+  onMaximize: ApplicationBase['onMaximize'];
+  onMinimize: ApplicationBase['onMinimize'];
+  onAppShortcutReceived: ApplicationBase['onAppShortcutReceived'];
+  currentPage: Page;
+  statusBar: typeof StatusBar = StatusBar;
+  tabBar?: IBottomTabBar;
+  private _sliderDrawer: SliderDrawer;
+  private _rootPage: NavigationController['controller'];
+  private keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
+  readonly LayoutDirection = {
+    LEFTTORIGHT: 0,
+    RIGHTTOLEFT: 1
+  } as const;
   readonly emulator = {
     globalObjectWillReset(state: EmulatorResetState) {
-      cancelAllBackgroundJobs();
+      this.cancelAllBackgroundJobs();
       switch (state) {
         case EmulatorResetState.scan:
           break;
@@ -63,134 +60,110 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   } as const;
   constructor() {
     super();
-    // TODO: Reimplement that
-    // onUserActivityCallback = function (e) {
-    //   const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
-    //   const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
-    //   if (url && type === 'NSUserActivityTypeBrowsingWeb' && typeof value === 'function') {
-    //     return value(url.absoluteString);
-    //   }
-    //   return false;
-    // };
-    listenAppShortcut((e) => {
-      this.emit(ApplicationEvents.AppShortcutReceived, e);
-    });
+    __SF_UIApplication.onUserActivityCallback = (e) => {
+      const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
+      const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
+      if (url && type === 'NSUserActivityTypeBrowsingWeb') {
+        return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
+      }
+      return false;
+    };
+    if (__SF_UIApplication.sharedInstance) {
+      __SF_UIApplication.sharedInstance().performActionForShortcutItemShortcutItem = (shortcutItem: any) => {
+        const params = { data: shortcutItem.userInfo };
+        this.emit('appShortcutReceived', params);
+        const innerReturnValue = this.onAppShortcutReceived?.(params);
+        return typeof innerReturnValue === 'boolean' ? innerReturnValue : true;
+      };
+    }
 
-    this.onUnhandledError = (e) => {
-      this.emit(ApplicationEvents.UnhandledError, e);
+    __SF_UIApplication.onAppShortcutReceive = (e) => {
+      //TODO: Check isEmulator
+      if (!__SF_UIApplication.sharedInstance) {
+        return;
+      }
+      this.emit('appShortcutReceived', e);
+      this.onAppShortcutReceived?.(e);
     };
 
-    this.onExit = function () {
-      this.emit(ApplicationEvents.Exit);
+    __SF_UIApplication.onUnhandledError = (e) => {
+      this.onUnhandledError?.(e);
+      this.emit('unhandledError', e);
     };
 
-    this.onReceivedNotification = function (e) {
-      this.emit(ApplicationEvents.ReceivedNotification, e);
+    __SF_UIApplication.onExit = () => {
+      this.emit('exit');
+      this.onExit?.();
     };
 
-    this.onApplicationCallReceived = function (e) {
-      this.emit(ApplicationEvents.ApplicationCallReceived, e);
+    __SF_UIApplication.onReceivedNotification = (e) => {
+      this.onReceivedNotification?.(e);
+      this.emit('receivedNotification', e);
     };
 
-    this.onMaximize = function () {
-      this.emit(ApplicationEvents.Maximize);
+    __SF_UIApplication.onApplicationCallReceived = (e) => {
+      this.onApplicationCallReceived?.(e);
+      this.emit('applicationCallReceived', e);
     };
 
-    this.onMinimize = function () {
-      this.emit(ApplicationEvents.Minimize);
+    __SF_UIApplication.onMaximize = () => {
+      this.onMaximize?.();
+      this.emit('maximize');
+    };
+
+    __SF_UIApplication.onMinimize = () => {
+      this.onMinimize?.();
+      this.emit('minimize');
     };
   }
   setAppTheme: (theme: string) => void;
-  Events: {
-    readonly Exit: 'exit';
-    readonly Maximize: 'maximize';
-    readonly Minimize: 'minimize';
-    readonly ReceivedNotification: 'receivedNotification';
-    readonly UnhandledError: 'unhandledError';
-    readonly ApplicationCallReceived: 'applicationCallReceived';
-    readonly AppShortcutReceived: 'appShortcutReceived';
-    readonly BackButtonPressed: 'backButtonPressed';
-    readonly RequestPermissionResult: 'requestPermissionResult';
-  };
-  currentPage: Page;
   registOnItemSelectedListener(): void {
     throw new Error('Method not implemented.');
   }
-  tabBar?: IBottomTabBar;
-  __mDrawerLayout: any;
-  private _sliderDrawer;
-  private _rootPage;
-  private _onUserActivityWithBrowsingWeb;
-  // TODO: typescript error
-  public statusBar: typeof StatusBar = StatusBar;
-  readonly LayoutDirection = {
-    LEFTTORIGHT: 0,
-    RIGHTTOLEFT: 1
-  } as const;
-  canOpenUrl(url) {
-    // TODO define SMFApplication globally
-    return SMFApplication.canOpenUrl(url);
+
+  canOpenUrl(url: string) {
+    return __SF_UIApplication.canOpenUrl(url);
   }
   exit() {
-    this._onExit();
-    // TODO define SMFApplication globally
-    SMFApplication.exit();
+    __SF_UIApplication.onExit();
+    __SF_UIApplication.exit();
   }
   restart() {
-    cancelAllBackgroundJobs();
-    // TODO define SMFApplication globally
-    SMFApplication.restart();
+    this.cancelAllBackgroundJobs();
+    __SF_UIApplication.restart();
   }
   setRootController(params: NavigationController) {
-    if (params && params.controller) {
+    if (params?.controller) {
       this.rootPage = params.controller;
-      keyWindow.rootViewController = params.controller.nativeObject;
-      keyWindow.makeKeyAndVisible();
+      this.keyWindow.rootViewController = params.controller.nativeObject;
+      this.keyWindow.makeKeyAndVisible();
     }
   }
   configureSliderDrawer(rootPage, sliderDrawer) {
     rootPage.sliderDrawer = sliderDrawer;
     sliderDrawer.nativeObject.Pages = rootPage;
-    sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, _sliderDrawer.nativeObject);
+    sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, this._sliderDrawer.nativeObject);
   }
-  call(
-    uriScheme: {
-      uriScheme: string;
-      data?: {};
-      onSuccess?: (value?: any) => void;
-      onFailure?: (value?: any) => void;
-    },
-    data?: {},
-    onSuccess?: (value?: any) => void,
-    onFailure?: (value?: any) => void
-  ) {
-    if (Object.keys(uriScheme).indexOf('uriScheme') === -1) {
-      SMFApplication.call(uriScheme, data, onSuccess, onFailure);
-    } else {
-      SMFApplication.call(uriScheme.uriScheme, uriScheme.data, uriScheme.onSuccess, uriScheme.onFailure);
-    }
+  call(params: Parameters<ApplicationBase['call']>['0']) {
+    __SF_UIApplication.call(params.uriScheme, params.data || {}, params.onSuccess, params.onFailure);
   }
   hideKeyboard() {
-    //TODO: new argument
     const argForce = new Invocation.Argument({
       type: 'BOOL',
       value: true
     });
-    // TODO: keyWindow must be __SF_NSOBject
-    Invocation.invokeInstanceMethod(keyWindow as any, 'endEditing:', [argForce], 'BOOL');
+    Invocation.invokeInstanceMethod(this.keyWindow, 'endEditing:', [argForce], 'BOOL');
   }
+
   get byteReceived() {
-    // TODO define SMFApplication globally
-    const counterInfo = SMFApplication.dataCounters();
+    const counterInfo = __SF_UIApplication.dataCounters();
     return counterInfo.WiFiReceived + counterInfo.WWANReceived;
   }
   get byteSent() {
-    // TODO define SMFApplication globally
-    const counterInfo = SMFApplication.dataCounters();
+    const counterInfo = __SF_UIApplication.dataCounters();
     return counterInfo.WiFiSent + counterInfo.WWANSent;
   }
   get keepScreenAwake() {
-    // TODO updated here with real sharedApplication
     const sharedApp = __SF_UIApplication.sharedApplication();
     return Invocation.invokeInstanceMethod(sharedApp, 'isIdleTimerDisabled', [], 'BOOL');
   }
@@ -206,10 +179,10 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
     return this._sliderDrawer;
   }
   set sliderDrawer(value) {
-    if (typeof value === 'object') {
-      _sliderDrawer = value;
-      if (typeof _rootPage !== 'undefined') {
-        this.configureSliderDrawer(_rootPage, _sliderDrawer);
+    if (value instanceof SliderDrawer) {
+      this._sliderDrawer = value;
+      if (this._rootPage) {
+        this.configureSliderDrawer(this._rootPage, this._sliderDrawer);
       }
     }
   }
@@ -218,77 +191,11 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   }
   set rootPage(value) {
     if (typeof value === 'object') {
-      _rootPage = value;
-
-      if (typeof _sliderDrawer !== 'undefined') {
-        this.configureSliderDrawer(_rootPage, _sliderDrawer);
+      this._rootPage = value;
+      if (this._sliderDrawer instanceof SliderDrawer) {
+        this.configureSliderDrawer(this._rootPage, this._sliderDrawer);
       }
     }
-  }
-  get onUnhandledError() {
-    return this._onUnhandledError;
-  }
-  set onUnhandledError(value) {
-    this._onUnhandledError = (e) => {
-      value && value(e);
-      this.emitter.emit(ApplicationEvents.UnhandledError, e);
-    };
-  }
-  set onExit(value) {
-    this._onExit = () => {
-      value && value();
-      this.emitter.emit(ApplicationEvents.Exit);
-    };
-  }
-  get onExit() {
-    return this._onExit;
-  }
-  set onReceivedNotification(value) {
-    this._onReceivedNotification = (e) => {
-      value && value(e);
-      this.emitter.emit(ApplicationEvents.ReceivedNotification, e);
-    };
-  }
-  get onReceivedNotification() {
-    return this._onReceivedNotification;
-  }
-  set onUserActivityWithBrowsingWeb(value) {
-    this._onUserActivityWithBrowsingWeb = value;
-    // TODO: Application Global
-  }
-  get onApplicationCallReceived() {
-    return this._onApplicationCallReceived;
-  }
-  set onApplicationCallReceived(value) {
-    this._onApplicationCallReceived = (e) => {
-      value && value(e);
-      this.emitter.emit(ApplicationEvents.ApplicationCallReceived, e);
-    };
-  }
-  set onAppShortcutReceived(value) {
-    listenAppShortcut(value);
-    this._onAppShortcutReceived = value;
-  }
-  get onUserActivityWithBrowsingWeb() {
-    return this._onUserActivityWithBrowsingWeb;
-  }
-  set onMaximize(value) {
-    this._onMaximize = () => {
-      value && value();
-      this.emitter.emit(ApplicationEvents.Maximize);
-    };
-  }
-  get onMaximize() {
-    return this._onMaximize;
-  }
-  set onMinimize(value) {
-    this._onMinimize = () => {
-      value && value();
-      this.emitter.emit(ApplicationEvents.Minimize);
-    };
-  }
-  get onMinimize() {
-    return this._onMinimize;
   }
   get currentReleaseChannel() {
     return this.currentReleaseChannel;
@@ -305,7 +212,7 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   get isVoiceOverEnabled() {
     return __SF_UIAccessibility.isVoiceOverRunning();
   }
-  get ios() {
+  get ios(): ApplicationBase['ios'] {
     return {
       get bundleIdentifier() {
         const mainBundle = Invocation.invokeClassMethod('NSBundle', 'mainBundle', [], 'NSObject');
@@ -313,7 +220,6 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
         return bundleIdentifier;
       },
       get userInterfaceLayoutDirection() {
-        // TODO: sharedApplication userInterfaceLayoutDirection prop needed
         return __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
       }
     };
@@ -324,53 +230,20 @@ class ApplicationIOS extends EventEmitter<ApplicationEvents> implements Applicat
   get Android() {
     return {};
   }
-}
-//EventEmitterCreator(SFApplication, EventFunctions);
-
-// function getProjectJsonObject(){
-//     imporr File from "../io/file";
-//     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
-
-//     // Publish case
-//     if(!projectFile.exists){
-//         projectFile = new File({path: File.getMainBundleDirectory() + "/project.json"});
-//     }
-
-//     var retval = {};
-//     if(projectFile.exists){
-//         import FileStream from "../io/filestream";
-//         var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
-//         var projectFileContent = projectFileStream.readToEnd();
-//         if (projectFileContent) {
-//             retval = JSON.parse(projectFileContent);
-//         }
-//         projectFileStream.close();
-//     }
-//     return retval;
-// }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-enum EmulatorResetState {
-  scan,
-  update,
-  clear
-}
-
-function cancelAllBackgroundJobs() {
-  Timer.clearAllTimer();
-
-  if (Location.nativeObject) {
-    Location.stop();
+  protected createNativeObject() {
+    return null;
   }
 
-  Accelerometer.stop();
-
-  //TODO: notifierInstance not exists
-  if (Network) {
-    Network.cancelAll();
+  private cancelAllBackgroundJobs() {
+    Timer.clearAllTimer();
+    if (Location.nativeObject) {
+      Location.stop();
+    }
+    Accelerometer.stop();
+    Network?.cancelAll();
   }
 }
 
-const Application = new ApplicationIOS();
+const ApplicationIOSInstance = new ApplicationIOS();
 
-export default Application;
+export default ApplicationIOSInstance;

@@ -1,10 +1,10 @@
 import { ISwipeView, SwipeViewState } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Page from '../page';
+import Page, { IPage } from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { SwipeViewEvents } from './swipeview-events';
 
 const NativeView = requireClass('android.view.View');
@@ -18,10 +18,10 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   extends ViewAndroid<TEvent | SwipeViewEvents, TNative, TProps>
   implements ISwipeView
 {
-  onPageSelected: (index: number, page: PageAndroid) => void;
+  onPageSelected: (index: number, page: IPage) => void;
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
-  onPageCreate: (position: number) => PageAndroid;
+  onPageCreate: (position: number) => Page;
   swipeToIndex(index: number, animated: boolean): void {
     animated = animated ? true : false; // not to pass null to native method
     this.nativeObject.setCurrentItem(index, animated);
@@ -89,7 +89,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   private getPageInstance(position: number) {
     let pageInstance: PageAndroid;
     if (this.onPageCreate) {
-      pageInstance = this.onPageCreate?.(position);
+      pageInstance = this.onPageCreate?.(position) as any; //TODO: Page type fix
     } else if (this._pageInstances[position]) {
       return this._pageInstances[position].nativeObject;
     } else {
@@ -139,7 +139,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     this._page = value;
   }
   get pages(): Page[] {
-    return this._pages as Page[]; //TODO: PageBase and PageAndroid no overlap
+    return this._pages as any; //TODO: PageBase and PageAndroid no overlap
   }
   set pages(value) {
     if (Array.isArray(value)) {

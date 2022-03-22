@@ -81,19 +81,16 @@ export class ContactIOS extends Contact {
 }
 
 class ContactsIOS extends ContactsBase {
+  protected createNativeObject() {
+    return __SF_CNMutableContact.new();
+  }
   static ios = {
     __pickerDelegate: new __SF_CNContactPickerDelegate()
   };
   static android: {};
   public static readonly Contact = ContactIOS;
   constructor(params?: Partial<ContactsBase>) {
-    super();
-    params = params || {};
-    if (params.nativeObject) {
-      this.nativeObject = params.nativeObject;
-    } else {
-      this.nativeObject = __SF_CNMutableContact.new();
-    }
+    super(params);
   }
   pickContact(
     page: Page,

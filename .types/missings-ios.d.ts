@@ -106,37 +106,23 @@ declare class __SF_UIView extends __SF_NSOBject {
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
-  yoga: any;
-  frame: __SF_NSRect;
-  bounds: __SF_NSRect;
-  layer: any;
+
   onTouch: (e: any) => void;
   onTouchCancelled: (e: any) => void;
   onTouchMoved: (e: any) => void;
   onTouchEnded: (e: any) => void;
-  alpha: number;
-  backgroundColor: __SF_UIColor;
   addFrameObserver(): void;
   frameObserveHandler(e: { frame: __SF_NSRect }): void;
   removeFrameObserver(): void;
-  tag: string;
   scale(coordinates: { x: number; y: number }): void;
-  touchEnabled: boolean;
   flipHorizontally(): void;
   flipVertically(): void;
-  superview: __SF_UIView;
   addSubview(view: __SF_UIView): void;
   removeFromSuperview(): void;
   willRemoveSubview: (e: any) => void;
-  widthAnchor: any;
-  heightAnchor: any;
-  viewControllers: __SF_UIViewController[];
-  navigationBar: any; /**TODO: NavigationBar Type */
   endEditing(animated: boolean): void;
   layoutIfNeeded(): void;
   sizeToFit(): void;
-  subviews: __SF_UIView[];
-  view: __SF_UIView;
   className(): any;
   becomeFirstResponder(): void;
   resignFirstResponder(): void;
@@ -144,6 +130,23 @@ declare class __SF_UIView extends __SF_NSOBject {
   removeFromParentViewController(): void;
   parentViewController(): __SF_UIViewController;
   didScroll(e: any): void;
+  widthAnchor: any;
+  heightAnchor: any;
+  viewControllers: __SF_UIViewController[];
+  navigationBar: any; /**TODO: NavigationBar Type */
+  subviews: __SF_UIView[];
+  superview: __SF_UIView;
+  subview: __SF_UIView;
+  touchEnabled: boolean;
+  tag: string;
+  view: __SF_UIView;
+  alpha: number;
+  backgroundColor: __SF_UIColor;
+  yoga: any;
+  frame: __SF_NSRect;
+  bounds: __SF_NSRect;
+  layer: any;
+  uuid: string;
 }
 declare class __SF_NSUserDefaults extends __SF_NSOBject {
   setObjectForKey(value: any, key: string): any;
@@ -358,28 +361,48 @@ declare class __SF_Label {
   static createFromFile(path: string, size: number): any;
 }
 
-declare interface iOSSharedApplication extends __SF_NSOBject {
-  statusBarFrame: __SF_NSRect;
-  statusBarOrientation: number;
-  sf_statusBarStyle: any;
-  sf_statusBarHidden: boolean;
-  userInterfaceLayoutDirection: number;
-  statusBarOrientationAnimationDuration: number;
-  keyWindow: { addSubview(view: __SF_UIView): void; rootViewController: any; makeKeyAndVisible: (...args: any[]) => void };
-  scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
-  presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
-  cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
-  cancelAllLocalNotifications(): void;
-  applicationIconBadgeNumber: number;
-  scheduledLocalNotifications: __SF_UILocalNotification[];
-  registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
-  registerForRemoteNotifications(): void;
-  unregisterForRemoteNotifications(): void;
-  canOpenURL(value: __SF_NSURL): boolean;
+declare class __SF_UIWindow extends __SF_NSOBject {
+  addSubview(view: __SF_UIView): void;
+  rootViewController: any;
+  makeKeyAndVisible: (...args: any[]) => void;
 }
 
 declare class __SF_UIApplication extends __SF_NSOBject {
-  static sharedApplication(): iOSSharedApplication;
+  static statusBarFrame: __SF_NSRect;
+  static statusBarOrientation: number;
+  static sf_statusBarStyle: any;
+  static sf_statusBarHidden: boolean;
+  static userInterfaceLayoutDirection: number;
+  static statusBarOrientationAnimationDuration: number;
+  static keyWindow: __SF_UIWindow;
+  static scheduleLocalNotification(localNotification: __SF_UILocalNotification): void;
+  static presentLocalNotificationNow(localNotification: __SF_UILocalNotification): void;
+  static cancelLocalNotification(localNotification: __SF_UILocalNotification): void;
+  static cancelAllLocalNotifications(): void;
+  static applicationIconBadgeNumber: number;
+  static scheduledLocalNotifications: __SF_UILocalNotification[];
+  static registerUserNotificationSettings(notificationSettings: __SF_UIUserNotificationSettings): void;
+  static registerForRemoteNotifications(): void;
+  static unregisterForRemoteNotifications(): void;
+
+  static sharedInstance(): __SF_UIApplication;
+  static sharedApplication(): __SF_UIApplication;
+  static onAppShortcutReceive: (params: { data: Record<string, any> }) => void;
+  static onUnhandledError: (error: UnhandledError) => void;
+  static onReceivedNotification: (data: { remote: Record<string, any>; local: Record<string, any> }) => void;
+  static onApplicationCallReceived: (params: { data: Record<string, any> }) => void;
+  static onAppShortcutReceived: (params: { data: Record<string, any> }) => void;
+  static onUserActivityCallback: (params: { userActivity: __SF_NSOBject }) => void;
+  static onMaximize: () => void;
+  static onMinimize: () => void;
+  static onExit: () => void;
+  static canOpenUrl(url: string): boolean; //TODO: This should be wrong, check with iOS team
+  static canOpenURL(url: __SF_NSURL): boolean;
+  static exit(): void;
+  static restart(): void;
+  static dataCounters(): { WiFiSent: number; WWANSent: number; WWANReceived: number; WiFiReceived: number };
+  static call(uriScheme: string, data: Record<string, any>, onSuccess?: (...args: any[]) => void, onFailure?: (...args: any[]) => void): void;
+  static isEmulator(): boolean;
 }
 
 declare class __SF_CMMotionManager {
@@ -522,7 +545,7 @@ declare class __SF_UITabBarAppearance extends __SF_UIView {
   configureWithOpaqueBackground(): void;
 }
 
-declare class __SF_UIButton extends __SF_UIView {
+declare class __SF_UIButton extends __SF_SMFUILabel {
   setEnabled: boolean;
   textAlignmentNumber: number;
   contentVerticalAlignment: number;
@@ -704,7 +727,7 @@ declare class __SF_MDCTextInputControllerUnderline {
 
 declare class __SF_UINavigationBarAppearance {
   configureWithOpaqueBackground(): void;
-  titleTextAttributes: any;
+  titleTextAttributes: { NSColor: __SF_UIColor; NSFont: __SF_UIFont };
   backgroundColor: __SF_UIColor;
   barTintColor: __SF_UIColor;
 }
@@ -814,7 +837,7 @@ declare class __SF_UIDevice {
   static currentReachabilityStatus(): number;
   static getIFAddresses(): string[];
   static vibrate(): void;
-  static takeSnapShot(): void;
+  static takeSnapShot(): __SF_UIImage;
   static forceTouchAvaliable(): boolean;
   static changeOrientation(orientation: number): void;
 }

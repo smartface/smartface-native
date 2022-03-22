@@ -6,9 +6,10 @@ import FileAndroid from '../../io/file/file.android';
 import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
-import Image from '../image';
+import type Image from '../image';
+import ImageAndroid from '../image/image.android';
 import ImageCacheType from '../shared/imagecachetype';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ImageViewEvents } from './imageview-events';
 
 const NativeImageView = requireClass('android.widget.ImageView');
@@ -29,7 +30,7 @@ const ImageFillTypeDic = {
 
 export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> extends ViewAndroid<TEvent | ImageViewEvents> implements IImageView {
   private _fillType: ImageFillType | ImageViewFillTypeIOS;
-  private _image: Image | null;
+  private _image: ImageAndroid | null;
   private _adjustViewBounds: boolean = false;
   private _tintColor: Color;
   private _newImageLoaded: boolean = false;
@@ -41,13 +42,13 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  get image(): Image | null {
+  get image(): ImageAndroid | null {
     if (!this._image || this._newImageLoaded) {
       this._newImageLoaded = false;
       const drawable = !!this.nativeObject.getDrawable();
 
       this._image = drawable
-        ? new Image({
+        ? new ImageAndroid({
             // TODO Recheck after build
             drawable: drawable
           })
@@ -55,9 +56,9 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
     return this._image;
   }
-  set image(value: string | Image | null) {
+  set image(value: string | ImageAndroid | null) {
     // We don't use backgroundImage of view. Because, it breaks image fill type.
-    if (value instanceof Image) {
+    if (value instanceof ImageAndroid) {
       this._image = value;
       this.nativeObject.setImageDrawable(value.nativeObject);
     } else if (typeof value === 'string') {
@@ -96,7 +97,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: ImageAndroid;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -148,7 +149,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     }
   }
 
-  loadFromFile(params: { placeholder?: INativeComponent; file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
+  loadFromFile(params: Parameters<IImageView['loadFromFile']>['0']): void {
     const { file = null, placeholder = null, fade = true, width = -1, height = -1, android: { useMemoryCache: useMemoryCache } = { useMemoryCache: true } } = params;
 
     if (file instanceof FileAndroid) {
@@ -221,7 +222,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
         onSuccess: function (resource, model, target, dataSource, isFirstResource) {
           const cacheName = dataSource.toString();
           const cacheType = this.getCacheTypeByName(cacheName);
-          const image = new Image({ drawable: resource });
+          const image = new ImageAndroid({ drawable: resource });
           onSuccess?.(image, cacheType);
         },
         onFailure: (glideException, model, target, isFirstResource) => {

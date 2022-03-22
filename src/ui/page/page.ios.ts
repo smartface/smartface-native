@@ -13,7 +13,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   implements IPage<TEvent | PageEvents>
 {
   headerBar?: HeaderBar | undefined;
-
+  protected createNativeObject() {
+    return new __SF_UIViewController();
+  }
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }
@@ -38,12 +40,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
   constructor(params?: Partial<TProps>) {
     super(params);
-
-    const { ios, android, ...restParams } = params || {};
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIViewController();
-    }
-
     this.nativeObject.automaticallyAdjustsScrollViewInsets = false;
 
     this.setNativeParams();
@@ -54,10 +50,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.pageView.applyLayout = () => {
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     };
-
-    // this.headerBar = {} as any;
-    // this.headerBar.android = {};
-    // this.headerBar.ios = {};
   }
 
   onLoad: () => void;
@@ -196,7 +188,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       this.calculatePosition();
     };
 
-    this.nativeObject.onViewDidAppear = function () {
+    this.nativeObject.onViewDidAppear = () => {
       if (this.nativeObject.navigationController) {
         //COR-1627 for iOS 11 badge
         const subviews: any[] = Invocation.invokeInstanceMethod(this.nativeObject.navigationController.navigationBar, 'subviews', [], 'id') as unknown as any[];
@@ -375,8 +367,11 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         }
       }
     };
-
-    self.headerBar && copyObjectPropertiesWithDescriptors(self.headerBar, headerBar);
+    self.headerBar = {
+      ios: {},
+      android: {}
+    } as HeaderBar;
+    copyObjectPropertiesWithDescriptors(self.headerBar, headerBar);
     self.headerBar?.ios && copyObjectPropertiesWithDescriptors(self.headerBar?.ios, headerBarIOS);
     self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBar);
     self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBarIOS);

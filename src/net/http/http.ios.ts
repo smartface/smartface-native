@@ -5,14 +5,13 @@ import Image from '../../ui/image';
 import { HttpBase, HttpRequest, IHttp } from './http';
 
 export default class HttpIOS extends HttpBase {
+  protected createNativeObject() {
+    return new __SF_Http();
+  }
   cookiePersistenceEnabled: boolean;
   private _sslPinning: IHttp['ios']['sslPinning'];
   constructor(params?: Partial<IHttp>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_Http();
-    }
     this.addIOSProps(this.getIOSProps());
   }
 

@@ -1,6 +1,9 @@
 import { AbstractSecureData } from './securedata';
 
 class SecureDataIOS extends AbstractSecureData {
+  protected createNativeObject() {
+    return null;
+  }
   static _iOS = {
     _Message: {
       NOPASSWORD: 'The specified item could not be found in the keychain.',

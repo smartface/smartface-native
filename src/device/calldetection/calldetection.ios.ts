@@ -3,6 +3,9 @@ import { ICallDetection, State } from '.';
 import { CallDetectionEvents } from './calldetection-events';
 
 class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> implements ICallDetection {
+  protected createNativeObject() {
+    return null;
+  }
   onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;
   private callObserverDelegate: __SF_CallObserverDelegate;
   constructor() {

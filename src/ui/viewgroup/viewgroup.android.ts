@@ -1,11 +1,9 @@
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
 import FlexLayout from '../flexlayout';
 import View, { IView } from '../view';
 
-const NativeRoundRectShape = requireClass('android.graphics.drawable.shapes.RoundRectShape');
-const NativeShapeDrawable = requireClass('android.graphics.drawable.ShapeDrawable');
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 
 export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewGroup = IViewGroup>
@@ -14,6 +12,9 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
 {
   static Events = ViewGroupEvents;
   childViews: Record<string, View> = {};
+  protected createNativeObject() {
+    return null;
+  }
 
   constructor(params?: Partial<TProps>) {
     super(params);

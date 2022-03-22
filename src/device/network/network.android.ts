@@ -1,5 +1,6 @@
-import { ConnectionType, NetworkBase, NetworkNotifier } from '.';
+import { ConnectionType, NetworkBase, INetworkNotifier } from '.';
 import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 
 const SFNetworkNotifier = requireClass('io.smartface.android.sfcore.device.network.SFNetworkNotifier');
@@ -31,37 +32,45 @@ function getTelephonyManager() {
   return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
-class Notifier extends NativeComponent implements NetworkNotifier {
+class Notifier extends NativeMobileComponent implements INetworkNotifier {
+  protected createNativeObject() {
+    const callback = {
+      onConnectionTypeChanged: (connectionType) => {
+        if (!this.connectionTypeChanged) return;
+        const cTypeEnum = getConnectionTypeEnum(connectionType);
+        const isInitialStickyNotification = this.android.isInitialStickyNotification();
+
+        if (!this.android.initialCacheEnabled && isInitialStickyNotification) return;
+
+        this.connectionTypeChanged(cTypeEnum);
+      }
+    };
+    return new SFNetworkNotifier(callback);
+  }
   private isReceiverCreated = false;
   private _connectionTypeChanged;
   private _initialCacheEnabled = false;
   subscribe: (callback: (type: ConnectionType) => void) => void;
   unsubscribe: () => void;
-  android: { isInitialStickyNotification(): boolean; initialCacheEnabled: boolean };
-  constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
-    super();
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+  constructor(params?: INetworkNotifier) {
+    super(params);
     const self = this;
-    if (!self.nativeObject) {
-      const callback = {
-        onConnectionTypeChanged: function (connectionType) {
-          if (!self.connectionTypeChanged) return;
-          const cTypeEnum = getConnectionTypeEnum(connectionType);
-          const isInitialStickyNotification = self.android.isInitialStickyNotification();
 
-          if (!self.android.initialCacheEnabled && isInitialStickyNotification) return;
+    this.addAndroidProps(this.getAndroidProps());
+    instanceCollection.push(this);
 
-          self.connectionTypeChanged(cTypeEnum);
-        }
-      };
-      self.nativeObject = new SFNetworkNotifier(callback);
-    }
+    this.subscribe = function (callback) {
+      self.connectionTypeChanged = callback;
+    };
 
-    const android = {
+    this.unsubscribe = function () {
+      self.connectionTypeChanged = null;
+    };
+  }
+
+  private getAndroidProps() {
+    const self = this;
+    return {
       get isInitialStickyNotification() {
         return self.nativeObject.isInitialStickyBroadcast();
       },
@@ -71,17 +80,6 @@ class Notifier extends NativeComponent implements NetworkNotifier {
       set initialCacheEnabled(value) {
         self._initialCacheEnabled = value;
       }
-    };
-    Object.assign(this.android, android);
-
-    instanceCollection.push(this);
-
-    this.subscribe = function (callback) {
-      self.connectionTypeChanged = callback;
-    };
-
-    this.unsubscribe = function () {
-      self.connectionTypeChanged = null;
     };
   }
   get connectionTypeChanged() {
@@ -104,6 +102,9 @@ class Notifier extends NativeComponent implements NetworkNotifier {
 }
 
 class NetworkAndroid extends NativeComponent implements NetworkBase {
+  protected createNativeObject() {
+    return;
+  }
   ConnectionType = ConnectionType;
   readonly roamingEnabled = false;
   constructor() {

@@ -1,55 +1,28 @@
-import IBlob from '../../global/blob/blob';
 import BlobIOS from '../../global/blob/blob.ios';
-import IImage, { AbstractImage, Format, ImageAndroidProps } from '.';
-import File from '../../io/file';
+import { IImage, AbstractImage, Format, ImageAndroidProps, ImageIOSProps, ImageParams } from './image';
+import FileIOS from '../../io/file/file.ios';
 import TypeUtil from '../../util/type';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * @since 4.5.0
  */
-class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
-  static createFromFile = function (path) {
-    const imageFile = new File({
-      path: path
-    });
-    let retval;
-    if (typeof imageFile.nativeObject.getActualPath() === 'undefined') {
-      retval = null;
-    } else {
-      retval = new ImageiOS({
-        path: imageFile.nativeObject.getActualPath()
-      });
-    }
-    return retval;
-  };
-
-  static createFromName = function (name: string) {
-    return new ImageiOS({
-      name: name
-    });
-  };
-
-  static createFromImage(image: string) {
-    return new ImageiOS({
-      image: image
-    });
+export default class ImageIOS<
+    TNative = __SF_UIImage,
+    TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps>
+  >
+  extends AbstractImage<TNative, TProps>
+  implements IImage
+{
+  protected createNativeObject() {
+    return null;
   }
-
-  static createFromBlob(blob: IBlob) {
-    return new ImageiOS({
-      blob: blob
-    });
-  }
-
-  static readandroid = {
-    createRoundedImage: function () {}
-  };
 
   private _flippedImage;
   private _nativeImage;
   private _autoMirrored: boolean = false;
 
-  constructor(params: any) {
+  constructor(params: Partial<TProps>) {
     super(params);
     if (params.path) {
       if (params.path.includes('.app')) {
@@ -73,7 +46,12 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
   }
 
   get android(): ImageAndroidProps {
-    return {};
+    return {
+      round: () => new ImageIOS({}),
+      get systemIcon() {
+        return 0;
+      }
+    };
   }
 
   createSystemIcon() {
@@ -105,13 +83,13 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
           invocationResizeable.invoke();
           image = invocationResizeable.getReturnValue();
         }
-        return ImageiOS.createFromImage(image);
+        return ImageIOS.createFromImage(image);
       },
       imageWithRenderingMode(value) {
-        return ImageiOS.createFromImage(this.nativeObject.imageWithRenderingMode(value));
+        return ImageIOS.createFromImage(this.nativeObject.imageWithRenderingMode(value));
       },
       imageFlippedForRightToLeftLayoutDirection() {
-        return ImageiOS.createFromImage(self.nativeObject.imageFlippedForRightToLeftLayoutDirection());
+        return ImageIOS.createFromImage(self.nativeObject.imageFlippedForRightToLeftLayoutDirection());
       },
       get renderingMode() {
         return self.nativeObject.valueForKey('renderingMode');
@@ -124,7 +102,7 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
   resize(width: number, height: number, onSuccess?: (e: { image: IImage }) => void, onFailure?: (e?: { message: string }) => void) {
     if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)) {
       // TODO: Recheck new Image.createFromImage(...)
-      const resizedImage = ImageiOS.createFromImage(
+      const resizedImage = ImageIOS.createFromImage(
         this.nativeObject.resizeImage({
           width: width,
           height: height
@@ -147,7 +125,7 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
 
   crop(x: number, y: number, width: number, height: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void) {
     if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height) && TypeUtil.isNumeric(x) && TypeUtil.isNumeric(y)) {
-      const resizedImage = ImageiOS.createFromImage(
+      const resizedImage = ImageIOS.createFromImage(
         this.nativeObject.cropToBounds({
           x: x,
           y: y,
@@ -172,7 +150,7 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
   rotate(angle: number, onSuccess: (e: { image: IImage }) => void, onFailure: (e?: { message: string }) => void) {
     if (TypeUtil.isNumeric(angle)) {
       // TODO: Recheck usage of new Image.createFromImage(...)
-      const resizedImage = ImageiOS.createFromImage(this.nativeObject.imageRotatedByDegrees(angle, false));
+      const resizedImage = ImageIOS.createFromImage(this.nativeObject.imageRotatedByDegrees(angle, false));
       if (onSuccess) {
         onSuccess({
           image: resizedImage
@@ -188,7 +166,7 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
     return null;
   }
 
-  compress(format: Format, quality: number, onSuccess: (e: { blob: IBlob }) => void, onFailure: (e?: { message: string }) => void) {
+  compress(format: Format, quality: number, onSuccess: (e: { blob: BlobIOS }) => void, onFailure: (e?: { message: string }) => void) {
     if (TypeUtil.isNumeric(quality)) {
       const blob = new BlobIOS(this.nativeObject.compress(format, quality / 100));
       if (onSuccess) {
@@ -231,6 +209,41 @@ class ImageiOS extends AbstractImage<__SF_UIImage> implements IImage {
   get autoMirrored() {
     return this._autoMirrored;
   }
-}
 
-export default ImageiOS;
+  static createFromFile(path) {
+    const imageFile = new FileIOS({
+      path: path
+    });
+    let retval;
+    if (typeof imageFile.nativeObject.getActualPath() === 'undefined') {
+      retval = null;
+    } else {
+      retval = new ImageIOS({
+        path: imageFile.nativeObject.getActualPath()
+      });
+    }
+    return retval;
+  }
+
+  static createFromName(name: string) {
+    return new ImageIOS({
+      name: name
+    });
+  }
+
+  static createFromImage(image: ImageIOS) {
+    return new ImageIOS({
+      image: image
+    });
+  }
+
+  static createFromBlob(blob: BlobIOS) {
+    return new ImageIOS({
+      blob: blob
+    });
+  }
+
+  static readandroid = {
+    createRoundedImage: function () {}
+  };
+}

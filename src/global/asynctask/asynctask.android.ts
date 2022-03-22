@@ -9,14 +9,14 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
   implements IAsyncTask
 {
+  protected createNativeObject() {
+    return new SFAsyncTask();
+  }
   static Events = AsyncTaskEvents;
   protected _android;
   private _task: IAsyncTask['task'];
-  constructor(params: Partial<IAsyncTask> = {}) {
-    super();
-    const { ios, android, ...rest } = params;
-    this.nativeObject = new SFAsyncTask();
-    Object.assign(this, rest);
+  constructor(params?: TProps) {
+    super(params);
 
     const callbacks = {
       onPreExecute: () => {

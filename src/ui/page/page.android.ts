@@ -14,7 +14,8 @@ import DocumentPickerAndroid from '../../device/documentpicker/documentpicker.an
 import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
 import ViewController from '../../util/Android/transition/viewcontroller';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import Image from '../image';
+import ImageAndroid from '../image/image.android';
+import type Image from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import StatusBar from '../../application/statusbar';
@@ -24,6 +25,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import LayoutParams from '../../util/Android/layoutparams';
 import SystemServices from '../../util/Android/systemservices';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -59,6 +61,9 @@ const NativeOrientationDictionary = {
 };
 
 export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
+  protected createNativeObject() {
+    return new SFFragment();
+  }
   getCurrentController(): IController {
     throw new Error('Method not implemented.');
   }
@@ -86,10 +91,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private isCreated = false;
   private optionsMenu: any = null;
   private actionBar: any = null;
-  isSwipeViewPage = false;
+  isSwipeViewPage = true;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayout;
-  private _headerBarItems: HeaderBarItem[];
+  private _headerBarItems: HeaderBarItem[] = [];
   private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
   private _headerBarColor: Color;
@@ -114,7 +119,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _attributedSubtitleBuilder: any;
   private _headerBarLogoEnabled = false;
   private _tag: any;
-  private _headerBarLeftItem: HeaderBarItem | null = null;
+  _headerBarLeftItem: HeaderBarItem | null = null;
   /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
    * _pageInstances[intPosition].__onShowCallback?.();
@@ -129,7 +134,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
   constructor(params?: Partial<TProps>) {
     super(params);
-
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     const pageLayout = this.pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     this.pageLayout = pageLayout;
@@ -140,7 +144,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     pageLayout.addView(this.rootLayout.nativeObject);
     this.toolbar = this.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     this.setCallbacks();
-    this.isSwipeViewPage = false;
     this.headerBar = { android: {}, ios: {} } as any;
     this.__onShowCallback = () => {
       this.onShow?.();
@@ -216,8 +219,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     params?.onComplete();
   }
   private setCallbacks() {
-    this._nativeObject = new SFFragment();
-    this.nativeObject.setCallback({
+    this.nativeObject?.setCallbacks({
       onCreate: () => {},
       onCreateView: () => {
         const layoutDirection = this.nativeObject.getResources().getConfiguration().getLayoutDirection();
@@ -548,7 +550,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               }
               customViewContainer.addChild(item.customView);
               item.nativeObject = customViewContainer.nativeObject;
-            } else if (item.image instanceof Image && (item.image?.nativeObject || (item.android as any).systemIcon)) {
+            } else if (item.image instanceof ImageAndroid && (item.image?.nativeObject || (item.android as any).systemIcon)) {
               item.nativeObject = new NativeImageButton(AndroidConfig.activity);
             } else {
               item.nativeObject = new NativeTextButton(AndroidConfig.activity);
@@ -592,7 +594,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
           //TODO: check out after headerbaritem is complete
           (self._headerBarLeftItem as any).isLeftItem = true;
           (self._headerBarLeftItem as any).actionBar = self.actionBar;
-          if (self._headerBarLeftItem.image instanceof Image) {
+          if (self._headerBarLeftItem.image instanceof ImageAndroid) {
             self.actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
           }
           self.actionBar.setHomeActionContentDescription(self._headerBarLeftItem.accessibilityLabel);
@@ -619,10 +621,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         }
       },
       get subtitle(): HeaderBar['android']['subtitle'] {
-        return self.toolbar.getSubTitle();
+        return self.toolbar.getSubtitle();
       },
       set subtitle(value: HeaderBar['android']['subtitle']) {
-        self.toolbar.setSubTitle(value || '');
+        self.toolbar.setSubtitle(value || '');
       },
       get subtitleColor(): HeaderBar['android']['subtitleColor'] {
         return self._headerBarSubtitleColor;
@@ -726,9 +728,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         self._tag = value;
       }
     };
-
-    this.headerBar = Object.assign(this.headerBar, headerbarParams);
-    Object.assign(this.headerBar.android, headerBarAndroid);
+    copyObjectPropertiesWithDescriptors(this.headerBar, headerbarParams);
+    copyObjectPropertiesWithDescriptors(this.headerBar.android, headerBarAndroid);
   }
 
   private layoutAssignments() {

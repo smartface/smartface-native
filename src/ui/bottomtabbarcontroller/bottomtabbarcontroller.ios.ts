@@ -8,6 +8,9 @@ import Page, { IPage } from '../page';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
+  protected createNativeObject() {
+    return null;
+  }
   static Events = BottomTabbarControllerEvents;
   private view;
   private model: BottomTabBarModel;
@@ -27,7 +30,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   isInsideBottomTabBar: boolean = false;
 
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
-    super();
+    super(params as any); //TODO: Fix as any
 
     this.view = new BottomTabBarView({
       viewModel: this
@@ -64,8 +67,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
         this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
       }
     };
-
-    params && Object.assign(this, params);
 
     this.viewModel = undefined;
 
@@ -204,6 +205,9 @@ class BottomTabBarModel {
 }
 
 class BottomTabBarView extends NativeComponent {
+  protected createNativeObject() {
+    return __SF_UITabBarController.new();
+  }
   viewModel: any;
   nativeObjectDelegate: any;
   constructor(params?: Partial<{ viewModel: any }>) {
@@ -215,7 +219,6 @@ class BottomTabBarView extends NativeComponent {
       self.viewModel = params.viewModel;
     }
 
-    self.nativeObject = __SF_UITabBarController.new();
     self.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
       tabBarControllerShouldSelectViewController: function (tabBarController, viewController) {
         const index = self.nativeObject.viewControllers.indexOf(viewController);

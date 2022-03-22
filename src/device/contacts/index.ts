@@ -15,8 +15,11 @@ export type ManagedContact = {
 };
 
 export class Contact extends NativeComponent {
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
   constructor(params?: Partial<Contact>) {
-    super();
+    super(params);
   }
   phoneNumbers?: string[];
   emailAddresses?: any;
@@ -62,6 +65,9 @@ export class Contact extends NativeComponent {
  *
  */
 export class ContactsBase extends NativeComponent {
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
   public static readonly Contact = Contact;
   /**
    * This function adds a contact to contact list with specified properties. You need check

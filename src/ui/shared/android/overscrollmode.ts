@@ -1,4 +1,4 @@
-declare enum OverScrollMode {
+enum OverScrollMode {
   ALWAYS,
   AUTO,
   NEVER

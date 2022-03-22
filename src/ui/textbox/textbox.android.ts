@@ -5,7 +5,7 @@ import Font from '../font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import AutoCapitalize from './autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import SystemServices from '../../util/Android/systemservices';

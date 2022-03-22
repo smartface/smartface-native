@@ -17,7 +17,6 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
   delegate?: __SF_CLLocationManagerDelegate;
   Android = { Provider: {}, Priority: {}, SettingsStatusCodes: {} };
   iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
-  _nativeObject = new __SF_CLLocationManager();
   private _authorizationStatus: LocationBase.iOS.AuthorizationStatus;
   onLocationChanged: (...args: any[]) => {};
   constructor() {
@@ -28,6 +27,9 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
       Provider: {}
     });
     this._authorizationStatus = this.ios?.authorizationStatus.NotDetermined;
+  }
+  protected createNativeObject() {
+    return new __SF_CLLocationManager();
   }
   private getIOSProps(): ILocation['ios'] {
     return {

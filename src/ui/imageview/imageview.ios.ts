@@ -1,7 +1,7 @@
 import { IImageView, ImageFillType, ImageViewFillTypeIOS } from '.';
 import File from '../../io/file';
 import Color from '../color';
-import { IImage } from '../image';
+import type Image from '../image';
 import ImageiOS from '../image/image.ios';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
@@ -115,7 +115,7 @@ enum SDWebImageOptions {
 }
 
 export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
-  private _imageTemplate: IImage | undefined;
+  private _imageTemplate: ImageiOS | undefined;
   private _isSetTintColor: boolean;
   constructor(params?: IImageView) {
     super(params);
@@ -133,11 +133,11 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this.touchEnabled = true;
   }
 
-  get image(): IImage | null {
-    return this.nativeObject.image ? (ImageiOS.createFromImage(this.nativeObject.image) as IImage) : null;
+  get image(): ImageiOS | null {
+    return this.nativeObject.image ? ImageiOS.createFromImage(this.nativeObject.image) : null;
   }
 
-  set image(value: IImage | null) {
+  set image(value: ImageiOS | null) {
     this._imageTemplate = undefined;
 
     // if (typeof value === 'string') {
@@ -155,7 +155,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     // } else {
     if (value) {
       if (this._isSetTintColor) {
-        let rendered: IImage = value.nativeObject.imageWithRenderingMode(2);
+        const rendered: ImageiOS = value.nativeObject.imageWithRenderingMode(2);
         this._imageTemplate = rendered;
         this.nativeObject.loadImage(rendered.nativeObject);
       } else this.nativeObject.loadImage(value.nativeObject);
@@ -193,7 +193,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: ImageiOS;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -285,9 +285,9 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: IImage;
+    placeholder?: Image;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: IImage | null, cache: ImageCacheType) => void;
+    onSuccess?: (image: Image | null, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };

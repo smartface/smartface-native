@@ -1,10 +1,10 @@
 import Font from '../font';
-import Image from '../image';
 import { IBadge } from '../badge';
 import AttributedString from '../../global/attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
 import { IPage } from '../page';
+import Image from '../image';
 /**
  * @class UI.TabBarItem
  * @since 1.1.10

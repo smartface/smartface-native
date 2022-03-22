@@ -1,6 +1,5 @@
 import { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
 import NativeComponent from '../../core/native-component';
-import Page from '../page';
 import BottomTabbarController from '../bottomtabbarcontroller';
 import TabBarController from '../tabbarcontroller';
 import { HeaderBar } from './headerbar';
@@ -26,6 +25,9 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     this._headerBar.ios.translucent = false;
 
     this._nativeObject = this.view.nativeObject;
+  }
+  protected createNativeObject() {
+    return null;
   }
 
   getCurrentController(): IController {
@@ -64,21 +66,17 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     Object.assign(this._headerBar, value);
   }
   push(params: { controller: Controller; animated?: boolean }): void {
-    if (params?.controller instanceof NavigationControllerIOS) {
-      this.view.push(params.controller, params.animated ? true : false);
-      this.model.pushPage(params.controller);
-      params.controller.parentController = this;
-    }
+    this.view.push(params.controller, params.animated ? true : false);
+    this.model.pushPage(params.controller);
+    params.controller.parentController = this;
   }
   pop(params: { animated: boolean } = { animated: true }): void {
     this.view.pop(!!params.animated);
     this.model.popPage();
   }
   popTo(params: { controller: Controller; animated?: boolean }): void {
-    if (params?.controller instanceof NavigationControllerIOS) {
-      this.view.popTo(params.controller, !!params.animated);
-      this.model.popToPage(params.controller);
-    }
+    this.view.popTo(params.controller, !!params.animated);
+    this.model.popToPage(params.controller);
   }
   willShow: (params: { controller: Controller; animated?: boolean }) => void;
   onTransition: (e: { controller?: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
@@ -125,10 +123,11 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   }
   private willShowViewController(index: number, animated?: boolean) {
     const page = this.model.pageForIndex(index);
-    page && this.willShow?.({
-      controller: page,
-      animated: animated
-    });
+    page &&
+      this.willShow?.({
+        controller: page,
+        animated: animated
+      });
   }
   private didShowViewController(viewController: __SF_UIViewController, index: number, animated?: boolean) {
     let operation = 0;
@@ -154,11 +153,12 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   private animationControllerForOperationFromViewControllerToViewController(operation: number, fromIndex: number, toIndex: number) {
     const fromController = this.model.childControllers[fromIndex];
     const toController = this.model.pageForIndex(toIndex);
-    toController && this.onTransition?.({
-      currentController: fromController,
-      targetController: toController,
-      operation: operation
-    });
+    toController &&
+      this.onTransition?.({
+        currentController: fromController,
+        targetController: toController,
+        operation: operation
+      });
   }
   static OperationType = OperationType;
 }
@@ -170,6 +170,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     super();
     this.viewModel = params.viewModel;
     this._nativeObject = new __SF_UINavigationController();
+
     this.__navigationControllerDelegate = new __SF_SMFNavigationControllerDelegate();
     this.__navigationControllerDelegate.navigationControllerWillShowViewControllerAnimated = (navigationController, viewController, animated) => {
       const index = this.nativeObject.viewControllers.indexOf(viewController);
@@ -183,7 +184,10 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
 
     this.nativeObject.delegate = this.__navigationControllerDelegate;
   }
-  push(page: NavigationControllerIOS, animated?: boolean) {
+  protected createNativeObject() {
+    return null;
+  }
+  push(page: IController, animated?: boolean) {
     if (page.nativeObject) {
       this.nativeObject.pushViewControllerAnimated(page.nativeObject, animated);
     }
@@ -192,7 +196,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     this.nativeObject.popViewControllerAnimated(animated);
   }
 
-  popTo(page: NavigationControllerIOS, animated?: boolean) {
+  popTo(page: IController, animated?: boolean) {
     if (page.nativeObject) {
       this.nativeObject.popToViewControllerAnimated(page.nativeObject, animated);
     }

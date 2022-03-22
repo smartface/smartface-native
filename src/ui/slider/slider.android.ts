@@ -1,10 +1,10 @@
 /*globals requireClass*/
 import Color from '../color';
 import { SliderEvents } from './slider-events';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { ISlider } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
-import Image from '../image';
+import ImageAndroid from '../image/image.android';
 
 const SDK_VERSION = requireClass('android.os.Build').VERSION.SDK_INT;
 const PorterDuffMode = requireClass('android.graphics.PorterDuff').Mode.SRC_IN;
@@ -12,17 +12,14 @@ const SeekBar = requireClass('android.widget.SeekBar');
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 
-export default class SliderAndroid<TEvent extends string = SliderEvents>
-  extends ViewAndroid<TEvent | SliderEvents, any, ISlider>
-  implements ISlider
-{
+export default class SliderAndroid<TEvent extends string = SliderEvents> extends ViewAndroid<TEvent | SliderEvents, any, ISlider> implements ISlider {
   private _layerDrawable: any;
   private _defaultThumb: any;
   private _minValue: number;
   private _maxValue: number;
   private _minTrackColor: Color;
   private _maxTrackColor: Color;
-  private _thumbImage: Image;
+  private _thumbImage: ImageAndroid;
   private _thumbColor: Color;
   private _onValueChange: (value: number) => void;
   constructor(params?: Partial<ISlider>) {
@@ -78,11 +75,11 @@ export default class SliderAndroid<TEvent extends string = SliderEvents>
     }
   }
 
-  get thumbImage(): Image {
+  get thumbImage(): ImageAndroid {
     return this._thumbImage;
   }
-  set thumbImage(value: Image) {
-    if (value instanceof Image && value.nativeObject) {
+  set thumbImage(value: ImageAndroid) {
+    if (value instanceof ImageAndroid && value.nativeObject) {
       this._thumbImage = value;
       this.nativeObject.setThumb(value.nativeObject);
     } else if (value === null) {

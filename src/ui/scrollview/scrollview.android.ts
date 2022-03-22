@@ -1,10 +1,11 @@
-import { IScrollView, ScrollViewAlign, ScrollViewEdge } from '.';
+import { IScrollView, ScrollViewEdge } from '.';
+import { ScrollViewAlign } from './scrollviewalign';
 import { Point2D } from '../../primitive/point2d';
 import ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import { ScrollViewEvents } from './scrollview-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 

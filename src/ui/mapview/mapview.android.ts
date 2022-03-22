@@ -1,6 +1,6 @@
 import { IMapView, MapViewType } from '.';
 import Color from '../color';
-import { ViewAndroid } from '../view/view.android';
+import ViewAndroid from '../view/view.android';
 import { MapViewEvents } from './mapview-events';
 import PinAndroid from './pin/pin.android';
 import Cluster from './cluster';

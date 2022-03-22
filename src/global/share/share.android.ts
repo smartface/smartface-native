@@ -1,7 +1,7 @@
 import Contacts from '../../device/contacts';
 import File from '../../io/file';
 import FileStream from '../../io/filestream';
-import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import Page from '../../ui/page';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { ShareBase } from './share';
@@ -9,15 +9,17 @@ import { ShareBase } from './share';
 const NativeIntent = requireClass('android.content.Intent');
 const NativeBuildConfig = requireClass(AndroidConfig.activity.getPackageName() + '.BuildConfig');
 const NativeFileProvider = requireClass('androidx.core.content.FileProvider');
+const NativeFile = requireClass('java.io.File');
+const NativeBitmap = requireClass('android.graphics.Bitmap');
+const NativeOutStream = requireClass('java.io.ByteArrayOutputStream');
+const NativeFileOutStream = requireClass('java.io.FileOutputStream');
+const NativeStringUtil = requireClass('io.smartface.android.utils.StringUtil');
+const NativeURI = requireClass('android.net.Uri');
+const NativeArrayList = requireClass('java.util.ArrayList');
 
 const Authority = NativeBuildConfig.APPLICATION_ID + '.provider';
 
 function writeImageToFile(image) {
-  const NativeFile = requireClass('java.io.File');
-  const NativeBitmap = requireClass('android.graphics.Bitmap');
-  const NativeOutStream = requireClass('java.io.ByteArrayOutputStream');
-  const NativeFileOutStream = requireClass('java.io.FileOutputStream');
-
   const outStream = new NativeOutStream();
   const bitmap = image.nativeObject.getBitmap();
   bitmap.compress(NativeBitmap.CompressFormat.PNG, 100, outStream);
@@ -33,8 +35,6 @@ function writeImageToFile(image) {
 }
 
 function writeContactsToFile(contacts, vCardFileName) {
-  const NativeStringUtil = requireClass('io.smartface.android.utils.StringUtil');
-
   const file = new File({ path: AndroidConfig.activity.getExternalCacheDir() + `/readytosharecontact/` + (vCardFileName + '.vcf') });
   if (!file.exists) file.createFile(true);
   const fileStream = file.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
@@ -137,7 +137,6 @@ function getContactFileName(contacts) {
 }
 
 function getUriFromFile(fileNativeObject) {
-  const NativeURI = requireClass('android.net.Uri');
   if (AndroidConfig.sdkVersion < 24) {
     return NativeURI.fromFile(fileNativeObject);
   }
@@ -146,7 +145,6 @@ function getUriFromFile(fileNativeObject) {
 
 function addContent(fileNativeObject, fileType) {
   const contentSharing = this;
-  const NativeURI = requireClass('android.net.Uri');
   let uri;
   if (AndroidConfig.sdkVersion < 24) {
     uri = NativeURI.fromFile(fileNativeObject);
@@ -175,7 +173,7 @@ export class ShareAndroid implements ShareBase {
       actionType: NativeIntent.ACTION_SEND
     });
   }
-  static shareImage(image: Image) {
+  static shareImage(image: ImageAndroid) {
     const imageFile = writeImageToFile(image);
     const uri = getUriFromFile(imageFile);
 
@@ -198,8 +196,6 @@ export class ShareAndroid implements ShareBase {
     });
   }
   static share(params: { items: any[]; page: Page; blacklist: string[] }) {
-    const NativeArrayList = requireClass('java.util.ArrayList');
-
     const itemList = params.items || [];
     const shareIntent = new NativeIntent(NativeIntent.ACTION_SEND_MULTIPLE);
     shareIntent.setType('*/*');
@@ -219,7 +215,7 @@ export class ShareAndroid implements ShareBase {
       } else if (typeof item === 'string') {
         shareIntent.putExtra(NativeIntent.EXTRA_TEXT, item);
         contentSharing.mimeTypes.push('text/plain');
-      } else if (item instanceof Image) {
+      } else if (item instanceof ImageAndroid) {
         const imageFile = writeImageToFile(item);
         addContentItem(imageFile, 'image/*');
       }
@@ -242,14 +238,8 @@ export class ShareAndroid implements ShareBase {
     const itemList = params.items || [];
     const vCardFileName = params.fileName ? params.fileName : 'Contacts';
     const file = writeContactsToFile(itemList, vCardFileName);
-    let uri;
-    if (AndroidConfig.sdkVersion < 24) {
-      //@ts-ignore TODO: file needs nativeObject
-      uri = NativeURI.fromFile(file.nativeObject);
-    } else {
-      //@ts-ignore TODO: file needs nativeObject
-      uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, file.nativeObject);
-    }
+    //@ts-ignore TODO: file needs nativeObject
+    let uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, file.nativeObject);
 
     shareContent({
       type: 'text/x-vcard',

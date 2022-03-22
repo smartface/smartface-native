@@ -29,7 +29,6 @@ const drawableSizes = ['small', 'normal', 'large', 'xlarge'];
 const drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
 let desiredDrawableSizeIndex: number;
 let desiredDrawableDensityIndex: number;
-
 export default class PathAndroid extends PathBase {
   constructor(params?: Partial<IPath>) {
     super(params);
@@ -53,7 +52,7 @@ export default class PathAndroid extends PathBase {
     return filesDir ? filesDir.getAbsolutePath() : null;
   }
 
-  get android(): AndroidProps {
+  static get android(): AndroidProps {
     return {
       get storages() {
         if (!storages.isResolved) {

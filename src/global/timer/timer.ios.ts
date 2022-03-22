@@ -1,8 +1,11 @@
 import NativeComponent from '../../core/native-component';
-import { TimerBase } from './timer';
+import { TimerBase, TimerParams } from './timer';
 
-class TimerIOS extends NativeComponent implements TimerBase {
-  static createTimer(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
+class TimerIOS extends TimerBase {
+  protected createNativeObject(): any {
+    return null;
+  }
+  static createTimer(params?: Partial<TimerParams>) {
     const timer = new __SF_Timer();
     if (params?.delay && params.repeat)
       timer.scheduledTimer(
@@ -16,12 +19,12 @@ class TimerIOS extends NativeComponent implements TimerBase {
       );
 
     TimerIOS.timerArray.push(timer);
-    return timer;
+    return timer as unknown as TimerIOS;
   }
-  static setTimeout(params: { task: () => void; delay: number }) {
+  static setTimeout(params: TimerParams) {
     return TimerIOS.createTimer({ ...params, repeat: false });
   }
-  static setInterval(params: { task: () => void; delay: number }) {
+  static setInterval(params: TimerParams) {
     return TimerIOS.createTimer({ ...params, repeat: true });
   }
   static clearTimer(timer: __SF_Timer) {
@@ -31,12 +34,12 @@ class TimerIOS extends NativeComponent implements TimerBase {
     for (const timer in TimerIOS.timerArray) {
       // Added this check to resolve the sonar issue.
       // hasOwnProperty() is used to filter out properties from the object's prototype chain.
-      if (TimerIOS.timerArray.hasOwnProperty(timer)) {
+      if (Object.prototype.hasOwnProperty.call(TimerIOS.timerArray, timer)) {
         TimerIOS.clearTimer(TimerIOS.timerArray[timer]);
       }
     }
   }
-  static timerArray: any[] = [];
+  static timerArray: __SF_Timer[] = [];
 }
 
 export default TimerIOS;

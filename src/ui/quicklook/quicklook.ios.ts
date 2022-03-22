@@ -7,21 +7,15 @@ import NativeComponent from '../../core/native-component';
 import StatusBar from '../../application/statusbar';
 
 export default class QuickLookIOS extends NativeComponent implements IQuickLook {
+  protected createNativeObject() {
+    return new __SF_QLPreviewController();
+  }
   private _document: string[] = [];
   barColor: boolean;
   statusBar: typeof StatusBar | null;
 
   constructor(params?: Partial<IQuickLook>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_QLPreviewController();
-    }
-
-    // Assign parameters given in constructor
-    for (const param in params) {
-      this[param] = params[param];
-    }
 
     //Deprecated use Application.statusBar
     this.statusBar = Application.statusBar;

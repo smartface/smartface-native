@@ -27,10 +27,16 @@ export default class ColorAndroid extends AbstractColor {
   static create(red: number, green: number, blue: number): ColorAndroid;
   static create(hexCode: string): ColorAndroid;
   static create(hexOrAlphaOrRed: number | string, redOrGreen?: number, greenOrBlue?: number, blue?: number): any {
-    if (arguments.length === 1 && typeof hexOrAlphaOrRed === 'string') {
-      // Color created with hex value
-      if (hexOrAlphaOrRed.charAt(0) !== '#') {
-        throw new TypeError('Hex parameter must start with "#" character');
+    if (arguments.length === 1) {
+      if (typeof hexOrAlphaOrRed === 'string') {
+        // Color created with hex value
+        if (hexOrAlphaOrRed.charAt(0) !== '#') {
+          throw new TypeError('Hex parameter must start with "#" character');
+        } else {
+          return new ColorAndroid({
+            color: NativeColor.parseColor(hexOrAlphaOrRed)
+          });
+        }
       }
       return new ColorAndroid({
         color: hexOrAlphaOrRed
@@ -112,9 +118,9 @@ export default class ColorAndroid extends AbstractColor {
   static WHITE = new ColorAndroid({
     color: NativeColor.WHITE
   });
-  private colors: any[];
+  colors: any[];
   static GradientDirection = GradientDirection;
-  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams>) {
+  constructor(params: Partial<ColorAndroidConstructorParams & GradientParams> = {}) {
     super();
     if (params.isGradient && params.startColor && params.endColor) {
       this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];

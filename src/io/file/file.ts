@@ -243,4 +243,7 @@ export abstract class AbstractFile extends NativeMobileComponent<any, IFile> imp
   static getMainBundleDirectory(): any {
     throw new Error('Method not implemented.');
   }
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
 }

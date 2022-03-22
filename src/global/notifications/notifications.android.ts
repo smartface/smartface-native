@@ -7,7 +7,7 @@ const ALARM_MANAGER = 'android.app.AlarmManager';
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
 import Color from '../../ui/color';
-import Image from '../../ui/image';
+import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
 import { NotificationsBase } from './notifications';
@@ -41,18 +41,17 @@ function unregisterPushNotification() {
 
 function registerPushNotification(onSuccessCallback, onFailureCallback) {
   NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
-    onSuccess: function (token) {
+    onSuccess: (token) => {
       NativeFCMListenerService.registerRemoteNotificationListener({
         onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
           const parsedJson = JSON.parse(data);
           if (isReceivedByOnClick) {
-            NotificationsAndroid.onNotificationClick && NotificationsAndroid.onNotificationClick(parsedJson);
+            NotificationsAndroid.onNotificationClick?.(parsedJson);
           } else {
-            NotificationsAndroid.onNotificationReceive && NotificationsAndroid.onNotificationReceive(parsedJson);
-            Application.onReceivedNotification &&
-              Application.onReceivedNotification({
-                remote: parsedJson
-              });
+            NotificationsAndroid.onNotificationReceive?.(parsedJson);
+            Application.onReceivedNotification?.({
+              remote: parsedJson
+            });
           }
         }
       });
@@ -157,6 +156,10 @@ class NotificationsAndroid implements NotificationsBase {
 }
 
 class LocalNotification extends NativeComponent {
+  protected createNativeObject() {
+    const nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
+    return nativeObject.setSmallIcon(NativeR.drawable.icon);
+  }
   private _android: any;
   private _id = getNewNotificationId();
   private _alertBody = '';
@@ -182,8 +185,6 @@ class LocalNotification extends NativeComponent {
     // via its pending intent and its notification object.
     this.mPendingIntent = null;
     this.mNotification = null;
-    this.nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
-    this.nativeObject = this.nativeObject.setSmallIcon(NativeR.drawable.icon);
 
     const android = {
       get color() {
@@ -302,7 +303,7 @@ class LocalNotification extends NativeComponent {
   }
   set launchImage(value) {
     if (TypeUtil.isString(value)) {
-      const largeImage = Image.createFromFile(value);
+      const largeImage = ImageAndroid.createFromFile(value);
       if (largeImage && largeImage.nativeObject) {
         const largeImageBitmap = largeImage.nativeObject.getBitmap();
         if (largeImageBitmap) {

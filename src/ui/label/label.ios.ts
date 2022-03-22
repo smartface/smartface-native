@@ -13,11 +13,11 @@ export default class LabelIOS<TEvent extends string = ViewEvents, TNative = any,
   protected _textColor: ILabel['textColor'] = Color.BLACK;
   constructor(params?: Partial<TProps>) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_SMFUILabel();
-    }
 
     this.touchEnabled = true;
+  }
+  protected createNativeObject() {
+    return new __SF_SMFUILabel();
   }
 
   get font() {

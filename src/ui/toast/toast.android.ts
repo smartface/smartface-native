@@ -17,6 +17,12 @@ export default class ToastAndroid<TEvent extends string = ToastEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | ToastEvents, any, TProps>
   implements IToast
 {
+  protected createNativeObject() {
+    return this.createNativeSnackBar({
+      duration: DEFAULT_DURATION_IN_SECONDS,
+      message: DEFAULT_MESSAGE
+    });
+  }
   private _message: string;
   private _messageTextColor: Color;
   private _actionTextColor: Color;
@@ -24,12 +30,6 @@ export default class ToastAndroid<TEvent extends string = ToastEvents, TProps ex
   private _bottomOffset: number;
   constructor(params?: TProps) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = this.createNativeSnackBar({
-        duration: DEFAULT_DURATION_IN_SECONDS,
-        message: DEFAULT_MESSAGE
-      });
-    }
     const nativeCallback = NativeSnackBar.Callback.extend(
       'SFSnackBarCallback',
       {

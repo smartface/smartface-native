@@ -9,6 +9,9 @@ import { SelectablePickerEvents } from './selectablepicker-events';
  * This doesn't need any implementation.
  */
 export default class SelectablePickerIOS<TEvent extends string = SelectablePickerEvents> extends NativeEventEmitterComponent<TEvent | SelectablePickerEvents> implements ISelectablePicker {
+  protected createNativeObject() {
+    return null;
+  }
   items: string[];
   onSelected: (index?: number, selected?: boolean) => void;
   title: string;

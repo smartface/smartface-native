@@ -8,33 +8,38 @@ import Font from '../font';
 import Image from '../image';
 import { IView } from '../view';
 
+enum SystemItem {
+  DONE,
+  CANCEL,
+  EDIT,
+  SAVE,
+  ADD,
+  FLEXIBLESPACE,
+  FIXEDSPACE,
+  COMPOSE,
+  REPLY,
+  ACTION,
+  ORGANIZE,
+  BOOKMARKS,
+  SEARCH,
+  REFRESH,
+  STOP,
+  CAMERA,
+  TRASH,
+  PLAY,
+  PAUSE,
+  REWIND,
+  FASTFORWARD,
+  UNDO,
+  REDO
+}
+
 export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
+  protected createNativeObject() {
+    return null;
+  }
   iOS = {
-    SystemItem: {
-      DONE: 0,
-      CANCEL: 1,
-      EDIT: 2,
-      SAVE: 3,
-      ADD: 4,
-      FLEXIBLESPACE: 5,
-      FIXEDSPACE: 6,
-      COMPOSE: 7,
-      REPLY: 8,
-      ACTION: 9,
-      ORGANIZE: 10,
-      BOOKMARKS: 11,
-      SEARCH: 12,
-      REFRESH: 13,
-      STOP: 14,
-      CAMERA: 15,
-      TRASH: 16,
-      PLAY: 17,
-      PAUSE: 18,
-      REWIND: 19,
-      FASTFORWARD: 20,
-      UNDO: 21,
-      REDO: 22
-    }
+    SystemItem
   };
   private _systemItem;
   private _badge: Badge;

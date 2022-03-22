@@ -8,10 +8,12 @@ export default class ToastIOS<TEvent extends string = ToastEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | ToastEvents, __SF_Snackbar, TProps>
   implements IToast
 {
+  protected createNativeObject() {
+    return new __SF_Snackbar();
+  }
   private _bottomOffset: number;
   constructor(params?: TProps) {
     super(params);
-    this.nativeObject = new __SF_Snackbar();
     this.nativeObject.dismissed = () => {
       this.emit('dismissed');
       this.onDismissed?.();

@@ -9,6 +9,9 @@ const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertView> implements IAlertView {
+  protected createNativeObject() {
+    return new NativeAlertDialog(AndroidConfig.activity);
+  }
   private __didSetOnDismissListener = true;
   private __buttonCallbacks: { [key: number]: () => void } = {};
   private __title = '';
@@ -18,9 +21,6 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   private _cancellable: IAlertView['android']['cancellable'];
   constructor(params?: Partial<IAlertView>) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = new NativeAlertDialog(AndroidConfig.activity);
-    }
     this.androidSpecificProperties();
   }
   isShowing(): void {

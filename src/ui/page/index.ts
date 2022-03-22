@@ -397,7 +397,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   implements IController, IPage
 {
   private _skipDefaults: boolean = false;
-
+  protected createNativeObject() {}
   public get skipDefaults(): boolean {
     return this._skipDefaults;
   }
@@ -438,6 +438,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
 }
 
 declare class PageImpl extends AbstractPage implements IPage {
+  protected createNativeObject();
   onLoad(): void;
   onShow(): void;
   onHide(): void;

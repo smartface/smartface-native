@@ -11,18 +11,19 @@ enum SLIDER_DRAWER_STATE {
 }
 
 export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents> extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents, __SF_SliderDrawer> implements ISliderDrawer {
+  protected createNativeObject() {
+    const nativeObject = __SF_SliderDrawer.new();
+    nativeObject.position = this._position;
+    nativeObject.state = 0;
+    nativeObject.enabled = this._enabled;
+    return nativeObject;
+  }
   private _position = 0;
   private _enabled = true;
   private _drawerWidth = 100;
   constructor(params?: Partial<ISliderDrawer>) {
     super(params);
 
-    if (!this.nativeObject) {
-      this._nativeObject = __SF_SliderDrawer.new();
-      this.nativeObject.position = this._position;
-      this.nativeObject.state = 0;
-      this.nativeObject.enabled = this._enabled;
-    }
     this.pageView = new FlexLayoutIOS({
       backgroundColor: Color.WHITE
     });
@@ -32,7 +33,7 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     this.nativeObject.onViewLayoutSubviews = () => {
       const screenWidth = __SF_UIScreen.mainScreen().bounds.width;
       this.pageView.nativeObject.frame = {
-        x: this.drawerPosition &&  screenWidth ? screenWidth - this.pageView.nativeObject.frame.width : 0,
+        x: this.drawerPosition && screenWidth ? screenWidth - this.pageView.nativeObject.frame.width : 0,
         y: 0,
         height: __SF_UIScreen.mainScreen().bounds.height,
         width: this.width

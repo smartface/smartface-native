@@ -2,7 +2,6 @@ import { IPin } from '.';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
 import TypeUtil from '../../../util/type';
 import ColorAndroid from '../../color/color.android';
-import { IImage } from '../../image';
 import ImageAndroid from '../../image/image.android';
 import { PinEvents } from './pin-events';
 
@@ -19,6 +18,9 @@ const HueDic = {
 };
 
 export default class PinAndroid<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, any> implements IPin {
+  protected createNativeObject() {
+    return null;
+  }
   private _color: ColorAndroid;
   private _image: ImageAndroid | null = null;
   private _location: IPin['location'];
@@ -56,11 +58,11 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
   set id(value: number) {
     this._id = value;
   }
-  get image(): IImage | null {
-    return this._image as IImage;
+  get image(): ImageAndroid | null {
+    return this._image as ImageAndroid;
   }
-  set image(value: IImage | null) {
-    this._image = value as ImageAndroid;
+  set image(value: ImageAndroid | null) {
+    this._image = value;
     if (this.nativeObject && !this.isClusterEnabled && value instanceof ImageAndroid) {
       const iconBitmap = value.nativeObject.getBitmap();
       const icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
