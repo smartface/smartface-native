@@ -1,4 +1,4 @@
-import { TextBoxAndroidProps, ITextBox } from '.';
+import { ITextBox } from '.';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';
@@ -71,6 +71,21 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
   implements ITextBox
 {
+  protected createNativeObject() {
+    //AND-3123: Due to the issue, hardware button listener added.
+    const callback = {
+      onKeyPreIme: (keyCode: number, keyEventAction: number) => {
+        // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+        if (keyCode === 4 && keyEventAction === 1) {
+          this.nativeObject.clearFocus();
+        }
+        // TODO: Below code moved to SFEditText class implementation.
+        // But, I am not sure this implementation doesn't cause unexpected touch handling.
+        // return false;
+      }
+    };
+    return new SFEditText(AndroidConfig.activity, callback);
+  }
   private __touchEnabled: boolean = true;
   private _isPassword: boolean = false;
   private _keyboardType: KeyboardType = KeyboardType.DEFAULT;
@@ -88,48 +103,26 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _autoCapitalize: AutoCapitalize = AutoCapitalize.NONE;
   private _didAddTextChangedListener: boolean = false;
   private _didSetOnEditorActionListener: boolean = false;
-  private activity: any;
   constructor(params: Partial<TProps>) {
     super(params);
 
-    this.activity = AndroidConfig.activity;
-    if (!this.nativeObject) {
-      //AND-3123: Due to the issue, hardware button listener added.
-      const callback = {
-        onKeyPreIme: (keyCode: number, keyEventAction: number) => {
-          // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-          if (keyCode === 4 && keyEventAction === 1) {
-            this.nativeObject.clearFocus();
-          }
-          // TODO: Below code moved to SFEditText class implementation.
-          // But, I am not sure this implementation doesn't causes unexpected touch handling.
-          // return false;
-        }
-      };
-      this._nativeObject = new SFEditText(this.activity, callback);
-    }
-
     // Don't use self.multiline = false due to AND-2725 bug.
-    // setMovementMethod in label-Android.js file removes the textbox cursor.
+    // setMovementMethod in label.android.ts file removes the textbox cursor.
     this.nativeObject.setSingleLine(true);
 
-    /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-    this.onTouch = (e) => {
-      let result: boolean | void;
-      if (this.onTouch) result = this.onTouch(e);
-      return result === true;
-    };
+    // /* Override the onTouch and make default returning false to prevent bug in other listener.*/
+    // this.onTouch = (e) => {
+    //   let result: boolean | void;
+    //   if (this.onTouch) result = this.onTouch(e);
+    //   return result === true;
+    // };
 
-    // Added for https://smartface.atlassian.net/browse/AND-3869
-    this.actionKeyType = ActionKeyType.DEFAULT;
+    this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
 
-    // const { android, ...restParams } = params;
-    // Object.assign(this._android, this.androidProps, android);
-    // Object.assign(this, restParams);
-    this.addAndroidProps(this.androidProps);
+    this.addAndroidProps(this.androidProps());
   }
 
-  private get androidProps() {
+  private androidProps() {
     const self = this;
     return {
       maxLength(value: number): void {

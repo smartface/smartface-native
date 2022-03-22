@@ -2,7 +2,6 @@ import Color, { AbstractColor, GradientDirection } from '.';
 
 const NativeColor = requireClass('android.graphics.Color');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
-const NativeBuild = requireClass('android.os.Build');
 
 const GradientDrawableDirection = [
   NativeGradientDrawable.Orientation.TOP_BOTTOM,
@@ -18,7 +17,7 @@ interface GradientParams {
 }
 
 interface ColorAndroidConstructorParams {
-  color: any;
+  color: number;
   isGradient: Color['isGradient'];
 }
 
@@ -39,29 +38,17 @@ export default class ColorAndroid extends AbstractColor {
         }
       }
       return new ColorAndroid({
-        color: hexOrAlphaOrRed
+        color: hexOrAlphaOrRed //means it's number and natively created
       });
     } else if (arguments.length === 3 && typeof hexOrAlphaOrRed === 'number') {
-      if (NativeBuild.VERSION.SDK_INT >= 26) {
-        return new ColorAndroid({
-          color: NativeColor.rgb(float(hexOrAlphaOrRed / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255))
-        });
-      } else {
-        return new ColorAndroid({
-          color: NativeColor.rgb(hexOrAlphaOrRed, redOrGreen, greenOrBlue)
-        });
-      }
+      return new ColorAndroid({
+        color: NativeColor.rgb(float(hexOrAlphaOrRed / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255))
+      });
     } else if (arguments.length === 4 && typeof hexOrAlphaOrRed === 'number') {
       const alpha = (hexOrAlphaOrRed / 100) * 255;
-      if (NativeBuild.VERSION.SDK_INT >= 26) {
-        return new ColorAndroid({
-          color: NativeColor.argb(float(alpha / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255), float(blue! / 255))
-        });
-      } else {
-        return new ColorAndroid({
-          color: NativeColor.argb(int(alpha), int(redOrGreen), int(greenOrBlue), int(blue))
-        });
-      }
+      return new ColorAndroid({
+        color: NativeColor.argb(float(alpha / 255), float(redOrGreen! / 255), float(greenOrBlue! / 255), float(blue! / 255))
+      });
     }
   }
   static createGradient(params: GradientParams): ColorAndroid {
@@ -92,7 +79,7 @@ export default class ColorAndroid extends AbstractColor {
     color: NativeColor.CYAN
   });
   static DARKGRAY = new ColorAndroid({
-    color: NativeColor.DARKGRAY
+    color: NativeColor.DKGRAY
   });
   static GRAY = new ColorAndroid({
     color: NativeColor.GRAY
@@ -122,13 +109,13 @@ export default class ColorAndroid extends AbstractColor {
   static GradientDirection = GradientDirection;
   constructor(params: Partial<ColorAndroidConstructorParams & GradientParams> = {}) {
     super();
-    if (params.isGradient && params.startColor && params.endColor) {
-      this.colors = [params.startColor.nativeObject, params.endColor.nativeObject];
+    if (params.isGradient) {
+      this.colors = [params.startColor?.nativeObject || 0, params.endColor?.nativeObject || 0];
       const index = params.direction || 0;
       this.direction = GradientDrawableDirection[index];
       this.nativeObject = new NativeGradientDrawable(this.direction, array(this.colors, 'int'));
-    } else if (params.color) {
-      this.nativeObject = params.color;
+    } else {
+      this.nativeObject = params.color || 0;
     }
   }
 

@@ -68,12 +68,12 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 
+  protected createNativeObject() {
+    return new __SF_UITextField();
+  }
+
   constructor(params?: Partial<TProps>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UITextField();
-    }
 
     this.nativeObject.textBoxDelegate = (method: { name?: string; range: number; replacementString: string }) => {
       if (method.name === 'textFieldShouldBeginEditing') {

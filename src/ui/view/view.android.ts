@@ -1,9 +1,7 @@
-/*globals array, requireClass, toJSArray */
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
 import Color from '../color';
 import { ViewEvents } from './view-event';
-import { EventEmitterWrapper } from '../../core/eventemitter';
 import View, { IView, IViewProps, ViewBase } from '.';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { ScrollViewAlign } from '../scrollview/scrollviewalign';
@@ -19,6 +17,8 @@ const NativeYogaNodeFactory = requireClass('com.facebook.yoga.YogaNodeFactory');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
+const NativeColorStateList = requireClass('android.content.res.ColorStateList');
+const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
 
 function PixelToDp(px) {
   return AndroidUnitConverter.pixelToDp(px);
@@ -81,7 +81,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     x: 1.0,
     y: 1.0
   };
-  protected _borderColor: Color = Color.BLACK;
+  protected _borderColor: IView['borderColor'] = Color.BLACK;
   protected _borderWidth: number = 0;
   protected _borderRadius: number = 0;
   protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
@@ -249,7 +249,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       //Provide backward support in case of diff behavior of border radius.
       const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
       const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-      const borderColorNative = this.borderColor?.nativeObject || Color.BLACK.nativeObject;
+      const borderColorNative = this.borderColor?.nativeObject || ColorAndroid.BLACK.nativeObject;
 
       if (backgroundColor.isGradient) {
         const colors = array(backgroundColor.colors, 'int');
@@ -333,7 +333,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set borderColor(value: Color) {
     this._borderColor = value;
-
     this._resetBackground();
     this._setBorderToAllEdges();
   }
@@ -864,9 +863,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     if (this._rippleColor && this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
       const states = array([array([], 'int')]);
       const colors = array([this._rippleColor.nativeObject], 'int');
-
-      const NativeColorStateList = requireClass('android.content.res.ColorStateList');
-      const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
       const colorStateList = new NativeColorStateList(states, colors);
 
       const mask = getRippleMask(DpToPixel(this.borderRadius));

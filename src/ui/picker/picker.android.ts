@@ -157,7 +157,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     const alertDialog = builder.show(); //return native alertdailog
     this.dialogInstance = alertDialog;
     // re-set background color
-    this._backgroundColor = this._backgroundColor;
+    this.backgroundColor = this._backgroundColor;
 
     if (this.buttonCustomize) {
       const negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
