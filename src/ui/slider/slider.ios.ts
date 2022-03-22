@@ -17,19 +17,16 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;
+  createNativeObject() {
+    return new __SF_UISlider();
+  }
   constructor(params?: Partial<ISlider>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UISlider();
-    }
-
+    this.nativeObject.addJSTarget(this.handleValueChange.bind(this), UIControlEvents.valueChanged);
     this.nativeObject.minimumTrackTintColor = Color.DARKGRAY.nativeObject;
     this.nativeObject.maximumTrackTintColor = Color.GREEN.nativeObject;
     this.nativeObject.minimumValue = 0;
     this.nativeObject.maximumValue = 100;
-
-    this.nativeObject.addJSTarget(this.handleValueChange, UIControlEvents.valueChanged);
   }
   skipDefaults: boolean;
 
@@ -109,8 +106,8 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
     this.nativeObject.setValueAnimated(intValue, false);
     if (this._value !== intValue) {
       this._value = intValue;
-      this?.onValueChange();
-      this.emit(SliderEvents.ValueChange);
+      this._onValueChange?.();
+      this.emit(SliderEvents.ValueChange, this._value);
     }
   }
 }
