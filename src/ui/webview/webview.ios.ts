@@ -139,11 +139,12 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
       }
     }
   };
+  createNativeObject() {
+    return new __SF_WKWebView();
+  }
   constructor(params?: Partial<IWebView>) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_WKWebView();
-    }
+
     // UIScrollViewInheritance.addPropertiesAndMethods.call(this, this.nativeObject.scrollView);
     this.nativeObject.scrollView.setValueForKey(4, 'contentInsetAdjustmentBehavior');
 

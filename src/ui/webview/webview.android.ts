@@ -90,6 +90,9 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       mFilePathCallback = null;
     }
   };
+  createNativeObject() {
+    return new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
+  }
   constructor(params?: Partial<WebView>) {
     super(params);
     this.nativeObject.setOnKeyListener(
@@ -111,9 +114,6 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     this.setWebViewClientCallbacks();
     this.setWebChromeClientCallbacks();
 
-    if (!this.nativeObject) {
-      this._nativeObject = new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
-    }
     /* Webview contains background color which draws all over given background drawbles.
     It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
     */
