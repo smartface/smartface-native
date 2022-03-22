@@ -18,20 +18,18 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   private _toggleImage: Image;
   private _thumbImage: Image;
   private _onToggleChangedCallback: (checked: boolean) => void;
-
+  createNativeObject() {
+    return new NativeSwitch(AndroidConfig.activity, {
+      onToggleChanged: (isChecked: boolean) => {
+        this.setThumbColor();
+        this.setTrackColor();
+        this._onToggleChangedCallback?.(isChecked);
+        this.emit(SwitchEvents.ToggleChanged, isChecked);
+      }
+    });
+  }
   constructor(params?: Partial<ISwitch>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeSwitch(AndroidConfig.activity, {
-        onToggleChanged: (isChecked: boolean) => {
-          this.setThumbColor();
-          this.setTrackColor();
-          this._onToggleChangedCallback?.(isChecked);
-          this.emit(SwitchEvents.ToggleChanged, isChecked);
-        }
-      });
-    }
 
     const self = this;
     this.addAndroidProps({

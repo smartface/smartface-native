@@ -7,13 +7,11 @@ import { SwitchEvents } from './switch-events';
 export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<TEvent | SwitchEvents, __SF_UISwitch, ISwitch> {
   private _toggleOnColor: Color = Color.GREEN;
   private _onToggleChanged: (toggle: boolean) => void;
-
+  createNativeObject() {
+    return new __SF_UISwitch();
+  }
   constructor(params?: Partial<ISwitch>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UISwitch();
-    }
 
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
