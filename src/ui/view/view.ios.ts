@@ -3,21 +3,11 @@ import Color from '../color';
 import { ViewEvents } from './view-event';
 import View, { IView, IViewProps, ViewBase } from '.';
 import { Size } from '../../primitive/size';
-import * as YogaEnums from '../shared/ios/yogaenums';
+import { YGUnit } from '../shared/ios/yogaenums';
 import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 
-const YGUnit = YogaEnums.YGUnit;
-
-declare const myLabelTitle: any;
-
-function isInside(frame, point) {
-  const x = point.x;
-  const y = point.y;
-  const w = frame.width;
-  const h = frame.height;
-  return !(x > w || x < 0 || y > h || y < 0);
-}
+declare const myLabelTitle: any; // TODO: Check that Where does myLabelTitle come from?
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
   protected createNativeObject(): any {
@@ -34,42 +24,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     y: 1.0
   };
 
-  onTouchHandler = (e: { point: Point2D }) => {
-    const point: Point2D = {
-      x: e.point.x ?? null,
-      y: e.point.y ?? null
-    };
-    this._onTouch?.(point);
-    this.emit(ViewEvents.Touch, point);
-  };
-  onTouchEndedHandler = (e?: { point: Point2D }) => {
-    const inside = isInside(this.nativeObject.frame, e?.point);
-    const event = {
-      x: e?.point.x ?? null,
-      y: e?.point.y ?? null,
-      isInside: inside
-    };
-    this._onTouchEnded?.(inside, event);
-    this.emit(ViewEvents.TouchEnded, event);
-  };
-  onTouchCancelledHandler = (e?: { point: Point2D }) => {
-    const point = {
-      x: e?.point.x ?? null,
-      y: e?.point.y ?? null
-    };
-    this._onTouchCancelled?.(point);
-    this.emit(ViewEvents.TouchCancelled, point);
-  };
-  onTouchMovedHandler = (e?: { point: Point2D }) => {
-    const inside = isInside(this.nativeObject.frame, e?.point);
-    const event = {
-      x: e?.point.x ?? null,
-      y: e?.point.y ?? null,
-      isInside: inside
-    };
-    this._onTouchMoved?.(inside, event);
-    this.emit(ViewEvents.TouchMoved, event);
-  };
   gradientColor: any;
   private _parent?: View;
   static Border = {
@@ -90,13 +44,50 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.layer.rotationX = 0;
     this.nativeObject.layer.rotationY = 0;
 
-    this.nativeObject.onTouch = this.onTouchHandler;
-    this.nativeObject.onTouchCancelled = this.onTouchCancelledHandler;
-    this.nativeObject.onTouchMoved = this.onTouchMovedHandler;
-    this.nativeObject.onTouchEnded = this.onTouchEndedHandler;
+    this.nativeObject.onTouch = (e: { point: Point2D }) => {
+      const point: Point2D = {
+        x: e.point.x ?? null,
+        y: e.point.y ?? null
+      };
+      this.onTouch?.(point);
+      this.emit('touch', point);
+    };
+
+    this.nativeObject.onTouchCancelled = (e?: { point: Point2D }) => {
+      const point = {
+        x: e?.point.x ?? null,
+        y: e?.point.y ?? null
+      };
+      this.onTouchCancelled?.(point);
+      this.emit('touchCancelled', point);
+    };
+    this.nativeObject.onTouchMoved = (e?: { point: Point2D }) => {
+      const inside = this.isInside(this.nativeObject.frame, e?.point);
+      const event = {
+        x: e?.point.x ?? null,
+        y: e?.point.y ?? null,
+        isInside: inside
+      };
+      this.onTouchMoved?.(inside, event);
+      this.emit('touchMoved', event);
+    };
+    this.nativeObject.onTouchEnded = (e?: { point: Point2D }) => {
+      const inside = this.isInside(this.nativeObject.frame, e?.point);
+      const event = {
+        x: e?.point.x ?? null,
+        y: e?.point.y ?? null,
+        isInside: inside
+      };
+      this.onTouchEnded?.(inside, event);
+      this.emit('touchEnded', event);
+    };
 
     this.addIOSProps(this.getIOSProperties());
   }
+  onTouch: (e?: Point2D | undefined) => boolean | void;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
+  onTouchCancelled: (point: Point2D) => boolean | void;
+  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D | undefined) => boolean | void;
 
   private getIOSProperties() {
     const self = this;
@@ -181,7 +172,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     ]);
   }
 
-  // TODO: Check that Where does myLabelTitle come from?
   get accessible() {
     return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, 'isAccessibilityElement', [], 'BOOL') as boolean;
   }
@@ -493,96 +483,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
     const screenOrigin = Invocation.invokeInstanceMethod(this.nativeObject, 'convertPoint:toView:', [origin, view], 'CGPoint');
     return screenOrigin as Point2D;
-  }
-
-  get onTouch() {
-    return this._onTouch;
-  }
-  set onTouch(value) {
-    if (typeof value !== 'function') {
-      return;
-    }
-    this._onTouch = value;
-    const onTouchHandler = function (e) {
-      if (e && e.point) {
-        const object = {
-          x: e.point.x,
-          y: e.point.y
-        };
-        return value.call(this, object);
-      } else {
-        return value.call(this);
-      }
-    };
-    this.nativeObject.onTouch = onTouchHandler.bind(this);
-  }
-
-  get onTouchEnded() {
-    return this._onTouchEnded;
-  }
-
-  set onTouchEnded(value) {
-    if (typeof value !== 'function') {
-      return;
-    }
-    this._onTouchEnded = value;
-    const onTouchEndedHandler = function (e) {
-      if (e && e.point) {
-        const inside = isInside(this.nativeObject.frame, e.point);
-        const object = {
-          isInside: inside,
-          x: e.point.x,
-          y: e.point.y
-        };
-        return value.call(this, inside, object);
-      } else {
-        return value.call(this);
-      }
-    };
-    this.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
-  }
-
-  get onTouchMoved() {
-    return this._onTouchMoved;
-  }
-  set onTouchMoved(value) {
-    if (typeof value !== 'function') {
-      return;
-    }
-    const onTouchMoveHandler = function (e) {
-      if (e && e.point) {
-        const inside = isInside(this.nativeObject.frame, e.point);
-        const object = {
-          isInside: inside,
-          x: e.point.x,
-          y: e.point.y
-        };
-        return value.call(this, inside, object);
-      } else {
-        return value.call(this);
-      }
-    };
-    this.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
-  }
-  get onTouchCancelled() {
-    return this._onTouchCancelled;
-  }
-  set onTouchCancelled(value) {
-    if (typeof value !== 'function') {
-      return;
-    }
-    const onTouchCancelledHandler = function (e) {
-      if (e && e.point) {
-        const object = {
-          x: e.point.x,
-          y: e.point.y
-        };
-        return value.call(this, object);
-      } else {
-        value.call(this);
-      }
-    };
-    this.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
   }
 
   //////////////////////////////////////////////////////////////////////////
@@ -1182,4 +1082,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       FORCERIGHTTOLEFT: 4
     } as const
   };
+
+  private isInside(frame: __SF_NSRect, point?: Point2D) {
+    const x = point?.x || 0;
+    const y = point?.y || 0;
+    const w = frame.width || 0;
+    const h = frame.height || 0;
+    return !(x > w || x < 0 || y > h || y < 0);
+  }
 }

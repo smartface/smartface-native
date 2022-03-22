@@ -73,6 +73,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   uniqueId: string;
   protected _maskedBorders: number[] = [];
   protected _masksToBounds: boolean = true;
+  protected _onTouch: IView['onTouch'];
+  protected _onTouchEnded: IView['onTouchEnded'];
+  protected _onTouchCancelled: IView['onTouchCancelled'];
+  protected _onTouchMoved: IView['onTouchMoved'];
   private _parent?: View;
   private _rotation: number = 0;
   private _rotationX: number = 0;

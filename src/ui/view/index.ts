@@ -912,61 +912,6 @@ export enum SemanticContentAttribute {
    */
   FORCERIGHTTOLEFT = 4
 }
-// export enum ViewEvents {
-// 	/**
-// 	 * This event is called when a touch screen motion event starts.
-// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-// 	 * @param {Object} motionEvent
-// 	 * @param {Number} motionEvent.x
-// 	 * @param {Number} motionEvent.y
-// 	 * @android
-// 	 * @ios
-// 	 * @since 4.3.5
-// 	 */
-// 	Touch = "touch",
-// 	/**
-// 	 * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
-// 	 *
-// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-// 	 * @param {Object} motionEvent
-// 	 * @param {Number} motionEvent.x
-// 	 * @param {Number} motionEvent.y
-// 	 * @android
-// 	 * @ios
-// 	 * @since 4.3.5
-// 	 */
-// 	TouchCancelled = "touchCancelled",
-// 	/**
-// 	 * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
-// 	 *
-// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-// 	 * @param {Boolean} isInside This argument is deprecated. Use motionEvent's property.
-// 	 * @param {Object} motionEvent
-// 	 * @param {Boolean} motionEvent.isInside
-// 	 * @param {Number} motionEvent.x
-// 	 * @param {Number} motionEvent.y
-// 	 * @android
-// 	 * @ios
-// 	 * @since 4.3.5
-// 	 */
-// 	TouchEnded = "touchEnded",
-// 	/**
-// 	 * This event is called when the touch has changed its point on the screen.
-// 	 *
-// 	 * @return {Boolean} True if the listener has consumed the event, false otherwise.
-// 	 * @param {Object} motionEvent
-// 	 * @param {Boolean} isInside
-// 	 * @param {Number} motionEvent.x
-// 	 * @param {Number} motionEvent.y
-// 	 * @android
-// 	 * @ios
-// 	 * @member UI.View
-// 	 * @since 4.3.5
-// 	 */
-// 	TouchMoved = "touchMoved",
-// }
-
-// const NativeEventEmitter = EventEmitterMixin(NativeComponent);
 
 export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative = any, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<
   TEvent | ExtractEventValues<ViewEvents>,
@@ -979,10 +924,6 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
   constructor(params?: Partial<TProps>) {
     super(params);
   }
-  // export namespace ios {
-  // 	export const viewAppearanceSemanticContentAttribute: iOS.SemanticContentAttribute;
-  // 	export const performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-  // }
   /**
    * iOS Specific Properties.
    * @class UI.View.iOS
@@ -993,11 +934,6 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
   };
   static Events = ViewEvents;
   static Border = Border;
-
-  protected _onTouch: IView['onTouch'];
-  protected _onTouchEnded: IView['onTouchEnded'];
-  protected _onTouchCancelled: IView['onTouchCancelled'];
-  protected _onTouchMoved: IView['onTouchMoved'];
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>

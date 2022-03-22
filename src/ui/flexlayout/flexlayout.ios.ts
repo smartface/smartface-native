@@ -1,8 +1,7 @@
-import IView from '../view';
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
-import * as YogaEnums from '../shared/ios/yogaenums';
+import * as NativeFlexProps from '../shared/ios/nativeflexprops';
 export default class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>
   extends ViewGroupIOS<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
@@ -11,15 +10,14 @@ export default class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNa
     super(params);
   }
   content: IFlexLayout;
-  onViewAdded: (view: IView) => void;
-  onViewRemoved: (view: IView) => void;
-  static Direction = YogaEnums.YGDirection;
-  static FlexDirection = YogaEnums.YGFlexDirection;
-  static JustifyContent = YogaEnums.YGJustify;
-  static AlignContent = YogaEnums.YGAlign;
-  static FlexWrap = YogaEnums.YGWrap;
-  static AlignItems = YogaEnums.YGAlign;
-  static AlignSelf = YogaEnums.YGAlign;
-  static PositionType = YogaEnums.YGPositionType;
-  static Display = YogaEnums.YGDisplay;
+
+  static Direction = NativeFlexProps.Direction;
+  static FlexDirection = NativeFlexProps.FlexDirection;
+  static JustifyContent = NativeFlexProps.JustifyContent;
+  static AlignContent = NativeFlexProps.AlignContent;
+  static FlexWrap = NativeFlexProps.FlexWrap;
+  static AlignItems = NativeFlexProps.AlignItems;
+  static AlignSelf = NativeFlexProps.AlignSelf;
+  static PositionType = NativeFlexProps.PositionType;
+  static Display = NativeFlexProps.Display;
 }

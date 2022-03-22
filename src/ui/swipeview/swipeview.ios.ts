@@ -4,7 +4,7 @@ import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
 import { SwipeViewEvents } from './swipeview-events';
 import Invocation from '../../util/iOS/invocation';
-import * as YogaEnums from '../shared/ios/yogaenums';
+import { YGUnit } from '../shared/ios/yogaenums';
 import PageIOS from '../page/page.ios';
 import Exception from '../../util/exception';
 
@@ -252,9 +252,9 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   }
   set width(value: ISwipeView['width']) {
     if (typeof value === 'number') {
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'width');
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'maxWidth');
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'minWidth');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'width');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'maxWidth');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'minWidth');
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
@@ -264,9 +264,9 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   }
   set height(value: ISwipeView['height']) {
     if (typeof value === 'number') {
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'height');
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'maxHeight');
-      this.nativeObject.yoga.setYGValueUnitForKey(value, YogaEnums.YGUnit.Point, 'minHeight');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'height');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'maxHeight');
+      this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'minHeight');
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
