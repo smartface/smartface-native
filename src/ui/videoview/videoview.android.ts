@@ -31,18 +31,18 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
   private _controllerShowTimeoutMs: number;
   private _customErrorMessage: string;
   private _showController: boolean;
+  protected createNativeObject() {
+    // To solve stretching due to yoga, we will wrap this with RelativeLayout.
+    const nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
+    const layoutParams = new NativeRelativeLayout.LayoutParams(-1, -1);
+    this.nativeInner = new NativeVideoView(AndroidConfig.activity);
+    layoutParams.addRule(13, -1); // CENTER_IN_PARENT, TRUE
+    nativeObject.addView(this.nativeInner, layoutParams);
+    nativeObject.setGravity(17);
+    return nativeObject;
+  }
   constructor(params: Partial<IVideoView> = {}) {
     super(params);
-
-    if (!this.nativeObject) {
-      // To solve stretching due to yoga, we will wrap this with RelativeLayout.
-      this.nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
-      const layoutParams = new NativeRelativeLayout.LayoutParams(-1, -1);
-      layoutParams.addRule?.(13, -1); // CENTER_IN_PARENT, TRUE
-      this.nativeInner = new NativeVideoView(AndroidConfig.activity);
-      this.nativeObject.addView(this.nativeInner, layoutParams);
-      this.nativeObject.setGravity(17);
-    }
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
     this.setNativeEvents();

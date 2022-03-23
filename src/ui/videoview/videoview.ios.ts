@@ -15,10 +15,8 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     super(params);
     this.backgroundModeEnabled = false;
 
-    if (!this.nativeObject) {
-      this.backgroundModeEnabled = !!params?.backgroundModeEnabled;
-      this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
-    }
+    this.backgroundModeEnabled = !!params?.backgroundModeEnabled;
+    this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
     this.nativeObject.addSubview(this.avPlayerViewController.view);
     this.setAVControllerEvents();
     this.addAndroidProps(this.getAndroidParams());
