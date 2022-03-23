@@ -24,12 +24,12 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
   private _lineSpacing: ITextView['lineSpacing'];
   private _onLinkClick: ITextView['onLinkClick'];
   private _selectable: ITextView['selectable'];
+  createNativeObject() {
+    return new __SF_UITextView();
+  }
   constructor(params: Partial<ITextView> = {}) {
     super();
 
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UITextView();
-    }
     //TODO: Look at it after Cenk is done with Scrollable stuff
     // UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
