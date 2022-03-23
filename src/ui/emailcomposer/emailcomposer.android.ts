@@ -1,5 +1,4 @@
 import { AbstractEmailComposer } from '.';
-import NativeComponent from '../../core/native-component';
 import Blob from '../../global/blob';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import File from '../../io/file';
@@ -40,16 +39,13 @@ export default class EmailComposerAndroid extends AbstractEmailComposer {
     });
   }
 
-  canSendMail(): boolean {
-    throw false;
-  }
-
   get onClose() {
     return this._closeCallback;
   }
   set onClose(callback: () => void) {
     if (!TypeUtil.isFunction(callback)) return;
     this._closeCallback = callback;
+    EmailComposerAndroid._closeCallback = callback;
   }
   setCC(cc: string[]) {
     if (typeof cc === 'object') {

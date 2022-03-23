@@ -587,7 +587,6 @@ declare class __SF_UIDatePicker {
 declare class __SF_MFMailComposeViewController {
   static canSendMail(): boolean;
   constructor();
-  canSendMail(): boolean;
   setCcRecipients(cc: any): void;
   setBccRecipients(bcc: any): void;
   setToRecipients(to: any): void;
