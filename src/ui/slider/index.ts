@@ -148,7 +148,7 @@ export declare interface ISlider<TEvent extends string = SliderEvents> extends I
 }
 
 export declare class AbstractSlider<TEvent extends string = SliderEvents> extends AbstractView<TEvent | SliderEvents, any, ISlider> implements ISlider<TEvent> {
-  constructor(params: Partial<ISlider>);
+  constructor(params?: Partial<ISlider>);
   skipDefaults: boolean;
   thumbColor: Color;
   thumbImage: Image;

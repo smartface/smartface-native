@@ -22,31 +22,28 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   private _thumbImage: ImageAndroid;
   private _thumbColor: Color;
   private _onValueChange: (value: number) => void;
+  createNativeObject() {
+    return new SeekBar(AndroidConfig.activity);
+  }
   constructor(params?: Partial<ISlider>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new SeekBar(AndroidConfig.activity);
-    }
 
     this._layerDrawable = this.nativeObject.getProgressDrawable().getCurrent();
     this._defaultThumb = this.nativeObject.getThumb();
 
-    // TODO Recheck after
     if (!this.skipDefaults) {
       // SET DEFAULTS
-      this.thumbColor = Color.GRAY;
-      this.minTrackColor = Color.DARKGRAY;
-      this.maxTrackColor = Color.GREEN;
+      this._thumbColor = Color.GRAY;
+      this._minTrackColor = Color.DARKGRAY;
+      this._maxTrackColor = Color.GREEN;
       this.value = 0;
-      this.minValue = 0;
-      this.maxValue = 100;
+      this._minValue = 0;
+      this._maxValue = 100;
       this.nativeObject.setOnSeekBarChangeListener(
         SeekBar.OnSeekBarChangeListener.implement({
           onProgressChanged: (seekBar, actualValue, fromUser) => {
-            // TODO Recheck after
             const param = actualValue + this._minValue;
-            this?._onValueChange(param);
+            this._onValueChange?.(param);
             this.emit(SliderEvents.ValueChange, param);
           },
           onStartTrackingTouch: function (seekBar) {},
