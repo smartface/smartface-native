@@ -361,22 +361,20 @@ export abstract class AbstractImage<
   }
   static android: {
     createRoundedImage(params): IImage | null;
+    /**
+     * Creates an Image object which built-in icon is created corresponding systemIcon value.
+     * This method is Android only.
+     *
+     * @android
+     * @static
+     * @method createSystemIcon
+     * @param {Number | String} systemIcon
+     * @see https://developer.android.com/reference/android/R.drawable
+     * @since 4.0.2
+     */
+    createSystemIcon(icon: number | string): IImage;
   };
 
-  /**
-   * Creates an Image object which built-in icon is created corresponding systemIcon value.
-   * This method is Android only.
-   *
-   * @android
-   * @static
-   * @method createSystemIcon
-   * @param {Number | String} systemIcon
-   * @see https://developer.android.com/reference/android/R.drawable
-   * @since 4.0.2
-   */
-  static createSystemIcon(icon: number | string): IImage {
-    throw new Error('Method not implemented.');
-  }
   /**
    * Creates an image object from given a blob.
    *

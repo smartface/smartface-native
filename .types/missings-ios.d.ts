@@ -51,10 +51,12 @@ declare class __SF_UIImageView extends __SF_UIView {
 declare class __SF_NSInvocation extends __SF_NSOBject {
   static createInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
   static createClassInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
+  setUIEdgeInsetsArgumentAtIndex(capinsets: __SF_NSRect, mode: number): void;
   target: __SF_NSOBject;
   setSelectorWithString(selector: string): void;
   retainArguments(): void;
   invoke(): void;
+  getReturnValue(): any;
   setClassTargetFromString(target: any): void;
 }
 

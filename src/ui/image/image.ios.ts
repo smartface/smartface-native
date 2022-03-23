@@ -43,9 +43,12 @@ export default class ImageIOS<
       this.nativeObject = params.image;
     }
     this._nativeImage = this.nativeObject;
+
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps(this.getAndroidProps());
   }
 
-  get android(): ImageAndroidProps {
+  private getAndroidProps(): ImageAndroidProps {
     return {
       round: () => new ImageIOS({}),
       get systemIcon() {
@@ -54,24 +57,11 @@ export default class ImageIOS<
     };
   }
 
-  createSystemIcon() {
-    return this;
-  }
-
-  // get android() {
-  //   const self = this;
-  //   return {
-  //     round: (radius: number) => {
-  //       return;
-  //     },
-  //   };
-  // }
-
-  get ios() {
+  private getIOSProps(): ImageIOSProps {
     const self = this;
     return {
       resizableImageWithCapInsetsResizingMode: (capinsets, resizingMode) => {
-        let image;
+        let image: any;
         const invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance('resizableImageWithCapInsets:resizingMode:', this.nativeObject);
         if (invocationResizeable) {
           invocationResizeable.target = this.nativeObject;
@@ -210,19 +200,12 @@ export default class ImageIOS<
     return this._autoMirrored;
   }
 
-  static createFromFile(path) {
+  static createFromFile(path: string): ImageIOS | null {
     const imageFile = new FileIOS({
       path: path
     });
-    let retval;
-    if (typeof imageFile.nativeObject.getActualPath() === 'undefined') {
-      retval = null;
-    } else {
-      retval = new ImageIOS({
-        path: imageFile.nativeObject.getActualPath()
-      });
-    }
-    return retval;
+    const actualPath: string | undefined = imageFile.nativeObject.getActualPath();
+    return actualPath ? new ImageIOS({ path: actualPath }) : null;
   }
 
   static createFromName(name: string) {
@@ -243,7 +226,10 @@ export default class ImageIOS<
     });
   }
 
-  static readandroid = {
-    createRoundedImage: function () {}
+  static android = {
+    createRoundedImage: () => null,
+    createSystemIcon() {
+      return this;
+    }
   };
 }
