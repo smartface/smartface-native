@@ -17,12 +17,11 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   private _adjustFontSizeToFit: boolean = false;
   private _minimumFontSize: number = 7;
   private __clearButtonEnabled: boolean;
+  createNativeObject() {
+    return new __SF_UITextView();
+  }
   constructor(params?: Partial<TProps>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UITextView();
-    }
 
     this.addIOSProps(this.iosProps);
     this.ios.showScrollBar = false;
