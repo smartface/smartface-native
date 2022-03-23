@@ -1,13 +1,12 @@
 import { FlexLayoutEvents } from './flexlayout-events';
-import { ConstructorOf } from '../../core/constructorof';
 import Color from '../color';
-import { IViewGroup } from '../viewgroup';
+import ViewGroup, { AbstractViewGroup, IViewGroup, ViewGroupAndroidProps } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Flex from '../shared/Flex';
+import { ViewIOSProps } from '../view';
 
-export type FlexLayoutIOSProps = IViewGroup['ios'];
-export type FlexLayoutAndroidProps = IViewGroup['android'] & {
-  readonly yogaNode: any;
+export interface FlexLayoutIOSProps extends ViewIOSProps {}
+export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {
   /**
    * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
    * This property only supported for api level 23 and above.
@@ -84,7 +83,7 @@ export type FlexLayoutAndroidProps = IViewGroup['android'] & {
    * @since 2.0.8
    */
   zIndex: number;
-};
+}
 
 /**
  * @class UI.FlexLayout
@@ -212,9 +211,25 @@ export interface IFlexLayout<
    * @ios
    */
   applyLayout(): void;
-  content: IFlexLayout | undefined;
 }
 
-const FlexLayout: ConstructorOf<IFlexLayout, Partial<IFlexLayout>> = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
-type FlexLayout = IFlexLayout;
+export declare class FlexLayoutBase<TEvent extends string = FlexLayoutEvents, TNative = any> extends AbstractViewGroup<TEvent | FlexLayoutEvents, TNative, IFlexLayout> implements IFlexLayout {
+  direction: Flex.Direction;
+  flexDirection: Flex.FlexDirection;
+  justifyContent: Flex.JustifyContent;
+  alignContent: Flex.AlignContent;
+  alignItems: Flex.AlignItems;
+  flexWrap: Flex.FlexWrap | null;
+  static Direction: typeof Flex.Direction;
+  static FlexDirection: typeof Flex.FlexDirection;
+  static JustifyContent: typeof Flex.JustifyContent;
+  static AlignContent: typeof Flex.AlignContent;
+  static FlexWrap: typeof Flex.FlexWrap;
+  static AlignItems: typeof Flex.AlignItems;
+  static AlignSelf: typeof Flex.AlignSelf;
+  static PositionType: typeof Flex.PositionType;
+}
+
+const FlexLayout: typeof FlexLayoutBase = require(`./flexlayout.${Device.deviceOS.toLowerCase()}`).default;
+type FlexLayout = FlexLayoutBase;
 export default FlexLayout;

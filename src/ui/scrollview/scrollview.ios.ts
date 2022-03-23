@@ -8,6 +8,7 @@ import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { ScrollViewEvents } from './scrollview-events';
+import type FlexLayout from '../flexlayout';
 
 enum ScrollType {
   VERTICAL,
@@ -51,6 +52,9 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       true
     );
   }
+  createNativeObject(): any {
+    return new __SF_UIScrollView();
+  }
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   contentLayout: FlexLayoutIOS;
   private _frame: __SF_UIView['frame'] = { x: 0, y: 0 };
@@ -59,30 +63,27 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   gradientColorFrameObserver?: (e: any) => void;
   constructor(params?: IScrollView) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_UIScrollView();
-      this.contentLayout = new FlexLayoutIOS();
-      this.contentLayout.nativeObject.addFrameObserver();
-      this.contentLayout.nativeObject.frameObserveHandler = function (e) {
-        if (!this.autoSizeEnabled) {
-          this.changeContentSize(e.frame);
-        }
-        this.gradientColorFrameObserver?.(e);
-      };
-      this.nativeObject.addFrameObserver();
-      this.nativeObject.frameObserveHandler = (e) => {
-        if (JSON.stringify(this._frame) !== JSON.stringify(e.frame)) {
-          this._frame = e.frame;
-          this.layout.applyLayout();
-        }
-      };
-      this.nativeObject.addSubview(this.contentLayout.nativeObject);
-      this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
-      this.nativeObject.didScroll = (params: { translation: Point2D; contentOffset: Point2D }) => {
-        this.emit('scroll', params);
-        this.onScroll?.(params);
-      };
-    }
+    this.contentLayout = new FlexLayoutIOS();
+    this.contentLayout.nativeObject.addFrameObserver();
+    this.contentLayout.nativeObject.frameObserveHandler = function (e) {
+      if (!this.autoSizeEnabled) {
+        this.changeContentSize(e.frame);
+      }
+      this.gradientColorFrameObserver?.(e);
+    };
+    this.nativeObject.addFrameObserver();
+    this.nativeObject.frameObserveHandler = (e) => {
+      if (JSON.stringify(this._frame) !== JSON.stringify(e.frame)) {
+        this._frame = e.frame;
+        this.contentLayout.applyLayout();
+      }
+    };
+    this.nativeObject.addSubview(this.contentLayout.nativeObject);
+    this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+    this.nativeObject.didScroll = (params: { translation: Point2D; contentOffset: Point2D }) => {
+      this.emit('scroll', params);
+      this.onScroll?.(params);
+    };
     this.setLayoutProps();
     this.addIOSProps(this.getIOSProps());
   }
@@ -100,21 +101,21 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     const isLTR = semanticContent === 0 ? __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection === 0 : semanticContent === 3;
     if (!isLTR) {
       this.flipHorizontally();
-      this.layout.onViewAddedInnerCallback = (view) => {
+      this.contentLayout.onViewAddedInnerCallback = (view) => {
         view.flipHorizontally();
       };
-      this.layout.onViewRemovedInnerCallback = (view) => {
+      this.contentLayout.onViewRemovedInnerCallback = (view) => {
         view.flipHorizontally();
       };
     }
-    this.layout.applyLayout = () => {
+    this.contentLayout.applyLayout = () => {
       __SF_Dispatch.mainAsync(() => {
         if (this.autoSizeEnabled) {
-          this.layout.width = this.nativeObject.frame.width;
-          this.layout.height = this.nativeObject.frame.height;
+          this.contentLayout.width = this.nativeObject.frame.width;
+          this.contentLayout.height = this.nativeObject.frame.height;
         }
 
-        this.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+        this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
         if (this.autoSizeEnabled) {
           const rect = {
             x: 0,
@@ -122,7 +123,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
             width: this.nativeObject.frame.width,
             height: this.nativeObject.frame.height
           };
-          const subviews = this.layout.nativeObject.subviews;
+          const subviews = this.contentLayout.nativeObject.subviews;
           let widthAffectingView;
           let heightAffectingView;
           for (let i = 0; i < subviews.length; i++) {
@@ -143,10 +144,10 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
 
           if (this._align === ScrollType.HORIZONTAL) {
             //// PADDING CHECK ///////
-            if (TypeUtil.isNumeric(this.layout.paddingRight)) {
-              rect.width = rect.width + this.layout.paddingRight;
-            } else if (TypeUtil.isNumeric(this.layout.padding)) {
-              rect.width = rect.width + this.layout.padding;
+            if (TypeUtil.isNumeric(this.contentLayout.paddingRight)) {
+              rect.width = rect.width + this.contentLayout.paddingRight;
+            } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
+              rect.width = rect.width + this.contentLayout.padding;
             }
             ///////////////////////////
 
@@ -159,10 +160,10 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
             rect.height = this.nativeObject.frame.height;
           } else {
             //// PADDING CHECK ///////
-            if (TypeUtil.isNumeric(this.layout.paddingBottom)) {
-              rect.height = rect.height + this.layout.paddingBottom;
-            } else if (TypeUtil.isNumeric(this.layout.padding)) {
-              rect.height = rect.height + this.layout.padding;
+            if (TypeUtil.isNumeric(this.contentLayout.paddingBottom)) {
+              rect.height = rect.height + this.contentLayout.paddingBottom;
+            } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
+              rect.height = rect.height + this.contentLayout.padding;
             }
             ///////////////////////////
 
@@ -176,9 +177,9 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
             rect.width = this.nativeObject.frame.width;
           }
 
-          this.layout.width = rect.width;
-          this.layout.height = rect.height;
-          this.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+          this.contentLayout.width = rect.width;
+          this.contentLayout.height = rect.height;
+          this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
 
           this.changeContentSize(rect);
         }
@@ -219,7 +220,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
         }
       }
     };
-    copyObjectPropertiesWithDescriptors(this.layout, layoutParams);
+    copyObjectPropertiesWithDescriptors(this.contentLayout, layoutParams);
   }
 
   private getIOSProps(): IScrollView['ios'] {
@@ -305,7 +306,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     };
   }
   get layout() {
-    return this.contentLayout;
+    return this.contentLayout as unknown as FlexLayout;
   }
   get paginationEnabled(): boolean {
     return this.nativeObject.valueForKey('pagingEnabled');
@@ -334,7 +335,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       this._align = ScrollType.VERTICAL;
     }
     if (!this.autoSizeEnabled) {
-      this.changeContentSize(this.layout.nativeObject.frame);
+      this.changeContentSize(this.contentLayout.nativeObject.frame);
     }
   }
   get scrollBarEnabled(): boolean {

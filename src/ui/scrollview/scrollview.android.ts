@@ -8,6 +8,7 @@ import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import ViewAndroid from '../view/view.android';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
+import FlexLayout from '../flexlayout';
 
 const NativeHorizontalScroll = requireClass('io.smartface.android.sfcore.SFHorizontalScrollView');
 const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
@@ -21,13 +22,55 @@ const NativeViewFocus = {
   [ScrollViewEdge.RIGHT]: NativeView.FOCUS_RIGHT
 };
 export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents> extends ViewGroupAndroid<TEvent | ScrollViewEvents, any, IScrollView> implements IScrollView {
-  private _align: ScrollViewAlign;
+  private _align: ScrollViewAlign = ScrollViewAlign.VERTICAL;
   private prevY: number;
   private prevOldY: number;
   private prevX: number;
   private prevOldX: number;
   private _layout: FlexLayoutAndroid;
   private _autoSizeEnabled = false;
+  protected createNativeObject(): any {
+    const isHorizontal = this._align === ScrollViewAlign.HORIZONTAL;
+    const callback = {
+      onScrollChanged: (x: number, y: number, oldXPixel: number, oldYPixel: number) => {
+        let isXSameCoordinate = false;
+        let isYSameCoordinate = false;
+
+        const newX = Math.max(x, 0); // negative values are provided as well
+        const newY = Math.max(y, 0); // negative values are provided as well
+
+        const oldXPixelPositive = Math.max(oldXPixel, 0);
+        const oldYPixelPositive = Math.max(oldYPixel, 0);
+
+        const newX_DP = AndroidUnitConverter.pixelToDp(newX);
+        const newY_DP = AndroidUnitConverter.pixelToDp(newY);
+
+        const oldX = AndroidUnitConverter.pixelToDp(oldXPixel);
+        const oldY = AndroidUnitConverter.pixelToDp(oldYPixel);
+
+        isXSameCoordinate = this.prevX === newX_DP && this.prevOldX === oldX; //This is avoid unnecessary triggers
+        isYSameCoordinate = this.prevY === newY_DP && this.prevOldY === oldY; //This is avoid unnecessary triggers
+
+        this.prevX = newX_DP;
+        this.prevOldX = oldX;
+
+        this.prevY = newY_DP;
+        this.prevOldY = oldY;
+
+        const translation = {
+          x: isHorizontal ? newX_DP - oldX : x - oldXPixelPositive,
+          y: isHorizontal ? y - oldYPixelPositive : newY_DP - oldY
+        };
+        if (isHorizontal ? !isXSameCoordinate : !isYSameCoordinate) {
+          this.onScroll?.({
+            translation: translation,
+            contentOffset: this.contentOffset
+          });
+        }
+      }
+    };
+    return isHorizontal ? new NativeVerticalScroll(AndroidConfig.activity, callback) : new NativeHorizontalScroll(AndroidConfig.activity, callback);
+  }
   scrollToEdge(edge: ScrollViewEdge): void {
     this.nativeObject.fullScroll(NativeViewFocus[edge]);
   }
@@ -43,48 +86,6 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   constructor(params?: IScrollView) {
     super(params);
-    if (!this.nativeObject) {
-      const isHorizontal = this._align === ScrollViewAlign.HORIZONTAL;
-      const callback = {
-        onScrollChanged: (x: number, y: number, oldXPixel: number, oldYPixel: number) => {
-          let isXSameCoordinate = false;
-          let isYSameCoordinate = false;
-
-          const newX = Math.max(x, 0); // negative values are provided as well
-          const newY = Math.max(y, 0); // negative values are provided as well
-
-          const oldXPixelPositive = Math.max(oldXPixel, 0);
-          const oldYPixelPositive = Math.max(oldYPixel, 0);
-
-          const newX_DP = AndroidUnitConverter.pixelToDp(newX);
-          const newY_DP = AndroidUnitConverter.pixelToDp(newY);
-
-          const oldX = AndroidUnitConverter.pixelToDp(oldXPixel);
-          const oldY = AndroidUnitConverter.pixelToDp(oldYPixel);
-
-          isXSameCoordinate = this.prevX === newX_DP && this.prevOldX === oldX; //This is avoid unnecessary triggers
-          isYSameCoordinate = this.prevY === newY_DP && this.prevOldY === oldY; //This is avoid unnecessary triggers
-
-          this.prevX = newX_DP;
-          this.prevOldX = oldX;
-
-          this.prevY = newY_DP;
-          this.prevOldY = oldY;
-
-          const translation = {
-            x: isHorizontal ? newX_DP - oldX : x - oldXPixelPositive,
-            y: isHorizontal ? y - oldYPixelPositive : newY_DP - oldY
-          };
-          if (isHorizontal ? !isXSameCoordinate : !isYSameCoordinate) {
-            this.onScroll?.({
-              translation: translation,
-              contentOffset: this.contentOffset
-            });
-          }
-        }
-      };
-      this.nativeObject = isHorizontal ? new NativeVerticalScroll(AndroidConfig.activity, callback) : new NativeHorizontalScroll(AndroidConfig.activity, callback);
-    }
     this.addAndroidProps(this.getAndroidProps());
     this._layout = new FlexLayoutAndroid();
     // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
@@ -110,7 +111,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     };
   }
   private calculateScrollViewSize() {
-    const childViews = this.layout.childViews;
+    const childViews = this._layout.childViews;
     const keys = Object.keys(childViews);
     const arrayLenght = keys.length;
     if (this.align === ScrollViewAlign.VERTICAL) {
@@ -170,7 +171,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     return this._align;
   }
   get layout() {
-    return this._layout;
+    return this._layout as unknown as FlexLayout;
   }
   get scrollBarEnabled(): IScrollView['scrollBarEnabled'] {
     return this.nativeObject.isHorizontalScrollBarEnabled() || this.nativeObject.isVerticalScrollBarEnabled();

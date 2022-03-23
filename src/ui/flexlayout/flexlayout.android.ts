@@ -32,7 +32,6 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   constructor(params?: Partial<TProps>) {
     super(params);
   }
-  content: FlexLayout;
 
   get direction() {
     return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), NativeDirection);

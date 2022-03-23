@@ -400,7 +400,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
  *     myPage.layout.addChild(myImageView);
  *
  */
-const ImageView: ConstructorOf<AbstractImageView, Partial<AbstractImageView>> = require(`./imageview.${Device.deviceOS.toLowerCase()}`).default;
+const ImageView: typeof AbstractImageView = require(`./imageview.${Device.deviceOS.toLowerCase()}`).default;
 type ImageView = AbstractImageView;
 
 export default ImageView;
