@@ -1,4 +1,4 @@
-import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
 
@@ -36,7 +36,7 @@ export interface AttributedStringiOSProps {
    */
   strikethroughColor: Color;
 }
-export interface IAttributedString {
+export interface IAttributedString extends INativeMobileComponent {
   /**
    * Gets/sets backgroundColor on AttributedString.
    *
