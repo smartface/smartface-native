@@ -22,6 +22,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   private _leftLayoutMain: FlexLayout;
   private _onLeftViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   private _onRightViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+  private _content: FlexLayout;
 
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
@@ -135,18 +136,17 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
             flexContent.applyLayout();
           };
           flexMain.addChild(flexContent);
-          // TODO: Ask why flexMain.content is implemented, it looks a bad idea.
-          flexMain.content = flexContent;
+          this._content = flexContent;
           self._leftLayoutMain = flexMain;
-        } else if (self._leftLayoutMain.content) {
-          const childs = self._leftLayoutMain.content.getChildList();
+        } else if (this._content) {
+          const childs = this._content.getChildList();
           for (const i in childs) {
-            self._leftLayoutMain.content.removeChild(childs[i]);
+            this._content.removeChild(childs[i]);
           }
         }
 
-        self._leftLayoutMain.content?.addChild(value.view);
-        self._leftLayoutMain.content?.applyLayout();
+        this._content?.addChild(value.view);
+        this._content?.applyLayout();
         // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'leadingViewMode');
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(self._leftLayoutMain.nativeObject, 'leadingView');
@@ -378,17 +378,16 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
         flexContent.applyLayout();
       };
       flexMain.addChild(flexContent);
-      // TODO Recheck after build. There is no content property.
-      flexMain.content = flexContent;
+      this._content = flexContent;
       this._rightLayoutMain = flexMain;
-    } else if (this._rightLayoutMain.content) {
-      const childs = this._rightLayoutMain.content.getChildList();
+    } else if (this._content) {
+      const childs = this._content.getChildList();
       for (const i in childs) {
-        this._rightLayoutMain.content.removeChild(childs[i]);
+        this._content.removeChild(childs[i]);
       }
     }
-    this._rightLayoutMain.content?.addChild(value.view);
-    this._rightLayoutMain.content?.applyLayout();
+    this._content?.addChild(value.view);
+    this._content?.applyLayout();
     // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'trailingViewMode');
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(this._rightLayoutMain.nativeObject, 'trailingView');

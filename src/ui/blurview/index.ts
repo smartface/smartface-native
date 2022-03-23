@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
-import View, { AbstractView, IView } from '../view';
+import View, { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { BlurViewEvents } from './blurview-events';
 
 /**
@@ -10,26 +10,26 @@ import { BlurViewEvents } from './blurview-events';
  * @ios
  */
 export enum BlurViewEffectStyle {
-  EXTRALIGHT = 0,
-  LIGHT = 1,
-  DARK = 2,
-  REGULAR = 4,
-  PROMINENT = 5,
-  SYSTEMULTRATHINMATERIAL = 6,
-  SYSTEMTHINMATERIAL = 7,
-  SYSTEMMATERIAL = 8,
-  SYSTEMTHICKMATERIAL = 9,
-  SYSTEMCHROMEMATERIAL = 10,
-  SYSTEMULTRATHINMATERIALLIGHT = 11,
-  SYSTEMTHINMATERIALLIGHT = 12,
-  SYSTEMMATERIALLIGHT = 13,
-  SYSTEMTHICKMATERIALLIGHT = 14,
-  SYSTEMCHROMEMATERIALLIGHT = 15,
-  SYSTEMULTRATHINMATERIALDARK = 16,
-  SYSTEMTHINMATERIALDARK = 17,
-  SYSTEMMATERIALDARK = 18,
-  SYSTEMTHICKMATERIALDARK = 19,
-  SYSTEMCHROMEMATERIALDARK = 20
+  EXTRALIGHT,
+  LIGHT,
+  DARK,
+  REGULAR,
+  PROMINENT,
+  SYSTEMULTRATHINMATERIAL,
+  SYSTEMTHINMATERIAL,
+  SYSTEMMATERIAL,
+  SYSTEMTHICKMATERIAL,
+  SYSTEMCHROMEMATERIAL,
+  SYSTEMULTRATHINMATERIALLIGHT,
+  SYSTEMTHINMATERIALLIGHT,
+  SYSTEMMATERIALLIGHT,
+  SYSTEMTHICKMATERIALLIGHT,
+  SYSTEMCHROMEMATERIALLIGHT,
+  SYSTEMULTRATHINMATERIALDARK,
+  SYSTEMTHINMATERIALDARK,
+  SYSTEMMATERIALDARK,
+  SYSTEMTHICKMATERIALDARK,
+  SYSTEMCHROMEMATERIALDARK
 }
 
 export enum BlurViewSemanticContentAttribute {
@@ -65,7 +65,7 @@ export enum BlurViewSemanticContentAttribute {
   FORCERIGHTTOLEFT = 4
 }
 
-export type iOSProps = View['ios'] & {
+export interface BlurViewiOSProps extends ViewIOSProps {
   /**
    * Gets/sets blur style.
    * @property {UI.BlurView.iOS.EffectStyle} effectStyle
@@ -73,9 +73,9 @@ export type iOSProps = View['ios'] & {
    * @since 4.3.1
    */
   effectStyle?: BlurViewEffectStyle;
-};
+}
 
-export type AndroidProps = View['android'] & {
+export interface BlurViewAndroidProps extends ViewAndroidProps {
   /**
    * Gets/sets the blur radius. The value range is between (0, 25].
    * @property {Number} [blurRadius=16]
@@ -97,11 +97,9 @@ export type AndroidProps = View['android'] & {
    * @since 4.3.1
    */
   overlayColor: Color;
-};
-
-export declare interface IBlurView<TEvent extends string = BlurViewEvents, TIOS = iOSProps, TAND = AndroidProps> extends IView<TEvent | BlurViewEvents, any, MobileOSProps<iOSProps, AndroidProps> > {
-
 }
+
+export declare interface IBlurView<TEvent extends string = BlurViewEvents> extends IView<TEvent | BlurViewEvents, any, MobileOSProps<BlurViewiOSProps, BlurViewAndroidProps>> {}
 
 export declare class AbstractBlurView<TEvent extends string = BlurViewEvents> extends AbstractView<TEvent, any, IBlurView> implements IBlurView<TEvent> {
   static iOS: {
