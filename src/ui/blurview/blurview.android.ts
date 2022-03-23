@@ -13,12 +13,11 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
   private _rootView: View;
   private _blurRadius: number = 16;
   private _blurRender: any;
+  createNativeObject() {
+    return new NativeBlurView(AndroidConfig.activity);
+  }
   constructor(params?: Partial<IBlurView>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeBlurView(AndroidConfig.activity);
-    }
 
     this._blurRender = new RenderScriptBlur(AndroidConfig.activity);
 

@@ -11,7 +11,9 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   private _subject: string;
   private _attaches: any = [];
   private _closeCallback: () => void;
-
+  createNativeObject() {
+    return new __SF_MFMailComposeViewController();
+  }
   private nativeObjectDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
   constructor() {
     super();
@@ -56,7 +58,6 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   }
   show(page: Page) {
     const self = this;
-    this.nativeObject = new __SF_MFMailComposeViewController();
     if (this._cc) this.nativeObject.setCcRecipients(this._cc);
     if (this._bcc) this.nativeObject.setBccRecipients(this._bcc);
     if (this._to) this.nativeObject.setToRecipients(this._to);
@@ -75,7 +76,7 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
     this.nativeObject.mailComposeDelegate = this.nativeObjectDelegate;
     page.nativeObject.presentViewController(this.nativeObject);
   }
-  canSendMail() {
+  static canSendMail() {
     return __SF_MFMailComposeViewController.canSendMail();
   }
 }

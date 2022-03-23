@@ -2,7 +2,7 @@ import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
 import { ViewGroupEvents } from './viewgroup-events';
 
-type ViewGroupAndroidProps = ViewAndroidProps & {
+export interface ViewGroupAndroidProps extends ViewAndroidProps {
   /**
    * Called when a child does not want this parent and its ancestors to intercept touch events .
    * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
@@ -13,7 +13,7 @@ type ViewGroupAndroidProps = ViewAndroidProps & {
    * @since 4.0.3
    */
   requestDisallowInterceptTouchEvent(disallow: boolean): void;
-};
+}
 /**
  * @class UI.ViewGroup
  * @since 0.1

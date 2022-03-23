@@ -2,7 +2,7 @@ import { IImageView, ImageFillType, ImageViewFillTypeIOS } from '.';
 import File from '../../io/file';
 import Color from '../color';
 import type Image from '../image';
-import ImageiOS from '../image/image.ios';
+import ImageIOS from '../image/image.ios';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
@@ -115,13 +115,13 @@ enum SDWebImageOptions {
 }
 
 export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
-  private _imageTemplate: ImageiOS | undefined;
+  private _imageTemplate: ImageIOS | undefined;
   private _isSetTintColor: boolean;
+  protected createNativeObject() {
+    return new __SF_UIImageView();
+  }
   constructor(params?: IImageView) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIImageView();
-    }
 
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
@@ -133,36 +133,26 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this.touchEnabled = true;
   }
 
-  get image(): ImageiOS | null {
-    return this.nativeObject.image ? ImageiOS.createFromImage(this.nativeObject.image) : null;
+  get image(): ImageIOS | null {
+    return this.nativeObject.image ? ImageIOS.createFromImage(this.nativeObject.image) : null;
   }
 
-  set image(value: ImageiOS | null) {
+  set image(value: ImageIOS | string | null) {
+    if (value === null) {
+      this.nativeObject.loadImage(undefined);
+      return;
+    }
+    const image = value instanceof ImageIOS ? value : ImageIOS.createFromFile(value);
+    if (!image) {
+      this.nativeObject.loadImage(undefined);
+      return;
+    }
     this._imageTemplate = undefined;
 
-    // if (typeof value === 'string') {
-    //   const image = Image.createFromFile(value);
-    //   if (image) {
-    //     if (this._isSetTintColor) {
-    //       // TODO Recheck after build
-    //       let rendered: Image = image.nativeObject.imageWithRenderingMode(2);
-    //       this._imageTemplate = rendered;
-    //       this.nativeObject.loadImage(rendered.nativeObject);
-    //     } else {
-    //       this.nativeObject.loadImage(image.nativeObject);
-    //     }
-    //   }
-    // } else {
-    if (value) {
-      if (this._isSetTintColor) {
-        const rendered: ImageiOS = value.nativeObject.imageWithRenderingMode(2);
-        this._imageTemplate = rendered;
-        this.nativeObject.loadImage(rendered.nativeObject);
-      } else this.nativeObject.loadImage(value.nativeObject);
-    } else {
-      this.nativeObject.loadImage(undefined);
-    }
-    // }
+    // TODO Recheck after build
+    const imageInstance: ImageIOS = this._isSetTintColor ? image.nativeObject.imageWithRenderingMode(2) : image;
+    this._imageTemplate = this._isSetTintColor ? imageInstance : this._imageTemplate;
+    this.nativeObject.loadImage(imageInstance.nativeObject);
   }
 
   get tintColor(): Color {
@@ -171,13 +161,10 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     });
   }
   set tintColor(value: Color) {
-    if (this.nativeObject.image) {
-      if (this._imageTemplate) {
-        this.nativeObject.image = this._imageTemplate.nativeObject;
-      } else {
-        this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
-        this.nativeObject.image = this._imageTemplate?.nativeObject;
-      }
+    if (this.nativeObject?.image) {
+      const template = this._imageTemplate || this.nativeObject.image.imageWithRenderingMode(2);
+      this.nativeObject.image = template;
+      this._imageTemplate = template;
     }
     this._isSetTintColor = true;
     this.nativeObject.tintColor = value.nativeObject;
@@ -193,7 +180,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   loadFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: ImageiOS;
+    placeholder?: ImageIOS;
     fade?: boolean;
     useHTTPCacheControl?: boolean;
     onSuccess?: () => void;
@@ -258,27 +245,32 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }
 
   loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
-    if (params.file) {
-      const file = params.file;
-      const filePath = file.nativeObject.getActualPath();
-      const image = ImageiOS.createFromFile(filePath);
-      const fade = typeof params.fade === 'boolean' ? params.fade : true;
+    // console.info('[imageios:loadfromfile] before try');
+    try {
+      if (params.file) {
+        const file = params.file;
+        const filePath = file.nativeObject.getActualPath();
+        const image = ImageIOS.createFromFile(filePath);
+        const fade = typeof params.fade === 'boolean' ? params.fade : true;
 
-      if (fade && image) {
-        this.nativeObject.loadImage(image.nativeObject);
-        const alpha = this.nativeObject.alpha;
-        this.nativeObject.alpha = 0;
-        __SF_UIView.animation(
-          0.3,
-          0,
-          () => {
-            this.nativeObject.alpha = alpha;
-          },
-          function () {}
-        );
-      } else {
-        image && this.nativeObject.loadImage(image.nativeObject);
+        if (fade && image) {
+          this.nativeObject.loadImage(image.nativeObject);
+          const alpha = this.nativeObject.alpha;
+          this.nativeObject.alpha = 0;
+          __SF_UIView.animation(
+            0.3,
+            0,
+            () => {
+              this.nativeObject.alpha = alpha;
+            },
+            function () {}
+          );
+        } else {
+          image && this.nativeObject.loadImage(image.nativeObject);
+        }
       }
+    } catch (e) {
+      // console.error(e.stack);
     }
   }
 
@@ -304,7 +296,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
         if (typeof params.onSuccess === 'function') {
           __SF_Dispatch.mainAsync((innerIndex) => {
             // TODO Recheck after build
-            params.onSuccess?.(ImageiOS.createFromImage(params.image), params.cache);
+            params.onSuccess?.(ImageIOS.createFromImage(params.image), params.cache);
           });
         }
       } else {

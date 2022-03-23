@@ -3,4 +3,6 @@ export type Rectangle = {
   left: number;
   width: number;
   height: number;
+  x: number;
+  y: number;
 };

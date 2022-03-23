@@ -176,7 +176,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @readonly
    * @since 0.1
    */
-  readonly layout: IFlexLayout;
+  readonly layout: FlexLayout;
 
   /**
    * This event is called when a page appears on the screen (everytime).

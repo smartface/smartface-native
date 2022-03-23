@@ -51,10 +51,12 @@ declare class __SF_UIImageView extends __SF_UIView {
 declare class __SF_NSInvocation extends __SF_NSOBject {
   static createInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
   static createClassInvocationWithSelectorInstance(name: string, obj: any): __SF_NSInvocation;
+  setUIEdgeInsetsArgumentAtIndex(capinsets: __SF_NSRect, mode: number): void;
   target: __SF_NSOBject;
   setSelectorWithString(selector: string): void;
   retainArguments(): void;
   invoke(): void;
+  getReturnValue(): any;
   setClassTargetFromString(target: any): void;
 }
 
@@ -585,7 +587,6 @@ declare class __SF_UIDatePicker {
 declare class __SF_MFMailComposeViewController {
   static canSendMail(): boolean;
   constructor();
-  canSendMail(): boolean;
   setCcRecipients(cc: any): void;
   setBccRecipients(bcc: any): void;
   setToRecipients(to: any): void;
@@ -1049,7 +1050,7 @@ declare class __SF_TopTabViewController extends __SF_UIViewController {
   scrollEnabled: boolean;
 }
 
-declare class __SF_UITextView extends __SF_UIView {
+declare class __SF_UITextView extends __SF_SMFUILabel {
   setSelectable: boolean;
   setEditable: boolean;
   setDelaysContentTouches: boolean;

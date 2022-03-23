@@ -237,14 +237,6 @@ export default class ImageAndroid<TNative = any, TProps extends WithMobileOSProp
     }
     return null;
   }
-
-  static createSystemIcon(systemIcon: number | string) {
-    return new ImageAndroid({
-      android: {
-        systemIcon
-      }
-    });
-  }
   static createFromBlob(blob) {
     const newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
     if (newBitmap)
@@ -270,6 +262,13 @@ export default class ImageAndroid<TNative = any, TProps extends WithMobileOSProp
           roundedBitmapDrawable: roundedBitmapDrawable
         });
       }
+    },
+    createSystemIcon(systemIcon: number | string) {
+      return new ImageAndroid({
+        android: {
+          systemIcon
+        }
+      });
     }
   };
 

@@ -113,9 +113,9 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static DEFAULT: FontStyle.DEFAULT;
+  static DEFAULT = FontStyle.DEFAULT.toString();
 
-  static IOS_SYSTEM_FONT: FontStyle.IOS_SYSTEM_FONT;
+  static IOS_SYSTEM_FONT = FontStyle.IOS_SYSTEM_FONT.toString();
   /**
    * Represents normal font style
    *
@@ -123,7 +123,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static NORMAL: FontStyle.NORMAL;
+  static NORMAL = FontStyle.NORMAL;
   /**
    * Represents bold font style
    *
@@ -131,7 +131,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static BOLD: FontStyle.BOLD;
+  static BOLD = FontStyle.BOLD;
   /**
    * Represents italic font style
    *
@@ -140,7 +140,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @readonly
    * @since 0.1
    */
-  static ITALIC: FontStyle.ITALIC;
+  static ITALIC = FontStyle.ITALIC;
   /**
    * Represents both bold and italic font style
    *
@@ -148,5 +148,5 @@ export abstract class AbstractFont extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static BOLD_ITALIC: FontStyle.BOLD_ITALIC;
+  static BOLD_ITALIC = FontStyle.BOLD_ITALIC;
 }

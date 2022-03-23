@@ -10,6 +10,9 @@ export default class FileIOS extends AbstractFile implements IFile {
   }
   set type(value: PATH_FILE_TYPE) {}
   fullPath: string;
+  protected createNativeObject() {
+    return null;
+  }
   constructor(params?: Partial<IFile> & FileParams) {
     super(params);
     this.addIOSProps(this.getIOSParams());
@@ -82,7 +85,11 @@ export default class FileIOS extends AbstractFile implements IFile {
     return this.nativeObject.getPath();
   }
   set path(value) {
-    this.nativeObject = __SF_File.create(value);
+    if (value) {
+      this.nativeObject = __SF_File.create(value);
+    } else {
+      throw Error(`Wrong file:ios path value: ${value}`);
+    }
   }
 
   copy(destination: string): boolean {

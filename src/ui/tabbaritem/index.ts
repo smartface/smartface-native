@@ -1,6 +1,6 @@
 import Font from '../font';
 import { IBadge } from '../badge';
-import AttributedString from '../../global/attributedstring';
+import AttributedString from '../attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
 import { IPage } from '../page';

@@ -9,7 +9,6 @@ export default class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNa
   constructor(params?: Partial<TProps>) {
     super(params);
   }
-  content: IFlexLayout;
 
   static Direction = NativeFlexProps.Direction;
   static FlexDirection = NativeFlexProps.FlexDirection;

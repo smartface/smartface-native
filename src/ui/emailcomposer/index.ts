@@ -140,17 +140,6 @@ export abstract class AbstractEmailComposer extends NativeMobileComponent<any, M
    * @since 3.0.3
    */
   abstract show(page: Page): void;
-  /**
-   * You should call this method before attempting to display the email composition interface. If it returns NO, you must not display the email composition interface.
-   *
-   * @return {Boolean} canSendMail
-   * @ios
-   * @android
-   * @method canSendMail
-   * @static
-   * @since 3.0.3
-   */
-  abstract canSendMail(): boolean;
   protected createNativeObject() {
     throw new Error('Method not implemented');
   }
@@ -163,7 +152,17 @@ declare class EmailComposerImpl extends AbstractEmailComposer {
   setSubject(subject: string): void;
   onClose: () => void;
   show(page: Page): void;
-  canSendMail(): boolean;
+  /**
+   * You should call this method before attempting to display the email composition interface. If it returns NO, you must not display the email composition interface.
+   *
+   * @return {Boolean} canSendMail
+   * @ios
+   * @android
+   * @method canSendMail
+   * @static
+   * @since 3.0.3
+   */
+  static canSendMail(): boolean;
 }
 
 const EmailComposer: typeof EmailComposerImpl = require(`./emailcomposer.${Device.deviceOS.toLowerCase()}`).default;

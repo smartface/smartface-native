@@ -1,6 +1,6 @@
 import { ITabbarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import AttributedString from '../../global/attributedstring';
+import AttributedString from '../attributedstring';
 import UnitConverter from '../../util/Android/unitconverter';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';

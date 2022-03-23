@@ -1,4 +1,4 @@
-import AttributedString from '../../global/attributedstring';
+import AttributedString from '../attributedstring';
 import Image from '../image';
 import Font from '../font';
 import Color from '../color';

@@ -16,7 +16,7 @@ export interface IViewState<Property = any> {
   focused?: Property;
 }
 
-export type ViewAndroidProps = {
+export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
   /**
@@ -74,9 +74,9 @@ export type ViewAndroidProps = {
    */
   zIndex: number;
   updateRippleEffectIfNeeded: () => void;
-};
+}
 
-export type ViewIOSProps = {
+export interface ViewIOSProps {
   /**
    * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views.
    * The default value of this property is false
@@ -162,7 +162,7 @@ export type ViewIOSProps = {
    * @since 4.2.1
    */
   performWithoutAnimation: (functionWithoutAnimation: Function) => void;
-};
+}
 
 export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndroidProps> = MobileOSProps<ViewIOSProps, ViewAndroidProps>> extends INativeComponent {
   /**

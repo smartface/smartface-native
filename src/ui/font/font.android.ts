@@ -18,8 +18,11 @@ export default class FontAndroid extends AbstractFont {
       typeface: this
     });
   }
+  constructor(params: Partial<AbstractFont>) {
+    super(params);
+  }
   static create(fontFamily: string, size: number, style: FontStyle): FontAndroid {
-    const fromCache = getFromCache(fontFamily, style, size);
+    const fromCache = FontAndroid.getFromCache(fontFamily, style, size);
     if (fromCache) {
       return fromCache;
     }
@@ -56,7 +59,7 @@ export default class FontAndroid extends AbstractFont {
     }
     let typeface: any;
     let font: FontAndroid;
-    if (fontFamily && fontFamily.length > 0 && fontFamily !== FontAndroid.DEFAULT) {
+    if (fontFamily?.length > 0 && fontFamily !== FontAndroid.DEFAULT) {
       // Searching font on assets:
       const base = fontFamily.split(' ').join('.');
       const convertedFontName = base + fontSuffix + '.ttf';
@@ -94,7 +97,7 @@ export default class FontAndroid extends AbstractFont {
 
       if (selectedFont !== undefined) {
         font = FontAndroid.createFromFile(selectedFont.fullPath, size);
-        addToCache(fontFamily, style, font);
+        FontAndroid.addToCache(fontFamily, style, font);
         return font;
       } else {
         typeface = NativeTypeface.create(fontFamily, fontStyle);
@@ -107,7 +110,7 @@ export default class FontAndroid extends AbstractFont {
       nativeObject: typeface,
       size: size
     });
-    addToCache(fontFamily, style, font);
+    FontAndroid.addToCache(fontFamily, style, font);
     return font;
   }
 
@@ -134,26 +137,26 @@ export default class FontAndroid extends AbstractFont {
     });
   }
 
-  static DEFAULT = AbstractFont.DEFAULT;
-  static IOS_SYSTEM_FONT = AbstractFont.IOS_SYSTEM_FONT;
-  static NORMAL = AbstractFont.NORMAL;
-  static BOLD = AbstractFont.BOLD;
-  static ITALIC = AbstractFont.ITALIC;
-  static BOLD_ITALIC = AbstractFont.BOLD_ITALIC;
-}
+  static DEFAULT = FontStyle.DEFAULT.toString();
+  static IOS_SYSTEM_FONT = FontStyle.IOS_SYSTEM_FONT.toString();
+  static NORMAL = FontStyle.NORMAL;
+  static BOLD = FontStyle.BOLD;
+  static ITALIC = FontStyle.ITALIC;
+  static BOLD_ITALIC = FontStyle.BOLD_ITALIC;
 
-function getFromCache(family: string, style: FontStyle, size: number): FontAndroid | undefined {
-  if (!fontCache.has(family)) {
-    return;
+  private static getFromCache(family: string, style: FontStyle, size: number): FontAndroid | undefined {
+    if (!fontCache.has(family)) {
+      return;
+    }
+    if (fontCache.get(family)[style]) {
+      return new FontAndroid({
+        nativeObject: fontCache.get(family)[style],
+        size
+      });
+    }
   }
-  if (fontCache.get(family)[style]) {
-    return new FontAndroid({
-      nativeObject: fontCache.get(family)[style],
-      size
-    });
-  }
-}
 
-function addToCache(family: string, style: FontStyle, font: FontAndroid): void {
-  fontCache.set(family, { [style]: font });
+  private static addToCache(family: string, style: FontStyle, font: FontAndroid): void {
+    fontCache.set(family, { [style]: font });
+  }
 }

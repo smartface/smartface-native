@@ -1,6 +1,6 @@
-import { INativeComponent } from '../../core/inative-component';
-import Color from '../../ui/color';
-import Font from '../../ui/font';
+import { INativeMobileComponent, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import Color from '../color';
+import Font from '../font';
 
 /**
  * @class AttributedString
@@ -18,7 +18,7 @@ import Font from '../../ui/font';
  *     attributeString.ios.underlineColor = Color.YELLOW;
  */
 
-export type iOSProps = Partial<{
+export interface AttributedStringiOSProps {
   /**
    * Gets/sets underlineColor on AttributedString.
    *
@@ -26,7 +26,7 @@ export type iOSProps = Partial<{
    * @ios
    * @since 3.0.0
    */
-  underlineColor?: Color;
+  underlineColor: Color;
   /**
    * Gets/sets strikethroughColor on AttributedString.
    *
@@ -34,9 +34,9 @@ export type iOSProps = Partial<{
    * @ios
    * @since 3.2.1
    */
-  strikethroughColor?: Color;
-}>;
-export interface IAttributedString extends INativeComponent {
+  strikethroughColor: Color;
+}
+export interface IAttributedString extends INativeMobileComponent {
   /**
    * Gets/sets backgroundColor on AttributedString.
    *
@@ -63,7 +63,7 @@ export interface IAttributedString extends INativeComponent {
    * @ios
    * @since 3.0.0
    */
-  font: Font;
+  font: Font | null;
 
   /**
    * Gets/sets foregroundColor on AttributedString.
@@ -101,63 +101,33 @@ export interface IAttributedString extends INativeComponent {
    * @since 3.0.0
    */
   underline: boolean;
-  ios: Partial<{
-    /**
-     * Gets/sets underlineColor on AttributedString.
-     *
-     * @property {UI.Color} underlineColor
-     * @ios
-     * @since 3.0.0
-     */
-    underlineColor?: Color;
-    /**
-     * Gets/sets strikethroughColor on AttributedString.
-     *
-     * @property {UI.Color} strikethroughColor
-     * @ios
-     * @since 3.2.1
-     */
-    strikethroughColor?: Color;
-  }>;
 }
 
-// export class AttributedStringBase implements IAttributedString {
-//   get backgroundColor(): Color {
-//     throw new Error('Method not implemented.');
-//   }
-//   set backgroundColor(value: Color) {
-//     throw new Error('Method not implemented.');
-//   }
-//   get string(): string {
-//     throw new Error('Method not implemented.');
-//   }
-//   set string(value: string) {
-//     throw new Error('Method not implemented.');
-//   }
-//   get font(): Font {
-//     throw new Error('Method not implemented.');
-//   }
-//   set font(value: Font) {
-//     throw new Error('Method not implemented.');
-//   }
-//   get foregroundColor(): Color {
-//     throw new Error('Method not implemented.');
-//   }
-//   set foregroundColor(value: Color) {
-//     throw new Error('Method not implemented.');
-//   }
-//   get strikethrough(): boolean {
-//     throw new Error('Method not implemented.');
-//   }
-//   set strikethrough(value: boolean) {
-//     throw new Error('Method not implemented.');
-//   }
-//   get underline(): boolean {
-//     throw new Error('Method not implemented.');
-//   }
-//   set underline(value: boolean) {
-//     throw new Error('Method not implemented.');
-//   }
-//   ios: iOSProps;
-//   nativeObject: any;
-// }
+export abstract class AttributedStringBase<
+    TNative = any,
+    TProps extends WithMobileOSProps<IAttributedString, AttributedStringiOSProps, {}> = WithMobileOSProps<IAttributedString, AttributedStringiOSProps, {}>
+  >
+  extends NativeMobileComponent<TNative, TProps>
+  implements IAttributedString
+{
+  abstract get backgroundColor(): Color;
+  abstract set backgroundColor(value: Color);
+  abstract get string(): string;
+  abstract set string(value: string);
+  abstract get font(): Font | null;
+  abstract set font(value: Font | null);
+  abstract get foregroundColor(): Color;
+  abstract set foregroundColor(value: Color);
+  abstract get link(): string | undefined;
+  abstract set link(value: string | undefined);
+  abstract get strikethrough(): boolean;
+  abstract set strikethrough(value: boolean);
+  abstract get underline(): boolean;
+  abstract set underline(value: boolean);
+  constructor(params?: TProps) {
+    super(params);
+  }
+  protected createNativeObject(): any {
+    return null;
+  }
+}

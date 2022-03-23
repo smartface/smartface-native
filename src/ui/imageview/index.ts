@@ -5,6 +5,7 @@ import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Image from '../image';
+import { ConstructorOf } from '../../core/constructorof';
 
 export enum ImageViewFillTypeIOS {
   REDRAW = 3,

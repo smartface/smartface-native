@@ -1,4 +1,4 @@
-import AttributedString from '../../global/attributedstring';
+import AttributedString from '../attributedstring';
 import Color from '../color';
 import Font from '../font';
 import View, { IView } from '../view';
