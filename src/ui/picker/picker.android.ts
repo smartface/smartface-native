@@ -32,6 +32,9 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   private buttonCustomize = false;
   protected dialogInstance: any;
 
+  createNativeObject() {
+    return new NativeNumberPicker(AndroidConfig.activity);
+  }
   constructor(params: Partial<IPicker> = {}) {
     super(params);
     this.setOnSelectedEvent();
