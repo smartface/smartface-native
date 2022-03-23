@@ -3,7 +3,7 @@ import { TextViewEvents } from './textview-events';
 import { ConstructorOf } from '../../core/constructorof';
 import { Size } from '../../primitive/size';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import AttributedString from '../../global/attributedstring';
+import AttributedString from '../attributedstring';
 import { Point2D } from '../../primitive/point2d';
 
 export type TextViewiOSProps = ILabel['ios'] & {
@@ -152,7 +152,7 @@ export declare interface ITextView<
    * });
    * ````
    */
-  onLinkClick: (e: string) => void;
+  onLinkClick: (e: string | undefined) => void;
   /**
    * Gets/sets letterSpacing on TextView. letterSpacing just work with attributedText.
    *

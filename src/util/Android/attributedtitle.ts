@@ -1,4 +1,4 @@
-import AttributedString from "../../global/attributedstring";
+import AttributedString from '../../ui/attributedstring';
 
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
