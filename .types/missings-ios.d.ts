@@ -1051,7 +1051,7 @@ declare class __SF_TopTabViewController extends __SF_UIViewController {
   scrollEnabled: boolean;
 }
 
-declare class __SF_UITextView extends __SF_UIView {
+declare class __SF_UITextView extends __SF_SMFUILabel {
   setSelectable: boolean;
   setEditable: boolean;
   setDelaysContentTouches: boolean;
