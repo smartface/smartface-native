@@ -20,6 +20,7 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
   private _title: string;
+  private _titleColor?: Color;
   private _onSelected: () => void;
   constructor(params?: Partial<MenuItem>) {
     super(params);
@@ -33,17 +34,17 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
 
     this.addAndroidProps({
       get titleColor(): Color | undefined {
-        return self._android.titleColor;
+        return self._titleColor;
       },
       set titleColor(color: Color | undefined) {
-        self._android.titleColor = color;
+        self._titleColor = color;
       },
       spanTitle() {
         let spannableStringBuilder = new NativeSpannableStringBuilder('');
         if (self._title) {
           spannableStringBuilder = new NativeSpannableStringBuilder(self._title);
-          if (self.android.titleColor) {
-            const colorSpan = new NativeColorSpan(self.android.titleColor.nativeObject);
+          if (self._titleColor) {
+            const colorSpan = new NativeColorSpan(self._titleColor.nativeObject);
             spannableStringBuilder.setSpan(colorSpan, 0, self._title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
             return spannableStringBuilder;
           }

@@ -1,14 +1,18 @@
 import Menu, { AbstractMenu } from '.';
+import NativeComponent from '../../core/native-component';
 import Exception from '../../util/exception';
 import TypeUtil from '../../util/type';
 import MenuItem from '../menuitem';
 import Page from '../page';
 
-export default class MenuAndroid implements AbstractMenu {
+export default class MenuAndroid extends NativeComponent implements AbstractMenu {
   private _items: MenuItem[] = [];
   private _headerTitle = '';
+  createNativeObject() {
+    return null;
+  }
   constructor(params?: Partial<Menu>) {
-    Object.assign(this, params);
+    super(params);
   }
   get items() {
     return this._items;
