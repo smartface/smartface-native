@@ -37,17 +37,14 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   private _videoOptions = videoDefault;
   private _cameraOptions = cameraDefault;
   private _audioOptions = audioDefault;
-  private _onChange: (params: { event: number; message: string }) => void;
   createNativeObject() {
-    this.nodePublisher = new __SF_NodePublisher();
-    const previewView = new ViewIOS();
-    return previewView.nativeObject;
+    return new ViewIOS().nativeObject;
   }
   constructor(params?: Partial<LiveMediaPublisher>) {
     super(params);
-    const self = this;
+    this.nodePublisher = new __SF_NodePublisher();
 
-    this.nodePublisher.setCameraPreviewCameraIdFrontMirror(this._nativeObject, this._cameraOptions.cameraId, this._cameraOptions.cameraFrontMirror);
+    this.nodePublisher.setCameraPreviewCameraIdFrontMirror(this.nativeObject, this._cameraOptions.cameraId, this._cameraOptions.cameraFrontMirror);
 
     this.nodePublisher.setVideoParamPresetFpsBitrateProfileFrontMirror(
       this._videoOptions.preset,
@@ -60,18 +57,13 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
     this.nodePublisher.setAudioParamBitrateProfileSampleRate(this._audioOptions.bitrate, this._audioOptions.profile, this._audioOptions.samplerate);
 
     this.publisherDelegate = new __SF_NodePlayerDelegateClass();
-    this.publisherDelegate.onEventCallbackEventMsg = function (e) {
-      self._onChange?.({ event: e.event, message: e.msg });
-      self.emit(LiveMediaPublisherEvents.Change, { event: e.event, message: e.msg });
+    this.publisherDelegate.onEventCallbackEventMsg = (e) => {
+      this.onChange?.({ event: e.event, message: e.msg });
+      this.emit('change', { event: e.event, message: e.msg });
     };
     this.nodePublisher.nodePublisherDelegate = this.publisherDelegate;
   }
-  get onChange() {
-    return this._onChange;
-  }
-  set onChange(callback: (params: { event: number; message: string }) => void) {
-    this._onChange = callback;
-  }
+  onChange: (params: { event: number; message: string }) => void;
   get audioEnabled() {
     return this._audioEnabled;
   }
