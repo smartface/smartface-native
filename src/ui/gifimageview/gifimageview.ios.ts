@@ -8,12 +8,11 @@ import ImageiOS from '../image/image.ios';
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: GifImage;
   private _loopCompletionCallback: (loopCountRemain: number) => void;
+  createNativeObject(): any {
+    return new __SF_FLAnimatedImageView();
+  }
   constructor(params?: IGifImageView) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_FLAnimatedImageView();
-    }
   }
 
   get gifImage(): GifImage {
