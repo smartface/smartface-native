@@ -3,7 +3,7 @@ import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
-export default class BadgeAndroid extends NativeComponent implements IBadge {
+export default class BadgeIOS extends NativeComponent implements IBadge {
   protected createNativeObject() {
     return null;
   }
@@ -54,7 +54,6 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   }
   set visible(value: IBadge['visible']) {
     this._visible = value;
-
     __SF_Dispatch.mainAsyncAfter(() => {
       if (this._visible) {
         this.nativeObject.pp_showBadge();
@@ -112,11 +111,10 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   }
   set font(value: IBadge['font']) {
     this._font = value;
-
     __SF_Dispatch.mainAsyncAfter(() => {
       const argIDBlock = new Invocation.Argument({
         type: 'IDBlock',
-        value: function (label: __SF_SMFUILabel) {
+        value: (label: __SF_SMFUILabel) => {
           const argFont = new Invocation.Argument({
             type: 'NSObject',
             value: this._font

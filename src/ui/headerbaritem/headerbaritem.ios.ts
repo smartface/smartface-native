@@ -35,8 +35,12 @@ enum SystemItem {
 }
 
 export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
-  protected createNativeObject() {
-    return null;
+  protected createNativeObject(params: Partial<IHeaderBarItem> = {}) {
+    if (!params?.ios?.systemItem) {
+      return new __SF_UIBarButtonItem();
+    }
+    this._systemItem = params.ios.systemItem;
+    return __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
   }
   iOS = {
     SystemItem
@@ -50,12 +54,6 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
 
   constructor(params?: Partial<HeaderBarItem>) {
     super(params);
-    if (params && params.ios && params.ios.systemItem) {
-      this._systemItem = params.ios.systemItem;
-      this.nativeObject = __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
-    } else {
-      this.nativeObject = new __SF_UIBarButtonItem();
-    }
 
     this.nativeObject.target = this.nativeObject;
 

@@ -35,8 +35,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   private _borderWidth: number = AndroidUnitConverter.dpToPixel(2);
   private nativeGradientDrawable = new NativeGradientDrawable();
   constructor(params: Partial<IBadge> = {}) {
-    super();
-    const { ...restParams } = params;
+    super(params);
 
     this.nativeObject.setGravity(CENTER);
     this.nativeObject.setPaddingRelative(TextViewContentPadding.start, TextViewContentPadding.top, TextViewContentPadding.end, TextViewContentPadding.bottom);
@@ -45,8 +44,6 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     this.nativeGradientDrawable.setCornerRadius(this._borderRadius);
 
     this.setDefaults();
-
-    Object.assign(this, restParams);
   }
 
   move(x: number, y: number): void {

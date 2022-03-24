@@ -31,7 +31,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   }
   iOS = { SystemItem: {} };
   private _title: string = '';
-  private _image: ImageAndroid | string | null;
+  private _image: ImageAndroid | string | null = null;
   private _customView?: View = undefined;
   private _enabled: boolean = true;
   private _onPress: IHeaderBarItem['onPress'] = null;
@@ -138,7 +138,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     }
   }
   get searchView() {
-    return this.searchView;
+    return this._searchView;
   }
   set searchView(searchView) {
     if (searchView) {
