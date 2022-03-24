@@ -1,4 +1,4 @@
-import { AbstractEmailComposer } from '.';
+import { AbstractEmailComposer } from './emailcomposer';
 import Blob from '../../global/blob';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import File from '../../io/file';
@@ -20,17 +20,19 @@ const ACTION_VIEW = 'android.intent.action.VIEW';
 export default class EmailComposerAndroid extends AbstractEmailComposer {
   static EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
   private _closeCallback: () => void;
-  constructor() {
-    super();
-    const self = this;
-    this.nativeObject = new NativeIntent(ACTION_VIEW);
-    this.nativeObject.setData(NativeUri.parse('mailto:'));
+  protected createNativeObject(): void {
+    const nativeObject = new NativeIntent(ACTION_VIEW);
+    nativeObject.setData(NativeUri.parse('mailto:'));
+    return nativeObject;
+  }
+  constructor(params) {
+    super(params);
 
     this.addAndroidProps({
       addAttachmentForAndroid(attachment: File) {
         if (attachment instanceof File) {
           const absulotePath = attachment.nativeObject.getAbsolutePath();
-          self.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse('file://' + absulotePath));
+          this.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse('file://' + absulotePath));
         }
       }
     });

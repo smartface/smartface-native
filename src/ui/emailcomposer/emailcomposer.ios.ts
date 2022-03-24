@@ -1,4 +1,4 @@
-import { AbstractEmailComposer } from '.';
+import { AbstractEmailComposer } from './emailcomposer';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import Page from '../page';
@@ -11,10 +11,10 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   private _subject: string;
   private _attaches: any = [];
   private _closeCallback: () => void;
-  createNativeObject() {
-    return new __SF_MFMailComposeViewController();
-  }
   private nativeObjectDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
+  protected createNativeObject(): any {
+    return null;
+  }
   constructor() {
     super();
     const self = this;
@@ -57,7 +57,7 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
     this._subject = subject;
   }
   show(page: Page) {
-    const self = this;
+    this.nativeObject = new __SF_MFMailComposeViewController();
     if (this._cc) this.nativeObject.setCcRecipients(this._cc);
     if (this._bcc) this.nativeObject.setBccRecipients(this._bcc);
     if (this._to) this.nativeObject.setToRecipients(this._to);
@@ -67,9 +67,9 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
       this.nativeObject.addAttachmentDataMimeTypeFileName(this._attaches[i].blob.nativeObject, this._attaches[i].mimeType, this._attaches[i].fileName);
     }
     this.nativeObjectDelegate = new __SF_SMFMFMailComposeViewControllerDelegate();
-    this.nativeObjectDelegate.didFinishWithResult = function () {
-      self.nativeObject.dismissViewController(function () {
-        self.onClose();
+    this.nativeObjectDelegate.didFinishWithResult = () => {
+      this.nativeObject.dismissViewController(() => {
+        this.onClose();
       });
     };
 
