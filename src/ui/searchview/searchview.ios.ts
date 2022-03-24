@@ -27,8 +27,8 @@ const UISearchBarIcon = {
 export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _textAligment: number = 3;
   private _constant: number = 0;
-  private _hint: string;
-  private _hintTextColor: Color = Color.LIGHTGRAY;
+  private _hint = '';
+  private _hintTextColor: Color;
   private _textColor: Color;
   private _backgroundColor: Color;
   private _backgroundImage: Image;
@@ -47,12 +47,15 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
   private _searchViewStyle: SearchViewStyle = UISearchBarStyle.default;
   private textfield: any;
   private keyboardanimationdelegate: any;
+  createNativeObject() {
+    const nativeObject = new __SF_SMFUISearchBar();
+    this._hintTextColor = Color.LIGHTGRAY;
+    this.textfield = nativeObject.valueForKey('searchField');
+    this.textfield.addKeyboardObserver();
+    return nativeObject;
+  }
   constructor(params?: Partial<ISearchView>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_SMFUISearchBar();
-    }
 
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
@@ -75,10 +78,6 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     });
     // TODO Recheck after build
     Invocation.invokeInstanceMethod(layoutConstraint, 'setActive:', [argIsActive]);
-
-    // TODO Recheck textfield and keyboardanimationdelegate fields. Doesn't exists in this;
-    this.textfield = this.nativeObject.valueForKey('searchField');
-    this.textfield.addKeyboardObserver();
 
     this.keyboardanimationdelegate = new KeyboardAnimationDelegate({
       nativeObject: this.nativeObject
@@ -106,7 +105,6 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
 
     this._textColor = this.nativeObject.textColor;
     this._backgroundColor = this.nativeObject.barTintColor;
-
     this._searchBarDelegate = new __SF_UISearchBarDelegate();
     this._searchBarDelegate.cancelButtonClicked = (e) => {
       this._onCancelButtonClicked();

@@ -74,22 +74,22 @@ const NativeTextAlignment = [
 
 export default class SearchViewAndroid<TEvent extends string = SearchViewEvents> extends ViewAndroid<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _hasEventsLocked: boolean = false;
-  private _hint: string;
-  private _textColor: Color;
-  private _defaultUnderlineColorNormal: Color;
-  private _defaultUnderlineColorFocus: Color;
+  private _hint: string = '';
+  private _textColor = Color.BLACK;
+  private _defaultUnderlineColorNormal = Color.create('#ffcccccc');
+  private _defaultUnderlineColorFocus = Color.create('#ff444444');
   private mSearchSrcTextView: any;
   private mCloseButton: any;
   private mSearchButton: any;
   private mUnderLine: any;
   private mSearchEditFrame: any;
   private mCompatImageView: any;
-  private _hintTextColor: Color;
-  private _keyboardType: KeyboardType;
+  private _hintTextColor = Color.LIGHTGRAY;
+  private _keyboardType = KeyboardType.DEFAULT;
   private _closeImage: ImageAndroid;
   private _backgroundImage: ImageAndroid;
-  private _textFieldBackgroundColor: Color;
-  private _textFieldBorderRadius: number;
+  private _textFieldBackgroundColor = Color.create(222, 222, 222);
+  private _textFieldBorderRadius = 15;
   private _searchButtonIcon: ImageAndroid;
   private _closeIcon: ImageAndroid;
   private _searchIcon: ImageAndroid;
@@ -100,24 +100,20 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _leftItem: any;
   private _underlineColor: { normal: Color; focus: Color };
   private _font: Font;
-  private _textalignment: TextAlignment;
+  private _textalignment = TextAlignment.MIDLEFT;
   private textFieldBackgroundDrawable: typeof GradientDrawable;
   private _onSearchBeginCallback: () => void;
   private _onSearchEndCallback: () => void;
   private _onTextChangedCallback: (searchText: string) => void;
   private _onSearchButtonClickedCallback: () => void;
   private skipDefaults: boolean;
-
+  createNativeObject() {
+    const nativeObject = new NativeSearchView(AndroidConfig.activity);
+    nativeObject.clearFocus();
+    return nativeObject;
+  }
   constructor(params?: Partial<ISearchView>) {
     super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeSearchView(AndroidConfig.activity);
-      // Prevent gain focus when SearchView appear.
-      this.nativeObject.clearFocus();
-    }
-
-    this._defaultUnderlineColorNormal = Color.create('#ffcccccc');
-    this._defaultUnderlineColorFocus = Color.create('#ff444444');
 
     this.mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
     this.mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
@@ -127,16 +123,10 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
 
     this.mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
 
-    this._textColor = Color.BLACK;
-    this._hintTextColor = Color.LIGHTGRAY;
-    this._keyboardType = KeyboardType.DEFAULT;
-    this._textFieldBackgroundColor = Color.create(222, 222, 222);
-    this._textFieldBorderRadius = 15;
     this._underlineColor = {
       normal: this._defaultUnderlineColorNormal,
       focus: this._defaultUnderlineColorFocus
     };
-    this._textalignment = TextAlignment.MIDLEFT;
 
     this.textFieldBackgroundDrawable = new GradientDrawable();
 
@@ -149,19 +139,17 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
             if (hasFocus) {
               const inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
               inputManager.showSoftInput(view, 0);
-              this?._onSearchBeginCallback();
+              this._onSearchBeginCallback?.();
               this.emit('searchBegin');
               this.mUnderLine.getBackground().setColorFilter(this._underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
             } else {
-              this?._onSearchEndCallback();
+              this._onSearchEndCallback?.();
               this.emit('searchEnd');
               this.mUnderLine.getBackground().setColorFilter(this._underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
             }
           }
         })
       );
-
-      this.android.iconifiedByDefault = false;
     }
 
     // Makes SearchView's textbox apperance fully occupied.
@@ -173,8 +161,12 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, this._hint);
     a.recycle();
 
+    this.addAndroidProps(this.getAndroidProps());
+    this.android.iconifiedByDefault = false;
+  }
+  private getAndroidProps() {
     const self = this;
-    this.addAndroidProps({
+    return {
       get closeImage(): ImageAndroid {
         return self._closeImage;
       },
@@ -226,9 +218,8 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
         self._iconifiedByDefault = value;
         self.nativeObject.setIconifiedByDefault(value);
       }
-    });
+    };
   }
-
   get keyboardType(): KeyboardType {
     return this._keyboardType;
   }
