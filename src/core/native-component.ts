@@ -4,7 +4,7 @@ export default abstract class NativeComponent<TNative = any, TProps extends Reco
   protected _nativeObject: any;
   constructor(params?: TProps) {
     const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
-    const nativeObject = this.createNativeObject();
+    const nativeObject = this.createNativeObject(params);
     if (nativeObject) {
       this.nativeObject = nativeObject;
     }
@@ -19,5 +19,5 @@ export default abstract class NativeComponent<TNative = any, TProps extends Reco
     this._nativeObject = value;
   }
 
-  protected abstract createNativeObject(): any;
+  protected abstract createNativeObject(params?: Record<string, any>): any;
 }

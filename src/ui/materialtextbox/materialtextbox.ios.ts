@@ -1,4 +1,4 @@
-import { IMaterialTextBox } from '.';
+import { IMaterialTextBox } from './materialtextbox';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
@@ -23,30 +23,34 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   private _onLeftViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   private _onRightViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   private _content: FlexLayout;
-
+  protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
+    if (params.multiline) {
+      this.nativeObject = new __SF_MDCMultilineTextField();
+      this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);
+      this.mdcTextInputControllerUnderline.expandsOnOverflow = false;
+      this.mdcTextInputControllerUnderline.minimumLines = params.lineCount ? params.lineCount : 1;
+    } else {
+      const nativeObject = new __SF_MDCTextField();
+      this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(nativeObject);
+      return nativeObject;
+    }
+  }
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
 
-    this._multiline = params?.multiline || false;
-    this._lineCount = params?.lineCount ? params.lineCount : 1;
-
-    if (!this.nativeObject) {
-      if (params && params.multiline) {
-        this._nativeObject = new __SF_MDCMultilineTextField();
-        this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);
-        this.mdcTextInputControllerUnderline.expandsOnOverflow = false;
-        this.mdcTextInputControllerUnderline.minimumLines = params.lineCount ? params.lineCount : 1;
-      } else {
-        this._nativeObject = new __SF_MDCTextField();
-        this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);
-      }
-    }
+    this._multiline = !!params.multiline;
+    this._lineCount = params.lineCount || 1;
 
     this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
-    const self = this;
 
-    this.addIOSProps({
+    this.addIOSProps(this.getIOSProps());
+    this.ios.clearButtonEnabled = false;
+  }
+
+  private getIOSProps() {
+    const self = this;
+    return {
       get clearButtonColor(): Color {
         return self.mdcTextInputControllerUnderline.textInputClearButtonTintColor;
       },
@@ -194,19 +198,13 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
       set expandsOnOverflow(value: boolean | undefined) {
         self.mdcTextInputControllerUnderline.expandsOnOverflow = value;
       }
-    });
-    this.ios.clearButtonEnabled = false;
-
-    // const { ios, ...restParams } = params;
-    // Object.assign(this._ios, this.iosProps, ios);
-    // Object.assign(this, restParams);
+    };
   }
 
-  // TODO Old version has not typing for this encapsulation
-  get testId(): any {
+  get testId(): string {
     return this.nativeObject.valueForKey('accessibilityIdentifier');
   }
-  set testId(value: any) {
+  set testId(value: string) {
     this.nativeObject.setValueForKey(value, 'accessibilityIdentifier');
     this.mdcTextInputControllerUnderline.textInput.setValueForKey(value + '_textBox', 'accessibilityIdentifier');
   }
@@ -313,9 +311,15 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   get multiline(): boolean {
     return this._multiline;
   }
+  private set multiline(value) {
+    this._multiline = value;
+  }
 
   get lineCount(): number {
     return this._lineCount;
+  }
+  private set lineCount(value) {
+    this._lineCount = value;
   }
 
   get isPassword(): boolean {
@@ -333,20 +337,17 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   }
 
   get characterRestrictionColor(): Color | null {
-    return this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor
-      ? new Color({
-          color: this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor
-        })
-      : null;
+    const trailColor = this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor;
+    return trailColor ? new Color({ color: trailColor }) : null;
   }
   set characterRestrictionColor(value: Color | null) {
     if (value) this.mdcTextInputControllerUnderline.trailingUnderlineLabelTextColor = value.nativeObject;
   }
 
-  get rightLayout(): { view: View; width: number; height?: number } {
+  get rightLayout() {
     return this._rightLayout;
   }
-  set rightLayout(value: { view: View; width: number; height?: number }) {
+  set rightLayout(value) {
     this._rightLayout = value;
     if (value === undefined) {
       // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
@@ -415,36 +416,36 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   }
 
   get selectedHintTextColor(): Color | null {
-    return this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor
-      ? new Color({
-          color: this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor
-        })
-      : null;
+    const activeColor = this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor;
+    return activeColor ? new Color({ color: activeColor }) : null;
   }
   set selectedHintTextColor(value: Color | null) {
     if (value) this.mdcTextInputControllerUnderline.floatingPlaceholderActiveColor = value.nativeObject;
   }
 
-  get lineColor(): { normal: Color | null; selected: Color | null } {
+  get lineColor() {
     return {
       normal: this.ios.normallineColor,
       selected: this.ios.selectedLineColor
     };
   }
-  set lineColor(value: { normal: Color | null; selected: Color | null }) {
-    value.normal && (this.ios.normallineColor = value.normal);
-    value.selected && (this.ios.selectedLineColor = value.normal);
+  set lineColor(value) {
+    if (value.normal) {
+      this.ios.normallineColor = value.normal;
+    }
+    if (value.selected) {
+      this.ios.selectedLineColor = value.selected;
+    }
   }
 
   get errorColor(): Color | null {
-    return this.mdcTextInputControllerUnderline.errorColor
-      ? new Color({
-          color: this.mdcTextInputControllerUnderline.errorColor
-        })
-      : null;
+    const errorColor = this.mdcTextInputControllerUnderline.errorColor;
+    return errorColor ? new Color({ color: errorColor }) : null;
   }
   set errorColor(value: Color | null) {
-    if (value) this.mdcTextInputControllerUnderline.errorColor = value.nativeObject;
+    if (value) {
+      this.mdcTextInputControllerUnderline.errorColor = value.nativeObject;
+    }
   }
 
   get errorMessage(): string {

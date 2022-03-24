@@ -84,7 +84,12 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
         // return false;
       }
     };
-    return new SFEditText(AndroidConfig.activity, callback);
+    // Don't use self.multiline = false due to AND-2725 bug.
+    // setMovementMethod in label.android.ts file removes the textbox cursor.
+
+    const nativeObject = new SFEditText(AndroidConfig.activity, callback);
+    nativeObject.setSingleLine(true);
+    return nativeObject;
   }
   private __touchEnabled: boolean = true;
   private _isPassword: boolean = false;
@@ -103,13 +108,9 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _autoCapitalize: AutoCapitalize = AutoCapitalize.NONE;
   private _didAddTextChangedListener: boolean = false;
   private _didSetOnEditorActionListener: boolean = false;
-  constructor(params: Partial<TProps>) {
+  constructor(params?: Partial<TProps>) {
     super(params);
-
-    // Don't use self.multiline = false due to AND-2725 bug.
-    // setMovementMethod in label.android.ts file removes the textbox cursor.
-    this.nativeObject.setSingleLine(true);
-
+    this.nativeObject = params?.nativeObject || this.nativeObject;
     // /* Override the onTouch and make default returning false to prevent bug in other listener.*/
     // this.onTouch = (e) => {
     //   let result: boolean | void;

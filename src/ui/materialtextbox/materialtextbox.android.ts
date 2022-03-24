@@ -1,13 +1,18 @@
-import { IMaterialTextBox } from '.';
+import { IMaterialTextBox, MaterialTextBoxAndroidProps, MaterialTextBoxiOSProps } from './materialtextbox';
 import { Point2D } from '../../primitive/point2d';
 
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Color from '../color';
+import Color, { ColorImpl } from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import TextBoxAndroid from '../textbox/textbox.android';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
+import ViewAndroid from '../view/view.android';
+import ActionKeyType from '../shared/android/actionkeytype';
+import TextAlignment from '../shared/textalignment';
+import AutoCapitalize from '../textbox/autocapitalize';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 const SFMaterialTextBoxWrapper = requireClass('io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
@@ -23,7 +28,7 @@ const state_unfocused = -16842908;
 // const GRAVITY_END = 8388613;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
-export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends TextBoxAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
+export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends ViewAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private sfTextBox: TextBoxAndroid;
   private textBoxNativeObject: any;
   private __hintTextColor: Color;
@@ -47,15 +52,17 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     setMaxHeight: (value: number) => void;
     setSupportBackgroundTintList: (params: any) => void;
   };
+  protected createNativeObject(): any {
+    const nativeObject = new SFMaterialTextBoxWrapper(activity);
+    this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
+    this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
+    return nativeObject;
+  }
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
-    this._nativeObject = new SFMaterialTextBoxWrapper(activity);
-
-    this.textBoxNativeObject = this.nativeObject.getTextInputEditTextInstance();
-    this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
 
     if (!AndroidConfig.isEmulator) {
-      let SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId('SFMaterialTextBoxHintAppearance', 'style');
+      const SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId('SFMaterialTextBoxHintAppearance', 'style');
       this.nativeObject.getInstance().setHintTextAppearance(SFMaterialTextBoxHintAppearance_ID);
     }
 
@@ -65,16 +72,40 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     // const { android, ...restParams } = params;
     // Object.assign(this._android, this.androidFields, android);
     // Object.assign(this, restParams);
-    const self = this;
 
-    this.addAndroidProps({
-      get labelsFont(): Font {
-        return self.__font;
-      },
-      set labelsFont(value: Font) {
-        self.__font = value;
-        self.nativeObject.setTypeface(value.nativeObject);
-      },
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  font: Font;
+  text: string;
+  autoCapitalize: AutoCapitalize;
+  textAlignment: TextAlignment;
+  textColor: ColorImpl;
+  cursorPosition: { start: number; end: number };
+  onEditBegins: () => void;
+  cursorColor: ColorImpl;
+  isPassword: boolean;
+  keyboardType: number | null;
+  actionKeyType: ActionKeyType;
+  showKeyboard(): void {
+    throw new Error('Method not implemented.');
+  }
+  hideKeyboard(): void {
+    throw new Error('Method not implemented.');
+  }
+  requestFocus(): void {
+    throw new Error('Method not implemented.');
+  }
+  removeFocus(): void {
+    throw new Error('Method not implemented.');
+  }
+  onTextChanged: (e?: { insertedText: string; location: number } | undefined) => void;
+  onClearButtonPress: () => void;
+  onEditEnds: () => void;
+  onActionButtonPress: (e?: { actionKeyType: ActionKeyType } | undefined) => void;
+
+  private getAndroidProps(): IMaterialTextBox['android'] {
+    const self = this;
+    return {
       get textBoxHeight(): number {
         return self.nativeTextInputEditText.getHeight();
       },
@@ -104,14 +135,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
       set maxLines(value: number) {
         self.textBoxNativeObject.setMaxLines(value);
       }
-    });
+    };
   }
 
   get hint(): string {
     return this.nativeObject.getHint().toString();
   }
   set hint(value: string) {
-    //Why are we need to look at the error text ?
     const enableHintMessage = this._errorText !== '';
     this.nativeObject.setHintEnabled(enableHintMessage);
     this.nativeObject.setHint(value);
