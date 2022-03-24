@@ -331,7 +331,7 @@ export enum AudioProfile {
  *         outputUrl: "rtmp://..."
  *     });
  *     liveMediaPublisher.startPreview();
- *     liveMediaPublisher.start(); // Start streaming
+ *     liveMediaPublisher.play(); // Start streaming
  */
 
 export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends IView<TEvent | LiveMediaPublisherEvents, any> {
@@ -458,12 +458,12 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
   /**
    * Start stream to output address.
    *
-   * @method start
+   * @method play
    * @android
    * @ios
    * @since 4.2.2
    */
-  start(): void;
+  play(): void;
 
   /**
    * Release the underlying resources.
@@ -510,6 +510,7 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
 
 export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends AbstractView<TEvent> implements ILiveMediaPublisher<TEvent | LiveMediaPublisherEvents> {
   startPreview(): void;
+  constructor(params?: Partial<ILiveMediaPublisher>);
   stopPreview(): void;
   switchCamera(): void;
   audioEnabled: boolean;
@@ -519,7 +520,7 @@ export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMedi
   camera: { cameraId: Camera; cameraFrontMirror: Boolean };
   audio: { bitrate: number; profile: AudioProfile; samplerate: number };
   video: Partial<{ preset: VideoPreset; bitrate: number; profile: VideoProfile; fps: number; videoFrontMirror: Boolean }>;
-  start(): void;
+  play(): void;
   release(): void;
   stop(): void;
   onChange: (params: { event: number; message: string }) => void;
@@ -530,7 +531,7 @@ export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMedi
   static AudioProfile: typeof AudioProfile;
 }
 
-const LiveMediaPublisher: typeof AbstractLiveMediaPublisher = require(`./livemediaplayer.${Device.deviceOS.toLowerCase()}`).default;
+const LiveMediaPublisher: typeof AbstractLiveMediaPublisher = require(`./livemediapublisher.${Device.deviceOS.toLowerCase()}`).default;
 type LiveMediaPublisher = AbstractLiveMediaPublisher;
 
 export default LiveMediaPublisher;

@@ -1,13 +1,13 @@
 import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
-import ViewIOS from '../view/view.ios';
+import ViewAndroid from '../view/view.android';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 
 const SFLiveMediaPublisherDelegate = requireClass('io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPublisherDelegate');
 const NodeCameraView = requireClass('cn.nodemedia.NodeCameraView');
 const NodePublisher = requireClass('cn.nodemedia.NodePublisher');
 
-export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMediaPublisherEvents> extends ViewIOS<TEvent | LiveMediaPublisherEvents, {}> implements ILiveMediaPublisher {
+export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMediaPublisherEvents> extends ViewAndroid<TEvent | LiveMediaPublisherEvents, {}> implements ILiveMediaPublisher {
   static Events = LiveMediaPublisherEvents;
   static Camera = Camera;
   static VideoPreset = VideoPreset;
@@ -22,13 +22,13 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
   private _audioOptions: Partial<{ bitrate: number; profile: number; samplerate: number }>;
   private _onChange: (params: { event: number; message: string }) => void;
   private nodePublisher: any;
+  createNativeObject() {
+    this.nodePublisher = new NodePublisher(AndroidConfig.activity);
+    return new NodeCameraView(AndroidConfig.activity);
+  }
   constructor(params?: Partial<LiveMediaPublisher>) {
     super(params);
     const self = this;
-    if (!this._nativeObject) {
-      this._nativeObject = new NodeCameraView(AndroidConfig.activity);
-      this.nodePublisher = new NodePublisher(AndroidConfig.activity);
-    }
 
     // set default values for camera property.
     // If the this.nodePublisher.setCameraPreview method is not called,  camera preview does not start.
@@ -105,7 +105,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
     this._flashEnabled = value;
     this.nodePublisher.setFlashEnable(this._flashEnabled);
   }
-  start() {
+  play() {
     this.nodePublisher.start();
   }
   stop() {

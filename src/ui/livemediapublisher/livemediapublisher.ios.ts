@@ -1,5 +1,4 @@
 import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
-import View from '../view';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 
@@ -39,14 +38,14 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   private _cameraOptions = cameraDefault;
   private _audioOptions = audioDefault;
   private _onChange: (params: { event: number; message: string }) => void;
+  createNativeObject() {
+    this.nodePublisher = new __SF_NodePublisher();
+    const previewView = new ViewIOS();
+    return previewView.nativeObject;
+  }
   constructor(params?: Partial<LiveMediaPublisher>) {
     super(params);
     const self = this;
-    if (!this._nativeObject) {
-      const previewView = new View();
-      this._nativeObject = previewView.nativeObject;
-      this.nodePublisher = new __SF_NodePublisher();
-    }
 
     this.nodePublisher.setCameraPreviewCameraIdFrontMirror(this._nativeObject, this._cameraOptions.cameraId, this._cameraOptions.cameraFrontMirror);
 
@@ -133,7 +132,7 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
     this._flashEnabled = value;
     this.nodePublisher.flashEnable = this._flashEnabled;
   }
-  start() {
+  play() {
     this.nodePublisher.start();
   }
   stop() {

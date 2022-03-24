@@ -106,7 +106,6 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents>
    * @method play
    * @android
    * @ios
-   * @deprecated
    * @since 4.2.2
    */
   play(): void;

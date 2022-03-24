@@ -1,6 +1,5 @@
 import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
-import View from '../view';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 
