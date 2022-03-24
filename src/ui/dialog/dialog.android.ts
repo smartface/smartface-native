@@ -20,32 +20,29 @@ interface IDialogAndroid {
 }
 
 export default class DialogAndroid extends AbstractDialog {
-  private _android: IDialogAndroid;
+  private _android: Partial<IDialogAndroid> = {};
   private _isTransparent: boolean;
-  private _themeStyle: DialogStyle = DialogAndroid.Android.Style.ThemeDefault;
+  private _themeStyle: DialogStyle;
   private _layout: FlexLayout;
   private _onShowCallback: () => void;
   private _isSetListener = false;
-  private _cancelable = false;
+  private _cancelable = true;
   skipDefaults = false;
   private dialogWindow: any;
   private colorDrawable: any;
-
-  constructor(params: Partial<DialogAndroid> = {}) {
-    super();
-    this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
-    this._isTransparent = params?.android?.isTransparent || false;
+  createNativeObject(params: Partial<DialogAndroid> = {}) {
     this._themeStyle = params?.android?.themeStyle || DialogAndroid.Android.Style.ThemeDefault;
+    this._isTransparent = params?.android?.isTransparent || false;
 
-    this.nativeObject = this.nativeObject || new NativeDialog(AndroidConfig.activity, this._themeStyle);
-
-    this.skipDefaults = params.skipDefaults || this._isTransparent;
-    for (const param in params) {
-      this[param] = params[param];
-    }
+    return new NativeDialog(AndroidConfig.activity, this._themeStyle);
+  }
+  constructor(params: Partial<DialogAndroid> = {}) {
+    super(params);
+    this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
 
     this.assignAndroidProperties();
     this.initDialogLayout();
+    this.skipDefaults = params.skipDefaults || this._isTransparent;
   }
   setShowListener() {
     const listener = DialogInterface.OnShowListener.implement({
@@ -60,7 +57,6 @@ export default class DialogAndroid extends AbstractDialog {
     const dialogAlpha = this.skipDefaults ? 0 : DEFAULT_TRANSLUCENCY;
     this.colorDrawable = new NativeColorDrawable(Color.create(dialogAlpha, 0, 0, 0).nativeObject);
     this.dialogWindow.setBackgroundDrawable(this.colorDrawable);
-    this.nativeObject.setContentView(this._layout.nativeObject);
 
     if (!this.skipDefaults) {
       this.dialogWindow.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -68,17 +64,17 @@ export default class DialogAndroid extends AbstractDialog {
     } else {
       this.dialogWindow.setGravity(80);
       this.dialogWindow.setBackgroundDrawable(this.colorDrawable);
-
       const statusBarHeight = Application.statusBar.visible ? Application.statusBar.height : 0;
       const layoutHeight = Screen.height - statusBarHeight;
       this._layout.height = statusBarHeight > 0 ? statusBarHeight : layoutHeight;
       this.dialogWindow.setLayout(LayoutParams.MATCH_PARENT, statusBarHeight > 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT);
     }
+    this.nativeObject.setContentView(this._layout.nativeObject);
   }
 
   private assignAndroidProperties() {
     const self = this;
-    this.android = {
+    this._android = {
       hideKeyboard(): void {
         if (!self.nativeObject) {
           return;
@@ -142,7 +138,7 @@ export default class DialogAndroid extends AbstractDialog {
     return 'Dialog';
   }
 
-  static Android: {
-    Style: typeof DialogStyle;
+  static Android = {
+    Style: DialogStyle
   };
 }

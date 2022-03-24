@@ -3,10 +3,12 @@ import Color from '../color';
 import FlexLayout from '../flexlayout';
 
 export default class DialogIOS extends AbstractDialog {
-  setShowListener(): void {
-  }
+  setShowListener(): void {}
   private dialogView: FlexLayout;
   private _android = {};
+  createNativeObject() {
+    return null;
+  }
   constructor(params?: Partial<DialogIOS>) {
     super(params);
 
@@ -26,10 +28,6 @@ export default class DialogIOS extends AbstractDialog {
     }, __SF_UIApplicationDidChangeStatusBarOrientationNotification);
 
     this.calculatePosition();
-
-    for (const param in params) {
-      this[param] = params[param];
-    }
   }
 
   hide() {
