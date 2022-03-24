@@ -14,14 +14,14 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
   private _audioEnabled = true;
   private _videoEnabled = true;
   private _onChange: (params: { event: number; message: string }) => void;
+  createNativeObject() {
+    const previewView = new ViewIOS();
+    this.nodePlayer = new __SF_NodePlayer();
+    return previewView.nativeObject;
+  }
   constructor(params?: Partial<LiveMediaPlayer>) {
-    super();
+    super(params);
     const self = this;
-    if (!this.nativeObject) {
-      const previewView = new View();
-      this._nativeObject = previewView.nativeObject;
-      this.nodePlayer = new __SF_NodePlayer();
-    }
     this.nodePlayer.playerView = this.nativeObject;
 
     this.playerDelegate = new __SF_NodePlayerDelegateClass();
@@ -30,13 +30,6 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
       self.emit(LiveMediaPlayerEvents.Change, { event: e.event, message: e.msg });
     };
     this.nodePlayer.nodePlayerDelegate = this.playerDelegate;
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
   }
   get onChange() {
     return this._onChange;

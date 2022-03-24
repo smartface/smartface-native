@@ -21,13 +21,13 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
   private _audioEnabled = true;
   private _videoEnabled = true;
   private _onChange: (params: { event: number; message: string }) => void;
+  createNativeObject() {
+    this.nodePlayer = new NodePlayer(AndroidConfig.activity);
+    return new NodePlayerView(AndroidConfig.activity);
+  }
   constructor(params?: Partial<LiveMediaPlayer>) {
-    super();
+    super(params);
     const self = this;
-    if (!this._nativeObject) {
-      this._nativeObject = new NodePlayerView(AndroidConfig.activity);
-      this.nodePlayer = new NodePlayer(AndroidConfig.activity);
-    }
     this.nodePlayer.setPlayerView(this._nativeObject);
 
     this.nodePlayer.setNodePlayerDelegate(
@@ -38,13 +38,6 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
         }
       })
     );
-
-    // Assign parameters given in constructor
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
   }
   get onChange() {
     return this._onChange;

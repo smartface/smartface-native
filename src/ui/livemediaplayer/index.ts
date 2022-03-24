@@ -176,8 +176,8 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents>
 }
 
 export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents> extends AbstractView<TEvent> implements ILiveMediaPlayer<TEvent> {
-  static Events: LiveMediaPlayerEvents & ViewEvents;
-  static ScaleType: ScaleType;
+  constructor(params?: Partial<ILiveMediaPlayer>);
+  static ScaleType: typeof ScaleType;
   videoEnabled: boolean;
   inputUrl: string;
   audioEnabled: boolean;
@@ -187,10 +187,11 @@ export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPl
   isPlaying(): boolean;
   release(): void;
   stop(): void;
+  start(): void;
   onChange: (params: { event: number; message: string }) => void;
 }
 
-const LiveMediaPlayer: typeof AbstractLiveMediaPlayer = require(`./webview.${Device.deviceOS.toLowerCase()}`).default;
+const LiveMediaPlayer: typeof AbstractLiveMediaPlayer = require(`./livemediaplayer.${Device.deviceOS.toLowerCase()}`).default;
 type LiveMediaPlayer = AbstractLiveMediaPlayer;
 
 export default LiveMediaPlayer;
