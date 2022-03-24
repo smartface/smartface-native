@@ -20,6 +20,7 @@ export default class FontAndroid extends AbstractFont {
   }
   constructor(params: Partial<AbstractFont>) {
     super(params);
+    console.info(this.nativeObject, ' ', Error().stack);
   }
   static create(fontFamily: string, size: number, style: FontStyle): FontAndroid {
     const fromCache = FontAndroid.getFromCache(fontFamily, style, size);
@@ -121,7 +122,6 @@ export default class FontAndroid extends AbstractFont {
         path: path
       });
       if (fontFile.exists && fontFile.nativeObject) {
-        //@ts-ignore Fix after File is successfully converted to typescript
         if (fontFile.type === Path.FILE_TYPE.ASSET) {
           const assets = AndroidConfig.activity.getAssets();
           typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
@@ -150,7 +150,7 @@ export default class FontAndroid extends AbstractFont {
     }
     if (fontCache.get(family)[style]) {
       return new FontAndroid({
-        nativeObject: fontCache.get(family)[style],
+        nativeObject: fontCache.get(family)[style].nativeObject,
         size
       });
     }
