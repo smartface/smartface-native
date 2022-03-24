@@ -24,13 +24,11 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   private _rangeEnabled: boolean = true;
   private _maxValueChanged: boolean = false;
   private _onValueChange: (value: number[]) => void;
-
+  createNativeObject() {
+    return new NativeSFRangeSlider(AndroidConfig.activity);
+  }
   constructor(params: Partial<IRangeSlider>) {
     super(params);
-
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeSFRangeSlider(AndroidConfig.activity);
-    }
 
     const self = this;
     this.addAndroidProps({

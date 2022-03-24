@@ -55,7 +55,7 @@ export interface IRangeSlider<
 }
 
 export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEvents> extends AbstractView<TEvent | RangeSliderEvents, any, IRangeSlider> implements IRangeSlider<TEvent> {
-  constructor(props?: Partial<RangeSliderEvents>)
+  constructor(props?: Partial<IRangeSlider>);
   trackColor?: Color;
   outerTrackColor?: Color;
   outerTrackWeight?: number;
