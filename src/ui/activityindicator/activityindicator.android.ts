@@ -1,9 +1,9 @@
 import ViewAndroid from '../view/view.android';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
-import { SemanticContentAttribute } from '../view';
+import { SemanticContentAttribute } from '../view/view';
 
 const NativeProgressBar = requireClass('android.widget.ProgressBar');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');

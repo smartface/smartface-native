@@ -8,7 +8,7 @@ namespace Invocation {
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGFloat'): number;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGSize'): Size;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGPoint'): Point2D;
-  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGColor'): Color;
+  export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGColor'): __SF_UIColor;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'CGRect'): __SF_NSRect;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'NSInteger'): number;
   export function invokeInstanceMethod(target: __SF_NSOBject, selector: string, argumentsArray: Invocation.Argument[], returnValueType?: 'NSString'): string;

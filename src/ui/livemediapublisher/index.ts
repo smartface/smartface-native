@@ -1,4 +1,4 @@
-import { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 
 /**

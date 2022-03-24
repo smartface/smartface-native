@@ -1,4 +1,4 @@
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 
 export const BlurViewEvents = {
   ...ViewEvents

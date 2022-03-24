@@ -1,6 +1,7 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
-import View, { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { AbstractView, ViewAndroidProps, ViewIOSProps, IView } from '../view/view';
+import type View from '../view';
 import { BlurViewEvents } from './blurview-events';
 
 /**

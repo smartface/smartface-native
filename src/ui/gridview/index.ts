@@ -7,11 +7,10 @@ import OverScrollMode from '../shared/android/overscrollmode';
 import ScrollState from '../shared/android/scrollstate';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
 import DecelerationRate from '../shared/ios/decelerationrate';
-import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { GridViewEvents } from './gridview-events';
 
-
-export type ScrollEventHandler = (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void
+export type ScrollEventHandler = (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void;
 /**
  * @enum UI.GridView.Android.SnapAlignment
  * @since 1.1.16
@@ -511,7 +510,7 @@ export abstract class AbstractGridView<TEvent extends string = GridViewEvents, T
   abstract refreshData(): void;
   abstract scrollTo(index: number, animated?: boolean): void;
   abstract stopRefresh(): void;
-  onScroll?: ((e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void);
+  onScroll?: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void;
   onPullRefresh: () => void;
   abstract itemByIndex(index: number): GridViewItem | undefined;
   static Android: {

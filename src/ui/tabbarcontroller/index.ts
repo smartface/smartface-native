@@ -3,11 +3,11 @@ import Color from '../color';
 import Page, { AbstractPage, IPage, PageAndroidParams, PageIOSParams, PageOrientation } from '../page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 import { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
-import View, { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view';
+import { IView } from '../view/view';
 import StatusBar from '../../application/statusbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 
@@ -223,7 +223,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
 
 export abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
   orientation: PageOrientation;
-  transitionViews: View[];
+  transitionViews: IView[];
   layout: FlexLayout;
   statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;

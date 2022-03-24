@@ -8,7 +8,7 @@ import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import View, { SemanticContentAttribute } from '../view';
+import { IView, SemanticContentAttribute } from '../view/view';
 import Page from '../page';
 import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
@@ -135,7 +135,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
 
       this.mSearchSrcTextView.setOnFocusChangeListener(
         NativeView.OnFocusChangeListener.implement({
-          onFocusChange: (view: View, hasFocus: boolean) => {
+          onFocusChange: (view: IView, hasFocus: boolean) => {
             if (hasFocus) {
               const inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
               inputManager.showSoftInput(view, 0);

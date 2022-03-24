@@ -1,4 +1,4 @@
-import { IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import File from '../../io/file';
 import Page from '../page';
 import { ConstructorOf } from '../../core/constructorof';

@@ -1,7 +1,7 @@
 import AttributedString from '../attributedstring';
 import Color from '../color';
 import Font from '../font';
-import View, { IView } from '../view';
+import { IView } from '../view/view';
 import HeaderBarItem from '../headerbaritem';
 import { LargeTitleDisplayMode } from '../page';
 import Image from '../image';
@@ -175,7 +175,7 @@ type IHeaderBar = {
    * @since 3.2.1
    */
   // TODO: if it can be only FlexLayout its type must be FlexLayout instead of View
-  titleLayout?: View<any>;
+  titleLayout?: IView<any>;
   /**
    * Gets/sets title of the header bar.
    *

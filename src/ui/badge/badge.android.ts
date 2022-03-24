@@ -2,7 +2,7 @@ import { IBadge } from '.';
 import NativeComponent from '../../core/native-component';
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
-import { IViewState } from '../view';
+import { IViewState } from '../view/view';
 import Font from '../font';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';

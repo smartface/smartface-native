@@ -1,8 +1,8 @@
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
-import Color from '../color';
-import { ViewEvents } from './view-event';
-import View, { IView, IViewProps, ViewBase } from '.';
+import type Color from '../color';
+import { ViewEvents } from './view-events';
+import { IView, IViewProps, ViewBase } from './view';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { ScrollViewAlign } from '../scrollview/scrollviewalign';
 import { getRippleMask } from '../../helper/getrippleeffect';
@@ -77,7 +77,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _onTouchEnded: IView['onTouchEnded'];
   protected _onTouchCancelled: IView['onTouchCancelled'];
   protected _onTouchMoved: IView['onTouchMoved'];
-  private _parent?: View;
+  private _parent?: ViewAndroid;
   private _rotation: number = 0;
   private _rotationX: number = 0;
   private _rotationY: number = 0;
@@ -85,10 +85,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     x: 1.0,
     y: 1.0
   };
-  protected _borderColor: IView['borderColor'] = Color.BLACK;
+  protected _borderColor: IView['borderColor'] = ColorAndroid.BLACK;
   protected _borderWidth: number = 0;
   protected _borderRadius: number = 0;
-  protected _backgroundColor: IView['backgroundColor'] = Color.TRANSPARENT;
+  protected _backgroundColor: IView['backgroundColor'] = ColorAndroid.TRANSPARENT;
   protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
@@ -195,7 +195,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get parent() {
     return this._parent;
   }
-  set parent(view: View | undefined) {
+  set parent(view: ViewAndroid | undefined) {
     this._parent = view;
   }
 

@@ -5,7 +5,7 @@ import { ControllerPresentParams } from '../../util/Android/transition/viewcontr
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
 import NativeComponent from '../../core/native-component';
 import { HeaderBar } from './headerbar';
-import { IView } from '../view';
+import { IView } from '../view/view';
 
 /**
  * @enum {Number} UI.NavigationController.OperationType

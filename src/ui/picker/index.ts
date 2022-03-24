@@ -2,7 +2,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
-import { IView, IViewState } from '../view';
+import { IView, IViewState } from '../view/view';
 import { PickerEvents } from './picker-events';
 
 export interface PickerAndroidProperties {

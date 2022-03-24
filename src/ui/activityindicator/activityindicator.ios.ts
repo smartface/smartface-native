@@ -1,5 +1,5 @@
 import Color from '../../ui/color';
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
 console.log('import test');

@@ -1,6 +1,6 @@
 import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutIOSParams, ShimmerHighlight, ShimmeringDirection } from '.';
 import FlexLayout from '../flexlayout';
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 
 export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutIOSParams> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {

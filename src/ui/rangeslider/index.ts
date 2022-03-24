@@ -1,11 +1,11 @@
-import View, { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import Color from '../color';
 import Image from '../image';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type RangeSliderIOSProps = View['ios'] &
+export type RangeSliderIOSProps = IView['ios'] &
   Partial<{
     thumbShadowColor: Color;
     thumbShadowOpacity: number;
@@ -15,7 +15,7 @@ export type RangeSliderIOSProps = View['ios'] &
     applyThumbViewChanges: () => void;
   }>;
 
-export type RangeSliderAndroidProps = View['android'] &
+export type RangeSliderAndroidProps = IView['android'] &
   Partial<{
     thumbSize: number;
     thumbColor: Color;

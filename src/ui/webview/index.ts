@@ -4,7 +4,7 @@ import File from '../../io/file';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
 import { Boundary } from '../../primitive/boundary';
 import { WebViewEvents } from './webview-events';
-import { IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 

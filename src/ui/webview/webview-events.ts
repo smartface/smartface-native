@@ -1,4 +1,4 @@
-import { ViewEvents } from "../view/view-event";
+import { ViewEvents } from '../view/view-events';
 
 export const WebViewEvents = {
   BackButtonPressed: 'backButtonPressed',
@@ -11,4 +11,4 @@ export const WebViewEvents = {
   ...ViewEvents
 } as const;
 
-export type WebViewEvents = ExtractValues<typeof WebViewEvents>
+export type WebViewEvents = ExtractValues<typeof WebViewEvents>;

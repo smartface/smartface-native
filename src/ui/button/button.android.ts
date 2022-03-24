@@ -5,7 +5,7 @@ import { ButtonEvents } from './button-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
 import ImageAndroid from '../image/image.android';
-import { IViewState } from '../view';
+import { IViewState } from '../view/view';
 import TextAlignment from '../shared/textalignment';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 

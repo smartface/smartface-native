@@ -1,7 +1,7 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import IImage from '../image';
-import { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import { SwitchEvents } from './switch-events';
 
 export type SwitchAndroidProps = IView['android'] & {

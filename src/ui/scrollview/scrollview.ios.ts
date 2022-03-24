@@ -201,20 +201,24 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
               if (self.layout.nativeObject.frame.width === 0 || self.layout.nativeObject.frame.height === 0) {
                 return;
               }
-              self.gradientColor.frame = e.frame;
-              self.layout.nativeObject.backgroundColor = self.gradientColor.layerToColor();
+              if (self.gradientColor) {
+                self.gradientColor.frame = e.frame;
+                self.layout.nativeObject.backgroundColor = self.gradientColor.layerToColor();
+              }
             };
           }
           self.gradientColor = value.nativeObject;
           if (self.layout.nativeObject.frame.width === 0 || self.layout.nativeObject.frame.height === 0) {
             return;
           }
-          self.gradientColor.frame = self.layout.nativeObject.frame;
-          self.layout.nativeObject.backgroundColor = self.gradientColor.layerToColor();
+          if (self.gradientColor) {
+            self.gradientColor.frame = self.layout.nativeObject.frame;
+            self.layout.nativeObject.backgroundColor = self.gradientColor.layerToColor();
+          }
         } else {
           if (self.gradientColor) {
             self.gradientColorFrameObserver = undefined;
-            self.gradientColor = undefined;
+            self.gradientColor = null;
           }
           self.layout.nativeObject.backgroundColor = value.nativeObject;
         }

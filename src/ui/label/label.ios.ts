@@ -1,6 +1,6 @@
 import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
 import Color from '../color';
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 import { ILabel } from '.';
 import TextAlignment from '../shared/textalignment';

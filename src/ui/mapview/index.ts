@@ -1,4 +1,4 @@
-import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import Color from '../color';
 import Font from '../font';
 import Pin from './pin';

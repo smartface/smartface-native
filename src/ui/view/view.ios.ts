@@ -1,13 +1,12 @@
 import { Point2D } from '../../primitive/point2d';
-import Color from '../color';
-import { ViewEvents } from './view-event';
-import View, { IView, IViewProps, ViewBase } from '.';
+import type Color from '../color';
+import { ViewEvents } from './view-events';
+import { IView, IViewProps, ViewBase } from './view';
 import { Size } from '../../primitive/size';
 import { YGUnit } from '../shared/ios/yogaenums';
 import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
-
-declare const myLabelTitle: any; // TODO: Check that Where does myLabelTitle come from?
+import ColorIOS from '../color/color.ios';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
   protected createNativeObject(): any {
@@ -24,14 +23,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     y: 1.0
   };
 
-  gradientColor: any;
-  private _parent?: View;
+  gradientColor: __SF_CAGradientLayer | null;
+  private _parent?: ViewIOS;
   static Border = {
     TOP_LEFT: 1 << 0,
     TOP_RIGHT: 1 << 1,
     BOTTOM_LEFT: 1 << 2,
     BOTTOM_RIGHT: 1 << 3
-  } as const;
+  };
 
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -156,7 +155,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     return this._parent;
   }
 
-  set parent(view: View | undefined) {
+  set parent(view: ViewIOS | undefined) {
     this._parent = view;
   }
 
@@ -173,7 +172,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get accessible() {
-    return Invocation.invokeInstanceMethod(myLabelTitle.nativeObject, 'isAccessibilityElement', [], 'BOOL') as boolean;
+    return Invocation.invokeInstanceMethod(this.nativeObject, 'isAccessibilityElement', [], 'BOOL') as boolean;
   }
   set accessible(value) {
     const isAccessibility = new Invocation.Argument({
@@ -229,8 +228,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   // ios
   private get shadowColor() {
-    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor') as Color;
-    return new Color({
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    return new ColorIOS({
       color
     });
   }
@@ -254,14 +253,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     Invocation.invokeInstanceMethod(this.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
   }
 
-  // TODO: ios da olacak
-  // private get masksToBounds() {
-  //     return this.masksToBounds;
-  // }
-  // private set masksToBounds(value) {
-  //     this.masksToBounds = value;
-  // }
-
   get masksToBounds() {
     return this.nativeObject.layer.masksToBounds;
   }
@@ -278,7 +269,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get borderColor() {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.layer.borderUIColor
     });
   }
@@ -317,12 +308,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get backgroundColor(): IView['backgroundColor'] {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.backgroundColor
     });
   }
   set backgroundColor(value) {
-    if (value instanceof Color) {
+    if (value instanceof ColorIOS) {
       if (value.nativeObject.constructor.name === 'CAGradientLayer') {
         if (!this.gradientColor) {
           this.nativeObject.addFrameObserver();
@@ -338,12 +329,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
         if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
           return;
         }
-        this.gradientColor.frame = this.nativeObject.frame;
-        this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+        if (this.gradientColor) {
+          this.gradientColor.frame = this.nativeObject.frame;
+          this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+        }
       } else {
         if (this.gradientColor) {
           this.nativeObject.removeFrameObserver();
-          this.gradientColor = undefined;
+          this.gradientColor = null;
         }
         this.nativeObject.backgroundColor = value.nativeObject;
       }
@@ -1056,10 +1049,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.yoga.markDirty();
   }
 
-  //////////////////////////////////////////////////////////////////////////
-  // YOGA STUFF END
-  //////////////////////////////////////////////////////////////////////////
-
   static readonly ios = {
     get viewAppearanceSemanticContentAttribute() {
       return __SF_UIView.viewAppearanceSemanticContentAttribute();
@@ -1080,7 +1069,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       AUTO: 0,
       FORCELEFTTORIGHT: 3,
       FORCERIGHTTOLEFT: 4
-    } as const
+    }
   };
 
   private isInside(frame: __SF_NSRect, point?: Point2D) {

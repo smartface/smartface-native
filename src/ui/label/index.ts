@@ -1,10 +1,10 @@
 import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import { ViewEvents } from '../view/view-event';
+import { ViewEvents } from '../view/view-events';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { IView, IViewState } from '../view';
+import { IView, IViewState } from '../view/view';
 import EllipsizeMode from '../shared/ellipsizemode';
 import TextDirection from '../shared/textdirection';
 export type LabelAndroidProps = IView['android'] & {

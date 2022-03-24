@@ -1,4 +1,4 @@
-import { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import Color from '../color';
 import File from '../../io/file';
 import ImageCacheType from '../shared/imagecachetype';

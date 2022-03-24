@@ -1,4 +1,5 @@
-import View, { AbstractView, IView } from '../view';
+import type View from '../view';
+import { IView } from '../view/view';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import Color from '../color';

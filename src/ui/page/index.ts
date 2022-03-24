@@ -1,13 +1,12 @@
 import StatusBar from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
-import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout, { IFlexLayout } from '../flexlayout';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import FlexLayout from '../flexlayout';
 import NavigationController, { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
-import View, { IViewProps, ViewAndroidProps, ViewIOSProps } from '../view';
+import { IView } from '../view/view';
 import { PageEvents } from './page-events';
 
 export enum PageOrientation {
@@ -165,7 +164,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @readonly
    * @since 3.2.0
    */
-  transitionViews: View[];
+  transitionViews: IView[];
   /**
    * Gets the main layout of Page which is an instance of UI.FlexLayout. You
    * should add views to the layout of the page.
@@ -419,7 +418,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   isActive: boolean;
   isInsideBottomTabBar: boolean;
   abstract orientation: PageOrientation;
-  abstract transitionViews: View[];
+  abstract transitionViews: IView[];
   abstract onOrientationChange(e: { orientation: PageOrientation[] }): void;
   abstract onLoad(): void;
   abstract onShow(): void;
@@ -443,7 +442,7 @@ declare class PageImpl extends AbstractPage implements IPage {
   onShow(): void;
   onHide(): void;
   orientation: PageOrientation;
-  transitionViews: View[];
+  transitionViews: IView[];
   layout: FlexLayout;
   statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;

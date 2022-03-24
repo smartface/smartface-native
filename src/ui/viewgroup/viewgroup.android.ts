@@ -2,7 +2,7 @@ import ViewAndroid from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
 import { IViewGroup } from '.';
 import FlexLayout from '../flexlayout';
-import View, { IView } from '../view';
+import { IView } from '../view/view';
 
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 
@@ -11,7 +11,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   implements IViewGroup
 {
   static Events = ViewGroupEvents;
-  childViews: Record<string, View> = {};
+  childViews: Record<string, IView> = {};
   protected createNativeObject() {
     return null;
   }
@@ -35,7 +35,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
     throw new Error('Method not implemented.');
   }
 
-  addChild(view: View) {
+  addChild(view: IView) {
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof FlexLayout) {

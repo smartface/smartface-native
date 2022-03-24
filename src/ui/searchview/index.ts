@@ -1,4 +1,4 @@
-import View, { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import type Color from '../color';
 import type Image from '../image';
 import type Page from '../page';
@@ -42,7 +42,7 @@ export enum SearchViewStyle {
   MINIMAL = 2
 }
 
-export type SearchViewIOSProps = View['ios'] & {
+export type SearchViewIOSProps = IView['ios'] & {
   /**
    * This function show loading indicator.
    *
@@ -129,7 +129,7 @@ export type SearchViewIOSProps = View['ios'] & {
   keyboardAppearance?: KeyboardAppearance;
 };
 
-export type SearchViewAndroidProps = View['android'] & {
+export type SearchViewAndroidProps = IView['android'] & {
   closeImage: Image;
   keyboardType: KeyboardType;
   /**
@@ -185,8 +185,7 @@ export type SearchViewAndroidProps = View['android'] & {
   textFieldBorderRadius: number;
 };
 
-export declare interface ISearchView<TEvent extends string = SearchViewEvents>
-  extends IView<TEvent | SearchViewEvents, any, MobileOSProps<SearchViewIOSProps, SearchViewAndroidProps>> {
+export declare interface ISearchView<TEvent extends string = SearchViewEvents> extends IView<TEvent | SearchViewEvents, any, MobileOSProps<SearchViewIOSProps, SearchViewAndroidProps>> {
   /**
    * Gets/sets text of SearchView.
    *

@@ -1,6 +1,6 @@
 import Color from '../color';
-import { AbstractView, IView } from '../view';
-import { ViewEvents } from '../view/view-event';
+import { AbstractView, IView } from '../view/view';
+import { ViewEvents } from '../view/view-events';
 
 export enum ActivityIndicatorViewStyle {
   /**

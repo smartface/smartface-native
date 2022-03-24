@@ -1,9 +1,9 @@
 import { FlexLayoutEvents } from './flexlayout-events';
 import Color from '../color';
-import ViewGroup, { AbstractViewGroup, IViewGroup, ViewGroupAndroidProps } from '../viewgroup';
+import { AbstractViewGroup, IViewGroup, ViewGroupAndroidProps } from '../viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Flex from '../shared/Flex';
-import { ViewIOSProps } from '../view';
+import { ViewIOSProps } from '../view/view';
 
 export interface FlexLayoutIOSProps extends ViewIOSProps {}
 export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {

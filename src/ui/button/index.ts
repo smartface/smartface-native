@@ -2,7 +2,7 @@ import Color from '../color';
 import Image from '../image';
 import { ButtonEvents } from './button-events';
 import { ILabel } from '../label';
-import { IViewState } from '../view';
+import { IViewState } from '../view/view';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 

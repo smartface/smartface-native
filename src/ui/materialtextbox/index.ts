@@ -1,8 +1,6 @@
-import { WithMobileOSProps, MobileOSProps } from '../../core/native-mobile-component';
 import { ColorImpl } from '../color';
 import Font from '../font';
 import TextBox from '../textbox';
-import View, { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view';
 import { IMaterialTextBox } from './materialtextbox';
 
 /**

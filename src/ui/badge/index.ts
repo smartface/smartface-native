@@ -2,7 +2,7 @@ import Color from '../color';
 import Font from '../font';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
-import { IViewState } from '../view';
+import { IViewState } from '../view/view';
 
 export declare interface IBadge extends INativeComponent {
   /**
@@ -84,6 +84,6 @@ export declare interface IBadge extends INativeComponent {
   moveY?: any;
 }
 
-const Badge: ConstructorOf<IBadge, Partial<IBadge> & {parameters?: any}> = require(`./badge.${Device.deviceOS.toLowerCase()}`).default;
+const Badge: ConstructorOf<IBadge, Partial<IBadge> & { parameters?: any }> = require(`./badge.${Device.deviceOS.toLowerCase()}`).default;
 type Badge = IBadge;
 export default Badge;

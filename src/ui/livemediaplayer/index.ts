@@ -1,5 +1,4 @@
-import { AbstractView, IView } from '../view';
-import { ViewEvents } from '../view/view-event';
+import { AbstractView, IView } from '../view/view';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
 
 export enum ScaleType {

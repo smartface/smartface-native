@@ -1,5 +1,5 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ViewGroupEvents } from './viewgroup-events';
 
 export interface ViewGroupAndroidProps extends ViewAndroidProps {

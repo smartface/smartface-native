@@ -1,6 +1,6 @@
 import { IButton } from '.';
 import Color from '../color';
-import { IViewState } from '../view';
+import { IViewState } from '../view/view';
 import LabelIOS from '../label/label.ios';
 import { ButtonEvents } from './button-events';
 import Image from '../image';

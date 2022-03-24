@@ -1,5 +1,5 @@
 import Page, { IPage } from '../page';
-import { AbstractView, IView } from '../view';
+import { AbstractView, IView } from '../view/view';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { SwipeViewEvents } from './swipeview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';

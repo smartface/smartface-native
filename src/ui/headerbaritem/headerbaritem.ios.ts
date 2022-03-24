@@ -6,7 +6,7 @@ import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import Image from '../image';
-import { IView } from '../view';
+import { IView } from '../view/view';
 
 enum SystemItem {
   DONE,

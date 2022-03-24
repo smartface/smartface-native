@@ -2,7 +2,7 @@ import OverScrollMode from '../shared/android/overscrollmode';
 import ListViewItem from '../listviewitem';
 import Color from '../color';
 import ScrollState from '../shared/android/scrollstate';
-import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { Point2D } from '../../primitive/point2d';
 import { ListViewEvents } from './listview-events';
 import SwipeItem, { ISwipeItem, SwipeDirection } from '../swipeitem';
