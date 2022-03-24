@@ -1,17 +1,14 @@
 import { ISelectablePicker } from '.';
-import { EventListenerCallback } from '../../core/eventemitter';
-import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import Color from '../color';
-import Font from '../font';
 import { SelectablePickerEvents } from './selectablepicker-events';
 
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 const NativeTextView = requireClass('android.widget.TextView');
 const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
-
+const NativeAlertDialog = requireClass('android.app.AlertDialog');
 interface Listeners {
   cancelButtonListener?: any;
   doneButtonListener?: any;
@@ -26,7 +23,7 @@ export default class SelectablePickerAndroid<TEvent extends SelectablePickerEven
   implements ISelectablePicker<TEvent | SelectablePickerEvents>
 {
   protected createNativeObject() {
-    return null;
+    return new NativeAlertDialog.Builder(AndroidConfig.activity);
   }
   private _items: ISelectablePicker['items'] = [];
   private _multiSelectEnabled: ISelectablePicker['multiSelectEnabled'] = false;
