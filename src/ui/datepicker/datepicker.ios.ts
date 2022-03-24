@@ -16,13 +16,12 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
   private _cancelText: string;
   private onDateSelectedListener: (e: { date: Date }) => void;
   private onCancelledListener: () => void;
+  createNativeObject() {
+    return new __SF_UIDatePicker();
+  }
   constructor(params: Partial<IDatePicker> = {}) {
     super();
     const { ios, android, ...restParams } = params;
-
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_UIDatePicker();
-    }
 
     this.addIOSProps(this.iosProps);
 
