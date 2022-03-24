@@ -20,7 +20,6 @@ export default class FontAndroid extends AbstractFont {
   }
   constructor(params: Partial<AbstractFont>) {
     super(params);
-    console.info(this.nativeObject, ' ', Error().stack);
   }
   static create(fontFamily: string, size: number, style: FontStyle): FontAndroid {
     const fromCache = FontAndroid.getFromCache(fontFamily, style, size);
