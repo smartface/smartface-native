@@ -350,7 +350,7 @@ export declare class AbstractImageView<TEvent extends string = ImageViewEvents> 
   static FillType: {
     ios: typeof ImageViewFillTypeIOS;
   } & typeof ImageFillType;
-
+  constructor(params?: Partial<IImageView>);
   image: null | Image;
 
   tintColor: Color;
