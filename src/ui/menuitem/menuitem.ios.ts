@@ -1,53 +1,48 @@
-import MenuItem, { AbstractMenuItem, IMenuItem, Style } from '.';
+import MenuItem, { IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
-export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
+export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements IMenuItem {
   protected createNativeObject() {
+    this._title = '';
+    this._style = Style.DEFAULT;
     return null;
   }
-  static Events = MenuItemEvents;
   static Styles = {
     DEFAULT: Style.DEFAULT,
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private style: Style = Style.DEFAULT;
-
-  private _title: string = '';
-  private _onSelected: () => void;
+  private _style: Style;
+  private _title: string;
   constructor(params?: Partial<MenuItem>) {
     super(params);
-    const self = this;
+    this.addIOSProps(this.getIOSProps());
+  }
 
-    this.addIOSProps({
+  private getIOSProps() {
+    const self = this;
+    return {
       get style(): Style {
-        return self.style;
+        return self._style;
       },
       set style(color: Style) {
-        self.style = color;
+        self._style = color;
       }
-    });
+    };
   }
-  getActionView: any;
+  onSelected: () => void;
   get title(): string {
     return this._title;
   }
   set title(value: string) {
     this._title = value;
   }
-  get onSelected(): () => void {
-    return this._onSelected;
-  }
-  set onSelected(callback: () => void) {
-    this._onSelected = callback;
-  }
   toString() {
     return 'MenuItem';
   }
   onSelectedListener() {
     this.onSelected?.();
-    this.emit(MenuItemEvents.Selected);
+    this.emit('selected');
   }
 }

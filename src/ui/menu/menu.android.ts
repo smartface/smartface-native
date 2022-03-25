@@ -41,7 +41,7 @@ export default class MenuAndroid extends NativeComponent implements AbstractMenu
     const pageNativeObject = page.nativeObject;
 
     pageNativeObject.registerForContextMenu(layoutNativeObject);
-    // TODO: add contextMenu to page
+    // TODO: Do not use like this, define an event to page and trigger that with given menu parameters
     page.contextMenu = {
       items: this._items,
       headerTitle: this._headerTitle

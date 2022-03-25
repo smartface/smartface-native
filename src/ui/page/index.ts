@@ -3,6 +3,7 @@ import { IEventEmitter } from '../../core/eventemitter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
+import MenuItem from '../menuitem';
 import NavigationController, { IController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
@@ -408,7 +409,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
     super(params);
   }
   childControllers: IController<any>[] = [];
-  contextMenu: { items: any[]; headerTitle: string };
+  contextMenu: { items: MenuItem[]; headerTitle: string };
   tabBar?: TabBarController;
   abstract getCurrentController(): IController;
   abstract show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });

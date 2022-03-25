@@ -1,4 +1,4 @@
-import Menu, { AbstractMenu } from '.';
+import { AbstractMenu } from '.';
 import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
 import MenuItem from '../menuitem';
@@ -10,7 +10,7 @@ export default class MenuIOS extends NativeComponent implements AbstractMenu {
   }
   private _items: MenuItem[] = [];
   private _headerTitle = '';
-  constructor(params?: Partial<Menu>) {
+  constructor(params?: Partial<MenuIOS>) {
     super(params);
   }
   get items() {
@@ -28,17 +28,16 @@ export default class MenuIOS extends NativeComponent implements AbstractMenu {
   show(page: Page) {
     this.nativeObject = __SF_UIAlertController.createAlertController(0);
 
-    if (this.headerTitle && this.headerTitle !== '') {
+    if (this.headerTitle) {
       this.nativeObject.title = this.headerTitle;
     }
 
     for (let i = 0; i < this.items.length; i++) {
-      const style = this.items[i].ios.style;
-      const listener = this.items[i].onSelectedListener;
-      if (style && listener) {
-        const action = __SF_UIAlertAction.createAction(this.items[i].title, style, listener);
-        this.nativeObject.addAction(action);
-      }
+      const style = this.items[i].ios.style || MenuItem.Styles.DEFAULT;
+      const title = this.items[i].title;
+      const listener = this.items[i].onSelectedListener.bind(this.items[i]); //Bind is used for switching scope on createAction
+      const action = __SF_UIAlertAction.createAction(title, style, listener);
+      this.nativeObject.addAction(action);
     }
 
     const popOver = this.nativeObject.valueForKey('popoverPresentationController');

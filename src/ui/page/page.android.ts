@@ -321,7 +321,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       onContextItemSelected: (itemId: number) => {
         const items = this.contextMenu.items;
         if (items && itemId >= 0) {
-          items[itemId].onSelected();
+          items[itemId].onSelectedListener();
           return true;
         }
       },

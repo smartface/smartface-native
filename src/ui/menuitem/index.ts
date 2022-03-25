@@ -1,3 +1,7 @@
+import { EventEmitter, IEventEmitter } from '../../core/eventemitter';
+import { INativeComponent } from '../../core/inative-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
@@ -41,6 +45,28 @@ export enum Style {
   DESTRUCTIVE = 2
 }
 
+export interface MenuItemAndroidProps {
+  /**
+   * Gets/sets the color of a menu item title.
+   *
+   * @property {UI.Color} titleColor
+   * @android
+   * @since 1.1.8
+   */
+  titleColor: Color;
+}
+
+export interface MenuItemIOSProps {
+  /**
+   * Gets/sets the style of a menu item.
+   *
+   * @property {UI.MenuItem.ios.Style} style
+   * @ios
+   * @since 1.1.8
+   */
+  style: Style;
+}
+
 /**
  * @class UI.MenuItem
  * @since 0.1
@@ -48,8 +74,9 @@ export enum Style {
  * MenuItem is used to add row and action to the UI.Menu
  *
  */
-export interface IMenuItem {
-  getActionView: any;
+export interface IMenuItem<TEvent extends string = MenuItemEvents, TProps extends MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps> = MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps>>
+  extends IEventEmitter<TEvent | MenuItemEvents>,
+    INativeComponent<TProps> {
   /**
    * Gets/sets the title of a menu item.
    *
@@ -100,42 +127,31 @@ export interface IMenuItem {
   onSelected: () => void;
 }
 
-export declare class AbstractMenuItem implements IMenuItem {
-  static Styles: Style;
-  static Events: MenuItemEvents;
+export declare class AbstractMenuItem<
+    TEvent extends string = MenuItemEvents,
+    TProps extends MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps> = MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps>
+  >
+  extends NativeEventEmitterComponent<TEvent | MenuItemEvents, TProps>
+  implements IMenuItem
+{
+  protected createNativeObject(params?: Record<string, any>);
+  static Styles: typeof Style;
   constructor(params?: Partial<AbstractMenuItem>);
   // TODO: No implemented getActionView
   getActionView: any;
   title: string;
-  android: Partial<{
-    /**
-     * Gets/sets the color of a menu item title.
-     *
-     * @property {UI.Color} titleColor
-     * @android
-     * @since 1.1.8
-     */
-    titleColor: Color;
-  }>;
-  ios: Partial<{
-    /**
-     * Gets/sets the style of a menu item.
-     *
-     * @property {UI.MenuItem.ios.Style} style
-     * @ios
-     * @since 1.1.8
-     */
-    style: Style;
-  }>;
   onSelected: () => void;
   /**
    * Used privately by the framework.
    * @ios
+   * @android
    */
-  onSelectedListener?: () => void;
+  onSelectedListener: () => void;
 }
 
 const MenuItem: typeof AbstractMenuItem = require(`./menuitem.${Device.deviceOS.toLowerCase()}`).default;
 type MenuItem = AbstractMenuItem;
 
 export default MenuItem;
+
+new MenuItem();

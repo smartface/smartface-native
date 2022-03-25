@@ -1,4 +1,4 @@
-import MenuItem, { AbstractMenuItem, IMenuItem, Style } from '.';
+import MenuItem, { IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Exception from '../../util/exception';
 import TypeUtil from '../../util/type';
@@ -9,7 +9,7 @@ const NativeSpannable = requireClass('android.text.Spanned');
 const NativeColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
-export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements AbstractMenuItem {
+export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements IMenuItem {
   protected createNativeObject() {
     return null;
   }
@@ -21,18 +21,13 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   };
   private _title: string;
   private _titleColor?: Color;
-  private _onSelected: () => void;
   constructor(params?: Partial<MenuItem>) {
     super(params);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  getAndroidProps() {
     const self = this;
-
-    const callbackWrapper = () => {
-      this.emit(MenuItemEvents.Selected);
-    };
-
-    this._onSelected = callbackWrapper;
-
-    this.addAndroidProps({
+    return {
       get titleColor(): Color | undefined {
         return self._titleColor;
       },
@@ -51,10 +46,13 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
         }
         return spannableStringBuilder;
       }
-    });
+    };
   }
-  getActionView: any;
-  onSelectedListener?: (() => void) | undefined;
+  onSelected: () => void;
+  onSelectedListener() {
+    this.emit('selected');
+    this.onSelected?.();
+  }
   get title(): string {
     return this._title;
   }
@@ -63,17 +61,6 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
       throw new TypeError(Exception.TypeError.STRING);
     }
     this._title = value;
-  }
-  get onSelected(): () => void {
-    return this._onSelected;
-  }
-  set onSelected(callback: () => void) {
-    const callbackWrapper = () => {
-      callback?.();
-      this.emit(MenuItemEvents.Selected);
-    };
-
-    this._onSelected = callbackWrapper;
   }
   toString() {
     return 'MenuItem';
