@@ -1,7 +1,7 @@
 import DocumentPicker from '.';
 import File from '../../io/file';
 import Page from '../../ui/page';
-import { DocumentPickerBase, Types } from '.';
+import { DocumentPickerBase, Types } from './documentpicker';
 
 class DocumentPickerIOS implements DocumentPickerBase {
   static readonly Types = Types;
