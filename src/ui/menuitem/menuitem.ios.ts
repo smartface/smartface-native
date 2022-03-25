@@ -17,7 +17,11 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
-
+  protected init(params?: Partial<Record<string, any>>): void {
+    this._title = '';
+    this._style = Style.DEFAULT;
+    super.init();
+  }
   private getIOSProps() {
     const self = this;
     return {
