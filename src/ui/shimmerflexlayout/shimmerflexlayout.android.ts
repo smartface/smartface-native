@@ -9,8 +9,8 @@ const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrame
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
 
 export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams> extends ViewAndroid<TEvent, TNative> implements IShimmerFlexLayout {
-  private _layout = new FlexLayout();
-  private _baseAlpha: number;
+  private _layout;
+  private _baseAlpha: number = 1;
   private _direction: ShimmeringDirection;
   private _repeatDelay = 400;
   private _contentLayout: IShimmerFlexLayout['contentLayout'];
@@ -22,11 +22,14 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   private _baseColor?: Color;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
+  createNativeObject() {
+    this._layout = new FlexLayout();
+    const nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
+    nativeObject.addView(this._layout.nativeObject);
+    return nativeObject;
+  }
   constructor(params: Partial<IShimmerFlexLayout> = {}) {
     super(params);
-    this._nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
-    this.nativeObject.addView(this._layout.nativeObject);
-
     this.androidSpecificProperties();
   }
 
@@ -147,8 +150,6 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
         self._baseColor = value;
       }
     });
-
-    this._android = Object.assign(this._android, android);
   }
 
   static Android: typeof AbstractShimmerFlexLayout.Android = {
