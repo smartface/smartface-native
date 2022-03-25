@@ -3,7 +3,7 @@ import Color from '../color';
 import Font from '../font';
 import { IView } from '../view/view';
 import HeaderBarItem from '../headerbaritem';
-import { LargeTitleDisplayMode } from '../page';
+import { LargeTitleDisplayMode } from '../page/page';
 import Image from '../image';
 
 /**

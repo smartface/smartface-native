@@ -3,7 +3,7 @@ import { IBadge } from '../badge';
 import AttributedString from '../attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
-import { IPage } from '../page';
+import { IPage } from '../page/page';
 import Image from '../image';
 /**
  * @class UI.TabBarItem

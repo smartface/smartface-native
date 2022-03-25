@@ -1,4 +1,4 @@
-import Page, { IPage } from '../page';
+import { IPage } from '../page/page';
 import { AbstractView, IView } from '../view/view';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { SwipeViewEvents } from './swipeview-events';
@@ -99,8 +99,8 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @ios
    * @since 1.1.10
    */
-  pages: Page[];
-  onPageSelected: (index: number, page: Page) => void;
+  pages: IPage[];
+  onPageSelected: (index: number, page: IPage) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
    * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
@@ -175,7 +175,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    */
   swipeToIndex(index: number, animated: boolean): void;
   overScrollMode: OverScrollMode;
-  onPageCreate: (position: number) => Page | null;
+  onPageCreate: (position: number) => IPage | null;
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };
 }
@@ -185,12 +185,12 @@ export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, 
   implements ISwipeView
 {
   constructor(params?: Partial<ISwipeView>);
-  onPageCreate: (position: number) => Page;
+  onPageCreate: (position: number) => IPage;
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };
-  page: Page;
-  pages: Page[];
-  onPageSelected: (index: number, page: Page) => void;
+  page: IPage;
+  pages: IPage[];
+  onPageSelected: (index: number, page: IPage) => void;
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
   currentIndex: number;

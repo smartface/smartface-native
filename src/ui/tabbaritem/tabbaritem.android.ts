@@ -5,7 +5,7 @@ import UnitConverter from '../../util/Android/unitconverter';
 import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
 import ImageAndroid from '../image/image.android';
-import { IPage } from '../page';
+import { IPage } from '../page/page';
 import TabBarController from '../tabbarcontroller';
 
 const NativeDrawable = requireClass('android.graphics.drawable.Drawable');

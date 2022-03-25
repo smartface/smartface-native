@@ -1,6 +1,6 @@
 import TabBarItem, { ITabbarItem } from '../tabbaritem';
 import Color from '../color';
-import Page, { AbstractPage, IPage, PageAndroidParams, PageIOSParams, PageOrientation } from '../page';
+import { AbstractPage, IPage, PageAndroidParams, PageIOSParams, PageOrientation } from '../page/page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -10,6 +10,7 @@ import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IView } from '../view/view';
 import StatusBar from '../../application/statusbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
+import type Page from '../page';
 
 export enum BarTextTransform {
   AUTO = 0,

@@ -4,7 +4,8 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import BottomTabBar from '../bottomtabbar';
 import NavigationController, { IController, INavigationController } from '../navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
-import Page, { IPage } from '../page';
+import { IPage } from '../page/page';
+import PageIOS from '../page/page.ios';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
@@ -170,7 +171,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
         const currentPage = this.getVisiblePage(this.childControllers[this.selectedIndex] as any);
 
-        if (currentPage instanceof Page && currentPage.transitionViews) {
+        if (currentPage instanceof PageIOS && currentPage.transitionViews) {
           controllerToPresent.setValueForKey(true, 'isHeroEnabled');
         }
 
@@ -178,14 +179,14 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       }
     }
   }
-  getVisiblePage(currentController: BottomTabbarController | NavigationController | Page): NavigationController | Page | BottomTabbarController {
-    let retval: NavigationController | Page | BottomTabbarController;
+  getVisiblePage(currentController: BottomTabbarController | NavigationController | PageIOS): NavigationController | PageIOS | BottomTabbarController {
+    let retval: NavigationController | PageIOS | BottomTabbarController;
     if (currentController instanceof BottomTabbarController) {
       const controller = currentController.childControllers[currentController.selectedIndex];
-      retval = this.getVisiblePage(controller as NavigationController | Page);
+      retval = this.getVisiblePage(controller as NavigationController | PageIOS);
     } else if (currentController instanceof NavigationController) {
       const controller = currentController.childControllers[currentController.childControllers.length - 1];
-      retval = this.getVisiblePage(controller as NavigationController | Page);
+      retval = this.getVisiblePage(controller as NavigationController | PageIOS);
     } else {
       retval = currentController;
     }

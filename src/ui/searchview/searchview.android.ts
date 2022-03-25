@@ -114,7 +114,6 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   }
   constructor(params?: Partial<ISearchView>) {
     super(params);
-
     this.mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
     this.mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
     this.mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
@@ -155,11 +154,11 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     // Makes SearchView's textbox apperance fully occupied.
     this.mCompatImageView = this.mSearchEditFrame.getChildAt(0);
     this.mSearchEditFrame.removeViewAt(0);
-    let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
-    const mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
+    const styledAttributes = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
+    const mSearchHintIcon = styledAttributes.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
     this._searchIcon = new ImageAndroid({ roundedBitmapDrawable: mSearchHintIcon });
     this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, this._hint);
-    a.recycle();
+    styledAttributes.recycle();
 
     this.addAndroidProps(this.getAndroidProps());
     this.android.iconifiedByDefault = false;
@@ -251,10 +250,8 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     return this._hint;
   }
   set hint(value: string) {
-    if (this.hint) {
-      this._hint = value;
-      this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, value);
-    }
+    this._hint = value;
+    this.updateQueryHint(this.mSearchSrcTextView, this._searchIcon, value);
   }
 
   get textColor(): ColorAndroid {

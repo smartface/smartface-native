@@ -1,7 +1,6 @@
-import Page from '../ui/page';
+import { IPage } from '../ui/page/page';
 import NavigationController from '../ui/navigationcontroller';
 import SliderDrawer from '../ui/sliderdrawer';
-import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
 import BottomTabBar from '../ui/bottomtabbar';
 import StatusBar from './statusbar';
@@ -916,7 +915,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 4.3.6
    */
   isVoiceOverEnabled: Boolean;
-  currentPage: Page;
+  currentPage: IPage;
   registOnItemSelectedListener(): void;
   tabBar?: BottomTabBar;
 }

@@ -1,11 +1,12 @@
 import { ISwipeView, SwipeViewState } from '.';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Page, { IPage } from '../page';
+import { IPage } from '../page/page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewAndroid from '../view/view.android';
 import { SwipeViewEvents } from './swipeview-events';
+import type Page from '../page';
 
 const NativeView = requireClass('android.view.View');
 const NativeViewPager = requireClass('io.smartface.android.sfcore.ui.swipeview.SFSwipeView');
@@ -27,7 +28,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     this.nativeObject.setCurrentItem(index, animated);
   }
   private _page: PageAndroid;
-  private _pages: PageAndroid[];
+  private _pages: Page[];
   private _lastIndex = -1;
   private _pageCount: number;
   private _pageInstances: PageAndroid[] = [];
@@ -139,14 +140,14 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     this._page = value;
   }
   get pages(): Page[] {
-    return this._pages as any; //TODO: PageBase and PageAndroid no overlap
+    return this._pages;
   }
   set pages(value) {
     if (Array.isArray(value)) {
       if (value.length < 1) {
         throw new TypeError('Array parameter cannot be empty.');
       }
-      this._pages = value as any; //TODO: PageBase and PageAndroid no overlap
+      this._pages = value;
       this.pagerAdapter.notifyDataSetChanged();
     }
   }

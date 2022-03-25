@@ -5,7 +5,7 @@ import Badge, { IBadge } from '../badge';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import Image from '../image';
-import { IPage } from '../page';
+import { IPage } from '../page/page';
 
 export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   protected createNativeObject() {

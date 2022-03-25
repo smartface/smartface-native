@@ -1,4 +1,4 @@
-import Page, { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from '.';
+import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from './page';
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
@@ -247,7 +247,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               // Sample case: Add PageA to SwipeView. Remove PageA from SwipeView and push it to NavigationController.
               // onShow callback will never be triggered.
               if (this.isSwipeViewPage) {
-                Application.currentPage = this as unknown as Page;
+                Application.currentPage = this;
               }
               Application.registOnItemSelectedListener();
 
@@ -293,19 +293,19 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         let tempOrientation: number[];
         switch (Screen.orientation) {
           case OrientationType.PORTRAIT:
-            tempOrientation = Page.Orientation.PORTRAIT;
+            tempOrientation = PageAndroid.Orientation.PORTRAIT;
             break;
           case OrientationType.UPSIDEDOWN:
-            tempOrientation = Page.Orientation.UPSIDEDOWN;
+            tempOrientation = PageAndroid.Orientation.UPSIDEDOWN;
             break;
           case OrientationType.LANDSCAPELEFT:
-            tempOrientation = Page.Orientation.LANDSCAPELEFT;
+            tempOrientation = PageAndroid.Orientation.LANDSCAPELEFT;
             break;
           case OrientationType.LANDSCAPERIGHT:
-            tempOrientation = Page.Orientation.LANDSCAPERIGHT;
+            tempOrientation = PageAndroid.Orientation.LANDSCAPERIGHT;
             break;
           default:
-            tempOrientation = Page.Orientation.PORTRAIT;
+            tempOrientation = PageAndroid.Orientation.PORTRAIT;
         }
         this.onOrientationChange?.({ orientation: tempOrientation });
       },

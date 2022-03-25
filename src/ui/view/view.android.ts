@@ -49,8 +49,6 @@ const YogaEdge = {
   ALL: NativeYogaEdge.ALL
 };
 
-const activity = AndroidConfig.activity;
-
 export default class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
   implements IView
@@ -96,28 +94,26 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _rippleEnabled = false;
   private _rippleColor?: Color;
   private _useForeground = false;
-  protected yogaNode: any;
+  private yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
   protected createNativeObject() {
-    const nativeObject = new NativeView(activity);
-    this.yogaNode = NativeYogaNodeFactory.create();
-    return nativeObject;
+    return new NativeView(AndroidConfig.activity);
   }
-
-  constructor(params?: Partial<TProps>) {
-    super(params);
-    if (this._nativeObject?.toString().indexOf('YogaLayout') !== -1) {
-      this.yogaNode = this._nativeObject.getYogaNode();
+  protected init(params?: Partial<TProps>): void {
+    if (this.nativeObject?.toString().indexOf('YogaLayout') !== -1) {
+      this.yogaNode = this.nativeObject.getYogaNode();
     } else {
       this.yogaNode = NativeYogaNodeFactory.create();
     }
-
-    this._nativeObject.setId(NativeView.generateViewId());
-
-    this._sfOnTouchViewManager = new SFOnTouchViewManager();
-    this.setTouchHandlers();
+    super.init(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
+    this._nativeObject.setId(NativeView.generateViewId());
+    this._sfOnTouchViewManager = new SFOnTouchViewManager();
+    this.setTouchHandlers();
+  }
+  constructor(params?: Partial<TProps>) {
+    super(params);
   }
 
   protected getAndroidSpecificProps() {
@@ -301,13 +297,13 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   get testId() {
     if (!AndroidConfig.isEmulator) {
-      return activity.getResources().getResourceEntryName(this._nativeObject.getId());
+      return AndroidConfig.activity.getResources().getResourceEntryName(this._nativeObject.getId());
     } else {
       return '';
     }
   }
   set testId(value) {
-    const id = activity.getResourceId(value);
+    const id = AndroidConfig.activity.getResourceId(value);
     if (id > 0) {
       this._nativeObject.setId(id);
     }

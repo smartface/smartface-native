@@ -1,12 +1,13 @@
 import { ISwipeView, SwipeViewState } from '.';
-import Page, { IPage } from '../page';
+import { IPage } from '../page/page';
+import PageIOS from '../page/page.ios';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
 import { SwipeViewEvents } from './swipeview-events';
 import Invocation from '../../util/iOS/invocation';
 import { YGUnit } from '../shared/ios/yogaenums';
-import PageIOS from '../page/page.ios';
 import Exception from '../../util/exception';
+import type Page from '../page';
 
 enum UIPageViewControllerTransitionStyle {
   PageCurl,
