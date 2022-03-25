@@ -1,5 +1,4 @@
 import ViewGroupAndroid from '../../ui/viewgroup/viewgroup.android';
-import FlexLayout, { IFlexLayout } from '.';
 import { FlexLayoutEvents } from './flexlayout-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import {
@@ -12,6 +11,7 @@ import {
   NativeJustifyContent,
   NativePositionType
 } from '../shared/android/nativeflexprops';
+import { IFlexLayout } from './flexlayout';
 const activity = AndroidConfig.activity;
 
 const NativeYogaLayout = requireClass('io.smartface.android.sfcore.ui.yogalayout.SFYogaLayout');

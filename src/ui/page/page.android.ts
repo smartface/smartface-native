@@ -4,8 +4,8 @@ import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
 import Screen, { OrientationType } from '../../device/screen';
 import Notifications from '../../global/notifications';
-import Color from '../color';
-import FlexLayout from '../flexlayout';
+import ColorAndroid from '../color/color.android';
+import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import HeaderBarItem from '../headerbaritem';
 import { PageEvents } from './page-events';
 import SoundAndroid from '../../device/sound/sound.android';
@@ -26,6 +26,8 @@ import * as RequestCodes from '../../util/Android/requestcodes';
 import LayoutParams from '../../util/Android/layoutparams';
 import SystemServices from '../../util/Android/systemservices';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import type FlexLayout from '../flexlayout';
+import type Color from '../color';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -93,11 +95,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private actionBar: any = null;
   isSwipeViewPage = false;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
-  private rootLayout: FlexLayout;
+  private rootLayout: FlexLayoutAndroid;
   private _headerBarItems: HeaderBarItem[] = [];
   private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
-  private _headerBarColor: Color;
+  private _headerBarColor: ColorAndroid;
   private _headerBarImage: Image;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
@@ -107,11 +109,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private _alpha = 1.0;
   private _headerBarTitleColor: Color;
   private _leftItemEnabled: boolean;
-  private _leftItemColor = Color.WHITE;
-  private _itemColor = Color.WHITE;
+  private _leftItemColor = ColorAndroid.WHITE;
+  private _itemColor = ColorAndroid.WHITE;
   private _headerBarLogo: Image;
   private _headerBarElevation: number;
-  private _headerBarSubtitleColor: Color;
+  private _headerBarSubtitleColor: ColorAndroid;
   private pageLayout: any;
   private _attributedTitle: any;
   private _attributedSubtitle: any;
@@ -137,8 +139,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     const pageLayout = this.pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     this.pageLayout = pageLayout;
-    this.rootLayout = new FlexLayout({
-      backgroundColor: Color.WHITE
+    this.rootLayout = new FlexLayoutAndroid({
+      backgroundColor: ColorAndroid.WHITE
     });
     (this.rootLayout as any).parent = this; //TODO: Might add parent as a member function
     pageLayout.addView(this.rootLayout.nativeObject);
@@ -167,7 +169,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     AndroidConfig.activity.setRequestedOrientation(nativeOrientation);
   }
   get layout(): IPage['layout'] {
-    return this.rootLayout;
+    return this.rootLayout as unknown as FlexLayout;
   }
   get isShown(): boolean {
     return this._isShown;
@@ -356,11 +358,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
 
   private setHeaderBarDefaults() {
     if (!this.skipDefaults) {
-      this.headerBar.backgroundColor = Color.create('#00A1F1');
+      this.headerBar.backgroundColor = ColorAndroid.create('#00A1F1');
       this.headerBar.leftItemEnabled = true;
       this.headerBar.android.logoEnabled = false;
-      this.headerBar.titleColor = Color.WHITE;
-      this.headerBar.android.subtitleColor = Color.WHITE;
+      this.headerBar.titleColor = ColorAndroid.WHITE;
+      this.headerBar.android.subtitleColor = ColorAndroid.WHITE;
       this.headerBar.visible = true;
       this.headerBar.android.padding = { top: 0, bottom: 0, left: 0, right: 4 };
       this.headerBar.android.contentInsetStartWithNavigation = 0;
@@ -439,7 +441,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         const pageLayoutParams = self.pageLayout.getLayoutParams();
         if (self._transparent) {
           pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
-          self.headerBar.backgroundColor = Color.TRANSPARENT;
+          self.headerBar.backgroundColor = ColorAndroid.TRANSPARENT;
         } else {
           pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
         }
@@ -466,13 +468,13 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         return self._headerBarTitleColor;
       },
       set titleColor(value: HeaderBar['titleColor']) {
-        self._headerBarTitleColor = value;
+        self._headerBarTitleColor = value as unknown as Color;
         self.toolbar.setTitleTextColor(value.nativeObject);
       },
-      get leftItemColor(): Color {
+      get leftItemColor(): ColorAndroid {
         return self._leftItemColor;
       },
-      set leftItemColor(value: Color) {
+      set leftItemColor(value: ColorAndroid) {
         const drawable = self.toolbar.getNavigationIcon();
         drawable?.setColorFilter(value.nativeObject, PorterDuff.Mode.SRC_ATOP);
       },
@@ -543,10 +545,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
             const nativeBadgeContainer = new NativeRelativeLayout(AndroidConfig.activity);
             nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
             if (item.customView) {
-              const customViewContainer = new FlexLayout();
+              const customViewContainer = new FlexLayoutAndroid();
               const cParent = item.customView.getParent();
               if (cParent !== null) {
-                (cParent as FlexLayout).removeAll(); //TODO: getParent should not return View
+                (cParent as FlexLayoutAndroid).removeAll(); //TODO: getParent should not return View
               }
               customViewContainer.addChild(item.customView);
               item.nativeObject = customViewContainer.nativeObject;

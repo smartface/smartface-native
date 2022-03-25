@@ -1,10 +1,10 @@
-import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from '.';
+import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from './sliderdrawer';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 import ApplicationAndroid from '../../application/application.android';
 import UnitConverter from '../../util/Android/unitconverter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import Color from '../color';
-import { IFlexLayout } from '../flexlayout';
+import ColorAndroid from '../color/color.android';
+import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');
 
@@ -12,32 +12,32 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents, any, ISliderDrawer>
   implements ISliderDrawer
 {
-  protected createNativeObject() {
-    return null;
-  }
-  private _layout: IFlexLayout;
-  private _position;
-  private _onShow;
-  private _onHide;
-  private _onLoad;
-  __isAttached = false;
-  private _enabled = true;
-  private _state = SliderDrawerAndroid.State.CLOSED;
+  private _layout: FlexLayoutAndroid;
+  private _position: ISliderDrawer['drawerPosition'];
+  private _enabled: boolean;
+  private _state: SliderDrawerState;
   private drawerLayoutParams: any;
   drawerListener: any;
-  constructor(params?: Partial<ISliderDrawer>) {
+  isSliderDrawerAttached = false;
+  onShow: () => void | null;
+  onHide: () => void | null;
+  onLoad: () => void | null;
+  constructor(params?: TProps) {
     super(params);
+  }
+  backgroundColor: ColorAndroid;
+  protected init(): void {
     this.drawerLayoutParams = new NativeDrawerLayout.LayoutParams(-1, -1);
     this.drawerLayoutParams.gravity = 3; // Gravity.LEFT
 
     this.drawerListener = NativeDrawerLayout.DrawerListener.implement({
       onDrawerClosed: (drawerView: any) => {
-        this._onHide?.();
+        this.onHide?.();
         this.emit('hide');
         this._state = SliderDrawerAndroid.State.CLOSED;
       },
       onDrawerOpened: (drawerView: any) => {
-        this._onShow?.();
+        this.onShow?.();
         this.emit('show');
         this._state = SliderDrawerAndroid.State.OPEN;
       },
@@ -49,18 +49,22 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
         }
       }
     });
-
-    // setting default values
-    this.width = 200;
-    this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
-    this.layout.nativeObject.setFitsSystemWindows(true);
+    this._layout = new FlexLayoutAndroid();
+    this._layout.width = 200;
+    this._layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
+    this._layout.nativeObject.setFitsSystemWindows(true);
+    this._enabled = false;
+    this.backgroundColor = new ColorAndroid();
+    this._state = SliderDrawerAndroid.State.CLOSED;
   }
-  backgroundColor: Color = new Color();
+  protected createNativeObject() {
+    return null;
+  }
   show(): void {
-    this.__isAttached && this.__showSliderDrawer();
+    this.isSliderDrawerAttached && this.showSliderDrawer();
   }
   hide(): void {
-    this.__isAttached && this.__showSliderDrawer();
+    this.isSliderDrawerAttached && this.showSliderDrawer();
   }
   toString() {
     return 'SliderDrawer';
@@ -81,32 +85,19 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   }
   set enabled(value: ISliderDrawer['enabled']) {
     this._enabled = value;
-    if (!this.__isAttached) return;
+    if (!this.isSliderDrawerAttached) {
+      return;
+    }
 
-    ApplicationAndroid.__mDrawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
-    !value && this.state === SliderDrawerAndroid.State.OPEN && this.__hideSliderDrawer();
+    ApplicationAndroid.drawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
+    if (!value && this.state === SliderDrawerAndroid.State.OPEN) {
+      this.hideSliderDrawer();
+    }
   }
   get layout(): ISliderDrawer['layout'] {
     return this._layout;
   }
-  get onShow(): ISliderDrawer['onShow'] {
-    return this._onShow;
-  }
-  set onShow(value: ISliderDrawer['onShow']) {
-    this._onShow = value;
-  }
-  get onLoad(): ISliderDrawer['onLoad'] {
-    return this._onLoad;
-  }
-  set onLoad(value: ISliderDrawer['onLoad']) {
-    this._onLoad = value;
-  }
-  get onHide(): ISliderDrawer['onHide'] {
-    return this._onHide;
-  }
-  set onHide(value: ISliderDrawer['onHide']) {
-    this._onHide = value;
-  }
+
   get height(): ISliderDrawer['height'] {
     // Added due to using DrawerLayout as a parent
     return UnitConverter.pixelToDp(this.drawerLayoutParams.height);
@@ -123,11 +114,11 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.width = UnitConverter.dpToPixel(value);
   }
-  private __hideSliderDrawer() {
-    ApplicationAndroid.__mDrawerLayout.closeDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
+  private hideSliderDrawer() {
+    ApplicationAndroid.drawerLayout.closeDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
   }
-  private __showSliderDrawer() {
-    ApplicationAndroid.__mDrawerLayout.openDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
+  private showSliderDrawer() {
+    ApplicationAndroid.drawerLayout.openDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
   }
 
   static State = SliderDrawerState;

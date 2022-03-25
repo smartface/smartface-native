@@ -1,4 +1,4 @@
-import Color from '../../../ui/color';
+import ColorAndroid from '../../../ui/color/color.android';
 import AndroidConfig from '../../../util/Android/androidconfig';
 import { NavigationBarBase, NavigationBarStyle } from './navigationbar';
 
@@ -7,7 +7,7 @@ const NativeBuild = requireClass('android.os.Build');
 class NavigationBarAndroid implements NavigationBarBase {
   readonly Styles = NavigationBarStyle;
   private _style: NavigationBarStyle = NavigationBarStyle.DARKCONTENT;
-  private _color: Color = Color.BLACK;
+  private _color: ColorAndroid = ColorAndroid.BLACK;
   get style(): NavigationBarStyle {
     return this._style;
   }
@@ -21,10 +21,10 @@ class NavigationBarAndroid implements NavigationBarBase {
       window.getDecorView().setSystemUiVisibility(flags);
     }
   }
-  get color(): Color {
+  get color(): ColorAndroid {
     return this._color;
   }
-  set color(value: Color) {
+  set color(value: ColorAndroid) {
     if (NativeBuild.VERSION.SDK_INT >= 21) {
       this._color = value;
       const window = AndroidConfig.activity.getWindow();

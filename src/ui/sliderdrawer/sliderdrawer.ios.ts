@@ -1,4 +1,4 @@
-import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from '.';
+import { ISliderDrawer, SliderDrawerPosition, SliderDrawerState } from './sliderdrawer';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';

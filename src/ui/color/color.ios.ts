@@ -1,5 +1,4 @@
-import Color, { AbstractColor } from '.';
-import { GradientDirection } from '.';
+import { GradientDirection, AbstractColor } from './color';
 
 export default class ColorIOS extends AbstractColor {
   static create(alpha: number, red: number, green: number, blue: number): ColorIOS;
@@ -35,7 +34,7 @@ export default class ColorIOS extends AbstractColor {
       x: params.direction === GradientDirection.DIAGONAL_LEFT || params.direction === GradientDirection.HORIZONTAL ? 1 : 0,
       y: params.direction === GradientDirection.HORIZONTAL ? 0 : 1
     };
-    return new Color({
+    return new ColorIOS({
       color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, pointStart, pointEnd) as any
     });
   }

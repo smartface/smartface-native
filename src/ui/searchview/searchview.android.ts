@@ -1,6 +1,6 @@
 /*globals requireClass*/
 import { ISearchView, SearchViewStyle } from '.';
-import Color from '../color';
+import ColorAndroid from '../color/color.android';
 import ImageAndroid from '../image/image.android';
 import KeyboardType from '../shared/keyboardtype';
 import ViewAndroid from '../view/view.android';
@@ -75,20 +75,20 @@ const NativeTextAlignment = [
 export default class SearchViewAndroid<TEvent extends string = SearchViewEvents> extends ViewAndroid<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _hasEventsLocked: boolean = false;
   private _hint: string = '';
-  private _textColor = Color.BLACK;
-  private _defaultUnderlineColorNormal = Color.create('#ffcccccc');
-  private _defaultUnderlineColorFocus = Color.create('#ff444444');
+  private _textColor = ColorAndroid.BLACK;
+  private _defaultUnderlineColorNormal = ColorAndroid.create('#ffcccccc');
+  private _defaultUnderlineColorFocus = ColorAndroid.create('#ff444444');
   private mSearchSrcTextView: any;
   private mCloseButton: any;
   private mSearchButton: any;
   private mUnderLine: any;
   private mSearchEditFrame: any;
   private mCompatImageView: any;
-  private _hintTextColor = Color.LIGHTGRAY;
+  private _hintTextColor = ColorAndroid.LIGHTGRAY;
   private _keyboardType = KeyboardType.DEFAULT;
   private _closeImage: ImageAndroid;
   private _backgroundImage: ImageAndroid;
-  private _textFieldBackgroundColor = Color.create(222, 222, 222);
+  private _textFieldBackgroundColor = ColorAndroid.create(222, 222, 222);
   private _textFieldBorderRadius = 15;
   private _searchButtonIcon: ImageAndroid;
   private _closeIcon: ImageAndroid;
@@ -98,7 +98,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _isNotSetTextWatcher: boolean = false;
   private _isClicklistenerAdded: boolean = false;
   private _leftItem: any;
-  private _underlineColor: { normal: Color; focus: Color };
+  private _underlineColor: { normal: ColorAndroid; focus: ColorAndroid };
   private _font: Font;
   private _textalignment = TextAlignment.MIDLEFT;
   private textFieldBackgroundDrawable: typeof GradientDrawable;
@@ -121,7 +121,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
     this.mSearchEditFrame = this.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
 
-    this.mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+    this.mUnderLine.setBackgroundColor(ColorAndroid.TRANSPARENT.nativeObject);
 
     this._underlineColor = {
       normal: this._defaultUnderlineColorNormal,
@@ -257,11 +257,11 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     }
   }
 
-  get textColor(): Color {
+  get textColor(): ColorAndroid {
     return this._textColor;
   }
-  set textColor(value: Color) {
-    if (!(value instanceof Color)) {
+  set textColor(value: ColorAndroid) {
+    if (!(value instanceof ColorAndroid)) {
       throw new TypeError(Exception.TypeError.DEFAULT + 'Color');
     }
     this._textColor = value;
@@ -318,22 +318,22 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setGravity(NativeTextAlignment[value]);
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): ColorAndroid {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
-    if (!(value instanceof Color)) {
+  set hintTextColor(value: ColorAndroid) {
+    if (!(value instanceof ColorAndroid)) {
       throw new TypeError(Exception.TypeError.DEFAULT + 'Color');
     }
     this._hintTextColor = value;
     this.mSearchSrcTextView.setHintTextColor(value.nativeObject);
   }
 
-  get textFieldBackgroundColor(): Color {
+  get textFieldBackgroundColor(): ColorAndroid {
     return this._textFieldBackgroundColor;
   }
-  set textFieldBackgroundColor(value: Color) {
-    if (!(value instanceof Color)) {
+  set textFieldBackgroundColor(value: ColorAndroid) {
+    if (!(value instanceof ColorAndroid)) {
       throw new TypeError(Exception.TypeError.DEFAULT + 'Color');
     }
     this._textFieldBackgroundColor = value;

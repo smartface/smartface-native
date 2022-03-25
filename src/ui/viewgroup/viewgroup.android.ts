@@ -1,7 +1,7 @@
 import ViewAndroid from '../view/view.android';
 import { ViewGroupEvents } from './viewgroup-events';
-import { IViewGroup } from '.';
-import FlexLayout from '../flexlayout';
+import { IViewGroup } from './viewgroup';
+import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import { IView } from '../view/view';
 
 const NativeViewGroup = requireClass('android.view.ViewGroup');
@@ -38,7 +38,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
   addChild(view: IView) {
     view.parent = this;
     this.childViews[view.id] = view;
-    if (this instanceof FlexLayout) {
+    if (this instanceof FlexLayoutAndroid) {
       this.nativeObject.addView(view.nativeObject, view.android.yogaNode);
     }
   }

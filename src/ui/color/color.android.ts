@@ -1,4 +1,4 @@
-import Color, { AbstractColor, GradientDirection } from '.';
+import { AbstractColor, GradientDirection } from './color';
 
 const NativeColor = requireClass('android.graphics.Color');
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
@@ -11,14 +11,14 @@ const GradientDrawableDirection = [
 ];
 
 interface GradientParams {
-  startColor: Color;
-  endColor: Color;
-  direction: Color['direction'];
+  startColor: ColorAndroid;
+  endColor: ColorAndroid;
+  direction: ColorAndroid['direction'];
 }
 
 interface ColorAndroidConstructorParams {
   color: number;
-  isGradient: Color['isGradient'];
+  isGradient: ColorAndroid['isGradient'];
 }
 
 export default class ColorAndroid extends AbstractColor {

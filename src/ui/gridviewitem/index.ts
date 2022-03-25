@@ -1,6 +1,6 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
-import { IFlexLayout } from '../flexlayout';
+import { IFlexLayout } from '../flexlayout/flexlayout';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**

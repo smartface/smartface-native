@@ -1,6 +1,6 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
-import { FlexLayoutIOSProps, IFlexLayout } from '../flexlayout';
+import { FlexLayoutIOSProps, IFlexLayout } from '../flexlayout/flexlayout';
 import { SwipeDirection } from '../swipeitem';
 import { MobileOSProps } from '../../core/native-mobile-component';
 

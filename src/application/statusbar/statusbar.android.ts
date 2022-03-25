@@ -1,5 +1,5 @@
 import { AbstractStatusBar } from '.';
-import Color from '../../ui/color';
+import ColorAndroid from '../../ui/color/color.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 
@@ -20,7 +20,7 @@ export enum StatusBarStyle {
 class StatusBarAndroid implements AbstractStatusBar {
   private _visible = true;
   private _statusBarStyle: StatusBarStyle = StatusBarStyle.LIGHTCONTENT;
-  private _color: Color = Color.WHITE;
+  private _color: ColorAndroid = ColorAndroid.WHITE;
   private _transparent: boolean;
   readonly Styles = StatusBarStyle;
   get style(): StatusBarStyle {
@@ -52,10 +52,10 @@ class StatusBarAndroid implements AbstractStatusBar {
       window.addFlags(FLAG_FULLSCREEN);
     }
   }
-  get backgroundColor(): Color {
+  get backgroundColor(): ColorAndroid {
     return this._color;
   }
-  set backgroundColor(color: Color) {
+  set backgroundColor(color: ColorAndroid) {
     if (color) {
       this._color = color;
 
@@ -81,10 +81,10 @@ class StatusBarAndroid implements AbstractStatusBar {
   get android(): AbstractStatusBar['android'] {
     const self = this;
     return {
-      get color(): Color {
+      get color(): ColorAndroid {
         return self._color;
       },
-      set color(value: Color) {
+      set color(value: ColorAndroid) {
         if (value) {
           self._color = value;
           const window = AndroidConfig.activity.getWindow();

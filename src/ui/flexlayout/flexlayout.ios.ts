@@ -1,5 +1,5 @@
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
-import { IFlexLayout } from '.';
+import { IFlexLayout } from './flexlayout';
 import { FlexLayoutEvents } from './flexlayout-events';
 import * as NativeFlexProps from '../shared/ios/nativeflexprops';
 export default class FlexLayoutIOS<TEvent extends string = FlexLayoutEvents, TNative = any, TProps extends IFlexLayout = IFlexLayout>

@@ -1,4 +1,4 @@
-import { IViewGroup } from '.';
+import { IViewGroup } from './viewgroup';
 import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import { IView } from '../view/view';
 import ViewIOS from '../view/view.ios';

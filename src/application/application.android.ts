@@ -4,9 +4,8 @@ import TypeUtil from '../util/type';
 import AndroidConfig from '../util/Android/androidconfig';
 import Http from '../net/http';
 import Network from '../device/network';
-import { EventEmitter } from '../core/eventemitter';
 import { ApplicationEvents } from './application-events';
-import SliderDrawer from '../ui/sliderdrawer';
+import type SliderDrawer from '../ui/sliderdrawer';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
@@ -87,7 +86,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   private _secureWindowContent = false;
   private activity = AndroidConfig.activity;
   private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
-  __mDrawerLayout: any;
+  private _drawerLayout: any;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
@@ -172,26 +171,27 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
 
   attachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
-      sliderDrawer.__isAttached = true;
+      sliderDrawer.isSliderDrawerAttached = true;
       const sliderDrawerId = sliderDrawer.layout.nativeObject.getId();
-      const isExists = this.__mDrawerLayout.findViewById(sliderDrawerId);
+      const isExists = this._drawerLayout.findViewById(sliderDrawerId);
       if (!isExists) {
-        this.__mDrawerLayout.addView(sliderDrawer.layout.nativeObject);
-        this.__mDrawerLayout.bringToFront();
+        this._drawerLayout.addView(sliderDrawer.layout.nativeObject);
+        this._drawerLayout.bringToFront();
         if (sliderDrawer.drawerListener) {
-          this.__mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+          this._drawerLayout.addDrawerListener(sliderDrawer.drawerListener);
         }
       }
       sliderDrawer.onLoad?.();
+      sliderDrawer.emit('load');
     }
   }
 
   detachSliderDrawer(sliderDrawer: SliderDrawerAndroid) {
     if (sliderDrawer) {
-      sliderDrawer.__isAttached = false;
-      this.__mDrawerLayout.removeView(sliderDrawer.nativeObject);
+      sliderDrawer.isSliderDrawerAttached = false;
+      this._drawerLayout.removeView(sliderDrawer.nativeObject);
       if (sliderDrawer.drawerListener) {
-        this.__mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+        this._drawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
       }
     }
   }
@@ -319,16 +319,16 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
 
   get drawerLayout() {
-    return this.__mDrawerLayout;
+    return this._drawerLayout;
   }
   set drawerLayout(value) {
-    this.__mDrawerLayout = value;
+    this._drawerLayout = value;
   }
   get sliderDrawer() {
     return this._sliderDrawer as SliderDrawer;
   }
   set sliderDrawer(drawer) {
-    if (drawer instanceof SliderDrawer) {
+    if (drawer instanceof SliderDrawerAndroid) {
       this.detachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid); //TODO: Fix as unknown problem
       this._sliderDrawer = drawer;
       this.attachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid);
