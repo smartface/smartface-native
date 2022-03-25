@@ -26,7 +26,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
   }
-  protected init(params) {
+  protected init(params: Partial<IMaterialTextBox> = {}) {
     this._multiline = !!params.multiline;
     this._lineCount = params.lineCount || 1;
 

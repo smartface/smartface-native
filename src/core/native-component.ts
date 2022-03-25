@@ -18,9 +18,6 @@ export default abstract class NativeComponent<TNative = any, TProps extends Reco
 
   protected init(params?: Partial<TProps>): void {
     const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
-    /**
-     * This might break default assignments in constructor.
-     */
     rest && Object.assign(this, rest);
   }
   protected abstract createNativeObject(params?: Partial<TProps>): any;

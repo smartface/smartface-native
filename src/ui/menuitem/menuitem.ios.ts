@@ -1,4 +1,4 @@
-import MenuItem, { IMenuItem, Style } from '.';
+import { IMenuItem, Style } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MenuItemEvents } from './menuitem-events';
 
@@ -11,13 +11,11 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private _title: string;
-  private _style: Style;
+  private _title = '';
+  private _style = Style.DEFAULT;
   constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addIOSProps(this.getIOSProps());
-    this._title = params?.title || '';
-    this._style = params?.ios?.style || Style.DEFAULT;
   }
 
   private getIOSProps() {
