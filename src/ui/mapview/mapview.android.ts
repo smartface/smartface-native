@@ -47,8 +47,8 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   private _nativeCustomMarkerRenderer: Cluster | null = null;
   private _nativeGoogleMap: any;
   private _clusterEnabled: IMapView['clusterEnabled'] = false;
-  private _pins: PinAndroid[];
-  private _pendingPins: PinAndroid[];
+  private _pins: PinAndroid[] = [];
+  private _pendingPins: PinAndroid[] = [];
   private _isMoveStarted = false;
   private _nativeClusterManager: any;
   private _zoomLevel: IMapView['zoomLevel'] = 10;
@@ -63,14 +63,15 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   private _minZoomLevel: IMapView['minZoomLevel'] = 0;
   private _locationButtonVisible: IMapView['android']['locationButtonVisible'] = true;
   private _pinArray: Record<string, PinAndroid> = {};
+  createNativeObject() {
+    this.lazyLoading = true;
+    return new NativeMapView(AndroidConfig.activity);
+  }
   constructor(params?: IMapView) {
     super(params);
     this.activityIntent = AndroidConfig.activity.getIntent();
     this.savedBundles = this.activityIntent.getExtras();
-    if (!this.nativeObject) {
-      this.nativeObject = new NativeMapView(AndroidConfig.activity);
-      // if (!params || !params.lazyLoading) this.nativeObject.onCreate(savedBundles);
-    }
+
     this.addAndroidProps(this.getandroidProps());
   }
   getVisiblePins(): PinAndroid[] {
@@ -351,7 +352,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this._nativeClusterManager.setRenderer(clusterRender);
   }
   get centerLocation() {
-    if (this._nativeGoogleMap) {
+    if (!this._nativeGoogleMap) {
       return this._centerLocation;
     }
     const nativeLatLng = this._nativeGoogleMap.getCameraPosition().target;

@@ -28,13 +28,13 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   private _maxZoomLevel: IMapView['maxZoomLevel'] = DEFAULT_MAX_ZOOM_LEVEL;
   private _zoomLevel: IMapView['zoomLevel'] = DEFAULT_ZOOM_LEVEL;
   private _cluster: ClusterIOS[] = [];
+  createNativeObject() {
+    return new __SF_MKMapView();
+  }
   constructor(params?: Partial<IMapView>) {
     super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_MKMapView();
-      this.tapGesture = new __SF_UITapGestureRecognizer();
-      this.longGesture = new __SF_UILongPressGestureRecognizer();
-    }
+    this.tapGesture = new __SF_UITapGestureRecognizer();
+    this.longGesture = new __SF_UILongPressGestureRecognizer();
     this.nativeObject.setCenter(DefaultLocation.latitude, DefaultLocation.longitude, false);
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
