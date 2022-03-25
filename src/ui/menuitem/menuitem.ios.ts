@@ -11,8 +11,8 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private _title = '';
-  private _style = Style.DEFAULT;
+  private _title: string;
+  private _style: Style;
   constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addIOSProps(this.getIOSProps());
