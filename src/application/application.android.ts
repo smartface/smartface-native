@@ -75,7 +75,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     return {};
   }
   statusBar: typeof StatusBar = StatusBar;
-  private _sliderDrawer: SliderDrawer;
+  private _sliderDrawer: SliderDrawerAndroid;
   private _keepScreenAwake = false;
   private _onUnhandledError: ApplicationBase['onUnhandledError'];
   private _currentPage: PageAndroid;
@@ -325,13 +325,13 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     this._drawerLayout = value;
   }
   get sliderDrawer() {
-    return this._sliderDrawer as SliderDrawer;
+    return this._sliderDrawer as unknown as SliderDrawer;
   }
   set sliderDrawer(drawer) {
     if (drawer instanceof SliderDrawerAndroid) {
-      this.detachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid); //TODO: Fix as unknown problem
+      this.detachSliderDrawer(this._sliderDrawer);
       this._sliderDrawer = drawer;
-      this.attachSliderDrawer(this._sliderDrawer as unknown as SliderDrawerAndroid);
+      this.attachSliderDrawer(this._sliderDrawer);
     } else {
       throw TypeError('Object must be SliderDrawer instance');
     }

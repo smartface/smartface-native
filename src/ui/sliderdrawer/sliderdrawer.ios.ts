@@ -11,24 +11,33 @@ enum SLIDER_DRAWER_STATE {
 }
 
 export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents> extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents, __SF_SliderDrawer> implements ISliderDrawer {
-  protected createNativeObject() {
-    const nativeObject = __SF_SliderDrawer.new();
-    nativeObject.position = this._position;
-    nativeObject.state = 0;
-    nativeObject.enabled = this._enabled;
-    return nativeObject;
-  }
-  private _position = 0;
-  private _enabled = true;
-  private _drawerWidth = 100;
+  private _position: number;
+  private _enabled: boolean;
+  private _drawerWidth: number;
+  pageView: FlexLayoutIOS;
+  height: number;
   constructor(params?: Partial<ISliderDrawer>) {
     super(params);
-
+    this.setPageViewProps();
+    this.setNativeProps();
+  }
+  protected createNativeObject() {
+    return __SF_SliderDrawer.new();
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
     this.pageView = new FlexLayoutIOS({
       backgroundColor: Color.WHITE
     });
 
-    this.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    this._drawerWidth = 100;
+    this._enabled = false;
+    this._position = 0;
+    super.init();
+  }
+  private setNativeProps() {
+    this.nativeObject.position = this._position;
+    this.nativeObject.state = 0;
+    this.nativeObject.enabled = this._enabled;
     this.nativeObject.onViewLoad = () => this.pageView.nativeObject;
     this.nativeObject.onViewLayoutSubviews = () => {
       const screenWidth = __SF_UIScreen.mainScreen().bounds.width;
@@ -43,32 +52,37 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
       this.pageView.top = this.pageView.nativeObject.frame.y;
       this.pageView.width = this.pageView.nativeObject.frame.width;
       this.pageView.height = this.pageView.nativeObject.frame.height;
-
-      this.nativeObject.onShow = () => {
-        __SF_UIView.animation(0, 0, () => {
-          this.layout.nativeObject.endEditing(true);
-        });
-        this.onShow?.();
-        this.emit('show');
-      };
-      this.nativeObject.onHide = () => {
-        __SF_UIView.animation(0, 0, () => {
-          this.layout.nativeObject?.endEditing(true);
-        });
-        this.onHide?.();
-        this.emit('hide');
-      };
-      this.nativeObject.onLoad = () => {
-        this.onLoad?.();
-        this.emit('load');
-      };
-
       this.pageView.applyLayout();
     };
+
+    this.nativeObject.onShow = () => {
+      __SF_UIView.animation(0, 0, () => {
+        this.layout.nativeObject.endEditing(true);
+      });
+      this.onShow?.();
+      this.emit('show');
+    };
+    this.nativeObject.onHide = () => {
+      __SF_UIView.animation(0, 0, () => {
+        this.layout.nativeObject?.endEditing(true);
+      });
+      this.onHide?.();
+      this.emit('hide');
+    };
+    this.nativeObject.onLoad = () => {
+      this.onLoad?.();
+      this.emit('load');
+    };
   }
-  pageView: FlexLayoutIOS;
-  height: number;
-  layout: FlexLayoutIOS;
+  private setPageViewProps() {
+    this.pageView.applyLayout = () => {
+      this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+    };
+    this.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    this.pageView.nativeObject.addObserver(() => {
+      this.layout.nativeObject.endEditing(true);
+    }, __SF_UIApplicationWillResignActiveNotification);
+  }
   get state(): SliderDrawerState {
     const state = this.nativeObject.state;
     switch (state) {
@@ -81,6 +95,9 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
       default:
         return -1;
     }
+  }
+  get layout() {
+    return this.pageView;
   }
   get backgroundColor(): ISliderDrawer['backgroundColor'] {
     return this.pageView.backgroundColor as Color;
@@ -114,13 +131,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
       width: this._drawerWidth
     };
     this.pageView.width = value;
-  }
-
-  get onDrag(): () => void {
-    return this.nativeObject.onDrag;
-  }
-  set onDrag(value: () => void) {
-    this.nativeObject.onDrag = value;
   }
 
   onShow: () => void;

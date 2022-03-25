@@ -18,14 +18,14 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   private _state: SliderDrawerState;
   private drawerLayoutParams: any;
   drawerListener: any;
-  isSliderDrawerAttached = false;
+  backgroundColor: ColorAndroid;
+  isSliderDrawerAttached;
   onShow: () => void | null;
   onHide: () => void | null;
   onLoad: () => void | null;
   constructor(params?: TProps) {
     super(params);
   }
-  backgroundColor: ColorAndroid;
   protected init(): void {
     this.drawerLayoutParams = new NativeDrawerLayout.LayoutParams(-1, -1);
     this.drawerLayoutParams.gravity = 3; // Gravity.LEFT
@@ -54,8 +54,10 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this._layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
     this._layout.nativeObject.setFitsSystemWindows(true);
     this._enabled = false;
-    this.backgroundColor = new ColorAndroid();
+    this.isSliderDrawerAttached = false;
+    this.backgroundColor = ColorAndroid.WHITE;
     this._state = SliderDrawerAndroid.State.CLOSED;
+    super.init();
   }
   protected createNativeObject() {
     return null;
