@@ -18,18 +18,6 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
   private _onFinishCallback: () => void;
   constructor(params?: TProps) {
     super(params);
-    this.nativeObject.onItemReady = () => {
-      this.onReady?.();
-      this.emit('ready');
-    };
-    this.nativeObject.AVPlayerItemDidPlayToEndTime = () => {
-      this.onFinish?.();
-      this.emit(SoundEvents.Finish);
-      if (this.isLooping) {
-        this.seekTo(0);
-        this.play();
-      }
-    };
   }
   get onReady() {
     return this._onReadyCallback;
@@ -68,6 +56,20 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
   set isLooping(isLooping: boolean) {
     this._isLooping = isLooping;
   }
+  addCallbackFunction() {
+    this.nativeObject.onItemReady = () => {
+      this.onReady?.();
+      this.emit('ready');
+    };
+    this.nativeObject.AVPlayerItemDidPlayToEndTime = () => {
+      this.onFinish?.();
+      this.emit(SoundEvents.Finish);
+      if (this.isLooping) {
+        this.seekTo(0);
+        this.play();
+      }
+    };
+  }
   loadURL(value: string) {
     const url = __SF_NSURL.URLWithString(value);
     this.avPlayerItem = __SF_AVPlayerItem.createFromURL(url);
@@ -76,6 +78,7 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
       this.nativeObject.replaceCurrentItem(this.avPlayerItem);
     } else {
       this.nativeObject = new __SF_AVPlayer(this.avPlayerItem);
+      this.addCallbackFunction();
     }
     this.nativeObject.addObserver();
   }
@@ -88,6 +91,7 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
       this.nativeObject.replaceCurrentItem(this.avPlayerItem);
     } else {
       this.nativeObject = new __SF_AVPlayer(this.avPlayerItem);
+      this.addCallbackFunction();
     }
     this.nativeObject.addObserver();
   }
