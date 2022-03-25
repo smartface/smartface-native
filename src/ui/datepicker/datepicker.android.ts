@@ -5,15 +5,20 @@ const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class DatePickerAndroid extends AbstractDatePicker {
-  private _onDateSelected: IDatePicker['onDateSelected'];
-  private _onCancelled: IDatePicker['onCancelled'];
+  onDateSelected: IDatePicker['onDateSelected'];
+  onCancelled: IDatePicker['onCancelled'];
   static Android = {
     Style
   };
   createNativeObject(params: Partial<IDatePicker> = {}) {
     const androidStyle = params?.android?.style || DatePickerAndroid.Android.Style.DEFAULT;
     const today = new Date();
-    return new NativeDatePickerDialog(
+    this.addAndroidProps({
+      get style() {
+        return androidStyle;
+      }
+    });
+    const nativeObject = new NativeDatePickerDialog(
       AndroidConfig.activity,
       androidStyle,
       NativeDatePickerDialog.OnDateSetListener.implement({
@@ -27,17 +32,7 @@ export default class DatePickerAndroid extends AbstractDatePicker {
       today.getMonth(),
       today.getDate()
     );
-  }
-  constructor(params: Partial<IDatePicker> = {}) {
-    super(params);
-    const androidStyle = params?.android?.style || DatePickerAndroid.Android.Style.DEFAULT;
-    this.addAndroidProps({
-      get style() {
-        return androidStyle;
-      }
-    });
-
-    this.nativeObject.setOnCancelListener(
+    nativeObject.setOnCancelListener(
       NativeDialogInterface.OnCancelListener.implement({
         onCancel: (dialogInterface: any) => {
           this.emit('cancelled');
@@ -45,6 +40,10 @@ export default class DatePickerAndroid extends AbstractDatePicker {
         }
       })
     );
+    return nativeObject;
+  }
+  constructor(params: Partial<IDatePicker> = {}) {
+    super(params);
   }
 
   show() {

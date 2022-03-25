@@ -130,33 +130,19 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
     throw new Error('Method not implemented.');
   }
 
-  get loopCount(): number {
-    throw new Error('Method not implemented.');
-  }
-  set loopCount(value: number) {
-    throw new Error('Method not implemented.');
-  }
-  get frameCount(): number {
-    throw new Error('Method not implemented.');
-  }
-  get posterImage(): Image {
-    throw new Error('Method not implemented.');
-  }
-  get instrinsicSize(): Size {
-    throw new Error('Method not implemented.');
-  }
-  toBlob(): IBlob | null {
-    throw new Error('Method not implemented.');
-  }
+  abstract get loopCount(): number;
+  abstract set loopCount(value: number);
+  abstract get frameCount(): number;
+  abstract get posterImage(): Image;
+  abstract get instrinsicSize(): Size;
+  abstract toBlob(): IBlob | null;
   static get android(): AndroidProps | undefined {
     throw new Error('Method not implemented.');
   }
   static get ios(): iOSProps | undefined {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject() {
-    throw new Error('Method not implemented.');
-  }
+  protected abstract createNativeObject(params?: Partial<AbstractGifImage>): any;
 }
 
 /**
@@ -180,7 +166,29 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
  *     myPage.layout.addChild(myGifImageView);
  *
  */
-class GifImageImpl extends AbstractGifImage {}
+class GifImageImpl extends AbstractGifImage {
+  get loopCount(): number {
+    throw new Error('Method not implemented.');
+  }
+  set loopCount(value: number) {
+    throw new Error('Method not implemented.');
+  }
+  get frameCount(): number {
+    throw new Error('Method not implemented.');
+  }
+  get posterImage(): Image {
+    throw new Error('Method not implemented.');
+  }
+  get instrinsicSize(): Size {
+    throw new Error('Method not implemented.');
+  }
+  toBlob(): IBlob | null {
+    throw new Error('Method not implemented.');
+  }
+  protected createNativeObject(params?: Partial<AbstractGifImage>) {
+    throw new Error('Method not implemented.');
+  }
+}
 const GifImage: typeof GifImageImpl = require(`./gifimage.${Device.deviceOS.toLowerCase()}`).default;
 type GifImage = GifImageImpl;
 

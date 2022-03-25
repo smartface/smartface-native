@@ -10,19 +10,21 @@ import { Size } from '../../primitive/size';
 import IBlob from '../../global/blob/blob';
 
 export default class GifImageAndroid extends AbstractGifImage {
-  private _content: File | Blob;
+  protected createNativeObject(params?: Partial<AbstractGifImage>) {
+    const nativeObject = params?.android?.drawable || null;
+    this._content = params?.android?.content || null;
+    return nativeObject;
+  }
+  private _content: File | Blob | null;
   private _seekPosition: number;
   private _speed: number;
   constructor(params: Partial<IGifImage> = {}) {
     super(params);
-
-    params?.android?.drawable && (this.nativeObject = params.android.drawable);
-    params?.android?.content && (this._content = params.android.content);
   }
 
   static createFromFile(path: string, width?: number, height?: number) {
     const file: File | undefined = typeof path === 'string' ? new File({ path }) : undefined;
-    if (file && file.nativeObject) {
+    if (file?.nativeObject) {
       return new GifImageAndroid({
         android: {
           drawable: new NativeGifDrawable(file.nativeObject),

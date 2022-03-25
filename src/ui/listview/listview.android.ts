@@ -402,6 +402,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
       this.nItemTouchHelper.attachToRecyclerView(this.nativeInner);
     }
   }
+
   get rowHeight() {
     return this._rowHeight;
   }

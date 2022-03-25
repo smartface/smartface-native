@@ -5,12 +5,17 @@ import Blob from '../../global/blob';
 import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
 import { Size } from '../../primitive/size';
 import ImageiOS from '../image/image.ios';
+import IBlob from '../../global/blob/blob';
 
 export default class GifImageIOS extends AbstractGifImage {
+  toBlob(): IBlob | null {
+    throw new Error('Method not implemented.');
+  }
+  protected createNativeObject(params: Partial<IGifImage>) {
+    return params.nativeObject;
+  }
   constructor(params: Partial<IGifImage> = {}) {
     super(params);
-
-    this.nativeObject = params.nativeObject;
   }
 
   static createFromFile(path: string): GifImageIOS {

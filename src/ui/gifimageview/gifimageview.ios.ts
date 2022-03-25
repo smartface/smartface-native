@@ -1,6 +1,6 @@
 import { GifImageViewEvents } from './gifimageview-events';
 import ImageViewIOS from '../imageview/imageview.ios';
-import { IGifImageView } from '.';
+import { IGifImageView } from './gifimageview';
 import GifImage from '../gifimage';
 import IImage from '../image';
 import ImageiOS from '../image/image.ios';

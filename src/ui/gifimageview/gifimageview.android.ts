@@ -1,4 +1,4 @@
-import { IGifImageView } from '.';
+import { IGifImageView } from './gifimageview';
 import GifImage from '../gifimage';
 import ImageAndroid from '../image/image.android';
 import ImageViewAndroid from '../imageview/imageview.android';
@@ -6,9 +6,6 @@ import { GifImageViewEvents } from './gifimageview-events';
 
 export default class GifImageViewAndroid<TEvent extends string = GifImageViewEvents> extends ImageViewAndroid<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifImage: GifImage;
-  createNativeObject() {
-    return null;
-  }
   constructor(params: Partial<IGifImageView> = {}) {
     super(params);
   }

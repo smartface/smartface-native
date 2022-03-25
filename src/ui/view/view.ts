@@ -1000,3 +1000,10 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   masksToBounds: boolean;
   maskedBorders: Border[];
 }
+
+type View<
+  TEvent extends string = ViewEvents,
+  TNative extends { [key: string]: any } = { [key: string]: any },
+  TMobile extends WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps> = WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps>
+> = IView<TEvent, TNative, TMobile>;
+export default View;
