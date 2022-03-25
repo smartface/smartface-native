@@ -4,8 +4,6 @@ import { MenuItemEvents } from './menuitem-events';
 
 export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements IMenuItem {
   protected createNativeObject() {
-    this._title = '';
-    this._style = Style.DEFAULT;
     return null;
   }
   static Styles = {
@@ -13,11 +11,13 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     CANCEL: Style.CANCEL,
     DESTRUCTIVE: Style.DESTRUCTIVE
   };
-  private _style: Style;
   private _title: string;
-  constructor(params?: Partial<MenuItem>) {
+  private _style: Style;
+  constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addIOSProps(this.getIOSProps());
+    this._title = params?.title || '';
+    this._style = params?.ios?.style || Style.DEFAULT;
   }
 
   private getIOSProps() {

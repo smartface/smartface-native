@@ -1,7 +1,7 @@
 import { EventEmitter, IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
 
@@ -76,7 +76,7 @@ export interface MenuItemIOSProps {
  */
 export interface IMenuItem<TEvent extends string = MenuItemEvents, TProps extends MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps> = MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps>>
   extends IEventEmitter<TEvent | MenuItemEvents>,
-    INativeComponent<TProps> {
+    INativeMobileComponent<any, TProps> {
   /**
    * Gets/sets the title of a menu item.
    *
@@ -86,26 +86,6 @@ export interface IMenuItem<TEvent extends string = MenuItemEvents, TProps extend
    * @since 0.1
    */
   title: string;
-  android: Partial<{
-    /**
-     * Gets/sets the color of a menu item title.
-     *
-     * @property {UI.Color} titleColor
-     * @android
-     * @since 1.1.8
-     */
-    titleColor: Color | undefined;
-  }>;
-  ios: Partial<{
-    /**
-     * Gets/sets the style of a menu item.
-     *
-     * @property {UI.MenuItem.ios.Style} style
-     * @ios
-     * @since 1.1.8
-     */
-    style: Style;
-  }>;
   /**
    * This event is called when user selects a menu item.
    *

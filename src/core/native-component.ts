@@ -1,14 +1,11 @@
-import { INativeComponent } from './inative-component';
-
 export default abstract class NativeComponent<TNative = any, TProps extends Record<string, any> = Record<string, any>> {
   protected _nativeObject: any;
   constructor(params?: TProps) {
-    const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
-    const nativeObject = this.createNativeObject(params);
+    const nativeObject = params?.nativeObject || this.createNativeObject(params);
     if (nativeObject) {
       this.nativeObject = nativeObject;
     }
-    rest && Object.assign(this, rest);
+    this.init(params);
   }
 
   get nativeObject(): any {
@@ -19,5 +16,12 @@ export default abstract class NativeComponent<TNative = any, TProps extends Reco
     this._nativeObject = value;
   }
 
-  protected abstract createNativeObject(params?: Record<string, any>): any;
+  protected init(params?: Partial<TProps>): void {
+    const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
+    /**
+     * This might break default assignments in constructor.
+     */
+    rest && Object.assign(this, rest);
+  }
+  protected abstract createNativeObject(params?: Partial<TProps>): any;
 }

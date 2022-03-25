@@ -23,6 +23,19 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   private _onLeftViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   private _onRightViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   private _content: FlexLayout;
+  constructor(params: Partial<IMaterialTextBox> = {}) {
+    super(params);
+  }
+  protected init(params) {
+    this._multiline = !!params.multiline;
+    this._lineCount = params.lineCount || 1;
+
+    this.nativeObject.layer.masksToBounds = false;
+    this.__hintTextColor = Color.create(199, 199, 205);
+
+    this.ios.clearButtonEnabled = false;
+    this.addIOSProps(this.getIOSProps());
+  }
   protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
     if (params.multiline) {
       this.nativeObject = new __SF_MDCMultilineTextField();
@@ -34,18 +47,6 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
       this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(nativeObject);
       return nativeObject;
     }
-  }
-  constructor(params: Partial<IMaterialTextBox> = {}) {
-    super(params);
-
-    this._multiline = !!params.multiline;
-    this._lineCount = params.lineCount || 1;
-
-    this.nativeObject.layer.masksToBounds = false;
-    this.__hintTextColor = Color.create(199, 199, 205);
-
-    this.addIOSProps(this.getIOSProps());
-    this.ios.clearButtonEnabled = false;
   }
 
   private getIOSProps() {
