@@ -2,6 +2,7 @@ import { HTTPRequestMethods, IXHR } from ".";
 
 import NativeEventEmitterComponent from "../../core/native-event-emitter-component";
 import { MobileOSProps } from "../../core/native-mobile-component";
+import { HttpRequestOptions } from "./common";
 import { XHREventsEvents } from "./xhr-events";
 
 export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;
@@ -47,7 +48,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 
     /* HELPER Functions */
-    
+
     private _setReadyState(value: number) {
         if (this._readyState !== value) {
             this._readyState = value;
@@ -75,37 +76,5 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 };
 
-
-
-export type Headers = { [key: string]: string | string[] };
-export interface HttpRequestOptions {
-    url: string;
-    method: string;
-    headers?: Headers;
-    content?: string | FormData | ArrayBuffer;
-    timeout?: number;
-}
-
-export class FormData {
-    private _data: Map<string, any>;
-
-    constructor() {
-        this._data = new Map<string, any>();
-    }
-
-    append(name: string, value: any) {
-        this._data.set(name, value);
-    }
-
-    toString(): string {
-        const arr = new Array<string>();
-
-        this._data.forEach(function (value, name, map) {
-            arr.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-        });
-
-        return arr.join('&');
-    }
-}
 
 export default XHR;
