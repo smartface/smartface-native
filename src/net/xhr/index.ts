@@ -7,6 +7,7 @@ export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'C
 
 interface IXHRMethods {
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
+    setRequestHeader(header: string, value: string);
 
     onload: (...args: any[]) => void;
     onloadend: (...args: any[]) => void;

@@ -17,6 +17,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
     private _options: HttpRequestOptions;
     private _readyState: number;
+    private _sendFlag: boolean;
 
     private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
@@ -45,6 +46,16 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         }
 
         this._setReadyState(XHR.OPENED);
+    }
+
+    public setRequestHeader(header: string, value: string) {
+        if (this._readyState !== XHR.OPENED || this._sendFlag) {
+            throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
+        }
+
+        if (typeof header === 'string' && typeof value === 'string' && this._options.headers) {
+            this._options.headers[header] = value;
+        }
     }
 
     /* HELPER Functions */
