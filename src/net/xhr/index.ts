@@ -5,12 +5,17 @@ import { XHREventsEvents } from './xhr.ios';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
-export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent {
-    timeOut: number;
+interface IXHRMethods {
+    open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
 
+    onload: (...args: any[]) => void;
+    onloadend: (...args: any[]) => void;
+    onreadystatechange: (...args: any[]) => void;
+    
+}
 
-    open(method : HTTPRequestMethods, url : string);
-    send(body : string);
+export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
+
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;
