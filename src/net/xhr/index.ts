@@ -12,6 +12,9 @@ interface IXHRMethods {
     onload: (...args: any[]) => void;
     onloadend: (...args: any[]) => void;
     onreadystatechange: (...args: any[]) => void;
+
+    addEventListener(eventName: XHREventsEvents, handler: Function)
+    removeEventListener(eventName: XHREventsEvents, toDetach: Function)
     
 }
 

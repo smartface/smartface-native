@@ -58,6 +58,26 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         }
     }
 
+    public addEventListener(eventName: XHREventsEvents, handler: Function) {
+        if(Object.values(XHREventsEvents).indexOf(eventName) === -1) {
+            throw new Error("Argument `eventName` type does not match")
+        }
+
+		const handlers = this._listeners.get(eventName) || [];
+		handlers.push(handler);
+		this._listeners.set(eventName, handlers);
+	}
+
+	public removeEventListener(eventName: XHREventsEvents, toDetach: Function) {
+        if(Object.values(XHREventsEvents).indexOf(eventName) === -1) {
+            throw new Error("Argument `eventName` type does not match")
+        }
+
+		let handlers = this._listeners.get(eventName) || [];
+		handlers = handlers.filter((handler) => handler !== toDetach);
+		this._listeners.set(eventName, handlers);
+	}
+
     /* HELPER Functions */
 
     private _setReadyState(value: number) {
