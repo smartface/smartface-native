@@ -23,7 +23,7 @@ interface IXHRMethods {
 
     addEventListener(eventName: XHREventsEvents, handler: Function)
     removeEventListener(eventName: XHREventsEvents, toDetach: Function)
-    
+
 }
 
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
@@ -32,6 +32,7 @@ export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, 
     responseText: String
     responseType: ResponseTypes
     responseURL?: string
+    status: number
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;

@@ -28,6 +28,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     private _sendFlag: boolean;
     private _responseType: ResponseTypes = 'text';
     private _responseURL?: string
+    private _status: number;
 
     private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
@@ -71,6 +72,10 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
     public get responseURL(): string | undefined {
         return this._responseURL;
+    }
+
+    public get status(): number {
+        return this._status;
     }
 
     public set responseType(value: ResponseTypes) {
@@ -165,7 +170,9 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     /* HELPER Functions */
 
     public _handleResponse(response: HttpResponse) {
+        this._status = response.statusCode
         this._responseURL = response.responseURL
+
         this._setReadyState(XHR.HEADERS_RECEIVED);
         this._setReadyState(XHR.LOADING);
 
@@ -208,6 +215,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     private resetLocalStates() {
         this._response = null;
         this._responseURL = undefined;
+        this._status = 0;
     }
 };
 
