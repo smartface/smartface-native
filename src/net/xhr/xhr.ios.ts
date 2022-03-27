@@ -25,6 +25,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     private _options: HttpRequestOptions;
     private _readyState: number;
     private _response: any;
+    private _headers: any;
     private _errorFlag: boolean;
     private _sendFlag: boolean;
     private _responseType: ResponseTypes = 'text';
@@ -93,6 +94,19 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         } else {
             throw new Error(`Response type of '${value}' not supported.`);
         }
+    }
+
+    public getResponseHeader(header: string): string | null {
+        if (typeof header === 'string' && this._readyState > 1 && this._headers && !this._errorFlag) {
+            header = header.toLowerCase();
+            for (const i in this._headers) {
+                if (i.toLowerCase() === header) {
+                    return this._headers[i];
+                }
+            }
+        }
+
+        return null;
     }
 
     public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
@@ -187,6 +201,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
     public _handleResponse(response: HttpResponse) {
         this._status = response.statusCode
+        this._headers = response.headers
         this._responseURL = response.responseURL
 
         this._setReadyState(XHR.HEADERS_RECEIVED);
@@ -241,6 +256,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         this._response = null;
         this._responseURL = undefined;
         this._status = 0;
+        this._headers = null;
     }
 };
 
