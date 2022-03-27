@@ -1,12 +1,14 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
+import { ResponseTypes } from './common';
 import { XHREventsEvents } from './xhr.ios';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
 interface IXHRMethods {
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
+    send(data?: any)
     setRequestHeader(header: string, value: string);
 
 
