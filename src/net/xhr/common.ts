@@ -7,6 +7,24 @@ export interface HttpRequestOptions {
     timeout?: number;
 }
 
+export const XMLHttpRequestResponseType = {
+    empty: '',
+    text: 'text',
+    json: 'json',
+    blob: 'blob',
+    arraybuffer: 'arraybuffer',
+} as const;
+
+export type ResponseTypes = ExtractValues<typeof XMLHttpRequestResponseType>;
+
+
+export interface HttpResponse {
+    statusCode: number;
+    headers: Headers;
+    //TODO: Add JSON, Blob, ArrayBuffer support
+    content?: String;
+}
+
 export class FormData {
     private _data: Map<string, any>;
 

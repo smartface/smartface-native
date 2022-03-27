@@ -22,6 +22,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
     private _options: HttpRequestOptions;
     private _readyState: number;
+    private _response: any;
     private _sendFlag: boolean;
 
     private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
@@ -35,6 +36,34 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public get readyState(): number {
 		return this._readyState;
 	}
+
+    public get response(): any {
+        if (this._responseType === XMLHttpRequestResponseType.empty || this._responseType === XMLHttpRequestResponseType.text) {
+            if (this._readyState !== XHR.LOADING && this._readyState !== XHR.DONE) {
+                return '';
+            } else {
+                return this._response;
+            }
+        } else {
+            if (this._readyState !== XHR.DONE) {
+                return null;
+            } else {
+                return this._response;
+            }
+        }
+    }
+
+    public get responseType(): ResponseTypes {
+        return this._responseType;
+    }
+
+    public set responseType(value: ResponseTypes) {
+        if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
+            this._responseType = value;
+        } else {
+            throw new Error(`Response type of '${value}' not supported.`);
+        }
+    }
 
     public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
         if (typeof async === 'boolean' && !async) {

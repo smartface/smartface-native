@@ -26,6 +26,8 @@ interface IXHRMethods {
 
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
     readyState: number
+    response: String
+    responseType: ResponseTypes
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;
