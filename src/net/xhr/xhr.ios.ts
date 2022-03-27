@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from ".";
 
 import NativeEventEmitterComponent from "../../core/native-event-emitter-component";
 import { MobileOSProps } from "../../core/native-mobile-component";
-import { HttpRequestOptions, HttpResponse, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
+import { HttpErrorResponse, HttpRequestOptions, HttpResponse, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
 import { XHREventsEvents } from "./xhr-events";
 
 export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;
@@ -64,7 +64,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             throw new Error("Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`);
         }
 
-        return this._response ? this._response : '';
+        return (this._response && !this._errorFlag) ? this._response : '';
     }
 
     public get responseType(): ResponseTypes {
@@ -78,14 +78,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public get status(): number {
         return this._status;
     }
-    
-    public get statusText(): string {
-		if (this._readyState === XHR.UNSENT || this._readyState === XHR.OPENED || this._errorFlag) {
-			return '';
-		}
 
-		return statuses[this._status];
-	}
+    public get statusText(): string {
+        if (this._readyState === XHR.UNSENT || this._readyState === XHR.OPENED || this._errorFlag) {
+            return '';
+        }
+
+        return statuses[this._status];
+    }
 
     public set responseType(value: ResponseTypes) {
         if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
@@ -141,8 +141,15 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
         this.nativeObject.createTask(JSON.stringify(params), (response: HttpResponse) => {
             this._handleResponse(response);
-        }, (error) => {
-            console.log('error occured..', error)
+        }, (error: HttpErrorResponse) => {
+            this._errorFlag = true;
+            this._sendFlag = false;
+
+            // -1004 apple specific code for timeout error
+            if (error.errorCode == -1004) {
+                this.emitEvent("timeout");
+            }
+            this._setRequestError("error", error);
         })
     }
 
@@ -206,6 +213,15 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             this.emitEvent('load');
             this.emitEvent('loadend');
         }
+    }
+
+    private _setRequestError(eventName: XHREventsEvents, error?: any) {
+        this._readyState = XHR.DONE;
+        this._response = error;
+
+        this.emitEvent('readystatechange');
+        this.emitEvent(eventName, error);
+        this.emitEvent('loadend');
     }
 
     private emitEvent(eventName: XHREventsEvents, ...args: Array<any>) {

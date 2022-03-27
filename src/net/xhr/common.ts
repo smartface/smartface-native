@@ -26,6 +26,12 @@ export interface HttpResponse {
     responseURL?: string
 }
 
+export interface HttpErrorResponse {
+    errorCode: number;
+    errorMessage: string
+}
+
+
 export class FormData {
     private _data: Map<string, any>;
 
