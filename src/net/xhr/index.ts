@@ -33,6 +33,7 @@ export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, 
     responseType: ResponseTypes
     responseURL?: string
     status: number
+    statusText: string
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;

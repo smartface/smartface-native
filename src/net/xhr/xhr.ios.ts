@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from ".";
 
 import NativeEventEmitterComponent from "../../core/native-event-emitter-component";
 import { MobileOSProps } from "../../core/native-mobile-component";
-import { HttpRequestOptions, HttpResponse, ResponseTypes, XMLHttpRequestResponseType } from "./common";
+import { HttpRequestOptions, HttpResponse, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
 import { XHREventsEvents } from "./xhr-events";
 
 export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;
@@ -25,6 +25,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     private _options: HttpRequestOptions;
     private _readyState: number;
     private _response: any;
+    private _errorFlag: boolean;
     private _sendFlag: boolean;
     private _responseType: ResponseTypes = 'text';
     private _responseURL?: string
@@ -77,6 +78,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public get status(): number {
         return this._status;
     }
+    
+    public get statusText(): string {
+		if (this._readyState === XHR.UNSENT || this._readyState === XHR.OPENED || this._errorFlag) {
+			return '';
+		}
+
+		return statuses[this._status];
+	}
 
     public set responseType(value: ResponseTypes) {
         if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
