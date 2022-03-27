@@ -88,6 +88,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         return statuses[this._status];
     }
 
+    public set timeout(value: number) {
+        if (this._readyState !== XHR.OPENED || this._sendFlag) {
+            throw new Error("Failed to set 'timeout' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
+        }
+
+        this._options.timeout = value / 1000
+    }
+
     public set responseType(value: ResponseTypes) {
         if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
             this._responseType = value;
@@ -95,9 +103,23 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             throw new Error(`Response type of '${value}' not supported.`);
         }
     }
+    
+    getResponseHeaders(): string {
+        if (this._readyState < XHR.HEADERS_RECEIVED || this._errorFlag) {
+			return '';
+		}
+
+		let result = '';
+
+		for (const i in this._headers) {
+			result += i + ': ' + this._headers[i] + '\r\n';
+		}
+
+		return result.substr(0, result.length - 2);
+    }
 
     public getResponseHeader(header: string): string | null {
-        if (typeof header === 'string' && this._readyState > 1 && this._headers && !this._errorFlag) {
+        if (typeof header === 'string' && this._readyState > XHR.OPENED && this._headers && !this._errorFlag) {
             header = header.toLowerCase();
             for (const i in this._headers) {
                 if (i.toLowerCase() === header) {
@@ -149,7 +171,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             url: this._options.url,
             method: this._options.method,
             headers: this._options.headers && Object.keys(this._options.headers).length > 0 ? this._options.headers : undefined,
-            timeout: this._options.timeout,
+            timeout: this._options.timeout ? this._options.timeout / 1000 : undefined,
             responseType: this.responseType
         };
 
