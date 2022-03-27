@@ -32,6 +32,10 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         return new __SF_XMLHttpRequest();
     }
 
+    public get readyState(): number {
+		return this._readyState;
+	}
+
     public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
         if (typeof async === 'boolean' && !async) {
             throw new Error('Every request must be asynchronous')
