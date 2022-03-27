@@ -29,6 +29,7 @@ interface IXHRMethods {
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
     readyState: number
     response: String
+    responseText: String
     responseType: ResponseTypes
 }
 

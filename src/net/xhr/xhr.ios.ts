@@ -56,6 +56,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         }
     }
 
+    public get responseText(): string {
+		if (this._responseType !== XMLHttpRequestResponseType.empty && this._responseType !== XMLHttpRequestResponseType.text) {
+			throw new Error("Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`);
+		}
+        
+		return this._response ? this._response : '';
+	}
+
     public get responseType(): ResponseTypes {
         return this._responseType;
     }
