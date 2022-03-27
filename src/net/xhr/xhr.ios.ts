@@ -11,9 +11,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public static OPENED = 1;
     public static DONE = 4;
 
+    public onabort: (...args: any[]) => void;
+    public onerror: (...args: any[]) => void;
     public onload: (...args: any[]) => void;
 	public onloadend: (...args: any[]) => void;
+    public onloadstart: (...args: any[]) => void;
+    public onprogress: (...args: any[]) => void;
 	public onreadystatechange: (...args: any[]) => void;
+    public ontimeout: (...args: any[]) => void;
 
     private _options: HttpRequestOptions;
     private _readyState: number;

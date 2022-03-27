@@ -9,9 +9,15 @@ interface IXHRMethods {
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
     setRequestHeader(header: string, value: string);
 
+
+    onabort: (...args: any[]) => void;
+    onerror: (...args: any[]) => void;
     onload: (...args: any[]) => void;
     onloadend: (...args: any[]) => void;
+    onloadstart: (...args: any[]) => void;
+    onprogress: (...args: any[]) => void;
     onreadystatechange: (...args: any[]) => void;
+    ontimeout: (...args: any[]) => void;
 
     addEventListener(eventName: XHREventsEvents, handler: Function)
     removeEventListener(eventName: XHREventsEvents, toDetach: Function)
