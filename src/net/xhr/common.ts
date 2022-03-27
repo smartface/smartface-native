@@ -23,6 +23,7 @@ export interface HttpResponse {
     headers: Headers;
     //TODO: Add JSON, Blob, ArrayBuffer support
     content?: String;
+    responseURL?: string
 }
 
 export class FormData {
