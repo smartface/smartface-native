@@ -16,10 +16,10 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public onabort: (...args: any[]) => void;
     public onerror: (...args: any[]) => void;
     public onload: (...args: any[]) => void;
-	public onloadend: (...args: any[]) => void;
+    public onloadend: (...args: any[]) => void;
     public onloadstart: (...args: any[]) => void;
     public onprogress: (...args: any[]) => void;
-	public onreadystatechange: (...args: any[]) => void;
+    public onreadystatechange: (...args: any[]) => void;
     public ontimeout: (...args: any[]) => void;
 
     private _options: HttpRequestOptions;
@@ -59,12 +59,12 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 
     public get responseText(): string {
-		if (this._responseType !== XMLHttpRequestResponseType.empty && this._responseType !== XMLHttpRequestResponseType.text) {
-			throw new Error("Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`);
-		}
-        
-		return this._response ? this._response : '';
-	}
+        if (this._responseType !== XMLHttpRequestResponseType.empty && this._responseType !== XMLHttpRequestResponseType.text) {
+            throw new Error("Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`);
+        }
+
+        return this._response ? this._response : '';
+    }
 
     public get responseType(): ResponseTypes {
         return this._responseType;
@@ -148,16 +148,16 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 
     public addEventListener(eventName: XHREventsEvents, handler: Function) {
-        if(Object.values(XHREventsEvents).indexOf(eventName) === -1) {
+        if (Object.values(XHREventsEvents).indexOf(eventName) === -1) {
             throw new Error("Argument `eventName` type does not match")
         }
 
-		const handlers = this._listeners.get(eventName) || [];
-		handlers.push(handler);
-		this._listeners.set(eventName, handlers);
-	}
+        const handlers = this._listeners.get(eventName) || [];
+        handlers.push(handler);
+        this._listeners.set(eventName, handlers);
+    }
 
-	public removeEventListener(eventName: XHREventsEvents, toDetach: Function) {
+    public removeEventListener(eventName: XHREventsEvents, toDetach: Function) {
         if (Object.values(XHREventsEvents).indexOf(eventName) === -1) {
             throw new Error("Argument `eventName` type does not match")
         }
