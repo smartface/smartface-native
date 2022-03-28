@@ -181,7 +181,7 @@ export class HttpRequest extends NativeComponent {
   protected createNativeObject() {
     return null;
   }
-  constructor(params: { nativeObject?: any }) {
+  constructor(params?: { nativeObject?: any }) {
     super(params);
     this.nativeObject = params?.nativeObject;
   }

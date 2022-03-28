@@ -172,10 +172,10 @@ export default class HttpAndroid extends HttpBase {
       params?.onError?.({
         message: 'No network connection'
       });
-      return new HttpRequest({ nativeObject: this.nativeObject });
+      return new HttpRequest();
     }
 
-    const request = new HttpRequest({ nativeObject: this.nativeObject });
+    const request = new HttpRequest();
     const callback = SFHttpCallback.getCallback({
       onFailure: (msg) => {
         params?.onError?.({
