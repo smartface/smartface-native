@@ -5,18 +5,17 @@ class TimerIOS extends TimerBase {
   protected createNativeObject(): any {
     return null;
   }
-  static createTimer(params?: Partial<TimerParams>) {
+  static createTimer(params: TimerParams) {
     const timer = new __SF_Timer();
-    if (params?.delay && params.repeat)
-      timer.scheduledTimer(
-        params.delay / 1000,
-        function () {
-          if (params.task) {
-            params.task();
-          }
-        },
-        params.repeat
-      );
+    timer.scheduledTimer(
+      params.delay / 1000,
+      function () {
+        if (params.task) {
+          params.task();
+        }
+      },
+      params.repeat!
+    );
 
     TimerIOS.timerArray.push(timer);
     return timer as unknown as TimerIOS;
