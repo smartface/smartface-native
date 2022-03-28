@@ -120,12 +120,9 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
   onFailure: (e: { code: number; message: string }) => void;
 }
 
-export declare class WebSocketBase<TEvent extends string = WebSocketEvents, TMobile extends MobileOSProps = MobileOSProps>
-  extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any, TMobile>
-  implements IWebSocket
-{
+export declare class WebSocketBase<TEvent extends string = WebSocketEvents> extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any> implements IWebSocket {
   protected createNativeObject(params?: Partial<Record<string, any>>);
-  constructor(params?: TMobile);
+  constructor(params?: Partial<IWebSocket>);
   onOpen: () => void;
   onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;
   onClose: (e: { code: number; reason: string }) => void;
