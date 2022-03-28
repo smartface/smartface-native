@@ -1,10 +1,9 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
-import Color from '../color';
 import FlexLayout from '../flexlayout';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
-import { AbstractViewGroup, IViewGroup } from '../viewgroup';
+import { AbstractViewGroup, IViewGroup } from '../viewgroup/viewgroup';
 import ViewGroupIOS from '../viewgroup/viewgroup.ios';
 import { ScrollViewEvents } from './scrollview-events';
 import { ScrollViewAlign } from './scrollviewalign';
