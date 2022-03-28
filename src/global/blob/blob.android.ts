@@ -16,8 +16,8 @@ class BlobAndroid extends NativeComponent implements IBlob {
     const nativeObject = new NativeByteArrayOutputStream();
     if (params?.parts && params.properties?.type) {
       this._type = params.properties.type;
-      const newParts = Array.isArray(params.parts) ? array(params.parts) : params.parts;
-      nativeObject.write(newParts, 'byte');
+      const newParts = Array.isArray(params.parts) ? array(params.parts, 'byte') : params.parts;
+      nativeObject.write(newParts);
 
       // TODO: This line added for AND-3357.
       // But investigate whether parts property is needeed.
@@ -74,6 +74,9 @@ class BlobAndroid extends NativeComponent implements IBlob {
 
   get parts() {
     return this._parts;
+  }
+  set parts(value) {
+    this._parts = value;
   }
 }
 

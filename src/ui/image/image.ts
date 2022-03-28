@@ -406,6 +406,8 @@ export abstract class AbstractImage<
     throw new Error('Method not implemented.');
   }
 
+  static Format: typeof Format;
+
   /**
    * Used privately inside framework
    * Creates an image object from file path or image.

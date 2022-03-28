@@ -235,4 +235,5 @@ export default class ImageIOS<
       return this;
     }
   };
+  static Format = Format;
 }

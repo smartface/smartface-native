@@ -26,7 +26,7 @@ export default class ImageAndroid<
   }
 
   private _systemIcon: IImage['android']['systemIcon'];
-
+  static Format = Format;
   constructor(params: Partial<TProps>) {
     super(params);
     if (typeof params !== 'object') {

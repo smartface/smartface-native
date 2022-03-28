@@ -2,10 +2,10 @@ import NativeComponent from '../../core/native-component';
 import IBlob from './blob';
 
 export default class BlobIOS extends NativeComponent implements IBlob {
-  protected createNativeObject(params?: { parts: string[] }) {
-    return params?.parts;
+  protected createNativeObject(parts) {
+    return parts;
   }
-  constructor(parts: string[]) {
+  constructor(parts: string[], properties?: { type: string }) {
     super(parts);
   }
   type: string;

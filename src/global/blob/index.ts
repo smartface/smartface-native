@@ -1,7 +1,7 @@
 import { AbstractBlob } from './blob';
 
 declare class BlobImpl extends AbstractBlob {
-  constructor(params?: Partial<AbstractBlob>, properties?: { type: string });
+  constructor(parts?: Partial<AbstractBlob>, properties?: { type: string });
   get type(): string;
   get size(): number;
   slice(start: number, end: number): AbstractBlob;
