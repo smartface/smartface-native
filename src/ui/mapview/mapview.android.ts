@@ -39,40 +39,63 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   onCreate: () => void;
   protected savedBundles: any;
   protected activityIntent: any;
-  protected _borderColor: Color = ColorAndroid.WHITE;
-  private lazyLoading = true; // lazyLoading is true by default after smartface-native 3.0.2 version.
-  private _font: FontAndroid = FontAndroid.create(FontAndroid.DEFAULT, 20, FontAndroid.BOLD);
-  private _fillColor = ColorAndroid.RED;
-  private _textColor = ColorAndroid.WHITE;
-  private _nativeCustomMarkerRenderer: Cluster | null = null;
+  protected _borderColor: Color;
+  private lazyLoading: boolean; // lazyLoading is true by default after smartface-native 3.0.2 version.
+  private _font: FontAndroid;
+  private _fillColor: ColorAndroid;
+  private _textColor: ColorAndroid;
+  private _nativeCustomMarkerRenderer: Cluster | null;
   private _nativeGoogleMap: any;
-  private _clusterEnabled: IMapView['clusterEnabled'] = false;
-  private _pins: PinAndroid[] = [];
-  private _pendingPins: PinAndroid[] = [];
-  private _isMoveStarted = false;
+  private _clusterEnabled: IMapView['clusterEnabled'];
+  private _pins: PinAndroid[];
+  private _pendingPins: PinAndroid[];
+  private _isMoveStarted: boolean;
   private _nativeClusterManager: any;
-  private _zoomLevel: IMapView['zoomLevel'] = 10;
-  private _centerLocation: IMapView['centerLocation'] = DefaultLocation;
-  private _compassEnabled: IMapView['compassEnabled'] = true;
-  private _rotateEnabled: IMapView['rotateEnabled'] = true;
-  private _scrollEnabled: IMapView['scrollEnabled'] = true;
-  private _zoomEnabled: IMapView['zoomEnabled'] = true;
-  private _userLocationEnabled: IMapView['userLocationEnabled'] = false;
-  private _type: IMapView['type'] = MapViewType.NORMAL;
-  private _maxZoomLevel: IMapView['maxZoomLevel'] = 19;
-  private _minZoomLevel: IMapView['minZoomLevel'] = 0;
-  private _locationButtonVisible: IMapView['android']['locationButtonVisible'] = true;
+  private _zoomLevel: IMapView['zoomLevel'];
+  private _centerLocation: IMapView['centerLocation'];
+  private _compassEnabled: IMapView['compassEnabled'];
+  private _rotateEnabled: IMapView['rotateEnabled'];
+  private _scrollEnabled: IMapView['scrollEnabled'];
+  private _zoomEnabled: IMapView['zoomEnabled'];
+  private _userLocationEnabled: IMapView['userLocationEnabled'];
+  private _type: IMapView['type'];
+  private _maxZoomLevel: IMapView['maxZoomLevel'];
+  private _minZoomLevel: IMapView['minZoomLevel'];
+  private _locationButtonVisible: IMapView['android']['locationButtonVisible'];
   private _pinArray: Record<string, PinAndroid> = {};
   createNativeObject() {
-    this.lazyLoading = true;
     return new NativeMapView(AndroidConfig.activity);
+  }
+  protected init(params?: Partial<IMapView>): void {
+    this._minZoomLevel = 0;
+    this._maxZoomLevel = 19;
+    this._type = MapViewType.NORMAL;
+    this._centerLocation = DefaultLocation;
+    this._compassEnabled = true;
+    this._rotateEnabled = true;
+    this._scrollEnabled = true;
+    this._zoomEnabled = true;
+    this._userLocationEnabled = false;
+    this._zoomLevel = 10;
+    this._isMoveStarted = false;
+    this._clusterEnabled = false;
+    this._pins = [];
+    this._pendingPins = [];
+    this._nativeCustomMarkerRenderer = null;
+    this._locationButtonVisible = true;
+    this.lazyLoading = true; // lazyLoading is true by default after smartface-native 3.0.2 version.
+    this._borderColor = ColorAndroid.WHITE;
+    this._font = FontAndroid.create(FontAndroid.DEFAULT, 20, FontAndroid.BOLD);
+    this._fillColor = ColorAndroid.RED;
+    this._textColor = ColorAndroid.WHITE;
+    this.lazyLoading = true;
+    this.activityIntent = AndroidConfig.activity.getIntent();
+    this.savedBundles = this.activityIntent.getExtras();
+    super.init(params);
+    this.addAndroidProps(this.getAndroidProps());
   }
   constructor(params?: IMapView) {
     super(params);
-    this.activityIntent = AndroidConfig.activity.getIntent();
-    this.savedBundles = this.activityIntent.getExtras();
-
-    this.addAndroidProps(this.getandroidProps());
   }
   getVisiblePins(): PinAndroid[] {
     const result: PinAndroid[] = [];
@@ -267,7 +290,6 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
               }
             })
           );
-
           this._zoomLevel && this.setCenterLocationWithZoomLevel(this._centerLocation, this._zoomLevel, false);
           this.compassEnabled = this._compassEnabled;
           this.rotateEnabled = this._rotateEnabled;
@@ -294,7 +316,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
       })
     );
   }
-  private getandroidProps() {
+  private getAndroidProps() {
     const self = this;
     return {
       prepareMap() {

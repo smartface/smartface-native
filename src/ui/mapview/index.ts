@@ -4,7 +4,6 @@ import Font from '../font';
 import Pin from './pin';
 import { MapViewEvents } from './mapview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { AbstractFont } from '../font/font';
 import Cluster from './cluster';
 
 /**
@@ -491,7 +490,6 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
 
 export declare class AbstractMapView<TEvent extends string = MapViewEvents> extends AbstractView<TEvent | MapViewEvents, any, IMapView> implements IMapView<TEvent | MapViewEvents> {
   constructor(params?: Partial<IMapView>);
-  zoomEnabled: boolean;
   scrollEnabled: boolean;
   rotateEnabled: boolean;
   compassEnabled: boolean;
@@ -500,14 +498,15 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   clusterFillColor: Color;
   clusterBorderColor: Color;
   clusterTextColor: Color;
-  clusterFont: AbstractFont;
+  clusterFont: Font;
   onClusterPress: (pins: Pin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
-  zoomLevel: number | undefined;
+  readonly zoomLevel: number | undefined;
   minZoomLevel: number;
   maxZoomLevel: number;
-  centerLocation: { latitude: number; longitude: number };
-  visibleRegion:
+  readonly centerLocation: { latitude: number; longitude: number };
+  zoomEnabled: boolean;
+  readonly visibleRegion:
     | {
         topLeft: { latitude: number; longitude: number };
         topRight: { latitude: number; longitude: number };
