@@ -30,8 +30,6 @@ export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, T
       throw new Error('url must be initialized.');
     }
 
-    this._url = params.url;
-
     this.createClientAndRequest();
     this.createWebSocketListener();
     this.nativeObject = this._client.newWebSocket(this._request, this._listener);
@@ -44,6 +42,10 @@ export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, T
 
   get url(): string {
     return this._url;
+  }
+
+  set url(value: string) {
+    this._url = value;
   }
 
   createClientAndRequest() {
@@ -108,7 +110,7 @@ export default class WebSocketAndroid<TEvent extends string = WebSocketEvents, T
   }
 
   send(params: Parameters<IWebSocket['send']>['0']) {
-    if (this.nativeObject && params) {
+    if (!this.nativeObject || !params) {
       throw new Error('WebSocket can send string or Blob.');
     }
     let data = '';
