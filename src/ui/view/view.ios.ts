@@ -13,36 +13,25 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     return new __SF_UIView();
   }
   protected _uniqueId: string;
-  protected _maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
-  protected _nativeObject: any;
-  private _rotation: number = 0;
-  private _rotationX: number = 0;
-  private _rotationY: number = 0;
-  private _scale: Point2D = {
-    x: 1.0,
-    y: 1.0
-  };
+  protected _maskedBorders: number[];
+  private _rotation: number;
+  private _rotationX: number;
+  private _rotationY: number;
+  private _scale: Point2D;
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: ViewIOS;
-  static Border = {
-    TOP_LEFT: 1 << 0,
-    TOP_RIGHT: 1 << 1,
-    BOTTOM_LEFT: 1 << 2,
-    BOTTOM_RIGHT: 1 << 3
-  };
 
   constructor(params?: Partial<TProps>) {
     super(params);
     this._uniqueId = this.nativeObject.uuid;
 
-    // Defaults
+    this._maskedBorders = [ViewIOS.Border.TOP_LEFT, ViewIOS.Border.TOP_RIGHT, ViewIOS.Border.BOTTOM_LEFT, ViewIOS.Border.BOTTOM_RIGHT];
     this.nativeObject.yoga.isEnabled = true;
     this.nativeObject.layer.masksToBounds = true;
     this.nativeObject.layer.rotationZ = 0;
     this.nativeObject.layer.rotationX = 0;
     this.nativeObject.layer.rotationY = 0;
-
     this.nativeObject.onTouch = (e: { point: Point2D }) => {
       const point: Point2D = {
         x: e.point.x ?? null,
@@ -82,6 +71,17 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     };
 
     this.addIOSProps(this.getIOSProperties());
+  }
+
+  protected init(params?: Partial<Record<string, any>>): void {
+    super.init(params);
+    this._rotation = 0;
+    this._rotationX = 0;
+    this._rotationY = 0;
+    this._scale = {
+      x: 1.0,
+      y: 1.0
+    };
   }
   onTouch: (e?: Point2D | undefined) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
@@ -1070,6 +1070,13 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       FORCELEFTTORIGHT: 3,
       FORCERIGHTTOLEFT: 4
     }
+  };
+
+  static Border = {
+    TOP_LEFT: 1 << 0,
+    TOP_RIGHT: 1 << 1,
+    BOTTOM_LEFT: 1 << 2,
+    BOTTOM_RIGHT: 1 << 3
   };
 
   private isInside(frame: __SF_NSRect, point?: Point2D) {

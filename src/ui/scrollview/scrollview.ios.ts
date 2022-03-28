@@ -16,6 +16,17 @@ enum ScrollType {
 }
 
 export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> extends ViewGroupIOS<TEvent | ScrollViewEvents, any, IScrollView> implements IScrollView {
+  onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
+  overScrollMode: OverScrollMode;
+  contentLayout: FlexLayoutIOS;
+  private _frame: __SF_UIView['frame'];
+  private _align: ScrollType;
+  private _autoSizeEnabled: boolean;
+  gradientColorFrameObserver?: (e: any) => void;
+  constructor(params?: IScrollView) {
+    super(params);
+    this.addIOSProps(this.getIOSProps());
+  }
   scrollToEdge(edge: ScrollViewEdge): void {
     if (this._align === ScrollType.HORIZONTAL) {
       if (edge === ScrollViewEdge.LEFT) {
@@ -52,26 +63,29 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       true
     );
   }
-  createNativeObject(): any {
+  private changeContentSize(frame: __SF_UIView['frame']) {
+    this.nativeObject.contentSize = {
+      width: this._align === ScrollType.VERTICAL ? 0 : frame.width,
+      height: this._align === ScrollType.VERTICAL ? frame.height : 0
+    };
+  }
+
+  protected createNativeObject(): any {
     return new __SF_UIScrollView();
   }
-  onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
-  contentLayout: FlexLayoutIOS;
-  private _frame: __SF_UIView['frame'] = { x: 0, y: 0 };
-  private _align: ScrollType;
-  private _autoSizeEnabled: boolean;
-  gradientColorFrameObserver?: (e: any) => void;
-  constructor(params?: IScrollView) {
-    super(params);
+  protected init() {
     this.contentLayout = new FlexLayoutIOS();
+    this.setLayoutProps();
     this.contentLayout.nativeObject.addFrameObserver();
-    this.contentLayout.nativeObject.frameObserveHandler = function (e) {
+    this.contentLayout.nativeObject.frameObserveHandler = (e) => {
       if (!this.autoSizeEnabled) {
         this.changeContentSize(e.frame);
       }
       this.gradientColorFrameObserver?.(e);
     };
     this.nativeObject.addFrameObserver();
+    this._frame = { x: 0, y: 0 };
+    this._align = ScrollType.VERTICAL;
     this.nativeObject.frameObserveHandler = (e) => {
       if (JSON.stringify(this._frame) !== JSON.stringify(e.frame)) {
         this._frame = e.frame;
@@ -84,17 +98,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       this.emit('scroll', params);
       this.onScroll?.(params);
     };
-    this.setLayoutProps();
-    this.addIOSProps(this.getIOSProps());
   }
-
-  private changeContentSize(frame: __SF_UIView['frame']) {
-    this.nativeObject.contentSize = {
-      width: this._align === ScrollType.VERTICAL ? 0 : frame.width,
-      height: this._align === ScrollType.VERTICAL ? frame.height : 0
-    };
-  }
-
   private setLayoutProps() {
     const self = this;
     const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
@@ -324,7 +328,6 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   set autoSizeEnabled(value: boolean) {
     this._autoSizeEnabled = value;
   }
-  overScrollMode: OverScrollMode;
   get align(): ScrollViewAlign {
     if (this._align === ScrollType.HORIZONTAL) {
       return ScrollViewAlign.HORIZONTAL;

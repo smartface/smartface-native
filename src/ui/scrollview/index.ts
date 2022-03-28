@@ -4,8 +4,7 @@ import Color from '../color';
 import FlexLayout from '../flexlayout';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
-import { AbstractViewGroup, IViewGroup } from '../viewgroup/viewgroup';
-import ViewGroupIOS from '../viewgroup/viewgroup.ios';
+import { AbstractViewGroup, IViewGroup, ViewGroupAndroidProps, ViewGroupIOSProps } from '../viewgroup/viewgroup';
 import { ScrollViewEvents } from './scrollview-events';
 import { ScrollViewAlign } from './scrollviewalign';
 
@@ -16,146 +15,155 @@ export enum ScrollViewEdge {
   BOTTOM = 'bottom'
 }
 
-type IScrollViewIOS = ViewGroupIOS &
-  Partial<{
-    decelerationRate: number;
-    /**
-     * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
-     *
-     * @property {Boolean} [scrollEnabled = true]
-     * @ios
-     * @since 3.1.3
-     */
-    scrollEnabled: boolean;
-    /**
-     * Sets/Gets the bounce effect when scrolling.
-     *
-     * @property {Boolean} bounces
-     * @ios
-     * @since 3.2.1
-     */
-    bounces: boolean;
-    /**
-     * The behavior for determining the adjusted content offsets.
-     *
-     * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
-     * @ios
-     * @since 4.0.0
-     */
-    contentInsetAdjustmentBehavior: ContentInsetAdjustment;
-    /**
-     * This event is called when the scroll view is about to start scrolling the content.
-     *
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @event onScrollBeginDragging
-     * @ios
-     * @since 3.2.1
-     * @deprecated
-     * @example
-     * ````
-     * import ScrollView from '@smartface/native/ui/scrollview';
-     *
-     * const scrollView = new ScrollView();
-     * scrollView.on(ScrollView.Events.ScrollBeginDragging, (params) => {
-     * 	console.info('onScrollBeginDragging', params);
-     * });
-     * ````
-     */
-    onScrollBeginDragging: (contentOffset: __SF_NSRect) => void;
-    /**
-     * This event is called when the scroll view is starting to decelerate the scrolling movement.
-     *
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @event onScrollBeginDecelerating
-     * @ios
-     * @since 3.2.1
-     * @deprecated
-     * @example
-     * ````
-     * import ScrollView from '@smartface/native/ui/scrollview';
-     *
-     * const scrollView = new ScrollView();
-     * scrollView.on(ScrollView.Events.ScrollBeginDecelerating, (params) => {
-     * 	console.info('onScrollBeginDecelerating', params);
-     * });
-     * ````
-     */
-    onScrollBeginDecelerating: (contentOffset: __SF_NSRect) => void;
-    /**
-     * This event is called when the scroll view has ended decelerating the scrolling movement.
-     *
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @event onScrollEndDecelerating
-     * @ios
-     * @since 3.2.1
-     * @deprecated
-     * @example
-     * ````
-     * import ScrollView from '@smartface/native/ui/scrollview';
-     *
-     * const scrollView = new ScrollView();
-     * scrollView.on(ScrollView.Events.ScrollEndDecelerating, (params) => {
-     * 	console.info('onScrollEndDecelerating', params);
-     * });
-     * ````
-     */
-    onScrollEndDecelerating: (contentOffset: __SF_NSRect) => void;
-    /**
-     * This event is called when dragging ended in the scroll view.
-     *
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @param {Boolean} decelerate
-     * @event onScrollEndDraggingWillDecelerate
-     * @ios
-     * @since 3.2.1
-     * @deprecated
-     * @example
-     * ````
-     * import ScrollView from '@smartface/native/ui/scrollview';
-     *
-     * const scrollView = new ScrollView();
-     * scrollView.on(ScrollView.Events.ScrollEndDraggingWillDecelerate, (params) => {
-     * 	console.info('onScrollEndDraggingWillDecelerate', params);
-     * });
-     * ````
-     */
-    onScrollEndDraggingWillDecelerate: (contentOffset: __SF_NSRect, decelerate: boolean) => void;
-    /**
-     * This event is called when the user finishes scrolling the content.
-     *
-     * @param {Object} contentOffset
-     * @param {Number} contentOffset.x
-     * @param {Number} contentOffset.y
-     * @param {Object} velocity
-     * @param {Number} velocity.x
-     * @param {Number} velocity.y
-     * @param {Object} targetContentOffset
-     * @param {Number} targetContentOffset.x
-     * @param {Number} targetContentOffset.y
-     * @event onScrollEndDraggingWithVelocityTargetContentOffset
-     * @ios
-     * @since 3.2.1
-     * @deprecated
-     * @example
-     * ````
-     * import ScrollView from '@smartface/native/ui/scrollview';
-     *
-     * const scrollView = new ScrollView();
-     * scrollView.on(ScrollView.Events.ScrollEndDraggingWithVelocityTargetContentOffset, (params) => {
-     * 	console.info('onScrollEndDraggingWithVelocityTargetContentOffset', params);
-     * });
-     * ````
-     */
-    onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: __SF_NSRect, targetContentOffset: Point2D) => void;
-  }>;
+export interface ScrollViewIOSProps extends ViewGroupIOSProps {
+  decelerationRate: number;
+  /**
+   * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
+   *
+   * @property {Boolean} [scrollEnabled = true]
+   * @ios
+   * @since 3.1.3
+   */
+  scrollEnabled: boolean;
+  /**
+   * Sets/Gets the bounce effect when scrolling.
+   *
+   * @property {Boolean} bounces
+   * @ios
+   * @since 3.2.1
+   */
+  bounces: boolean;
+  /**
+   * The behavior for determining the adjusted content offsets.
+   *
+   * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+   * @ios
+   * @since 4.0.0
+   */
+  contentInsetAdjustmentBehavior: ContentInsetAdjustment;
+  /**
+   * This event is called when the scroll view is about to start scrolling the content.
+   *
+   * @param {Object} contentOffset
+   * @param {Number} contentOffset.x
+   * @param {Number} contentOffset.y
+   * @event onScrollBeginDragging
+   * @ios
+   * @since 3.2.1
+   * @deprecated
+   * @example
+   * ````
+   * import ScrollView from '@smartface/native/ui/scrollview';
+   *
+   * const scrollView = new ScrollView();
+   * scrollView.on(ScrollView.Events.ScrollBeginDragging, (params) => {
+   * 	console.info('onScrollBeginDragging', params);
+   * });
+   * ````
+   */
+  onScrollBeginDragging: (contentOffset: __SF_NSRect) => void;
+  /**
+   * This event is called when the scroll view is starting to decelerate the scrolling movement.
+   *
+   * @param {Object} contentOffset
+   * @param {Number} contentOffset.x
+   * @param {Number} contentOffset.y
+   * @event onScrollBeginDecelerating
+   * @ios
+   * @since 3.2.1
+   * @deprecated
+   * @example
+   * ````
+   * import ScrollView from '@smartface/native/ui/scrollview';
+   *
+   * const scrollView = new ScrollView();
+   * scrollView.on(ScrollView.Events.ScrollBeginDecelerating, (params) => {
+   * 	console.info('onScrollBeginDecelerating', params);
+   * });
+   * ````
+   */
+  onScrollBeginDecelerating: (contentOffset: __SF_NSRect) => void;
+  /**
+   * This event is called when the scroll view has ended decelerating the scrolling movement.
+   *
+   * @param {Object} contentOffset
+   * @param {Number} contentOffset.x
+   * @param {Number} contentOffset.y
+   * @event onScrollEndDecelerating
+   * @ios
+   * @since 3.2.1
+   * @deprecated
+   * @example
+   * ````
+   * import ScrollView from '@smartface/native/ui/scrollview';
+   *
+   * const scrollView = new ScrollView();
+   * scrollView.on(ScrollView.Events.ScrollEndDecelerating, (params) => {
+   * 	console.info('onScrollEndDecelerating', params);
+   * });
+   * ````
+   */
+  onScrollEndDecelerating: (contentOffset: __SF_NSRect) => void;
+  /**
+   * This event is called when dragging ended in the scroll view.
+   *
+   * @param {Object} contentOffset
+   * @param {Number} contentOffset.x
+   * @param {Number} contentOffset.y
+   * @param {Boolean} decelerate
+   * @event onScrollEndDraggingWillDecelerate
+   * @ios
+   * @since 3.2.1
+   * @deprecated
+   * @example
+   * ````
+   * import ScrollView from '@smartface/native/ui/scrollview';
+   *
+   * const scrollView = new ScrollView();
+   * scrollView.on(ScrollView.Events.ScrollEndDraggingWillDecelerate, (params) => {
+   * 	console.info('onScrollEndDraggingWillDecelerate', params);
+   * });
+   * ````
+   */
+  onScrollEndDraggingWillDecelerate: (contentOffset: __SF_NSRect, decelerate: boolean) => void;
+  /**
+   * This event is called when the user finishes scrolling the content.
+   *
+   * @param {Object} contentOffset
+   * @param {Number} contentOffset.x
+   * @param {Number} contentOffset.y
+   * @param {Object} velocity
+   * @param {Number} velocity.x
+   * @param {Number} velocity.y
+   * @param {Object} targetContentOffset
+   * @param {Number} targetContentOffset.x
+   * @param {Number} targetContentOffset.y
+   * @event onScrollEndDraggingWithVelocityTargetContentOffset
+   * @ios
+   * @since 3.2.1
+   * @deprecated
+   * @example
+   * ````
+   * import ScrollView from '@smartface/native/ui/scrollview';
+   *
+   * const scrollView = new ScrollView();
+   * scrollView.on(ScrollView.Events.ScrollEndDraggingWithVelocityTargetContentOffset, (params) => {
+   * 	console.info('onScrollEndDraggingWithVelocityTargetContentOffset', params);
+   * });
+   * ````
+   */
+  onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: __SF_NSRect, targetContentOffset: Point2D) => void;
+}
+export interface ScrollViewAndroidProps extends ViewGroupAndroidProps {
+  /**
+   * Gets/sets over-scroll mode for this view.
+   *
+   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+   * @android
+   * @since 3.0.2
+   */
+  overScrollMode: OverScrollMode;
+}
 
 /**
  * @class UI.ScrollView
@@ -203,16 +211,10 @@ type IScrollViewIOS = ViewGroupIOS &
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
  */
-export interface IScrollView<TEvent extends string = ScrollViewEvents, TMobile extends MobileOSProps<IScrollViewIOS, {}> = MobileOSProps<IScrollViewIOS, {}>>
-  extends IViewGroup<TEvent | ScrollViewEvents, any, TMobile> {
-  /**
-   * Gets/sets over-scroll mode for this view.
-   *
-   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-   * @android
-   * @since 3.0.2
-   */
-  overScrollMode: OverScrollMode;
+export interface IScrollView<
+  TEvent extends string = ScrollViewEvents,
+  TMobile extends MobileOSProps<ScrollViewIOSProps, ScrollViewAndroidProps> = MobileOSProps<ScrollViewIOSProps, ScrollViewAndroidProps>
+> extends IViewGroup<TEvent | ScrollViewEvents, any, TMobile> {
   /**
    * Gets/sets the alignment of the scrollview. If alignment is HORIZONTAL, the ScrollView
    * will scroll horizontally, otherwise will scroll vertically.
@@ -319,7 +321,7 @@ export interface IScrollView<TEvent extends string = ScrollViewEvents, TMobile e
   readonly contentOffset: Point2D;
 }
 
-export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents, TIOS extends Record<string, any> = IScrollViewIOS, TAND extends Record<string, any> = {}>
+export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents>
   extends AbstractViewGroup<TEvent | ScrollViewEvents, any, IScrollView>
   implements IScrollView<TEvent | ScrollViewEvents>
 {

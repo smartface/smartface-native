@@ -929,7 +929,7 @@ declare class __SF_MultiSlider extends __SF_UIView {
 }
 
 declare class __SF_UIScrollView extends __SF_UIView {
-  didScroll: () => void;
+  didScroll: (params: { translation: __SF_NSRect; contentOffset: __SF_NSRect }) => void;
   showsHorizontalScrollIndicator: boolean;
   onScrollBeginDecelerating: (scrollView: any) => void;
   onScrollViewWillBeginDragging: (scrollView: any) => void;

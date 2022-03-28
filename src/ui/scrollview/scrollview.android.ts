@@ -69,7 +69,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
         }
       }
     };
-    return isHorizontal ? new NativeVerticalScroll(AndroidConfig.activity, callback) : new NativeHorizontalScroll(AndroidConfig.activity, callback);
+    return isHorizontal ? new NativeHorizontalScroll(AndroidConfig.activity, callback) : new NativeVerticalScroll(AndroidConfig.activity, callback);
   }
   scrollToEdge(edge: ScrollViewEdge): void {
     this.nativeObject.fullScroll(NativeViewFocus[edge]);

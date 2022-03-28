@@ -2,6 +2,8 @@ import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ViewGroupEvents } from './viewgroup-events';
 
+export interface ViewGroupIOSProps extends ViewIOSProps {}
+
 export interface ViewGroupAndroidProps extends ViewAndroidProps {
   /**
    * Called when a child does not want this parent and its ancestors to intercept touch events .
@@ -34,7 +36,7 @@ export interface ViewGroupAndroidProps extends ViewAndroidProps {
 export interface IViewGroup<
   TEvent extends string = ViewGroupEvents,
   TNative = any,
-  TMobileProps extends MobileOSProps<ViewIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewIOSProps, ViewGroupAndroidProps>
+  TMobileProps extends MobileOSProps<ViewGroupIOSProps, ViewGroupAndroidProps> = MobileOSProps<ViewGroupIOSProps, ViewGroupAndroidProps>
 > extends IView<TEvent | ViewGroupEvents, TNative, TMobileProps> {
   /**
    * This function adds a child view to a viewgroup.
