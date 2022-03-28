@@ -312,4 +312,4 @@ class ContactsIOS extends ContactsBase {
   }
 }
 
-export default ContactsIOS;
+export default new ContactsIOS();
