@@ -22,6 +22,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     public onreadystatechange: (...args: any[]) => void;
     public ontimeout: (...args: any[]) => void;
 
+    private _requestID?: number
     private _options: HttpRequestOptions;
     private _readyState: number;
     private _response: any;
@@ -103,7 +104,31 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             throw new Error(`Response type of '${value}' not supported.`);
         }
     }
-    
+
+    public abort() {
+        if (this._requestID) {
+            const isRemovedTask = this.nativeObject.removeDataTask(this._requestID)
+            if (isRemovedTask) {
+                this._response = null;
+                this._headers = "";
+                this._status = 0;
+
+                if ((this._readyState === XHR.OPENED && this._sendFlag) || this._readyState === XHR.HEADERS_RECEIVED || this._readyState === XHR.LOADING) {
+                    this._errorFlag = true;
+                    this._sendFlag = false;
+                    this._setRequestError('abort');
+                }
+
+                if (this._readyState === XHR.DONE) {
+                    this._readyState = XHR.UNSENT;
+                }
+            }
+        }
+        else {
+            //TODO: What are we going to do when request can not be aborted.
+        }
+    }
+
     getResponseHeaders(): string {
         if (this._readyState < XHR.HEADERS_RECEIVED || this._errorFlag) {
 			return '';
@@ -175,7 +200,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             responseType: this.responseType
         };
 
-        this.nativeObject.createTask(JSON.stringify(params), (response: HttpResponse) => {
+        const taskID = this.nativeObject.createTask(JSON.stringify(params), (response: HttpResponse) => {
             this._handleResponse(response);
         }, (error: HttpErrorResponse) => {
             this._errorFlag = true;
@@ -187,6 +212,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             }
             this._setRequestError("error", error);
         })
+        this._requestID = taskID
     }
 
     public setRequestHeader(header: string, value: string) {
@@ -275,6 +301,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 
     private resetLocalStates() {
+        this._requestID = undefined
         this._response = null;
         this._responseURL = undefined;
         this._status = 0;

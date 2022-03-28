@@ -7,6 +7,7 @@ import { XHREventsEvents } from './xhr.ios';
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
 interface IXHRMethods {
+    abort()
     getResponseHeaders(): string
     getResponseHeader(header: string): string | null
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
