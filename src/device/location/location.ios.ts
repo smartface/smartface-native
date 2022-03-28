@@ -19,14 +19,12 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
   iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
   private _authorizationStatus: LocationBase.iOS.AuthorizationStatus;
   onLocationChanged: (...args: any[]) => {};
+  init() {
+    this.addIOSProps(this.getIOSProps());
+    this._authorizationStatus = this.ios?.authorizationStatus.NotDetermined;
+  }
   constructor() {
     super();
-    this.addIOSProps(this.getIOSProps());
-    this.addAndroidProps({
-      checkSettings() {},
-      Provider: {}
-    });
-    this._authorizationStatus = this.ios?.authorizationStatus.NotDetermined;
   }
   protected createNativeObject() {
     return new __SF_CLLocationManager();
@@ -64,17 +62,18 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
   }
   __onActivityResult: (resultCode: number) => void;
   changeLocationListener(e) {
-    this.onLocationChanged(e);
+    this.onLocationChanged?.(e);
+    this.emit('locationChanged', e);
   }
   start() {
-    if (this._nativeObject) {
+    if (!this.nativeObject) {
       this.stop();
     }
 
     this.delegate = new __SF_CLLocationManagerDelegate();
 
     if (__SF_CLLocationManager.locationServicesEnabled()) {
-      this._nativeObject.delegate = this.delegate;
+      this.nativeObject.delegate = this.delegate;
       this.delegate.didUpdateLocations = this.changeLocationListener;
       this.delegate.didChangeAuthorizationStatus = function () {
         const authStatus = this.ios.getAuthorizationStatus();
@@ -84,19 +83,19 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
         }
       };
 
-      this._nativeObject.requestWhenInUseAuthorization();
-      this._nativeObject.startUpdatingLocation();
+      this.nativeObject.requestWhenInUseAuthorization();
+      this.nativeObject.startUpdatingLocation();
     }
   }
   stop() {
-    if (this._nativeObject) {
-      this._nativeObject.stopUpdatingLocation();
-      this._nativeObject.delegate = undefined;
+    if (this.nativeObject) {
+      this.nativeObject.stopUpdatingLocation();
+      this.nativeObject.delegate = undefined;
       this.delegate = undefined;
     }
   }
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void) {
-    const location = this._nativeObject.lastKnownLocation();
+    const location = this.nativeObject.lastKnownLocation();
     if (location) {
       onSuccess && onSuccess(location);
     } else {
