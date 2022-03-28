@@ -1,7 +1,7 @@
 import Page from '../../ui/page';
 import Image from '../../ui/image';
 import File from '../../io/file';
-import Contacts, { Contact } from '../../device/contacts';
+import { Contact } from '../../device/contacts';
 
 /**
  * @class Share

@@ -4,6 +4,7 @@ import File from '../../io/file';
 import Page from '../../ui/page';
 import Invocation from '../../util/iOS/invocation';
 import { ShareBase } from './share';
+const UIActivityViewController = SF.requireClass('UIActivityViewController');
 
 const UIActivityType = {
   addToReadingList: 'com.apple.UIKit.activity.AddToReadingList',
@@ -30,7 +31,7 @@ export class ShareIOS implements ShareBase {
     });
   }
   static createActivity(activityItems) {
-    const alloc = __SF_UIActivityViewController.alloc();
+    const alloc = UIActivityViewController.alloc();
     const argActivityItems = new Invocation.Argument({
       type: 'id',
       value: activityItems
@@ -43,8 +44,7 @@ export class ShareIOS implements ShareBase {
     return Invocation.invokeInstanceMethod(alloc, 'initWithActivityItems:applicationActivities:', [argActivityItems, argApplicationActivities], 'id');
   }
   static shareText(text: INativeComponent, page: Page, blacklist: string[]) {
-    //TODO: wrong usage?
-    const activity = ShareIOS.createActivity([text.nativeObject]) as __SF_NSOBject;
+    const activity = ShareIOS.createActivity([text]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }
@@ -68,7 +68,6 @@ export class ShareIOS implements ShareBase {
   }
 
   static shareFile(file: File, page: Page, blacklist: string[]) {
-    //@ts-ignore TODO: file needs nativeObject
     const actualPath = file.nativeObject.getActualPath();
     const url = __SF_NSURL.fileURLWithPath(actualPath);
     const activity = ShareIOS.createActivity([url]) as __SF_NSOBject;

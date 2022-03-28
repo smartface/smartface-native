@@ -248,6 +248,7 @@ export class ShareAndroid implements ShareBase {
       actionType: NativeIntent.ACTION_SEND
     });
   }
+  static ios = {};
 }
 
 export default ShareAndroid;
