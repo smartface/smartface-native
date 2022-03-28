@@ -1,6 +1,6 @@
-import { HardwareBase } from '.';
+import { HardwareBase } from './hardware';
 
-class Hardware implements HardwareBase {
+class HardwareIOS implements HardwareBase {
   static UID = __SF_UIDevice.currentDevice().UUID;
   static IMEI = '-1';
   static brandName = 'Apple';
@@ -9,7 +9,7 @@ class Hardware implements HardwareBase {
     return __SF_UIDevice.modelName();
   }
   static getDeviceModelName() {
-    return Hardware.ios.modelName;
+    return HardwareIOS.ios.modelName;
   }
   static get ios() {
     return {
@@ -137,4 +137,4 @@ class Hardware implements HardwareBase {
   }
 }
 
-module.exports = Hardware;
+export default HardwareIOS;

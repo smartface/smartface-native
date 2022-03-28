@@ -1,4 +1,4 @@
-import { HardwareBase } from '.';
+import { HardwareBase } from './hardware';
 import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeSettings = requireClass('android.provider.Settings');
@@ -7,7 +7,7 @@ const NativeBuild = requireClass('android.os.Build');
 const TELEPHONY_SERVICE = 'phone';
 const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
-class Hardware implements HardwareBase {
+class HardwareAndroid implements HardwareBase {
   static IMEI = '-1';
   static MANUFACTURER = NativeBuild.MANUFACTURER;
   static ios = { microphone: { requestRecordPermission() {} } };
@@ -30,8 +30,8 @@ class Hardware implements HardwareBase {
     return NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID);
   }
   static getDeviceModelName() {
-    return Hardware.MANUFACTURER + ' ' + Hardware.brandName + ' ' + Hardware.brandModel;
+    return HardwareAndroid.MANUFACTURER + ' ' + HardwareAndroid.brandName + ' ' + HardwareAndroid.brandModel;
   }
 }
 
-module.exports = Hardware;
+export default HardwareAndroid;
