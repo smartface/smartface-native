@@ -122,7 +122,7 @@ export default class HttpAndroid extends HttpBase {
 
     params.onLoad = (e) => {
       if (e?.body) {
-        e.image = ImageAndroid.createFromBlob(e.body);
+        e.image = ImageAndroid.createFromBlob(e.body as BlobAndroid);
       }
       requestOnLoad?.(e);
     };
@@ -186,7 +186,6 @@ export default class HttpAndroid extends HttpBase {
         let responseBody;
         const statusCode = code;
         const responseHeaders = this.getResponseHeaders(headers);
-
         if (statusCode !== 304 && bytes) {
           responseBody = new Blob(bytes, {
             type: ''

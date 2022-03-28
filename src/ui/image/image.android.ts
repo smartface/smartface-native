@@ -17,10 +17,10 @@ const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
 const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressFormat.PNG];
 const androidResources = AndroidConfig.activityResources;
 
-export default class ImageAndroid<TNative = any, TProps extends WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>>
-  extends AbstractImage<TNative, TProps>
-  implements IImage
-{
+export default class ImageAndroid<
+  TNative = any,
+  TProps extends WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
+> extends AbstractImage<TNative, TProps> {
   protected createNativeObject(): any {
     return null;
   }
@@ -237,12 +237,13 @@ export default class ImageAndroid<TNative = any, TProps extends WithMobileOSProp
     }
     return null;
   }
-  static createFromBlob(blob) {
+  static createFromBlob(blob: BlobAndroid) {
     const newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
-    if (newBitmap)
+    if (newBitmap) {
       return new ImageAndroid({
         bitmap: newBitmap
       });
+    }
     return null;
   }
   static android = {

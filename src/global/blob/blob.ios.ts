@@ -1,14 +1,15 @@
+import NativeComponent from '../../core/native-component';
 import IBlob from './blob';
 
-class BlobIOS implements IBlob {
-  constructor(parts: string[], properties?: { type: string }) {
-    if (!this.nativeObject) {
-      this.nativeObject = parts;
-    }
+export default class BlobIOS extends NativeComponent implements IBlob {
+  protected createNativeObject(params?: { parts: string[] }) {
+    return params?.parts;
+  }
+  constructor(parts: string[]) {
+    super(parts);
   }
   type: string;
   slice?: ((start: number, end: number) => IBlob) | undefined;
-  nativeObject: { [key: string]: any };
   get size() {
     return this.nativeObject.length;
   }
@@ -39,5 +40,3 @@ class BlobIOS implements IBlob {
     return new BlobIOS(__SF_NSData.dataFromUTF8String(utf8String));
   }
 }
-
-export default BlobIOS;

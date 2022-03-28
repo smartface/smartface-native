@@ -1,3 +1,4 @@
+import NativeComponent from '../../core/native-component';
 import Base64Util from '../../util/base64';
 import IBlob from './blob';
 
@@ -5,24 +6,30 @@ const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
 const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
 const NativeBase64 = requireClass('android.util.Base64');
 
-class BlobAndroid implements IBlob {
+interface BlobAndroidConstructorParameters {
+  parts?: string[];
+  properties?: { type: string };
+}
+
+class BlobAndroid extends NativeComponent implements IBlob {
+  protected createNativeObject(params?: Partial<BlobAndroidConstructorParameters>) {
+    const nativeObject = new NativeByteArrayOutputStream();
+    if (params?.parts && params.properties?.type) {
+      this._type = params.properties.type;
+      const newParts = Array.isArray(params.parts) ? array(params.parts) : params.parts;
+      nativeObject.write(newParts, 'byte');
+
+      // TODO: This line added for AND-3357.
+      // But investigate whether parts property is needeed.
+      this._parts = params.parts;
+    }
+    return nativeObject;
+  }
   private _parts: string[];
   private _type: string;
   constructor(parts?: string[], properties?: { type: string }) {
-    if (parts && properties?.type) {
-      this._type = properties.type;
-      this.nativeObject = new NativeByteArrayOutputStream();
-      if (Array.isArray(parts)) {
-        this.nativeObject.write(array(parts, 'byte'));
-      } else {
-        this.nativeObject.write(parts);
-      }
-      // TODO: This line added for AND-3357.
-      // But investigate whether parts property is need.
-      this._parts = parts;
-    }
+    super({ parts, properties });
   }
-  nativeObject: { [key: string]: any };
   get type(): string {
     return this._type;
   }

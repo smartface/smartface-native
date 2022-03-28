@@ -8,12 +8,15 @@ import { WithMobileOSProps } from '../../core/native-mobile-component';
  * @since 4.5.0
  */
 export default class ImageIOS<
-    TNative = __SF_UIImage,
-    TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps>
-  >
-  extends AbstractImage<TNative, TProps>
-  implements IImage
-{
+  TNative = __SF_UIImage,
+  TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps>
+> extends AbstractImage<TNative, TProps> {
+  get height(): number {
+    return this.nativeObject.size.height;
+  }
+  get width(): number {
+    return this.nativeObject.size.width;
+  }
   protected createNativeObject() {
     return null;
   }
