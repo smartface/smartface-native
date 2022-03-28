@@ -1,6 +1,6 @@
 import Hardware from '../../device/hardware';
 import Timer from '../timer';
-import { SpeechRecognizerAndroidError, SpeechRecognizerBase, SpeechRecognizerError } from './speechrecognizer';
+import { RecognizerAndroidError, SpeechRecognizerBase, RecognizerError } from './speechrecognizer';
 
 enum SFSpeechRecognizerAuthorizationStatus {
   notDetermined,
@@ -29,7 +29,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
   static avaudioengine: __SF_AVAudioEngine | undefined;
   static speechRecognizer: __SF_SFSpeechRecognizer | undefined;
   static speechDelegate: __SF_SFSpeechRecognizerDelegate;
-  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void {
+  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void {
     SpeechRecognizerIOS.stop();
     SpeechRecognizerIOS.onErrorHandler = params.onError;
 
@@ -85,7 +85,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
       delay: 100
     });
   }
-  static createRecognizer(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }) {
+  static createRecognizer(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }) {
     if (SpeechRecognizerIOS.speechRecognizer) {
       return;
     }
@@ -230,7 +230,7 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
       return isLocaleSupport(nslocale);
     }
   };
-  static readonly Error: typeof SpeechRecognizerError & { android: typeof SpeechRecognizerAndroidError };
+  static readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
 }
 
 export default SpeechRecognizerIOS;

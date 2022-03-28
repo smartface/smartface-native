@@ -1,17 +1,18 @@
-export enum SpeechRecognizerError {
-  INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
-  NETWORK = 'NETWORK',
-  NETWORK_TIMEOUT = 'NETWORK_TIMEOUT',
-  SPEECH_TIMEOUT = 'SPEECH_TIMEOUT',
-  CLIENT = 'CLIENT',
-  SERVER = 'SERVER'
-}
+export const RecognizerAndroidError = <const>{
+  AUDIO: 'AUDIO',
+  NO_MATCH: 'NO_MATCH',
+  RECOGNIZER_BUSY: 'RECOGNIZER_BUSY'
+};
 
-export enum SpeechRecognizerAndroidError {
-  AUDIO = 'AUDIO',
-  NO_MATCH = 'NO_MATCH',
-  RECOGNIZER_BUSY = 'RECOGNIZER_BUSY'
-}
+export const RecognizerError = <const>{
+  INSUFFICIENT_PERMISSIONS: 'INSUFFICIENT_PERMISSIONS',
+  NETWORK: 'NETWORK',
+  NETWORK_TIMEOUT: 'NETWORK_TIMEOUT',
+  SPEECH_TIMEOUT: 'SPEECH_TIMEOUT',
+  CLIENT: 'CLIENT',
+  SERVER: 'SERVER',
+  android: RecognizerAndroidError
+};
 
 /**
  * @class SpeechRecognizer
@@ -91,7 +92,7 @@ export declare class SpeechRecognizerBase {
    * @ios
    * @since 1.1.13
    */
-  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: SpeechRecognizerError) => void }): void;
+  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void;
   /**
    * Stop speech recognition service.
    *
@@ -123,5 +124,5 @@ export declare class SpeechRecognizerBase {
      */
     isLocaleSupported(locale: string): boolean;
   }>;
-  static readonly Error: typeof SpeechRecognizerError & { android: typeof SpeechRecognizerAndroidError };
+  static readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
 }
