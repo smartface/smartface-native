@@ -20,7 +20,7 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
 
     const callbacks = {
       onPreExecute: () => {
-        this.onPreExecute();
+        this.onPreExecute?.();
         this.emit('preExecute');
       },
       doInBackground: () => {
