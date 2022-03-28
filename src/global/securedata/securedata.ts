@@ -6,7 +6,6 @@ interface ISecureData extends INativeComponent {
   read(): Promise<any>;
   delete(): Promise<void>;
   readonly key: string;
-  readonly service?: string | undefined;
 }
 
 export abstract class AbstractSecureData extends NativeComponent implements ISecureData {
@@ -16,7 +15,7 @@ export abstract class AbstractSecureData extends NativeComponent implements ISec
   abstract read(): Promise<any>;
   abstract delete(): Promise<void>;
   abstract key: string;
-  abstract  service: string | undefined;
+  abstract ios?: { service?: string };
 }
 
 export default ISecureData;

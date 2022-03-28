@@ -1,8 +1,13 @@
 import { AbstractSecureData } from './securedata';
 
 class SecureDataIOS extends AbstractSecureData {
-  protected createNativeObject() {
-    return null;
+  protected createNativeObject(params?: { key: string; ios?: { service?: any } }) {
+    const _key = params?.key;
+    const _service = params?.ios?.service;
+    if (!_key || !_service) {
+      throw new Error('Constructor must have service and key parameter.');
+    }
+    return new __SF_KeychainPasswordItem(_service, _key, undefined);
   }
   static _iOS = {
     _Message: {
@@ -12,29 +17,21 @@ class SecureDataIOS extends AbstractSecureData {
     }
   };
   constructor(params?: { key: string; ios?: { service?: any } }) {
-    super();
-
-    const _key = params && params.key;
-    const _service = params && params.ios && params.ios.service;
-    if (!_key || !_service) {
-      throw new Error('Constructor must have service and key parameter.');
-    }
-    if (!this.nativeObject) {
-      this.nativeObject = new __SF_KeychainPasswordItem(_service, _key, undefined);
-    }
-
-    if (params) {
-      for (const param in params) {
-        this[param] = params[param];
-      }
-    }
+    super(params);
   }
-  get service() {
-    return this._service;
-  }
+
   get key() {
     return this._key;
   }
+
+  set key(value: string) {
+    this._key = value;
+  }
+
+  set ios(value: { service: string }) {
+    this._service = value.service;
+  }
+
   read(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.nativeObject.readPasswordWithBlock(function (e) {

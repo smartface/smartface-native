@@ -7,6 +7,7 @@ class SecureDataAndroid extends AbstractSecureData {
     return null;
   }
   service: string | undefined;
+  ios = {};
   constructor(params: { key: string }) {
     super();
     if (!params || !params.key) {
