@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { getStatusTextByCode } from './util';
+import { statuses } from './common';
 import { XHREventsEvents } from './xhr-events';
 
 const NativeXMLHttpRequest = requireClass('io.smartface.android.sfcore.net.XMLHttpRequest');
@@ -23,7 +23,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _method: HTTPRequestMethods;
   private _url: string;
   private _readyState: number;
-  private _status: number | null;
+  private _status: number;
   private _response: object | null;
   private _headers: Map<string, object> | null;
   private _responseURL: string;
@@ -45,13 +45,13 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return this._readyState;
   }
 
-  public get status(): number | null {
+  public get status(): number {
     return this._status;
   }
 
   public get statusText(): string {
     if (this._status) {
-      return getStatusTextByCode(this._status);
+      return statuses[this._status];
     } else {
       return '';
     }
@@ -143,11 +143,11 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._overrideMimeType = mime; // todo look later while impl. blob
   }
 
-  public addEventListener(type: TEvent, listener: () => void) {
+  public addEventListener(type: string, listener: () => void) {
     this.on(type, listener);
   }
 
-  public removeEventListener(type: TEvent, listener: () => void) {
+  public removeEventListener(type: string, listener: () => void) {
     this.off(type, listener);
   }
 
@@ -213,7 +213,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _reset(): void {
     this._response = null;
     this._headers = null;
-    this._status = null;
+    this._status = 0;
     this._errorFlag = false;
   }
 }
