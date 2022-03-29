@@ -90,7 +90,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
   private didSetTouchHandler = false;
   private _sfOnTouchViewManager: any;
-  private _touchEnabled: boolean = false;
+  private _touchEnabled: boolean = true;
   private _rippleEnabled = false;
   private _rippleColor?: Color;
   private _useForeground = false;
