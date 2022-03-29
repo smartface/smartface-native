@@ -34,7 +34,6 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private _image: ImageAndroid | string | null = null;
   private _customView?: View = undefined;
   private _enabled: boolean = true;
-  private _onPress: IHeaderBarItem['onPress'] = null;
   private _color: Color | null = null;
   private _badge?: Badge = undefined;
   private _accessibilityLabel: string;
@@ -50,8 +49,12 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   constructor(params?: Partial<HeaderBarItem>) {
     super(params);
 
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  onPress: (() => void) | null;
+  private getAndroidProps() {
     const self = this;
-    this._android = {
+    return {
       get systemIcon() {
         return self._android.systemIcon;
       },
@@ -157,16 +160,6 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
       this.nativeObject.setEnabled(this._enabled);
     }
   }
-  get onPress() {
-    return this._onPress;
-  }
-  set onPress(value: IHeaderBarItem['onPress']) {
-    if (value instanceof Function) {
-      this._onPress = value;
-    } else {
-      throw new TypeError('onPress must be function.');
-    }
-  }
   get size() {
     return this.nativeObject
       ? {
@@ -226,11 +219,10 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
       this.color = this.color;
     }
 
-    const self = this;
     this.nativeObject.setOnClickListener(
       NativeView.OnClickListener.implement({
-        onClick: function () {
-          self._onPress?.();
+        onClick: () => {
+          this.onPress?.();
         }
       })
     );

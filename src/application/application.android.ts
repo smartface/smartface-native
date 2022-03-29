@@ -302,7 +302,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   setRootController(params) {
     ViewController.deactivateRootController(this.currentPage);
     // ViewController.activateController(params.controller);
-    params.controller.__isActive = true;
+    params.controller.isActive = true;
     ViewController.setController(params);
   }
   get onUnhandledError() {

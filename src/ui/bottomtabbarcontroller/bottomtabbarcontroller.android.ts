@@ -34,7 +34,12 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
   private __targetIndex: number;
   pageID: number;
   popupBackNavigator: any;
-  isActive: boolean;
+  get isActive(): boolean {
+    return this.__isActive;
+  }
+  set isActive(value: boolean) {
+    this.__isActive = value;
+  }
   parentController: IController;
   headerBar?: HeaderBar;
   isInsideBottomTabBar: boolean;
@@ -59,7 +64,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
           // use self property to show/hide bottom naviagtion view after controller transition
           this.childControllers[this._selectedIndex] && ViewController.deactivateController(this.childControllers[this._selectedIndex]);
           this.childControllers[index].isInsideBottomTabBar = true;
-          this.childControllers[index].isActive = this.__isActive;
+          this.childControllers[index].isActive = this.isActive;
           this.push(this.childControllers[index]);
           this._selectedIndex = index;
           try {
@@ -144,19 +149,14 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
     }
   }
   push(childController: any) {
-    if (!childController && !this.__isActive) {
+    if (!childController && !this.isActive) {
       return;
     }
 
     ViewController.deactivateController(this.getCurrentController());
 
-    // Don't remove this line to top of the page.
-    // NavigationController requires BottomTabBarController.
-    // TODO: should this be lazy import?
-    // const NavigationController = import('../../ui/navigationcontroller');
     childController.isInsideBottomTabBar = true;
     if (childController instanceof Page) {
-      //TODO: Page needs __isActive and pageID
       childController.isActive = true;
       if (!childController.pageID) {
         childController.pageID = FragmentTransaction.generatePageID();
@@ -194,7 +194,6 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
   show() {
     this.addTabBarToActivity();
     this.setChecked();
-    // TODO: check __isActive property
     // Comment out for: https://smartface.atlassian.net/browse/SUPDEV-1867
     // self.push(self.childControllers[_selectedIndex]);
   }

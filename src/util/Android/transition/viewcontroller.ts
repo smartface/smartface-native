@@ -32,12 +32,12 @@ namespace ViewController {
       parentController = parentController.parentController;
     }
   }
-  export function setIsActiveOfController(controller: IController, __isActive: boolean) {
+  export function setIsActiveOfController(controller: IController, isActive: boolean) {
     if (!controller || controller instanceof Page) return;
-    controller.isActive = __isActive;
+    controller.isActive = isActive;
     let childController = controller.getCurrentController();
     while (childController) {
-      childController.isActive = __isActive;
+      childController.isActive = isActive;
       if (childController instanceof Page) break;
       childController = controller.getCurrentController();
     }

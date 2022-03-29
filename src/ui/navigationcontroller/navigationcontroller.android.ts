@@ -18,16 +18,12 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
   popUpBackPage: Page | null;
-  private ___isActive = false;
-  set __isActive(value: boolean) {
-    // console.info('isActive is sett: ', {
-    //   value,
-    //   error: Error().stack
-    // });
-    this.___isActive = value;
+  private __isActive = false;
+  set isActive(value: boolean) {
+    this.__isActive = value;
   }
-  get __isActive(): boolean {
-    return this.___isActive;
+  get isActive(): boolean {
+    return this.__isActive;
   }
 
   protected _childControllers: INavigationController['childControllers'] = [];
@@ -37,7 +33,6 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     this.__navID = ++NavigationControllerAndroid.NavCount;
   }
   pageID: number;
-  isActive: boolean = false;
   headerBar: HeaderBar;
   get childControllers() {
     return this._childControllers;
@@ -56,13 +51,13 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
         childController.pageID = FragmentTransaction.generatePageID();
       }
 
-      if (this.pageIDCollectionInStack[childController.pageID]) {
-        // console.log("This page exist in history!");
-      }
+      // if (this.pageIDCollectionInStack[childController.pageID]) {
+      // console.log("This page exist in history!");
+      // }
       this.pageIDCollectionInStack[childController.pageID] = childController;
     }
 
-    if (this.__isActive) {
+    if (this.isActive) {
       ViewController.activateController(this.getCurrentController() as any); //TODO: Typing conlict
 
       this.show({
@@ -93,10 +88,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     if (params.controller.pageID && !this.pageIDCollectionInStack[params.controller.pageID]) {
       throw new Error("This page doesn't exist in history!");
     }
-    // console.log('in navigationcontroller:android:show before __isActive: ', this.__isActive, {
-    //   stack: Error().stack
-    // });
-    if (!this.__isActive) {
+    if (!this.isActive) {
       return;
     }
     if (params.animated) {
@@ -110,7 +102,6 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       animated: params.animated
     });
 
-    // No need self.__isActive property. show method is triggered when self is active.
     ViewController.activateController(params.controller);
 
     this.showController(params);
@@ -141,7 +132,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       // console.log("This page exist in history! PageID: " + params.controller.pageID);
     }
 
-    this.__isActive && ViewController.deactivateController(this.getCurrentController() as any);
+    this.isActive && ViewController.deactivateController(this.getCurrentController() as any);
     params.controller.parentController = this;
     params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
     this.pageIDCollectionInStack[params.controller.pageID] = params.controller;
@@ -153,7 +144,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
       FragmentTransaction.push({
         page: params.controller,
-        animated: !params.animated,
+        animated: !params.animated, //First open, animated should be false
         animationType: params.animationType,
         isComingFromPresent: params.isComingFromPresent
       });
@@ -166,7 +157,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   }
 
   present(params?: Parameters<INavigationController['present']>['0']) {
-    if (!params || !this.__isActive) {
+    if (!params || !this.isActive) {
       return;
     }
     params.controller.popupBackNavigator = this;
@@ -208,7 +199,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     if (poppedController?.pageID) {
       this.pageIDCollectionInStack[poppedController.pageID] = null;
     }
-    if (!this.__isActive) {
+    if (!this.isActive) {
       return;
     }
     poppedController && this.popFromHistoryController(poppedController, { animated: !!params.animated });
@@ -233,7 +224,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       }
     }
 
-    if (!this.__isActive) {
+    if (!this.isActive) {
       return;
     }
     if (currentController) {

@@ -246,9 +246,9 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               // TODO: isSwipeViewPage is never set to false. This will cause some unexpected behaviours.
               // Sample case: Add PageA to SwipeView. Remove PageA from SwipeView and push it to NavigationController.
               // onShow callback will never be triggered.
-              if (this.isSwipeViewPage) {
-                Application.currentPage = this;
-              }
+              // if (this.isSwipeViewPage) {
+              Application.currentPage = this;
+              // }
               Application.registOnItemSelectedListener();
 
               if (!this.isSwipeViewPage) {

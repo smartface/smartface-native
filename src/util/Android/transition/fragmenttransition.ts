@@ -44,44 +44,32 @@ namespace FragmentTransaction {
     return ++FragmentTransaction.pageCount;
   }
   export function push(params: TransitionParams) {
-    console.log('before checkBottomTabBarVisible');
     FragmentTransaction.checkBottomTabBarVisible(params.page);
-    console.log('before pageID');
 
     const tag = params.page.pageID;
-    console.log('before transition');
     if (!tag) {
       throw new Error("This page doesn't have an unique ID!");
     }
-    console.log('before currentPage');
 
-    const currentPage = (Application as any).currentPage; //TODO: Check after application and page developments are complete
+    const currentPage = Application.currentPage;
     if (currentPage?.pageID === tag) {
       return;
     }
-    console.log('before isComingFromPresent');
 
     if (!params.isComingFromPresent) {
       FragmentTransaction.replace(params);
       return;
     }
-    console.log('before params.page');
 
     const page = params.page;
-    console.log('before popUpBackPage');
-    page.popUpBackPage = currentPage;
+    page.popUpBackPage = currentPage as unknown as Page;
 
     if (currentPage?.transitionViews) {
       FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     } else {
-      console.log('before transition', {
-        page: page.constructor.name,
-        params
-      });
       FragmentTransaction.popUpTransition(page, params.animated);
-      console.log('after transition');
-      const isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-      currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+      const isPresentLayoutFocused = page?.layout?.nativeObject.isFocused();
+      currentPage?.layout?.nativeObject.setFocusableInTouchMode(false);
       if (!isPresentLayoutFocused) {
         page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
       }
@@ -172,7 +160,7 @@ namespace FragmentTransaction {
     if (page?.parentController) {
       const popupBackNavigator = page.parentController.popupBackNavigator;
       if (popupBackNavigator) {
-        popupBackNavigator.__isActive = true;
+        popupBackNavigator.isActive = true;
         const currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
         page.parentController.popUpBackPage = currentPageFromController;
       }
@@ -255,7 +243,7 @@ namespace FragmentTransaction {
         rightExit: resources.getIdentifier('slide_right_exit', 'anim', packageName)
       });
     }
-    const { leftEnter, leftExit, rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransaction.AnimationType.LEFTTORIGHT);
+    const { leftEnter, leftExit, rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransaction.AnimationType.RIGHTTOLEFT);
 
     if (leftEnter !== 0 && leftExit !== 0) {
       fragmentTransaction.setCustomAnimations(leftEnter, leftExit, rightEnter, rightExit);
