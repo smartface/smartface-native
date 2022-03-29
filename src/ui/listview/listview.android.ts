@@ -37,18 +37,20 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
   private nativeSwipeItemInstance: any;
-  constructor(params?: IListView) {
-    super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
-    }
-
+  createNativeObject() {
+    return new NativeSwipeRefreshLayout(AndroidConfig.activity);
+  }
+  init(params?: Partial<IListView>) {
     this.setNativeInner();
     this.setDataAdapter();
     this.addAndroidProps(this.getAndroidParams());
     this.addIOSProps(this.getIOSParams());
     this.setItemTouchHelper();
     this.createScrollListener();
+    super.init(params);
+  }
+  constructor(params?: IListView) {
+    super(params);
   }
   nativeInner: INativeInner;
   onPullRefresh: IListView['onPullRefresh'];

@@ -14,11 +14,18 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   protected createNativeObject() {
     const nativeObject = new __SF_UITableView();
     this.refreshControl = new __SF_UIRefreshControl();
-    this._nativeObject.addSubview(this.refreshControl);
-    this._nativeObject.separatorStyle = 0;
-    this._nativeObject.showsVerticalScrollIndicator = false;
-    this._nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+    nativeObject.addSubview(this.refreshControl);
+    nativeObject.separatorStyle = 0;
+    nativeObject.showsVerticalScrollIndicator = false;
+    nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
     return nativeObject;
+  }
+  init(params?: IListView) {
+    this.addIOSProps(this.getIOSParams());
+    this.addAndroidProps(this.getAndroidParams());
+    this.setNativeObjectParams();
+    this.setScrollEvents();
+    super.init(params);
   }
   nativeInner: INativeInner;
   private refreshControl: __SF_UIRefreshControl;
@@ -28,10 +35,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   private _contentInset = { top: 0, bottom: 0 };
   constructor(params?: IListView) {
     super(params);
-    this.addIOSProps(this.getIOSParams());
-    this.addAndroidProps(this.getAndroidParams());
-    this.setNativeObjectParams();
-    this.setScrollEvents();
   }
   getFirstVisibleIndex(): number {
     const visibleIndexArray = this.nativeObject.getVisibleIndexArray();

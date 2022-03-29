@@ -16,22 +16,22 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
     this.ios.expandSwipe = () => {};
 
     if (!this.nativeInner) {
-      this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this._nativeObject);
-      this._nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
+      this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
+      this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
     }
   }
   // Added due to problem in row height for RecyclerView
   get height(): number {
-    return UnitConverter.pixelToDp(this._nativeObject.getLayoutParams().height);
+    return UnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
   }
   set height(value: number) {
-    this._nativeObject.getLayoutParams().height = UnitConverter.dpToPixel(value);
+    this.nativeObject.getLayoutParams().height = UnitConverter.dpToPixel(value);
   }
   // Added due to problem in row height for RecyclerView
   get width(): number {
-    return UnitConverter.pixelToDp(this._nativeObject.getLayoutParams().width);
+    return UnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
   }
   set width(value: number) {
-    this._nativeObject.getLayoutParams().width = UnitConverter.dpToPixel(value);
+    this.nativeObject.getLayoutParams().width = UnitConverter.dpToPixel(value);
   }
 }
