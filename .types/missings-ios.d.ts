@@ -1230,6 +1230,7 @@ declare class __SF_SMFReachability {
   currentReachabilityStatus(): number;
   reachabilityChangedCallback: () => void;
   startNotifier(): void;
+  removeObserver(): void;
   stopNotifier(): void;
 }
 

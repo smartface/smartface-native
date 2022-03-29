@@ -36,11 +36,15 @@ class Notifier extends NativeMobileComponent implements INetworkNotifier {
   protected createNativeObject() {
     const callback = {
       onConnectionTypeChanged: (connectionType) => {
-        if (!this.connectionTypeChanged) return;
+        if (!this.connectionTypeChanged) {
+          return;
+        }
         const cTypeEnum = getConnectionTypeEnum(connectionType);
-        const isInitialStickyNotification = this.android.isInitialStickyNotification();
+        const isInitialStickyNotification = typeof this.android?.isInitialStickyNotification === 'function' && this.android?.isInitialStickyNotification();
 
-        if (!this.android.initialCacheEnabled && isInitialStickyNotification) return;
+        if (!this.android.initialCacheEnabled && isInitialStickyNotification) {
+          return;
+        }
 
         this.connectionTypeChanged(cTypeEnum);
       }
@@ -54,17 +58,16 @@ class Notifier extends NativeMobileComponent implements INetworkNotifier {
   unsubscribe: () => void;
   constructor(params?: INetworkNotifier) {
     super(params);
-    const self = this;
 
     this.addAndroidProps(this.getAndroidProps());
     instanceCollection.push(this);
 
-    this.subscribe = function (callback) {
-      self.connectionTypeChanged = callback;
+    this.subscribe = (callback) => {
+      this.connectionTypeChanged = callback;
     };
 
-    this.unsubscribe = function () {
-      self.connectionTypeChanged = null;
+    this.unsubscribe = () => {
+      this.connectionTypeChanged = null;
     };
   }
 
@@ -111,6 +114,7 @@ class NetworkAndroid extends NativeComponent implements NetworkBase {
     super();
   }
   public readonly notifier = new Notifier();
+  public readonly Notifier = Notifier;
   get IMSI() {
     return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
   }

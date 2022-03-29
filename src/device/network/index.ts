@@ -1,5 +1,5 @@
+import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
-import NativeComponent from '../../core/native-component';
 
 /**
  * @enum {Number} Device.Network.ConnectionType
@@ -7,37 +7,13 @@ import NativeComponent from '../../core/native-component';
  */
 export enum ConnectionType {
   /**
-   * @deprecated Use {@link Device.Network.ConnectionType#NONE} instead
-   * @property {Number} None
-   * @readonly
-   * @static
-   * @since 0.1
-   */
-  None = 0,
-  /**
-   * @deprecated Use {@link Device.Network.ConnectionType#MOBILE} instead
-   * @property {Number} Mobile
-   * @readonly
-   * @static
-   * @since 0.1
-   */
-  Mobile = 1,
-  /**
-   *
-   * @property {Number} WIFI
-   * @readonly
-   * @static
-   * @since 0.1
-   */
-  WIFI = 2,
-  /**
    *
    * @property {Number} NONE
    * @readonly
    * @static
    * @since 2.0.4
    */
-  NONE = 0,
+  NONE,
   /**
    *
    * @property {Number} MOBILE
@@ -45,7 +21,15 @@ export enum ConnectionType {
    * @static
    * @since 2.0.4
    */
-  MOBILE = 1
+  MOBILE,
+  /**
+   *
+   * @property {Number} WIFI
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  WIFI
 }
 
 export interface INetworkNotifier extends INativeComponent {
@@ -79,8 +63,7 @@ export interface INetworkNotifier extends INativeComponent {
    * @since 3.0.1
    */
   unsubscribe(): void;
-  get connectionTypeChanged(): ((type: ConnectionType) => void) | null;
-  set connectionTypeChanged(callback: ((type: ConnectionType) => void) | null);
+  connectionTypeChanged: ((type: ConnectionType) => void) | null;
 }
 /**
  * @class Device.Network
@@ -118,6 +101,7 @@ export declare class NetworkBase {
    *     });
    *
    */
+  public readonly Notifier: ConstructorOf<INetworkNotifier, Partial<INetworkNotifier>>;
   public readonly notifier: INetworkNotifier;
   /**
    *

@@ -308,6 +308,6 @@ export default class HttpAndroid extends HttpBase {
   }
 
   checkInternet() {
-    return !(Network.connectionType === ConnectionType.None);
+    return !(Network.connectionType === ConnectionType.NONE);
   }
 }

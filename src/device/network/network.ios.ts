@@ -11,40 +11,38 @@ class Notifier extends NativeComponent implements INetworkNotifier {
   };
   constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
     super(params);
-
-    if (this.nativeObject) {
-      this.nativeObject.stopNotifier();
-      this.nativeObject.removeObserver();
-      this.nativeObject.reachabilityChangedCallback = () => {
-        let sfStatus;
-        const status = this.nativeObject.currentReachabilityStatus();
-        switch (status) {
-          case 0:
-            sfStatus = Network.ConnectionType.NONE;
-            break;
-          case 1:
-            sfStatus = Network.ConnectionType.WIFI;
-            break;
-          case 2:
-            sfStatus = Network.ConnectionType.MOBILE;
-            break;
-          default:
-            break;
-        }
-
-        if (this.connectionTypeChanged) {
-          this.connectionTypeChanged(sfStatus);
-        }
-      };
-    }
   }
+  connectionTypeChanged: ((type: ConnectionType) => void) | null;
   protected createNativeObject(): any {
     const nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
     nativeObject.observeFromNotificationCenter();
+    nativeObject.reachabilityChangedCallback = () => {
+      let sfStatus = Network.ConnectionType.NONE;
+      const status = this.nativeObject.currentReachabilityStatus();
+      switch (status) {
+        case 0:
+          sfStatus = Network.ConnectionType.NONE;
+          break;
+        case 1:
+          sfStatus = Network.ConnectionType.WIFI;
+          break;
+        case 2:
+          sfStatus = Network.ConnectionType.MOBILE;
+          break;
+        default:
+          break;
+      }
+      this.connectionTypeChanged?.(sfStatus);
+    };
     return nativeObject;
   }
-  subscribe(callback) {
-    this.connectionTypeChanged = callback;
+  subscribe(callback: Notifier['_connectionTypeChanged']) {
+    if (typeof callback === 'function') {
+      this.connectionTypeChanged = callback;
+      this.nativeObject.startNotifier();
+    } else {
+      this.unsubscribe();
+    }
   }
 
   unsubscribe() {
@@ -52,23 +50,12 @@ class Notifier extends NativeComponent implements INetworkNotifier {
     this.nativeObject.removeObserver();
     this.connectionTypeChanged = null;
   }
-  get connectionTypeChanged() {
-    return this._connectionTypeChanged;
-  }
-  set connectionTypeChanged(value) {
-    if (typeof value === 'function') {
-      this._connectionTypeChanged = value;
-      this.nativeObject.startNotifier();
-    } else if (typeof value === 'object') {
-      this._connectionTypeChanged = value;
-      this.nativeObject.stopNotifier();
-    }
-  }
 }
 
 class NetworkIOS implements NetworkBase {
   ConnectionType = ConnectionType;
   public readonly notifier: INetworkNotifier = new Notifier();
+  public readonly Notifier = Notifier;
   roamingEnabled: boolean = false;
   get SMSEnabled(): boolean {
     return false;
