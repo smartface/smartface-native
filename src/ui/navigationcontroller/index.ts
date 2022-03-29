@@ -214,13 +214,6 @@ export abstract class AbstractNavigationController extends NativeComponent imple
   abstract willShow: (params: { controller: Controller; animated?: boolean }) => void;
   abstract onTransition: (e: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
   abstract headerBar: HeaderBar;
-
-  protected __isActive: boolean = false;
-  protected _childControllers: Controller[] = [];
-  protected _willShowCallback: (opts?: { controller: IController; animated?: boolean }) => void;
-  protected _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
-  protected _headerBar: HeaderBar;
-
   parentController: INavigationController;
   controller: IController;
   animation?: boolean;

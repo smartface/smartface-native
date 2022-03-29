@@ -8,6 +8,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   private _android = {};
   private _ios = {};
   view: NavigationView;
+  protected _headerBar: HeaderBar;
   protected model: NavigationModel;
   pageID: number;
   tabBar?: TabBarController;

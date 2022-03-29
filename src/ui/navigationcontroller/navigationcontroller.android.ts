@@ -10,13 +10,26 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   protected createNativeObject() {
     return null;
   }
-  static NavCount = 0;
-  static OperationType = OperationType;
+  protected _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;
+  protected _willShowCallback: (opts?: { controller: IController; animated?: boolean }) => void;
+
   private pageIDCollectionInStack = {};
   private __navID: number;
   isInsideBottomTabBar: boolean = false;
   popupBackNavigator: any;
   popUpBackPage: Page | null;
+  private ___isActive = false;
+  set __isActive(value: boolean) {
+    // console.info('isActive is sett: ', {
+    //   value,
+    //   error: Error().stack
+    // });
+    this.___isActive = value;
+  }
+  get __isActive(): boolean {
+    return this.___isActive;
+  }
+
   protected _childControllers: INavigationController['childControllers'] = [];
   constructor(params: Partial<INavigationController> = {}) {
     super(params);
@@ -80,14 +93,17 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     if (params.controller.pageID && !this.pageIDCollectionInStack[params.controller.pageID]) {
       throw new Error("This page doesn't exist in history!");
     }
+    // console.log('in navigationcontroller:android:show before __isActive: ', this.__isActive, {
+    //   stack: Error().stack
+    // });
     if (!this.__isActive) {
       return;
     }
     if (params.animated) {
       params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT;
     }
-    if (params.controller instanceof NavigationController) {
-      params.controller.parentController ||= this;
+    if (!params.controller.parentController) {
+      params.controller.parentController = this;
     }
     this._willShowCallback?.({
       controller: params.controller,
@@ -98,7 +114,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     ViewController.activateController(params.controller);
 
     this.showController(params);
-    let currentController = this._childControllers[0];
+    let currentController;
     if (this._childControllers.length > 1) {
       currentController = this._childControllers[this._childControllers.length - 1];
     }
@@ -170,7 +186,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       return;
     }
 
-    FragmentTransaction.dismissTransition(this.getCurrentController(), !!params?.animated);
+    FragmentTransaction.dismissTransition(this.getCurrentController() as Page, !!params?.animated);
     FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
 
     if (this.popUpBackPage) {
@@ -247,4 +263,6 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     //TODO: currentController changed to controller
     this._onTransitionCallback?.({ controller: currentController, targetController: targetController, operation: OperationType.POP });
   }
+  static NavCount = 0;
+  static OperationType = OperationType;
 }
