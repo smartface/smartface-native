@@ -1,6 +1,6 @@
 import NavigationController, { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
 import Application from '../../application';
-import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
+import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import ViewController, { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 import BottomTabBarController from '../bottomtabbarcontroller';
 import { HeaderBar } from './headerbar';
@@ -48,7 +48,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       childController.parentController = this;
       childController.isInsideBottomTabBar = this.isInsideBottomTabBar;
       if (!childController.pageID) {
-        childController.pageID = FragmentTransaction.generatePageID();
+        childController.pageID = FragmentTransition.generatePageID();
       }
 
       // if (this.pageIDCollectionInStack[childController.pageID]) {
@@ -92,7 +92,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       return;
     }
     if (params.animated) {
-      params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT;
+      params.animationType = FragmentTransition.AnimationType.RIGHTTOLEFT;
     }
     if (!params.controller.parentController) {
       params.controller.parentController = this;
@@ -124,7 +124,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   }
   push(params: Parameters<INavigationController['push']>['0']) {
     if (!params.controller.pageID) {
-      params.controller.pageID = FragmentTransaction.generatePageID();
+      params.controller.pageID = FragmentTransition.generatePageID();
     }
 
     if (this.pageIDCollectionInStack[params.controller.pageID]) {
@@ -141,7 +141,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
   showController(params: ControllerPresentParams) {
     if (params.controller instanceof Page) {
       params.controller.isInsideBottomTabBar = this.isInsideBottomTabBar;
-      FragmentTransaction.push({
+      FragmentTransition.push({
         page: params.controller,
         animated: !params.animated, //First open, animated should be false
         animationType: params.animationType,
@@ -176,8 +176,8 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       return;
     }
 
-    FragmentTransaction.dismissTransition(this.getCurrentController() as Page, !!params?.animated);
-    FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
+    FragmentTransition.dismissTransition(this.getCurrentController() as Page, !!params?.animated);
+    FragmentTransition.checkBottomTabBarVisible(this.popUpBackPage);
 
     if (this.popUpBackPage) {
       Application.currentPage = this.popUpBackPage;
@@ -242,7 +242,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     this._willShowCallback?.({ controller: targetController, animated: params.animated });
     if (targetController instanceof Page) {
       const page = targetController;
-      FragmentTransaction.pop({
+      FragmentTransition.pop({
         page: page,
         animated: params.animated
       });

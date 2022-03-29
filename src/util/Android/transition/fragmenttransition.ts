@@ -20,7 +20,7 @@ interface TransitionParams {
   isComingFromPresent?: boolean;
   onCompleteCallback?: () => void;
   onComplete?: () => void;
-  animationType?: FragmentTransaction.AnimationType;
+  animationType?: FragmentTransition.AnimationType;
 }
 
 enum PagePopUpAnimationKeys {
@@ -28,11 +28,11 @@ enum PagePopUpAnimationKeys {
   EXIT
 }
 
-const pageAnimationsCache = new Map<FragmentTransaction.AnimationType, any>();
+const pageAnimationsCache = new Map<FragmentTransition.AnimationType, any>();
 const pagePopUpAnimationsCache = new Map<PagePopUpAnimationKeys, any>();
 const _addedFragmentsInContainer = new Map<number, boolean>();
 
-namespace FragmentTransaction {
+namespace FragmentTransition {
   export enum AnimationType {
     RIGHTTOLEFT = '0',
     LEFTTORIGHT = '1'
@@ -40,10 +40,10 @@ namespace FragmentTransaction {
 
   export let pageCount = 0;
   export function generatePageID() {
-    return ++FragmentTransaction.pageCount;
+    return ++FragmentTransition.pageCount;
   }
   export function push(params: TransitionParams) {
-    FragmentTransaction.checkBottomTabBarVisible(params.page);
+    FragmentTransition.checkBottomTabBarVisible(params.page);
 
     const tag = params.page.pageID;
     if (!tag) {
@@ -56,7 +56,7 @@ namespace FragmentTransaction {
     }
 
     if (!params.isComingFromPresent) {
-      FragmentTransaction.replace(params);
+      FragmentTransition.replace(params);
       return;
     }
 
@@ -64,9 +64,9 @@ namespace FragmentTransaction {
     page.popUpBackPage = currentPage as unknown as Page;
 
     if (currentPage?.transitionViews) {
-      FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
+      FragmentTransition.revealTransition(currentPage.transitionViews, page, params.animated);
     } else {
-      FragmentTransaction.popUpTransition(page, params.animated);
+      FragmentTransition.popUpTransition(page, params.animated);
       const isPresentLayoutFocused = page?.layout?.nativeObject.isFocused();
       currentPage?.layout?.nativeObject.setFocusableInTouchMode(false);
       if (!isPresentLayoutFocused) {
@@ -78,9 +78,9 @@ namespace FragmentTransaction {
 
   export function pop(params: any) {
     if (params) {
-      params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT;
-      FragmentTransaction.checkBottomTabBarVisible(params.page);
-      FragmentTransaction.replace(params);
+      params.animationType = FragmentTransition.AnimationType.LEFTTORIGHT;
+      FragmentTransition.checkBottomTabBarVisible(params.page);
+      FragmentTransition.replace(params);
     }
   }
 
@@ -91,14 +91,14 @@ namespace FragmentTransaction {
     if (params.animated) {
       const animationType = DirectionBasedConverter.getAnimationType(params.animationType);
       switch (animationType) {
-        case FragmentTransaction.AnimationType.RIGHTTOLEFT:
-          FragmentTransaction.rightToLeftTransitionAnimation(fragmentTransaction);
+        case FragmentTransition.AnimationType.RIGHTTOLEFT:
+          FragmentTransition.rightToLeftTransitionAnimation(fragmentTransaction);
           break;
-        case FragmentTransaction.AnimationType.LEFTTORIGHT:
-          FragmentTransaction.leftToRightTransitionAnimation(fragmentTransaction);
+        case FragmentTransition.AnimationType.LEFTTORIGHT:
+          FragmentTransition.leftToRightTransitionAnimation(fragmentTransaction);
           break;
         default:
-          FragmentTransaction.rightToLeftTransitionAnimation(fragmentTransaction);
+          FragmentTransition.rightToLeftTransitionAnimation(fragmentTransaction);
           break;
       }
     }
@@ -118,12 +118,12 @@ namespace FragmentTransaction {
   }
 
   export function revealTransition(transitionViews: Page['transitionViews'], page: Page, animated = true) {
-    FragmentTransaction.checkBottomTabBarVisible(page);
+    FragmentTransition.checkBottomTabBarVisible(page);
     const rootViewId = NativeR.id.page_container;
     const fragmentManager = activity.getSupportFragmentManager();
     const fragmentTransaction = fragmentManager.beginTransaction();
 
-    FragmentTransaction.addSharedElement({
+    FragmentTransition.addSharedElement({
       page: page,
       animated: animated,
       fragmentTransaction: fragmentTransaction,
@@ -137,7 +137,7 @@ namespace FragmentTransaction {
   }
 
   export function popUpTransition(page: Page, animation?: boolean) {
-    FragmentTransaction.checkBottomTabBarVisible(page);
+    FragmentTransition.checkBottomTabBarVisible(page);
     const rootViewId = NativeR.id.page_container;
     const fragmentManager = activity.getSupportFragmentManager();
     const fragmentTransaction = fragmentManager.beginTransaction();
@@ -168,7 +168,7 @@ namespace FragmentTransaction {
       popupBackPage = page.parentController.popUpBackPage;
       if (popupBackPage?.transitionViews) {
         _addedFragmentsInContainer[page.pageID] = false;
-        FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
+        FragmentTransition.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
         return;
       }
     }
@@ -217,33 +217,33 @@ namespace FragmentTransaction {
   }
 
   export function leftToRightTransitionAnimation(fragmentTransaction: TransitionParams['fragmentTransaction']) {
-    if (!pageAnimationsCache.get(FragmentTransaction.AnimationType.LEFTTORIGHT)) {
+    if (!pageAnimationsCache.get(FragmentTransition.AnimationType.LEFTTORIGHT)) {
       const packageName = activity.getPackageName();
       const resources = AndroidConfig.activityResources;
-      pageAnimationsCache.set(FragmentTransaction.AnimationType.LEFTTORIGHT, {
+      pageAnimationsCache.set(FragmentTransition.AnimationType.LEFTTORIGHT, {
         rightEnter: resources.getIdentifier('slide_right_enter', 'anim', packageName),
         rightExit: resources.getIdentifier('slide_right_exit', 'anim', packageName)
       });
     }
 
-    const { rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransaction.AnimationType.LEFTTORIGHT);
+    const { rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransition.AnimationType.LEFTTORIGHT);
 
     if (rightEnter !== 0 && rightExit !== 0) {
       fragmentTransaction.setCustomAnimations(rightEnter, rightExit);
     }
   }
   export function rightToLeftTransitionAnimation(fragmentTransaction: TransitionParams['fragmentTransaction']) {
-    if (!pageAnimationsCache.get(FragmentTransaction.AnimationType.RIGHTTOLEFT)) {
+    if (!pageAnimationsCache.get(FragmentTransition.AnimationType.RIGHTTOLEFT)) {
       const packageName = activity.getPackageName();
       const resources = AndroidConfig.activityResources;
-      pageAnimationsCache.set(FragmentTransaction.AnimationType.RIGHTTOLEFT, {
+      pageAnimationsCache.set(FragmentTransition.AnimationType.RIGHTTOLEFT, {
         leftEnter: resources.getIdentifier('slide_left_enter', 'anim', packageName),
         leftExit: resources.getIdentifier('slide_left_exit', 'anim', packageName),
         rightEnter: resources.getIdentifier('slide_right_enter', 'anim', packageName),
         rightExit: resources.getIdentifier('slide_right_exit', 'anim', packageName)
       });
     }
-    const { leftEnter, leftExit, rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransaction.AnimationType.RIGHTTOLEFT);
+    const { leftEnter, leftExit, rightEnter, rightExit } = pageAnimationsCache.get(FragmentTransition.AnimationType.RIGHTTOLEFT);
 
     if (leftEnter !== 0 && leftExit !== 0) {
       fragmentTransaction.setCustomAnimations(leftEnter, leftExit, rightEnter, rightExit);
@@ -259,4 +259,4 @@ function setPopUpAnimationsCache() {
   pagePopUpAnimationsCache.set(PagePopUpAnimationKeys.EXIT, resources.getIdentifier('ondismiss_animation', 'anim', packageName));
 }
 
-export default FragmentTransaction;
+export default FragmentTransition;

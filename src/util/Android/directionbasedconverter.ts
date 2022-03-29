@@ -1,6 +1,6 @@
 import Application from '../../application';
 import View from '../../ui/view';
-import FragmentTransaction from './transition/fragmenttransition';
+import FragmentTransition from './transition/fragmenttransition';
 
 function getDirection() {
   return Application.android.getLayoutDirection;
@@ -15,14 +15,14 @@ namespace DirectionBasedConverter {
     return getDirection() === Application.LayoutDirection.RIGHTTOLEFT ? array.length - 1 - index : index;
   }
 
-  export function getAnimationType(animationType: FragmentTransaction.AnimationType) {
+  export function getAnimationType(animationType: FragmentTransition.AnimationType) {
     if (getDirection() === Application.LayoutDirection.LEFTTORIGHT) {
       return animationType;
     }
-    if (animationType === FragmentTransaction.AnimationType.LEFTTORIGHT) {
-      return FragmentTransaction.AnimationType.RIGHTTOLEFT;
-    } else if (animationType === FragmentTransaction.AnimationType.RIGHTTOLEFT) {
-      return FragmentTransaction.AnimationType.LEFTTORIGHT;
+    if (animationType === FragmentTransition.AnimationType.LEFTTORIGHT) {
+      return FragmentTransition.AnimationType.RIGHTTOLEFT;
+    } else if (animationType === FragmentTransition.AnimationType.RIGHTTOLEFT) {
+      return FragmentTransition.AnimationType.LEFTTORIGHT;
     } else {
       return -1;
     }

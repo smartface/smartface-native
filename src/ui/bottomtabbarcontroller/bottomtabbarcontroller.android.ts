@@ -6,7 +6,7 @@ import BottomTabBar from '../bottomtabbar';
 import ViewController from '../../util/Android/transition/viewcontroller';
 import NavigationController, { IController } from '../navigationcontroller';
 import Page from '../page';
-import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
+import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBarAndroid from '../bottomtabbar/bottomtabbar.android';
@@ -159,9 +159,9 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
     if (childController instanceof Page) {
       childController.isActive = true;
       if (!childController.pageID) {
-        childController.pageID = FragmentTransaction.generatePageID();
+        childController.pageID = FragmentTransition.generatePageID();
       }
-      FragmentTransaction.push({
+      FragmentTransition.push({
         page: childController,
         animated: false
       });

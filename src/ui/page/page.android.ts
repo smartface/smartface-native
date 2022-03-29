@@ -13,7 +13,7 @@ import WebViewAndroid from '../webview/webview.android';
 import DocumentPickerAndroid from '../../device/documentpicker/documentpicker.android';
 import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
 import ViewController from '../../util/Android/transition/viewcontroller';
-import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
+import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import ImageAndroid from '../image/image.android';
 import type Image from '../image';
 import SearchView from '../searchview';
@@ -216,7 +216,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       !isPrevLayoutFocused && this.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
       !isPrevLayoutFocused && this.popUpBackPage.layout.nativeObject.requestFocus();
     }
-    FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage as any);
+    FragmentTransition.checkBottomTabBarVisible(this.popUpBackPage as any);
     Application.currentPage = this.popUpBackPage; //TODO: Find a better fix
     params?.onComplete();
   }

@@ -2,7 +2,7 @@ import { INativeComponent } from '../../core/inative-component';
 import TabBarController from '../tabbarcontroller';
 import { IBottomTabBar } from '../bottomtabbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
-import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
+import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import NativeComponent from '../../core/native-component';
 import { HeaderBar } from './headerbar';
 import { IView } from '../view/view';
@@ -220,7 +220,7 @@ export abstract class AbstractNavigationController extends NativeComponent imple
   animated?: boolean;
   isComingFromPresent?: boolean;
   onComplete?: () => void;
-  animationType?: FragmentTransaction.AnimationType;
+  animationType?: FragmentTransition.AnimationType;
   tabBar?: TabBarController;
   pageID: number;
   popupBackNavigator: boolean;
