@@ -37,17 +37,20 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private _onScrollListener: any;
   private _snapToAlignment: any;
   private _nativeLinearSnapHelper: any;
-  constructor(params?: Partial<IGridView>) {
-    super(params);
-    if (!this.nativeObject) {
-      this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
-    }
+  createNativeObject() {
+    return new NativeSwipeRefreshLayout(AndroidConfig.activity);
+  }
+  init(params?: Partial<IGridView>) {
     this.setNativeInner();
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
     this.nativeObject.addView(this.nativeInner);
     this.setNativeEvents();
     this.setDataAdapter();
+    super.init(params);
+  }
+  constructor(params?: Partial<IGridView>) {
+    super(params);
   }
   onItemCreate: (type?: number) => GridViewItem;
   onItemBind: (item?: GridViewItem, index?: number) => void;

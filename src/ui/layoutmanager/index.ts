@@ -145,17 +145,75 @@ export declare interface ILayoutManager extends INativeComponent, MobileOSProps<
 }
 
 export abstract class AbstractLayoutManager<TNative = any> extends NativeMobileComponent<TNative, ILayoutManager> implements ILayoutManager {
-  abstract lineSpacing: number;
-  abstract itemSpacing: number;
-  abstract onItemLength: null | ((length: number) => number);
-  abstract onFullSpan: null | ((type: number) => number);
-  abstract spanCount: number;
-  abstract contentInset: Boundary;
-  abstract scrollDirection: ScrollDirection;
+  abstract get itemSpacing(): number;
+  abstract set itemSpacing(value: number);
+  abstract get lineSpacing(): number;
+  abstract set lineSpacing(value: number);
+  abstract get spanCount(): number;
+  abstract set spanCount(value: number);
+  abstract get contentInset(): Boundary;
+  abstract set contentInset(value: Boundary);
+  abstract get scrollDirection(): ScrollDirection;
+  abstract set scrollDirection(value: ScrollDirection);
+  abstract get onFullSpan(): ILayoutManager['onFullSpan'];
+  abstract set onFullSpan(value: ILayoutManager['onFullSpan']);
+  abstract get onItemLength(): ILayoutManager['onItemLength'];
+  abstract set onItemLength(value: ILayoutManager['onItemLength']);
   static ScrollDirection: typeof ScrollDirection;
 }
 
-const LayoutManager: typeof AbstractLayoutManager = require(`./layoutmanager.${Device.deviceOS.toLowerCase()}`).default;
-type LayoutManager = AbstractLayoutManager;
+export class LayoutManagerImpl extends AbstractLayoutManager {
+  protected createNativeObject() {
+    throw new Error('Method not implemented.');
+  }
+  get itemSpacing(): number {
+    throw new Error('Method not implemented.');
+  }
+  set itemSpacing(value: number) {
+    throw new Error('Method not implemented.');
+  }
+  get lineSpacing(): number {
+    throw new Error('Method not implemented.');
+  }
+  set lineSpacing(value: number) {
+    throw new Error('Method not implemented.');
+  }
+  get spanCount(): number {
+    throw new Error('Method not implemented.');
+  }
+  set spanCount(value: number) {
+    throw new Error('Method not implemented.');
+  }
+  get contentInset(): Boundary {
+    throw new Error('Method not implemented.');
+  }
+  set contentInset(value: Boundary) {
+    throw new Error('Method not implemented.');
+  }
+  get scrollDirection(): ScrollDirection {
+    throw new Error('Method not implemented.');
+  }
+  set scrollDirection(value: ScrollDirection) {
+    throw new Error('Method not implemented.');
+  }
+  get onFullSpan(): ILayoutManager['onFullSpan'] {
+    throw new Error('Method not implemented.');
+  }
+  set onFullSpan(value: ILayoutManager['onFullSpan']) {
+    throw new Error('Method not implemented.');
+  }
+  get onItemLength(): ILayoutManager['onItemLength'] {
+    throw new Error('Method not implemented.');
+  }
+  set onItemLength(value: ILayoutManager['onItemLength']) {
+    throw new Error('Method not implemented.');
+  }
+  constructor(params: Partial<ILayoutManager>) {
+    super(params);
+  }
+}
+
+const LayoutManager: typeof LayoutManagerImpl = require(`./layoutmanager.${Device.deviceOS.toLowerCase()}`).default;
+type LayoutManager = LayoutManagerImpl;
 
 export default LayoutManager;

@@ -9,13 +9,13 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
   protected createNativeObject() {
     return new __SF_UICollectionViewFlowLayout();
   }
-  onFullSpan: (type: number) => number;
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
   private _itemSpacing: ILayoutManager['itemSpacing'];
   private _scrollDirection: ILayoutManager['scrollDirection'] = ScrollDirection.VERTICAL;
   private _contentInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
   private _onItemLength: ILayoutManager['onItemLength'] = () => DEFAULT_ITEM_LENGTH;
+  private _onFullSpanCallback: ILayoutManager['onFullSpan'];
   collectionView: __SF_UICollectionView | null = null;
   jsCollectionView: GridViewIOS; //TODO: Find a better solution. Normally we shouldn't need this.
   private _sectionInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
@@ -30,7 +30,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
         const __fullSpanSize = this.calculateItemSize(1);
         this.collectionView.sizeForItemAtIndexPath = (collectionView: LayoutManagerIOS['collectionView'], indexPath: __SF_NSIndexPath) => {
           const span = Number(this.jsCollectionView.onItemType(indexPath.row));
-          const itemLength = this.onFullSpan(span);
+          const itemLength = this.onFullSpan?.(span);
           if (itemLength === undefined) {
             return retval;
           }
@@ -106,7 +106,12 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
   }
   set onItemLength(value: ILayoutManager['onItemLength']) {
     this._onItemLength = value;
-    this.nativeObject.scrollDirection = value;
+  }
+  get onFullSpan(): ILayoutManager['onFullSpan'] {
+    return this._onFullSpanCallback;
+  }
+  set onFullSpan(value: ILayoutManager['onFullSpan']) {
+    this._onFullSpanCallback = value;
   }
   private get itemLength(): number {
     return this._itemLength;
