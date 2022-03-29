@@ -8,3 +8,5 @@ export const XHREventsEvents = {
     readystatechange: 'readystatechange',
     timeout: 'timeout',
 } as const;
+
+export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;

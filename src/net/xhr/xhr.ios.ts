@@ -5,7 +5,6 @@ import { MobileOSProps } from "../../core/native-mobile-component";
 import { HttpErrorResponse, HttpRequestOptions, HttpResponse, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
 import { XHREventsEvents } from "./xhr-events";
 
-export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;
 class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps> implements IXHR {
     public static UNSENT = 0;
     public static OPENED = 1;
