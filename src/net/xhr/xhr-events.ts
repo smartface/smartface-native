@@ -1,10 +1,10 @@
 export const XHREventsEvents = {
-  readystatechange: 'readystatechange',
-  loadstart: 'loadstart',
-  progress: 'progress',
-  abort: 'abort',
-  error: 'error',
-  load: 'load',
-  timeout: 'timeout',
-  loadend: 'loadend'
+    abort: 'abort',
+    error: 'error',
+    load: 'load',
+    loadend: 'loadend',
+    loadstart: 'loadstart',
+    progress: 'progress',
+    readystatechange: 'readystatechange',
+    timeout: 'timeout',
 } as const;
