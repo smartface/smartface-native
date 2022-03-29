@@ -23,6 +23,8 @@ namespace DirectionBasedConverter {
       return FragmentTransaction.AnimationType.RIGHTTOLEFT;
     } else if (animationType === FragmentTransaction.AnimationType.RIGHTTOLEFT) {
       return FragmentTransaction.AnimationType.LEFTTORIGHT;
+    } else {
+      return -1;
     }
   }
 

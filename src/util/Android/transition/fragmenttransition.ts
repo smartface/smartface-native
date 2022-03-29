@@ -3,7 +3,6 @@ import Application from '../../../application';
 import ViewController from './viewcontroller';
 import DirectionBasedConverter from '../directionbasedconverter';
 import type Page from '../../../ui/page';
-import type { IController } from '../../../ui/navigationcontroller';
 
 const NativeTransitionInflater = requireClass('androidx.transition.TransitionInflater');
 const NativeAnimationUtils = requireClass('io.smartface.android.utils.AnimationUtil');
@@ -99,6 +98,7 @@ namespace FragmentTransaction {
           FragmentTransaction.leftToRightTransitionAnimation(fragmentTransaction);
           break;
         default:
+          FragmentTransaction.rightToLeftTransitionAnimation(fragmentTransaction);
           break;
       }
     }

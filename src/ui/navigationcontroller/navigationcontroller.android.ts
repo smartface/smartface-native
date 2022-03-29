@@ -103,7 +103,6 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     });
 
     ViewController.activateController(params.controller);
-
     this.showController(params);
     let currentController;
     if (this._childControllers.length > 1) {
@@ -188,7 +187,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     this.popupBackNavigator = null;
 
     ViewController.deactivateController(this);
-    params?.onComplete && params.onComplete();
+    params?.onComplete?.();
   }
   pop(params: Parameters<INavigationController['pop']>['0'] = {}) {
     if (this._childControllers.length < 2) {
