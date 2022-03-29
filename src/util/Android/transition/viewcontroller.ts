@@ -69,7 +69,9 @@ namespace ViewController {
       });
     } else if (params.controller instanceof Page) {
       // TODO: Check pageID settings! Code duplicate exists
-      !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
+      if (!params.controller.pageID) {
+        params.controller.pageID = FragmentTransition.generatePageID();
+      }
       // TODO: Check animation type. I am not sure about that!
       FragmentTransition.push({
         page: params.controller,

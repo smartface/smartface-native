@@ -74,18 +74,22 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   protected createNativeObject() {
     return {};
   }
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
+    this._secureWindowContent = false;
+    this._keepScreenAwake = false;
+  }
   statusBar: typeof StatusBar = StatusBar;
   private _sliderDrawer: SliderDrawerAndroid;
-  private _keepScreenAwake = false;
+  private _keepScreenAwake: boolean;
   private _onUnhandledError: ApplicationBase['onUnhandledError'];
   private _currentPage: PageAndroid;
   private _dispatchTouchEvent: ApplicationBase['android']['dispatchTouchEvent'];
   private __isSetOnItemSelectedListener: boolean;
   private _onReceivedNotification: ApplicationBase['onReceivedNotification'];
   private _keyboardMode: ApplicationBase['android']['keyboardMode'];
-  private _secureWindowContent = false;
-  private activity = AndroidConfig.activity;
-  private spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
+  private _secureWindowContent: boolean;
+  private spratAndroidActivityInstance: any;
   private _drawerLayout: any;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
@@ -116,7 +120,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       }
     });
 
-    const mDrawerLayout = this.activity.findViewById(NativeR.id.layout_root);
+    const mDrawerLayout = AndroidConfig.activity.findViewById(NativeR.id.layout_root);
     this.drawerLayout = mDrawerLayout;
 
     // Creating Activity Lifecycle listener
@@ -236,14 +240,14 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       const title = TypeUtil.isString(_chooserTitle) ? _chooserTitle : 'Select and application';
       const chooserIntent = NativeIntent.createChooser(intent, title);
       try {
-        this.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+        AndroidConfig.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
         _onFailure?.(e);
         return;
       }
     } else {
       try {
-        this.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+        AndroidConfig.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
       } catch (e) {
         _onFailure?.(e);
         return;
@@ -270,13 +274,13 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     }
   }
   exit() {
-    this.activity.finish();
+    AndroidConfig.activity.finish();
   }
   restart() {
     this.spratAndroidActivityInstance.restartSpratActivity();
   }
   hideKeyboard() {
-    const focusedView = this.activity.getCurrentFocus();
+    const focusedView = AndroidConfig.activity.getCurrentFocus();
     if (!focusedView) return;
     const windowToken = focusedView.getWindowToken();
     const inputManager = AndroidConfig.getSystemService(SystemServices.INPUT_METHOD_SERVICE, SystemServices.INPUT_METHOD_MANAGER);
@@ -343,18 +347,18 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     this._keepScreenAwake = value;
     if (this._keepScreenAwake) {
       // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-      this.activity.getWindow().addFlags(128);
+      AndroidConfig.activity.getWindow().addFlags(128);
     } else {
       // 128 = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-      this.activity.getWindow().clearFlags(128);
+      AndroidConfig.activity.getWindow().clearFlags(128);
     }
   }
   get byteReceived() {
-    const UID = this.activity.getApplicationInfo().uid;
+    const UID = AndroidConfig.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
   }
   get byteSent() {
-    const UID = this.activity.getApplicationInfo().uid;
+    const UID = AndroidConfig.activity.getApplicationInfo().uid;
     return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
   }
   get currentReleaseChannel() {
@@ -396,7 +400,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     const self = this;
     return {
       Permissions,
-      packageName: self.activity.getPackageName(),
+      packageName: AndroidConfig.activity.getPackageName(),
       get dispatchTouchEvent() {
         return self._dispatchTouchEvent;
       },
@@ -409,9 +413,9 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         }
         if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
           // PackageManager.PERMISSION_GRANTED
-          return NativeContextCompat.checkSelfPermission(self.activity, permission) === 0;
+          return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission) === 0;
         } else {
-          const packageManager = self.activity.getPackageManager();
+          const packageManager = AndroidConfig.activity.getPackageManager();
           // PackageManager.PERMISSION_GRANTED
           return packageManager.checkPermission(permission, self.android.packageName) === 0;
         }
@@ -428,18 +432,18 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
               result: self.android.checkPermission?.(permissions) || false
             });
         } else {
-          self.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
+          AndroidConfig.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
         }
       },
       shouldShowRequestPermissionRationale(permission) {
         if (!TypeUtil.isString(permission)) {
           throw new Error('Permission must be Application.Permission type');
         }
-        return AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW && self.activity.shouldShowRequestPermissionRationale(permission);
+        return AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW && AndroidConfig.activity.shouldShowRequestPermissionRationale(permission);
       },
       setAppTheme(currentTheme) {
-        const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
-        const _themeRes = self.activity.getResources().getIdentifier(currentTheme, 'style', self.activity.getPackageName());
+        const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(AndroidConfig.activity);
+        const _themeRes = AndroidConfig.activity.getResources().getIdentifier(currentTheme, 'style', AndroidConfig.activity.getPackageName());
         sharedPreferences.edit().putInt('SFCurrentBaseTheme', _themeRes).commit();
       },
       get navigationBar() {
@@ -451,28 +455,28 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       set keyboardMode(modeEnum) {
         if (typeof modeEnum !== 'number') return;
         self._keyboardMode = modeEnum;
-        self.activity.getWindow().setSoftInputMode(modeEnum);
+        AndroidConfig.activity.getWindow().setSoftInputMode(modeEnum);
       },
       get locale() {
         return LocaleConfigurationUtil.getDeviceLanguage();
       },
       set locale(languageCode) {
         if (TypeUtil.isString(languageCode)) {
-          const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(self.activity);
+          const sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(AndroidConfig.activity);
           sharedPreferences.edit().putString('AppLocale', languageCode).commit();
-          LocaleHelperUtil.changeConfigurationLocale(self.activity);
+          LocaleHelperUtil.changeConfigurationLocale(AndroidConfig.activity);
         }
       },
       get getLayoutDirection() {
-        return self.activity.getResources().getConfiguration().getLayoutDirection();
+        return AndroidConfig.activity.getResources().getConfiguration().getLayoutDirection();
       },
       get secureWindowContent() {
         return self._secureWindowContent;
       },
       set secureWindowContent(value) {
         self._secureWindowContent = value;
-        if (self._secureWindowContent) self.activity.getWindow().setFlags(FLAG_SECURE, FLAG_SECURE);
-        else self.activity.getWindow().clearFlags(FLAG_SECURE);
+        if (self._secureWindowContent) AndroidConfig.activity.getWindow().setFlags(FLAG_SECURE, FLAG_SECURE);
+        else AndroidConfig.activity.getWindow().clearFlags(FLAG_SECURE);
       }
     };
   }

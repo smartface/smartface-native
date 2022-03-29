@@ -7,8 +7,10 @@ import ViewController from '../../util/Android/transition/viewcontroller';
 import NavigationController, { IController } from '../navigationcontroller';
 import Page from '../page';
 import FragmentTransaction from '../../util/Android/transition/fragmenttransition';
-import { EventEmitter } from '../../core/eventemitter';
 import { HeaderBar } from '../navigationcontroller/headerbar';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import BottomTabBarAndroid from '../bottomtabbar/bottomtabbar.android';
+import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
@@ -17,57 +19,57 @@ const NativeBottomNavigationView = requireClass('com.google.android.material.bot
 const NativeSFR = requireClass(AndroidConfig.packageName + '.R');
 const NativeForegroundColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 
-export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTabbarControllerEvents> implements IBottomTabBarController {
+export default class BottomTabbarControllerAndroid extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
   private _addedToActivity = false;
   private _disabledShiftingMode = false;
-  private _menu;
+  private _menu: any;
   private _childControllers: IController[] = [];
   private _selectedIndex = 0;
   private _shouldSelectByIndexCallback: ({ index: number }) => boolean;
   private _didSelectByIndexCallback: (params: { index: number }) => void;
   private initializeOneTime = false;
-  private cahceNativeViews = {};
   private cacheNativeBuilders = {};
-  private __isActive;
+  private __isActive: boolean;
   private __targetIndex: number;
   pageID: number;
   popupBackNavigator: any;
   isActive: boolean;
   parentController: IController;
   headerBar?: HeaderBar;
-  nativeObject: any;
   isInsideBottomTabBar: boolean;
-  constructor(params?: Partial<IBottomTabBarController>) {
-    super();
+  constructor(params?: any) {
+    super(params);
     Application.tabBar = new BottomTabBar();
 
     const listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
-    const self = this;
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(
       listener.implement({
-        onNavigationItemSelected: function (item) {
+        onNavigationItemSelected: (item: any) => {
           const index = item.getItemId();
-          const result = self.shouldSelectByIndex?.({ index: index }) || true;
-          self.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
-          if (!result) return false;
+          const result = this.shouldSelectByIndex?.({ index: index }) || true;
+          this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
+          if (!result) {
+            return false;
+          }
 
-          this.controlAttributedTextColor(self.tabBar, index, self.cacheNativeBuilders);
+          this.controlAttributedTextColor(index, this.cacheNativeBuilders);
 
           // TODO: Add self property to controller class
           // use self property to show/hide bottom naviagtion view after controller transition
-          self.childControllers[self._selectedIndex] && ViewController.deactivateController(self.childControllers[self._selectedIndex]);
-          self.childControllers[index].isInsideBottomTabBar = true;
-          self.childControllers[index].isActive = self.__isActive;
-          self.push(self.childControllers[index]);
-          self._selectedIndex = index;
+          this.childControllers[this._selectedIndex] && ViewController.deactivateController(this.childControllers[this._selectedIndex]);
+          this.childControllers[index].isInsideBottomTabBar = true;
+          this.childControllers[index].isActive = this.__isActive;
+          this.push(this.childControllers[index]);
+          this._selectedIndex = index;
           try {
-            self.didSelectByIndex?.({
+            this.didSelectByIndex?.({
               index: index
             });
-            self.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
+            this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
           } catch (e) {
-            Application.onUnhandledError && Application.onUnhandledError(e);
+            Application.onUnhandledError?.(e);
+            Application.emit('unhandledError', e);
           }
 
           return true;
@@ -76,7 +78,9 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     );
 
     this.addTabBarToActivity();
-    params && Object.assign(this, params);
+  }
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    return null;
   }
 
   shouldSelectViewController(index: any) {
@@ -140,11 +144,9 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     }
   }
   push(childController: any) {
-    if (!childController) {
+    if (!childController && !this.__isActive) {
       return;
     }
-
-    if (!this.__isActive) return;
 
     ViewController.deactivateController(this.getCurrentController());
 
@@ -243,7 +245,7 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
   /*
   Over draws the given foreground color based on selected and normal color of tabbar item. 
   */
-  controlAttributedTextColor(index, cache) {
+  controlAttributedTextColor(index: number, cache) {
     const tabBar = this.tabBar;
     const tabBarItem = tabBar.items[index];
     let nativeStringBuilder;
@@ -264,17 +266,17 @@ export default class BottomTabbarControllerAndroid extends EventEmitter<BottomTa
     }
     cache.prevSelectedAttributedItem = index;
   }
-  attributedItem(tabBarItem, color) {
+  attributedItem(tabBarItem: TabbarItemAndroid, color) {
     return this.attributedItemBuilder(tabBarItem, color);
   }
-  attributedItemBuilder(tabBarItem, color) {
+  attributedItemBuilder(tabBarItem: TabbarItemAndroid, color) {
     const nativeForegroundSpan = new NativeForegroundColorSpan(color);
     const nativeStringBuilder = tabBarItem._attributedTitleBuilder;
     nativeStringBuilder.setSpan(nativeForegroundSpan, 0, nativeStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
 
     return nativeStringBuilder;
   }
-  disableShiftMode(bottomTabBar) {
+  disableShiftMode(bottomTabBar: BottomTabBarAndroid) {
     bottomTabBar.nativeObject.setLabelVisibilityMode(1);
 
     const menuView = bottomTabBar.nativeObject.getChildAt(0);

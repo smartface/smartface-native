@@ -2,9 +2,52 @@ import Font from '../font';
 import { IBadge } from '../badge';
 import AttributedString from '../attributedstring';
 import { ConstructorOf } from '../../core/constructorof';
-import { INativeComponent } from '../../core/inative-component';
-import { IPage } from '../page/page';
+import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Image from '../image';
+import TabBarController from '../tabbarcontroller';
+import BottomTabbarController from '../bottomtabbarcontroller';
+import { IViewState } from '../view/view';
+
+export interface TabbarItemIOSProps {
+  /**
+   * Gets/sets font of tab bar item.
+   *
+   * @property {UI.Font} font
+   * @ios
+   * @since 4.0.2
+   */
+  font: Font;
+}
+
+export interface TabbarItemAndroidProps {
+  /**
+   * Gets/sets attributed title of tab bar item.
+   *
+   * @property {UI.AttributedString} attributedTitle
+   * @android
+   * @since 4.0.2
+   */
+  attributedTitle: AttributedString;
+  /**
+   * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
+   *
+   *     @example
+   *     var myItem = new TabBarItem({
+   *         android: {
+   *             systemIcon: 17301545   // OR 'ic_dialog_email'
+   *         },
+   *         title: "Page1"
+   *     });
+   *
+   *
+   * @property {Number | String} systemIcon
+   * @android
+   * @see https://developer.android.com/reference/android/R.drawable
+   * @since 4.0.2
+   */
+  systemIcon: number | string;
+}
+
 /**
  * @class UI.TabBarItem
  * @since 1.1.10
@@ -26,7 +69,7 @@ import Image from '../image';
  *     });
  *     myTab.add('home', myItem);
  */
-export declare interface ITabbarItem extends INativeComponent {
+export declare interface ITabbarItem extends INativeMobileComponent<any, WithMobileOSProps<any, TabbarItemIOSProps, TabbarItemAndroidProps>> {
   /**
    * Gets/sets the title of tab item.
    *
@@ -46,7 +89,7 @@ export declare interface ITabbarItem extends INativeComponent {
    * @ios
    * @since 1.1.10
    */
-  icon: { normal: Image | string; selected: Image | string } | Image | string | undefined;
+  icon: Image | IViewState<Image> | string | undefined;
   /**
    * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge usage isn't currently supported if this TabBarItem is belongs to TabBarController.
    * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.
@@ -71,48 +114,9 @@ export declare interface ITabbarItem extends INativeComponent {
    * @since 1.1.10
    */
   route: string;
-
-  android: Partial<{
-    /**
-     * Gets/sets attributed title of tab bar item.
-     *
-     * @property {UI.AttributedString} attributedTitle
-     * @android
-     * @since 4.0.2
-     */
-    attributedTitle: AttributedString;
-    /**
-     * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
-     *
-     *     @example
-     *     var myItem = new TabBarItem({
-     *         android: {
-     *             systemIcon: 17301545   // OR 'ic_dialog_email'
-     *         },
-     *         title: "Page1"
-     *     });
-     *
-     *
-     * @property {Number | String} systemIcon
-     * @android
-     * @see https://developer.android.com/reference/android/R.drawable
-     * @since 4.0.2
-     */
-    systemIcon: number | string;
-  }>;
-  ios: Partial<{
-    /**
-     * Gets/sets font of tab bar item.
-     *
-     * @property {UI.Font} font
-     * @ios
-     * @since 4.0.2
-     */
-    font: Font;
-  }>;
   invalidate(): void;
   setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon?: string | number }): void;
-  tabBarItemParent: IPage | null;
+  tabBarItemParent: TabBarController | BottomTabbarController | null;
 }
 
 const TabbarItem: ConstructorOf<ITabbarItem, Partial<ITabbarItem>> = require(`./tabbaritem.${Device.deviceOS.toLowerCase()}`).default;

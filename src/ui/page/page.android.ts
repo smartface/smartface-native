@@ -86,6 +86,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   static Orientation = Orientation;
 
   headerBar: HeaderBar;
+  isSwipeViewPage = false;
+  popUpBackPage: PageAndroid;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
   private pageLayoutContainer: any;
@@ -93,11 +95,9 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
   private isCreated = false;
   private optionsMenu: any = null;
   private actionBar: any = null;
-  isSwipeViewPage = false;
   private _orientation: PageOrientation = PageOrientation.PORTRAIT;
   private rootLayout: FlexLayoutAndroid;
   private _headerBarItems: HeaderBarItem[] = [];
-  private popUpBackPage: PageAndroid;
   private returnRevealAnimation: boolean;
   private _headerBarColor: ColorAndroid;
   private _headerBarImage: Image;
@@ -216,8 +216,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
       !isPrevLayoutFocused && this.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
       !isPrevLayoutFocused && this.popUpBackPage.layout.nativeObject.requestFocus();
     }
-    FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage);
-    (Application.currentPage as any) = this.popUpBackPage; //TODO: Find a better fix
+    FragmentTransaction.checkBottomTabBarVisible(this.popUpBackPage as any);
+    Application.currentPage = this.popUpBackPage; //TODO: Find a better fix
     params?.onComplete();
   }
   private setCallbacks() {

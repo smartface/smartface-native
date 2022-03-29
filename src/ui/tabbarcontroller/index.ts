@@ -254,7 +254,7 @@ export abstract class AbstractTabBarController<TEvent extends string = TabBarCon
   onSelected: (index: number) => void;
 }
 
-class TabBarControllerImpl extends AbstractTabBarController {
+export class TabBarControllerImpl extends AbstractTabBarController {
   protected createNativeObject() {
     throw new Error('Method not implemented.');
   }

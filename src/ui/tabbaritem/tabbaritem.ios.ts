@@ -2,22 +2,23 @@ import { ITabbarItem } from '.';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import Badge, { IBadge } from '../badge';
+import { IBottomTabBarController } from '../bottomtabbarcontroller';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import Image from '../image';
-import { IPage } from '../page/page';
+import TabBarController from '../tabbarcontroller';
 
 export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   protected createNativeObject() {
     return null;
   }
-  private _nativeView;
+  private _nativeView: any;
   private _title: string = '';
-  private _icon: any;
+  private _icon;
   private _badge: IBadge | Record<string, any>;
   private _route: string;
 
-  constructor(params?: Partial<TabbarItemIOS>) {
+  constructor(params?: Partial<ITabbarItem>) {
     super(params);
     this.nativeObject = undefined;
     if (params?.nativeObject) {
@@ -60,10 +61,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
       }
     });
   }
-  setProperties(params: { itemTitle: string; itemIcon: string | { normal: string | Image; selected: string | Image } | Image; systemIcon?: string | number | undefined }): void {
+  tabBarItemParent: TabBarController | IBottomTabBarController | null;
+  setProperties(params): void {
     throw new Error('Method not implemented.');
   }
-  tabBarItemParent: IPage | null = null;
   get android() {
     return this._android;
   }
@@ -104,7 +105,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   get icon() {
     return this._icon;
   }
-  set icon(icon: { normal: Image | string; selected: Image | string } | Image | string) {
+  set icon(icon) {
     if (typeof icon === 'object') {
       this._icon = icon;
       if (this.nativeObject) {

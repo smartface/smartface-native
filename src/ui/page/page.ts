@@ -414,6 +414,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   abstract getCurrentController(): IController;
   abstract show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
   parentController: IController;
+  popUpBackPage?: AbstractPage;
   pageID: number;
   popupBackNavigator: any;
   isActive: boolean;
@@ -438,7 +439,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
 }
 
 export declare class PageImpl extends AbstractPage implements IPage {
-  protected createNativeObject();
+  protected createNativeObject(): any;
   onLoad(): void;
   onShow(): void;
   onHide(): void;

@@ -8,6 +8,7 @@ import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeView from '../swipeview';
 import { ITabbarItem } from '../tabbaritem';
+import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 
 /* globals requireClass */
@@ -22,7 +23,7 @@ const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
   private _onPageCreateCallback: (index: number) => Page;
-  private _items: ITabbarItem[];
+  private _items: TabbarItemAndroid[];
   private _barColor: Color;
   private _indicatorColor: Color;
   private _textColor: Color | { normal: Color; selected: Color };
@@ -158,12 +159,12 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
 
   get items(): ITabbarItem[] {
-    return this._items;
+    return this._items as unknown as ITabbarItem[];
   }
   set items(value: ITabbarItem[]) {
     // TODO: We have updated UI.TabBarItem in Router v2.
     // After it will merge, title and icon must be updated dynamically.
-    this._items = value;
+    this._items = value as unknown as TabbarItemAndroid[];
 
     // TODO: Maybe later, swipeView pageCount can be set dynamically.
     // After that, use refreshData method like listview.
@@ -172,19 +173,14 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
 
     for (let i = 0; i < this._items.length; i++) {
       const item = this._items[i];
-      // TODO: no _attributedTitleBuilder property in ItemTabbar. Ask it.
-      // const itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
-      const itemTitle = item.title;
+      const itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
 
-      // TODO: no tabBarItemParent property in ItemTabbar. Ask it.
-      // @ts-ignore
-      item.tabBarItemParent = this;
+      item.tabBarItemParent = this as any;
       // TODO: no nativeObject property in ItemTabbar. Ask it.
-      // @ts-ignore
       item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
       item.setProperties({
         itemTitle,
-        itemIcon: item.icon,
+        itemIcon: item.icon as any,
         systemIcon: item.android.systemIcon
       });
     }

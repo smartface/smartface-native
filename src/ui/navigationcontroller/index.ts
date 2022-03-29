@@ -6,6 +6,7 @@ import FragmentTransaction from '../../util/Android/transition/fragmenttransitio
 import NativeComponent from '../../core/native-component';
 import { HeaderBar } from './headerbar';
 import { IView } from '../view/view';
+import type Page from '../page';
 
 /**
  * @enum {Number} UI.NavigationController.OperationType
@@ -40,8 +41,9 @@ export enum OperationType {
 
 export interface IController<TNative = any> extends INativeComponent<TNative> {
   transitionViews?: IView[];
-  pageID?: number;
+  pageID: number;
   popupBackNavigator: any;
+  popUpBackPage?: any;
   isActive: boolean;
   parentController: IController | null;
   childControllers: IController[];
@@ -49,7 +51,7 @@ export interface IController<TNative = any> extends INativeComponent<TNative> {
   headerBar?: HeaderBar;
   tabBar?: IController | IBottomTabBar | TabBarController;
   getCurrentController(): IController | null;
-  show(params?: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
+  show(params?: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void }): void;
 }
 export type Controller = IController;
 // Page | INavigationController | IBottomTabBarController;
