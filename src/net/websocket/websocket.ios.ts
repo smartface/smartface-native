@@ -21,7 +21,8 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
   }
   private delegateInstance: any;
   private socket: any;
-  constructor(params?: TProps) {
+  private _url: string;
+  constructor(params?: TProps & Partial<IWebSocket>) {
     super(params);
 
     if (!this.nativeObject) {
@@ -36,11 +37,11 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
         alloc = invocationAlloc.getReturnValue();
       }
 
-      if (!this.url) {
+      if (!this._url) {
         throw new Error('invalid arguments');
       }
 
-      const nsURL = __SF_NSURL.URLWithString(this.url);
+      const nsURL = __SF_NSURL.URLWithString(this._url);
       let nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
 
       if (this.headers) {
@@ -68,7 +69,7 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
     this.onOpen?.();
     this.emit('open');
 
-    const WebSocketDelegate = defineClass('WebSocketControllerDelegate : NSObject <SRWebSocketDelegate>', {
+    const WebSocketDelegate = SF.defineClass('WebSocketControllerDelegate : NSObject <SRWebSocketDelegate>', {
       webSocketDidOpen: (webSocket: WebSocketIOS) => {
         this.emit('open');
         this.onOpen?.();
@@ -131,7 +132,12 @@ export default class WebSocketIOS<TEvent extends string = WebSocketEvents, TProp
       invocationUrl.invoke();
       url = invocationUrl.getReturnValue();
     }
-    return url ? url.absoluteString : undefined;
+    this._url = url ? url.absoluteString : undefined;
+    return this._url;
+  }
+
+  set url(value: string) {
+    this._url = value;
   }
 
   onOpen(): void {

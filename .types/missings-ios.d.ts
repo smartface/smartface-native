@@ -27,6 +27,7 @@ declare namespace SF {
   export function requireClass(name: string): any;
   export function dispatch_async(queue: any, action: () => void);
   export function dispatch_get_main_queue(): any;
+  export function defineClass(name: string, methods: Record<string, Function>): any;
 }
 
 declare class __SF_UIImage extends __SF_NSOBject {
