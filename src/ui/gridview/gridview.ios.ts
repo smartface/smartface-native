@@ -19,7 +19,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   onPullRefresh: () => void;
   private _sectionCount: number;
   private registeredIndentifier: any = [];
-  private defaultflowLayout: LayoutManagerIOS;
+  private _layoutManager: LayoutManagerIOS;
   private smfcollectionView: __SF_UICollectionView;
   private _itemCount: number;
   private _itemLength = DEFAULT_ITEM_LENGTH;
@@ -27,22 +27,26 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   private _scrollBarEnabled: boolean;
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: boolean;
-  constructor(params?: Partial<IGridView>) {
-    super(params);
+  createNativeObject(params?: Partial<IGridView>) {
+    this._layoutManager = params?.layoutManager as unknown as LayoutManagerIOS;
+    this.smfcollectionView = new __SF_UICollectionView(this._layoutManager.nativeObject);
+    this.nativeObject = this.smfcollectionView;
     this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
-    this.defaultflowLayout = params?.layoutManager as unknown as LayoutManagerIOS;
-    this.smfcollectionView = new __SF_UICollectionView(this.defaultflowLayout.nativeObject);
+    this._layoutManager.collectionView = this.smfcollectionView;
+    this._layoutManager.jsCollectionView = this as GridViewIOS; //TODO: It doesn't accept "this" due to Events
+    this.refreshControl = new __SF_UIRefreshControl();
     this.setNativeParams();
-    if (!this.nativeObject) {
-      this.nativeObject = this.smfcollectionView;
-      this.defaultflowLayout.collectionView = this.smfcollectionView;
-      this.defaultflowLayout.jsCollectionView = this as GridViewIOS; //TODO: It doesn't accept "this" due to Events
-      this.refreshControl = new __SF_UIRefreshControl();
-    }
+    return null;
+  }
+  init(params?: Partial<IGridView>) {
     this.scrollBarEnabled = true;
     this.addIOSProps(this.getIOSProps());
     this.addAndroidProps(this.getAndroidProps());
     this.setScrollEvents();
+    super.init(params);
+  }
+  constructor(params?: Partial<IGridView>) {
+    super(params);
   }
   private getAndroidProps() {
     return {
@@ -202,10 +206,10 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   }
   scrollTo(index: number, animated?: boolean): void {
     const indexPath = __SF_NSIndexPath.indexPathForItemInSection(index, 0);
-    if (!this.layoutManager) {
+    if (!this._layoutManager) {
       return;
     }
-    const direction = this.layoutManager.scrollDirection === LayoutManager.ScrollDirection.VERTICAL ? 0 : 3; // 1 << 0 means UICollectionViewScrollPositionTop
+    const direction = this._layoutManager.scrollDirection === LayoutManager.ScrollDirection.VERTICAL ? 0 : 3; // 1 << 0 means UICollectionViewScrollPositionTop
     this.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << direction, animated !== false);
   }
   stopRefresh(): void {
@@ -229,15 +233,19 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   set itemLength(value) {
     this._itemLength = value;
   }
+  get layoutManager() {
+    return this._layoutManager;
+  }
+  set layoutManager(value: any) {
+    this._layoutManager = value;
+  }
   get scrollEnabled(): boolean {
     return this.nativeObject.valueForKey('scrollEnabled');
   }
   set scrollEnabled(value: boolean) {
     this.nativeObject.setValueForKey(value, 'scrollEnabled');
   }
-  get layoutManager(): LayoutManager {
-    return this.defaultflowLayout as unknown as LayoutManager;
-  }
+
   get scrollBarEnabled(): boolean {
     return this._scrollBarEnabled;
   }

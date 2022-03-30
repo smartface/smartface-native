@@ -13,16 +13,17 @@ export default class GridViewIOSAndroid<TEvent extends string = FlexLayoutEvents
   implements IGridViewItem
 {
   nativeInner: any;
-
+  createNativeObject() {
+    return null;
+  }
+  init(params?: Partial<TProps>) {
+    this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
+    this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
+    this.nativeObject.setLayoutParams(new StaggeredGridLayoutManagerLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    super.init(params);
+  }
   constructor(params?: Partial<TProps>) {
     super(params);
-
-    if (!this.nativeInner) {
-      this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
-      this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
-    }
-
-    this.nativeObject.setLayoutParams(new StaggeredGridLayoutManagerLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
   }
   viewType: number;
   updateRippleEffectIfNeeded?: () => void;

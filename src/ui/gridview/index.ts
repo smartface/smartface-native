@@ -484,13 +484,8 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
   itemByIndex(index: number): GridViewItem | undefined;
 }
 
-export abstract class AbstractGridView<TEvent extends string = GridViewEvents, TProps extends IGridView = IGridView>
-  extends AbstractView<TEvent | GridViewEvents, any, IGridView>
-  implements IGridView
-{
-  constructor(params?: Partial<TProps>) {
-    super(params);
-  }
+export declare class AbstractGridView<TEvent extends string = GridViewEvents, TProps extends IGridView = IGridView> extends AbstractView<TEvent | GridViewEvents, any, IGridView> implements IGridView {
+  constructor(params?: Partial<TProps>);
   onItemCreate: (type?: number) => GridViewItem;
   onItemBind: (item?: GridViewItem, index?: number) => void;
   onItemType: (index?: number) => number;
@@ -501,56 +496,23 @@ export abstract class AbstractGridView<TEvent extends string = GridViewEvents, T
   layoutManager: LayoutManager;
   scrollBarEnabled: boolean;
   refreshEnabled: boolean;
-  abstract getFirstVisibleIndex(): number;
-  abstract getLastVisibleIndex(): number;
-  abstract setPullRefreshColors(color: Color[]): void;
-  abstract deleteRowRange(params: { positionStart: number; itemCount: number }): void;
-  abstract insertRowRange(params: { positionStart: number; itemCount: number }): void;
-  abstract refreshRowRange(params: { positionStart: number; itemCount: number }): void;
-  abstract refreshData(): void;
-  abstract scrollTo(index: number, animated?: boolean): void;
-  abstract stopRefresh(): void;
+  getFirstVisibleIndex(): number;
+  getLastVisibleIndex(): number;
+  setPullRefreshColors(color: Color[]): void;
+  deleteRowRange(params: { positionStart: number; itemCount: number }): void;
+  insertRowRange(params: { positionStart: number; itemCount: number }): void;
+  refreshRowRange(params: { positionStart: number; itemCount: number }): void;
+  refreshData(): void;
+  scrollTo(index: number, animated?: boolean): void;
+  stopRefresh(): void;
   onScroll?: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void;
   onPullRefresh: () => void;
-  abstract itemByIndex(index: number): GridViewItem | undefined;
+  itemByIndex(index: number): GridViewItem | undefined;
   static Android: {
     SnapAlignment: GridViewSnapAlignment;
   };
 }
 
-class GridViewImpl extends AbstractGridView {
-  getFirstVisibleIndex(): number {
-    throw new Error('Method not implemented.');
-  }
-  getLastVisibleIndex(): number {
-    throw new Error('Method not implemented.');
-  }
-  setPullRefreshColors(color: Color[]): void {
-    throw new Error('Method not implemented.');
-  }
-  deleteRowRange(params: { positionStart: number; itemCount: number }): void {
-    throw new Error('Method not implemented.');
-  }
-  insertRowRange(params: { positionStart: number; itemCount: number }): void {
-    throw new Error('Method not implemented.');
-  }
-  refreshRowRange(params: { positionStart: number; itemCount: number }): void {
-    throw new Error('Method not implemented.');
-  }
-  refreshData(): void {
-    throw new Error('Method not implemented.');
-  }
-  scrollTo(index: number, animated?: boolean): void {
-    throw new Error('Method not implemented.');
-  }
-  stopRefresh(): void {
-    throw new Error('Method not implemented.');
-  }
-  itemByIndex(index: number): GridViewItem | undefined {
-    throw new Error('Method not implemented.');
-  }
-}
-
-const GridView: typeof GridViewImpl = require(`./gridview.${Device.deviceOS.toLowerCase()}`).default;
-type GridView = GridViewImpl;
+const GridView: typeof AbstractGridView = require(`./gridview.${Device.deviceOS.toLowerCase()}`).default;
+type GridView = AbstractGridView;
 export default GridView;
