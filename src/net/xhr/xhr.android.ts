@@ -130,7 +130,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     if ((this._readyState === XHR.OPENED && this._sendFlag) || this._readyState === XHR.HEADERS_RECEIVED || this._readyState === XHR.LOADING) {
       this._errorFlag = true;
       this._sendFlag = false;
-      this.emit('abort');
+      this._emitEvent('abort');
     }
     if (this._readyState === XHR.DONE) {
       this._readyState = XHR.UNSENT;
@@ -169,8 +169,8 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this.off(type, listener);
   }
 
-  public dispatchEvent(event: TEvent): boolean {
-    this.emit(event);
+  public dispatchEvent(event: string): boolean {
+    this._emitEvent(event);
     return true;
   }
 
@@ -184,7 +184,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
         this._setReadyState(XHR.HEADERS_RECEIVED);
         this._setReadyState(XHR.LOADING);
         this._response = this._nativeObject.getResponse().body().string();
-        this.emit('progress');
+        this._emitEvent('progress');
         this._sendFlag = false;
         this._setReadyState(XHR.DONE);
       },
@@ -224,7 +224,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
   }
 
-  private _emitEvent(event: XHREventsEvents) {
+  private _emitEvent(event: string) {
     this['on' + event]?.();
     this.emit(event);
   }
