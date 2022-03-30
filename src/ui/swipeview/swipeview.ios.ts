@@ -43,14 +43,20 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   private _isPageTransaction = false;
   private pageControllerDelegate: __SF_UIPageViewControllerDelegate;
   overScrollMode: OverScrollMode;
-  constructor(params?: TProps) {
-    super(params);
+  createNativeObject() {
+    return null;
+  }
+  init(params?: TProps) {
+    super.init(params);
     this.setPageController();
 
     this.flexGrow = 1;
     this.nativeObject.addSubview(this.pageController.view);
     this.setPageControllerDataSource();
     this.setViewControllerDelegate();
+  }
+  constructor(params?: TProps) {
+    super(params);
   }
   onPageSelected: (index: number, page: IPage) => void;
   onPageScrolled: (index: number, offset: number) => void;

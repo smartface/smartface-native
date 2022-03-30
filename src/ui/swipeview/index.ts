@@ -197,7 +197,7 @@ export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents, 
   pagingEnabled: boolean;
   swipeToIndex(index: number, animated: boolean): void;
   overScrollMode: OverScrollMode;
-  static State: SwipeViewState;
+  static State: typeof SwipeViewState;
 }
 // export = SwipeView;
 

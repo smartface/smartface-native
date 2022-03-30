@@ -36,61 +36,64 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   private _callbackOnPageStateChanged;
   private _callbackOnPageScrolled;
   private _onPageCreateCallback;
-  constructor(params?: TProps) {
-    super(params);
-    if (!this.nativeObject) {
-      const callbacks = {
-        getCount: () => {
-          return this.pageCount !== null ? this.pageCount : this.pages.length;
-        },
-        getItem: (position: number) => {
-          return this.getPageInstance(position);
-        }
-      };
-      this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+  createNativeObject() {
+    const callbacks = {
+      getCount: () => {
+        return this.pageCount !== null ? this.pageCount : this.pages.length;
+      },
+      getItem: (position: number) => {
+        return this.getPageInstance(position);
+      }
+    };
+    this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+    const nativeObject = new NativeViewPager(AndroidConfig.activity);
+    const viewID = NativeView.generateViewId();
+    nativeObject.setId(viewID);
+    return nativeObject;
+  }
+  init(params?: Partial<TProps>) {
+    super.init(params);
+    this.addAndroidProps(this.getAndroidProps());
 
-      const viewID = NativeView.generateViewId();
-      this.nativeObject = new NativeViewPager(AndroidConfig.activity);
-      this.nativeObject.setId(viewID);
-      this.addAndroidProps(this.getAndroidProps());
-
-      this.nativeObject.setAdapter(this.pagerAdapter);
-      const listener = NativeOnPageChangeListener.implement({
-        onPageScrollStateChanged: (state: SwipeViewState) => {
-          this.onStateChanged?.(state);
-          this.emit('stateChanged', state);
-        },
-        onPageSelected: (position: number) => {
-          this.onPageSelected?.(position, this._pageInstances[position]);
-          this.emit('pageSelected', position, this._pageInstances[position]);
-        },
-        onPageScrolled: (position: number, positionOffset: number, positionOffsetPixels: number) => {
-          const offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
-          this.onPageScrolled?.(position, offsetPixels);
-          this.emit('pageScrolled', position, offsetPixels);
-          const intPosition = position;
-          if (this._lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
-            this._lastIndex = intPosition;
-            // TODO: Hotfix for APC. Please investigate why _pageInstances[intPosition] is null.
-            // Maybe this custom index propagation has logic error.
-            if (!this._pageInstances[intPosition]) {
-              return;
-            }
-            /**
-             * Check page-Android.js for the variable assignment.
-             */
-            this._pageInstances[intPosition]?.__onShowCallback();
+    this.nativeObject.setAdapter(this.pagerAdapter);
+    const listener = NativeOnPageChangeListener.implement({
+      onPageScrollStateChanged: (state: SwipeViewState) => {
+        this.onStateChanged?.(state);
+        this.emit('stateChanged', state);
+      },
+      onPageSelected: (position: number) => {
+        this.onPageSelected?.(position, this._pageInstances[position]);
+        this.emit('pageSelected', position, this._pageInstances[position]);
+      },
+      onPageScrolled: (position: number, positionOffset: number, positionOffsetPixels: number) => {
+        const offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
+        this.onPageScrolled?.(position, offsetPixels);
+        this.emit('pageScrolled', position, offsetPixels);
+        const intPosition = position;
+        if (this._lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
+          this._lastIndex = intPosition;
+          // TODO: Hotfix for APC. Please investigate why _pageInstances[intPosition] is null.
+          // Maybe this custom index propagation has logic error.
+          if (!this._pageInstances[intPosition]) {
+            return;
           }
+          /**
+           * Check page-Android.js for the variable assignment.
+           */
+          this._pageInstances[intPosition]?.__onShowCallback();
         }
-      });
-      this.nativeObject.addOnPageChangeListener(listener);
-    }
+      }
+    });
+    this.nativeObject.addOnPageChangeListener(listener);
+  }
+  constructor(params?: Partial<TProps>) {
+    super(params);
   }
 
   private getPageInstance(position: number) {
     let pageInstance: PageAndroid;
     if (this.onPageCreate) {
-      pageInstance = this.onPageCreate?.(position) as any; //TODO: Page type fix
+      pageInstance = this.onPageCreate(position) as any; //TODO: Page type fix
     } else if (this._pageInstances[position]) {
       return this._pageInstances[position].nativeObject;
     } else {
@@ -166,5 +169,5 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   set pagingEnabled(value) {
     this.nativeObject.setIsUserInputEnabled(value);
   }
-  static State: SwipeViewState & typeof ViewAndroid.State;
+  static State: typeof SwipeViewState & typeof ViewAndroid.State = SwipeViewState as any;
 }
