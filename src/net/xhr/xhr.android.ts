@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { statuses } from './common';
+import { FormData, ResponseTypes, statuses } from './common';
 import { XHREventsEvents } from './xhr-events';
 
 const NativeXMLHttpRequest = requireClass('io.smartface.android.sfcore.net.XMLHttpRequest');
@@ -28,7 +28,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _headers: Map<string, object> | null;
   private _responseURL: string;
   private _overrideMimeType: string;
-  private _responseType: string;
+  private _responseType: ResponseTypes;
 
   private _sendFlag: boolean;
   private _errorFlag: boolean;
@@ -76,6 +76,14 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
       return '';
     }
     return this._response ? this._response.toString() : '';
+  }
+
+  get responseType(): ResponseTypes {
+    return this._responseType;
+  }
+
+  set responseType(responseType: ResponseTypes) {
+    this._responseType = responseType;
   }
 
   public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
