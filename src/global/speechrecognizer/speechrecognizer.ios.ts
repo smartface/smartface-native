@@ -23,146 +23,146 @@ function isLocaleSupport(locale: { identifier: string } | __SF_NSLocale) {
 }
 
 class SpeechRecognizerIOS implements SpeechRecognizerBase {
-  static recognitionTask: any;
-  static recognitionRequest: any;
-  static avaudiosession: any;
-  static avaudioengine: __SF_AVAudioEngine | undefined;
-  static speechRecognizer: __SF_SFSpeechRecognizer | undefined;
-  static speechDelegate: __SF_SFSpeechRecognizerDelegate;
-  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void {
-    SpeechRecognizerIOS.stop();
-    SpeechRecognizerIOS.onErrorHandler = params.onError;
+  recognitionTask: any;
+  recognitionRequest: any;
+  avaudiosession: any;
+  avaudioengine: __SF_AVAudioEngine | undefined;
+  speechRecognizer: __SF_SFSpeechRecognizer | undefined;
+  speechDelegate: __SF_SFSpeechRecognizerDelegate;
+  start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void {
+    this.stop();
+    this.onErrorHandler = params.onError;
 
-    __SF_SFSpeechRecognizer.speechRequestAuthorization(function (e: { status: SFSpeechRecognizerAuthorizationStatus }) {
+    __SF_SFSpeechRecognizer.speechRequestAuthorization((e: { status: SFSpeechRecognizerAuthorizationStatus }) => {
       if (e.status === SFSpeechRecognizerAuthorizationStatus.authorized) {
-        Hardware.ios.microphone?.requestRecordPermission?.(function (granted) {
+        Hardware.ios.microphone?.requestRecordPermission?.((granted) => {
           if (granted) {
-            __SF_Dispatch.mainAsyncAfter(function () {
-              SpeechRecognizerIOS.createRecognizer(params);
+            __SF_Dispatch.mainAsyncAfter(() => {
+              this.createRecognizer(params);
             }, 200);
           } else {
-            SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.INSUFFICIENT_PERMISSIONS);
+            this.onErrorHandler(this.Error.INSUFFICIENT_PERMISSIONS);
           }
         });
       } else {
-        SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.INSUFFICIENT_PERMISSIONS);
+        this.onErrorHandler(this.Error.INSUFFICIENT_PERMISSIONS);
       }
     });
   }
-  static isRunning(): boolean {
-    if (SpeechRecognizerIOS.avaudioengine) {
-      return SpeechRecognizerIOS.avaudioengine.isRunning;
+  isRunning(): boolean {
+    if (this.avaudioengine) {
+      return this.avaudioengine.isRunning;
     } else {
       return false;
     }
   }
-  static stop(): void {
-    if (!SpeechRecognizerIOS.speechRecognizer) {
+  stop(): void {
+    if (!this.speechRecognizer) {
       return;
     }
 
     const myTimer = Timer.setTimeout({
-      task: function () {
-        __SF_Dispatch.mainAsync(function () {
-          if (SpeechRecognizerIOS.recognitionTask) {
-            SpeechRecognizerIOS.recognitionTask.cancel();
-            SpeechRecognizerIOS.recognitionTask = undefined;
+      task: () => {
+        __SF_Dispatch.mainAsync(() => {
+          if (this.recognitionTask) {
+            this.recognitionTask.cancel();
+            this.recognitionTask = undefined;
           }
 
-          if (SpeechRecognizerIOS.avaudioengine && SpeechRecognizerIOS.avaudioengine.isRunning) {
-            SpeechRecognizerIOS.avaudioengine.stop();
-            SpeechRecognizerIOS.avaudioengine.inputNode.removeTapOnBus(0);
-            if (SpeechRecognizerIOS.recognitionRequest) {
-              SpeechRecognizerIOS.recognitionRequest.endAudio();
+          if (this.avaudioengine && this.avaudioengine.isRunning) {
+            this.avaudioengine.stop();
+            this.avaudioengine.inputNode.removeTapOnBus(0);
+            if (this.recognitionRequest) {
+              this.recognitionRequest.endAudio();
             }
           }
 
-          SpeechRecognizerIOS.avaudioengine = undefined;
-          SpeechRecognizerIOS.recognitionRequest = undefined;
-          SpeechRecognizerIOS.speechRecognizer = undefined;
+          this.avaudioengine = undefined;
+          this.recognitionRequest = undefined;
+          this.speechRecognizer = undefined;
         });
       },
       delay: 100
     });
   }
-  static createRecognizer(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }) {
-    if (SpeechRecognizerIOS.speechRecognizer) {
+  createRecognizer(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }) {
+    if (this.speechRecognizer) {
       return;
     }
 
     if (params.locale) {
       if (isLocaleSupport(new __SF_NSLocale(params.locale))) {
-        SpeechRecognizerIOS.speechRecognizer = new __SF_SFSpeechRecognizer(new __SF_NSLocale(params.locale));
+        this.speechRecognizer = new __SF_SFSpeechRecognizer(new __SF_NSLocale(params.locale));
       } else {
-        SpeechRecognizerIOS.sendError(SpeechRecognizerIOS.Error.SERVER);
+        this.sendError(this.Error.SERVER);
         return;
       }
     } else {
       if (isLocaleSupport(__SF_NSLocale.currentLocale())) {
-        SpeechRecognizerIOS.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale.currentLocale());
+        this.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale.currentLocale());
       } else {
-        SpeechRecognizerIOS.sendError(SpeechRecognizerIOS.Error.SERVER);
+        this.sendError(this.Error.SERVER);
         return;
       }
     }
 
-    SpeechRecognizerIOS.avaudioengine = new __SF_AVAudioEngine();
-    SpeechRecognizerIOS.recognitionRequest = undefined;
-    SpeechRecognizerIOS.recognitionTask = undefined;
-    SpeechRecognizerIOS.speechDelegate = new __SF_SFSpeechRecognizerDelegate();
+    this.avaudioengine = new __SF_AVAudioEngine();
+    this.recognitionRequest = undefined;
+    this.recognitionTask = undefined;
+    this.speechDelegate = new __SF_SFSpeechRecognizerDelegate();
 
-    SpeechRecognizerIOS.speechDelegate.speechRecognizerAvailabilityDidChange = function (e) {
+    this.speechDelegate.speechRecognizerAvailabilityDidChange = (e) => {
       if (!e.available) {
-        SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.NETWORK);
+        this.onErrorHandler(this.Error.NETWORK);
       }
     };
 
-    SpeechRecognizerIOS.speechRecognizer.delegate = SpeechRecognizerIOS.speechDelegate;
+    this.speechRecognizer.delegate = this.speechDelegate;
 
-    if (SpeechRecognizerIOS.recognitionTask) {
-      SpeechRecognizerIOS.recognitionTask.cancel();
-      SpeechRecognizerIOS.recognitionTask = undefined;
+    if (this.recognitionTask) {
+      this.recognitionTask.cancel();
+      this.recognitionTask = undefined;
     }
 
-    SpeechRecognizerIOS.avaudiosession = __SF_AVAudioSession.sharedInstance();
+    this.avaudiosession = __SF_AVAudioSession.sharedInstance();
 
-    const isOtherAudioPlaying = SpeechRecognizerIOS.avaudiosession.valueForKey('isOtherAudioPlaying');
+    const isOtherAudioPlaying = this.avaudiosession.valueForKey('isOtherAudioPlaying');
 
     if (isOtherAudioPlaying) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.NETWORK);
+      this.onErrorHandler(this.Error.NETWORK);
       return;
     }
 
-    SpeechRecognizerIOS.avaudiosession.setCategory('AVAudioSessionCategoryRecord', function (e) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
+    this.avaudiosession.setCategory('AVAudioSessionCategoryRecord', (e) => {
+      this.onErrorHandler(this.Error.CLIENT);
       return;
     });
-    SpeechRecognizerIOS.avaudiosession.setMode('AVAudioSessionModeMeasurement', function (e) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
-      return;
-    });
-
-    SpeechRecognizerIOS.avaudiosession.setActiveWithOptions(true, 1, function (e) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
+    this.avaudiosession.setMode('AVAudioSessionModeMeasurement', (e) => {
+      this.onErrorHandler(this.Error.CLIENT);
       return;
     });
 
-    SpeechRecognizerIOS.recognitionRequest = new __SF_SFSpeechAudioBufferRecognitionRequest();
+    this.avaudiosession.setActiveWithOptions(true, 1, (e) => {
+      this.onErrorHandler(this.Error.CLIENT);
+      return;
+    });
 
-    const inputNode = SpeechRecognizerIOS.avaudioengine.inputNode;
+    this.recognitionRequest = new __SF_SFSpeechAudioBufferRecognitionRequest();
+
+    const inputNode = this.avaudioengine.inputNode;
     if (!inputNode) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
+      this.onErrorHandler(this.Error.CLIENT);
       return;
     }
 
-    if (!SpeechRecognizerIOS.recognitionRequest) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
+    if (!this.recognitionRequest) {
+      this.onErrorHandler(this.Error.CLIENT);
       return;
     }
 
-    SpeechRecognizerIOS.recognitionRequest.shouldReportPartialResults = true;
+    this.recognitionRequest.shouldReportPartialResults = true;
 
-    SpeechRecognizerIOS.recognitionTask = SpeechRecognizerIOS.speechRecognizer.recognitionTask(SpeechRecognizerIOS.recognitionRequest, function (e) {
+    this.recognitionTask = this.speechRecognizer.recognitionTask(this.recognitionRequest, (e) => {
       let isFinal = false;
       if (e.result) {
         if (typeof params.onResult === 'function') {
@@ -171,9 +171,8 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
         isFinal = e.result.isFinal;
         // e.result.bestTranscription.segments[e.result.bestTranscription.segments.length -1].substring
       }
-
       if (isFinal) {
-        SpeechRecognizerIOS.stop();
+        this.stop();
         if (typeof params.onFinish === 'function') {
           if (e.result) {
             params.onFinish(e.result.bestTranscription.formattedString);
@@ -186,40 +185,40 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
       if (e.error) {
         if (e.error.code === 203) {
           //Retry
-          SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.SPEECH_TIMEOUT);
+          this.onErrorHandler(this.Error.SPEECH_TIMEOUT);
         } else if (e.error.code === 209 || e.error.code === 216) {
           //TODO: empty statement
         } else {
-          SpeechRecognizerIOS.onErrorHandler(e.error.localizedDescription);
+          this.onErrorHandler(e.error.localizedDescription);
         }
       }
     });
 
     const recordingFormat = inputNode.outputFormatForBus(0);
-    inputNode.installTap(0, 1024, recordingFormat, function (e) {
-      if (SpeechRecognizerIOS.recognitionRequest) {
-        SpeechRecognizerIOS.recognitionRequest.appendBuffer(e.buffer);
+    inputNode.installTap(0, 1024, recordingFormat, (e) => {
+      if (this.recognitionRequest) {
+        this.recognitionRequest.appendBuffer(e.buffer);
       }
     });
 
-    SpeechRecognizerIOS.avaudioengine.prepare();
-    SpeechRecognizerIOS.avaudioengine.start(function (e) {
-      SpeechRecognizerIOS.onErrorHandler(SpeechRecognizerIOS.Error.CLIENT);
+    this.avaudioengine.prepare();
+    this.avaudioengine.start((e) => {
+      this.onErrorHandler(this.Error.CLIENT);
     });
   }
-  static onErrorHandler(error) {
-    if (!SpeechRecognizerIOS.speechRecognizer) {
+  onErrorHandler(error) {
+    if (!this.speechRecognizer) {
       return;
     }
-    SpeechRecognizerIOS.stop();
-    SpeechRecognizerIOS.sendError(error);
+    this.stop();
+    this.sendError(error);
   }
-  static sendError(error) {
-    if (typeof SpeechRecognizerIOS.onErrorHandler === 'function') {
-      SpeechRecognizerIOS.onErrorHandler(error);
+  sendError(error) {
+    if (typeof this.onErrorHandler === 'function') {
+      this.onErrorHandler(error);
     }
   }
-  static ios = {
+  ios = {
     isLocaleSupported(locale: string): boolean {
       let nslocale;
       if (locale) {
@@ -230,7 +229,9 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
       return isLocaleSupport(nslocale);
     }
   };
-  static readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
+  readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
 }
 
-export default SpeechRecognizerIOS;
+const SpeechRecognizer = new SpeechRecognizerIOS();
+
+export default SpeechRecognizer;
