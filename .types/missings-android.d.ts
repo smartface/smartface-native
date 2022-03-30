@@ -70,8 +70,8 @@ declare interface INativeLayoutManager {
 
 declare interface INativeInner {
   addOnLayoutChangeListener(llistener: any);
-  getHeight():number;
-  getWidth():number;
+  getHeight(): number;
+  getWidth(): number;
   removeItemDecoration(item: any): void;
   addItemDecoration(item: any): void;
   addOnItemTouchListener(param: any): void;
@@ -97,4 +97,9 @@ declare interface INativeInner {
   setPaddingRelative(paddingLeft: number, paddingTop: number, paddingRight: number, paddingBottom: number): void;
   setScrollBarStyle(style: number): void;
   setHorizontalScrollBarEnabled(enabled: boolean): void;
+}
+
+declare interface NativeArrayList {
+  newInsert(item: any): void;
+  add(item: any): void;
 }

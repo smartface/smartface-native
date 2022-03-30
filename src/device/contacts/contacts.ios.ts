@@ -1,5 +1,5 @@
 import Page from '../../ui/page';
-import { ContactsBase, Contact, ManagedContact } from '.';
+import { ContactsBase, Contact } from './contacts';
 
 function manageNativeContact(contact: ContactIOS) {
   const returnValue: { displayName?: string; phoneNumbers?: string[]; emailAddresses?: string[]; urlAddresses?: string[]; addresses?: string[] } = {};
@@ -40,16 +40,11 @@ function manageNativeContact(contact: ContactIOS) {
   for (const address in contact.postalAddresses) {
     // Added this check to resolve the sonar issue.
     if (Object.prototype.hasOwnProperty.call(contact.postalAddresses, address)) {
-      const addressStr =
-        contact.postalAddresses[address].value.street +
-        ' ' +
-        contact.postalAddresses[address].value.city +
-        ' ' +
-        contact.postalAddresses[address].value.state +
-        ' ' +
-        contact.postalAddresses[address].value.postalCode +
-        ' ' +
-        contact.postalAddresses[address].value.country;
+      const defaultPostalAdress = { street: '', city: '', state: '', postalCode: '', country: '' };
+      const postalAddress = contact.postalAddresses[address];
+      const postalAddressValue = isPostalAddressString(postalAddress) ? defaultPostalAdress : postalAddress.value;
+
+      const addressStr = `${postalAddressValue.street || ''} ${postalAddressValue.city} ${postalAddressValue.state} ${postalAddressValue.postalCode} ${postalAddressValue.country}`;
       addresses.push(addressStr);
     }
   }
@@ -227,7 +222,7 @@ class ContactsIOS extends ContactsBase {
                   break;
                 case 'address': {
                   const addressValue = __SF_CNMutablePostalAddress.new();
-                  addressValue.street = parameterContact[propertyName];
+                  addressValue.street = parameterContact[propertyName] || '';
                   contact.postalAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, addressValue)];
                   break;
                 }
@@ -280,14 +275,14 @@ class ContactsIOS extends ContactsBase {
       }
     );
   }
-  getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: ManagedContact[]) => void }) {
+  getAll(params: { onFailure: (error: any) => void; onSuccess: (contacts: Partial<Contact>[]) => void }) {
     //Depracated on 4.1.5
     const store = __SF_CNContactStore.new();
     store.requestAccess(
       function () {
         store.fetchAllContacts<ContactIOS>(
           function (allContactsNativeArray) {
-            const allContactsManagedArray: ManagedContact[] = [];
+            const allContactsManagedArray: Partial<Contact>[] = [];
             for (const index in allContactsNativeArray) {
               // Added this check to resolve the sonar issue.
               // hasOwnProperty() is used to filter out properties from the object's prototype chain.
@@ -310,6 +305,10 @@ class ContactsIOS extends ContactsBase {
       }
     );
   }
+}
+
+function isPostalAddressString(address: Contact['postalAddresses'][0]): address is string {
+  return typeof address === 'string';
 }
 
 export default new ContactsIOS();
