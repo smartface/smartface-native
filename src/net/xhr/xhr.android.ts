@@ -47,6 +47,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
 
   constructor() {
     super();
+    this._reset();
     this._initialize();
   }
 
@@ -233,5 +234,6 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._headers = null;
     this._status = 0;
     this._errorFlag = false;
+    this.responseType = '';
   }
 }
