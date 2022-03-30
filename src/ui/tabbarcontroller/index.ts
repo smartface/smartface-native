@@ -250,8 +250,8 @@ export abstract class AbstractTabBarController<TEvent extends string = TabBarCon
   iconColor: { normal: Color; selected: Color } | Color;
   textColor: { normal: Color; selected: Color } | Color;
   pagingEnabled: boolean;
-  onPageCreate: (index: number) => Page;
-  onSelected: (index: number) => void;
+  abstract onPageCreate(index: number): Page;
+  abstract onSelected(index: number): void;
 }
 
 export class TabBarControllerImpl extends AbstractTabBarController {
@@ -265,6 +265,12 @@ export class TabBarControllerImpl extends AbstractTabBarController {
     throw new Error('Method not implemented.');
   }
   onHide(): void {
+    throw new Error('Method not implemented.');
+  }
+  onPageCreate(index: number): Page {
+    throw new Error('Method not implemented.');
+  }
+  onSelected(index: number): void {
     throw new Error('Method not implemented.');
   }
   present(params?: ControllerPresentParams): void {

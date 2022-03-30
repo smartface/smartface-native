@@ -19,12 +19,10 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
   private _onPageCreate: (index: number) => Page;
   private _onSelected: (index: number) => void;
   private iOSProps: { barTextTransform?: BarTextTransform } = {};
-  constructor(params?: Partial<ITabBarController>) {
-    super(params);
-    if (!this.nativeObject) {
-      this._nativeObject = new __SF_TopTabViewController();
-    }
-
+  createNativeObject() {
+    return new __SF_TopTabViewController();
+  }
+  init(params?: Partial<ITabBarController>) {
     const self = this;
     this.addIOSProps({
       get barTextTransform(): BarTextTransform {
@@ -36,6 +34,10 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
         }
       }
     });
+    super.init(params);
+  }
+  constructor(params?: Partial<ITabBarController>) {
+    super(params);
   }
 
   get barHeight(): number {
