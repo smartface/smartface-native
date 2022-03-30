@@ -17,6 +17,15 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   public static LOADING = 3;
   public static DONE = 4;
 
+  public onabort: (...args: any[]) => void = ()=>{};
+  public onerror: (...args: any[]) => void = ()=>{};
+  public onload: (...args: any[]) => void = ()=>{};
+  public onloadend: (...args: any[]) => void = ()=>{};
+  public onloadstart: (...args: any[]) => void = ()=>{};
+  public onprogress: (...args: any[]) => void = ()=>{};
+  public onreadystatechange: (...args: any[]) => void = ()=>{};
+  public ontimeout: (...args: any[]) => void = ()=>{};
+
   public timeout: number;
   public withCredentials: boolean;
 
@@ -215,6 +224,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   }
 
   private _emitEvent(event: XHREventsEvents) {
+    this['on' + event]?.();
     this.emit(event);
   }
 
