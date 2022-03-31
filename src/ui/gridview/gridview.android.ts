@@ -29,15 +29,24 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private _onScrollStateChanged: IGridView['android']['onScrollStateChanged'];
   private _layoutManager: LayoutManagerAndroid | undefined;
   private _gridViewItems: Record<string, GridViewItem> = {};
-  private _itemCount: IGridView['itemCount'];
-  private isScrollListenerAdded;
-  private _scrollBarEnabled: IGridView['scrollBarEnabled'];
+  private _itemCount: IGridView['itemCount'] = 0;
+  private isScrollListenerAdded = false;
+  private _scrollBarEnabled: IGridView['scrollBarEnabled'] = false;
   private _scrollEnabled: IGridView['scrollBarEnabled'];
   private _nativePagerSnapHelper: any;
-  private _paginationEnabled: boolean;
+  private _paginationEnabled: boolean = false;
   private _onScrollListener: any;
   private _snapToAlignment: any;
   private _nativeLinearSnapHelper: any;
+  onItemCreate: (type?: number) => GridViewItem;
+  onItemBind: (item?: GridViewItem, index?: number) => void;
+  onItemType: (index?: number) => number;
+  onItemSelected: (gridViewItem: GridViewItem, index?: number) => void;
+  onPullRefresh: () => void;
+  constructor(params?: Partial<IGridView>) {
+    super(params);
+  }
+
   createNativeObject() {
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
@@ -48,21 +57,16 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     this.nativeObject.addView(this.nativeInner);
     this.setNativeEvents();
     this.setDataAdapter();
-    this._itemCount = 0;
-    this.isScrollListenerAdded = false;
-    this._scrollBarEnabled = false;
-    this._paginationEnabled = false;
-    this._gridViewItems = {};
     super.init(params);
   }
-  constructor(params?: Partial<IGridView>) {
-    super(params);
+  setTouchHandlers(): void {
+    if (this.didSetTouchHandler) {
+      return;
+    }
+    this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
+    this.nativeInner.setOnTouchListener(this._sfOnTouchViewManager);
+    this.didSetTouchHandler = true;
   }
-  onItemCreate: (type?: number) => GridViewItem;
-  onItemBind: (item?: GridViewItem, index?: number) => void;
-  onItemType: (index?: number) => number;
-  onItemSelected: (gridViewItem: GridViewItem, index?: number) => void;
-  onPullRefresh: () => void;
   private setNativeInner() {
     const callbacks = {
       onAttachedToWindow: () => {
@@ -116,26 +120,30 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private setDataAdapter() {
     const callbacks = {
       onCreateViewHolder: (viewType: number) => {
-        const itemCreateReturn = this.onItemCreate?.(viewType);
-        // There used to be try-catch. If we encounter with crash, wrap this with try-catch with application.onHundandledError trigger
-        const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
-        let spanSize = this._layoutManager?.spanSize;
-        if (spanSize === 0 && this._layoutManager) {
-          if (this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL) {
-            this._layoutManager.viewWidth = this.width;
-          } else {
-            this._layoutManager.viewHeight = this.height;
+        try {
+          const itemCreateReturn = this.onItemCreate?.(viewType);
+          // There used to be try-catch. If we encounter with crash, wrap this with try-catch with application.onHundandledError trigger
+          const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
+          let spanSize = this._layoutManager?.spanSize;
+          if (spanSize === 0 && this._layoutManager) {
+            if (this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL) {
+              this._layoutManager.viewWidth = this.width;
+            } else {
+              this._layoutManager.viewHeight = this.height;
+            }
+            spanSize = this._layoutManager.spanSize; //spansize is re-calculated
           }
-          spanSize = this._layoutManager.spanSize; //spansize is re-calculated
+
+          this.assignSizeBasedOnDirection(holderViewLayout, viewType);
+
+          holderViewLayout.viewType = viewType;
+          this._gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+
+          holderViewLayout.nativeInner.setRecyclerViewAdapter(this.nativeDataAdapter);
+          return holderViewLayout.nativeInner;
+        } catch (e) {
+          console.error('gridviewandroid:error: ', e.stack);
         }
-
-        this.assignSizeBasedOnDirection(holderViewLayout, viewType);
-
-        holderViewLayout.viewType = viewType;
-        this._gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
-
-        holderViewLayout.nativeInner.setRecyclerViewAdapter(this.nativeDataAdapter);
-        return holderViewLayout.nativeInner;
       },
       onBindViewHolder: (itemViewHashCode: number, position: number) => {
         const _holderViewLayout = this._gridViewItems[itemViewHashCode];
@@ -232,22 +240,21 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     const spanSize = this._layoutManager?.spanSize;
     const isVertical = this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL;
     const fullSpanLength = this._layoutManager?.onFullSpan?.(viewType) || null;
-    const layoutParams = holderViewLayout.nativeObject.getLayoutParams();
     const itemLength = (spanSize && this._layoutManager?.onItemLength?.(spanSize)) || null;
     const spanLength = Number(fullSpanLength) || itemLength;
     if (isVertical) {
       holderViewLayout.height = spanLength;
-      if (Number(spanLength)) {
+      if (Number(fullSpanLength)) {
         this.applyFullSpan(holderViewLayout);
       } else {
-        layoutParams.width = LayoutParams.MATCH_PARENT;
+        holderViewLayout.nativeObject.getLayoutParams().width = LayoutParams.MATCH_PARENT;
       }
     } else {
       holderViewLayout.width = spanLength;
-      if (Number(spanLength)) {
+      if (Number(fullSpanLength)) {
         this.applyFullSpan(holderViewLayout);
       } else {
-        layoutParams.height = LayoutParams.MATCH_PARENT;
+        holderViewLayout.nativeObject.getLayoutParams().height = LayoutParams.MATCH_PARENT;
       }
     }
   }

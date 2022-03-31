@@ -405,6 +405,15 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     }
   }
 
+  setTouchHandlers(): void {
+    if (this.didSetTouchHandler) {
+      return;
+    }
+    this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
+    this.nativeInner.setOnTouchListener(this._sfOnTouchViewManager);
+    this.didSetTouchHandler = true;
+  }
+
   get rowHeight() {
     return this._rowHeight;
   }

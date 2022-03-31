@@ -97,6 +97,7 @@ declare interface INativeInner {
   setPaddingRelative(paddingLeft: number, paddingTop: number, paddingRight: number, paddingBottom: number): void;
   setScrollBarStyle(style: number): void;
   setHorizontalScrollBarEnabled(enabled: boolean): void;
+  setOnTouchListener(viewManager: any): void;
 }
 
 declare interface NativeArrayList {

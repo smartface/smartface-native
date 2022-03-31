@@ -10,6 +10,8 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import TypeUtil from '../../util/type';
 import ColorAndroid from '../color/color.android';
+import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
+import type ScrollViewAndroid from '../scrollview/scrollview.android';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -75,7 +77,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _onTouchEnded: IView['onTouchEnded'];
   protected _onTouchCancelled: IView['onTouchCancelled'];
   protected _onTouchMoved: IView['onTouchMoved'];
-  private _parent?: ViewAndroid;
+  private _parent?: ViewGroupAndroid;
   private _rotation: number = 0;
   private _rotationX: number = 0;
   private _rotationY: number = 0;
@@ -88,8 +90,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _borderRadius: number = 0;
   protected _backgroundColor: IView['backgroundColor'] = ColorAndroid.TRANSPARENT;
   protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
-  private didSetTouchHandler = false;
-  private _sfOnTouchViewManager: any;
+  protected didSetTouchHandler = false;
+  protected _sfOnTouchViewManager: any;
   private _touchEnabled: boolean = true;
   private _rippleEnabled = false;
   private _rippleColor?: Color;
@@ -100,20 +102,16 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return new NativeView(AndroidConfig.activity);
   }
   protected init(params?: Partial<TProps>): void {
-    if (this.nativeObject?.toString().indexOf('YogaLayout') !== -1) {
-      this.yogaNode = this.nativeObject.getYogaNode();
-    } else {
-      this.yogaNode = NativeYogaNodeFactory.create();
-    }
+    this.yogaNode = NativeYogaNodeFactory.create();
     super.init(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
-    this._nativeObject.setId(NativeView.generateViewId());
+    this.nativeObject.setId(NativeView.generateViewId());
     this._sfOnTouchViewManager = new SFOnTouchViewManager();
-    this.setTouchHandlers();
   }
   constructor(params?: Partial<TProps>) {
     super(params);
+    this.setTouchHandlers();
   }
 
   protected getAndroidSpecificProps() {
@@ -191,7 +189,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get parent() {
     return this._parent;
   }
-  set parent(view: ViewAndroid | undefined) {
+  set parent(view: ViewGroupAndroid | undefined) {
     this._parent = view;
   }
 
@@ -199,9 +197,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     if (this.didSetTouchHandler) {
       return;
     }
-    const touchableView = this.nativeInner || this.nativeObject;
+
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
-    touchableView.setOnTouchListener(this._sfOnTouchViewManager);
+    this.nativeObject.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
   }
 
@@ -374,7 +372,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._nativeObject.setClipToOutline(this._masksToBounds);
   }
 
-  private _touchCallbacks = {
+  protected _touchCallbacks = {
     onTouchEnded: (isInside: boolean, x: number, y: number) => {
       const mEvent = {
         x,
@@ -598,7 +596,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as any).align === ScrollViewAlign.VERTICAL) {
+    if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as ScrollViewAndroid).align === ScrollViewAlign.VERTICAL) {
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
@@ -611,7 +609,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
-    if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as any).align === ScrollViewAlign.VERTICAL) {
+    if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as ScrollViewAndroid).align === ScrollViewAlign.VERTICAL) {
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.width = -2);
     }
