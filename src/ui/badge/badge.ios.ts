@@ -4,28 +4,37 @@ import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
 export default class BadgeIOS extends NativeComponent implements IBadge {
-  protected createNativeObject() {
-    return null;
+  protected createNativeObject(params: Partial<IBadge> = {}) {
+    return params.nativeObject;
   }
   private _visible = false;
-  private _text = '';
+  private _text;
   private _backgroundColor: IBadge['backgroundColor'];
   private _borderColor: IBadge['borderColor'];
   private _textColor: IBadge['textColor'];
   private _font: IBadge['font'];
   private _borderRadius: number;
-  private _borderWidth: number = 0;
-  private _height = 0;
-  private _isBadgeFirstLoad = false;
+  private _borderWidth: number;
+  private _height;
+  private _isBadgeFirstLoad;
   private _isRTL: boolean;
-  constructor(params: Partial<IBadge> = {}) {
-    super(params);
-
+  init(params: Partial<IBadge> = {}) {
+    this._text = '';
+    this._visible = false;
+    this._borderWidth = 0;
+    this._height = 0;
+    this._backgroundColor = null;
+    this._textColor = null;
+    this._isBadgeFirstLoad = false;
     const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
     const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
 
     const isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
     this._isRTL = !isLTR;
+    super.init(params);
+  }
+  constructor(params: Partial<IBadge> = {}) {
+    super(params);
   }
   get text(): IBadge['text'] {
     return this._text;
@@ -38,13 +47,42 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
       if (!this._isBadgeFirstLoad) {
         // Re-invoke setters
         this.visible = this._visible;
-        this.backgroundColor = this._backgroundColor;
-        this.textColor = this._textColor;
-        this.font = this._font;
-        this.borderColor = this._borderColor;
-        this.borderWidth = this._borderWidth;
-        this.height = this._height;
-        this.isRTL = this._isRTL;
+        if (this._backgroundColor) {
+          this.backgroundColor = this._backgroundColor;
+        } else {
+          this._backgroundColor = null;
+        }
+        if (this._textColor) {
+          this.textColor = this._textColor;
+        } else {
+          this._textColor = null;
+        }
+
+        if (this._font) {
+          this.font = this._font;
+        } else {
+          this._font = null;
+        }
+
+        if (this._borderColor) {
+          this.borderColor = this._borderColor;
+        } else {
+          this._borderColor = null;
+        }
+
+        if (this._borderWidth) {
+          this.borderWidth = this._borderWidth;
+        } else {
+          this._borderWidth = 0;
+        }
+
+        if (this._height) {
+          this.height = this._height;
+        } else {
+          this._height = 0;
+        }
+
+        this._isRTL && (this.isRTL = this._isRTL);
       }
       this._isBadgeFirstLoad = true;
     }, 1);

@@ -532,6 +532,9 @@ export declare class AbstractHeaderBarItem extends NativeComponent implements IH
     titleFont: Font;
     backBarButtonItem: IHeaderBarItem;
   }>;
+  static iOS: {
+    SystemItem: typeof SystemItem;
+  };
   image: Image | string | null;
   customView: View;
   enabled: boolean;

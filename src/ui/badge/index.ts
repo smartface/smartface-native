@@ -40,7 +40,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  textColor: Color | IViewState<Color>;
+  textColor: Color | IViewState<Color> | null;
   /**
    * Gets/sets font of badge.
    *

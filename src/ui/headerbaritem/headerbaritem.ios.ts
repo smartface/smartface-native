@@ -36,13 +36,17 @@ enum SystemItem {
 
 export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
   protected createNativeObject(params: Partial<IHeaderBarItem> = {}) {
+    let nativeObject;
     if (!params?.ios?.systemItem) {
-      return new __SF_UIBarButtonItem();
+      nativeObject = new __SF_UIBarButtonItem();
+    } else {
+      this._systemItem = params.ios.systemItem;
+      nativeObject = __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
     }
-    this._systemItem = params.ios.systemItem;
-    return __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
+    nativeObject.target = nativeObject;
+    return nativeObject;
   }
-  iOS = {
+  static iOS = {
     SystemItem
   };
   private _systemItem;
@@ -51,14 +55,11 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
   private _font: Font | undefined;
   private _customView: IView | undefined;
   private _onPress: HeaderBarItem['onPress'] = null;
-
-  constructor(params?: Partial<HeaderBarItem>) {
-    super(params);
-
-    this.nativeObject.target = this.nativeObject;
-
+  init(params: Partial<IHeaderBarItem> = {}) {
+    super.init(params);
     this._badge = new Badge({ nativeObject: this.nativeObject });
-
+    this._font = undefined;
+    this._customView = undefined;
     const self = this;
     this.addIOSProps({
       get systemItem() {
@@ -80,8 +81,10 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
         }
       }
     });
+  }
 
-    const { ios, android, ...restParams } = params || {};
+  constructor(params?: Partial<HeaderBarItem>) {
+    super(params);
   }
   get layout() {
     let retval;
