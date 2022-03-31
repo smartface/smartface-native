@@ -7,7 +7,6 @@ const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListe
 
 export default class LayoutManagerAndroid extends AbstractLayoutManager implements ILayoutManager {
   protected createNativeObject(params: Partial<ILayoutManager> = {}) {
-    console.info('layoutmanager:android: ', params);
     this._spanCount = params.spanCount || 1;
     this._scrollDirection = params.scrollDirection ?? ScrollDirection.VERTICAL;
     return new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
