@@ -142,6 +142,36 @@ export declare class NotificationsBase {
    */
   static removeAllDeliveredNotifications(): void;
 
+  ios: Partial<{
+    /**
+     * Gets/sets badge number of the application. This number will be displayed as the application's icon badge.
+     *
+     * @property {Number} [applicationIconBadgeNumber = 0]
+     * @ios
+     * @static
+     * @since 0.1
+     */
+    applicationIconBadgeNumber: number;
+    /**
+     * Gets/sets the boolean value that controls whether the notification shows or hides the alert action.
+     *
+     * @property {Boolean} [hasAction = true]
+     * @ios
+     * @static
+     * @since 0.1
+     */
+    hasAction: boolean;
+    /**
+     * Gets/sets the user information of the LocalNotification.
+     *
+     * @property {Object} [userInfo = {}]
+     * @ios
+     * @static
+     * @since 0.1
+     */
+    userInfo: any;
+  }>;
+
   public static readonly ios: Partial<{
     authorizationStatus: typeof UnauthorizationStatus;
     /**

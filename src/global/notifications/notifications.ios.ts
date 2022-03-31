@@ -1,12 +1,110 @@
 import Application from '../../application';
-import NativeComponent from '../../core/native-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 import { UnauthorizationStatus } from './unauthorization-status';
 
-class NotificationsIOS implements NotificationsBase {
-  public readonly android: {};
+class LocalNotification extends NativeMobileComponent {
+  protected createNativeObject() {
+    return new __SF_UILocalNotification();
+  }
+  init(params?: any) {
+    this.addIOSProps({
+      get applicationIconBadgeNumber() {
+        return this.nativeObject.applicationIconBadgeNumber;
+      },
+      set applicationIconBadgeNumber(value: number) {
+        if (typeof value === 'number') {
+          this.nativeObject.applicationIconBadgeNumber = value;
+        }
+      },
+      get hasAction() {
+        return this.nativeObject.hasAction;
+      },
+      set hasAction(value: boolean) {
+        if (typeof value === 'boolean') {
+          this.nativeObject.hasAction = value;
+        }
+      },
+      get userInfo() {
+        return this.nativeObject.userInfo;
+      },
+      set userInfo(value: any) {
+        if (typeof value === 'object') {
+          this.nativeObject.userInfo = value;
+        }
+      }
+    });
+    super.init(params);
+  }
+  constructor(params?: any) {
+    super(params);
+  }
+  get alertBody() {
+    return this.nativeObject.alertBody;
+  }
+  set alertBody(value: string) {
+    if (typeof value === 'string') {
+      this.nativeObject.alertBody = value;
+    }
+  }
+  get alertAction() {
+    return this.nativeObject.alertAction;
+  }
+  set alertAction(value: string) {
+    if (typeof value === 'string') {
+      this.nativeObject.alertAction = value;
+    }
+  }
+  get sound() {
+    return this.nativeObject.soundName;
+  }
+  set sound(value: string) {
+    if (typeof value === 'string') {
+      this.nativeObject.soundName = value;
+    }
+  }
+  get launchImage() {
+    return this.nativeObject.alertLaunchImage;
+  }
+  set launchImage(value: string) {
+    if (typeof value === 'string') {
+      this.nativeObject.alertLaunchImage = value;
+    }
+  }
+  get fireDate() {
+    return this.nativeObject.fireDate;
+  }
+  set fireDate(value) {
+    this.nativeObject.fireDate = value;
+  }
+  get repeatInterval() {
+    return this.nativeObject.repeatInterval;
+  }
+  set repeatInterval(value: number) {
+    if (typeof value === 'number') {
+      this.nativeObject.repeatInterval = value;
+    }
+  }
+  schedule() {
+    __SF_UIApplication.sharedApplication().scheduleLocalNotification(this.nativeObject);
+  }
+
+  present() {
+    __SF_UIApplication.sharedApplication().presentLocalNotificationNow(this.nativeObject);
+  }
+
+  cancel() {
+    __SF_UIApplication.sharedApplication().cancelLocalNotification(this.nativeObject);
+  }
+}
+
+class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+  protected createNativeObject() {
+    return null;
+  }
   static Events = NotificationEvents;
   static ios: typeof NotificationsBase.ios & { UNUserNotificationCenterDelegate: any; _didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any } = {
     _willPresentNotification: undefined,
@@ -41,6 +139,10 @@ class NotificationsIOS implements NotificationsBase {
     AuthorizationStatus,
     NotificationPresentationOptions
   };
+
+  get android() {
+    return {};
+  }
 
   get onNotificationReceive() {
     return NotificationsIOS.ios._willPresentNotification;
@@ -124,99 +226,7 @@ class NotificationsIOS implements NotificationsBase {
   static removeAllDeliveredNotifications() {
     __SF_UNUserNotificationCenter.currentNotificationCenter().removeAllDeliveredNotifications();
   }
-  static LocalNotification: typeof LocalNotification;
-}
-
-class LocalNotification extends NativeComponent {
-  protected createNativeObject() {
-    return new __SF_UILocalNotification();
-  }
-  constructor(params?: any) {
-    super(params);
-    const ios = {
-      get applicationIconBadgeNumber() {
-        return this.nativeObject.applicationIconBadgeNumber;
-      },
-      set applicationIconBadgeNumber(value: number) {
-        if (typeof value === 'number') {
-          this.nativeObject.applicationIconBadgeNumber = value;
-        }
-      },
-      get hasAction() {
-        return this.nativeObject.hasAction;
-      },
-      set hasAction(value: boolean) {
-        if (typeof value === 'boolean') {
-          this.nativeObject.hasAction = value;
-        }
-      },
-      get userInfo() {
-        return this.nativeObject.userInfo;
-      },
-      set userInfo(value: any) {
-        if (typeof value === 'object') {
-          this.nativeObject.userInfo = value;
-        }
-      }
-    };
-  }
-  get alertBody() {
-    return this.nativeObject.alertBody;
-  }
-  set alertBody(value: string) {
-    if (typeof value === 'string') {
-      this.nativeObject.alertBody = value;
-    }
-  }
-  get alertAction() {
-    return this.nativeObject.alertAction;
-  }
-  set alertAction(value: string) {
-    if (typeof value === 'string') {
-      this.nativeObject.alertAction = value;
-    }
-  }
-  get sound() {
-    return this.nativeObject.soundName;
-  }
-  set sound(value: string) {
-    if (typeof value === 'string') {
-      this.nativeObject.soundName = value;
-    }
-  }
-  get launchImage() {
-    return this.nativeObject.alertLaunchImage;
-  }
-  set launchImage(value: string) {
-    if (typeof value === 'string') {
-      this.nativeObject.alertLaunchImage = value;
-    }
-  }
-  get fireDate() {
-    return this.nativeObject.fireDate;
-  }
-  set fireDate(value) {
-    this.nativeObject.fireDate = value;
-  }
-  get repeatInterval() {
-    return this.nativeObject.repeatInterval;
-  }
-  set repeatInterval(value: number) {
-    if (typeof value === 'number') {
-      this.nativeObject.repeatInterval = value;
-    }
-  }
-  schedule() {
-    __SF_UIApplication.sharedApplication().scheduleLocalNotification(this.nativeObject);
-  }
-
-  present() {
-    __SF_UIApplication.sharedApplication().presentLocalNotificationNow(this.nativeObject);
-  }
-
-  cancel() {
-    __SF_UIApplication.sharedApplication().cancelLocalNotification(this.nativeObject);
-  }
+  static LocalNotification: typeof LocalNotification = LocalNotification;
 }
 
 export default NotificationsIOS;
