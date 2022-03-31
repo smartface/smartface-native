@@ -1,4 +1,4 @@
-import { ISwipeView, SwipeViewState } from '.';
+import { ISwipeView, SwipeViewState } from './swipeview';
 import { IPage } from '../page/page';
 import PageIOS from '../page/page.ios';
 import OverScrollMode from '../shared/android/overscrollmode';

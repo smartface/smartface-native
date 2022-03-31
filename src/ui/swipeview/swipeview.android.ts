@@ -1,4 +1,4 @@
-import { ISwipeView, SwipeViewState } from '.';
+import { ISwipeView, SwipeViewState } from './swipeview';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { IPage } from '../page/page';
@@ -23,23 +23,20 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
   onPageCreate: (position: number) => Page;
-  swipeToIndex(index: number, animated: boolean): void {
-    animated = animated ? true : false; // not to pass null to native method
-    this.nativeObject.setCurrentItem(index, animated);
-  }
   private _page: PageAndroid;
-  private _pages: Page[];
-  private _lastIndex = -1;
+  private _pages: typeof Page[];
+  private _lastIndex: number;
   private _pageCount: number;
-  private _pageInstances: PageAndroid[] = [];
-  private _callbackOnPageSelected;
-  private _callbackOnPageStateChanged;
-  private _callbackOnPageScrolled;
-  private _onPageCreateCallback;
+  private _pageInstances: PageAndroid[];
+  constructor(params?: Partial<TProps>) {
+    super(params);
+  }
+
   createNativeObject() {
+    this._pages = [];
     const callbacks = {
       getCount: () => {
-        return this.pageCount !== null ? this.pageCount : this.pages.length;
+        return this.pageCount ?? this.pages.length;
       },
       getItem: (position: number) => {
         return this.getPageInstance(position);
@@ -48,14 +45,14 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
     const nativeObject = new NativeViewPager(AndroidConfig.activity);
     const viewID = NativeView.generateViewId();
+    nativeObject.setAdapter(this.pagerAdapter);
     nativeObject.setId(viewID);
     return nativeObject;
   }
   init(params?: Partial<TProps>) {
-    super.init(params);
-    this.addAndroidProps(this.getAndroidProps());
-
-    this.nativeObject.setAdapter(this.pagerAdapter);
+    this._lastIndex = -1;
+    this._pageInstances = [];
+    this._pages = [];
     const listener = NativeOnPageChangeListener.implement({
       onPageScrollStateChanged: (state: SwipeViewState) => {
         this.onStateChanged?.(state);
@@ -85,24 +82,23 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
       }
     });
     this.nativeObject.addOnPageChangeListener(listener);
+    this.addAndroidProps(this.getAndroidProps());
+    super.init(params);
   }
-  constructor(params?: Partial<TProps>) {
-    super(params);
+  swipeToIndex(index: number, animated: boolean): void {
+    animated = !!animated; // not to pass null to native method
+    this.nativeObject.setCurrentItem(index, animated);
   }
-
   private getPageInstance(position: number) {
     let pageInstance: PageAndroid;
     if (this.onPageCreate) {
-      pageInstance = this.onPageCreate(position) as any; //TODO: Page type fix
+      pageInstance = this.onPageCreate(position) as unknown as PageAndroid;
     } else if (this._pageInstances[position]) {
       return this._pageInstances[position].nativeObject;
     } else {
       // For backward compatibility
       const PageClass = this.pages[position];
-      //@ts-ignore TODO: skipDefaults Type
-      pageInstance = new PageClass({
-        skipDefaults: true
-      });
+      pageInstance = new PageClass() as unknown as PageAndroid;
     }
     this._pageInstances[position] = pageInstance;
     this.bypassPageSpecificProperties(pageInstance);
@@ -142,7 +138,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   set page(value) {
     this._page = value;
   }
-  get pages(): Page[] {
+  get pages(): typeof Page[] {
     return this._pages;
   }
   set pages(value) {
@@ -169,5 +165,5 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   set pagingEnabled(value) {
     this.nativeObject.setIsUserInputEnabled(value);
   }
-  static State: typeof SwipeViewState & typeof ViewAndroid.State = SwipeViewState as any;
+  static State = { ...SwipeViewState, ...ViewAndroid.State };
 }

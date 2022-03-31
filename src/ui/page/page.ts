@@ -440,6 +440,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
 
 export declare class PageImpl extends AbstractPage implements IPage {
   protected createNativeObject(): any;
+  constructor(params?: Partial<AbstractPage>);
   onLoad(): void;
   onShow(): void;
   onHide(): void;
@@ -453,4 +454,9 @@ export declare class PageImpl extends AbstractPage implements IPage {
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
   present(params?: ControllerParams): void;
   dismiss(params?: ControllerParams): void;
+  static iOS: {
+    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
+    PresentationStyle: typeof PresentationStyle;
+  };
+  static Orientation: typeof Orientation;
 }
