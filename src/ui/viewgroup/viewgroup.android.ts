@@ -33,7 +33,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof FlexLayoutAndroid) {
-      this.nativeObject.addView(view.nativeObject, view.android.yogaNode);
+      this.nativeObject.addView(view.nativeObject, view.yogaNode);
     }
   }
   removeChild(view: IView) {

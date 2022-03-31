@@ -29,26 +29,80 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   private _textColor: Color | { normal: Color; selected: Color };
   private _iconColor: Color | { normal: Color; selected: Color };
   private _overScrollMode: OverScrollMode;
-  private _scrollEnabled: boolean = false;
-  private _dividerWidth: number = 0;
-  private _dividerPadding: number = 0;
+  private _scrollEnabled: boolean;
+  private _dividerWidth: number;
+  private _dividerPadding: number;
   private _dividerColor: Color;
   private _indicatorHeight: number;
-  private _autoCapitalize: boolean = true;
+  private _autoCapitalize: boolean;
   private tabLayout: any;
   private divider: any;
   private swipeView: SwipeView;
   private dividerDrawable: typeof NativeGradientDrawable;
 
-  constructor(params?: Partial<ITabBarController>) {
-    super(params);
-
+  init(params?: Partial<ITabBarController>) {
+    this._scrollEnabled = false;
+    this._dividerWidth = 0;
+    this._dividerPadding = 0;
+    this._autoCapitalize = true;
     this._items = [];
     this._overScrollMode = OverScrollMode.ALWAYS;
     this._dividerColor = Color.BLACK;
     this._indicatorColor = Color.create('#00A1F1');
     this._barColor = Color.WHITE;
     this._textColor = Color.BLACK;
+    this.tabLayout = {};
+    const self = this;
+    this.addAndroidProps({
+      get dividerWidth(): number {
+        return self._dividerWidth;
+      },
+      set dividerWidth(value: number) {
+        self._dividerWidth = value;
+
+        self.divider.setShowDividers(2); // 2 = LinearLayout.SHOW_DIVIDER_MIDDLE
+        self.dividerDrawable = new NativeGradientDrawable();
+        self.dividerDrawable.setColor(self._dividerColor.nativeObject);
+
+        let px = AndroidUnitConverter.dpToPixel(value);
+        self.dividerDrawable.setSize(px, 1);
+        px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
+        self.divider.setDividerPadding(px);
+        self.divider.setDividerDrawable(self.dividerDrawable);
+      },
+      get dividerColor(): Color {
+        return self._dividerColor;
+      },
+      set dividerColor(value: Color) {
+        self._dividerColor = value;
+        if (self.dividerDrawable) {
+          self.dividerDrawable.setColor(value.nativeObject);
+        }
+      },
+      get dividerPadding(): number {
+        return self._dividerPadding;
+      },
+      set dividerPadding(value: number) {
+        self._dividerPadding = value;
+        if (self.dividerDrawable) {
+          const px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
+          self.divider.setDividerPadding(px);
+        }
+      },
+      get overScrollMode(): OverScrollMode {
+        return self._overScrollMode;
+      },
+      set overScrollMode(value: OverScrollMode) {
+        self._overScrollMode = value;
+        self.swipeView.android.overScrollMode = value;
+        self.tabLayout.nativeObject.setOverScrollvalue(value);
+      }
+    });
+    super.init(params);
+  }
+
+  constructor(params?: Partial<ITabBarController>) {
+    super(params);
 
     this.tabLayout.nativeObject = new NativeTabLayout(AndroidConfig.activity);
     this.tabLayout.yogaNode = NativeYogaNodeFactory.create();
@@ -97,53 +151,6 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
       onTabReselected: (tab) => {}
     });
     this.tabLayout.nativeObject.addOnTabSelectedListener(listener);
-
-    const self = this;
-    this.addAndroidProps({
-      get dividerWidth(): number {
-        return self._dividerWidth;
-      },
-      set dividerWidth(value: number) {
-        self._dividerWidth = value;
-
-        self.divider.setShowDividers(2); // 2 = LinearLayout.SHOW_DIVIDER_MIDDLE
-        self.dividerDrawable = new NativeGradientDrawable();
-        self.dividerDrawable.setColor(self._dividerColor.nativeObject);
-
-        let px = AndroidUnitConverter.dpToPixel(value);
-        self.dividerDrawable.setSize(px, 1);
-        px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
-        self.divider.setDividerPadding(px);
-        self.divider.setDividerDrawable(self.dividerDrawable);
-      },
-      get dividerColor(): Color {
-        return self._dividerColor;
-      },
-      set dividerColor(value: Color) {
-        self._dividerColor = value;
-        if (self.dividerDrawable) {
-          self.dividerDrawable.setColor(value.nativeObject);
-        }
-      },
-      get dividerPadding(): number {
-        return self._dividerPadding;
-      },
-      set dividerPadding(value: number) {
-        self._dividerPadding = value;
-        if (self.dividerDrawable) {
-          const px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
-          self.divider.setDividerPadding(px);
-        }
-      },
-      get overScrollMode(): OverScrollMode {
-        return self._overScrollMode;
-      },
-      set overScrollMode(value: OverScrollMode) {
-        self._overScrollMode = value;
-        self.swipeView.android.overScrollMode = value;
-        self.tabLayout.nativeObject.setOverScrollvalue(value);
-      }
-    });
   }
 
   // TODO Unused fields
