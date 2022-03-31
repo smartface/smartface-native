@@ -41,22 +41,7 @@ class NotificationsIOS implements NotificationsBase {
     AuthorizationStatus,
     NotificationPresentationOptions
   };
-  EventFunctions = {
-    [NotificationEvents.NotificationClick]: function () {
-      this.onCallStateChanged = function (state) {
-        this.emitter.emit(NotificationEvents.NotificationClick, state);
-      };
-    },
-    [NotificationEvents.NotificationReceive]: function (value) {
-      this.onCallStateChanged = function (state) {
-        this.emitter.emit(NotificationEvents.NotificationReceive, state);
-      };
-      if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
-        __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = NotificationsIOS.ios.UNUserNotificationCenterDelegate;
-      }
-      NotificationsIOS.ios._willPresentNotification = value;
-    }
-  };
+
   get onNotificationReceive() {
     return NotificationsIOS.ios._willPresentNotification;
   }
