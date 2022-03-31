@@ -1,35 +1,47 @@
-import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
+import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from './layoutmanager';
 import Invocation from '../../util/iOS/invocation';
 import { isNotEmpty } from '../../util/type';
 import GridViewIOS from '../gridview/gridview.ios';
+import { GridViewEvents } from '../gridview/gridview-events';
 
 const DEFAULT_ITEM_LENGTH = 50;
 
 export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UICollectionViewFlowLayout> implements ILayoutManager {
-  protected createNativeObject() {
-    return new __SF_UICollectionViewFlowLayout();
-  }
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
   private _itemSpacing: ILayoutManager['itemSpacing'];
-  private _scrollDirection: ILayoutManager['scrollDirection'] = ScrollDirection.VERTICAL;
-  private _contentInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
-  private _onItemLength: ILayoutManager['onItemLength'] = () => DEFAULT_ITEM_LENGTH;
+  private _scrollDirection: ILayoutManager['scrollDirection'];
+  private _contentInset: ILayoutManager['contentInset'];
+  private _onItemLength: ILayoutManager['onItemLength'];
   private _onFullSpanCallback: ILayoutManager['onFullSpan'];
-  collectionView: __SF_UICollectionView | null = null;
-  jsCollectionView: GridViewIOS; //TODO: Find a better solution. Normally we shouldn't need this.
-  private _sectionInset: ILayoutManager['contentInset'] = { bottom: 0, left: 0, right: 0, top: 0 };
-  private _itemLength = 50;
+  collectionView: __SF_UICollectionView | null;
+  onItemType: (index: number) => number;
+  private _sectionInset: ILayoutManager['contentInset'];
+  private _itemLength: number;
   constructor(params: Partial<ILayoutManager> = {}) {
     super(params);
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.lineSpacing = 0;
+    this.itemSpacing = 0;
+    this._itemLength = DEFAULT_ITEM_LENGTH;
+    this._sectionInset = { bottom: 0, left: 0, right: 0, top: 0 };
+    this._contentInset = { bottom: 0, left: 0, right: 0, top: 0 };
+    this._onItemLength = () => DEFAULT_ITEM_LENGTH;
+    this._scrollDirection = ScrollDirection.VERTICAL;
+    this.collectionView = null;
+    super.init(params);
+  }
+  protected createNativeObject() {
+    const nativeObject = new __SF_UICollectionViewFlowLayout();
 
-    this.nativeObject.prepareLayoutCallback = () => {
+    nativeObject.prepareLayoutCallback = () => {
       const retval = this.calculateItemSize(this.spanCount);
 
       if (this.onFullSpan && this.collectionView) {
         const __fullSpanSize = this.calculateItemSize(1);
         this.collectionView.sizeForItemAtIndexPath = (collectionView: LayoutManagerIOS['collectionView'], indexPath: __SF_NSIndexPath) => {
-          const span = Number(this.jsCollectionView.onItemType(indexPath.row));
+          const span = Number(this.onItemType?.(indexPath.row));
           const itemLength = this.onFullSpan?.(span);
           if (itemLength === undefined) {
             return retval;
@@ -48,23 +60,24 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
         Invocation.invokeInstanceMethod(this.nativeObject, 'setItemSize:', [argumentSize]);
       }
     };
-    this.nativeObject.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = (proposedContentOffset, velocity) => {
+    nativeObject.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = (proposedContentOffset, velocity) => {
       const proposedContentOffsetWithInset = {
-        x: proposedContentOffset.x + this.contentInset.left,
-        y: proposedContentOffset.y + this.contentInset.top
+        x: proposedContentOffset.x + (this.contentInset.left || 0),
+        y: proposedContentOffset.y + (this.contentInset?.top || 0)
       };
       if (this.ios.targetContentOffset) {
         const returnValue = this.ios.targetContentOffset(proposedContentOffsetWithInset, velocity);
         if (isNotEmpty(this.contentInset.left) && isNotEmpty(returnValue.x)) returnValue.x -= this.contentInset.left;
         if (isNotEmpty(this.contentInset.top) && isNotEmpty(returnValue.y)) returnValue.y -= this.contentInset.top;
-        return returnValue;
+        return {
+          x: returnValue.x || 0,
+          y: returnValue.y || 0
+        };
       }
       return proposedContentOffset;
     };
-    this.lineSpacing = 0;
-    this.itemSpacing = 0;
+    return nativeObject;
   }
-
   get spanCount(): ILayoutManager['spanCount'] {
     return this._spanCount;
   }

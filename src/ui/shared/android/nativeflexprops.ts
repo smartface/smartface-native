@@ -28,11 +28,11 @@ export const NativeJustifyContent = {
 };
 
 export const NativeAlignContent = {
-  AUTO: NativeYogaJustify.AUTO,
-  FLEX_START: NativeYogaJustify.FLEX_START,
-  CENTER: NativeYogaJustify.CENTER,
-  FLEX_END: NativeYogaJustify.FLEX_END,
-  STRETCH: NativeYogaJustify.STRETCH
+  AUTO: NativeYogaAlign.AUTO,
+  FLEX_START: NativeYogaAlign.FLEX_START,
+  CENTER: NativeYogaAlign.CENTER,
+  FLEX_END: NativeYogaAlign.FLEX_END,
+  STRETCH: NativeYogaAlign.STRETCH
 };
 
 export const NativeFlexWrap = {

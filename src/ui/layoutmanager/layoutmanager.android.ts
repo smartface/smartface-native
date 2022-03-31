@@ -1,5 +1,4 @@
-import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from '.';
-import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from './layoutmanager';
 import UnitConverter from '../../util/Android/unitconverter';
 
 const NativeItemDecoration = requireClass('androidx.recyclerview.widget.RecyclerView$ItemDecoration');
@@ -8,21 +7,29 @@ const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListe
 
 export default class LayoutManagerAndroid extends AbstractLayoutManager implements ILayoutManager {
   protected createNativeObject(params: Partial<ILayoutManager> = {}) {
-    this._spanCount = params.spanCount !== undefined ? params.spanCount : 1;
-    this._itemSpacing = params?.itemSpacing || 0;
-    this._scrollDirection = params?.scrollDirection !== undefined ? params.scrollDirection : 1; //LTR
-    this._spanSize = 0;
+    console.info('layoutmanager:android: ', params);
+    this._spanCount = params.spanCount || 1;
+    this._scrollDirection = params.scrollDirection ?? ScrollDirection.VERTICAL;
     return new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
   }
-  private _lineDecoration: any = null;
-  private _itemDecoration: any = null;
+  protected init(params?: Partial<Record<string, any>>): void {
+    this._itemSpacing = params?.itemSpacing || 0;
+    this._spanSize = 0;
+    this._nativeRecyclerView = null;
+    this._itemDecoration = null;
+    this._lineDecoration = null;
+
+    super.init(params);
+  }
+  private _lineDecoration: any;
+  private _itemDecoration: any;
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
   private _itemSpacing: ILayoutManager['itemSpacing'];
   private _scrollDirection: ILayoutManager['scrollDirection'];
   private _contentInset: ILayoutManager['contentInset'];
-  private _onItemLength: ILayoutManager['onItemLength'] | null = null;
-  private _nativeRecyclerView: INativeInner | null = null;
+  private _onItemLength: ILayoutManager['onItemLength'] | null;
+  private _nativeRecyclerView: INativeInner | null;
   private _spanSize: number;
   private _onFullSpanCallback: ILayoutManager['onFullSpan'];
   constructor(params: Partial<ILayoutManager> = {}) {

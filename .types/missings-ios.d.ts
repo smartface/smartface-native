@@ -346,7 +346,7 @@ declare class __SF_UICollectionViewLayout extends __SF_NSOBject {}
 
 declare class __SF_UICollectionViewFlowLayout extends __SF_UICollectionViewLayout {
   prepareLayoutCallback: () => void;
-  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x?: number; y?: number }, velocity: { x?: number; y?: number }) => { x?: number; y?: number };
+  targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback: (proposedContentOffset: { x: number; y: number }, velocity: { x: number; y: number }) => { x: number; y: number };
 }
 
 declare class UIFont {

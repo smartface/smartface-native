@@ -2,13 +2,14 @@ import { GridViewSnapAlignment, IGridView } from '.';
 
 import Color from '../color';
 import GridViewItem from '../gridviewitem';
-import LayoutManager, { ScrollDirection } from '../layoutmanager';
+import { ScrollDirection } from '../layoutmanager/layoutmanager';
 import ViewAndroid from '../view/view.android';
 import { GridViewEvents } from './gridview-events';
 import LayoutManagerAndroid from '../layoutmanager/layoutmanager.android';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
+import type LayoutManager from '../layoutmanager';
 
 const NativeSFRecyclerView = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
@@ -28,12 +29,12 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private _onScrollStateChanged: IGridView['android']['onScrollStateChanged'];
   private _layoutManager: LayoutManagerAndroid | undefined;
   private _gridViewItems: Record<string, GridViewItem> = {};
-  private _itemCount: IGridView['itemCount'] = 0;
-  private isScrollListenerAdded = false;
-  private _scrollBarEnabled: IGridView['scrollBarEnabled'] = false;
+  private _itemCount: IGridView['itemCount'];
+  private isScrollListenerAdded;
+  private _scrollBarEnabled: IGridView['scrollBarEnabled'];
   private _scrollEnabled: IGridView['scrollBarEnabled'];
   private _nativePagerSnapHelper: any;
-  private _paginationEnabled: boolean = false;
+  private _paginationEnabled: boolean;
   private _onScrollListener: any;
   private _snapToAlignment: any;
   private _nativeLinearSnapHelper: any;
@@ -47,6 +48,11 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     this.nativeObject.addView(this.nativeInner);
     this.setNativeEvents();
     this.setDataAdapter();
+    this._itemCount = 0;
+    this.isScrollListenerAdded = false;
+    this._scrollBarEnabled = false;
+    this._paginationEnabled = false;
+    this._gridViewItems = {};
     super.init(params);
   }
   constructor(params?: Partial<IGridView>) {
@@ -68,21 +74,19 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
         this.emit('detachedFromWindow');
       }
     };
-    if (!this.nativeInner) {
-      // For creating RecyclerView with android:scrollbar=vertical attribute
-      if (NativeR.style.ScrollBarRecyclerView) {
-        const themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-        this.nativeInner = new NativeSFRecyclerView(themeWrapper, callbacks);
-      } else {
-        this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, callbacks);
-      }
-
-      //this.nativeInner.setItemViewCacheSize(0);
-      //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
-      this.nativeInner.setScrollBarStyle(50331648);
-      this.nativeInner.setHorizontalScrollBarEnabled(false);
-      this.nativeInner.setVerticalScrollBarEnabled(false);
+    // For creating RecyclerView with android:scrollbar=vertical attribute
+    if (NativeR.style.ScrollBarRecyclerView) {
+      const themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
+      this.nativeInner = new NativeSFRecyclerView(themeWrapper, callbacks);
+    } else {
+      this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, callbacks);
     }
+
+    //this.nativeInner.setItemViewCacheSize(0);
+    //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
+    this.nativeInner.setScrollBarStyle(50331648);
+    this.nativeInner.setHorizontalScrollBarEnabled(false);
+    this.nativeInner.setVerticalScrollBarEnabled(false);
   }
   private setNativeEvents() {
     this.nativeObject.setOnRefreshListener(
@@ -117,7 +121,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
         const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
         let spanSize = this._layoutManager?.spanSize;
         if (spanSize === 0 && this._layoutManager) {
-          if (this._layoutManager?.scrollDirection === LayoutManager.ScrollDirection.VERTICAL) {
+          if (this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL) {
             this._layoutManager.viewWidth = this.width;
           } else {
             this._layoutManager.viewHeight = this.height;
@@ -226,7 +230,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   }
   private assignSizeBasedOnDirection(holderViewLayout: any, viewType: number) {
     const spanSize = this._layoutManager?.spanSize;
-    const isVertical = this._layoutManager?.scrollDirection === LayoutManager.ScrollDirection.VERTICAL;
+    const isVertical = this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL;
     const fullSpanLength = this._layoutManager?.onFullSpan?.(viewType) || null;
     const layoutParams = holderViewLayout.nativeObject.getLayoutParams();
     const itemLength = (spanSize && this._layoutManager?.onItemLength?.(spanSize)) || null;

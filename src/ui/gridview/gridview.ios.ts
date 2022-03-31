@@ -1,9 +1,8 @@
 import { GridViewSnapAlignment, IGridView, ScrollEventHandler } from '.';
 import { Point2D } from '../../primitive/point2d';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
-import Color from '../color';
-import GridViewItem from '../gridviewitem';
-import LayoutManager from '../layoutmanager';
+import ColorIOS from '../color/color.ios';
+import GridViewItemIOS from '../gridviewitem/gridviewitem.ios';
 import LayoutManagerIOS from '../layoutmanager/layoutmanager.ios';
 import ViewIOS from '../view/view.ios';
 import { GridViewEvents } from './gridview-events';
@@ -11,37 +10,39 @@ import { GridViewEvents } from './gridview-events';
 const DEFAULT_ITEM_LENGTH = 50;
 
 export default class GridViewIOS<TEvent extends string = GridViewEvents> extends ViewIOS<TEvent | GridViewEvents, any, IGridView> implements IGridView {
-  onItemCreate: (type?: number) => GridViewItem;
-  onItemBind: (item?: GridViewItem, index?: number) => void;
+  onItemCreate: (type?: number) => GridViewItemIOS;
+  onItemBind: (item?: GridViewItemIOS, index?: number) => void;
   onItemType: (index?: number) => number;
-  onItemSelected: (gridViewItem: GridViewItem, index?: number) => void;
+  onItemSelected: (gridViewItem: GridViewItemIOS, index?: number) => void;
   onScroll?: ScrollEventHandler;
   onPullRefresh: () => void;
   private _sectionCount: number;
-  private registeredIndentifier: any = [];
+  private registeredIndentifier: any[];
   private _layoutManager: LayoutManagerIOS;
-  private smfcollectionView: __SF_UICollectionView;
   private _itemCount: number;
-  private _itemLength = DEFAULT_ITEM_LENGTH;
-  private collectionViewItems: Record<string, GridViewItem> = {};
+  private _itemLength: number;
+  private collectionViewItems: Record<string, GridViewItemIOS>;
   private _scrollBarEnabled: boolean;
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: boolean;
   createNativeObject(params?: Partial<IGridView>) {
     this._layoutManager = params?.layoutManager as unknown as LayoutManagerIOS;
-    this.smfcollectionView = new __SF_UICollectionView(this._layoutManager.nativeObject);
-    this.nativeObject = this.smfcollectionView;
-    this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
-    this._layoutManager.collectionView = this.smfcollectionView;
-    this._layoutManager.jsCollectionView = this as GridViewIOS; //TODO: It doesn't accept "this" due to Events
+    const nativeObject = new __SF_UICollectionView(this._layoutManager.nativeObject);
+    nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+    this._layoutManager.collectionView = nativeObject;
+    this._layoutManager.onItemType = (index: number) => this.onItemType?.(index);
     this.refreshControl = new __SF_UIRefreshControl();
-    this.setNativeParams();
-    return null;
+    return nativeObject;
   }
   init(params?: Partial<IGridView>) {
     this.scrollBarEnabled = true;
+    this.collectionViewItems = {};
+    this.registeredIndentifier = [];
+    this._itemLength = DEFAULT_ITEM_LENGTH;
+    this._itemCount = 0;
     this.addIOSProps(this.getIOSProps());
     this.addAndroidProps(this.getAndroidProps());
+    this.setNativeParams();
     this.setScrollEvents();
     super.init(params);
   }
@@ -116,16 +117,16 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     };
   }
   private setNativeParams() {
-    this.smfcollectionView.numberOfSectionsCallback = () => {
+    this.nativeObject.numberOfSectionsCallback = () => {
       return this._sectionCount;
     };
-    this.smfcollectionView.numberOfItemsInSectionCallback = () => {
+    this.nativeObject.numberOfItemsInSectionCallback = () => {
       return this._itemCount; //There used to be unused onItemCountForSection function. It is removed.
     };
 
-    this.smfcollectionView.cellForItemAtIndexPathCallback = (collectionView, indexPath) => {
+    this.nativeObject.cellForItemAtIndexPathCallback = (collectionView, indexPath) => {
       // Cell dequeing for type
-      const type = this.onItemType(indexPath.row).toString();
+      const type = this.onItemType?.(indexPath.row).toString() || '0';
 
       if (this.registeredIndentifier.indexOf(type) === -1) {
         collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
@@ -135,25 +136,22 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
       const cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
       // onItemCreate and onItemBind callback pairs
       if (cell.contentView.subviews.length > 0) {
-        if (this.onItemBind) {
-          this.onItemBind(this.collectionViewItems[cell.uuid], indexPath.row);
-        }
+        this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
       } else {
         this.collectionViewItems[cell.uuid] = this.onItemCreate?.(parseInt(cell.reuseIdentifier));
         const currentCellDirection = this.collectionViewItems[cell.uuid].nativeObject.yoga.direction;
         // Bug ID : IOS-2750
-        if (currentCellDirection === 0 && this.smfcollectionView.superview) {
-          this.collectionViewItems[cell.uuid].nativeObject.yoga.direction = this.smfcollectionView.superview.yoga.resolvedDirection;
+        if (currentCellDirection === 0 && this.nativeObject.superview) {
+          this.collectionViewItems[cell.uuid].nativeObject.yoga.direction = this.nativeObject.superview.yoga.resolvedDirection;
         }
         ///////
 
         cell.contentView.addSubview(this.collectionViewItems[cell.uuid].nativeObject);
         this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
       }
-
       return cell;
     };
-    this.smfcollectionView.didSelectItemAtIndexPathCallback = (collectionView, indexPath) => {
+    this.nativeObject.didSelectItemAtIndexPathCallback = (collectionView, indexPath) => {
       const cell = collectionView.cellForItemAtIndexPath(indexPath);
       if (cell) {
         this.onItemSelected?.(this.collectionViewItems[cell.uuid], indexPath.row);
@@ -189,7 +187,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     const visibleIndex = visibleIndexArray[visibleIndexArray.length - 1];
     return visibleIndex?.row || 0;
   }
-  setPullRefreshColors(color: Color[] | Color): void {
+  setPullRefreshColors(color: ColorIOS[] | ColorIOS): void {
     this.refreshControl.tintColor = Array.isArray(color) ? color[0].nativeObject : color.nativeObject;
   }
   deleteRowRange(params: { positionStart: number; itemCount: number }): void {
@@ -209,13 +207,13 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     if (!this._layoutManager) {
       return;
     }
-    const direction = this._layoutManager.scrollDirection === LayoutManager.ScrollDirection.VERTICAL ? 0 : 3; // 1 << 0 means UICollectionViewScrollPositionTop
+    const direction = this._layoutManager.scrollDirection === LayoutManagerIOS.ScrollDirection.VERTICAL ? 0 : 3; // 1 << 0 means UICollectionViewScrollPositionTop
     this.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << direction, animated !== false);
   }
   stopRefresh(): void {
     this.refreshControl.endRefreshing();
   }
-  itemByIndex(index: number): GridViewItem | undefined {
+  itemByIndex(index: number): GridViewItemIOS | undefined {
     const indexPath = __SF_NSIndexPath.indexPathForRowInSection(index, 0);
     const cell = this.nativeObject.cellForItemAtIndexPath(indexPath);
     return cell ? this.collectionViewItems[cell.uuid] : undefined;
