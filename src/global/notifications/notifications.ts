@@ -2,6 +2,18 @@ import Color from '../../ui/color';
 import { NotificationEvents } from './notifications-events';
 import { UnauthorizationStatus } from './unauthorization-status';
 
+export enum AuthorizationStatus {
+  NOTDETERMINED,
+  DENIED,
+  AUTHORIZED
+}
+
+export enum NotificationPresentationOptions {
+  BADGE = 1 << 0,
+  SOUND = 1 << 1,
+  ALERT = 1 << 2
+}
+
 /**
  * @class Notifications
  *
@@ -154,6 +166,10 @@ export declare class NotificationsBase {
   }>;
 
   public readonly android: {};
+  static iOS: {
+    AuthorizationStatus: typeof AuthorizationStatus;
+    NotificationPresentationOptions: typeof NotificationPresentationOptions;
+  };
 }
 export declare namespace Notifications {
   /**

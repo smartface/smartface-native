@@ -1,7 +1,7 @@
 import Application from '../../application';
 import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
-import { NotificationsBase } from './notifications';
+import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 import { UnauthorizationStatus } from './unauthorization-status';
 
@@ -38,16 +38,8 @@ class NotificationsIOS implements NotificationsBase {
   };
 
   static iOS = {
-    AuthorizationStatus: {
-      NOTDETERMINED: 0,
-      DENIED: 1,
-      AUTHORIZED: 2
-    },
-    NotificationPresentationOptions: {
-      BADGE: 1 << 0,
-      SOUND: 1 << 1,
-      ALERT: 1 << 2
-    }
+    AuthorizationStatus,
+    NotificationPresentationOptions
   };
   EventFunctions = {
     [NotificationEvents.NotificationClick]: function () {

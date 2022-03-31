@@ -114,12 +114,12 @@ class NotificationsAndroid implements NotificationsBase {
   EventFunctions = {
     [NotificationEvents.NotificationClick]: function () {
       this._onNotificationClick = function (state) {
-        this.emitter.emit(NotificationEvents.NotificationClick, state);
+        this.emitter.emit('notificationClick', state);
       };
     },
     [NotificationEvents.NotificationReceive]: function () {
       this._onNotificationReceive = function (state) {
-        this.emitter.emit(NotificationEvents.NotificationReceive, state);
+        this.emitter.emit('notificationReceive', state);
       };
     }
   };
