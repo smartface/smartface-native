@@ -9,7 +9,7 @@ export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'C
 
 interface IXHRMethods {
     abort()
-    getResponseHeaders(): string
+    getAllResponseHeaders(): string
     getResponseHeader(header: string): string | null
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
     send(data?: string | FormData)
@@ -32,7 +32,7 @@ interface IXHRMethods {
 
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
     readyState: number
-    response: String
+    response: String | null
     responseText: String
     responseType: ResponseTypes
     responseURL?: string

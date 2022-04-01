@@ -169,15 +169,15 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._overrideMimeType = mime; // todo look later while impl. blob
   }
 
-  public addEventListener(type: string, listener: () => void) {
+  public addEventListener(type: XHREventsEvents, listener: () => void) {
     this.on(type, listener);
   }
 
-  public removeEventListener(type: string, listener: () => void) {
+  public removeEventListener(type: XHREventsEvents, listener: () => void) {
     this.off(type, listener);
   }
 
-  public dispatchEvent(event: string): boolean {
+  public dispatchEvent(event: XHREventsEvents): boolean {
     this._emitEvent(event);
     return true;
   }
@@ -232,7 +232,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
   }
 
-  private _emitEvent(event: string) {
+  private _emitEvent(event: XHREventsEvents) {
     this['on' + event]?.();
     this.emit(event);
   }
