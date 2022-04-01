@@ -5,16 +5,14 @@ const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
 const ALARM_SERVICE = 'alarm';
 const ALARM_MANAGER = 'android.app.AlarmManager';
 import Application from '../../application';
-import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Color from '../../ui/color';
 import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
-import { NotificationsBase } from './notifications';
+import { NotificationsBase, Priority } from './notifications';
 import { NotificationEvents } from './notifications-events';
-import { Priority } from './priority';
 
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat = requireClass('androidx.core.app.NotificationCompat');

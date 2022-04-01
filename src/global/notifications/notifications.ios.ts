@@ -4,8 +4,6 @@ import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
-import { UnauthorizationStatus } from './unauthorization-status';
-
 class LocalNotification extends NativeMobileComponent {
   protected createNativeObject() {
     return new __SF_UILocalNotification();
@@ -108,7 +106,7 @@ class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, a
   static Events = NotificationEvents;
   static ios: typeof NotificationsBase.ios & { UNUserNotificationCenterDelegate: any; _didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any } = {
     _willPresentNotification: undefined,
-    authorizationStatus: UnauthorizationStatus,
+    authorizationStatus: AuthorizationStatus,
     _didReceiveNotificationResponse: undefined,
     UNUserNotificationCenterDelegate: {
       ...new __SF_SMFUNUserNotificationCenterDelegate(),
