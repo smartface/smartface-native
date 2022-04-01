@@ -848,12 +848,12 @@ declare class __SF_UIAccessibility {
   static isVoiceOverRunning(): boolean;
 }
 
-declare class __SF_UITabbarItem {
+declare class __SF_UITabBarItem {
   title: string;
   image: __SF_UIImage;
   selectedImage: __SF_UIImage;
   setTitleTextAttributesForState(font: { NSFont: any }, uiControlState: number /**TODO: Add after UIControlState is there */): any;
-  static new(): __SF_UITabbarItem;
+  static new(): __SF_UITabBarItem;
 }
 
 declare class __SF_UIActivityViewController extends __SF_NSOBject {

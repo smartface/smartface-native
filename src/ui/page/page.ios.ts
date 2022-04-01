@@ -52,8 +52,8 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     };
   }
 
-  onLoad: () => void;
-  onShow: () => void;
+  onLoad(): void {}
+  onShow(): void {}
   onHide: () => void;
   onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
 

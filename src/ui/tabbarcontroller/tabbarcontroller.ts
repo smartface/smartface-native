@@ -1,6 +1,6 @@
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import Color from '../color';
-import { AbstractPage, IPage, PageAndroidParams, PageIOSParams, PageOrientation } from '../page/page';
+import { AbstractPage, IPage, LargeTitleDisplayMode, PageAndroidParams, PageIOSParams, PageOrientation, PresentationStyle } from '../page/page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -16,17 +16,6 @@ export enum BarTextTransform {
   AUTO = 0,
   NONE = 1,
   UPPERCASE = 2
-}
-export enum LargeTitleDisplayMode {
-  AUTOMATIC = 0,
-  ALWAYS = 1,
-  NEVER = 2
-}
-export enum PresentationStyle {
-  COVERVERTICAL = 0,
-  FLIPHORIZONTAL = 1,
-  CROSSDISSOLVE = 2,
-  PARTIALCURL = 3
 }
 
 export interface ITabBarControllerIOSProps extends PageIOSParams {

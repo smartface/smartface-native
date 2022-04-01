@@ -2,11 +2,12 @@ import { IBadge } from '.';
 import NativeComponent from '../../core/native-component';
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
-import { IViewState } from '../view/view';
+import ViewState, { IViewState } from '../shared/viewState';
 import Font from '../font';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
+import isViewState from '../../util/isViewState';
 
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
@@ -83,12 +84,10 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
   set textColor(value: IBadge['textColor']) {
     this._textColor = value;
     if (this.nativeObject && value instanceof Color) {
-      if (value.nativeObject) {
-        this.nativeObject.setTextColor(value.nativeObject);
-      } else {
-        const textColorStateListDrawable = this.createColorStateList(value as IViewState<Color>);
-        this.nativeObject.setTextColor(textColorStateListDrawable);
-      }
+      this.nativeObject.setTextColor(value.nativeObject);
+    } else if (isViewState(value)) {
+      const textColorStateListDrawable = this.createColorStateList(value);
+      this.nativeObject.setTextColor(textColorStateListDrawable);
     }
   }
   get font(): IBadge['font'] {

@@ -1,6 +1,6 @@
 import { IButton } from '.';
 import Color from '../color';
-import { IViewState } from '../view/view';
+import ViewState from '../shared/viewState';
 import LabelIOS from '../label/label.ios';
 import { ButtonEvents } from './button-events';
 import Image from '../image';
@@ -14,7 +14,7 @@ enum ButtonState {
   FOCUSED
 }
 
-const TextColorsInitial: IViewState<Color> = {
+const TextColorsInitial: ViewState<Color> = {
   normal: Color.BLACK,
   disabled: Color.BLACK,
   selected: Color.BLACK,
@@ -22,7 +22,7 @@ const TextColorsInitial: IViewState<Color> = {
   focused: Color.BLACK
 };
 
-const BackgroundColorsInitial: IViewState<Color> = {
+const BackgroundColorsInitial: ViewState<Color> = {
   normal: Color.TRANSPARENT,
   disabled: Color.TRANSPARENT,
   selected: Color.TRANSPARENT,
@@ -30,7 +30,7 @@ const BackgroundColorsInitial: IViewState<Color> = {
   focused: Color.TRANSPARENT
 };
 
-const BackgroundImagesInitial: IViewState<Image> = {
+const BackgroundImagesInitial: ViewState<Image> = {
   normal: undefined,
   disabled: undefined,
   selected: undefined,

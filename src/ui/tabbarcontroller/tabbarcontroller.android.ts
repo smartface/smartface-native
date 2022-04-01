@@ -7,7 +7,7 @@ import type Page from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeView from '../swipeview';
-import { ITabbarItem } from '../tabbaritem';
+import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 

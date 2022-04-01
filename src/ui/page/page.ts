@@ -130,7 +130,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * });
    * ````
    */
-  onLoad: () => void;
+  onLoad(): void;
   /**
    * Gets/sets custom transition views. Used with custom transitions to map a {@link UI.View View}
    * from a removed or hidden {@link UI.Page Page} to a {@link UI.View View} from a shown or added {@link UI.Page Page}.
@@ -204,7 +204,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * });
    * ````
    */
-  onShow: () => void;
+  onShow(): void;
   /**
    * This event is called when a page disappears from the screen.
    *
@@ -221,7 +221,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * });
    * ````
    */
-  onHide: () => void;
+  onHide(): void;
   /**
    * This function shows up the pop-up page. Pop-up pages behave exactly as UI.Page .
    *

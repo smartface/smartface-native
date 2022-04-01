@@ -5,9 +5,10 @@ import { ButtonEvents } from './button-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
 import ImageAndroid from '../image/image.android';
-import { IViewState } from '../view/view';
+import ViewState from '../view/view';
 import TextAlignment from '../shared/textalignment';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
+import isViewState from '../../util/isViewState';
 
 const NativeButton = requireClass('android.widget.Button');
 const NativeView = requireClass('android.view.View');
@@ -124,7 +125,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
       this.backgroundDrawable = new NativeGradientDrawable();
       this.backgroundDrawable.setColor(backgroundColors.nativeObject);
       this.backgroundDrawable.setCornerRadius(this._borderRadius);
-    } else if (isStateObject<Color>(backgroundColors)) {
+    } else if (isViewState<Color>(backgroundColors)) {
       release(this.backgroundDrawable);
       this.backgroundDrawable = new NativeStateListDrawable();
       let stateDrawable: any;
@@ -192,7 +193,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
       this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
       this.backgroundDrawable.setCornerRadius(this._borderRadius);
       this.setBackground(0);
-    } else if (isStateObject<ImageAndroid>(backgroundImages)) {
+    } else if (isViewState<ImageAndroid>(backgroundImages)) {
       let stateDrawable: any;
       let image: ImageAndroid;
       release(this.backgroundDrawable);
@@ -300,11 +301,4 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
       })
     );
   }
-}
-
-/**
- * TODO: We might need to move this to a better place
- */
-function isStateObject<Property>(value: Property | IViewState<Property>): value is IViewState<Property> {
-  return (value as IViewState<Property>).normal !== undefined;
 }

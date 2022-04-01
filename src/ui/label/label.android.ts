@@ -4,13 +4,14 @@ import TextAlignment from '../shared/textalignment';
 import ViewAndroid from '../view/view.android';
 import { ILabel, LabelAndroidProps } from '.';
 import { ViewEvents } from '../view/view-events';
-import { IViewState } from '../view/view';
+import ViewState, { IViewState } from '../shared/viewState';
 import EllipsizeMode from '../shared/ellipsizemode';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import TextDirection from '../shared/textdirection';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import TypeUtil from '../../util/type';
+import isViewState from '../../util/isViewState';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -174,9 +175,9 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     if (value instanceof Color && value.nativeObject) {
       this._textColor = value;
       this.nativeObject.setTextColor(value.nativeObject);
-    } else if (TypeUtil.isObject(value)) {
+    } else if (isViewState(value)) {
       this._textColor = value;
-      const textColorStateListDrawable = this.createColorStateList(value as IViewState<Color>);
+      const textColorStateListDrawable = this.createColorStateList(value);
       this.nativeObject.setTextColor(textColorStateListDrawable);
     }
   }

@@ -1,8 +1,7 @@
-import Color from '../color';
 import Image from '../image';
 import { ButtonEvents } from './button-events';
 import { ILabel } from '../label';
-import { IViewState } from '../view/view';
+import ViewState from '../shared/viewState';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
@@ -43,7 +42,7 @@ export declare interface IButton<TEvent extends string = ButtonEvents, TMobile e
    * @android
    * @ios
    */
-  backgroundImage: Image | IViewState<Image>;
+  backgroundImage: ViewState<Image>;
   /**
    * @deprecated
    * @example

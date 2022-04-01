@@ -4,10 +4,12 @@ import TextAlignment from '../shared/textalignment';
 import { ViewEvents } from '../view/view-events';
 import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { IView, IViewState } from '../view/view';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import EllipsizeMode from '../shared/ellipsizemode';
 import TextDirection from '../shared/textdirection';
-export type LabelAndroidProps = IView['android'] & {
+import ViewState from '../shared/viewState';
+
+export interface LabelAndroidProps extends ViewAndroidProps {
   /**
    * Gets/sets adjustable-font step granularity. It is used in conjunction with the minimum and maximum text size in order to build the set of text sizes the system uses to choose from when auto-sizing
    *
@@ -23,9 +25,9 @@ export type LabelAndroidProps = IView['android'] & {
    * @since 4.0.2
    */
   textDirection?: TextDirection;
-};
+}
 
-export type LabelIOSProps = IView['ios'];
+export interface LabelIOSProps extends ViewIOSProps {}
 
 export declare interface ILabel<TEvent extends string = ViewEvents, TMobile extends MobileOSProps<LabelIOSProps, LabelAndroidProps> = MobileOSProps<LabelIOSProps, LabelAndroidProps>>
   extends IView<TEvent, any, TMobile> {
@@ -108,7 +110,7 @@ export declare interface ILabel<TEvent extends string = ViewEvents, TMobile exte
    * @ios
    * @since 0.1
    */
-  textColor: Color | IViewState<Color>;
+  textColor: ViewState<Color>;
 
   /**
    * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)

@@ -1,67 +1,68 @@
-import { ITabbarItem } from '.';
+import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
-import Badge, { IBadge } from '../badge';
+import { IBadge } from '../badge';
 import { IBottomTabBarController } from '../bottomtabbarcontroller';
-import FlexLayout from '../flexlayout';
-import Font from '../font';
-import Image from '../image';
-import TabBarController from '../tabbarcontroller';
+import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
+import FontIOS from '../font/font.ios';
+import ImageIOS from '../image/image.ios';
+import BadgeIOS from '../badge/badge.ios';
+import { TabBarControllerImpl } from '../tabbarcontroller/tabbarcontroller';
+import isViewState from '../../util/isViewState';
 
 export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
-  protected createNativeObject() {
-    return null;
-  }
   private _nativeView: any;
-  private _title: string = '';
-  private _icon;
-  private _badge: IBadge | Record<string, any>;
+  private _title: string;
+  private _icon: ITabbarItem['icon'];
+  private _badge: Partial<IBadge>;
   private _route: string;
 
   constructor(params?: Partial<ITabbarItem>) {
     super(params);
-    this.nativeObject = undefined;
-    if (params?.nativeObject) {
-      this._nativeObject = params.nativeObject;
-    }
-
-    this._badge = this.nativeObject
-      ? new Badge({ nativeObject: this.nativeObject })
-      : ({
-          backgroundColor: null,
-          borderColor: null,
-          borderWidth: 0,
-          textColor: null,
-          visible: false,
-          moveX: undefined,
-          moveY: undefined,
-          move: function (x, y) {
-            this.moveX = x;
-            this.moveY = y;
-          }
-        } as unknown as IBadge);
-
-    this.addIOSProps({
-      get font(): Font {
-        return this._ios?.font;
+    this.addIOSProps(this.getIOSProps());
+  }
+  protected createNativeObject() {
+    return null;
+  }
+  protected init(): void {
+    this._title = '';
+    const defaultBadge = {
+      backgroundColor: undefined,
+      borderColor: undefined,
+      borderWidth: 0,
+      textColor: undefined,
+      visible: false,
+      moveX: undefined,
+      moveY: undefined,
+      move: function (x, y) {
+        this.moveX = x;
+        this.moveY = y;
+      }
+    };
+    this._badge = this.nativeObject ? new BadgeIOS({ nativeObject: this.nativeObject }) : defaultBadge;
+    this.addIOSProps(this.getIOSProps());
+  }
+  getIOSProps() {
+    const self = this;
+    return {
+      get font(): FontIOS {
+        return self.ios.font;
       },
-      set font(value: Font) {
-        this._ios.font = value;
-        if (this.nativeObject) {
-          if (this._ios.font) {
-            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 0); //UIControlStateNormal
-            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 0); //UIControlStateHighlighted
-            this.nativeObject.setTitleTextAttributesForState({ NSFont: this._ios.font }, 1 << 1); //UIControlStateDisabled
-          } else {
-            this.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
-            this.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
-            this.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
-          }
+      set font(value: FontIOS) {
+        self.ios.font = value;
+        if (this.ios.font) {
+          self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 0); //UIControlStateNormal
+          self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 1 << 0); //UIControlStateHighlighted
+          self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 1 << 1); //UIControlStateDisabled
+        } else {
+          self.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
+          self.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
+          self.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
         }
       }
-    });
+    };
   }
-  tabBarItemParent: TabBarController | IBottomTabBarController | null;
+  tabBarItemParent: TabBarControllerImpl | IBottomTabBarController | null;
   setProperties(params): void {
     throw new Error('Method not implemented.');
   }
@@ -84,7 +85,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
         value: 'view'
       });
       const view = Invocation.invokeInstanceMethod(this.nativeObject, 'valueForKey:', [key], 'id');
-      this._nativeView = new FlexLayout({
+      this._nativeView = new FlexLayoutIOS({
         nativeObject: view
       });
       retval = this._nativeView;
@@ -105,40 +106,35 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   get icon() {
     return this._icon;
   }
-  set icon(icon) {
-    if (typeof icon === 'object') {
-      this._icon = icon;
-      if (this.nativeObject) {
-        if (this._icon && (this._icon.normal || this._icon.selected)) {
-          if (typeof this._icon.normal === 'object') {
-            this.nativeObject.image = this._icon.normal.nativeObject;
-          } else if (typeof this._icon.normal === 'string') {
-            const image = Image.createFromFile(this._icon.normal);
-            if (image) this.nativeObject.image = image.nativeObject;
-          } else {
-            this.nativeObject.image = undefined;
-          }
-
-          if (typeof this._icon.selected === 'object') {
-            this.nativeObject.selectedImage = this._icon.selected.nativeObject;
-          } else if (typeof this._icon.selected === 'string') {
-            const image = Image.createFromFile(this._icon.selected);
-            if (image) this.nativeObject.selectedImage = image.nativeObject;
-          } else {
-            this.nativeObject.selectedImage = undefined;
-          }
-        } else {
-          if (typeof this._icon === 'object') {
-            this.nativeObject.image = this._icon ? this._icon.nativeObject : undefined;
-            this.nativeObject.selectedImage = this._icon ? this._icon.nativeObject : undefined;
-          } else if (typeof this._icon === 'string') {
-            const image = Image.createFromFile(this._icon);
-            if (image) {
-              this.nativeObject.image = image.nativeObject ? image.nativeObject : undefined;
-              this.nativeObject.selectedImage = image.nativeObject ? image.nativeObject : undefined;
-            }
-          }
+  set icon(value) {
+    this._icon = value;
+    if (typeof value === 'undefined') {
+      return;
+    } else if (typeof value === 'string') {
+      const image = ImageIOS.createFromFile(value);
+      if (image) {
+        this.nativeObject.image = image.nativeObject || undefined;
+        this.nativeObject.selectedImage = image.nativeObject || undefined;
+      }
+    } else if (value instanceof ImageIOS) {
+      this.nativeObject.image = value?.nativeObject || undefined;
+      this.nativeObject.selectedImage = value?.nativeObject || undefined;
+    } else if (isViewState(value)) {
+      if (typeof value.normal === 'string') {
+        const image = ImageIOS.createFromFile(value.normal);
+        if (image) {
+          this.nativeObject.image = image.nativeObject;
         }
+      } else {
+        this.nativeObject.image = value.normal?.nativeObject || undefined;
+      }
+      if (typeof value.selected === 'string') {
+        const image = ImageIOS.createFromFile(value.selected);
+        if (image) {
+          this.nativeObject.image = image.nativeObject;
+        }
+      } else {
+        this.nativeObject.image = value.selected?.nativeObject || undefined;
       }
     }
   }
@@ -149,12 +145,11 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     return this.layout.getScreenLocation();
   }
   invalidate() {
-    if (this._badge && !(this._badge instanceof Badge)) {
-      // @ts-ignore
+    if (this._badge && !(this._badge instanceof BadgeIOS)) {
       delete this._badge['move'];
-      const _badgeWithNativeObject = new Badge({
+      const _badgeWithNativeObject = new BadgeIOS({
         nativeObject: this.nativeObject,
-        ...(this._badge as any)
+        ...this._badge
       });
       this._badge.moveX !== undefined && _badgeWithNativeObject.move(this._badge.moveX, this._badge.moveY);
       this._badge = _badgeWithNativeObject;

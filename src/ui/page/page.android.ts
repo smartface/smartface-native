@@ -218,14 +218,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     params?.onComplete();
   }
   private setCallbacks() {
-    const onLoad = () => {
-      this.onLoad?.();
-      this.emit('load');
-    };
-    const onShow = function () {
-      this.onShow?.();
-      this.emit('show');
-    }.bind(this);
     this.nativeObject?.setCallbacks({
       onCreate: () => {},
       onCreateView: () => {
@@ -236,7 +228,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         this.actionBar = AndroidConfig.activity.getSupportActionBar();
         if (!this.isCreated) {
           this.setHeaderBarDefaults();
-          onLoad();
+          this.onLoad?.();
+          this.emit('load');
           this.isCreated = true;
         }
         this.orientation = this._orientation;
@@ -256,7 +249,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
               Application.registOnItemSelectedListener();
 
               if (!this.isSwipeViewPage) {
-                onShow();
+                this.onShow?.();
+                this.emit('show');
               }
 
               const spratIntent = AndroidConfig.activity.getIntent();

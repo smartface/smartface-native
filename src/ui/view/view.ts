@@ -1,21 +1,13 @@
 import type Color from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { ViewEvents } from './view-events';
-import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
 import { IEventEmitter } from '../../core/eventemitter';
 import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import Flex from '../shared/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-export interface IViewState<Property = any> {
-  normal?: Property;
-  disabled?: Property;
-  selected?: Property;
-  pressed?: Property;
-  focused?: Property;
-}
-
+import ViewState from '../shared/viewState';
 export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
@@ -215,7 +207,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: Color | IViewState<Color>;
+  backgroundColor: ViewState<Color>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -959,7 +951,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: Color | IViewState<Color>;
+  backgroundColor: ViewState<Color>;
   borderColor: Color;
   borderWidth: number;
   borderRadius: number;

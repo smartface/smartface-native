@@ -2,7 +2,8 @@ import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
-import { IView, IViewState } from '../view/view';
+import ViewState from '../shared/viewState';
+import { IView } from '../view/view';
 import { PickerEvents } from './picker-events';
 
 export interface PickerAndroidProperties {
@@ -116,7 +117,7 @@ export declare interface IPicker<
    * @ios
    * @since 4.2.3
    */
-  dialogBackgroundColor: Color | IViewState<Color>;
+  dialogBackgroundColor: ViewState<Color>;
   /**
    * This event is called when scroll ends & an item is selected on a picker.
    *

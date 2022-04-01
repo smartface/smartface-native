@@ -1,18 +1,16 @@
-import { BarTextTransform, ITabBarController, LargeTitleDisplayMode, PresentationStyle } from './tabbarcontroller';
+import { BarTextTransform, ITabBarController } from './tabbarcontroller';
 import OverScrollMode from '../shared/android/overscrollmode';
 import Color from '../color';
-import type Page from '../page';
 import PageIOS from '../page/page.ios';
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
+import { PageImpl } from '../page/page';
 
 export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
   private _items: ITabbarItem[];
   private _autoCapitalize: boolean;
   private _iconColor: { normal: Color; selected: Color } | Color;
   private _textColor: { normal: Color; selected: Color } | Color;
-  private _onPageCreate: (index: number) => Page;
-  private _onSelected: (index: number) => void;
   private _barTextTransform: BarTextTransform;
   createNativeObject() {
     return new __SF_TopTabViewController();
@@ -22,11 +20,28 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     this.addIOSProps(this.getIOSProps());
   }
 
-  onLoad: () => void = () => {};
-  onShow: () => void = () => {};
+  onLoad() {
+    super.onLoad();
+  }
+  onShow() {
+    super.onShow();
+  }
   constructor(params?: Partial<ITabBarController>) {
     super(params);
+
+    this.nativeObject.viewControllerForIndex = (index: number) => {
+      const retval = this.onPageCreate?.(index)?.nativeObject;
+      this.emit('pageCreate', index);
+      return retval;
+    };
+
+    this.nativeObject.tabWillSelectAtIndex = (index: number) => {
+      this.onSelected?.(index);
+      this.emit('selected', index);
+    };
   }
+  onPageCreate: (index: number) => PageImpl;
+  onSelected: (index: number) => void;
 
   getIOSProps() {
     const self = this;
@@ -56,7 +71,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       const nativeItems: any[] = [];
       for (const i in this._items) {
         if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i].nativeObject = __SF_UITabbarItem.new();
+          this._items[i].nativeObject = SF.requireClass('UITabBarItem').new();
         }
         this._items[i].invalidate();
         nativeItems[i] = this._items[i].nativeObject;
@@ -191,28 +206,6 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     this.nativeObject.pagingEnabled = value;
   }
 
-  get onPageCreate(): (index: number) => Page {
-    return this._onPageCreate;
-  }
-  set onPageCreate(value: (index: number) => Page) {
-    this._onPageCreate = value;
-    this.nativeObject.viewControllerForIndex = (index: number) => {
-      const retval = this._onPageCreate?.(index)?.nativeObject;
-      this.emit('pageCreate', index);
-      return retval;
-    };
-  }
-
-  get onSelected(): (index: number) => void {
-    return this._onSelected;
-  }
-  set onSelected(value: (index: number) => void) {
-    this._onSelected = value;
-    this.nativeObject.tabWillSelectAtIndex = (index: number) => {
-      this._onSelected?.(index);
-      this.emit('selected', index);
-    };
-  }
   static iOS = {
     BarTextTransform: BarTextTransform,
     ...PageIOS.iOS

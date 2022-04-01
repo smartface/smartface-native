@@ -7,7 +7,8 @@ import BottomTabBar from '../bottomtabbar';
 import ImageAndroid from '../image/image.android';
 import TabBarController from '../tabbarcontroller';
 import BottomTabbarController from '../bottomtabbarcontroller';
-import { IViewState } from '../view/view';
+import ViewState from '../shared/viewState';
+import isViewState from '../../util/isViewState';
 
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
@@ -18,7 +19,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     return null;
   }
   private _title: string;
-  private _icon: IViewState<ImageAndroid> | ImageAndroid | string;
+  private _icon: ViewState<ImageAndroid> | string;
   private _badgeObj: Badge;
   private _systemIcon: any;
   private _tabBarItemParent: TabBarController | BottomTabbarController | null = null;
@@ -84,24 +85,23 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       path: null
     });
 
-    let icon = value;
-    if (typeof icon === 'string') {
+    if (typeof value === 'string') {
       //IDE requires this implementation.
-      icon = ImageAndroid.createImageFromPath(icon);
-    } else if (isIconType(icon)) {
-      icon.normal = ImageAndroid.createImageFromPath(icon.normal);
-      icon.selected = ImageAndroid.createImageFromPath(icon.selected);
+      value = ImageAndroid.createImageFromPath(value);
+    } else if (isViewState(value)) {
+      value.normal = ImageAndroid.createImageFromPath(value.normal);
+      value.selected = ImageAndroid.createImageFromPath(value.selected);
     } else {
       throw new Error('icon should be an instance of Image or given icon path should be properly defined.');
     }
 
-    if (isIconType<ImageAndroid>(icon)) {
-      const normal = icon.normal instanceof ImageAndroid ? icon.normal : EmptyImage;
-      const selected = icon.selected instanceof ImageAndroid ? icon.selected : EmptyImage;
+    if (isViewState(value)) {
+      const normal = value.normal instanceof ImageAndroid ? value.normal : EmptyImage;
+      const selected = value.selected instanceof ImageAndroid ? value.selected : EmptyImage;
       // TODO: Refactor this implemenation. Discuss with ios team.
-      icon = { ...icon, ...this.makeSelector(normal, selected) };
+      value = { ...value, ...this.makeSelector(normal, selected) };
     }
-    this.nativeObject?.setIcon((icon as ImageAndroid).nativeObject);
+    this.nativeObject?.setIcon((value as ImageAndroid).nativeObject);
   }
   get badge() {
     if (this._badgeObj === undefined) this._badgeObj = new Badge();
@@ -155,8 +155,4 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     if (itemIcon) this.icon = itemIcon;
     if (systemIcon) this.android.systemIcon = systemIcon;
   }
-}
-
-function isIconType<Property>(value: Property | IViewState<Property> | string): value is IViewState<Property> {
-  return (value as IViewState<Property>).normal !== undefined;
 }

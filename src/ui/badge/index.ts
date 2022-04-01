@@ -2,7 +2,7 @@ import Color from '../color';
 import Font from '../font';
 import { ConstructorOf } from '../../core/constructorof';
 import { INativeComponent } from '../../core/inative-component';
-import { IViewState } from '../view/view';
+import ViewState from '../shared/viewState';
 
 export declare interface IBadge extends INativeComponent {
   /**
@@ -40,7 +40,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  textColor: Color | IViewState<Color> | null;
+  textColor: ViewState<Color> | null;
   /**
    * Gets/sets font of badge.
    *
