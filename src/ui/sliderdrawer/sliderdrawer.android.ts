@@ -26,7 +26,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   constructor(params?: TProps) {
     super(params);
   }
-  protected init(): void {
+  protected init(params): void {
     this.drawerLayoutParams = new NativeDrawerLayout.LayoutParams(-1, -1);
     this.drawerLayoutParams.gravity = 3; // Gravity.LEFT
 
@@ -57,7 +57,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this.isSliderDrawerAttached = false;
     this.backgroundColor = ColorAndroid.WHITE;
     this._state = SliderDrawerAndroid.State.CLOSED;
-    super.init();
+    super.init(params);
   }
   protected createNativeObject() {
     return null;

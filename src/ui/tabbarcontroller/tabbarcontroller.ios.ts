@@ -65,19 +65,11 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     return this._items;
   }
   set items(value: ITabbarItem[]) {
-    if (typeof value === 'object') {
-      this._items = value;
-
-      const nativeItems: any[] = [];
-      for (const i in this._items) {
-        if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i].nativeObject = SF.requireClass('UITabBarItem').new();
-        }
-        this._items[i].invalidate();
-        nativeItems[i] = this._items[i].nativeObject;
-      }
-      this.nativeObject.tabBarItems = nativeItems;
-    }
+    this._items = value || [];
+    this.nativeObject.tabBarItems = this._items.map((item) => {
+      item.invalidate();
+      return item.nativeObject;
+    });
   }
 
   dividerColor: Color;

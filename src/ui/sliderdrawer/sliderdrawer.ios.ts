@@ -32,7 +32,7 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     this._drawerWidth = 100;
     this._enabled = false;
     this._position = 0;
-    super.init();
+    super.init(params);
   }
   private setNativeProps() {
     this.nativeObject.position = this._position;

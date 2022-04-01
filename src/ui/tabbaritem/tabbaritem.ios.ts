@@ -22,9 +22,9 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject() {
-    return null;
+    return SF.requireClass('UITabBarItem').new();
   }
-  protected init(): void {
+  protected init(params: Partial<ITabbarItem>): void {
     this._title = '';
     const defaultBadge = {
       backgroundColor: undefined,
@@ -41,6 +41,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     };
     this._badge = this.nativeObject ? new BadgeIOS({ nativeObject: this.nativeObject }) : defaultBadge;
     this.addIOSProps(this.getIOSProps());
+    super.init(params);
   }
   getIOSProps() {
     const self = this;
@@ -65,9 +66,6 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   tabBarItemParent: TabBarControllerImpl | IBottomTabBarController | null;
   setProperties(params): void {
     throw new Error('Method not implemented.');
-  }
-  get android() {
-    return this._android;
   }
   get route(): string {
     return this._route;
@@ -95,13 +93,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   get title(): string {
     return this._title;
   }
-  set title(title: string) {
-    if (typeof title === 'string') {
-      this._title = title;
-      if (this.nativeObject) {
-        this.nativeObject.title = this._title;
-      }
-    }
+  set title(value: string) {
+    console.info(value);
+    this._title = value;
+    this.nativeObject.title = value;
   }
   get icon() {
     return this._icon;

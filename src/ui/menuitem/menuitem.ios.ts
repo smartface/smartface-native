@@ -20,7 +20,7 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
   protected init(params?: Partial<Record<string, any>>): void {
     this._title = '';
     this._style = Style.DEFAULT;
-    super.init();
+    super.init(params);
   }
   private getIOSProps() {
     const self = this;
