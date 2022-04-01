@@ -37,7 +37,6 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _response: object | null;
   private _headers: Map<string, object> | null;
   private _responseURL: string;
-  private _overrideMimeType: string;
   private _responseType: ResponseTypes;
 
   private _sendFlag: boolean;
@@ -182,14 +181,6 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
       return this.nativeObject.getResponse().headers().get(header);
     }
     return null;
-  }
-
-  public overrideMimeType(mime: string) {
-    if (this._readyState === XHR.LOADING || this._readyState === XHR.DONE) {
-      throw new Error("Failed to execute 'overrideMimeType' on 'XMLHttpRequest': " + "The object's state cannot be LOADING or DONE.");
-    }
-
-    this._overrideMimeType = mime; // todo look later while impl. blob
   }
 
   public addEventListener(type: XHREventsEvents, listener: () => void) {
