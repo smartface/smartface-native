@@ -2,6 +2,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import { ResponseTypes } from './common';
+import { FormData } from './formdata';
 import { XHREventsEvents } from './xhr-events';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
@@ -11,7 +12,7 @@ interface IXHRMethods {
     getResponseHeaders(): string
     getResponseHeader(header: string): string | null
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
-    send(data?: any)
+    send(data?: string | FormData)
     setRequestHeader(header: string, value: string);
 
 

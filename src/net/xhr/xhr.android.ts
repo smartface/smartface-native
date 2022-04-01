@@ -2,7 +2,8 @@ import { HTTPRequestMethods, IXHR } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { FormData, ResponseTypes, statuses } from './common';
+import { ResponseTypes, statuses } from './common';
+import { FormData } from './formdata';
 import { XHREventsEvents } from './xhr-events';
 
 const NativeXMLHttpRequest = requireClass('io.smartface.android.sfcore.net.XMLHttpRequest');
@@ -109,10 +110,17 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._setReadyState(XHR.OPENED);
   }
 
-  public send(body?: string) {
+  public send(body?: string | FormData) {
     this._sendFlag = true;
     this._reset();
-    this._nativeObject.sendRequest(this._method, this._url, body && '', this._headers || {}, this.timeout, this.withCredentials);
+    const headers = this._headers || {};
+    if (body instanceof FormData) {
+      const data = body.getParts();
+      this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers , this.timeout, this.withCredentials);
+    } else {
+      const data = body === '' || body ? body : null;
+      this._nativeObject.sendRequest(this._method, this._url, data, headers, this.timeout, this.withCredentials);
+    }
     this._emitEvent('loadstart');
   }
 
