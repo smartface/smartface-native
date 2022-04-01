@@ -7,15 +7,12 @@ import { XHREventsEvents } from './xhr-events';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
-interface IXHRMethods {
-    abort()
-    getAllResponseHeaders(): string
-    getResponseHeader(header: string): string | null
-    open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
-    send(data?: string | FormData)
-    setRequestHeader(header: string, value: string);
+interface EventTarget {
+    addEventListener(eventName: string, handler: Function)
+    removeEventListener(eventName: string, toDetach: Function)
+}
 
-
+interface XMLHttpRequestEventTarget extends EventTarget {
     onabort: (...args: any[]) => void;
     onerror: (...args: any[]) => void;
     onload: (...args: any[]) => void;
@@ -24,13 +21,18 @@ interface IXHRMethods {
     onprogress: (...args: any[]) => void;
     onreadystatechange: (...args: any[]) => void;
     ontimeout: (...args: any[]) => void;
-
-    addEventListener(eventName: XHREventsEvents, handler: Function)
-    removeEventListener(eventName: XHREventsEvents, toDetach: Function)
-
 }
 
-export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods {
+interface IXHRMethods {
+    abort()
+    getAllResponseHeaders(): string
+    getResponseHeader(header: string): string | null
+    open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
+    send(data?: string | FormData)
+    setRequestHeader(header: string, value: string);
+}
+
+export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods, XMLHttpRequestEventTarget {
     readyState: number
     response: String | null
     responseText: String
