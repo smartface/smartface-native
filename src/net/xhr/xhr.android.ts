@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { ResponseTypes, statuses } from './common';
+import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './common';
 import { FormData } from './formdata';
 import { XHREventsEvents } from './xhr-events';
 
@@ -18,16 +18,16 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   public static LOADING = 3;
   public static DONE = 4;
 
-  public onabort: (...args: any[]) => void = ()=>{};
-  public onerror: (...args: any[]) => void = ()=>{};
-  public onload: (...args: any[]) => void = ()=>{};
-  public onloadend: (...args: any[]) => void = ()=>{};
-  public onloadstart: (...args: any[]) => void = ()=>{};
-  public onprogress: (...args: any[]) => void = ()=>{};
-  public onreadystatechange: (...args: any[]) => void = ()=>{};
-  public ontimeout: (...args: any[]) => void = ()=>{};
+  public onabort: (...args: any[]) => void = () => {};
+  public onerror: (...args: any[]) => void = () => {};
+  public onload: (...args: any[]) => void = () => {};
+  public onloadend: (...args: any[]) => void = () => {};
+  public onloadstart: (...args: any[]) => void = () => {};
+  public onprogress: (...args: any[]) => void = () => {};
+  public onreadystatechange: (...args: any[]) => void = () => {};
+  public ontimeout: (...args: any[]) => void = () => {};
 
-  public timeout: number;
+  private _timeout: number;
   public withCredentials: boolean;
 
   private _method: HTTPRequestMethods;
@@ -68,6 +68,17 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
   }
 
+  public get timeout(): number {
+    return this._timeout;
+  }
+
+  public set timeout(value: number) {
+    if (this._readyState !== XHR.OPENED || this._sendFlag) {
+      throw new Error("Failed to set 'timeout' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
+    }
+    this._timeout = value;
+  }
+
   public get responseURL(): string {
     return this._responseURL;
   }
@@ -81,7 +92,9 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
 
   public get responseText(): string {
     if (this._responseType !== '' && this._responseType !== 'text') {
-      throw new Error('InvalidStateError');
+      throw new Error(
+        "Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`
+      );
     }
     if (this.readyState < XHR.LOADING) {
       return '';
@@ -93,11 +106,18 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return this._responseType;
   }
 
-  set responseType(responseType: ResponseTypes) {
-    this._responseType = responseType;
+  set responseType(value: ResponseTypes) {
+    if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
+      this._responseType = value;
+    } else {
+      throw new Error(`Response type of '${value}' not supported.`);
+    }
   }
 
   public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
+    if (typeof async === 'boolean' && !async) {
+      throw new Error('Every request must be asynchronous');
+    }
     this._method = method;
     this._url = url;
     this._headers = new Map<string, object>();
@@ -111,22 +131,25 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   }
 
   public send(body?: string | FormData) {
-    this._sendFlag = true;
     this._reset();
+    if (this._readyState !== XHR.OPENED || this._sendFlag) {
+      throw new Error("Failed to execute 'send' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
+    }
+    this._sendFlag = true;
     const headers = this._headers || {};
     if (body instanceof FormData) {
       const data = body.getParts();
-      this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers , this.timeout, this.withCredentials);
+      this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers, this._timeout, this.withCredentials);
     } else {
       const data = body === '' || body ? body : null;
-      this._nativeObject.sendRequest(this._method, this._url, data, headers, this.timeout, this.withCredentials);
+      this._nativeObject.sendRequest(this._method, this._url, data, headers, this._timeout, this.withCredentials);
     }
     this._emitEvent('loadstart');
   }
 
   public setRequestHeader(name: string, value: string) {
     if (this._readyState !== XHR.OPENED || this._sendFlag) {
-      throw new Error('InvalidAccessError');
+      throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
     this._headers!![name] = value;
   }
@@ -163,7 +186,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
 
   public overrideMimeType(mime: string) {
     if (this._readyState === XHR.LOADING || this._readyState === XHR.DONE) {
-      throw new Error('InvalidStateError');
+      throw new Error("Failed to execute 'overrideMimeType' on 'XMLHttpRequest': " + "The object's state cannot be LOADING or DONE.");
     }
 
     this._overrideMimeType = mime; // todo look later while impl. blob
@@ -209,7 +232,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._readyState = XHR.UNSENT;
     //this.upload = ...
     this._responseURL = '';
-    this.timeout = 0;
+    this._timeout = 0;
     this.withCredentials = true;
   }
 
