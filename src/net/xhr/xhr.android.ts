@@ -1,4 +1,4 @@
-import { HTTPRequestMethods, IXHR } from '.';
+import { HTTPRequestMethods, IXHR, XMLHttpRequestEventTarget } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -111,6 +111,10 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     } else {
       throw new Error(`Response type of '${value}' not supported.`);
     }
+  }
+
+  public get upload(): XMLHttpRequestEventTarget {
+    return this;
   }
 
   public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {

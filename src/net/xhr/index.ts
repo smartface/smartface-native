@@ -7,12 +7,12 @@ import { XHREventsEvents } from './xhr-events';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
-interface EventTarget {
+export interface EventTarget {
     addEventListener(eventName: string, handler: Function)
     removeEventListener(eventName: string, toDetach: Function)
 }
 
-interface XMLHttpRequestEventTarget extends EventTarget {
+export interface XMLHttpRequestEventTarget extends EventTarget {
     onabort: (...args: any[]) => void;
     onerror: (...args: any[]) => void;
     onload: (...args: any[]) => void;
@@ -41,6 +41,7 @@ export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, 
     status: number
     statusText: string
     timeout: number
+    get upload() : XMLHttpRequestEventTarget
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;
