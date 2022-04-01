@@ -62,7 +62,7 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
-export default class PageAndroid<TEvent extends string = PageEvents, TNative = __SF_UIViewController, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
+export default class PageAndroid<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
   protected createNativeObject() {
     return new SFFragment();
   }
@@ -127,9 +127,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
    * _pageInstances[intPosition].__onShowCallback?.();
    */
   __onShowCallback: IPage['onShow'];
-
-  // protected _ios: PageIOSParams;
-  // protected _android: PageAndroidParams & TNative;
   onLoad: () => void;
   onHide: () => void;
   onShow: () => void;
@@ -221,6 +218,14 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
     params?.onComplete();
   }
   private setCallbacks() {
+    const onLoad = () => {
+      this.onLoad?.();
+      this.emit('load');
+    };
+    const onShow = function () {
+      this.onShow?.();
+      this.emit('show');
+    }.bind(this);
     this.nativeObject?.setCallbacks({
       onCreate: () => {},
       onCreateView: () => {
@@ -231,8 +236,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
         this.actionBar = AndroidConfig.activity.getSupportActionBar();
         if (!this.isCreated) {
           this.setHeaderBarDefaults();
-          this.onLoad?.();
-          this.emit('load');
+          onLoad();
           this.isCreated = true;
         }
         this.orientation = this._orientation;
@@ -252,8 +256,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               Application.registOnItemSelectedListener();
 
               if (!this.isSwipeViewPage) {
-                this.onShow?.();
-                this.emit('show');
+                onShow();
               }
 
               const spratIntent = AndroidConfig.activity.getIntent();
@@ -550,7 +553,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = _
               if (cParent !== null) {
                 (cParent as FlexLayoutAndroid).removeAll(); //TODO: getParent should not return View
               }
-              customViewContainer.addChild(item.customView);
+              customViewContainer.addChild(item.customView as FlexLayoutAndroid);
               item.nativeObject = customViewContainer.nativeObject;
             } else if (item.image instanceof ImageAndroid && (item.image?.nativeObject || (item.android as any).systemIcon)) {
               item.nativeObject = new NativeImageButton(AndroidConfig.activity);

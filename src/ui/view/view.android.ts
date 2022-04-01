@@ -96,7 +96,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _rippleEnabled = false;
   private _rippleColor?: Color;
   private _useForeground = false;
-  private yogaNode: any;
+  yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
   protected createNativeObject() {
     return new NativeView(AndroidConfig.activity);

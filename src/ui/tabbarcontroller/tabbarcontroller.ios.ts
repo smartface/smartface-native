@@ -1,30 +1,36 @@
-import { BarTextTransform, ITabBarController, LargeTitleDisplayMode, PresentationStyle } from '.';
+import { BarTextTransform, ITabBarController, LargeTitleDisplayMode, PresentationStyle } from './tabbarcontroller';
 import OverScrollMode from '../shared/android/overscrollmode';
 import Color from '../color';
-import Page from '../page';
+import type Page from '../page';
 import PageIOS from '../page/page.ios';
-import { ITabbarItem } from '../tabbaritem';
+import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 
 export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
-  static iOS: {
-    BarTextTransform: typeof BarTextTransform;
-    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
-    PresentationStyle: typeof PresentationStyle;
-  };
   private _items: ITabbarItem[];
   private _autoCapitalize: boolean;
   private _iconColor: { normal: Color; selected: Color } | Color;
   private _textColor: { normal: Color; selected: Color } | Color;
   private _onPageCreate: (index: number) => Page;
   private _onSelected: (index: number) => void;
-  private iOSProps: { barTextTransform?: BarTextTransform } = {};
+  private _barTextTransform: BarTextTransform;
   createNativeObject() {
     return new __SF_TopTabViewController();
   }
   init(params?: Partial<ITabBarController>) {
+    super.init(params);
+    this.addIOSProps(this.getIOSProps());
+  }
+
+  onLoad: () => void = () => {};
+  onShow: () => void = () => {};
+  constructor(params?: Partial<ITabBarController>) {
+    super(params);
+  }
+
+  getIOSProps() {
     const self = this;
-    this.addIOSProps({
+    return {
       get barTextTransform(): BarTextTransform {
         return self.nativeObject.topBar.valueForKey('titleTextTransform');
       },
@@ -33,11 +39,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
           self.nativeObject.topBar.setValueForKey(value, 'titleTextTransform');
         }
       }
-    });
-    super.init(params);
-  }
-  constructor(params?: Partial<ITabBarController>) {
-    super(params);
+    };
   }
 
   get barHeight(): number {
@@ -52,7 +54,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       this._items = value;
 
       const nativeItems: any[] = [];
-      for (let i in this._items) {
+      for (const i in this._items) {
         if (typeof this._items[i].nativeObject === 'undefined') {
           this._items[i].nativeObject = __SF_UITabbarItem.new();
         }
@@ -82,15 +84,8 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     return this._autoCapitalize;
   }
   set autoCapitalize(value: boolean) {
-    if (typeof value === 'boolean') {
-      if (value) {
-        // TODO Old version has not the field?
-        this.iOSProps.barTextTransform = BarTextTransform.AUTO;
-      } else {
-        this.iOSProps.barTextTransform = BarTextTransform.NONE;
-      }
-      this._autoCapitalize = value;
-    }
+    this._barTextTransform = value ? BarTextTransform.AUTO : BarTextTransform.NONE;
+    this._autoCapitalize = value;
   }
 
   get indicatorHeight(): number {
@@ -218,45 +213,8 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       this.emit('selected', index);
     };
   }
+  static iOS = {
+    BarTextTransform: BarTextTransform,
+    ...PageIOS.iOS
+  };
 }
-
-// function TabBarController(params) {
-//   var self = this;
-
-//   const EventFunctions = {
-//     [Events.PageCreate]: function () {
-//       _onPageCreate = (state) => {
-//         this.emitter.emit(Events.PageCreate, state);
-//       };
-//       self.nativeObject.viewControllerForIndex = function (index) {
-//         var retval = undefined;
-//         retval = _onPageCreate.call(this, index).nativeObject;
-//         return retval;
-//       }.bind(this);
-//     },
-
-//     [Events.Selected]: function () {
-//       _onSelected = (state) => {
-//         this.emitter.emit(Events.Selected, state);
-//       };
-//       self.nativeObject.tabWillSelectAtIndex = function (index) {
-//         _onSelected.call(this, index);
-//       }.bind(this);
-//     }
-//   };
-//   EventEmitterCreator(this, EventFunctions);
-
-//   Object.defineProperty(self.ios, 'barTextTransform', {
-//     get: function () {
-//       return self.nativeObject.topBar.valueForKey('titleTextTransform');
-//     },
-//     set: function (value) {
-//       if (typeof value === 'number') {
-//         self.nativeObject.topBar.setValueForKey(value, 'titleTextTransform');
-//       }
-//     },
-//     enumerable: true,
-//     configurable: true
-//   });
-
-// module.exports = TabBarController;

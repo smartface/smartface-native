@@ -29,7 +29,7 @@ export default class ViewGroupAndroid<TEvent extends string = ViewGroupEvents, T
     throw new Error('Method not implemented.');
   }
 
-  addChild(view: IView) {
+  addChild(view: ViewAndroid) {
     view.parent = this;
     this.childViews[view.id] = view;
     if (this instanceof FlexLayoutAndroid) {

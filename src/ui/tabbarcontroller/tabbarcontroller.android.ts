@@ -1,4 +1,4 @@
-import { ITabBarController } from '.';
+import { ITabBarController } from './tabbarcontroller';
 import Application from '../../application';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
@@ -152,6 +152,8 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     });
     this.tabLayout.nativeObject.addOnTabSelectedListener(listener);
   }
+  onLoad: () => void = () => {};
+  onShow: () => void = () => {};
 
   // TODO Unused fields
   dividerColor: Color;

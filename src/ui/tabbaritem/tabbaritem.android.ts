@@ -1,4 +1,4 @@
-import { ITabbarItem } from '.';
+import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AttributedString from '../attributedstring';
 import UnitConverter from '../../util/Android/unitconverter';
