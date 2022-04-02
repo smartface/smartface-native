@@ -144,20 +144,25 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   }
 
   public send(body?: string | FormData) {
-    this._reset();
     if (this._readyState !== XHR.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'send' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
     this._sendFlag = true;
+    this._errorFlag = false;
     const headers = this._headers || {};
-    if (body instanceof FormData) {
-      const data = body.getParts();
-      this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers, this._timeout, this.withCredentials);
-    } else {
-      const data = body === '' || body ? body : null;
-      this._nativeObject.sendRequest(this._method, this._url, data, headers, this._timeout, this.withCredentials);
+    try {
+      if (body instanceof FormData) {
+        const data = body.getParts();
+        this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers, this._timeout, this.withCredentials);
+      } else {
+        const data = body === '' || body ? body : null;
+        this._nativeObject.sendRequest(this._method, this._url, data, headers, this._timeout, this.withCredentials);
+      }
+      this._emitEvent('loadstart');
+    } catch (error) {
+      this._setResponseError(error);
+      this._setReadyState(XHR.DONE);
     }
-    this._emitEvent('loadstart');
   }
 
   public setRequestHeader(name: string, value: string) {
@@ -236,7 +241,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
       },
       onFailure: (timeout: boolean, exception: object) => {
         this._timedOut = timeout;
-        this._hasError = true;
+        this._setResponseError(exception.toString());
         this._setReadyState(XHR.DONE);
       }
     });
@@ -257,7 +262,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     if (newState === XHR.DONE) {
       if (this._aborted) {
         this._emitEvent('abort');
-      } else if (this._hasError) {
+      } else if (this._errorFlag) {
         if (this._timedOut) {
           this._emitEvent('timeout');
         } else {
@@ -284,5 +289,10 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._status = 0;
     this._errorFlag = false;
     this.responseType = '';
+  }
+
+  private _setResponseError(error: string): void {
+    this._response = error;
+    this._errorFlag = true;
   }
 }
