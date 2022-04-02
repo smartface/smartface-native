@@ -34,8 +34,8 @@ interface IXHRMethods {
 
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods, XMLHttpRequestEventTarget {
     readyState: number
-    response: String | null
-    responseText: String
+    response: string | object | null
+    responseText: string
     responseType: ResponseTypes
     responseURL?: string
     status: number

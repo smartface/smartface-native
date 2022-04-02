@@ -34,7 +34,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _url: string;
   private _readyState: number;
   private _status: number;
-  private _response: object | null;
+  private _response: string | object | null;
   private _headers: Map<string, object> | null;
   private _responseURL: string;
   private _responseType: ResponseTypes;
@@ -43,6 +43,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _errorFlag: boolean;
   private _aborted: boolean;
   private _timedOut: boolean;
+
   private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
   constructor() {
@@ -82,11 +83,20 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return this._responseURL;
   }
 
-  public get response(): string | null {
-    if (this._hasError) {
-      return null;
+  public get response(): object | string | null {
+    if (this._responseType === XMLHttpRequestResponseType.empty || this._responseType === XMLHttpRequestResponseType.text) {
+      if (this._readyState !== XHR.LOADING && this._readyState !== XHR.DONE) {
+        return '';
+      } else {
+        return this._response;
+      }
+    } else {
+      if (this._readyState !== XHR.DONE) {
+        return null;
+      } else {
+        return this._response;
+      }
     }
-    return this._response ? this._response.toString() : null;
   }
 
   public get responseText(): string {
@@ -175,7 +185,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     if (this._readyState < XHR.HEADERS_RECEIVED || this._errorFlag) {
       return '';
     }
-    let result = this.nativeObject.getAllResponseHeaders();
+    const result = this.nativeObject.getAllResponseHeaders();
     return result.length >= 2 ? result.substr(0, result.length - 2) : result;
   }
 
@@ -207,13 +217,19 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   protected createNativeObject() {
     const nativeObject = new NativeXMLHttpRequest();
     nativeObject.setCallbacks({
-      onResponse: () => {
+      onResponse: (stringResponse: string) => {
         const response = this._nativeObject.getResponse();
         this._status = response.code();
         this._responseURL = response ? response.request().url().toString() : '';
         this._setReadyState(XHR.HEADERS_RECEIVED);
         this._setReadyState(XHR.LOADING);
-        this._response = this._nativeObject.getResponse().body().string();
+        if (response !== null) {
+          if (this.responseType === XMLHttpRequestResponseType.text || this.responseType === XMLHttpRequestResponseType.empty) {
+            this._response = stringResponse;
+          } else if (this.responseType === XMLHttpRequestResponseType.json) {
+            this._response = JSON.parse(stringResponse);
+          }
+        }
         this._emitEvent('progress');
         this._sendFlag = false;
         this._setReadyState(XHR.DONE);
