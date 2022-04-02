@@ -1,17 +1,16 @@
 type FormDataValue = string | { name?: string; type?: string; uri: string };
 type FormDataNameValuePair = [string, FormDataValue];
 
-type Headers = { [name: string]: string };
 type FormDataPart =
   | {
       string: string;
-      headers: Headers;
+      fieldName: string;
     }
   | {
       uri: string;
-      headers: Headers;
       name?: string;
       type?: string;
+      fieldName: string;
     };
 
 export class FormData {
@@ -27,19 +26,10 @@ export class FormData {
 
   getParts(): Array<FormDataPart> {
     return this._parts.map(([name, value]) => {
-      const contentDisposition = 'form-data; name="' + name + '"';
-
-      const headers: Headers = { 'content-disposition': contentDisposition };
       if (typeof value === 'object' && !Array.isArray(value) && value) {
-        if (typeof value.name === 'string') {
-          headers['content-disposition'] += '; filename="' + value.name + '"';
-        }
-        if (typeof value.type === 'string') {
-          headers['content-type'] = value.type;
-        }
-        return { ...value, headers, fieldName: name };
+        return {...value, fieldName: name };
       }
-      return { string: String(value), headers, fieldName: name };
+      return { string: String(value), fieldName: name };
     });
   }
 }
