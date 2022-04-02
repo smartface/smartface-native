@@ -43,7 +43,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _errorFlag: boolean;
   private _aborted: boolean;
   private _timedOut: boolean;
-  private _hasError: boolean;
+  private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
   constructor() {
     super();
@@ -187,12 +187,16 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return null;
   }
 
-  public addEventListener(type: XHREventsEvents, listener: () => void) {
-    this.on(type, listener);
+  public addEventListener(eventName: XHREventsEvents, handler: () => void) {
+    const handlers = this._listeners.get(eventName) || [];
+    handlers.push(handler);
+    this._listeners.set(eventName, handlers);
   }
 
-  public removeEventListener(type: XHREventsEvents, listener: () => void) {
-    this.off(type, listener);
+  public removeEventListener(eventName: XHREventsEvents, toDetach: () => void) {
+    let handlers = this._listeners.get(eventName) || [];
+    handlers = handlers.filter((handler) => handler !== toDetach);
+    this._listeners.set(eventName, handlers);
   }
 
   public dispatchEvent(event: XHREventsEvents): boolean {
@@ -250,9 +254,12 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
   }
 
-  private _emitEvent(event: XHREventsEvents) {
-    this['on' + event]?.();
-    this.emit(event);
+  private _emitEvent(eventName: XHREventsEvents, ...args: Array<any>) {
+    this['on' + eventName]?.(...args);
+    const handlers = this._listeners.get(eventName) || [];
+    handlers.forEach((handler) => {
+      handler(...args);
+    });
   }
 
   private _reset(): void {
