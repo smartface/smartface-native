@@ -142,9 +142,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
   }
 
   public send(body?: string | FormData) {
-    this._errorFlag = false;
-    this._response = null;
-    this._status = 0;
+    this._reset();
 
     if (this._readyState !== XHRAndroid.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'send' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
@@ -177,13 +175,12 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     this._nativeObject.abort();
     if ((this._readyState === XHRAndroid.OPENED && this._sendFlag) || this._readyState === XHRAndroid.HEADERS_RECEIVED || this._readyState === XHRAndroid.LOADING) {
       this._aborted = true;
-      this._sendFlag = false;
-      this._response = 'abort';
+      this._setResponseError('network error');
       this._setReadyState(XHRAndroid.DONE);
     }
     if(this._readyState === XHRAndroid.DONE) {
       this._readyState = XHRAndroid.UNSENT;
-      this._response = 'network error';
+      this._setResponseError('network error');
     }
     this._reset();
   }
@@ -283,6 +280,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     this._errorFlag = false;
     this._sendFlag = false;
     this._aborted = false;
+    this._timedOut = false;
   }
 
   private _setResponseError(error: string): void {
