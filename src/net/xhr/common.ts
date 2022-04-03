@@ -1,5 +1,3 @@
-//import { TextDecoder, TextEncoder } from "util";
-
 import { FormData } from "./formdata";
 
 export type Headers = { [key: string]: string | string[] };
@@ -20,7 +18,6 @@ export const XMLHttpRequestResponseType = {
 } as const;
 
 export type ResponseTypes = ExtractValues<typeof XMLHttpRequestResponseType>;
-
 
 export interface HttpResponse {
     statusCode: number;

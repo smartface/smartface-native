@@ -27,8 +27,8 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   public onreadystatechange: (...args: any[]) => void = () => {};
   public ontimeout: (...args: any[]) => void = () => {};
 
-  private _timeout: number;
-  public withCredentials: boolean;
+  private _timeout: number = 0;
+  public withCredentials: boolean = false;
 
   private _method: HTTPRequestMethods;
   private _url: string;
@@ -36,8 +36,9 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   private _status: number;
   private _response: string | object | null;
   private _headers: Map<string, object> | null;
+  private _requestHeaders: Map<string, object> | null;
   private _responseURL: string;
-  private _responseType: ResponseTypes;
+  private _responseType: ResponseTypes = '';
 
   private _sendFlag: boolean;
   private _errorFlag: boolean;
@@ -48,8 +49,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
 
   constructor() {
     super();
-    this._reset();
-    this._initialize();
+    this._readyState = XHR.UNSENT;
   }
 
   public get readyState(): number {
@@ -61,11 +61,10 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
   }
 
   public get statusText(): string {
-    if (this._status) {
-      return statuses[this._status];
-    } else {
-      return '';
-    }
+    if (this._readyState === XHR.UNSENT || this._readyState === XHR.OPENED || this._errorFlag) {
+			return '';
+		}
+    return statuses[this._status];
   }
 
   public get timeout(): number {
@@ -111,11 +110,11 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return this._response ? this._response.toString() : '';
   }
 
-  get responseType(): ResponseTypes {
+  public get responseType(): ResponseTypes {
     return this._responseType;
   }
 
-  set responseType(value: ResponseTypes) {
+  public set responseType(value: ResponseTypes) {
     if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
       this._responseType = value;
     } else {
@@ -133,12 +132,12 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
     this._method = method;
     this._url = url;
-    this._headers = new Map<string, object>();
+    this._requestHeaders = new Map<string, object>();
     if (user) {
-      this._headers['user'] = user;
+      this._requestHeaders['user'] = user;
     }
     if (password) {
-      this._headers['password'] = password;
+      this._requestHeaders['password'] = password;
     }
     this._setReadyState(XHR.OPENED);
   }
@@ -149,14 +148,16 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     }
     this._sendFlag = true;
     this._errorFlag = false;
-    const headers = this._headers || {};
+		this._response = null;
+		this._headers = null;
+		this._status = 0;
     try {
       if (body instanceof FormData) {
         const data = body.getParts();
-        this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, headers, this._timeout, this.withCredentials);
+        this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, this._requestHeaders, this._timeout, this.withCredentials);
       } else {
         const data = body === '' || body ? body : null;
-        this._nativeObject.sendRequest(this._method, this._url, data, headers, this._timeout, this.withCredentials);
+        this._nativeObject.sendRequest(this._method, this._url, data, this._requestHeaders, this._timeout, this.withCredentials);
       }
       this._emitEvent('loadstart');
     } catch (error) {
@@ -169,7 +170,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     if (this._readyState !== XHR.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
-    this._headers!![name] = value;
+    this._requestHeaders!![name] = value;
   }
 
   public abort() {
@@ -248,17 +249,11 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     return nativeObject;
   }
 
-  private _initialize() {
-    this._readyState = XHR.UNSENT;
-    //this.upload = ...
-    this._responseURL = '';
-    this._timeout = 0;
-    this.withCredentials = true;
-  }
-
   private _setReadyState(newState: number) {
-    this._readyState = newState;
-    this._emitEvent('readystatechange');
+    if(this._readyState !== newState) {
+      this._readyState = newState;
+      this._emitEvent('readystatechange');
+    }
     if (newState === XHR.DONE) {
       if (this._aborted) {
         this._emitEvent('abort');
@@ -288,7 +283,7 @@ export default class XHR<TEvent extends string = XHREventsEvents, TProps extends
     this._headers = null;
     this._status = 0;
     this._errorFlag = false;
-    this.responseType = '';
+    this._responseType = '';
   }
 
   private _setResponseError(error: string): void {
