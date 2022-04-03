@@ -42,7 +42,6 @@ export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, 
     readonly statusText: string;
     timeout: number;
     readonly upload : XMLHttpRequestEventTarget;
-    withCredentials : boolean;
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;
