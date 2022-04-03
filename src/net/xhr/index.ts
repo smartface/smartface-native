@@ -24,24 +24,25 @@ export interface XMLHttpRequestEventTarget extends EventTarget {
 }
 
 interface IXHRMethods {
-    abort()
-    getAllResponseHeaders(): string
-    getResponseHeader(header: string): string | null
+    abort();
+    getAllResponseHeaders(): string;
+    getResponseHeader(header: string): string | null;
     open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
-    send(data?: string | FormData)
+    send(data?: string | FormData);
     setRequestHeader(header: string, value: string);
 }
 
 export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods, XMLHttpRequestEventTarget {
-    readyState: number
-    response: string | object | null
-    responseText: string
-    responseType: ResponseTypes
-    responseURL?: string
-    status: number
-    statusText: string
-    timeout: number
-    get upload() : XMLHttpRequestEventTarget
+    readonly readyState: number;
+    readonly response: string | object | null;
+    readonly responseText: string;
+    responseType: ResponseTypes;
+    readonly responseURL?: string;
+    readonly status: number;
+    readonly statusText: string;
+    timeout: number;
+    readonly upload : XMLHttpRequestEventTarget;
+    withCredentials : boolean;
 }
 
 const XHR: ConstructorOf<IXHR, Partial<IXHR>> = require(`./xhr.${Device.deviceOS.toLowerCase()}`).default;
