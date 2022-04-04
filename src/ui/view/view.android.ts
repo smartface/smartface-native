@@ -22,11 +22,11 @@ const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
 const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
 
-function PixelToDp(px) {
+function PixelToDp(px: number) {
   return AndroidUnitConverter.pixelToDp(px);
 }
 
-function DpToPixel(dp) {
+function DpToPixel(dp: number) {
   return AndroidUnitConverter.dpToPixel(dp);
 }
 
@@ -102,7 +102,11 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return new NativeView(AndroidConfig.activity);
   }
   protected init(params?: Partial<TProps>): void {
-    this.yogaNode = NativeYogaNodeFactory.create();
+    if (this.nativeObject?.toString().indexOf('YogaLayout') !== -1) {
+      this.yogaNode = this.nativeObject.getYogaNode();
+    } else {
+      this.yogaNode = NativeYogaNodeFactory.create();
+    }
     super.init(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
@@ -203,10 +207,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.didSetTouchHandler = true;
   }
 
-  //TODO: Didn't delete these func to not broke backward. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
+  //TODO: Didn't delete these functions to not break backward compatibility. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
   protected _setBorderToAllEdges() {
-    let borderWidthPx = DpToPixel(this.borderWidth);
-    if (!borderWidthPx) borderWidthPx = 0; // NaN, undefined etc.
+    const borderWidthPx = DpToPixel(this.borderWidth) || 0;
     this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
     this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
     this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
@@ -590,7 +593,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setPosition(YogaEdge.END, DpToPixel(end));
   }
   get height() {
-    return PixelToDp(this._nativeObject.getHeight());
+    return PixelToDp(this.yogaNode.getHeight());
   }
   set height(height) {
     this.yogaNode.setHeight(DpToPixel(height));
@@ -602,7 +605,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     }
   }
   get width() {
-    return PixelToDp(this._nativeObject.getWidth());
+    return PixelToDp(this.yogaNode.getWidth());
   }
   set width(width) {
     this.yogaNode.setWidth(DpToPixel(width));
@@ -611,7 +614,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     // TODO: Find another way to do this
     if (this._parent?.constructor.name === 'ScrollViewAndroid' && (this._parent as ScrollViewAndroid).align === ScrollViewAlign.VERTICAL) {
       const layoutParams = this._nativeObject.getLayoutParams();
-      layoutParams && (layoutParams.width = -2);
+      if (layoutParams) {
+        layoutParams.width = -2;
+      }
     }
   }
   get minWidth() {

@@ -32,41 +32,41 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   }
 
   get direction() {
-    return this.convertFlexJavaEnumToJsEnum(this.android.yogaNode.getStyleDirection(), NativeDirection);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), NativeDirection);
   }
   set direction(direction) {
-    this.android.yogaNode.setDirection(direction);
+    this.yogaNode.setDirection(direction);
   }
   get flexDirection() {
-    return this.convertFlexJavaEnumToJsEnum(this.android.yogaNode.getFlexDirection(), NativeFlexDirection);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), NativeFlexDirection);
   }
   set flexDirection(flexDirection) {
-    this.android.yogaNode.setFlexDirection(flexDirection);
+    this.yogaNode.setFlexDirection(flexDirection);
   }
   get justifyContent() {
-    return this.convertFlexJavaEnumToJsEnum(this.android.yogaNode.getJustifyContent(), NativeJustifyContent);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), NativeJustifyContent);
   }
   set justifyContent(justifyContent) {
-    this.android.yogaNode.setJustifyContent(justifyContent);
+    this.yogaNode.setJustifyContent(justifyContent);
   }
   get alignContent() {
-    return this.convertFlexJavaEnumToJsEnum(this.android.yogaNode.getAlignContent(), NativeAlignContent);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), NativeAlignContent);
   }
   set alignContent(alignContent) {
-    this.android.yogaNode.setAlignContent(alignContent);
+    this.yogaNode.setAlignContent(alignContent);
   }
   get alignItems() {
-    return this.convertFlexJavaEnumToJsEnum(this.android.yogaNode.getAlignItems(), NativeAlignItems);
+    return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), NativeAlignItems);
   }
   set alignItems(alignItems) {
-    this.android.yogaNode.setAlignItems(alignItems);
+    this.yogaNode.setAlignItems(alignItems);
   }
   get flexWrap() {
     return this._flexWrap;
   }
   set flexWrap(flexWrap) {
     this._flexWrap = flexWrap;
-    this.android.yogaNode.setWrap(flexWrap);
+    this.yogaNode.setWrap(flexWrap);
   }
 
   toString() {

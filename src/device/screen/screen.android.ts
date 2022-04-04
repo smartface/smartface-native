@@ -13,7 +13,7 @@ const windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANA
 const display = windowManager.getDefaultDisplay();
 const metrics = new NativeDisplayMetrics();
 
-class ScreenAndroid implements IScreen {
+class ScreenAndroidClass implements IScreen {
   OrientationType = OrientationType;
   get dpi() {
     display.getRealMetrics(metrics);
@@ -53,6 +53,6 @@ class ScreenAndroid implements IScreen {
   }
 }
 
-const Screen = new ScreenAndroid();
+const ScreenAndroid = new ScreenAndroidClass();
 
-export default Screen;
+export default ScreenAndroid;

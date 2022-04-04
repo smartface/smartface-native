@@ -11,7 +11,7 @@ const orientationArray = [
   OrientationType.FACEDOWN
 ] as const;
 
-class ScreenIOS implements IScreen {
+class ScreenIOSClass implements IScreen {
   OrientationType = OrientationType;
   ios = { forceTouchAvaliable: __SF_UIDevice.forceTouchAvaliable() };
   constructor() {}
@@ -46,5 +46,5 @@ class ScreenIOS implements IScreen {
   };
 }
 
-const Screen = new ScreenIOS();
-export default Screen;
+const ScreenIOS = new ScreenIOSClass();
+export default ScreenIOS;

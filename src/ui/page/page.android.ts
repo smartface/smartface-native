@@ -62,6 +62,8 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.AUTO]: 13
 };
 
+const GRAVITY_START = 8388611; //Gravity.Start
+
 export default class PageAndroid<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
   protected createNativeObject() {
     return new SFFragment();
@@ -410,9 +412,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         if (self._titleLayout) {
           self.toolbar.removeView(self._titleLayout.nativeObject);
         }
-        const toolbarParams = new ToolbarLayoutParams(8388611); // Gravity.START
-
-        value && self.toolbar.addView(value.nativeObject, toolbarParams);
+        if (value) {
+          const toolbarParams = new ToolbarLayoutParams(GRAVITY_START); // Gravity.START
+          self.toolbar.addView(value.nativeObject, toolbarParams);
+          self._titleLayout = value;
+        }
       },
       get borderVisibility(): HeaderBar['borderVisibility'] {
         return self._borderVisibility;
