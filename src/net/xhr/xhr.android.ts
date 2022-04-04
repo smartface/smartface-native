@@ -114,7 +114,11 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
   }
 
   public set responseType(value: ResponseTypes) {
-    if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
+    if (value === XMLHttpRequestResponseType.blob) {
+      throw new Error(`Response type of '${value}' not supported.`);
+    } else if (value === XMLHttpRequestResponseType.arraybuffer) {
+      throw new Error(`Response type of '${value}' not supported.`);
+    } else if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
       this._responseType = value;
     } else {
       throw new Error(`Response type of '${value}' not supported.`);
