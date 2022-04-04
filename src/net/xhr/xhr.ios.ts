@@ -1,4 +1,4 @@
-import { HTTPRequestMethods, IXHR } from '.';
+import { HTTPRequestMethods, IXHR } from './xhr';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
