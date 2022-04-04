@@ -1,4 +1,4 @@
-import { IPin } from '.';
+import { IPin } from './pin';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
 import ColorIOS from '../../color/color.ios';
 import Image from '../../image';

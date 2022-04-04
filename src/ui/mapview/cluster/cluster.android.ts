@@ -1,4 +1,4 @@
-import { ICluster } from '.';
+import { ICluster } from './cluster';
 import MapView from '..';
 import NativeComponent from '../../../core/native-component';
 import TypeValue from '../../../util/Android/typevalue';

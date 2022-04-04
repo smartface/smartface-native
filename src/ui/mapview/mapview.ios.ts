@@ -1,4 +1,4 @@
-import { IMapView, MapViewType } from '.';
+import { IMapView, MapViewType } from './mapview';
 import Location from '../../device/location';
 import Invocation from '../../util/iOS/invocation';
 import ViewIOS from '../view/view.ios';

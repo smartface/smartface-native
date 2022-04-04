@@ -1,4 +1,4 @@
-import { IPin } from '.';
+import { IPin } from './pin';
 import NativeEventEmitterComponent from '../../../core/native-event-emitter-component';
 import TypeUtil from '../../../util/type';
 import ColorAndroid from '../../color/color.android';

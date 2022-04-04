@@ -1,4 +1,4 @@
-import { IMapView, MapViewType } from '.';
+import { IMapView, MapViewType } from './mapview';
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
 import { MapViewEvents } from './mapview-events';
