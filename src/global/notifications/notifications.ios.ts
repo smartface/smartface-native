@@ -4,8 +4,6 @@ import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
-import { UnauthorizationStatus } from './unauthorization-status';
-
 class LocalNotification extends NativeMobileComponent {
   protected createNativeObject() {
     return new __SF_UILocalNotification();
@@ -101,89 +99,97 @@ class LocalNotification extends NativeMobileComponent {
   }
 }
 
-class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
   protected createNativeObject() {
     return null;
   }
-  static Events = NotificationEvents;
-  static ios: typeof NotificationsBase.ios & { UNUserNotificationCenterDelegate: any; _didReceiveNotificationResponse: ((e: any) => void) | undefined; _willPresentNotification?: (e: any) => any } = {
-    _willPresentNotification: undefined,
-    authorizationStatus: UnauthorizationStatus,
-    _didReceiveNotificationResponse: undefined,
-    UNUserNotificationCenterDelegate: {
-      ...new __SF_SMFUNUserNotificationCenterDelegate(),
-      willPresentNotification: function (e) {
-        if (NotificationsIOS.ios._willPresentNotification === undefined) {
-          return 0;
-        }
-
-        const returnValue = NotificationsIOS.ios._willPresentNotification(e);
-        if (returnValue === undefined || returnValue.length === 0) {
-          return 0;
-        }
-
-        let returnNSUIInteger;
-        for (const index in returnValue) {
-          returnNSUIInteger = returnNSUIInteger | returnValue[index];
-        }
-
-        return returnNSUIInteger;
+  init() {
+    super.init();
+    this.addIOSProps(this.getIOSProps());
+  }
+  private getIOSProps() {
+    const self = this;
+    return {
+      _willPresentNotification: undefined,
+      AuthorizationStatus: AuthorizationStatus,
+      _didReceiveNotificationResponse: undefined,
+      get applicationIconBadgeNumber() {
+        return __SF_UIApplication.sharedApplication().applicationIconBadgeNumber;
       },
-      didReceiveNotificationResponse: function (e) {
-        NotificationsIOS.ios._didReceiveNotificationResponse && NotificationsIOS.ios._didReceiveNotificationResponse(e);
-      }
-    }
-  };
+      set applicationIconBadgeNumber(value) {
+        if (typeof value === 'number') {
+          __SF_UIApplication.sharedApplication().applicationIconBadgeNumber = value;
+        }
+      },
+      get scheduledLocalNotifications() {
+        const retval: any[] = [];
 
-  static iOS = {
-    AuthorizationStatus,
-    NotificationPresentationOptions
-  };
+        const nativeNotifications = __SF_UIApplication.sharedApplication().scheduledLocalNotifications;
+        const arrayLength = nativeNotifications.length;
+        for (let i = 0; i < arrayLength; i++) {
+          const localNotification = new this.LocalNotification();
+          localNotification.nativeObject = nativeNotifications[i];
+          retval.push(localNotification);
+        }
+
+        return retval;
+      },
+      UNUserNotificationCenterDelegate: {
+        ...new __SF_SMFUNUserNotificationCenterDelegate(),
+        willPresentNotification: (e) => {
+          if (self.ios._willPresentNotification === undefined) {
+            return 0;
+          }
+
+          const returnValue = self.ios._willPresentNotification(e);
+          if (returnValue === undefined || returnValue.length === 0) {
+            return 0;
+          }
+
+          let returnNSUIInteger;
+          for (const index in returnValue) {
+            returnNSUIInteger = returnNSUIInteger | returnValue[index];
+          }
+
+          return returnNSUIInteger;
+        },
+        didReceiveNotificationResponse: (e) => {
+          self.ios._didReceiveNotificationResponse && self.ios._didReceiveNotificationResponse(e);
+        }
+      }
+    };
+  }
+
+  get iOS() {
+    return {
+      AuthorizationStatus,
+      NotificationPresentationOptions
+    };
+  }
 
   get android() {
     return {};
   }
 
   get onNotificationReceive() {
-    return NotificationsIOS.ios._willPresentNotification;
+    return this.ios._willPresentNotification;
   }
   set onNotificationReceive(value) {
     if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
-      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = NotificationsIOS.ios.UNUserNotificationCenterDelegate;
+      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
     }
-    NotificationsIOS.ios._willPresentNotification = value;
+    this.ios._willPresentNotification = value;
   }
   get onNotificationClick() {
-    return NotificationsIOS.ios._didReceiveNotificationResponse;
+    return this.ios._didReceiveNotificationResponse;
   }
   set onNotificationClick(value) {
     if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
-      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = NotificationsIOS.ios.UNUserNotificationCenterDelegate;
+      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
     }
-    NotificationsIOS.ios._didReceiveNotificationResponse = value;
+    this.ios._didReceiveNotificationResponse = value;
   }
 
-  get applicationIconBadgeNumber() {
-    return __SF_UIApplication.sharedApplication().applicationIconBadgeNumber;
-  }
-  set applicationIconBadgeNumber(value) {
-    if (typeof value === 'number') {
-      __SF_UIApplication.sharedApplication().applicationIconBadgeNumber = value;
-    }
-  }
-  get scheduledLocalNotifications() {
-    const retval: any[] = [];
-
-    const nativeNotifications = __SF_UIApplication.sharedApplication().scheduledLocalNotifications;
-    const arrayLength = nativeNotifications.length;
-    for (let i = 0; i < arrayLength; i++) {
-      const localNotification = new NotificationsIOS.LocalNotification();
-      localNotification.nativeObject = nativeNotifications[i];
-      retval.push(localNotification);
-    }
-
-    return retval;
-  }
   unregisterForPushNotifications() {
     __SF_UIApplication.sharedApplication().unregisterForRemoteNotifications();
   }
@@ -199,12 +205,12 @@ class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, a
     __SF_UIApplication.sharedApplication().registerUserNotificationSettings(userNotificationSettings);
     __SF_UIApplication.sharedApplication().registerForRemoteNotifications();
   }
-  static cancelAllLocalNotifications() {
+  cancelAllLocalNotifications() {
     __SF_UIApplication.sharedApplication().cancelAllLocalNotifications();
   }
-  static Priority = {};
-  static Android = { Priority: {} };
-  static Notifications = {
+  Priority = {};
+  Android = {};
+  Notifications = {
     ios: {
       getAuthorizationStatus(callback) {
         const current = Invocation.invokeClassMethod('UNUserNotificationCenter', 'currentNotificationCenter', [], 'id');
@@ -223,10 +229,12 @@ class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, a
       }
     }
   };
-  static removeAllDeliveredNotifications() {
+  removeAllDeliveredNotifications() {
     __SF_UNUserNotificationCenter.currentNotificationCenter().removeAllDeliveredNotifications();
   }
-  static LocalNotification: typeof LocalNotification = LocalNotification;
+  LocalNotification: typeof LocalNotification = LocalNotification;
 }
+
+const NotificationsIOS = new NotificationsIOSClass();
 
 export default NotificationsIOS;

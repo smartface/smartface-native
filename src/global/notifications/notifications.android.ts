@@ -5,16 +5,14 @@ const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
 const ALARM_SERVICE = 'alarm';
 const ALARM_MANAGER = 'android.app.AlarmManager';
 import Application from '../../application';
-import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Color from '../../ui/color';
 import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
-import { NotificationsBase } from './notifications';
+import { NotificationsBase, Priority } from './notifications';
 import { NotificationEvents } from './notifications-events';
-import { Priority } from './priority';
 
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat = requireClass('androidx.core.app.NotificationCompat');
@@ -39,33 +37,6 @@ function getNewNotificationId() {
 function unregisterPushNotification() {
   NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
   NativeFCMListenerService.unregisterRemoteNotificationListener();
-}
-
-function registerPushNotification(onSuccessCallback, onFailureCallback) {
-  NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
-    onSuccess: (token) => {
-      NativeFCMListenerService.registerRemoteNotificationListener({
-        onRemoteNotificationReceived: function (data, isReceivedByOnClick) {
-          const parsedJson = JSON.parse(data);
-          if (isReceivedByOnClick) {
-            NotificationsAndroid.onNotificationClick?.(parsedJson);
-          } else {
-            NotificationsAndroid.onNotificationReceive?.(parsedJson);
-            Application.onReceivedNotification?.({
-              remote: parsedJson
-            });
-          }
-        }
-      });
-      onSuccessCallback &&
-        onSuccessCallback({
-          token: token
-        });
-    },
-    onFailure: function () {
-      onFailureCallback && onFailureCallback();
-    }
-  });
 }
 
 function removeAllNotifications() {
@@ -120,7 +91,7 @@ class LocalNotification extends NativeMobileComponent {
   private _indeterminate = false;
   private _ticker = '';
   private _vibrate = false;
-  private _priority = NotificationsAndroid.Priority.DEFAULT;
+  private _priority = Priority.DEFAULT;
   private _subText = '';
   private _ongoing = false;
   private _onNotificationClick;
@@ -304,33 +275,31 @@ class LocalNotification extends NativeMobileComponent {
     return this._id;
   }
 }
-class NotificationsAndroid extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+class NotificationsAndroidClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
   protected createNativeObject() {
     return null;
   }
-  static ios = { authorizationStatus: {}, getAuthorizationStatus() {} };
-  static iOS = { NotificationPresentationOptions: {} };
-  static Android = { Priority: Priority };
-  static Priority = Priority;
-  static Events = NotificationEvents;
-  static _onNotificationClick;
-  static _onNotificationReceive;
-  static get onNotificationClick() {
+  get ios() {
+    return { authorizationStatus: {}, getAuthorizationStatus() {} };
+  }
+  iOS = {};
+  Android = { Priority: Priority };
+  Priority = Priority;
+  _onNotificationClick;
+  _onNotificationReceive;
+  get onNotificationClick() {
     return this._onNotificationClick;
   }
-  static set onNotificationClick(callback) {
+  set onNotificationClick(callback) {
     this._onNotificationClick = callback;
   }
-  static get onNotificationReceive() {
+  get onNotificationReceive() {
     return this._onNotificationReceive;
   }
-  static set onNotificationReceive(callback) {
+  set onNotificationReceive(callback) {
     this._onNotificationReceive = callback;
   }
   get android() {
-    return {};
-  }
-  get ios() {
     return {};
   }
   cancelAllLocalNotifications() {
@@ -346,12 +315,40 @@ class NotificationsAndroid extends NativeEventEmitterComponent<NotificationEvent
   }
   registerForPushNotifications(onSuccess, onFailure) {
     if (!AndroidConfig.isEmulator) {
-      registerPushNotification(onSuccess, onFailure);
+      this.registerPushNotification(onSuccess, onFailure);
     } else {
       onFailure && onFailure();
     }
   }
-  static LocalNotification = LocalNotification;
+  private registerPushNotification(onSuccessCallback, onFailureCallback) {
+    NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
+      onSuccess: (token) => {
+        NativeFCMListenerService.registerRemoteNotificationListener({
+          onRemoteNotificationReceived: (data, isReceivedByOnClick) => {
+            const parsedJson = JSON.parse(data);
+            if (isReceivedByOnClick) {
+              this.onNotificationClick?.(parsedJson);
+            } else {
+              this.onNotificationReceive?.(parsedJson);
+              Application.onReceivedNotification?.({
+                remote: parsedJson
+              });
+            }
+          }
+        });
+        onSuccessCallback &&
+          onSuccessCallback({
+            token: token
+          });
+      },
+      onFailure: function () {
+        onFailureCallback && onFailureCallback();
+      }
+    });
+  }
+  LocalNotification = LocalNotification;
 }
+
+const NotificationsAndroid = new NotificationsAndroidClass();
 
 export default NotificationsAndroid;
