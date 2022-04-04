@@ -6,7 +6,7 @@ import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './xhr';
 import { FormData, FormDataPart } from './xhr';
 import { XHREventsEvents } from './xhr-events';
 
-class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps> implements IXHR {
+class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps> implements IXHR {
   static UNSENT = 0;
   static OPENED = 1;
   static HEADERS_RECEIVED = 2;
@@ -36,7 +36,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
   protected createNativeObject() {
-    this._readyState = XHR.UNSENT;
+    this._readyState = XHRIOS.UNSENT;
     return new __SF_XMLHttpRequest();
   }
 
@@ -50,13 +50,13 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
   get response(): any {
     if (this._responseType === XMLHttpRequestResponseType.empty || this._responseType === XMLHttpRequestResponseType.text) {
-      if (this._readyState !== XHR.LOADING && this._readyState !== XHR.DONE) {
+      if (this._readyState !== XHRIOS.LOADING && this._readyState !== XHRIOS.DONE) {
         return '';
       } else {
         return this._response;
       }
     } else {
-      if (this._readyState !== XHR.DONE) {
+      if (this._readyState !== XHRIOS.DONE) {
         return null;
       } else {
         return this._response;
@@ -99,7 +99,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   }
 
   get statusText(): string {
-    if (this._readyState === XHR.UNSENT || this._readyState === XHR.OPENED || this._errorFlag) {
+    if (this._readyState === XHRIOS.UNSENT || this._readyState === XHRIOS.OPENED || this._errorFlag) {
       return '';
     }
 
@@ -113,7 +113,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   }
 
   set timeout(value: number) {
-    if (this._readyState !== XHR.OPENED || this._sendFlag) {
+    if (this._readyState !== XHRIOS.OPENED || this._sendFlag) {
       throw new Error("Failed to set 'timeout' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
 
@@ -128,14 +128,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         this._headers = '';
         this._status = 0;
 
-        if ((this._readyState === XHR.OPENED && this._sendFlag) || this._readyState === XHR.HEADERS_RECEIVED || this._readyState === XHR.LOADING) {
+        if ((this._readyState === XHRIOS.OPENED && this._sendFlag) || this._readyState === XHRIOS.HEADERS_RECEIVED || this._readyState === XHRIOS.LOADING) {
           this._errorFlag = true;
           this._sendFlag = false;
           this._setRequestError('abort');
         }
 
-        if (this._readyState === XHR.DONE) {
-          this._readyState = XHR.UNSENT;
+        if (this._readyState === XHRIOS.DONE) {
+          this._readyState = XHRIOS.UNSENT;
         }
       }
     } else {
@@ -144,7 +144,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   }
 
   getAllResponseHeaders(): string {
-    if (this._readyState < XHR.HEADERS_RECEIVED || this._errorFlag) {
+    if (this._readyState < XHRIOS.HEADERS_RECEIVED || this._errorFlag) {
       return '';
     }
 
@@ -158,7 +158,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   }
 
   getResponseHeader(header: string): string | null {
-    if (typeof header === 'string' && this._readyState > XHR.OPENED && this._headers && !this._errorFlag) {
+    if (typeof header === 'string' && this._readyState > XHRIOS.OPENED && this._headers && !this._errorFlag) {
       header = header.toLowerCase();
       for (const i in this._headers) {
         if (i.toLowerCase() === header) {
@@ -187,7 +187,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
       this._options.headers['password'] = password;
     }
 
-    this._setReadyState(XHR.OPENED);
+    this._setReadyState(XHRIOS.OPENED);
   }
 
   private getRequestTypeBasedOnData(data?: any) {
@@ -214,7 +214,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   send(data?: any) {
     this.resetLocalStates();
 
-    if (this._readyState !== XHR.OPENED || this._sendFlag) {
+    if (this._readyState !== XHRIOS.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'send' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
 
@@ -260,7 +260,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
   }
 
   setRequestHeader(header: string, value: string) {
-    if (this._readyState !== XHR.OPENED || this._sendFlag) {
+    if (this._readyState !== XHRIOS.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
 
@@ -296,8 +296,8 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     this._headers = response.headers;
     this._responseURL = response.responseURL;
 
-    this._setReadyState(XHR.HEADERS_RECEIVED);
-    this._setReadyState(XHR.LOADING);
+    this._setReadyState(XHRIOS.HEADERS_RECEIVED);
+    this._setReadyState(XHRIOS.LOADING);
 
     //TODO: add Blob, ArrayBuffer support
     if (this._responseType === XMLHttpRequestResponseType.text || this._responseType === XMLHttpRequestResponseType.empty) {
@@ -313,7 +313,7 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
 
     this.emitEvent('progress');
     this._sendFlag = false;
-    this._setReadyState(XHR.DONE);
+    this._setReadyState(XHRIOS.DONE);
   }
 
   private _setReadyState(value: number) {
@@ -322,14 +322,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
       this.emitEvent('readystatechange');
     }
 
-    if (this._readyState === XHR.DONE) {
+    if (this._readyState === XHRIOS.DONE) {
       this.emitEvent('load');
       this.emitEvent('loadend');
     }
   }
 
   private _setRequestError(eventName: XHREventsEvents, error?: any) {
-    this._readyState = XHR.DONE;
+    this._readyState = XHRIOS.DONE;
     this._response = error;
 
     this.emitEvent('readystatechange');
@@ -381,4 +381,4 @@ interface HttpErrorResponse {
   errorMessage: string;
 }
 
-export default XHR;
+export default XHRIOS;
