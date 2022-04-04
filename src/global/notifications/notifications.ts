@@ -104,6 +104,14 @@ export interface NotificationAndroidProps {
    * @since 0.1
    */
   vibrate: boolean;
+
+  /**
+   * @property {Boolean}
+   * @android
+   * @static
+   * @since 0.1
+   */
+  ongoing: boolean;
   /**
    * Gets/sets the priority of the LocalNotification. Priority determines how much attention
    * should be consumed by this notification. LOW_PRIORTY notifications may be hidden from the
@@ -141,9 +149,7 @@ export interface NotificationAndroidProps {
  *     });
  *
  */
-export declare class NotificationsBase extends NativeEventEmitterComponent<NotificationEvents, any, MobileOSProps<NotificationIOSProps, {}>> {
-  protected createNativeObject(params?: Partial<Record<string, any>>);
-  static Events: NotificationEvents;
+export interface NotificationsBase extends NativeEventEmitterComponent<NotificationEvents, any, MobileOSProps<NotificationIOSProps, {}>> {
   /**
    * Cancel all presented or scheduled local notifications.
    *
@@ -154,7 +160,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * @since 0.1
    * @deprecated 4.0.8 Use {@link Notifications#removeAllDeliveredNotifications}
    */
-  static cancelAllLocalNotifications(): void;
+  cancelAllLocalNotifications(): void;
   /**
    * Register for remote push notifications. For emulator this will not work and always calls onFailure callback.
    * This function uses senderID inside of project.json file for registering push notification services. You can obtain
@@ -170,8 +176,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * @static
    * @since 0.1
    */
-  static registerForPushNotifications(onSuccess: ({ token: string }) => void, onFailure: () => void): void;
-  static ongoing: boolean;
+  registerForPushNotifications(onSuccess: ({ token: string }) => void, onFailure: () => void): void;
   /**
    * Unregister for remote push notifications. For emulator this will not work and does nothing.
    *
@@ -181,7 +186,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * @static
    * @since 0.1
    */
-  static unregisterForPushNotifications(): void;
+  unregisterForPushNotifications(): void;
   /**
    * Gets authorization status.
    *
@@ -192,7 +197,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * @static
    * @since 2.0.11
    */
-  static getAuthorizationStatus(callback: (status: Notifications.iOS.AuthorizationStatus) => void): void;
+  getAuthorizationStatus?(callback: (status: typeof AuthorizationStatus) => void): void;
   /**
    * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background.
    * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
@@ -220,7 +225,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * });
    * ````
    */
-  static onNotificationReceive(data: any): Notifications.iOS.NotificationPresentationOptions[];
+  onNotificationReceive(data: any): typeof NotificationPresentationOptions[];
   /**
    * This event triggered when clicked on notification alert
    *
@@ -240,7 +245,7 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * });
    * ````
    */
-  static onNotificationClick: (data: any) => void;
+  onNotificationClick: (data: any) => void;
   /**
    * Use this method to remove all of your app’s delivered notifications.
    *
@@ -250,15 +255,15 @@ export declare class NotificationsBase extends NativeEventEmitterComponent<Notif
    * @static
    * @since 4.0.8
    */
-  static removeAllDeliveredNotifications(): void;
+  removeAllDeliveredNotifications(): void;
 
-  static iOS: {
-    AuthorizationStatus: typeof AuthorizationStatus;
-    NotificationPresentationOptions: typeof NotificationPresentationOptions;
+  iOS: {
+    AuthorizationStatus?: typeof AuthorizationStatus;
+    NotificationPresentationOptions?: typeof NotificationPresentationOptions;
   };
 
-  static Android: {
-    Priority: typeof Priority;
+  Android: {
+    Priority?: typeof Priority;
   };
 }
 
