@@ -99,7 +99,7 @@ class LocalNotification extends NativeMobileComponent {
   }
 }
 
-class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
   protected createNativeObject() {
     return null;
   }
@@ -235,6 +235,6 @@ class NotificationsIOS extends NativeEventEmitterComponent<NotificationEvents, a
   LocalNotification: typeof LocalNotification = LocalNotification;
 }
 
-const Notifications = new NotificationsIOS();
+const NotificationsIOS = new NotificationsIOSClass();
 
-export default Notifications;
+export default NotificationsIOS;
