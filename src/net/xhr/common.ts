@@ -1,13 +1,4 @@
-import { TextDecoder, TextEncoder } from "util";
-
 export type Headers = { [key: string]: string | string[] };
-export interface HttpRequestOptions {
-    url: string;
-    method: string;
-    headers?: Headers;
-    content?: string | FormData | ArrayBuffer;
-    timeout?: number;
-}
 
 export const XMLHttpRequestResponseType = {
     empty: '',
@@ -20,120 +11,60 @@ export const XMLHttpRequestResponseType = {
 export type ResponseTypes = ExtractValues<typeof XMLHttpRequestResponseType>;
 
 
-export interface HttpResponse {
-    statusCode: number;
-    headers: Headers;
-    //TODO: Add JSON, Blob, ArrayBuffer support
-    content?: String;
-    responseURL?: string
-}
 
-export interface HttpErrorResponse {
-    errorCode: number;
-    errorMessage: string
-}
-
+type FormDataValue = string | { name?: string, type?: string, uri: string };
+type FormDataNameValuePair = [string, FormDataValue];
+export type FormDataPart = { keyValue: string, headers: Headers }
+    | {
+        uri: string,
+        headers: Headers,
+        name?: string,
+        type?: string,
+    };
 
 export class FormData {
-    private _data: Map<string, any>;
+    _parts: Array<FormDataNameValuePair>;
 
     constructor() {
-        this._data = new Map<string, any>();
+        this._parts = [];
     }
 
-    append(name: string, value: any) {
-        this._data.set(name, value);
+    append(key: string, value: FormDataValue) {
+        // The XMLHttpRequest spec doesn't specify if duplicate keys are allowed.
+        // MDN says that any new values should be appended to existing values.
+        // In any case, major browsers allow duplicate keys, so that's what we'll do
+        // too. They'll simply get appended as additional form data parts in the
+        // request body, leaving the server to deal with them.
+        this._parts.push([key, value]);
     }
 
-    toString(): string {
-        const arr = new Array<string>();
+    getParts(): Array<FormDataPart> {
+        return this._parts.map(([name, value]) => {
+            console.log('name:',name)
+            console.log('value:',value)
+            const contentDisposition = 'form-data; name="' + name + '"';
 
-        this._data.forEach(function (value, name, map) {
-            arr.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
+            const headers: Headers = { 'content-disposition': contentDisposition };
+
+            // The body part is a "blob", which in React Native just means
+            // an object with a `uri` attribute. Optionally, it can also
+            // have a `name` and `type` attribute to specify filename and
+            // content type (cf. web Blob interface.)
+            if (typeof value === 'object' && value) {
+                if (typeof value.name === 'string') {
+                    headers['content-disposition'] += '; filename="' + value.name + '"';
+                }
+                if (typeof value.type === 'string') {
+                    headers['content-type'] = value.type;
+                }
+                return { ...value, headers, fieldName: name };
+            }
+            // Convert non-object values to strings as per FormData.append() spec
+            return { keyValue: String(value), headers, fieldName: name };
         });
-
-        return arr.join('&');
     }
 }
 
-export class Blob {
-	public static InternalAccessor = class {
-		public static getBuffer(blob: Blob) {
-			return blob._buffer;
-		}
-	};
-
-	private _buffer: Uint8Array;
-	private _size: number;
-	private _type: string;
-
-	public get size() {
-		return this._size;
-	}
-	public get type() {
-		return this._type;
-	}
-
-	constructor(chunks: Array<Blob | string> = [], opts: { type?: string } = {}) {
-		const dataChunks: Uint8Array[] = [];
-		for (const chunk of chunks) {
-			if (chunk instanceof Blob) {
-				dataChunks.push(chunk._buffer);
-			} else if (typeof chunk === 'string') {
-				const textEncoder = new TextEncoder();
-				dataChunks.push(textEncoder.encode(chunk));
-			} else {
-				const textEncoder = new TextEncoder();
-				dataChunks.push(textEncoder.encode(String(chunk)));
-			}
-		}
-
-		const size = dataChunks.reduce((size, chunk) => size + chunk.byteLength, 0);
-		const buffer = new Uint8Array(size);
-		let offset = 0;
-		for (let i = 0; i < dataChunks.length; i++) {
-			const chunk = dataChunks[i];
-			buffer.set(chunk, offset);
-			offset += chunk.byteLength;
-		}
-
-		this._buffer = buffer;
-		this._size = this._buffer.byteLength;
-
-		this._type = opts.type || '';
-		if (/[^\u0020-\u007E]/.test(this._type)) {
-			this._type = '';
-		} else {
-			this._type = this._type.toLowerCase();
-		}
-	}
-
-	public arrayBuffer(): Promise<ArrayBuffer> {
-		return Promise.resolve(this._buffer);
-	}
-
-	public text(): Promise<string> {
-		const textDecoder = new TextDecoder();
-
-		return Promise.resolve(textDecoder.decode(this._buffer));
-	}
-
-	public slice(start?: number, end?: number, type?: string): Blob {
-		const slice = this._buffer.slice(start || 0, end || this._buffer.length);
-
-		return new Blob([slice], { type: type });
-	}
-
-	public stream() {
-		throw new Error('stream is currently not supported');
-	}
-
-	public toString() {
-		return '[object Blob]';
-	}
-
-	[Symbol.toStringTag] = 'Blob';
-}
 
 export const statuses = {
     100: 'Continue',
