@@ -12,23 +12,23 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
   extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps>
   implements IXHR
 {
-  public static UNSENT = 0;
-  public static OPENED = 1;
-  public static HEADERS_RECEIVED = 2;
-  public static LOADING = 3;
-  public static DONE = 4;
+  static UNSENT = 0;
+  static OPENED = 1;
+  static HEADERS_RECEIVED = 2;
+  static LOADING = 3;
+  static DONE = 4;
 
-  public onabort: (...args: any[]) => void = () => {};
-  public onerror: (...args: any[]) => void = () => {};
-  public onload: (...args: any[]) => void = () => {};
-  public onloadend: (...args: any[]) => void = () => {};
-  public onloadstart: (...args: any[]) => void = () => {};
-  public onprogress: (...args: any[]) => void = () => {};
-  public onreadystatechange: (...args: any[]) => void = () => {};
-  public ontimeout: (...args: any[]) => void = () => {};
+  onabort: (...args: any[]) => void = () => {};
+  onerror: (...args: any[]) => void = () => {};
+  onload: (...args: any[]) => void = () => {};
+  onloadend: (...args: any[]) => void = () => {};
+  onloadstart: (...args: any[]) => void = () => {};
+  onprogress: (...args: any[]) => void = () => {};
+  onreadystatechange: (...args: any[]) => void = () => {};
+  ontimeout: (...args: any[]) => void = () => {};
 
   private _timeout: number = 0;
-  public withCredentials: boolean = true;
+  withCredentials: boolean = true;
 
   private _method: HTTPRequestMethods;
   private _url: string;
@@ -51,37 +51,37 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     this._readyState = XHRAndroid.UNSENT;
   }
 
-  public get readyState(): number {
+  get readyState(): number {
     return this._readyState;
   }
 
-  public get status(): number {
+  get status(): number {
     return this._status;
   }
 
-  public get statusText(): string {
+  get statusText(): string {
     if (this._readyState === XHRAndroid.UNSENT || this._readyState === XHRAndroid.OPENED || this._errorFlag) {
       return '';
     }
     return statuses[this._status];
   }
 
-  public get timeout(): number {
+  get timeout(): number {
     return this._timeout;
   }
 
-  public set timeout(value: number) {
+  set timeout(value: number) {
     if (this._readyState !== XHRAndroid.OPENED || this._sendFlag) {
       throw new Error("Failed to set 'timeout' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
     this._timeout = value;
   }
 
-  public get responseURL(): string {
+  get responseURL(): string {
     return this._responseURL;
   }
 
-  public get response(): object | string | null {
+  get response(): object | string | null {
     if (this._responseType === XMLHttpRequestResponseType.empty || this._responseType === XMLHttpRequestResponseType.text) {
       if (this._readyState !== XHRAndroid.LOADING && this._readyState !== XHRAndroid.DONE) {
         return '';
@@ -97,7 +97,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     }
   }
 
-  public get responseText(): string {
+  get responseText(): string {
     if (this._responseType !== '' && this._responseType !== 'text') {
       throw new Error(
         "Failed to read the 'responseText' property from 'XMLHttpRequest': " + "The value is only accessible if the object's 'responseType' is '' or 'text' " + `(was '${this._responseType}').`
@@ -109,11 +109,11 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     return this._response ? this._response.toString() : '';
   }
 
-  public get responseType(): ResponseTypes {
+  get responseType(): ResponseTypes {
     return this._responseType;
   }
 
-  public set responseType(value: ResponseTypes) {
+  set responseType(value: ResponseTypes) {
     if (value === XMLHttpRequestResponseType.blob) {
       throw new Error(`Response type of '${value}' not supported.`);
     } else if (value === XMLHttpRequestResponseType.arraybuffer) {
@@ -125,11 +125,11 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     }
   }
 
-  public get upload(): XMLHttpRequestEventTarget {
+  get upload(): XMLHttpRequestEventTarget {
     return this;
   }
 
-  public open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
+  open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string) {
     if (typeof async === 'boolean' && !async) {
       throw new Error('Every request must be asynchronous');
     }
@@ -145,7 +145,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     this._setReadyState(XHRAndroid.OPENED);
   }
 
-  public send(body?: string | FormData) {
+  send(body?: string | FormData) {
     this._reset();
 
     if (this._readyState !== XHRAndroid.OPENED || this._sendFlag) {
@@ -168,14 +168,14 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     }
   }
 
-  public setRequestHeader(name: string, value: string) {
+  setRequestHeader(name: string, value: string) {
     if (this._readyState !== XHRAndroid.OPENED || this._sendFlag) {
       throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
     }
     this._requestHeaders!![name] = value;
   }
 
-  public abort() {
+  abort() {
     this._nativeObject.abort();
     if ((this._readyState === XHRAndroid.OPENED && this._sendFlag) || this._readyState === XHRAndroid.HEADERS_RECEIVED || this._readyState === XHRAndroid.LOADING) {
       this._aborted = true;
@@ -189,7 +189,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     this._reset();
   }
 
-  public getAllResponseHeaders(): string {
+  getAllResponseHeaders(): string {
     if (this._readyState < XHRAndroid.HEADERS_RECEIVED || this._errorFlag) {
       return '';
     }
@@ -197,7 +197,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     return result.length >= 2 ? result.substr(0, result.length - 2) : result;
   }
 
-  public getResponseHeader(header: string): string | null {
+  getResponseHeader(header: string): string | null {
     if (this._readyState > XHRAndroid.OPENED || this._errorFlag) {
       header = header.toLowerCase();
       return this.nativeObject.getResponse().headers().get(header);
@@ -205,19 +205,19 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     return null;
   }
 
-  public addEventListener(eventName: XHREventsEvents, handler: () => void) {
+  addEventListener(eventName: XHREventsEvents, handler: () => void) {
     const handlers = this._listeners.get(eventName) || [];
     handlers.push(handler);
     this._listeners.set(eventName, handlers);
   }
 
-  public removeEventListener(eventName: XHREventsEvents, toDetach: () => void) {
+  removeEventListener(eventName: XHREventsEvents, toDetach: () => void) {
     let handlers = this._listeners.get(eventName) || [];
     handlers = handlers.filter((handler) => handler !== toDetach);
     this._listeners.set(eventName, handlers);
   }
 
-  public dispatchEvent(event: XHREventsEvents): boolean {
+  dispatchEvent(event: XHREventsEvents): boolean {
     this._emitEvent(event);
     return true;
   }
