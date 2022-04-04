@@ -1,8 +1,8 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
-import { ResponseTypes } from './common';
-import { FormData } from './common';
+import { ResponseTypes } from './xhr';
+import { FormData } from './xhr';
 import { XHREventsEvents } from './xhr-events';
 
 export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';

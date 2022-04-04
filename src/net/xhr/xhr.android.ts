@@ -2,8 +2,8 @@ import { HTTPRequestMethods, IXHR, XMLHttpRequestEventTarget } from '.';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './common';
-import { FormData } from './common';
+import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './xhr';
+import { FormData } from './xhr';
 import { XHREventsEvents } from './xhr-events';
 
 const NativeXMLHttpRequest = requireClass('io.smartface.android.sfcore.net.XMLHttpRequest');
