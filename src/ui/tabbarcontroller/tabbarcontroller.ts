@@ -5,7 +5,7 @@ import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
-import { IController } from '../navigationcontroller';
+import { IController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IView } from '../view/view';
 import StatusBar from '../../application/statusbar';

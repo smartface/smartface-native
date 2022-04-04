@@ -1,4 +1,4 @@
-import NavigationController, { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
+import { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from './navigationcontroller';
 import Application from '../../application';
 import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import ViewController, { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';

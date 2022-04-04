@@ -1,4 +1,4 @@
-import { IBottomTabBar } from '.';
+import { IBottomTabBar } from './bottomtabbar';
 import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import System from '../../device/system';
@@ -8,37 +8,37 @@ import ImageIOS from '../image/image.ios';
 import TabBarItem from '../tabbaritem';
 
 export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
-  protected createNativeObject() {
-    return null;
-  }
-  private appearance;
+  private appearance: any;
   private _items: TabBarItem[];
-  private _borderVisibility: boolean = true;
-  private _itemColor = {
-    normal: Color.GRAY,
-    selected: Color.create('#00a1f1')
-  }; // Do not remove. COR-1931 describes what happening.
+  private _borderVisibility: boolean;
+  private _itemColor: IBottomTabBar['itemColor']; // Do not remove. COR-1931 describes what happening.
   private _selectionIndicatorImage: any;
   constructor(params?: Partial<IBottomTabBar> & Partial<NativeComponent>) {
     super(params);
-    this.nativeObject = undefined;
-    this.appearance = undefined;
-    if (params?.nativeObject) {
-      this.nativeObject = params.nativeObject;
-
-      // Xcode 13.1 background bug fixes [NTVE-398]
-      if (parseInt(System.OSVersion) >= 15) {
-        this.appearance = new __SF_UITabBarAppearance();
-
-        this.appearance.configureWithOpaqueBackground();
-
-        this.nativeObject.standardAppearance = this.appearance;
-        this.nativeObject.scrollEdgeAppearance = this.nativeObject.standardAppearance;
-      }
-    }
-
-    this.nativeObject.translucent = false;
     this.addIOSProps(this.getIOSParams());
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.nativeObject.translucent = false;
+    this.nativeObject.delegate = this;
+    // Xcode 13.1 background bug fixes [NTVE-398]
+    if (parseInt(System.OSVersion) >= 15) {
+      this.appearance = new __SF_UITabBarAppearance();
+
+      this.appearance.configureWithOpaqueBackground();
+
+      this.nativeObject.standardAppearance = this.appearance;
+      this.nativeObject.scrollEdgeAppearance = this.nativeObject.standardAppearance;
+    }
+    this._items = [];
+    this._borderVisibility = true;
+    this._itemColor = {
+      normal: Color.GRAY,
+      selected: Color.create('#00a1f1')
+    };
+    super.init(params);
+  }
+  protected createNativeObject() {
+    return null;
   }
   get height() {
     return this.nativeObject.frame.height;
@@ -60,16 +60,18 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomT
     };
   }
   set items(value: TabBarItem[]) {
-    if (typeof value === 'object') {
+    console.info('set items: ', value);
+    if (Array.isArray(value)) {
       this._items = value;
-
-      for (const i in this._items) {
-        //TODO: update once tabbaritem merged
-        if (typeof this._items[i].nativeObject === 'undefined') {
-          this._items[i].nativeObject = this.nativeObject.items[i];
-        }
-        this._items[i].invalidate();
-      }
+      this._items.forEach((item, index) => {
+        console.info('set items: ', {
+          item,
+          nativeObject: typeof item.nativeObject,
+          nativeItems: typeof this.nativeObject.items[index]
+        });
+        item.nativeObject = this.nativeObject.items[index];
+        item.invalidate();
+      });
     }
   }
   get itemColor() {

@@ -4,7 +4,7 @@ import copyObjectPropertiesWithDescriptors from '../../util/copyObjectProperties
 import Invocation from '../../util/iOS/invocation';
 import FlexLayout from '../flexlayout';
 import HeaderBarItem from '../headerbaritem';
-import { IController } from '../navigationcontroller';
+import { IController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { PageEvents } from './page-events';
 

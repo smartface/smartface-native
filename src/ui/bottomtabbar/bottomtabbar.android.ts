@@ -1,7 +1,7 @@
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
-import BottomTabBar, { IBottomTabBar } from '.';
+import { IBottomTabBar } from './bottomtabbar';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 
@@ -21,7 +21,7 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   }; // Do not remove. COR-1931 describes what happening.
   private _backgroundColor = Color.WHITE;
   private _items: TabBarItem[] = [];
-  constructor(params?: Partial<BottomTabBar>) {
+  constructor(params?: Partial<BottomTabBarAndroid>) {
     super(params);
     this.addAndroidProps(this.getAndroidParams());
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.

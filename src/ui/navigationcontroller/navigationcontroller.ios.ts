@@ -1,9 +1,10 @@
-import { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from '.';
+import { AbstractNavigationController, Controller, IController, INavigationController, OperationType } from './navigationcontroller';
 import NativeComponent from '../../core/native-component';
 import BottomTabbarController from '../bottomtabbarcontroller';
 import TabBarController from '../tabbarcontroller';
 import { HeaderBar } from './headerbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 export default class NavigationControllerIOS extends AbstractNavigationController implements INavigationController, IController {
   private _android = {};
   private _ios = {};
@@ -64,7 +65,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     return this._headerBar;
   }
   set headerBar(value: HeaderBar) {
-    Object.assign(this._headerBar, value);
+    copyObjectPropertiesWithDescriptors(this._headerBar, value);
   }
   push(params: { controller: Controller; animated?: boolean }): void {
     this.view.push(params.controller, params.animated ? true : false);

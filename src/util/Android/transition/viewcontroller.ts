@@ -1,7 +1,8 @@
 import Page from '../../../ui/page';
-import NavigationController, { IController, INavigationController } from '../../../ui/navigationcontroller';
+import { IController, INavigationController } from '../../../ui/navigationcontroller/navigationcontroller';
 import FragmentTransition from './fragmenttransition';
 import BottomTabBarController from '../../../ui/bottomtabbarcontroller';
+import NavigationControllerAndroid from '../../../ui/navigationcontroller/navigationcontroller.android';
 
 type PageWithController = Page | INavigationController;
 
@@ -11,6 +12,7 @@ export type ControllerPresentParams = {
   animated?: boolean;
   isComingFromPresent?: boolean;
   onComplete?: () => void;
+  onCompleteCallback?: () => void;
   animationType?: FragmentTransition.AnimationType;
 };
 namespace ViewController {
@@ -51,7 +53,7 @@ namespace ViewController {
     }
   }
   export function setController(params: ControllerPresentParams) {
-    if (params.controller instanceof NavigationController) {
+    if (params.controller instanceof NavigationControllerAndroid) {
       const childControllerStack = params.controller.childControllers;
       const childControllerStackLenght = childControllerStack.length;
 

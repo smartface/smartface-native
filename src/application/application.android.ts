@@ -9,7 +9,7 @@ import type SliderDrawer from '../ui/sliderdrawer';
 import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
-import { IBottomTabBar } from '../ui/bottomtabbar';
+import { IBottomTabBar } from '../ui/bottomtabbar//bottomtabbar';
 import { ApplicationAndroidPermissions, ApplicationBase, KeyboardMode } from './application';
 import SystemServices from '../util/Android/systemservices';
 import * as RequestCodes from '../util/Android/requestcodes';

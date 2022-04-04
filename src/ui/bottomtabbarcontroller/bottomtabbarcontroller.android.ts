@@ -1,10 +1,10 @@
-import { IBottomTabBarController } from '.';
+import { IBottomTabBarController } from './bottomtabbarcontroller';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Application from '../../application';
 import BottomTabBar from '../bottomtabbar';
 import ViewController from '../../util/Android/transition/viewcontroller';
-import NavigationController, { IController } from '../navigationcontroller';
+import { IController } from '../navigationcontroller/navigationcontroller';
 import Page from '../page';
 import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import { HeaderBar } from '../navigationcontroller/headerbar';
@@ -12,6 +12,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import BottomTabBarAndroid from '../bottomtabbar/bottomtabbar.android';
 import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import NavigationControllerAndroid from '../navigationcontroller/navigationcontroller.android';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
@@ -167,7 +168,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
         page: childController,
         animated: false
       });
-    } else if (childController instanceof NavigationController) {
+    } else if (childController instanceof NavigationControllerAndroid) {
       childController.isActive = true;
       // first press
       if (childController.childControllers.length < 1) {

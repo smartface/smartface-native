@@ -2,7 +2,7 @@ import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { IBadge } from '../badge';
-import { IBottomTabBarController } from '../bottomtabbarcontroller';
+import { IBottomTabBarController } from '../bottomtabbarcontroller/bottomtabbarcontroller';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import FontIOS from '../font/font.ios';
 import ImageIOS from '../image/image.ios';
@@ -21,8 +21,8 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
-  protected createNativeObject() {
-    return SF.requireClass('UITabBarItem').new();
+  protected createNativeObject(params: Partial<ITabbarItem>) {
+    return params?.nativeObject || SF.requireClass('UITabBarItem');
   }
   protected init(params: Partial<ITabbarItem>): void {
     this._title = '';
@@ -94,7 +94,6 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     return this._title;
   }
   set title(value: string) {
-    console.info(value);
     this._title = value;
     this.nativeObject.title = value;
   }

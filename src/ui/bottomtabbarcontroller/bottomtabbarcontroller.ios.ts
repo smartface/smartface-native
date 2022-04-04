@@ -1,27 +1,26 @@
-import BottomTabbarController, { IBottomTabBarController } from '.';
+import { IBottomTabBarController } from './bottomtabbarcontroller';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBar from '../bottomtabbar';
-import NavigationController, { IController, INavigationController } from '../navigationcontroller';
+import { IController, INavigationController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IPage } from '../page/page';
 import PageIOS from '../page/page.ios';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import NavigationControllerIOS from '../navigationcontroller/navigationcontroller.ios';
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
-  protected createNativeObject() {
-    return null;
-  }
   static Events = BottomTabbarControllerEvents;
-  private view;
+  private view: any;
   private model: BottomTabBarModel;
-  private _tabBar;
-  private _shouldSelectByIndex;
-  private _didSelectByIndex;
-  private _shouldSelectViewController;
-  private _didSelectViewController;
-  private viewModel;
-  private nativeObjectDelegate;
+  private _tabBar: BottomTabBar;
+  private _shouldSelectByIndex: IBottomTabBarController['shouldSelectByIndex'];
+  private _didSelectByIndex: IBottomTabBarController['didSelectByIndex'] | undefined;
+  private _shouldSelectViewController: IBottomTabBarController['shouldSelectViewController'];
+  private _didSelectViewController: IBottomTabBarController['didSelectViewController'];
+  private viewModel: any;
+  private nativeObjectDelegate: any;
   private currentIndex: number;
   parentController: IController;
   pageID: number;
@@ -32,20 +31,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
     super(params as any); //TODO: Fix as any
-
-    this.view = new BottomTabBarView({
-      viewModel: this
-    });
-
-    // NativeObjectDirectAccess
-    this.nativeObject = this.view.nativeObject;
-
-    // Model
-    this.model = new BottomTabBarModel();
-    this._tabBar = new BottomTabBar({
-      nativeObject: this.view.nativeObject.tabBar
-    });
-
     // From View's Delegate
     this.shouldSelectByIndex = undefined;
     this.shouldSelectViewController = (index) => {
@@ -68,15 +53,14 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
         this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
       }
     };
+  }
 
-    this.viewModel = undefined;
-
+  protected createNativeObject(params) {
     if (params?.viewModel) {
       this.viewModel = params.viewModel;
     }
-
-    this.nativeObject = __SF_UITabBarController.new();
-    this.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
+    const nativeObject = SF.requireClass('UITabBarController').new();
+    this.nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
       tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
         const index = this.nativeObject.viewControllers.indexOf(viewController);
         return this.viewModel.shouldSelectViewController(index);
@@ -86,12 +70,23 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
         this.viewModel.didSelectViewController(index);
       }
     }).new();
-    this.nativeObject.delegate = this.nativeObjectDelegate;
+    nativeObject.delegate = this.nativeObjectDelegate;
 
-    this.childControllers = [];
-    this.currentIndex = 0;
+    return nativeObject;
   }
-  // TODO: not implemented yet
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.currentIndex = 0;
+    this.view = new BottomTabBarView({
+      viewModel: this
+    });
+
+    // Model
+    this.model = new BottomTabBarModel();
+    this._tabBar = new BottomTabBar({
+      nativeObject: this.view.nativeObject.tabBar
+    });
+    super.init(params);
+  }
   getCurrentController(): IController | null {
     if (this.childControllers.length > 0) {
       return this.childControllers[this.childControllers.length - 1];
@@ -130,11 +125,10 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     if (typeof childControllers === 'object') {
       this.model.childControllers = childControllers;
 
-      const nativeChildPageArray: any[] = [];
-      for (const i in this.model.childControllers) {
-        this.model.childControllers[i].parentController = this;
-        nativeChildPageArray.push(this.model.childControllers[i].nativeObject);
-      }
+      const nativeChildPageArray = this.model.childControllers.map((controller) => {
+        controller.parentController = this;
+        return controller.nativeObject;
+      });
       this.view.setNativeChildViewControllers(nativeChildPageArray);
     }
   }
@@ -143,7 +137,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   }
   set tabBar(value) {
     if (typeof value === 'object') {
-      Object.assign(this._tabBar, value);
+      copyObjectPropertiesWithDescriptors(this._tabBar, value);
     }
   }
   get selectedIndex() {
@@ -179,14 +173,14 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
       }
     }
   }
-  getVisiblePage(currentController: BottomTabbarController | NavigationController | PageIOS): NavigationController | PageIOS | BottomTabbarController {
-    let retval: NavigationController | PageIOS | BottomTabbarController;
-    if (currentController instanceof BottomTabbarController) {
+  getVisiblePage(currentController: BottomTabbarControllerIOS | NavigationControllerIOS | PageIOS): NavigationControllerIOS | PageIOS | BottomTabbarControllerIOS {
+    let retval: NavigationControllerIOS | PageIOS | BottomTabbarControllerIOS;
+    if (currentController instanceof BottomTabbarControllerIOS) {
       const controller = currentController.childControllers[currentController.selectedIndex];
-      retval = this.getVisiblePage(controller as NavigationController | PageIOS);
-    } else if (currentController instanceof NavigationController) {
+      retval = this.getVisiblePage(controller as NavigationControllerIOS | PageIOS);
+    } else if (currentController instanceof NavigationControllerIOS) {
       const controller = currentController.childControllers[currentController.childControllers.length - 1];
-      retval = this.getVisiblePage(controller as NavigationController | PageIOS);
+      retval = this.getVisiblePage(controller as NavigationControllerIOS | PageIOS);
     } else {
       retval = currentController;
     }
@@ -202,43 +196,48 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 }
 
 class BottomTabBarModel {
-  constructor(public childControllers: (INavigationController | IPage)[] = [], public currentIndex: number = 0) {}
+  childControllers: (INavigationController | IPage)[] = [];
+  currentIndex = 0;
+  constructor(childControllers: (INavigationController | IPage)[] = [], currentIndex = 0) {
+    this.childControllers = childControllers;
+    this.currentIndex = currentIndex;
+  }
 }
 
 class BottomTabBarView extends NativeComponent {
-  protected createNativeObject() {
-    return __SF_UITabBarController.new();
-  }
   viewModel: any;
   nativeObjectDelegate: any;
   constructor(params?: Partial<{ viewModel: any }>) {
-    super();
-    const self = this;
-    self.viewModel = undefined;
-
+    super(params);
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
     if (params?.viewModel) {
-      self.viewModel = params.viewModel;
+      this.viewModel = params.viewModel;
     }
 
-    self.nativeObjectDelegate = defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
-      tabBarControllerShouldSelectViewController: function (tabBarController, viewController) {
-        const index = self.nativeObject.viewControllers.indexOf(viewController);
-        return self.viewModel.shouldSelectViewController(index);
+    this.nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
+      tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
+        const index = this.nativeObject.viewControllers.indexOf(viewController);
+        return this.viewModel.shouldSelectViewController(index);
       },
-      tabBarControllerDidSelectViewController: function (tabBarController, viewController) {
-        const index = self.nativeObject.viewControllers.indexOf(viewController);
-        self.viewModel.didSelectViewController(index);
+      tabBarControllerDidSelectViewController: (tabBarController, viewController) => {
+        const index = this.nativeObject.viewControllers.indexOf(viewController);
+        this.viewModel.didSelectViewController(index);
       }
     }).new();
-    self.nativeObject.delegate = self.nativeObjectDelegate;
+    this.nativeObject.delegate = this.nativeObjectDelegate;
   }
-  setIndex(index) {
+
+  protected createNativeObject() {
+    return SF.requireClass('UITabBarController').new();
+  }
+  setIndex(index: number) {
     this.nativeObject.selectedIndex = index;
   }
   present(controllerToPresent, animationNeed, completionBlock) {
     this.nativeObject.presentViewController(controllerToPresent, completionBlock, animationNeed);
   }
-  dismiss(onComplete) {
+  dismiss(onComplete: () => void) {
     this.nativeObject.dismissViewController(onComplete);
   }
   setNativeChildViewControllers(nativeChildPageArray) {

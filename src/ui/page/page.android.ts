@@ -20,7 +20,7 @@ import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import StatusBar from '../../application/statusbar';
 import { HeaderBar } from '../navigationcontroller/headerbar';
-import { IController } from '../navigationcontroller';
+import { IController } from '../navigationcontroller/navigationcontroller';
 import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import LayoutParams from '../../util/Android/layoutparams';

@@ -8,7 +8,7 @@ import StatusBar from './statusbar';
 import { ApplicationBase } from './application';
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
-import { IBottomTabBar } from '../ui/bottomtabbar';
+import { IBottomTabBar } from '../ui/bottomtabbar/bottomtabbar';
 import NativeEventEmitterComponent from '../core/native-event-emitter-component';
 import SliderDrawer from '../ui/sliderdrawer';
 

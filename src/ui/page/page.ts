@@ -4,7 +4,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 import MenuItem from '../menuitem';
-import NavigationController, { IController } from '../navigationcontroller';
+import { IController, AbstractNavigationController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
 import { IView } from '../view/view';
@@ -66,7 +66,7 @@ export interface PageAndroidParams {
 }
 
 interface ControllerParams {
-  controller: IPage | NavigationController;
+  controller: IPage | AbstractNavigationController;
   animated: boolean;
   onComplete: () => void;
 }
