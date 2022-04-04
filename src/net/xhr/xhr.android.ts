@@ -182,7 +182,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
       this._setResponseError('network error');
       this._setReadyState(XHRAndroid.DONE);
     }
-    if(this._readyState === XHRAndroid.DONE) {
+    if (this._readyState === XHRAndroid.DONE) {
       this._readyState = XHRAndroid.UNSENT;
       this._setResponseError('network error');
     }
