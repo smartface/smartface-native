@@ -11,6 +11,7 @@ import { HeaderBar } from '../navigationcontroller/headerbar';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBarAndroid from '../bottomtabbar/bottomtabbar.android';
 import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
@@ -96,12 +97,13 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
     return Application.tabBar;
   }
   set tabBar(params: any) {
-    Object.assign(Application.tabBar, params);
+    copyObjectPropertiesWithDescriptors(Application.tabBar as any, params);
+    // Object.assign(Application.tabBar, params);
   }
   get childControllers() {
     return this._childControllers;
   }
-  set childController(childrenArray: any[]) {
+  set childControllers(childrenArray: any[]) {
     this._childControllers = childrenArray;
     for (const index in this._childControllers) {
       try {
