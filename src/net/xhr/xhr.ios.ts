@@ -35,8 +35,12 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
 
   private _listeners: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
-  protected createNativeObject() {
+  constructor() {
+    super();
     this._readyState = XHRIOS.UNSENT;
+  }
+
+  protected createNativeObject() {
     return new __SF_XMLHttpRequest();
   }
 
