@@ -2,7 +2,7 @@ import { HTTPRequestMethods, IXHR } from ".";
 
 import NativeEventEmitterComponent from "../../core/native-event-emitter-component";
 import { MobileOSProps } from "../../core/native-mobile-component";
-import { HttpErrorResponse, HttpRequestOptions, HttpResponse, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
+import { FormData, FormDataPart, Headers, ResponseTypes, statuses, XMLHttpRequestResponseType } from "./common";
 import { XHREventsEvents } from "./xhr-events";
 
 class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps> implements IXHR {
@@ -40,6 +40,10 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         return new __SF_XMLHttpRequest();
     }
 
+    public get upload() {
+        return this;
+    }
+
     public get readyState(): number {
         return this._readyState;
     }
@@ -72,6 +76,20 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         return this._responseType;
     }
 
+    public set responseType(value: ResponseTypes) {
+        if (value === XMLHttpRequestResponseType.blob) {
+            throw new Error(`Response type of '${value}' not supported.`);
+        }
+        else if (value === XMLHttpRequestResponseType.arraybuffer) {
+            throw new Error(`Response type of '${value}' not supported.`);
+        }
+        else if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
+            this._responseType = value;
+        } else {
+            throw new Error(`Response type of '${value}' not supported.`);
+        }
+    }
+
     public get responseURL(): string | undefined {
         return this._responseURL;
     }
@@ -88,20 +106,18 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         return statuses[this._status];
     }
 
+    public get timeout(): number {
+        if (this._options.timeout) return this._options.timeout
+
+        return 0
+    }
+
     public set timeout(value: number) {
         if (this._readyState !== XHR.OPENED || this._sendFlag) {
             throw new Error("Failed to set 'timeout' on 'XMLHttpRequest': " + "The object's state must be OPENED.");
         }
 
         this._options.timeout = value / 1000
-    }
-
-    public set responseType(value: ResponseTypes) {
-        if (value === XMLHttpRequestResponseType.empty || value in XMLHttpRequestResponseType) {
-            this._responseType = value;
-        } else {
-            throw new Error(`Response type of '${value}' not supported.`);
-        }
     }
 
     public abort() {
@@ -128,18 +144,18 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         }
     }
 
-    getResponseHeaders(): string {
+    getAllResponseHeaders(): string {
         if (this._readyState < XHR.HEADERS_RECEIVED || this._errorFlag) {
-			return '';
-		}
+            return '';
+        }
 
-		let result = '';
+        let result = '';
 
-		for (const i in this._headers) {
-			result += i + ': ' + this._headers[i] + '\r\n';
-		}
+        for (const i in this._headers) {
+            result += i + ': ' + this._headers[i] + '\r\n';
+        }
 
-		return result.substr(0, result.length - 2);
+        return result.substr(0, result.length - 2);
     }
 
     public getResponseHeader(header: string): string | null {
@@ -176,6 +192,27 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         this._setReadyState(XHR.OPENED);
     }
 
+    private getRequestTypeBasedOnData(data?: any) {
+        if (typeof data === 'string') {
+            return 'string'
+        } else if (data instanceof FormData) {
+            return 'formData'
+        }
+    }
+
+    private convertFormDataToJSON(data: FormData) {
+        let params: any = [];
+
+        data._parts.map(([name, value]) => {
+            if (typeof value === 'object' && value) {
+                params.push({ key: name, file: { uri: value.uri, name: value.name, type: value.type } })
+            } else {
+                params.push({ key: name, value: value })
+            }
+        })
+        return params;
+    }
+
     public send(data?: any) {
         this.resetLocalStates();
 
@@ -184,8 +221,11 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         }
 
         //TODO: add FormData, Blob, ArrayBuffer support
-        if (typeof data === 'string') {
+        if (typeof data === 'string' && this._options.method !== 'GET') {
             this._options.content = data;
+        } else if (data instanceof FormData) {
+            this._options.content = JSON.stringify(this.convertFormDataToJSON(data));
+
         }
 
         this._sendFlag = true;
@@ -196,11 +236,14 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
             method: this._options.method,
             headers: this._options.headers && Object.keys(this._options.headers).length > 0 ? this._options.headers : undefined,
             timeout: this._options.timeout ? this._options.timeout / 1000 : undefined,
-            responseType: this.responseType
+            responseType: this.responseType,
+            requestType: this.getRequestTypeBasedOnData(data)
         };
 
-        const taskID = this.nativeObject.createTask(JSON.stringify(params), (response: HttpResponse) => {
+
+        const taskID = this.nativeObject.createTask(JSON.stringify(params), this._options.content, (response: HttpResponse) => {
             this._handleResponse(response);
+            this.nativeObject.removeDataTask(taskID)
         }, (error: HttpErrorResponse) => {
             this._errorFlag = true;
             this._sendFlag = false;
@@ -210,7 +253,9 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
                 this.emitEvent("timeout");
             }
             this._setRequestError("error", error);
+            this.nativeObject.removeDataTask(taskID)
         })
+        console.log('TASKID: ', taskID);
         this._requestID = taskID
     }
 
@@ -254,9 +299,16 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         this._setReadyState(XHR.HEADERS_RECEIVED);
         this._setReadyState(XHR.LOADING);
 
-        //TODO: add FormData, Blob, ArrayBuffer support
+        //TODO: add Blob, ArrayBuffer support
         if (this._responseType === XMLHttpRequestResponseType.text || this._responseType === XMLHttpRequestResponseType.empty) {
             this._response = response.content;
+        } else if (this._responseType === XMLHttpRequestResponseType.json) {
+            if (response.content) {
+                this._response = JSON.parse(response.content);
+            } else {
+                this._response = 'Error while convertion to JSON'
+                throw new Error('Error while convertion to JSON');
+            }
         }
 
         this.emitEvent('progress');
@@ -308,5 +360,26 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
     }
 };
 
+
+export interface HttpRequestOptions {
+    url: string;
+    method: string;
+    headers?: Headers;
+    content?: string | FormDataPart[] | ArrayBuffer;
+    timeout?: number;
+}
+
+export interface HttpResponse {
+    statusCode: number;
+    headers: Headers;
+    //TODO: Add JSON, Blob, ArrayBuffer support
+    content?: string;
+    responseURL?: string
+}
+
+export interface HttpErrorResponse {
+    errorCode: number;
+    errorMessage: string
+}
 
 export default XHR;

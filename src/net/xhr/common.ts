@@ -1,13 +1,4 @@
-import { FormData } from "./formdata";
-
 export type Headers = { [key: string]: string | string[] };
-export interface HttpRequestOptions {
-    url: string;
-    method: string;
-    headers?: Headers;
-    content?: string | FormData | ArrayBuffer;
-    timeout?: number;
-}
 
 export const XMLHttpRequestResponseType = {
     empty: '',
