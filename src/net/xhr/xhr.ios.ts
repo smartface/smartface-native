@@ -256,7 +256,6 @@ class XHR<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps 
         this.nativeObject.removeDataTask(taskID);
       }
     );
-    console.log('TASKID: ', taskID);
     this._requestID = taskID;
   }
 
