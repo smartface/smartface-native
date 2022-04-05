@@ -22,7 +22,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject(params: Partial<ITabbarItem>) {
-    return params?.nativeObject || SF.requireClass('UITabBarItem');
+    return SF.requireClass('UITabBarItem').new();
   }
   protected init(params: Partial<ITabbarItem>): void {
     this._title = '';
