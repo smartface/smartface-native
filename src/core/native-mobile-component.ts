@@ -13,8 +13,8 @@ export type WithMobileOSProps<
 > = MobileOSProps<TIOS, TAND> & TProps;
 
 export interface INativeMobileComponent<TNative = any, TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>> extends INativeComponent<TNative> {
-  get ios(): TProps['ios'];
-  get android(): TProps['android'];
+  readonly ios: TProps['ios'];
+  readonly android: TProps['android'];
 }
 
 export abstract class NativeMobileComponent<TNative = any, TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>> extends NativeComponent<TNative> {

@@ -24,59 +24,60 @@ export interface IToast<TEvent extends string = ToastEvents> extends INativeComp
    * Gets/sets the message of toast.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set message(value: string);
-  get message(): string;
+  message: string;
   /**
    * Gets/sets the background of toast message view.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set backgroundColor(value: Color);
-  get backgroundColor(): Color;
+  backgroundColor: Color;
   /**
    * Gets/sets the actionTextColor of toast action text.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set actionTextColor(value: Color);
-  get actionTextColor(): Color;
+  actionTextColor: Color;
   /**
    * Gets/sets the messageTextColor of toast message text.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set messageTextColor(value: Color);
-  get messageTextColor(): Color;
+  messageTextColor: Color;
   /**
    * Gets/sets the bottom offset of toast message view from bottom.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set bottomOffset(value: number);
-  get bottomOffset(): number;
+  bottomOffset: number;
 
   /**
    * Gets/sets how long it will stay on the screen. Value can bet set between 1 - 10 as integer
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  set duration(value: number);
-  get duration(): number;
+  duration: number;
 
   /**
    * Gets status of the toast. Returns true if the toast is currently displayed on the screen.
    * @android
    * @ios
+   * @property
    * @since 4.4.1
    */
-  get isShowing(): boolean;
+  isShowing: boolean;
 
   /**
    * Add an action to toast.
