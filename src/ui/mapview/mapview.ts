@@ -16,6 +16,7 @@ import Cluster from './cluster';
  *
  */
 export enum MapViewType {
+  NONE,
   /**
    * @property {Number} NORMAL
    * @android
