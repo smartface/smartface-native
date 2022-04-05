@@ -16,6 +16,15 @@ import Cluster from './cluster';
  *
  */
 export enum MapViewType {
+  /**
+   * This will cause map to not get rendered.
+   * @property {Number} NONE
+   * @android
+   * @ios
+   * @static
+   * @readonly
+   * @since 0.1
+   */
   NONE,
   /**
    * @property {Number} NORMAL
