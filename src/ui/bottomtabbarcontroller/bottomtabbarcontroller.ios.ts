@@ -32,19 +32,15 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
     super(params as any); //TODO: Fix as any
     // From View's Delegate
-    this.shouldSelectByIndex = undefined;
     this.shouldSelectViewController = (index) => {
-      let retval = true;
-      if (typeof this.shouldSelectByIndex === 'function') {
-        retval = this.shouldSelectByIndex?.({
+      this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
+      return (
+        this.shouldSelectByIndex?.({
           index: index
-        });
-        this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
-      }
-      return retval;
+        }) ?? true
+      );
     };
 
-    this.didSelectByIndex = undefined;
     this.didSelectViewController = (index) => {
       if (typeof this.didSelectByIndex === 'function') {
         this.didSelectByIndex?.({
@@ -85,6 +81,9 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     this._tabBar = new BottomTabBar({
       nativeObject: this.view.nativeObject.tabBar
     });
+
+    this.didSelectByIndex = undefined;
+    this.shouldSelectByIndex = undefined;
     super.init(params);
   }
   getCurrentController(): IController | null {
@@ -136,9 +135,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     return this._tabBar;
   }
   set tabBar(value) {
-    if (typeof value === 'object') {
-      copyObjectPropertiesWithDescriptors(this._tabBar, value);
-    }
+    copyObjectPropertiesWithDescriptors(this._tabBar, value);
   }
   get selectedIndex() {
     return this.model.currentIndex;
