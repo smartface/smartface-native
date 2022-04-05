@@ -30,30 +30,40 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
 {
   private _currentIndex: number = 0;
   private _page: IPage;
-  private currentState = SwipeViewState.IDLE;
+  private currentState: SwipeViewState;
   private pageController: __SF_UIPageViewController;
-  private transactionIndex = 0;
-  private pendingViewControllerIndex = 0;
-  private previousViewControllerIndex = 0;
+  private transactionIndex: number;
+  private pendingViewControllerIndex: number;
+  private previousViewControllerIndex: number;
   private pageControllerDatasource: __SF_UIPageViewControllerDatasource;
-  private _pageArray: any[] = []; //TODO: PageIOS and PageBase isn't compatible
-  private _instanceArray: IPage[] = [];
-  private _pageNativeObjectArray: any[] = [];
-  private _pagingEnabled = true;
-  private _isPageTransaction = false;
+  private _pageArray: any[]; //TODO: PageIOS and PageBase isn't compatible
+  private _instanceArray: IPage[];
+  private _pageNativeObjectArray: any[];
+  private _pagingEnabled: boolean;
+  private _isPageTransaction: boolean;
   private pageControllerDelegate: __SF_UIPageViewControllerDelegate;
   overScrollMode: OverScrollMode;
   createNativeObject() {
-    return null;
+    return super.createNativeObject();
   }
   init(params?: TProps) {
-    super.init(params);
+    this.transactionIndex = 0;
+    this._currentIndex = 0;
+    this.currentState = SwipeViewState.IDLE;
+    this.pendingViewControllerIndex = 0;
+    this.previousViewControllerIndex = 0;
+    this._pageArray = [];
+    this._instanceArray = [];
+    this._pageNativeObjectArray = [];
+    this._pagingEnabled = true;
+    this._isPageTransaction = false;
     this.setPageController();
 
     this.flexGrow = 1;
     this.nativeObject.addSubview(this.pageController.view);
     this.setPageControllerDataSource();
     this.setViewControllerDelegate();
+    super.init(params);
   }
   constructor(params?: TProps) {
     super(params);
@@ -139,9 +149,8 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
     this.pageController.delegate = this.pageControllerDelegate;
   }
   private setPageController() {
-    if (!this.nativeObject) {
-      this.pageController = __SF_UIPageViewController.createWithTransitionStyleNavigationOrientation(UIPageViewControllerTransitionStyle.Scroll, UIPageViewControllerNavigationOrientation.Horizontal);
-    }
+    this.pageController = __SF_UIPageViewController.createWithTransitionStyleNavigationOrientation(UIPageViewControllerTransitionStyle.Scroll, UIPageViewControllerNavigationOrientation.Horizontal);
+
     this.pageController.view.onTouch = (e) => {
       const params = {
         x: e?.point?.x || 0,
