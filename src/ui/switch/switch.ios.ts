@@ -1,4 +1,4 @@
-import { ISwitch } from '.';
+import { ISwitch } from './switch';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';

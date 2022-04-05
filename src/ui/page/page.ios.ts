@@ -1,5 +1,6 @@
 import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from './page';
-import Screen, { OrientationType } from '../../device/screen';
+import Screen from '../../device/screen';
+import { OrientationType } from '../../device/screen/screen';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import Invocation from '../../util/iOS/invocation';
 import FlexLayout from '../flexlayout';

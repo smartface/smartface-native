@@ -1,4 +1,4 @@
-import { AbstractWebBrowserOptions } from '.';
+import { AbstractWebBrowserOptions } from './webbrowser';
 import Color from '../color';
 
 export class WebBrowserOptions implements AbstractWebBrowserOptions {

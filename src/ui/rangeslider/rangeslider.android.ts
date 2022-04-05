@@ -3,7 +3,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter.js';
 import { RangeSliderEvents } from './rangeslider-events';
 import ViewAndroid from '../view/view.android';
-import { IRangeSlider } from '.';
+import { IRangeSlider } from './rangeslider';
 import Color from '../color';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');

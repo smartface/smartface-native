@@ -1,4 +1,4 @@
-import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
+import { ILiveMediaPlayer, ScaleType } from './livemediaplayer';
 import AndroidConfig from '../../util/Android/androidconfig';
 import ViewAndroid from '../view/view.android';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
@@ -25,7 +25,7 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
     this.nodePlayer = new NodePlayer(AndroidConfig.activity);
     return new NodePlayerView(AndroidConfig.activity);
   }
-  constructor(params?: Partial<LiveMediaPlayer>) {
+  constructor(params?: Partial<ILiveMediaPlayer>) {
     super(params);
     const self = this;
     this.nodePlayer.setPlayerView(this._nativeObject);

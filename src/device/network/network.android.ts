@@ -1,4 +1,4 @@
-import { ConnectionType, NetworkBase, INetworkNotifier } from '.';
+import { ConnectionType, NetworkBase, INetworkNotifier } from './network';
 import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';

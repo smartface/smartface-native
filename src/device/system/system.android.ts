@@ -1,4 +1,4 @@
-import { AbstractSystem, OSType } from '.';
+import { AbstractSystem, OSType } from './system';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';

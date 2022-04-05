@@ -1,4 +1,4 @@
-import LiveMediaPlayer, { ILiveMediaPlayer, ScaleType } from '.';
+import { ILiveMediaPlayer, ScaleType } from './livemediaplayer';
 import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
@@ -18,7 +18,7 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
     this.nodePlayer = new __SF_NodePlayer();
     return previewView.nativeObject;
   }
-  constructor(params?: Partial<LiveMediaPlayer>) {
+  constructor(params?: Partial<ILiveMediaPlayer>) {
     super(params);
     const self = this;
     this.nodePlayer.playerView = this.nativeObject;

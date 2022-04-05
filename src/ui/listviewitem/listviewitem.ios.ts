@@ -1,4 +1,4 @@
-import { IListViewItem, ListViewItemIOSProperties } from '.';
+import { IListViewItem, ListViewItemIOSProperties } from './listviewitem';
 import { FlexLayoutEvents } from '../flexlayout/flexlayout-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 

@@ -274,3 +274,13 @@ export abstract class AbstractColor extends NativeComponent {
 
   static GradientDirection: typeof GradientDirection;
 }
+
+/**
+ * Only to use type of export
+ */
+export declare class ColorImpl extends AbstractColor {
+  red(): number;
+  green(): number;
+  blue(): number;
+  alpha(): number;
+}

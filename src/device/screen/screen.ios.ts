@@ -1,4 +1,4 @@
-import { OrientationType, IScreen } from '.';
+import { OrientationType, IScreen } from './screen';
 import ImageIOS from '../../ui/image/image.ios';
 
 const orientationArray = [

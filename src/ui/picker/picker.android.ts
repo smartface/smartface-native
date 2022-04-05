@@ -1,4 +1,4 @@
-import { IPicker } from '.';
+import { IPicker } from './picker';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
 import TypeValue from '../../util/Android/typevalue';

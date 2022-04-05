@@ -1,5 +1,5 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { IAccelerometer } from '.';
+import { IAccelerometer } from './accelerometer';
 import { AccelerometerEvents } from './accelerometer-events';
 
 class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, any, IAccelerometer> implements IAccelerometer {

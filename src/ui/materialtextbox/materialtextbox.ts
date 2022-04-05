@@ -1,11 +1,11 @@
-import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox';
+import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox/textbox';
 import Font from '../font';
 import Color from '../color';
 import View from '../view';
 import { MaterialTextBoxEvents } from './materialtextbox-events';
-import { ConstructorOf } from '../../core/constructorof';
 import { MobileOSProps } from '../../core/native-mobile-component';
-
+import { ColorImpl } from '../color/color';
+import TextBox from '../textbox';
 export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
   /**
    * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
@@ -309,4 +309,33 @@ export interface IMaterialTextBox<
    * @since 0.1
    */
   font: Font;
+}
+
+/**
+ * @class UI.MaterialTextBox
+ * @since 3.1.2
+ * @extends UI.TextBox
+ * MaterialTextBox is a UI which users can edit the text.
+ *
+ *     @example
+ *     import MaterialTextBox from '@smartface/native/ui/materialtextbox';
+ *     const materialtextbox = new MaterialTextBox({
+ *         height : 50,
+ *         hint : "Hint"
+ *     });
+ *     myPage.layout.addChild(materialtextbox);
+ *
+ */
+export declare class MaterialTextBoxImpl extends TextBox implements IMaterialTextBox {
+  constructor(params?: Partial<IMaterialTextBox>);
+  lineCount: number;
+  multiline: boolean;
+  selectedHintTextColor: ColorImpl | null;
+  rightLayout: IMaterialTextBox['rightLayout'];
+  lineColor: IMaterialTextBox['lineColor'];
+  errorColor: ColorImpl | null;
+  errorMessage: string;
+  characterRestriction: number | undefined;
+  characterRestrictionColor: ColorImpl | null;
+  labelsFont: Font;
 }

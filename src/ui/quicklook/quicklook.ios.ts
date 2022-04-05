@@ -1,7 +1,7 @@
 import File from '../../io/file';
 import Color from '../../ui/color';
 import Application from '../../application';
-import { IQuickLook } from '.';
+import { IQuickLook } from './quicklook';
 import Page from '../page';
 import NativeComponent from '../../core/native-component';
 import StatusBar from '../../application/statusbar';

@@ -1,4 +1,4 @@
-import { IListViewItem, ListViewItemIOSProperties } from '.';
+import { IListViewItem, ListViewItemIOSProperties } from './listviewitem';
 import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
 import UnitConverter from '../../util/Android/unitconverter';
 import { FlexLayoutAndroidProps } from '../flexlayout/flexlayout';

@@ -2,7 +2,7 @@
 import Color from '../color';
 import { SliderEvents } from './slider-events';
 import ViewAndroid from '../view/view.android';
-import { ISlider } from '.';
+import { ISlider } from './slider';
 import AndroidConfig from '../../util/Android/androidconfig';
 import ImageAndroid from '../image/image.android';
 

@@ -1,5 +1,5 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { ICallDetection, State } from '.';
+import { ICallDetection, State } from './calldetection';
 import { CallDetectionEvents } from './calldetection-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 

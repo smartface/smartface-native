@@ -2,7 +2,7 @@ import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import ViewAndroid from '../view/view.android';
-import { ILabel, LabelAndroidProps } from '.';
+import { ILabel, LabelAndroidProps } from './label';
 import { ViewEvents } from '../view/view-events';
 import ViewState, { IViewState } from '../shared/viewState';
 import EllipsizeMode from '../shared/ellipsizemode';

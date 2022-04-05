@@ -2,7 +2,7 @@ import NSLineBreakMode from '../../util/iOS/nslinebreakmode';
 import Color from '../color';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
-import { ILabel } from '.';
+import { ILabel } from './label';
 import TextAlignment from '../shared/textalignment';
 
 const DEFAULT_MINIMUM_FONT_SIZE = 1;

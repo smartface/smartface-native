@@ -1,4 +1,4 @@
-import { IVideoView } from '.';
+import { IVideoView } from './videoview';
 import File from '../../io/file';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Exception from '../../util/exception';

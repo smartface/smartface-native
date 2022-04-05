@@ -1,4 +1,4 @@
-import { ISelectablePicker } from '.';
+import { ISelectablePicker } from './selectablepicker';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Color from '../color';
 import { AbstractFont } from '../font/font';

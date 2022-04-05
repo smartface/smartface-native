@@ -1,4 +1,4 @@
-import { ITextView } from '.';
+import { ITextView } from './textview';
 import { Size } from '../../primitive/size';
 import LabelAndroid from '../label/label.android';
 import TextAlignment from '../shared/textalignment';

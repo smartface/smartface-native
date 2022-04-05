@@ -1,4 +1,4 @@
-import { IToast } from '.';
+import { IToast } from './toast';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';

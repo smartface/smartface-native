@@ -1,6 +1,6 @@
 const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
 
-import { IAccelerometer } from '.';
+import { IAccelerometer } from './accelerometer';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { AccelerometerEvents } from './accelerometer-events';
 class AccelerometerAndroid extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {

@@ -1,6 +1,7 @@
 /*globals requireClass*/
 import Blob from '../../global/blob';
-import Network, { ConnectionType } from '../../device/network';
+import Network from '../../device/network';
+import { ConnectionType } from '../../device/network/network';
 import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Path from '../../io/path';

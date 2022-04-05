@@ -1,4 +1,4 @@
-import { IButton } from '.';
+import { IButton } from './button';
 import Color from '../color';
 import ViewState from '../shared/viewState';
 import LabelIOS from '../label/label.ios';

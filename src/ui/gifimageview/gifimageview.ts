@@ -1,4 +1,4 @@
-import { IImageView } from '../imageview';
+import { IImageView } from '../imageview/imageview';
 import GifImage from '../gifimage';
 import Image from '../image';
 import Color from '../color';

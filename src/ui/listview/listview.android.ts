@@ -1,4 +1,4 @@
-import { IListView, RowAnimation } from '.';
+import { IListView, RowAnimation } from './listview';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
 import AndroidUnitConverter from '../../util/Android/unitconverter';

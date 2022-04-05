@@ -1,4 +1,4 @@
-import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
+import { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from './livemediapublisher';
 import ViewIOS from '../view/view.ios';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
 
@@ -40,7 +40,7 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   createNativeObject() {
     return new ViewIOS().nativeObject;
   }
-  constructor(params?: Partial<LiveMediaPublisher>) {
+  constructor(params?: Partial<ILiveMediaPublisher>) {
     super(params);
     this.nodePublisher = new __SF_NodePublisher();
 

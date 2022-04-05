@@ -1,4 +1,4 @@
-import { ITextBox } from '.';
+import { ITextBox } from './textbox';
 import ActionKeyType from '../shared/android/actionkeytype';
 import Color from '../color';
 import Font from '../font';

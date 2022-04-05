@@ -5,7 +5,7 @@ import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import { WebViewEvents } from './webview-events';
 import WebView from '.';
-import IWebView from '.';
+import { IWebView } from './webview';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 

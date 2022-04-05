@@ -1,11 +1,10 @@
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
-import { IButton } from '.';
+import { IButton } from './button';
 import { ButtonEvents } from './button-events';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LabelAndroid from '../label/label.android';
 import ImageAndroid from '../image/image.android';
-import ViewState from '../view/view';
 import TextAlignment from '../shared/textalignment';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import isViewState from '../../util/isViewState';

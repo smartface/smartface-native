@@ -1,4 +1,4 @@
-import { IScreen, OrientationType } from '.';
+import { IScreen, OrientationType } from './screen';
 import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';

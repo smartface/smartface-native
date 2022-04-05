@@ -1,4 +1,4 @@
-import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, IDatePicker, Style } from '.';
+import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, IDatePicker, Style } from './datepicker';
 import Color from '../color';
 import { DatePickerEvents } from './datepicker-events';
 

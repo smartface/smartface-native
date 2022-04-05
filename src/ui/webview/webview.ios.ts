@@ -1,7 +1,7 @@
 import File from '../../io/file';
 import ViewIOS from '../../ui/view/view.ios';
 import Invocation from '../../util/iOS/invocation';
-import IWebView from '.';
+import { IWebView } from './webview';
 import { WebViewEvents } from './webview-events';
 
 function dataTypesToNSSet(dataTypes) {

@@ -1,4 +1,4 @@
-import { IVideoView } from '.';
+import { IVideoView } from './videoview';
 import File from '../../io/file';
 import Exception from '../../util/exception';
 import TypeUtil from '../../util/type';

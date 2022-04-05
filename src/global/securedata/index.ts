@@ -1,5 +1,5 @@
 import { ConstructorOf } from '../../core/constructorof';
-import ISecureData, { AbstractSecureData } from './securedata';
+import ISecureData from './securedata';
 
 const SecureData: ConstructorOf<ISecureData, { key: string; ios?: { service?: any } }> = require(`./securedata.${Device.deviceOS.toLowerCase()}`).default;
 type SecureData = ISecureData;

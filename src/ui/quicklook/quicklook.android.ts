@@ -1,6 +1,6 @@
 //Generated for handling ios view
 
-import { IQuickLook } from '.';
+import { IQuickLook } from './quicklook';
 import StatusBar from '../../application/statusbar';
 import NativeComponent from '../../core/native-component';
 import Color from '../color';

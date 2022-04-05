@@ -1,4 +1,4 @@
-import { ISlider } from '.';
+import { ISlider } from './slider';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';

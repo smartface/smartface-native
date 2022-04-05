@@ -1,4 +1,4 @@
-import { ISearchView, SearchViewStyle } from '.';
+import { ISearchView, SearchViewStyle } from './searchview';
 import System from '../../device/system';
 import Color from '../color';
 import Font from '../font';

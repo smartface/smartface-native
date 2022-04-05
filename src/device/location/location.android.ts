@@ -1,6 +1,6 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import * as RequestCodes from '../../util/Android/requestcodes';
-import { ILocation } from '.';
+import { ILocation } from './location';
 import { LocationEvents } from './location-events';
 const PROVIDER = {
   AUTO: 'auto',

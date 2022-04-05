@@ -1,4 +1,4 @@
-import { ITextArea, TextareaiOSProps } from '.';
+import { ITextArea, TextareaiOSProps } from './textarea';
 import ActionKeyType from '../shared/android/actionkeytype';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';

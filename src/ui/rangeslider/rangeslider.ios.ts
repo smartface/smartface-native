@@ -1,4 +1,4 @@
-import { IRangeSlider } from '.';
+import { IRangeSlider } from './rangeslider';
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import Image from '../image';

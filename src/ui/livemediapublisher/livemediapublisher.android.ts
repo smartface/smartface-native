@@ -1,4 +1,4 @@
-import LiveMediaPublisher, { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from '.';
+import { AudioProfile, Camera, ILiveMediaPublisher, VideoPreset, VideoProfile } from './livemediapublisher';
 import AndroidConfig from '../../util/Android/androidconfig';
 import ViewAndroid from '../view/view.android';
 import { LiveMediaPublisherEvents } from './livemediapublisher-events';
@@ -26,7 +26,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
     this.nodePublisher = new NodePublisher(AndroidConfig.activity);
     return new NodeCameraView(AndroidConfig.activity);
   }
-  constructor(params?: Partial<LiveMediaPublisher>) {
+  constructor(params?: Partial<ILiveMediaPublisher>) {
     super(params);
     const self = this;
 

@@ -1,4 +1,4 @@
-import { GridViewSnapAlignment, IGridView } from '.';
+import { GridViewSnapAlignment, IGridView } from './gridview';
 
 import Color from '../color';
 import GridViewItem from '../gridviewitem';

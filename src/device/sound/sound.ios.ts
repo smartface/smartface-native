@@ -1,4 +1,4 @@
-import { AbstractSound } from '.';
+import { AbstractSound } from './sound';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import File from '../../io/file';

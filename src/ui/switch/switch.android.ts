@@ -1,5 +1,5 @@
 /*globals requireClass*/
-import { ISwitch } from '.';
+import { ISwitch } from './switch';
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
 import ImageAndroid from '../image/image.android';

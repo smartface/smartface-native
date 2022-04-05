@@ -1,5 +1,5 @@
 import LabelIOS from '../label/label.ios';
-import { ITextView } from '.';
+import { ITextView } from './textview';
 import Invocation from '../../util/iOS/invocation';
 import { Size } from '../../primitive/size';
 import { TextViewEvents } from './textview-events';

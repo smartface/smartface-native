@@ -1,4 +1,4 @@
-import MenuItem, { IMenuItem, Style } from '.';
+import { IMenuItem, Style } from './menuitem';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Exception from '../../util/exception';
 import TypeUtil from '../../util/type';
@@ -21,7 +21,7 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   };
   private _title: string;
   private _titleColor?: Color;
-  constructor(params?: Partial<MenuItem>) {
+  constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addAndroidProps(this.getAndroidProps());
   }

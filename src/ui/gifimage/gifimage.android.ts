@@ -5,7 +5,7 @@ import FileStream from '../../io/filestream';
 import File from '../../io/file';
 import Blob from '../../global/blob';
 import ImageAndroid from '../../ui/image/image.android';
-import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from '.';
+import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from './gifimage';
 import { Size } from '../../primitive/size';
 import IBlob from '../../global/blob/blob';
 

@@ -1,4 +1,4 @@
-import { IPicker, PickerIOSProperties } from '.';
+import { IPicker, PickerIOSProperties } from './picker';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { PickerEvents } from './picker-events';

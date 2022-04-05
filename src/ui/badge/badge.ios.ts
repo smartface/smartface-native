@@ -1,4 +1,4 @@
-import { IBadge } from '.';
+import { IBadge } from './badge';
 import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
 import Color from '../color';

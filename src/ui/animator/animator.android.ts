@@ -1,5 +1,5 @@
 import ViewGroup from '../viewgroup';
-import { AnimatorBase, AnimatorParams } from '.';
+import { AnimatorBase, AnimatorParams } from './animator';
 
 /*globals requireClass*/
 const NativeTransitionManager = requireClass('androidx.transition.TransitionManager');

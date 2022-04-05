@@ -1,4 +1,4 @@
-import HeaderBarItem, { IHeaderBarItem } from '.';
+import { IHeaderBarItem } from './headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import Badge from '../badge';
@@ -54,7 +54,7 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
   private _nativeView;
   private _font: Font | undefined;
   private _customView: IView | undefined;
-  private _onPress: HeaderBarItem['onPress'] = null;
+  private _onPress: IHeaderBarItem['onPress'] = null;
   init(params: Partial<IHeaderBarItem> = {}) {
     super.init(params);
     this._badge = new Badge({ nativeObject: this.nativeObject });
@@ -83,7 +83,7 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
     });
   }
 
-  constructor(params?: Partial<HeaderBarItem>) {
+  constructor(params?: Partial<IHeaderBarItem>) {
     super(params);
   }
   get layout() {

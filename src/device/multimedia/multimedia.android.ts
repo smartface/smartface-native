@@ -1,4 +1,4 @@
-import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from '.';
+import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from './multimedia';
 import File from '../../io/file';
 import ImageAndroid from '../../ui/image/image.android';
 import Page from '../../ui/page';

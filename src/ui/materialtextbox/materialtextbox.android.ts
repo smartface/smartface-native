@@ -3,7 +3,7 @@ import { Point2D } from '../../primitive/point2d';
 
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Color, { ColorImpl } from '../color';
+import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import TextBoxAndroid from '../textbox/textbox.android';
@@ -79,10 +79,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   text: string;
   autoCapitalize: AutoCapitalize;
   textAlignment: TextAlignment;
-  textColor: ColorImpl;
+  textColor: Color;
   cursorPosition: { start: number; end: number };
   onEditBegins: () => void;
-  cursorColor: ColorImpl;
+  cursorColor: Color;
   isPassword: boolean;
   keyboardType: number | null;
   actionKeyType: ActionKeyType;

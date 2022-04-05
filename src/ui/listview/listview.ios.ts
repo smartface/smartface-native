@@ -1,4 +1,4 @@
-import { IListView, RowAnimation } from '.';
+import { IListView, RowAnimation } from './listview';
 import { Point2D } from '../../primitive/point2d';
 import Color from '../color';
 import ListViewItem from '../listviewitem';

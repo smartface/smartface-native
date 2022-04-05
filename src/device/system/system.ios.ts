@@ -1,4 +1,4 @@
-import { AbstractSystem, BiometryType, OSType } from '.';
+import { AbstractSystem, BiometryType, OSType } from './system';
 import Application from '../../application';
 import Invocation from '../../util/iOS/invocation';
 

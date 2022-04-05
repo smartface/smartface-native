@@ -1,4 +1,4 @@
-import { MultimediaBase } from '.';
+import { MultimediaBase } from './multimedia';
 import File from '../../io/file';
 import Image from '../../ui/image';
 import Page from '../../ui/page';

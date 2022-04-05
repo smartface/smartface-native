@@ -1,7 +1,7 @@
 import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
-import { IBadge } from '../badge';
+import { IBadge } from '../badge/badge';
 import { IBottomTabBarController } from '../bottomtabbarcontroller/bottomtabbarcontroller';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import FontIOS from '../font/font.ios';

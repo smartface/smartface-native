@@ -1,4 +1,4 @@
-import { AbstractWebBrowser } from '.';
+import { AbstractWebBrowser } from './webbrowser';
 import Page from '../page';
 import Color from '../color';
 import Invocation from '../../util/iOS/invocation';

@@ -1,5 +1,5 @@
 /*globals requireClass*/
-import { ISearchView, SearchViewStyle } from '.';
+import { ISearchView, SearchViewStyle } from './searchview';
 import ColorAndroid from '../color/color.android';
 import ImageAndroid from '../image/image.android';
 import KeyboardType from '../shared/keyboardtype';

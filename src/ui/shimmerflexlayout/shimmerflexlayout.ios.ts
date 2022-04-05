@@ -1,4 +1,4 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutIOSParams, ShimmerHighlight, ShimmeringDirection } from '.';
+import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutIOSParams, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import FlexLayout from '../flexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';

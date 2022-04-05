@@ -1,5 +1,5 @@
 import Font from '../font';
-import { IBadge } from '../badge';
+import { IBadge } from '../badge/badge';
 import AttributedString from '../attributedstring';
 import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import { IImage } from '../image/image';

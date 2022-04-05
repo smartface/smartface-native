@@ -1,4 +1,4 @@
-import { AbstractWebBrowser } from '.';
+import { AbstractWebBrowser } from './webbrowser';
 import Color from '../color';
 import Page from '../page';
 import { WebBrowserOptions } from './webbrowseroptions';

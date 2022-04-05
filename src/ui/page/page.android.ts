@@ -2,7 +2,8 @@ import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientatio
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
-import Screen, { OrientationType } from '../../device/screen';
+import Screen from '../../device/screen';
+import { OrientationType } from '../../device/screen/screen';
 import Notifications from '../../global/notifications';
 import ColorAndroid from '../color/color.android';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';

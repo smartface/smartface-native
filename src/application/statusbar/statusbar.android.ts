@@ -1,4 +1,4 @@
-import { AbstractStatusBar } from '.';
+import { AbstractStatusBar } from './statusbar';
 import ColorAndroid from '../../ui/color/color.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';

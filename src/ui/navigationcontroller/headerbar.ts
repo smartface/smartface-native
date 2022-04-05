@@ -4,7 +4,7 @@ import ImageIOS from '../../ui/image/image.ios';
 import { default as IHeaderBar } from '../headerbar';
 import Font from '../font';
 import View from '../view';
-import { IHeaderBarItem } from '../headerbaritem';
+import { IHeaderBarItem } from '../headerbaritem/headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import NavigationControllerIOS from './navigationcontroller.ios';
 

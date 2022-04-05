@@ -1,4 +1,4 @@
-import { ConnectionType, NetworkBase, INetworkNotifier } from '.';
+import { ConnectionType, NetworkBase, INetworkNotifier } from './network';
 import NativeComponent from '../../core/native-component';
 
 class Notifier extends NativeComponent implements INetworkNotifier {

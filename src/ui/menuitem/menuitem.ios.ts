@@ -1,4 +1,4 @@
-import { IMenuItem, Style } from '.';
+import { IMenuItem, Style } from './menuitem';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MenuItemEvents } from './menuitem-events';
 

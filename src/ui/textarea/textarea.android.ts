@@ -1,4 +1,4 @@
-import { ITextArea } from '.';
+import { ITextArea } from './textarea';
 import ActionKeyType from '../shared/android/actionkeytype';
 import KeyboardType from '../shared/keyboardtype';
 import TextBoxAndroid from '../textbox/textbox.android';

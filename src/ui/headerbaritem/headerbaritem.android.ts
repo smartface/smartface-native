@@ -1,4 +1,4 @@
-import HeaderBarItem, { IHeaderBarItem } from '.';
+import { IHeaderBarItem } from './headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -46,7 +46,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private nativeBadgeContainer: any;
   private _itemColor = Color.WHITE;
 
-  constructor(params?: Partial<HeaderBarItem>) {
+  constructor(params?: Partial<IHeaderBarItem>) {
     super(params);
 
     this.addAndroidProps(this.getAndroidProps());

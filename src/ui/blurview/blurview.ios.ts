@@ -1,4 +1,4 @@
-import { IBlurView } from '.';
+import { IBlurView } from './blurview';
 import ViewIOS from '../view/view.ios';
 import { BlurViewEvents } from './blurview-events';
 

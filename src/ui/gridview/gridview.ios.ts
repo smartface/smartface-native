@@ -1,4 +1,4 @@
-import { GridViewSnapAlignment, IGridView, ScrollEventHandler } from '.';
+import { GridViewSnapAlignment, IGridView, ScrollEventHandler } from './gridview';
 import { Point2D } from '../../primitive/point2d';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
 import ColorIOS from '../color/color.ios';
