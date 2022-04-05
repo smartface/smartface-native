@@ -1,5 +1,5 @@
-import { INativeComponent } from "../../core/inative-component";
-import { MobileOSProps } from "../../core/native-mobile-component";
+import { INativeComponent } from '../../core/inative-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * @enum {Number} UI.AlertView.Android.ButtonType
@@ -145,7 +145,7 @@ export interface IAlertView extends INativeComponent, MobileOSProps {
    * @since 4.1.2
    * @readonly
    */
-  get textBoxes(): { text: string }[];
+  readonly textBoxes: { text: string }[];
   /**
    * Allows you to add button to AlertView. You can add maximum 3 buttons
    * on Android platform, on iOS there is no limitation.
@@ -199,7 +199,7 @@ export interface IAlertView extends INativeComponent, MobileOSProps {
 
 export declare class AbstractAlertView implements IAlertView {
   constructor(params?: Partial<IAlertView>);
-  ios: Partial<{ [key: string]: any; }>;
+  ios: Partial<{ [key: string]: any }>;
   isShowing(): void;
   show(): void;
   dismiss(): void;
