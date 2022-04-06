@@ -115,7 +115,7 @@ function Sound() {
     });
 
     self.addCallbackFunction = function() {
-        self.nativeObject.onReady = function() {
+        self.nativeObject.onItemReady = function() {
             if (typeof self.onReady === "function") {
                 self.onReady();
             }
