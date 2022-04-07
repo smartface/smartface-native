@@ -17,12 +17,12 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   private _badge: Partial<IBadge>;
   private _route: string;
 
-  constructor(params?: Partial<ITabbarItem>) {
+  constructor(params: Partial<ITabbarItem> = {}) {
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject(params: Partial<ITabbarItem>) {
-    return SF.requireClass('UITabBarItem').new();
+    return null;
   }
   protected init(params: Partial<ITabbarItem>): void {
     this._title = '';
@@ -51,7 +51,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
       },
       set font(value: FontIOS) {
         self.ios.font = value;
-        if (this.ios.font) {
+        if (!self.nativeObject) {
+          return;
+        }
+        if (self.ios.font) {
           self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 0); //UIControlStateNormal
           self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 1 << 0); //UIControlStateHighlighted
           self.nativeObject.setTitleTextAttributesForState({ NSFont: self.ios.font }, 1 << 1); //UIControlStateDisabled
@@ -95,14 +98,16 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   }
   set title(value: string) {
     this._title = value;
-    this.nativeObject.title = value;
+    if (this.nativeObject) {
+      this.nativeObject.title = value;
+    }
   }
   get icon() {
     return this._icon;
   }
   set icon(value) {
     this._icon = value;
-    if (typeof value === 'undefined') {
+    if (typeof value === 'undefined' && !this.nativeObject) {
       return;
     } else if (typeof value === 'string') {
       const image = ImageIOS.createFromFile(value);

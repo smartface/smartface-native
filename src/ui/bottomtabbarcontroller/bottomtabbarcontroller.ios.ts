@@ -1,7 +1,7 @@
 import { IBottomTabBarController } from './bottomtabbarcontroller';
 import NativeComponent from '../../core/native-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import BottomTabBar from '../bottomtabbar';
+import BottomTabBarIOS from '../bottomtabbar/bottomtabbar.ios';
 import { IController, INavigationController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IPage } from '../page/page';
@@ -14,7 +14,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   static Events = BottomTabbarControllerEvents;
   private view: any;
   private model: BottomTabBarModel;
-  private _tabBar: BottomTabBar;
+  private _tabBar: BottomTabBarIOS;
   private _shouldSelectByIndex: IBottomTabBarController['shouldSelectByIndex'];
   private _didSelectByIndex: IBottomTabBarController['didSelectByIndex'] | undefined;
   private _shouldSelectViewController: IBottomTabBarController['shouldSelectViewController'];
@@ -55,7 +55,10 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     if (params?.viewModel) {
       this.viewModel = params.viewModel;
     }
-    const nativeObject = SF.requireClass('UITabBarController').new();
+    this.view = new BottomTabBarView({
+      viewModel: this
+    });
+    const nativeObject = this.view.nativeObject;
     this.nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
       tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
         const index = this.nativeObject.viewControllers.indexOf(viewController);
@@ -72,13 +75,10 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   }
   protected init(params?: Partial<Record<string, any>>): void {
     this.currentIndex = 0;
-    this.view = new BottomTabBarView({
-      viewModel: this
-    });
 
     // Model
     this.model = new BottomTabBarModel();
-    this._tabBar = new BottomTabBar({
+    this._tabBar = new BottomTabBarIOS({
       nativeObject: this.view.nativeObject.tabBar
     });
 
@@ -123,7 +123,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   set childControllers(childControllers) {
     if (typeof childControllers === 'object') {
       this.model.childControllers = childControllers;
-
       const nativeChildPageArray = this.model.childControllers.map((controller) => {
         controller.parentController = this;
         return controller.nativeObject;

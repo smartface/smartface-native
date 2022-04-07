@@ -49,9 +49,10 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomT
     if (Array.isArray(value)) {
       this._items = value;
       this._items.forEach((item, index) => {
-        // if (!item.nativeObject) {
-        item.nativeObject = this.nativeObject.items[index];
-        // }
+        if (!item.nativeObject) {
+          item.nativeObject = this.nativeObject.items[index];
+          item.title = item.title;
+        }
         item.invalidate();
       });
     }
