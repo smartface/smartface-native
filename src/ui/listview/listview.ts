@@ -837,7 +837,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * @android
    * @since 4.1.4
    */
-  onRowCanSwipe: (index: number) => [SwipeDirection];
+  onRowCanSwipe: (index: number) => SwipeDirection[];
 }
 
 export declare class AbstractListView<TEvent extends string = ListViewEvents, TProps extends IListView = IListView>
@@ -882,11 +882,11 @@ export declare class AbstractListView<TEvent extends string = ListViewEvents, TP
   onRowMoved: (source: number, destination: number) => void;
   onRowMove: (source: number, destination: number) => boolean;
   onRowCanMove: (index: number) => boolean;
-  onRowCanSwipe: (index: number) => [SwipeDirection];
+  onRowCanSwipe: (index: number) => SwipeDirection[];
 
-  static SwipeItem: SwipeItem;
+  static SwipeItem: typeof SwipeItem;
   static iOS: {
-    RowAnimation: RowAnimation;
+    RowAnimation: typeof RowAnimation;
   };
-  static SwipeDirection: SwipeDirection;
+  static SwipeDirection: typeof SwipeDirection;
 }

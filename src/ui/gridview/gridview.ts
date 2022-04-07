@@ -6,9 +6,13 @@ import LayoutManager from '../layoutmanager';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ScrollState from '../shared/android/scrollstate';
 import ContentInsetAdjustment from '../shared/ios/contentinsetadjustment';
-import DecelerationRate from '../shared/ios/decelerationrate';
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { GridViewEvents } from './gridview-events';
+
+export enum DecelerationRate {
+  NORMAL,
+  FAST
+}
 
 export type ScrollEventHandler = (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void;
 /**
@@ -509,6 +513,9 @@ export declare class AbstractGridView<TEvent extends string = GridViewEvents, TP
   onPullRefresh: () => void;
   itemByIndex(index: number): GridViewItem | undefined;
   static Android: {
-    SnapAlignment: GridViewSnapAlignment;
+    SnapAlignment: typeof GridViewSnapAlignment;
+  };
+  static iOS: {
+    DecelerationRate: typeof DecelerationRate;
   };
 }

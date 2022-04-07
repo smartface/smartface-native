@@ -30,7 +30,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   static Orientation = Orientation;
 
   private routerPath: any = null;
-  private pageView = new FlexLayout();
+  protected pageView = new FlexLayout();
   private _safeAreaLayoutMode: IPage['ios']['safeAreaLayoutMode'];
   private _safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
   private _transitionViews: IPage['transitionViews'];

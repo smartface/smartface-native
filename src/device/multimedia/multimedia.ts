@@ -320,7 +320,7 @@ export declare class MultimediaBase {
    *
    * ActionType is used to indicate type of the camera action.
    */
-  static readonly ActionType: ActionType;
+  static readonly ActionType: typeof ActionType;
   /**
    * @enum {Number} Device.Multimedia.Type
    * @since 0.1
@@ -329,7 +329,7 @@ export declare class MultimediaBase {
    *
    * Type is used to indicate type of the media.
    */
-  static readonly Type: Type;
+  static readonly Type: typeof Type;
   /**
    * These enums used to specify shape of crop window.
    *
@@ -338,13 +338,13 @@ export declare class MultimediaBase {
    * @android
    * @ios
    */
-  static readonly CropShape: CropShape;
+  static readonly CropShape: typeof CropShape;
   /**
    * @enum {Number} Device.Multimedia.CameraDevice
    * @since 4.3.0
    * @ios
    */
-  static readonly CameraDevice: CameraDevice;
+  static readonly CameraDevice: typeof CameraDevice;
   /**
    * These enums used to specify quality of video
    *
@@ -728,4 +728,13 @@ export declare class MultimediaBase {
      */
     getCameraAuthorizationStatus(): CameraAuthorizationStatus;
   }>;
+
+  static iOS: {
+    CameraDevice: typeof CameraDevice;
+    CameraFlashMode: typeof CameraFlashMode;
+  };
+
+  static Android: {
+    CropShape: typeof CropShape;
+  };
 }

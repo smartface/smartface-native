@@ -550,6 +550,9 @@ class MultimediaAndroid implements MultimediaBase {
       onCancel && onCancel();
     }
   }
+  Android = {
+    CropShape: CropShape
+  };
 }
 
 const Multimedia = new MultimediaAndroid();

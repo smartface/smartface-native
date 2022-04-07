@@ -163,7 +163,7 @@ export interface IAlertView extends INativeComponent, MobileOSProps {
    * @ios
    * @since 0.1
    */
-  addButton(params: { type: ButtonType; text: string; onClick: () => void; index: number }): void;
+  addButton(params: { type: ButtonType; text: string; onClick: () => void; index?: number }): void;
   /**
    * Allows to add TextBox to AlertView. In iOS, maximum two textbox can be added. It is not applied to Android but 2 textboxes recommended.
    *
@@ -217,7 +217,7 @@ export declare class AbstractAlertView implements IAlertView {
     cancellable: boolean;
   }>;
   get textBoxes(): { text: string }[];
-  addButton(params: { type: ButtonType; text: string; onClick?: () => void; index: number }): void;
+  addButton(params: { type: ButtonType; text: string; onClick?: () => void; index?: number }): void;
   addTextBox(params: {
     text: string;
     hint: string;

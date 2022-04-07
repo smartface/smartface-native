@@ -535,7 +535,7 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   onCreate: () => void;
   type: MapViewType;
 
-  static Type: MapViewType;
+  static Type: typeof MapViewType;
   static Pin: typeof Pin;
   static Cluster: typeof Cluster;
 }

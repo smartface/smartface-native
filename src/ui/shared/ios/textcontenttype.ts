@@ -1,4 +1,5 @@
 const TextContentType = {
+  //TODO: Fix this as it is iOS only
   NAME: __SF_UITextContentTypeName,
   NAMEPREFIX: __SF_UITextContentTypeNamePrefix,
   GIVENNAME: __SF_UITextContentTypeGivenName,

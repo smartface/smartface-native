@@ -176,4 +176,5 @@ export declare class NetworkBase {
    */
   roamingEnabled: boolean;
   cancelAll: () => void;
+  ConnectionType: typeof ConnectionType;
 }

@@ -3,6 +3,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import Color from '../color';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import { SliderDrawerEvents } from './sliderdrawer-events';
+import { PageOrientation } from '../page/page';
 
 enum SLIDER_DRAWER_STATE {
   CLOSE,
@@ -14,12 +15,11 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
   private _position: number;
   private _enabled: boolean;
   private _drawerWidth: number;
+  orientation: PageOrientation;
   pageView: FlexLayoutIOS;
   height: number;
   constructor(params?: Partial<ISliderDrawer>) {
     super(params);
-    this.setPageViewProps();
-    this.setNativeProps();
   }
   protected createNativeObject() {
     return __SF_SliderDrawer.new();
@@ -28,10 +28,12 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     this.pageView = new FlexLayoutIOS({
       backgroundColor: Color.WHITE
     });
-
     this._drawerWidth = 100;
-    this._enabled = false;
-    this._position = 0;
+    this._enabled = true;
+    this._position = SliderDrawerPosition.LEFT;
+    this.orientation = PageOrientation.PORTRAIT;
+    this.setPageViewProps();
+    this.setNativeProps();
     super.init(params);
   }
   private setNativeProps() {
@@ -56,20 +58,23 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     };
 
     this.nativeObject.onShow = () => {
+      console.info('sliderdrawer onshow');
       __SF_UIView.animation(0, 0, () => {
-        this.layout.nativeObject.endEditing(true);
+        this.pageView.nativeObject.endEditing(true);
       });
       this.onShow?.();
       this.emit('show');
     };
     this.nativeObject.onHide = () => {
+      console.info('sliderdrawer onhide');
       __SF_UIView.animation(0, 0, () => {
-        this.layout.nativeObject?.endEditing(true);
+        this.pageView.nativeObject?.endEditing(true);
       });
       this.onHide?.();
       this.emit('hide');
     };
     this.nativeObject.onLoad = () => {
+      console.info('sliderdrawer onload');
       this.onLoad?.();
       this.emit('load');
     };
@@ -137,6 +142,7 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
   onHide: () => void;
   onLoad: () => void;
   show(): void {
+    console.info('sliderdrawer show');
     this.nativeObject.show();
   }
   hide(): void {

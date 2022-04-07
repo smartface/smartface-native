@@ -91,8 +91,6 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     } else if (isViewState(value)) {
       value.normal = ImageAndroid.createImageFromPath(value.normal);
       value.selected = ImageAndroid.createImageFromPath(value.selected);
-    } else {
-      throw new Error('icon should be an instance of Image or given icon path should be properly defined.');
     }
 
     if (isViewState(value)) {

@@ -12,7 +12,7 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
   nativeInner: any;
   constructor(params?: IListViewItem) {
     super(params);
-    this.ios.expandSwipe = () => {};
+    this.addIOSProps(this.getIOSParams());
   }
   protected init(
     params?: Partial<
@@ -24,6 +24,7 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
   ): void {
     this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
     this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
+    super.init(params);
   }
   // Added due to problem in row height for RecyclerView
   get height(): number {
@@ -38,5 +39,11 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
   }
   set width(value: number) {
     this.nativeObject.getLayoutParams().width = UnitConverter.dpToPixel(value);
+  }
+
+  getIOSParams() {
+    return {
+      expandSwipe: () => {}
+    };
   }
 }

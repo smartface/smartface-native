@@ -7,6 +7,7 @@ import { YGUnit } from '../shared/ios/yogaenums';
 import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
+import { IViewGroup } from '../viewgroup/viewgroup';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
   protected createNativeObject(): any {
@@ -20,7 +21,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _scale: Point2D;
 
   gradientColor: __SF_CAGradientLayer | null;
-  private _parent?: ViewIOS;
+  private _parent?: IViewGroup;
 
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -155,7 +156,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     return this._parent;
   }
 
-  set parent(view: ViewIOS | undefined) {
+  set parent(view: IViewGroup | undefined) {
     this._parent = view;
   }
 

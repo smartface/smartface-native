@@ -42,14 +42,14 @@ export default class HttpAndroid extends HttpBase {
   private _client: any;
   constructor(params?: Partial<IHttp>) {
     super(params);
+    this.timeout = 60000;
+  }
+
+  protected init(params?: Partial<Record<string, any>>): void {
     this._clientBuilder = new OkHttpClientBuilder();
+    this._client = this._clientBuilder.build();
 
     _instanceCollection.push(this);
-
-    if (!Number.isInteger(this.timeout)) {
-      this.timeout = 60000;
-    }
-    this._client = this._clientBuilder.build();
   }
 
   get timeout(): number {

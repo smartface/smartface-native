@@ -278,4 +278,11 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   static Android = {
     SnapToAligment: GridViewSnapAlignment
   };
+  static iOS = {
+    DecelerationRate: {
+      NORMAL: __SF_UIScrollViewDecelerationRateNormal,
+      FAST: __SF_UIScrollViewDecelerationRateFast
+    },
+    ...ViewIOS.iOS
+  };
 }

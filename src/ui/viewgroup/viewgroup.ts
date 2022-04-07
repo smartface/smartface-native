@@ -1,3 +1,4 @@
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView, AbstractView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ViewGroupEvents } from './viewgroup-events';

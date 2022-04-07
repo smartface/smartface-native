@@ -8,6 +8,7 @@ import Flex from '../shared/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ViewState from '../shared/viewState';
+import { IViewGroup } from '../viewgroup/viewgroup';
 export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
@@ -676,7 +677,7 @@ export interface IView<
    * @ios
    * @since 0.1
    */
-  getParent(): IView | null;
+  getParent(): IViewGroup | null;
   /**
    * This event is called when a touch screen motion event starts.
    *
@@ -940,7 +941,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   flipHorizontally(): void;
   flipVertically(): void;
   getScreenLocation(): Point2D;
-  getParent(): IView | null;
+  getParent(): IViewGroup | null;
   onTouch: (e?: Point2D) => boolean | void;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
   onTouchCancelled: (point: Point2D) => boolean | void;

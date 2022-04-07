@@ -52,11 +52,10 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   }
   init(params?: Partial<IGridView>) {
     this.setNativeInner();
+    this.setDataAdapter();
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
-    this.nativeObject.addView(this.nativeInner);
     this.setNativeEvents();
-    this.setDataAdapter();
     super.init(params);
   }
   setTouchHandlers(): void {
@@ -91,6 +90,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     this.nativeInner.setScrollBarStyle(50331648);
     this.nativeInner.setHorizontalScrollBarEnabled(false);
     this.nativeInner.setVerticalScrollBarEnabled(false);
+    this.nativeObject.addView(this.nativeInner);
   }
   private setNativeEvents() {
     this.nativeObject.setOnRefreshListener(
@@ -120,30 +120,26 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private setDataAdapter() {
     const callbacks = {
       onCreateViewHolder: (viewType: number) => {
-        try {
-          const itemCreateReturn = this.onItemCreate?.(viewType);
-          // There used to be try-catch. If we encounter with crash, wrap this with try-catch with application.onHundandledError trigger
-          const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
-          let spanSize = this._layoutManager?.spanSize;
-          if (spanSize === 0 && this._layoutManager) {
-            if (this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL) {
-              this._layoutManager.viewWidth = this.width;
-            } else {
-              this._layoutManager.viewHeight = this.height;
-            }
-            spanSize = this._layoutManager.spanSize; //spansize is re-calculated
+        const itemCreateReturn = this.onItemCreate?.(viewType);
+        // There used to be try-catch. If we encounter with crash, wrap this with try-catch with application.onHundandledError trigger
+        const holderViewLayout = itemCreateReturn instanceof GridViewItem ? itemCreateReturn : new GridViewItem();
+        let spanSize = this._layoutManager?.spanSize;
+        if (spanSize === 0 && this._layoutManager) {
+          if (this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL) {
+            this._layoutManager.viewWidth = this.width;
+          } else {
+            this._layoutManager.viewHeight = this.height;
           }
-
-          this.assignSizeBasedOnDirection(holderViewLayout, viewType);
-
-          holderViewLayout.viewType = viewType;
-          this._gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
-
-          holderViewLayout.nativeInner.setRecyclerViewAdapter(this.nativeDataAdapter);
-          return holderViewLayout.nativeInner;
-        } catch (e) {
-          console.error('gridviewandroid:error: ', e.stack);
+          spanSize = this._layoutManager.spanSize; //spansize is re-calculated
         }
+
+        this.assignSizeBasedOnDirection(holderViewLayout, viewType);
+
+        holderViewLayout.viewType = viewType;
+        this._gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+
+        holderViewLayout.nativeInner.setRecyclerViewAdapter(this.nativeDataAdapter);
+        return holderViewLayout.nativeInner;
       },
       onBindViewHolder: (itemViewHashCode: number, position: number) => {
         const _holderViewLayout = this._gridViewItems[itemViewHashCode];

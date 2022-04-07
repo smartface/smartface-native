@@ -58,7 +58,7 @@ export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView>
   }
   addButton(params: Parameters<IAlertView['addButton']>['0']): void {
     if (params.text) {
-      const action = __SF_UIAlertAction.createAction(params.text, params.index, params.onClick);
+      const action = __SF_UIAlertAction.createAction(params.text, params.index || 0, params.onClick);
       this.nativeObject.addAction(action);
     }
   }

@@ -36,7 +36,7 @@ export declare class AbstractRSA {
    * @android
    * @since 4.4
    */
-  static generateKeyPair: (params: { keySize: number }) => string;
+  static generateKeyPair: (params: { keySize: number }) => { privateKey: string; publicKey: string };
   static ios: {
     /**
      * On iOS, instead of using getBase64PublicString to retrieve generated public key, using this will yield better result.
