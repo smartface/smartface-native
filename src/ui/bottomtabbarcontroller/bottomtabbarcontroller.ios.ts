@@ -17,8 +17,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   private _tabBar: BottomTabBarIOS;
   private _shouldSelectByIndex: IBottomTabBarController['shouldSelectByIndex'];
   private _didSelectByIndex: IBottomTabBarController['didSelectByIndex'] | undefined;
-  private _shouldSelectViewController: IBottomTabBarController['shouldSelectViewController'];
-  private _didSelectViewController: IBottomTabBarController['didSelectViewController'];
   private viewModel: any;
   private nativeObjectDelegate: any;
   private currentIndex: number;
@@ -32,23 +30,22 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   constructor(params?: Partial<IBottomTabBarController & { viewModel?: any }>) {
     super(params as any); //TODO: Fix as any
     // From View's Delegate
-    this.shouldSelectViewController = (index) => {
-      this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
-      return (
-        this.shouldSelectByIndex?.({
-          index: index
-        }) ?? true
-      );
-    };
+  }
 
-    this.didSelectViewController = (index) => {
-      if (typeof this.didSelectByIndex === 'function') {
-        this.didSelectByIndex?.({
-          index: index
-        });
-        this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
-      }
-    };
+  didSelectViewController(index: number) {
+    this.didSelectByIndex?.({
+      index: index
+    });
+    this.emit(BottomTabbarControllerEvents.SelectByIndex, { index });
+  }
+
+  shouldSelectViewController(index: number) {
+    this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
+    return (
+      this.shouldSelectByIndex?.({
+        index: index
+      }) ?? true
+    );
   }
 
   protected createNativeObject(params) {
@@ -104,18 +101,6 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   }
   set shouldSelectByIndex(value: any) {
     this._shouldSelectByIndex = value;
-  }
-  get shouldSelectViewController() {
-    return this._shouldSelectViewController;
-  }
-  set shouldSelectViewController(value: any) {
-    this._shouldSelectViewController = value;
-  }
-  get didSelectViewController() {
-    return this._didSelectViewController;
-  }
-  set didSelectViewController(value: any) {
-    this._didSelectViewController = value;
   }
   get childControllers() {
     return this.model.childControllers;
