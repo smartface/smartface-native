@@ -1,12 +1,12 @@
-import { IBottomTabBar } from './bottomtabbar';
+import { IBottomTabBar, IBottomTabBarAndroidProps, IBottomTabBarIOSProps } from './bottomtabbar';
 import NativeComponent from '../../core/native-component';
-import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import SystemIOS from '../../device/system/system.ios';
 import ColorIOS from '../color/color.ios';
 import ImageIOS from '../image/image.ios';
 import TabBarItemIOS from '../tabbaritem/tabbaritem.ios';
 
-export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
+export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobileOSProps<IBottomTabBar, IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> implements IBottomTabBar {
   private appearance: any;
   private _items: TabBarItemIOS[];
   private _borderVisibility: boolean;
@@ -18,7 +18,6 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomT
   }
   protected init(params?: Partial<Record<string, any>>): void {
     this.nativeObject.translucent = false;
-    this.nativeObject.delegate = this;
     // Xcode 13.1 background bug fixes [NTVE-398]
     if (parseInt(SystemIOS.OSVersion) >= 15) {
       this.appearance = new __SF_UITabBarAppearance();
@@ -50,8 +49,12 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, IBottomT
       this._items = value;
       this._items.forEach((item, index) => {
         if (!item.nativeObject) {
+          // Re-set the values since nativeObject is set on runtime.
           item.nativeObject = this.nativeObject.items[index];
           item.title = item.title;
+          item.icon = item.icon;
+          item.route = item.route;
+          item.ios.font = item.ios.font;
         }
         item.invalidate();
       });

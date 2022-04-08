@@ -1,8 +1,16 @@
-import { INativeComponent } from '../../core/inative-component';
+import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 
-interface IBottomTabBarAndroidProps {
+export interface IBottomTabBarAndroidProps {
+  /**
+   * Gets the maximum number of items that add to bottom tab bar.
+   *
+   * @since 1.1.10
+   * @property {Number} maxItemCount
+   * @android
+   * @readonly
+   */
   maxItemCount: number;
   /**
    * Enable/disable the default animation of BottomTabBar item. Might be used while badge being used.
@@ -15,7 +23,7 @@ interface IBottomTabBarAndroidProps {
   disableItemAnimation?: boolean; //TODO: Find out why this exists because it isn't used on bottomtabbar.android.ts
 }
 
-interface IBottomTabBarIOSProps {
+export interface IBottomTabBarIOSProps {
   /**
    * A Boolean value that indicates whether the tab bar is translucent.
    *
@@ -35,7 +43,7 @@ interface IBottomTabBarIOSProps {
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  *
  */
-export declare interface IBottomTabBar extends INativeComponent {
+export interface IBottomTabBar extends INativeMobileComponent<any, WithMobileOSProps<any, IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> {
   /**
    * Gets/sets background color of the tab bar items.
    *
@@ -45,15 +53,6 @@ export declare interface IBottomTabBar extends INativeComponent {
    * @since 1.1.10
    */
   backgroundColor: Color;
-  /**
-   * Gets the maximum number of items that add to bottom tab bar.
-   *
-   * @since 1.1.10
-   * @property {Number} maxItemCount
-   * @android
-   * @readonly
-   */
-  android: IBottomTabBarAndroidProps;
   /**
    * Gets/sets title and icon color of the tab bar items.
    *
@@ -76,5 +75,4 @@ export declare interface IBottomTabBar extends INativeComponent {
    * @since 3.2.0
    */
   items: TabBarItem[] | null;
-  ios: Partial<IBottomTabBarIOSProps>;
 }

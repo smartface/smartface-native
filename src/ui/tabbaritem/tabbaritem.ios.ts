@@ -16,6 +16,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   private _icon: ITabbarItem['icon'];
   private _badge: Partial<IBadge>;
   private _route: string;
+  private _font: ITabbarItem['ios']['font'];
 
   constructor(params: Partial<ITabbarItem> = {}) {
     super(params);
@@ -47,10 +48,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     const self = this;
     return {
       get font(): FontIOS {
-        return self.ios.font;
+        return self._font;
       },
       set font(value: FontIOS) {
-        self.ios.font = value;
+        self._font = value;
         if (!self.nativeObject) {
           return;
         }
@@ -77,7 +78,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     this._route = value;
   }
   get layout() {
-    let retval;
+    let retval: any;
     if (this._nativeView) {
       retval = this._nativeView;
     } else {

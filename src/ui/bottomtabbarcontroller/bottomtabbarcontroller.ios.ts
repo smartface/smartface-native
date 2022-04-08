@@ -49,30 +49,12 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
   }
 
   protected createNativeObject(params) {
-    if (params?.viewModel) {
-      this.viewModel = params.viewModel;
-    }
     this.view = new BottomTabBarView({
       viewModel: this
     });
-    const nativeObject = this.view.nativeObject;
-    this.nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>', {
-      tabBarControllerShouldSelectViewController: (tabBarController, viewController) => {
-        const index = this.nativeObject.viewControllers.indexOf(viewController);
-        return this.viewModel.shouldSelectViewController(index);
-      },
-      tabBarControllerDidSelectViewController: (tabBarController, viewController) => {
-        const index = this.nativeObject.viewControllers.indexOf(viewController);
-        this.viewModel.didSelectViewController(index);
-      }
-    }).new();
-    nativeObject.delegate = this.nativeObjectDelegate;
-
-    return nativeObject;
+    return this.view.nativeObject;
   }
   protected init(params?: Partial<Record<string, any>>): void {
-    this.currentIndex = 0;
-
     // Model
     this.model = new BottomTabBarModel();
     this._tabBar = new BottomTabBarIOS({
@@ -167,7 +149,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     }
     return retval;
   }
-  dismiss(params) {
+  dismiss(params?: any) {
     if (typeof params === 'object') {
       const onComplete = params.onComplete;
       const _completionBlock = onComplete?.() || undefined;
@@ -177,8 +159,8 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 }
 
 class BottomTabBarModel {
-  childControllers: (INavigationController | IPage)[] = [];
-  currentIndex = 0;
+  childControllers: (INavigationController | IPage)[];
+  currentIndex: number;
   constructor(childControllers: (INavigationController | IPage)[] = [], currentIndex = 0) {
     this.childControllers = childControllers;
     this.currentIndex = currentIndex;
@@ -186,7 +168,7 @@ class BottomTabBarModel {
 }
 
 class BottomTabBarView extends NativeComponent {
-  viewModel: any;
+  viewModel: BottomTabbarControllerIOS;
   nativeObjectDelegate: any;
   constructor(params?: Partial<{ viewModel: any }>) {
     super(params);
@@ -221,7 +203,7 @@ class BottomTabBarView extends NativeComponent {
   dismiss(onComplete: () => void) {
     this.nativeObject.dismissViewController(onComplete);
   }
-  setNativeChildViewControllers(nativeChildPageArray) {
+  setNativeChildViewControllers(nativeChildPageArray: any[]) {
     this.nativeObject.viewControllers = nativeChildPageArray;
 
     if (nativeChildPageArray.length > 0) {
