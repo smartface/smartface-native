@@ -13,14 +13,14 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
   static LOADING = 3;
   static DONE = 4;
 
-  onabort: (...args: any[]) => void;
-  onerror: (...args: any[]) => void;
-  onload: (...args: any[]) => void;
-  onloadend: (...args: any[]) => void;
-  onloadstart: (...args: any[]) => void;
-  onprogress: (...args: any[]) => void;
-  onreadystatechange: (...args: any[]) => void;
-  ontimeout: (...args: any[]) => void;
+  onabort: (...args: any[]) => void = () => {};
+  onerror: (...args: any[]) => void = () => {};
+  onload: (...args: any[]) => void = () => {};
+  onloadend: (...args: any[]) => void = () => {};
+  onloadstart: (...args: any[]) => void = () => {};
+  onprogress: (...args: any[]) => void = () => {};
+  onreadystatechange: (...args: any[]) => void = () => {};
+  ontimeout: (...args: any[]) => void = () => {};
 
   private _requestID?: number;
   private _options: HttpRequestOptions;
