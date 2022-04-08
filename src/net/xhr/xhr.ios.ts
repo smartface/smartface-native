@@ -13,14 +13,14 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
   static LOADING = 3;
   static DONE = 4;
 
-  onabort: (...args: any[]) => void;
-  onerror: (...args: any[]) => void;
-  onload: (...args: any[]) => void;
-  onloadend: (...args: any[]) => void;
-  onloadstart: (...args: any[]) => void;
-  onprogress: (...args: any[]) => void;
-  onreadystatechange: (...args: any[]) => void;
-  ontimeout: (...args: any[]) => void;
+  onabort: (...args: any[]) => void = () => {};
+  onerror: (...args: any[]) => void = () => {};
+  onload: (...args: any[]) => void = () => {};
+  onloadend: (...args: any[]) => void = () => {};
+  onloadstart: (...args: any[]) => void = () => {};
+  onprogress: (...args: any[]) => void = () => {};
+  onreadystatechange: (...args: any[]) => void = () => {};
+  ontimeout: (...args: any[]) => void = () => {};
 
   private _requestID?: number;
   private _options: HttpRequestOptions;
@@ -236,7 +236,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
       url: this._options.url,
       method: this._options.method,
       headers: this._options.headers && Object.keys(this._options.headers).length > 0 ? this._options.headers : undefined,
-      timeout: this._options.timeout ? this._options.timeout / 1000 : undefined,
+      timeout: this._options.timeout ? this._options.timeout : undefined,
       responseType: this.responseType,
       requestType: this.getRequestTypeBasedOnData(data)
     };
@@ -253,7 +253,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
         this._sendFlag = false;
 
         // -1004 apple specific code for timeout error
-        if (error.errorCode == -1004) {
+        if (error.errorCode == -1004 || error.errorCode == -1001) {
           this.emitEvent('timeout');
         }
         this._setRequestError('error', error);
