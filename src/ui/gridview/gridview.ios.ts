@@ -36,10 +36,13 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   }
   init(params?: Partial<IGridView>) {
     this.scrollBarEnabled = true;
+    this._refreshEnabled = false;
+
     this.collectionViewItems = {};
     this.registeredIndentifier = [];
     this._itemLength = DEFAULT_ITEM_LENGTH;
     this._itemCount = 0;
+    this._sectionCount = 1;
     this.addIOSProps(this.getIOSProps());
     this.addAndroidProps(this.getAndroidProps());
     this.setNativeParams();
@@ -117,14 +120,18 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     };
   }
   private setNativeParams() {
+    console.info('setNativeParams: ', this.nativeObject.toString());
     this.nativeObject.numberOfSectionsCallback = () => {
+      console.info('numberOfSectionsCallback: ', this._sectionCount);
       return this._sectionCount;
     };
     this.nativeObject.numberOfItemsInSectionCallback = () => {
+      console.info('numberOfItemsInSectionCallback: ', this._itemCount);
       return this._itemCount; //There used to be unused onItemCountForSection function. It is removed.
     };
 
     this.nativeObject.cellForItemAtIndexPathCallback = (collectionView, indexPath) => {
+      console.info('cellForItemAtIndexPathCallback: ', { indexPath, collectionView: collectionView.toString() });
       // Cell dequeing for type
       const type = this.onItemType?.(indexPath.row).toString() || '0';
 
@@ -135,23 +142,29 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
 
       const cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
       // onItemCreate and onItemBind callback pairs
-      if (cell.contentView.subviews.length > 0) {
-        this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
-      } else {
-        this.collectionViewItems[cell.uuid] = this.onItemCreate?.(parseInt(cell.reuseIdentifier));
-        const currentCellDirection = this.collectionViewItems[cell.uuid].nativeObject.yoga.direction;
-        // Bug ID : IOS-2750
-        if (currentCellDirection === 0 && this.nativeObject.superview) {
-          this.collectionViewItems[cell.uuid].nativeObject.yoga.direction = this.nativeObject.superview.yoga.resolvedDirection;
-        }
-        ///////
+      console.info('cellForItemAtIndexPathCallback: ', { indexPath });
+      try {
+        if (cell.contentView.subviews.length > 0) {
+          this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
+        } else {
+          this.collectionViewItems[cell.uuid] = this.onItemCreate?.(parseInt(cell.reuseIdentifier));
+          const currentCellDirection = this.collectionViewItems[cell.uuid].nativeObject.yoga.direction;
+          // Bug ID : IOS-2750
+          if (currentCellDirection === 0 && this.nativeObject.superview) {
+            this.collectionViewItems[cell.uuid].nativeObject.yoga.direction = this.nativeObject.superview.yoga.resolvedDirection;
+          }
+          ///////
 
-        cell.contentView.addSubview(this.collectionViewItems[cell.uuid].nativeObject);
-        this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
+          cell.contentView.addSubview(this.collectionViewItems[cell.uuid].nativeObject);
+          this.onItemBind?.(this.collectionViewItems[cell.uuid], indexPath.row);
+        }
+        return cell;
+      } catch (e) {
+        console.error(e.message, { stack: e.stack });
       }
-      return cell;
     };
     this.nativeObject.didSelectItemAtIndexPathCallback = (collectionView, indexPath) => {
+      console.info('didSelectItemAtIndexPathCallback: ');
       const cell = collectionView.cellForItemAtIndexPath(indexPath);
       if (cell) {
         this.onItemSelected?.(this.collectionViewItems[cell.uuid], indexPath.row);
@@ -159,6 +172,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
       }
     };
     this.refreshControl.addJSTarget(() => {
+      console.info('addJSTarget: ');
       this.emit('pullRefresh');
       this.onPullRefresh?.();
     }, UIControlEvents.valueChanged);

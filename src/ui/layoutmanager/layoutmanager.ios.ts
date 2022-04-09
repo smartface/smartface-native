@@ -1,8 +1,6 @@
 import { AbstractLayoutManager, ILayoutManager, ScrollDirection } from './layoutmanager';
 import Invocation from '../../util/iOS/invocation';
 import { isNotEmpty } from '../../util/type';
-import GridViewIOS from '../gridview/gridview.ios';
-import { GridViewEvents } from '../gridview/gridview-events';
 
 const DEFAULT_ITEM_LENGTH = 50;
 
@@ -37,7 +35,6 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
 
     nativeObject.prepareLayoutCallback = () => {
       const retval = this.calculateItemSize(this.spanCount);
-
       if (this.onFullSpan && this.collectionView) {
         const __fullSpanSize = this.calculateItemSize(1);
         this.collectionView.sizeForItemAtIndexPath = (collectionView: LayoutManagerIOS['collectionView'], indexPath: __SF_NSIndexPath) => {
@@ -46,6 +43,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
           if (itemLength === undefined) {
             return retval;
           }
+
           return {
             width: this.scrollDirection === ScrollDirection.VERTICAL ? __fullSpanSize.width : itemLength,
             height: this.scrollDirection === ScrollDirection.VERTICAL ? itemLength : __fullSpanSize.height
@@ -211,20 +209,21 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     if (this.scrollDirection === ScrollDirection.VERTICAL) {
       const columnCount = this.spanCount;
       const itemWidth = columnCount ? (collectionView?.frame.width || 0) / columnCount : 0;
-      const itemHeight = 0;
-      // itemHeight = sfSelf.onItemLength();
+      const itemHeight = this.onItemLength?.(0) || 0;
       retval.width = itemWidth;
       retval.height = itemHeight;
     } else if (this.scrollDirection === ScrollDirection.HORIZONTAL) {
       const rowCount = this.spanCount;
       const itemHeight = rowCount ? (collectionView?.frame.height || 0) / rowCount : 0;
-      const itemWidth = 0;
-      // itemWidth = sfSelf.onItemLength();
+      const itemWidth = this.onItemLength?.(0) || 0;
       retval.width = itemWidth;
       retval.height = itemHeight;
     }
     return retval;
   }
 
-  static ScrollDirection = ScrollDirection;
+  static ScrollDirection = {
+    VERTICAL: 0, // on iOS, the enum values are in reverse
+    HORIZONTAL: 1
+  };
 }
