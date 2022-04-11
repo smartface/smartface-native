@@ -108,11 +108,11 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   }
   set icon(value) {
     this._icon = value;
-    if (typeof value === 'undefined' && !this.nativeObject) {
+    if (typeof value === 'undefined' || !this.nativeObject) {
       return;
     } else if (typeof value === 'string') {
       const image = ImageIOS.createFromFile(value);
-      if (image) {
+      if (image instanceof ImageIOS) {
         this.nativeObject.image = image.nativeObject || undefined;
         this.nativeObject.selectedImage = image.nativeObject || undefined;
       }
