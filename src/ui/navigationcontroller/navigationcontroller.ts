@@ -6,6 +6,7 @@ import FragmentTransition from '../../util/Android/transition/fragmenttransition
 import NativeComponent from '../../core/native-component';
 import { HeaderBar } from './headerbar';
 import { IView } from '../view/view';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 /**
  * @enum {Number} UI.NavigationController.OperationType
  *
@@ -197,7 +198,7 @@ export interface INavigationController extends IController, ControllerPresentPar
   popupBackNavigator: any;
 }
 
-export abstract class AbstractNavigationController extends NativeComponent implements INavigationController {
+export abstract class AbstractNavigationController extends NativeMobileComponent implements INavigationController {
   constructor(params?: Partial<INavigationController>) {
     super(params);
   }

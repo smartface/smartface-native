@@ -187,13 +187,13 @@ export interface ShimmerFlexLayoutIOSParams {
   endFadeDuration: number;
 }
 
-export declare interface IShimmerFlexLayout<
+export interface IShimmerFlexLayout<
   TEvent extends string = ViewEvents,
   TMobile extends MobileOSProps<IView['ios'] & ShimmerFlexLayoutIOSParams, IView['android'] & ShimmerFlexLayoutAndroidParams> = MobileOSProps<
     IView['ios'] & ShimmerFlexLayoutIOSParams,
     IView['android'] & ShimmerFlexLayoutAndroidParams
   >
-> extends IView<TEvent, any, TMobile> {
+> extends IView<TEvent | ViewEvents, any, TMobile> {
   /**
    * Starts the shimmer animation
    *

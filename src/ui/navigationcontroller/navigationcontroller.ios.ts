@@ -6,30 +6,32 @@ import { HeaderBar } from './headerbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 export default class NavigationControllerIOS extends AbstractNavigationController implements INavigationController, IController {
-  private _android = {};
-  private _ios = {};
   view: NavigationView;
   protected _headerBar: HeaderBar;
   protected model: NavigationModel;
   pageID: number;
   tabBar?: TabBarController;
-  isActive: boolean = false;
-  popupBackNavigator: boolean = false;
+  isActive: boolean;
+  popupBackNavigator: boolean;
   isInsideBottomTabBar: boolean;
 
   constructor(params: Partial<INavigationController>) {
     super(params);
-    this.view = new NavigationView({ viewModel: this });
-    this.model = new NavigationModel();
     this._headerBar = new HeaderBar({
       navigationController: this
     });
     this._headerBar.ios.translucent = false;
-
-    this._nativeObject = this.view.nativeObject;
   }
   protected createNativeObject() {
-    return null;
+    this.view = new NavigationView({ viewModel: this });
+    this.model = new NavigationModel();
+    return this.view.nativeObject;
+  }
+
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.isActive = false;
+    this.popupBackNavigator = false;
+    super.init(params);
   }
 
   getCurrentController(): IController {
@@ -40,12 +42,6 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     throw new Error('Method not implemented.');
   }
 
-  get android() {
-    return this._android;
-  }
-  get ios() {
-    return this._ios;
-  }
   get childControllers(): INavigationController['childControllers'] {
     return this.model.childControllers;
   }
@@ -68,7 +64,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     copyObjectPropertiesWithDescriptors(this._headerBar, value);
   }
   push(params: { controller: Controller; animated?: boolean }): void {
-    this.view.push(params.controller, params.animated ? true : false);
+    this.view.push(params.controller, !!params.animated);
     this.model.pushPage(params.controller);
     params.controller.parentController = this;
   }
@@ -123,7 +119,7 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
     }
     return retval;
   }
-  private willShowViewController(index: number, animated?: boolean) {
+  willShowViewController(index: number, animated?: boolean) {
     const page = this.model.pageForIndex(index);
     page &&
       this.willShow?.({
@@ -131,23 +127,22 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
         animated: animated
       });
   }
-  private didShowViewController(viewController: __SF_UIViewController, index: number, animated?: boolean) {
-    let operation = 0;
+
+  didShowViewController(viewController: __SF_UIViewController, index: number, animated?: boolean) {
     let fromIndex = 0;
     let toIndex = 0;
     if (this.model.pageToPush) {
-      operation = 1;
+      const operation = NavigationControllerIOS.OperationType.PUSH;
       fromIndex = index - 1;
       toIndex = index;
       this.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
     } else if (this.view.nativeObject.viewControllers.length < this.model.childControllers.length) {
-      operation = 2;
+      const operation = NavigationControllerIOS.OperationType.POP;
       fromIndex = this.model.childControllers.length - 1;
       toIndex = index;
       this.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
       this.model.popToIndex(index);
     }
-
     if (this.model.pageToPush) {
       this.model.pageToPush = null;
     }
@@ -166,13 +161,16 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
 }
 
 class NavigationView extends NativeComponent<__SF_UINavigationController> {
-  viewModel: any = undefined;
+  viewModel: NavigationControllerIOS;
   private __navigationControllerDelegate: __SF_SMFNavigationControllerDelegate;
   constructor(params: { viewModel?: any } = {}) {
-    super();
+    super(params);
+  }
+  protected createNativeObject(params) {
     this.viewModel = params.viewModel;
-    this._nativeObject = new __SF_UINavigationController();
-
+    return new __SF_UINavigationController();
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
     this.__navigationControllerDelegate = new __SF_SMFNavigationControllerDelegate();
     this.__navigationControllerDelegate.navigationControllerWillShowViewControllerAnimated = (navigationController, viewController, animated) => {
       const index = this.nativeObject.viewControllers.indexOf(viewController);
@@ -185,9 +183,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     };
 
     this.nativeObject.delegate = this.__navigationControllerDelegate;
-  }
-  protected createNativeObject() {
-    return null;
+    super.init(params);
   }
   push(page: IController, animated?: boolean) {
     if (page.nativeObject) {
@@ -218,7 +214,13 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
 }
 
 class NavigationModel {
-  pageToPush: IController | null = null;
+  private _pageToPush: IController | null = null;
+  get pageToPush(): IController | null {
+    return this._pageToPush;
+  }
+  set pageToPush(value: IController | null) {
+    this._pageToPush = value;
+  }
   childControllers: IController[] = [];
   pushPage(page: IController) {
     this.pageToPush = page;

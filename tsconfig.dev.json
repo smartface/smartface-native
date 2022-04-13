@@ -7,7 +7,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "declaration": true,
-    "outDir": "../../InternalProjects/helloworld-boilerplate/scripts/node_modules/@smartface/native",
+    "outDir": "../../InternalProjects/sf-playground/scripts/node_modules/@smartface/native",
     "target": "ES5",
     "esModuleInterop": true,
     "sourceMap": true,

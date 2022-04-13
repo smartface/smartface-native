@@ -248,15 +248,15 @@ class MultimediaIOS implements MultimediaBase {
       }
     }
 
-    this.pickerDelegate.imagePickerControllerDidCancel = function () {
+    this.pickerDelegate.imagePickerControllerDidCancel = () => {
       picker.dismissViewController();
       if (e.onCancel) {
         e.onCancel();
       }
     };
 
-    this.pickerDelegate.didFinishPickingMediaWithInfo = function (param) {
-      picker.dismissViewController(function () {
+    this.pickerDelegate.didFinishPickingMediaWithInfo = (param) => {
+      picker.dismissViewController(() => {
         if (e.onSuccess) {
           if (param.info['UIImagePickerControllerMediaType'] === UIImagePickerMediaTypes.image) {
             let image;
@@ -305,7 +305,7 @@ class MultimediaIOS implements MultimediaBase {
     const onCompleted = e.onCompleted;
     const onFailure = e.onFailure;
 
-    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.path, outputFileName, function (e) {
+    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.path, outputFileName, (e) => {
       if (e.filePath && typeof onCompleted === 'function') {
         const video = new File({
           path: e.filePath

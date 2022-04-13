@@ -930,7 +930,7 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
-  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
+  extends NativeEventEmitterComponent<TEvent | ViewEvents, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
   protected createNativeObject(): any;

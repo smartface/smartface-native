@@ -416,7 +416,7 @@ export declare class AbstractSystem {
    * @static
    * @since 4.4.0
    */
-  static isEmulator: string;
+  static isEmulator: boolean;
 
   /**
    * Vibrates the device for a while. iOS ignores given parameter.

@@ -7,6 +7,7 @@ import { Point2D } from '../../primitive/point2d';
 import View from '../view';
 import NativeComponent from '../../core/native-component';
 import { INativeComponent } from '../../core/inative-component';
+import { IImage } from '../image/image';
 
 /**
  * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
@@ -426,7 +427,7 @@ export interface IHeaderBarItem extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  image: Image | string | null;
+  image: IImage | string | null;
   /**
    * Gets/sets customView of header bar item. Default is undefined. In Android, customView cannot be assigned as {@link UI.HeaderBar#setLeftItem left item}.
    * Given customView overrides following HeaderBarItem properties; image, title, font, systemIcon and systemItem.
@@ -535,7 +536,7 @@ export declare class AbstractHeaderBarItem extends NativeComponent implements IH
   static iOS: {
     SystemItem: typeof SystemItem;
   };
-  image: Image | string | null;
+  image: IImage | string | null;
   customView: View;
   enabled: boolean;
   getScreenLocation(): Point2D;
