@@ -48,14 +48,12 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobi
     if (Array.isArray(value)) {
       this._items = value;
       this._items.forEach((item, index) => {
-        if (!item.nativeObject) {
-          // Re-set the values since nativeObject is set on runtime.
-          item.nativeObject = this.nativeObject.items[index];
-          item.title = item.title;
-          item.icon = item.icon;
-          item.route = item.route;
-          item.ios.font = item.ios.font;
-        }
+        // Re-set the values since nativeObject is set on runtime.
+        item.nativeObject = this.nativeObject.items[index];
+        item.title = item.title;
+        item.icon = item.icon;
+        item.route = item.route;
+        item.ios.font = item.ios.font;
         item.invalidate();
       });
     }

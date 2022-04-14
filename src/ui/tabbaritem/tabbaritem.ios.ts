@@ -10,6 +10,8 @@ import BadgeIOS from '../badge/badge.ios';
 import { TabBarControllerImpl } from '../tabbarcontroller/tabbarcontroller';
 import isViewState from '../../util/isViewState';
 
+const UITabBarItem = SF.requireClass('UITabBarItem');
+
 export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
   private _nativeView: any;
   private _title: string;
@@ -23,7 +25,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject(params: Partial<ITabbarItem>) {
-    return null;
+    return UITabBarItem.new();
   }
   protected init(params: Partial<ITabbarItem>): void {
     this._title = '';
