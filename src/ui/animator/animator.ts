@@ -1,7 +1,7 @@
-import ViewGroup from '../viewgroup';
+import { IViewGroup } from '../viewgroup/viewgroup';
 
 export type AnimatorParams = {
-  layout: ViewGroup;
+  layout: IViewGroup;
   duration: number;
   animFn: () => void;
 };
@@ -51,7 +51,7 @@ export class AnimatorBase implements IAnimator {
    * @ios
    * @since 0.1
    */
-  static animate(rootLayout: ViewGroup, duration: number, animFn: () => void): AnimatorBase {
+  static animate(rootLayout: IViewGroup, duration: number, animFn: () => void): AnimatorBase {
     throw new Error('Method not implemented.');
   }
 }

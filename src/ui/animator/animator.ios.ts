@@ -1,9 +1,9 @@
-import ViewGroup from '../viewgroup';
+import { IViewGroup } from '../viewgroup/viewgroup';
 import { AnimatorBase, AnimatorParams } from './animator';
 
 export default class AnimatorIOS extends AnimatorBase {
-  private _layout: ViewGroup | undefined;
-  private _duration = 0;
+  private _layout: IViewGroup | undefined;
+  private _duration: number;
   private _animFn: (() => void) | undefined;
   private _thenAnimator: AnimatorIOS;
   private _completeFn: () => void;
@@ -45,7 +45,7 @@ export default class AnimatorIOS extends AnimatorBase {
     this._completeFn = callback;
   }
 
-  static animate(rootLayout: ViewGroup, duration: number, animFn: () => void): AnimatorIOS {
+  static animate(rootLayout: IViewGroup, duration: number, animFn: () => void): AnimatorIOS {
     const animator = new AnimatorIOS({
       layout: rootLayout,
       duration: duration / 1000, //millisecont to second

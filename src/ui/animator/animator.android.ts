@@ -1,4 +1,5 @@
 import ViewGroup from '../viewgroup';
+import { IViewGroup } from '../viewgroup/viewgroup';
 import { AnimatorBase, AnimatorParams } from './animator';
 
 /*globals requireClass*/
@@ -12,7 +13,7 @@ const NativeScaleTransition = requireClass('io.smartface.android.anims.ScaleTran
 const NativeViewGroup = requireClass('android.view.ViewGroup');
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 export default class AnimatorAndroid extends AnimatorBase {
-  private _layout: ViewGroup;
+  private _layout: IViewGroup;
   private _duration = 0;
   private _animFn: () => void;
   private _nextAnimator: AnimatorAndroid;
@@ -93,7 +94,7 @@ export default class AnimatorAndroid extends AnimatorBase {
     return animator;
   }
 
-  applyLayoutInners(rootLayout: ViewGroup) {
+  applyLayoutInners(rootLayout: IViewGroup) {
     const innerGroups: any[] = [];
     this.addInnerNativeViewGroups(rootLayout.nativeObject, innerGroups);
     innerGroups.forEach((viewGroup) => {
@@ -102,7 +103,7 @@ export default class AnimatorAndroid extends AnimatorBase {
     });
   }
 
-  addInnerNativeViewGroups(viewGroup: any, viewGroups: ViewGroup[]) {
+  addInnerNativeViewGroups(viewGroup: any, viewGroups: IViewGroup[]) {
     for (let i = 0; i < viewGroup.getChildCount(); i++) {
       const innerView = viewGroup.getChildAt(i);
       const innerClass = innerView.getClass();
