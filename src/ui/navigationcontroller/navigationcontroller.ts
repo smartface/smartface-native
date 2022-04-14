@@ -199,7 +199,7 @@ export interface INavigationController extends IController, ControllerPresentPar
 }
 
 export abstract class AbstractNavigationController extends NativeMobileComponent implements INavigationController {
-  constructor(params?: Partial<INavigationController>) {
+  constructor(params?: any) {
     super(params);
   }
   abstract present(params?: ControllerPresentParams): void;

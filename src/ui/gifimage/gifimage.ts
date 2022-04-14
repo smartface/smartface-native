@@ -5,6 +5,7 @@ import IBlob from '../../global/blob/blob';
 import File from '../../io/file';
 import { Size } from '../../primitive/size';
 import Image from '../image';
+import { IImage } from '../image/image';
 
 export type iOSProps = {
   /**
@@ -72,7 +73,7 @@ export interface IGifImage extends INativeComponent, MobileOSProps<iOSProps, And
    * @ios
    * @since 3.2.0
    */
-  posterImage: Image;
+  posterImage: IImage;
 
   /**
    * Gets/Sets the instrinsicSize of gifImage.
@@ -133,7 +134,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
   abstract get loopCount(): number;
   abstract set loopCount(value: number);
   abstract get frameCount(): number;
-  abstract get posterImage(): Image;
+  abstract get posterImage(): IImage;
   abstract get instrinsicSize(): Size;
   abstract toBlob(): IBlob | null;
   static get android(): AndroidProps | undefined {
@@ -176,7 +177,7 @@ export class GifImageImpl extends AbstractGifImage {
   get frameCount(): number {
     throw new Error('Method not implemented.');
   }
-  get posterImage(): Image {
+  get posterImage(): IImage {
     throw new Error('Method not implemented.');
   }
   get instrinsicSize(): Size {

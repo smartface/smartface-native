@@ -4,6 +4,7 @@ import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
 import Image from '../image';
+import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
 
 /**
@@ -58,11 +59,11 @@ export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProp
   text: string;
   backgroundColor: Color;
   textColor: Color;
-  icon?: Image;
+  icon?: IImage;
   font: Font | null;
   onPress: (params: { index: number }) => void;
 }
 
-const SwipeItem: ConstructorOf<ISwipeItem, Partial<ISwipeItem>> = require(`./swipeitem`).default;
+const SwipeItem: ConstructorOf<ISwipeItem, Partial<ISwipeItem>> = require('./swipeitem').default;
 type SwipeItem = ISwipeItem;
 export default SwipeItem;

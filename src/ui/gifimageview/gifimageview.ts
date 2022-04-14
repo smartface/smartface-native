@@ -1,8 +1,8 @@
 import { IImageView } from '../imageview/imageview';
 import GifImage from '../gifimage';
-import Image from '../image';
 import Color from '../color';
 import { GifImageViewEvents } from './gifimageview-events';
+import { IImage } from '../image/image';
 
 export interface IGifImageView<TEvent extends string = GifImageViewEvents> extends IImageView<TEvent | GifImageViewEvents> {
   /**
@@ -23,7 +23,7 @@ export interface IGifImageView<TEvent extends string = GifImageViewEvents> exten
    * @ios
    * @since 3.2.0
    */
-  readonly currentFrame: Image;
+  readonly currentFrame: IImage;
   /**
    * Gets the currentFrameIndex.
    *
@@ -97,5 +97,5 @@ export interface IGifImageView<TEvent extends string = GifImageViewEvents> exten
    * @ios
    * @since 3.2.0
    */
-  loadFromUrl(params: { url: string; placeholder?: Image; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
+  loadFromUrl(params: { url: string; placeholder?: IImage; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
 }

@@ -3,7 +3,7 @@ import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import File from '../../io/file';
-import Image from '../../ui/image';
+import { IImage } from '../../ui/image/image';
 
 /**
  * Uses the pinned certificates to validate the server trust. The server trust is considered valid if one of the pinned certificates match one of the server certificates.
@@ -39,7 +39,7 @@ type RequestParamsType<B = {}, L = {}> = {
     onError: (e: { message?: string; body?: any; statusCode?: number; headers?: Record<string, string> }) => void;
   };
 
-type ImageRequestParams = RequestParamsType<{}, { image: Image | null }>;
+type ImageRequestParams = RequestParamsType<{}, { image: IImage | null }>;
 type StringRequestParams = RequestParamsType<{}, { string: string }>;
 type JSONType = { [key: string]: string | number | null | boolean };
 type FileRequestParams = RequestParamsType<{ fileName?: string }, { file?: File }>;

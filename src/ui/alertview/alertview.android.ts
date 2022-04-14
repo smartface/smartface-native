@@ -151,9 +151,6 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
       this.setOnDismissListener();
     }
   }
-  get android() {
-    return this._android;
-  }
 
   static Android = {
     ButtonType: ButtonType

@@ -1,5 +1,5 @@
 import Color from '../color';
-import Image from '../image';
+import { IImage } from '../image/image';
 import { AbstractView, IView } from '../view/view';
 import { SliderEvents } from './slider-events';
 
@@ -33,7 +33,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView {
    * @ios
    * @since 0.1
    */
-  thumbImage: Image;
+  thumbImage: IImage;
   /**
    * Gets/sets color of the thumb's minimum track color.
    *
@@ -151,7 +151,7 @@ export declare class AbstractSlider<TEvent extends string = SliderEvents> extend
   constructor(params?: Partial<ISlider>);
   skipDefaults: boolean;
   thumbColor: Color;
-  thumbImage: Image;
+  thumbImage: IImage;
   minTrackColor: Color;
   maxTrackColor: Color;
   value: number;

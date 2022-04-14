@@ -43,7 +43,7 @@ export default class GifImageIOS extends AbstractGifImage {
   }
 
   get posterImage(): Image {
-    return ImageiOS.createFromImage(this.nativeObject.posterImage);
+    return ImageiOS.createFromImage(this.nativeObject.posterImage) as Image;
   }
 
   get instrinsicSize(): Size {

@@ -2,6 +2,7 @@ import Page from '../../ui/page';
 import Image from '../../ui/image';
 import File from '../../io/file';
 import { Contact } from '../../device/contacts/contacts';
+import { IImage } from '../../ui/image/image';
 
 /**
  * @class Share
@@ -47,7 +48,7 @@ export declare class ShareBase {
    * @ios
    * @since 0.1
    */
-  static shareImage(image: Image, page: Page, blacklist: string[]): void;
+  static shareImage(image: IImage, page: Page, blacklist: string[]): void;
   /**
    * Shares a file.
    *

@@ -16,7 +16,6 @@ import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
 import ViewController from '../../util/Android/transition/viewcontroller';
 import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import ImageAndroid from '../image/image.android';
-import type Image from '../image';
 import SearchView from '../searchview';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import StatusBar from '../../application/statusbar';
@@ -29,6 +28,7 @@ import SystemServices from '../../util/Android/systemservices';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import type FlexLayout from '../flexlayout';
 import type Color from '../color';
+import { IImage } from '../image/image';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -103,7 +103,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private _headerBarItems: HeaderBarItem[] = [];
   private returnRevealAnimation: boolean;
   private _headerBarColor: ColorAndroid;
-  private _headerBarImage: Image;
+  private _headerBarImage: IImage;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
   private _transitionViewsCallback: IPage['android']['transitionViewsCallback'];
@@ -114,7 +114,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private _leftItemEnabled: boolean;
   private _leftItemColor = ColorAndroid.WHITE;
   private _itemColor = ColorAndroid.WHITE;
-  private _headerBarLogo: Image;
+  private _headerBarLogo: IImage;
   private _headerBarElevation: number;
   private _headerBarSubtitleColor: ColorAndroid;
   private pageLayout: any;

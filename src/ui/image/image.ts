@@ -22,7 +22,10 @@ import { Rectangle } from '../../primitive/rectangle';
  *     myPage.layout.addChild(myImageView);
  *
  */
-export interface IImage extends INativeMobileComponent<any, WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>> {
+export interface IImage<
+  TNative extends { [key: string]: any } = any,
+  TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
+> extends INativeMobileComponent<TNative, TProps> {
   /**
    * Gets the height of image in pixels.
    *
@@ -321,9 +324,9 @@ export abstract class AbstractImage<
     TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
   >
   extends NativeMobileComponent<TNative, TProps>
-  implements IImage
+  implements IImage<TNative, TProps>
 {
-  constructor(params: Partial<TProps>) {
+  constructor(params?: Partial<TProps>) {
     super(params);
   }
   compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | void {

@@ -2,6 +2,7 @@ import Page from '../../ui/page';
 import Image from '../../ui/image';
 import File from '../../io/file';
 import Color from '../../ui/color';
+import { IImage } from '../../ui/image/image';
 
 export enum ActionType {
   /**
@@ -227,14 +228,14 @@ export type PickMultipleFromGalleryParams = {
     fixOrientation?: boolean;
     maxImageSize?: number;
   };
-  onSuccess: (params: { assets: [{ image?: Image; file?: File | null }] }) => void;
+  onSuccess: (params: { assets: [{ image?: IImage; file?: File | null }] }) => void;
   onCancel?: () => void;
   onFailure?: (e: [{ message: string; fileName: string | null; uri: string }]) => void;
 };
 
 export type LaunchCropperParams = {
   page: Page;
-  asset: File | Image;
+  asset: File | IImage;
   aspectRatio?: { x: number; y: number };
   cropShape?: CropShape;
   headerBarTitle?: string;
@@ -263,7 +264,7 @@ export type LaunchCropperParams = {
     doneButtonColor?: Color;
     cancelButtonColor?: Color;
   };
-  onSuccess: (params: { image?: Image }) => void;
+  onSuccess: (params: { image?: IImage }) => void;
   onCancel?: () => void;
   onFailure?: (e: { message: string }) => void;
 };
@@ -306,7 +307,7 @@ export type MultimediaParams = {
     fixOrientation?: boolean;
     maxImageSize?: number;
   };
-  onSuccess: (params: { image?: Image; video?: File }) => void;
+  onSuccess: (params: { image?: IImage; video?: File }) => void;
   onCancel?: () => void;
   onFailure?: (e: { message: string }) => void;
 };

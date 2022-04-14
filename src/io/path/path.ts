@@ -63,7 +63,7 @@ export class PathBase extends NativeComponent implements IPath {
     throw new Error('Method not implemented.');
   }
 
-  get android(): AndroidProps {
+  static get android(): AndroidProps {
     throw new Error('Method not implemented.');
   }
 }

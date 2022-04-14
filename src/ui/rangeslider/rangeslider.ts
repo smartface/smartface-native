@@ -1,9 +1,9 @@
 import { AbstractView, IView } from '../view/view';
 import Color from '../color';
-import Image from '../image';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { IImage } from '../image/image';
 
 export type RangeSliderIOSProps = IView['ios'] &
   Partial<{
@@ -36,7 +36,7 @@ export interface IRangeSlider<
   snapStepSize?: number;
   minValue?: number;
   maxValue?: number;
-  thumbImage?: Image;
+  thumbImage?: IImage;
   isHapticSnap?: boolean;
   isTrackRounded?: boolean;
   /**
@@ -65,7 +65,7 @@ export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEven
   snapStepSize?: number;
   minValue?: number;
   maxValue?: number;
-  thumbImage?: Image;
+  thumbImage?: IImage;
   isHapticSnap?: boolean;
   isTrackRounded?: boolean;
   /**

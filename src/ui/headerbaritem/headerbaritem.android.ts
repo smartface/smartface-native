@@ -56,17 +56,17 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     const self = this;
     return {
       get systemIcon() {
-        return self._android.systemIcon;
+        return self.android.systemIcon;
       },
       set systemIcon(systemIcon) {
-        self._android.systemIcon = systemIcon;
+        self.android.systemIcon = systemIcon;
 
         if (!self.nativeObject || (self.nativeObject && !self.imageButton)) {
           self.nativeObject = this.createNativeImageButton.call(self);
           self.updateAccessibilityLabel(self._accessibilityLabel);
         }
 
-        if (typeof self._android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(ImageAndroid.systemDrawableId(self._android.systemIcon));
+        if (typeof self.android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(ImageAndroid.systemDrawableId(self.android.systemIcon));
       }
     };
   }
@@ -77,7 +77,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     if (!value) {
       this._color = value;
       if (this.nativeObject && this.color) {
-        if (this._image || this._android.systemIcon) {
+        if (this._image || this.android.systemIcon) {
           const imageCopy = this.nativeObject.getDrawable().mutate();
           imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
           this.nativeObject.setImageDrawable(imageCopy);
@@ -129,8 +129,8 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
         } else {
           this.nativeObject.setImageDrawable(null);
           this.nativeObject = null;
-          if (this._android.attributedTitle) {
-            this._android.attributedTitle = this._android.attributedTitle;
+          if (this.android.attributedTitle) {
+            this.android.attributedTitle = this.android.attributedTitle;
           } else {
             this.title = this._title;
           }
@@ -210,9 +210,9 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     if (!this._customView) {
       if (this.imageButton) {
         this.image && (this.image = this.image);
-        this._android.systemIcon && (this._android.systemIcon = this._android.systemIcon);
-      } else if (this._android.attributedTitle) {
-        this._android.attributedTitle = this._android.attributedTitle;
+        this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
+      } else if (this.android.attributedTitle) {
+        this.android.attributedTitle = this.android.attributedTitle;
       } else {
         this.title = this._title;
       }

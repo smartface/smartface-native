@@ -9,6 +9,7 @@ import TextAlignment from '../shared/textalignment';
 import { SearchViewEvents } from './searchview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import type KeyboardType from '../shared/keyboardtype';
+import { IImage } from '../image/image';
 
 /**
  * Bar style that specifies the search bar’s appearance.
@@ -130,7 +131,7 @@ export type SearchViewIOSProps = IView['ios'] & {
 };
 
 export type SearchViewAndroidProps = IView['android'] & {
-  closeImage: Image;
+  closeImage: IImage;
   keyboardType: KeyboardType;
   /**
    * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
@@ -140,7 +141,7 @@ export type SearchViewAndroidProps = IView['android'] & {
    * @android
    * @since 3.2.1
    */
-  searchButtonIcon: Image;
+  searchButtonIcon: IImage;
   /**
    * This property makes the search view either iconified or expanded.
    *
@@ -158,7 +159,7 @@ export type SearchViewAndroidProps = IView['android'] & {
    * @since 3.2.1
    * @deprecated 3.2.2 Use {@link UI.SearchView#closeIcon} instead.
    */
-  clearIcon: Image;
+  clearIcon: IImage;
   /**
    * Gets/sets clear/close icon of searchview.
    *
@@ -166,7 +167,7 @@ export type SearchViewAndroidProps = IView['android'] & {
    * @android
    * @since 3.2.2
    */
-  closeIcon: Image;
+  closeIcon: IImage;
   /**
    * This property allows you to override search icon of searchview by given icon or custom layout.
    *
@@ -174,7 +175,7 @@ export type SearchViewAndroidProps = IView['android'] & {
    * @android
    * @since 3.2.2
    */
-  leftItem: Image | FlexLayout;
+  leftItem: IImage | FlexLayout;
   /**
    * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
    *
@@ -221,7 +222,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  backgroundImage: Image;
+  backgroundImage: IImage;
   /**
    * Gets/sets search icon image of SearchView.
    *
@@ -231,7 +232,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @since 0.1
    * @deprecated 3.2.2 Use {@link UI.SearchView#searchIcon} instead.
    */
-  iconImage: Image;
+  iconImage: IImage;
   /**
    * Gets/sets search icon image of SearchView.
    *
@@ -240,7 +241,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 3.2.2
    */
-  searchIcon: Image;
+  searchIcon: IImage;
   /**
    * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar,
    * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios. In Android,
@@ -436,9 +437,9 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   text: string;
   hint: string;
   textColor: Color;
-  backgroundImage: Image;
+  backgroundImage: IImage;
   iconImage: Image;
-  searchIcon: Image;
+  searchIcon: IImage;
   addToHeaderBar(page: Page): void;
   removeFromHeaderBar(page: Page): void;
   showKeyboard(): void;

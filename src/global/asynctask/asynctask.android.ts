@@ -13,7 +13,6 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
     return new SFAsyncTask();
   }
   static Events = AsyncTaskEvents;
-  protected _android;
   private _task: IAsyncTask['task'];
   constructor(params?: TProps) {
     super(params);

@@ -3,7 +3,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
-import Image from '../image';
+import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
 export default class SwipeItem
   extends NativeEventEmitterComponent<SwipeItemEvents, any, WithMobileOSProps<Partial<ISwipeItem>, Partial<ISwipeItemIOSParams>, Partial<ISwipeItemAndroidParams>>>
@@ -15,7 +15,7 @@ export default class SwipeItem
   private _text: string = 'Button';
   private _backgroundColor: Color = Color.GRAY;
   private _textColor: Color = Color.WHITE;
-  private _icon?: Image;
+  private _icon?: IImage;
   private _font: Font | null = Font.create(Font.DEFAULT, 14);
   private _onPress: ISwipeItem['onPress'];
   private _padding: number = 0;

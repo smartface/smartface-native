@@ -217,7 +217,7 @@ export default class ImageIOS<
     });
   }
 
-  static createFromImage(image: ImageIOS) {
+  static createFromImage(image: IImage) {
     return new ImageIOS({
       image: image
     });

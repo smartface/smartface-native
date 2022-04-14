@@ -12,14 +12,14 @@ export type WithMobileOSProps<
   TAND extends { [key: string]: any } = { [key: string]: any }
 > = MobileOSProps<TIOS, TAND> & TProps;
 
-export interface INativeMobileComponent<TNative = any, TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>> extends INativeComponent<TNative> {
+export interface INativeMobileComponent<TNative = any, TProps extends WithMobileOSProps = WithMobileOSProps> extends INativeComponent<TNative> {
   readonly ios: TProps['ios'];
   readonly android: TProps['android'];
 }
 
-export abstract class NativeMobileComponent<TNative = any, TProps extends WithMobileOSProps<{ [key: string]: any }> = WithMobileOSProps<{ [key: string]: any }>> extends NativeComponent<TNative> {
+export abstract class NativeMobileComponent<TNative = any, TProps extends WithMobileOSProps = WithMobileOSProps> extends NativeComponent<TNative> {
   private _ios: TProps['ios'];
-  protected _android: TProps['android'];
+  private _android: TProps['android'];
   constructor(params: Partial<TProps> = {}) {
     super(params);
 

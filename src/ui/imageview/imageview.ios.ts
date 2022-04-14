@@ -1,11 +1,11 @@
 import { IImageView, ImageFillType, ImageViewFillTypeIOS } from './imageview';
 import File from '../../io/file';
 import Color from '../color';
-import type Image from '../image';
 import ImageIOS from '../image/image.ios';
 import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
+import { IImage } from '../image/image';
 
 enum SDWebImageOptions {
   /**
@@ -277,9 +277,9 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   fetchFromUrl(params: {
     url: string;
     headers?: { [name: string]: string };
-    placeholder?: Image;
+    placeholder?: IImage;
     useHTTPCacheControl?: boolean;
-    onSuccess?: (image: Image | null, cache: ImageCacheType) => void;
+    onSuccess?: (image: IImage | null, cache: ImageCacheType) => void;
     onFailure?: () => void;
     android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
