@@ -1,55 +1,18 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
-import { XHREventsEvents } from './xhr-events';
+import { XHREvents } from './xhr-events';
 
-export type HTTPRequestMethods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
-
-export interface EventTarget {
-    addEventListener(eventName: string, handler: Function)
-    removeEventListener(eventName: string, toDetach: Function)
+export interface IXHR extends IEventEmitter<XHREvents>, INativeComponent, IXMLHttpRequest {
+  readonly readyState: number;
+  readonly response: string | object | null;
+  readonly responseText: string;
+  readonly responseURL?: string;
+  readonly status: number;
+  readonly statusText: string;
+  responseType: XMLHttpRequestResponseType;
+  readonly upload: XMLHttpRequestEventTarget;
+  timeout: number;
 }
-
-export interface XMLHttpRequestEventTarget extends EventTarget {
-    onabort: (...args: any[]) => void;
-    onerror: (...args: any[]) => void;
-    onload: (...args: any[]) => void;
-    onloadend: (...args: any[]) => void;
-    onloadstart: (...args: any[]) => void;
-    onprogress: (...args: any[]) => void;
-    onreadystatechange: (...args: any[]) => void;
-    ontimeout: (...args: any[]) => void;
-}
-
-interface IXHRMethods {
-    abort();
-    getAllResponseHeaders(): string;
-    getResponseHeader(header: string): string | null;
-    open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string);
-    send(data?: string | FormData);
-    setRequestHeader(header: string, value: string);
-}
-
-export interface IXHR extends IEventEmitter<XHREventsEvents>, INativeComponent, IXHRMethods, XMLHttpRequestEventTarget {
-    readonly readyState: number;
-    readonly response: string | object | null;
-    readonly responseText: string;
-    responseType: ResponseTypes;
-    readonly responseURL?: string;
-    readonly status: number;
-    readonly statusText: string;
-    timeout: number;
-    readonly upload : XMLHttpRequestEventTarget;
-}
-
-export const XMLHttpRequestResponseType = {
-  empty: '',
-  text: 'text',
-  json: 'json',
-  blob: 'blob',
-  arraybuffer: 'arraybuffer'
-} as const;
-
-export type ResponseTypes = ExtractValues<typeof XMLHttpRequestResponseType>;
 
 type FormDataValue = string | { name?: string; type?: string; uri: string };
 type FormDataNameValuePair = [string, FormDataValue];
@@ -80,7 +43,7 @@ export class FormData {
   getParts(): Array<FormDataPart> {
     return this._parts.map(([name, value]) => {
       if (typeof value === 'object' && !Array.isArray(value) && value) {
-        return {...value, fieldName: name };
+        return { ...value, fieldName: name };
       }
       return { string: String(value), fieldName: name };
     });
@@ -122,6 +85,7 @@ export const statuses = {
   415: 'Unsupported Media Type',
   416: 'Requested Range Not Satisfiable',
   417: 'Expectation Failed',
+  418: 'I am a Teapot',
   500: 'Internal Server Error',
   501: 'Not Implemented',
   502: 'Bad Gateway',

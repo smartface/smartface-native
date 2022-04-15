@@ -1,17 +1,14 @@
-import { HTTPRequestMethods, IXHR, XMLHttpRequestEventTarget } from './xhr';
+import { IXHR } from './xhr';
 
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './xhr';
+import { statuses } from './xhr';
 import { FormData } from './xhr';
-import { XHREventsEvents } from './xhr-events';
+import { XHREvents } from './xhr-events';
 
 const NativeXMLHttpRequest = requireClass('io.smartface.android.sfcore.net.XMLHttpRequest');
 
-export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps>
-  extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps>
-  implements IXHR
-{
+export default class XHRAndroid<TEvent extends string = XHREvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREvents, any, TProps> implements IXHR {
   static UNSENT = 0;
   static OPENED = 1;
   static HEADERS_RECEIVED = 2;
@@ -37,7 +34,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
   private _response: string | object | null;
   private _requestHeaders: Map<string, object> | null;
   private _responseURL: string;
-  private _responseType: ResponseTypes = '';
+  private _responseType: XMLHttpRequestResponseType = XMLHttpRequestResponseType.empty;
 
   private _sendFlag: boolean;
   private _errorFlag: boolean;
@@ -109,11 +106,11 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     return this._response ? this._response.toString() : '';
   }
 
-  get responseType(): ResponseTypes {
+  get responseType(): XMLHttpRequestResponseType {
     return this._responseType;
   }
 
-  set responseType(value: ResponseTypes) {
+  set responseType(value: XMLHttpRequestResponseType) {
     if (value === XMLHttpRequestResponseType.blob) {
       throw new Error(`Response type of '${value}' not supported.`);
     } else if (value === XMLHttpRequestResponseType.arraybuffer) {
@@ -205,19 +202,19 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     return null;
   }
 
-  addEventListener(eventName: XHREventsEvents, handler: () => void) {
+  addEventListener(eventName: XHREvents, handler: () => void) {
     const handlers = this._listeners.get(eventName) || [];
     handlers.push(handler);
     this._listeners.set(eventName, handlers);
   }
 
-  removeEventListener(eventName: XHREventsEvents, toDetach: () => void) {
+  removeEventListener(eventName: XHREvents, toDetach: () => void) {
     let handlers = this._listeners.get(eventName) || [];
     handlers = handlers.filter((handler) => handler !== toDetach);
     this._listeners.set(eventName, handlers);
   }
 
-  dispatchEvent(event: XHREventsEvents): boolean {
+  dispatchEvent(event: XHREvents): boolean {
     this._emitEvent(event);
     return true;
   }
@@ -270,7 +267,7 @@ export default class XHRAndroid<TEvent extends string = XHREventsEvents, TProps 
     }
   }
 
-  private _emitEvent(eventName: XHREventsEvents, ...args: Array<any>) {
+  private _emitEvent(eventName: XHREvents, ...args: Array<any>) {
     this['on' + eventName]?.(...args);
     const handlers = this._listeners.get(eventName) || [];
     handlers.forEach((handler) => {

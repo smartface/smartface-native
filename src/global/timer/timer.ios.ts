@@ -7,15 +7,7 @@ class TimerIOS extends TimerBase {
   }
   static createTimer(params: TimerParams) {
     const timer = new __SF_Timer();
-    timer.scheduledTimer(
-      params.delay / 1000,
-      function () {
-        if (params.task) {
-          params.task();
-        }
-      },
-      params.repeat!
-    );
+    timer.scheduledTimer(params.delay / 1000, () => params.task?.(), params.repeat!);
 
     TimerIOS.timerArray.push(timer);
     return timer as unknown as TimerIOS;

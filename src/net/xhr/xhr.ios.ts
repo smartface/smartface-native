@@ -1,12 +1,10 @@
-import { HTTPRequestMethods, IXHR } from './xhr';
-
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { ResponseTypes, statuses, XMLHttpRequestResponseType } from './xhr';
+import { statuses, IXHR } from './xhr';
 import { FormData, FormDataPart } from './xhr';
-import { XHREventsEvents } from './xhr-events';
+import { XHREvents } from './xhr-events';
 
-class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREventsEvents, any, TProps> implements IXHR {
+class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREvents, any, TProps> implements IXHR {
   static UNSENT = 0;
   static OPENED = 1;
   static HEADERS_RECEIVED = 2;
@@ -29,7 +27,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
   private _headers: any;
   private _errorFlag: boolean;
   private _sendFlag: boolean;
-  private _responseType: ResponseTypes = 'text';
+  private _responseType: XMLHttpRequestResponseType = XMLHttpRequestResponseType.empty;
   private _responseURL?: string;
   private _status: number;
 
@@ -78,11 +76,11 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
     return this._response && !this._errorFlag ? this._response : '';
   }
 
-  get responseType(): ResponseTypes {
+  get responseType(): XMLHttpRequestResponseType {
     return this._responseType;
   }
 
-  set responseType(value: ResponseTypes) {
+  set responseType(value: XMLHttpRequestResponseType) {
     if (value === XMLHttpRequestResponseType.blob) {
       throw new Error(`Response type of '${value}' not supported.`);
     } else if (value === XMLHttpRequestResponseType.arraybuffer) {
@@ -253,7 +251,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
         this._sendFlag = false;
 
         // -1004 apple specific code for timeout error
-        if (error.errorCode == -1004 || error.errorCode == -1001) {
+        if (error.errorCode === -1004 || error.errorCode === -1001) {
           this.emitEvent('timeout');
         }
         this._setRequestError('error', error);
@@ -273,8 +271,8 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
     }
   }
 
-  addEventListener(eventName: XHREventsEvents, handler: Function) {
-    if (Object.values(XHREventsEvents).indexOf(eventName) === -1) {
+  addEventListener(eventName: XHREvents, handler: Function) {
+    if (Object.values(XHREvents).indexOf(eventName) === -1) {
       throw new Error('Argument `eventName` type does not match');
     }
 
@@ -283,8 +281,8 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
     this._listeners.set(eventName, handlers);
   }
 
-  removeEventListener(eventName: XHREventsEvents, toDetach: Function) {
-    if (Object.values(XHREventsEvents).indexOf(eventName) === -1) {
+  removeEventListener(eventName: XHREvents, toDetach: Function) {
+    if (Object.values(XHREvents).indexOf(eventName) === -1) {
       throw new Error('Argument `eventName` type does not match');
     }
 
@@ -332,7 +330,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
     }
   }
 
-  private _setRequestError(eventName: XHREventsEvents, error?: any) {
+  private _setRequestError(eventName: XHREvents, error?: any) {
     this._readyState = XHRIOS.DONE;
     this._response = error;
 
@@ -341,7 +339,7 @@ class XHRIOS<TEvent extends string = XHREventsEvents, TProps extends MobileOSPro
     this.emitEvent('loadend');
   }
 
-  private emitEvent(eventName: XHREventsEvents, ...args: Array<any>) {
+  private emitEvent(eventName: XHREvents, ...args: Array<any>) {
     this.emit(eventName);
 
     if (typeof this['on' + eventName] === 'function') {

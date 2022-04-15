@@ -1,4 +1,3 @@
-import NativeComponent from '../../core/native-component';
 import { TimerBase } from './timer';
 
 /* global requireClass */
@@ -14,7 +13,7 @@ class TimerAndroid extends TimerBase {
   private delay: number;
   static handler = NativeSFHandler.getHandler();
   static setTimeout(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({ ...params, repeat: false }) as TimerBase;
+    return new TimerAndroid({ ...params, repeat: false });
   }
   static setInterval(params: { task: () => void; delay: number }) {
     return new TimerAndroid({ ...params, repeat: true }) as TimerBase;

@@ -1,92 +1,101 @@
-export {};
+declare interface Timer {
+  hasRef(): boolean;
+  ref(): this;
+  refresh(): this;
+  unref(): this;
+}
 
-declare global {
-  type Optional<T> = { [P in keyof T]?: T[P] };
-  type DeviceOS = 'Android' | 'iOS';
-  class Device {
-    static deviceOS: DeviceOS;
-  }
+declare interface Immediate {
+  hasRef(): boolean;
+  ref(): this;
+  unref(): this;
+  _onImmediate: () => void; // to distinguish it from the Timeout class
+}
 
-  const SMFApplication: typeof __SF_UIApplication;
-  const Application: any;
+declare interface Timeout extends Timer {
+  hasRef(): boolean;
+  ref(): this;
+  refresh(): this;
+  unref(): this;
+}
 
-  function long(value: number): number;
-  function array(outerRadii: any, type?: string): any[];
-  function toJSArray(val: any): any[];
-  function float(val: any): number;
-  function int(val: any): number;
-  function release(value: any): any;
-  function arrayLength(array: any[]): number;
-  function alert(
-    params:
-      | string
-      | {
-          title?: string;
-          message?: string;
-          buttons?: {
-            text: string;
-            type: number;
-            onClick?: () => void;
-          }[];
-        }
-  ): void;
+declare interface ErrorType {
+  message: string;
+  stack: string;
+}
 
-  function requireClass(className: string): any;
-  function defineClass(className: string, opts?: any): any;
+type ConstructorOf<I, P = any> = new (params?: P) => I;
 
-  interface ErrorType {
-    message: string;
-    stack: string;
-  }
+declare type ExtractValue<T extends { [key: string]: any }> = T extends {
+  [key: string]: any;
+}
+  ? T[keyof T]
+  : T;
+declare type ExtractValues<T extends { [key: string]: any }> = T extends {
+  [key: string]: any;
+}
+  ? ExtractValue<T[keyof T]>
+  : never;
 
-  type ExtractValue<T extends { [key: string]: any }> = T extends {
-    [key: string]: any;
-  }
-    ? T[keyof T]
-    : T;
-  type ExtractValues<T extends { [key: string]: any }> = T extends {
-    [key: string]: any;
-  }
-    ? ExtractValue<T[keyof T]>
-    : never;
-  interface Error {
-    type: string;
-    message: string;
-    stack?: string;
-  }
+declare interface Error {
+  type: string;
+  message: string;
+  stack?: string;
+}
 
-  interface UnhandledError extends Error {}
+interface UnhandledError extends Error {}
 
-  // namespace console {
-  //   function info(...params: any[]): void;
-  //   function log(...params: any[]): void;
-  //   function error(...params: any[]): void;
-  //   function warn(...params: any[]): void;
-  // }
+declare type DeviceOS = 'Android' | 'iOS';
+declare type XMLHttpRequest = IXMLHttpRequest;
 
-  function setTimeout(fn: () => void, time: number): Timeout;
-  function setInterval(fn: () => void, time: number): Timeout;
-  function clearInterval(intervalId: Timeout): void;
-  function clearTimeout(timeoutId: Timeout): void;
+declare class Device {
+  static deviceOS: DeviceOS;
+}
 
-  interface Timer {
-    hasRef(): boolean;
-    ref(): this;
-    refresh(): this;
-    unref(): this;
-  }
+type AlertParams = {
+  title?: string;
+  message?: string;
+  buttons?: {
+    text: string;
+    type: number;
+    onClick?: () => void;
+  }[];
+};
 
-  class Immediate {
-    hasRef(): boolean;
-    ref(): this;
-    unref(): this;
-    _onImmediate: () => void; // to distinguish it from the Timeout class
-  }
+// Native mobile globals
+declare function requireClass(className: string): any;
+declare function defineClass(className: string, opts?: any): any;
+declare const SMFApplication: typeof __SF_UIApplication; //ios global application from framework
+declare const Application: any; //Android global application from framework
 
-  class Timeout implements Timer {
-    hasRef(): boolean;
-    ref(): this;
-    refresh(): this;
-    unref(): this;
+//android value converters. convert from js value to java values
+declare function long(value: number): number;
+declare function array(outerRadii: any, type?: string): any[];
+declare function toJSArray(val: any): any[];
+declare function float(val: any): number;
+declare function int(val: any): number;
+declare function release(value: any): any;
+declare function arrayLength(array: any[]): number;
+
+//javascript standard globals
+declare function alert(params: string | AlertParams): void;
+declare function setTimeout(fn: () => void, time: number): Timeout;
+declare function setInterval(fn: () => void, time: number): Timeout;
+declare function clearInterval(intervalId: Timeout): void;
+declare function clearTimeout(timeoutId: Timeout): void;
+
+declare module NodeJS {
+  interface Global {
+    // Native mobile globals
+    requireClass(className: string): any;
+    defineClass(className: string, opts?: any): any;
+    SMFApplication: typeof __SF_UIApplication; //ios global application from framework
+    Application: any; //Android global application from framework
+    Device: Device;
+    XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
+
+    lang: Record<string, any>; //Old i18n polyfill, replace later
   }
 }
+
+declare var global: NodeJS.Global & typeof globalThis;

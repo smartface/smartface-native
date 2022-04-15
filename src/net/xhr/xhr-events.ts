@@ -1,4 +1,4 @@
-export const XHREventsEvents = {
+export const XHREvents = {
   abort: 'abort',
   error: 'error',
   load: 'load',
@@ -9,4 +9,4 @@ export const XHREventsEvents = {
   timeout: 'timeout'
 } as const;
 
-export type XHREventsEvents = ExtractValues<typeof XHREventsEvents>;
+export type XHREvents = ExtractValues<typeof XHREvents>;

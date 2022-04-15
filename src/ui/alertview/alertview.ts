@@ -1,5 +1,15 @@
 import { INativeComponent } from '../../core/inative-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+
+export interface IAlertViewAndroidProps {
+  /**
+   * Gets/sets whether the alert view is cancelable or not when touched outside.
+   *
+   * @android
+   * @since 0.1
+   */
+  cancellable: boolean;
+}
 
 /**
  * @enum {Number} UI.AlertView.Android.ButtonType
@@ -32,9 +42,9 @@ import { MobileOSProps } from '../../core/native-mobile-component';
  *     myAlertView.show();
  */
 export enum ButtonType {
-  POSITIVE = 0,
-  NEUTRAL = 1,
-  NEGATIVE = 2
+  POSITIVE,
+  NEUTRAL,
+  NEGATIVE
 }
 
 /**
@@ -66,7 +76,7 @@ export enum ButtonType {
  *
  *     myAlertView.show();
  */
-export interface IAlertView extends INativeComponent, MobileOSProps {
+export interface IAlertView extends INativeComponent, MobileOSProps<{}, IAlertViewAndroidProps> {
   /**
    * Gets showing status of AlertView. It is set to true if AlertView is
    * currently displayed on screen, false otherwise.
@@ -119,15 +129,6 @@ export interface IAlertView extends INativeComponent, MobileOSProps {
    * @since 0.1
    */
   onDismiss: (alertView?: IAlertView) => void;
-  readonly android: Partial<{
-    /**
-     * Gets/sets whether the alert view is cancelable or not when touched outside.
-     *
-     * @android
-     * @since 0.1
-     */
-    cancellable: boolean;
-  }>;
   /**
    * Dismisses the AlertView, isShowing property set to false after this
    * operation.
@@ -197,9 +198,9 @@ export interface IAlertView extends INativeComponent, MobileOSProps {
   }): void;
 }
 
-export declare class AbstractAlertView implements IAlertView {
+export declare class AbstractAlertView extends NativeMobileComponent<any, MobileOSProps<{}, IAlertViewAndroidProps>> implements IAlertView {
+  protected createNativeObject(params?: Partial<Record<string, any>>): any;
   constructor(params?: Partial<IAlertView>);
-  ios: Partial<{ [key: string]: any }>;
   isShowing(): void;
   show(): void;
   dismiss(): void;
@@ -207,15 +208,6 @@ export declare class AbstractAlertView implements IAlertView {
   title: string;
   message: string;
   onDismiss: (alertView?: IAlertView) => void;
-  android: Partial<{
-    /**
-     * Gets/sets whether the alert view is cancelable or not when touched outside.
-     *
-     * @android
-     * @since 0.1
-     */
-    cancellable: boolean;
-  }>;
   get textBoxes(): { text: string }[];
   addButton(params: { type: ButtonType; text: string; onClick?: () => void; index?: number }): void;
   addTextBox(params: {
@@ -224,7 +216,6 @@ export declare class AbstractAlertView implements IAlertView {
     isPassword: boolean;
     android: Partial<{ width: number; height: number; viewSpacings: { left: number; top: number; right: number; bottom: number } }>;
   }): void;
-  nativeObject: any;
   static Android: {
     ButtonType: typeof ButtonType;
   };
