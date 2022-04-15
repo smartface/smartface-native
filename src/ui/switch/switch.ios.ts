@@ -6,26 +6,27 @@ import { SwitchEvents } from './switch-events';
 
 export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<TEvent | SwitchEvents, __SF_UISwitch, ISwitch> {
   private _toggleOnColor: Color = Color.GREEN;
-  private _onToggleChanged: (toggle: boolean) => void;
+  onToggleChanged: (toggle: boolean) => void;
+  constructor(params?: Partial<ISwitch>) {
+    super(params);
+  }
   createNativeObject() {
     return new __SF_UISwitch();
   }
-  constructor(params?: Partial<ISwitch>) {
-    super(params);
-
-    if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+  protected init(params?: Partial<Record<string, any>>): void {
+    if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
-    } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
+    } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
       this.nativeObject.setValueForKey(4, 'semanticContentAttribute');
     }
 
     this.nativeObject.layer.masksToBounds = false;
 
-    const onToggleChangedHandler = (toggle: boolean) => {
-      this._onToggleChanged(toggle);
-      this.emit(SwitchEvents.ToggleChanged, toggle);
-    };
-    this.nativeObject.addJSTarget(onToggleChangedHandler, UIControlEvents.valueChanged);
+    this.nativeObject.addJSTarget(() => {
+      this.onToggleChanged?.(this.toggle);
+      this.emit('toggleChanged', this.toggle);
+    }, UIControlEvents.valueChanged);
+    super.init(params);
   }
 
   get enabled(): boolean {
@@ -69,11 +70,6 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this._toggleOnColor = value;
     this.nativeObject.onTintColor = value.nativeObject;
   }
-
-  get onToggleChanged(): (toggle: boolean) => void {
-    return this._onToggleChanged;
-  }
-  set onToggleChanged(value: (toggle: boolean) => void) {
-    this._onToggleChanged = value;
-  }
 }
+
+import '@smartface/native';

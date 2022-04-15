@@ -34,9 +34,6 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   extends LabelAndroid<ButtonEvents, TNative, TProps>
   implements IButton<TEvent>
 {
-  protected createNativeObject() {
-    return new NativeButton(AndroidConfig.activity);
-  }
   protected _backgroundColor: IButton['backgroundColor'];
   private __backgroundImages: IButton['backgroundImage'];
   private borderShapeDrawable: any;
@@ -44,22 +41,29 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   private backgroundDrawable = new NativeGradientDrawable();
   constructor(params: Partial<TProps> = {}) {
     super(params);
+    this.setOnClickListener();
+    this.setOnLongClickListener();
+
+    this.viewNativeDefaultTextAlignment = TextAlignmentDic[TextAlignment.MIDCENTER];
+    this._borderColor = Color.BLACK;
+    this.textAlignment = TextAlignment.MIDCENTER;
+    this._borderWidth = 0;
+  }
+  protected init(params?: Partial<TProps>): void {
     if (this._backgroundColor instanceof Color) {
       this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     }
     this._borderRadius = 0;
     this.borderShapeDrawable = SFViewUtil.getShapeDrawable(0, 0, this._borderRadius);
 
-    this.layerDrawable = this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
-    this._borderColor = Color.BLACK;
-
-    this._borderWidth = 0;
-
     this.nativeObject.setBackground(this.layerDrawable);
     this.nativeObject.setAllCaps(false); // enable lowercase texts
+    this.layerDrawable = this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
+    super.init(params);
+  }
 
-    this.setOnClickListener();
-    this.setOnLongClickListener();
+  protected createNativeObject() {
+    return new NativeButton(AndroidConfig.activity);
   }
   static Events = { ...ViewAndroid.Events, ...ButtonEvents };
   get backgroundColor(): IButton['backgroundColor'] {

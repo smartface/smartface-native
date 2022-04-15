@@ -33,31 +33,37 @@ const NativeEllipsizeMode = {
 
 const MAX_INT_VALUE = 2147483647;
 const AUTO_SIZE_TEXT_TYPE_NONE = 0;
-const MIDLEFT_GRAVITY = 16 | 3;
-const MIDCENTER_GRAVITY = 17;
 const MINIMUM_FONT_SIZE = 7;
 
 export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel> extends ViewAndroid<TEvent, TNative, TProps> implements ILabel {
   private _ellipsizeMode: ILabel['ellipsizeMode'];
   protected _textAlignment: TextAlignment;
-  protected viewNativeDefaultTextAlignment: number = TextAlignment.TOPLEFT;
+  protected viewNativeDefaultTextAlignment: number;
   private skipDefaults: boolean;
-  private _adjustFontSizeToFit = false;
-  private _minimumFontSize = MINIMUM_FONT_SIZE;
+  private _adjustFontSizeToFit: boolean;
+  private _minimumFontSize: number;
   private _textDirection: TextDirection;
-  private _adjustableFontSizeStep = 1;
-  private fontInitial: Font | null = null;
-  private _textColor: ILabel['textColor'] = Color.BLUE;
-  protected createNativeObject() {
-    return new NativeTextView(AndroidConfig.activity);
-  }
+  private _adjustableFontSizeStep: number;
+  private fontInitial: Font | null;
+  private _textColor: ILabel['textColor'];
   constructor(params: Partial<TProps>) {
     super(params);
-
-    this._textAlignment = TextAlignment.MIDLEFT;
-    this.nativeObject.setGravity(MIDLEFT_GRAVITY);
-    this.viewNativeDefaultTextAlignment = MIDLEFT_GRAVITY;
+  }
+  protected init(params?: Partial<TProps>): void {
+    super.init(params);
+    this._adjustFontSizeToFit = false;
+    this._minimumFontSize = MINIMUM_FONT_SIZE;
+    this._adjustableFontSizeStep = 1;
+    this.fontInitial = null;
+    this._textColor = Color.BLUE;
+    this.viewNativeDefaultTextAlignment = TextAlignmentDic[TextAlignment.MIDLEFT];
+    this.textAlignment = TextAlignment.MIDLEFT;
+    super.init(params);
     this.initAndroidProps();
+  }
+
+  protected createNativeObject() {
+    return new NativeTextView(AndroidConfig.activity);
   }
 
   toString() {

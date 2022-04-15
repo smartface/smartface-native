@@ -5,6 +5,8 @@ import TypeValue from '../../util/Android/typevalue';
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
 import { PickerEvents } from './picker-events';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
 
 const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
 const NativeNumberPicker = requireClass('android.widget.NumberPicker');
@@ -17,8 +19,7 @@ const NativeRString = requireClass('android.R').string;
 const CENTER = 17;
 
 export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndroid<TEvent | PickerEvents> implements IPicker<TEvent | PickerEvents> {
-  protected _items: IPicker['items'] = [];
-  protected _onSelected: IPicker['onSelected'];
+  protected _items: IPicker['items'];
   protected _okColor: IPicker['okColor'];
   protected _cancelColor: IPicker['cancelColor'];
   protected _okFont: IPicker['okFont'];
@@ -27,18 +28,26 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   protected _cancelText: IPicker['cancelText'];
   protected _textColor: IPicker['textColor'];
   protected _titleFont: IPicker['titleFont'];
-  protected _titleColor: IPicker['titleColor'] = Color.BLACK;
+  protected _titleColor: IPicker['titleColor'];
   protected _title: IPicker['title'];
-  private buttonCustomize = false;
+  private buttonCustomize: boolean;
   protected dialogInstance: any;
 
-  createNativeObject() {
-    return new NativeNumberPicker(AndroidConfig.activity);
-  }
   constructor(params: Partial<IPicker> = {}) {
     super(params);
     this.setOnSelectedEvent();
     this.androidProperties();
+  }
+  onSelected: (index: number) => void;
+  protected init(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
+    this._items = [];
+    this._titleColor = Color.BLACK;
+    this.buttonCustomize = false;
+    super.init(params);
+  }
+
+  createNativeObject() {
+    return new NativeNumberPicker(AndroidConfig.activity);
   }
   get items(): IPicker['items'] {
     return this._items; //TODO: Returns self.nativeObject.getDisplayValues() after string problem is solved.
@@ -52,12 +61,6 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   }
   set currentIndex(value: IPicker['currentIndex']) {
     this.nativeObject.setValue(value);
-  }
-  get onSelected(): IPicker['onSelected'] {
-    return this._onSelected;
-  }
-  set onSelected(value: IPicker['onSelected']) {
-    this._onSelected = value;
   }
   get okColor(): IPicker['okColor'] {
     return this._okColor;
@@ -137,7 +140,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     const layout = this.addViewToLayout();
 
     const cancelListener = NativeDialogInterface.OnClickListener.implement({
-      onClick: function (dialogInterface: any, i: number) {
+      onClick: (dialogInterface: any, i: number) => {
         cancel?.();
       }
     });
@@ -209,7 +212,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
       onScrollStateChange: (picker, scrollState) => {
         if (scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
           this.emit('selected', this.currentIndex);
-          this._onSelected?.(this.currentIndex);
+          this.onSelected?.(this.currentIndex);
         }
       }
     });

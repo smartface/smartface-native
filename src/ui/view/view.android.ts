@@ -187,7 +187,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return this._onTouchCancelled;
   }
   set onTouchCancelled(onTouchCancelled) {
-    this._onTouchCancelled = onTouchCancelled.bind(this);
+    this._onTouchCancelled = onTouchCancelled;
   }
 
   get parent() {
@@ -201,7 +201,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     if (this.didSetTouchHandler) {
       return;
     }
-
     this._sfOnTouchViewManager.setTouchCallbacks(this._touchCallbacks);
     this.nativeObject.setOnTouchListener(this._sfOnTouchViewManager);
     this.didSetTouchHandler = true;
@@ -375,46 +374,48 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._nativeObject.setClipToOutline(this._masksToBounds);
   }
 
-  protected _touchCallbacks = {
-    onTouchEnded: (isInside: boolean, x: number, y: number) => {
-      const mEvent = {
-        x,
-        y,
-        isInside
-      };
-      this.emit('touchEnded', mEvent);
-      const result = this.onTouchEnded?.(isInside, mEvent);
-      return !!result;
-    },
-    onTouch: (x: number, y: number) => {
-      const mEvent = {
-        x,
-        y
-      };
-      this.emit('touch', mEvent);
-      const result = this.onTouch?.(mEvent);
-      return !!result;
-    },
-    onTouchMoved: (isInside: boolean, x: number, y: number) => {
-      const mEvent = {
-        x,
-        y,
-        isInside
-      };
-      this.emit('touchMoved', mEvent);
-      const result = this.onTouchMoved?.(isInside, mEvent);
-      return !!result;
-    },
-    onTouchCancelled: (x: number, y: number) => {
-      const mEvent = {
-        x,
-        y
-      };
-      this.emit('touchCancelled', mEvent);
-      const result = this.onTouchCancelled?.(mEvent);
-      return !!result;
-    }
-  };
+  protected get _touchCallbacks() {
+    return {
+      onTouchEnded: (isInside: boolean, x: number, y: number) => {
+        const mEvent = {
+          x,
+          y,
+          isInside
+        };
+        this.emit('touchEnded', mEvent);
+        const result = this.onTouchEnded?.(isInside, mEvent);
+        return !!result;
+      },
+      onTouch: (x: number, y: number) => {
+        const mEvent = {
+          x,
+          y
+        };
+        this.emit('touch', mEvent);
+        const result = this.onTouch?.(mEvent);
+        return !!result;
+      },
+      onTouchMoved: (isInside: boolean, x: number, y: number) => {
+        const mEvent = {
+          x,
+          y,
+          isInside
+        };
+        this.emit('touchMoved', mEvent);
+        const result = this.onTouchMoved?.(isInside, mEvent);
+        return !!result;
+      },
+      onTouchCancelled: (x: number, y: number) => {
+        const mEvent = {
+          x,
+          y
+        };
+        this.emit('touchCancelled', mEvent);
+        const result = this.onTouchCancelled?.(mEvent);
+        return !!result;
+      }
+    };
+  }
 
   get transitionId() {
     return SFViewUtil.getTransitionName(this.nativeObject);
