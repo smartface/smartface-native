@@ -16,5 +16,5 @@
     "types": ["node"]
   },
   "include": ["./src/**/*"],
-  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts"]
+  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts", ".types/xmlhttprequest.d.ts"]
 }
