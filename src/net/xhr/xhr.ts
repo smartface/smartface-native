@@ -2,7 +2,40 @@ import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
 import { XHREvents } from './xhr-events';
 
-export interface IXHR extends IEventEmitter<XHREvents>, INativeComponent, IXMLHttpRequest {
+export enum XMLHttpRequestResponseType {
+  empty = '',
+  text = 'text',
+  json = 'json',
+  blob = 'blob',
+  arraybuffer = 'arraybuffer'
+}
+
+export interface EventTarget {
+  addEventListener(eventName: string, handler: (...args: any[]) => void): void;
+  removeEventListener(eventName: string, toDetach: (...args: any[]) => void): void;
+}
+
+export interface XMLHttpRequestEventTarget extends EventTarget {
+  onabort: (...args: any[]) => void;
+  onerror: (...args: any[]) => void;
+  onload: (...args: any[]) => void;
+  onloadend: (...args: any[]) => void;
+  onloadstart: (...args: any[]) => void;
+  onprogress: (...args: any[]) => void;
+  onreadystatechange: (...args: any[]) => void;
+  ontimeout: (...args: any[]) => void;
+}
+
+export interface IXHRMethods {
+  abort(): void;
+  getAllResponseHeaders(): string;
+  getResponseHeader(header: string): string | null;
+  open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string): void;
+  send(data?: string | FormData): void;
+  setRequestHeader(header: string, value: string): void;
+}
+
+export interface IXHR extends IEventEmitter<XHREvents>, INativeComponent, IXHRMethods, XMLHttpRequestEventTarget {
   readonly readyState: number;
   readonly response: string | object | null;
   readonly responseText: string;

@@ -3,7 +3,7 @@ import XHR from './net/xhr';
 import AlertOverride from './core/alert';
 import * as TimerOverride from './core/timers';
 
-global.XMLHttpRequest = XHR;
+global.XMLHttpRequest = XHR as any;
 global.process = global.process || {
   env: {
     NODE_ENV: 'production'

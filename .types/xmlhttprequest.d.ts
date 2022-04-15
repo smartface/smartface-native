@@ -24,7 +24,7 @@ declare interface XMLHttpRequestEventTarget extends EventTarget {
   ontimeout: (...args: any[]) => void;
 }
 
-interface IXHRMethods {
+declare interface IXHRMethods {
   abort(): void;
   getAllResponseHeaders(): string;
   getResponseHeader(header: string): string | null;
@@ -38,7 +38,7 @@ interface IXHRMethods {
   emit(event: 'abort' | 'error' | 'load' | 'loadend' | 'loadstart' | 'progress' | 'readystatechange' | 'timeout', ...args: any[]): void;
 }
 
-declare interface IXMLHttpRequest extends IXHRMethods, XMLHttpRequestEventTarget {
+declare interface IXMLHttpRequest extends XMLHttpRequestEventTarget {
   readonly readyState: number;
   readonly response: string | object | null;
   readonly responseText: string;
@@ -49,6 +49,18 @@ declare interface IXMLHttpRequest extends IXHRMethods, XMLHttpRequestEventTarget
   timeout: number;
   responseType: XMLHttpRequestResponseType;
   nativeObject: { [key: string]: any };
+
+  abort(): void;
+  getAllResponseHeaders(): string;
+  getResponseHeader(header: string): string | null;
+  open(method: HTTPRequestMethods, url: string, async?: boolean, user?: string, password?: string): void;
+  send(data?: string | FormData): void;
+  setRequestHeader(header: string, value: string): void;
+
+  on(eventName: 'abort' | 'error' | 'load' | 'loadend' | 'loadstart' | 'progress' | 'readystatechange' | 'timeout', callback: (...args: any) => void): () => void;
+  once(eventName: 'abort' | 'error' | 'load' | 'loadend' | 'loadstart' | 'progress' | 'readystatechange' | 'timeout', callback: (...args: any) => void): () => void;
+  off(eventName: 'abort' | 'error' | 'load' | 'loadend' | 'loadstart' | 'progress' | 'readystatechange' | 'timeout', callback?: (...args: any) => void): void;
+  emit(event: 'abort' | 'error' | 'load' | 'loadend' | 'loadstart' | 'progress' | 'readystatechange' | 'timeout', ...args: any[]): void;
 }
 
 declare interface FormData {

@@ -83,6 +83,7 @@ declare function setTimeout(fn: () => void, time: number): Timeout;
 declare function setInterval(fn: () => void, time: number): Timeout;
 declare function clearInterval(intervalId: Timeout): void;
 declare function clearTimeout(timeoutId: Timeout): void;
+declare const XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
 
 declare module NodeJS {
   interface Global {
