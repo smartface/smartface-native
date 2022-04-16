@@ -73,6 +73,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     return this._textColor;
   }
   set textColor(value: IPicker['textColor']) {
+    this._textColor = value;
     this.nativeObject.setTextColor(value?.nativeObject);
   }
   get dialogBackgroundColor(): IPicker['dialogBackgroundColor'] {
@@ -80,7 +81,9 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   }
   set dialogBackgroundColor(value: IPicker['dialogBackgroundColor']) {
     this._backgroundColor = value;
-    if (this._backgroundColor instanceof Color) this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
+    if (this._backgroundColor instanceof Color) {
+      this.dialogInstance?.getWindow().setBackgroundDrawable(new NativeColorDrawable(this._backgroundColor.nativeObject));
+    }
   }
   get cancelColor(): IPicker['cancelColor'] {
     return this._cancelColor;
@@ -97,7 +100,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     this._cancelText = value;
   }
   get okText(): IPicker['okText'] {
-    return this._cancelText;
+    return this._okText;
   }
   set okText(value: IPicker['okText']) {
     this.buttonCustomize = true;
@@ -111,7 +114,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     this._okFont = value;
   }
   get cancelFont(): IPicker['cancelFont'] {
-    return this._okFont;
+    return this._cancelFont;
   }
   set cancelFont(value: IPicker['cancelFont']) {
     this.buttonCustomize = true;
@@ -163,7 +166,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     const alertDialog = builder.show(); //return native alertdailog
     this.dialogInstance = alertDialog;
     // re-set background color
-    this.backgroundColor = this._backgroundColor;
+    this.dialogBackgroundColor = this._backgroundColor;
 
     if (this.buttonCustomize) {
       const negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);

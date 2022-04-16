@@ -139,7 +139,7 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     this._cancelText = value;
   }
   get okText(): IPicker['okText'] {
-    return this._cancelText;
+    return this._okText;
   }
   set okText(value: IPicker['okText']) {
     this._okText = value;
@@ -151,7 +151,7 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
     this._okFont = value;
   }
   get cancelFont(): IPicker['cancelFont'] {
-    return this._okFont;
+    return this._cancelFont;
   }
   set cancelFont(value: IPicker['cancelFont']) {
     this._cancelFont = value;
