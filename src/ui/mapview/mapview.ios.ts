@@ -22,24 +22,33 @@ const DEFAULT_ZOOM_LEVEL = 15;
 export default class MapViewIOS<TEvent extends string = MapViewEvents> extends ViewIOS<TEvent | MapViewEvents, any, IMapView> implements IMapView {
   private tapGesture: __SF_UITapGestureRecognizer;
   private longGesture: __SF_UILongPressGestureRecognizer;
-  private _isFirstRender = true;
-  private _pinArray: Record<string, Pin> = {};
-  private _minZoomLevel: IMapView['minZoomLevel'] = DEFAULT_MIN_ZOOM_LEVEL;
-  private _maxZoomLevel: IMapView['maxZoomLevel'] = DEFAULT_MAX_ZOOM_LEVEL;
-  private _zoomLevel: IMapView['zoomLevel'] = DEFAULT_ZOOM_LEVEL;
-  private _cluster: ClusterIOS[] = [];
-  createNativeObject() {
-    return new __SF_MKMapView();
-  }
+  private _isFirstRender: boolean;
+  private _pinArray: Record<string, Pin>;
+  private _minZoomLevel: IMapView['minZoomLevel'];
+  private _maxZoomLevel: IMapView['maxZoomLevel'];
+  private _zoomLevel: IMapView['zoomLevel'];
+  private _cluster: ClusterIOS[];
   constructor(params?: Partial<IMapView>) {
     super(params);
     this.tapGesture = new __SF_UITapGestureRecognizer();
     this.longGesture = new __SF_UILongPressGestureRecognizer();
     this.nativeObject.setCenter(DefaultLocation.latitude, DefaultLocation.longitude, false);
-    this.addAndroidProps(this.getAndroidProps());
-    this.addIOSProps(this.getIOSProps());
     this.setGestureHandlers();
     this.setNativeEvents();
+  }
+  createNativeObject() {
+    return new __SF_MKMapView();
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
+    this._minZoomLevel = DEFAULT_MIN_ZOOM_LEVEL;
+    this._maxZoomLevel = DEFAULT_MAX_ZOOM_LEVEL;
+    this._zoomLevel = DEFAULT_ZOOM_LEVEL;
+    this._cluster = [];
+    this._pinArray = {};
+    this._isFirstRender = false;
+    super.init(params);
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps(this.getAndroidProps());
   }
   getVisiblePins(): Pin[] {
     const annotationVisibleRect = Invocation.invokeInstanceMethod(this.nativeObject, 'visibleMapRect', [], 'CGRect');
@@ -64,9 +73,9 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   addPin(pin: Pin): void {
     if (pin instanceof Pin) {
       // pin.parentMapView = this; //Unused variable. Bring it back if there's an error.
-      const uuid = this.nativeObject.uuid;
+      const uuid = pin.nativeObject.uuid;
       this._pinArray[uuid] = pin;
-      this.nativeObject.addAnnotation(this.nativeObject);
+      this.nativeObject.addAnnotation(pin.nativeObject);
     }
   }
   removePin(pin: Pin): void {
@@ -252,7 +261,6 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
         this.zoomLevel = this.minZoomLevel;
         return;
       }
-
       if (this.zoomLevel && this.minZoomLevel > DEFAULT_MIN_ZOOM_LEVEL && this.zoomLevel < this.minZoomLevel) {
         this.zoomLevel = this.minZoomLevel;
       } else if (this.zoomLevel && this.maxZoomLevel < DEFAULT_MAX_ZOOM_LEVEL && this.zoomLevel > this.maxZoomLevel) {
@@ -351,7 +359,9 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   }
   set zoomLevel(value) {
     this._zoomLevel = value;
-    value && this.setZoomLevelWithAnimated(this.centerLocation, value + 1, false);
+    if (typeof value === 'number') {
+      this.setZoomLevelWithAnimated(this.centerLocation, value + 1, false);
+    }
   }
   get minZoomLevel() {
     return this._minZoomLevel;

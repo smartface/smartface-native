@@ -114,7 +114,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     if (!(pin instanceof PinAndroid)) {
       return;
     }
-    if (this.nativeObject && this._nativeGoogleMap) {
+    if (!this.nativeObject || !this._nativeGoogleMap) {
       this._pendingPins.push(pin);
       return;
     }
@@ -123,7 +123,6 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     }
     if (!this._clusterEnabled) {
       const marker = new NativeMarkerOptions();
-
       // pin location must set before adding to map.
       if (pin.location?.latitude && pin.location?.longitude) {
         const position = new NativeLatLng(pin.location.latitude, pin.location.longitude);

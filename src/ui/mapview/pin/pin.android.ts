@@ -18,23 +18,33 @@ const HueDic = {
 };
 
 export default class PinAndroid<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, any> implements IPin {
-  protected createNativeObject() {
-    return null;
-  }
   private _color: ColorAndroid;
-  private _image: ImageAndroid | null = null;
+  private _image: ImageAndroid | null;
   private _location: IPin['location'];
-  private _clusterColor: ColorAndroid | null = null;
-  private _subtitle = '';
-  private _title = '';
-  private _visible = true;
-  private _id = 0;
+  private _clusterColor: ColorAndroid | null;
+  private _subtitle: string;
+  private _title: string;
+  private _visible: boolean;
+  private _id: number;
   /**
    * nativeObject will be taken from constructor as parameter since pin is created on mapview.
    */
   constructor(params?: IPin) {
     super(params);
     // this.nativeObject = nativeObject; //Pin nativeObject is added from outside. write a setter for it when nativeObject any problem is fixed
+  }
+  protected createNativeObject() {
+    return null;
+  }
+
+  protected init(params?: Partial<Record<string, any>>): void {
+    this._visible = true;
+    this._title = '';
+    this._subtitle = '';
+    this._clusterColor = null;
+    this._image = null;
+    this._id = 0;
+    super.init(params);
   }
   get color(): ColorAndroid {
     return this._color;
@@ -81,7 +91,6 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
     if (!value || !TypeUtil.isNumeric(value.latitude) || !TypeUtil.isNumeric(value.longitude)) {
       throw new Error('location property must be on object includes latitude and longitude keys.');
     }
-    this._location = value;
     if (this.nativeObject && !this.isClusterEnabled) {
       const position = new NativeLatLng(value.latitude, value.longitude);
       this.nativeObject.setPosition(position);
