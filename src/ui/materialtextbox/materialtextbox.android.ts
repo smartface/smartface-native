@@ -260,10 +260,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.nativeObject.setRightLayout(this._rightLayout?.nativeObject, this._rightLayout?.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
   }
 
-  get onTouch(): (e?: Point2D) => boolean | void {
+  get onTouch(): (e?: Point2D) => boolean | undefined {
     return this._onTouch;
   }
-  set onTouch(value: (e?: Point2D) => boolean | void) {
+  set onTouch(value: (e?: Point2D) => boolean | undefined) {
     this._onTouch = value;
     this.setTouchHandlers();
 
@@ -271,10 +271,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.sfTextBox.setTouchHandlers(); // TODO: Ask why setTouchHandlers is used here
   }
 
-  get onTouchEnded(): (isInside: boolean, point: Point2D) => boolean | void {
+  get onTouchEnded(): (isInside: boolean, point: Point2D) => boolean | undefined {
     return this._onTouchEnded;
   }
-  set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean | void) {
+  set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean | undefined) {
     this._onTouchEnded = value;
     // TODO: Ask why setTouchHandlers is used here. It must emit a touch event
     this.setTouchHandlers();
@@ -282,10 +282,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.sfTextBox.setTouchHandlers();
   }
 
-  get onTouchMoved(): (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void {
+  get onTouchMoved(): (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | undefined {
     return this._onTouchMoved;
   }
-  set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void) {
+  set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | undefined) {
     // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
     this.onTouchMoved = value;
     this.setTouchHandlers();
@@ -293,10 +293,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.sfTextBox.setTouchHandlers();
   }
 
-  get onTouchCancelled(): (point: Point2D) => boolean | void {
+  get onTouchCancelled(): (point: Point2D) => boolean | undefined {
     return this._onTouchCancelled;
   }
-  set onTouchCancelled(value: (point: Point2D) => boolean | void) {
+  set onTouchCancelled(value: (point: Point2D) => boolean | undefined) {
     // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
     this.onTouchCancelled = value;
     this.setTouchHandlers();

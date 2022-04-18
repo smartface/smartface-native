@@ -23,7 +23,9 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     return new NativeYogaLayout(AndroidConfig.activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');
-        return this.android?.onInterceptTouchEvent?.() || undefined;
+        if (typeof this.android.onInterceptTouchEvent === 'function') {
+          return this.android.onInterceptTouchEvent();
+        }
       }
     });
   }

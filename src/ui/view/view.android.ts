@@ -376,16 +376,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   protected get _touchCallbacks() {
     return {
-      onTouchEnded: (isInside: boolean, x: number, y: number) => {
-        const mEvent = {
-          x,
-          y,
-          isInside
-        };
-        this.emit('touchEnded', mEvent);
-        const result = this.onTouchEnded?.(isInside, mEvent);
-        return !!result;
-      },
       onTouch: (x: number, y: number) => {
         const mEvent = {
           x,
@@ -393,7 +383,17 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touch', mEvent);
         const result = this.onTouch?.(mEvent);
-        return !!result;
+        return result === false;
+      },
+      onTouchEnded: (isInside: boolean, x: number, y: number) => {
+        const mEvent = {
+          x,
+          y,
+          isInside
+        };
+        const result = this.onTouchEnded?.(isInside, mEvent);
+        this.emit('touchEnded', mEvent);
+        return result === false;
       },
       onTouchMoved: (isInside: boolean, x: number, y: number) => {
         const mEvent = {
@@ -403,7 +403,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touchMoved', mEvent);
         const result = this.onTouchMoved?.(isInside, mEvent);
-        return !!result;
+        return result === false;
       },
       onTouchCancelled: (x: number, y: number) => {
         const mEvent = {
@@ -412,7 +412,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touchCancelled', mEvent);
         const result = this.onTouchCancelled?.(mEvent);
-        return !!result;
+        return result === false;
       }
     };
   }

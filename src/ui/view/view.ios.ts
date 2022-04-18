@@ -84,10 +84,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       y: 1.0
     };
   }
-  onTouch: (e?: Point2D | undefined) => boolean | void;
-  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
-  onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D | undefined) => boolean | void;
+  onTouch: (e?: Point2D | undefined) => boolean | undefined;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | undefined;
+  onTouchCancelled: (point: Point2D) => boolean | undefined;
+  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D | undefined) => boolean | undefined;
 
   private getIOSProperties() {
     const self = this;

@@ -708,7 +708,7 @@ export interface IView<
    * });
    * ````
    */
-  onTouch: (e?: Point2D) => void | boolean;
+  onTouch: (e?: Point2D) => boolean | undefined;
   /**
    * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
    *
@@ -741,7 +741,7 @@ export interface IView<
    * });
    * ````
    */
-  onTouchEnded: (isInside: boolean, point: Point2D) => void | boolean;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | undefined;
   /**
    * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
    *
@@ -772,7 +772,7 @@ export interface IView<
    * });
    * ````
    */
-  onTouchCancelled: (point: Point2D) => void | boolean;
+  onTouchCancelled: (point: Point2D) => boolean | undefined;
   /**
    * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
    * @example
@@ -792,7 +792,7 @@ export interface IView<
    * });
    * ````
    */
-  onTouchMoved: (e: { isInside: boolean } | boolean, point?: Point2D) => void | boolean;
+  onTouchMoved: (e: { isInside: boolean } | boolean, point?: Point2D) => boolean | undefined;
   /**
    * This method marks the view as needs relayout.
    *
@@ -942,10 +942,10 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   flipVertically(): void;
   getScreenLocation(): Point2D;
   getParent(): IViewGroup | null;
-  onTouch: (e?: Point2D) => boolean | void;
-  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | void;
-  onTouchCancelled: (point: Point2D) => boolean | void;
-  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | void;
+  onTouch: (e?: Point2D) => boolean | undefined;
+  onTouchEnded: (isInside: boolean, point: Point2D) => boolean | undefined;
+  onTouchCancelled: (point: Point2D) => boolean | undefined;
+  onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | undefined;
   dirty(): void;
   getPosition: () => { left: number; top: number; width: number; height: number };
   transitionId: string;

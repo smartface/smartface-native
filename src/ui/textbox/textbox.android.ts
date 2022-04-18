@@ -113,7 +113,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject = params?.nativeObject || this.nativeObject;
     // /* Override the onTouch and make default returning false to prevent bug in other listener.*/
     // this.onTouch = (e) => {
-    //   let result: boolean | void;
+    //   let result: boolean | undefined;
     //   if (this.onTouch) result = this.onTouch(e);
     //   return result === true;
     // };
