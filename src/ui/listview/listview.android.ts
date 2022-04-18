@@ -25,15 +25,15 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private nativeDataAdapter: any;
   private _rowHeight: IListView['rowHeight'];
   private _onScroll: IListView['onScroll'];
-  private _onScrollListener: IListView['onScroll'] | undefined = undefined;
+  private _onScrollListener: IListView['onScroll'] | undefined;
   private _onScrollStateChanged: IListView['android']['onScrollStateChanged'];
-  private _itemCount: IListView['itemCount'] = 0;
-  private _contentInset: IListView['contentInset'] = { top: 0, bottom: 0 };
+  private _itemCount: IListView['itemCount'];
+  private _contentInset: IListView['contentInset'];
   private _scrollEnabled: IListView['scrollEnabled'];
-  private _rowMoveEnabled: IListView['rowMoveEnabled'] = false;
-  private _longPressDragEnabled: IListView['longPressDragEnabled'] = false;
-  private _swipeEnabled: IListView['swipeEnabled'] = false;
-  private _listViewItems: Record<string, ListViewItem> = {};
+  private _rowMoveEnabled: IListView['rowMoveEnabled'];
+  private _longPressDragEnabled: IListView['longPressDragEnabled'];
+  private _swipeEnabled: IListView['swipeEnabled'];
+  private _listViewItems: Record<string, ListViewItem>;
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
   private nativeSwipeItemInstance: any;
@@ -41,6 +41,13 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
   init(params?: Partial<IListView>) {
+    this._itemCount = 0;
+    this._contentInset = { top: 0, bottom: 0 };
+    this._rowMoveEnabled = false;
+    this._longPressDragEnabled = false;
+    this._swipeEnabled = false;
+    this._listViewItems = {};
+
     this.setNativeInner();
     this.setDataAdapter();
     this.addAndroidProps(this.getAndroidParams());
@@ -203,7 +210,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
         this.onRowBind?.(_holderViewLayout, position);
       },
       getItemCount: () => {
-        return isNaN(this._itemCount) ? 0 : this.itemCount;
+        return isNaN(this._itemCount) ? 0 : this._itemCount;
       },
       getItemViewType: (position: number) => {
         const rowType = this.onRowType?.(position);

@@ -21,6 +21,8 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     return nativeObject;
   }
   init(params?: IListView) {
+    this._contentInset = { top: 0, bottom: 0 };
+    this._listItemArray = [];
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
@@ -31,8 +33,8 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: IListView['refreshEnabled'];
   private _onPullRefresh: IListView['onPullRefresh'];
-  private _listItemArray: ListViewItemIOS[] = [];
-  private _contentInset = { top: 0, bottom: 0 };
+  private _listItemArray: ListViewItemIOS[];
+  private _contentInset: IListView['contentInset'];
   constructor(params?: IListView) {
     super(params);
   }
