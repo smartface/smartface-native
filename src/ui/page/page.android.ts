@@ -1,4 +1,4 @@
-import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from './page';
+import { AbstractPage, IPage, LargeTitleDisplayMode, PageOrientation, PresentationStyle } from './page';
 import Application from '../../application';
 import Contacts from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
@@ -27,7 +27,7 @@ import LayoutParams from '../../util/Android/layoutparams';
 import SystemServices from '../../util/Android/systemservices';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import type FlexLayout from '../flexlayout';
-import type Color from '../color';
+import Color from '../color';
 import { IImage } from '../image/image';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -57,8 +57,8 @@ const NativeOrientationDictionary = {
   [PageOrientationAndroid.PORTRAIT]: 1,
   [PageOrientationAndroid.UPSIDEDOWN]: 9,
   [PageOrientationAndroid.AUTOPORTRAIT]: 7,
-  [PageOrientation.LANDSCAPELEFT]: 0,
-  [PageOrientation.LANDSCAPERIGHT]: 8,
+  [PageOrientationAndroid.LANDSCAPELEFT]: 0,
+  [PageOrientationAndroid.LANDSCAPERIGHT]: 8,
   [PageOrientationAndroid.AUTOLANDSCAPE]: 6,
   [PageOrientationAndroid.AUTO]: 13
 };
@@ -66,54 +66,51 @@ const NativeOrientationDictionary = {
 const GRAVITY_START = 8388611; //Gravity.Start
 
 export default class PageAndroid<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
-  protected createNativeObject() {
-    return new SFFragment();
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.isSwipeViewPage = false;
+    this.isCreated = false;
+    this.optionsMenu = null;
+    this.actionBar = null;
+    this._orientation = PageOrientationAndroid.AUTO; //TODO: Types are different
+    this._headerBarItems = [];
+    this._borderVisibility = true;
+    this._transparent = false;
+    this._alpha = 1.0;
+    this._leftItemColor = ColorAndroid.WHITE;
+    this._itemColor = ColorAndroid.WHITE;
+    this._headerBarLogoEnabled = false;
+    this._headerBarLeftItem = null;
+    super.init(params);
   }
-  getCurrentController(): IController {
-    throw new Error('Method not implemented.');
-  }
-  show(params: {
-    // for better performance. Remove if statement.
-    // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
-    controller: IController;
-    animated: any;
-    isComingFromPresent?: boolean | undefined;
-    onCompleteCallback?: (() => void) | undefined; // deprecated
-  }) {
-    throw new Error('Method not implemented.');
-  }
-  static iOS = {
-    LargeTitleDisplayMode: LargeTitleDisplayMode,
-    PresentationStyle: PresentationStyle
-  };
-  static Orientation = Orientation;
-
+  statusBar: typeof StatusBar;
+  parentController: IPage['parentController'];
   headerBar: HeaderBar;
-  isSwipeViewPage = false;
+  isSwipeViewPage: boolean;
   popUpBackPage: PageAndroid;
+  _headerBarLeftItem: HeaderBarItem | null;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
   private pageLayoutContainer: any;
   private toolbar: any;
-  private isCreated = false;
-  private optionsMenu: any = null;
-  private actionBar: any = null;
-  private _orientation: PageOrientation = PageOrientation.PORTRAIT;
+  private isCreated: boolean;
+  private optionsMenu: any;
+  private actionBar: any;
+  private _orientation: PageOrientationAndroid;
   private rootLayout: FlexLayoutAndroid;
-  private _headerBarItems: HeaderBarItem[] = [];
+  private _headerBarItems: HeaderBarItem[];
   private returnRevealAnimation: boolean;
   private _headerBarColor: ColorAndroid;
   private _headerBarImage: IImage;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
   private _transitionViewsCallback: IPage['android']['transitionViewsCallback'];
-  private _borderVisibility = true;
-  private _transparent = false;
-  private _alpha = 1.0;
+  private _borderVisibility: HeaderBar['borderVisibility'];
+  private _transparent: HeaderBar['transparent'];
+  private _alpha: HeaderBar['alpha'];
   private _headerBarTitleColor: Color;
   private _leftItemEnabled: boolean;
-  private _leftItemColor = ColorAndroid.WHITE;
-  private _itemColor = ColorAndroid.WHITE;
+  private _leftItemColor: ColorAndroid;
+  private _itemColor: ColorAndroid;
   private _headerBarLogo: IImage;
   private _headerBarElevation: number;
   private _headerBarSubtitleColor: ColorAndroid;
@@ -122,9 +119,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private _attributedSubtitle: any;
   private _attributedTitleBuilder: any;
   private _attributedSubtitleBuilder: any;
-  private _headerBarLogoEnabled = false;
+  private _headerBarLogoEnabled: boolean;
   private _tag: any;
-  _headerBarLeftItem: HeaderBarItem | null = null;
   /**TProps
    * This is a workaround solution for swipeView-Android. The source is:
    * _pageInstances[intPosition].__onShowCallback?.();
@@ -155,17 +151,35 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this.nativeSpecificParams();
     this.layoutAssignments();
   }
-  statusBar: typeof StatusBar;
-  parentController: IPage['parentController'];
-  get orientation(): PageOrientation {
-    return this._orientation;
+  protected createNativeObject() {
+    return new SFFragment();
   }
-  set orientation(value: PageOrientation) {
-    this._orientation = value;
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: {
+    // for better performance. Remove if statement.
+    // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
+    controller: IController;
+    animated: any;
+    isComingFromPresent?: boolean | undefined;
+    onCompleteCallback?: (() => void) | undefined; // deprecated
+  }) {
+    throw new Error('Method not implemented.');
+  }
+  get orientation() {
+    return this._orientation as any;
+  }
+  set orientation(value) {
+    this._orientation = value as any;
     const nativeOrientation = NativeOrientationDictionary[this._orientation];
     if (typeof nativeOrientation !== 'number') {
-      this._orientation = PageOrientation.PORTRAIT;
+      this._orientation = PageOrientationAndroid.PORTRAIT;
     }
+    console.info({
+      nativeOrientation,
+      orientation: this._orientation
+    });
     AndroidConfig.activity.setRequestedOrientation(nativeOrientation);
   }
   get layout(): IPage['layout'] {
@@ -290,7 +304,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return true;
       },
       onConfigurationChanged: () => {
-        let tempOrientation: number[];
+        let tempOrientation: number;
         switch (Screen.orientation) {
           case OrientationType.PORTRAIT:
             tempOrientation = PageAndroid.Orientation.PORTRAIT;
@@ -307,7 +321,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
           default:
             tempOrientation = PageAndroid.Orientation.PORTRAIT;
         }
-        this.onOrientationChange?.({ orientation: tempOrientation });
+        this.onOrientationChange?.({ orientation: tempOrientation as any });
       },
       onCreateContextMenu: (menu: any) => {
         const items = this.contextMenu.items;
@@ -765,4 +779,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this.layout.nativeObject.setFocusable(true);
     this.layout.nativeObject.setFocusableInTouchMode(true);
   }
+
+  static iOS = {
+    LargeTitleDisplayMode: LargeTitleDisplayMode,
+    PresentationStyle: PresentationStyle
+  };
+  static Orientation = PageOrientationAndroid as any;
 }

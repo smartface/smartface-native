@@ -1,7 +1,7 @@
 import StatusBar from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 import MenuItem from '../menuitem';
 import { IController, AbstractNavigationController } from '../navigationcontroller/navigationcontroller';
@@ -106,13 +106,12 @@ export interface PageIOSParams {
 
 export declare interface IPage<TEvent extends string = PageEvents, TMobile extends MobileOSProps<PageIOSParams, PageAndroidParams> = MobileOSProps<PageIOSParams, PageAndroidParams>, TNative = any>
   extends IEventEmitter<TEvent | PageEvents>,
+    INativeMobileComponent<TNative, TMobile>,
     IController<TNative> {
   contextMenu: {
     items: any[];
     headerTitle: string;
   };
-  android: TMobile['android'];
-  ios: TMobile['ios'];
   isInsideBottomTabBar: boolean;
   /**
    * This event is called once when page is created.
