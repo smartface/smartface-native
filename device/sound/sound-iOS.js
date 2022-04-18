@@ -36,10 +36,7 @@ function Sound() {
     }
 
     self.loadFile = function(value) {
-        var filePath = new File({
-            path: value
-        });
-        var actualPath = filePath.nativeObject.getActualPath();
+        var actualPath = value.nativeObject.getActualPath();
         var url = __SF_NSURL.fileURLWithPath(actualPath);
         self.avPlayerItem = __SF_AVPlayerItem.createFromURL(url);
         if (self.nativeObject) {
