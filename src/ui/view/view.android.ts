@@ -71,31 +71,28 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   };
   nativeInner: any;
   uniqueId: string;
-  protected _maskedBorders: number[] = [];
-  protected _masksToBounds: boolean = true;
+  protected _maskedBorders: number[];
+  protected _masksToBounds: boolean;
   protected _onTouch: IView['onTouch'];
   protected _onTouchEnded: IView['onTouchEnded'];
   protected _onTouchCancelled: IView['onTouchCancelled'];
   protected _onTouchMoved: IView['onTouchMoved'];
   private _parent?: ViewGroupAndroid;
-  private _rotation: number = 0;
-  private _rotationX: number = 0;
-  private _rotationY: number = 0;
-  private _scale: Point2D = {
-    x: 1.0,
-    y: 1.0
-  };
-  protected _borderColor: IView['borderColor'] = ColorAndroid.BLACK;
-  protected _borderWidth: number = 0;
-  protected _borderRadius: number = 0;
-  protected _backgroundColor: IView['backgroundColor'] = ColorAndroid.TRANSPARENT;
-  protected _overScrollMode: OverScrollMode = OverScrollMode.ALWAYS;
-  protected didSetTouchHandler = false;
+  private _rotation: number;
+  private _rotationX: number;
+  private _rotationY: number;
+  private _scale: Point2D;
+  protected _borderColor: IView['borderColor'];
+  protected _borderWidth: number;
+  protected _borderRadius: number;
+  protected _backgroundColor: IView['backgroundColor'];
+  protected _overScrollMode: OverScrollMode;
+  protected didSetTouchHandler;
   protected _sfOnTouchViewManager: any;
-  private _touchEnabled: boolean = true;
-  private _rippleEnabled = false;
+  private _touchEnabled: boolean;
+  private _rippleEnabled: boolean;
   private _rippleColor?: Color;
-  private _useForeground = false;
+  private _useForeground: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
   protected createNativeObject() {
@@ -107,6 +104,21 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     } else {
       this.yogaNode = NativeYogaNodeFactory.create();
     }
+    this._borderColor = ColorAndroid.BLACK;
+    this._borderWidth = 0;
+    this._borderRadius = 0;
+    this._backgroundColor = ColorAndroid.TRANSPARENT;
+    this.didSetTouchHandler = false;
+    this._touchEnabled = true;
+    this._rippleEnabled = false;
+    this._useForeground = false;
+    this._overScrollMode = OverScrollMode.ALWAYS;
+    this._scale = { x: 1.0, y: 1.0 };
+    this._rotation = 0;
+    this._rotationX = 0;
+    this._rotationY = 0;
+    this._masksToBounds = true;
+    this._maskedBorders = [];
     super.init(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
@@ -115,7 +127,18 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   constructor(params?: Partial<TProps>) {
     super(params);
-    this.setTouchHandlers();
+    this.prependListener('touch', () => {
+      this.setTouchHandlers();
+    });
+    this.prependListener('touchCancelled', () => {
+      this.setTouchHandlers();
+    });
+    this.prependListener('touchEnded', () => {
+      this.setTouchHandlers();
+    });
+    this.prependListener('touchMoved', () => {
+      this.setTouchHandlers();
+    });
   }
 
   protected getAndroidSpecificProps() {
@@ -169,24 +192,28 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return this._onTouch;
   }
   set onTouch(onTouch) {
+    this.setTouchHandlers();
     this._onTouch = onTouch;
   }
   get onTouchEnded() {
     return this._onTouchEnded;
   }
   set onTouchEnded(onTouchEnded) {
+    this.setTouchHandlers();
     this._onTouchEnded = onTouchEnded;
   }
   get onTouchMoved() {
     return this._onTouchMoved;
   }
   set onTouchMoved(onTouchMoved) {
+    this.setTouchHandlers();
     this._onTouchMoved = onTouchMoved;
   }
   get onTouchCancelled() {
     return this._onTouchCancelled;
   }
   set onTouchCancelled(onTouchCancelled) {
+    this.setTouchHandlers();
     this._onTouchCancelled = onTouchCancelled;
   }
 
@@ -383,7 +410,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touch', mEvent);
         const result = this.onTouch?.(mEvent);
-        return result === false;
+        return result !== false;
       },
       onTouchEnded: (isInside: boolean, x: number, y: number) => {
         const mEvent = {
@@ -393,7 +420,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         const result = this.onTouchEnded?.(isInside, mEvent);
         this.emit('touchEnded', mEvent);
-        return result === false;
+        return !!result;
       },
       onTouchMoved: (isInside: boolean, x: number, y: number) => {
         const mEvent = {
@@ -403,7 +430,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touchMoved', mEvent);
         const result = this.onTouchMoved?.(isInside, mEvent);
-        return result === false;
+        return !!result;
       },
       onTouchCancelled: (x: number, y: number) => {
         const mEvent = {
@@ -412,7 +439,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         };
         this.emit('touchCancelled', mEvent);
         const result = this.onTouchCancelled?.(mEvent);
-        return result === false;
+        return !!result;
       }
     };
   }

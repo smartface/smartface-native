@@ -5,6 +5,12 @@ export default abstract class NativeEventEmitterComponent<TEvent extends string,
   extends NativeMobileComponent<TNative, WithMobileOSProps<TProps>>
   implements IEventEmitter<TEvent>
 {
+  prependListener(eventName: TEvent, callback: EventListenerCallback): void {
+    return this.emitter.prependListener(eventName, callback);
+  }
+  prependOnceListener(eventName: TEvent, callback: EventListenerCallback): void {
+    return this.emitter.prependOnceListener(eventName, callback);
+  }
   private emitter = new EventEmitter<TEvent>();
   on(eventName: TEvent, callback: EventListenerCallback): () => void {
     return this.emitter.on(eventName, callback);
