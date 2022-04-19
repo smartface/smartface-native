@@ -94,7 +94,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return this._color;
   }
   set color(value: Color | null) {
-    if (!value) {
+    if (value !== null) {
       this._color = value;
       if (this.nativeObject && this.color) {
         if (this._image || this.android.systemIcon) {
