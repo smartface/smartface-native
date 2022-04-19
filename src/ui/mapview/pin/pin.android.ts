@@ -102,7 +102,7 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
   set title(value: string) {
     this._title = value;
     if (this.nativeObject && !this.isClusterEnabled) {
-      this.nativeObject.setTitle(this);
+      this.nativeObject.setTitle(value);
     }
   }
   get subtitle(): string {

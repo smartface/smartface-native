@@ -35,10 +35,10 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
     return {
       authorizationStatus: IOS_AUTHORIZATION_STATUS,
       native: { authorizationStatus: IOS_NATIVE_AUTHORIZATION_STATUS },
-      locationServicesEnabled() {
+      locationServicesEnabled: () => {
         return __SF_CLLocationManager.locationServicesEnabled();
       },
-      getAuthorizationStatus() {
+      getAuthorizationStatus: () => {
         const authorizationStatus = Invocation.invokeClassMethod('CLLocationManager', 'authorizationStatus', [], 'int') as unknown as number;
         let status;
         switch (authorizationStatus) {

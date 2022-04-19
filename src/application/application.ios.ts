@@ -58,18 +58,18 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       }
     }
   } as const;
+  onUserActivityCallback(e) {
+    const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
+    const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
+    if (url && type === 'NSUserActivityTypeBrowsingWeb') {
+      return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
+    }
+    return false;
+  }
   constructor() {
     super();
-    __SF_UIApplication.onUserActivityCallback = (e) => {
-      const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
-      const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
-      if (url && type === 'NSUserActivityTypeBrowsingWeb') {
-        return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
-      }
-      return false;
-    };
-    if (__SF_UIApplication.sharedInstance) {
-      __SF_UIApplication.sharedInstance().performActionForShortcutItemShortcutItem = (shortcutItem: any) => {
+    if (SMFApplication.sharedInstance) {
+      SMFApplication.sharedInstance().performActionForShortcutItemShortcutItem = (shortcutItem: any) => {
         const params = { data: shortcutItem.userInfo };
         this.emit('appShortcutReceived', params);
         const innerReturnValue = this.onAppShortcutReceived?.(params);
@@ -79,7 +79,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
 
     __SF_UIApplication.onAppShortcutReceive = (e) => {
       //TODO: Check isEmulator
-      if (!__SF_UIApplication.sharedInstance) {
+      if (!SMFApplication.sharedInstance) {
         return;
       }
       this.emit('appShortcutReceived', e);
@@ -122,15 +122,15 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   }
 
   canOpenUrl(url: string) {
-    return __SF_UIApplication.canOpenUrl(url);
+    return SMFApplication.canOpenUrl(url);
   }
   exit() {
-    __SF_UIApplication.onExit();
-    __SF_UIApplication.exit();
+    SMFApplication.onExit();
+    SMFApplication.exit();
   }
   restart() {
     this.cancelAllBackgroundJobs();
-    __SF_UIApplication.restart();
+    SMFApplication.restart();
   }
   setRootController(params: NavigationController) {
     if (params?.controller) {
@@ -145,7 +145,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
     sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, this._sliderDrawer.nativeObject);
   }
   call(params: Parameters<ApplicationBase['call']>['0']) {
-    __SF_UIApplication.call(params.uriScheme, params.data || {}, params.onSuccess, params.onFailure);
+    SMFApplication.call(params.uriScheme, params.data || {}, params.onSuccess, params.onFailure);
   }
   hideKeyboard() {
     const argForce = new Invocation.Argument({
@@ -156,11 +156,11 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   }
 
   get byteReceived() {
-    const counterInfo = __SF_UIApplication.dataCounters();
+    const counterInfo = SMFApplication.dataCounters();
     return counterInfo.WiFiReceived + counterInfo.WWANReceived;
   }
   get byteSent() {
-    const counterInfo = __SF_UIApplication.dataCounters();
+    const counterInfo = SMFApplication.dataCounters();
     return counterInfo.WiFiSent + counterInfo.WWANSent;
   }
   get keepScreenAwake() {
@@ -225,10 +225,21 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
     };
   }
   get android() {
-    return {};
+    return {
+      checkPermission: () => false,
+      requestPermission: () => {},
+      shouldShowRequestPermissionRationale: () => false,
+      onRequestPermissionsResult: () => {},
+      Permissions: {},
+      navigationBar: {} as any,
+      setAppTheme: () => {}
+    };
   }
   get Android() {
-    return {};
+    return {
+      KeyboardMode: {} as any,
+      Permissions: {} as any
+    };
   }
   protected createNativeObject() {
     return null;

@@ -8,7 +8,7 @@ import { IImage } from '../../image/image';
 export default class PinIOS<TEvent extends string = PinEvents> extends NativeEventEmitterComponent<TEvent | PinEvents, __SF_Annotation, IPin> implements IPin {
   constructor(params?: IPin) {
     super(params);
-    this.nativeObject.onInfoPress = () => {
+    this.nativeObject.onPress = () => {
       this.onPress?.();
       this.emit('press');
     };
