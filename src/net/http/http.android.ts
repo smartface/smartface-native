@@ -189,7 +189,7 @@ export default class HttpAndroid extends HttpBase {
         const responseHeaders = this.getResponseHeaders(headers);
         if (statusCode !== 304 && bytes) {
           responseBody = new Blob(bytes, {
-            type: ''
+            type: 'file'
           });
         }
 
