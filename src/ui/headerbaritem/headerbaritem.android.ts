@@ -38,13 +38,14 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private _badge?: Badge;
   private _accessibilityLabel: string;
   private isLeftItem: boolean;
-  private isBadgeEnabled : boolean;
+  private isBadgeEnabled: boolean;
   private actionBar: any | null;
   private _imageButton: boolean;
   private _searchView: SearchView | null;
   private _menuItem: MenuItem | null;
   private nativeBadgeContainer: any;
   private _itemColor: Color;
+  private _systemIcon: number | string; 
 
   protected init(params?: Partial<IHeaderBarItem>): void {
     this._title = '';
@@ -73,17 +74,19 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     const self = this;
     return {
       get systemIcon() {
-        return self.android.systemIcon;
+        return self._systemIcon;
       },
       set systemIcon(systemIcon) {
-        self.android.systemIcon = systemIcon;
+        self._systemIcon = systemIcon;
 
         if (!self.nativeObject || (self.nativeObject && !self.imageButton)) {
           self.nativeObject = this.createNativeImageButton.call(self);
           self.updateAccessibilityLabel(self._accessibilityLabel);
         }
 
-        if (typeof self.android.systemIcon === 'number') self.nativeObject && self.nativeObject.setImageResource(ImageAndroid.systemDrawableId(self.android.systemIcon));
+        if (typeof self._systemIcon === 'number') {
+          self.nativeObject && self.nativeObject.setImageResource(ImageAndroid.systemDrawableId(self._systemIcon));
+        }
       }
     };
   }
