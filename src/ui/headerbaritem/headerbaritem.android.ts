@@ -30,21 +30,38 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return null;
   }
   iOS = { SystemItem: {} };
-  private _title: string = '';
-  private _image: ImageAndroid | string | null = null;
-  private _customView?: View = undefined;
-  private _enabled: boolean = true;
-  private _color: Color | null = null;
-  private _badge?: Badge = undefined;
+  private _title: string;
+  private _image: ImageAndroid | string | null;
+  private _customView?: View;
+  private _enabled: boolean;
+  private _color: Color | null;
+  private _badge?: Badge;
   private _accessibilityLabel: string;
-  private isLeftItem: boolean = false;
-  private isBadgeEnabled = false;
-  private actionBar: any | null = null;
-  private _imageButton = false;
-  private _searchView: SearchView | null = null;
-  private _menuItem: MenuItem | null = null;
+  private isLeftItem: boolean;
+  private isBadgeEnabled : boolean;
+  private actionBar: any | null;
+  private _imageButton: boolean;
+  private _searchView: SearchView | null;
+  private _menuItem: MenuItem | null;
   private nativeBadgeContainer: any;
-  private _itemColor = Color.WHITE;
+  private _itemColor: Color;
+
+  protected init(params?: Partial<IHeaderBarItem>): void {
+    this._title = '';
+    this._image = null;
+    this._customView = undefined;
+    this._enabled = true;
+    this._color = null;
+    this._badge = undefined;
+    this.isLeftItem = false;
+    this.isBadgeEnabled = false;
+    this.actionBar = null;
+    this._imageButton = false;
+    this._searchView = null;
+    this._menuItem = null;
+    this._itemColor = Color.WHITE;
+    super.init(params);
+  }
 
   constructor(params?: Partial<IHeaderBarItem>) {
     super(params);
