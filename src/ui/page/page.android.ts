@@ -176,10 +176,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     if (typeof nativeOrientation !== 'number') {
       this._orientation = PageOrientationAndroid.PORTRAIT;
     }
-    console.info({
-      nativeOrientation,
-      orientation: this._orientation
-    });
     AndroidConfig.activity.setRequestedOrientation(nativeOrientation);
   }
   get layout(): IPage['layout'] {
