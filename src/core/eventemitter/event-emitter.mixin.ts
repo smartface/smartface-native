@@ -102,5 +102,12 @@ export function EventEmitterMixin(TargetClass: ConstructorOf<any>) {
     emit(event: TEvent, ...args: any[]) {
       this.emitter.emit(event, ...args);
     }
+
+    prependListener(eventName: TEvent, callback: EventListenerCallback): void {
+      this.emitter.prependListener(eventName, callback);
+    }
+    prependOnceListener(eventName: TEvent, callback: EventListenerCallback): void {
+      this.emitter.prependOnceListener(eventName, callback);
+    }
   };
 }

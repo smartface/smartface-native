@@ -32,6 +32,17 @@ export interface IEventEmitter<TEvent extends string = string> {
    * @param {*} args - Arguments that needs to be passed down
    */
   emit(event: TEvent, ...args: any[]): void;
+
+  /**
+   * Adds the listener function to the beginning of the listeners array for the event named eventName.
+   * No checks are made to see if the listener has already been added.
+   * Multiple calls passing the same combination of eventName and listener will result in the listener being added, and called, multiple times.
+   */
+  prependListener(eventName: TEvent, callback: EventListenerCallback): void;
+  /**
+   * Adds a one-time listener function for the event named eventName to the beginning of the listeners array. The next time eventName is triggered, this listener is removed, and then invoked.
+   */
+  prependOnceListener(eventName: TEvent, callback: EventListenerCallback): void;
 }
 
 export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent> {
@@ -50,6 +61,12 @@ export class EventEmitter<TEvent extends string> implements IEventEmitter<TEvent
   }
   emit(event: TEvent, ...args: any[]) {
     this.emitter.emit(event, ...args);
+  }
+  prependListener(eventName: TEvent, callback: EventListenerCallback) {
+    this.emitter.prependListener(eventName, callback);
+  }
+  prependOnceListener(eventName: TEvent, callback: EventListenerCallback) {
+    this.emitter.prependOnceListener(eventName, callback);
   }
 
   /**
