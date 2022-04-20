@@ -1,13 +1,13 @@
-@smartface/native
-===================
+# @smartface/native
 
 Core Modules of Native Libraries. @smartface/native has implementations of Android and iOS native libraries with Smartface Expose Framework.
 
 # Installation & Usage
 
-* Create workspace on Smartface Cloud
-* Add @smartface/native to your dependencies in scripts/package.json
-* You're ready to use @smartface/native library in your workspace
+- Create workspace on Smartface Cloud
+- Add @smartface/native to your dependencies in scripts/package.json
+- You're ready to use @smartface/native library in your workspace
+
 ```
 import Label from '@smartface/native/ui/label';
 
@@ -18,11 +18,13 @@ layout.addChild(label);
 
 # Create New Module
 
-If you want to implement a new feature, make sure that the folder it is in is relevant. 
+If you want to implement a new feature, make sure that the folder it is in is relevant.
 E.g. if your element derives from View or ViewGroup, that should be located in UI.
 
 ## File Structure
+
 yourModule
+
 - analysis.js -> For API Documentation
 - yourModule-Android.js -> Main code of Android
 - yourModule-iOS.js -> Main code of Android
@@ -30,18 +32,19 @@ yourModule
 - index.js -> Main file that separates imports for both OS
 
 ### Analysis.js
+
 This will be used to generate API Documentation. You should write the code yourself referencing jsdocs standards.
 
 **Example from Animator:**
 
 ```
-/** 
+/**
  * Performs the changes declared in animFunction with animation inside the layout provided.
- * Duration indicates how long the animation will take in milliseconds. 
- * For animation rootLayout you should choose parent layout for Android, you can choose page 
+ * Duration indicates how long the animation will take in milliseconds.
+ * For animation rootLayout you should choose parent layout for Android, you can choose page
  * layout for iOS as shown in example.
- * While animating Textbox, you may see the hint of the Textbox disappear on Android. 
- * This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should 
+ * While animating Textbox, you may see the hint of the Textbox disappear on Android.
+ * This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should
  * set empty text to the Textbox onComplete callback of animation.
  * @method animate
  * @param {UI.ViewGroup} rootLayout
@@ -59,7 +62,7 @@ Animator.animate = function(rootLayout, duration, animFunction) {
 };
 ```
 
-### yourModule-*.js
+### yourModule-\*.js
 
 Your code and logic should be here for both OS. Happy Coding!
 
@@ -72,16 +75,23 @@ For example functions, you can copy and paste the same examples from analysis.js
 ### index.js
 
 This file is only responsible for distributing require. It should mainly be:
+
 ```
 module.exports = require("./yourModule-" + Device.deviceOS);
 ```
+
 # Generate API Documentation
-> Make sure that analysis.js is present and defined correctly if you have a new module.
 
-Before having a new version, analysis.js files should be transpiled for [API documentation.](ref.smartface.io)
-This step is done automatically on Jenkins. However, in order to observe Doc changes locally, follow the steps below
+> **INFO**: Make sure that index.ts and yourModule.ts is present and defined correctly if you have a new module.
 
-1. Install [Ruby version of JSduck](https://github.com/senchalabs/jsduck) on your computer
-2. Launch generateDocs.sh using `bash generateDocs.sh` 
-3. In your parent directory, there will be file named `api-docs.zip`. Unzip it.
-4. Navigate to unzipped file and open `index.html` file.
+> **WARNING**: New modules under primitive must be defined in typedoc.js
+
+Local Build
+
+1. Run `yarn install` on project folder
+2. Run `yarn build:document`
+3. Navigate to /docs and open `index.html` file.
+
+Docker Build
+
+`docker build -t smartface-native-documentation .`
