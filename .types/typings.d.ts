@@ -66,7 +66,6 @@ type AlertParams = {
 declare function requireClass(className: string): any;
 declare function defineClass(className: string, opts?: any): any;
 declare const SMFApplication: typeof __SF_UIApplication; //ios global application from framework
-declare const Application: any; //Android global application from framework
 
 //android value converters. convert from js value to java values
 declare function long(value: number): number;
@@ -91,7 +90,6 @@ declare module NodeJS {
     requireClass(className: string): any;
     defineClass(className: string, opts?: any): any;
     SMFApplication: typeof __SF_UIApplication; //ios global application from framework
-    Application: any; //Android global application from framework
     Device: Device;
     XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
 

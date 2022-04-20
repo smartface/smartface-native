@@ -18,6 +18,9 @@ import NativeEventEmitterComponent from '../core/native-event-emitter-component'
 import PageAndroid from '../ui/page/page.android';
 import Page from '../ui/page';
 
+//@ts-ignore TODO: global Application variable from framework. NTVE-616
+const SMFApplication = Application; // Remove this line after NTVE-616 is resolved.
+
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
 const NativeAccessibilityServiceInfo = requireClass('android.accessibilityservice.AccessibilityServiceInfo');
@@ -101,7 +104,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   constructor() {
     super();
 
-    Application.onApplicationCallReceived = (e) => {
+    SMFApplication.onApplicationCallReceived = (e) => {
       if (this.checkIsAppShortcut(e)) {
         this.onAppShortcutReceived?.(e);
         this.emit('appShortcutReceived', e);
@@ -312,7 +315,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   set onUnhandledError(value) {
     this._onUnhandledError = value;
-    Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+    SMFApplication.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
       this.emit('unhandledError', e);
       this._onUnhandledError?.(e);
     };
@@ -365,19 +368,19 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.currentReleaseChannel;
+    return SMFApplication.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.smartfaceAppName;
+    return SMFApplication.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.smartfaceAppName;
+    return SMFApplication.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return Application.version;
+    return SMFApplication.version;
   }
   // events
   get onReceivedNotification() {
