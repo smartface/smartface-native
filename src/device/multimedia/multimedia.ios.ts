@@ -154,7 +154,7 @@ class MultimediaIOS implements MultimediaBase {
         const onFailure = e.onFailure;
         const url = file.ios.getNSURL();
 
-        __SF_UIImagePickerController.fixVideoOrientation(url, function (e) {
+        __SF_UIImagePickerController.fixVideoOrientation(url, (e) => {
           if (e.filePath && typeof onCompleted === 'function') {
             const video = new File({
               path: e.filePath
@@ -166,7 +166,7 @@ class MultimediaIOS implements MultimediaBase {
         });
       },
       requestGalleryAuthorization(callback) {
-        self.ios.native.PHPhotoLibraryRequestAuthorization(function (status) {
+        self.ios.native.PHPhotoLibraryRequestAuthorization((status) => {
           if (typeof callback === 'function') {
             if (status === PHAuthorizationStatus.Authorized) {
               callback(true);
@@ -177,7 +177,7 @@ class MultimediaIOS implements MultimediaBase {
         });
       },
       requestCameraAuthorization(callback) {
-        self.ios.native.AVCaptureDeviceRequestAccessForMediaType(function (status) {
+        self.ios.native.AVCaptureDeviceRequestAccessForMediaType((status) => {
           if (typeof callback === 'function') {
             callback(status);
           }
@@ -372,20 +372,20 @@ class MultimediaIOS implements MultimediaBase {
 
     let ypImagePicker: __SF_YPImagePicker | undefined = new __SF_YPImagePicker(ypImagePickerConfig);
 
-    ypImagePicker.didFinishPicking = function (data) {
-      ypImagePicker?.picker.dismissViewController(function () {
+    ypImagePicker.didFinishPicking = (data) => {
+      ypImagePicker?.picker.dismissViewController(() => {
         if (data.cancelled) {
           onCancel && onCancel();
           return;
         }
 
-        const imageAssets = data.photos.map(function (image) {
+        const imageAssets = data.photos.map((image) => {
           return {
             image: Image.createFromImage(image.originalImage)
           };
         });
 
-        const videoAssets = data.videos.map(function (video) {
+        const videoAssets = data.videos.map((video) => {
           return {
             file: new File({
               path: video.url.path
@@ -476,24 +476,24 @@ class MultimediaIOS implements MultimediaBase {
     }
 
     const delegate = new __SF_TOCropViewControllerDelegate();
-    delegate.didCropToImage = function (data) {
-      toCropViewController?.dismissViewController(function () {
+    delegate.didCropToImage = (data) => {
+      toCropViewController?.dismissViewController(() => {
         const image = Image.createFromImage(data.image);
         onSuccess && onSuccess({ image: image });
       }, true);
       toCropViewController = undefined;
     };
 
-    delegate.didCropToCircularImage = function (data) {
-      toCropViewController?.dismissViewController(function () {
+    delegate.didCropToCircularImage = (data) => {
+      toCropViewController?.dismissViewController(() => {
         const image = Image.createFromImage(data.image);
         onSuccess && onSuccess({ image: image });
       }, true);
       toCropViewController = undefined;
     };
 
-    delegate.didFinishCancelled = function () {
-      toCropViewController?.dismissViewController(function () {
+    delegate.didFinishCancelled = () => {
+      toCropViewController?.dismissViewController(() => {
         onCancel && onCancel();
       }, true);
       toCropViewController = undefined;
