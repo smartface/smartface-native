@@ -126,7 +126,8 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       headers,
       useHTTPCacheControl,
       useHTTPCacheControl ? false : android.useDiskCache,
-      android.useMemoryCache
+      android.useMemoryCache,
+      android.cacheSignature,
     );
     try {
       SFGlide.loadFromUrl(loadFromUrlParameters);
