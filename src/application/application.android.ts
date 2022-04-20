@@ -17,6 +17,7 @@ import ViewController from '../util/Android/transition/viewcontroller';
 import NativeEventEmitterComponent from '../core/native-event-emitter-component';
 import PageAndroid from '../ui/page/page.android';
 import Page from '../ui/page';
+import { EventListenerCallback } from '../core/eventemitter';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -121,14 +122,6 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         this.android.onBackButtonPressed?.();
         this.emit('backButtonPressed');
       }
-    });
-
-    this.prependListener('unhandledError', () => {
-      //@ts-ignore TODO: global Application variable from framework. NTVE-616
-      Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
-        this.emit('unhandledError', e);
-        this._onUnhandledError?.(e);
-      };
     });
 
     const mDrawerLayout = AndroidConfig.activity.findViewById(NativeR.id.layout_root);
@@ -521,6 +514,17 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   private checkIsAppShortcut(e: Record<string, any>) {
     return Object.prototype.hasOwnProperty.call(e?.data, 'AppShortcutType');
+  }
+
+  on(eventName: ApplicationEvents, callback: EventListenerCallback) {
+    if (eventName === ApplicationEvents.UnhandledError) {
+      //@ts-ignore TODO: global Application variable from framework. NTVE-616
+      Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+        this.emit('unhandledError', e);
+        this._onUnhandledError?.(e);
+      };
+    }
+    return super.on(eventName, callback);
   }
 }
 

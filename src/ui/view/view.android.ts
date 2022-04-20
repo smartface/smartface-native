@@ -12,6 +12,7 @@ import TypeUtil from '../../util/type';
 import ColorAndroid from '../color/color.android';
 import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import type ScrollViewAndroid from '../scrollview/scrollview.android';
+import { EventListenerCallback } from '../../core/eventemitter';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -127,18 +128,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   constructor(params?: Partial<TProps>) {
     super(params);
-    this.prependListener('touch', () => {
-      this.setTouchHandlers();
-    });
-    this.prependListener('touchCancelled', () => {
-      this.setTouchHandlers();
-    });
-    this.prependListener('touchEnded', () => {
-      this.setTouchHandlers();
-    });
-    this.prependListener('touchMoved', () => {
-      this.setTouchHandlers();
-    });
   }
 
   protected getAndroidSpecificProps() {
@@ -913,4 +902,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     }
   }
   // End of Ripple Effect
+
+  on(eventName: ViewEvents, callback: EventListenerCallback) {
+    this.setTouchHandlers();
+    return super.on(eventName, callback);
+  }
 }
