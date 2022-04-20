@@ -1,16 +1,21 @@
 const TypeDoc = require('typedoc');
 const fs = require('fs');
 const path = require('path');
-const packageJson = require('./package.json');
 const OUTPUT_DIR = 'docs';
 const BASE_PATH = 'src';
 
-function baseOrAbstractClassChecker(moduleName) {
-  return ['Base', 'Abstract'].some((a) => moduleName.includes(a));
+/**
+ * We need to define all modules under primitive here for typedoc
+ */
+const primitiveModules = ['boundary', 'iflexlayout', 'point2d', 'position', 'rectangle', 'size'];
+
+function primitiveModuleFinder(basePath) {
+  const paths = primitiveModules.map((p) => basePath + p + '.ts');
+  return paths.filter((p) => fs.existsSync(p));
 }
 
-function interfaceChecker(moduleName) {
-  return moduleName[0] === 'I';
+function baseOrAbstractClassChecker(moduleName) {
+  return ['Base', 'Abstract'].some((a) => moduleName.includes(a));
 }
 
 function capitalize(s) {
@@ -41,12 +46,17 @@ function getModuleNamesWithPath(basePath) {
     const separated = directory.split(path.sep);
     if (separated.length > 1) {
       // From all paths filter index.ts, MODULE_NAME.ts, MODULE_NAME-events.ts
+      // + add modules under primitive
       const lastPath = separated[separated.length - 1];
       const moduleNamed = directory + path.sep + lastPath + '.ts';
       const indexNamed = directory + path.sep + 'index.ts';
       const eventsNamed = directory + path.sep + lastPath + '-events.ts';
       if (fs.existsSync(eventsNamed)) {
         allPossibleEntryPoints.push(eventsNamed);
+      }
+      if (lastPath === 'primitive') {
+        const primitiveEntryPoints = primitiveModuleFinder(directory + path.sep);
+        allPossibleEntryPoints = allPossibleEntryPoints.concat(primitiveEntryPoints);
       }
       if (fs.existsSync(moduleNamed)) {
         allPossibleEntryPoints.push(moduleNamed);
