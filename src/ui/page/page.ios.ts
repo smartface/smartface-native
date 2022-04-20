@@ -318,13 +318,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         self.nativeObject.navigationItem.leftBarButtonItem = self._leftItem;
       },
       setItems(value: Parameters<HeaderBar['setItems']>['0']) {
-        const nativeObjectArray: any[] = [];
-
-        for (let i = value.length - 1; i >= 0; i--) {
-          //Bug : IOS-2399
-          nativeObjectArray.push(value[i].nativeObject);
-        }
-
+        //Bug : IOS-2399 for reverse
+        console.info('setItems');
+        const nativeObjectArray: any[] = value.map((item) => item.nativeObject).reverse();
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
       },
       setLeftItem(value: Parameters<HeaderBar['setLeftItem']>['0']) {
