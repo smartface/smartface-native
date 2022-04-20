@@ -78,8 +78,10 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     this.spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
     this._secureWindowContent = false;
     this._keepScreenAwake = false;
+    this.statusBar = StatusBar;
+    super.init(params);
   }
-  statusBar: typeof StatusBar = StatusBar;
+  statusBar: typeof StatusBar;
   private _sliderDrawer: SliderDrawerAndroid;
   private _keepScreenAwake: boolean;
   private _onUnhandledError: ApplicationBase['onUnhandledError'];

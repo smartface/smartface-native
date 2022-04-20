@@ -26,6 +26,13 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
 }
 
 class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
+
+  protected init(params?: Partial<Record<string, any>>): void {
+    this.statusBar = StatusBar;
+    this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow
+    super.init(params);
+  }
+
   onUnhandledError: ApplicationBase['onUnhandledError'];
   onExit: ApplicationBase['onExit'];
   onReceivedNotification: ApplicationBase['onReceivedNotification'];
@@ -34,11 +41,11 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   onMinimize: ApplicationBase['onMinimize'];
   onAppShortcutReceived: ApplicationBase['onAppShortcutReceived'];
   currentPage: Page;
-  statusBar: typeof StatusBar = StatusBar;
+  statusBar: typeof StatusBar;
   tabBar?: IBottomTabBar;
   private _sliderDrawer: SliderDrawer;
   private _rootPage: NavigationController['controller'];
-  private keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
+  private keyWindow;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
