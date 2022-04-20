@@ -42,14 +42,14 @@ export type AndroidProps = ViewAndroidProps & {
    * @android
    * @since 3.2.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.BackButtonPressed, () => {
    * 	console.info('onBackButtonPressed');
    * });
-   * ````
+   * ```
    */
   onBackButtonPressed?: () => void;
   /**
@@ -65,14 +65,14 @@ export type AndroidProps = ViewAndroidProps & {
    * @android
    * @since 4.0.4
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.ConsoleMessage, (params) => {
    * 	console.info('onConsoleMessage', params);
    * });
-   * ````
+   * ```
    */
   onConsoleMessage?: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => boolean;
   /**
@@ -355,14 +355,14 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.ChangedURL, (params) => {
    * 	console.info('onChangedURL', params);
    * });
-   * ````
+   * ```
    */
   onChangedURL?: (e: { url: string }) => boolean;
   /**
@@ -377,14 +377,14 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.Load, (params) => {
    * 	console.info('onLoad', params);
    * });
-   * ````
+   * ```
    */
   onLoad?: (e: { url: string }) => void;
   /**
@@ -402,14 +402,14 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @ios
    * @since 4.0.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.OpenNewWindow, (params) => {
    * 	console.info('onOpenNewWindow', params);
    * });
-   * ````
+   * ```
    */
   onOpenNewWindow?: (e: { url: string }) => void;
   /**
@@ -425,14 +425,14 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.Error, (params) => {
    * 	console.info('onError', params);
    * });
-   * ````
+   * ```
    */
   onError?: (e: { url: string; code: number; message: string }) => void;
   /**
@@ -447,14 +447,14 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import WebView from '@smartface/native/ui/webview';
    *
    * const webView = new WebView();
    * webView.on(WebView.Events.Show, (params) => {
    * 	console.info('onShow', params);
    * });
-   * ````
+   * ```
    */
   onShow?: (e: { url: string }) => void;
   /**

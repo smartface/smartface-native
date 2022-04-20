@@ -32,14 +32,14 @@ export interface IVideoViewIOSProps extends ViewIOSProps {
    * @param {Function} callback
    * @since 4.3.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.DidStopPictureInPicture, () => {
    * 	console.info('didStopPictureInPicture');
    * });
-   * ````
+   * ```
    */
   didStopPictureInPicture: () => void;
 
@@ -52,14 +52,14 @@ export interface IVideoViewIOSProps extends ViewIOSProps {
    * @param {Function} callback
    * @since 4.3.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.DidStartPictureInPicture, () => {
    * 	console.info('didStartPictureInPicture');
    * });
-   * ````
+   * ```
    */
   didStartPictureInPicture: () => void;
   /**
@@ -70,14 +70,14 @@ export interface IVideoViewIOSProps extends ViewIOSProps {
    * @param {Function} callback
    * @since 4.3.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.WillStopPictureInPicture, (params) => {
    * 	console.info('willStopPictureInPicture', params);
    * });
-   * ````
+   * ```
    */
   willStopPictureInPicture: () => void;
   /**
@@ -89,14 +89,14 @@ export interface IVideoViewIOSProps extends ViewIOSProps {
    * @param {Function} callback
    * @since 4.3.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.WillStartPictureInPicture, (params) => {
    * 	console.info('willStartPictureInPicture', params);
    * });
-   * ````
+   * ```
    */
   willStartPictureInPicture: () => void;
   /**
@@ -109,14 +109,14 @@ export interface IVideoViewIOSProps extends ViewIOSProps {
    * @param {Boolean} callback.parameter To allow the system to finish restoring your user interface, you must call the completion handler with a value of true.
    * @since 4.3.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.RestoreUserInterfaceForPictureInPictureStopWithCompletionHandler, (params) => {
    * 	console.info('restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', params);
    * });
-   * ````
+   * ```
    */
   restoreUserInterfaceForPictureInPictureStopWithCompletionHandler: (callback: (parameter?: boolean) => void) => void;
   /**
@@ -360,14 +360,14 @@ export interface IVideoView<
    * @param {Function} callback
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.Ready, () => {
    * 	console.info('onReady');
    * });
-   * ````
+   * ```
    */
   onReady: () => void;
   /**
@@ -380,14 +380,14 @@ export interface IVideoView<
    * @param {Function} callback
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.Finish, () => {
    * 	console.info('onFinish');
    * });
-   * ````
+   * ```
    */
   onFinish: () => void;
   /**
@@ -400,14 +400,14 @@ export interface IVideoView<
    * @param {Function} callback
    * @since 4.3.6
    * @example
-   * ````
+   * ```
    * import VideoView from '@smartface/native/ui/videoview';
    *
    * const videoView = new VideoView();
    * videoView.on(VideoView.Events.Failure, () => {
    * 	console.info('onFailure');
    * });
-   * ````
+   * ```
    */
   onFailure: () => void;
   /**

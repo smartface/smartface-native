@@ -42,14 +42,14 @@ export interface IRangeSlider<
   /**
    * @deprecated
    * @example
-   * ````
+   * ```
    * import RangeSlider from '@smartface/native/ui/rangeslider';
    *
    * const rangeSlider = new RangeSlider();
    * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
    *  console.info('onValueChange', params);
    * });
-   * ````
+   * ```
    */
   onValueChange?: (value: number[]) => void;
 }
@@ -71,14 +71,14 @@ export declare class AbstractRangeSlider<TEvent extends string = RangeSliderEven
   /**
    * @deprecated
    * @example
-   * ````
+   * ```
    * import RangeSlider from '@smartface/native/ui/rangeslider';
    *
    * const rangeSlider = new RangeSlider();
    * rangeSlider.on(RangeSlider.Events.ValueChange, params => {
    *  console.info('onValueChange', params);
    * });
-   * ````
+   * ```
    */
   onValueChange?: (value: number[]) => void;
 }

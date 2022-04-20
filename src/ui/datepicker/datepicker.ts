@@ -306,14 +306,14 @@ export declare interface IDatePicker<
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import DatePicker from '@smartface/native/ui/datepicker';
    *
    * const datePicker = new DatePicker();
    * datePicker.on(DatePicker.Events.Selected, (params) => {
    *  console.info('onDateSelected', params);
    * });
-   * ````
+   * ```
    */
   onDateSelected: (date: Date) => void;
   /**
@@ -325,14 +325,14 @@ export declare interface IDatePicker<
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import DatePicker from '@smartface/native/ui/datepicker';
    *
    * const datePicker = new DatePicker();
    * datePicker.on(DatePicker.Events.Cancelled, () => {
    *  console.info('onCancelled');
    * });
-   * ````
+   * ```
    */
   onCancelled: () => void;
 }

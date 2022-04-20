@@ -53,14 +53,14 @@ type IScrollViewIOS = ViewGroupIOS &
      * @since 3.2.1
      * @deprecated
      * @example
-     * ````
+     * ```
      * import ScrollView from '@smartface/native/ui/scrollview';
      *
      * const scrollView = new ScrollView();
      * scrollView.on(ScrollView.Events.ScrollBeginDragging, (params) => {
      * 	console.info('onScrollBeginDragging', params);
      * });
-     * ````
+     * ```
      */
     onScrollBeginDragging: (contentOffset: __SF_NSRect) => void;
     /**
@@ -74,14 +74,14 @@ type IScrollViewIOS = ViewGroupIOS &
      * @since 3.2.1
      * @deprecated
      * @example
-     * ````
+     * ```
      * import ScrollView from '@smartface/native/ui/scrollview';
      *
      * const scrollView = new ScrollView();
      * scrollView.on(ScrollView.Events.ScrollBeginDecelerating, (params) => {
      * 	console.info('onScrollBeginDecelerating', params);
      * });
-     * ````
+     * ```
      */
     onScrollBeginDecelerating: (contentOffset: __SF_NSRect) => void;
     /**
@@ -95,14 +95,14 @@ type IScrollViewIOS = ViewGroupIOS &
      * @since 3.2.1
      * @deprecated
      * @example
-     * ````
+     * ```
      * import ScrollView from '@smartface/native/ui/scrollview';
      *
      * const scrollView = new ScrollView();
      * scrollView.on(ScrollView.Events.ScrollEndDecelerating, (params) => {
      * 	console.info('onScrollEndDecelerating', params);
      * });
-     * ````
+     * ```
      */
     onScrollEndDecelerating: (contentOffset: __SF_NSRect) => void;
     /**
@@ -117,14 +117,14 @@ type IScrollViewIOS = ViewGroupIOS &
      * @since 3.2.1
      * @deprecated
      * @example
-     * ````
+     * ```
      * import ScrollView from '@smartface/native/ui/scrollview';
      *
      * const scrollView = new ScrollView();
      * scrollView.on(ScrollView.Events.ScrollEndDraggingWillDecelerate, (params) => {
      * 	console.info('onScrollEndDraggingWillDecelerate', params);
      * });
-     * ````
+     * ```
      */
     onScrollEndDraggingWillDecelerate: (contentOffset: __SF_NSRect, decelerate: boolean) => void;
     /**
@@ -144,14 +144,14 @@ type IScrollViewIOS = ViewGroupIOS &
      * @since 3.2.1
      * @deprecated
      * @example
-     * ````
+     * ```
      * import ScrollView from '@smartface/native/ui/scrollview';
      *
      * const scrollView = new ScrollView();
      * scrollView.on(ScrollView.Events.ScrollEndDraggingWithVelocityTargetContentOffset, (params) => {
      * 	console.info('onScrollEndDraggingWithVelocityTargetContentOffset', params);
      * });
-     * ````
+     * ```
      */
     onScrollEndDraggingWithVelocityTargetContentOffset: (contentOffset: __SF_NSRect, velocity: __SF_NSRect, targetContentOffset: Point2D) => void;
   }>;
@@ -293,14 +293,14 @@ export interface IScrollView<TEvent extends string = ScrollViewEvents, TMobile e
    * @ios
    * @since 1.1.13
    * @example
-   * ````
+   * ```
    * import ScrollView from '@smartface/native/ui/scrollview';
    *
    * const scrollView = new ScrollView();
    * scrollView.on(ScrollView.Events.Scroll, (params) => {
    * 	console.info('onScroll', params);
    * });
-   * ````
+   * ```
    */
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   /**

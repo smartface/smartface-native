@@ -121,14 +121,14 @@ export interface IViewGroup<
    * @since 1.1.8
    * @deprecated
    * @example
-   * ````
+   * ```
    * import ViewGroup from '@smartface/native/ui/viewgroup';
    *
    * const viewGroup = new ViewGroup();
    * viewGroup.on(ViewGroup.Events.ViewAdded, (params) => {
    *  console.info('onViewAdded', params);
    * });
-   * ````
+   * ```
    */
   onViewAdded: (view: IView) => void;
   /**
@@ -141,14 +141,14 @@ export interface IViewGroup<
    * @ios
    * @since 1.1.8
    * @example
-   * ````
+   * ```
    * import ViewGroup from '@smartface/native/ui/viewgroup';
    *
    * const viewGroup = new ViewGroup();
    * viewGroup.on(ViewGroup.Events.ViewRemoved, (params) => {
    *  console.info('onViewRemoved', params);
    * });
-   * ````
+   * ```
    */
   onViewRemoved: (view: IView) => void;
 }

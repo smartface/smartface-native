@@ -32,28 +32,28 @@ export interface IPin<TEvent extends string = PinEvents, TMobile extends MobileO
    * @ios
    * @since 1.1.2
    * @example
-   * ````
+   * ```
    * import Pin from '@smartface/native/ui/mapview/pin';
    *
    * const pin = new Pin();
    * pin.on(Pin.Events.Press, () => {
    *  console.info('onPress');
    * });
-   * ````
+   * ```
    */
   onPress: () => void;
 
   /**
    * @deprecated
    * @example
-   * ````
+   * ```
    * import Pin from '@smartface/native/ui/mapview/pin';
    *
    * const pin = new Pin();
    * pin.on(Pin.Events.InfoWindowPress, () => {
    *  console.info('onInfoWindowPress');
    * });
-   * ````
+   * ```
    */
   onInfoWindowPress: () => void;
 }

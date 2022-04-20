@@ -65,14 +65,14 @@ export interface IBottomTabBarController extends IController {
    * @ios
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import BottomTabbarController from '@smartface/native/ui/bottomtabbarcontroller';
    *
    * const bottomTabbarController = new BottomTabbarController();
    * bottomTabbarController.on(BottomTabBarController.Events.ShouldSelectByIndex, (params) => {
    *  console.info('shouldSelectByIndex', params);
    * });
-   * ````
+   * ```
    */
   shouldSelectByIndex(params: { index: number }): boolean;
   /**
@@ -86,14 +86,14 @@ export interface IBottomTabBarController extends IController {
    * @ios
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import BottomTabBarController from "./bottomtabbarcontroller";
    *
    * const bottomTabBarController = new BottomTabBarController();
    * bottomTabBarController.on(BottomTabBarController.Events.SelectByIndex, (params) => {
    *  console.info('selectByIndex', params);
    * });
-   * ````
+   * ```
    */
   didSelectByIndex(params: { index: number }): void;
 }

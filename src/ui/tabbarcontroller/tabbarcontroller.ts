@@ -179,14 +179,14 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import TabbarController from '@smartface/native/ui/tabbarcontroller';
    *
    * const tabbarController = new TabbarController();
    * tabbarController.on(TabbarController.Events.PageCreate, (params) => {
    * 	console.info('onPageCreate', params);
    * });
-   * ````
+   * ```
    */
   onPageCreate: (index: number) => Page;
   /**
@@ -199,14 +199,14 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import TabbarController from '@smartface/native/ui/tabbarcontroller';
    *
    * const tabbarController = new TabbarController();
    * tabbarController.on(TabbarController.Events.Selected, (params) => {
    * 	console.info('onSelected', params);
    * });
-   * ````
+   * ```
    */
   onSelected: (index: number) => void;
 }

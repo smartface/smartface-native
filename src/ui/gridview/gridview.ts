@@ -483,7 +483,6 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
    * @android
    * @ios
    * @since 3.0.2
-   * @example
    */
   itemByIndex(index: number): GridViewItem | undefined;
 }

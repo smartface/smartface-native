@@ -49,14 +49,14 @@ export interface PageAndroidParams {
    * @android
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.BackButtonPressed, () => {
    * 	console.info('backButtonPressed);
    * });
-   * ````
+   * ```
    */
   onBackButtonPressed(): void;
   transitionViewsCallback?: {
@@ -89,14 +89,14 @@ export interface PageIOSParams {
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.SafeAreaPaddingChange, () => {
    * 	console.info('onSafeAreaPaddingChange');
    * });
-   * ````
+   * ```
    */
   onSafeAreaPaddingChange: ((padding: { left: number; top: number; right: number; bottom: number }) => void) | undefined;
   present(params?: ControllerParams): void;
@@ -120,14 +120,14 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.Load, () => {
    * 	console.info('onLoad');
    * });
-   * ````
+   * ```
    */
   onLoad(): void;
   /**
@@ -194,14 +194,14 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.Show, () => {
    * 	console.info('onShow');
    * });
-   * ````
+   * ```
    */
   onShow(): void;
   /**
@@ -211,14 +211,14 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.Hide, () => {
    * 	console.info('onHide');
    * });
-   * ````
+   * ```
    */
   onHide(): void;
   /**
@@ -334,14 +334,14 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
    * page.on(Page.Events.OrientationChange, (params) => {
    * 	console.info('onOrientationChange', params);
    * });
-   * ````
+   * ```
    */
   onOrientationChange(e: { orientation: PageOrientation[] }): void;
   skipDefaults?: boolean;

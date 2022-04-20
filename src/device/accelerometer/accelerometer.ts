@@ -50,13 +50,13 @@ export interface IAccelerometer extends NativeEventEmitterComponent<Acceleromete
    * @ios
    * @deprecated
    * @example
-   * ````
+   * ```
    * import AcceleroMeter from '@smartface/native/device/accelerometer';
    *
    * AcceleroMeter.on(AcceleroMeter.Events.Accelerate, (params) => {
    *  console.info('onAccelerate', params);
    * });
-   * ````
+   * ```
    */
   onAccelerate: (e: { x: number; y: number; z: number }) => void;
 

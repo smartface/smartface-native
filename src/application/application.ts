@@ -99,13 +99,13 @@ export interface ApplicationAndroidProps {
    * @deprecated
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.BackButtonPressed, () => {
    * 	console.info('onBackButtonPressed');
    * });
-   * ````
+   * ```
    */
   onBackButtonPressed: () => void;
   /**
@@ -708,13 +708,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @ios
    * @since 1.2
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.UnhandledError, (error) => {
    * 	console.info('onUnhandledError', error);
    * });
-   * ````
+   * ```
    */
   onUnhandledError: (error: UnhandledError) => void;
   /**
@@ -727,13 +727,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @deprecated
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.Exit, () => {
    * 	console.info('onExit');
    * });
-   * ````
+   * ```
    */
   onExit(): void;
   /**
@@ -749,13 +749,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @deprecated
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.ReceivedNotification, (params) => {
    * 	console.info('onReceivedNotification', params);
    * });
-   * ````
+   * ```
    */
   onReceivedNotification: (data: Partial<{ remote: { [key: string]: any }; local: { [key: string]: any } }>) => void;
   /**
@@ -781,13 +781,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 1.1.13
    * @see https://developer.android.com/training/sharing/receive.html
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.ApplicationCallReceived, (params) => {
    * 	console.info('onApplicationCallReceived', params);
    * });
-   * ````
+   * ```
    */
   onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
   /**
@@ -806,13 +806,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @see https://developer.android.com/guide/topics/ui/shortcuts
    * @see https://developer.apple.com/documentation/uikit/menus_and_shortcuts/add_home_screen_quick_actions
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.AppShortcutReceived, (params) => {
    * 	console.info('onAppShortcutReceived', params);
    * });
-   * ````
+   * ```
    */
   onAppShortcutReceived: (e: { data: { [key: string]: any } }) => void;
   /**
@@ -826,13 +826,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @deprecated
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.Maximize, () => {
    * 	console.info('onMaximize');
    * });
-   * ````
+   * ```
    */
   onMaximize: () => void;
   /**
@@ -846,13 +846,13 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @deprecated
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Application from '@smartface/native/application';
    *
    * Application.on(Application.Events.Minimize, () => {
    * 	console.info('onMinimize');
    * });
-   * ````
+   * ```
    */
   onMinimize: () => void;
   /**

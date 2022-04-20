@@ -45,14 +45,14 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
    * @ios
    * @since 4.3.0
    * @example
-   * ````
+   * ```
    * import MaterialTextBox from '@smartface/native/ui/materialtextbox';
    *
    * const materialTextBox = new MaterialTextBox();
    * materialTextBox.on(MaterialTextBox.Events.LeftLayoutRectForBounds, (params) => {
    *  console.info('onLeftLayoutRectForBounds', params);
    * });
-   * ````
+   * ```
    */
   onLeftLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   /**
@@ -77,14 +77,14 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
    * @ios
    * @since 4.3.0
    * @example
-   * ````
+   * ```
    * import MaterialTexBox from '@smartface/native/ui/materialtextbox';
    *
    * const materialTextBox = new MaterialTextBox();
    * materialTextBox.on(MaterialTextBox.Events.RightLayoutRectForBounds, (params) => {
    *  console.info('onRightLayoutRectForBounds', params);
    * });
-   * ````
+   * ```
    */
   onRightLayoutRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
   /**

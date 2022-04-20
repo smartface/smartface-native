@@ -166,14 +166,14 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @since 2.0.8
    * @deprecated
    * @example
-   * ````
+   * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
    * textBox.on(TextBox.Events.EditBegins, (params) => {
    * 	console.info('onEditBegins', params);
    * });
-   * ````
+   * ```
    */
   cursorPosition: {
     start: number;
@@ -285,14 +285,14 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @since 0.1
    * @deprecated
    * @example
-   * ````
+   * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
    * textBox.on(TextBox.Events.TextChanged, (params) => {
    * 	console.info('onTextChanged', params);
    * });
-   * ````
+   * ```
    */
   onTextChanged: (e?: { insertedText: string; location: number }) => void;
   /**
@@ -304,14 +304,14 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @since 4.0.2
    * @deprecated
    * @example
-   * ````
+   * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
    * textBox.on(TextBox.Events.ClearButtonPress, () => {
    * 	console.info('onClearButtonPress');
    * });
-   * ````
+   * ```
    */
   onClearButtonPress: () => void;
   /**
@@ -324,14 +324,14 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @since 0.1
    * @deprecated
    * @example
-   * ````
+   * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
    * textBox.on(TextBox.Events.EditEnds, () => {
    * 	console.info('onEditEnds');
    * });
-   * ````
+   * ```
    */
   onEditEnds: () => void;
   /**
@@ -345,14 +345,14 @@ export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile
    * @since 0.1
    * @deprecated
    * @example
-   * ````
+   * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
    * textBox.on(TextBox.Events.ActionButtonPress, (params) => {
    * 	console.info('onActionButtonPress', params);
    * });
-   * ````
+   * ```
    */
   onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
   enabled?: boolean;

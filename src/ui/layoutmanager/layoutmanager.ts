@@ -13,14 +13,14 @@ export interface LayoutManagerIOSParams {
    * @ios
    * @since 3.2.0
    * @example
-   * ````
+   * ```
    * import LayoutManager from '@smartface/native/ui/layoutmanager';
    *
    * const layoutManager = new LayoutManager();
    * layoutManager.on(LayoutManager.Events.TargetContentOffset, (params) => {
    *  console.info('targetContentOffset', params);
    * });
-   * ````
+   * ```
    */
   targetContentOffset: (proposedContentOffset: Point2D, velocity: Point2D) => Point2D;
 }
@@ -81,14 +81,14 @@ export declare interface ILayoutManager extends INativeComponent, MobileOSProps<
    * @ios
    * @since 3.0.2
    * @example
-   * ````
+   * ```
    * import LayoutManager from '@smartface/native/ui/layoutmanager';
    *
    * const layoutManager = new LayoutManager();
    * layoutManager.on(LayoutManager.Events.ItemLength, (params) => {
    *  console.info('onItemLength', params);
    * });
-   * ````
+   * ```
    */
   onItemLength: null | ((length: number) => number);
   /**
@@ -101,14 +101,14 @@ export declare interface ILayoutManager extends INativeComponent, MobileOSProps<
    * @ios
    * @since 4.0.1
    * @example
-   * ````
+   * ```
    * import LayoutManager from '@smartface/native/ui/layoutmanager';
    *
    * const layoutManager = new LayoutManager();
    * layoutManager.on(LayoutManager.Events.FullSpan, (params) => {
    *  console.info('onFullSpan', params);
    * });
-   * ````
+   * ```
    */
   onFullSpan: null | ((type: number) => number);
 

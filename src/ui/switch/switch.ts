@@ -121,14 +121,14 @@ export declare interface ISwitch<TEvent extends string = SwitchEvents, TProps ex
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Switch from '@smartface/native/ui/switch';
    *
    * const switch = new Switch();
    * switch.on(Switch.Events.ToggleChanged, (params) => {
    *  console.info('onToggleChanged', params);
    * });
-   * ````
+   * ```
    */
   onToggleChanged: (toggle: boolean) => void;
 }

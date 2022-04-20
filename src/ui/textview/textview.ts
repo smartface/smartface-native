@@ -142,14 +142,14 @@ export declare interface ITextView<
    * @ios
    * @since 3.0.0
    * @example
-   * ````
+   * ```
    * import TextView from '@smartface/native/ui/textview';
    *
    * const textView = new TextView();
    * textView.on(TextView.Events.LinkClick, (params) => {
    *  console.info('onLinkClick', params);
    * });
-   * ````
+   * ```
    */
   onLinkClick: (e: string | undefined) => void;
   /**

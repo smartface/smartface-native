@@ -111,13 +111,13 @@ export interface ILocation<TEvent extends string = LocationEvents, TMobile exten
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Location from '@smartface/native/device/location';
    *
    * Location.on(Location.Events.LocationChanged, (params) => {
    * 	console.info('onLocationChanged', params);
    * });
-   * ````
+   * ```
    */
   onLocationChanged: (e: { latitude: number; longitude: number }) => void;
   /**

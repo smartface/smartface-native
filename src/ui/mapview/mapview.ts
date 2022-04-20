@@ -232,14 +232,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.ClusterPress, (params) => {
    * 	console.info('onClusterPress', params);
    * });
-   * ````
+   * ```
    */
   onClusterPress: (pins: Pin[]) => void;
   /**
@@ -397,14 +397,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 1.1.3
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.Press, (params) => {
    * 	console.info('onPress', params);
    * });
-   * ````
+   * ```
    */
   onPress: (location: { latitude: number; longitude: number }) => void;
   /**
@@ -416,14 +416,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 2.0.9
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.CameraMoveStarted, () => {
    * 	console.info('onCameraMoveStarted');
    * });
-   * ````
+   * ```
    */
   onCameraMoveStarted: () => void;
   /**
@@ -435,14 +435,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 2.0.9
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.CameraMoveEnded, () => {
    * 	console.info('onCameraMoveEnded');
    * });
-   * ````
+   * ```
    */
   onCameraMoveEnded: () => void;
   /**
@@ -457,14 +457,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 1.1.3
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.LongPress, (params) => {
    * 	console.info('onLongPress', params);
    * });
-   * ````
+   * ```
    */
   onLongPress: (location: { latitude: number; longitude: number }) => void;
   /**
@@ -476,14 +476,14 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @android
    * @ios
    * @example
-   * ````
+   * ```
    * import MapView from '@smartface/native/ui/mapview';
    *
    * const mapView = new MapView();
    * mapView.on(MapView.Events.Create, () => {
    * 	console.info('onCreate');
    * });
-   * ````
+   * ```
    */
   onCreate: () => void;
   /**

@@ -45,26 +45,26 @@ export declare interface IButton<TEvent extends string = ButtonEvents, TMobile e
   /**
    * @deprecated
    * @example
-   * ````
+   * ```
    * import Button from '@smartface/native/ui/button';
    *
    * this.button1.on(Button.Events.Press, () => {
    *  console.info('Button pressed');
    * });
-   * ````
+   * ```
    */
   onPress: () => void;
   /**
    * This only works for Android
    * @deprecated
    * @example
-   * ````
+   * ```
    * import Button from '@smartface/native/ui/button';
    *
    * this.button1.on(Button.Events.LongPress, () => {
    *  console.info('Button long pressed');
    * });
-   * ````
+   * ```
    */
   onLongPress: () => void;
 }

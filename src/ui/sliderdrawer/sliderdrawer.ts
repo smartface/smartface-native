@@ -145,14 +145,14 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
    *
    * const sliderDrawer = new SliderDrawer();
    * sliderDrawer.on(SliderDrawer.Events.Show, () => {
    * 	console.info('onShow');
    * });
-   * ````
+   * ```
    */
   onShow: () => void | null;
   /**
@@ -164,14 +164,14 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
    *
    * const sliderDrawer = new SliderDrawer();
    * sliderDrawer.on(SliderDrawer.Events.Hide, () => {
    * 	console.info('onHide');
    * });
-   * ````
+   * ```
    */
   onHide: () => void | null;
   /**
@@ -183,14 +183,14 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SliderDrawer from '@smartface/native/ui/sliderdrawer';
    *
    * const sliderDrawer = new SliderDrawer();
    * sliderDrawer.on(SliderDrawer.Events.Load, () => {
    * 	console.info('onLoad');
    * });
-   * ````
+   * ```
    */
   onLoad: () => void | null;
   height: number;

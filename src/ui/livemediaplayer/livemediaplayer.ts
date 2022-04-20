@@ -161,14 +161,14 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents>
    * @ios
    * @since 4.2.2
    * @example
-   * ````
+   * ```
    * import LiveMediaPlayer from '@smartface/native/ui/livemediaplayer';
    *
    * const liveMediaPlayer = new LiveMediaPlayer();
    * liveMediaPlayer.on(LiveMediaPlayer.Events.Change, (params) => {
    *  console.info('onChange', params);
    * });
-   * ````
+   * ```
    */
   onChange: (params: { event: number; message: string }) => void;
 }

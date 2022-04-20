@@ -47,14 +47,14 @@ export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {
    * @member UI.FlexLayout
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import FlexLayout from '@smartface/native/ui/flexlayout';
    *
    * const flexLayout = new FlexLayout();
    * flex.on(Flex.Events.InterceptTouchEvent, () => {
    * 	console.info('onInterceptTouchEvent');
    * });
-   * ````
+   * ```
    */
   onInterceptTouchEvent: () => boolean;
 

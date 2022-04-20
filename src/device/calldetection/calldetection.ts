@@ -99,14 +99,14 @@ export interface ICallDetection extends NativeEventEmitterComponent<CallDetectio
    * @ios
    * @deprecated
    * @example
-   * ````
+   * ```
    * import CallDetection from '@smartface/native/device/calldetection';
    *
    * const callDetection1 = new CallDetection();
    * callDetection1.on(CallDetection.Events.CallStateChanged, (params) => {
    *  console.info('onCallStateChanged', params);
    * });
-   * ````
+   * ```
    */
   onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
 }

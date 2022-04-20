@@ -81,14 +81,14 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @ios
    * @since 1.1.10
    * @example
-   * ````
+   * ```
    * import SwipeView from '@smartface/native/ui/swipeview';
    *
    * const swipeView = new SwipeView();
    * swipeView.on(SwipeView.Events.PageSelected, (params) => {
    * 	console.info('onPageSelected', params);
    * });
-   * ````
+   * ```
    */
   page: IPage;
 
@@ -114,14 +114,14 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @ios
    * @since 2.0.9
    * @example
-   * ````
+   * ```
    * import SwipeView from '@smartface/native/ui/swipeview';
    *
    * const swipeView = new SwipeView();
    * swipeView.on(SwipeView.Events.PageScrolled, (params) => {
    * 	console.info('onPageScrolled', params);
    * });
-   * ````
+   * ```
    */
   onPageScrolled: (index: number, offset: number) => void;
   /**
@@ -134,14 +134,14 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @ios
    * @since 1.1.10
    * @example
-   * ````
+   * ```
    * import SwipeView from '@smartface/native/ui/swipeview';
    *
    * const swipeView = new SwipeView();
    * swipeView.on(SwipeView.Events.StateChanged, (params) => {
    * 	console.info('onStateChanged', params);
    * });
-   * ````
+   * ```
    */
   onStateChanged: (state: SwipeViewState) => void;
   /**

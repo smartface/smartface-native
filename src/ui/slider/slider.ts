@@ -135,14 +135,14 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView {
    * @since 0.1
    * @deprecated
    * @example
-   * ````
+   * ```
    * import Slider from '@smartface/native/ui/slider';
    *
    * const slider = new Slider();
    * slider.on(Slider.Events.ValueChange, () => {
    *  console.info('valueChange');
    * });
-   * ````
+   * ```
    */
   onValueChange: (value: number) => void;
 }

@@ -496,14 +496,14 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
    * @ios
    * @since 4.2.2
    * @example
-   * ````
+   * ```
    * import LiveMediaPublisher from '@smartface/native/ui/livemediapublisher';
    *
    * const liveMediaPublisher = new LiveMediaPublisher();
    * liveMediaPublisher.on(LiveMediaPublisher.Events.Change, (params) => {
    *  console.info('onChange', params);
    * });
-   * ````
+   * ```
    */
   onChange: (params: { event: number; message: string }) => void;
 }

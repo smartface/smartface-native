@@ -94,14 +94,14 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @deprecated
    * @event onReady
    * @example
-   * ````
+   * ```
    * import Sound from '@smartface/native/device/sound';
    *
    * const sound1 = new Sound();
    * sound.on(Sound.Events.Ready, (params) => {
    *  console.info('onReady', params);
    * });
-   * ````
+   * ```
    */
   abstract onReady: () => void;
   /**
@@ -114,14 +114,14 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @deprecated
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import Sound from '@smartface/native/device/sound';
    *
    * const sound1 = new Sound();
    * sound1.on(Sound.Events.Finish, (params) => {
    *  console.info('onFinish', params);
    * });
-   * ````
+   * ```
    */
   abstract onFinish: () => void;
   /**

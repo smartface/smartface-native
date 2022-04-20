@@ -109,14 +109,14 @@ export type SearchViewIOSProps = IView['ios'] & {
    * @event onCancelButtonClicked
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SearchView from '@smartface/native/ui/searchview';
    *
    * const searchView = new SearchView();
    * searchView.on(SearchView.Events.CancelButtonClicked, () => {
    * 	console.info('onCancelButtonClicked');
    * });
-   * ````
+   * ```
    */
   onCancelButtonClicked?: () => void;
   /**
@@ -359,14 +359,14 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SearchView from '@smartface/native/ui/searchview';
    *
    * const searchView = new SearchView();
    * searchView.on(SearchView.Events.SearchBegin, () => {
    * 	console.info('onSearchBegin');
    * });
-   * ````
+   * ```
    */
   onSearchBegin: () => void;
   /**
@@ -378,14 +378,14 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SearchView from '@smartface/native/ui/searchview';
    *
    * const searchView = new SearchView();
    * searchView.on(SearchView.Events.SearchEnd, () => {
    * 	console.info('onSearchEnd');
    * });
-   * ````
+   * ```
    */
   onSearchEnd: () => void;
 
@@ -399,14 +399,14 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @event onTextChanged
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SearchView from '@smartface/native/ui/searchview';
    *
    * const searchView = new SearchView();
    * searchView.on(SearchView.Events.TextChanged, (params) => {
    * 	console.info('onTextChanged', params);
    * });
-   * ````
+   * ```
    */
   onTextChanged: (searchText: string) => void;
   /**
@@ -418,14 +418,14 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import SearchView from '@smartface/native/ui/searchview';
    *
    * const searchView = new SearchView();
    * searchView.on(SearchView.Events.SearchButtonClicked, (params) => {
    * 	console.info('onSearchButtonClicked');
    * });
-   * ````
+   * ```
    */
   onSearchButtonClicked: () => void;
 }

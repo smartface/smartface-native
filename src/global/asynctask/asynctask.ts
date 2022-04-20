@@ -84,14 +84,14 @@ export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile ext
    * @deprecated
    * @since 3.1.0
    * @example
-   * ````
+   * ```
    * import AsyncTask from '@smartface/native/global/asynctask';
    *
    * const task = new AsyncTask();
    * task.on(AsyncTask.Events.Complete, () => {
    * 	console.info('onComplete');
    * });
-   * ````
+   * ```
    */
   onComplete: () => void;
   /**
@@ -102,14 +102,14 @@ export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile ext
    * @android
    * @since 3.2.2
    * @example
-   * ````
+   * ```
    * import AsyncTask from '@smartface/native/global/asynctask';
    *
    * const task = new AsyncTask();
    * task.on(AsyncTask.Events.PreExecute, () => {
    * 	console.info('onPreExecute');
    * });
-   * ````
+   * ```
    */
   onPreExecute: () => void;
   /**
@@ -121,14 +121,14 @@ export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile ext
    * @ios
    * @since 3.2.2
    * @example
-   * ````
+   * ```
    * import AsyncTask from '@smartface/native/global/asynctask';
    *
    * const task = new AsyncTask();
    * task.on(AsyncTask.Events.Cancelled, () => {
    * 	console.info('onCancelled');
    * });
-   * ````
+   * ```
    */
   onCancelled: () => void;
   /**

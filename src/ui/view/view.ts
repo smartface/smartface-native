@@ -692,7 +692,7 @@ export interface IView<
    * @member UI.View
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import View from '@smartface/native/ui/view';
    * import FlexLayout from '@smartface/native/ui/flexlayout';
    * import Button from '@smartface/native/ui/button';
@@ -706,7 +706,7 @@ export interface IView<
    * this.button1.on(Button.Events.Touch, (point) => {
    * 	console.info('button onTouch', point);
    * });
-   * ````
+   * ```
    */
   onTouch: (e?: Point2D) => boolean | undefined;
   /**
@@ -725,7 +725,7 @@ export interface IView<
    * @member UI.View
    * @since 0.1
    * @example
-   * ````
+   * ```
    * import View from '@smartface/native/ui/view';
    * import FlexLayout from '@smartface/native/ui/flexlayout';
    * import Button from '@smartface/native/ui/button';
@@ -739,7 +739,7 @@ export interface IView<
    * this.button1.on(Button.Events.TouchEnded, (isInside, point) => {
    * 	console.info('button onTouchEnded', isInside, point);
    * });
-   * ````
+   * ```
    */
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean | undefined;
   /**
@@ -756,7 +756,7 @@ export interface IView<
    * @member UI.View
    * @since 2.0.10
    * @example
-   * ````
+   * ```
    * import View from '@smartface/native/ui/view';
    * import FlexLayout from '@smartface/native/ui/flexlayout';
    * import Button from '@smartface/native/ui/button';
@@ -770,13 +770,13 @@ export interface IView<
    * this.button1.on(Button.Events.TouchCancelled, (point) => {
    * 	console.info('button onTouchCancelled', point);
    * });
-   * ````
+   * ```
    */
   onTouchCancelled: (point: Point2D) => boolean | undefined;
   /**
    * @deprecated This method is deprecated in favor of EventEmitter. You could get more details for the deprecated events from here https://docs.smartface.io/smartface-native-framework/tips-and-tricks/handling-events
    * @example
-   * ````
+   * ```
    * import View from '@smartface/native/ui/view';
    * import FlexLayout from '@smartface/native/ui/flexlayout';
    * import Button from '@smartface/native/ui/button';
@@ -790,7 +790,7 @@ export interface IView<
    * this.button1.on(Button.Events.TouchMoved, (point) => {
    * 	console.info('button onTouchMoved', point);
    * });
-   * ````
+   * ```
    */
   onTouchMoved: (e: { isInside: boolean } | boolean, point?: Point2D) => boolean | undefined;
   /**

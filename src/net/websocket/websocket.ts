@@ -51,14 +51,14 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * @deprecated
    * @since 1.1.17
    * @example
-   * ````
+   * ```
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
    * webSocket.on(WebSocket.Events.Open, () => {
    *  console.info('onOpen');
    * });
-   * ````
+   * ```
    */
   onOpen: () => void;
   /**
@@ -70,14 +70,14 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * @event
    * @since 1.1.17
    * @example
-   * ````
+   * ```
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
    * webSocket.on(WebSocket.Events.Message, (params) => {
    *  console.info('onMessage', params);
    * });
-   * ````
+   * ```
    */
   onMessage: (e: { string?: string; blob?: Blob }) => void;
   /**
@@ -89,14 +89,14 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * @event
    * @since 1.1.17
    * @example
-   * ````
+   * ```
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
    * webSocket.on(WebSocket.Events.Close, (params) => {
    *  console.info('onClose', params);
    * });
-   * ````
+   * ```
    */
   onClose: (e: { code: number; reason: string }) => void;
   /**
@@ -108,14 +108,14 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * @event
    * @since 1.1.17
    * @example
-   * ````
+   * ```
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
    * webSocket.on(WebSocket.Events.Failure, (params) => {
    *  console.info('onFailure', params);
    * });
-   * ````
+   * ```
    */
   onFailure: (e: { code: number; message: string }) => void;
 }
