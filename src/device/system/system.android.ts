@@ -105,8 +105,7 @@ class SystemAndroid extends NativeMobileComponent implements AbstractSystem {
   get clipboard() {
     const clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
     const storedData = clipboard.getPrimaryClip();
-    if (storedData !== null) {
-      // NEEDED!
+    if (storedData) {
       return storedData.getItemAt(0).getText().toString();
     } else {
       return null;
