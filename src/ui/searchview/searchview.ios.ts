@@ -107,7 +107,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this._backgroundColor = this.nativeObject.barTintColor;
     this._searchBarDelegate = new __SF_UISearchBarDelegate();
     this._searchBarDelegate.cancelButtonClicked = (e) => {
-      this._onCancelButtonClicked();
+      this._onCancelButtonClicked?.();
       this.emit('cancelButtonClicked');
     };
     this._searchBarDelegate.didBeginEditing = () => {
@@ -123,7 +123,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
         this.nativeObject.setShowsCancelButtonAnimated(false, true);
       }
 
-      this._onSearchEnd();
+      this._onSearchEnd?.();
       this.emit('searchEnd');
     };
 
@@ -142,11 +142,11 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
         }
       }
 
-      this._onTextChanged(searchText);
+      this._onTextChanged?.(searchText);
       this.emit('textChanged', searchText);
     };
     this._searchBarDelegate.searchButtonClicked = () => {
-      this._onSearchButtonClicked();
+      this._onSearchButtonClicked?.();
       this.emit('searchButtonClicked');
     };
     this.nativeObject.delegate = this._searchBarDelegate;
