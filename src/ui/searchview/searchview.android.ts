@@ -73,40 +73,57 @@ const NativeTextAlignment = [
 ];
 
 export default class SearchViewAndroid<TEvent extends string = SearchViewEvents> extends ViewAndroid<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
-  private _hasEventsLocked: boolean = false;
-  private _hint: string = '';
-  private _textColor = ColorAndroid.BLACK;
-  private _defaultUnderlineColorNormal = ColorAndroid.create('#ffcccccc');
-  private _defaultUnderlineColorFocus = ColorAndroid.create('#ff444444');
+  private _hasEventsLocked: boolean;
+  private _hint: string;
+  private _textColor;
+  private _defaultUnderlineColorNormal;
+  private _defaultUnderlineColorFocus;
   private mSearchSrcTextView: any;
   private mCloseButton: any;
   private mSearchButton: any;
   private mUnderLine: any;
   private mSearchEditFrame: any;
   private mCompatImageView: any;
-  private _hintTextColor = ColorAndroid.LIGHTGRAY;
-  private _keyboardType = KeyboardType.DEFAULT;
+  private _hintTextColor;
+  private _keyboardType;
   private _closeImage: ImageAndroid;
   private _backgroundImage: ImageAndroid;
-  private _textFieldBackgroundColor = ColorAndroid.create(222, 222, 222);
-  private _textFieldBorderRadius = 15;
+  private _textFieldBackgroundColor;
+  private _textFieldBorderRadius;
   private _searchButtonIcon: ImageAndroid;
   private _closeIcon: ImageAndroid;
   private _searchIcon: ImageAndroid;
-  private _iconifiedByDefault: boolean = false;
-  private _searchIconAssigned: boolean = true;
-  private _isNotSetTextWatcher: boolean = false;
-  private _isClicklistenerAdded: boolean = false;
+  private _iconifiedByDefault: boolean;
+  private _searchIconAssigned: boolean;
+  private _isNotSetTextWatcher: boolean;
+  private _isClicklistenerAdded: boolean;
   private _leftItem: any;
   private _underlineColor: { normal: ColorAndroid; focus: ColorAndroid };
   private _font: Font;
-  private _textalignment = TextAlignment.MIDLEFT;
+  private _textalignment;
   private textFieldBackgroundDrawable: typeof GradientDrawable;
   private _onSearchBeginCallback: () => void;
   private _onSearchEndCallback: () => void;
   private _onTextChangedCallback: (searchText: string) => void;
   private _onSearchButtonClickedCallback: () => void;
   private skipDefaults: boolean;
+  init(params?: Partial<ISearchView>) {
+    this._iconifiedByDefault = false;
+    this._searchIconAssigned = true;
+    this._isNotSetTextWatcher = false;
+    this._isClicklistenerAdded = false;
+    this._textFieldBorderRadius = 15;
+    this._textFieldBackgroundColor = ColorAndroid.create(222, 222, 222);
+    this._defaultUnderlineColorNormal = ColorAndroid.create('#ffcccccc');
+    this._defaultUnderlineColorFocus = ColorAndroid.create('#ff444444');
+    this._hintTextColor = ColorAndroid.LIGHTGRAY;
+    this._keyboardType = KeyboardType.DEFAULT;
+    this._textalignment = TextAlignment.MIDLEFT;
+    this._textColor = ColorAndroid.BLACK;
+    this._hint = '';
+    this._hasEventsLocked = false;
+    super.init(params);
+  }
   createNativeObject() {
     const nativeObject = new NativeSearchView(AndroidConfig.activity);
     nativeObject.clearFocus();
@@ -149,6 +166,8 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
           }
         })
       );
+      this.setTextWatcher();
+      this.setOnSearchButtonClickedListener();
     }
 
     // Makes SearchView's textbox apperance fully occupied.
@@ -429,7 +448,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.addTextChangedListener(
       NativeTextWatcher.implement({
         onTextChanged: (charSequence: string, start, before, count) => {
-          !this._hasEventsLocked && this._onTextChangedCallback(charSequence.toString());
+          !this._hasEventsLocked && this._onTextChangedCallback?.(charSequence.toString());
           !this._hasEventsLocked && this.emit('textChanged', charSequence.toString());
         },
         beforeTextChanged: (charSequence, start, count, after) => {},
@@ -444,7 +463,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setOnEditorActionListener(
       NativeTextView.OnEditorActionListener.implement({
         onEditorAction: (textView, actionId, event) => {
-          this._onSearchButtonClickedCallback();
+          this._onSearchButtonClickedCallback?.();
           this.emit('searchButtonClicked');
           return true;
         }
