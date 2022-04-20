@@ -513,7 +513,8 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
   /**
    * Gets/sets sliderDrawer of the Application.
    *
-   * @property {UI.SliderDrawer} [sliderDrawer = null]
+   * @property {UI.SliderDrawer}
+   * @defaultValue null
    * @android
    * @ios
    * @since 3.2.0
@@ -523,8 +524,9 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
   /**
    * This property allows you to prevent the screen from going to sleep while your app is active.
    *
-   * @property {Boolean} [keepScreenAwake = false]
+   * @property {Boolean}
    * @android
+   * @defaultValue false
    * @ios
    * @since 4.3.1
    */
