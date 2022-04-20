@@ -18,9 +18,6 @@ import NativeEventEmitterComponent from '../core/native-event-emitter-component'
 import PageAndroid from '../ui/page/page.android';
 import Page from '../ui/page';
 
-//@ts-ignore TODO: global Application variable from framework. NTVE-616
-const SMFApplication = Application; // Remove this line after NTVE-616 is resolved.
-
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
 const NativeAccessibilityServiceInfo = requireClass('android.accessibilityservice.AccessibilityServiceInfo');
@@ -104,7 +101,8 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   constructor() {
     super();
 
-    SMFApplication.onApplicationCallReceived = (e) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    Application.onApplicationCallReceived = (e) => {
       if (this.checkIsAppShortcut(e)) {
         this.onAppShortcutReceived?.(e);
         this.emit('appShortcutReceived', e);
@@ -123,6 +121,14 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         this.android.onBackButtonPressed?.();
         this.emit('backButtonPressed');
       }
+    });
+
+    this.prependListener('unhandledError', () => {
+      //@ts-ignore TODO: global Application variable from framework. NTVE-616
+      Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+        this.emit('unhandledError', e);
+        this._onUnhandledError?.(e);
+      };
     });
 
     const mDrawerLayout = AndroidConfig.activity.findViewById(NativeR.id.layout_root);
@@ -315,7 +321,8 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   set onUnhandledError(value) {
     this._onUnhandledError = value;
-    SMFApplication.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
       this.emit('unhandledError', e);
       this._onUnhandledError?.(e);
     };
@@ -368,19 +375,23 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
   get currentReleaseChannel() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return SMFApplication.currentReleaseChannel;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    return Application.currentReleaseChannel;
   }
   get smartfaceAppName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return SMFApplication.smartfaceAppName;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    return Application.smartfaceAppName;
   }
   get appName() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return SMFApplication.smartfaceAppName;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    return Application.smartfaceAppName;
   }
   get version() {
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
-    return SMFApplication.version;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-616
+    return Application.version;
   }
   // events
   get onReceivedNotification() {
