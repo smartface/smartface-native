@@ -235,6 +235,15 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this.nativeObject.text = value;
   }
 
+  get cursorColor(): Color {
+    return new Color({
+      color: this.textfield.valueForKey('tintColor')
+    });
+  }
+  set cursorColor(value: Color) {
+    this.textfield.setValueForKey(value.nativeObject, 'tintColor');
+  }
+
   get hint(): string {
     return this._hint;
   }

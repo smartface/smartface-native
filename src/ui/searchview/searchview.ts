@@ -206,6 +206,15 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    */
   hint: string;
   /**
+   * Gets/sets cursor color of searchview.
+   *
+   * @property {UI.Color} cursorColor
+   * @ios
+   * @android
+   * @since 3.2.1
+   */
+  cursorColor?: Color;
+  /**
    * Gets/sets text color of SearchView.
    *
    * @property {UI.Color} textColor
@@ -436,6 +445,7 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   };
   text: string;
   hint: string;
+  cursorColor: Color;
   textColor: Color;
   backgroundImage: IImage;
   iconImage: Image;

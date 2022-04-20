@@ -13,6 +13,7 @@ import Page from '../page';
 import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
 import AndroidConfig from '../../util/Android/androidconfig';
+import { ColorImpl } from '../color/color';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -22,6 +23,7 @@ const NativeTextView = requireClass('android.widget.TextView');
 const NativeTextWatcher = requireClass('android.text.TextWatcher');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
+const SFEditText = requireClass('io.smartface.android.sfcore.ui.textbox.SFEditText');
 
 const { COMPLEX_UNIT_DIP } = TypeValue;
 
@@ -95,6 +97,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _searchIcon: ImageAndroid;
   private _iconifiedByDefault: boolean;
   private _searchIconAssigned: boolean;
+  private _textViewCursorColor;
   private _isNotSetTextWatcher: boolean;
   private _isClicklistenerAdded: boolean;
   private _leftItem: any;
@@ -289,6 +292,14 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   }
   set backgroundImage(value: ImageAndroid) {
     this._backgroundImage = value;
+  }
+
+  get cursorColor(): ColorImpl {
+    return this._textViewCursorColor;
+  }
+  set cursorColor(value: ColorImpl) {
+    this._textViewCursorColor = value;
+    SFEditText.setCursorColor(this.mSearchSrcTextView, this._textViewCursorColor.nativeObject);
   }
 
   get iconImage(): ImageAndroid {
