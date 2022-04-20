@@ -18,6 +18,9 @@ enum EmulatorResetState {
   clear
 }
 
+//@ts-ignore TODO: global Application variable from framework. NTVE-697
+const FrameworkApplication = Application; // Remove this line after NTVE-697 is resolved.
+
 //Application Direction Manager (RTL Support)
 const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
 const viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
@@ -26,10 +29,9 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
 }
 
 class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
-
   protected init(params?: Partial<Record<string, any>>): void {
     this.statusBar = StatusBar;
-    this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow
+    this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
     super.init(params);
   }
 
@@ -84,7 +86,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       };
     }
 
-    __SF_UIApplication.onAppShortcutReceive = (e) => {
+    FrameworkApplication.onAppShortcutReceive = (e) => {
       //TODO: Check isEmulator
       if (!SMFApplication.sharedInstance) {
         return;
@@ -93,32 +95,32 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       this.onAppShortcutReceived?.(e);
     };
 
-    __SF_UIApplication.onUnhandledError = (e) => {
+    FrameworkApplication.onUnhandledError = (e) => {
       this.onUnhandledError?.(e);
       this.emit('unhandledError', e);
     };
 
-    __SF_UIApplication.onExit = () => {
+    FrameworkApplication.onExit = () => {
       this.emit('exit');
       this.onExit?.();
     };
 
-    __SF_UIApplication.onReceivedNotification = (e) => {
+    FrameworkApplication.onReceivedNotification = (e) => {
       this.onReceivedNotification?.(e);
       this.emit('receivedNotification', e);
     };
 
-    __SF_UIApplication.onApplicationCallReceived = (e) => {
+    FrameworkApplication.onApplicationCallReceived = (e) => {
       this.onApplicationCallReceived?.(e);
       this.emit('applicationCallReceived', e);
     };
 
-    __SF_UIApplication.onMaximize = () => {
+    FrameworkApplication.onMaximize = () => {
       this.onMaximize?.();
       this.emit('maximize');
     };
 
-    __SF_UIApplication.onMinimize = () => {
+    FrameworkApplication.onMinimize = () => {
       this.onMinimize?.();
       this.emit('minimize');
     };
@@ -132,7 +134,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
     return SMFApplication.canOpenUrl(url);
   }
   exit() {
-    SMFApplication.onExit();
+    FrameworkApplication.onExit();
     SMFApplication.exit();
   }
   restart() {
