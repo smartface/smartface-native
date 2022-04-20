@@ -75,7 +75,7 @@ async function main() {
         context.project.removeReflection(oldDefault);
       }
       submodule?.children?.forEach((child) => {
-        if (baseOrAbstractClassChecker(child?.name) || interfaceChecker(child?.name)) {
+        if (baseOrAbstractClassChecker(child?.name)) {
           child.name = capitalize(submodule.name);
         }
       });

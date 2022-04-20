@@ -64,7 +64,8 @@ export interface IAccelerometer extends NativeEventEmitterComponent<Acceleromete
     /**
      * The interval, in millisecond, for providing accelerometer updates to the block handler.
      *
-     * @property {Number} [accelerometerUpdateInterval = 100]
+     * @property {Number}
+     * @defaultValue 100
      * @ios
      * @since 4.0.2
      */
