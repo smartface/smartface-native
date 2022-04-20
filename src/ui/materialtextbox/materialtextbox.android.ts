@@ -260,44 +260,41 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.nativeObject.setRightLayout(this._rightLayout?.nativeObject, this._rightLayout?.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
   }
 
-  get onTouch(): (e?: Point2D) => boolean | undefined {
+  get onTouch(): (e?: Point2D) => boolean {
     return this._onTouch;
   }
-  set onTouch(value: (e?: Point2D) => boolean | undefined) {
+  set onTouch(value: (e?: Point2D) => boolean) {
     this._onTouch = value;
     this.setTouchHandlers();
 
     this.sfTextBox.onTouch = value;
-    this.sfTextBox.setTouchHandlers(); // TODO: Ask why setTouchHandlers is used here
+    this.sfTextBox.setTouchHandlers();
   }
 
-  get onTouchEnded(): (isInside: boolean, point: Point2D) => boolean | undefined {
+  get onTouchEnded(): (isInside: boolean, point: Point2D) => boolean {
     return this._onTouchEnded;
   }
-  set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean | undefined) {
+  set onTouchEnded(value: (isInside: boolean, point: Point2D) => boolean) {
     this._onTouchEnded = value;
-    // TODO: Ask why setTouchHandlers is used here. It must emit a touch event
     this.setTouchHandlers();
     this.sfTextBox.onTouchEnded = value;
     this.sfTextBox.setTouchHandlers();
   }
 
-  get onTouchMoved(): (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | undefined {
+  get onTouchMoved(): (e: boolean | { isInside: boolean }, point?: Point2D) => boolean {
     return this._onTouchMoved;
   }
-  set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean | undefined) {
-    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
+  set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean) {
     this.onTouchMoved = value;
     this.setTouchHandlers();
     this.sfTextBox.onTouchMoved = value;
     this.sfTextBox.setTouchHandlers();
   }
 
-  get onTouchCancelled(): (point: Point2D) => boolean | undefined {
+  get onTouchCancelled(): (point: Point2D) => boolean {
     return this._onTouchCancelled;
   }
-  set onTouchCancelled(value: (point: Point2D) => boolean | undefined) {
-    // TODO: Ask why setTouchHandlers is used here. It must emit an touch event
+  set onTouchCancelled(value: (point: Point2D) => boolean) {
     this.onTouchCancelled = value;
     this.setTouchHandlers();
     this.sfTextBox.onTouchCancelled = value;
