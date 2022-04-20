@@ -11,7 +11,8 @@
     "deploy": "npm run build && cd ./dist && npm publish",
     "dev": "cp -r .types ./src/ && npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
-    "lint:write": "npx prettier --write ./**/*"
+    "lint:write": "npx prettier --write ./**/*",
+    "build:document": "node typedoc.js"
   },
   "repository": {
     "type": "git",
