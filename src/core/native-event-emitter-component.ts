@@ -11,7 +11,7 @@ export default abstract class NativeEventEmitterComponent<TEvent extends string,
   prependOnceListener(eventName: TEvent, callback: EventListenerCallback): void {
     return this.emitter.prependOnceListener(eventName, callback);
   }
-  private emitter = new EventEmitter<TEvent>();
+  private emitter: EventEmitter<TEvent>;
   on(eventName: TEvent, callback: EventListenerCallback): () => void {
     return this.emitter.on(eventName, callback);
   }
@@ -23,5 +23,9 @@ export default abstract class NativeEventEmitterComponent<TEvent extends string,
   }
   emit(event: TEvent, ...args: any[]): void {
     this.emitter.emit(event, ...args);
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.emitter = new EventEmitter<TEvent>();
+    super.preConstruct(params);
   }
 }

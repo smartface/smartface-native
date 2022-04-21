@@ -24,7 +24,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
         this.setThumbColor();
         this.setTrackColor();
         this._onToggleChangedCallback?.(isChecked);
-        this.emit(SwitchEvents.ToggleChanged, isChecked);
+        this.emit('toggleChanged', isChecked);
       }
     });
   }
