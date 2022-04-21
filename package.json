@@ -1,6 +1,6 @@
 {
   "name": "@smartface/native",
-  "version": "5.0.0-beta.1",
+  "version": "5.0.0-beta.2",
   "description": "Core Modules of Native Libraries..",
   "main": "dist/index.js",
   "scripts": {
@@ -46,9 +46,9 @@
     "prettier": "^2.5.1",
     "salep": "0.2.*",
     "source-map-support": "^0.5.16",
+    "typedoc": "beta",
     "typescript": "^4.6.2",
     "uglify-js": "2.8.12",
-    "walk": "^2.3.9",
-    "typedoc": "beta"
+    "walk": "^2.3.9"
   }
 }
