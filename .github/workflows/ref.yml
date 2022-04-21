@@ -28,7 +28,7 @@ jobs:
 
       - name: build
         run: |
-          yarn build:documentation
+          yarn build:document
 
   push_to_Docker_Hub:
     runs-on: ubuntu-latest
