@@ -224,8 +224,37 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   }
   private setNativeObjectParams() {
     this.nativeObject.heightForRowAtIndex = (e) => {
-      this.emit('pullRefresh', e.index);
       return this.onRowHeight(e.index);
+    };
+
+    this.nativeObject.onRowSwiped = (e) => {
+      let index;
+      if (e.index != -1) {
+        index = e.index;
+      }
+
+      if (this.ios.onRowSwiped) {
+        //Deprecated on 4.1.4
+        return this.ios.onRowSwiped(e.direction, e.expansionSettings, index);
+      }
+
+      if (this.onRowCanSwipe) {
+        let returnOnRowCanSwipe = this.onRowCanSwipe(index);
+        if (returnOnRowCanSwipe) {
+          if (returnOnRowCanSwipe.includes(e.direction)) {
+            let object = {
+              index: index,
+              direction: e.direction,
+              ios: {
+                expansionSettings: e.expansionSettings
+              }
+            };
+            return this.__onRowSwipeWrapper(object);
+          }
+        }
+      }
+
+      return [];
     };
 
     this.nativeObject.cellForRowAt = (e) => {
@@ -360,7 +389,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     return this.nativeObject.isEditing;
   }
   set rowMoveEnabled(value: boolean) {
-    this.nativeObject.isEditing = value;
+    this.nativeObject.setEditing(value);
   }
   longPressDragEnabled: boolean;
 
@@ -368,6 +397,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     RowAnimation: RowAnimation,
     ...ViewIOS.iOS
   };
-  static SwipeDirection: SwipeDirection;
-  static SwipeItem: typeof SwipeItem;
+  static SwipeDirection: typeof SwipeDirection = SwipeDirection;
+  static SwipeItem: typeof SwipeItem = SwipeItem;
 }

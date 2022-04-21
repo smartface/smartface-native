@@ -503,7 +503,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
       y: AndroidUnitConverter.pixelToDp(this.nativeInner?.computeVerticalScrollOffset())
     };
   }
-  static SwipeItem = typeof SwipeItem;
+  static SwipeItem = SwipeItem;
   static SwipeDirection: typeof SwipeDirection = {
     LEFTTORIGHT: 1 << 3,
     RIGHTTOLEFT: 1 << 2
