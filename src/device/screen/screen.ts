@@ -92,16 +92,24 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    *
    * @android
    * @ios
+   * @static
    * @property {Device.Screen.OrientationType} orientation
    * @readonly
    * @since 0.1
    */
   readonly orientation: OrientationType;
   /**
+   * @enum {String} Device.Screen.OrientationType
+   * @static
+   * @since 0.1
+   */
+  readonly OrientationType: typeof OrientationType;
+  /**
    * Gets height of device screen.
    *
    * @android
    * @ios
+   * @static
    * @property {Number} height
    * @readonly
    * @since 0.1
@@ -112,6 +120,7 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    *
    * @android
    * @ios
+   * @static
    * @property {Number} width
    * @readonly
    * @since 0.1
@@ -122,6 +131,7 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    *
    * @android
    * @ios
+   * @static
    * @property {Boolean} touchSupported
    * @readonly
    * @since 0.1
@@ -132,6 +142,7 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    *
    * @android
    * @ios
+   * @static
    * @property {Number} dpi
    * @readonly
    * @since 0.1
@@ -142,6 +153,7 @@ export interface IScreen<TProps extends MobileOSProps<ISCreenIOSProps, {}> = Mob
    *
    * @android
    * @ios
+   * @static
    * @method capture
    * @return {UI.Image} captured image.
    * @since 0.1

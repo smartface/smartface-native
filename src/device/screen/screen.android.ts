@@ -15,6 +15,7 @@ const metrics = new NativeDisplayMetrics();
 
 class ScreenAndroidClass implements IScreen {
   OrientationType = OrientationType;
+  ios = {};
   get dpi() {
     display.getRealMetrics(metrics);
     return metrics.densityDpi;

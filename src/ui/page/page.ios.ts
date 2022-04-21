@@ -8,41 +8,27 @@ import HeaderBarItem from '../headerbaritem';
 import { IController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { PageEvents } from './page-events';
+import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
+import { IFlexLayout } from '../flexlayout/flexlayout';
 
 export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
   extends AbstractPage<TEvent | PageEvents, TNative, TProps>
   implements IPage<TEvent | PageEvents>
 {
   headerBar?: HeaderBar | undefined;
-  protected createNativeObject() {
-    return new __SF_UIViewController();
-  }
-  getCurrentController(): IController {
-    throw new Error('Method not implemented.');
-  }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
-    throw new Error('Method not implemented.');
-  }
-  static iOS = {
-    LargeTitleDisplayMode: LargeTitleDisplayMode,
-    PresentationStyle: PresentationStyle
-  };
-  static Orientation = Orientation;
-
-  private routerPath: any = null;
-  protected pageView = new FlexLayout();
+  private routerPath: any;
+  protected pageView: IFlexLayout;
   private _safeAreaLayoutMode: IPage['ios']['safeAreaLayoutMode'];
-  private _safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
+  private _safeAreaPaddingObject: { top: number; bottom: number; left: number; right: number };
   private _transitionViews: IPage['transitionViews'];
   private _titleView: HeaderBar['titleLayout'];
-  private _presentationStyle = 0;
-  private _largeTitleDisplayMode = 0;
+  private _presentationStyle: number;
+  private _largeTitleDisplayMode: number;
   private _leftItem: any;
-  private _orientationNative: PageOrientation[] = [PageOrientation.PORTRAIT];
+  private _orientationNative: PageOrientation[];
   constructor(params?: Partial<TProps>) {
     super(params);
     this.nativeObject.automaticallyAdjustsScrollViewInsets = false;
-
     this.setNativeParams();
     this.initPageNativeEvents();
     this.initPageEvents();
@@ -53,6 +39,24 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     };
   }
 
+  protected createNativeObject() {
+    return new __SF_UIViewController();
+  }
+  getCurrentController(): IController {
+    throw new Error('Method not implemented.');
+  }
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
+    throw new Error('Method not implemented.');
+  }
+  protected init(params?: Partial<Record<string, any>>): void {
+    this._safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
+    this._presentationStyle = 0;
+    this._largeTitleDisplayMode = 0;
+    this._orientationNative = [PageOrientation.PORTRAIT];
+    this.pageView = new FlexLayoutIOS();
+    this.routerPath = null;
+    super.init(params);
+  }
   onLoad(): void {}
   onShow(): void {}
   onHide: () => void;
@@ -314,13 +318,9 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         self.nativeObject.navigationItem.leftBarButtonItem = self._leftItem;
       },
       setItems(value: Parameters<HeaderBar['setItems']>['0']) {
-        const nativeObjectArray: any[] = [];
-
-        for (let i = value.length - 1; i >= 0; i--) {
-          //Bug : IOS-2399
-          nativeObjectArray.push(value[i].nativeObject);
-        }
-
+        //Bug : IOS-2399 for reverse
+        console.info('setItems');
+        const nativeObjectArray: any[] = value.map((item) => item.nativeObject).reverse();
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
       },
       setLeftItem(value: Parameters<HeaderBar['setLeftItem']>['0']) {
@@ -377,4 +377,10 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBar);
     self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBarIOS);
   }
+
+  static iOS = {
+    LargeTitleDisplayMode: LargeTitleDisplayMode,
+    PresentationStyle: PresentationStyle
+  };
+  static Orientation = Orientation;
 }

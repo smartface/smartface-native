@@ -2,6 +2,7 @@
 import { AbstractFont, FontStyle } from './font';
 import File from '../../io/file';
 import { Size } from '../../primitive/size';
+const UIFont = SF.requireClass('UIFont');
 
 export default class FontIOS extends AbstractFont {
   sizeOfString(string: string, maxWidth: number): Size {
@@ -92,9 +93,9 @@ export default class FontIOS extends AbstractFont {
   static ios = {
     allFontNames() {
       let retval: string[] = [];
-      const familyNames = __SF_UIFont.familyNames();
+      const familyNames = UIFont.familyNames();
       for (const familyNameindex in familyNames) {
-        const fontNames = __SF_UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
+        const fontNames = UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
         retval = retval.concat(Object.values(fontNames));
       }
       return retval;

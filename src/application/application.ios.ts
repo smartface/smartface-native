@@ -18,9 +18,6 @@ enum EmulatorResetState {
   clear
 }
 
-//@ts-ignore TODO: global Application variable from framework. NTVE-697
-const FrameworkApplication = Application; // Remove this line after NTVE-697 is resolved.
-
 //Application Direction Manager (RTL Support)
 const userDefaults = new __SF_NSUserDefaults('SF_USER_DEFAULTS'); //From view-iOS.js viewAppearanceSemanticContentAttribute
 const viewAppearanceSemanticContentAttribute = userDefaults.stringForKey('smartface.ios.viewAppearanceSemanticContentAttribute');
@@ -86,7 +83,8 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       };
     }
 
-    FrameworkApplication.onAppShortcutReceive = (e) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onAppShortcutReceive = (e) => {
       //TODO: Check isEmulator
       if (!SMFApplication.sharedInstance) {
         return;
@@ -95,32 +93,38 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       this.onAppShortcutReceived?.(e);
     };
 
-    FrameworkApplication.onUnhandledError = (e) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onUnhandledError = (e) => {
       this.onUnhandledError?.(e);
       this.emit('unhandledError', e);
     };
 
-    FrameworkApplication.onExit = () => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onExit = () => {
       this.emit('exit');
       this.onExit?.();
     };
 
-    FrameworkApplication.onReceivedNotification = (e) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onReceivedNotification = (e) => {
       this.onReceivedNotification?.(e);
       this.emit('receivedNotification', e);
     };
 
-    FrameworkApplication.onApplicationCallReceived = (e) => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onApplicationCallReceived = (e) => {
       this.onApplicationCallReceived?.(e);
       this.emit('applicationCallReceived', e);
     };
 
-    FrameworkApplication.onMaximize = () => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onMaximize = () => {
       this.onMaximize?.();
       this.emit('maximize');
     };
 
-    FrameworkApplication.onMinimize = () => {
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onMinimize = () => {
       this.onMinimize?.();
       this.emit('minimize');
     };
@@ -134,7 +138,8 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
     return SMFApplication.canOpenUrl(url);
   }
   exit() {
-    FrameworkApplication.onExit();
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onExit();
     SMFApplication.exit();
   }
   restart() {

@@ -117,6 +117,7 @@ export default class ColorAndroid extends AbstractColor {
     } else {
       this.nativeObject = params.color || 0;
     }
+    this.isGradient = !!params.isGradient;
   }
 
   red(): number {

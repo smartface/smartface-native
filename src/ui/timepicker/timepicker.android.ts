@@ -9,7 +9,11 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
   protected createNativeObject() {
     return this.createTimerDialog();
   }
-  private _is24HourFormat = true;
+  init(params: Partial<ITimePicker> = {}) {
+    this._is24HourFormat = true;
+    super.init(params);
+  }
+  private _is24HourFormat: boolean;
   private _hour: number | undefined;
   private _minutes: number | undefined;
   constructor(params: Partial<ITimePicker> = {}) {
@@ -32,7 +36,7 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
   }
   set is24HourFormat(value: boolean) {
     this._is24HourFormat = value;
-    this.nativeObject && this.nativeObject.setIs24HourView(value);
+    this.nativeObject?.setIs24HourView(value);
   }
 
   get hour(): number | undefined {
@@ -70,7 +74,6 @@ export default class TimePickerAndroid<TEvent extends string = TimePickerEvents>
       !!this._is24HourFormat
     );
     nativeObject.setTitle('');
-    this.nativeObject = nativeObject;
     return nativeObject;
   }
 }

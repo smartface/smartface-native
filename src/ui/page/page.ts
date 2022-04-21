@@ -2,13 +2,13 @@ import StatusBar from '../../application/statusbar';
 import { IEventEmitter } from '../../core/eventemitter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout from '../flexlayout';
 import MenuItem from '../menuitem';
 import { IController, AbstractNavigationController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import TabBarController from '../tabbarcontroller';
 import { IView } from '../view/view';
 import { PageEvents } from './page-events';
+import { IFlexLayout } from '../flexlayout/flexlayout';
 
 export enum PageOrientation {
   UNKNOWN,
@@ -175,7 +175,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * @readonly
    * @since 0.1
    */
-  readonly layout: FlexLayout;
+  readonly layout: IFlexLayout;
 
   /**
    * This event is called when a page appears on the screen (everytime).
@@ -426,7 +426,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   abstract onHide(): void;
   abstract present(params?: ControllerParams): void;
   abstract dismiss(params?: { onComplete: () => void }): void;
-  abstract readonly layout: FlexLayout;
+  abstract readonly layout: IFlexLayout;
   abstract readonly statusBar: typeof StatusBar;
   abstract readonly headerBar?: HeaderBar;
 
@@ -445,7 +445,7 @@ export declare class PageImpl extends AbstractPage implements IPage {
   onHide(): void;
   orientation: PageOrientation;
   transitionViews: IView[];
-  layout: FlexLayout;
+  layout: IFlexLayout;
   statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;
   getCurrentController(): IController;
