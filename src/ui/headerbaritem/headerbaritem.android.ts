@@ -39,12 +39,12 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private _badge?: Badge;
   private _accessibilityLabel: string;
   private isLeftItem: boolean;
-  private isBadgeEnabled: boolean;
+  isBadgeEnabled: boolean;
   private actionBar: any | null;
   private _imageButton: boolean;
   private _searchView: SearchView | null;
-  private _menuItem: MenuItem | null;
-  private nativeBadgeContainer: any;
+  private _menuItem: any | null;
+  nativeBadgeContainer: any;
   private _itemColor: Color;
   private _systemIcon: number | string;
 
@@ -320,7 +320,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return nativeImageButton;
   }
 
-  private updateColor(color: ColorAndroid) {
+  updateColor(color: ColorAndroid) {
     if (this.nativeObject && color instanceof ColorAndroid) {
       if (this.image || this.android.systemIcon) {
         const imageCopy = this.nativeObject.getDrawable().mutate();

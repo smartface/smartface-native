@@ -29,6 +29,7 @@ import copyObjectPropertiesWithDescriptors from '../../util/copyObjectProperties
 import type FlexLayout from '../flexlayout';
 import Color from '../color';
 import { IImage } from '../image/image';
+import HeaderBarItemAndroid from '../headerbaritem/headerbaritem.android';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -87,7 +88,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   headerBar: HeaderBar;
   isSwipeViewPage: boolean;
   popUpBackPage: PageAndroid;
-  _headerBarLeftItem: HeaderBarItem | null;
+  _headerBarLeftItem: HeaderBarItemAndroid | null;
   private _isShown: boolean;
   private _transitionViews: IPage['transitionViews'];
   private pageLayoutContainer: any;
@@ -97,7 +98,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private actionBar: any;
   private _orientation: PageOrientationAndroid;
   private rootLayout: FlexLayoutAndroid;
-  private _headerBarItems: HeaderBarItem[];
+  private _headerBarItems: HeaderBarItemAndroid[];
   private returnRevealAnimation: boolean;
   private _headerBarColor: ColorAndroid;
   private _headerBarImage: IImage;
@@ -498,6 +499,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._itemColor;
       },
       set itemColor(value: HeaderBar['itemColor']) {
+        self._itemColor = value as ColorAndroid;
+        self._leftItemColor = (self._headerBarLeftItem?.color || value) as ColorAndroid;
+        for (let i = 0; i < self._headerBarItems.length; i++) {
+          self._headerBarItems[i].updateColor((self._headerBarItems[i].color || value) as ColorAndroid);
+        }
         (self.headerBar as any).leftItemColor = value; //TODO: lefItemColor is an internal value. Consider opening it back.
         for (let i = 0; i < self._headerBarItems.length; i++) {
           self._headerBarItems[i].color = value;
@@ -516,7 +522,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
        */
       addViewToHeaderBar(view: SearchView) {
         self._headerBarItems.unshift(
-          new HeaderBarItem({
+          new HeaderBarItemAndroid({
             //@ts-ignore TODO: Add searchView as member property
             searchView: view,
             title: 'Search'
@@ -534,7 +540,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
           self.headerBar.setItems(self._headerBarItems);
         }
       },
-      setItems(items: HeaderBarItem[]) {
+      setItems(items: HeaderBarItemAndroid[]) {
         if (!(items instanceof Array)) {
           return;
         } else if (items === null) {
@@ -551,7 +557,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         self.optionsMenu.clear();
         let itemID = 1;
         // TODO: Type all this after HeaderBarItem is done.
-        items.forEach((item: HeaderBarItem & Record<string, any>) => {
+        items.forEach((item: HeaderBarItemAndroid & Record<string, any>) => {
           let itemView: any;
           if (item.searchView) {
             itemView = item.searchView.nativeObject;
@@ -597,7 +603,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
               itemView.clearFocus();
             }
 
-            item.menuItem.setActionView(itemView);
+            item.menuItem?.setActionView(itemView);
           }
         });
       },
@@ -607,14 +613,14 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         }
 
         if (leftItem.image) {
-          self._headerBarLeftItem = leftItem;
+          self._headerBarLeftItem = leftItem as unknown as HeaderBarItemAndroid;
           //TODO: check out after headerbaritem is complete
           (self._headerBarLeftItem as any).isLeftItem = true;
           (self._headerBarLeftItem as any).actionBar = self.actionBar;
-          if (self._headerBarLeftItem.image instanceof ImageAndroid) {
-            self.actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
+          if (self._headerBarLeftItem?.image instanceof ImageAndroid) {
+            self.actionBar.setHomeAsUpIndicator(self._headerBarLeftItem?.image.nativeObject);
           }
-          self.actionBar.setHomeActionContentDescription(self._headerBarLeftItem.accessibilityLabel);
+          self.actionBar.setHomeActionContentDescription(self._headerBarLeftItem?.accessibilityLabel);
         } else {
           // null or undefined
           if (self._headerBarLeftItem) {
@@ -625,6 +631,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
           self.actionBar.setHomeActionContentDescription(null);
           self.actionBar.setHomeAsUpIndicator(null);
         }
+        (self.headerBar as any).leftItemColor = leftItem.color || self._itemColor;
       }
     };
     const headerBarAndroid = {
