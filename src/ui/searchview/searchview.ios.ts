@@ -280,8 +280,12 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     });
   }
   set backgroundColor(value: Color) {
+    if (!this.nativeObject.backgroundImage) {
+      this.nativeObject.backgroundImage = __SF_UIImage.getInstance();
+    }
     this._backgroundColor = value.nativeObject;
     this.nativeObject.barTintColor = this._backgroundColor;
+    this.nativeObject.backgroundColor = this._backgroundColor;
     if (this.borderWidth === 0) {
       this.borderColor = value;
     }

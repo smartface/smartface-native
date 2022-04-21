@@ -260,6 +260,17 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       this.onHide?.();
       this.emit('hide');
     };
+
+    this.nativeObject.dismissStart = () => {
+      this.emit('dismissStart', { target: 'bottomSheet' });
+    };
+    this.nativeObject.dismissComplete = () => {
+      this.emit('dismissComplete', { target: 'bottomSheet' });
+    };
+
+    this.nativeObject.dismissCancel = () => {
+      this.emit('dismissCancel', { target: 'bottomSheet' });
+    };
   }
 
   private checkIfSearchviewIsSubview(nativeObject: any) {
@@ -319,7 +330,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       },
       setItems(value: Parameters<HeaderBar['setItems']>['0']) {
         //Bug : IOS-2399 for reverse
-        console.info('setItems');
         const nativeObjectArray: any[] = value.map((item) => item.nativeObject).reverse();
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
       },

@@ -14,6 +14,8 @@ export type ControllerPresentParams = {
   onComplete?: () => void;
   onCompleteCallback?: () => void;
   animationType?: FragmentTransition.AnimationType;
+  options?: {};
+  sheetPresentationController?: any;
 };
 namespace ViewController {
   export function activateRootController(controller: IController) {

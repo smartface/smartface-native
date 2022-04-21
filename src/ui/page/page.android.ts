@@ -76,7 +76,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this._borderVisibility = true;
     this._transparent = false;
     this._alpha = 1.0;
-    this._leftItemColor = ColorAndroid.WHITE;
+    this._leftItemColor = null;
     this._itemColor = ColorAndroid.WHITE;
     this._headerBarLogoEnabled = false;
     this._headerBarLeftItem = null;
@@ -109,7 +109,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private _alpha: HeaderBar['alpha'];
   private _headerBarTitleColor: Color;
   private _leftItemEnabled: boolean;
-  private _leftItemColor: ColorAndroid;
+  private _leftItemColor: ColorAndroid | null;
   private _itemColor: ColorAndroid;
   private _headerBarLogo: IImage;
   private _headerBarElevation: number;
@@ -483,12 +483,15 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         self._headerBarTitleColor = value as unknown as Color;
         self.toolbar.setTitleTextColor(value.nativeObject);
       },
-      get leftItemColor(): ColorAndroid {
+      get leftItemColor(): ColorAndroid | null {
         return self._leftItemColor;
       },
-      set leftItemColor(value: ColorAndroid) {
-        const drawable = self.toolbar.getNavigationIcon();
-        drawable?.setColorFilter(value.nativeObject, PorterDuff.Mode.SRC_ATOP);
+      set leftItemColor(value: ColorAndroid | null) {
+        self._leftItemColor = value;
+        if (value instanceof ColorAndroid) {
+          const drawable = self.toolbar.getNavigationIcon();
+          drawable?.setColorFilter(value.nativeObject, PorterDuff.Mode.SRC_ATOP);
+        }
       },
 
       get itemColor(): HeaderBar['itemColor'] {

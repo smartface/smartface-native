@@ -1,4 +1,7 @@
 export const PageEvents = {
+  DimissComplete: 'dismissComplete',
+  DismissStart: 'dismissStart',
+  DismissCancel: 'dismissCancel',
   Hide: 'hide',
   Load: 'load',
   Show: 'show',

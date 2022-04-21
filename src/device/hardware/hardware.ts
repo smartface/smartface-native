@@ -1,3 +1,9 @@
+export enum DeviceType {
+  UNSPECIFIED = 'unspecified',
+  PHONE = 'phone',
+  TABLET = 'tablet'
+}
+
 /**
  * @class Device.Hardware
  * @since 0.1
@@ -101,4 +107,6 @@ export declare class HardwareBase {
    * @since 0.1
    */
   static getDeviceModelName(): string;
+
+  static deviceType: DeviceType;
 }

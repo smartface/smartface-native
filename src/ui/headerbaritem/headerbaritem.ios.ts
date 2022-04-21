@@ -163,12 +163,10 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
     return this._badge;
   }
   get size() {
-    return this.layout
-      ? {
-          width: this.layout.nativeObject.frame.width,
-          height: this.layout.nativeObject.frame.height
-        }
-      : undefined;
+    return {
+      width: this.layout?.nativeObject.frame.width || 0,
+      height: this.layout?.nativeObject.frame.height || 0
+    };
   }
   get accessibilityLabel() {
     return Invocation.invokeInstanceMethod(this.nativeObject, 'accessibilityLabel', [], 'NSString') as string;

@@ -1,6 +1,7 @@
-import { HardwareBase } from './hardware';
+import { DeviceType, HardwareBase } from './hardware';
 import AndroidConfig from '../../util/Android/androidconfig';
 
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeSettings = requireClass('android.provider.Settings');
 const NativeBuild = requireClass('android.os.Build');
 // Context.TELEPHONY_SERVICE
@@ -31,6 +32,10 @@ class HardwareAndroid implements HardwareBase {
   }
   static getDeviceModelName() {
     return HardwareAndroid.MANUFACTURER + ' ' + HardwareAndroid.brandName + ' ' + HardwareAndroid.brandModel;
+  }
+  static get deviceName() {
+    const isTablet = AndroidConfig.activity.getResources().getBoolean(NativeR.bool.isTablet);
+    return isTablet ? DeviceType.TABLET : DeviceType.PHONE;
   }
 }
 

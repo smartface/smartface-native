@@ -1,4 +1,4 @@
-import { HardwareBase } from './hardware';
+import { DeviceType, HardwareBase } from './hardware';
 
 class HardwareIOS implements HardwareBase {
   static UID = __SF_UIDevice.currentDevice().UUID;
@@ -16,10 +16,8 @@ class HardwareIOS implements HardwareBase {
       microphone: {
         requestRecordPermission(callback) {
           const avaudiosession = __SF_AVAudioSession.sharedInstance();
-          avaudiosession.requestRecordPermissionWithHandler(function (e) {
-            if (typeof callback === 'function') {
-              callback(e.granted);
-            }
+          avaudiosession.requestRecordPermissionWithHandler((e) => {
+            callback?.(e.granted);
           });
         }
       },
@@ -134,6 +132,17 @@ class HardwareIOS implements HardwareBase {
         }
       }
     };
+  }
+  static get deviceType(): DeviceType {
+    const nativeDeviceType = __SF_UIDevice.currentDevice().userInterfaceIdiom;
+    switch (nativeDeviceType) {
+      case 0:
+        return DeviceType.PHONE;
+      case 1:
+        return DeviceType.TABLET;
+      default:
+        return DeviceType.UNSPECIFIED;
+    }
   }
 }
 

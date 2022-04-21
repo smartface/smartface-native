@@ -5,8 +5,8 @@ import { ControllerPresentParams } from '../../util/Android/transition/viewcontr
 import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import NativeComponent from '../../core/native-component';
 import { HeaderBar } from './headerbar';
-import { IView } from '../view/view';
-import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 /**
  * @enum {Number} UI.NavigationController.OperationType
  *
@@ -192,6 +192,9 @@ export interface INavigationController extends IController, ControllerPresentPar
    * @since 4.0.0
    */
   dismiss(params?: { onComplete: () => void; animated: boolean }): void;
+  dismissStart: () => void;
+  dismissComplete: () => void;
+  dismissCancel: () => void;
   parentController: INavigationController;
   isInsideBottomTabBar: boolean;
   isActive: boolean;
@@ -202,6 +205,12 @@ export abstract class AbstractNavigationController extends NativeMobileComponent
   constructor(params?: any) {
     super(params);
   }
+  dismissStart: () => void;
+  dismissComplete: () => void;
+  dismissCancel: () => void;
+  transitionViews?: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>[] | undefined;
+  popUpBackPage?: any;
+  onCompleteCallback?: (() => void) | undefined;
   abstract present(params?: ControllerPresentParams): void;
   abstract dismiss(params?: { onComplete: () => void }): void;
   abstract push(params: { controller: IController; animated?: boolean }): void;

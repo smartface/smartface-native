@@ -11,6 +11,7 @@ import MenuItem from '../menuitem';
 import SearchView from '../searchview';
 import View from '../view';
 import LayoutParams from '../../util/Android/layoutparams';
+import ColorAndroid from '../color/color.android';
 
 const SFView = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
 const NativeTextButton = requireClass('android.widget.Button');
@@ -45,7 +46,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private _menuItem: MenuItem | null;
   private nativeBadgeContainer: any;
   private _itemColor: Color;
-  private _systemIcon: number | string; 
+  private _systemIcon: number | string;
 
   protected init(params?: Partial<IHeaderBarItem>): void {
     this._title = '';
@@ -94,17 +95,9 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return this._color;
   }
   set color(value: Color | null) {
-    if (value !== null) {
+    if (value instanceof ColorAndroid) {
       this._color = value;
-      if (this.nativeObject && this.color) {
-        if (this._image || this.android.systemIcon) {
-          const imageCopy = this.nativeObject.getDrawable().mutate();
-          imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-          this.nativeObject.setImageDrawable(imageCopy);
-        } else {
-          this.nativeObject.setTextColor(this.color.nativeObject);
-        }
-      }
+      this.updateColor(value);
     }
   }
   get title() {
@@ -325,5 +318,17 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     }
 
     return nativeImageButton;
+  }
+
+  private updateColor(color: ColorAndroid) {
+    if (this.nativeObject && color instanceof ColorAndroid) {
+      if (this.image || this.android.systemIcon) {
+        const imageCopy = this.nativeObject.getDrawable().mutate();
+        imageCopy.setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+        this.nativeObject.setImageDrawable(imageCopy);
+      } else {
+        this.nativeObject.setTextColor(color.nativeObject);
+      }
+    }
   }
 }

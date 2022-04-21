@@ -776,6 +776,9 @@ declare class __SF_UIViewController extends __SF_NSOBject {
   onLoad: () => void;
   onShow: () => void;
   onHide: () => void;
+  dismissStart: (() => void) | null;
+  dismissComplete: (() => void) | null;
+  dismissCancel: (() => void) | null;
   orientations: any;
   navigationItem: __SF_UINavigationItem;
   view: __SF_UIView;
@@ -831,6 +834,7 @@ declare interface iOSCurrentDevice {
   batteryState: number;
   systemVersion: string;
   batteryLevel: number;
+  userInterfaceIdiom: number;
 }
 
 declare class __SF_UIDevice {

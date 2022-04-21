@@ -25,6 +25,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   createNativeObject() {
     this._layout = new FlexLayout();
     const nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
+    nativeObject.hideShimmer();
     nativeObject.addView(this._layout.nativeObject);
     return nativeObject;
   }
@@ -46,10 +47,10 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   }
 
   startShimmering() {
-    this.nativeObject.startShimmer();
+    this.nativeObject.showShimmer(true);
   }
   stopShimmering() {
-    this.nativeObject.stopShimmer();
+    this.nativeObject.hideShimmer();
   }
 
   get isShimmering(): IShimmerFlexLayout['isShimmering'] {
