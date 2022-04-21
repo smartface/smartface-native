@@ -35,22 +35,23 @@ jobs:
     needs: [build]
 
     steps:
-      - name: extract packagejson # Writes version into ${{ env.PACKAGE_VERSION }}
-        uses: nyaa8/package-version@v1.0.3
-        with:
-          path: 'package.json'
-          follow-symlinks: 'false'
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: echo version
+        run: echo "$steps.package-version.outputs.current-version"
 
       - name: is this cycle alpha
-        if: contains(env.PACKAGE_VERSION, 'alpha')
+        if: contains(steps.package-version.outputs.current-version, 'alpha')
         run: echo "RELEASE_CYCLE=alpha" >> $GITHUB_ENV
 
       - name: is this cycle beta
-        if: contains(env.PACKAGE_VERSION, 'beta')
+        if: contains(steps.package-version.outputs.current-version, 'beta')
         run: echo "RELEASE_CYCLE=beta" >> $GITHUB_ENV
 
       - name: is this cycle release
-        if: true && !contains(env.PACKAGE_VERSION, 'beta') && !contains(env.PACKAGE_VERSION, 'alpha')
+        if: true && !contains(steps.package-version.outputs.current-version, 'beta') && !contains(steps.package-version.outputs.current-version, 'alpha')
         run: echo "RELEASE_CYCLE=release" >> $GITHUB_ENV
 
       - name: echo release cycle
