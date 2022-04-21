@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: extract packagejson # Writes version into ${{ env.PACKAGE_VERSION }}
-        uses: nyaa8/package-version@v1
+        uses: nyaa8/package-version@v1.0.3
         with:
           path: 'package.json'
           follow-symlinks: 'false'
