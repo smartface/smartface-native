@@ -95,3 +95,7 @@ Local Build
 Docker Build
 
 `docker build -t smartface-native-documentation .`
+
+Docker Run
+
+`docker run -d -p 80:80 smartface-native-documentation`
