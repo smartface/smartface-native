@@ -138,7 +138,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }
 
   set image(value: ImageIOS | string | null) {
-    if (value === null) {
+    if (!value) {
       this.nativeObject.loadImage(undefined);
       return;
     }
@@ -150,9 +150,9 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     this._imageTemplate = undefined;
 
     // TODO Recheck after build
-    const imageInstance: ImageIOS = this._isSetTintColor ? image.nativeObject.imageWithRenderingMode(2) : image;
-    this._imageTemplate = this._isSetTintColor ? imageInstance : this._imageTemplate;
-    this.nativeObject.loadImage(imageInstance.nativeObject);
+    image.nativeObject = this._isSetTintColor ? image.nativeObject.imageWithRenderingMode(2) : image.nativeObject;
+    this._imageTemplate = image.nativeObject;
+    this.nativeObject.loadImage(image.nativeObject);
   }
 
   get tintColor(): Color {
