@@ -23,7 +23,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
     super(params);
   }
 
-  preConstruct(params) {
+  protected preConstruct(params) {
     this._flexWrap = null;
     super.preConstruct(params);
   }
