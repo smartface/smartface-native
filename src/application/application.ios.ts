@@ -44,7 +44,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   tabBar?: IBottomTabBar;
   private _sliderDrawer: SliderDrawer;
   private _rootPage: NavigationController['controller'];
-  private keyWindow;
+  private keyWindow: any;
   readonly LayoutDirection = {
     LEFTTORIGHT: 0,
     RIGHTTOLEFT: 1
@@ -212,16 +212,20 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
     }
   }
   get currentReleaseChannel() {
-    return this.currentReleaseChannel;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    return Application.currentReleaseChannel;
   }
   get smartfaceAppName() {
-    return this.smartfaceAppName;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    return Application.smartfaceAppName;
   }
   get appName() {
-    return this.smartfaceAppName;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    return Application.smartfaceAppName;
   }
   get version() {
-    return this.version;
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    return Application.version;
   }
   get isVoiceOverEnabled() {
     return __SF_UIAccessibility.isVoiceOverRunning();
