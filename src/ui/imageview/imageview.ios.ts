@@ -117,7 +117,7 @@ enum SDWebImageOptions {
 export default class ImageViewIOS<TEvent extends string = ImageViewEvents> extends ViewIOS<TEvent | ImageViewEvents, __SF_UIImageView, IImageView> implements IImageView {
   private _imageTemplate: ImageIOS | undefined;
   private _isSetTintColor: boolean;
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_UIImageView();
   }
   constructor(params?: IImageView) {

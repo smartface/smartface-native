@@ -90,7 +90,7 @@ export abstract class TimerBase extends NativeComponent {
   static clearAllTimer(): void {
     throw new Error('Method not implemented.');
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     throw new Error('Method not implemented.');
   }
 }

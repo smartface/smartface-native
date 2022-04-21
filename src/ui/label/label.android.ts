@@ -49,8 +49,8 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   constructor(params: Partial<TProps>) {
     super(params);
   }
-  protected __init__(params?: Partial<TProps>): void {
-    super.__init__(params);
+  protected preConstruct(params?: Partial<TProps>): void {
+    super.preConstruct(params);
     this._adjustFontSizeToFit = false;
     this._minimumFontSize = MINIMUM_FONT_SIZE;
     this._adjustableFontSizeStep = 1;
@@ -58,11 +58,11 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     this._textColor = Color.BLUE;
     this.viewNativeDefaultTextAlignment = TextAlignmentDic[TextAlignment.MIDLEFT];
     this.textAlignment = TextAlignment.MIDLEFT;
-    super.__init__(params);
+    super.preConstruct(params);
     this.initAndroidProps();
   }
 
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeTextView(AndroidConfig.activity);
   }
 

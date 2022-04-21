@@ -76,7 +76,7 @@ export class ContactIOS extends Contact {
 }
 
 class ContactsIOS extends ContactsBase {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return __SF_CNMutableContact.new();
   }
   static ios = {

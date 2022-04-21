@@ -90,7 +90,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       mFilePathCallback = null;
     }
   };
-  __createNativeObject__() {
+  createNativeObject() {
     return new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
   }
   constructor(params?: Partial<WebView>) {

@@ -9,7 +9,7 @@ export default class SwipeItem
   extends NativeEventEmitterComponent<SwipeItemEvents, any, WithMobileOSProps<Partial<ISwipeItem>, Partial<ISwipeItemIOSParams>, Partial<ISwipeItemAndroidParams>>>
   implements ISwipeItem
 {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   private _text: string = 'Button';

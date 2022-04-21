@@ -40,7 +40,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   private swipeView: SwipeView;
   private dividerDrawable: typeof NativeGradientDrawable;
 
-  __init__(params?: Partial<ITabBarController>) {
+  preConstruct(params?: Partial<ITabBarController>) {
     this._scrollEnabled = false;
     this._dividerWidth = 0;
     this._dividerPadding = 0;
@@ -98,7 +98,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         self.tabLayout.nativeObject.setOverScrollvalue(value);
       }
     });
-    super.__init__(params);
+    super.preConstruct(params);
   }
 
   constructor(params?: Partial<ITabBarController>) {

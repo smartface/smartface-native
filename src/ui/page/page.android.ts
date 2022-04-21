@@ -67,7 +67,7 @@ const NativeOrientationDictionary = {
 const GRAVITY_START = 8388611; //Gravity.Start
 
 export default class PageAndroid<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage> extends AbstractPage<TEvent | PageEvents, TNative, TProps> {
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.isSwipeViewPage = false;
     this.isCreated = false;
     this.optionsMenu = null;
@@ -81,7 +81,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this._itemColor = ColorAndroid.WHITE;
     this._headerBarLogoEnabled = false;
     this._headerBarLeftItem = null;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   statusBar: typeof StatusBar;
   parentController: IPage['parentController'];
@@ -152,7 +152,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this.nativeSpecificParams();
     this.layoutAssignments();
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new SFFragment();
   }
   getCurrentController(): IController {

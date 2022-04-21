@@ -10,7 +10,7 @@ export default class DatePickerAndroid extends AbstractDatePicker {
   static Android = {
     Style
   };
-  __createNativeObject__(params: Partial<IDatePicker> = {}) {
+  createNativeObject(params: Partial<IDatePicker> = {}) {
     const androidStyle = params?.android?.style || DatePickerAndroid.Android.Style.DEFAULT;
     const today = new Date();
     this.addAndroidProps({

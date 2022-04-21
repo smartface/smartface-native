@@ -31,7 +31,7 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
   private _controllerShowTimeoutMs: number;
   private _customErrorMessage: string;
   private _showController: boolean;
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     // To solve stretching due to yoga, we will wrap this with RelativeLayout.
     const nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
     const layoutParams = new NativeRelativeLayout.LayoutParams(-1, -1);

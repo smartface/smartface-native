@@ -8,7 +8,7 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
   implements AbstractSound
 {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   public static Events = SoundEvents;

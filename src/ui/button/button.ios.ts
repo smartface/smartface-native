@@ -53,7 +53,7 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
       this.onPress?.();
     }, UIControlEvents.touchUpInside);
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_UIButton();
   }
   onLongPress: () => void;

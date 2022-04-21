@@ -70,10 +70,10 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     };
   }
 
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     return new __SF_UIScrollView();
   }
-  protected __init__() {
+  protected preConstruct() {
     this.contentLayout = new FlexLayoutIOS();
     this.setLayoutProps();
     this.contentLayout.nativeObject.addFrameObserver();

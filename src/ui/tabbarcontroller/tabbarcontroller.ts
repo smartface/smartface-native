@@ -244,7 +244,7 @@ export abstract class AbstractTabBarController<TEvent extends string = TabBarCon
 }
 
 export class TabBarControllerImpl extends AbstractTabBarController {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     throw new Error('Method not implemented.');
   }
   onLoad(): void {

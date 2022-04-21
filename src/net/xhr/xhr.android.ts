@@ -216,7 +216,7 @@ export default class XHRAndroid<TEvent extends string = XHREvents, TProps extend
     return true;
   }
 
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     const nativeObject = new NativeXMLHttpRequest();
     nativeObject.setCallbacks({
       onResponse: (stringResponse: string) => {

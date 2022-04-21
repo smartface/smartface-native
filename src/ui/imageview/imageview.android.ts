@@ -31,7 +31,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   private _adjustViewBounds: boolean = false;
   private _tintColor: ColorAndroid;
   private _newImageLoaded: boolean = false;
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeImageView(AndroidConfig.activity);
   }
   constructor(params?: Partial<IImageView>) {

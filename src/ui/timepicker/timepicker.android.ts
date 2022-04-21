@@ -6,12 +6,12 @@ import { TimePickerEvents } from './timepicker-events';
 const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
 
 export default class TimePickerAndroid<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
-  __init__(params: Partial<ITimePicker> = {}) {
+  preConstruct(params: Partial<ITimePicker> = {}) {
     this._is24HourFormat = true;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   private _is24HourFormat: boolean;
   private _hour: number | undefined;

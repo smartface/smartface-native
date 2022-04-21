@@ -911,7 +911,7 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
   TNative,
   TProps
 > {
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     throw new Error('Method not implemented.');
   }
   constructor(params?: Partial<TProps>) {
@@ -933,7 +933,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   extends NativeEventEmitterComponent<TEvent | ViewEvents, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
-  protected __createNativeObject__(): any;
+  protected createNativeObject(): any;
   parent: IView | undefined;
   get uniqueId(): string;
   applyLayout(): void;

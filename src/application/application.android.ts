@@ -72,15 +72,15 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
 class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return {};
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.spratAndroidActivityInstance = NativeSpratAndroidActivity.getInstance();
     this._secureWindowContent = false;
     this._keepScreenAwake = false;
     this.statusBar = StatusBar;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   statusBar: typeof StatusBar;
   private _sliderDrawer: SliderDrawerAndroid;

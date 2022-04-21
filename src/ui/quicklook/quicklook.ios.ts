@@ -7,7 +7,7 @@ import NativeComponent from '../../core/native-component';
 import StatusBar from '../../application/statusbar';
 
 export default class QuickLookIOS extends NativeComponent implements IQuickLook {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_QLPreviewController();
   }
   private _document: string[] = [];

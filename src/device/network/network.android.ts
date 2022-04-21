@@ -33,7 +33,7 @@ function getTelephonyManager() {
 }
 
 class Notifier extends NativeMobileComponent implements INetworkNotifier {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     const callback = {
       onConnectionTypeChanged: (connectionType) => {
         if (!this.connectionTypeChanged) {
@@ -105,7 +105,7 @@ class Notifier extends NativeMobileComponent implements INetworkNotifier {
 }
 
 class NetworkAndroid extends NativeComponent implements NetworkBase {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return;
   }
   ConnectionType = ConnectionType;

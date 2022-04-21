@@ -13,7 +13,7 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
   private _audioEnabled = true;
   private _videoEnabled = true;
   private _onChange: (params: { event: number; message: string }) => void;
-  __createNativeObject__() {
+  createNativeObject() {
     const previewView = new ViewIOS();
     this.nodePlayer = new __SF_NodePlayer();
     return previewView.nativeObject;

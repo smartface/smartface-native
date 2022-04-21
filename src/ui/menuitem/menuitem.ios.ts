@@ -3,7 +3,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { MenuItemEvents } from './menuitem-events';
 
 export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements IMenuItem {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   static Styles = {
@@ -17,10 +17,10 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._title = '';
     this._style = Style.DEFAULT;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   private getIOSProps() {
     const self = this;

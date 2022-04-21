@@ -6,7 +6,7 @@ export default class DialogIOS extends AbstractDialog {
   setShowListener(): void {}
   private dialogView: FlexLayout;
   private _android = {};
-  __createNativeObject__() {
+  createNativeObject() {
     return null;
   }
   constructor(params?: Partial<DialogIOS>) {

@@ -8,7 +8,7 @@ export default class ToastIOS<TEvent extends string = ToastEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | ToastEvents, __SF_Snackbar, TProps>
   implements IToast
 {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_Snackbar();
   }
   private _bottomOffset: number;

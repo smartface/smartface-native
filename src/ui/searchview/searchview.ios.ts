@@ -47,7 +47,7 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
   private _searchViewStyle: SearchViewStyle = UISearchBarStyle.default;
   private textfield: any;
   private keyboardanimationdelegate: any;
-  __createNativeObject__() {
+  createNativeObject() {
     const nativeObject = new __SF_SMFUISearchBar();
     this._hintTextColor = Color.LIGHTGRAY;
     this.textfield = nativeObject.valueForKey('searchField');

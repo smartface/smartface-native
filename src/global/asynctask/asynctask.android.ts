@@ -9,7 +9,7 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
   implements IAsyncTask
 {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new SFAsyncTask();
   }
   static Events = AsyncTaskEvents;

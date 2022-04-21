@@ -110,7 +110,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _onTextChangedCallback: (searchText: string) => void;
   private _onSearchButtonClickedCallback: () => void;
   private skipDefaults: boolean;
-  __init__(params?: Partial<ISearchView>) {
+  preConstruct(params?: Partial<ISearchView>) {
     this._iconifiedByDefault = false;
     this._searchIconAssigned = true;
     this._isNotSetTextWatcher = false;
@@ -125,9 +125,9 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this._textColor = ColorAndroid.BLACK;
     this._hint = '';
     this._hasEventsLocked = false;
-    super.__init__(params);
+    super.preConstruct(params);
   }
-  __createNativeObject__() {
+  createNativeObject() {
     const nativeObject = new NativeSearchView(AndroidConfig.activity);
     nativeObject.clearFocus();
     return nativeObject;

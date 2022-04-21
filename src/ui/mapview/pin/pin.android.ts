@@ -33,18 +33,18 @@ export default class PinAndroid<TEvent extends string = PinEvents> extends Nativ
     super(params);
     // this.nativeObject = nativeObject; //Pin nativeObject is added from outside. write a setter for it when nativeObject any problem is fixed
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
 
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._visible = true;
     this._title = '';
     this._subtitle = '';
     this._clusterColor = null;
     this._image = null;
     this._id = 0;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   get color(): ColorAndroid {
     return this._color;

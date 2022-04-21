@@ -5,7 +5,7 @@ const NativeSFHandler = requireClass('io.smartface.android.sfcore.global.SFHandl
 const NativeRunnable = requireClass('java.lang.Runnable');
 
 class TimerAndroid extends TimerBase {
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     return null;
   }
   private repeat: boolean = false;

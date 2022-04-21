@@ -39,7 +39,7 @@ export abstract class AbstractFont extends NativeComponent {
    * @since 1.1.18
    */
   abstract sizeOfString(string: string, maxWidth: number): Size;
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     return null;
   }
   /**

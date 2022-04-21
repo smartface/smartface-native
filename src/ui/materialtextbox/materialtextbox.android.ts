@@ -52,7 +52,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     setMaxHeight: (value: number) => void;
     setSupportBackgroundTintList: (params: any) => void;
   };
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     const nativeObject = new SFMaterialTextBoxWrapper(activity);
     this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
     this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });

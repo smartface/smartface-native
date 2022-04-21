@@ -5,7 +5,7 @@ import MenuItem from '../menuitem';
 import Page from '../page';
 
 export default class MenuIOS extends NativeComponent implements AbstractMenu {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   private _items: MenuItem[] = [];

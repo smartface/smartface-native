@@ -67,7 +67,7 @@ export default class DatabaseAndroid extends BaseDatabase {
 }
 
 export class QueryResult extends NativeComponent implements Database.QueryResult {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   constructor(params?: { isInternal: boolean; cursor: any }) {
@@ -113,7 +113,7 @@ export class QueryResult extends NativeComponent implements Database.QueryResult
 }
 
 export class DatabaseObject extends NativeComponent implements Database.DatabaseObject {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   constructor(params?: { isInternal: boolean; cursor: any }) {

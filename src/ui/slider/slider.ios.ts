@@ -17,7 +17,7 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;
-  __createNativeObject__() {
+  createNativeObject() {
     return new __SF_UISlider();
   }
   constructor(params?: Partial<ISlider>) {

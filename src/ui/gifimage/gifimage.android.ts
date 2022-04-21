@@ -10,7 +10,7 @@ import { Size } from '../../primitive/size';
 import IBlob from '../../global/blob/blob';
 
 export default class GifImageAndroid extends AbstractGifImage {
-  protected __createNativeObject__(params?: Partial<AbstractGifImage>) {
+  protected createNativeObject(params?: Partial<AbstractGifImage>) {
     const nativeObject = params?.android?.drawable || null;
     this._content = params?.android?.content || null;
     return nativeObject;

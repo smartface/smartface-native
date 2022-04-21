@@ -4,7 +4,7 @@ import UIDatePickerMode from '../../util/iOS/uidatepickermode';
 import { TimePickerEvents } from './timepicker-events';
 
 export default class TimePickerIOS<TEvent extends string = TimePickerEvents> extends NativeEventEmitterComponent<TEvent | TimePickerEvents> implements ITimePicker<TEvent | TimePickerEvents> {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_UIDatePicker();
   }
   private _hours: number | null = null;

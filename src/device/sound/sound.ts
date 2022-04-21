@@ -224,5 +224,5 @@ export declare class SoundImpl extends AbstractSound {
   play(): void;
   loadFile(file: File): void;
   loadURL(url: string): void;
-  protected __createNativeObject__(): any;
+  protected createNativeObject(): any;
 }

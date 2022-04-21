@@ -29,7 +29,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
   private prevOldX: number;
   private _layout: FlexLayoutAndroid;
   private _autoSizeEnabled = false;
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     const isHorizontal = this._align === ScrollViewAlign.HORIZONTAL;
     const callback = {
       onScrollChanged: (x: number, y: number, oldXPixel: number, oldYPixel: number) => {

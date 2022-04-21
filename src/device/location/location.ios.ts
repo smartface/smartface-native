@@ -23,12 +23,12 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
   constructor() {
     super();
   }
-  __init__() {
-    super.__init__();
+  preConstruct() {
+    super.preConstruct();
     this.addIOSProps(this.getIOSProps());
     this._authorizationStatus = this.ios?.authorizationStatus.NotDetermined;
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_CLLocationManager();
   }
   private getIOSProps(): ILocation['ios'] {

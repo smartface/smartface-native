@@ -39,7 +39,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     };
   }
 
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new __SF_UIViewController();
   }
   getCurrentController(): IController {
@@ -48,14 +48,14 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
     throw new Error('Method not implemented.');
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
     this._presentationStyle = 0;
     this._largeTitleDisplayMode = 0;
     this._orientationNative = [PageOrientation.PORTRAIT];
     this.pageView = new FlexLayoutIOS();
     this.routerPath = null;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   onLoad(): void {}
   onShow(): void {}

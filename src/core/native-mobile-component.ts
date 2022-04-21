@@ -30,10 +30,10 @@ export abstract class NativeMobileComponent<TNative = any, TProps extends WithMo
      * Note that it will break android and ios setting on constructor
      */
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._android = {};
     this._ios = {};
-    super.__init__(params);
+    super.preConstruct(params);
     const { android = {}, ios = {} } = params || { ios: {}, android: {} };
     this.addAndroidProps(android);
     this.addIOSProps(ios);

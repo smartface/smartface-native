@@ -23,7 +23,7 @@ const TextViewContentPadding = {
 };
 
 export default class BadgeAndroid extends NativeComponent implements IBadge {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeTextView(AndroidConfig.activity);
   }
   private _borderColor = Color.WHITE;

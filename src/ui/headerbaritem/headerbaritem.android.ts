@@ -27,7 +27,7 @@ function PixelToDp(px) {
 }
 
 export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   iOS = { SystemItem: {} };
@@ -48,7 +48,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   private _itemColor: Color;
   private _systemIcon: number | string;
 
-  protected __init__(params?: Partial<IHeaderBarItem>): void {
+  protected preConstruct(params?: Partial<IHeaderBarItem>): void {
     this._title = '';
     this._image = null;
     this._customView = undefined;
@@ -62,7 +62,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     this._searchView = null;
     this._menuItem = null;
     this._itemColor = Color.WHITE;
-    super.__init__(params);
+    super.preConstruct(params);
   }
 
   constructor(params?: Partial<IHeaderBarItem>) {

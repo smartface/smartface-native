@@ -19,7 +19,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   implements IFlexLayout
 {
   private _flexWrap: number | null = null;
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeYogaLayout(AndroidConfig.activity, {
       onInterceptTouchEvent: () => {
         this.emit('interceptTouchEvent');

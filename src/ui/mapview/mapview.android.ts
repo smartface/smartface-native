@@ -63,10 +63,10 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   private _minZoomLevel: IMapView['minZoomLevel'];
   private _locationButtonVisible: IMapView['android']['locationButtonVisible'];
   private _pinArray: Record<string, PinAndroid> = {};
-  __createNativeObject__() {
+  createNativeObject() {
     return new NativeMapView(AndroidConfig.activity);
   }
-  protected __init__(params?: Partial<IMapView>): void {
+  protected preConstruct(params?: Partial<IMapView>): void {
     this._minZoomLevel = 0;
     this._maxZoomLevel = 19;
     this._type = MapViewType.NORMAL;
@@ -91,7 +91,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this.lazyLoading = true;
     this.activityIntent = AndroidConfig.activity.getIntent();
     this.savedBundles = this.activityIntent.getExtras();
-    super.__init__(params);
+    super.preConstruct(params);
     this.addAndroidProps(this.getAndroidProps());
   }
   constructor(params?: IMapView) {

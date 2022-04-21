@@ -10,7 +10,7 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
   private _rangeEnabled: boolean;
   private _thumbImage: Image;
   private _onValueChange: (value: number[]) => void;
-  __createNativeObject__() {
+  createNativeObject() {
     return new __SF_MultiSlider();
   }
   constructor(params: Partial<IRangeSlider> = {}) {

@@ -37,16 +37,16 @@ export default class NavigationControllerIOS extends AbstractNavigationControlle
   dismissComplete: () => void;
   dismissCancel: () => void;
   onCompleteCallback?: (() => void) | undefined;
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     this.view = new NavigationView({ viewModel: this });
     this.model = new NavigationModel();
     return this.view.nativeObject;
   }
 
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.isActive = false;
     this.popupBackNavigator = false;
-    super.__init__(params);
+    super.preConstruct(params);
   }
 
   getCurrentController(): IController {
@@ -196,11 +196,11 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
   constructor(params: { viewModel?: any } = {}) {
     super(params);
   }
-  protected __createNativeObject__(params) {
+  protected createNativeObject(params) {
     this.viewModel = params.viewModel;
     return new __SF_UINavigationController();
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.__navigationControllerDelegate = new __SF_SMFNavigationControllerDelegate();
     this.__navigationControllerDelegate.navigationControllerWillShowViewControllerAnimated = (navigationController, viewController, animated) => {
       const index = this.nativeObject.viewControllers.indexOf(viewController);
@@ -213,7 +213,7 @@ class NavigationView extends NativeComponent<__SF_UINavigationController> {
     };
 
     this.nativeObject.delegate = this.__navigationControllerDelegate;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   push(page: IController, animated?: boolean) {
     if (page.nativeObject) {

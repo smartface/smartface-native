@@ -76,7 +76,7 @@ function cancelNotificationIntent(self) {
 }
 
 class LocalNotification extends NativeMobileComponent {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     const nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
     return nativeObject.setSmallIcon(NativeR.drawable.icon);
   }
@@ -98,7 +98,7 @@ class LocalNotification extends NativeMobileComponent {
   private _onNotificationReceive;
   private mPendingIntent: any;
   private mNotification: any;
-  __init__(params?: any) {
+  preConstruct(params?: any) {
     this.addAndroidProps({
       get color() {
         return this._color;
@@ -276,7 +276,7 @@ class LocalNotification extends NativeMobileComponent {
   }
 }
 class NotificationsAndroidClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   get ios() {

@@ -7,7 +7,7 @@ import Color from '../color';
 import Page from '../page';
 
 export default class QuickLookAndroid extends NativeComponent implements IQuickLook {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   document: string[] = [];

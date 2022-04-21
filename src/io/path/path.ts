@@ -23,7 +23,7 @@ export type AndroidProps = Partial<{
 export interface IPath extends INativeComponent {}
 
 export class PathBase extends NativeComponent implements IPath {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   constructor(params?: Partial<IPath>) {

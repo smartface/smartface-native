@@ -12,7 +12,7 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   private _attaches: any = [];
   private _closeCallback: () => void;
   private nativeObjectDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     return null;
   }
   constructor() {

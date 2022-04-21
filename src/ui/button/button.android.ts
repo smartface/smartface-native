@@ -49,7 +49,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     this.textAlignment = TextAlignment.MIDCENTER;
     this._borderWidth = 0;
   }
-  protected __init__(params?: Partial<TProps>): void {
+  protected preConstruct(params?: Partial<TProps>): void {
     if (this._backgroundColor instanceof Color) {
       this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     }
@@ -59,10 +59,10 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     this.nativeObject.setBackground(this.layerDrawable);
     this.nativeObject.setAllCaps(false); // enable lowercase texts
     this.layerDrawable = this.createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
-    super.__init__(params);
+    super.preConstruct(params);
   }
 
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeButton(AndroidConfig.activity);
   }
   static Events = { ...ViewAndroid.Events, ...ButtonEvents };

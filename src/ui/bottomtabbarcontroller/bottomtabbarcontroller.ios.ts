@@ -48,13 +48,13 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     );
   }
 
-  protected __createNativeObject__(params) {
+  protected createNativeObject(params) {
     this.view = new BottomTabBarView({
       viewModel: this
     });
     return this.view.nativeObject;
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     // Model
     this.model = new BottomTabBarModel();
     this._tabBar = new BottomTabBarIOS({
@@ -63,7 +63,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
     this.didSelectByIndex = undefined;
     this.shouldSelectByIndex = undefined;
-    super.__init__(params);
+    super.preConstruct(params);
   }
   getCurrentController(): IController | null {
     if (this.childControllers.length > 0) {
@@ -173,7 +173,7 @@ class BottomTabBarView extends NativeComponent {
   constructor(params?: Partial<{ viewModel: any }>) {
     super(params);
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     if (params?.viewModel) {
       this.viewModel = params.viewModel;
     }
@@ -191,7 +191,7 @@ class BottomTabBarView extends NativeComponent {
     this.nativeObject.delegate = this.nativeObjectDelegate;
   }
 
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return SF.requireClass('UITabBarController').new();
   }
   setIndex(index: number) {

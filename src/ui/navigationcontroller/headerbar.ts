@@ -47,7 +47,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   addViewToHeaderBar(view: Parameters<IHeaderBar['addViewToHeaderBar']>['0']): void {
     throw new Error('Method not implemented.');
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   get transparent(): IHeaderBar['transparent'] {

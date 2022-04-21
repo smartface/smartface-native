@@ -18,11 +18,11 @@ export default class PinIOS<TEvent extends string = PinEvents> extends NativeEve
       this.emit('infoWindowPress', state);
     };
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.addIOSProps(this.getIOSProps());
-    super.__init__(params);
+    super.preConstruct(params);
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return __SF_Annotation.createAnnotation();
   }
   get color(): ColorIOS {

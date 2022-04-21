@@ -20,7 +20,7 @@ const ACTION_VIEW = 'android.intent.action.VIEW';
 export default class EmailComposerAndroid extends AbstractEmailComposer {
   static EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
   private _closeCallback: () => void;
-  protected __createNativeObject__(): void {
+  protected createNativeObject(): void {
     const nativeObject = new NativeIntent(ACTION_VIEW);
     nativeObject.setData(NativeUri.parse('mailto:'));
     return nativeObject;

@@ -22,7 +22,7 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   private _thumbImage: ImageAndroid;
   private _thumbColor: Color;
   private _onValueChange: (value: number) => void;
-  __createNativeObject__() {
+  createNativeObject() {
     return new SeekBar(AndroidConfig.activity);
   }
   constructor(params?: Partial<ISlider>) {

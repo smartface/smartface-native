@@ -26,7 +26,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
   }
-  protected __init__(params: Partial<IMaterialTextBox> = {}) {
+  protected preConstruct(params: Partial<IMaterialTextBox> = {}) {
     this._multiline = !!params.multiline;
     this._lineCount = params.lineCount || 1;
 
@@ -36,7 +36,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this.ios.clearButtonEnabled = false;
     this.addIOSProps(this.getIOSProps());
   }
-  protected __createNativeObject__(params: Partial<IMaterialTextBox> = {}): any {
+  protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
     if (params.multiline) {
       this.nativeObject = new __SF_MDCMultilineTextField();
       this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);

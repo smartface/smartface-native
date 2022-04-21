@@ -24,7 +24,7 @@ export default class TextViewIOS<TEvent extends TextViewEvents, TProps extends I
   private _lineSpacing: ITextView['lineSpacing'];
   private _onLinkClick: ITextView['onLinkClick'];
   private _selectable: ITextView['selectable'];
-  __createNativeObject__() {
+  createNativeObject() {
     return new __SF_UITextView();
   }
   constructor(params: Partial<ITextView> = {}) {

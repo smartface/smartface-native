@@ -130,7 +130,7 @@ export abstract class AbstractDialog extends NativeComponent {
   static Android: {
     Style: Partial<typeof DialogStyle>;
   };
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     throw new Error('Method not implemented');
   }
 }

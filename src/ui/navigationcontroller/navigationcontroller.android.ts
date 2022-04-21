@@ -7,7 +7,7 @@ import { HeaderBar } from './headerbar';
 import Page from '../page';
 
 export default class NavigationControllerAndroid extends AbstractNavigationController implements INavigationController {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   protected _onTransitionCallback: (opts?: { controller: Controller; operation: OperationType; currentController?: Controller; targetController?: Controller }) => void;

@@ -14,7 +14,7 @@ const COMPLEX_UNIT_SP = 2;
 const WRAP_CONTENT = -2;
 
 export default class ClusterAndroid extends NativeComponent<any> implements ICluster {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   constructor(params: Partial<ICluster> = {}) {

@@ -35,7 +35,7 @@ enum SystemItem {
 }
 
 export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeaderBarItem> implements IHeaderBarItem {
-  protected __createNativeObject__(params: Partial<IHeaderBarItem> = {}) {
+  protected createNativeObject(params: Partial<IHeaderBarItem> = {}) {
     let nativeObject;
     if (!params?.ios?.systemItem) {
       nativeObject = new __SF_UIBarButtonItem();
@@ -55,8 +55,8 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
   private _font: Font | undefined;
   private _customView: IView | undefined;
   private _onPress: IHeaderBarItem['onPress'] = null;
-  __init__(params: Partial<IHeaderBarItem> = {}) {
-    super.__init__(params);
+  preConstruct(params: Partial<IHeaderBarItem> = {}) {
+    super.preConstruct(params);
     this._badge = new Badge({ nativeObject: this.nativeObject });
     this._font = undefined;
     this._customView = undefined;

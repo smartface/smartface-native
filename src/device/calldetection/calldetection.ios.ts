@@ -3,7 +3,7 @@ import { ICallDetection, State } from './calldetection';
 import { CallDetectionEvents } from './calldetection-events';
 
 class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> implements ICallDetection {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;

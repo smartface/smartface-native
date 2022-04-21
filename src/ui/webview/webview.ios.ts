@@ -139,7 +139,7 @@ class WebViewIOS<TEvent extends string = WebViewEvents> extends ViewIOS<TEvent |
       }
     }
   };
-  __createNativeObject__() {
+  createNativeObject() {
     return new __SF_WKWebView();
   }
   constructor(params?: Partial<IWebView>) {

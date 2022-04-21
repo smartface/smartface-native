@@ -21,7 +21,7 @@ export default class SoundAndroid<TEvent extends string = SoundEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
   implements AbstractSound
 {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return new NativeMediaPlayer();
   }
   public static Events = SoundEvents;

@@ -510,7 +510,7 @@ export interface IHeaderBarItem extends INativeComponent {
 }
 
 export declare class AbstractHeaderBarItem extends NativeComponent implements IHeaderBarItem {
-  protected __createNativeObject__();
+  protected createNativeObject();
   constructor(params?: Partial<AbstractHeaderBarItem>);
   title: string;
   readonly size: {

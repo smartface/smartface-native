@@ -199,7 +199,7 @@ export interface IAlertView extends INativeComponent, MobileOSProps<{}, IAlertVi
 }
 
 export declare class AbstractAlertView extends NativeMobileComponent<any, MobileOSProps<{}, IAlertViewAndroidProps>> implements IAlertView {
-  protected __createNativeObject__(params?: Partial<Record<string, any>>): any;
+  protected createNativeObject(params?: Partial<Record<string, any>>): any;
   constructor(params?: Partial<IAlertView>);
   isShowing(): void;
   show(): void;

@@ -19,7 +19,7 @@ const NativeFileInputStream = requireClass('java.io.FileInputStream');
 const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
 const NativeFileReader = requireClass('java.io.FileReader');
 export default class FileStreamAndroid extends NativeComponent implements IFileStream {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   private _fileObject: any;

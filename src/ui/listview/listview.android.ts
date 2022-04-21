@@ -37,10 +37,10 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
   private nativeSwipeItemInstance: any;
-  __createNativeObject__() {
+  createNativeObject() {
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
-  __init__(params?: Partial<IListView>) {
+  preConstruct(params?: Partial<IListView>) {
     this._itemCount = 0;
     this._contentInset = { top: 0, bottom: 0 };
     this._rowMoveEnabled = false;
@@ -54,7 +54,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     this.addIOSProps(this.getIOSParams());
     this.setItemTouchHelper();
     this.createScrollListener();
-    super.__init__(params);
+    super.preConstruct(params);
   }
   constructor(params?: IListView) {
     super(params);

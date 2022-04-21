@@ -15,7 +15,7 @@ const NativeStateListDrawable = requireClass('android.graphics.drawable.StateLis
 const NativeR = requireClass('android.R');
 
 export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabbarItem> implements ITabbarItem {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   private _title: string;

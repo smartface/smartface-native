@@ -181,6 +181,6 @@ export declare class LayoutManagerImpl extends AbstractLayoutManager {
   set onFullSpan(value: ((type: number) => number) | null);
   get onItemLength(): ((length: number) => number) | null;
   set onItemLength(value: ((length: number) => number) | null);
-  protected __createNativeObject__(params?: Partial<Record<string, any>>);
+  protected createNativeObject(params?: Partial<Record<string, any>>);
   constructor(params: Partial<ILayoutManager>);
 }

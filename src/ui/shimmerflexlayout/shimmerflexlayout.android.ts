@@ -22,7 +22,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   private _baseColor?: Color;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
-  __createNativeObject__() {
+  createNativeObject() {
     this._layout = new FlexLayout();
     const nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
     nativeObject.hideShimmer();

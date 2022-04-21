@@ -6,19 +6,19 @@ const NativeSFStaggeredGridLayoutManager = requireClass('io.smartface.android.sf
 const LayoutChangeListener = requireClass('android.view.View$OnLayoutChangeListener');
 
 export default class LayoutManagerAndroid extends AbstractLayoutManager implements ILayoutManager {
-  protected __createNativeObject__(params: Partial<ILayoutManager> = {}) {
+  protected createNativeObject(params: Partial<ILayoutManager> = {}) {
     this._spanCount = params.spanCount || 1;
     this._scrollDirection = params.scrollDirection ?? ScrollDirection.VERTICAL;
     return new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._itemSpacing = params?.itemSpacing || 0;
     this._spanSize = 0;
     this._nativeRecyclerView = null;
     this._itemDecoration = null;
     this._lineDecoration = null;
 
-    super.__init__(params);
+    super.preConstruct(params);
   }
   private _lineDecoration: any;
   private _itemDecoration: any;

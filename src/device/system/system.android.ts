@@ -36,7 +36,7 @@ function getBatteryIntent() {
 }
 
 class SystemAndroid extends NativeMobileComponent implements AbstractSystem {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   OSVersion = NativeBuild.VERSION.RELEASE;

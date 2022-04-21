@@ -10,7 +10,7 @@ import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     return new __SF_UIView();
   }
   protected _uniqueId: string;
@@ -74,8 +74,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.addIOSProps(this.getIOSProperties());
   }
 
-  protected __init__(params?: Partial<Record<string, any>>): void {
-    super.__init__(params);
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    super.preConstruct(params);
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;

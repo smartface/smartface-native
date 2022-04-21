@@ -24,7 +24,7 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, 
       }
     });
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   onAccelerate: (e: { x: number; y: number; z: number }) => void;

@@ -13,7 +13,7 @@ class Notifier extends NativeComponent implements INetworkNotifier {
     super(params);
   }
   connectionTypeChanged: ((type: ConnectionType) => void) | null;
-  protected __createNativeObject__(): any {
+  protected createNativeObject(): any {
     const nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
     nativeObject.observeFromNotificationCenter();
     nativeObject.reachabilityChangedCallback = () => {

@@ -24,10 +24,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
-  protected __createNativeObject__(params: Partial<ITabbarItem>) {
+  protected createNativeObject(params: Partial<ITabbarItem>) {
     return UITabBarItem.new();
   }
-  protected __init__(params: Partial<ITabbarItem>): void {
+  protected preConstruct(params: Partial<ITabbarItem>): void {
     this._title = '';
     const defaultBadge = {
       backgroundColor: undefined,
@@ -44,7 +44,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     };
     this._badge = this.nativeObject ? new BadgeIOS({ nativeObject: this.nativeObject }) : defaultBadge;
     this.addIOSProps(this.getIOSProps());
-    super.__init__(params);
+    super.preConstruct(params);
   }
   getIOSProps() {
     const self = this;

@@ -21,10 +21,10 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
   constructor(params?: Partial<ISliderDrawer>) {
     super(params);
   }
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return __SF_SliderDrawer.new();
   }
-  protected __init__(params?: Partial<Record<string, any>>): void {
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.pageView = new FlexLayoutIOS({
       backgroundColor: Color.WHITE
     });
@@ -34,7 +34,7 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     this.orientation = PageOrientation.PORTRAIT;
     this.setPageViewProps();
     this.setNativeProps();
-    super.__init__(params);
+    super.preConstruct(params);
   }
   private setNativeProps() {
     this.nativeObject.position = this._position;

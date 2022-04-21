@@ -86,7 +86,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
 
     this.addTabBarToActivity();
   }
-  protected __createNativeObject__(params?: Partial<Record<string, any>>) {
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
     return null;
   }
 

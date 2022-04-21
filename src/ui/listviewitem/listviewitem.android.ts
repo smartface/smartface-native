@@ -14,7 +14,7 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
     super(params);
     this.addIOSProps(this.getIOSParams());
   }
-  protected __init__(
+  protected preConstruct(
     params?: Partial<
       IListViewItem<
         'interceptTouchEvent' | 'viewAdded' | 'viewRemoved' | 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved',
@@ -24,7 +24,7 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
   ): void {
     this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
     this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
-    super.__init__(params);
+    super.preConstruct(params);
   }
   // Added due to problem in row height for RecyclerView
   get height(): number {

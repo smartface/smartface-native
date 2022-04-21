@@ -12,7 +12,7 @@ interface BlobAndroidConstructorParameters {
 }
 
 class BlobAndroid extends NativeComponent implements IBlob {
-  protected __createNativeObject__(params?: Partial<BlobAndroidConstructorParameters>) {
+  protected createNativeObject(params?: Partial<BlobAndroidConstructorParameters>) {
     const nativeObject = new NativeByteArrayOutputStream();
     if (params?.parts && params.properties?.type) {
       this._type = params.properties.type;

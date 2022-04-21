@@ -178,7 +178,7 @@ export abstract class HttpBase extends NativeMobileComponent<any, WithMobileOSPr
  *
  */
 export class HttpRequest extends NativeComponent {
-  protected __createNativeObject__() {
+  protected createNativeObject() {
     return null;
   }
   constructor(params?: { nativeObject?: any }) {
