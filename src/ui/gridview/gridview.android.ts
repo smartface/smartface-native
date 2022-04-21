@@ -1,4 +1,4 @@
-import { GridViewSnapAlignment, IGridView } from './gridview';
+import { DecelerationRate, GridViewSnapAlignment, IGridView } from './gridview';
 
 import Color from '../color';
 import GridViewItem from '../gridviewitem';
@@ -10,6 +10,7 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
 import type LayoutManager from '../layoutmanager';
+import { SemanticContentAttribute } from '../view/view';
 
 const NativeSFRecyclerView = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
@@ -155,10 +156,12 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
       onItemSelected: (position: number, itemViewHashCode: number) => {
         const selectedItem = this._gridViewItems[itemViewHashCode];
         this.onItemSelected?.(selectedItem, position);
+        this.emit('itemSelected', selectedItem, position);
       },
       onItemLongSelected: (position: number, itemViewHashCode: number) => {
         const selectedItem = this._gridViewItems[itemViewHashCode];
         this.android.onItemLongSelected?.(selectedItem, position);
+        this.emit('itemLongSelected', selectedItem, position);
       }
     };
     this.nativeDataAdapter = new SFRecyclerViewAdapter(callbacks);
@@ -431,4 +434,8 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
       this.isScrollListenerAdded = false;
     }
   }
+  static iOS = {
+    DecelerationRate: DecelerationRate,
+    SemanticContentAttribute: SemanticContentAttribute
+  };
 }
