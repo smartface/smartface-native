@@ -11,7 +11,8 @@
     "deploy": "npm run build && cd ./dist && npm publish",
     "dev": "cp -r .types ./src/ && npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
-    "lint:write": "npx prettier --write ./**/*"
+    "lint:write": "npx prettier --write ./**/*",
+    "build:document": "node typedoc.js"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "source-map-support": "^0.5.16",
     "typescript": "^4.6.2",
     "uglify-js": "2.8.12",
-    "walk": "^2.3.9"
+    "walk": "^2.3.9",
+    "typedoc": "beta"
   }
 }

@@ -20,7 +20,7 @@ export declare class NavigationBarBase {
    * Gets/sets transparency of status bar.This property works only for Android version
    * OREO 8.1.0 (API 27) or above.
    *
-   * @property {Application.Android.NavigationBar.Style} [style = Application.Android.NavigationBar.Styles.DARKCONTENT]
+   * @defaultValue NavigationBarStyle.DARKCONTENT
    * @android
    * @since 4.0.0
    */
