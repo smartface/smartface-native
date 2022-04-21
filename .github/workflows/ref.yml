@@ -4,9 +4,8 @@ name: CI
 
 on:
   push:
-    branches: [master, prerelease, develop, feature/ts-new]
-  pull_request:
-    branches: [master, prerelease, develop, feature/ts-new]
+    tags:
+      - v*
 
   workflow_dispatch:
 
