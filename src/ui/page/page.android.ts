@@ -173,9 +173,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   }
   set orientation(value) {
     this._orientation = value as any;
-    const nativeOrientation = NativeOrientationDictionary[this._orientation];
+    let nativeOrientation = NativeOrientationDictionary[this._orientation];
     if (typeof nativeOrientation !== 'number') {
       this._orientation = PageOrientationAndroid.PORTRAIT;
+      nativeOrientation = NativeOrientationDictionary[PageOrientationAndroid.PORTRAIT];
     }
     AndroidConfig.activity.setRequestedOrientation(nativeOrientation);
   }

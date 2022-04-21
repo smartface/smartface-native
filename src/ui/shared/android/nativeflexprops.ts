@@ -36,7 +36,7 @@ export const NativeAlignContent = {
 };
 
 export const NativeFlexWrap = {
-  NOWRAP: NativeYogaWrap.NOWRAP,
+  NOWRAP: NativeYogaWrap.NO_WRAP,
   WRAP: NativeYogaWrap.WRAP
 };
 
