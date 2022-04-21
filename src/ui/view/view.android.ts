@@ -904,7 +904,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   // End of Ripple Effect
 
   on(eventName: ViewEvents, callback: EventListenerCallback) {
-    this.setTouchHandlers();
+    if (Object.values(ViewEvents).includes(eventName)) {
+      this.setTouchHandlers();
+    }
     return super.on(eventName, callback);
   }
 }
