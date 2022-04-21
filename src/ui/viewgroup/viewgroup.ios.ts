@@ -39,6 +39,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
         this.onViewRemovedInnerCallback?.(view);
       }
     };
+    this.addAndroidProps(this.getAndroidProps());
   }
   onViewAdded: (view: IView) => void;
   onViewRemoved: (view: IView) => void;
@@ -47,6 +48,12 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
     const uniqueId = view.uniqueId;
     this._children[uniqueId] = view;
     this.nativeObject.addSubview(view.nativeObject);
+  }
+
+  private getAndroidProps() {
+    return {
+      requestDisallowInterceptTouchEvent: (disallow: boolean) => {}
+    };
   }
 
   // TODO: Make View disposable and move that logic into

@@ -18,7 +18,16 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   extends ViewGroupAndroid<TEvent | FlexLayoutEvents, TNative, TProps>
   implements IFlexLayout
 {
-  private _flexWrap: number | null = null;
+  private _flexWrap: number | null;
+  constructor(params?: Partial<TProps>) {
+    super(params);
+  }
+
+  preConstruct(params) {
+    this._flexWrap = null;
+    super.preConstruct(params);
+  }
+
   protected createNativeObject() {
     return new NativeYogaLayout(AndroidConfig.activity, {
       onInterceptTouchEvent: () => {
@@ -28,9 +37,6 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
         }
       }
     });
-  }
-  constructor(params?: Partial<TProps>) {
-    super(params);
   }
 
   get direction() {

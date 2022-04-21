@@ -14,6 +14,20 @@ import TextAlignment from '../shared/textalignment';
 import AutoCapitalize from '../textbox/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
+interface nativeTextInputEditText {
+  getHeight: () => number;
+  setHeight: (value: number) => void;
+  getMaxHeight: () => number;
+  setMaxHeight: (value: number) => void;
+  setSupportBackgroundTintList: (params: any) => void;
+  getMaxLines(): number;
+  setMaxLines(value: number): void;
+  getMinLines(): number;
+  setMinLines(value: number): void;
+  isSingleLine(): boolean;
+  setSingleLine(value: boolean): void;
+}
+
 const SFMaterialTextBoxWrapper = requireClass('io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
 
@@ -30,7 +44,7 @@ const state_unfocused = -16842908;
 
 export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends ViewAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private sfTextBox: TextBoxAndroid;
-  private textBoxNativeObject: any;
+  private textBoxNativeObject: nativeTextInputEditText;
   private __hintTextColor: Color;
   private _hintFocusedTextColor: Color | null;
   private _errorText: string;
@@ -45,13 +59,6 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   private _enableErrorMessage: boolean = false;
   private _enableCharacterRestriction: boolean = false;
   private _touchEnable: boolean = true;
-  private nativeTextInputEditText: {
-    getHeight: () => number;
-    setHeight: (value: number) => void;
-    getMaxHeight: () => number;
-    setMaxHeight: (value: number) => void;
-    setSupportBackgroundTintList: (params: any) => void;
-  };
   protected createNativeObject(): any {
     const nativeObject = new SFMaterialTextBoxWrapper(activity);
     this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
@@ -107,16 +114,16 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     const self = this;
     return {
       get textBoxHeight(): number {
-        return self.nativeTextInputEditText.getHeight();
+        return self.textBoxNativeObject.getHeight();
       },
       set textBoxHeight(value: number) {
-        self.nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(value));
+        self.textBoxNativeObject.setHeight(AndroidUnitConverter.dpToPixel(value));
       },
       get textBoxMaxHeight(): number {
-        return self.nativeTextInputEditText.getMaxHeight();
+        return self.textBoxNativeObject.getMaxHeight();
       },
       set textBoxMaxHeight(value: number) {
-        self.nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(value));
+        self.textBoxNativeObject.setMaxHeight(AndroidUnitConverter.dpToPixel(value));
       },
       get enableErrorMessage(): boolean {
         return self._enableErrorMessage;
@@ -187,7 +194,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
 
     const lineColorListState = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
 
-    this.nativeTextInputEditText.setSupportBackgroundTintList(lineColorListState);
+    this.textBoxNativeObject.setSupportBackgroundTintList(lineColorListState);
   }
 
   get lineCount(): number {
@@ -285,7 +292,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     return this._onTouchMoved;
   }
   set onTouchMoved(value: (e: boolean | { isInside: boolean }, point?: Point2D) => boolean) {
-    this.onTouchMoved = value;
+    this._onTouchMoved = value;
     this.setTouchHandlers();
     this.sfTextBox.onTouchMoved = value;
     this.sfTextBox.setTouchHandlers();

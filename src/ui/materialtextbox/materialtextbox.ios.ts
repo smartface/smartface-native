@@ -33,8 +33,8 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
 
-    this.ios.clearButtonEnabled = false;
     this.addIOSProps(this.getIOSProps());
+    super.preConstruct(params);
   }
   protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
     if (params.multiline) {

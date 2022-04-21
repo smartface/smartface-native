@@ -71,6 +71,51 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
   implements ITextBox
 {
+  private __touchEnabled: boolean;
+  private _isPassword: boolean;
+  private _keyboardType: KeyboardType;
+  private _actionKeyType: ActionKeyType;
+  private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
+  private _cursorColor: Color;
+  private _hintTextColor: Color;
+  private _textColor: Color;
+  private _font: Font;
+  private _textAlignment: TextAlignment;
+  private _onEditBegins: () => void;
+  private _onEditEnds: () => void;
+  private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
+  private _hasEventsLocked: boolean;
+  private _autoCapitalize: AutoCapitalize;
+  private _didAddTextChangedListener: boolean;
+  private _didSetOnEditorActionListener: boolean;
+  constructor(params?: Partial<TProps>) {
+    super(params);
+    /* Override the onTouch and make default returning false to prevent bug in other listener.*/
+    this.onTouch = (e) => {
+      let result: boolean | undefined;
+      if (this.onTouch) {
+        result = this.onTouch(e);
+      }
+      return result === true;
+    };
+
+    this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
+
+    this.addAndroidProps(this.androidProps());
+  }
+
+  protected preConstruct(params?: Partial<TProps>): void {
+    this.__touchEnabled = true;
+    this.__touchEnabled = true;
+    this._isPassword = false;
+    this._keyboardType = KeyboardType.DEFAULT;
+    this._actionKeyType = ActionKeyType.DEFAULT;
+    this._hasEventsLocked = false;
+    this._autoCapitalize = AutoCapitalize.NONE;
+    this._didAddTextChangedListener = false;
+    this._didSetOnEditorActionListener = false;
+    super.preConstruct(params);
+  }
   protected createNativeObject() {
     //AND-3123: Due to the issue, hardware button listener added.
     const callback = {
@@ -90,37 +135,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     const nativeObject = new SFEditText(AndroidConfig.activity, callback);
     nativeObject.setSingleLine(true);
     return nativeObject;
-  }
-  private __touchEnabled: boolean = true;
-  private _isPassword: boolean = false;
-  private _keyboardType: KeyboardType = KeyboardType.DEFAULT;
-  private _actionKeyType: ActionKeyType = ActionKeyType.DEFAULT;
-  private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
-  private _cursorColor: Color;
-  private _hintTextColor: Color;
-  private _textColor: Color;
-  private _font: Font;
-  private _textAlignment: TextAlignment;
-  private _onEditBegins: () => void;
-  private _onEditEnds: () => void;
-  private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
-  private _hasEventsLocked: boolean = false;
-  private _autoCapitalize: AutoCapitalize = AutoCapitalize.NONE;
-  private _didAddTextChangedListener: boolean = false;
-  private _didSetOnEditorActionListener: boolean = false;
-  constructor(params?: Partial<TProps>) {
-    super(params);
-    this.nativeObject = params?.nativeObject || this.nativeObject;
-    // /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-    // this.onTouch = (e) => {
-    //   let result: boolean | undefined;
-    //   if (this.onTouch) result = this.onTouch(e);
-    //   return result === true;
-    // };
-
-    this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
-
-    this.addAndroidProps(this.androidProps());
   }
 
   private androidProps() {
