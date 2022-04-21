@@ -37,6 +37,9 @@ jobs:
     steps:
       - name: extract packagejson # Writes version into ${{ env.PACKAGE_VERSION }}
         uses: nyaa8/package-version@v1
+        with:
+          path: 'package.json'
+          follow-symlinks: 'false'
 
       - name: is this cycle alpha
         if: contains(env.PACKAGE_VERSION, 'alpha')
