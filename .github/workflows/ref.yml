@@ -4,9 +4,9 @@ name: CI
 
 on:
   push:
-    branches: [feature/typedoc]
+    branches: [master, prerelease, develop, feature/ts-new]
   pull_request:
-    branches: [feature/typedoc]
+    branches: [master, prerelease, develop, feature/ts-new]
 
   workflow_dispatch:
 
@@ -22,13 +22,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Install dependencies
-      #   run: |
-      #     yarn install
+      - name: Install dependencies
+        run: |
+          yarn install
 
-      # - name: build
-      #   run: |
-      #     yarn build:document
+      - name: build
+        run: |
+          yarn build:document
 
   push_to_Docker_Hub:
     runs-on: ubuntu-latest
