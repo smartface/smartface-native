@@ -992,6 +992,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   alignSelf: Flex.AlignSelf;
   masksToBounds: boolean;
   maskedBorders: Border[];
+  static readonly Border: typeof Border;
 }
 
 type View<
