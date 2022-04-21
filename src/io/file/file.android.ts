@@ -18,7 +18,7 @@ const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
 const NativeFileInputStream = requireClass('java.io.FileInputStream');
 const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
 export default class FileAndroid extends NativeComponent implements IFile {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   nativeAssetsList: any[] = [];

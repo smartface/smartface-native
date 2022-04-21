@@ -2,7 +2,7 @@ import NativeComponent from '../../core/native-component';
 import { TimerBase, TimerParams } from './timer';
 
 class TimerIOS extends TimerBase {
-  protected createNativeObject(): any {
+  protected __createNativeObject__(): any {
     return null;
   }
   static createTimer(params: TimerParams) {

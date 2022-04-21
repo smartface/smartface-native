@@ -36,17 +36,17 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     this.setGestureHandlers();
     this.setNativeEvents();
   }
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_MKMapView();
   }
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     this._minZoomLevel = DEFAULT_MIN_ZOOM_LEVEL;
     this._maxZoomLevel = DEFAULT_MAX_ZOOM_LEVEL;
     this._zoomLevel = DEFAULT_ZOOM_LEVEL;
     this._cluster = [];
     this._pinArray = {};
     this._isFirstRender = false;
-    super.init(params);
+    super.__init__(params);
     this.addIOSProps(this.getIOSProps());
     this.addAndroidProps(this.getAndroidProps());
   }

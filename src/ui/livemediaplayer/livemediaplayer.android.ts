@@ -21,7 +21,7 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
   private _audioEnabled = true;
   private _videoEnabled = true;
   private _onChange: (params: { event: number; message: string }) => void;
-  createNativeObject() {
+  __createNativeObject__() {
     this.nodePlayer = new NodePlayer(AndroidConfig.activity);
     return new NodePlayerView(AndroidConfig.activity);
   }

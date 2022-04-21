@@ -4,7 +4,7 @@ import { BlurViewEvents } from './blurview-events';
 
 export default class BlurViewIOS<TEvent extends string = BlurViewEvents> extends ViewIOS<TEvent | BlurViewEvents, __SF_SMFVisualEffectView, IBlurView> implements IBlurView {
   private _effectStyle: number = 1;
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_SMFVisualEffectView(1);
   }
   constructor(params: Partial<IBlurView> = {}) {

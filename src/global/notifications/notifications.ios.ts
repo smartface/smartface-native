@@ -5,10 +5,10 @@ import Invocation from '../../util/iOS/invocation';
 import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase } from './notifications';
 import { NotificationEvents } from './notifications-events';
 class LocalNotification extends NativeMobileComponent {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_UILocalNotification();
   }
-  init(params?: any) {
+  __init__(params?: any) {
     this.addIOSProps({
       get applicationIconBadgeNumber() {
         return this.nativeObject.applicationIconBadgeNumber;
@@ -35,7 +35,7 @@ class LocalNotification extends NativeMobileComponent {
         }
       }
     });
-    super.init(params);
+    super.__init__(params);
   }
   constructor(params?: any) {
     super(params);
@@ -100,11 +100,11 @@ class LocalNotification extends NativeMobileComponent {
 }
 
 class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
-  init() {
-    super.init();
+  __init__() {
+    super.__init__();
     this.addIOSProps(this.getIOSProps());
   }
   private getIOSProps() {

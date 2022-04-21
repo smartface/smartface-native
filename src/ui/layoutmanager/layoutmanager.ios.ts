@@ -19,7 +19,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
   constructor(params: Partial<ILayoutManager> = {}) {
     super(params);
   }
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     this.lineSpacing = 0;
     this.itemSpacing = 0;
     this._itemLength = DEFAULT_ITEM_LENGTH;
@@ -28,9 +28,9 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     this._onItemLength = () => DEFAULT_ITEM_LENGTH;
     this._scrollDirection = ScrollDirection.VERTICAL;
     this.collectionView = null;
-    super.init(params);
+    super.__init__(params);
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     const nativeObject = new __SF_UICollectionViewFlowLayout();
 
     nativeObject.prepareLayoutCallback = () => {

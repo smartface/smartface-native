@@ -71,7 +71,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
   implements ITextBox
 {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     //AND-3123: Due to the issue, hardware button listener added.
     const callback = {
       onKeyPreIme: (keyCode: number, keyEventAction: number) => {

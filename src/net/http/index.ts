@@ -13,7 +13,7 @@ declare class HttpImpl extends HttpBase {
   request(params: Parameters<HttpBase['request']>['0']): HttpRequest;
   upload(params: Parameters<HttpBase['upload']>['0']): HttpRequest;
   cancelAll(): void;
-  protected createNativeObject(params?: Partial<Record<string, any>>);
+  protected __createNativeObject__(params?: Partial<Record<string, any>>);
 }
 
 const Http: typeof HttpImpl = require(`./http.${Device.deviceOS.toLowerCase()}`).default;

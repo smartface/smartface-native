@@ -11,7 +11,7 @@ import Invocation from '../../util/iOS/invocation';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
 
 export default class ListViewIOS<TEvent extends string = ListViewEvents> extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView> implements IListView {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     const nativeObject = new __SF_UITableView();
     this.refreshControl = new __SF_UIRefreshControl();
     nativeObject.addSubview(this.refreshControl);
@@ -20,14 +20,14 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
     return nativeObject;
   }
-  init(params?: IListView) {
+  __init__(params?: IListView) {
     this._contentInset = { top: 0, bottom: 0 };
     this._listItemArray = [];
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
     this.setScrollEvents();
-    super.init(params);
+    super.__init__(params);
   }
   nativeInner: INativeInner;
   private refreshControl: __SF_UIRefreshControl;

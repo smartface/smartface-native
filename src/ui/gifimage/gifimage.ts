@@ -143,7 +143,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
   static get ios(): iOSProps | undefined {
     throw new Error('Method not implemented.');
   }
-  protected abstract createNativeObject(params?: Partial<AbstractGifImage>): any;
+  protected abstract __createNativeObject__(params?: Partial<AbstractGifImage>): any;
 }
 
 /**
@@ -186,7 +186,7 @@ export class GifImageImpl extends AbstractGifImage {
   toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject(params?: Partial<AbstractGifImage>) {
+  protected __createNativeObject__(params?: Partial<AbstractGifImage>) {
     throw new Error('Method not implemented.');
   }
 }

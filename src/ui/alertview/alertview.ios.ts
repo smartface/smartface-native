@@ -6,7 +6,7 @@ enum MethodNames {
 }
 
 export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView> implements IAlertView {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return __SF_UIAlertController.createAlertController(1);
   }
   private delegate: (method: { name: string }) => void;

@@ -26,10 +26,10 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
 }
 
 class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     this.statusBar = StatusBar;
     this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
-    super.init(params);
+    super.__init__(params);
   }
 
   onUnhandledError: ApplicationBase['onUnhandledError'];
@@ -255,7 +255,7 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
       Permissions: {} as any
     };
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
 

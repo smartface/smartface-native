@@ -25,7 +25,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
   private _scrollBarEnabled: boolean;
   private refreshControl: __SF_UIRefreshControl;
   private _refreshEnabled: boolean;
-  createNativeObject(params?: Partial<IGridView>) {
+  __createNativeObject__(params?: Partial<IGridView>) {
     this._layoutManager = params?.layoutManager as unknown as LayoutManagerIOS;
     const nativeObject = new __SF_UICollectionView(this._layoutManager.nativeObject);
     nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
@@ -34,7 +34,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     this.refreshControl = new __SF_UIRefreshControl();
     return nativeObject;
   }
-  init(params?: Partial<IGridView>) {
+  __init__(params?: Partial<IGridView>) {
     this.scrollBarEnabled = true;
     this._refreshEnabled = false;
 
@@ -47,7 +47,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     this.addAndroidProps(this.getAndroidProps());
     this.setNativeParams();
     this.setScrollEvents();
-    super.init(params);
+    super.__init__(params);
   }
   constructor(params?: Partial<IGridView>) {
     super(params);

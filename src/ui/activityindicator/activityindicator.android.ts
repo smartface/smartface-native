@@ -10,7 +10,7 @@ const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 
 export default class ActivityIndicatorAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent, any, IActivityIndicator> {
   private _color: Color;
-  createNativeObject() {
+  __createNativeObject__() {
     return new NativeProgressBar(AndroidConfig.activity);
   }
   constructor(params?: Partial<IActivityIndicator>) {

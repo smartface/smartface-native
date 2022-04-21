@@ -4,7 +4,7 @@ import ViewIOS from '../view/view.ios';
 import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
 export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent, any, IActivityIndicator> {
   private _color: Color;
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_UIActivityIndicatorView(ActivityIndicatorIOS.iOS.ActivityIndicatorViewStyle.NORMAL);
   }
   constructor(params?: Partial<IActivityIndicator>) {

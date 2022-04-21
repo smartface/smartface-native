@@ -47,16 +47,16 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     super(params);
   }
 
-  createNativeObject() {
+  __createNativeObject__() {
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
-  init(params?: Partial<IGridView>) {
+  __init__(params?: Partial<IGridView>) {
     this.setNativeInner();
     this.setDataAdapter();
     this.addAndroidProps(this.getAndroidProps());
     this.addIOSProps(this.getIOSProps());
     this.setNativeEvents();
-    super.init(params);
+    super.__init__(params);
   }
   setTouchHandlers(): void {
     if (this.didSetTouchHandler) {

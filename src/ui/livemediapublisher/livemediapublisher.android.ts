@@ -22,7 +22,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
   private _audioOptions: Partial<{ bitrate: number; profile: number; samplerate: number }>;
   private _onChange: (params: { event: number; message: string }) => void;
   private nodePublisher: any;
-  createNativeObject() {
+  __createNativeObject__() {
     this.nodePublisher = new NodePublisher(AndroidConfig.activity);
     return new NodeCameraView(AndroidConfig.activity);
   }

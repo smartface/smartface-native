@@ -114,7 +114,7 @@ export declare class AbstractMenuItem<
   extends NativeEventEmitterComponent<TEvent | MenuItemEvents, TProps>
   implements IMenuItem
 {
-  protected createNativeObject(params?: Record<string, any>);
+  protected __createNativeObject__(params?: Record<string, any>);
   static Styles: typeof Style;
   constructor(params?: Partial<AbstractMenuItem>);
   // TODO: No implemented getActionView

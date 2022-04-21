@@ -96,10 +96,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _useForeground: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new NativeView(AndroidConfig.activity);
   }
-  protected init(params?: Partial<TProps>): void {
+  protected __init__(params?: Partial<TProps>): void {
     if (this.nativeObject?.toString().indexOf('YogaLayout') !== -1) {
       this.yogaNode = this.nativeObject.getYogaNode();
     } else {
@@ -120,7 +120,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._rotationY = 0;
     this._masksToBounds = true;
     this._maskedBorders = [];
-    super.init(params);
+    super.__init__(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
     this.nativeObject.setId(NativeView.generateViewId());

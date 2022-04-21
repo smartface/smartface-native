@@ -121,7 +121,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
 }
 
 export declare class WebSocketBase<TEvent extends string = WebSocketEvents> extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any> implements IWebSocket {
-  protected createNativeObject(params?: Partial<Record<string, any>>);
+  protected __createNativeObject__(params?: Partial<Record<string, any>>);
   constructor(params?: Partial<IWebSocket>);
   onOpen: () => void;
   onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;

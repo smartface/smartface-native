@@ -43,10 +43,10 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
   private _isPageTransaction: boolean;
   private pageControllerDelegate: __SF_UIPageViewControllerDelegate;
   overScrollMode: OverScrollMode;
-  createNativeObject() {
-    return super.createNativeObject();
+  __createNativeObject__() {
+    return super.__createNativeObject__();
   }
-  init(params?: TProps) {
+  __init__(params?: TProps) {
     this.transactionIndex = 0;
     this._currentIndex = 0;
     this.currentState = SwipeViewState.IDLE;
@@ -63,7 +63,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
     this.nativeObject.addSubview(this.pageController.view);
     this.setPageControllerDataSource();
     this.setViewControllerDelegate();
-    super.init(params);
+    super.__init__(params);
   }
   constructor(params?: TProps) {
     super(params);

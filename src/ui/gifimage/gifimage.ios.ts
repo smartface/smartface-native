@@ -11,7 +11,7 @@ export default class GifImageIOS extends AbstractGifImage {
   toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject(params: Partial<IGifImage>) {
+  protected __createNativeObject__(params: Partial<IGifImage>) {
     return params.nativeObject;
   }
   constructor(params: Partial<IGifImage> = {}) {

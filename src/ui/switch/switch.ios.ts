@@ -10,10 +10,10 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   constructor(params?: Partial<ISwitch>) {
     super(params);
   }
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_UISwitch();
   }
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
     } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
@@ -26,7 +26,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
       this.onToggleChanged?.(this.toggle);
       this.emit('toggleChanged', this.toggle);
     }, UIControlEvents.valueChanged);
-    super.init(params);
+    super.__init__(params);
   }
 
   get enabled(): boolean {

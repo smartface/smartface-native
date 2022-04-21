@@ -4,7 +4,7 @@ import ViewIOS from '../view/view.ios';
 import { PickerEvents } from './picker-events';
 
 export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEvent | PickerEvents, PickerIOSProperties> implements IPicker<TEvent | PickerEvents> {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_UIPickerView();
   }
   protected _items: IPicker['items'] = [];

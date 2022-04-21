@@ -5,7 +5,7 @@ import Image from '../../ui/image';
 import { HttpBase, HttpRequest, IHttp } from './http';
 
 export default class HttpIOS extends HttpBase {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_Http();
   }
   cookiePersistenceEnabled: boolean;

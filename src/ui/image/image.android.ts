@@ -21,7 +21,7 @@ export default class ImageAndroid<
   TNative = any,
   TProps extends WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
 > extends AbstractImage<TNative, TProps> {
-  protected createNativeObject(): any {
+  protected __createNativeObject__(): any {
     return null;
   }
 

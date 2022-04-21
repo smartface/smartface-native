@@ -4,7 +4,7 @@ import { IAccelerometer } from './accelerometer';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { AccelerometerEvents } from './accelerometer-events';
 class AccelerometerAndroid extends NativeEventEmitterComponent<AccelerometerEvents> implements IAccelerometer {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   private _nativeSFAccelerometerListener = new NativeSFAccelerometerListener();

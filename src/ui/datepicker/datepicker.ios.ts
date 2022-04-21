@@ -16,7 +16,7 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
   private _cancelText: string;
   private onDateSelectedListener: (e: { date: Date }) => void;
   private onCancelledListener: () => void;
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_UIDatePicker();
   }
   constructor(params: Partial<IDatePicker> = {}) {

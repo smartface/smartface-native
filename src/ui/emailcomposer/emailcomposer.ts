@@ -140,7 +140,7 @@ export abstract class AbstractEmailComposer extends NativeMobileComponent<any, M
    * @since 3.0.3
    */
   abstract show(page: Page): void;
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     throw new Error('Method not implemented');
   }
 }

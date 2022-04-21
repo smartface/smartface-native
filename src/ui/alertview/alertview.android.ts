@@ -9,7 +9,7 @@ const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
 export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertView> implements IAlertView {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new NativeAlertDialog(AndroidConfig.activity);
   }
   private __didSetOnDismissListener = true;

@@ -470,7 +470,7 @@ export abstract class AbstractImage<
     throw new Error('Method not implemented.');
   }
 
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     throw new Error('Method not implemented.');
   }
 

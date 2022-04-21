@@ -22,7 +22,7 @@ export default class SelectablePickerAndroid<TEvent extends SelectablePickerEven
   extends NativeEventEmitterComponent<TEvent | SelectablePickerEvents>
   implements ISelectablePicker<TEvent | SelectablePickerEvents>
 {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new NativeAlertDialog.Builder(AndroidConfig.activity);
   }
   private _items: ISelectablePicker['items'] = [];

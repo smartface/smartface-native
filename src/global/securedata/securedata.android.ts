@@ -3,7 +3,7 @@ import { AbstractSecureData } from './securedata';
 const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyStore');
 
 class SecureDataAndroid extends AbstractSecureData {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   service: string | undefined;

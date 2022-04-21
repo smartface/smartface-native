@@ -10,7 +10,7 @@ export default class FileIOS extends AbstractFile implements IFile {
   }
   set type(value: PATH_FILE_TYPE) {}
   fullPath: string;
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   constructor(params?: Partial<IFile> & FileParams) {

@@ -39,14 +39,14 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
     this.androidProperties();
   }
   onSelected: (index: number) => void;
-  protected init(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
+  protected __init__(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
     this._items = [];
     this._titleColor = Color.BLACK;
     this.buttonCustomize = false;
-    super.init(params);
+    super.__init__(params);
   }
 
-  createNativeObject() {
+  __createNativeObject__() {
     return new NativeNumberPicker(AndroidConfig.activity);
   }
   get items(): IPicker['items'] {

@@ -17,7 +17,7 @@ export default class ImageIOS<
   get width(): number {
     return this.nativeObject.size.width;
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
 

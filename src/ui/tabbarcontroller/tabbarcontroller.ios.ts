@@ -12,11 +12,11 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
   private _iconColor: { normal: Color; selected: Color } | Color;
   private _textColor: { normal: Color; selected: Color } | Color;
   private _barTextTransform: BarTextTransform;
-  createNativeObject() {
+  __createNativeObject__() {
     return new __SF_TopTabViewController();
   }
-  init(params?: Partial<ITabBarController>) {
-    super.init(params);
+  __init__(params?: Partial<ITabBarController>) {
+    super.__init__(params);
     this.addIOSProps(this.getIOSProps());
   }
 

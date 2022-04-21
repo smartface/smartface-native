@@ -7,7 +7,7 @@ export class AsyncTaskIOS<TEvent extends string = AsyncTaskEvents, TProps extend
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
   implements IAsyncTask
 {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_NSOperationQueue();
   }
   static Events = AsyncTaskEvents;

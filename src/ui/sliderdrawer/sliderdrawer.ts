@@ -202,7 +202,7 @@ export declare class AbstractSliderDrawer<TEvent extends string = SliderDrawerEv
   extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents>
   implements ISliderDrawer<TEvent | SliderDrawerEvents>
 {
-  protected createNativeObject();
+  protected __createNativeObject__();
   constructor(params?: Partial<ISliderDrawer>);
   backgroundColor: Color;
   readonly state: SliderDrawerState;

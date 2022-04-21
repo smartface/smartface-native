@@ -17,7 +17,7 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   private _adjustFontSizeToFit: boolean = false;
   private _minimumFontSize: number = 7;
   private __clearButtonEnabled: boolean;
-  createNativeObject(): any {
+  __createNativeObject__(): any {
     return new __SF_UITextView();
   }
   constructor(params?: Partial<TProps>) {

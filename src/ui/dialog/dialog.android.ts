@@ -30,7 +30,7 @@ export default class DialogAndroid extends AbstractDialog {
   skipDefaults = false;
   private dialogWindow: any;
   private colorDrawable: any;
-  createNativeObject(params: Partial<DialogAndroid> = {}) {
+  __createNativeObject__(params: Partial<DialogAndroid> = {}) {
     this._themeStyle = params?.android?.themeStyle || DialogAndroid.Android.Style.ThemeDefault;
     this._isTransparent = params?.android?.isTransparent || false;
 

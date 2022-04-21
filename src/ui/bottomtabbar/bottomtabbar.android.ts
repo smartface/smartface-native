@@ -12,7 +12,7 @@ const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
 export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBottomTabBar> implements IBottomTabBar {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
   }
   private _itemColors = {

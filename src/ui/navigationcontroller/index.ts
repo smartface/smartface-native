@@ -16,7 +16,7 @@ declare class NavigationControllerImpl extends AbstractNavigationController {
   headerBar: HeaderBar;
   get isActive(): boolean;
   set isActive(value: boolean);
-  protected createNativeObject(params?: Partial<Record<string, any>>);
+  protected __createNativeObject__(params?: Partial<Record<string, any>>);
   constructor(params?: Partial<AbstractNavigationController>);
 }
 

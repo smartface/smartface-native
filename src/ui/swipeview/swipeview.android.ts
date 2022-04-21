@@ -32,7 +32,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     super(params);
   }
 
-  createNativeObject() {
+  __createNativeObject__() {
     this._pages = [];
     const callbacks = {
       getCount: () => {
@@ -49,7 +49,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     nativeObject.setId(viewID);
     return nativeObject;
   }
-  init(params?: Partial<TProps>) {
+  __init__(params?: Partial<TProps>) {
     this._lastIndex = -1;
     this._pageInstances = [];
     this._pages = [];
@@ -83,7 +83,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     });
     this.nativeObject.addOnPageChangeListener(listener);
     this.addAndroidProps(this.getAndroidProps());
-    super.init(params);
+    super.__init__(params);
   }
   swipeToIndex(index: number, animated: boolean): void {
     animated = !!animated; // not to pass null to native method

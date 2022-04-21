@@ -24,7 +24,7 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   private _rangeEnabled: boolean = true;
   private _maxValueChanged: boolean = false;
   private _onValueChange: (value: number[]) => void;
-  createNativeObject() {
+  __createNativeObject__() {
     return new NativeSFRangeSlider(AndroidConfig.activity);
   }
   constructor(params: Partial<IRangeSlider>) {

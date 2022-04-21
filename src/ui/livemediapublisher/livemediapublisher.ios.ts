@@ -37,7 +37,7 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   private _videoOptions = videoDefault;
   private _cameraOptions = cameraDefault;
   private _audioOptions = audioDefault;
-  createNativeObject() {
+  __createNativeObject__() {
     return new ViewIOS().nativeObject;
   }
   constructor(params?: Partial<ILiveMediaPublisher>) {

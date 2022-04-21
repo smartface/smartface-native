@@ -11,7 +11,7 @@ interface ContactIOSPostalType {
 }
 
 export class Contact extends NativeComponent {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     throw new Error('Method not implemented.');
   }
   constructor(params?: Partial<Contact>) {
@@ -63,7 +63,7 @@ export class Contact extends NativeComponent {
  *
  */
 export class ContactsBase extends NativeComponent {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     throw new Error('Method not implemented.');
   }
   public readonly Contact = Contact;

@@ -10,7 +10,7 @@ const NativeColorSpan = requireClass('android.text.style.ForegroundColorSpan');
 const NativeSpannableStringBuilder = requireClass('android.text.SpannableStringBuilder');
 
 export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuItemEvents, any, IMenuItem> implements IMenuItem {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   static Events = MenuItemEvents;

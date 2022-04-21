@@ -127,7 +127,7 @@ export abstract class AttributedStringBase<
   constructor(params?: TProps) {
     super(params);
   }
-  protected createNativeObject(): any {
+  protected __createNativeObject__(): any {
     return null;
   }
 }

@@ -1,11 +1,11 @@
 export default abstract class NativeComponent<TNative = any, TProps extends Record<string, any> = Record<string, any>> {
   protected _nativeObject: any;
   constructor(params?: TProps) {
-    const nativeObject = params?.nativeObject || this.createNativeObject(params);
+    const nativeObject = params?.nativeObject || this.__createNativeObject__(params);
     if (nativeObject) {
       this.nativeObject = nativeObject;
     }
-    this.init(params);
+    this.__init__(params);
   }
 
   get nativeObject(): any {
@@ -16,9 +16,9 @@ export default abstract class NativeComponent<TNative = any, TProps extends Reco
     this._nativeObject = value;
   }
 
-  protected init(params?: Partial<TProps>): void {
+  protected __init__(params?: Partial<TProps>): void {
     const { android = {}, ios = {}, ...rest } = params || { ios: {}, android: {} };
     rest && Object.assign(this, rest);
   }
-  protected abstract createNativeObject(params?: Partial<TProps>): any;
+  protected abstract __createNativeObject__(params?: Partial<TProps>): any;
 }

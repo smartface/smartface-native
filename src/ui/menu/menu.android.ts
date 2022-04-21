@@ -8,7 +8,7 @@ import Page from '../page';
 export default class MenuAndroid extends NativeComponent implements AbstractMenu {
   private _items: MenuItem[] = [];
   private _headerTitle = '';
-  createNativeObject() {
+  __createNativeObject__() {
     return null;
   }
   constructor(params?: Partial<AbstractMenu>) {

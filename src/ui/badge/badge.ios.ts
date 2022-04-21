@@ -4,7 +4,7 @@ import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
 export default class BadgeIOS extends NativeComponent implements IBadge {
-  protected createNativeObject(params: Partial<IBadge> = {}) {
+  protected __createNativeObject__(params: Partial<IBadge> = {}) {
     return params.nativeObject;
   }
   private _visible = false;
@@ -18,7 +18,7 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
   private _height;
   private _isBadgeFirstLoad;
   private _isRTL: boolean;
-  init(params: Partial<IBadge> = {}) {
+  __init__(params: Partial<IBadge> = {}) {
     this._text = '';
     this._visible = false;
     this._borderWidth = 0;
@@ -31,7 +31,7 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
 
     const isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
     this._isRTL = !isLTR;
-    super.init(params);
+    super.__init__(params);
   }
   constructor(params: Partial<IBadge> = {}) {
     super(params);

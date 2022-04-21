@@ -1,7 +1,7 @@
 import { AbstractSecureData } from './securedata';
 
 class SecureDataIOS extends AbstractSecureData {
-  protected createNativeObject(params?: { key: string; ios?: { service?: any } }) {
+  protected __createNativeObject__(params?: { key: string; ios?: { service?: any } }) {
     const _key = params?.key;
     const _service = params?.ios?.service;
     if (!_key || !_service) {

@@ -39,7 +39,7 @@ export class ContactAndroid extends Contact {
 
 //TODO: all functions assigning to class callbacks. They shouldn't
 class ContactsAndroid extends ContactsBase {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   private contentProviderOperation: NativeArrayList;

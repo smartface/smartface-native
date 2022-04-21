@@ -68,7 +68,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
 
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_UITextField();
   }
 

@@ -31,7 +31,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
   private _adjustViewBounds: boolean = false;
   private _tintColor: ColorAndroid;
   private _newImageLoaded: boolean = false;
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new NativeImageView(AndroidConfig.activity);
   }
   constructor(params?: Partial<IImageView>) {
@@ -127,7 +127,7 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       useHTTPCacheControl,
       useHTTPCacheControl ? false : android.useDiskCache,
       android.useMemoryCache,
-      android.cacheSignature,
+      android.cacheSignature
     );
     try {
       SFGlide.loadFromUrl(loadFromUrlParameters);

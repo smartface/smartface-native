@@ -18,7 +18,7 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   private _toggleImage: Image;
   private _thumbImage: Image;
   private _onToggleChangedCallback: (checked: boolean) => void;
-  createNativeObject() {
+  __createNativeObject__() {
     return new NativeSwitch(AndroidConfig.activity, {
       onToggleChanged: (isChecked: boolean) => {
         this.setThumbColor();

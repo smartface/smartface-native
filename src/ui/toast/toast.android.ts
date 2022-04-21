@@ -17,7 +17,7 @@ export default class ToastAndroid<TEvent extends string = ToastEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | ToastEvents, any, TProps>
   implements IToast
 {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return this.createNativeSnackBar({
       duration: DEFAULT_DURATION_IN_SECONDS,
       message: DEFAULT_MESSAGE

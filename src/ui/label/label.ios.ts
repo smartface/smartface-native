@@ -16,7 +16,7 @@ export default class LabelIOS<TEvent extends string = ViewEvents, TNative = any,
 
     this.touchEnabled = true;
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_SMFUILabel();
   }
 

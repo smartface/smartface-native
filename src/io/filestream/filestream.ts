@@ -128,7 +128,7 @@ export abstract class FileStreamBase extends NativeComponent implements IFileStr
   static create(path: any, streamMode: any, contentMode: number): FileStreamBase | undefined {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     throw new Error('Method not implemented.');
   }
 }

@@ -16,7 +16,7 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobi
     super(params);
     this.addIOSProps(this.getIOSParams());
   }
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     this.nativeObject.translucent = false;
     // Xcode 13.1 background bug fixes [NTVE-398]
     if (parseInt(SystemIOS.OSVersion) >= 15) {
@@ -33,9 +33,9 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobi
       normal: ColorIOS.GRAY,
       selected: ColorIOS.create('#00a1f1')
     };
-    super.init(params);
+    super.__init__(params);
   }
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   get height() {

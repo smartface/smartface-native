@@ -37,7 +37,7 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
     this._readyState = XHRIOS.UNSENT;
   }
 
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return new __SF_XMLHttpRequest();
   }
 

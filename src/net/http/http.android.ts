@@ -32,7 +32,7 @@ const activity = AndroidConfig.activity;
 const _instanceCollection: HttpAndroid[] = [];
 
 export default class HttpAndroid extends HttpBase {
-  protected createNativeObject() {
+  protected __createNativeObject__() {
     return null;
   }
   private _clientBuilder: any;
@@ -45,7 +45,7 @@ export default class HttpAndroid extends HttpBase {
     this.timeout = 60000;
   }
 
-  protected init(params?: Partial<Record<string, any>>): void {
+  protected __init__(params?: Partial<Record<string, any>>): void {
     this._clientBuilder = new OkHttpClientBuilder();
     this._client = this._clientBuilder.build();
 

@@ -13,12 +13,12 @@ export default class GridViewItemAndroid<TEvent extends string = FlexLayoutEvent
   implements IGridViewItem
 {
   nativeInner: any;
-  init(params?: Partial<TProps>) {
+  __init__(params?: Partial<TProps>) {
     // nativeObject is inherited from flexlayout
     this.nativeInner = params?.nativeInner || new SFRecyclerViewHolder(this.nativeObject);
     this.nativeObject.setLayoutParams(new NativeYogaLayout.LayoutParams(-1, -2));
     this.nativeObject.setLayoutParams(new StaggeredGridLayoutManagerLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    super.init(params);
+    super.__init__(params);
   }
   constructor(params?: Partial<TProps>) {
     super(params);
