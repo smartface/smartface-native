@@ -91,10 +91,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   constructor(params?: Partial<TProps>) {
     super(params);
     /* Override the onTouch and make default returning false to prevent bug in other listener.*/
-    this.onTouch = (e) => {
+    this._touchCallbacks.onTouch = (x, y) => {
       let result: boolean | undefined;
       if (this.onTouch) {
-        result = this.onTouch(e);
+        result = this.onTouch({ x, y });
       }
       return result === true;
     };
