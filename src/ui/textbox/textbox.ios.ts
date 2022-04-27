@@ -52,10 +52,10 @@ const UITextAutocapitalizationType = {
 };
 
 export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
-  private _textAligment: number = 3;
+  private _textAligment: number;
   private _hint: string;
   private _hintTextColor: Color;
-  private _clearButtonEnabled: boolean = false;
+  private _clearButtonEnabled: boolean;
   private _keyboardLayout: FlexLayout | undefined;
   private keyboardanimationdelegate: KeyboardAnimationDelegate;
   private _inputView: {
@@ -67,10 +67,6 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
   private _onClearButtonPress: () => void;
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
-
-  protected createNativeObject() {
-    return new __SF_UITextField();
-  }
 
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -142,10 +138,17 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.onHideKeyboard = (e) => {
       this.keyboardanimationdelegate.keyboardHideAnimation(e);
     };
+  }
 
+  protected createNativeObject() {
+    return new __SF_UITextField();
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._hintTextColor = Color.create(199, 199, 205);
-
+    this._textAligment = TextAlignment.MIDLEFT;
+    this._clearButtonEnabled = false;
     this.addIOSProps(this.iOSProps);
+    super.preConstruct(params);
   }
 
   private get iOSProps() {

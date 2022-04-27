@@ -67,6 +67,17 @@ const NativeActionKeyType = [
   4 // EditorInfo.IME_ACTION_SEND
 ];
 
+const TextAlignmentDic = {
+  [TextAlignment.TOPLEFT]: 48 | 3, // Gravity.TOP | Gravity.LEFT
+  [TextAlignment.TOPCENTER]: 48 | 1, //Gravity.TOP | Gravity.CENTER_HORIZONTAL
+  [TextAlignment.TOPRIGHT]: 48 | 5, //Gravity.TOP | Gravity.RIGHT
+  [TextAlignment.MIDLEFT]: 16 | 3, // Gravity.CENTER_VERTICAL | Gravity.LEFT
+  [TextAlignment.MIDCENTER]: 17, //Gravity.CENTER
+  [TextAlignment.MIDRIGHT]: 16 | 5, // Gravity.CENTER_VERTICAL | Gravity.RIGHT
+  [TextAlignment.BOTTOMLEFT]: 80 | 3, // Gravity.BOTTOM | Gravity.LEFT
+  [TextAlignment.BOTTOMCENTER]: 80 | 1, // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
+  [TextAlignment.BOTTOMRIGHT]: 80 | 5 // Gravity.BOTTOM | Gravity.RIGHT
+};
 export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox>
   extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
   implements ITextBox
@@ -110,6 +121,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._isPassword = false;
     this._keyboardType = KeyboardType.DEFAULT;
     this._actionKeyType = ActionKeyType.DEFAULT;
+    this._textAlignment = TextAlignment.MIDLEFT;
     this._hasEventsLocked = false;
     this._autoCapitalize = AutoCapitalize.NONE;
     this._didAddTextChangedListener = false;
@@ -189,6 +201,8 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   }
   set textAlignment(value: TextAlignment) {
     this._textAlignment = value;
+    this._textAlignment = value in TextAlignmentDic ? value : (this._textAlignment = TextAlignment.MIDLEFT);
+    this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
   }
 
   get textColor(): Color {
