@@ -11,6 +11,8 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import LayoutParams from '../../util/Android/layoutparams';
 import type LayoutManager from '../layoutmanager';
 import { SemanticContentAttribute } from '../view/view';
+import { EventListenerCallback } from '../../core/eventemitter';
+import { ViewEvents } from '../view/view-events';
 
 const NativeSFRecyclerView = requireClass('io.smartface.android.sfcore.ui.listview.SFRecyclerView');
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
@@ -213,15 +215,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
         if (value && self.isScrollListenerAdded === true) {
           return;
         }
-
-        const scrollListenerObject = this._onScrollListener || this.createOnScrollListernerObject();
-        if (value) {
-          this.nativeInner.setOnScrollListener(scrollListenerObject);
-          self.isScrollListenerAdded = true;
-        } else if (!self._onScroll) {
-          this.nativeInner.removeOnScrollListener(scrollListenerObject);
-          self.isScrollListenerAdded = false;
-        }
+        self.toggleScrollListener(typeof value === 'function');
       }
     };
   }
@@ -236,10 +230,10 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     layoutParams.setFullSpan(true);
   }
   private assignSizeBasedOnDirection(holderViewLayout: any, viewType: number) {
-    const spanSize = this._layoutManager?.spanSize;
+    const spanSize = this._layoutManager?.spanSize || 0;
     const isVertical = this._layoutManager?.scrollDirection === LayoutManagerAndroid.ScrollDirection.VERTICAL;
     const fullSpanLength = this._layoutManager?.onFullSpan?.(viewType) || null;
-    const itemLength = (spanSize && this._layoutManager?.onItemLength?.(spanSize)) || null;
+    const itemLength = this._layoutManager?.onItemLength?.(spanSize) || null;
     const spanLength = Number(fullSpanLength) || itemLength;
     if (isVertical) {
       holderViewLayout.height = spanLength;
@@ -424,9 +418,17 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     if (value && this.isScrollListenerAdded) {
       return;
     }
-
+    this.toggleScrollListener(!!value);
+  }
+  on(eventName: string, callback: EventListenerCallback) {
+    if (eventName === 'scroll' || eventName === ' scrollStateChanged') {
+      this.toggleScrollListener(typeof callback === 'function');
+    }
+    return super.on(eventName as ViewEvents, callback);
+  }
+  private toggleScrollListener(toggle: boolean) {
     const scrollListenerObject = this._onScrollListener || this.createOnScrollListernerObject();
-    if (value) {
+    if (toggle) {
       this.nativeInner.setOnScrollListener(scrollListenerObject);
       this.isScrollListenerAdded = true;
     } else if (!this._onScrollStateChanged) {
@@ -434,6 +436,7 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
       this.isScrollListenerAdded = false;
     }
   }
+
   static iOS = {
     DecelerationRate: DecelerationRate,
     SemanticContentAttribute: SemanticContentAttribute
