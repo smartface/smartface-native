@@ -73,7 +73,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   protected createNativeObject(): any {
     return new __SF_UIScrollView();
   }
-  protected preConstruct() {
+  protected preConstruct(params) {
     this.contentLayout = new FlexLayoutIOS();
     this.setLayoutProps();
     this.contentLayout.nativeObject.addFrameObserver();
@@ -93,6 +93,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       }
     };
     this.nativeObject.addSubview(this.contentLayout.nativeObject);
+    super.preConstruct(params);
     this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
     this.nativeObject.didScroll = (params: { translation: Point2D; contentOffset: Point2D }) => {
       this.emit('scroll', params);
