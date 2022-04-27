@@ -12,9 +12,24 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: yarn
-      - run: yarn build
-      - run: npm run deploy
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Publish
+        run: npm run deploy
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
-          
+      - name: Determine if Latest
+        if: ${{ github.ref_name == 'master' }}
+        run: echo "RELEASE_TAG=latest" >> $GITHUB_ENV
+      - name: Determine if Beta
+        if: ${{ github.ref_name == 'prerelease' }}
+        run: echo "RELEASE_TAG=beta" >> $GITHUB_ENV
+      - name: Determine if Alpha
+        if: ${{ github.ref_name == 'develop' }}
+        run: echo "RELEASE_TAG=alpha" >> $GITHUB_ENV
+      - uses: rickstaa/action-create-tag@v1
+        continue-on-error: true
+        with:
+          tag: ${{ env.RELEASE_TAG }}
