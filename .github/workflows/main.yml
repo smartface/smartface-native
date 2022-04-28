@@ -26,6 +26,6 @@ jobs:
         if: ${{ github.ref_name == 'develop' }}
         run: echo "RELEASE_TAG=alpha" >> $GITHUB_ENV
       - name: Publish
-        run: npm run deploy -- --${{ env.RELEASE_TAG }}
+        run: npm run deploy -- --tag ${{ env.RELEASE_TAG }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
