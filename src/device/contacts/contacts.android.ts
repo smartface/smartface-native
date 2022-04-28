@@ -1,8 +1,10 @@
 import Blob from '../../global/blob';
 import Page from '../../ui/page';
-import { Contact, ContactsBase } from './contacts';
+import { ContactsBase } from './contacts';
+import { IContact } from './contact/contact';
 import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
+import ContactAndroid from './contact/contact.android';
 
 const NativeContactsContract = requireClass('android.provider.ContactsContract');
 const NativeArrayList = requireClass('java.util.ArrayList');
@@ -31,11 +33,6 @@ interface ContactDataParams {
   contentResolver?: any;
   columnTag?: string;
 }
-export class ContactAndroid extends Contact {
-  constructor(params?: Partial<Contact>) {
-    super(params);
-  }
-}
 
 //TODO: all functions assigning to class callbacks. They shouldn't
 class ContactsAndroid extends ContactsBase {
@@ -43,12 +40,12 @@ class ContactsAndroid extends ContactsBase {
     return null;
   }
   private contentProviderOperation: NativeArrayList;
-  private _onSuccess?: (contacts?: Partial<Contact>[]) => void;
+  private _onSuccess?: (contacts?: Partial<IContact>[]) => void;
   private _onFailure?: (error?: any) => void;
   constructor() {
     super();
   }
-  add(params: { contact: ContactAndroid; onSuccess?: () => void; onFailure?: (error) => void }) {
+  add(params: { contact: IContact; onSuccess?: () => void; onFailure?: (error) => void }) {
     const { contact, onSuccess, onFailure } = params;
     this._onSuccess = onSuccess;
     this._onFailure = onFailure;
@@ -92,7 +89,7 @@ class ContactsAndroid extends ContactsBase {
     }
   }
   // Deprecated
-  pick(params: { page: Page; onSuccess: (contacts: Contact[]) => void; onFailure: (error) => void }) {
+  pick(params: { page: Page; onSuccess: (contacts: IContact[]) => void; onFailure: (error) => void }) {
     if (!(params && params.page instanceof Page)) {
       throw new TypeError('Page parameter required');
     }
@@ -132,7 +129,7 @@ class ContactsAndroid extends ContactsBase {
     }
   }
   // Deprecated
-  getAll(params: { onSuccess: (contacts: Partial<Contact>[]) => void; onFailure: (error: any) => void }) {
+  getAll(params: { onSuccess: (contacts: Partial<IContact>[]) => void; onFailure: (error: any) => void }) {
     let success = true;
     try {
       const contentResolver = AndroidConfig.activity.getContentResolver();
@@ -146,7 +143,7 @@ class ContactsAndroid extends ContactsBase {
         throw new Error('query returns null.');
       }
       const firstRow = cursor.moveToFirst();
-      const contacts: Partial<Contact>[] = [];
+      const contacts: Partial<IContact>[] = [];
       if (firstRow) {
         do {
           let index = cursor.getColumnIndex(projection[0]);
@@ -178,7 +175,7 @@ class ContactsAndroid extends ContactsBase {
   }
   fetchAll(params: { onSuccess: (contacts: any[]) => void; onFailure: (error) => void }) {
     const { onFailure, onSuccess } = params;
-    const contacts: Contact[] = [];
+    const contacts: IContact[] = [];
     try {
       const contentResolver = AndroidConfig.activity.getContentResolver();
       const projection = [
@@ -211,7 +208,7 @@ class ContactsAndroid extends ContactsBase {
             structuredNamesObj,
             work
           );
-          const contact = new ContactsAndroid.Contact(params);
+          const contact = new ContactAndroid(params);
           contacts.push(contact);
         } while (cursor.moveToNext());
         onSuccess?.(contacts);
@@ -258,7 +255,7 @@ class ContactsAndroid extends ContactsBase {
       work
     );
 
-    return new ContactsAndroid.Contact(params);
+    return new ContactAndroid(params);
   }
 
   private getContactDataById(params: ContactDataParams) {
@@ -395,6 +392,6 @@ class ContactsAndroid extends ContactsBase {
     }
   }
 
-  public static readonly Contact = ContactAndroid;
+  public readonly Contact = ContactAndroid;
 }
 export default new ContactsAndroid();

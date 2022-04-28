@@ -1,43 +1,6 @@
 import Page from '../../ui/page';
-import Blob from '../../global/blob';
 import NativeComponent from '../../core/native-component';
-
-interface ContactIOSPostalType {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-}
-
-export class Contact extends NativeComponent {
-  protected createNativeObject() {
-    throw new Error('Method not implemented.');
-  }
-  constructor(params?: Partial<Contact>) {
-    super(params);
-  }
-  phoneNumbers?: string[];
-  phoneNumber?: string[]; // coming from old type
-  emailAddresses?: string[];
-  givenName?: string;
-  familyName?: string;
-  addresses?: string[];
-  address?: string; // coming from old type
-  urlAddresses?: string[];
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
-  namePrefix?: string;
-  nameSuffix?: string;
-  title?: string;
-  organization?: string;
-  department?: string;
-  nickname?: string;
-  displayName?: string;
-  photo?: Blob | null;
-  postalAddresses: string[] | { value: ContactIOSPostalType }[]; // String on Android and object on iOS
-}
+import { IContact } from './contact/contact';
 
 /**
  * @class Device.Contacts
@@ -63,10 +26,10 @@ export class Contact extends NativeComponent {
  *
  */
 export class ContactsBase extends NativeComponent {
-  protected createNativeObject() {
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
     throw new Error('Method not implemented.');
   }
-  public readonly Contact = Contact;
+  public readonly Contact: ConstructorOf<IContact, Partial<IContact>>;
   /**
    * This function adds a contact to contact list with specified properties. You need check
    * {@link Application.Android.Permissions#WRITE_CONTACTS} before adding contact.
@@ -96,7 +59,7 @@ export class ContactsBase extends NativeComponent {
    *
    *
    * @param {Object} params Object describing properties
-   * @param {Contact} params.contact Object describing contact properties
+   * @param {IContact} params.contact Object describing contact properties
    * @param {Function} params.onSuccess This event is called after adding contact successfully.
    * @param {Function} [params.onFailure] This event is called after adding contact fails.
    * @param {Object} params.onFailure.params
@@ -108,7 +71,7 @@ export class ContactsBase extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  add(params: { contact: Contact; onSuccess?: () => void; onFailure?: () => void }): void {
+  add(params: { contact: IContact; onSuccess?: () => void; onFailure?: () => void }): void {
     throw new Error('Method not implemented.');
   }
   /**
@@ -132,7 +95,7 @@ export class ContactsBase extends NativeComponent {
    * @param {UI.Page} params.page
    * @param {Function} params.onSuccess This event is called after getting contact successfully.
    * @param {Object} params.onSuccess.params
-   * @param {Contact} params.onSuccess.params.contact
+   * @param {IContact} params.onSuccess.params.contact
    * @param {Function} [params.onFailure] This event is called after getting contact fails.
    * @method pick
    * @android
@@ -142,7 +105,7 @@ export class ContactsBase extends NativeComponent {
   pickContact(
     page: Page,
     handlers: {
-      onSuccess: (contact: Contact) => void;
+      onSuccess: (contact: IContact) => void;
       onFailure?: () => void;
     }
   ): void {
@@ -167,14 +130,14 @@ export class ContactsBase extends NativeComponent {
    * @param {Object} params Object describing callbacks
    * @param {Function} params.onSuccess This event is called after getting contacts successfully.
    * @param {Array} params.onSuccess.params
-   * @param {Contact} params.onSuccess.params.contact
+   * @param {IContact} params.onSuccess.params.contact
    * @param {Function} [params.onFailure] This event is called after getting contacts fails.
    * @method getAll
    * @android
    * @ios
    * @since 0.1
    */
-  fetchAll(handlers: { onSuccess: (contacts: Contact[]) => void; onFailure?: (error: string) => void }): void {
+  fetchAll(handlers: { onSuccess: (contacts: IContact[]) => void; onFailure?: (error: string) => void }): void {
     throw new Error('Method not implemented.');
   }
 
@@ -207,7 +170,7 @@ export class ContactsBase extends NativeComponent {
   getContactsByPhoneNumber(
     phoneNumber: string,
     handlers: {
-      onSuccess: (contacts: Contact[]) => void;
+      onSuccess: (contacts: IContact[]) => void;
       onFailure?: (error: string) => void;
     }
   ): void {

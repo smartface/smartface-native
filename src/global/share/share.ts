@@ -1,7 +1,6 @@
 import Page from '../../ui/page';
-import Image from '../../ui/image';
 import File from '../../io/file';
-import { Contact } from '../../device/contacts/contacts';
+import { IContact } from '../../device/contacts/contact/contact';
 import { IImage } from '../../ui/image/image';
 
 /**
@@ -82,7 +81,7 @@ export declare class ShareBase {
    * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
    * @since 4.2.1
    */
-  static shareContacts(params: { items: Contact[]; fileName?: string; page: Page; blacklist: string[] }): void;
+  static shareContacts(params: { items: IContact[]; fileName?: string; page: Page; blacklist: string[] }): void;
 
   /**
    * Shares file, image & text.

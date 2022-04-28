@@ -97,7 +97,7 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
   }
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void) {
     this.__getInstance().getLastKnownLocation({
-      onSuccess: onSuccess,
+      onSuccess: (lat: number, lng: number) => onSuccess({ latitude: lat, longitude: lng }),
       onFailure: onFailure
     });
   }

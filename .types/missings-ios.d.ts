@@ -425,6 +425,7 @@ declare class __SF_CNMutableContact {
   static getShareableFilePathWithContactArrayFileName(_itemsNativeObject: __SF_CNMutableContact[], filename: string): any;
   static new(): __SF_CNMutableContact;
   constructor();
+  mutableCopy(): __SF_CNMutableContact;
   namePrefix: string;
   givenName: string;
   familyName: string;
@@ -463,12 +464,7 @@ declare class __SF_CNLabelPhoneNumberMain extends __SF_CNLabelParent {}
 declare class __SF_CNLabelHome extends __SF_CNLabelParent {}
 declare class __SF_CNLabelURLAddressHomePage extends __SF_CNLabelParent {}
 
-declare interface ContactNative {
-  mutableCopy: () => any;
-  [key: string]: any;
-}
-
-declare class __SF_CNContactPickerDelegate<TContact = ContactNative> {
+declare class __SF_CNContactPickerDelegate<TContact = __SF_CNMutableContact> {
   contactPickerDidSelectContact: (contact: TContact) => void;
   contactPickerDidCancel(): void;
 }
@@ -476,7 +472,7 @@ declare class __SF_CNContactPickerDelegate<TContact = ContactNative> {
 declare class __SF_CNContactStore {
   static new(): __SF_CNContactStore;
   requestAccess: (value: () => void, failure: (...args: any[]) => void) => void;
-  fetchAllContacts: <TContact = ContactNative>(value: (allContactsNativeArray: TContact[]) => void, failure: (...args: any[]) => void) => void;
+  fetchAllContacts: <TContact = __SF_CNMutableContact>(value: (allContactsNativeArray: TContact[]) => void, failure: (...args: any[]) => void) => void;
   executeSave(saveRequest: __SF_CNSaveRequest): any;
 }
 
@@ -485,18 +481,18 @@ declare class __SF_CNPhoneNumber {
 }
 
 declare class __SF_CNContactViewControllerDelegate {
-  didCompleteWithContact: (contact: ContactNative) => void;
+  didCompleteWithContact: (contact: __SF_CNMutableContact) => void;
 }
 
 declare class __SF_CNContactViewController {
-  static viewControllerForNewContact(contact: ContactNative);
+  static viewControllerForNewContact(contact: __SF_CNMutableContact);
   contactStore: __SF_CNContactStore;
   allowActions: boolean;
   delegate: __SF_CNContactViewControllerDelegate;
 }
 
 declare class __SF_CNSaveRequest {
-  addContact(contact: ContactNative): void;
+  addContact(contact: __SF_CNMutableContact): void;
   static new(): __SF_CNSaveRequest;
 }
 
