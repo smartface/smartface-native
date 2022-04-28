@@ -1,5 +1,5 @@
 import { IScrollView, ScrollViewEdge } from './scrollview';
-import { ScrollViewAlign } from './scrollviewalign';
+import { ScrollViewAlign } from './scrollview';
 import { Point2D } from '../../primitive/point2d';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import TypeUtil from '../../util/type';
@@ -25,7 +25,6 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   gradientColorFrameObserver?: (e: any) => void;
   constructor(params?: IScrollView) {
     super(params);
-    this.addIOSProps(this.getIOSProps());
   }
   scrollToEdge(edge: ScrollViewEdge): void {
     if (this._align === ScrollType.HORIZONTAL) {
@@ -76,6 +75,12 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   protected preConstruct(params) {
     this.contentLayout = new FlexLayoutIOS();
     this.setLayoutProps();
+    this._frame = { x: 0, y: 0 };
+    this._align = ScrollType.VERTICAL;
+    this._autoSizeEnabled = false;
+    super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
+
     this.contentLayout.nativeObject.addFrameObserver();
     this.contentLayout.nativeObject.frameObserveHandler = (e) => {
       if (!this.autoSizeEnabled) {
@@ -84,8 +89,6 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       this.gradientColorFrameObserver?.(e);
     };
     this.nativeObject.addFrameObserver();
-    this._frame = { x: 0, y: 0 };
-    this._align = ScrollType.VERTICAL;
     this.nativeObject.frameObserveHandler = (e) => {
       if (JSON.stringify(this._frame) !== JSON.stringify(e.frame)) {
         this._frame = e.frame;
@@ -93,7 +96,6 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       }
     };
     this.nativeObject.addSubview(this.contentLayout.nativeObject);
-    super.preConstruct(params);
     this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
     this.nativeObject.didScroll = (params: { translation: Point2D; contentOffset: Point2D }) => {
       this.emit('scroll', params);
@@ -117,77 +119,77 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
       __SF_Dispatch.mainAsync(() => {
         if (this.autoSizeEnabled) {
           this.contentLayout.width = this.nativeObject.frame.width;
-          this.contentLayout.height = this.nativeObject.frame.height;
         }
 
         this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-        if (this.autoSizeEnabled) {
-          const rect = {
-            x: 0,
-            y: 0,
-            width: this.nativeObject.frame.width,
-            height: this.nativeObject.frame.height
-          };
-          const subviews = this.contentLayout.nativeObject.subviews;
-          let widthAffectingView;
-          let heightAffectingView;
-          for (let i = 0; i < subviews.length; i++) {
-            const frame = subviews[i].frame;
-            rect.x = frame.x < rect.x ? frame.x : rect.x;
-            rect.y = frame.y < rect.y ? frame.y : rect.y;
-            const width = frame.x < 0 ? frame.width : frame.x + frame.width;
-            if (width > rect.width) {
-              rect.width = width;
-              widthAffectingView = subviews[i];
-            }
-            const height = frame.y < 0 ? frame.height : frame.y + frame.height;
-            if (height > rect.height) {
-              rect.height = height;
-              heightAffectingView = subviews[i];
-            }
-          }
-
-          if (this._align === ScrollType.HORIZONTAL) {
-            //// PADDING CHECK ///////
-            if (TypeUtil.isNumeric(this.contentLayout.paddingRight)) {
-              rect.width = rect.width + this.contentLayout.paddingRight;
-            } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
-              rect.width = rect.width + this.contentLayout.padding;
-            }
-            ///////////////////////////
-
-            //// MARGIN CHECK /////////
-            if (widthAffectingView && TypeUtil.isNumeric(widthAffectingView.yoga.getYGValueForKey('marginLeft'))) {
-              rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey('marginLeft');
-            } else if (widthAffectingView && TypeUtil.isNumeric(widthAffectingView.yoga.getYGValueForKey('margin'))) {
-              rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey('margin');
-            }
-            rect.height = this.nativeObject.frame.height;
-          } else {
-            //// PADDING CHECK ///////
-            if (TypeUtil.isNumeric(this.contentLayout.paddingBottom)) {
-              rect.height = rect.height + this.contentLayout.paddingBottom;
-            } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
-              rect.height = rect.height + this.contentLayout.padding;
-            }
-            ///////////////////////////
-
-            //// MARGIN CHECK /////////
-            if (heightAffectingView && TypeUtil.isNumeric(heightAffectingView.yoga.getYGValueForKey('marginBottom'))) {
-              rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey('marginBottom');
-            } else if (heightAffectingView && TypeUtil.isNumeric(heightAffectingView.yoga.getYGValueForKey('margin'))) {
-              rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey('margin');
-            }
-            ///////////////////////////
-            rect.width = this.nativeObject.frame.width;
-          }
-
-          this.contentLayout.width = rect.width;
-          this.contentLayout.height = rect.height;
-          this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-
-          this.changeContentSize(rect);
+        if (!this.autoSizeEnabled) {
+          return;
         }
+
+        const rect = {
+          x: 0,
+          y: 0,
+          width: this.nativeObject.frame.width,
+          height: this.nativeObject.frame.height
+        };
+        const subviews = this.contentLayout.nativeObject.subviews;
+        let widthAffectingView;
+        let heightAffectingView;
+        for (let i = 0; i < subviews.length; i++) {
+          const frame = subviews[i].frame;
+          rect.x = frame.x < rect.x ? frame.x : rect.x;
+          rect.y = frame.y < rect.y ? frame.y : rect.y;
+          const width = frame.x < 0 ? frame.width : frame.x + frame.width;
+          if (width > rect.width) {
+            rect.width = width;
+            widthAffectingView = subviews[i];
+          }
+          const height = frame.y < 0 ? frame.height : frame.y + frame.height;
+          if (height > rect.height) {
+            rect.height = height;
+            heightAffectingView = subviews[i];
+          }
+        }
+
+        if (this._align === ScrollType.HORIZONTAL) {
+          //// PADDING CHECK ///////
+          if (TypeUtil.isNumeric(this.contentLayout.paddingRight)) {
+            rect.width = rect.width + this.contentLayout.paddingRight;
+          } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
+            rect.width = rect.width + this.contentLayout.padding;
+          }
+          ///////////////////////////
+
+          //// MARGIN CHECK /////////
+          if (widthAffectingView && TypeUtil.isNumeric(widthAffectingView.yoga.getYGValueForKey('marginLeft'))) {
+            rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey('marginLeft');
+          } else if (widthAffectingView && TypeUtil.isNumeric(widthAffectingView.yoga.getYGValueForKey('margin'))) {
+            rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey('margin');
+          }
+          rect.height = this.nativeObject.frame.height;
+        } else {
+          //// PADDING CHECK ///////
+          if (TypeUtil.isNumeric(this.contentLayout.paddingBottom)) {
+            rect.height = rect.height + this.contentLayout.paddingBottom;
+          } else if (TypeUtil.isNumeric(this.contentLayout.padding)) {
+            rect.height = rect.height + this.contentLayout.padding;
+          }
+          ///////////////////////////
+
+          //// MARGIN CHECK /////////
+          if (heightAffectingView && TypeUtil.isNumeric(heightAffectingView.yoga.getYGValueForKey('marginBottom'))) {
+            rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey('marginBottom');
+          } else if (heightAffectingView && TypeUtil.isNumeric(heightAffectingView.yoga.getYGValueForKey('margin'))) {
+            rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey('margin');
+          }
+          ///////////////////////////
+          rect.width = this.nativeObject.frame.width;
+        }
+
+        this.contentLayout.width = rect.width;
+        this.contentLayout.height = rect.height;
+        this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+        this.changeContentSize(rect);
       });
     };
     const layoutParams = {
@@ -342,7 +344,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     } else {
       this._align = ScrollType.VERTICAL;
     }
-    if (!this.autoSizeEnabled) {
+    if (!this._autoSizeEnabled) {
       this.changeContentSize(this.contentLayout.nativeObject.frame);
     }
   }

@@ -4,7 +4,7 @@ import type Color from '../color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { ScrollViewAlign } from '../scrollview/scrollviewalign';
+import { ScrollViewAlign } from '../scrollview/scrollview';
 import { getRippleMask } from '../../helper/getrippleeffect';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';

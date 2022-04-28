@@ -1,5 +1,5 @@
 import { IScrollView, ScrollViewEdge } from './scrollview';
-import { ScrollViewAlign } from './scrollviewalign';
+import { ScrollViewAlign } from './scrollview';
 import { Point2D } from '../../primitive/point2d';
 import ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import { ScrollViewEvents } from './scrollview-events';
@@ -22,13 +22,46 @@ const NativeViewFocus = {
   [ScrollViewEdge.RIGHT]: NativeView.FOCUS_RIGHT
 };
 export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents> extends ViewGroupAndroid<TEvent | ScrollViewEvents, any, IScrollView> implements IScrollView {
-  private _align: ScrollViewAlign = ScrollViewAlign.VERTICAL;
+  private _align: ScrollViewAlign;
   private prevY: number;
   private prevOldY: number;
   private prevX: number;
   private prevOldX: number;
   private _layout: FlexLayoutAndroid;
   private _autoSizeEnabled = false;
+  onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
+  constructor(params?: IScrollView) {
+    super(params);
+    this.addAndroidProps(this.getAndroidProps());
+    this._layout = new FlexLayoutAndroid();
+    // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
+    // So, the user have to set width and height for the layout of scrollview.
+    // If the issue is fixed, you can try below lines.
+
+    // const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
+    // const layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
+    // this.nativeObject.addView(thid._layout.nativeObject, layoutParams);
+    this.nativeObject.addView(this._layout.nativeObject);
+    this._layout.parent = this;
+  }
+  private getAndroidProps(): IScrollView['android'] {
+    const self = this;
+    return {
+      get overScrollMode() {
+        return self._overScrollMode;
+      },
+      set overScrollMode(mode: OverScrollMode) {
+        self.nativeObject.setOverScrollMode(mode);
+        self._overScrollMode = mode;
+      }
+    };
+  }
+  protected preConstruct(params) {
+    this._align = params?.align || ScrollViewAlign.VERTICAL;
+    this._autoSizeEnabled = false;
+    super.preConstruct(params);
+  }
+
   protected createNativeObject(): any {
     const isHorizontal = this._align === ScrollViewAlign.HORIZONTAL;
     const callback = {
@@ -66,6 +99,10 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
             translation: translation,
             contentOffset: this.contentOffset
           });
+          this.emit('scroll', {
+            translation: translation,
+            contentOffset: this.contentOffset
+          });
         }
       }
     };
@@ -82,33 +119,6 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     } else {
       _animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate);
     }
-  }
-  onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
-  constructor(params?: IScrollView) {
-    super(params);
-    this.addAndroidProps(this.getAndroidProps());
-    this._layout = new FlexLayoutAndroid();
-    // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
-    // So, the user have to set width and height for the layout of scrollview.
-    // If the issue is fixed, you can try below lines.
-
-    // const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
-    // const layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
-    // this.nativeObject.addView(thid._layout.nativeObject, layoutParams);
-    this.nativeObject.addView(this._layout.nativeObject);
-    this._layout.parent = this;
-  }
-  private getAndroidProps(): IScrollView['android'] {
-    const self = this;
-    return {
-      get overScrollMode() {
-        return self._overScrollMode;
-      },
-      set overScrollMode(mode: OverScrollMode) {
-        self.nativeObject.setOverScrollMode(mode);
-        self._overScrollMode = mode;
-      }
-    };
   }
   private calculateScrollViewSize() {
     const childViews = this._layout.childViews;
@@ -152,7 +162,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     // ToDo: This method will overwrite flexlayout's applyLayout. It is not sure that we should overwrite it.
     if (this.autoSizeEnabled) {
       const nativeGlobalLayoutListener = NativeViewTreeObserver.OnGlobalLayoutListener.implement({
-        onGlobalLayout: function () {
+        onGlobalLayout: () => {
           this.calculateScrollViewSize();
           this.layout.nativeObject.requestLayout();
           this.layout.nativeObject.invalidate();
@@ -169,6 +179,9 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
 
   get align() {
     return this._align;
+  }
+  set align(value) {
+    // Should be readonly, do nothing
   }
   get layout() {
     return this._layout as unknown as FlexLayout;
