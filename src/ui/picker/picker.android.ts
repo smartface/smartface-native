@@ -42,6 +42,7 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
   protected preConstruct(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
     this._items = [];
     this._titleColor = Color.BLACK;
+    this._backgroundColor = Color.WHITE; // Might need to be removed later when system theme support arrives.
     this.buttonCustomize = false;
     super.preConstruct(params);
   }
@@ -163,10 +164,13 @@ export default class PickerAndroid<TEvent extends PickerEvents> extends ViewAndr
 
     builder.setCustomTitle(this.__createTitleView());
 
+    if (this._backgroundColor) {
+      this.dialogBackgroundColor = this._backgroundColor;
+    }
+
     const alertDialog = builder.show(); //return native alertdailog
     this.dialogInstance = alertDialog;
     // re-set background color
-    this.dialogBackgroundColor = this._backgroundColor;
 
     if (this.buttonCustomize) {
       const negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
