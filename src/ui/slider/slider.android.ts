@@ -1,12 +1,11 @@
 /*globals requireClass*/
-import Color from '../color';
+import ColorAndroid from '../color/color.android';
 import { SliderEvents } from './slider-events';
 import ViewAndroid from '../view/view.android';
 import { ISlider } from './slider';
 import AndroidConfig from '../../util/Android/androidconfig';
 import ImageAndroid from '../image/image.android';
 
-const SDK_VERSION = requireClass('android.os.Build').VERSION.SDK_INT;
 const PorterDuffMode = requireClass('android.graphics.PorterDuff').Mode.SRC_IN;
 const SeekBar = requireClass('android.widget.SeekBar');
 const NativeR = requireClass('android.R');
@@ -17,10 +16,10 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   private _defaultThumb: any;
   private _minValue: number;
   private _maxValue: number;
-  private _minTrackColor: Color;
-  private _maxTrackColor: Color;
+  private _minTrackColor: ColorAndroid;
+  private _maxTrackColor: ColorAndroid;
   private _thumbImage: ImageAndroid;
-  private _thumbColor: Color;
+  private _thumbColor: ColorAndroid;
   private _onValueChange: (value: number) => void;
   createNativeObject() {
     return new SeekBar(AndroidConfig.activity);
@@ -33,9 +32,9 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
 
     if (!this.skipDefaults) {
       // SET DEFAULTS
-      this._thumbColor = Color.GRAY;
-      this._minTrackColor = Color.DARKGRAY;
-      this._maxTrackColor = Color.GREEN;
+      this._thumbColor = ColorAndroid.GRAY;
+      this._minTrackColor = ColorAndroid.create('#00A1F1');
+      this._maxTrackColor = ColorAndroid.create(100, 183, 183, 183);
       this.value = 0;
       this._minValue = 0;
       this._maxValue = 100;
@@ -44,27 +43,27 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
           onProgressChanged: (seekBar, actualValue, fromUser) => {
             const param = actualValue + this._minValue;
             this._onValueChange?.(param);
-            this.emit(SliderEvents.ValueChange, param);
+            this.emit('valueChange', param);
           },
-          onStartTrackingTouch: function (seekBar) {},
-          onStopTrackingTouch: function (seekBar) {}
+          onStartTrackingTouch: (seekBar) => {},
+          onStopTrackingTouch: (seekBar) => {}
         })
       );
 
       // Added for AND-2869 bug.
       this.nativeObject.setOnClickListener(
         NativeView.OnClickListener.implement({
-          onClick: function (view) {}
+          onClick: (view) => {}
         })
       );
     }
   }
   skipDefaults: boolean;
 
-  get thumbColor(): Color {
+  get thumbColor(): ColorAndroid {
     return this._thumbColor;
   }
-  set thumbColor(value: Color) {
+  set thumbColor(value: ColorAndroid) {
     if (value) {
       this._thumbColor = value;
       this._defaultThumb.setColorFilter(value.nativeObject, PorterDuffMode);
@@ -85,20 +84,20 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
     }
   }
 
-  get minTrackColor(): Color {
+  get minTrackColor(): ColorAndroid {
     return this._minTrackColor;
   }
-  set minTrackColor(value: Color) {
+  set minTrackColor(value: ColorAndroid) {
     if (value) {
       this._minTrackColor = value;
       this._layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(this._minTrackColor.nativeObject, PorterDuffMode);
     }
   }
 
-  get maxTrackColor(): Color {
+  get maxTrackColor(): ColorAndroid {
     return this._maxTrackColor;
   }
-  set maxTrackColor(value: Color) {
+  set maxTrackColor(value: ColorAndroid) {
     if (value) {
       this._maxTrackColor = value;
       this._layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(this._maxTrackColor.nativeObject, PorterDuffMode);

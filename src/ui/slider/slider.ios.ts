@@ -1,5 +1,5 @@
 import { ISlider } from './slider';
-import Color from '../color';
+import ColorIOS from '../color/color.ios';
 import ViewIOS from '../view/view.ios';
 import { SliderEvents } from './slider-events';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
@@ -17,25 +17,29 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   private _thumbImage: Image;
   private _value: number = 0;
   private _onValueChange: () => void;
-  createNativeObject() {
-    return new __SF_UISlider();
-  }
   constructor(params?: Partial<ISlider>) {
     super(params);
     this.nativeObject.addJSTarget(this.handleValueChange.bind(this), UIControlEvents.valueChanged);
-    this.nativeObject.minimumTrackTintColor = Color.DARKGRAY.nativeObject;
-    this.nativeObject.maximumTrackTintColor = Color.GREEN.nativeObject;
-    this.nativeObject.minimumValue = 0;
-    this.nativeObject.maximumValue = 100;
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.minTrackColor = ColorIOS.create('#00A1F1');
+    this.maxTrackColor = ColorIOS.create(100, 183, 183, 183);
+    this.minValue = 0;
+    this.maxValue = 100;
+    super.preConstruct(params);
+  }
+
+  createNativeObject() {
+    return new __SF_UISlider();
   }
   skipDefaults: boolean;
 
-  get thumbColor(): Color {
-    return new Color({
+  get thumbColor(): ColorIOS {
+    return new ColorIOS({
       color: this.nativeObject.thumbTintColor
     });
   }
-  set thumbColor(value: Color) {
+  set thumbColor(value: ColorIOS) {
     this.nativeObject.thumbTintColor = value.nativeObject;
   }
 
@@ -48,21 +52,21 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
     this.nativeObject.setThumbImage(value.nativeObject, SliderState.pressed);
   }
 
-  get minTrackColor(): Color {
-    return new Color({
+  get minTrackColor(): ColorIOS {
+    return new ColorIOS({
       color: this.nativeObject.minimumTrackTintColor
     });
   }
-  set minTrackColor(value: Color) {
+  set minTrackColor(value: ColorIOS) {
     this.nativeObject.minimumTrackTintColor = value.nativeObject;
   }
 
-  get maxTrackColor(): Color {
-    return new Color({
+  get maxTrackColor(): ColorIOS {
+    return new ColorIOS({
       color: this.nativeObject.maximumTrackTintColor
     });
   }
-  set maxTrackColor(value: Color) {
+  set maxTrackColor(value: ColorIOS) {
     this.nativeObject.maximumTrackTintColor = value.nativeObject;
   }
 
