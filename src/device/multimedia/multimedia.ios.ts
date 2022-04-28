@@ -299,20 +299,17 @@ class MultimediaIOS implements MultimediaBase {
       throw new TypeError('Parameter type mismatch. params.page must be Page instance');
     }
   }
-  convertToMp4(e) {
+  convertToMp4(e: Parameters<typeof MultimediaBase['convertToMp4']>['0']) {
     const file = e.videoFile;
     const outputFileName = e.outputFileName;
-    const onCompleted = e.onCompleted;
-    const onFailure = e.onFailure;
-
-    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.path, outputFileName, (e) => {
-      if (e.filePath && typeof onCompleted === 'function') {
+    __SF_UIImagePickerController.convertToMP4WithPresetQualityWithShouldOptimizeForNetworkUseVideoFilePathFileNameCallback(0, false, file.getAbsolutePath(), outputFileName, (result) => {
+      if (result.filePath) {
         const video = new File({
-          path: e.filePath
+          path: result.filePath
         });
-        onCompleted({ video });
-      } else if (typeof onFailure === 'function') {
-        onFailure();
+        e.onCompleted?.({ video });
+      } else {
+        e.onFailure?.();
       }
     });
   }
