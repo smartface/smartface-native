@@ -20,6 +20,8 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   constructor(params?: Partial<ISlider>) {
     super(params);
     this.nativeObject.addJSTarget(this.handleValueChange.bind(this), UIControlEvents.valueChanged);
+    // this.nativeObject.addJSTarget(this.handleEndTracking.bind(this), UIControlEvents.touchDragExit);
+    // this.nativeObject.addJSTarget(this.handleStartTracking.bind(this), UIControlEvents.touchDragEnter);
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.minTrackColor = ColorIOS.create('#00A1F1');
@@ -106,12 +108,20 @@ export default class SliderIOS<TEvent extends string = SliderEvents> extends Vie
   }
 
   handleValueChange() {
-    let intValue = Math.round(this.value);
+    const intValue = Math.round(this.value);
     this.nativeObject.setValueAnimated(intValue, false);
     if (this._value !== intValue) {
       this._value = intValue;
       this._onValueChange?.();
-      this.emit(SliderEvents.ValueChange, this._value);
+      this.emit('valueChange', this._value);
     }
+  }
+
+  handleStartTracking() {
+    this.emit('trackStart');
+  }
+
+  handleEndTracking() {
+    this.emit('trackEnd');
   }
 }

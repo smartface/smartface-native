@@ -45,8 +45,12 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
             this._onValueChange?.(param);
             this.emit('valueChange', param);
           },
-          onStartTrackingTouch: (seekBar) => {},
-          onStopTrackingTouch: (seekBar) => {}
+          onStartTrackingTouch: (seekBar) => {
+            this.emit('trackStart');
+          },
+          onStopTrackingTouch: (seekBar) => {
+            this.emit('trackEnd');
+          }
         })
       );
 

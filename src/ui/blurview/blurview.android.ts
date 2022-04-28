@@ -11,18 +11,26 @@ const NativeBlurView = requireClass('eightbitlab.com.blurview.BlurView');
 export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> extends ViewAndroid<TEvent | BlurViewEvents, any, IBlurView> implements IBlurView {
   private _overlayColor: Color;
   private _rootView: View;
-  private _blurRadius: number = 16;
+  private _blurRadius: number;
   private _blurRender: any;
+  constructor(params?: Partial<IBlurView>) {
+    super(params);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+
   createNativeObject() {
     return new NativeBlurView(AndroidConfig.activity);
   }
-  constructor(params?: Partial<IBlurView>) {
-    super(params);
 
+  protected preConstruct(params?: Partial<IBlurView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved'>>): void {
     this._blurRender = new RenderScriptBlur(AndroidConfig.activity);
+    this._blurRadius = 16;
+    super.preConstruct(params);
+  }
 
+  protected getAndroidProps() {
     const self = this;
-    this.addAndroidProps({
+    return {
       get overlayColor(): Color {
         return self._overlayColor;
       },
@@ -50,9 +58,8 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
         self._blurRadius = value;
         self.refreshBlurView();
       }
-    });
+    };
   }
-
   refreshBlurView() {
     if (!this._rootView) {
       return;
