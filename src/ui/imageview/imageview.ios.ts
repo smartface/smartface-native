@@ -1,4 +1,4 @@
-import { IImageView, ImageFillType, ImageViewFillTypeIOS } from './imageview';
+import { IImageView, ImageFillType } from './imageview';
 import File from '../../io/file';
 import Color from '../color';
 import ImageIOS from '../image/image.ios';
@@ -6,6 +6,7 @@ import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 import { IImage } from '../image/image';
+import ColorIOS from '../color/color.ios';
 
 enum SDWebImageOptions {
   /**
@@ -138,6 +139,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }
 
   set image(value: ImageIOS | string | null) {
+    this._imageTemplate = undefined;
     if (!value) {
       this.nativeObject.loadImage(undefined);
       return;
@@ -147,7 +149,6 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
       this.nativeObject.loadImage(undefined);
       return;
     }
-    this._imageTemplate = undefined;
 
     // TODO Recheck after build
     image.nativeObject = this._isSetTintColor ? image.nativeObject.imageWithRenderingMode(2) : image.nativeObject;
@@ -168,12 +169,13 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     }
     this._isSetTintColor = true;
     this.nativeObject.tintColor = value.nativeObject;
+    this.image = this.image; //Re-trigger setter
   }
 
-  get imageFillType(): ImageViewFillTypeIOS | ImageFillType {
+  get imageFillType(): ImageFillType {
     return this.nativeObject.contentMode;
   }
-  set imageFillType(value: ImageViewFillTypeIOS | ImageFillType) {
+  set imageFillType(value: ImageFillType) {
     this.nativeObject.contentMode = value;
   }
 
@@ -191,86 +193,90 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }): void {
     if (typeof params.url === 'string') {
       // Deprecated: Use loadFromUrl(object);
-      this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, params.headers, undefined, () => {
-        if (!params.onFailure) {
-          // TODO Recheck after build
-          if (params.cache === ImageCacheType.NONE && params.fade !== false) {
-            const alpha = this.nativeObject.alpha;
-            this.nativeObject.alpha = 0;
-            __SF_UIView.animation(
-              0.3,
-              0,
-              () => {
-                this.nativeObject.alpha = alpha;
-              },
-              function () {}
-            );
+      this.nativeObject.loadFromURL(
+        __SF_NSURL.URLWithString(params.url),
+        params.placeholder ? params.placeholder.nativeObject : undefined,
+        params.headers,
+        undefined,
+        (innerFade, image, error, cache, url) => {
+          if (!error) {
+            if (params.cache === ImageCacheType.NONE && params.fade !== false) {
+              const alpha = this.nativeObject.alpha;
+              this.nativeObject.alpha = 0;
+              __SF_UIView.animation(
+                0.3,
+                0,
+                () => {
+                  this.nativeObject.alpha = alpha;
+                },
+                () => {}
+              );
+            }
           }
         }
-      });
+      );
     } else if (typeof params.url === 'object') {
       // Deprecated: Use useHTTPCacheControl option.
       const options = params.ios && params.ios.isRefreshCached ? SDWebImageOptions.SDWebImageRefreshCached : params.useHTTPCacheControl ? SDWebImageOptions.SDWebImageRefreshCached : undefined;
 
       const headers = params.headers;
-      this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, headers, options ? options : undefined, () => {
-        if (!params.onFailure) {
-          // TODO Recheck after build
-          if (params.cache === ImageCacheType.NONE && params.fade !== false) {
-            const alpha = this.nativeObject.alpha;
-            this.nativeObject.alpha = 0;
-            __SF_UIView.animation(
-              0.3,
-              0,
-              () => {
-                this.nativeObject.alpha = alpha;
-              },
-              function () {}
-            );
-          }
-          if (typeof params.onSuccess === 'function') {
-            __SF_Dispatch.mainAsync(function (innerIndex) {
+      this.nativeObject.loadFromURL(
+        __SF_NSURL.URLWithString(params.url),
+        params.placeholder ? params.placeholder.nativeObject : undefined,
+        headers,
+        options ? options : undefined,
+        (innerFade, image, error, cache, url) => {
+          if (!error) {
+            // TODO Recheck after build
+            if (cache === ImageCacheType.NONE && innerFade !== false) {
+              const alpha = this.nativeObject.alpha;
+              this.nativeObject.alpha = 0;
+              __SF_UIView.animation(
+                0.3,
+                0,
+                () => {
+                  this.nativeObject.alpha = alpha;
+                },
+                () => {}
+              );
+            }
+            __SF_Dispatch.mainAsync((innerIndex) => {
               params.onSuccess?.();
             });
-          }
-        } else {
-          if (typeof params.onFailure === 'function') {
-            __SF_Dispatch.mainAsync(function (innerIndex) {
+          } else {
+            __SF_Dispatch.mainAsync((innerIndex) => {
               params.onFailure?.();
             });
           }
         }
-      }); //onFailure COR-1817
+      ); //onFailure COR-1817
     }
   }
 
   loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {
-    // console.info('[imageios:loadfromfile] before try');
-    try {
-      if (params.file) {
-        const file = params.file;
-        const filePath = file.nativeObject.getActualPath();
-        const image = ImageIOS.createFromFile(filePath);
-        const fade = typeof params.fade === 'boolean' ? params.fade : true;
+    if (params.file) {
+      const file = params.file;
+      const filePath = file.nativeObject.getActualPath();
+      const image = ImageIOS.createFromFile(filePath);
+      const fade = typeof params.fade === 'boolean' ? params.fade : true;
 
-        if (fade && image) {
-          this.nativeObject.loadImage(image.nativeObject);
-          const alpha = this.nativeObject.alpha;
-          this.nativeObject.alpha = 0;
-          __SF_UIView.animation(
-            0.3,
-            0,
-            () => {
-              this.nativeObject.alpha = alpha;
-            },
-            function () {}
-          );
-        } else {
-          image && this.nativeObject.loadImage(image.nativeObject);
+      if (fade && image) {
+        this.image = image;
+        const alpha = this.nativeObject.alpha;
+        this.nativeObject.alpha = 0;
+        __SF_UIView.animation(
+          0.3,
+          0,
+          () => {
+            this.nativeObject.alpha = alpha;
+          },
+          () => {}
+        );
+      } else {
+        if (image) {
+          this.image = image;
         }
       }
-    } catch (e) {
-      // console.error(e.stack);
     }
   }
 
@@ -291,25 +297,20 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     params.useHTTPCacheControl && (options = options | SDWebImageOptions.SDWebImageRefreshCached);
 
     const headers = params.headers || {};
-    this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder ? params.placeholder.nativeObject : undefined, headers, options ? options : undefined, () => {
-      if (!params.onFailure) {
-        if (typeof params.onSuccess === 'function') {
-          __SF_Dispatch.mainAsync((innerIndex) => {
-            // TODO Recheck after build
-            params.onSuccess?.(ImageIOS.createFromImage(params.image), params.cache);
-          });
-        }
+    this.nativeObject.loadFromURL(__SF_NSURL.URLWithString(params.url), params.placeholder?.nativeObject || undefined, headers, options || undefined, (image, error, cache, url) => {
+      if (!error) {
+        __SF_Dispatch.mainAsync((innerIndex) => {
+          // TODO Recheck after build
+          params.onSuccess?.(ImageIOS.createFromImage(image), cache);
+        });
       } else {
         if (typeof params.onFailure === 'function') {
-          __SF_Dispatch.mainAsync(function (innerIndex) {
+          __SF_Dispatch.mainAsync((innerIndex) => {
             params.onFailure?.();
           });
         }
       }
     }); //onFailure COR-1817
   }
-  static FillType = {
-    ios: ImageViewFillTypeIOS,
-    ...ImageFillType
-  };
+  static FillType = ImageFillType;
 }

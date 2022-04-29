@@ -108,7 +108,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
    * @ios
    * @since 3.2.0
    */
-  static createFromBlob(blob: Blob): AbstractGifImage | null {
+  static createFromBlob(blob: Blob): IGifImage | null {
     throw new Error('Method not implemented.');
   }
 
@@ -127,7 +127,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
    * @static
    * @since 3.2.0
    */
-  static createFromFile(path: string, width?: number, height?: number): AbstractGifImage | null {
+  static createFromFile(path: string, width?: number, height?: number): IGifImage | null {
     throw new Error('Method not implemented.');
   }
 
@@ -143,7 +143,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
   static get ios(): iOSProps | undefined {
     throw new Error('Method not implemented.');
   }
-  protected abstract createNativeObject(params?: Partial<AbstractGifImage>): any;
+  protected abstract createNativeObject(params?: Partial<IGifImage>): any;
 }
 
 /**
@@ -186,7 +186,7 @@ export class GifImageImpl extends AbstractGifImage {
   toBlob(): IBlob | null {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject(params?: Partial<AbstractGifImage>) {
+  protected createNativeObject(params?: Partial<IGifImage>) {
     throw new Error('Method not implemented.');
   }
 }

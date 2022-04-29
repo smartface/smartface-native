@@ -7,7 +7,6 @@ import { MobileOSProps } from '../../core/native-mobile-component';
 import { IImage } from '../image/image';
 
 export enum ImageViewFillTypeIOS {
-  REDRAW = 3,
   /**
    * @property {Number} MIDCENTER
    * @ios
@@ -118,7 +117,7 @@ export enum ImageViewFillTypeIOS {
  *     myPage.layout.addChild(myImageView);
  *
  */
-export enum ImageFillType {
+export enum ImageFillTypeGeneric {
   /**
    * @property {Number} NORMAL
    * @android
@@ -168,6 +167,13 @@ export enum ImageFillType {
    */
   ASPECTFILL = 3
 }
+
+export const ImageFillType = {
+  ...ImageViewFillTypeIOS,
+  ...ImageFillTypeGeneric
+};
+
+export type ImageFillType = ImageViewFillTypeIOS | ImageFillTypeGeneric;
 
 export interface IImageView<
   TEvent extends string = ImageViewEvents,

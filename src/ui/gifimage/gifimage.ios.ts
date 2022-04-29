@@ -8,17 +8,18 @@ import ImageiOS from '../image/image.ios';
 import IBlob from '../../global/blob/blob';
 
 export default class GifImageIOS extends AbstractGifImage {
+  constructor(params: Partial<IGifImage> = {}) {
+    super(params);
+    this.addIOSProps(this.getIOSProps());
+  }
+
   toBlob(): IBlob | null {
-    throw new Error('Method not implemented.');
+    return null;
   }
   protected createNativeObject(params: Partial<IGifImage>) {
     return params.nativeObject;
   }
-  constructor(params: Partial<IGifImage> = {}) {
-    super(params);
-  }
-
-  static createFromFile(path: string): GifImageIOS {
+  static createFromFile(path: string): IGifImage {
     const file: File = typeof path === 'string' ? new File({ path }) : path;
     const fileStream = file.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
     const blob = fileStream?.readToEnd<Blob>();
@@ -27,7 +28,7 @@ export default class GifImageIOS extends AbstractGifImage {
     return new GifImageIOS({ nativeObject });
   }
 
-  static createFromBlob(blob: Blob): GifImageIOS {
+  static createFromBlob(blob: Blob): IGifImage {
     const nativeObject = __SF_FLAnimatedImage.animatedImageWithGIFData(blob.nativeObject);
     return new GifImageIOS({ nativeObject: nativeObject });
   }
@@ -50,7 +51,7 @@ export default class GifImageIOS extends AbstractGifImage {
     return this.nativeObject.size;
   }
 
-  get ios(): iOSProps {
+  getIOSProps() {
     const self = this;
     return {
       get frameCacheSizeCurrent(): number {

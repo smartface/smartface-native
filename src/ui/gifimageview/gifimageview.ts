@@ -1,8 +1,9 @@
 import { IImageView } from '../imageview/imageview';
-import GifImage from '../gifimage';
+
 import Color from '../color';
 import { GifImageViewEvents } from './gifimageview-events';
 import { IImage } from '../image/image';
+import { IGifImage } from '../gifimage/gifimage';
 
 export interface IGifImageView<TEvent extends string = GifImageViewEvents> extends IImageView<TEvent | GifImageViewEvents> {
   /**
@@ -11,9 +12,9 @@ export interface IGifImageView<TEvent extends string = GifImageViewEvents> exten
    * @property {UI.GifImage}  [gifImage = undefined]
    * @android
    * @ios
-   * @since 3.2.0
+   * @since 3.2.
    */
-  gifImage: undefined | GifImage;
+  gifImage: undefined | IGifImage;
   /**
    * Gets the currentFrame.
    *
@@ -81,21 +82,4 @@ export interface IGifImageView<TEvent extends string = GifImageViewEvents> exten
    * @since 3.2.0
    */
   tintColor: Color;
-  /**
-   * Load image from the server and place the returned image into the ImageView.
-   * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded.
-   *
-   * @method loadFromUrl
-   * @param {Object} object
-   * @param {String} object.url
-   * @param {UI.Image} object.placeholder
-   * @param {Boolean} object.fade = true
-   * @param {Function} object.onSuccess
-   * @param {Function} object.onError
-   * @android
-   * @removed
-   * @ios
-   * @since 3.2.0
-   */
-  loadFromUrl(params: { url: string; placeholder?: IImage; fade?: boolean; onSuccess?: () => void; onError?: () => void }): void;
 }
