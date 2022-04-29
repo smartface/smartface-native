@@ -119,7 +119,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._rotationX = 0;
     this._rotationY = 0;
     this._masksToBounds = true;
-    this._maskedBorders = [];
+    this._maskedBorders = [ViewAndroid.Border.TOP_LEFT, ViewAndroid.Border.TOP_RIGHT, ViewAndroid.Border.BOTTOM_RIGHT, ViewAndroid.Border.BOTTOM_LEFT];
     super.preConstruct(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
@@ -149,7 +149,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         self.useForeground = value;
       },
       updateRippleEffectIfNeeded: () => {
-        this._rippleEnabled && this._rippleColor && (this.android.rippleColor = this._rippleColor);
+        if (self._rippleEnabled && self._rippleColor) {
+          self.rippleColor = self._rippleColor;
+        }
       },
       get rippleColor() {
         return self.rippleColor;
@@ -259,20 +261,18 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return borderRadiuses;
   }
   private _resetBackground() {
-    if (this.backgroundColor instanceof ColorAndroid) {
-      const backgroundColor = this.backgroundColor;
-      const bitwiseBorders = this.maskedBorders?.reduce((acc, cValue) => acc | cValue, 0);
-      //Provide backward support in case of diff behavior of border radius.
-      const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
-      const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
-      const borderColorNative = this.borderColor?.nativeObject || ColorAndroid.BLACK.nativeObject;
+    const bitwiseBorders = this.maskedBorders?.reduce((acc, cValue) => acc | cValue, 0);
+    //Provide backward support in case of diff behavior of border radius.
+    const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
+    const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
+    const borderColorNative = this.borderColor?.nativeObject || ColorAndroid.BLACK.nativeObject;
 
-      if (backgroundColor.isGradient) {
-        const colors = array(backgroundColor.colors, 'int');
-        SFViewUtil.setBackground(this.nativeObject, colors, backgroundColor.direction, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
-      } else {
-        SFViewUtil.setBackground(this.nativeObject, backgroundColor.nativeObject, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
-      }
+    const backgroundColor = this.backgroundColor;
+    if (backgroundColor instanceof ColorAndroid && backgroundColor.isGradient) {
+      const colors = array(backgroundColor.colors, 'int');
+      SFViewUtil.setBackground(this.nativeObject, colors, backgroundColor.direction, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
+    } else if (backgroundColor instanceof ColorAndroid) {
+      SFViewUtil.setBackground(this.nativeObject, backgroundColor.nativeObject, borderColorNative, borderWidth, array(borderRadiuses, 'float'));
     }
   }
 
@@ -886,19 +886,12 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       const colorStateList = new NativeColorStateList(states, colors);
 
       const mask = getRippleMask(DpToPixel(this.borderRadius));
-
-      if (this._useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
-        /*
-		Only supported for api level 23 and above
-		*/
-        const currentBackground = this.nativeObject.getForeground();
-        const rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
-        this.nativeObject.setForeground(rippleDrawableForegorund);
-      } else {
-        const currentBackground = this.nativeObject.getBackground();
-        const rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
-        this.nativeObject.setBackground(rippleDrawableBackgorund);
-      }
+      /*
+      Only supported for api level 23 and above
+      */
+      const currentBackground = this.nativeObject.getForeground();
+      const rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+      this.nativeObject.setForeground(rippleDrawableForegorund);
     }
   }
   // End of Ripple Effect
