@@ -10,19 +10,25 @@ import { IGifImage } from '../gifimage/gifimage';
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: IGifImage;
   private _loopCompletionCallback: (loopCountRemain: number) => void;
-  createNativeObject(): any {
-    return new __SF_FLAnimatedImageView();
-  }
+  private _isAnimating: boolean;
   constructor(params?: IGifImageView) {
     super(params);
   }
 
+  createNativeObject(): any {
+    return new __SF_FLAnimatedImageView();
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._isAnimating = false;
+    super.preConstruct(params);
+  }
   get gifImage(): IGifImage {
     return this._gifimage;
   }
   set gifImage(value: IGifImage) {
     this._gifimage = value;
     this.nativeObject.animatedImage = value.nativeObject;
+    this._isAnimating = true;
   }
 
   get currentFrame(): IImage {
@@ -35,15 +41,17 @@ export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents>
   }
 
   get isAnimating(): boolean {
-    return this.nativeObject.animating;
+    return this._isAnimating;
   }
 
   startAnimating(): void {
-    // TODO Old version has not startAnimating function
+    this.nativeObject.startAnimating();
+    this._isAnimating = true;
   }
 
   stopAnimating(): void {
-    // TODO Old version has not stopAnimating function
+    this.nativeObject.stopAnimating();
+    this._isAnimating = false;
   }
 
   get loopCompletionCallback(): (loopCountRemain: number) => void {
