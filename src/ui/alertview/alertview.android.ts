@@ -1,9 +1,10 @@
-import TextBox from '../textbox';
 import { ButtonType, IAlertView } from './alertview';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import LayoutParams from '../../util/Android/layoutparams';
+import TextBoxAndroid from '../textbox/textbox.android';
+import { ITextBox } from '../textbox/textbox';
 
 const NativeAlertDialog = requireClass('io.smartface.android.sfcore.ui.alertview.SFAlertView');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
@@ -16,7 +17,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   private __buttonCallbacks: { [key: number]: () => void } = {};
   private __title = '';
   private __message = '';
-  private __textBoxes: TextBox[];
+  private __textBoxes: ITextBox[];
   private __onDismiss: IAlertView['onDismiss'];
   private _cancellable: IAlertView['android']['cancellable'];
   constructor(params?: Partial<IAlertView>) {
@@ -65,7 +66,11 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
             case -2:
               callbackType = AlertViewAndroid.Android.ButtonType.NEGATIVE;
               break;
+            case -3:
+              callbackType = AlertViewAndroid.Android.ButtonType.NEUTRAL;
+              break;
             default:
+              callbackType = AlertViewAndroid.Android.ButtonType.NEUTRAL;
               break;
           }
           this.__buttonCallbacks[callbackType]?.();
@@ -75,7 +80,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   }
   addTextBox(params: Partial<Parameters<IAlertView['addTextBox']>['0']>): void {
     const { hint = '', text = '', isPassword = false, android: { viewSpacings: viewSpacings = {}, height, width } = {} } = params;
-    const mTextBox = new TextBox({
+    const mTextBox = new TextBoxAndroid({
       hint,
       text
     });
@@ -90,13 +95,13 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
     Object.keys(viewSpacings).map((key) => {
       viewSpacingsInPx[key] = AndroidUnitConverter.dpToPixel(viewSpacings[key]);
     });
-    const dpHeight = this.dpToPixel(height || 0);
-    const dpWidth = this.dpToPixel(width || 0);
+    const dpHeight = this.dpToPixel(height);
+    const dpWidth = this.dpToPixel(width);
     this.nativeObject.addTextBox(mTextBox.nativeObject, dpWidth, dpHeight, viewSpacingsInPx.left, viewSpacingsInPx.top, viewSpacingsInPx.right, viewSpacingsInPx.bottom);
     this.__textBoxes.push(mTextBox);
   }
 
-  private dpToPixel(size: number) {
+  private dpToPixel(size: number | undefined) {
     return size !== undefined ? AndroidUnitConverter.dpToPixel(size) : LayoutParams.MATCH_PARENT;
   }
 

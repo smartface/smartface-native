@@ -6,19 +6,16 @@ enum MethodNames {
 }
 
 export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView> implements IAlertView {
-  protected createNativeObject() {
-    return __SF_UIAlertController.createAlertController(1);
-  }
-  private delegate: (method: { name: string }) => void;
   private _onDismiss: (alertView: AlertViewIOS) => void;
   constructor(params?: Partial<IAlertView>) {
     super(params);
+  }
+  protected createNativeObject() {
+    return __SF_UIAlertController.createAlertController(1);
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.title = '';
-    this.delegate = (method: { name: string }) => {
-      if (method.name === MethodNames.onDismiss) {
-        this.onDismiss();
-      }
-    };
+    super.preConstruct(params);
   }
   isShowing(): void {
     return this.nativeObject.isBeingPresented;
@@ -45,7 +42,11 @@ export default class AlertViewIOS extends NativeMobileComponent<any, IAlertView>
     this._onDismiss = value;
   }
   dismiss(): void {
-    __SF_UIAlertController.dismissAlert(this.nativeObject, this.delegate);
+    __SF_UIAlertController.dismissAlert(this.nativeObject, (method: { name: string }) => {
+      if (method.name === MethodNames.onDismiss) {
+        this.onDismiss();
+      }
+    });
   }
   get textBoxes(): { text: string }[] {
     const returnArray: any[] = [];
