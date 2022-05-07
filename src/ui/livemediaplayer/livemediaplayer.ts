@@ -107,7 +107,7 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents>
    * @ios
    * @since 4.2.2
    */
-  play(): void;
+  start(): void;
 
   /**
    * Pause playback.
@@ -118,6 +118,16 @@ export interface ILiveMediaPlayer<TEvent extends string = LiveMediaPlayerEvents>
    * @since 4.2.2
    */
   pause(): void;
+
+  /**
+   * Stop playback.
+   *
+   * @method pause
+   * @android
+   * @ios
+   * @since 4.2.2
+   */
+  stop(): void;
 
   /**
    * Returns whether it is currently playing.
@@ -180,7 +190,6 @@ export declare class AbstractLiveMediaPlayer<TEvent extends string = LiveMediaPl
   inputUrl: string;
   audioEnabled: boolean;
   scaleType: ScaleType;
-  play(): void;
   pause(): void;
   isPlaying(): boolean;
   release(): void;

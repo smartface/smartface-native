@@ -2,39 +2,55 @@ import { ILiveMediaPlayer, ScaleType } from './livemediaplayer';
 import AndroidConfig from '../../util/Android/androidconfig';
 import ViewAndroid from '../view/view.android';
 import { LiveMediaPlayerEvents } from './livemediaplayer-events';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
 
 const SFLiveMediaPlayerDelegate = requireClass('io.smartface.android.sfcore.ui.livemediapublisher.SFLiveMediaPlayerDelegate');
 
 const NodePlayerView = requireClass('cn.nodemedia.NodePlayerView');
 const NodePlayer = requireClass('cn.nodemedia.NodePlayer');
 
+const NativeScaleType = {
+  STRETCH: NodePlayerView.UIViewContentMode.ScaleToFill,
+  ASPECTFIT: NodePlayerView.UIViewContentMode.ScaleAspectFit,
+  ASPECTFILL: NodePlayerView.UIViewContentMode.ScaleAspectFill
+};
+
+const ScaleTypeMapping = {
+  [ScaleType.STRETCH]: NativeScaleType.STRETCH,
+  [ScaleType.ASPECTFIT]: NativeScaleType.ASPECTFIT,
+  [ScaleType.ASPECTFILL]: NativeScaleType.ASPECTFILL
+};
+
 export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPlayerEvents> extends ViewAndroid<TEvent | LiveMediaPlayerEvents, any> implements ILiveMediaPlayer {
-  static ScaleType = {
-    STRETCH: NodePlayerView.UIViewContentMode.ScaleToFill,
-    ASPECTFIT: NodePlayerView.UIViewContentMode.ScaleAspectFit,
-    ASPECTFILL: NodePlayerView.UIViewContentMode.ScaleAspectFill
-  };
+  static ScaleType = NativeScaleType;
   static Events = LiveMediaPlayerEvents;
   private nodePlayer: any;
   private _inputUrl;
-  private _scaleType = ScaleType.STRETCH;
-  private _audioEnabled = true;
-  private _videoEnabled = true;
+  private _scaleType: ScaleType;
+  private _audioEnabled: boolean;
+  private _videoEnabled: boolean;
   private _onChange: (params: { event: number; message: string }) => void;
+
+  protected preConstruct(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
+    this._audioEnabled = true;
+    this._videoEnabled = true;
+    this._scaleType = ScaleType.STRETCH;
+    super.preConstruct(params);
+  }
   createNativeObject() {
     this.nodePlayer = new NodePlayer(AndroidConfig.activity);
     return new NodePlayerView(AndroidConfig.activity);
   }
   constructor(params?: Partial<ILiveMediaPlayer>) {
     super(params);
-    const self = this;
-    this.nodePlayer.setPlayerView(this._nativeObject);
+    this.nodePlayer.setPlayerView(this.nativeObject);
 
     this.nodePlayer.setNodePlayerDelegate(
       new SFLiveMediaPlayerDelegate({
-        onEventCallback: function (event, message) {
-          self._onChange?.({ event, message });
-          self.emit(LiveMediaPlayerEvents.Change, { event, message });
+        onEventCallback: (event, message) => {
+          this._onChange?.({ event, message });
+          this.emit(LiveMediaPlayerEvents.Change, { event, message });
         }
       })
     );
@@ -71,13 +87,12 @@ export default class LiveMediaPlayerAndroid<TEvent extends string = LiveMediaPla
   }
   set scaleType(mode: ScaleType) {
     this._scaleType = mode;
-    this._nativeObject.setUIViewContentMode(this._scaleType);
+    this._nativeObject.setUIViewContentMode(ScaleTypeMapping[this._scaleType]);
   }
   pause() {
     this.nodePlayer.pause();
   }
-  //TODO: rename this or view.start
-  play() {
+  start() {
     this.nodePlayer.start();
   }
   stop() {

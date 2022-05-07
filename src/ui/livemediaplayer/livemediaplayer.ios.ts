@@ -65,19 +65,16 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
     this._scaleType = mode;
     this.nodePlayer.contentMode = this._scaleType;
   }
-  pause() {
-    this.nodePlayer.pause();
-  }
-  //TODO: rename this or view.start
-  play() {
+  start() {
     this.nodePlayer.start();
   }
   stop() {
     this.nodePlayer.stop();
   }
-  release() {
-    this.nodePlayer.release();
+  pause() {
+    this.nodePlayer.pause();
   }
+  release() {}
   isPlaying() {
     return this.nodePlayer.isPlaying();
   }

@@ -597,10 +597,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   set bottom(bottom) {
     this.yogaNode.setPosition(YogaEdge.BOTTOM, DpToPixel(bottom));
   }
-  get start() {
+  get positionStart() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.START).value);
   }
-  set start(start) {
+  set positionStart(start) {
     this.yogaNode.setPosition(YogaEdge.START, DpToPixel(start));
   }
   get end() {
