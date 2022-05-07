@@ -1,5 +1,5 @@
-import Color from '../color';
-import { AbstractView, IView } from '../view/view';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { AbstractView, IView, ViewIOSProps } from '../view/view';
 import { ViewEvents } from '../view/view-events';
 
 export enum ActivityIndicatorViewStyle {
@@ -21,27 +21,18 @@ export enum ActivityIndicatorViewStyle {
   NORMAL = 1
 }
 
-export interface IActivityIndicator extends IView<ViewEvents, any, IActivityIndicator> {
-  ios: IView['ios'] & {
-    /**
-     * Gets/sets style of the activity indicator.
-     *
-     * @ios
-     * @since 3.2.1
-     */
-    activityIndicatorViewStyle: ActivityIndicatorViewStyle;
-  };
-  android: IView['android'];
-}
-export declare class ActivityIndicatorBase<TEvent extends string = ViewEvents> extends AbstractView<TEvent> {
+export interface ActivityIndicatorIOSProps extends ViewIOSProps {
   /**
-   * Gets/sets color of the activity indicator.
+   * Gets/sets style of the activity indicator.
    *
-   * @android
    * @ios
-   * @since 0.1
+   * @since 3.2.1
    */
-  color: Color;
+  activityIndicatorViewStyle: ActivityIndicatorViewStyle;
+}
+
+export interface IActivityIndicator extends IView<ViewEvents, any, MobileOSProps<ActivityIndicatorIOSProps, {}>> {}
+export declare class ActivityIndicatorBase<TEvent extends string = ViewEvents> extends AbstractView<TEvent, any, IActivityIndicator> {
   static iOS: {
     ActivityIndicatorViewStyle: typeof ActivityIndicatorViewStyle;
   };

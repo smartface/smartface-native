@@ -4,19 +4,17 @@ import ViewIOS from '../view/view.ios';
 import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
 export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent, any, IActivityIndicator> {
   private _color: Color;
-  createNativeObject() {
-    return new __SF_UIActivityIndicatorView(ActivityIndicatorIOS.iOS.ActivityIndicatorViewStyle.NORMAL);
-  }
   constructor(params?: Partial<IActivityIndicator>) {
     super(params);
+    this.addIOSProps(this.getIOSProps());
 
     this.nativeObject.startAnimating();
-    this._color = Color.create('#00A1F1');
-    this.nativeObject.color = this._color.nativeObject;
+    this.color = Color.create('#00A1F1');
+  }
 
+  getIOSProps() {
     const self = this;
-
-    this.addIOSProps({
+    return {
       get activityIndicatorViewStyle() {
         return self.nativeObject.activityIndicatorViewStyle;
       },
@@ -24,9 +22,11 @@ export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> ex
         self.nativeObject.activityIndicatorViewStyle = value;
         self.nativeObject.color = self._color.nativeObject;
       }
-    });
+    };
   }
-
+  createNativeObject() {
+    return new __SF_UIActivityIndicatorView(ActivityIndicatorIOS.iOS.ActivityIndicatorViewStyle.NORMAL);
+  }
   get color() {
     return this._color;
   }
