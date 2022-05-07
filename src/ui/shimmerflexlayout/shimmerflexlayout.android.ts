@@ -4,15 +4,17 @@ import ViewAndroid from '../view/view.android';
 import FlexLayout from '../flexlayout';
 import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
+import { MobileOSProps } from '../../core/native-mobile-component';
+import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
 
 const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrameLayout');
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
 
 export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams> extends ViewAndroid<TEvent, TNative> implements IShimmerFlexLayout {
   private _layout;
-  private _baseAlpha: number = 1;
+  private _baseAlpha: number;
   private _direction: ShimmeringDirection;
-  private _repeatDelay = 400;
+  private _repeatDelay: number;
   private _contentLayout: IShimmerFlexLayout['contentLayout'];
   private _duration?: number;
   private _intensity?: number;
@@ -22,6 +24,12 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   private _baseColor?: Color;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
+  private _isShimmering: boolean;
+  constructor(params: Partial<IShimmerFlexLayout> = {}) {
+    super(params);
+    this.androidSpecificProperties();
+  }
+
   createNativeObject() {
     this._layout = new FlexLayout();
     const nativeObject = new NativeShimmerFrameLayout(AndroidConfig.activity);
@@ -29,11 +37,16 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
     nativeObject.addView(this._layout.nativeObject);
     return nativeObject;
   }
-  constructor(params: Partial<IShimmerFlexLayout> = {}) {
-    super(params);
-    this.androidSpecificProperties();
-  }
 
+  protected preConstruct(params?: Partial<IViewProps<MobileOSProps<ViewIOSProps, ViewAndroidProps>>>): void {
+    this._repeatDelay = 400;
+    this._baseAlpha = 1;
+    // There's a flag for shimmer toggle, becauase here we don't actually start&stop shimmer.
+    // The shimmer is always turned on, we just toggle the visibility instead of shimmer itself.
+    // Therefore, ShimmerFrameLayout.isShimmerStarted() will always return true.
+    this._isShimmering = false;
+    super.preConstruct(params);
+  }
   get contentLayout(): IShimmerFlexLayout['contentLayout'] {
     return this._contentLayout;
   }
@@ -48,13 +61,15 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
 
   startShimmering() {
     this.nativeObject.showShimmer(true);
+    this._isShimmering = true;
   }
   stopShimmering() {
     this.nativeObject.hideShimmer();
+    this._isShimmering = false;
   }
 
   get isShimmering(): IShimmerFlexLayout['isShimmering'] {
-    return this.nativeObject.isShimmerStarted();
+    return this._isShimmering;
   }
 
   get baseAlpha(): IShimmerFlexLayout['baseAlpha'] {
