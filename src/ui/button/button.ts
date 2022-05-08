@@ -5,7 +5,7 @@ import ViewState from '../shared/viewState';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 type MobileProps = MobileOSProps<ILabel['ios'], ILabel['android']>;
-export declare interface IButton<TEvent extends string = ButtonEvents, TMobile extends MobileProps = MobileProps> extends ILabel<TEvent | ButtonEvents, TMobile> {
+export interface IButton<TEvent extends string = ButtonEvents, TMobile extends MobileProps = MobileProps> extends ILabel<TEvent | ButtonEvents, TMobile> {
   /**
    * Enables/disables the Button. This will dim the button color. You can set the dim property on Button style.
    *

@@ -409,7 +409,7 @@ export interface IVideoView<
    * });
    * ```
    */
-  onFailure: () => void;
+  onFailure: (reason?: any) => void;
   /**
    * This function seeks to desired position of the video.
    *

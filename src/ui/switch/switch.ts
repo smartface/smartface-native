@@ -1,10 +1,10 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import IImage from '../image';
-import { AbstractView, IView } from '../view/view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { SwitchEvents } from './switch-events';
 
-export type SwitchAndroidProps = IView['android'] & {
+export interface SwitchAndroidProps extends ViewAndroidProps {
   /**
    * Gets/sets color of the thumb when Switch is OFF.
    * It is set to gray by default.
@@ -47,11 +47,9 @@ export type SwitchAndroidProps = IView['android'] & {
    * @since 0.1
    */
   toggleOffColor: Color;
-};
+}
 
-type SwitchIOSProps = IView['ios'];
-
-export declare interface ISwitch<TEvent extends string = SwitchEvents, TProps extends MobileOSProps<SwitchIOSProps, SwitchAndroidProps> = MobileOSProps<SwitchIOSProps, SwitchAndroidProps>>
+export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends MobileOSProps<ViewIOSProps, SwitchAndroidProps> = MobileOSProps<ViewIOSProps, SwitchAndroidProps>>
   extends IView<TEvent | SwitchEvents, any, TProps> {
   /**
    * Enables/disables the Switch.
@@ -133,22 +131,17 @@ export declare interface ISwitch<TEvent extends string = SwitchEvents, TProps ex
   onToggleChanged: (toggle: boolean) => void;
 }
 
-export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent, any, ISwitch> implements ISwitch<TEvent> {
-  get enabled(): boolean;
-  set enabled(value: boolean);
-
-  get thumbOnColor(): Color;
-  set thumbOnColor(value: Color);
-
-  get thumbOffColor(): Color;
-  set thumbOffColor(value: Color);
-
-  get toggle(): boolean;
-  set toggle(value: boolean);
-
-  get toggleOnColor(): Color;
-  set toggleOnColor(value: Color);
-
-  get onToggleChanged(): (toggle: boolean) => void;
-  set onToggleChanged(value: (toggle: boolean) => void);
+export abstract class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent | SwitchEvents, any, ISwitch> implements ISwitch<TEvent | SwitchEvents> {
+  abstract get enabled(): boolean;
+  abstract set enabled(value: boolean);
+  abstract get thumbOnColor(): Color;
+  abstract set thumbOnColor(value: Color);
+  abstract get thumbOffColor(): Color;
+  abstract set thumbOffColor(value: Color);
+  abstract get toggle(): boolean;
+  abstract set toggle(value: boolean);
+  abstract get toggleOnColor(): Color;
+  abstract set toggleOnColor(value: Color);
+  abstract get onToggleChanged(): (toggle: boolean) => void;
+  abstract set onToggleChanged(value: (toggle: boolean) => void);
 }

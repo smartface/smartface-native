@@ -6,19 +6,16 @@ import Page from '../page';
 import ViewIOS from '../view/view.ios';
 import { VideoViewEvents } from './videoview-events';
 
+const VIDEO_GRAVITY = 'AVLayerVideoGravityResizeAspect';
+
 export default class VideoViewIOS<TEvent extends string = VideoViewEvents> extends ViewIOS<TEvent | VideoViewEvents, any, IVideoView> implements IVideoView {
   protected avPlayerViewController: __SF_AVPlayerViewController;
-  protected avPlayer: __SF_AVPlayer;
+  protected avPlayer: __SF_AVPlayer | undefined;
   private _loopEnabled: boolean;
-  private _page: IVideoView['page'] = null;
+  private _page: IVideoView['page'];
   constructor(params: Partial<IVideoView> = {}) {
     super(params);
-    this.backgroundModeEnabled = false;
-
-    this.backgroundModeEnabled = !!params?.backgroundModeEnabled;
-    this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
     this.nativeObject.addSubview(this.avPlayerViewController.view);
-    this.setAVControllerEvents();
     this.addAndroidProps(this.getAndroidParams());
     this.addIOSProps(this.getIOSParams());
   }
@@ -26,6 +23,13 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     return {
       setFullScreenButtonImage: () => {}
     };
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.backgroundModeEnabled = !!params?.backgroundModeEnabled;
+    this._page = null;
+    this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
+    this.setAVControllerEvents();
+    super.preConstruct(params);
   }
   private getIOSParams() {
     const self = this;
@@ -46,7 +50,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
         return self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart;
       },
       set shouldAutomaticallyDismissAtPictureInPictureStart(value: IVideoView['ios']['shouldAutomaticallyDismissAtPictureInPictureStart']) {
-        if (value) self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart = value;
+        self.avPlayerViewController.shouldAutomaticallyDismissAtPictureInPictureStart = !!value;
       }
     };
   }
@@ -56,6 +60,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
       this.emit('ready');
     };
     this.avPlayerViewController.AVPlayerItemDidPlayToEndTime = () => {
+      console.info('Loop: ', this._loopEnabled, { player: typeof this.avPlayer });
       this.onFinish?.();
       this.emit('finish');
       if (this._loopEnabled) {
@@ -90,7 +95,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   }
   onReady: () => void;
   onFinish: () => void;
-  onFailure: () => void;
+  onFailure: (reason?: any) => void;
   play(): void {
     this.avPlayer?.play();
   }
@@ -99,7 +104,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   }
   stop(): void {
     this.avPlayer?.pause();
-    this.avPlayer?.seekTo(0);
+    this.seekTo(0);
   }
   setLoopEnabled(enabled: boolean): void {
     this._loopEnabled = enabled;
@@ -114,11 +119,11 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     const urlWithString = __SF_NSURL.URLWithString(url);
     this.avPlayer = __SF_AVPlayer.createFromURL(urlWithString);
     this.avPlayerViewController.player = this.avPlayer;
-    this.avPlayerViewController.videoGravity = 'AVLayerVideoGravityResizeAspect';
+    this.avPlayerViewController.videoGravity = VIDEO_GRAVITY;
     this.avPlayer.addObserver();
 
-    this.avPlayer.onItemFailed = () => {
-      this.onFailure?.();
+    this.avPlayer.onItemFailed = (e: __SF_NSError) => {
+      this.onFailure?.(e);
       this.emit('failure');
     };
   }
@@ -129,10 +134,10 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     if (url) {
       this.avPlayer = __SF_AVPlayer.createFromURL(url);
       this.avPlayerViewController.player = this.avPlayer;
-      this.avPlayerViewController.videoGravity = 'AVLayerVideoGravityResizeAspect';
+      this.avPlayerViewController.videoGravity = VIDEO_GRAVITY;
       this.avPlayer.addObserver();
-      this.avPlayer.onItemFailed = () => {
-        this.onFailure?.();
+      this.avPlayer.onItemFailed = (e: __SF_NSError) => {
+        this.onFailure?.(e);
         this.emit('failure');
       };
     }
@@ -162,10 +167,12 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     value?.nativeObject.addChildViewController(this.avPlayerViewController);
   }
   get totalDuration() {
-    return this.avPlayer.duration() * 1000;
+    const duration = this.avPlayer?.duration() || 0;
+    return duration * 1000;
   }
   get currentDuration() {
-    return this.avPlayer.getCurrentTime() * 1000;
+    const duration = this.avPlayer?.getCurrentTime() || 0;
+    return duration * 1000;
   }
   backgroundModeEnabled: boolean;
 }

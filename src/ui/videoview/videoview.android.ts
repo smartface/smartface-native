@@ -115,6 +115,13 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
       },
       setFullScreenButtonImage(isInFullScreen: boolean) {
         self.nativeInner.setFullscreenDrawable(isInFullScreen);
+      },
+      get rewindButtonEnabled() {
+        return self._rewindButtonEnabled;
+      },
+      set rewindButtonEnabled(value) {
+        self._rewindButtonEnabled = value;
+        self.nativeInner.setShowRewindButton(value);
       }
     };
   }

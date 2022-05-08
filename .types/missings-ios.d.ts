@@ -1096,6 +1096,8 @@ declare class __SF_AVPlayerViewController extends __SF_UIView {
   didStartPictureInPicture(): void;
   willStopPictureInPicture(): void;
   willStartPictureInPicture(): void;
+  onReady: () => void;
+  AVPlayerItemDidPlayToEndTime: () => void;
   shouldAutomaticallyDismissAtPictureInPictureStart: boolean;
   restoreUserInterfaceForPictureInPictureStopWithCompletionHandler(callback?: (shouldFinish?: boolean) => void): void;
 }
@@ -1306,7 +1308,17 @@ declare class __SF_AVPlayerItem {
 
 declare class __SF_NodePlayer {}
 
-declare class __SF_AVPlayer {
+declare class __SF_NSError extends __SF_NSOBject {
+  code: number;
+  domain: string;
+  userInfo: {
+    NSLocalizedFailureReason: string;
+    NSLocalizedDescription: string;
+    NSUnderlyingError: any;
+  };
+}
+
+declare class __SF_AVPlayer extends __SF_NSOBject {
   constructor(avPlayerItem: __SF_AVPlayerItem);
   static createFromURL(url: __SF_NSURL): __SF_AVPlayer;
   addObserver(): void;
@@ -1320,7 +1332,7 @@ declare class __SF_AVPlayer {
   getCurrentTime(): number;
   onItemReady: () => void;
   AVPlayerItemDidPlayToEndTime: () => void;
-  onItemFailed: () => void;
+  onItemFailed: (e: __SF_NSError) => void;
   volume: number;
   rate: number;
 }
