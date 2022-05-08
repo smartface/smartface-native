@@ -131,7 +131,7 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
   onToggleChanged: (toggle: boolean) => void;
 }
 
-export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent, any, ISwitch> implements ISwitch<TEvent> {
+export declare class AbstractSwitch<TEvent extends string = SwitchEvents> extends AbstractView<TEvent | SwitchEvents, any, ISwitch> implements ISwitch<TEvent | SwitchEvents> {
   get enabled(): boolean;
   set enabled(value: boolean);
 
