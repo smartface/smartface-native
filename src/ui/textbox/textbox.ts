@@ -9,7 +9,7 @@ import TextContentType from '../shared/textcontenttype';
 import KeyboardType from '../shared/keyboardtype';
 import ActionKeyType from '../shared/android/actionkeytype';
 import { TextBoxEvents } from './textbox-events';
-import AutoCapitalize from './autocapitalize';
+import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 export type TextBoxAndroidProps = View['android'] & {

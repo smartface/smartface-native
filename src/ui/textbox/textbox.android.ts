@@ -6,7 +6,7 @@ import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
 import ViewAndroid from '../view/view.android';
-import AutoCapitalize from './autocapitalize';
+import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import SystemServices from '../../util/Android/systemservices';
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -294,7 +294,11 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     return this._keyboardType;
   }
   set keyboardType(value: KeyboardType) {
-    this._keyboardType = value;
+    const prevKeyboardType = NativeKeyboardType[this._keyboardType];
+    const newKeyboardType = NativeKeyboardType[value];
+    this._keyboardType = isNaN(newKeyboardType) ? KeyboardType.DEFAULT : value;
+
+    this.updateInputType(prevKeyboardType, newKeyboardType);
   }
 
   get actionKeyType(): ActionKeyType {

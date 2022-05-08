@@ -52,8 +52,9 @@ export default class ImageIOS<
   }
 
   private getAndroidProps(): ImageAndroidProps {
+    const self = this;
     return {
-      round: () => new ImageIOS({}),
+      round: () => self,
       get systemIcon() {
         return 0;
       }

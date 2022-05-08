@@ -5,7 +5,7 @@ import Font from '../font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
-import AutoCapitalize from './autocapitalize';
+import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import FlexLayout from '../flexlayout';
 import KeyboardAppearance from '../shared/keyboardappearance';
@@ -42,13 +42,6 @@ const IOSReturnKeyType = {
   done: 9,
   emergencyCall: 10,
   continue: 11 // @available(iOS 9.0, *)
-};
-
-const UITextAutocapitalizationType = {
-  None: 0,
-  Words: 1,
-  Sentences: 2,
-  AllCharactes: 3
 };
 
 export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {

@@ -11,7 +11,7 @@ import { MaterialTextBoxEvents } from './materialtextbox-events';
 import ViewAndroid from '../view/view.android';
 import ActionKeyType from '../shared/android/actionkeytype';
 import TextAlignment from '../shared/textalignment';
-import AutoCapitalize from '../textbox/autocapitalize';
+import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 interface nativeTextInputEditText {
