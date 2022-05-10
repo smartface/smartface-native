@@ -13,11 +13,10 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
   protected avPlayer: __SF_AVPlayer | undefined;
   private _loopEnabled: boolean;
   private _page: IVideoView['page'];
+  backgroundModeEnabled: boolean;
   constructor(params: Partial<IVideoView> = {}) {
     super(params);
     this.nativeObject.addSubview(this.avPlayerViewController.view);
-    this.addAndroidProps(this.getAndroidParams());
-    this.addIOSProps(this.getIOSParams());
     this.setAVControllerEvents();
   }
   private getAndroidParams() {
@@ -30,6 +29,8 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     this._page = null;
     this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
     super.preConstruct(params);
+    this.addAndroidProps(this.getAndroidParams());
+    this.addIOSProps(this.getIOSParams());
   }
   private getIOSParams() {
     const self = this;
@@ -173,7 +174,6 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     const duration = this.avPlayer?.getCurrentTime() || 0;
     return duration * 1000;
   }
-  backgroundModeEnabled: boolean;
 }
 
 // self.show = function(animation,callback) {
