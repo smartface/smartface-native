@@ -32,16 +32,21 @@ export default class TextViewAndroid<TEvent extends TextViewEvents, TProps exten
   private _attributedStringBuilder;
   private _attributedStringArray: ITextView['attributedText'];
   private _onLinkClick: ITextView['onLinkClick'];
-  private _letterSpacing = 0;
-  private _lineSpacing = 0;
-  private _scrollEnabled = false;
+  private _letterSpacing: ITextView['letterSpacing'];
+  private _lineSpacing: ITextView['lineSpacing'];
+  private _scrollEnabled: ITextView['scrollEnabled'];
   private _htmlText: ITextView['htmlText'];
   private linkMovementMethodCreated: boolean;
   private scrollableMovementMethodCreated: boolean;
   constructor(params: Partial<TProps> = {}) {
     super(params);
   }
-
+  protected preConstruct(params?: Partial<TProps>): void {
+    this._letterSpacing = 9;
+    this._lineSpacing = 0;
+    this._scrollEnabled = false;
+    super.preConstruct(params);
+  }
   get htmlText(): ITextView['htmlText'] {
     return this._htmlText || '';
   }

@@ -18,6 +18,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     this.nativeObject.addSubview(this.avPlayerViewController.view);
     this.addAndroidProps(this.getAndroidParams());
     this.addIOSProps(this.getIOSParams());
+    this.setAVControllerEvents();
   }
   private getAndroidParams() {
     return {
@@ -28,7 +29,6 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     this.backgroundModeEnabled = !!params?.backgroundModeEnabled;
     this._page = null;
     this.avPlayerViewController = __SF_AVPlayerViewController.createWithBackgroundMode(this.backgroundModeEnabled);
-    this.setAVControllerEvents();
     super.preConstruct(params);
   }
   private getIOSParams() {
@@ -60,7 +60,6 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
       this.emit('ready');
     };
     this.avPlayerViewController.AVPlayerItemDidPlayToEndTime = () => {
-      console.info('Loop: ', this._loopEnabled, { player: typeof this.avPlayer });
       this.onFinish?.();
       this.emit('finish');
       if (this._loopEnabled) {

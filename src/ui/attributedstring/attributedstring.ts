@@ -1,6 +1,7 @@
-import { INativeMobileComponent, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
+import { AbstractFont } from '../font/font';
 
 /**
  * @class AttributedString
@@ -36,7 +37,8 @@ export interface AttributedStringiOSProps {
    */
   strikethroughColor: Color;
 }
-export interface IAttributedString extends INativeMobileComponent {
+export interface IAttributedString<TNative = any, TProps extends MobileOSProps<AttributedStringiOSProps, {}> = MobileOSProps<AttributedStringiOSProps, {}>>
+  extends INativeMobileComponent<TNative, TProps> {
   /**
    * Gets/sets backgroundColor on AttributedString.
    *
@@ -63,7 +65,7 @@ export interface IAttributedString extends INativeMobileComponent {
    * @ios
    * @since 3.0.0
    */
-  font: Font | null;
+  font: AbstractFont | null;
 
   /**
    * Gets/sets foregroundColor on AttributedString.
@@ -103,10 +105,7 @@ export interface IAttributedString extends INativeMobileComponent {
   underline: boolean;
 }
 
-export abstract class AttributedStringBase<
-    TNative = any,
-    TProps extends WithMobileOSProps<IAttributedString, AttributedStringiOSProps, {}> = WithMobileOSProps<IAttributedString, AttributedStringiOSProps, {}>
-  >
+export abstract class AttributedStringBase<TNative = any, TProps extends MobileOSProps<AttributedStringiOSProps, {}> = MobileOSProps<AttributedStringiOSProps, {}>>
   extends NativeMobileComponent<TNative, TProps>
   implements IAttributedString
 {
@@ -114,8 +113,8 @@ export abstract class AttributedStringBase<
   abstract set backgroundColor(value: Color);
   abstract get string(): string;
   abstract set string(value: string);
-  abstract get font(): Font | null;
-  abstract set font(value: Font | null);
+  abstract get font(): AbstractFont | null;
+  abstract set font(value: AbstractFont | null);
   abstract get foregroundColor(): Color;
   abstract set foregroundColor(value: Color);
   abstract get link(): string | undefined;

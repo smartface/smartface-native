@@ -49,7 +49,7 @@ export default class LiveMediaPlayerIOS<TEvent extends string = LiveMediaPlayerE
   }
   set audioEnabled(isEnabled: boolean) {
     this._audioEnabled = isEnabled;
-    this.nodePlayer.setAudioEnable(this._audioEnabled);
+    this.nodePlayer.audioEnable = this._audioEnabled;
   }
   get videoEnabled() {
     return this._videoEnabled;
