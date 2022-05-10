@@ -1,9 +1,9 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutIOSParams, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
+import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import FlexLayout from '../flexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 
-export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutIOSParams> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
+export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = any> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
   private _contentLayout: FlexLayout;
   protected _nativeObject: __SF_FBShimmeringView;
   protected createNativeObject() {

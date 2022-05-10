@@ -1,4 +1,4 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerFlexLayoutAndroidParams, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
+import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewAndroid from '../view/view.android';
 import FlexLayout from '../flexlayout';
@@ -10,7 +10,14 @@ import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
 const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrameLayout');
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
 
-export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents, TNative = ShimmerFlexLayoutAndroidParams> extends ViewAndroid<TEvent, TNative> implements IShimmerFlexLayout {
+const NativeShimmeringDirectionMapping = {
+  [ShimmeringDirection.UP]: 3,
+  [ShimmeringDirection.RIGHT]: 0,
+  [ShimmeringDirection.LEFT]: 2,
+  [ShimmeringDirection.DOWN]: 1
+};
+
+export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements IShimmerFlexLayout {
   private _layout;
   private _baseAlpha: number;
   private _direction: ShimmeringDirection;
@@ -60,6 +67,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   }
 
   startShimmering() {
+    this.android.build?.();
     this.nativeObject.showShimmer(true);
     this._isShimmering = true;
   }
@@ -112,7 +120,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
         self._intensity && self._shimmerBuilder.setIntensity(self._intensity);
         self._repeatCount && self._shimmerBuilder.setRepeatCount(self._repeatCount);
         self._repeatDelay && self._shimmerBuilder.setRepeatDelay(self._repeatDelay);
-        self._direction && self._shimmerBuilder.setDirection(self._direction);
+        !isNaN(self._direction) && self._shimmerBuilder.setDirection(NativeShimmeringDirectionMapping[self._direction]);
         self._tilt && self._shimmerBuilder.setTilt(self._tilt);
         if (shimmerEnum === ShimmerHighlight.ColorHighlight) {
           self._highlightColor && self._shimmerBuilder.setHighlightColor(self._highlightColor.nativeObject); //Color int

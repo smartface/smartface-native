@@ -1,7 +1,7 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
-import { AbstractView, IView } from '../view/view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ViewEvents } from '../view/view-events';
 
 export enum ShimmeringDirection {
@@ -74,7 +74,7 @@ export enum ShimmerHighlight {
   ColorHighlight
 }
 
-export interface ShimmerFlexLayoutAndroidParams {
+export interface ShimmerFlexLayoutAndroidProps extends ViewAndroidProps {
   /**
    * Builds the shimmer based on your assigned properties by given UI.ShimmerFlexLayout.Android.Shimmer. This method must be used after all other
    * propertis of ShimmerFlexLayout is assigned.
@@ -144,7 +144,7 @@ export interface ShimmerFlexLayoutAndroidParams {
   highlightAlpha: Color;
 }
 
-export interface ShimmerFlexLayoutIOSParams {
+export interface ShimmerFlexLayoutIOSProps extends ViewIOSProps {
   /**
    * The highlight length of shimmering. Range of [0,1], defaults to 1.0.
    *
@@ -189,10 +189,7 @@ export interface ShimmerFlexLayoutIOSParams {
 
 export interface IShimmerFlexLayout<
   TEvent extends string = ViewEvents,
-  TMobile extends MobileOSProps<IView['ios'] & ShimmerFlexLayoutIOSParams, IView['android'] & ShimmerFlexLayoutAndroidParams> = MobileOSProps<
-    IView['ios'] & ShimmerFlexLayoutIOSParams,
-    IView['android'] & ShimmerFlexLayoutAndroidParams
-  >
+  TMobile extends MobileOSProps<ShimmerFlexLayoutIOSProps, ShimmerFlexLayoutAndroidProps> = MobileOSProps<ShimmerFlexLayoutIOSProps, ShimmerFlexLayoutAndroidProps>
 > extends IView<TEvent | ViewEvents, any, TMobile> {
   /**
    * Starts the shimmer animation
@@ -325,7 +322,7 @@ export interface IShimmerFlexLayout<
  *     shimmer.startShimmering();
  *
  */
-export declare class AbstractShimmerFlexLayout<TEvent extends string = ViewEvents> extends AbstractView<TEvent | ViewEvents> implements IShimmerFlexLayout {
+export declare class AbstractShimmerFlexLayout<TEvent extends string = ViewEvents> extends AbstractView<TEvent | ViewEvents, any, IShimmerFlexLayout> implements IShimmerFlexLayout {
   constructor(params?: Partial<IShimmerFlexLayout>);
   shimmeringDirection: ShimmeringDirection;
   startShimmering(): void;
