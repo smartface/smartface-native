@@ -1,7 +1,9 @@
 import { ICluster } from './cluster';
 import MapView from '..';
-import NativeComponent from '../../../core/native-component';
 import TypeValue from '../../../util/Android/typevalue';
+import Font from '../../font';
+import Color from '../../color';
+import { MobileOSProps, NativeMobileComponent } from '../../../core/native-mobile-component';
 
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance().getApplicationContext();
@@ -13,19 +15,55 @@ const NativeGoogleMapR = requireClass('com.google.maps.android.R');
 const COMPLEX_UNIT_SP = 2;
 const WRAP_CONTENT = -2;
 
-export default class ClusterAndroid extends NativeComponent<any> implements ICluster {
+export default class ClusterAndroid extends NativeMobileComponent<any, MobileOSProps<ICluster['ios'], ICluster['android']>> implements ICluster {
   protected createNativeObject() {
     return null;
   }
   constructor(params: Partial<ICluster> = {}) {
     super(params);
-    this.nativeObject = params?.nativeObject || __SF_Cluster.createCluster();
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._textColor = Color.WHITE;
+    this._fillColor = Color.RED;
+    this._borderColor = Color.WHITE;
+    this._font = Font.create(Font.DEFAULT, 20, Font.BOLD) as any; //Weird font error
+    super.preConstruct(params);
+  }
+  private _borderColor: Color;
+  private _textColor: Color;
+  private _fillColor: Color;
+  private _font: Font;
+
+  get borderColor(): ICluster['borderColor'] {
+    return this._borderColor;
+  }
+  set borderColor(value: ICluster['borderColor']) {
+    this._borderColor = value;
+  }
+  get textColor(): ICluster['textColor'] {
+    return this._textColor;
+  }
+  set textColor(value: ICluster['textColor']) {
+    this._textColor = value;
+  }
+  get fillColor(): ICluster['fillColor'] {
+    return this._fillColor;
+  }
+  set fillColor(value: ICluster['fillColor']) {
+    this._fillColor = value;
+  }
+  get font(): ICluster['font'] {
+    return this._font;
+  }
+  set font(value: ICluster['font']) {
+    this._font = value;
   }
   title: string;
   subtitle: string;
   canShowCallout: boolean;
   count: number;
 
+  onPress: (e?: { memberAnnotations: __SF_Annotation[] } | undefined) => void;
   setDefaultClusterRenderer(mapView: MapView, nativeGoogleMap: any, nativeClusterManager: any) {
     const callbacks = {
       onBeforeClusterItemRendered: (clusterItemObj: any, markerOptions: any) => {
