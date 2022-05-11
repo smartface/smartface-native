@@ -287,13 +287,6 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setTextColor(value.nativeObject);
   }
 
-  get backgroundImage(): ImageAndroid {
-    return this._backgroundImage;
-  }
-  set backgroundImage(value: ImageAndroid) {
-    this._backgroundImage = value;
-  }
-
   get cursorColor(): ColorImpl {
     return this._textViewCursorColor;
   }

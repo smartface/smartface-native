@@ -45,6 +45,14 @@ export enum SearchViewStyle {
 
 export type SearchViewIOSProps = IView['ios'] & {
   /**
+   * Gets/sets background image of SearchView.
+   *
+   * @property {UI.Image} backgroundImage
+   * @ios
+   * @since 0.1
+   */
+  backgroundImage: IImage;
+  /**
    * This function show loading indicator.
    *
    * @method showLoading
@@ -223,15 +231,6 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @since 0.1
    */
   textColor: Color;
-  /**
-   * Gets/sets background image of SearchView.
-   *
-   * @property {UI.Image} backgroundImage
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  backgroundImage: IImage;
   /**
    * Gets/sets search icon image of SearchView.
    *
@@ -447,7 +446,6 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   hint: string;
   cursorColor: Color;
   textColor: Color;
-  backgroundImage: IImage;
   iconImage: Image;
   searchIcon: IImage;
   addToHeaderBar(page: Page): void;
