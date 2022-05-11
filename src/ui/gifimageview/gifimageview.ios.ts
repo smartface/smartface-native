@@ -1,11 +1,13 @@
 import { GifImageViewEvents } from './gifimageview-events';
 import ImageViewIOS from '../imageview/imageview.ios';
 import { IGifImageView } from './gifimageview';
-import IImage from '../image';
 import ImageiOS from '../image/image.ios';
 import { IFile } from '../../io/file/file';
 import GifImageIOS from '../gifimage/gifimage.ios';
 import { IGifImage } from '../gifimage/gifimage';
+import { WithMobileOSProps } from '../../core/native-mobile-component';
+import { ImageParams, ImageIOSProps, ImageAndroidProps, IImage } from '../image/image';
+import ImageCacheType from '../shared/imagecachetype';
 
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: IGifImage;
@@ -70,5 +72,13 @@ export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents>
     const filePath = file.nativeObject.getActualPath();
     const gifImage = GifImageIOS.createFromFile(filePath);
     this.gifImage = gifImage;
+  }
+
+  loadFromUrl(params: { url: string; headers?: { [name: string]: string; } | undefined; placeholder?: ImageiOS<__SF_UIImage, WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps>> | undefined; fade?: boolean | undefined; useHTTPCacheControl?: boolean | undefined; onSuccess?: (() => void) | undefined; onFailure?: (() => void) | undefined; android?: { useDiskCache?: boolean | undefined; useMemoryCache?: boolean | undefined; } | undefined; ios?: { isRefreshCached?: boolean | undefined; } | undefined; cache?: ImageCacheType | undefined; }): void {
+    
+  }
+
+  fetchFromUrl(params: { url: string; headers?: { [name: string]: string; } | undefined; placeholder?: IImage<any, WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>> | undefined; useHTTPCacheControl?: boolean | undefined; onSuccess?: ((image: IImage<any, WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>> | null, cache: ImageCacheType) => void) | undefined; onFailure?: (() => void) | undefined; android?: { useDiskCache?: boolean | undefined; useMemoryCache?: boolean | undefined; } | undefined; ios?: { isRefreshCached?: boolean | undefined; } | undefined; image: any; cache: ImageCacheType; }): void {
+    
   }
 }
