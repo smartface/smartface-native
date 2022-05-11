@@ -458,12 +458,12 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
   /**
    * Start stream to output address.
    *
-   * @method play
+   * @method start
    * @android
    * @ios
    * @since 4.2.2
    */
-  play(): void;
+  start(): void;
 
   /**
    * Release the underlying resources.
@@ -520,7 +520,7 @@ export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMedi
   camera: { cameraId: Camera; cameraFrontMirror: Boolean };
   audio: { bitrate: number; profile: AudioProfile; samplerate: number };
   video: Partial<{ preset: VideoPreset; bitrate: number; profile: VideoProfile; fps: number; videoFrontMirror: Boolean }>;
-  play(): void;
+  start(): void;
   release(): void;
   stop(): void;
   onChange: (params: { event: number; message: string }) => void;

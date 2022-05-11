@@ -105,7 +105,7 @@ export default class LiveMediaPublisherAndroid<TEvent extends string = LiveMedia
     this._flashEnabled = value;
     this.nodePublisher.setFlashEnable(this._flashEnabled);
   }
-  play() {
+  start() {
     this.nodePublisher.start();
   }
   stop() {
