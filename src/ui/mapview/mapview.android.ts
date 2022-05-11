@@ -356,6 +356,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
             pinArray.push(this._pinArray[clusterArray[i]]);
           }
           this.onClusterPress?.(pinArray);
+          this.emit('clusterPress', pinArray);
           return true;
         }
       })

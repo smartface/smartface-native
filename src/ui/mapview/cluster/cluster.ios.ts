@@ -10,6 +10,7 @@ export default class ClusterIOS extends NativeMobileComponent<__SF_Cluster, Mobi
   constructor(params: Partial<ICluster> = {}) {
     super(params);
     this.addIOSProps(this.getIOSProps());
+    this.nativeObject.onPress = (e) => this.onPress(e); //The definition comes from mapview.ios.ts
   }
   onPress: (e?: { memberAnnotations: __SF_Annotation[] } | undefined) => void;
   private getIOSProps(): ICluster['ios'] {
