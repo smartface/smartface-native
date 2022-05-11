@@ -88,7 +88,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
       return undefined;
     };
 
-    this.pageControllerDatasource.viewControllerAfterViewController = function (e) {
+    this.pageControllerDatasource.viewControllerAfterViewController = (e) => {
       let index = this._pageNativeObjectArray.indexOf(e.viewController);
       this.transactionIndex = index;
       if (index >= 0 && index < this._pageNativeObjectArray.length - 1 && this._pagingEnabled) {
