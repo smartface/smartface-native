@@ -159,6 +159,13 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       set keyboardAppearance(value: KeyboardAppearance) {
         self.nativeObject.setValueForKey(value, 'keyboardAppearance');
       },
+      get backgroundImage(): Image {
+        return self._backgroundImage;
+      },
+      set backgroundImage(value: Image) {
+        self._backgroundImage = value;
+        self.nativeObject.setSearchFieldBackgroundImage(self._backgroundImage.nativeObject, 0);
+      },
       get loadingColor(): Color {
         return new Color({
           color: self.nativeObject.activityIndicator.color
@@ -289,14 +296,6 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     if (this.borderWidth === 0) {
       this.borderColor = value;
     }
-  }
-
-  get backgroundImage(): Image {
-    return this._backgroundImage;
-  }
-  set backgroundImage(value: Image) {
-    this._backgroundImage = value;
-    this.nativeObject.setSearchFieldBackgroundImage(this._backgroundImage.nativeObject, 0);
   }
 
   get iconImage(): Image {
