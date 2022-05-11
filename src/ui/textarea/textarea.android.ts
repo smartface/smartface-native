@@ -8,26 +8,27 @@ export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNa
   extends TextBoxAndroid<TEvent | TextAreaEvents, TNative, TProps>
   implements ITextArea<TEvent>
 {
-  private _bounces: boolean;
   private __hint: string;
   private __actionKeyType: ActionKeyType;
   private __keyboardType: KeyboardType;
   private __isPassword: boolean;
   private __onActionButtonPress: ITextArea['onActionButtonPress'];
-  constructor(params: Partial<TProps>) {
+  constructor(params?: Partial<TProps>) {
     super(params);
-
+    this.addAndroidProps(this.getAndroidProps());
     this.nativeObject.setSingleLine(false);
-    const self = this;
+  }
 
-    this.addAndroidProps({
+  private getAndroidProps() {
+    const self = this;
+    return {
       get hint(): string {
-        return self.__hint;
+        return self.nativeObject.getHint();
       },
       set hint(value: string) {
-        self.__hint = value;
+        self.nativeObject.setHint(value);
       }
-    });
+    };
   }
 
   get isPassword(): boolean {
@@ -57,14 +58,6 @@ export default class TextAreaAndroid<TEvent extends string = TextAreaEvents, TNa
   set hint(value: string) {
     this.__hint = value;
   }
-
-  get bounces(): boolean {
-    return this._bounces;
-  }
-  set bounces(value: boolean) {
-    this._bounces = value;
-  }
-
   get onActionButtonPress(): ITextArea['onActionButtonPress'] {
     return this.__onActionButtonPress;
   }

@@ -28,7 +28,7 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
   private prevX: number;
   private prevOldX: number;
   private _layout: FlexLayoutAndroid;
-  private _autoSizeEnabled = false;
+  private _autoSizeEnabled;
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   constructor(params?: IScrollView) {
     super(params);
@@ -57,12 +57,12 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     };
   }
   protected preConstruct(params) {
-    this._align = params?.align || ScrollViewAlign.VERTICAL;
     this._autoSizeEnabled = false;
     super.preConstruct(params);
   }
 
-  protected createNativeObject(): any {
+  protected createNativeObject(params?: any): any {
+    this._align = params?.align || ScrollViewAlign.VERTICAL;
     const isHorizontal = this._align === ScrollViewAlign.HORIZONTAL;
     const callback = {
       onScrollChanged: (x: number, y: number, oldXPixel: number, oldYPixel: number) => {
@@ -81,8 +81,8 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
         const oldX = AndroidUnitConverter.pixelToDp(oldXPixel);
         const oldY = AndroidUnitConverter.pixelToDp(oldYPixel);
 
-        isXSameCoordinate = this.prevX === newX_DP && this.prevOldX === oldX; //This is avoid unnecessary triggers
-        isYSameCoordinate = this.prevY === newY_DP && this.prevOldY === oldY; //This is avoid unnecessary triggers
+        isXSameCoordinate = this.prevX === newX_DP && this.prevOldX === oldX; //This is to avoid unnecessary triggers
+        isYSameCoordinate = this.prevY === newY_DP && this.prevOldY === oldY; //This is to avoid unnecessary triggers
 
         this.prevX = newX_DP;
         this.prevOldX = oldX;

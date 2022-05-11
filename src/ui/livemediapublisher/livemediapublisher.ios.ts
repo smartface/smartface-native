@@ -30,31 +30,15 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
   static AudioProfile = AudioProfile;
   private nodePublisher: __SF_NodePublisher;
   private publisherDelegate: __SF_NodePlayerDelegateClass;
-  private _outputUrl = '';
-  private _flashEnabled = false;
-  private _audioEnabled = true;
-  private _videoEnabled = true;
-  private _videoOptions = videoDefault;
-  private _cameraOptions = cameraDefault;
-  private _audioOptions = audioDefault;
-  createNativeObject() {
-    return new ViewIOS().nativeObject;
-  }
+  private _outputUrl: ILiveMediaPublisher['outputUrl'];
+  private _flashEnabled: ILiveMediaPublisher['flashEnabled'];
+  private _audioEnabled: ILiveMediaPublisher['audioEnabled'];
+  private _videoEnabled: ILiveMediaPublisher['videoEnabled'];
+  private _videoOptions: typeof videoDefault;
+  private _cameraOptions: typeof cameraDefault;
+  private _audioOptions: typeof audioDefault;
   constructor(params?: Partial<ILiveMediaPublisher>) {
     super(params);
-    this.nodePublisher = new __SF_NodePublisher();
-
-    this.nodePublisher.setCameraPreviewCameraIdFrontMirror(this.nativeObject, this._cameraOptions.cameraId, this._cameraOptions.cameraFrontMirror);
-
-    this.nodePublisher.setVideoParamPresetFpsBitrateProfileFrontMirror(
-      this._videoOptions.preset,
-      this._videoOptions.fps,
-      this._videoOptions.bitrate,
-      this._videoOptions.profile,
-      this._videoOptions.videoFrontMirror
-    );
-
-    this.nodePublisher.setAudioParamBitrateProfileSampleRate(this._audioOptions.bitrate, this._audioOptions.profile, this._audioOptions.samplerate);
 
     this.publisherDelegate = new __SF_NodePlayerDelegateClass();
     this.publisherDelegate.onEventCallbackEventMsg = (e) => {
@@ -63,7 +47,30 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
     };
     this.nodePublisher.nodePublisherDelegate = this.publisherDelegate;
   }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._outputUrl = '';
+    this._audioEnabled = true;
+    this._videoEnabled = true;
+    this._videoOptions = videoDefault;
+    this._cameraOptions = cameraDefault;
+    this._audioOptions = audioDefault;
+    this.nodePublisherProps();
+    super.preConstruct(params);
+  }
   onChange: (params: { event: number; message: string }) => void;
+
+  private nodePublisherProps() {
+    this.nodePublisher = new __SF_NodePublisher();
+    this.nodePublisher.setCameraPreviewCameraIdFrontMirror(this.nativeObject, this._cameraOptions.cameraId, this._cameraOptions.cameraFrontMirror);
+    this.nodePublisher.setAudioParamBitrateProfileSampleRate(this._audioOptions.bitrate, this._audioOptions.profile, this._audioOptions.samplerate);
+    this.nodePublisher.setVideoParamPresetFpsBitrateProfileFrontMirror(
+      this._videoOptions.preset,
+      this._videoOptions.fps,
+      this._videoOptions.bitrate,
+      this._videoOptions.profile,
+      this._videoOptions.videoFrontMirror
+    );
+  }
   get audioEnabled() {
     return this._audioEnabled;
   }
@@ -124,7 +131,7 @@ export default class LiveMediaPublisherIOS<TEvent extends string = LiveMediaPubl
     this._flashEnabled = value;
     this.nodePublisher.flashEnable = this._flashEnabled;
   }
-  play() {
+  start() {
     this.nodePublisher.start();
   }
   stop() {

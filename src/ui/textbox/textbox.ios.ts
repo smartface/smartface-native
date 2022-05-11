@@ -140,11 +140,11 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this._hintTextColor = Color.create(199, 199, 205);
     this._textAligment = TextAlignment.MIDLEFT;
     this._clearButtonEnabled = false;
-    this.addIOSProps(this.iOSProps);
     super.preConstruct(params);
+    this.addIOSProps(this.iOSProps());
   }
 
-  private get iOSProps() {
+  private iOSProps() {
     const self = this;
     return {
       get adjustFontSizeToFit(): boolean {

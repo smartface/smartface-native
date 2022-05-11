@@ -88,7 +88,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _borderRadius: number;
   protected _backgroundColor: IView['backgroundColor'];
   protected _overScrollMode: OverScrollMode;
-  protected didSetTouchHandler;
+  protected didSetTouchHandler: boolean;
   protected _sfOnTouchViewManager: any;
   private _touchEnabled: boolean;
   private _rippleEnabled: boolean;
@@ -114,10 +114,10 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._rippleEnabled = false;
     this._useForeground = false;
     this._overScrollMode = OverScrollMode.ALWAYS;
-    this._scale = { x: 1.0, y: 1.0 };
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;
+    this._scale = { x: 1.0, y: 1.0 };
     this._masksToBounds = true;
     this._maskedBorders = [ViewAndroid.Border.TOP_LEFT, ViewAndroid.Border.TOP_RIGHT, ViewAndroid.Border.BOTTOM_RIGHT, ViewAndroid.Border.BOTTOM_LEFT];
     super.preConstruct(params);
@@ -544,10 +544,12 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._nativeObject.bringToFront();
   }
   flipHorizontally() {
-    this._nativeObject.setScaleX(-1);
+    const currentScale = this.scaleX;
+    this._nativeObject.setScaleX(-currentScale);
   }
   flipVertically() {
-    this._nativeObject.setScaleY(-1);
+    const currentScale = this.scaleY;
+    this._nativeObject.setScaleY(-currentScale);
   }
   getParent() {
     return this._parent ? this._parent : null;

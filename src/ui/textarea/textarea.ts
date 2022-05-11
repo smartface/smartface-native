@@ -2,7 +2,7 @@ import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox/textb
 import { TextAreaEvents } from './textarea-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type TextareaiOSProps = TextBoxiOSProps & {
+export interface TextAreaiOSProps extends TextBoxiOSProps {
   /**
    * Get/set showScrollBar property
    *
@@ -12,21 +12,6 @@ export type TextareaiOSProps = TextBoxiOSProps & {
    */
   showScrollBar: boolean;
   clearButtonEnabled: boolean;
-};
-
-export type TextareaAndroidProps = TextBoxAndroidProps & {
-  /**
-   * Gets/sets hint text that will be displayed when TextBox is empty.
-   *
-   * @property {String} [hint = ""]
-   * @android
-   * @since 1.1.10
-   */
-  hint: string;
-};
-
-export declare interface ITextArea<TEvent extends string = TextAreaEvents, TProps extends MobileOSProps<TextareaiOSProps, TextareaAndroidProps> = MobileOSProps<TextareaiOSProps, TextareaAndroidProps>>
-  extends ITextBox<TEvent | TextAreaEvents, TProps> {
   /**
    * Sets/Gets the bounce effect when scrolling.
    *
@@ -36,3 +21,17 @@ export declare interface ITextArea<TEvent extends string = TextAreaEvents, TProp
    */
   bounces: boolean;
 }
+
+export interface TextAreaAndroidProps extends TextBoxAndroidProps {
+  /**
+   * Gets/sets hint text that will be displayed when TextBox is empty.
+   *
+   * @property {String} [hint = ""]
+   * @android
+   * @since 1.1.10
+   */
+  hint: string;
+}
+
+export interface ITextArea<TEvent extends string = TextAreaEvents, TProps extends MobileOSProps<TextAreaiOSProps, TextAreaAndroidProps> = MobileOSProps<TextAreaiOSProps, TextAreaAndroidProps>>
+  extends ITextBox<TEvent | TextAreaEvents, TProps> {}

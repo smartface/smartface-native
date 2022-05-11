@@ -111,7 +111,7 @@ export declare class AbstractMenuItem<
     TEvent extends string = MenuItemEvents,
     TProps extends MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps> = MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps>
   >
-  extends NativeEventEmitterComponent<TEvent | MenuItemEvents, TProps>
+  extends NativeEventEmitterComponent<TEvent | MenuItemEvents, any, TProps>
   implements IMenuItem
 {
   protected createNativeObject(params?: Record<string, any>);

@@ -1,7 +1,7 @@
 import Color from '../color';
 import Font from '../font';
 import TextView from '../textview';
-import { AttributedStringBase } from './attributedstring';
+import { AttributedStringBase, IAttributedString } from './attributedstring';
 
 const SFClickableSpan = requireClass('io.smartface.android.sfcore.ui.textview.SFClickableSpan');
 const NativeForegroundColorSpan = requireClass('android.text.style.ForegroundColorSpan');
@@ -12,17 +12,27 @@ const NativeUnderlineSpan = requireClass('android.text.style.UnderlineSpan');
 const NativeStrikethroughSpan = requireClass('android.text.style.StrikethroughSpan');
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
-class AttributedStringAndroid extends AttributedStringBase {
-  private _string = '';
-  private _foregroundColor = Color.BLACK;
-  private _backgroundColor = Color.TRANSPARENT;
-  private _font = Font.create(Font.DEFAULT, 14, Font.NORMAL);
-  private _underline = false;
-  private _strikethrough = false;
+class AttributedStringAndroid extends AttributedStringBase implements IAttributedString {
+  private _string: IAttributedString['string'];
+  private _foregroundColor: IAttributedString['foregroundColor'];
+  private _backgroundColor: IAttributedString['foregroundColor'];
+  private _font: IAttributedString['font'];
+  private _underline: IAttributedString['underline'];
+  private _strikethrough: IAttributedString['strikethrough'];
   private _link?: string;
   private textView: TextView;
   constructor(params?: ConstructorParameters<typeof AttributedStringBase>['0']) {
     super(params);
+  }
+
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._string = '';
+    this._foregroundColor = Color.BLACK;
+    this._backgroundColor = Color.TRANSPARENT;
+    this._font = Font.create(Font.DEFAULT, 14, Font.NORMAL);
+    this._underline = false;
+    this._strikethrough = false;
+    super.preConstruct(params);
   }
   get string() {
     return this._string;

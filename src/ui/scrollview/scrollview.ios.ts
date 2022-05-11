@@ -19,7 +19,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   overScrollMode: OverScrollMode;
   contentLayout: FlexLayoutIOS;
-  private _frame: __SF_UIView['frame'];
+  private _frame: { x?: number; y?: number };
   private _align: ScrollType;
   private _autoSizeEnabled: boolean;
   gradientColorFrameObserver?: (e: any) => void;
@@ -75,7 +75,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   protected preConstruct(params) {
     this.contentLayout = new FlexLayoutIOS();
     this.setLayoutProps();
-    this._frame = { x: 0, y: 0 };
+    this._frame = {};
     this._align = ScrollType.VERTICAL;
     this._autoSizeEnabled = false;
     super.preConstruct(params);
@@ -117,14 +117,14 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
     }
     this.contentLayout.applyLayout = () => {
       __SF_Dispatch.mainAsync(() => {
-        if (this.autoSizeEnabled) {
-          this.contentLayout.width = this.nativeObject.frame.width;
-        }
-
-        this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
         if (!this.autoSizeEnabled) {
+          this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
           return;
         }
+
+        this.contentLayout.width = this.nativeObject.frame.width;
+        this.contentLayout.height = this.nativeObject.frame.height;
+        this.contentLayout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
 
         const rect = {
           x: 0,

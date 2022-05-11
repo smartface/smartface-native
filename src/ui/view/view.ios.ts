@@ -318,12 +318,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       if (value.nativeObject.constructor.name === 'CAGradientLayer') {
         if (!this.gradientColor) {
           this.nativeObject.addFrameObserver();
-          this.nativeObject.frameObserveHandler = function (e) {
+          this.nativeObject.frameObserveHandler = (e) => {
             if (this.nativeObject.frame.width === 0 || this.nativeObject.frame.height === 0) {
               return;
             }
-            this.gradientColor.frame = e.frame;
-            this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+            if (this.gradientColor) {
+              this.gradientColor.frame = e.frame;
+              this.nativeObject.backgroundColor = this.gradientColor.layerToColor();
+            }
           };
         }
         this.gradientColor = value.nativeObject;

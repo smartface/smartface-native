@@ -1,9 +1,11 @@
-import { ITextArea, TextareaiOSProps } from './textarea';
+import { ITextArea } from './textarea';
 import ActionKeyType from '../shared/android/actionkeytype';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import TextBoxIOS from '../textbox/textbox.ios';
 import { TextAreaEvents } from './textarea-events';
+
+const MINIMUM_FONT_SIZE = 7;
 
 export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative = __SF_UITextView, TProps extends ITextArea = ITextArea>
   extends TextBoxIOS<TEvent | TextAreaEvents, TNative, TProps>
@@ -14,56 +16,63 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   private _actionKeyType: ActionKeyType;
   private _keyboardType: KeyboardType;
   private _isPassword: boolean;
-  private _adjustFontSizeToFit: boolean = false;
-  private _minimumFontSize: number = 7;
+  private _adjustFontSizeToFit: boolean;
+  private _minimumFontSize: number;
   private __clearButtonEnabled: boolean;
+  enabled?: boolean;
+  constructor(params?: Partial<TProps>) {
+    super(params);
+    this.ios.showScrollBar = false;
+    this.nativeObject.setValueForKey(2, 'contentInsetAdjustmentBehavior');
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._adjustFontSizeToFit = false;
+    this._minimumFontSize = MINIMUM_FONT_SIZE;
+    this.addIOSProps(this.getIOSProps());
+    super.preConstruct(params);
+  }
   createNativeObject(): any {
     return new __SF_UITextView();
   }
-  constructor(params?: Partial<TProps>) {
-    super(params);
 
-    this.addIOSProps(this.iosProps);
-    this.ios.showScrollBar = false;
-  }
-  enabled?: boolean;
-
-  get iosProps(): TextareaiOSProps {
+  protected getIOSProps(): ITextArea['ios'] {
     const self = this;
     return {
-      get showScrollBar(): TextareaiOSProps['showScrollBar'] {
+      get showScrollBar(): ITextArea['ios']['showScrollBar'] {
         return self.nativeObject.showsHorizontalScrollIndicator;
       },
-      set showScrollBar(value: TextareaiOSProps['showScrollBar']) {
+      set showScrollBar(value: ITextArea['ios']['showScrollBar']) {
         self.nativeObject.showsHorizontalScrollIndicator = value;
         self.nativeObject.showsVerticalScrollIndicator = value;
       },
-      get adjustFontSizeToFit(): TextareaiOSProps['adjustFontSizeToFit'] {
+      get adjustFontSizeToFit(): ITextArea['ios']['adjustFontSizeToFit'] {
         return self._adjustFontSizeToFit;
       },
-      set adjustFontSizeToFit(value: TextareaiOSProps['adjustFontSizeToFit']) {
+      set adjustFontSizeToFit(value: ITextArea['ios']['adjustFontSizeToFit']) {
         self._adjustFontSizeToFit = !!value;
       },
-      get minimumFontSize(): TextareaiOSProps['minimumFontSize'] {
+      get minimumFontSize(): ITextArea['ios']['minimumFontSize'] {
         return self._minimumFontSize;
       },
-      set minimumFontSize(value: TextareaiOSProps['minimumFontSize']) {
-        self._minimumFontSize = value;
+      set minimumFontSize(value: ITextArea['ios']['minimumFontSize']) {
+        if (value) {
+          self._minimumFontSize = value;
+        }
       },
       get clearButtonEnabled(): boolean {
         return self.__clearButtonEnabled;
       },
-      set clearButtonEnabled(value: TextareaiOSProps['clearButtonEnabled']) {
-        self.__clearButtonEnabled = value;
+      set clearButtonEnabled(value: ITextArea['ios']['clearButtonEnabled']) {
+        self.__clearButtonEnabled = !!value;
+      },
+
+      get bounces(): boolean {
+        return self.nativeObject.valueForKey('bounces');
+      },
+      set bounces(value: boolean) {
+        self.nativeObject.setValueForKey(value, 'bounces');
       }
     };
-  }
-
-  get bounces(): boolean {
-    return this._bounces;
-  }
-  set bounces(value: boolean) {
-    this._bounces = value;
   }
 
   get textAlignment(): TextAlignment {
