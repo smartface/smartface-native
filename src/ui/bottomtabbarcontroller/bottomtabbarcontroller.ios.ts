@@ -41,11 +41,7 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
 
   shouldSelectViewController(index: number) {
     this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
-    return (
-      this.shouldSelectByIndex?.({
-        index: index
-      }) ?? true
-    );
+    return this.shouldSelectByIndex ? this.shouldSelectByIndex({ index: index }) : true;
   }
 
   protected createNativeObject(params) {
