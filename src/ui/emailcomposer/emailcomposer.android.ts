@@ -21,11 +21,12 @@ export default class EmailComposerAndroid extends AbstractEmailComposer {
   private _closeCallback: () => void;
   constructor(params) {
     super(params);
+    const self = this;
     this.addAndroidProps({
       addAttachmentForAndroid(attachment: File) {
         if (attachment instanceof File) {
           const absulotePath = attachment.nativeObject.getAbsolutePath();
-          this.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse('file://' + absulotePath));
+          self.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse('file://' + absulotePath));
         }
       }
     });
