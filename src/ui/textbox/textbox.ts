@@ -1,5 +1,5 @@
 import type View from '../view';
-import { IView } from '../view/view';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import Color from '../color';
@@ -12,7 +12,7 @@ import { TextBoxEvents } from './textbox-events';
 import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
-export type TextBoxAndroidProps = View['android'] & {
+export interface TextBoxAndroidProps extends ViewAndroidProps {
   cursorPosition: {
     start: number;
     end: number;
@@ -26,9 +26,9 @@ export type TextBoxAndroidProps = View['android'] & {
    * @since 2.0.10
    */
   maxLength?: (value: number) => void;
-};
+}
 
-export type TextBoxiOSProps = View['ios'] & {
+export interface TextBoxiOSProps extends ViewIOSProps {
   /**
    * This property adjusts font size according to view's fixed width. If you set it true,
    * you should set minimum font size by changing the minimumFontSize property.
@@ -110,9 +110,9 @@ export type TextBoxiOSProps = View['ios'] & {
    *
    */
   textContentType?: TextContentType;
-};
+}
 
-export declare interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps> = MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps>>
+export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps> = MobileOSProps<TextBoxiOSProps, TextBoxAndroidProps>>
   extends IView<TEvent | TextBoxEvents, any, TMobile> {
   /**
    * Gets/sets the font of the TextBox.

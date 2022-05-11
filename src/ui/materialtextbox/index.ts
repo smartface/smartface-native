@@ -1,6 +1,7 @@
-import { MaterialTextBoxImpl } from './materialtextbox';
+import { IMaterialTextBox } from './materialtextbox';
+import { ConstructorOf } from '../../core/constructorof';
 
-const MaterialTexBox: typeof MaterialTextBoxImpl = require(`./materialtextbox.${Device.deviceOS.toLowerCase()}`).default;
-type MaterialTexBox = MaterialTextBoxImpl;
+const MaterialTexBox: ConstructorOf<IMaterialTextBox, Partial<IMaterialTextBox>> = require(`./materialtextbox.${Device.deviceOS.toLowerCase()}`).default;
+type MaterialTexBox = IMaterialTextBox;
 
 export default MaterialTexBox;

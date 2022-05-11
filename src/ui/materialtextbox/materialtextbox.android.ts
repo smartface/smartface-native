@@ -48,23 +48,28 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   private __hintTextColor: Color;
   private _hintFocusedTextColor: Color | null;
   private _errorText: string;
-  private _lineColorObj: { normal: Color | null; selected: Color | null } = { normal: null, selected: null };
-  private _errorColor: Color | null = null;
+  private _lineColorObj: { normal: Color | null; selected: Color | null };
+  private _errorColor: Color | null;
   private _characterRestrictionColor: Color;
   private __font: Font;
-  private _rightLayout: FlexLayout | null = null;
+  private _rightLayout: FlexLayout | null;
   private _rightLayoutWidth: number;
-  private _enableCounterMaxLength: number = 10;
-  private _enableCounter: boolean = false;
-  private _enableErrorMessage: boolean = false;
-  private _enableCharacterRestriction: boolean = false;
-  private _touchEnable: boolean = true;
-  protected createNativeObject(): any {
-    const nativeObject = new SFMaterialTextBoxWrapper(activity);
-    this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
-    this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
-    return nativeObject;
-  }
+  private _enableCounterMaxLength: number;
+  private _enableCounter: boolean;
+  private _enableErrorMessage: boolean;
+  private _enableCharacterRestriction: boolean;
+  private _touchEnable: boolean;
+  font: Font;
+  text: string;
+  autoCapitalize: AutoCapitalize;
+  textAlignment: TextAlignment;
+  textColor: Color;
+  cursorPosition: { start: number; end: number };
+  onEditBegins: () => void;
+  cursorColor: Color;
+  isPassword: boolean;
+  keyboardType: number | null;
+  actionKeyType: ActionKeyType;
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
 
@@ -82,17 +87,23 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
 
     this.addAndroidProps(this.getAndroidProps());
   }
-  font: Font;
-  text: string;
-  autoCapitalize: AutoCapitalize;
-  textAlignment: TextAlignment;
-  textColor: Color;
-  cursorPosition: { start: number; end: number };
-  onEditBegins: () => void;
-  cursorColor: Color;
-  isPassword: boolean;
-  keyboardType: number | null;
-  actionKeyType: ActionKeyType;
+  protected preConstruct(params?: any): void {
+    this._lineColorObj = { normal: null, selected: null };
+    this._errorColor = null;
+    this._rightLayout = null;
+    this._enableCounterMaxLength = 10;
+    this._enableCounter = false;
+    this._enableErrorMessage = false;
+    this._enableCharacterRestriction = false;
+    this._touchEnable = true;
+    super.preConstruct(params);
+  }
+  protected createNativeObject(): any {
+    const nativeObject = new SFMaterialTextBoxWrapper(activity);
+    this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
+    this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
+    return nativeObject;
+  }
   showKeyboard(): void {
     throw new Error('Method not implemented.');
   }
@@ -141,6 +152,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
       },
       set maxLines(value: number) {
         self.textBoxNativeObject.setMaxLines(value);
+      },
+      get enableCharacterRestriction(): boolean {
+        return self._enableCharacterRestriction;
+      },
+      set enableCharacterRestriction(value: boolean) {
+        self._enableCharacterRestriction = value;
+        self.nativeObject.setCounterEnabled(self._enableCharacterRestriction);
       }
     };
   }
@@ -330,7 +348,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this._enableCounter = this._enableCounterMaxLength !== 0 ? true : false;
 
     //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
-    if (this._enableCharacterRestriction !== true) this.enableCharacterRestriction = true;
+    if (this._enableCharacterRestriction !== true) {
+      this.android.enableCharacterRestriction = true;
+    }
 
     if (this._characterRestrictionColor) this.characterRestrictionColor = this._characterRestrictionColor;
 
@@ -343,17 +363,11 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   set characterRestrictionColor(value: Color) {
     this._characterRestrictionColor = value;
 
-    if (this._enableCounter !== true) this.enableCharacterRestriction = true;
+    if (this._enableCounter !== true) {
+      this.android.enableCharacterRestriction = true;
+    }
 
     const counterView = this.nativeObject.getReCreatedCounterView();
     counterView.setTextColor(this._characterRestrictionColor.nativeObject);
-  }
-
-  get enableCharacterRestriction(): boolean {
-    return this._enableCharacterRestriction;
-  }
-  set enableCharacterRestriction(value: boolean) {
-    this._enableCharacterRestriction = value;
-    this.nativeObject.setCounterEnabled(this._enableCharacterRestriction);
   }
 }

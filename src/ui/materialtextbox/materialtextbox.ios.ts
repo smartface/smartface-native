@@ -16,8 +16,8 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   private _errorMessage: string;
   private __hint: string;
   private __hintTextColor: Color;
-  private _onLeftViewRightPadding: number = 0;
-  private _onRightViewLeftPadding: number = 0;
+  private _onLeftViewRightPadding: number;
+  private _onRightViewLeftPadding: number;
   private _leftLayout: { view: View; width: number; height?: number };
   private _leftLayoutMain: FlexLayout;
   private _onLeftViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
@@ -29,7 +29,8 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   protected preConstruct(params: Partial<IMaterialTextBox> = {}) {
     this._multiline = !!params.multiline;
     this._lineCount = params.lineCount || 1;
-
+    this._onLeftViewRightPadding = 0;
+    this._onRightViewLeftPadding = 0;
     this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
 
@@ -133,7 +134,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
           flexContent.width = value.width ? value.width : 30;
           flexContent.height = value.height ? value.height : 30;
           flexMain.nativeObject.addFrameObserver();
-          flexMain.nativeObject.frameObserveHandler = function (e) {
+          flexMain.nativeObject.frameObserveHandler = (e) => {
             flexContent.top = 0;
             flexContent.left = 0;
             flexContent.width = e.frame.width;
@@ -162,21 +163,25 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
       },
       // TODO Old version has not this encapsulation.
       get normallineColor(): Color | null {
-        return self.mdcTextInputControllerUnderline.normalColor
-          ? new Color({
-              color: self.mdcTextInputControllerUnderline.normalColor
-            })
-          : null;
+        if (self.mdcTextInputControllerUnderline.normalColor) {
+          return new Color({
+            color: self.mdcTextInputControllerUnderline.normalColor
+          });
+        } else {
+          return null;
+        }
       },
       set normallineColor(value: Color | null) {
         if (value) self.mdcTextInputControllerUnderline.normalColor = value.nativeObject;
       },
       get selectedLineColor(): Color | null {
-        return self.mdcTextInputControllerUnderline.activeColor
-          ? new Color({
-              color: self.mdcTextInputControllerUnderline.activeColor
-            })
-          : null;
+        if (self.mdcTextInputControllerUnderline.activeColor) {
+          return new Color({
+            color: self.mdcTextInputControllerUnderline.activeColor
+          });
+        } else {
+          return null;
+        }
       },
       set selectedLineColor(value: Color | null) {
         if (value) self.mdcTextInputControllerUnderline.activeColor = value.nativeObject;

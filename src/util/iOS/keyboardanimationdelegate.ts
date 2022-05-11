@@ -23,7 +23,7 @@ export default class KeyboardAnimationDelegate {
     return this.parentView?.parentViewController() || undefined;
   }
   parent() {
-    let navigationController = this.getParentViewController().navigationController;
+    const navigationController = this.getParentViewController().navigationController;
     let parent = this.parentDialog;
 
     if (!parent) {
@@ -48,14 +48,14 @@ export default class KeyboardAnimationDelegate {
   keyboardShowAnimation(keyboardHeight: number, e: KeyboardInfoParams, isBeginEditing?: boolean) {
     KeyboardAnimationDelegate.isKeyboardVisible = true;
     KeyboardAnimationDelegate.ApplicationKeyboardHeight = keyboardHeight;
-    let height = this.nativeObject.frame.height;
-    let top = this.getViewTop(this.nativeObject);
+    const height = this.nativeObject.frame.height;
+    const top = this.getViewTop(this.nativeObject);
 
     if (!this.getParentViewController() && !this.parentDialog) {
       return;
     }
 
-    let controlValue = top + height;
+    const controlValue = top + height;
     if (controlValue + KeyboardAnimationDelegate.offsetFromTop(this) > Screen.height - keyboardHeight) {
       this._isKeyboadAnimationCompleted = false;
       this._topDistance = controlValue + KeyboardAnimationDelegate.offsetFromTop(this) - (Screen.height - keyboardHeight);
@@ -77,11 +77,11 @@ export default class KeyboardAnimationDelegate {
       }
 
       if (e?.userInfo) {
-        var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
-        var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
-        var animationOptions = animationCurve << 16;
+        const animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
+        const animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
+        const animationOptions = animationCurve << 16;
 
-        var invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance('animateWithDuration:delay:options:animations:completion:', 'UIView');
+        const invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance('animateWithDuration:delay:options:animations:completion:', 'UIView');
         if (invocationAnimation) {
           invocationAnimation.setClassTargetFromString('UIView');
           invocationAnimation.setSelectorWithString('animateWithDuration:delay:options:animations:completion:');
@@ -90,8 +90,8 @@ export default class KeyboardAnimationDelegate {
           invocationAnimation.setDoubleArgumentAtIndex(0, 3);
           invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
           invocationAnimation.setVoidBlockArgumentAtIndex(function () {
-            var parent = this.parent();
-            var frame = parent.frame;
+            const parent = this.parent();
+            const frame = parent.frame;
             frame.y = -this._topDistance;
             parent.frame = frame;
           }, 5);
@@ -100,15 +100,15 @@ export default class KeyboardAnimationDelegate {
           this._isKeyboadAnimationCompleted = true; // bug id : IOS-2763
         }
       } else {
-        var parent = this.parent();
-        var frame = parent.frame;
+        const parent = this.parent();
+        const frame = parent.frame;
         frame.y = -this._topDistance;
         parent.frame = frame;
         this._isKeyboadAnimationCompleted = true;
       }
     } else {
       if (this.getParentViewController()) {
-        if (this.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this) && this.getParentViewController().view.frame.y != 0) {
+        if (this.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this) && this.getParentViewController().view.frame.y !== 0) {
           if (e?.userInfo) {
             this.keyboardHideAnimation({
               userInfo: e.userInfo,
@@ -159,11 +159,11 @@ export default class KeyboardAnimationDelegate {
     if (this.getParentViewController() || this.parentDialog) {
       if (this._isKeyboadAnimationCompleted) {
         if (e?.userInfo) {
-          var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
-          var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
-          var animationOptions = animationCurve << 16;
+          const animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
+          const animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
+          const animationOptions = animationCurve << 16;
 
-          var invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance('animateWithDuration:delay:options:animations:completion:', 'UIView');
+          const invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance('animateWithDuration:delay:options:animations:completion:', 'UIView');
           if (invocationAnimation) {
             invocationAnimation.setClassTargetFromString('UIView');
             invocationAnimation.setSelectorWithString('animateWithDuration:delay:options:animations:completion:');
@@ -172,8 +172,8 @@ export default class KeyboardAnimationDelegate {
             invocationAnimation.setDoubleArgumentAtIndex(0, 3);
             invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
             invocationAnimation.setVoidBlockArgumentAtIndex(function () {
-              var parent = this.parent();
-              var frame = parent.frame;
+              const parent = this.parent();
+              const frame = parent.frame;
               frame.y = this.defaultTopPosition();
               parent.frame = frame;
             }, 5);
@@ -181,8 +181,8 @@ export default class KeyboardAnimationDelegate {
             invocationAnimation.invoke();
           }
         } else {
-          var parent = this.parent();
-          var frame = parent.frame;
+          const parent = this.parent();
+          const frame = parent.frame;
           frame.y = this.defaultTopPosition();
           parent.frame = frame;
         }
@@ -197,7 +197,7 @@ export default class KeyboardAnimationDelegate {
       } else if (view.superview.constructor.name === 'SMFUIScrollView') {
         this._top += view.frame.y;
         if (this._top + this.nativeObject.frame.height > view.superview.contentOffset.y + view.superview.frame.height) {
-          var newTop = this._top - (view.superview.frame.height || 0) + this.nativeObject.frame.height;
+          const newTop = this._top - (view.superview.frame.height || 0) + this.nativeObject.frame.height;
           view.superview.setContentOffsetAnimated(
             {
               x: 0,
@@ -220,15 +220,15 @@ export default class KeyboardAnimationDelegate {
         }
       } else if (view.superview.constructor.name === 'SMFUITableView') {
         if (view.constructor.name === 'SMFUITableViewCell') {
-          var cell = view;
-          var tableView = view.superview;
-          var indexPath = tableView.indexPathForCell(cell);
-          var rect = tableView.rectForRowAtIndexPath(indexPath);
+          const cell = view;
+          const tableView = view.superview;
+          const indexPath = tableView.indexPathForCell(cell);
+          const rect = tableView.rectForRowAtIndexPath(indexPath);
 
           this._top += rect.y;
 
           if (this._top + this.nativeObject.frame.height > tableView.contentOffset.y + tableView.frame.height) {
-            var newTop = this._top - (tableView.frame.height || 0) + this.nativeObject.frame.height;
+            const newTop = this._top - (tableView.frame.height || 0) + this.nativeObject.frame.height;
             tableView.setContentOffsetAnimated(
               {
                 x: 0,
@@ -260,7 +260,7 @@ export default class KeyboardAnimationDelegate {
       }
 
       if (view.superview.superview) {
-        var isRootView = view.superview.superview.valueForKey('restorationIdentifier') == 'RouterView' ? true : false;
+        const isRootView = view.superview.superview.valueForKey('restorationIdentifier') === 'RouterView' ? true : false;
         if (view.superview.superview.constructor.name !== 'UIViewControllerWrapperView' && !isRootView) {
           return this.getViewTop(view.superview);
         } else {
@@ -269,10 +269,10 @@ export default class KeyboardAnimationDelegate {
       }
     }
 
-    var statusBar = KeyboardAnimationDelegate.statusBarFrames(this);
+    const statusBar = KeyboardAnimationDelegate.statusBarFrames(this);
     this._top += statusBar.viewRect.height! > 20 ? 20 : 0;
 
-    var temp = this._top;
+    const temp = this._top;
     this._top = 0;
     return temp;
   }
@@ -289,7 +289,8 @@ export default class KeyboardAnimationDelegate {
       if (!instance.getParentViewController().statusBarHidden) {
         //44 point = iPhone X
         return (
-          (statusBar.viewRect.height == 44 ? 44 : statusBar.viewRect.height || 0 > 20 ? 20 : statusBar.frame.height) || 0 + (instance.getParentViewController().navigationController.navigationBar.frame.height || 0)
+          (statusBar.viewRect.height === 44 ? 44 : statusBar.viewRect.height || 0 > 20 ? 20 : statusBar.frame.height) ||
+          0 + (instance.getParentViewController().navigationController.navigationBar.frame.height || 0)
         );
       } else {
         return instance.getParentViewController().navigationController.navigationBar.frame.height || 0;
