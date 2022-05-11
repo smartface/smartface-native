@@ -1,7 +1,7 @@
-import File from '../../io/file';
-import Blob from '../../global/blob';
 import Page from '../page';
 import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import IBlob from '../../global/blob/blob';
+import { IFile } from '../../io/file/file';
 
 interface EmailComposerAndroidProps {
   /**
@@ -12,7 +12,7 @@ interface EmailComposerAndroidProps {
    * @method addAttachmentForAndroid
    * @since 3.0.3
    */
-  addAttachmentForAndroid(file: File): void;
+  addAttachmentForAndroid(file: IFile): void;
 }
 interface EmailComposerIOSProps {
   /**
@@ -26,7 +26,7 @@ interface EmailComposerIOSProps {
    * @method addAttachmentForiOS
    * @since 3.0.3
    */
-  addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string): void;
+  addAttachmentForiOS(blob: IBlob, mimeType?: string, fileName?: string): void;
 }
 
 /**

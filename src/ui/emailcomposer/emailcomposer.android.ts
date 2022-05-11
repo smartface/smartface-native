@@ -18,16 +18,9 @@ const EXTRA_STREAM = 'android.intent.extra.STREAM';
 const ACTION_VIEW = 'android.intent.action.VIEW';
 
 export default class EmailComposerAndroid extends AbstractEmailComposer {
-  static EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
   private _closeCallback: () => void;
-  protected createNativeObject(): void {
-    const nativeObject = new NativeIntent(ACTION_VIEW);
-    nativeObject.setData(NativeUri.parse('mailto:'));
-    return nativeObject;
-  }
   constructor(params) {
     super(params);
-
     this.addAndroidProps({
       addAttachmentForAndroid(attachment: File) {
         if (attachment instanceof File) {
@@ -41,6 +34,11 @@ export default class EmailComposerAndroid extends AbstractEmailComposer {
     });
   }
 
+  protected createNativeObject(): void {
+    const nativeObject = new NativeIntent(ACTION_VIEW);
+    nativeObject.setData(NativeUri.parse('mailto:'));
+    return nativeObject;
+  }
   get onClose() {
     return this._closeCallback;
   }
@@ -88,4 +86,5 @@ export default class EmailComposerAndroid extends AbstractEmailComposer {
   static onActivityResult(requestCode: number, resultCode: number, data: any) {
     EmailComposerAndroid._closeCallback?.();
   }
+  static EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
 }

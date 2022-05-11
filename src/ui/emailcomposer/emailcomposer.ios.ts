@@ -2,6 +2,13 @@ import { AbstractEmailComposer } from './emailcomposer';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import Page from '../page';
+import IBlob from '../../global/blob/blob';
+
+interface iOSAttachment {
+  mimeType?: string;
+  fileName?: string;
+  blob: IBlob;
+}
 
 export default class EmailComposerIOS extends AbstractEmailComposer {
   private _cc: string[];
@@ -9,16 +16,30 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
   private _to: string[];
   private _message: { message: string; isHtmlText: boolean };
   private _subject: string;
-  private _attaches: any = [];
+  private _attaches: iOSAttachment[];
   private _closeCallback: () => void;
   private nativeObjectDelegate: __SF_SMFMFMailComposeViewControllerDelegate;
+  constructor() {
+    super();
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private getAndroidProps() {
+    return {
+      addAttachmentForAndroid(attachment: File) {}
+    };
+  }
+
   protected createNativeObject(): any {
     return null;
   }
-  constructor() {
-    super();
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._attaches = [];
+    super.preConstruct(params);
+  }
+  private getIOSProps() {
     const self = this;
-    this.addIOSProps({
+    return {
       addAttachmentForiOS(blob: Blob, mimeType?: string, fileName?: string) {
         self._attaches.push({
           blob: blob,
@@ -26,11 +47,7 @@ export default class EmailComposerIOS extends AbstractEmailComposer {
           fileName: fileName
         });
       }
-    });
-
-    this.addAndroidProps({
-      addAttachmentForAndroid(attachment: File) {}
-    });
+    };
   }
   get onClose() {
     return this._closeCallback;
