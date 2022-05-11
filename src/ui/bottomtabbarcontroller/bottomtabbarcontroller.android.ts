@@ -54,7 +54,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
       listener.implement({
         onNavigationItemSelected: (item: any) => {
           const index = item.getItemId();
-          const result = this.shouldSelectByIndex?.({ index: index }) || true;
+          const result = this.shouldSelectByIndex ? this.shouldSelectByIndex({ index: index }) : true;
           this.emit(BottomTabbarControllerEvents.ShouldSelectByIndex, { index });
           if (!result) {
             return false;

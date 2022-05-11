@@ -57,7 +57,6 @@ export interface IBottomTabBarController extends IController {
    * Return true if you want the item to be displayed as the selected index.
    *
    * @event shouldSelectByIndex
-   * @deprecated
    * @param params
    * @param Number params.index
    * @return Boolean
@@ -69,9 +68,10 @@ export interface IBottomTabBarController extends IController {
    * import BottomTabbarController from '@smartface/native/ui/bottomtabbarcontroller';
    *
    * const bottomTabbarController = new BottomTabbarController();
-   * bottomTabbarController.on(BottomTabBarController.Events.ShouldSelectByIndex, (params) => {
-   *  console.info('shouldSelectByIndex', params);
-   * });
+   * bottomTabbarController.shouldSelectByIndex = ({ index }) => {
+   *  console.info('shouldSelectByIndex', index);
+   *  return true;
+   * }
    * ```
    */
   shouldSelectByIndex(params: { index: number }): boolean;
@@ -79,7 +79,6 @@ export interface IBottomTabBarController extends IController {
    *  Called when an item in the bottom tabbar item is selected.
    *
    * @event didSelectByIndex
-   * @deprecated
    * @param params
    * @param Number params.index
    * @android
@@ -90,9 +89,9 @@ export interface IBottomTabBarController extends IController {
    * import BottomTabBarController from "./bottomtabbarcontroller";
    *
    * const bottomTabBarController = new BottomTabBarController();
-   * bottomTabBarController.on(BottomTabBarController.Events.SelectByIndex, (params) => {
-   *  console.info('selectByIndex', params);
-   * });
+   * bottomTabbarController.didSelectByIndex = ({ index }) => {
+   *  console.info('didSelectByIndex', index);
+   * }
    * ```
    */
   didSelectByIndex(params: { index: number }): void;
