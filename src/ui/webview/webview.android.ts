@@ -5,9 +5,9 @@ import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import { WebViewEvents } from './webview-events';
 import WebView from '.';
-import { IWebView } from './webview';
+import { AndroidProps, iOSProps, IWebView } from './webview';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
@@ -42,57 +42,17 @@ interface IWebChromeClientCallbacks {
 }
 
 export default class WebViewAndroid<TEvent extends string = WebViewEvents> extends ViewAndroid<TEvent | WebViewEvents, any, IWebView> implements IWebView {
-  private _canOpenLinkInside = true;
+  private _canOpenLinkInside: boolean;
   private _onError: IWebView['onError'];
   private _onShow: IWebView['onShow'];
   private _onLoad: IWebView['onLoad'];
   private _onChangedURL: IWebView['onChangedURL'];
   private _onConsoleMessage: IWebView['android']['onConsoleMessage'];
-  private _scrollBarEnabled = true;
-  private _scrollEnabled = true;
+  private _scrollBarEnabled: boolean;
+  private _scrollEnabled: boolean;
   private _superTouchCallbacks;
-  private webViewClientCallbacks: IWebViewClientCallbacks;
-  private webChromeClientCallbacks: IWebChromeClientCallbacks;
   private _onBackButtonPressedCallback: IWebView['android']['onBackButtonPressed'];
   private _page: IWebView['android']['page'];
-  private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
-  private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
-  static onActivityResult = function (requestCode, resultCode, data) {
-    if (requestCode === WebViewAndroid.RESULT_CODE_ICE_CREAM) {
-      let uri = null;
-      if (data !== null) {
-        uri = data.getData();
-      }
-      mUploadMessage.onReceiveValue(uri);
-      mUploadMessage = null;
-    } else if (requestCode === WebViewAndroid.REQUEST_CODE_LOLIPOP) {
-      let results: any = null;
-      // Check that the response is a good one
-      if (resultCode === -1) {
-        // Activity.RESULT_OK
-        if (data === null) {
-          // If there is not data, then we may have taken a photo
-          if (mCameraPhotoPath !== null) {
-            const parsedUri: any[] = [];
-            parsedUri.push(NativeUri.parse(mCameraPhotoPath));
-            results = array(parsedUri, 'android.net.Uri');
-          }
-        } else {
-          const dataString = data.getDataString();
-          const parsedUri2: any[] = [];
-          parsedUri2.push(NativeUri.parse(dataString));
-          if (dataString !== null) {
-            results = array(parsedUri2, 'android.net.Uri');
-          }
-        }
-      }
-      mFilePathCallback.onReceiveValue(results);
-      mFilePathCallback = null;
-    }
-  };
-  createNativeObject() {
-    return new SFWebView(activity, this.webViewClientCallbacks, this.webChromeClientCallbacks);
-  }
   constructor(params?: Partial<WebView>) {
     super(params);
     this.nativeObject.setOnKeyListener(
@@ -111,14 +71,22 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     );
 
     this.addAndroidProps(this.getAndroidParams());
-    this.setWebViewClientCallbacks();
-    this.setWebChromeClientCallbacks();
 
     /* Webview contains background color which draws all over given background drawbles.
     It means that setBackgroundColor is not same as setBackground. So, to eleminate this behavior, set transparent
     */
     this.nativeObject.setBackgroundColor(0);
     this.nativeObject.setScrollBarEnabled(this._scrollBarEnabled);
+  }
+
+  createNativeObject() {
+    return new SFWebView(activity, this.getWebViewClientCallbacks(), this.getWebChromeClientCallbacks());
+  }
+  protected preConstruct(params?: any): void {
+    this._scrollBarEnabled = true;
+    this._scrollEnabled = true;
+    this._canOpenLinkInside = true;
+    super.preConstruct(params);
   }
   onOpenNewWindow?: (e: { url: string }) => void;
   get scrollBarEnabled() {
@@ -250,8 +218,8 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     }
   }
 
-  private overrideURLChange(url: string, _canOpenLinkInside: boolean) {
-    if (_canOpenLinkInside) {
+  private overrideURLChange(url: string) {
+    if (this._canOpenLinkInside) {
       return false;
     } else {
       const action = NativeIntent.ACTION_VIEW;
@@ -315,8 +283,8 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
     };
   }
 
-  private setWebViewClientCallbacks() {
-    this.webViewClientCallbacks = {
+  private getWebViewClientCallbacks() {
+    return {
       onPageFinished: (url: string) => {
         const params = { url: url };
         this._onShow?.(params);
@@ -334,7 +302,7 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
         if (!callbackValue) {
           return true;
         }
-        return this.overrideURLChange(url, this._canOpenLinkInside);
+        return this.overrideURLChange(url);
       },
       onReceivedError: (code: number, message: string, url: string) => {
         const params = {
@@ -347,8 +315,8 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
       }
     };
   }
-  private setWebChromeClientCallbacks() {
-    this.webChromeClientCallbacks = {
+  private getWebChromeClientCallbacks() {
+    return {
       //For Android5.0+
       onShowFileChooser: (filePathCallback: () => void) => {
         if (mFilePathCallback !== null) {
@@ -401,5 +369,41 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
         return !!result;
       }
     };
+  }
+
+  private static REQUEST_CODE_LOLIPOP = WebViewRequestCodes.REQUEST_CODE_LOLIPOP;
+  private static RESULT_CODE_ICE_CREAM = WebViewRequestCodes.RESULT_CODE_ICE_CREAM;
+  static onActivityResult(requestCode, resultCode, data) {
+    if (requestCode === WebViewAndroid.RESULT_CODE_ICE_CREAM) {
+      let uri = null;
+      if (data !== null) {
+        uri = data.getData();
+      }
+      mUploadMessage.onReceiveValue(uri);
+      mUploadMessage = null;
+    } else if (requestCode === WebViewAndroid.REQUEST_CODE_LOLIPOP) {
+      let results: any = null;
+      // Check that the response is a good one
+      if (resultCode === -1) {
+        // Activity.RESULT_OK
+        if (data === null) {
+          // If there is not data, then we may have taken a photo
+          if (mCameraPhotoPath !== null) {
+            const parsedUri: any[] = [];
+            parsedUri.push(NativeUri.parse(mCameraPhotoPath));
+            results = array(parsedUri, 'android.net.Uri');
+          }
+        } else {
+          const dataString = data.getDataString();
+          const parsedUri2: any[] = [];
+          parsedUri2.push(NativeUri.parse(dataString));
+          if (dataString !== null) {
+            results = array(parsedUri2, 'android.net.Uri');
+          }
+        }
+      }
+      mFilePathCallback.onReceiveValue(results);
+      mFilePathCallback = null;
+    }
   }
 }
