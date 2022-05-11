@@ -17,35 +17,52 @@ interface Listeners {
 }
 
 const CENTER = 17; //Gravity.CENTER
+const DEFAULT_DONE_TEXT = 'Ok';
+const DEFAULT_CANCEL_TEXT = 'Cancel';
 
 export default class SelectablePickerAndroid<TEvent extends SelectablePickerEvents>
   extends NativeEventEmitterComponent<TEvent | SelectablePickerEvents>
   implements ISelectablePicker<TEvent | SelectablePickerEvents>
 {
-  protected createNativeObject() {
-    return new NativeAlertDialog.Builder(AndroidConfig.activity);
-  }
-  private _items: ISelectablePicker['items'] = [];
-  private _multiSelectEnabled: ISelectablePicker['multiSelectEnabled'] = false;
-  private _cancelable: ISelectablePicker['cancelable'] = true;
-  private _checkedItem: number = -1;
-  private _checkedItems: ISelectablePicker['checkedItems'] = [];
+  private _items: ISelectablePicker['items'];
+  private _multiSelectEnabled: ISelectablePicker['multiSelectEnabled'];
+  private _cancelable: ISelectablePicker['cancelable'];
+  private _checkedItem: number;
+  private _checkedItems: ISelectablePicker['checkedItems'];
   private _backgroundColor: ISelectablePicker['backgroundColor'];
-  private _selectedItems: number[] = [];
+  private _selectedItems: number[];
   private _onSelected: ISelectablePicker['onSelected'];
-  private _listeners: Listeners = {};
-  private _isShowed = false;
-  private _doneButtonText: ISelectablePicker['doneButtonText'] = 'Ok';
+  private _listeners: Listeners;
+  private _isShowed: boolean;
+  private _doneButtonText: ISelectablePicker['doneButtonText'];
   private _doneButtonFont: ISelectablePicker['doneButtonFont'];
   private _doneButtonColor: ISelectablePicker['doneButtonColor'];
-  private _cancelButtonText: ISelectablePicker['cancelButtonText'] = 'Cancel';
+  private _cancelButtonText: ISelectablePicker['cancelButtonText'];
   private _cancelButtonFont: ISelectablePicker['cancelButtonFont'];
   private _cancelButtonColor: ISelectablePicker['cancelButtonColor'];
   private _titleFont: ISelectablePicker['titleFont'];
-  private _titleColor: ISelectablePicker['titleColor'] = Color.BLACK;
+  private _titleColor: ISelectablePicker['titleColor'];
   private _title: ISelectablePicker['title'];
   constructor(params: Partial<ISelectablePicker> = {}) {
     super(params);
+  }
+  protected createNativeObject() {
+    return new NativeAlertDialog.Builder(AndroidConfig.activity);
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._items = [];
+    this._multiSelectEnabled = false;
+    this._cancelable = true;
+    this._checkedItem = -1;
+    this._checkedItems = [];
+    this._selectedItems = [];
+    this._listeners = {};
+    this._isShowed = false;
+    this._doneButtonText = DEFAULT_DONE_TEXT;
+    this._cancelButtonText = DEFAULT_CANCEL_TEXT;
+    this._titleColor = Color.BLACK;
+
+    super.preConstruct(params);
   }
   get items(): ISelectablePicker['items'] {
     return this._items;
