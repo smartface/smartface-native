@@ -129,16 +129,16 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   }
   createNativeObject() {
     const nativeObject = new NativeSearchView(AndroidConfig.activity);
+    this.mSearchSrcTextView = nativeObject.findViewById(NativeSupportR.id.search_src_text);
+    this.mCloseButton = nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+    this.mSearchButton = nativeObject.findViewById(NativeSupportR.id.search_button);
+    this.mUnderLine = nativeObject.findViewById(NativeSupportR.id.search_plate);
+    this.mSearchEditFrame = nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
     nativeObject.clearFocus();
     return nativeObject;
   }
   constructor(params?: Partial<ISearchView>) {
     super(params);
-    this.mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
-    this.mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
-    this.mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
-    this.mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
-    this.mSearchEditFrame = this.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
 
     this.mUnderLine.setBackgroundColor(ColorAndroid.TRANSPARENT.nativeObject);
 
@@ -285,13 +285,6 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     }
     this._textColor = value;
     this.mSearchSrcTextView.setTextColor(value.nativeObject);
-  }
-
-  get backgroundImage(): ImageAndroid {
-    return this._backgroundImage;
-  }
-  set backgroundImage(value: ImageAndroid) {
-    this._backgroundImage = value;
   }
 
   get cursorColor(): ColorImpl {

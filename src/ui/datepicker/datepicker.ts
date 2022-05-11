@@ -27,7 +27,7 @@ import { MobileOSProps } from '../../core/native-mobile-component';
  *     myDatePicker.show();
  *
  */
-export enum Style {
+export enum DatePickerStyle {
   /**
    * Native default DatePicker theme.
    *
@@ -249,7 +249,7 @@ export interface DatePickerAndroidProperties {
    * @android
    * @since 3.1.3
    */
-  style: Style;
+  style: DatePickerStyle;
 }
 
 export declare interface IDatePicker<
@@ -349,7 +349,7 @@ export abstract class AbstractDatePicker extends NativeEventEmitterComponent<Dat
   onCancelled: () => void;
 
   static Android: {
-    Style: typeof Style;
+    Style: typeof DatePickerStyle;
   };
   static iOS: {
     DatePickerMode: typeof DatePickerMode;

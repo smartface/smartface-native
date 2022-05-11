@@ -1,4 +1,4 @@
-import { AbstractDatePicker, IDatePicker, Style } from './datepicker';
+import { AbstractDatePicker, IDatePicker, DatePickerStyle, DatePickerMode } from './datepicker';
 import AndroidConfig from '../../util/Android/androidconfig';
 
 const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
@@ -7,9 +7,6 @@ const NativeDialogInterface = requireClass('android.content.DialogInterface');
 export default class DatePickerAndroid extends AbstractDatePicker {
   onDateSelected: IDatePicker['onDateSelected'];
   onCancelled: IDatePicker['onCancelled'];
-  static Android = {
-    Style
-  };
   createNativeObject(params: Partial<IDatePicker> = {}) {
     const androidStyle = params?.android?.style || DatePickerAndroid.Android.Style.DEFAULT;
     const today = new Date();
@@ -71,4 +68,11 @@ export default class DatePickerAndroid extends AbstractDatePicker {
   toString() {
     return 'DatePicker';
   }
+
+  static Android = {
+    Style: DatePickerStyle
+  };
+  static iOS = {
+    DatePickerMode: DatePickerMode
+  };
 }

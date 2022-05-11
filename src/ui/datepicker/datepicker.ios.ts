@@ -1,4 +1,4 @@
-import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, IDatePicker, Style } from './datepicker';
+import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, DatePickerStyle, IDatePicker } from './datepicker';
 import Color from '../color';
 import { DatePickerEvents } from './datepicker-events';
 
@@ -20,10 +20,9 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
     return new __SF_UIDatePicker();
   }
   constructor(params: Partial<IDatePicker> = {}) {
-    super();
-    const { ios, android, ...restParams } = params;
+    super(params);
 
-    this.addIOSProps(this.iosProps);
+    this.addIOSProps(this.getIOSProps());
 
     this.nativeObject.onSelected = (e) => {
       this.emit('selected', e.date);
@@ -33,10 +32,6 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
       this.emit('cancelled');
       this.onCancelled?.();
     };
-
-    // Object.assign(this._ios, ios);
-    // Object.assign(this._android, android);
-    // Object.assign(this, restParams);
   }
 
   setDate(date: Date) {
@@ -67,7 +62,7 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
     );
   }
 
-  private get iosProps(): DatePickerIOSProperties {
+  private getIOSProps(): DatePickerIOSProperties {
     const self = this;
 
     return {
@@ -167,4 +162,10 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
       title: ''
     };
   }
+  static Android = {
+    Style: DatePickerStyle
+  };
+  static iOS = {
+    DatePickerMode: DatePickerMode
+  };
 }

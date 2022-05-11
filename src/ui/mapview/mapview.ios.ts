@@ -19,6 +19,11 @@ const DEFAULT_MIN_ZOOM_LEVEL = 0;
 const DEFAULT_MAX_ZOOM_LEVEL = 19;
 const DEFAULT_ZOOM_LEVEL = 15;
 
+const NativeMapType = {
+  [MapViewType.NORMAL]: 0,
+  [MapViewType.SATELLITE]: 1,
+  [MapViewType.HYBRID]: 2
+};
 export default class MapViewIOS<TEvent extends string = MapViewEvents> extends ViewIOS<TEvent | MapViewEvents, any, IMapView> implements IMapView {
   private tapGesture: __SF_UITapGestureRecognizer;
   private longGesture: __SF_UILongPressGestureRecognizer;
@@ -28,6 +33,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   private _maxZoomLevel: IMapView['maxZoomLevel'];
   private _zoomLevel: IMapView['zoomLevel'];
   private _cluster: ClusterIOS[];
+  private _mapViewType: MapViewType;
   constructor(params?: Partial<IMapView>) {
     super(params);
     this.tapGesture = new __SF_UITapGestureRecognizer();
@@ -109,25 +115,22 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     const self = this;
     return {
       get clusterPadding(): IMapView['ios']['clusterPadding'] {
-        return self.cluster.nativeObject.padding;
+        return self.cluster.ios.padding;
       },
       set clusterPadding(value: IMapView['ios']['clusterPadding']) {
-        self.cluster.nativeObject.padding = value;
+        self.cluster.ios.padding = value;
       },
       get clusterBorderWidth(): IMapView['ios']['clusterBorderWidth'] {
-        return self.cluster.nativeObject.borderWidth;
+        return self.cluster.ios.borderWidth;
       },
       set clusterBorderWidth(value: IMapView['ios']['clusterBorderWidth']) {
-        self.cluster.nativeObject.borderWidth = value;
+        self.cluster.ios.borderWidth = value;
       },
       get clusterSize(): IMapView['ios']['clusterSize'] {
-        return self.cluster.nativeObject.size.width;
+        return self.cluster.ios.size;
       },
       set clusterSize(value: IMapView['ios']['clusterSize']) {
-        self.cluster.nativeObject.size = {
-          width: value,
-          height: value
-        };
+        self.cluster.ios.size = value;
       }
     };
   }
@@ -268,7 +271,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
       }
     };
 
-    this.cluster.nativeObject.onPress = (e: any) => {
+    this.cluster.onPress = (e: any) => {
       const pinArray: Pin[] = [];
       for (const i in e.memberAnnotations) {
         pinArray.push(this._pinArray[e.memberAnnotations[i].uuid]);
@@ -302,11 +305,11 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     value ? Location.start() : Location.stop();
     this.nativeObject.showsUserLocation = value;
   }
-  get clusterEnabled(): IMapView['clusterEnabled'] {
-    return this.cluster.nativeObject.fillColor;
+  get clusterFillColor(): IMapView['clusterFillColor'] {
+    return this.cluster.fillColor;
   }
-  set clusterEnabled(value: IMapView['clusterEnabled']) {
-    this.cluster.nativeObject.fillColor = value;
+  set clusterFillColor(value: IMapView['clusterFillColor']) {
+    this.cluster.fillColor = value;
   }
   get cluster(): ClusterIOS {
     if (this._cluster.length === 0) {
@@ -316,29 +319,29 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     return this._cluster[0];
   }
 
-  get clusterFillColor(): IMapView['clusterFillColor'] {
-    return this.cluster.nativeObject.isClusterEnabled;
+  get clusterEnabled(): IMapView['clusterEnabled'] {
+    return this.nativeObject.isClusterEnabled;
   }
-  set clusterFillColor(value: IMapView['clusterFillColor']) {
-    this.cluster.nativeObject.isClusterEnabled = value;
+  set clusterEnabled(value: IMapView['clusterEnabled']) {
+    this.nativeObject.isClusterEnabled = value;
   }
   get clusterBorderColor(): IMapView['clusterBorderColor'] {
-    return this.cluster.nativeObject.borderColor;
+    return this.cluster.borderColor;
   }
   set clusterBorderColor(value: IMapView['clusterBorderColor']) {
-    this.cluster.nativeObject.borderColor = value;
+    this.cluster.borderColor = value;
   }
   get clusterTextColor(): IMapView['clusterTextColor'] {
-    return this.cluster.nativeObject.textColor;
+    return this.cluster.textColor;
   }
   set clusterTextColor(value: IMapView['clusterTextColor']) {
-    this.cluster.nativeObject.textColor = value;
+    this.cluster.textColor = value;
   }
   get clusterFont(): IMapView['clusterFont'] {
-    return this.cluster.nativeObject.font;
+    return this.cluster.font;
   }
   set clusterFont(value: IMapView['clusterFont']) {
-    this.cluster.nativeObject.font = value;
+    this.cluster.font = value;
   }
   get zoomLevel() {
     if (this.nativeObject.getRegion) {
@@ -398,10 +401,11 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     };
   }
   get type(): MapViewType {
-    return this.nativeObject.mapType;
+    return this._mapViewType;
   }
   set type(value: MapViewType) {
-    this.nativeObject.mapType = value;
+    this._mapViewType = value;
+    this.nativeObject.mapType = NativeMapType[value];
   }
 
   static Pin = Pin;

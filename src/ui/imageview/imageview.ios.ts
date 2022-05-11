@@ -200,7 +200,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
         undefined,
         (innerFade, image, error, cache, url) => {
           if (!error) {
-            if (params.cache === ImageCacheType.NONE && params.fade !== false) {
+            if (cache === ImageCacheType.NONE && innerFade !== false) {
               const alpha = this.nativeObject.alpha;
               this.nativeObject.alpha = 0;
               __SF_UIView.animation(

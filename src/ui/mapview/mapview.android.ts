@@ -39,11 +39,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   onCreate: () => void;
   protected savedBundles: any;
   protected activityIntent: any;
-  protected _borderColor: Color;
   private lazyLoading: boolean; // lazyLoading is true by default after smartface-native 3.0.2 version.
-  private _font: FontAndroid;
-  private _fillColor: ColorAndroid;
-  private _textColor: ColorAndroid;
   private _nativeCustomMarkerRenderer: Cluster | null;
   private _nativeGoogleMap: any;
   private _clusterEnabled: IMapView['clusterEnabled'];
@@ -84,10 +80,6 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this._nativeCustomMarkerRenderer = null;
     this._locationButtonVisible = true;
     this.lazyLoading = true; // lazyLoading is true by default after smartface-native 3.0.2 version.
-    this._borderColor = ColorAndroid.WHITE;
-    this._font = FontAndroid.create(FontAndroid.DEFAULT, 20, FontAndroid.BOLD);
-    this._fillColor = ColorAndroid.RED;
-    this._textColor = ColorAndroid.WHITE;
     this.lazyLoading = true;
     this.activityIntent = AndroidConfig.activity.getIntent();
     this.savedBundles = this.activityIntent.getExtras();
@@ -364,6 +356,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
             pinArray.push(this._pinArray[clusterArray[i]]);
           }
           this.onClusterPress?.(pinArray);
+          this.emit('clusterPress', pinArray);
           return true;
         }
       })
@@ -486,38 +479,38 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
   }
 
   get clusterFillColor() {
-    return this._fillColor.nativeObject;
+    return this.cluster.fillColor.nativeObject;
   }
   set clusterFillColor(value) {
     //cant set after added mapview
     if (value instanceof ColorAndroid) {
-      this._fillColor = value;
+      this.cluster.fillColor = value;
     }
   }
   get clusterBorderColor() {
-    return this._borderColor.nativeObject;
+    return this.cluster.borderColor.nativeObject;
   }
   set clusterBorderColor(value) {
     //cant set after added mapview
     if (value instanceof Color) {
-      this._borderColor = value;
+      this.cluster.borderColor = value;
     }
   }
   get clusterTextColor() {
-    return this._textColor.nativeObject;
+    return this.cluster.textColor.nativeObject;
   }
   set clusterTextColor(value) {
     //cant set after added mapview
     if (value instanceof ColorAndroid) {
-      this._textColor = value;
+      this.cluster.textColor = value;
     }
   }
   get clusterFont() {
-    return this._font;
+    return this.cluster.font as any; //Weird font issue
   }
   set clusterFont(value) {
     if (value instanceof FontAndroid) {
-      this._font = value;
+      this.cluster.font = value;
     }
   }
   get type(): MapViewType {

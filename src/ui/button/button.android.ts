@@ -93,7 +93,8 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     return AndroidUnitConverter.pixelToDp(this._borderRadius);
   }
   set borderRadius(value: IButton['borderRadius']) {
-    this._borderRadius = AndroidUnitConverter.dpToPixel(value);
+    const radius = isNaN(value) ? 0 : value;
+    this._borderRadius = AndroidUnitConverter.dpToPixel(radius);
     this.setBorder();
     if (this.__backgroundImages) {
       this.setBackgroundImage();
