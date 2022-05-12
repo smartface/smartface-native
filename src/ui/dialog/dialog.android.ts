@@ -20,29 +20,33 @@ interface IDialogAndroid {
 }
 
 export default class DialogAndroid extends AbstractDialog {
-  private _android: Partial<IDialogAndroid> = {};
   private _isTransparent: boolean;
   private _themeStyle: DialogStyle;
   private _layout: FlexLayout;
   private _onShowCallback: () => void;
-  private _isSetListener = false;
-  private _cancelable = true;
-  skipDefaults = false;
+  private _isSetListener: boolean;
+  private _cancelable: boolean;
+  skipDefaults: boolean;
   private dialogWindow: any;
   private colorDrawable: any;
+  constructor(params: Partial<DialogAndroid> = {}) {
+    super(params);
+    this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
+    this.initDialogLayout();
+    this.skipDefaults = params.skipDefaults || this._isTransparent;
+  }
   createNativeObject(params: Partial<DialogAndroid> = {}) {
     this._themeStyle = params?.android?.themeStyle || DialogAndroid.Android.Style.ThemeDefault;
     this._isTransparent = params?.android?.isTransparent || false;
 
     return new NativeDialog(AndroidConfig.activity, this._themeStyle);
   }
-  constructor(params: Partial<DialogAndroid> = {}) {
-    super(params);
-    this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
-
-    this.assignAndroidProperties();
-    this.initDialogLayout();
-    this.skipDefaults = params.skipDefaults || this._isTransparent;
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.skipDefaults = false;
+    this._cancelable = true;
+    this._isSetListener = false;
+    super.preConstruct(params);
+    this.addAndroidProps(this.getAndroidProps());
   }
   setShowListener() {
     const listener = DialogInterface.OnShowListener.implement({
@@ -72,9 +76,9 @@ export default class DialogAndroid extends AbstractDialog {
     this.nativeObject.setContentView(this._layout.nativeObject);
   }
 
-  private assignAndroidProperties() {
+  private getAndroidProps() {
     const self = this;
-    this._android = {
+    return {
       hideKeyboard(): void {
         if (!self.nativeObject) {
           return;
@@ -112,14 +116,6 @@ export default class DialogAndroid extends AbstractDialog {
         self._themeStyle = value;
       }
     };
-  }
-
-  get android() {
-    return this._android;
-  }
-
-  set android(value: Partial<IDialogAndroid>) {
-    Object.assign(this._android, value);
   }
 
   get layout() {

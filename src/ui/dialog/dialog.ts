@@ -1,7 +1,36 @@
 import NativeComponent from '../../core/native-component';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 
 export const DEFAULT_TRANSLUCENCY = 58;
+
+export interface DialogAndroidProps {
+  /**
+   * Sets the theme style of dialog.
+   *
+   * @property {UI.Dialog.Android.Style} themeStyle
+   * @android
+   * @since 3.0.2
+   */
+  themeStyle: DialogStyle;
+  /**
+   * Sets whether the dialog is full transparent. This property must be given in constructor function.
+   * If {@link UI.StatusBar statusBar} is visible, the dialog is drawn under status bar.
+   *
+   * @property {Boolean} isTransparent
+   * @android
+   * @since 3.2.0
+   */
+  isTransparent: boolean;
+  /**
+   * Sets whether this dialog is cancelable with the {@link Application#onBackButtonPressed BACK} key.
+   *
+   * @property {Boolean} cancelable
+   * @android
+   * @since 4.0.2
+   */
+  cancelable: boolean;
+}
 
 /**
  * @enum UI.Dialog.Android.Style
@@ -67,9 +96,9 @@ export enum DialogStyle {
   ThemeNoHeaderBarWithTranslucentDecor = 16974306
 }
 
-export abstract class AbstractDialog extends NativeComponent {
+export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps<{}, DialogAndroidProps> = MobileOSProps<{}, DialogAndroidProps>> extends NativeMobileComponent<TNative, TProps> {
   constructor(params?: Partial<AbstractDialog>) {
-    super(params);
+    super(params as any);
   }
   abstract setShowListener(): void;
   /**
@@ -98,34 +127,6 @@ export abstract class AbstractDialog extends NativeComponent {
   abstract show(): void;
 
   static Style: DialogStyle;
-
-  abstract get android(): Partial<{
-    /**
-     * Sets the theme style of dialog.
-     *
-     * @property {UI.Dialog.Android.Style} themeStyle
-     * @android
-     * @since 3.0.2
-     */
-    themeStyle: DialogStyle;
-    /**
-     * Sets whether the dialog is full transparent. This property must be given in constructor function.
-     * If {@link UI.StatusBar statusBar} is visible, the dialog is drawn under status bar.
-     *
-     * @property {Boolean} isTransparent
-     * @android
-     * @since 3.2.0
-     */
-    isTransparent: boolean;
-    /**
-     * Sets whether this dialog is cancelable with the {@link Application#onBackButtonPressed BACK} key.
-     *
-     * @property {Boolean} cancelable
-     * @android
-     * @since 4.0.2
-     */
-    cancelable: boolean;
-  }>;
 
   static Android: {
     Style: Partial<typeof DialogStyle>;
