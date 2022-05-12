@@ -490,64 +490,65 @@ class MultimediaAndroid implements MultimediaBase {
         maxImageSize: maxImageSize = -1
       } = {}
     } = _captureParams;
-    if (resultCode === MULTIMEDIA_ACTIVITY_RESULT_OK) {
-      try {
-        if (this._action !== ActionType.IMAGE_CAPTURE) {
-          const uri = data.getData();
-
-          if (onSuccess) {
-            if (this._action === ActionType.IMAGE_CAPTURE) {
-              if (allowsEditing) {
-                this.startCropActivityHelper({
-                  requestCode: this.CropImage.CROP_CAMERA_DATA_REQUEST_CODE,
-                  asset: this._imageFileUri,
-                  page,
-                  cropShape,
-                  aspectRatio,
-                  rotateText,
-                  scaleText,
-                  cropText,
-                  headerBarTitle,
-                  maxResultSize,
-                  hideBottomControls,
-                  enableFreeStyleCrop
-                });
-              } else {
-                NativeSFMultimedia.getBitmapFromUriAsync(activity, this._imageFileUri, maxImageSize, fixOrientation, {
-                  onCompleted: (bitmap) => {
-                    let image = new ImageAndroid({
-                      bitmap
-                    });
-                    onSuccess({
-                      image
-                    });
-                  },
-                  onFailure: (err) => {
-                    onFailure &&
-                      onFailure({
-                        message: err
-                      });
-                  }
-                });
-              }
-            } else {
-              const realPath = getRealPathFromURI(uri);
-              onSuccess({
-                video: new File({
-                  path: realPath
-                })
-              });
-            }
-          }
-        }
-      } catch (err) {
-        onFailure &&
-          onFailure({
-            message: err
-          });
+    let uri = null;
+    let failure = false;
+    if (resultCode !== MULTIMEDIA_ACTIVITY_RESULT_OK) {
+      onCancel?.();
+      return;
+    }
+    try {
+      if (this._action !== ActionType.IMAGE_CAPTURE) {
+        uri = data.getData();
       }
-    } else {
-      onCancel && onCancel();
+    } catch (err) {
+      failure = true;
+      onFailure?.({
+        message: err
+      });
+    }
+    if (!failure && onSuccess) {
+      if (this._action === ActionType.IMAGE_CAPTURE) {
+        if (allowsEditing) {
+          this.startCropActivityHelper({
+            requestCode: this.CropImage.CROP_CAMERA_DATA_REQUEST_CODE,
+            asset: this._imageFileUri,
+            page,
+            cropShape,
+            aspectRatio,
+            rotateText,
+            scaleText,
+            cropText,
+            headerBarTitle,
+            maxResultSize,
+            hideBottomControls,
+            enableFreeStyleCrop
+          });
+        } else {
+          NativeSFMultimedia.getBitmapFromUriAsync(activity, this._imageFileUri, maxImageSize, fixOrientation, {
+            onCompleted: (bitmap) => {
+              const image = new ImageAndroid({
+                bitmap
+              });
+              onSuccess({
+                image
+              });
+            },
+            onFailure: (err) => {
+              onFailure &&
+                onFailure({
+                  message: err
+                });
+            }
+          });
+        }
+      } else {
+        const realPath = getRealPathFromURI(uri);
+        onSuccess({
+          video: new File({
+            path: realPath
+          })
+        });
+      }
     }
   }
   Android = {

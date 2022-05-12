@@ -881,7 +881,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set rippleColor(value: Color | undefined) {
     this._rippleColor = value;
-
+    this.rippleEnabled = true; //If user sets rippleColor, always set rippleenabled to true. They can set to false if needed.
     if (this._rippleColor && this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
       const states = array([array([], 'int')]);
       const colors = array([this._rippleColor.nativeObject], 'int');
