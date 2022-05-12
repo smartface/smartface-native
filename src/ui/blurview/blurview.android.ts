@@ -12,7 +12,6 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
   private _overlayColor: Color;
   private _rootView: View;
   private _blurRadius: number;
-  private _blurRender: any;
   constructor(params?: Partial<IBlurView>) {
     super(params);
     this.addAndroidProps(this.getAndroidProps());
@@ -23,7 +22,6 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
   }
 
   protected preConstruct(params?: Partial<IBlurView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved'>>): void {
-    this._blurRender = new RenderScriptBlur(AndroidConfig.activity);
     this._blurRadius = 16;
     super.preConstruct(params);
   }
@@ -64,7 +62,8 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
     if (!this._rootView) {
       return;
     }
-    const blurViewFacade = this.nativeObject.setupWith(this._rootView.nativeObject).setBlurAlgorithm(this._blurRender);
+    const renderScriptBlur = new RenderScriptBlur(AndroidConfig.activity);
+    const blurViewFacade = this.nativeObject.setupWith(this._rootView.nativeObject).setBlurAlgorithm(renderScriptBlur);
     blurViewFacade.setBlurRadius(this._blurRadius);
 
     if (this._overlayColor) {
