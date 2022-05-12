@@ -58,7 +58,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
     };
 
     this.nativeObject.onShow = () => {
-      console.info('sliderdrawer onshow');
       __SF_UIView.animation(0, 0, () => {
         this.pageView.nativeObject.endEditing(true);
       });
@@ -66,7 +65,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
       this.emit('show');
     };
     this.nativeObject.onHide = () => {
-      console.info('sliderdrawer onhide');
       __SF_UIView.animation(0, 0, () => {
         this.pageView.nativeObject?.endEditing(true);
       });
@@ -74,7 +72,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
       this.emit('hide');
     };
     this.nativeObject.onLoad = () => {
-      console.info('sliderdrawer onload');
       this.onLoad?.();
       this.emit('load');
     };

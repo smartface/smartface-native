@@ -710,7 +710,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._attributedTitle;
       },
       set attributedTitle(value: HeaderBar['android']['attributedTitle']) {
-        console.info('set attributed title');
         self._attributedTitle = value;
         if (!value) {
           return;
