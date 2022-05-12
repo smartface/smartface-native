@@ -91,7 +91,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
       return;
     }
 
-    ApplicationAndroid.drawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
+    ApplicationAndroid.drawerLayout.setDrawerLockMode(~~!value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
     if (!value && this.state === SliderDrawerAndroid.State.OPEN) {
       this.hideSliderDrawer();
     }
