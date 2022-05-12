@@ -66,7 +66,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this.isSliderDrawerAttached && this.showSliderDrawer();
   }
   hide(): void {
-    this.isSliderDrawerAttached && this.showSliderDrawer();
+    this.isSliderDrawerAttached && this.hideSliderDrawer();
   }
   toString() {
     return 'SliderDrawer';
