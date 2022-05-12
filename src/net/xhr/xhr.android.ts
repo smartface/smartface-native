@@ -151,7 +151,7 @@ export default class XHRAndroid<TEvent extends string = XHREvents, TProps extend
         const data = body.getParts();
         this._nativeObject.sendRequestWithFormData(this._method, this._url, data || null, this._requestHeaders, this._timeout, this.withCredentials);
       } else {
-        const data = body === '' || body ? body : null;
+        const data = this.adjustBody(body);
         this._nativeObject.sendRequest(this._method, this._url, data, this._requestHeaders, this._timeout, this.withCredentials);
       }
       this._sendFlag = true;
@@ -160,6 +160,13 @@ export default class XHRAndroid<TEvent extends string = XHREvents, TProps extend
       this._setResponseError(error);
       this._setReadyState(XHRAndroid.DONE);
     }
+  }
+
+  adjustBody(body?: string): string | null {
+    if (this._method === 'POST') {
+      return body ? body : '';
+    }
+    return body === '' || body ? body : null;
   }
 
   setRequestHeader(name: string, value: string) {
