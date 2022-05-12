@@ -727,6 +727,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._attributedSubtitle;
       },
       set attributedSubtitle(value: HeaderBar['android']['attributedSubtitle']) {
+        self._attributedSubtitle = value;
         if (!value) {
           return;
         }
@@ -735,7 +736,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         } else {
           self._attributedSubtitleBuilder = new NativeSpannableStringBuilder();
         }
-        self._attributedSubtitleBuilder.setSpan(self._attributedSubtitleBuilder);
+        self._attributedSubtitle.setSpan(self._attributedSubtitleBuilder);
         self.toolbar.setSubtitle(self._attributedSubtitleBuilder);
       },
       get logoEnabled(): HeaderBar['android']['logoEnabled'] {
