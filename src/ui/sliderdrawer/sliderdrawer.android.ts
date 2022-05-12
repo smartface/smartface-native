@@ -5,6 +5,7 @@ import UnitConverter from '../../util/Android/unitconverter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ColorAndroid from '../color/color.android';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
+import { ColorImpl } from '../color/color';
 
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');
 
@@ -18,7 +19,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   private _state: SliderDrawerState;
   private drawerLayoutParams: any;
   drawerListener: any;
-  backgroundColor: ColorAndroid;
+  _backgroundColor: ColorImpl;
   isSliderDrawerAttached;
   onShow: () => void | null;
   onHide: () => void | null;
@@ -66,7 +67,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
     this.isSliderDrawerAttached && this.showSliderDrawer();
   }
   hide(): void {
-    this.isSliderDrawerAttached && this.showSliderDrawer();
+    this.isSliderDrawerAttached && this.hideSliderDrawer();
   }
   toString() {
     return 'SliderDrawer';
@@ -91,7 +92,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
       return;
     }
 
-    ApplicationAndroid.drawerLayout.setDrawerLockMode(~~value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
+    ApplicationAndroid.drawerLayout.setDrawerLockMode(~~!value); // DrawerLayout.LOCK_MODE_UNLOCKED = 0 DrawerLayout.LOCK_MODE_LOCKED_CLOSED = 1
     if (!value && this.state === SliderDrawerAndroid.State.OPEN) {
       this.hideSliderDrawer();
     }
@@ -115,6 +116,13 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   set width(value: ISliderDrawer['width']) {
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.width = UnitConverter.dpToPixel(value);
+  }
+  get backgroundColor(): ISliderDrawer['backgroundColor'] {
+    return this._backgroundColor;
+  }
+  set backgroundColor(color: ISliderDrawer['backgroundColor']) {
+    this._backgroundColor = color;
+    this.layout.backgroundColor = color;
   }
   private hideSliderDrawer() {
     ApplicationAndroid.drawerLayout.closeDrawer(this.drawerPosition === SliderDrawerAndroid.Position.RIGHT ? 5 : 3);
