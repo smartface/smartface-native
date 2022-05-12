@@ -139,7 +139,6 @@ export default class SliderDrawerIOS<TEvent extends string = SliderDrawerEvents>
   onHide: () => void;
   onLoad: () => void;
   show(): void {
-    console.info('sliderdrawer show');
     this.nativeObject.show();
   }
   hide(): void {
