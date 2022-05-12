@@ -19,8 +19,8 @@ export default class PinIOS<TEvent extends string = PinEvents> extends NativeEve
     };
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    this.addIOSProps(this.getIOSProps());
     super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject() {
     return __SF_Annotation.createAnnotation();

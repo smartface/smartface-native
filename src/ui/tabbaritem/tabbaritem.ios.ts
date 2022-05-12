@@ -43,8 +43,8 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
       }
     };
     this._badge = this.nativeObject ? new BadgeIOS({ nativeObject: this.nativeObject }) : defaultBadge;
-    this.addIOSProps(this.getIOSProps());
     super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
   }
   getIOSProps() {
     const self = this;

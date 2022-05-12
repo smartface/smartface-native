@@ -28,8 +28,8 @@ export default class TextAreaIOS<TEvent extends string = TextAreaEvents, TNative
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._adjustFontSizeToFit = false;
     this._minimumFontSize = MINIMUM_FONT_SIZE;
-    this.addIOSProps(this.getIOSProps());
     super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
   }
   createNativeObject(): any {
     return new __SF_UITextView();
