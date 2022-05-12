@@ -14,6 +14,7 @@ import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { ColorImpl } from '../color/color';
+import { IImage } from '../image/image';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -185,6 +186,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.addAndroidProps(this.getAndroidProps());
     this.android.iconifiedByDefault = false;
   }
+  backgroundImage: IImage;
   private getAndroidProps() {
     const self = this;
     return {
