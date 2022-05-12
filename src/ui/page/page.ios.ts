@@ -32,7 +32,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.setNativeParams();
     this.initPageNativeEvents();
     this.initPageEvents();
-    this.headerBarProperties();
 
     this.pageView.applyLayout = () => {
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
@@ -56,6 +55,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.pageView = new FlexLayoutIOS();
     this.routerPath = null;
     super.preConstruct(params);
+    this.headerBarProperties();
   }
   onLoad(): void {}
   onShow(): void {}
@@ -315,7 +315,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
           }
           // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
           self._titleView.nativeObject.sizeToFit();
-
           self.nativeObject.navigationItem.titleView = self._titleView.nativeObject;
         } else {
           self.nativeObject.navigationItem.titleView = undefined;

@@ -11,44 +11,51 @@ import NavigationControllerIOS from './navigationcontroller.ios';
 export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHeaderBar> implements IHeaderBar {
   appearance?: __SF_UINavigationBarAppearance;
   navigationController?: NavigationControllerIOS;
-  private _transparent = false;
+  leftItemEnabled: boolean;
+  titleLayout?: View;
+  title: string;
+  private _transparent: boolean;
   private _transparentEmptyImage: __SF_UIImage;
   private _titleColor: Color;
-  private _visible = true;
-  private _prefersLargeTitles = false;
+  private _visible: boolean;
+  private _prefersLargeTitles: boolean;
   private _backIndicatorImage: ImageIOS;
   private _backIndicatorTransitionMaskImage: ImageIOS;
   private _titleFont?: Font;
   private _borderVisibility: boolean;
-  leftItemEnabled: boolean;
-  titleLayout?: View;
-  title: string;
   setItems(items: IHeaderBarItem[]): void {}
   setLeftItem(item: IHeaderBarItem): void {}
   constructor(params: Partial<IHeaderBar> & { navigationController?: NavigationControllerIOS }) {
     super(params);
-
-    if (params.navigationController) {
-      this.nativeObject = params.navigationController.view.nativeObject.navigationBar;
-      // Xcode 13.1 background bug fixes [NTVE-398]
-      if (Number(System.OSVersion) >= 15) {
-        this.appearance = new __SF_UINavigationBarAppearance();
-        this.appearance.configureWithOpaqueBackground();
-        this.nativeObject.standardAppearance = this.appearance;
-        this.nativeObject.scrollEdgeAppearance = this.appearance;
-      }
-      this.navigationController = params.navigationController;
-    }
-    this.addIOSProps(this.iosProperties());
   }
+
   removeViewFromHeaderBar(view: Parameters<IHeaderBar['removeViewFromHeaderBar']>['0']): void {
     throw new Error('Method not implemented.');
   }
   addViewToHeaderBar(view: Parameters<IHeaderBar['addViewToHeaderBar']>['0']): void {
     throw new Error('Method not implemented.');
   }
-  protected createNativeObject() {
-    return null;
+  protected createNativeObject(params) {
+    let nativeObject: any;
+    if (params.navigationController) {
+      nativeObject = params.navigationController.view.nativeObject.navigationBar;
+      // Xcode 13.1 background bug fixes [NTVE-398]
+      if (Number(System.OSVersion) >= 15) {
+        this.appearance = new __SF_UINavigationBarAppearance();
+        this.appearance.configureWithOpaqueBackground();
+        nativeObject.standardAppearance = this.appearance;
+        nativeObject.scrollEdgeAppearance = this.appearance;
+      }
+      this.navigationController = params.navigationController;
+    }
+    return nativeObject || null;
+  }
+  preConstruct(params) {
+    this._visible = true;
+    this._prefersLargeTitles = false;
+    this._transparent = false;
+    super.preConstruct(params);
+    this.addIOSProps(this.iosProperties());
   }
   get transparent(): IHeaderBar['transparent'] {
     return this._transparent;

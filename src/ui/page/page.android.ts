@@ -674,8 +674,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
       },
       set contentInset(value: HeaderBar['android']['contentInset']) {
         // API Level 21+
-        const cotentInsetStart = value?.left === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStart()) : value.left;
-        const cotentInsetEnd = value?.right === undefined ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetEnd()) : value.right;
+        const cotentInsetStart = !value?.left ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetStart()) : value.left;
+        const cotentInsetEnd = !value?.right ? AndroidUnitConverter.pixelToDp(self.toolbar.getContentInsetEnd()) : value.right;
 
         self.toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
       },
@@ -710,6 +710,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._attributedTitle;
       },
       set attributedTitle(value: HeaderBar['android']['attributedTitle']) {
+        console.info('set attributed title');
         self._attributedTitle = value;
         if (!value) {
           return;
@@ -719,7 +720,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         } else {
           self._attributedTitleBuilder = new NativeSpannableStringBuilder();
         }
-
         self._attributedTitle.setSpan(self._attributedTitleBuilder);
         self.toolbar.setTitle(self._attributedTitleBuilder);
       },
