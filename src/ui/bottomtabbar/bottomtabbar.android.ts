@@ -8,6 +8,7 @@ import { NativeMobileComponent } from '../../core/native-mobile-component';
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
+const NativeRDefault = requireClass('android.R');
 const activity = AndroidConfig.activity;
 const MAXITEMCOUNT = 5;
 
@@ -54,9 +55,8 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   set itemColor(colors: { normal: Color; selected: Color }) {
     if (colors && colors.normal && colors.selected) {
       if (colors.normal instanceof Color && colors.selected instanceof Color) {
-        const NativeR = requireClass('android.R');
         this._itemColors = colors;
-        const states = array([array([NativeR.attr.state_checked], 'int'), array([], 'int')]);
+        const states = array([array([NativeRDefault.attr.state_checked], 'int'), array([], 'int')]);
 
         const ColorStateList = requireClass('android.content.res.ColorStateList');
         const nativeColorArray = array([colors.selected.nativeObject, colors.normal.nativeObject], 'int');

@@ -5,7 +5,6 @@ import FlexLayout from '../flexlayout';
 export default class DialogIOS extends AbstractDialog {
   setShowListener(): void {}
   private dialogView: FlexLayout;
-  private _android = {};
   createNativeObject() {
     return null;
   }
@@ -46,10 +45,6 @@ export default class DialogIOS extends AbstractDialog {
 
   get layout() {
     return this.dialogView;
-  }
-
-  get android() {
-    return this._android;
   }
 
   static Android = {

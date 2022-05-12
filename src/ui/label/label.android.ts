@@ -152,7 +152,8 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return mMaxLines === MAX_INT_VALUE ? 0 : mMaxLines;
   }
   set maxLines(value: ILabel['maxLines']) {
-    this.nativeObject.setMaxLines(value === 0 ? MAX_INT_VALUE : value);
+    const valueInt = isNaN(value) ? 0 : value;
+    this.nativeObject.setMaxLines(valueInt === 0 ? MAX_INT_VALUE : valueInt);
   }
   get ellipsizeMode(): ILabel['ellipsizeMode'] {
     return this._ellipsizeMode;
