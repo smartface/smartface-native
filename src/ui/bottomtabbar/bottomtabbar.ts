@@ -1,4 +1,4 @@
-import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import TabBarItem from '../tabbaritem';
 
@@ -43,7 +43,7 @@ export interface IBottomTabBarIOSProps {
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  *
  */
-export interface IBottomTabBar extends INativeMobileComponent<any, WithMobileOSProps<any, IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> {
+export interface IBottomTabBar extends INativeMobileComponent<any, MobileOSProps<IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> {
   /**
    * Gets/sets background color of the tab bar items.
    *

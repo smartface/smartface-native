@@ -11,8 +11,8 @@ import { HeaderBar } from '../navigationcontroller/headerbar';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import BottomTabBarAndroid from '../bottomtabbar/bottomtabbar.android';
 import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
-import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import NavigationControllerAndroid from '../navigationcontroller/navigationcontroller.android';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
@@ -23,15 +23,15 @@ const NativeForegroundColorSpan = requireClass('android.text.style.ForegroundCol
 
 export default class BottomTabbarControllerAndroid extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
-  private _addedToActivity = false;
-  private _disabledShiftingMode = false;
+  private _addedToActivity: boolean;
+  private _disabledShiftingMode: boolean;
   private _menu: any;
-  private _childControllers: IController[] = [];
-  private _selectedIndex = 0;
+  private _childControllers: IController[];
+  private _selectedIndex: number;
   private _shouldSelectByIndexCallback: ({ index: number }) => boolean;
   private _didSelectByIndexCallback: (params: { index: number }) => void;
-  private initializeOneTime = false;
-  private cacheNativeBuilders = {};
+  private initializeOneTime: boolean;
+  private cacheNativeBuilders: Record<string, any>;
   private __isActive: boolean;
   private __targetIndex: number;
   pageID: number;
@@ -47,7 +47,6 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
   isInsideBottomTabBar: boolean;
   constructor(params?: any) {
     super(params);
-    Application.tabBar = new BottomTabBar();
 
     const listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(
@@ -89,6 +88,16 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
   protected createNativeObject(params?: Partial<Record<string, any>>) {
     return null;
   }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    Application.tabBar = new BottomTabBar();
+    this._addedToActivity = false;
+    this._disabledShiftingMode = false;
+    this._childControllers = [];
+    this._selectedIndex = 0;
+    this.initializeOneTime = false;
+    this.cacheNativeBuilders = {};
+    super.preConstruct(params);
+  }
 
   shouldSelectViewController(index: any) {
     return true;
@@ -98,8 +107,9 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
     return Application.tabBar;
   }
   set tabBar(params: any) {
-    copyObjectPropertiesWithDescriptors(Application.tabBar as any, params);
-    // Object.assign(Application.tabBar, params);
+    const { android, ios, ...rest } = params as IBottomTabBar;
+    Object.assign(Application.tabBar, rest);
+    Object.assign(Application.tabBar?.android, android);
   }
   get childControllers() {
     return this._childControllers;

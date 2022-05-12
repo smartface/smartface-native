@@ -7,8 +7,8 @@ import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IPage } from '../page/page';
 import PageIOS from '../page/page.ios';
 import { BottomTabbarControllerEvents } from './bottomtabbarcontroller-events';
-import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import NavigationControllerIOS from '../navigationcontroller/navigationcontroller.ios';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
 
 export default class BottomTabbarControllerIOS extends NativeEventEmitterComponent<BottomTabbarControllerEvents> implements IBottomTabBarController {
   static Events = BottomTabbarControllerEvents;
@@ -97,7 +97,9 @@ export default class BottomTabbarControllerIOS extends NativeEventEmitterCompone
     return this._tabBar;
   }
   set tabBar(value) {
-    copyObjectPropertiesWithDescriptors(this._tabBar, value);
+    const { android, ios, ...rest } = value as IBottomTabBar;
+    Object.assign(this._tabBar, rest);
+    Object.assign(this._tabBar.ios, ios);
   }
   get selectedIndex() {
     return this.model.currentIndex;
