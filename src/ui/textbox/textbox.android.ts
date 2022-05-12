@@ -117,7 +117,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
 
   protected preConstruct(params?: Partial<TProps>): void {
     this.__touchEnabled = true;
-    this.__touchEnabled = true;
     this._isPassword = false;
     this._keyboardType = KeyboardType.DEFAULT;
     this._actionKeyType = ActionKeyType.DEFAULT;

@@ -72,19 +72,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   actionKeyType: ActionKeyType;
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
-
     if (!AndroidConfig.isEmulator) {
       const SFMaterialTextBoxHintAppearance_ID = AndroidConfig.getResourceId('SFMaterialTextBoxHintAppearance', 'style');
       this.nativeObject.getInstance().setHintTextAppearance(SFMaterialTextBoxHintAppearance_ID);
     }
-
     //Defaults
     this.multiline = false;
-
-    // const { android, ...restParams } = params;
-    // Object.assign(this._android, this.androidFields, android);
-    // Object.assign(this, restParams);
-
+    this.onTouch = () => false; // Fixes touch not working with wrapped materialtextboxes
     this.addAndroidProps(this.getAndroidProps());
   }
   protected preConstruct(params?: any): void {
