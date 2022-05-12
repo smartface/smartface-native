@@ -177,7 +177,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
           return;
         childController.push({
           controller: childController.childControllers[0],
-          animated: false
+          animated: true
         });
       } else if (childController.childControllers.length >= 1) {
         const childControllerStack = childController.childControllers;
@@ -187,7 +187,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
         // show latest page or controller
         childController.show({
           controller: childControllerStack[childControllerStackLenght - 1],
-          animated: false
+          animated: true
         });
       }
     } else {
