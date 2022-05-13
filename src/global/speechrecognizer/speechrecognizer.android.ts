@@ -57,6 +57,8 @@ class SpeechRecognizerAndroid implements SpeechRecognizerBase {
   }
   stop(): void {
     this.nativeObject?.destroy();
+    //Destroy was not enough for existing check
+    this.nativeObject = null;
     this._isRunning = false;
   }
   isRunning(): boolean {
