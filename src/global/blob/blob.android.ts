@@ -37,7 +37,7 @@ class BlobAndroid extends NativeMobileComponent implements IBlob {
       slice: (start: number, end: number) => {
         const newBlob = new BlobAndroid();
         const byteArray = self.nativeObject.toByteArray();
-        newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)
+        newBlob.nativeObject.write(byteArray, start, end - start); //  write(byte[] b, int off, int len)
         return newBlob;
       }
     };
