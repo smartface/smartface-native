@@ -1,28 +1,36 @@
-import { AbstractWebBrowser } from './webbrowser';
+import { IWebBrowserOptions, WebBrowserBase } from './webbrowser';
 import Page from '../page';
-import Color from '../color';
 import Invocation from '../../util/iOS/invocation';
-import { WebBrowserOptions } from './webbrowseroptions';
 
-export default class WebBrowserIOS implements AbstractWebBrowser {
-  static readonly Options = WebBrowserOptions;
-
-  static show(page: Page, options: Partial<WebBrowserOptions>) {
-    if (!(options && options.url && (options.url.startsWith('https://') || options.url.startsWith('http://')))) {
+export default class WebBrowserIOS extends WebBrowserBase {
+  private _options?: Partial<IWebBrowserOptions>;
+  constructor(params?: Partial<IWebBrowserOptions>) {
+    super(params);
+    this._options = Object.assign({}, params);
+  }
+  protected createNativeObject() {
+    return null;
+  }
+  show(page: Page) {
+    if (!(this._options && this._options.url && (this._options.url.startsWith('https://') || this._options.url.startsWith('http://')))) {
       throw new Error('The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.');
     }
-    const nsURL = __SF_NSURL.URLWithString(options.url);
+    const nsURL = __SF_NSURL.URLWithString(this._options.url);
     const safariViewController = __SF_SMFSFSafariViewController.create(nsURL, false);
-    const argBarColor = new Invocation.Argument({
-      type: 'NSObject',
-      value: options.barColor?.nativeObject
-    });
-    Invocation.invokeInstanceMethod(safariViewController, 'setPreferredBarTintColor:', [argBarColor]);
-    const argItemColor = new Invocation.Argument({
-      type: 'NSObject',
-      value: options.itemColor?.nativeObject
-    });
-    Invocation.invokeInstanceMethod(safariViewController, 'setPreferredControlTintColor:', [argItemColor]);
+    if (this._options.barColor?.nativeObject) {
+      const argBarColor = new Invocation.Argument({
+        type: 'NSObject',
+        value: this._options.barColor?.nativeObject
+      });
+      Invocation.invokeInstanceMethod(safariViewController, 'setPreferredBarTintColor:', [argBarColor]);
+    }
+    if (this._options.ios?.itemColor?.nativeObject) {
+      const argItemColor = new Invocation.Argument({
+        type: 'NSObject',
+        value: this._options.ios?.itemColor?.nativeObject
+      });
+      Invocation.invokeInstanceMethod(safariViewController, 'setPreferredControlTintColor:', [argItemColor]);
+    }
     const argPresentationStyle = new Invocation.Argument({
       type: 'NSInteger',
       value: 7
