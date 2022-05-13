@@ -285,9 +285,9 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       this.onRowSelected?.(this._listItemArray[e.uuid], e.index);
     };
 
-    this.nativeObject.didScroll = () => {
-      this.emit('scroll');
-      this.onScroll?.();
+    this.nativeObject.didScroll = (e) => {
+      this.emit('scroll', e);
+      this.onScroll?.(e);
     };
     this.nativeObject.canMoveRowAt = (e) => {
       this.emit('rowCanMove', e.indexPath.row);
