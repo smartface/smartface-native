@@ -1,4 +1,4 @@
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Base64Util from '../../util/base64';
 import IBlob from './blob';
 
@@ -11,7 +11,7 @@ interface BlobAndroidConstructorParameters {
   properties?: { type: string };
 }
 
-class BlobAndroid extends NativeComponent implements IBlob {
+class BlobAndroid extends NativeMobileComponent implements IBlob {
   protected createNativeObject(params?: Partial<BlobAndroidConstructorParameters>) {
     const nativeObject = new NativeByteArrayOutputStream();
     if (params?.parts && params.properties?.type) {
@@ -28,19 +28,25 @@ class BlobAndroid extends NativeComponent implements IBlob {
   private _parts: string[];
   private _type: string;
   constructor(parts?: string[], properties?: { type: string }) {
-    super({ parts, properties });
+    super({ parts, properties } as any);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private getAndroidProps() {
+    const self = this;
+    return {
+      slice: (start: number, end: number) => {
+        const newBlob = new BlobAndroid();
+        const byteArray = self.nativeObject.toByteArray();
+        newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)
+        return newBlob;
+      }
+    };
   }
   get type(): string {
     return this._type;
   }
   get size(): number {
     return this.nativeObject && arrayLength(this.nativeObject.toByteArray());
-  }
-  slice(start: number, end: number): IBlob {
-    const newBlob = new BlobAndroid();
-    const byteArray = this.nativeObject.toByteArray();
-    newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)
-    return newBlob;
   }
   toBase64() {
     const byteArray = this.nativeObject.toByteArray();

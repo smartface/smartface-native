@@ -1,15 +1,23 @@
-import NativeComponent from '../../core/native-component';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import IBlob from './blob';
 
-export default class BlobIOS extends NativeComponent implements IBlob {
+export default class BlobIOS extends NativeMobileComponent implements IBlob {
   protected createNativeObject(parts) {
     return parts;
   }
   constructor(parts: string[], properties?: { type: string }) {
-    super(parts);
+    super(parts as any);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private getAndroidProps() {
+    const self = this;
+    return {
+      slice: () => {
+        return self;
+      }
+    };
   }
   type: string;
-  slice?: ((start: number, end: number) => IBlob) | undefined;
   get size() {
     return this.nativeObject.length;
   }
