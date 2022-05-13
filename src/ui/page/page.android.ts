@@ -81,6 +81,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this._itemColor = ColorAndroid.WHITE;
     this._headerBarLogoEnabled = false;
     this._headerBarLeftItem = null;
+    this.statusBar = StatusBar;
     super.preConstruct(params);
   }
   statusBar: typeof StatusBar;

@@ -3,13 +3,13 @@ import Screen from '../../device/screen';
 import { OrientationType } from '../../device/screen/screen';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 import Invocation from '../../util/iOS/invocation';
-import FlexLayout from '../flexlayout';
 import HeaderBarItem from '../headerbaritem';
 import { IController } from '../navigationcontroller/navigationcontroller';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { PageEvents } from './page-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import { IFlexLayout } from '../flexlayout/flexlayout';
+import StatusBar from '../../application/statusbar';
 
 export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
   extends AbstractPage<TEvent | PageEvents, TNative, TProps>
@@ -54,6 +54,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this._orientationNative = [PageOrientation.PORTRAIT];
     this.pageView = new FlexLayoutIOS();
     this.routerPath = null;
+    this.statusBar = StatusBar;
     super.preConstruct(params);
     this.headerBarProperties();
   }
