@@ -178,7 +178,9 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
     if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
       let readLine = this.nativeObject.readLine();
       let fileContent = '';
-      while (readLine !== null) {
+      // Using loose check here to avoid infinite loop
+      // eslint-disable-next-line eqeqeq
+      while (readLine != null) {
         fileContent += readLine + '\n';
         readLine = this.nativeObject.readLine();
       }

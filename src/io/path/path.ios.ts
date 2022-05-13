@@ -22,7 +22,7 @@ export default class PathIOS extends PathBase {
     return File.getDocumentsDirectory();
   }
 
-  get android(): any {
+  static get android(): any {
     return {};
   }
 }

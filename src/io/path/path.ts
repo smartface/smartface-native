@@ -11,18 +11,18 @@ export enum PATH_FILE_TYPE {
   RAU_DRAWABLE = 6
 }
 
-export type AndroidProps = Partial<{
+export interface PathAndroidProps {
   storages: {
     external: string | null;
     internal: string | null;
     usb: string | null;
     isResolved: boolean | null;
   };
-}>;
+}
 
 export interface IPath extends INativeComponent {}
 
-export class PathBase extends NativeComponent implements IPath {
+export abstract class PathBase extends NativeComponent implements IPath {
   protected createNativeObject() {
     return null;
   }
@@ -62,8 +62,7 @@ export class PathBase extends NativeComponent implements IPath {
   static get ImagesUriScheme(): string {
     throw new Error('Method not implemented.');
   }
-
-  static get android(): AndroidProps {
+  static get android(): PathAndroidProps {
     throw new Error('Method not implemented.');
   }
 }

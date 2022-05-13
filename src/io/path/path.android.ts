@@ -1,6 +1,6 @@
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
-import { AndroidProps, IPath, PathBase } from './path';
+import { IPath, PathAndroidProps, PathBase } from './path';
 
 const NativeFile = requireClass('java.io.File');
 const NativeEnvironment = requireClass('android.os.Environment');
@@ -52,7 +52,7 @@ export default class PathAndroid extends PathBase {
     return filesDir ? filesDir.getAbsolutePath() : null;
   }
 
-  static get android(): AndroidProps {
+  static get android(): PathAndroidProps {
     return {
       get storages() {
         if (!storages.isResolved) {
