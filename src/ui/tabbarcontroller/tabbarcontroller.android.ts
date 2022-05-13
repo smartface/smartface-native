@@ -52,53 +52,8 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     this._barColor = Color.WHITE;
     this._textColor = Color.BLACK;
     this.tabLayout = {};
-    const self = this;
-    this.addAndroidProps({
-      get dividerWidth(): number {
-        return self._dividerWidth;
-      },
-      set dividerWidth(value: number) {
-        self._dividerWidth = value;
-
-        self.divider.setShowDividers(2); // 2 = LinearLayout.SHOW_DIVIDER_MIDDLE
-        self.dividerDrawable = new NativeGradientDrawable();
-        self.dividerDrawable.setColor(self._dividerColor.nativeObject);
-
-        let px = AndroidUnitConverter.dpToPixel(value);
-        self.dividerDrawable.setSize(px, 1);
-        px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
-        self.divider.setDividerPadding(px);
-        self.divider.setDividerDrawable(self.dividerDrawable);
-      },
-      get dividerColor(): Color {
-        return self._dividerColor;
-      },
-      set dividerColor(value: Color) {
-        self._dividerColor = value;
-        if (self.dividerDrawable) {
-          self.dividerDrawable.setColor(value.nativeObject);
-        }
-      },
-      get dividerPadding(): number {
-        return self._dividerPadding;
-      },
-      set dividerPadding(value: number) {
-        self._dividerPadding = value;
-        if (self.dividerDrawable) {
-          const px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
-          self.divider.setDividerPadding(px);
-        }
-      },
-      get overScrollMode(): OverScrollMode {
-        return self._overScrollMode;
-      },
-      set overScrollMode(value: OverScrollMode) {
-        self._overScrollMode = value;
-        self.swipeView.android.overScrollMode = value;
-        self.tabLayout.nativeObject.setOverScrollvalue(value);
-      }
-    });
     super.preConstruct(params);
+    this.addAndroidProps(this.getAndroidProps());
   }
 
   constructor(params?: Partial<ITabBarController>) {
@@ -152,8 +107,56 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     });
     this.tabLayout.nativeObject.addOnTabSelectedListener(listener);
   }
-  onLoad: () => void = () => {};
-  onShow: () => void = () => {};
+  private getAndroidProps() {
+    const self = this;
+    return {
+      get dividerWidth(): number {
+        return self._dividerWidth;
+      },
+      set dividerWidth(value: number) {
+        self._dividerWidth = value;
+
+        self.divider.setShowDividers(2); // 2 = LinearLayout.SHOW_DIVIDER_MIDDLE
+        self.dividerDrawable = new NativeGradientDrawable();
+        self.dividerDrawable.setColor(self._dividerColor.nativeObject);
+
+        let px = AndroidUnitConverter.dpToPixel(value);
+        self.dividerDrawable.setSize(px, 1);
+        px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
+        self.divider.setDividerPadding(px);
+        self.divider.setDividerDrawable(self.dividerDrawable);
+      },
+      get dividerColor(): Color {
+        return self._dividerColor;
+      },
+      set dividerColor(value: Color) {
+        self._dividerColor = value;
+        if (self.dividerDrawable) {
+          self.dividerDrawable.setColor(value.nativeObject);
+        }
+      },
+      get dividerPadding(): number {
+        return self._dividerPadding;
+      },
+      set dividerPadding(value: number) {
+        self._dividerPadding = value;
+        if (self.dividerDrawable) {
+          const px = AndroidUnitConverter.dpToPixel(self._dividerPadding);
+          self.divider.setDividerPadding(px);
+        }
+      },
+      get overScrollMode(): OverScrollMode {
+        return self._overScrollMode;
+      },
+      set overScrollMode(value: OverScrollMode) {
+        self._overScrollMode = value;
+        self.swipeView.android.overScrollMode = value;
+        self.tabLayout.nativeObject.setOverScrollMode(value);
+      }
+    };
+  }
+  onLoad: () => void;
+  onShow: () => void;
 
   // TODO Unused fields
   dividerColor: Color;

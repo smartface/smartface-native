@@ -7,6 +7,9 @@ import { TabBarControllerEvents } from './tabbarcontroller-events';
 import { PageImpl } from '../page/page';
 
 export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
+  dividerColor: Color;
+  dividerPadding: number;
+  dividerWidth: number;
   private _items: ITabbarItem[];
   private _autoCapitalize: boolean;
   private _iconColor: { normal: Color; selected: Color } | Color;
@@ -20,12 +23,6 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     this.addIOSProps(this.getIOSProps());
   }
 
-  onLoad() {
-    super.onLoad();
-  }
-  onShow() {
-    super.onShow();
-  }
   constructor(params?: Partial<ITabBarController>) {
     super(params);
 
@@ -71,10 +68,6 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
       return item.nativeObject;
     });
   }
-
-  dividerColor: Color;
-  dividerPadding: number;
-  dividerWidth: number;
 
   get indicatorColor(): Color {
     return new Color({

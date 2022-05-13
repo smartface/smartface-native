@@ -31,9 +31,14 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
 
   constructor(params?: Partial<ITabbarItem>) {
     super(params);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  invalidate(): void {
+    throw new Error('Method not implemented.');
+  }
+  private getAndroidProps() {
     const self = this;
-
-    const android = {
+    return {
       get systemIcon() {
         return self._systemIcon;
       },
@@ -50,10 +55,6 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
         self._attributedTitle = value;
       }
     };
-    this.addAndroidProps(android);
-  }
-  invalidate(): void {
-    throw new Error('Method not implemented.');
   }
   get tabBarItemParent() {
     return this._tabBarItemParent;

@@ -24,7 +24,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   onStateChanged: (state: SwipeViewState) => void;
   onPageCreate: (position: number) => Page;
   private _page: PageAndroid;
-  private _pages: typeof Page[];
+  private _pages: IPage[];
   private _lastIndex: number;
   private _pageCount: number;
   private _pageInstances: PageAndroid[];
@@ -96,8 +96,8 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
       return this._pageInstances[position].nativeObject;
     } else {
       // For backward compatibility
-      const PageClass = this.pages[position];
-      pageInstance = new PageClass() as unknown as PageAndroid;
+      const PageClass = this.pages[position] as unknown as typeof PageAndroid;
+      pageInstance = new PageClass();
     }
     this._pageInstances[position] = pageInstance;
     this.bypassPageSpecificProperties(pageInstance);
@@ -137,7 +137,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   set page(value) {
     this._page = value;
   }
-  get pages(): typeof Page[] {
+  get pages(): IPage[] {
     return this._pages;
   }
   set pages(value) {

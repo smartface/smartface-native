@@ -3,7 +3,6 @@ import { AbstractView, IView } from '../view/view';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { SwipeViewEvents } from './swipeview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Page from '../page';
 
 /**
  * @enum UI.SwipeView.State
@@ -100,7 +99,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @ios
    * @since 1.1.10
    */
-  pages: typeof Page[];
+  pages: IPage[];
   onPageSelected: (index: number, page: IPage) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
@@ -187,7 +186,7 @@ export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents> 
   pageCount: number;
   pagerAdapter: { notifyDataSetChanged: () => void };
   page: IPage;
-  pages: typeof Page[];
+  pages: IPage[];
   onPageSelected: (index: number, page: IPage) => void;
   onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
