@@ -1,7 +1,10 @@
 import { INativeComponent } from '../../core/inative-component';
 import Contacts from '../../device/contacts';
+import { IContact } from '../../device/contacts/contact/contact';
 import File from '../../io/file';
+import { IImage } from '../../ui/image/image';
 import Page from '../../ui/page';
+import { IPage } from '../../ui/page/page';
 import Invocation from '../../util/iOS/invocation';
 import { ShareBase } from './share';
 const UIActivityViewController = SF.requireClass('UIActivityViewController');
@@ -48,8 +51,12 @@ export class ShareIOS implements ShareBase {
     activity.excludedActivityTypes = blacklist;
     ShareIOS.ios__presentViewController(page, activity);
   }
-  static shareImage() {}
-  static shareContacts(object: { items: typeof Contacts.Contact[]; fileName?: string; page: Page; blacklist: string[] }) {
+  static shareImage(image: IImage, page: IPage, blacklist: any[]) {
+    const activity = ShareIOS.createActivity([image.nativeObject]);
+    activity.excludedActivityTypes = blacklist;
+    ShareIOS.ios__presentViewController(page, activity);
+  }
+  static shareContacts(object: { items: IContact[]; fileName?: string; page: Page; blacklist: string[] }) {
     const items = object.items;
     const page = object.page;
     const blacklist = object.blacklist;
@@ -57,8 +64,7 @@ export class ShareIOS implements ShareBase {
     const _itemsNativeObject: __SF_CNMutableContact[] = [];
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      //@ts-ignore TODO: contact need nativeObject
-      _itemsNativeObject.push(item.nativeObject);
+      _itemsNativeObject.push(item.nativeObject as any);
     }
 
     const path = __SF_CNMutableContact.getShareableFilePathWithContactArrayFileName(_itemsNativeObject, fileName);
