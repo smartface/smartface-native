@@ -1,13 +1,15 @@
 import NativeComponent from '../../core/native-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
-import Page from '../page';
+import { IPage } from '../page/page';
 
-export interface IWebBrowserOptions extends NativeComponent {
+export interface IWebBrowserIOSProps {
+  itemColor?: Color;
+}
+
+export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBrowserIOSProps, {}> = MobileOSProps<IWebBrowserIOSProps, {}>> extends INativeMobileComponent<TNative, TProps> {
   url: string;
   barColor?: Color;
-  ios?: Partial<{
-    itemColor?: Color;
-  }>;
 }
 
 /**
@@ -41,10 +43,10 @@ export class WebBrowserBase extends NativeComponent {
    * @ios
    * @since 2.0.11
    */
-  show(page: Page) {
+  show(page: IPage) {
     throw new Error('show() Method not implemented.');
   }
-  constructor(params?: Partial<IWebBrowserOptions>) {
+  constructor(params?: Partial<IWebBrowser>) {
     super(params);
   }
 }

@@ -1,9 +1,9 @@
 import Page from '../page';
-import { IWebBrowserOptions, WebBrowserBase } from './webbrowser';
+import { IWebBrowser, WebBrowserBase } from './webbrowser';
 
 export default class WebBrowserAndroid extends WebBrowserBase {
-  private _options?: Partial<IWebBrowserOptions>;
-  constructor(params?: Partial<IWebBrowserOptions>) {
+  private _options?: Partial<IWebBrowser>;
+  constructor(params?: Partial<IWebBrowser>) {
     super(params);
     this._options = Object.assign({}, params);
   }

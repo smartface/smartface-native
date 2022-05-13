@@ -1,10 +1,10 @@
-import { IWebBrowserOptions, WebBrowserBase } from './webbrowser';
+import { IWebBrowser, WebBrowserBase } from './webbrowser';
 import Page from '../page';
 import Invocation from '../../util/iOS/invocation';
 
 export default class WebBrowserIOS extends WebBrowserBase {
-  private _options?: Partial<IWebBrowserOptions>;
-  constructor(params?: Partial<IWebBrowserOptions>) {
+  private _options?: Partial<IWebBrowser>;
+  constructor(params?: Partial<IWebBrowser>) {
     super(params);
     this._options = Object.assign({}, params);
   }
