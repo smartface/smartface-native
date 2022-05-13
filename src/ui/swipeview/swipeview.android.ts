@@ -35,7 +35,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   createNativeObject() {
     const callbacks = {
       getCount: () => {
-        return this.pageCount ?? this.pages.length;
+        return this.pageCount ?? (this.pages?.length || 0);
       },
       getItem: (position: number) => {
         return this.getPageInstance(position);
