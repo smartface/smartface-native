@@ -25,35 +25,28 @@ const UISearchBarIcon = {
 };
 
 export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
-  private _textAligment: number = 3;
-  private _constant: number = 0;
-  private _hint = '';
+  private _textAligment: number;
+  private _constant: number;
+  private _hint;
   private _hintTextColor: Color;
   private _textColor: Color;
   private _backgroundColor: Color;
   private _backgroundImage: Image;
   private _iconImage: Image;
   private _searchIcon: Image;
-  private _borderWidth: number = 0;
+  private _borderWidth: number;
   private _searchContainerView: any;
-  private _isAddedHeaderBar: boolean = false;
-  private _showsCancelButton: boolean = false;
+  private _isAddedHeaderBar: boolean;
+  private _showsCancelButton: boolean;
   private _onSearchBegin: () => void;
   private _onSearchEnd: () => void;
   private _onTextChanged: (searchText: string) => void;
   private _onSearchButtonClicked: () => void;
   private _onCancelButtonClicked: () => void;
   private _searchBarDelegate: __SF_UISearchBarDelegate;
-  private _searchViewStyle: SearchViewStyle = UISearchBarStyle.default;
+  private _searchViewStyle: SearchViewStyle;
   private textfield: any;
   private keyboardanimationdelegate: any;
-  createNativeObject() {
-    const nativeObject = new __SF_SMFUISearchBar();
-    this._hintTextColor = Color.LIGHTGRAY;
-    this.textfield = nativeObject.valueForKey('searchField');
-    this.textfield.addKeyboardObserver();
-    return nativeObject;
-  }
   constructor(params?: Partial<ISearchView>) {
     super(params);
 
@@ -150,9 +143,11 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       this.emit('searchButtonClicked');
     };
     this.nativeObject.delegate = this._searchBarDelegate;
+  }
 
+  private getIOSProps() {
     const self = this;
-    this.addIOSProps({
+    return {
       get keyboardAppearance(): KeyboardAppearance {
         return self.nativeObject.valueForKey('keyboardAppearance');
       },
@@ -221,9 +216,27 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       hideLoading() {
         self.nativeObject.activityIndicator.stopAnimating();
       }
-    });
+    };
+  }
+  createNativeObject() {
+    const nativeObject = new __SF_SMFUISearchBar();
+    this._hintTextColor = Color.LIGHTGRAY;
+    this.textfield = nativeObject.valueForKey('searchField');
+    this.textfield.addKeyboardObserver();
+    return nativeObject;
   }
 
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._constant = 0;
+    this._hint = '';
+    this._borderWidth = 0;
+    this._isAddedHeaderBar = false;
+    this._showsCancelButton = false;
+    this._searchViewStyle = UISearchBarStyle.default;
+    this._textAligment = TextAlignment.MIDLEFT;
+    super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
+  }
   get text(): string {
     return this.nativeObject.text;
   }
