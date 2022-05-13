@@ -32,8 +32,8 @@ export default class DialogAndroid extends AbstractDialog {
   constructor(params: Partial<DialogAndroid> = {}) {
     super(params);
     this._layout = new FlexLayout({ backgroundColor: Color.TRANSPARENT });
-    this.initDialogLayout();
     this.skipDefaults = params.skipDefaults || this._isTransparent;
+    this.initDialogLayout();
   }
   createNativeObject(params: Partial<DialogAndroid> = {}) {
     this._themeStyle = params?.android?.themeStyle || DialogAndroid.Android.Style.ThemeDefault;
@@ -70,7 +70,9 @@ export default class DialogAndroid extends AbstractDialog {
       this.dialogWindow.setBackgroundDrawable(this.colorDrawable);
       const statusBarHeight = Application.statusBar.visible ? Application.statusBar.height : 0;
       const layoutHeight = Screen.height - statusBarHeight;
-      this._layout.height = statusBarHeight > 0 ? statusBarHeight : layoutHeight;
+      if(statusBarHeight > 0) {
+        this._layout.height = layoutHeight;
+      }
       this.dialogWindow.setLayout(LayoutParams.MATCH_PARENT, statusBarHeight > 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT);
     }
     this.nativeObject.setContentView(this._layout.nativeObject);
