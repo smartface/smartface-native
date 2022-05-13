@@ -117,7 +117,7 @@ export enum ImageViewFillTypeIOS {
  *     myPage.layout.addChild(myImageView);
  *
  */
-export enum ImageFillTypeGeneric {
+export const ImageFillType = {
   /**
    * @property {Number} NORMAL
    * @android
@@ -129,7 +129,7 @@ export enum ImageFillTypeGeneric {
    * @ios
    * @since 0.1
    */
-  NORMAL = 0,
+  NORMAL: 0,
   /**
    * @property {Number} STRETCH
    * @android
@@ -141,7 +141,7 @@ export enum ImageFillTypeGeneric {
    * @ios
    * @since 0.1
    */
-  STRETCH = 1,
+  STRETCH: 1,
   /**
    * @property {Number} ASPECTFIT
    * @android
@@ -153,7 +153,7 @@ export enum ImageFillTypeGeneric {
    * @ios
    * @since 0.1
    */
-  ASPECTFIT = 2,
+  ASPECTFIT: 2,
   /**
    * @property {Number} ASPECTFILL
    * @android
@@ -165,15 +165,11 @@ export enum ImageFillTypeGeneric {
    * @ios
    * @since 3.0.2
    */
-  ASPECTFILL = 3
-}
+  ASPECTFILL: 3,
+  iOS: ImageViewFillTypeIOS
+} as const;
 
-export const ImageFillType = {
-  ...ImageViewFillTypeIOS,
-  ...ImageFillTypeGeneric
-};
-
-export type ImageFillType = ImageViewFillTypeIOS | ImageFillTypeGeneric;
+export type ImageFillType = ExtractValues<typeof ImageFillType>;
 
 export interface IImageView<
   TEvent extends string = ImageViewEvents,
@@ -245,7 +241,7 @@ export interface IImageView<
    * @ios
    * @since 0.1
    */
-  imageFillType: ImageViewFillTypeIOS | ImageFillType;
+  imageFillType: ImageFillType;
   /**
    * Load image from the server and place the returned image into the ImageView.
    * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded.
@@ -351,15 +347,13 @@ export interface IImageView<
 }
 
 export declare class AbstractImageView<TEvent extends string = ImageViewEvents> extends AbstractView<TEvent> implements IImageView<TEvent> {
-  static FillType: {
-    ios: typeof ImageViewFillTypeIOS;
-  } & typeof ImageFillType;
+  static FillType: typeof ImageFillType;
   constructor(params?: Partial<IImageView>);
   image: string | IImage | null;
 
   tintColor: Color;
 
-  imageFillType: ImageViewFillTypeIOS | ImageFillType;
+  imageFillType: ImageFillType;
 
   loadFromUrl(params: {
     url: string;

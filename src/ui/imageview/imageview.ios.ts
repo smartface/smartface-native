@@ -1,4 +1,4 @@
-import { IImageView, ImageFillType } from './imageview';
+import { IImageView, ImageFillType, ImageViewFillTypeIOS } from './imageview';
 import File from '../../io/file';
 import Color from '../color';
 import ImageIOS from '../image/image.ios';
@@ -6,7 +6,13 @@ import ImageCacheType from '../shared/imagecachetype';
 import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 import { IImage } from '../image/image';
-import ColorIOS from '../color/color.ios';
+
+const NativeFillTypeProps = {
+  [ImageFillType.STRETCH]: 0,
+  [ImageFillType.ASPECTFIT]: 1,
+  [ImageFillType.ASPECTFILL]: 2,
+  [ImageFillType.NORMAL]: 4
+};
 
 enum SDWebImageOptions {
   /**
@@ -123,15 +129,16 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }
   constructor(params?: IImageView) {
     super(params);
-
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
     } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
       this.nativeObject.setValueForKey(4, 'semanticContentAttribute');
     }
-
-    this.nativeObject.contentMode = ImageFillType.NORMAL;
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.touchEnabled = true;
+    this.imageFillType = ImageFillType.NORMAL;
+    super.preConstruct(params);
   }
 
   get image(): ImageIOS | null {
@@ -169,14 +176,13 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     }
     this._isSetTintColor = true;
     this.nativeObject.tintColor = value.nativeObject;
-    this.image = this.image; //Re-trigger setter
   }
 
   get imageFillType(): ImageFillType {
     return this.nativeObject.contentMode;
   }
   set imageFillType(value: ImageFillType) {
-    this.nativeObject.contentMode = value;
+    this.nativeObject.contentMode = NativeFillTypeProps[value] || value;
   }
 
   loadFromUrl(params: {
