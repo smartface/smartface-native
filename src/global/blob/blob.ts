@@ -1,4 +1,14 @@
-import { INativeComponent } from '../../core/inative-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+
+export interface IBlobAndroidProps {
+  /**
+   * Returns a new Blob object containing the data in the specified range of bytes of the existing Blob.
+   *
+   * @method slice
+   * @since 0.1
+   */
+  slice?: (start: number, end: number) => IBlob;
+}
 
 /**
  * @class Blob
@@ -11,7 +21,7 @@ import { INativeComponent } from '../../core/inative-component';
  *     var myBase64Str = "SGVsbG8gV29ybGQ=";
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
-export interface IBlob extends INativeComponent {
+export interface IBlob<TNative = any, TProps extends MobileOSProps<{}, IBlobAndroidProps> = MobileOSProps<{}, IBlobAndroidProps>> extends INativeMobileComponent<TNative, TProps> {
   /**
    * Returns the type of Blob data.
    *
@@ -28,13 +38,6 @@ export interface IBlob extends INativeComponent {
    * @since 0.1
    */
   readonly size: number;
-  /**
-   * Returns a new Blob object containing the data in the specified range of bytes of the existing Blob.
-   *
-   * @method slice
-   * @since 0.1
-   */
-  slice?: (start: number, end: number) => IBlob;
   /**
    * Returns a base64 String
    *
@@ -67,10 +70,11 @@ export interface IBlob extends INativeComponent {
 }
 
 export abstract class AbstractBlob implements IBlob {
+  ios: Partial<{}>;
+  android: Partial<IBlobAndroidProps>;
   nativeObject: any;
   abstract get type(): string;
   abstract get size(): number;
-  abstract slice(start: number, end: number): AbstractBlob;
   abstract toBase64(): string;
   abstract toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void;
   abstract toString(): string;
