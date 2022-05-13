@@ -35,7 +35,15 @@ export default class ImageIOS<
         const fileName = array.pop();
         this.nativeObject = __SF_UIImage.createName(fileName);
       } else {
-        this.nativeObject = new __SF_UIImage(params.path);
+        const imageFile = new FileIOS({
+          path: params.path
+        });
+        const actualPath: string | undefined = imageFile.nativeObject.getActualPath();
+        if (actualPath) {
+          this.nativeObject = new __SF_UIImage(actualPath);
+        } else {
+          throw Error('Image file not found. Check your path');
+        }
       }
     } else if (params.name) {
       // TODO: Check usage of new __SF_UIImage
