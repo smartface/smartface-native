@@ -17,7 +17,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   private __buttonCallbacks: { [key: number]: () => void } = {};
   private __title = '';
   private __message = '';
-  private __textBoxes: ITextBox[];
+  private __textBoxes: ITextBox[] = [];
   private __onDismiss: IAlertView['onDismiss'];
   private _cancellable: IAlertView['android']['cancellable'];
   constructor(params?: Partial<IAlertView>) {
