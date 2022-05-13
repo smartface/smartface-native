@@ -1,44 +1,15 @@
-import Page from '../page';
+import NativeComponent from '../../core/native-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
+import { IPage } from '../page/page';
 
-export declare class AbstractWebBrowserOptions {
-  constructor(params?: Partial<AbstractWebBrowserOptions>);
-  get url(): string;
-  set url(value: string);
-  get barColor(): Color;
-  set barColor(value: Color);
-  /**
-   * Gets the itemColor.
-   *
-   * @returns {Color}
-   * @ios
-   * @since 2.0.11
-   */
-  get itemColor(): Color;
-  /**
-   * Sets the itemColor.
-   *
-   * @property {Color} [value = Color.BLACK]
-   * @ios
-   * @since 2.0.11
-   */
-  set itemColor(value: Color);
-  /**
-   * Gets the statusBar visibility.
-   *
-   * @returns {boolean}
-   * @ios
-   * @since 2.0.11
-   */
-  get statusBarVisible(): boolean;
-  /**
-   * Sets the statusBar visibility.
-   *
-   * @property {boolean} [value = true]
-   * @ios
-   * @since 2.0.11
-   */
-  set statusBarVisible(value: boolean);
+export interface IWebBrowserIOSProps {
+  itemColor?: Color;
+}
+
+export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBrowserIOSProps, {}> = MobileOSProps<IWebBrowserIOSProps, {}>> extends INativeMobileComponent<TNative, TProps> {
+  url: string;
+  barColor?: Color;
 }
 
 /**
@@ -49,39 +20,33 @@ export declare class AbstractWebBrowserOptions {
  *
  *       @example
  *       import WebBrowser from '@smartface/native/ui/webbrowser';
- *       var webOptions = new WebBrowser.Options();
- *       webOptions.url = "https://smartface.io"
- *       webOptions.barColor = Color.RED;
- *       webOptions.ios.itemColor = Color.BLUE;
- *       WebBrowser.show(page,webOptions);
+ *       const webBrowser = new WebBrowser({
+ *          url: 'https://smartface.io',
+ *          barColor: Color.RED,
+ *          ios: {
+ *           itemColor: Color.GREEN
+ *         }
+ *       });
+ *       webBrowser.show(this);
  */
-export declare class AbstractWebBrowser {
-  /**
-   * @class UI.WebBrowser.Options
-   * @since 2.0.11
-   *
-   * An object that provides a standard interface for browsing the web.
-   *
-   *      @example
-   *      var webOptions = new WebBrowser.Options();
-   *      webOptions.url = "https://smartface.io"
-   *      webOptions.barColor = Color.RED;
-   *      webOptions.ios.itemColor = Color.BLUE;
-   *      WebBrowser.show(page,options);
-   */
-  public static readonly Options: new (params?: Partial<AbstractWebBrowserOptions>) => AbstractWebBrowserOptions;
+export class WebBrowserBase extends NativeComponent {
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    throw new Error('createNativeObject Method not implemented.');
+  }
   /**
    *
    * This function shows WebBrowser on the given UI.Page.
    *
    * @event show
    * @param {UI.Page} page
-   * @param {UI.WebBrowser.Options} options
-   * @static
    * @android
    * @ios
    * @since 2.0.11
    */
-  static show(page: Page, options: AbstractWebBrowserOptions): void;
-  constructor(params?: AbstractWebBrowserOptions);
+  show(page: IPage) {
+    throw new Error('show() Method not implemented.');
+  }
+  constructor(params?: Partial<IWebBrowser>) {
+    super(params);
+  }
 }

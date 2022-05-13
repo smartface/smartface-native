@@ -1,6 +1,6 @@
-import { AbstractWebBrowser } from './webbrowser';
+import { WebBrowserBase } from './webbrowser';
 
-const WebBrowser: typeof AbstractWebBrowser = require(`./webbrowser.${Device.deviceOS.toLowerCase()}`).default;
-type WebBrowser = AbstractWebBrowser;
+const WebBrowser: typeof WebBrowserBase = require(`./webbrowser.${Device.deviceOS.toLowerCase()}`).default;
+type WebBrowser = WebBrowserBase;
 
 export default WebBrowser;
