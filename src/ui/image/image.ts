@@ -1,4 +1,4 @@
-import { INativeMobileComponent, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import IBlob from '../../global/blob/blob';
 import { Rectangle } from '../../primitive/rectangle';
 
@@ -22,10 +22,8 @@ import { Rectangle } from '../../primitive/rectangle';
  *     myPage.layout.addChild(myImageView);
  *
  */
-export interface IImage<
-  TNative extends { [key: string]: any } = any,
-  TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
-> extends INativeMobileComponent<TNative, TProps> {
+export interface IImage<TNative extends { [key: string]: any } = any, TProps extends MobileOSProps<ImageIOSProps, ImageAndroidProps> = MobileOSProps<ImageIOSProps, ImageAndroidProps>>
+  extends INativeMobileComponent<TNative, TProps> {
   /**
    * Gets the height of image in pixels.
    *
@@ -310,24 +308,24 @@ export interface ImageIOSProps {
 export interface ImageParams {
   bitmap?: any;
   roundedBitmapDrawable?: any;
-  drawable: any;
+  drawable?: any;
   path: any;
   name?: string;
   blob?: IBlob;
   image?: IImage;
+  android?: {
+    systemIcon?: string | number;
+  };
 }
 /**
  * @since 4.5.0
  */
-export abstract class AbstractImage<
-    TNative extends { [key: string]: any } = any,
-    TProps extends WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
-  >
+export abstract class AbstractImage<TNative extends { [key: string]: any } = any, TProps extends MobileOSProps<ImageIOSProps, ImageAndroidProps> = MobileOSProps<ImageIOSProps, ImageAndroidProps>>
   extends NativeMobileComponent<TNative, TProps>
   implements IImage<TNative, TProps>
 {
-  constructor(params?: Partial<TProps>) {
-    super(params);
+  constructor(params?: ImageParams) {
+    super(params as unknown as TProps);
   }
   compress(format: Format, quality: number, onSuccess?: (e: { blob: IBlob }) => void, onFailure?: (e?: { message: string }) => void): IBlob | null | void {
     throw new Error('Method not implemented.');

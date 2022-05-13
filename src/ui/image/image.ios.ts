@@ -26,7 +26,7 @@ export default class ImageIOS<
   private _autoMirrored: boolean = false;
 
   constructor(params: Partial<TProps>) {
-    super(params);
+    super(params as any);
     if (params.path) {
       if (params.path.includes('.app')) {
         // Publish project image caching.
@@ -66,9 +66,9 @@ export default class ImageIOS<
     return {
       resizableImageWithCapInsetsResizingMode: (capinsets, resizingMode) => {
         let image: any;
-        const invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance('resizableImageWithCapInsets:resizingMode:', this.nativeObject);
+        const invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance('resizableImageWithCapInsets:resizingMode:', self.nativeObject);
         if (invocationResizeable) {
-          invocationResizeable.target = this.nativeObject;
+          invocationResizeable.target = self.nativeObject;
           invocationResizeable.setSelectorWithString('resizableImageWithCapInsets:resizingMode:');
           invocationResizeable.retainArguments();
           invocationResizeable.setUIEdgeInsetsArgumentAtIndex(capinsets, 2);
@@ -79,10 +79,10 @@ export default class ImageIOS<
         }
         return ImageIOS.createFromImage(image);
       },
-      imageWithRenderingMode(value) {
-        return ImageIOS.createFromImage(this.nativeObject.imageWithRenderingMode(value));
+      imageWithRenderingMode: (value) => {
+        return ImageIOS.createFromImage(self.nativeObject.imageWithRenderingMode(value));
       },
-      imageFlippedForRightToLeftLayoutDirection() {
+      imageFlippedForRightToLeftLayoutDirection: () => {
         return ImageIOS.createFromImage(self.nativeObject.imageFlippedForRightToLeftLayoutDirection());
       },
       get renderingMode() {

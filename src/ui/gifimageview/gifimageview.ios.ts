@@ -74,11 +74,7 @@ export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents>
     this.gifImage = gifImage;
   }
 
-  loadFromUrl(params: { url: string; headers?: { [name: string]: string; } | undefined; placeholder?: ImageiOS<__SF_UIImage, WithMobileOSProps<Partial<ImageParams>, ImageIOSProps, ImageAndroidProps>> | undefined; fade?: boolean | undefined; useHTTPCacheControl?: boolean | undefined; onSuccess?: (() => void) | undefined; onFailure?: (() => void) | undefined; android?: { useDiskCache?: boolean | undefined; useMemoryCache?: boolean | undefined; } | undefined; ios?: { isRefreshCached?: boolean | undefined; } | undefined; cache?: ImageCacheType | undefined; }): void {
-    
-  }
+  loadFromUrl(): void {}
 
-  fetchFromUrl(params: { url: string; headers?: { [name: string]: string; } | undefined; placeholder?: IImage<any, WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>> | undefined; useHTTPCacheControl?: boolean | undefined; onSuccess?: ((image: IImage<any, WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>> | null, cache: ImageCacheType) => void) | undefined; onFailure?: (() => void) | undefined; android?: { useDiskCache?: boolean | undefined; useMemoryCache?: boolean | undefined; } | undefined; ios?: { isRefreshCached?: boolean | undefined; } | undefined; image: any; cache: ImageCacheType; }): void {
-    
-  }
+  fetchFromUrl(): void {}
 }

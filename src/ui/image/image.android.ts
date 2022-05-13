@@ -3,7 +3,7 @@ import { IImage, AbstractImage, Format, ImageAndroidProps, ImageIOSProps, ImageP
 import AndroidConfig from '../../util/Android/androidconfig';
 import FileAndroid from '../../io/file/file.android';
 import PathAndroid from '../../io/path/path.android';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
 
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
@@ -17,23 +17,21 @@ const NativeContextCompat = requireClass('androidx.core.content.ContextCompat');
 const CompressFormat = [NativeBitmap.CompressFormat.JPEG, NativeBitmap.CompressFormat.PNG];
 const androidResources = AndroidConfig.activityResources;
 
-export default class ImageAndroid<
-  TNative = any,
-  TProps extends WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps> = WithMobileOSProps<ImageParams, ImageIOSProps, ImageAndroidProps>
-> extends AbstractImage<TNative, TProps> {
-  protected createNativeObject(): any {
-    return null;
-  }
-
+export default class ImageAndroid<TNative = any, TProps extends MobileOSProps<ImageIOSProps, ImageAndroidProps> = MobileOSProps<ImageIOSProps, ImageAndroidProps>> extends AbstractImage<
+  TNative,
+  TProps
+> {
   private _systemIcon: IImage['android']['systemIcon'];
-  static Format = Format;
-  constructor(params: Partial<TProps>) {
-    super(params);
+  constructor(params?: Partial<ImageParams>) {
+    //Should be ImageParams
+    super(params as any);
     if (typeof params !== 'object') {
       throw new Error('Constructor parameters needed for Image!');
     }
   }
-
+  protected createNativeObject(): any {
+    return null;
+  }
   get height(): number {
     return this.nativeObject.getBitmap().getHeight();
   }
@@ -196,7 +194,7 @@ export default class ImageAndroid<
     this.nativeObject = value;
   }
 
-  get android() {
+  getAndroidProps() {
     const self = this;
     return {
       round(radius: number) {
@@ -213,6 +211,26 @@ export default class ImageAndroid<
       set systemIcon(systemIcon) {
         this._systemIcon = systemIcon;
         self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, ImageAndroid.systemDrawableId(this._systemIcon));
+      }
+    };
+  }
+  getIOSProps() {
+    const self = this;
+    return {
+      resizableImageWithCapInsetsResizingMode: (capinsets, resizingMode) => {
+        return self as ImageAndroid;
+      },
+      imageWithRenderingMode(value) {
+        return self as ImageAndroid;
+      },
+      imageFlippedForRightToLeftLayoutDirection() {
+        return self as ImageAndroid;
+      },
+      get renderingMode() {
+        return self.nativeObject.valueForKey('renderingMode');
+      },
+      get flipsForRightToLeftLayoutDirection() {
+        return self.nativeObject.valueForKey('flipsForRightToLeftLayoutDirection');
       }
     };
   }
@@ -256,7 +274,7 @@ export default class ImageAndroid<
       });
       if (imageFile.type === PathAndroid.FILE_TYPE.ASSET || imageFile.type === PathAndroid.FILE_TYPE.DRAWABLE) {
         const image = ImageAndroid.createFromFile(params.path);
-        return image?.android.round(params.radius) || null;
+        return image?.android.round?.(params.radius) || null;
       } else {
         const roundedBitmapDrawable = ImageAndroid.getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
         return new ImageAndroid({
@@ -325,4 +343,5 @@ export default class ImageAndroid<
 
     return inSampleSize;
   }
+  static Format = Format;
 }
