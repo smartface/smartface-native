@@ -8,6 +8,7 @@ import ViewIOS from '../view/view.ios';
 import { GridViewEvents } from './gridview-events';
 
 const DEFAULT_ITEM_LENGTH = 50;
+const NSIndexPath = SF.requireClass('NSIndexPath');
 
 export default class GridViewIOS<TEvent extends string = GridViewEvents> extends ViewIOS<TEvent | GridViewEvents, any, IGridView> implements IGridView {
   onItemCreate: (type?: number) => GridViewItemIOS;
@@ -207,7 +208,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     this.nativeObject.reloadData();
   }
   scrollTo(index: number, animated?: boolean): void {
-    const indexPath = __SF_NSIndexPath.indexPathForItemInSection(index, 0);
+    const indexPath = NSIndexPath.indexPathForItemInSection(index, 0);
     if (!this._layoutManager) {
       return;
     }
@@ -218,7 +219,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     this.refreshControl.endRefreshing();
   }
   itemByIndex(index: number): GridViewItemIOS | undefined {
-    const indexPath = __SF_NSIndexPath.indexPathForRowInSection(index, 0);
+    const indexPath = NSIndexPath.indexPathForRowInSection(index, 0);
     const cell = this.nativeObject.cellForItemAtIndexPath(indexPath);
     return cell ? this.collectionViewItems[cell.uuid] : undefined;
   }

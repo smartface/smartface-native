@@ -199,7 +199,6 @@ export interface IListViewAndroid extends ViewAndroidProps {
   /**
    * This event is called when a scroll occurs.
    *
-   * @deprecated
    * @param {Object} params
    * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
    * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
@@ -408,7 +407,6 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   /**
    * This event is called when user selects a row at specific index.
    *
-   * @deprecated
    * @param {UI.ListViewItem} listViewItem
    * @param {Number} index
    * @event onRowSelected
@@ -658,7 +656,6 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * For better performance, don't set any callback if does not
    * necessary
    *
-   * @deprecated
    * @event onScroll
    * @param {Object} params
    * @param {Object} params.translation
@@ -802,7 +799,6 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   /**
    * This event is called when dragged item before reordered in the list view.
    *
-   * @deprecated
    * @param {Number} source
    * @param {Number} destination
    * @event onRowMove
@@ -816,7 +812,6 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * By default all the items are draggable if {@link UI.ListView#rowMoveEnabled rowMoveEnabled} is true, to restrict some rows set this method and change return value
    * by specific condition.
    *
-   * @deprecated
    * @param {Number} index
    * @event onRowCanMove
    * @return {Boolean} Return true if index can be draggable
@@ -829,7 +824,6 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * By default all the items are swipeable if {@link UI.ListView#swipeEnabled swipeEnabled} is true, to restrict some rows set this method and change return value
    * by specific condition. For iOS, this callback is triggered twice consecutively.
    *
-   * @deprecated
    * @param {Number} index
    * @event onRowCanSwipe
    * @return {UI.ListView.SwipeDirection[]} Return allowed swipe direction in array.

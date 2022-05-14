@@ -229,7 +229,8 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
 
     this.nativeObject.onRowSwiped = (e) => {
       let index;
-      if (e.index != -1) {
+
+      if (e.index !== -1) {
         index = e.index;
       }
 

@@ -8,6 +8,8 @@ import OverScrollMode from '../shared/android/overscrollmode';
 import SwipeItem, { SwipeDirection } from '../swipeitem';
 import ViewAndroid from '../view/view.android';
 import { ListViewEvents } from './listview-events';
+import { ViewEvents } from '../view/view-events';
+import { EventListenerCallback } from '../../core/eventemitter';
 
 const NativeSwipeRefreshLayout = requireClass('androidx.swiperefreshlayout.widget.SwipeRefreshLayout');
 const NativeSFLinearLayoutManager = requireClass('io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager');
@@ -37,6 +39,7 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
   private nItemTouchHelper: any;
   private sfItemTouchHelperCallback: any;
   private nativeSwipeItemInstance: any;
+  private _onGesture: IListView['android']['onGesture'];
   createNativeObject() {
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
@@ -47,14 +50,15 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     this._longPressDragEnabled = false;
     this._swipeEnabled = false;
     this._listViewItems = {};
+    this._overScrollMode = OverScrollMode.ALWAYS;
 
     this.setNativeInner();
     this.setDataAdapter();
+    super.preConstruct(params);
     this.addAndroidProps(this.getAndroidParams());
     this.addIOSProps(this.getIOSParams());
     this.setItemTouchHelper();
     this.createScrollListener();
-    super.preConstruct(params);
   }
   constructor(params?: IListView) {
     super(params);
@@ -248,34 +252,25 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
         }
       })
     );
-    if (!this.nativeInner) {
-      if (NativeR.style.ScrollBarRecyclerView) {
-        const themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-        this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
-      } else {
-        this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
-      }
-      this.nativeInner.setHasFixedSize(true);
-      this.nativeInner.setDrawingCacheEnabled(true);
-      this.nativeInner.setItemViewCacheSize(0);
-      this.nativeInner.setClipToPadding(false);
-    }
 
-    this.nativeInner?.addOnItemTouchListener(
+    if (NativeR.style.ScrollBarRecyclerView) {
+      const themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
+      this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
+    } else {
+      this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
+    }
+    this.nativeInner.setHasFixedSize(true);
+    this.nativeInner.setDrawingCacheEnabled(true);
+    this.nativeInner.setItemViewCacheSize(0);
+    this.nativeInner.setClipToPadding(false);
+
+    this.nativeInner.addOnItemTouchListener(
       NativeRecyclerView.OnItemTouchListener.implement({
         onInterceptTouchEvent: () => !this.touchEnabled,
         onRequestDisallowInterceptTouchEvent: () => {},
         onTouchEvent: () => {}
       })
     );
-    this.nativeInner?.setJsCallbacks({
-      onScrollGesture: (distanceX: number, distanceY: number) => {
-        const params = { distanceX: distanceX, distanceY: distanceY };
-        const returnValue = this.android.onGesture?.(params) ?? true;
-        this.emit('gesture', params);
-        return !!returnValue;
-      }
-    });
     this._layoutManager = {
       nativeObject: new NativeSFLinearLayoutManager(AndroidConfig.activity)
     };
@@ -310,6 +305,23 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           self._onScrollListener && self.nativeInner.setOnScrollListener(self._onScrollListener);
         } else if (!self._onScroll) {
           self._onScrollListener && self.nativeInner.removeOnScrollListener(self._onScrollListener);
+        }
+      },
+      get onGesture() {
+        return self._onGesture;
+      },
+      set onGesture(value) {
+        if (value) {
+          self.nativeInner.setJsCallbacks({
+            onScrollGesture: (distanceX: number, distanceY: number) => {
+              const params = { distanceX: distanceX, distanceY: distanceY };
+              const returnValue = this.android.onGesture?.(params) ?? true;
+              this.emit('gesture', params);
+              return !!returnValue;
+            }
+          });
+        } else {
+          self.nativeInner.setJsCallbacks(null);
         }
       }
     };
@@ -512,4 +524,10 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     RowAnimation: RowAnimation,
     ...ViewAndroid.iOS
   };
+  on(eventName: ViewEvents, callback: EventListenerCallback) {
+    if (Object.values(ViewEvents).includes(eventName)) {
+      this.setTouchHandlers();
+    }
+    return super.on(eventName, callback);
+  }
 }

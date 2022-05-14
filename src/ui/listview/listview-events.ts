@@ -3,7 +3,6 @@ import { ViewEvents } from '../view/view-events';
 export const ListViewEvents = {
   AttachedToWindow: 'attachedToWindow',
   DetachedFromWindow: 'detachedFromWindow',
-  Gesture: 'gesture',
   PullRefresh: 'pullRefresh',
   RowCanMove: 'rowCanMove',
   RowCanSwipe: 'rowCanSwipe',
