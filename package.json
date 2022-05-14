@@ -1,6 +1,6 @@
 {
   "name": "@smartface/native",
-  "version": "5.0.0-alpha.88",
+  "version": "5.0.0-alpha.89",
   "description": "Core Modules of Native Libraries..",
   "main": "dist/index.js",
   "scripts": {
