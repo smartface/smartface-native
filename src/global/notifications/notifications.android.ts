@@ -1,9 +1,3 @@
-// android.content.Context.NOTIFICATION_SERVICE;
-const NOTIFICATION_SERVICE = 'notification';
-const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
-// android.content.Context.ALARM_SERVICE;
-const ALARM_SERVICE = 'alarm';
-const ALARM_MANAGER = 'android.app.AlarmManager';
 import Application from '../../application';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
@@ -13,6 +7,13 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
 import { NotificationsBase, Priority } from './notifications';
 import { NotificationEvents } from './notifications-events';
+
+// android.content.Context.NOTIFICATION_SERVICE;
+const NOTIFICATION_SERVICE = 'notification';
+const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
+// android.content.Context.ALARM_SERVICE;
+const ALARM_SERVICE = 'alarm';
+const ALARM_MANAGER = 'android.app.AlarmManager';
 
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat = requireClass('androidx.core.app.NotificationCompat');
@@ -80,96 +81,26 @@ class LocalNotification extends NativeMobileComponent {
     const nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
     return nativeObject.setSmallIcon(NativeR.drawable.icon);
   }
-  private _id = getNewNotificationId();
-  private _alertBody = '';
-  private _alertAction = '';
-  private _sound = '';
-  private _repeatInterval = 0;
+  private _id: number;
+  private _alertBody: string;
+  private _alertAction: string;
+  private _sound: string;
+  private _repeatInterval: number;
   private _launchImage;
   private _fireDate;
   private _color = 0;
-  private _indeterminate = false;
-  private _ticker = '';
-  private _vibrate = false;
-  private _priority = Priority.DEFAULT;
-  private _subText = '';
-  private _ongoing = false;
+  private _indeterminate: boolean;
+  private _ticker: string;
+  private _vibrate: boolean;
+  private _priority: Priority;
+  private _subText: string;
+  private _ongoing: boolean;
   private _onNotificationClick;
   private _onNotificationReceive;
   private mPendingIntent: any;
   private mNotification: any;
-  preConstruct(params?: any) {
-    this.addAndroidProps({
-      get color() {
-        return this._color;
-      },
-      set color(value) {
-        if (value instanceof Color && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-          this._color = value;
-          this.nativeObject.setColor(value.nativeObject);
-        }
-      },
-      get indeterminate() {
-        return this._indeterminate;
-      },
-      set indeterminate(value) {
-        if (TypeUtil.isBoolean(value)) {
-          this._indeterminate = value;
-          this.nativeObject.setProgress(0, 100, value);
-        }
-      },
-      get ticker() {
-        return this._ticker;
-      },
-      set ticker(value) {
-        if (TypeUtil.isString(value)) {
-          this._ticker = value;
-          this.nativeObject.setTicker(value);
-        }
-      },
-      get vibrate() {
-        return this._vibrate;
-      },
-      /** @todo it looks like we got problems with primitive arrays
-       * method androidx.core.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
-       * */
-      set vibrate(value) {
-        if (TypeUtil.isBoolean(value)) {
-          this._vibrate = true;
-          this.nativeObject.setVibrate(array([long(1000)], 'long'));
-        }
-      },
-      get priority() {
-        return this._priority;
-      },
-      set priority(value) {
-        if (TypeUtil.isNumeric(value)) {
-          this._priority = value;
-          this.nativeObject.setPriority(value);
-        }
-      },
-      get subText() {
-        return this._subText;
-      },
-      set subText(value) {
-        if (TypeUtil.isString(value)) {
-          this._subText = value;
-          this.nativeObject.setSubText(value);
-        }
-      },
-      get ongoing() {
-        return this._ongoing;
-      },
-      set ongoing(value) {
-        if (TypeUtil.isBoolean(value)) {
-          this._ongoing = value;
-          this.nativeObject.setOngoing(value);
-        }
-      }
-    });
-  }
   constructor(params?: any) {
-    super();
+    super(params);
     // When notification builded, notification must canceled
     // via its pending intent and its notification object.
     this.mPendingIntent = null;
@@ -177,13 +108,102 @@ class LocalNotification extends NativeMobileComponent {
 
     //ToDo: onReceivedNotification is deprecated. Implement click and receive callbacks for local notification as well and refactor callback assignment.
     NativeLocalNotificationReceiver.registerRemoteNotificationListener({
-      onLocalNotificationReceived: function (data) {
-        Application.onReceivedNotification &&
-          Application.onReceivedNotification({
-            local: JSON.parse(data)
-          });
+      onLocalNotificationReceived: (data) => {
+        Application.onReceivedNotification?.({
+          local: JSON.parse(data)
+        });
       }
     });
+  }
+
+  preConstruct(params?: any) {
+    this._id = getNewNotificationId();
+    this._alertBody = '';
+    this._alertAction = '';
+    this._sound = '';
+    this._repeatInterval = 0;
+    this._color = 0;
+    this._indeterminate = false;
+    this._ticker = '';
+    this._vibrate = false;
+    this._priority = Priority.DEFAULT;
+    this._subText = '';
+    this._ongoing = false;
+    this.addAndroidProps(this.getAndroidProps());
+    super.preConstruct(params);
+  }
+
+  private getAndroidProps() {
+    const self = this;
+    return {
+      get color() {
+        return self._color;
+      },
+      set color(value) {
+        //@ts-ignore
+        if (value instanceof Color && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+          self._color = value;
+          self.nativeObject.setColor(value.nativeObject);
+        }
+      },
+      get indeterminate() {
+        return self._indeterminate;
+      },
+      set indeterminate(value) {
+        if (TypeUtil.isBoolean(value)) {
+          self._indeterminate = value;
+          self.nativeObject.setProgress(0, 100, value);
+        }
+      },
+      get ticker() {
+        return this._ticker;
+      },
+      set ticker(value) {
+        if (TypeUtil.isString(value)) {
+          self._ticker = value;
+          self.nativeObject.setTicker(value);
+        }
+      },
+      get vibrate() {
+        return self._vibrate;
+      },
+      /** @todo it looks like we got problems with primitive arrays
+       * method androidx.core.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
+       * */
+      set vibrate(value) {
+        if (TypeUtil.isBoolean(value)) {
+          self._vibrate = true;
+          self.nativeObject.setVibrate(array([long(1000)], 'long'));
+        }
+      },
+      get priority() {
+        return self._priority;
+      },
+      set priority(value) {
+        if (TypeUtil.isNumeric(value)) {
+          self._priority = value;
+          self.nativeObject.setPriority(value);
+        }
+      },
+      get subText() {
+        return self._subText;
+      },
+      set subText(value) {
+        if (TypeUtil.isString(value)) {
+          self._subText = value;
+          self.nativeObject.setSubText(value);
+        }
+      },
+      get ongoing() {
+        return self._ongoing;
+      },
+      set ongoing(value) {
+        if (TypeUtil.isBoolean(value)) {
+          self._ongoing = value;
+          self.nativeObject.setOngoing(value);
+        }
+      }
+    };
   }
   get alertBody() {
     return this._alertBody;
@@ -313,14 +333,14 @@ class NotificationsAndroidClass extends NativeEventEmitterComponent<Notification
       unregisterPushNotification();
     }
   }
-  registerForPushNotifications(onSuccess, onFailure) {
+  registerForPushNotifications(onSuccess: (...args: any[]) => void, onFailure: (...args: any[]) => void) {
     if (!AndroidConfig.isEmulator) {
       this.registerPushNotification(onSuccess, onFailure);
     } else {
-      onFailure && onFailure();
+      onFailure?.();
     }
   }
-  private registerPushNotification(onSuccessCallback, onFailureCallback) {
+  private registerPushNotification(onSuccessCallback: (...args: any[]) => void, onFailureCallback: (...args: any[]) => void) {
     NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
       onSuccess: (token) => {
         NativeFCMListenerService.registerRemoteNotificationListener({
@@ -328,21 +348,24 @@ class NotificationsAndroidClass extends NativeEventEmitterComponent<Notification
             const parsedJson = JSON.parse(data);
             if (isReceivedByOnClick) {
               this.onNotificationClick?.(parsedJson);
+              this.emit('notificationClick', parsedJson);
             } else {
               this.onNotificationReceive?.(parsedJson);
+              this.emit('notificationReceive', {
+                remote: parsedJson
+              });
               Application.onReceivedNotification?.({
                 remote: parsedJson
               });
             }
           }
         });
-        onSuccessCallback &&
-          onSuccessCallback({
-            token: token
-          });
+        onSuccessCallback?.({
+          token: token
+        });
       },
-      onFailure: function () {
-        onFailureCallback && onFailureCallback();
+      onFailure: () => {
+        onFailureCallback?.();
       }
     });
   }

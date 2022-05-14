@@ -9,6 +9,8 @@ class LocalNotification extends NativeMobileComponent {
     return new __SF_UILocalNotification();
   }
   preConstruct(params?: any) {
+    super.preConstruct(params);
+
     this.addIOSProps({
       get applicationIconBadgeNumber() {
         return this.nativeObject.applicationIconBadgeNumber;
@@ -35,7 +37,6 @@ class LocalNotification extends NativeMobileComponent {
         }
       }
     });
-    super.preConstruct(params);
   }
   constructor(params?: any) {
     super(params);
