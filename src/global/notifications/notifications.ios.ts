@@ -101,20 +101,29 @@ class LocalNotification extends NativeMobileComponent {
 }
 
 class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+  private _notificationCenterDelegate: __SF_SMFUNUserNotificationCenterDelegate;
   constructor(params?: any) {
     super(params);
-    __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
-    this.ios._willPresentNotification = (e: any) => {
+    this._notificationCenterDelegate = new __SF_SMFUNUserNotificationCenterDelegate();
+    this._notificationCenterDelegate.willPresentNotification = (e) => {
       this.emit('notificationReceive', e);
-      const presentationOptions = this.onNotificationReceive?.(e);
-      return presentationOptions || [this.iOS.NotificationPresentationOptions.SOUND, this.iOS.NotificationPresentationOptions.ALERT];
+      const returnValue = this.onNotificationReceive?.(e);
+      if (returnValue === undefined || returnValue.length === 0) {
+        return 0;
+      }
+      let returnNSUIInteger = 0;
+      for (const index in returnValue) {
+        returnNSUIInteger = returnNSUIInteger | returnValue[index];
+      }
+
+      return returnNSUIInteger;
     };
-    this.ios._didReceiveNotificationResponse = (e: any) => {
+    this._notificationCenterDelegate.didReceiveNotificationResponse = (e) => {
       this.emit('notificationClick', e);
       this.onNotificationClick?.(e);
     };
   }
-  onNotificationReceive: (data: any) => typeof NotificationPresentationOptions[];
+  onNotificationReceive: (data: any) => NotificationPresentationOptions[];
   onNotificationClick: (data: any) => void;
   protected createNativeObject() {
     return null;
@@ -126,9 +135,7 @@ class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEven
   private getIOSProps() {
     const self = this;
     return {
-      _willPresentNotification: undefined,
       AuthorizationStatus: AuthorizationStatus,
-      _didReceiveNotificationResponse: undefined,
       get applicationIconBadgeNumber() {
         return __SF_UIApplication.sharedApplication().applicationIconBadgeNumber;
       },
@@ -149,29 +156,6 @@ class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEven
         }
 
         return retval;
-      },
-      UNUserNotificationCenterDelegate: {
-        ...new __SF_SMFUNUserNotificationCenterDelegate(),
-        willPresentNotification: (e) => {
-          if (self.ios._willPresentNotification === undefined) {
-            return 0;
-          }
-
-          const returnValue = self.ios._willPresentNotification(e);
-          if (returnValue === undefined || returnValue.length === 0) {
-            return 0;
-          }
-
-          let returnNSUIInteger;
-          for (const index in returnValue) {
-            returnNSUIInteger = returnNSUIInteger | returnValue[index];
-          }
-
-          return returnNSUIInteger;
-        },
-        didReceiveNotificationResponse: (e) => {
-          self.ios._didReceiveNotificationResponse && self.ios._didReceiveNotificationResponse(e);
-        }
       }
     };
   }

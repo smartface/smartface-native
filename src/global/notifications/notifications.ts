@@ -225,7 +225,7 @@ export interface NotificationsBase extends NativeEventEmitterComponent<Notificat
    * });
    * ```
    */
-  onNotificationReceive: (data: any) => typeof NotificationPresentationOptions[];
+  onNotificationReceive: (data: any) => NotificationPresentationOptions[];
   /**
    * This event triggered when clicked on notification alert
    *

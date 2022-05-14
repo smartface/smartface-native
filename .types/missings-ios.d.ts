@@ -1387,8 +1387,8 @@ declare class __SF_SearchBarContainerView {
 }
 
 declare class __SF_SMFUNUserNotificationCenterDelegate {
-  static willPresentNotification: (e: any) => number;
-  static didReceiveNotificationResponse: (e: any) => void;
+  willPresentNotification: (e: any) => number;
+  didReceiveNotificationResponse: (e: any) => void;
 }
 
 declare class __SF_KeychainPasswordItem {

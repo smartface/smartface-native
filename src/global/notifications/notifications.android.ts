@@ -345,18 +345,16 @@ class NotificationsAndroidClass extends NativeEventEmitterComponent<Notification
   }
   private registerPushNotification(onSuccessCallback: (...args: any[]) => void, onFailureCallback: (...args: any[]) => void) {
     NativeFCMRegisterUtil.registerPushNotification(AndroidConfig.activity, {
-      onSuccess: (token) => {
+      onSuccess: (token: string) => {
         NativeFCMListenerService.registerRemoteNotificationListener({
-          onRemoteNotificationReceived: (data, isReceivedByOnClick) => {
+          onRemoteNotificationReceived: (data: any, isReceivedByOnClick: boolean) => {
             const parsedJson = JSON.parse(data);
             if (isReceivedByOnClick) {
               this.onNotificationClick?.(parsedJson);
               this.emit('notificationClick', parsedJson);
             } else {
               this.onNotificationReceive?.(parsedJson);
-              this.emit('notificationReceive', {
-                remote: parsedJson
-              });
+              this.emit('notificationReceive', parsedJson);
               Application.onReceivedNotification?.({
                 remote: parsedJson
               });
