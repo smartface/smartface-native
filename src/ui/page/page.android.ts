@@ -30,6 +30,7 @@ import type FlexLayout from '../flexlayout';
 import Color from '../color';
 import { IImage } from '../image/image';
 import HeaderBarItemAndroid from '../headerbaritem/headerbaritem.android';
+import TypeUtil from '../../util/type';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -466,8 +467,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._leftItemEnabled;
       },
       set leftItemEnabled(value: HeaderBar['leftItemEnabled']) {
-        self._leftItemEnabled = value;
-        self.actionBar.setDisplayHomeAsUpEnabled(self._leftItemEnabled);
+        if (TypeUtil.isBoolean(value)) {
+          self._leftItemEnabled = value;
+          self.actionBar.setDisplayHomeAsUpEnabled(self._leftItemEnabled);
+        }
       },
       get height(): number {
         const resources = AndroidConfig.activityResources;
