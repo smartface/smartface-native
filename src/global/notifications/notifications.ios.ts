@@ -122,6 +122,7 @@ class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEven
       this.emit('notificationClick', e);
       this.onNotificationClick?.(e);
     };
+    __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this._notificationCenterDelegate;
   }
   onNotificationReceive: (data: any) => NotificationPresentationOptions[];
   onNotificationClick: (data: any) => void;
