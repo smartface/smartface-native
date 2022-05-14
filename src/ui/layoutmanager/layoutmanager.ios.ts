@@ -4,6 +4,17 @@ import { isNotEmpty } from '../../util/type';
 
 const DEFAULT_ITEM_LENGTH = 50;
 
+// On iOS, those values are in reverse
+const NativeScrollDirection = {
+  VERTICAL: 0,
+  HORIZONTAL: 1
+};
+
+const ScrollDirectionMapping = {
+  [ScrollDirection.VERTICAL]: NativeScrollDirection.VERTICAL,
+  [ScrollDirection.HORIZONTAL]: NativeScrollDirection.HORIZONTAL
+};
+
 export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UICollectionViewFlowLayout> implements ILayoutManager {
   private _spanCount: ILayoutManager['spanCount'];
   private _lineSpacing: ILayoutManager['lineSpacing'];
@@ -26,7 +37,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     this._sectionInset = { bottom: 0, left: 0, right: 0, top: 0 };
     this._contentInset = { bottom: 0, left: 0, right: 0, top: 0 };
     this._onItemLength = () => DEFAULT_ITEM_LENGTH;
-    this._scrollDirection = ScrollDirection.VERTICAL;
+    this._scrollDirection = NativeScrollDirection.VERTICAL;
     this.collectionView = null;
     super.preConstruct(params);
   }
@@ -45,8 +56,8 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
           }
 
           return {
-            width: this.scrollDirection === ScrollDirection.VERTICAL ? __fullSpanSize.width : itemLength,
-            height: this.scrollDirection === ScrollDirection.VERTICAL ? itemLength : __fullSpanSize.height
+            width: this.scrollDirection === NativeScrollDirection.VERTICAL ? __fullSpanSize.width : itemLength,
+            height: this.scrollDirection === NativeScrollDirection.VERTICAL ? itemLength : __fullSpanSize.height
           };
         };
       } else if (this.collectionView) {
@@ -109,8 +120,8 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     return this._scrollDirection;
   }
   set scrollDirection(value: ILayoutManager['scrollDirection']) {
-    this._scrollDirection = value;
-    this.nativeObject.scrollDirection = value;
+    this._scrollDirection = ScrollDirectionMapping[value];
+    this.nativeObject.scrollDirection = this._scrollDirection;
   }
   get onItemLength(): ILayoutManager['onItemLength'] {
     return this._onItemLength;
@@ -149,7 +160,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
       height: 0
     };
     let insetSize = 0;
-    if (this.scrollDirection === ScrollDirection.VERTICAL) {
+    if (this.scrollDirection === NativeScrollDirection.VERTICAL) {
       if (isNotEmpty(this.collectionView) && isNotEmpty(this.collectionView.frame.width) && isNotEmpty(this.onItemLength)) {
         const calculatedSizes = this.calculateSize(this.collectionView.frame.width, spanCount);
         retval.width = calculatedSizes.cellSize;
@@ -162,7 +173,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
           right: insetSize
         };
       }
-    } else if (this.scrollDirection === ScrollDirection.HORIZONTAL) {
+    } else if (this.scrollDirection === NativeScrollDirection.HORIZONTAL) {
       if (isNotEmpty(this.collectionView) && isNotEmpty(this.collectionView.frame.height) && isNotEmpty(this.onItemLength)) {
         const calculatedSizes = this.calculateSize(this.collectionView.frame.height, spanCount);
         retval.height = calculatedSizes.cellSize;
@@ -206,13 +217,13 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
       height: 0
     };
 
-    if (this.scrollDirection === ScrollDirection.VERTICAL) {
+    if (this.scrollDirection === NativeScrollDirection.VERTICAL) {
       const columnCount = this.spanCount;
       const itemWidth = columnCount ? (collectionView?.frame.width || 0) / columnCount : 0;
       const itemHeight = this.onItemLength?.(0) || 0;
       retval.width = itemWidth;
       retval.height = itemHeight;
-    } else if (this.scrollDirection === ScrollDirection.HORIZONTAL) {
+    } else if (this.scrollDirection === NativeScrollDirection.HORIZONTAL) {
       const rowCount = this.spanCount;
       const itemHeight = rowCount ? (collectionView?.frame.height || 0) / rowCount : 0;
       const itemWidth = this.onItemLength?.(0) || 0;
@@ -222,8 +233,5 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     return retval;
   }
 
-  static ScrollDirection = {
-    VERTICAL: 0, // on iOS, the enum values are in reverse
-    HORIZONTAL: 1
-  };
+  static ScrollDirection = NativeScrollDirection;
 }
