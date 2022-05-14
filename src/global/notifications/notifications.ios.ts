@@ -101,6 +101,21 @@ class LocalNotification extends NativeMobileComponent {
 }
 
 class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEvents, any, NotificationsBase> implements NotificationsBase {
+  constructor(params?: any) {
+    super(params);
+    __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
+    this.ios._willPresentNotification = (e: any) => {
+      this.emit('notificationReceive', e);
+      const presentationOptions = this.onNotificationReceive?.(e);
+      return presentationOptions || [this.iOS.NotificationPresentationOptions.SOUND, this.iOS.NotificationPresentationOptions.ALERT];
+    };
+    this.ios._didReceiveNotificationResponse = (e: any) => {
+      this.emit('notificationClick', e);
+      this.onNotificationClick?.(e);
+    };
+  }
+  onNotificationReceive: (data: any) => typeof NotificationPresentationOptions[];
+  onNotificationClick: (data: any) => void;
   protected createNativeObject() {
     return null;
   }
@@ -170,25 +185,6 @@ class NotificationsIOSClass extends NativeEventEmitterComponent<NotificationEven
 
   get android() {
     return {};
-  }
-
-  get onNotificationReceive() {
-    return this.ios._willPresentNotification;
-  }
-  set onNotificationReceive(value) {
-    if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
-      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
-    }
-    this.ios._willPresentNotification = value;
-  }
-  get onNotificationClick() {
-    return this.ios._didReceiveNotificationResponse;
-  }
-  set onNotificationClick(value) {
-    if (__SF_UNUserNotificationCenter.currentNotificationCenter().delegate === undefined) {
-      __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = this.ios.UNUserNotificationCenterDelegate;
-    }
-    this.ios._didReceiveNotificationResponse = value;
   }
 
   unregisterForPushNotifications() {

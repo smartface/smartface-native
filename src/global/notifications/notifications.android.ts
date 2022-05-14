@@ -5,7 +5,7 @@ import Color from '../../ui/color';
 import ImageAndroid from '../../ui/image/image.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
-import { NotificationsBase, Priority } from './notifications';
+import { AuthorizationStatus, NotificationPresentationOptions, NotificationsBase, Priority } from './notifications';
 import { NotificationEvents } from './notifications-events';
 
 // android.content.Context.NOTIFICATION_SERVICE;
@@ -302,7 +302,10 @@ class NotificationsAndroidClass extends NativeEventEmitterComponent<Notification
   get ios() {
     return { authorizationStatus: {}, getAuthorizationStatus() {} };
   }
-  iOS = {};
+  iOS = {
+    AuthorizationStatus,
+    NotificationPresentationOptions
+  };
   Android = { Priority: Priority };
   Priority = Priority;
   _onNotificationClick;
