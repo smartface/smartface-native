@@ -7,7 +7,7 @@ import ViewIOS from '../view/view.ios';
 import { ImageViewEvents } from './imageview-events';
 import { IImage } from '../image/image';
 
-const NativeFillTypeProps = {
+export const NativeFillTypeProps = {
   [ImageFillType.STRETCH]: 0,
   [ImageFillType.ASPECTFIT]: 1,
   [ImageFillType.ASPECTFILL]: 2,

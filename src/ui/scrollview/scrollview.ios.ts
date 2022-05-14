@@ -19,7 +19,7 @@ export default class ScrollViewIOS<TEvent extends string = ScrollViewEvents> ext
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   overScrollMode: OverScrollMode;
   contentLayout: FlexLayoutIOS;
-  private _frame: { x?: number; y?: number };
+  protected _frame: { x?: number; y?: number };
   private _align: ScrollType;
   private _autoSizeEnabled: boolean;
   gradientColorFrameObserver?: (e: any) => void;
