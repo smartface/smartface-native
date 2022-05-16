@@ -92,7 +92,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
   private _hasEventsLocked: boolean;
   private _autoCapitalize: AutoCapitalize;
-  private _didAddTextChangedListener: boolean;
   private _didSetOnEditorActionListener: boolean;
   constructor(params?: Partial<TProps>) {
     super(params);
@@ -104,6 +103,32 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
       }
       return result === true;
     };
+
+    this.nativeObject.addTextChangedListener(
+      NativeTextWatcher.implement({
+        // todo: Control insertedText after resolving story/AND-2508 issue.
+        onTextChanged: (charSequence: any, start: number, before: number, count: number) => {
+          if (!this._hasEventsLocked) {
+            let insertedText = '';
+            if (before === 0) {
+              insertedText = charSequence.subSequence(start, start + count).toString();
+            } else if (before <= count) {
+              insertedText = charSequence.subSequence(before, count).toString();
+            }
+            this.onTextChanged?.({
+              location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
+              insertedText: insertedText
+            });
+            this.emit('textChanged', {
+              location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
+              insertedText: insertedText
+            });
+          }
+        },
+        beforeTextChanged: function (charSequence, start, count, after) {},
+        afterTextChanged: function (editable) {}
+      })
+    );
 
     this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
 
@@ -118,7 +143,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._textAlignment = TextAlignment.MIDLEFT;
     this._hasEventsLocked = false;
     this._autoCapitalize = AutoCapitalize.NONE;
-    this._didAddTextChangedListener = false;
     this._didSetOnEditorActionListener = false;
     super.preConstruct(params);
   }
@@ -324,36 +348,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   }
   set onTextChanged(value: (e?: { insertedText: string; location: number }) => void) {
     this._onTextChanged = value;
-    if (!this._didAddTextChangedListener) {
-      this._didAddTextChangedListener = true;
-      this.nativeObject.addTextChangedListener(
-        NativeTextWatcher.implement({
-          // todo: Control insertedText after resolving story/AND-2508 issue.
-          onTextChanged: (charSequence, start, before, count) => {
-            if (!this._hasEventsLocked) {
-              let insertedText = '';
-              if (before === 0) {
-                insertedText = charSequence.subSequence(start, start + count).toString();
-              } else if (before <= count) {
-                insertedText = charSequence.subSequence(before, count).toString();
-              }
-              if (this._onTextChanged) {
-                this._onTextChanged({
-                  location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
-                  insertedText: insertedText
-                });
-                this.emit('textChanged', {
-                  location: insertedText === '' ? Math.abs(start + before) - 1 : Math.abs(start + before),
-                  insertedText: insertedText
-                });
-              }
-            }
-          },
-          beforeTextChanged: function (charSequence, start, count, after) {},
-          afterTextChanged: function (editable) {}
-        })
-      );
-    }
   }
 
   onClearButtonPress() {}

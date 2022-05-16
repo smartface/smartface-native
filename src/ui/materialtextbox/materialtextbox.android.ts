@@ -14,6 +14,8 @@ import TextAlignment from '../shared/textalignment';
 import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import KeyboardType from '../shared/keyboardtype';
+import { EventListenerCallback } from '../../core/eventemitter';
+import { TextBoxEvents } from '../textbox/textbox-events';
 
 interface nativeTextInputEditText {
   getHeight: () => number;
@@ -120,7 +122,6 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   set actionKeyType(value) {
     this.sfTextBox.actionKeyType = value;
   }
-  onEditBegins: () => void;
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
     if (!AndroidConfig.isEmulator) {
@@ -128,9 +129,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
       this.nativeObject.getInstance().setHintTextAppearance(SFMaterialTextBoxHintAppearance_ID);
     }
     //Defaults
-    this.multiline = false;
     this.onTouch = () => false; // Fixes touch not working with wrapped materialtextboxes
-    this.addAndroidProps(this.getAndroidProps());
   }
   protected preConstruct(params?: any): void {
     this._lineColorObj = { normal: null, selected: null };
@@ -141,7 +140,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this._enableErrorMessage = false;
     this._enableCharacterRestriction = false;
     this._touchEnable = true;
+    this.multiline = false;
     super.preConstruct(params);
+    this.addAndroidProps(this.getAndroidProps());
   }
   protected createNativeObject(): any {
     const nativeObject = new SFMaterialTextBoxWrapper(activity);
@@ -161,10 +162,36 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   removeFocus(): void {
     this.sfTextBox.removeFocus();
   }
-  onTextChanged: (e?: { insertedText: string; location: number } | undefined) => void;
-  onClearButtonPress: () => void;
-  onEditEnds: () => void;
-  onActionButtonPress: (e?: { actionKeyType: ActionKeyType } | undefined) => void;
+  get onTextChanged() {
+    return this.sfTextBox.onTextChanged;
+  }
+  set onTextChanged(value) {
+    this.sfTextBox.onTextChanged = value;
+  }
+  get onClearButtonPress() {
+    return this.sfTextBox.onClearButtonPress;
+  }
+  set onClearButtonPress(value) {
+    this.sfTextBox.onClearButtonPress = value;
+  }
+  get onEditEnds() {
+    return this.sfTextBox.onEditEnds;
+  }
+  set onEditEnds(value) {
+    this.sfTextBox.onEditEnds = value;
+  }
+  get onActionButtonPress() {
+    return this.sfTextBox.onActionButtonPress;
+  }
+  set onActionButtonPress(value) {
+    this.sfTextBox.onActionButtonPress = value;
+  }
+  get onEditBegins() {
+    return this.sfTextBox.onEditBegins;
+  }
+  set onEditBegins(value) {
+    this.sfTextBox.onEditBegins = value;
+  }
 
   private getAndroidProps(): IMaterialTextBox['android'] {
     const self = this;
@@ -187,7 +214,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
       set enableErrorMessage(value: boolean) {
         self._enableErrorMessage = value;
         self.nativeObject.setErrorEnabled(self._enableErrorMessage);
-        if (value === true && !AndroidConfig.isEmulator) {
+        if (value && !AndroidConfig.isEmulator) {
           const SFMaterialTextBoxErrorTextAppearance_ID = AndroidConfig.getResourceId('SFMaterialTextBoxErrorTextAppearance', 'style');
           self.nativeObject.getInstance().setErrorTextAppearance(SFMaterialTextBoxErrorTextAppearance_ID);
         }
@@ -280,7 +307,9 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   set errorColor(value: Color | null) {
     this._errorColor = value;
     if (value) {
-      if (this._enableErrorMessage !== true) this.android.enableErrorMessage = true;
+      if (this._enableErrorMessage !== true) {
+        this.android.enableErrorMessage = true;
+      }
       const errorView = this.nativeObject.getReCreatedErrorView();
       errorView.setTextColor(value.nativeObject);
     } else {
@@ -378,9 +407,12 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this._errorText = value;
 
     //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
-    if (!this._enableErrorMessage && this._errorText.length !== 0) this.android.enableErrorMessage = true;
-
-    if (this._errorColor) this.errorColor = this._errorColor;
+    if (!this._enableErrorMessage && this._errorText.length !== 0) {
+      this.android.enableErrorMessage = true;
+    }
+    if (this._errorColor) {
+      this.errorColor = this._errorColor;
+    }
 
     this.nativeObject.setError(this._errorText);
   }
@@ -414,5 +446,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
 
     const counterView = this.nativeObject.getReCreatedCounterView();
     counterView.setTextColor(this._characterRestrictionColor.nativeObject);
+  }
+
+  on(eventName: TextBoxEvents, callback: EventListenerCallback) {
+    if (Object.values(TextBoxEvents).includes(eventName)) {
+      return this.sfTextBox.on(eventName as any, callback);
+    } else {
+      return super.on(eventName as any, callback);
+    }
   }
 }
