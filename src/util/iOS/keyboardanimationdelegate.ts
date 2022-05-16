@@ -89,13 +89,13 @@ export default class KeyboardAnimationDelegate {
           invocationAnimation.setDoubleArgumentAtIndex(animatonDuration, 2);
           invocationAnimation.setDoubleArgumentAtIndex(0, 3);
           invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
-          invocationAnimation.setVoidBlockArgumentAtIndex(function () {
+          invocationAnimation.setVoidBlockArgumentAtIndex(() => {
             const parent = this.parent();
             const frame = parent.frame;
             frame.y = -this._topDistance;
             parent.frame = frame;
           }, 5);
-          invocationAnimation.setBoolBlockArgumentAtIndex(function (e) {}, 6);
+          invocationAnimation.setBoolBlockArgumentAtIndex((e) => {}, 6);
           invocationAnimation.invoke();
           this._isKeyboadAnimationCompleted = true; // bug id : IOS-2763
         }
@@ -171,13 +171,13 @@ export default class KeyboardAnimationDelegate {
             invocationAnimation.setDoubleArgumentAtIndex(animatonDuration, 2);
             invocationAnimation.setDoubleArgumentAtIndex(0, 3);
             invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions, 4);
-            invocationAnimation.setVoidBlockArgumentAtIndex(function () {
+            invocationAnimation.setVoidBlockArgumentAtIndex(() => {
               const parent = this.parent();
               const frame = parent.frame;
               frame.y = this.defaultTopPosition();
               parent.frame = frame;
             }, 5);
-            invocationAnimation.setBoolBlockArgumentAtIndex(function (e) {}, 6);
+            invocationAnimation.setBoolBlockArgumentAtIndex((e) => {}, 6);
             invocationAnimation.invoke();
           }
         } else {
