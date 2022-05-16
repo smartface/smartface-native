@@ -83,6 +83,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this._headerBarLogoEnabled = false;
     this._headerBarLeftItem = null;
     this.statusBar = StatusBar;
+    this.contextMenu = {} as any;
     super.preConstruct(params);
   }
   statusBar: typeof StatusBar;
