@@ -1,3 +1,4 @@
+import { TextViewEvents } from '../textview/textview-events';
 import { ViewEvents } from '../view/view-events';
 
 export const TextBoxEvents = {
@@ -6,7 +7,7 @@ export const TextBoxEvents = {
   EditBegins: 'editBegins',
   EditEnds: 'editEnds',
   TextChanged: 'textChanged',
-  ...ViewEvents
+  ...TextViewEvents
 } as const;
 
 export type TextBoxEvents = ExtractValues<typeof TextBoxEvents>;

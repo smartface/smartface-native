@@ -10,6 +10,7 @@ import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import SystemServices from '../../util/Android/systemservices';
 import AndroidConfig from '../../util/Android/androidconfig';
+import TextViewAndroid from '../textview/textview.android';
 
 const NativeTextWatcher = requireClass('android.text.TextWatcher');
 const NativeTextView = requireClass('android.widget.TextView');
@@ -78,10 +79,7 @@ const TextAlignmentDic = {
   [TextAlignment.BOTTOMCENTER]: 80 | 1, // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
   [TextAlignment.BOTTOMRIGHT]: 80 | 5 // Gravity.BOTTOM | Gravity.RIGHT
 };
-export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox>
-  extends ViewAndroid<TEvent | TextBoxEvents, TNative, TProps>
-  implements ITextBox
-{
+export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends TextViewAndroid<TEvent | TextBoxEvents> implements ITextBox {
   private __touchEnabled: boolean;
   private _isPassword: boolean;
   private _keyboardType: KeyboardType;
@@ -89,9 +87,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
   private _cursorColor: Color;
   private _hintTextColor: Color;
-  private _textColor: Color;
-  private _font: Font;
-  private _textAlignment: TextAlignment;
   private _onEditBegins: () => void;
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
@@ -164,14 +159,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
       }
     };
   }
-
-  get font(): Font {
-    return this._font;
-  }
-  set font(value: Font) {
-    this._font = value;
-  }
-
   get text(): string {
     return this.nativeObject.getText().toString();
   }
@@ -205,10 +192,11 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   }
 
   get textColor(): Color {
-    return this._textColor;
+    return this._textColor as any;
   }
   set textColor(value: Color) {
     this._textColor = value;
+    this.nativeObject.setTextColor(value.nativeObject);
   }
 
   get cursorPosition(): { start: number; end: number } {

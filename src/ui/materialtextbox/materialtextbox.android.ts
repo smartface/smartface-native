@@ -150,16 +150,16 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     return nativeObject;
   }
   showKeyboard(): void {
-    throw new Error('Method not implemented.');
+    this.sfTextBox.showKeyboard();
   }
   hideKeyboard(): void {
-    throw new Error('Method not implemented.');
+    this.sfTextBox.hideKeyboard();
   }
   requestFocus(): void {
-    throw new Error('Method not implemented.');
+    this.sfTextBox.requestFocus();
   }
   removeFocus(): void {
-    throw new Error('Method not implemented.');
+    this.sfTextBox.removeFocus();
   }
   onTextChanged: (e?: { insertedText: string; location: number } | undefined) => void;
   onClearButtonPress: () => void;

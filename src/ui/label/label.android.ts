@@ -45,7 +45,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _textDirection: TextDirection;
   private _adjustableFontSizeStep: number;
   private fontInitial: Font | null;
-  private _textColor: ILabel['textColor'];
+  protected _textColor: ILabel['textColor'];
   constructor(params: Partial<TProps>) {
     super(params);
   }

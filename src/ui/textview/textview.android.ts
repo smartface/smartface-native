@@ -28,7 +28,7 @@ const TextAlignmentDic = {
 const MAX_INT_VALUE = 2147483647;
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
-export default class TextViewAndroid<TEvent extends TextViewEvents, TProps extends ITextView = ITextView> extends LabelAndroid<TEvent | TextViewEvents, any, TProps> implements ITextView {
+export default class TextViewAndroid<TEvent extends string = TextViewEvents, TProps extends ITextView = ITextView> extends LabelAndroid<TEvent | TextViewEvents, any, TProps> implements ITextView {
   private _attributedStringBuilder;
   private _attributedStringArray: ITextView['attributedText'];
   private _onLinkClick: ITextView['onLinkClick'];

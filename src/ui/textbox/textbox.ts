@@ -11,8 +11,9 @@ import ActionKeyType from '../shared/android/actionkeytype';
 import { TextBoxEvents } from './textbox-events';
 import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { TextViewAndroidPRoperties } from '../textview/textview';
 
-export interface TextBoxAndroidProps extends ViewAndroidProps {
+export interface TextBoxAndroidProps extends TextViewAndroidPRoperties {
   cursorPosition: {
     start: number;
     end: number;
