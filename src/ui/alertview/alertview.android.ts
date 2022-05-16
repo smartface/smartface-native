@@ -13,16 +13,24 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   protected createNativeObject() {
     return new NativeAlertDialog(AndroidConfig.activity);
   }
-  private __didSetOnDismissListener = true;
-  private __buttonCallbacks: { [key: number]: () => void } = {};
-  private __title = '';
-  private __message = '';
-  private __textBoxes: ITextBox[] = [];
-  private __onDismiss: IAlertView['onDismiss'];
+  private __didSetOnDismissListener: boolean;
+  private __buttonCallbacks: { [key: number]: () => void };
+  private _title: string;
+  private _message: string;
+  private _textBoxes: ITextBox[];
+  private _onDismiss: IAlertView['onDismiss'];
   private _cancellable: IAlertView['android']['cancellable'];
   constructor(params?: Partial<IAlertView>) {
     super(params);
     this.androidSpecificProperties();
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.__buttonCallbacks = {};
+    this._title = '';
+    this._message = '';
+    this._textBoxes = [];
+    this.__didSetOnDismissListener = true;
+    super.preConstruct(params);
   }
   isShowing(): void {
     return this.nativeObject.isShowing();
@@ -38,8 +46,10 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   }
   addButton(params: Partial<Parameters<IAlertView['addButton']>['0']>): void {
     const text = params.text || '';
-    const buttonType = params.type || params.index;
-    if (buttonType && params.onClick) this.__buttonCallbacks[buttonType] = params.onClick;
+    const buttonType = Number.isInteger(params.type) ? params.type : params.index;
+    if (typeof buttonType === 'number' && params.onClick) {
+      this.__buttonCallbacks[buttonType] = params.onClick;
+    }
     let nativeButtonIndex = -3;
     switch (buttonType) {
       case AlertViewAndroid.Android.ButtonType.POSITIVE:
@@ -58,7 +68,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
       text,
       NativeDialogInterface.OnClickListener.implement({
         onClick: (dialog: any, which: number) => {
-          let callbackType = AlertViewAndroid.Android.ButtonType.NEUTRAL;
+          let callbackType = NaN;
           switch (which) {
             case -1:
               callbackType = AlertViewAndroid.Android.ButtonType.POSITIVE;
@@ -70,10 +80,11 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
               callbackType = AlertViewAndroid.Android.ButtonType.NEUTRAL;
               break;
             default:
-              callbackType = AlertViewAndroid.Android.ButtonType.NEUTRAL;
               break;
           }
-          this.__buttonCallbacks[callbackType]?.();
+          if (!isNaN(callbackType)) {
+            this.__buttonCallbacks[callbackType]?.();
+          }
         }
       })
     );
@@ -98,7 +109,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
     const dpHeight = this.dpToPixel(height);
     const dpWidth = this.dpToPixel(width);
     this.nativeObject.addTextBox(mTextBox.nativeObject, dpWidth, dpHeight, viewSpacingsInPx.left, viewSpacingsInPx.top, viewSpacingsInPx.right, viewSpacingsInPx.bottom);
-    this.__textBoxes.push(mTextBox);
+    this._textBoxes.push(mTextBox);
   }
 
   private dpToPixel(size: number | undefined) {
@@ -108,7 +119,7 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   private setOnDismissListener() {
     this.nativeObject.setOnDismissListener(
       NativeDialogInterface.OnDismissListener.implement({
-        onDismiss: () => this.__onDismiss()
+        onDismiss: () => this._onDismiss()
       })
     );
     this.__didSetOnDismissListener = true;
@@ -129,29 +140,29 @@ export default class AlertViewAndroid extends NativeMobileComponent<any, IAlertV
   }
 
   get textBoxes(): IAlertView['textBoxes'] {
-    return this.__textBoxes.map((textBox) => ({ text: textBox.text }));
+    return this._textBoxes.map((textBox) => ({ text: textBox.text }));
   }
 
   get title(): IAlertView['title'] {
-    return this.__title;
+    return this._title;
   }
   set title(value: IAlertView['title']) {
-    this.__title = value;
+    this._title = value;
     this.nativeObject.setTitle(value);
   }
   get message(): IAlertView['message'] {
-    return this.__message;
+    return this._message;
   }
   set message(value: IAlertView['message']) {
-    this.__message = value;
+    this._message = value;
     this.nativeObject.setMessage(value);
   }
 
   get onDismiss(): IAlertView['onDismiss'] {
-    return this.__onDismiss;
+    return this._onDismiss;
   }
   set onDismiss(value: IAlertView['onDismiss']) {
-    this.__onDismiss = value.bind(this);
+    this._onDismiss = value.bind(this);
     if (!this.__didSetOnDismissListener) {
       this.setOnDismissListener();
     }
