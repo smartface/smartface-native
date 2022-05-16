@@ -27,6 +27,8 @@ export default class ImageIOS<
 
   constructor(params: Partial<TProps>) {
     super(params as any);
+    this.addIOSProps(this.getIOSProps());
+    this.addAndroidProps(this.getAndroidProps());
     if (params.path) {
       if (params.path.includes('.app')) {
         // Publish project image caching.
@@ -54,9 +56,6 @@ export default class ImageIOS<
       this.nativeObject = params.image;
     }
     this._nativeImage = this.nativeObject;
-
-    this.addIOSProps(this.getIOSProps());
-    this.addAndroidProps(this.getAndroidProps());
   }
 
   private getAndroidProps(): ImageAndroidProps {

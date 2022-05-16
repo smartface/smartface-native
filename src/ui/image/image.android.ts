@@ -25,6 +25,8 @@ export default class ImageAndroid<TNative = any, TProps extends MobileOSProps<Im
   constructor(params?: Partial<ImageParams>) {
     //Should be ImageParams
     super(params as any);
+    this.addAndroidProps(this.getAndroidProps());
+    this.addIOSProps(this.getIOSProps());
     if (typeof params !== 'object') {
       throw new Error('Constructor parameters needed for Image!');
     }
