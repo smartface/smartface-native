@@ -13,6 +13,7 @@ import ActionKeyType from '../shared/android/actionkeytype';
 import TextAlignment from '../shared/textalignment';
 import AutoCapitalize from '../shared/autocapitalize';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import KeyboardType from '../shared/keyboardtype';
 
 interface nativeTextInputEditText {
   getHeight: () => number;
@@ -59,17 +60,67 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   private _enableErrorMessage: boolean;
   private _enableCharacterRestriction: boolean;
   private _touchEnable: boolean;
-  font: Font;
-  text: string;
-  autoCapitalize: AutoCapitalize;
-  textAlignment: TextAlignment;
-  textColor: Color;
-  cursorPosition: { start: number; end: number };
+  get font(): Font {
+    return this.sfTextBox.font;
+  }
+  set font(value) {
+    this.sfTextBox.font = value;
+  }
+  get text(): string {
+    return this.sfTextBox.text;
+  }
+  set text(value) {
+    this.sfTextBox.text = value;
+  }
+  get autoCapitalize(): AutoCapitalize {
+    return this.sfTextBox.autoCapitalize;
+  }
+  set autoCapitalize(value) {
+    this.sfTextBox.autoCapitalize = value;
+  }
+  get textAlignment(): TextAlignment {
+    return this.sfTextBox.textAlignment;
+  }
+  set textAlignment(value) {
+    this.sfTextBox.textAlignment = value;
+  }
+  get textColor(): Color {
+    return this.sfTextBox.textColor;
+  }
+  set textColor(value) {
+    this.sfTextBox.textColor = value;
+  }
+  get cursorColor(): Color {
+    return this.sfTextBox.cursorColor;
+  }
+  set cursorColor(value) {
+    this.sfTextBox.cursorColor = value;
+  }
+  get cursorPosition(): IMaterialTextBox['cursorPosition'] {
+    return this.sfTextBox.cursorPosition;
+  }
+  set cursorPosition(value) {
+    this.sfTextBox.cursorPosition = value;
+  }
+  get isPassword(): IMaterialTextBox['isPassword'] {
+    return this.sfTextBox.isPassword;
+  }
+  set isPassword(value) {
+    this.sfTextBox.isPassword = value;
+  }
+  get keyboardType(): KeyboardType {
+    return this.sfTextBox.keyboardType;
+  }
+  set keyboardType(value) {
+    this.sfTextBox.keyboardType = value;
+  }
+  get actionKeyType(): IMaterialTextBox['actionKeyType'] {
+    return this.sfTextBox.actionKeyType;
+  }
+  set actionKeyType(value) {
+    this.sfTextBox.actionKeyType = value;
+  }
   onEditBegins: () => void;
-  cursorColor: Color;
-  isPassword: boolean;
-  keyboardType: number | null;
-  actionKeyType: ActionKeyType;
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
     if (!AndroidConfig.isEmulator) {
