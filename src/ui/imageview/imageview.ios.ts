@@ -172,7 +172,7 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     if (this.nativeObject?.image) {
       const template = this._imageTemplate || this.nativeObject.image.imageWithRenderingMode(2);
       this.nativeObject.image = template;
-      this._imageTemplate = template;
+      this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
     }
     this._isSetTintColor = true;
     this.nativeObject.tintColor = value.nativeObject;
