@@ -157,7 +157,16 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   }
   set borderVisibility(value: IHeaderBar['borderVisibility']) {
     this._borderVisibility = value;
-    this.nativeObject.shadowImage = value ? undefined : __SF_UIImage.getInstance();
+
+    if (parseInt(System.OSVersion) >= 15) {
+      if (this.appearance) {
+        this.appearance.shadowColor = value ? Color.TRANSPARENT.nativeObject : Color.GRAY.nativeObject;
+      }
+      this.nativeObject.standardAppearance = this.appearance;
+      this.nativeObject.scrollEdgeAppearance = this.appearance;
+    } else {
+      this.nativeObject.shadowImage = value ? undefined : __SF_UIImage.getInstance();
+    }
   }
   private __updateTitleTextAttributes() {
     // Xcode 13.1 background bug fixes [NTVE-398]
