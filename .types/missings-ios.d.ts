@@ -728,6 +728,8 @@ declare class __SF_UINavigationBarAppearance {
   titleTextAttributes: { NSColor: __SF_UIColor; NSFont: __SF_UIFont };
   backgroundColor: __SF_UIColor;
   barTintColor: __SF_UIColor;
+  backgroundImage: __SF_UIImage
+  shadowColor: __SF_UIColor
 }
 
 declare class __SF_UINavigationController {
