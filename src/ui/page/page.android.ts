@@ -261,9 +261,9 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
               // TODO: isSwipeViewPage is never set to false. This will cause some unexpected behaviours.
               // Sample case: Add PageA to SwipeView. Remove PageA from SwipeView and push it to NavigationController.
               // onShow callback will never be triggered.
-              // if (this.isSwipeViewPage) {
-              Application.currentPage = this;
-              // }
+              if (!this.isSwipeViewPage) {
+                Application.currentPage = this;
+              }
               Application.registOnItemSelectedListener();
 
               if (!this.isSwipeViewPage) {
@@ -586,6 +586,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
             }
 
             nativeBadgeContainer.addView(item.nativeObject);
+            item.setValues();
             item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
             item.nativeBadgeContainer = nativeBadgeContainer;
 
@@ -595,7 +596,6 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
             }
             itemView = nativeBadgeContainer;
             item.itemView = itemView;
-            item.setValues();
             item.nativeObject.setContentDescription(item.accessibilityLabel);
           }
           if (itemView) {

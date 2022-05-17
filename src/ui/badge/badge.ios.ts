@@ -7,16 +7,16 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
   protected createNativeObject(params: Partial<IBadge> = {}) {
     return params.nativeObject;
   }
-  private _visible = false;
-  private _text;
+  private _visible: boolean;
+  private _text: string;
   private _backgroundColor: IBadge['backgroundColor'];
   private _borderColor: IBadge['borderColor'];
   private _textColor: IBadge['textColor'];
   private _font: IBadge['font'];
   private _borderRadius: number;
   private _borderWidth: number;
-  private _height;
-  private _isBadgeFirstLoad;
+  private _height: number;
+  private _isBadgeFirstLoad: boolean;
   private _isRTL: boolean;
   preConstruct(params: Partial<IBadge> = {}) {
     this._text = '';
@@ -46,7 +46,6 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
       this.nativeObject.pp_addBadgeWithText(value);
       if (!this._isBadgeFirstLoad) {
         // Re-invoke setters
-        this.visible = this._visible;
         if (this._backgroundColor) {
           this.backgroundColor = this._backgroundColor;
         } else {
