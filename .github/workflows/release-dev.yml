@@ -27,7 +27,7 @@ jobs:
         uses: rishabhgupta/split-by@v1
         id: split
         with:
-          string: 'feat/branch-name'
+          string: ${{ github.ref_name }}
           split-by: '/'
       - run: |
           yarn version --prerelease --preid ${{ steps.split.outputs._1}}
