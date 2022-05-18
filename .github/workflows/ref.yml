@@ -4,7 +4,7 @@ name: API Doc
 
 on:
   workflow_run:
-    workflows: [Release Production, Release Pre Versions]
+    workflows: ['Release Production', 'Release Pre Versions']
     types:
       - completed
 jobs:
