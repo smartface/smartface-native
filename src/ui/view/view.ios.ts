@@ -19,6 +19,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _rotationX: number;
   private _rotationY: number;
   private _scale: Point2D;
+  private _width: number;
+  private _height: number;
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
@@ -923,11 +925,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     */
 
   get width() {
-    return this.nativeObject.frame.width;
+    return this.nativeObject.frame.width || this._width;
   }
 
   set width(value) {
     if (typeof value === 'number') {
+      this._width = value;
       this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'width');
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
@@ -935,12 +938,13 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get height() {
-    return this.nativeObject.frame.height;
+    return this.nativeObject.frame.height || this._height;
   }
 
   set height(value) {
     if (typeof value === 'number') {
       this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'height');
+      this._height = value;
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }

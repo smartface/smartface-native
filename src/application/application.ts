@@ -277,7 +277,8 @@ export enum ApplicationAndroidPermissions {
    * @property READ_CALENDAR
    * @readonly
    * @since 1.1.16
-   */ READ_CALENDAR = 'android.permission.READ_CALENDAR',
+   */
+  READ_CALENDAR = 'android.permission.READ_CALENDAR',
   /**
    * Allows an application to write the user's calendar data.
    *
@@ -677,7 +678,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    */
   statusBar: typeof StatusBar;
   LayoutDirection: typeof LayoutDirection;
-  Android: Partial<{
+  Android: {
     KeyboardMode: typeof KeyboardMode;
     NavigationBar: {
       style: NavigationBarStyle;
@@ -691,7 +692,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
      * Application.android.Permissions deprecated since 1.1.16. Use Application.Android.Permissions instead.
      */
     Permissions: typeof ApplicationAndroidPermissions;
-  }>;
+  };
   /**
    * Set the configure the native theme.
    *
