@@ -19,12 +19,7 @@ declare module android {
       measure(widthSpec: number, heightSpec: number): number;
       getMeasuredHeight(): number;
       getMeasuredWidth(): number;
-      setPaddingRelative(
-        param1: number,
-        param2: number,
-        param3: number,
-        param4: number
-      ): number;
+      setPaddingRelative(param1: number, param2: number, param3: number, param4: number): number;
     }
   }
 
@@ -62,4 +57,50 @@ declare namespace java {
       public renameTo(destination: File): string;
     }
   }
+}
+
+declare interface INativeLayoutManager {
+  findLastVisibleItemPosition(): number;
+  findFirstVisibleItemPositions(...args: any[]): any;
+  findLastVisibleItemPositions(...args: any[]): any;
+  findFirstVisibleItemPosition(): number;
+  setCanScrollVerically(value: boolean): void;
+  setCanScrollHorizontally(value: boolean): void;
+}
+
+declare interface INativeInner {
+  addOnLayoutChangeListener(llistener: any);
+  getHeight(): number;
+  getWidth(): number;
+  removeItemDecoration(item: any): void;
+  addItemDecoration(item: any): void;
+  addOnItemTouchListener(param: any): void;
+  setJsCallbacks(param: any): void;
+  computeHorizontalScrollOffset(): any;
+  computeVerticalScrollOffset(): any;
+  getChildAdapterPosition(item: any): any;
+  setOverScrollMode(mode: number): void;
+  smoothScrollToPosition(position: number): void;
+  scrollToPosition(position): number;
+  findViewHolderForAdapterPosition(index: number): any;
+  isVerticalScrollBarEnabled(): boolean;
+  setVerticalScrollBarEnabled(value: boolean): void;
+  setOnScrollListener(listener: (...args: any[]) => any): void;
+  removeOnScrollListener(listener: (...args: any[]) => any): void;
+  getLayoutManager(): INativeLayoutManager;
+  setLayoutManager(layoutManager: INativeLayoutManager): void;
+  setHasFixedSize(value: boolean): void;
+  setDrawingCacheEnabled(value: boolean): void;
+  setItemViewCacheSize(value: number): void;
+  setClipToPadding(value: boolean): void;
+  setAdapter(adapter: any): void;
+  setPaddingRelative(paddingLeft: number, paddingTop: number, paddingRight: number, paddingBottom: number): void;
+  setScrollBarStyle(style: number): void;
+  setHorizontalScrollBarEnabled(enabled: boolean): void;
+  setOnTouchListener(viewManager: any): void;
+}
+
+declare interface NativeArrayList {
+  newInsert(item: any): void;
+  add(item: any): void;
 }

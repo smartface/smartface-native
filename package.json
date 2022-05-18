@@ -1,1 +1,57 @@
-{"name":"@smartface/native","version":"4.4.0","description":"Core Modules of Native Libraries..","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1","browserify":"browserify index.js -o bundle.js --standalone sf-core && uglifyjs bundle.js -o bundle.ugly.js -c -m","beautify":"find . -type f -name '*.js' ! -path '*node_modules*' ! -path '*git*' ! -path '*docs_resource*' ! -path '*tests*' -exec js-beautify -r {} +","build":"node bundler.js && rm -rf ./.tmp","dev":"npx tsc -w"},"repository":{"type":"git","url":"https://github.com/smartface/smartface-native.git"},"keywords":["smartface","core-modules","javascript"],"author":{"name":"Smartface","email":"info@smartface.io","url":"http://smartface.io"},"license":"ISC","homepage":"https://github.com/smartface/smartface-native","devDependencies":{"browserify":"14.1.0","chai":"^3.5.0","js-beautify":"^1.9.1","lodash":"^4.17.4","node-forge":"^0.7.0","salep":"0.2.*","source-map-support":"^0.5.16","typescript":"^3.7.5","uglify-js":"2.8.12","walk":"^2.3.9"},"dependencies":{"events":"^3.3.0"}}
+{
+  "name": "@smartface/native",
+  "version": "5.0.0",
+  "description": "Core Modules of Native Libraries..",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browserify": "browserify index.js -o bundle.js --standalone sf-core && uglifyjs bundle.js -o bundle.ugly.js -c -m",
+    "beautify": "find . -type f -name '*.js' ! -path '*node_modules*' ! -path '*git*' ! -path '*docs_resource*' ! -path '*tests*' -exec js-beautify -r {} +",
+    "build": "rm -rf dist && tsc && cp ./package.json ./dist && cp -r .types ./dist",
+    "deploy": "npm run build && cd ./dist && npm publish",
+    "deploy:alpha": "npm run deploy -- --tag alpha",
+    "deploy:beta": "npm run deploy -- --tag beta",
+    "deploy:prod": "npm run deploy -- --tag latest",
+    "dev": "cp -r .types ./src/ && npx tsc -w --project tsconfig.dev.json",
+    "lint": "npx prettier --check ./**/*",
+    "lint:write": "npx prettier --write ./**/*",
+    "build:document": "node typedoc.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smartface/smartface-native.git"
+  },
+  "keywords": [
+    "smartface",
+    "core-modules",
+    "javascript"
+  ],
+  "author": {
+    "name": "Smartface",
+    "email": "info@smartface.io",
+    "url": "http://smartface.io"
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/smartface/smartface-native",
+  "dependencies": {
+    "events": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "browserify": "14.1.0",
+    "chai": "^3.5.0",
+    "eslint": "^8.9.0",
+    "js-beautify": "^1.9.1",
+    "lodash": "^4.17.4",
+    "node-forge": "^0.7.0",
+    "prettier": "^2.5.1",
+    "salep": "0.2.*",
+    "source-map-support": "^0.5.16",
+    "typedoc": "beta",
+    "typescript": "^4.6.2",
+    "uglify-js": "2.8.12",
+    "walk": "^2.3.9"
+  }
+}
