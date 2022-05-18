@@ -1,1 +1,0 @@
-module.exports = require('./timepicker-' + Device.deviceOS + '.js');

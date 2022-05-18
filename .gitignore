@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 package.json
 env.properties
+dist
+src/.types
+docs
