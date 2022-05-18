@@ -8,10 +8,12 @@ on:
       - '**/yml'
 jobs:
   publishPreRelease:
-    name: Publish Pre Release
+    name: PreRelease Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
+        with:
+          token: ${{ secrets.YOUR_PAT_TOKEN }}
       - uses: actions/setup-node@v1
         with:
           node-version: 16

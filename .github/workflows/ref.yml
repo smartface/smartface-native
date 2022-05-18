@@ -3,11 +3,10 @@
 name: API Doc
 
 on:
-  push:
-    tags:
-      - v*
-
-  workflow_dispatch:
+  workflow_run:
+    workflows: ['publishProd, publishPreRelease']
+    types:
+      - completed
 
 jobs:
   build:
