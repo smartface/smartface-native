@@ -13,3 +13,4 @@ tests
 CHANGELOG.html
 env.properties
 encrypt
+*.log

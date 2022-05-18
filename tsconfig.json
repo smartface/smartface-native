@@ -1,47 +1,20 @@
 {
-	"compilerOptions": {
-		"noEmit": false,
-		"allowJs": false,
-		"baseUrl": ".",
-		"rootDir": ".",
-		"declaration": true,
-		"emitDeclarationOnly": true,
-		"outFile": "./dist/types",
-		"target": "ES5",
-		"esModuleInterop": true,
-		"paths": {
-			"sf-core/ui/*": ["./ui/*"],
-			"sf-core/ui": ["./ui/index"],
-			"sf-core/application/*": ["./application/*"],
-			"sf-core/application": ["./application/index"],
-			"sf-core/device/*": ["./device/*"],
-			"sf-core/device": ["./device/index"],
-			"sf-core/util/*": ["./util/*"],
-			"sf-core/util": ["./util/index"],
-			"sf-core/io/*": ["./io/*"],
-			"sf-core/io": ["./io/index"],
-			"sf-core/global/*": ["./global/*"],
-			"sf-core/global": ["./global/index"],
-			"sf-core/primitive/*": ["./primitive/*"]
-		},
-		"lib": ["ES2015"],
-	},
-	"include": [
-		"./application",
-		"./typings",
-		"./device",
-		"./global",
-		"./ui",
-		"./io",
-		"./net",
-		"./util",
-		"./primitive",
-		"./test.ts"
-	],
-	"files": [
-		".types/typings.d.ts",
-		".types/missings-android.d.ts",
-		".types/missings-ios.d.ts"
-	],
-	"exclude": [".dist", "./ui/scrollview", "node_modules", "**/*.test.js", "**/analysis.js"]
+  "compilerOptions": {
+    "noEmit": false,
+    "allowJs": false,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": false,
+    "baseUrl": ".",
+    "rootDir": "src",
+    "declaration": true,
+    "outDir": "dist",
+    "target": "ES5",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "lib": ["ES2015"],
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
+  },
+  "include": ["./src/**/*"],
+  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts", ".types/xmlhttprequest.d.ts"]
 }

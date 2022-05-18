@@ -1,0 +1,40 @@
+name: Release Production
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**/ts'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Publish
+        run: |
+          npm run deploy:prod
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
+      - name: Setup Git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "info@smartface.io"
+      - name: Update Alpha Branch
+        run: |
+          git checkout release/alpha
+          git merge master
+      - name: Update Beta Branch
+        run: |
+          git checkout release/beta
+          git merge master
+      - name: Sync Changes
+        run: |
+          git push

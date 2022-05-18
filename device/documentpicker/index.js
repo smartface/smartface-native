@@ -1,1 +1,0 @@
-module.exports = require('./documentpicker-'+Device.deviceOS);

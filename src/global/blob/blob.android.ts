@@ -1,0 +1,89 @@
+import { NativeMobileComponent } from '../../core/native-mobile-component';
+import Base64Util from '../../util/base64';
+import IBlob from './blob';
+
+const NativeBlob = requireClass('io.smartface.android.sfcore.global.SFBlob');
+const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
+const NativeBase64 = requireClass('android.util.Base64');
+
+interface BlobAndroidConstructorParameters {
+  parts?: string[];
+  properties?: { type: string };
+}
+
+class BlobAndroid extends NativeMobileComponent implements IBlob {
+  protected createNativeObject(params?: Partial<BlobAndroidConstructorParameters>) {
+    const nativeObject = new NativeByteArrayOutputStream();
+    if (params?.parts && params.properties?.type) {
+      this._type = params.properties.type;
+      const newParts = Array.isArray(params.parts) ? array(params.parts, 'byte') : params.parts;
+      nativeObject.write(newParts);
+
+      // TODO: This line added for AND-3357.
+      // But investigate whether parts property is needeed.
+      this._parts = params.parts;
+    }
+    return nativeObject;
+  }
+  private _parts: string[];
+  private _type: string;
+  constructor(parts?: string[], properties?: { type: string }) {
+    super({ parts, properties } as any);
+    this.addAndroidProps(this.getAndroidProps());
+  }
+  private getAndroidProps() {
+    const self = this;
+    return {
+      slice: (start: number, end: number) => {
+        const newBlob = new BlobAndroid();
+        const byteArray = self.nativeObject.toByteArray();
+        newBlob.nativeObject.write(byteArray, start, end - start); //  write(byte[] b, int off, int len)
+        return newBlob;
+      }
+    };
+  }
+  get type(): string {
+    return this._type;
+  }
+  get size(): number {
+    return this.nativeObject && arrayLength(this.nativeObject.toByteArray());
+  }
+  toBase64() {
+    const byteArray = this.nativeObject.toByteArray();
+    const encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.NO_WRAP);
+    return encodedString;
+  }
+  toBase64Async(callbacks: { onComplete: (base64: String) => void; onFailure?: () => void }) {
+    NativeBlob.toBase64Async(this.nativeObject, callbacks);
+  }
+
+  toString() {
+    return this.nativeObject.toString();
+  }
+  /** @todo
+   * Error: Attempt to invoke virtual method 'int io.smartface.ExposingEngine.FastArray.size()' on a null object reference
+   */
+  static createFromBase64(base64String: string) {
+    const byteArray = NativeBase64.decode(base64String, NativeBase64.NO_WRAP);
+    const newBlob = new BlobAndroid(byteArray, {
+      type: 'image'
+    });
+    return newBlob;
+  }
+  static createFromUTF8String(str: string) {
+    // utf string or string
+    const utf8Array = Base64Util.StrToUtf8Array(str);
+    return new BlobAndroid(array(utf8Array, 'byte'), {
+      type: 'text'
+    });
+  }
+
+  get parts() {
+    return this._parts;
+  }
+  set parts(value) {
+    this._parts = value;
+  }
+}
+
+export default BlobAndroid;

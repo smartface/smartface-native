@@ -1,0 +1,40 @@
+name: Release Pre Versions
+on:
+  push:
+    branches:
+      - release/**
+    paths:
+      - '**/ts'
+jobs:
+  publishOnMerge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Tag and Publish
+        uses: rishabhgupta/split-by@v1
+        id: split
+        with:
+          string: 'feat/branch-name'
+          split-by: '/'
+      - run: |
+          yarn version --prerelease --preid ${{ steps.split.outputs._1}}
+          npm run deploy:${{ steps.split.outputs._1}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
+      - name: Setup Git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "info@smartface.io"
+      - name: Push New Version
+        run: |
+          git push
+          git push --tags
