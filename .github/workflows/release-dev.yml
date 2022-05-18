@@ -1,4 +1,4 @@
-name: Release Pre Versions
+name: Release Pre Version
 on:
   push:
     branches:
