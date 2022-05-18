@@ -227,6 +227,15 @@ export interface IMaterialTextBox<
    */
   multiline: boolean;
   /**
+   * Gets/sets hintTextColor of the MaterialTextBox.
+   * @property {UI.Color} hintTextcolor
+   * @ios
+   * @android
+   * @since 3.1.2
+   */
+  hintTextcolor: Color | null;
+  /**
+  /**
    * Gets/sets the selectedHintTextColor of the MaterialTextBox.
    * @property {UI.Color} selectedHintTextColor
    * @ios
