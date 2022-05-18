@@ -44,7 +44,7 @@ export default class TextViewAndroid<TEvent extends string = TextViewEvents, TPr
   protected preConstruct(params?: Partial<TProps>): void {
     this._letterSpacing = 9;
     this._lineSpacing = 0;
-    this._scrollEnabled = false;
+    this._scrollEnabled = true;
     super.preConstruct(params);
   }
   get htmlText(): ITextView['htmlText'] {
