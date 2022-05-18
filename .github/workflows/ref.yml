@@ -4,10 +4,11 @@ name: API Doc
 
 on:
   workflow_run:
-    workflows: [Production Publish, PreRelease Publish]
+    workflows:
+      - Release Production
+      - Release Pre Versions
     types:
       - completed
-
 jobs:
   build:
     runs-on: ubuntu-latest
