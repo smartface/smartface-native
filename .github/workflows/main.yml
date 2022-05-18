@@ -1,34 +1,39 @@
 name: Publish
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - release/**
 jobs:
-  publish:
+  publishOnMerge:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
       - uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
         run: yarn
       - name: Build
         run: yarn build
-      - name: Determine if Latest
-        if: ${{ github.ref_name == 'master' }}
-        run: echo "RELEASE_TAG=:latest" >> $GITHUB_ENV
-      - name: Determine if Beta
-        if: ${{ github.ref_name == 'prerelease' }}
-        run: echo "RELEASE_TAG=:beta" >> $GITHUB_ENV
-      - name: Determine if Alpha
-        if: ${{ github.ref_name == 'develop' }}
-        run: echo "RELEASE_TAG=:alpha" >> $GITHUB_ENV
-      - name: Determine if Typescript Migration (Temporary, delete later)
-        if: ${{ github.ref_name == 'feature/ts-new' }}
-        run: echo "RELEASE_TAG=:alpha" >> $GITHUB_ENV
-      - name: Publish
-        run: npm run deploy${{ env.RELEASE_TAG }}
+      - name: Publish with relevant to release name
+        uses: rishabhgupta/split-by@v1
+        id: split
+        with:
+          string: 'feat/branch-name'
+          split-by: '/'
+      - run: |
+          npm run deploy:${{ steps.split.outputs._1}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
+      - name: Increment Version
+        run: yarn version --prerelease
+      - name: Setup Git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "info@smartface.io"
+      - name: Push New Version
+        run: |
+          git push
+          git push --tags
