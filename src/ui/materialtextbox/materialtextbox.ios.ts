@@ -59,19 +59,6 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
       set clearButtonColor(value: Color) {
         self.mdcTextInputControllerUnderline.textInputClearButtonTintColor = value.nativeObject;
       },
-      get underlineLabelsFont(): Font {
-        return self.mdcTextInputControllerUnderline.trailingUnderlineLabelFont;
-      },
-      set underlineLabelsFont(value: Font) {
-        self.mdcTextInputControllerUnderline.leadingUnderlineLabelFont = value;
-        self.mdcTextInputControllerUnderline.trailingUnderlineLabelFont = value;
-      },
-      get inlineHintFont(): Font {
-        return self.mdcTextInputControllerUnderline.inlinePlaceholderFont;
-      },
-      set inlineHintFont(value: Font) {
-        self.mdcTextInputControllerUnderline.inlinePlaceholderFont = value;
-      },
       get leftLayoutRightPadding(): number {
         return self._onLeftViewRightPadding;
       },
