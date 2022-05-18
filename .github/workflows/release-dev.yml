@@ -8,6 +8,7 @@ on:
       - '**/yml'
 jobs:
   publishPreRelease:
+    name: Publish Pre Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
@@ -30,8 +31,8 @@ jobs:
           string: ${{ github.ref_name }}
           split-by: '/'
       - run: |
-          yarn version --prerelease --preid ${{ steps.split.outputs._1}}
-          npm run deploy:${{ steps.split.outputs._1}}
+          yarn version --prerelease --preid ${{ steps.split.outputs._1 }}
+          npm run deploy:${{ steps.split.outputs._1 }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
       - name: Push New Version
