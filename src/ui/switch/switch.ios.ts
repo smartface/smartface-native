@@ -28,7 +28,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     super.preConstruct(params);
   }
 
-  triggerCallbackToJS() {
+  private triggerCallbackToJS() {
     this.onToggleChanged?.(this.toggle);
       this.emit('toggleChanged', this.toggle);
   }
