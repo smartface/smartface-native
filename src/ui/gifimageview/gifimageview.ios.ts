@@ -5,9 +5,7 @@ import ImageiOS from '../image/image.ios';
 import { IFile } from '../../io/file/file';
 import GifImageIOS from '../gifimage/gifimage.ios';
 import { IGifImage } from '../gifimage/gifimage';
-import { WithMobileOSProps } from '../../core/native-mobile-component';
-import { ImageParams, ImageIOSProps, ImageAndroidProps, IImage } from '../image/image';
-import ImageCacheType from '../shared/imagecachetype';
+import { IImage } from '../image/image';
 
 export default class GifImageViewIOS<TEvent extends string = GifImageViewEvents> extends ImageViewIOS<TEvent | GifImageViewEvents> implements IGifImageView {
   private _gifimage: IGifImage;

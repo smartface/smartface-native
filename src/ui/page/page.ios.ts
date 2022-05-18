@@ -334,13 +334,11 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
       },
       setLeftItem(value: Parameters<HeaderBar['setLeftItem']>['0']) {
-        if (value) {
-          if (value instanceof HeaderBarItem) {
-            if (self.ios.navigationItem?.leftItemEnabled) {
-              self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
-            }
-            self._leftItem = value.nativeObject;
+        if (value instanceof HeaderBarItem) {
+          if (self.ios.navigationItem?.leftItemEnabled) {
+            self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
           }
+          self._leftItem = value.nativeObject;
         } else {
           self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
@@ -382,6 +380,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
       ios: {},
       android: {}
     } as HeaderBar;
+    self.ios.navigationItem = {} as any;
     copyObjectPropertiesWithDescriptors(self.headerBar, headerBar);
     self.headerBar?.ios && copyObjectPropertiesWithDescriptors(self.headerBar?.ios, headerBarIOS);
     self.ios.navigationItem && copyObjectPropertiesWithDescriptors(self.ios.navigationItem, headerBar);
