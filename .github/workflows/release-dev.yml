@@ -6,8 +6,7 @@ on:
     paths:
       - '**/ts'
 jobs:
-  publishOnMerge:
-    if: github.event.pull_request.merged == true
+  publishPreRelease:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
