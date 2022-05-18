@@ -17,18 +17,17 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
-      - name: Publish with relevant to release name
+      - name: Tag and Publish
         uses: rishabhgupta/split-by@v1
         id: split
         with:
           string: 'feat/branch-name'
           split-by: '/'
       - run: |
+          yarn version --prerelease --preid ${{ steps.split.outputs._1}}
           npm run deploy:${{ steps.split.outputs._1}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
-      - name: Increment Version
-        run: yarn version --prerelease
       - name: Setup Git config
         run: |
           git config user.name "GitHub Actions Bot"
