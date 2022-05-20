@@ -1,4 +1,3 @@
-import NativeComponent from '../../core/native-component';
 import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 
@@ -72,28 +71,29 @@ export enum DialogStyle {
    * @android
    * @since 3.0.2
    */
-  ThemeDefault = 16974065,
+  ThemeDefault = 16974402, //android.R.style.Theme_Material_Light_NoActionBar_Fullscreen
   /**
    * This theme with no header bar.
    *
    * @android
    * @since 3.0.2
    */
-  ThemeNoHeaderBar = 16974064,
+  ThemeNoHeaderBar = 16974401, //android.R.style.Theme_Material_Light_NoActionBar
   /**
    * This theme has no title bar and fills the entire screen and extends into the display overscan region.
    *
    * @android
    * @since 3.0.2
+   * @deprecated
    */
-  ThemeNoHeaderBarWithOverscan = 16974302,
+  ThemeNoHeaderBarWithOverscan = 16974403, //android.R.style.Theme_Material_Light_NoActionBar_Overscan
   /**
    * This theme  has no title bar and translucent system decor.
    *
    * @android
    * @since 3.0.2
    */
-  ThemeNoHeaderBarWithTranslucentDecor = 16974306
+  ThemeNoHeaderBarWithTranslucentDecor = 16974404, //android.R.style.Theme_Material_Light_NoActionBar_TranslucentDecor
 }
 
 export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps<{}, DialogAndroidProps> = MobileOSProps<{}, DialogAndroidProps>> extends NativeMobileComponent<TNative, TProps> {
