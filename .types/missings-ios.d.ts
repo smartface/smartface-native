@@ -306,6 +306,23 @@ declare class __SF_UITableView extends __SF_UIScrollView {
   actionRowRange(style: number, positionStart: number, itemCount: number, animation?: number): void;
 }
 
+declare class __SF_SMFTableViewIndex extends __SF_UIView {
+  tableViewIndexDidSelect: (e: { index: number }) => boolean; //Haptic
+  backgroundView: __SF_UIView;
+  tintColor: __SF_UIColor;
+  itemSpacing: number;
+  font: __SF_UIFont;
+  indexInsetDictionary: Record<string, number>;
+  indexOffsetDictionary: Record<string, number>;
+  minWidth: number;
+  reloadData(): void;
+  resetFont(): void;
+  resetItemSpacing(): void;
+  resetIndexInset(): void;
+  resetIndexOffset(): void;
+  resetAppearance(): void;
+}
+
 declare class __SF_UICollectionView extends __SF_UIScrollView {
   constructor(layoutManager: __SF_UICollectionViewFlowLayout);
   numberOfSectionsCallback: (collectionView: any) => number;
@@ -728,8 +745,8 @@ declare class __SF_UINavigationBarAppearance {
   titleTextAttributes: { NSColor: __SF_UIColor; NSFont: __SF_UIFont };
   backgroundColor: __SF_UIColor;
   barTintColor: __SF_UIColor;
-  backgroundImage: __SF_UIImage
-  shadowColor: __SF_UIColor
+  backgroundImage: __SF_UIImage;
+  shadowColor: __SF_UIColor;
 }
 
 declare class __SF_UINavigationController {
