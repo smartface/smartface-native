@@ -80,7 +80,7 @@ export enum RowAnimation {
    * @readonly
    * @since 4.1.4
    */
-  AUTOMATIC
+  AUTOMATIC = 100
 }
 
 export interface IListViewIOS extends ViewIOSProps {
