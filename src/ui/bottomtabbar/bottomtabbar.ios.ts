@@ -54,7 +54,7 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobi
         item.icon = item.icon;
         item.route = item.route;
         item.ios.font = item.ios.font;
-        item.invalidate();
+        item.badge = item.badge;
       });
     }
   }

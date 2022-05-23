@@ -4,9 +4,6 @@ import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
 export default class BadgeIOS extends NativeComponent implements IBadge {
-  protected createNativeObject(params: Partial<IBadge> = {}) {
-    return params.nativeObject;
-  }
   private _visible: boolean;
   private _text: string;
   private _backgroundColor: IBadge['backgroundColor'];
@@ -18,6 +15,12 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
   private _height: number;
   private _isBadgeFirstLoad: boolean;
   private _isRTL: boolean;
+  constructor(params: Partial<IBadge> = {}) {
+    super(params);
+  }
+  protected createNativeObject(params: Partial<IBadge> = {}) {
+    return params.nativeObject;
+  }
   preConstruct(params: Partial<IBadge> = {}) {
     this._text = '';
     this._visible = false;
@@ -33,15 +36,11 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
     this._isRTL = !isLTR;
     super.preConstruct(params);
   }
-  constructor(params: Partial<IBadge> = {}) {
-    super(params);
-  }
   get text(): IBadge['text'] {
     return this._text;
   }
   set text(value: IBadge['text']) {
     this._text = value;
-
     __SF_Dispatch.mainAsyncAfter(() => {
       this.nativeObject.pp_addBadgeWithText(value);
       if (!this._isBadgeFirstLoad) {

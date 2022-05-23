@@ -1,11 +1,11 @@
 import Font from '../font';
 import { IBadge } from '../badge/badge';
-import AttributedString from '../attributedstring';
 import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import { IImage } from '../image/image';
-import TabBarController from '../tabbarcontroller';
-import BottomTabbarController from '../bottomtabbarcontroller';
 import ViewState from '../shared/viewState';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
+import { ITabBarController } from '../tabbarcontroller/tabbarcontroller';
+import { IAttributedString } from '../attributedstring/attributedstring';
 
 export interface TabbarItemIOSProps {
   /**
@@ -26,7 +26,7 @@ export interface TabbarItemAndroidProps {
    * @android
    * @since 4.0.2
    */
-  attributedTitle: AttributedString;
+  attributedTitle: IAttributedString;
   /**
    * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
    *
@@ -113,7 +113,7 @@ export declare interface ITabbarItem extends INativeMobileComponent<any, WithMob
    * @since 1.1.10
    */
   route: string;
-  invalidate(): void;
   setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon?: string | number }): void;
-  tabBarItemParent: TabBarController | BottomTabbarController | null;
+  tabBarItemParent: ITabBarController | IBottomTabBar | null;
+  index: number | null;
 }

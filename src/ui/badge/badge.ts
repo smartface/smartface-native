@@ -79,6 +79,4 @@ export declare interface IBadge extends INativeComponent {
    * @since 3.0.0
    */
   move(x: number, y: number): void;
-  moveX?: any;
-  moveY?: any;
 }

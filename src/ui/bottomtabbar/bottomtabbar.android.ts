@@ -4,6 +4,7 @@ import TabBarItem from '../tabbaritem';
 import { IBottomTabBar } from './bottomtabbar';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { ITabbarItem } from '../tabbaritem/tabbaritem';
 
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
@@ -88,35 +89,28 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   toString() {
     return 'Tab';
   }
-  createTabbarMenuItems(tabBarItems: any[]) {
+  createTabbarMenuItems(tabBarItems: ITabbarItem[]) {
     const btbMenu = this.nativeObject.getMenu();
     btbMenu.clear();
-
     for (let i = 0; i < tabBarItems.length; i++) {
       const tabbarItem = tabBarItems[i];
       tabbarItem.tabBarItemParent = this;
-      let title;
-      if (tabbarItem._attributedTitleBuilder !== undefined) {
-        title = tabbarItem._attributedTitleBuilder;
+      let title: string;
+      if (tabbarItem.android.attributedTitleBuilder !== undefined) {
+        title = tabbarItem.android.attributedTitleBuilder;
       } else {
         title = tabbarItem.title ? tabbarItem.title : 'Title ' + i;
       }
 
       tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
       tabbarItem.setProperties({
+        itemTitle: title,
         itemIcon: tabbarItem.icon,
         systemIcon: tabbarItem.android.systemIcon
       });
       tabbarItem.index = i;
+      tabbarItem.badge = tabbarItem.badge;
     }
-    this.addBadgeToItem(tabBarItems);
     this._items = tabBarItems;
-  }
-  addBadgeToItem(tabBarItems) {
-    // Adding badge must be after added all menu items.
-    for (let i = 0; i < tabBarItems.length; i++) {
-      //TODO: what is this?
-      tabBarItems[i].badgeAdded && tabBarItems[i].badge;
-    }
   }
 }
