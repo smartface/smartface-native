@@ -133,6 +133,7 @@ export default class BottomTabbarControllerAndroid extends NativeEventEmitterCom
   }
   set selectedIndex(index: number) {
     this._selectedIndex = index;
+    this.show();
   }
   get didSelectByIndex() {
     return this._didSelectByIndexCallback;
