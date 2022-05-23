@@ -81,6 +81,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;
+    this._width = 0;
+    this._height = 0;
     this._scale = {
       x: 1.0,
       y: 1.0
@@ -925,7 +927,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     */
 
   get width() {
-    return this.nativeObject.frame.width || this._width;
+    return this.nativeObject.frame.width ?? this._width;
   }
 
   set width(value) {
@@ -938,7 +940,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get height() {
-    return this.nativeObject.frame.height || this._height;
+    return this.nativeObject.frame.height ?? this._height;
   }
 
   set height(value) {
