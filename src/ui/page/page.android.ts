@@ -336,6 +336,9 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         }
       },
       onContextItemSelected: (itemId: number) => {
+        // Check the this page is currently displayed
+        // onContextItemSelected callback is triggered for previous page when using modal page
+        if(Application.currentPage.pageID !== this.pageID) return false;
         const items = this.contextMenu.items;
         if (items && itemId >= 0) {
           items[itemId].onSelectedListener();
