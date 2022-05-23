@@ -6,23 +6,17 @@ import ImageAndroid from '../image/image.android';
 import Image from '../image';
 import ViewAndroid from '../view/view.android';
 import { SwitchEvents } from './switch-events';
+import ColorAndroid from '../color/color.android';
 
 const NativeSwitch = requireClass('io.smartface.android.sfcore.ui.switchview.SFSwitch');
-const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 
 export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends ViewAndroid<TEvent | SwitchEvents, any, ISwitch> {
-  private _thumbOnColor: Color;
-  private _thumbOffColor: Color;
-  private _toggleOnColor: Color;
-  private _toggleOffColor: Color;
   private _toggleImage: Image;
   private _thumbImage: Image;
   private _onToggleChangedCallback: (checked: boolean) => void;
   createNativeObject() {
     return new NativeSwitch(AndroidConfig.activity, {
       onToggleChanged: (isChecked: boolean) => {
-        this.setThumbColor();
-        this.setTrackColor();
         this._onToggleChangedCallback?.(isChecked);
         this.emit('toggleChanged', isChecked);
       }
@@ -52,36 +46,32 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
         self.nativeObject.setThumbDrawable(self._thumbImage.nativeObject);
       },
       get toggleOffColor(): Color {
-        return self._toggleOffColor;
+        return self.getColorFromColorInt(self.nativeObject.getTrackOffColor());
       },
       set toggleOffColor(value: Color) {
-        self._toggleOffColor = value;
-        self.setTrackColor();
+        self.nativeObject.setTrackOffColor(self.getColorIntFromColor(value));
       },
       get thumbOffColor(): Color {
-        return self._thumbOffColor;
+        return self.getColorFromColorInt(self.nativeObject.getThumbOffColor());
       },
       set thumbOffColor(value: Color) {
-        self._thumbOffColor = value;
-        self.setThumbColor();
+        self.nativeObject.setThumbOffColor(self.getColorIntFromColor(value));
       }
     });
   }
 
   get thumbOnColor(): Color {
-    return this._thumbOnColor;
+    return this.getColorFromColorInt(this.nativeObject.getThumbOnColor());
   }
   set thumbOnColor(value: Color) {
-    this._thumbOnColor = value;
-    this.setThumbColor();
+    this.nativeObject.setThumbOnColor(this.getColorIntFromColor(value));
   }
 
   get thumbOffColor(): Color {
-    return this._thumbOffColor;
+    return this.getColorFromColorInt(this.nativeObject.getThumbOffColor());
   }
   set thumbOffColor(value: Color) {
-    this._thumbOffColor = value;
-    this.setThumbColor();
+    this.nativeObject.setThumbOffColor(this.getColorIntFromColor(value));
   }
 
   get toggle(): boolean {
@@ -92,11 +82,10 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
   }
 
   get toggleOnColor(): Color {
-    return this._toggleOnColor;
+    return this.getColorFromColorInt(this.nativeObject.getTrackOnColor());
   }
   set toggleOnColor(value: Color) {
-    this._toggleOnColor = value;
-    this.setTrackColor();
+    this.nativeObject.setTrackOnColor(this.getColorIntFromColor(value));
   }
 
   get onToggleChanged(): (toggle: boolean) => void {
@@ -106,19 +95,10 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
     this._onToggleChangedCallback = value;
   }
 
-  setThumbColor() {
-    if (this.toggle && this.thumbOnColor) {
-      this.nativeObject.getThumbDrawable().setColorFilter(this.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
-    } else if (this.thumbOffColor) {
-      this.nativeObject.getThumbDrawable().setColorFilter(this.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
-    }
+  getColorIntFromColor(color: Color): number {
+    return color.nativeObject;
   }
-
-  setTrackColor() {
-    if (this.toggle) {
-      this.toggleOnColor && this.nativeObject.getTrackDrawable().setColorFilter(this.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
-    } else {
-      this.android.toggleOffColor && this.nativeObject.getTrackDrawable().setColorFilter(this.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
-    }
+  getColorFromColorInt(colorInt: number): Color {
+    return new ColorAndroid({color : colorInt});
   }
 }
