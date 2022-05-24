@@ -2,13 +2,15 @@ import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AttributedString from '../attributedstring';
 import UnitConverter from '../../util/Android/unitconverter';
-import Badge from '../badge';
 import BottomTabBar from '../bottomtabbar';
 import ImageAndroid from '../image/image.android';
 import TabBarController from '../tabbarcontroller';
-import BottomTabbarController from '../bottomtabbarcontroller';
 import ViewState from '../shared/viewState';
 import isViewState from '../../util/isViewState';
+import BadgeAndroid from '../badge/badge.android';
+import { IBadge } from '../badge/badge';
+import { ITabBarController } from '../tabbarcontroller/tabbarcontroller';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
 
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
@@ -20,11 +22,10 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   }
   private _title: string;
   private _icon: ViewState<ImageAndroid> | string;
-  private _badgeObj: Badge;
+  private _badgeObj: IBadge;
   private _systemIcon: any;
-  private _tabBarItemParent: TabBarController | BottomTabbarController | null = null;
-  private index = null;
-  private badgeAdded = false;
+  private _tabBarItemParent: ITabBarController | IBottomTabBar | null;
+  index: number | null;
   _attributedTitleBuilder: any;
   private _attributedTitle?: AttributedString;
   private _route: string;
@@ -36,6 +37,11 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   invalidate(): void {
     throw new Error('Method not implemented.');
   }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._tabBarItemParent = null;
+    this.index = null;
+    super.preConstruct(params);
+  }
   private getAndroidProps() {
     const self = this;
     return {
@@ -44,7 +50,9 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       },
       set systemIcon(systemIcon) {
         self._systemIcon = systemIcon;
-        self.nativeObject && self.nativeObject.setIcon(ImageAndroid.systemDrawableId(self._systemIcon));
+        if (self.nativeObject && systemIcon) {
+          self.nativeObject.setIcon(ImageAndroid.systemDrawableId(self._systemIcon));
+        }
       },
       get attributedTitle() {
         // TODO: Ask if _attributedTitleBuilder exists or not.
@@ -103,10 +111,23 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
     this.nativeObject?.setIcon((value as ImageAndroid).nativeObject);
   }
   get badge() {
-    if (this._badgeObj === undefined) this._badgeObj = new Badge();
-    this._badgeObj.nativeObject.getParent() === undefined && this.setBadgeToTabarItem(this._badgeObj);
-
+    if (this._badgeObj === undefined) {
+      this._badgeObj = new BadgeAndroid();
+    }
+    if (this._badgeObj.nativeObject.getParent() === undefined) {
+      this.setBadgeToTabarItem(this._badgeObj);
+    }
     return this._badgeObj;
+  }
+  set badge(value) {
+    if (value instanceof BadgeAndroid) {
+      this._badgeObj = value;
+    } else if (typeof value === 'object') {
+      this._badgeObj = new BadgeAndroid(value);
+    }
+    if (this._badgeObj.nativeObject.getParent() === undefined) {
+      this.setBadgeToTabarItem(this._badgeObj);
+    }
   }
   titleSetter(title: string) {
     if (!this.nativeObject) {
@@ -129,15 +150,13 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       nativeObject: res
     };
   }
-  setBadgeToTabarItem(badgeObj: any) {
-    this.badgeAdded = true;
+  setBadgeToTabarItem(badgeObj: IBadge) {
     if (this._tabBarItemParent !== null && this.index !== null) {
       const TOP_CENTERHORIZANTAL = 1 | 48;
       const WRAP_CONTENT = -2;
       const layoutParams = new NativeFrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, TOP_CENTERHORIZANTAL);
-      badgeObj.layoutParams = layoutParams;
       layoutParams.setMarginStart(UnitConverter.dpToPixel(12));
-      badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
+      badgeObj.nativeObject.setLayoutParams(layoutParams);
 
       const nativeBottomTabarMenuView = this._tabBarItemParent.nativeObject.getChildAt(0);
       const nativeMenuItem = nativeBottomTabarMenuView.getChildAt(this.index);
@@ -146,12 +165,5 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   }
   toString() {
     return 'TabBarItem';
-  }
-  setProperties(params: { itemTitle: string; itemIcon: ImageAndroid | string; systemIcon: string | number }) {
-    const { itemTitle, itemIcon, systemIcon } = params;
-
-    if (itemTitle) this.title = itemTitle;
-    if (itemIcon) this.icon = itemIcon;
-    if (systemIcon) this.android.systemIcon = systemIcon;
   }
 }

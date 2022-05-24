@@ -218,6 +218,14 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
                 () => {}
               );
             }
+
+            __SF_Dispatch.mainAsync((innerIndex) => {
+              params.onSuccess?.();
+            });
+          } else {
+            __SF_Dispatch.mainAsync((innerIndex) => {
+              params.onFailure?.();
+            });
           }
         }
       );

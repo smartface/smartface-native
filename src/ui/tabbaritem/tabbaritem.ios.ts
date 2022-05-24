@@ -2,13 +2,13 @@ import { ITabbarItem } from './tabbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
 import { IBadge } from '../badge/badge';
-import { IBottomTabBarController } from '../bottomtabbarcontroller/bottomtabbarcontroller';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import FontIOS from '../font/font.ios';
 import ImageIOS from '../image/image.ios';
 import BadgeIOS from '../badge/badge.ios';
-import { TabBarControllerImpl } from '../tabbarcontroller/tabbarcontroller';
+import { ITabBarController } from '../tabbarcontroller/tabbarcontroller';
 import isViewState from '../../util/isViewState';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
 
 const UITabBarItem = SF.requireClass('UITabBarItem');
 
@@ -16,33 +16,24 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   private _nativeView: any;
   private _title: string;
   private _icon: ITabbarItem['icon'];
-  private _badge: Partial<IBadge>;
+  private _badge: Partial<IBadge> | IBadge;
   private _route: string;
   private _font: ITabbarItem['ios']['font'];
+  private _badgeProps: Partial<IBadge>;
 
   constructor(params: Partial<ITabbarItem> = {}) {
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
+  index: number | null;
+  tabBarItemParent: ITabBarController | IBottomTabBar | null;
   protected createNativeObject(params: Partial<ITabbarItem>) {
     return UITabBarItem.new();
   }
   protected preConstruct(params: Partial<ITabbarItem>): void {
     this._title = '';
-    const defaultBadge = {
-      backgroundColor: undefined,
-      borderColor: undefined,
-      borderWidth: 0,
-      textColor: undefined,
-      visible: false,
-      moveX: undefined,
-      moveY: undefined,
-      move: function (x, y) {
-        this.moveX = x;
-        this.moveY = y;
-      }
-    };
-    this._badge = this.nativeObject ? new BadgeIOS({ nativeObject: this.nativeObject }) : defaultBadge;
+    this._badgeProps = {};
+    this._badge = new BadgeIOS({ nativeObject: this.nativeObject });
     super.preConstruct(params);
     this.addIOSProps(this.getIOSProps());
   }
@@ -69,10 +60,7 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
       }
     };
   }
-  tabBarItemParent: TabBarControllerImpl | IBottomTabBarController | null;
-  setProperties(params): void {
-    throw new Error('Method not implemented.');
-  }
+  setProperties(params): void {}
   get route(): string {
     return this._route;
   }
@@ -141,20 +129,24 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     }
   }
   get badge(): IBadge {
-    return this._badge as IBadge;
+    // This is done this way because nativeObject is always changing. Never create another badge object again.
+    // This might reduce performance a bit, but this will stay like this until there's a better solution.
+    return new BadgeIOS({ ...this._badgeProps, nativeObject: this.nativeObject });
+  }
+
+  set badge(value: IBadge) {
+    this.setBadgeProps(value);
   }
   getScreenLocation() {
     return this.layout.getScreenLocation();
   }
-  invalidate() {
-    if (this._badge && !(this._badge instanceof BadgeIOS)) {
-      delete this._badge['move'];
-      const _badgeWithNativeObject = new BadgeIOS({
-        nativeObject: this.nativeObject,
-        ...this._badge
-      });
-      this._badge.moveX !== undefined && _badgeWithNativeObject.move(this._badge.moveX, this._badge.moveY);
-      this._badge = _badgeWithNativeObject;
-    }
+  private setBadgeProps(props: Partial<IBadge>) {
+    this._badgeProps.backgroundColor = props.backgroundColor;
+    this._badgeProps.text = props.text;
+    this._badgeProps.borderColor = props.borderColor;
+    this._badgeProps.borderWidth = props.borderWidth;
+    this._badgeProps.font = props.font;
+    this._badgeProps.textColor = props.textColor;
+    this._badgeProps.visible = props.visible;
   }
 }

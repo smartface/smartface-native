@@ -256,7 +256,8 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   get Android() {
     return {
       KeyboardMode: {} as any,
-      Permissions: {} as any
+      Permissions: {} as any,
+      NavigationBar: {} as any
     };
   }
   protected createNativeObject() {

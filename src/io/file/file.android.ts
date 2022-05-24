@@ -21,7 +21,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
   protected createNativeObject() {
     return null;
   }
-  nativeAssetsList: any[] = [];
+  nativeAssetsList: any[] | undefined;
   resolvedPath: any;
   type: PATH_FILE_TYPE;
   fullPath: string;
@@ -45,14 +45,7 @@ export default class FileAndroid extends NativeComponent implements IFile {
     switch (this.resolvedPath.type) {
       case Path.FILE_TYPE.ASSET:
         // this.nativeObject will be String for performance
-        // Checking assets list loaded.
-        if (!this.nativeAssetsList) {
-          this.nativeAssetsList = activity.getAssets().list('');
-        }
-        if (this.nativeAssetsList) {
-          this.nativeAssetsList = toJSArray(this.nativeAssetsList);
-        }
-        this.nativeAssetsList?.forEach((assetName) => {
+        this.getNativeAssetsList()?.forEach((assetName) => {
           if (this.resolvedPath.name === assetName) {
             // this.nativeObject = this.resolvedPath.name;
             this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
@@ -163,6 +156,22 @@ export default class FileAndroid extends NativeComponent implements IFile {
 
   get writable(): boolean {
     return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.canWrite() : false;
+  }
+
+  getNativeAssetsList(): any[] | undefined {
+    // Checking assets list loaded.
+    if (!this.nativeAssetsList) {
+      this.nativeAssetsList = this.loadNativeAssetsList();
+    }
+    return this.nativeAssetsList;
+  }
+
+  loadNativeAssetsList(): any[] | undefined {
+    const nativeAssetsList = activity.getAssets().list('');
+    if (nativeAssetsList) {
+      return toJSArray(nativeAssetsList);
+    }
+    return undefined;
   }
 
   getAbsolutePath(): string {

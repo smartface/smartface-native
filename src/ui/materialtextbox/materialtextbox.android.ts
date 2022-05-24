@@ -1,4 +1,4 @@
-import { IMaterialTextBox, MaterialTextBoxAndroidProps, MaterialTextBoxiOSProps } from './materialtextbox';
+import { IMaterialTextBox } from './materialtextbox';
 import { Point2D } from '../../primitive/point2d';
 
 import AndroidConfig from '../../util/Android/androidconfig';
@@ -7,12 +7,9 @@ import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Font from '../font';
 import TextBoxAndroid from '../textbox/textbox.android';
-import { MaterialTextBoxEvents } from './materialtextbox-events';
 import ViewAndroid from '../view/view.android';
-import ActionKeyType from '../shared/android/actionkeytype';
 import TextAlignment from '../shared/textalignment';
 import AutoCapitalize from '../shared/autocapitalize';
-import { MobileOSProps } from '../../core/native-mobile-component';
 import KeyboardType from '../shared/keyboardtype';
 import { EventListenerCallback } from '../../core/eventemitter';
 import { TextBoxEvents } from '../textbox/textbox-events';
@@ -34,18 +31,15 @@ interface nativeTextInputEditText {
 const SFMaterialTextBoxWrapper = requireClass('io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
 
-const activity = AndroidConfig.activity;
 const hintTextColorFieldName = 'defaultHintTextColor';
 const hintFocusedTextColorFieldName = 'focusedTextColor';
 
-const WRAP_CONTENT = -2;
-const MATCH_PARENT = -1;
 const state_focused = 16842908;
 const state_unfocused = -16842908;
 // const GRAVITY_END = 8388613;
 // const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
 
-export default class MaterialTextBoxAndroid<TEvent extends string = MaterialTextBoxEvents> extends ViewAndroid<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
+export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvents> extends ViewAndroid<TEvent | TextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private sfTextBox: TextBoxAndroid;
   private textBoxNativeObject: nativeTextInputEditText;
   private __hintTextColor: Color;
@@ -145,7 +139,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
     this.addAndroidProps(this.getAndroidProps());
   }
   protected createNativeObject(): any {
-    const nativeObject = new SFMaterialTextBoxWrapper(activity);
+    const nativeObject = new SFMaterialTextBoxWrapper(AndroidConfig.activity);
     this.textBoxNativeObject = nativeObject.getTextInputEditTextInstance();
     this.sfTextBox = new TextBoxAndroid({ nativeObject: this.textBoxNativeObject });
     return nativeObject;
@@ -328,11 +322,11 @@ export default class MaterialTextBoxAndroid<TEvent extends string = MaterialText
   }
 
   get testId(): any {
-    return !AndroidConfig.isEmulator ? activity.getResources().getResourceEntryName(this.nativeObject.getId()) : '';
+    return !AndroidConfig.isEmulator ? AndroidConfig.activity.getResources().getResourceEntryName(this.nativeObject.getId()) : '';
   }
   set testId(value: any) {
-    const id = activity.getResourceId(value);
-    const editTextId = activity.getResourceId(value + '_textBox');
+    const id = AndroidConfig.activity.getResourceId(value);
+    const editTextId = AndroidConfig.activity.getResourceId(value + '_textBox');
     id > 0 && this.nativeObject.setId(id);
     editTextId > 0 && this.sfTextBox.nativeObject.setId(editTextId);
   }

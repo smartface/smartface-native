@@ -23,10 +23,14 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this.nativeObject.layer.masksToBounds = false;
 
     this.nativeObject.addJSTarget(() => {
-      this.onToggleChanged?.(this.toggle);
-      this.emit('toggleChanged', this.toggle);
+      this.triggerCallbackToJS()
     }, UIControlEvents.valueChanged);
     super.preConstruct(params);
+  }
+
+  private triggerCallbackToJS() {
+    this.onToggleChanged?.(this.toggle);
+      this.emit('toggleChanged', this.toggle);
   }
 
   get enabled(): boolean {
@@ -61,6 +65,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   }
   set toggle(value: boolean) {
     this.nativeObject.setOnAnimated(value, true);
+    this.triggerCallbackToJS()
   }
 
   get toggleOnColor(): Color {

@@ -56,19 +56,6 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     };
   }
   private setAVControllerEvents() {
-    this.avPlayerViewController.onReady = () => {
-      this.onReady?.();
-      this.emit('ready');
-    };
-    this.avPlayerViewController.AVPlayerItemDidPlayToEndTime = () => {
-      this.onFinish?.();
-      this.emit('finish');
-      if (this._loopEnabled) {
-        this.seekTo(0);
-        this.play();
-      }
-    };
-
     this.avPlayerViewController.didStopPictureInPicture = () => {
       this.ios.didStopPictureInPicture?.();
       this.emit('didStopPictureInPicture');
@@ -93,6 +80,30 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
       this.emit('restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback);
     };
   }
+
+  private setAVPlayerEvents() {
+    if (this.avPlayer) {
+      this.avPlayer.onItemReady = () => {
+        this.onReady?.();
+        this.emit('ready');
+      };
+
+      this.avPlayer.AVPlayerItemDidPlayToEndTime = () => {
+        this.onFinish?.();
+        this.emit('finish');
+        if (this._loopEnabled) {
+          this.seekTo(0);
+          this.play();
+        }
+      };
+
+      this.avPlayer.onItemFailed = (e: __SF_NSError) => {
+        this.onFailure?.(e);
+        this.emit('failure');
+      };
+    }
+  }
+
   onReady: () => void;
   onFinish: () => void;
   onFailure: (reason?: any) => void;
@@ -121,12 +132,9 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
     this.avPlayerViewController.player = this.avPlayer;
     this.avPlayerViewController.videoGravity = VIDEO_GRAVITY;
     this.avPlayer.addObserver();
-
-    this.avPlayer.onItemFailed = (e: __SF_NSError) => {
-      this.onFailure?.(e);
-      this.emit('failure');
-    };
+    this.setAVPlayerEvents()
   }
+
   loadFile(file: File): void {
     this.avPlayer?.removeObserver();
 
@@ -136,10 +144,7 @@ export default class VideoViewIOS<TEvent extends string = VideoViewEvents> exten
       this.avPlayerViewController.player = this.avPlayer;
       this.avPlayerViewController.videoGravity = VIDEO_GRAVITY;
       this.avPlayer.addObserver();
-      this.avPlayer.onItemFailed = (e: __SF_NSError) => {
-        this.onFailure?.(e);
-        this.emit('failure');
-      };
+      this.setAVPlayerEvents();
     }
   }
   seekTo(time: number): void {
