@@ -5,11 +5,12 @@ import UnitConverter from '../../util/Android/unitconverter';
 import BottomTabBar from '../bottomtabbar';
 import ImageAndroid from '../image/image.android';
 import TabBarController from '../tabbarcontroller';
-import BottomTabbarController from '../bottomtabbarcontroller';
 import ViewState from '../shared/viewState';
 import isViewState from '../../util/isViewState';
 import BadgeAndroid from '../badge/badge.android';
 import { IBadge } from '../badge/badge';
+import { ITabBarController } from '../tabbarcontroller/tabbarcontroller';
+import { IBottomTabBar } from '../bottomtabbar/bottomtabbar';
 
 const NativeFrameLayout = requireClass('android.widget.FrameLayout');
 const NativeStateListDrawable = requireClass('android.graphics.drawable.StateListDrawable');
@@ -23,7 +24,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   private _icon: ViewState<ImageAndroid> | string;
   private _badgeObj: IBadge;
   private _systemIcon: any;
-  private _tabBarItemParent: TabBarController | BottomTabBar | null;
+  private _tabBarItemParent: ITabBarController | IBottomTabBar | null;
   index: number | null;
   _attributedTitleBuilder: any;
   private _attributedTitle?: AttributedString;
@@ -49,7 +50,9 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       },
       set systemIcon(systemIcon) {
         self._systemIcon = systemIcon;
-        self.nativeObject && self.nativeObject.setIcon(ImageAndroid.systemDrawableId(self._systemIcon));
+        if (self.nativeObject && systemIcon) {
+          self.nativeObject.setIcon(ImageAndroid.systemDrawableId(self._systemIcon));
+        }
       },
       get attributedTitle() {
         // TODO: Ask if _attributedTitleBuilder exists or not.
@@ -162,12 +165,5 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
   }
   toString() {
     return 'TabBarItem';
-  }
-  setProperties(params: { itemTitle: string; itemIcon: ImageAndroid | string; systemIcon: string | number }) {
-    const { itemTitle, itemIcon, systemIcon } = params;
-
-    if (itemTitle) this.title = itemTitle;
-    if (itemIcon) this.icon = itemIcon;
-    if (systemIcon) this.android.systemIcon = systemIcon;
   }
 }

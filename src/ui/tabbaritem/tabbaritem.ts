@@ -113,7 +113,6 @@ export declare interface ITabbarItem extends INativeMobileComponent<any, WithMob
    * @since 1.1.10
    */
   route: string;
-  setProperties(params: { itemTitle: string; itemIcon: ITabbarItem['icon']; systemIcon?: string | number }): void;
   tabBarItemParent: ITabBarController | IBottomTabBar | null;
   index: number | null;
 }
