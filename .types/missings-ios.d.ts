@@ -734,8 +734,8 @@ declare class __SF_MDCTextInputControllerUnderline {
   underlineHeightNormal?: number;
   underlineHeightActive?: number;
   errorColor?: __SF_UIColor;
-  leadingViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
-  trailingViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+  leadingViewRectForBounds: (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => Record<string, any>;
+  trailingViewRectForBounds: (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => Record<string, any>;
   setErrorTextErrorAccessibilityValue(errorMessage: string, replaceErrorMessage: string): void;
   setErrorTextNil(): void;
 }

@@ -80,15 +80,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
           actionKeyType: this.actionKeyType
         });
       } else if (method.name === 'textFieldShouldClear') {
-        if (typeof this.onClearButtonPress === 'function') {
-          const returnValue = this.onClearButtonPress?.();
-          return returnValue === undefined ? true : returnValue;
-        }
-        return true;
+        const returnValue = this.onClearButtonPress?.();
+        this.emit('clearButtonPress');
+        return returnValue === undefined ? true : returnValue;
       } else if (method.name === 'shouldChangeCharactersIn:Range:ReplacementString') {
-        if (typeof this.onTextChanged !== 'function') {
-          return true;
-        }
         this.onTextChanged?.({
           location: method.range,
           insertedText: method.replacementString
@@ -97,6 +92,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
           location: method.range,
           insertedText: method.replacementString
         });
+        return true;
       }
     };
 

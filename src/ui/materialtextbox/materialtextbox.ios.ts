@@ -4,9 +4,9 @@ import FlexLayout from '../flexlayout';
 import Font from '../font';
 import TextBoxIOS from '../textbox/textbox.ios';
 import View from '../view';
-import { MaterialTextBoxEvents } from './materialtextbox-events';
+import { TextBoxEvents } from '../textbox/textbox-events';
 
-export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxEvents> extends TextBoxIOS<TEvent | MaterialTextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
+export default class MaterialTextBoxIOS<TEvent extends string = TextBoxEvents> extends TextBoxIOS<TEvent | TextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private mdcTextInputControllerUnderline: __SF_MDCTextInputControllerUnderline;
   private _multiline: boolean;
   private _lineCount: number;
@@ -20,8 +20,8 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
   private _onRightViewLeftPadding: number;
   private _leftLayout: { view: View; width: number; height?: number };
   private _leftLayoutMain: FlexLayout;
-  private _onLeftViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
-  private _onRightViewRectForBounds: (bounds?: Object, defaultRect?: Object) => Object;
+  private _onLeftViewRectForBounds: (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => __SF_NSRect;
+  private _onRightViewRectForBounds: (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => __SF_NSRect;
   private _content: FlexLayout;
   constructor(params: Partial<IMaterialTextBox> = {}) {
     super(params);
@@ -31,23 +31,24 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
     this._lineCount = params.lineCount || 1;
     this._onLeftViewRightPadding = 0;
     this._onRightViewLeftPadding = 0;
-    this.nativeObject.layer.masksToBounds = false;
     this.__hintTextColor = Color.create(199, 199, 205);
 
     super.preConstruct(params);
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
+    let nativeObject: __SF_MDCMultilineTextField | __SF_MDCTextField;
     if (params.multiline) {
-      this.nativeObject = new __SF_MDCMultilineTextField();
+      nativeObject = new __SF_MDCMultilineTextField();
       this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);
       this.mdcTextInputControllerUnderline.expandsOnOverflow = false;
       this.mdcTextInputControllerUnderline.minimumLines = params.lineCount ? params.lineCount : 1;
     } else {
-      const nativeObject = new __SF_MDCTextField();
+      nativeObject = new __SF_MDCTextField();
       this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(nativeObject);
-      return nativeObject;
     }
+    nativeObject.layer.masksToBounds = false;
+    return nativeObject;
   }
 
   private getIOSProps() {
@@ -73,17 +74,17 @@ export default class MaterialTextBoxIOS<TEvent extends string = MaterialTextBoxE
         self._onRightViewLeftPadding = value;
         self.mdcTextInputControllerUnderline.trailingViewTrailingPaddingConstantJS = value;
       },
-      get onLeftLayoutRectForBounds(): (bounds?: Object, defaultRect?: Object) => Object {
+      get onLeftLayoutRectForBounds(): (bounds?: Object, defaultRect?: Object) => __SF_NSRect {
         return self._onLeftViewRectForBounds;
       },
-      set onLeftLayoutRectForBounds(value: (bounds?: Object, defaultRect?: Object) => Object) {
+      set onLeftLayoutRectForBounds(value: (bounds?: Object, defaultRect?: Object) => __SF_NSRect) {
         self._onLeftViewRectForBounds = value;
         self.mdcTextInputControllerUnderline.leadingViewRectForBounds = value;
       },
-      get onRightLayoutRectForBounds(): (bounds?: Object, defaultRect?: Object) => Object {
+      get onRightLayoutRectForBounds(): (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => __SF_NSRect {
         return self._onRightViewRectForBounds;
       },
-      set onRightLayoutRectForBounds(value: (bounds?: Object, defaultRect?: Object) => Object) {
+      set onRightLayoutRectForBounds(value: (bounds?: __SF_NSRect, defaultRect?: __SF_NSRect) => __SF_NSRect) {
         self._onRightViewRectForBounds = value;
         self.mdcTextInputControllerUnderline.trailingViewRectForBounds = value;
       },

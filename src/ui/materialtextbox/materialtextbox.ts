@@ -1,9 +1,9 @@
 import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox/textbox';
 import Font from '../font';
 import Color from '../color';
-import { MaterialTextBoxEvents } from './materialtextbox-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView } from '../view/view';
+import { TextBoxEvents } from '../textbox/textbox-events';
 export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
   /**
    * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
@@ -209,9 +209,9 @@ export interface MaterialTextBoxAndroidProps extends TextBoxAndroidProps {
  *
  */
 export interface IMaterialTextBox<
-  TEvent extends string = MaterialTextBoxEvents,
+  TEvent extends string = TextBoxEvents,
   TProps extends MobileOSProps<MaterialTextBoxiOSProps, MaterialTextBoxAndroidProps> = MobileOSProps<MaterialTextBoxiOSProps, MaterialTextBoxAndroidProps>
-> extends ITextBox<TEvent | MaterialTextBoxEvents, TProps> {
+> extends ITextBox<TEvent | TextBoxEvents, TProps> {
   /**
    * Gets/sets the lineCount of the MaterialTextBox. You can use this property when multiline is true.
    * @property {Number} [lineCount = 1]
