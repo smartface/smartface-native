@@ -3,10 +3,9 @@
 name: API Doc
 
 on:
-  workflow_run:
-    workflows: ['Release Production', 'Release Pre Versions']
-    types:
-      - completed
+  push:
+    branches:
+      - 'master'
 jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
