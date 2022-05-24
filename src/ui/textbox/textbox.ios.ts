@@ -44,6 +44,46 @@ const IOSReturnKeyType = {
   continue: 11 // @available(iOS 9.0, *)
 };
 
+const NSTextAlignments = {
+  left: 0,
+  center: 1,
+  right: 2
+};
+
+const ContentVerticalAlignments = {
+  top: 1,
+  center: 0,
+  bottom: 2
+};
+
+const ContentVerticalAlignmentMapping = {
+  [TextAlignment.TOPLEFT]: ContentVerticalAlignments.top,
+  [TextAlignment.TOPCENTER]: ContentVerticalAlignments.top,
+  [TextAlignment.TOPRIGHT]: ContentVerticalAlignments.top,
+
+  [TextAlignment.MIDLEFT]: ContentVerticalAlignments.center,
+  [TextAlignment.MIDCENTER]: ContentVerticalAlignments.center,
+  [TextAlignment.MIDRIGHT]: ContentVerticalAlignments.center,
+
+  [TextAlignment.BOTTOMLEFT]: ContentVerticalAlignments.bottom,
+  [TextAlignment.BOTTOMCENTER]: ContentVerticalAlignments.bottom,
+  [TextAlignment.BOTTOMRIGHT]: ContentVerticalAlignments.bottom
+};
+
+const TextAlignmentMapping = {
+  [TextAlignment.TOPLEFT]: NSTextAlignments.left,
+  [TextAlignment.TOPCENTER]: NSTextAlignments.center,
+  [TextAlignment.TOPRIGHT]: NSTextAlignments.right,
+
+  [TextAlignment.MIDLEFT]: NSTextAlignments.left,
+  [TextAlignment.MIDCENTER]: NSTextAlignments.center,
+  [TextAlignment.MIDRIGHT]: NSTextAlignments.right,
+
+  [TextAlignment.BOTTOMLEFT]: NSTextAlignments.left,
+  [TextAlignment.BOTTOMCENTER]: NSTextAlignments.center,
+  [TextAlignment.BOTTOMRIGHT]: NSTextAlignments.right
+};
+
 export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
   private _textAligment: number;
   private _hint: string;
@@ -267,13 +307,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     return this._textAligment;
   }
   set textAlignment(value: TextAlignment) {
-    this._textAligment = value;
-
-    const vertical = value / 3 === 0 ? 1 : value / 3 === 1 ? 0 : 2;
-    const horizontal = value % 3 === 0 ? 0 : value % 3 === 1 ? 1 : 2;
-
-    this.nativeObject.contentVerticalAlignment = vertical;
-    this.nativeObject.textAlignment = horizontal;
+    this._textAligment = value
+    
+    this.nativeObject.contentVerticalAlignment = ContentVerticalAlignmentMapping[value];
+    this.nativeObject.textAlignment = TextAlignmentMapping[value];
   }
 
   get textColor(): Color {
