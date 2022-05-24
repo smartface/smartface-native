@@ -1,7 +1,7 @@
 {
   "name": "@smartface/native",
   "version": "5.0.1",
-  "description": "Core Modules of Native Libraries..",
+  "description": "Core Modules of Native Libraries",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
