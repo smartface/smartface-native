@@ -23,30 +23,37 @@ const TextViewContentPadding = {
 };
 
 export default class BadgeAndroid extends NativeComponent implements IBadge {
-  protected createNativeObject() {
-    return new NativeTextView(AndroidConfig.activity);
-  }
-  private _borderColor = Color.WHITE;
-  private _visible = false;
-  private _text = '';
+  private _borderColor: Color;
+  private _visible: boolean;
+  private _text: string;
   private _backgroundColor: IBadge['backgroundColor'];
   private _textColor: IBadge['textColor'];
   private _font: IBadge['font'];
-  private _borderRadius: number = AndroidUnitConverter.dpToPixel(10);
-  private _borderWidth: number = AndroidUnitConverter.dpToPixel(2);
-  private nativeGradientDrawable = new NativeGradientDrawable();
+  private _borderRadius: number;
+  private _borderWidth: number;
+  private nativeGradientDrawable: any;
   constructor(params: Partial<IBadge> = {}) {
     super(params);
+    this.setDefaults();
+  }
 
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this._visible = true;
+    this._text = '';
+    this._borderColor = Color.WHITE;
+    this._borderWidth = AndroidUnitConverter.dpToPixel(2);
+    this._borderRadius = AndroidUnitConverter.dpToPixel(10);
     this.nativeObject.setGravity(CENTER);
     this.nativeObject.setPaddingRelative(TextViewContentPadding.start, TextViewContentPadding.top, TextViewContentPadding.end, TextViewContentPadding.bottom);
 
     this.nativeGradientDrawable = new NativeGradientDrawable();
     this.nativeGradientDrawable.setCornerRadius(this._borderRadius);
-
-    this.setDefaults();
+    super.preConstruct(params);
   }
 
+  protected createNativeObject() {
+    return new NativeTextView(AndroidConfig.activity);
+  }
   move(x: number, y: number): void {
     this.nativeObject.setTranslationX(AndroidUnitConverter.dpToPixel(x));
     this.nativeObject.setTranslationY(AndroidUnitConverter.dpToPixel(y));
@@ -63,6 +70,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     return this._visible;
   }
   set visible(value: IBadge['visible']) {
+    this._visible = value;
     this.nativeObject.setVisibility(value ? 0 : 4);
   }
   get backgroundColor(): IBadge['backgroundColor'] | null {

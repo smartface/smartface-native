@@ -1,11 +1,9 @@
 import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox/textbox';
 import Font from '../font';
 import Color from '../color';
-import View from '../view';
-import { MaterialTextBoxEvents } from './materialtextbox-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { ColorImpl } from '../color/color';
-import TextBox from '../textbox';
+import { IView } from '../view/view';
+import { TextBoxEvents } from '../textbox/textbox-events';
 export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
   /**
    * This property used to assign a view left of MaterialTextBox. The given view's width & height must be specified. This property does not work when multiline is true.
@@ -19,7 +17,7 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
    * @since 3.2.1
    */
   leftLayout: {
-    view: View;
+    view: IView;
     width: number;
     height?: number;
   };
@@ -103,14 +101,18 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
   leftLayoutRightPadding: number;
   /**
    * Gets/sets the inlineHintFont of the MaterialTextBox. This property overrides the labelsFont property for characterRestriction.
+   * This property will not do anything.
    * @property {UI.Font} inlineHintFont
    * @ios
+   * @deprecated
    * @since 4.3.0
    */
   inlineHintFont: Font;
   /**
    * Gets/sets the underlineLabelsFont of the MaterialTextBox. This property overrides the labelsFont property for error and characterRestriction font.
+   * This property will not do anything.
    * @property {UI.Font} underlineLabelsFont
+   * @deprecated
    * @ios
    * @since 4.3.0
    */
@@ -207,9 +209,9 @@ export interface MaterialTextBoxAndroidProps extends TextBoxAndroidProps {
  *
  */
 export interface IMaterialTextBox<
-  TEvent extends string = MaterialTextBoxEvents,
+  TEvent extends string = TextBoxEvents,
   TProps extends MobileOSProps<MaterialTextBoxiOSProps, MaterialTextBoxAndroidProps> = MobileOSProps<MaterialTextBoxiOSProps, MaterialTextBoxAndroidProps>
-> extends ITextBox<TEvent | MaterialTextBoxEvents, TProps> {
+> extends ITextBox<TEvent | TextBoxEvents, TProps> {
   /**
    * Gets/sets the lineCount of the MaterialTextBox. You can use this property when multiline is true.
    * @property {Number} [lineCount = 1]
@@ -247,7 +249,7 @@ export interface IMaterialTextBox<
    * @since 3.2.1
    */
   rightLayout: {
-    view: View | null;
+    view: IView | null;
     width: number;
     height?: number;
   };
@@ -283,14 +285,15 @@ export interface IMaterialTextBox<
   /**
    * Gets/sets the characterRestriction of the MaterialTextBox.
    * @property {Number} characterRestriction
+   * @deprecated Use android.chacharacterRestriction instead.
    * @android
-   * @ios
    * @since 3.1.2
    */
   characterRestriction: number | undefined;
   /**
    * Gets/sets the characterRestrictionColor of the MaterialTextBox.
    * @property {UI.Color} characterRestrictionColor
+   * @deprecated Use android.characterRestrictionColor instead.
    * @android
    * @ios
    * @since 3.1.2

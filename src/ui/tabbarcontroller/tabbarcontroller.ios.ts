@@ -64,7 +64,7 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
   set items(value: ITabbarItem[]) {
     this._items = value || [];
     this.nativeObject.tabBarItems = this._items.map((item) => {
-      item.invalidate();
+      item.badge = item.badge;
       return item.nativeObject;
     });
   }

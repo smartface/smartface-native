@@ -29,7 +29,7 @@ const MAX_INT_VALUE = 2147483647;
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
 export default class TextViewAndroid<TEvent extends string = TextViewEvents, TProps extends ITextView = ITextView> extends LabelAndroid<TEvent | TextViewEvents, any, TProps> implements ITextView {
-  private _attributedStringBuilder;
+  private _attributedStringBuilder: any;
   private _attributedStringArray: ITextView['attributedText'];
   private _onLinkClick: ITextView['onLinkClick'];
   private _letterSpacing: ITextView['letterSpacing'];
@@ -44,7 +44,8 @@ export default class TextViewAndroid<TEvent extends string = TextViewEvents, TPr
   protected preConstruct(params?: Partial<TProps>): void {
     this._letterSpacing = 9;
     this._lineSpacing = 0;
-    this._scrollEnabled = false;
+    this._scrollEnabled = true;
+    this._attributedStringArray = [];
     super.preConstruct(params);
   }
   get htmlText(): ITextView['htmlText'] {
@@ -159,7 +160,7 @@ To prevent, we need to customize BaseMovementMethod
 */
   private enableScrollable(scrollEnabled: boolean) {
     if (scrollEnabled) {
-      if (this.htmlText.length > 0 || this.attributedText.length > 0) {
+      if (this.htmlText?.length > 0 || this.attributedText?.length > 0) {
         if (this.linkMovementMethodCreated) {
           return;
         }

@@ -23,7 +23,7 @@ const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
   private _onSelectedCallback: (index: number) => void;
   private _onPageCreateCallback: (index: number) => Page;
-  private _items: TabbarItemAndroid[];
+  private _items: ITabbarItem[];
   private _barColor: Color;
   private _indicatorColor: Color;
   private _textColor: Color | { normal: Color; selected: Color };
@@ -171,12 +171,12 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
 
   get items(): ITabbarItem[] {
-    return this._items as unknown as ITabbarItem[];
+    return this._items;
   }
   set items(value: ITabbarItem[]) {
     // TODO: We have updated UI.TabBarItem in Router v2.
     // After it will merge, title and icon must be updated dynamically.
-    this._items = value as unknown as TabbarItemAndroid[];
+    this._items = value;
 
     // TODO: Maybe later, swipeView pageCount can be set dynamically.
     // After that, use refreshData method like listview.
@@ -184,19 +184,19 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     this.swipeView.pagerAdapter.notifyDataSetChanged();
 
     for (let i = 0; i < this._items.length; i++) {
-      const item = this._items[i];
-      const itemTitle = item._attributedTitleBuilder ? item._attributedTitleBuilder : item.title;
+      const item = this._items[i] as TabbarItemAndroid;
+      const itemTitle = item._attributedTitleBuilder || item.title;
 
-      item.tabBarItemParent = this as any;
+      item.tabBarItemParent = this;
       // TODO: no nativeObject property in ItemTabbar. Ask it.
       item.nativeObject = this.tabLayout.nativeObject.getTabAt(i);
-      item.setProperties({
-        itemTitle,
-        itemIcon: item.icon as any,
-        systemIcon: item.android.systemIcon
-      });
+      item.title = itemTitle;
+      item.icon = item.icon;
+      item.android.systemIcon = item.android.systemIcon;
     }
-    if (!this.autoCapitalize) this.setAllCaps(this._items, this.tabLayout.nativeObject, this.autoCapitalize);
+    if (!this.autoCapitalize) {
+      this.setAllCaps(this._items, this.tabLayout.nativeObject, this.autoCapitalize);
+    }
   }
 
   get indicatorColor(): Color {

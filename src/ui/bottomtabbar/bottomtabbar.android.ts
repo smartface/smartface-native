@@ -1,9 +1,9 @@
 import AndroidConfig from '../../util/Android/androidconfig';
 import Color from '../color';
-import TabBarItem from '../tabbaritem';
 import { IBottomTabBar } from './bottomtabbar';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { ITabbarItem } from '../tabbaritem/tabbaritem';
 
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
@@ -18,8 +18,8 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
     return new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
   }
   private _itemColors: IBottomTabBar['itemColor'];
-  private _backgroundColor = Color.WHITE;
-  private _items: TabBarItem[] = [];
+  private _backgroundColor: Color;
+  private _items: ITabbarItem[];
   constructor(params?: Partial<BottomTabBarAndroid>) {
     super(params);
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.
@@ -38,6 +38,8 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
       normal: Color.GRAY,
       selected: Color.create('#00a1f1')
     };
+    this._items = [];
+    this._backgroundColor = Color.WHITE;
     super.preConstruct(params);
     this.addAndroidProps(this.getAndroidParams());
   }
@@ -53,7 +55,7 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   get items() {
     return this._items;
   }
-  set items(tabBarItems: TabBarItem[]) {
+  set items(tabBarItems: ITabbarItem[]) {
     this.createTabbarMenuItems(tabBarItems);
   }
   get itemColor() {
@@ -88,35 +90,25 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   toString() {
     return 'Tab';
   }
-  createTabbarMenuItems(tabBarItems: any[]) {
+  createTabbarMenuItems(tabBarItems: ITabbarItem[]) {
     const btbMenu = this.nativeObject.getMenu();
     btbMenu.clear();
-
-    for (let i = 0; i < tabBarItems.length; i++) {
-      const tabbarItem = tabBarItems[i];
+    tabBarItems.forEach((tabbarItem, index) => {
       tabbarItem.tabBarItemParent = this;
-      let title;
-      if (tabbarItem._attributedTitleBuilder !== undefined) {
-        title = tabbarItem._attributedTitleBuilder;
+      let title: string;
+      if (tabbarItem.android.attributedTitleBuilder !== undefined) {
+        title = tabbarItem.android.attributedTitleBuilder;
       } else {
-        title = tabbarItem.title ? tabbarItem.title : 'Title ' + i;
+        title = tabbarItem.title || `Title ${index}`;
       }
 
-      tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
-      tabbarItem.setProperties({
-        itemIcon: tabbarItem.icon,
-        systemIcon: tabbarItem.android.systemIcon
-      });
-      tabbarItem.index = i;
-    }
-    this.addBadgeToItem(tabBarItems);
+      tabbarItem.nativeObject = btbMenu.add(0, index, 0, title);
+      tabbarItem.title = title;
+      tabbarItem.icon = tabbarItem.icon;
+      tabbarItem.android.systemIcon = tabbarItem.android.systemIcon;
+      tabbarItem.index = index;
+      tabbarItem.badge;
+    });
     this._items = tabBarItems;
-  }
-  addBadgeToItem(tabBarItems) {
-    // Adding badge must be after added all menu items.
-    for (let i = 0; i < tabBarItems.length; i++) {
-      //TODO: what is this?
-      tabBarItems[i].badgeAdded && tabBarItems[i].badge;
-    }
   }
 }
