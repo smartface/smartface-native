@@ -37,15 +37,12 @@ export default class MaterialTextBoxIOS<TEvent extends string = TextBoxEvents> e
     this.addIOSProps(this.getIOSProps());
   }
   protected createNativeObject(params: Partial<IMaterialTextBox> = {}): any {
-    let nativeObject: __SF_MDCMultilineTextField | __SF_MDCTextField;
+    const nativeObject = params.multiline ? new __SF_MDCMultilineTextField() : new __SF_MDCTextField();
+    this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(nativeObject);
+
     if (params.multiline) {
-      nativeObject = new __SF_MDCMultilineTextField();
-      this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(this.nativeObject);
       this.mdcTextInputControllerUnderline.expandsOnOverflow = false;
-      this.mdcTextInputControllerUnderline.minimumLines = params.lineCount ? params.lineCount : 1;
-    } else {
-      nativeObject = new __SF_MDCTextField();
-      this.mdcTextInputControllerUnderline = new __SF_MDCTextInputControllerUnderline(nativeObject);
+      this.mdcTextInputControllerUnderline.minimumLines = params.lineCount || 1;
     }
     nativeObject.layer.masksToBounds = false;
     return nativeObject;
@@ -130,17 +127,17 @@ export default class MaterialTextBoxIOS<TEvent extends string = TextBoxEvents> e
             flexContent.applyLayout();
           };
           flexMain.addChild(flexContent);
-          this._content = flexContent;
+          self._content = flexContent;
           self._leftLayoutMain = flexMain;
         } else if (this._content) {
-          const childs = this._content.getChildList();
-          for (const i in childs) {
-            this._content.removeChild(childs[i]);
+          const children = self._content.getChildList();
+          for (const i in children) {
+            self._content.removeChild(children[i]);
           }
         }
 
-        this._content?.addChild(value.view);
-        this._content?.applyLayout();
+        self._content?.addChild(value.view);
+        self._content?.applyLayout();
         // if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(3, 'leadingViewMode');
         self.mdcTextInputControllerUnderline.textInput.setValueForKey(self._leftLayoutMain.nativeObject, 'leadingView');
