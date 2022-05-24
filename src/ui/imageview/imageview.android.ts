@@ -192,13 +192,13 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
     let glideTarget = null;
     if (onSuccess) {
       glideTarget = GlideTarget.implement({
-        onResourceReady(resource, transition) {},
-        onLoadStarted(placeholder) {
+        onResourceReady: (resource, transition) => {},
+        onLoadStarted: (placeholder) => {
           if (placeholder) {
             this.nativeObject.setImageDrawable(placeholder);
           }
         },
-        onLoadCleared(placeholder) {}
+        onLoadCleared: (placeholder) => {}
       });
     }
     if (!useHTTPCacheControl) {
