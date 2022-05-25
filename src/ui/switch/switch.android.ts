@@ -88,6 +88,13 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
     this.nativeObject.setTrackOnColor(this.getColorIntFromColor(value));
   }
 
+  get toggleOffColor(): Color {
+    return this.getColorFromColorInt(this.nativeObject.getTrackOffColor());
+  }
+  set toggleOffColor(value: Color) {
+    this.nativeObject.setTrackOffColor(this.getColorIntFromColor(value));
+  }
+
   get onToggleChanged(): (toggle: boolean) => void {
     return this._onToggleChangedCallback;
   }
@@ -99,6 +106,6 @@ export default class SwitchAndroid<TEvent extends string = SwitchEvents> extends
     return color.nativeObject;
   }
   getColorFromColorInt(colorInt: number): Color {
-    return new ColorAndroid({color : colorInt});
+    return new ColorAndroid({ color: colorInt });
   }
 }
