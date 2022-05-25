@@ -133,8 +133,7 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    */
   onToggleChanged: (toggle: boolean) => void;
   /**
-   * Gets/sets the background of the switch when it is OFF.  It is set to gray
-   * by default. This property works only for Android.
+   * Gets/sets the background of the switch when it is OFF.  It is set to gray by default.
    *
    *     @example
    *     import Switch from '@smartface/native/ui/switch';
