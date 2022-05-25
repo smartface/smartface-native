@@ -20,7 +20,9 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
   private _isRTL: boolean;
   constructor(params: Partial<IBadge> = {}) {
     super(params);
-    this.move(DEFAULT_MOVE_X, 0);
+    if (this.text) {
+      this.move(this._isRTL ? 0 : DEFAULT_MOVE_X, 0);
+    }
   }
   protected createNativeObject(params: Partial<IBadge> = {}) {
     return params.nativeObject;
