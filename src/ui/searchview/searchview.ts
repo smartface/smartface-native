@@ -438,7 +438,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
   onSearchButtonClicked: () => void;
 }
 
-export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent, any, ISearchView> implements ISearchView<TEvent> {
+export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView<TEvent | SearchViewEvents> {
   static iOS: {
     Style: typeof SearchViewStyle;
   };
