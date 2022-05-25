@@ -213,7 +213,12 @@ class MultimediaAndroid implements MultimediaBase {
 
     params.page.nativeObject.startActivityForResult(NativeIntent.createChooser(intent, null), this.PICK_MULTIPLE_FROM_GALLERY);
   }
-  onActivityResult(requestCode, resultCode, data) {
+  onActivityResult(requestCode: number, resultCode: number, data: any) {
+    console.info('request code: ', {
+      requestCode,
+      pickFromGallery: this.PICK_FROM_GALLERY,
+      multiple: this.PICK_MULTIPLE_FROM_GALLERY
+    });
     if (requestCode === this.CAMERA_REQUEST) {
       this.getCameraDataHelper(this._captureParams, resultCode, data);
     } else if (requestCode === this.PICK_FROM_GALLERY) {
@@ -243,7 +248,7 @@ class MultimediaAndroid implements MultimediaBase {
       //follow the uCrop lib issue. https://github.com/Yalantis/uCrop/issues/743. If they fixes, no need to fix orientation issue.
       NativeSFMultimedia.getBitmapFromUriAsync(activity, resultUri, maxImageSize, fixOrientation, {
         onCompleted: (bitmap) => {
-          let croppedImage = new ImageAndroid({
+          const croppedImage = new ImageAndroid({
             bitmap
           });
           onSuccess &&
@@ -330,7 +335,7 @@ class MultimediaAndroid implements MultimediaBase {
       try {
         const uris: any[] = [];
         const clipData = data.getClipData();
-        if (clipData === null) {
+        if (!clipData) {
           uris.push(data.getData());
         } else {
           const count = clipData.getItemCount();
@@ -373,15 +378,14 @@ class MultimediaAndroid implements MultimediaBase {
                   uri: error.uri
                 };
               });
-              onFailure && onFailure(errorObject);
+              onFailure?.(errorObject);
             }
           });
         }
       } catch (err) {
-        onFailure &&
-          onFailure({
-            message: err
-          });
+        onFailure?.({
+          message: err
+        });
         return;
       }
     } else {
