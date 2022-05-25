@@ -3,6 +3,9 @@ import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
 import Color from '../color';
 
+const DEFAULT_MOVE_X = 18;
+
+// Uses https://github.com/jkpang/PPBadgeView
 export default class BadgeIOS extends NativeComponent implements IBadge {
   private _visible: boolean;
   private _text: string;
@@ -17,6 +20,7 @@ export default class BadgeIOS extends NativeComponent implements IBadge {
   private _isRTL: boolean;
   constructor(params: Partial<IBadge> = {}) {
     super(params);
+    this.move(DEFAULT_MOVE_X, 0);
   }
   protected createNativeObject(params: Partial<IBadge> = {}) {
     return params.nativeObject;
