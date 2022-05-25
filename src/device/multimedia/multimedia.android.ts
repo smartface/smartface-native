@@ -214,11 +214,6 @@ class MultimediaAndroid implements MultimediaBase {
     params.page.nativeObject.startActivityForResult(NativeIntent.createChooser(intent, null), this.PICK_MULTIPLE_FROM_GALLERY);
   }
   onActivityResult(requestCode: number, resultCode: number, data: any) {
-    console.info('request code: ', {
-      requestCode,
-      pickFromGallery: this.PICK_FROM_GALLERY,
-      multiple: this.PICK_MULTIPLE_FROM_GALLERY
-    });
     if (requestCode === this.CAMERA_REQUEST) {
       this.getCameraDataHelper(this._captureParams, resultCode, data);
     } else if (requestCode === this.PICK_FROM_GALLERY) {
