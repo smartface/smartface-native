@@ -1,5 +1,5 @@
-import { AbstractSlider } from './slider';
-
+import { ConstructorOf } from '../../core/constructorof';
+import { ISlider } from './slider';
 /**
  * @class UI.Slider
  * @since 0.1
@@ -23,7 +23,7 @@ import { AbstractSlider } from './slider';
  *     });
  *
  */
-const Slider: typeof AbstractSlider = require(`./slider.${Device.deviceOS.toLowerCase()}`).default;
-type Slider = AbstractSlider;
+const Slider: ConstructorOf<ISlider, Partial<ISlider>> = require(`./slider.${Device.deviceOS.toLowerCase()}`).default;
+type Slider = ISlider;
 
 export default Slider;

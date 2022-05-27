@@ -906,11 +906,7 @@ export enum SemanticContentAttribute {
   FORCERIGHTTOLEFT = 4
 }
 
-export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TNative = any, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<
-  TEvent | ExtractEventValues<ViewEvents>,
-  TNative,
-  TProps
-> {
+export class ViewBase<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends NativeEventEmitterComponent<TEvent | ViewEvents, TNative, TProps> {
   protected createNativeObject(): any {
     throw new Error('Method not implemented.');
   }
@@ -930,7 +926,7 @@ export class ViewBase<TEvent extends string = ExtractEventValues<ViewEvents>, TN
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
-  extends NativeEventEmitterComponent<TEvent | ViewEvents, TNative, TProps>
+  extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
   protected createNativeObject(): any;
@@ -994,10 +990,3 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   maskedBorders: Border[];
   static readonly Border: typeof Border;
 }
-
-type View<
-  TEvent extends string = ViewEvents,
-  TNative extends { [key: string]: any } = { [key: string]: any },
-  TMobile extends WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps> = WithMobileOSProps<IViewProps, ViewIOSProps, ViewAndroidProps>
-> = IView<TEvent, TNative, TMobile>;
-export default View;

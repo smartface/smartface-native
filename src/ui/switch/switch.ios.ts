@@ -6,6 +6,11 @@ import { SwitchEvents } from './switch-events';
 
 export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<TEvent | SwitchEvents, __SF_UISwitch, ISwitch> {
   private _toggleOnColor: Color = Color.GREEN;
+  private _toggleOffColor: Color = Color.create('#FAFAFF');
+
+  private _thumbOnColor: Color = Color.WHITE;
+  private _thumbOffColor: Color = Color.WHITE;
+
   onToggleChanged: (toggle: boolean) => void;
   constructor(params?: Partial<ISwitch>) {
     super(params);
@@ -23,14 +28,17 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this.nativeObject.layer.masksToBounds = false;
 
     this.nativeObject.addJSTarget(() => {
-      this.triggerCallbackToJS()
+      this.triggerCallbackToJS();
     }, UIControlEvents.valueChanged);
     super.preConstruct(params);
   }
 
   private triggerCallbackToJS() {
     this.onToggleChanged?.(this.toggle);
-      this.emit('toggleChanged', this.toggle);
+    this.emit('toggleChanged', this.toggle);
+
+    this.thumbOffColor = this._thumbOffColor;
+    this.toggleOffColor = this._toggleOffColor;
   }
 
   get enabled(): boolean {
@@ -53,19 +61,38 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     if (value === null || value === undefined) {
       this.nativeObject.thumbTintColor = undefined;
     } else {
+      this._thumbOnColor = value;
       this.nativeObject.thumbTintColor = value.nativeObject;
     }
   }
 
   // TODO There is nothing related to thumbOffColor
-  thumbOffColor: Color;
+  get thumbOffColor(): Color {
+    return this._thumbOffColor;
+  }
+
+  set thumbOffColor(value: Color) {
+    if (!value) return;
+
+    
+    this._thumbOffColor = value;
+    if (!this.nativeObject.isOn) {
+      this.nativeObject.thumbTintColor = value.nativeObject;
+    } else {
+      if (this._thumbOnColor) {
+        this.nativeObject.thumbTintColor = this._thumbOnColor.nativeObject;
+      }
+    }
+  }
+
+  // thumbOffColor: Color;
 
   get toggle(): boolean {
     return this.nativeObject.isOn;
   }
   set toggle(value: boolean) {
     this.nativeObject.setOnAnimated(value, true);
-    this.triggerCallbackToJS()
+    this.triggerCallbackToJS();
   }
 
   get toggleOnColor(): Color {
@@ -74,6 +101,23 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   set toggleOnColor(value: Color) {
     this._toggleOnColor = value;
     this.nativeObject.onTintColor = value.nativeObject;
+  }
+
+  get toggleOffColor(): Color {
+    return this._toggleOffColor;
+  }
+
+  set toggleOffColor(value: Color) {
+    if (!value) return;
+
+    this._toggleOffColor = value;
+    if (!this.nativeObject.isOn) {
+      this.nativeObject.setOffColor(value.nativeObject);
+    } else {
+      if (this._toggleOnColor) {
+        this.nativeObject.onTintColor = this._toggleOnColor.nativeObject;
+      }
+    }
   }
 }
 

@@ -274,7 +274,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       return false;
     } else {
       const fallback = '{com.android.fallback/com.android.fallback.Fallback}';
-      return !(fallback === componentName.toShortString());
+      return !(fallback === componentName?.toShortString());
     }
   }
   exit() {

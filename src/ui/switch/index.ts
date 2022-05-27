@@ -1,6 +1,7 @@
-import { AbstractSwitch } from './switch';
+import { ISwitch } from './switch';
+import { ConstructorOf } from '../../core/constructorof';
 
-const Switch: typeof AbstractSwitch = require(`./switch.${Device.deviceOS.toLowerCase()}`).default;
-type Switch = AbstractSwitch;
+const Switch: ConstructorOf<ISwitch, Partial<ISwitch>> = require(`./switch.${Device.deviceOS.toLowerCase()}`).default;
+type Switch = ISwitch;
 
 export default Switch;

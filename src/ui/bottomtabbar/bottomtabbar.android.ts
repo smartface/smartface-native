@@ -107,7 +107,10 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
       tabbarItem.icon = tabbarItem.icon;
       tabbarItem.android.systemIcon = tabbarItem.android.systemIcon;
       tabbarItem.index = index;
-      tabbarItem.badge;
+    });
+    // Adding badge must be after added all menu items.
+    tabBarItems.forEach((tabbarItem, index) => {
+      tabbarItem.badge = tabbarItem.badge;
     });
     this._items = tabBarItems;
   }

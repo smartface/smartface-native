@@ -133,7 +133,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   onLoad: () => void;
   onHide: () => void;
   onShow: () => void;
-  onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
+  onOrientationChange: (e: { orientation: PageOrientation }) => void;
   constructor(params?: Partial<TProps>) {
     super(params);
     this.pageLayoutContainer = AndroidConfig.activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
@@ -338,7 +338,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
       onContextItemSelected: (itemId: number) => {
         // Check the this page is currently displayed
         // onContextItemSelected callback is triggered for previous page when using modal page
-        if(Application.currentPage.pageID !== this.pageID) return false;
+        if (Application.currentPage.pageID !== this.pageID) return false;
         const items = this.contextMenu.items;
         if (items && itemId >= 0) {
           items[itemId].onSelectedListener();
