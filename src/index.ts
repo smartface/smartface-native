@@ -5,6 +5,9 @@ import AlertOverride from './core/alert';
 import * as TimerOverride from './core/timers';
 import { AbortController, AbortSignal } from 'abort-controller';
 
+// TODO: abort-controller needs console.assert.
+// It has to be implemented in framework-core like other console functions.
+global.console.assert = function (param1, param2) {};
 global.XMLHttpRequest = XHR as any;
 global.FormData = FormData;
 global.AbortController = AbortController as any;
