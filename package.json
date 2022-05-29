@@ -34,6 +34,7 @@
   "license": "ISC",
   "homepage": "https://github.com/smartface/smartface-native",
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "events": "^3.3.0"
   },
   "devDependencies": {
