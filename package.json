@@ -34,7 +34,8 @@
   "license": "ISC",
   "homepage": "https://github.com/smartface/smartface-native",
   "dependencies": {
-    "events": "^3.3.0"
+    "events": "^3.3.0",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@types/node": "^14.1.0",
