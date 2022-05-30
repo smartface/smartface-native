@@ -1,6 +1,6 @@
 {
   "name": "@smartface/native",
-  "version": "5.0.2-alpha.9",
+  "version": "5.0.2-alpha.11",
   "description": "Core Modules of Native Libraries..",
   "main": "dist/index.js",
   "scripts": {
@@ -34,8 +34,9 @@
   "license": "ISC",
   "homepage": "https://github.com/smartface/smartface-native",
   "dependencies": {
+    "events": "^3.3.0",
+    "whatwg-fetch": "^3.6.2"
     "abort-controller": "^3.0.0",
-    "events": "^3.3.0"
   },
   "devDependencies": {
     "@types/node": "^14.1.0",
