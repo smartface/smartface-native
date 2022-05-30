@@ -711,16 +711,11 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setPadding(YogaEdge.VERTICAL, DpToPixel(paddingVertical));
   }
   get padding() {
-    // YogaEdge.ALL not working on YogaCore. We are getting what we set.
-    return PixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
+    return PixelToDp(this.yogaNode.getPadding(YogaEdge.ALL).value);
   }
   set padding(padding) {
-    // YogaEdge.ALL not working on YogaCore. We are setting border to all.
     const db_padding = DpToPixel(padding);
-    this.yogaNode.setPadding(YogaEdge.TOP, db_padding);
-    this.yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
-    this.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
-    this.yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
+    this.yogaNode.setPadding(YogaEdge.ALL, db_padding);
   }
   get marginTop() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
