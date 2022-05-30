@@ -1,6 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { FormData, FormDataPart, statuses, IXHR, XMLHttpRequestResponseType } from './xhr';
+import FormData from '../formdata';
+import { statuses, IXHR, XMLHttpRequestResponseType } from './xhr';
 import { XHREvents } from './xhr-events';
 
 class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREvents, any, TProps> implements IXHR {
