@@ -3,7 +3,11 @@ import XHR from './net/xhr';
 import FormData from './net/formdata';
 import AlertOverride from './core/alert';
 import * as TimerOverride from './core/timers';
+import URL from './net/url';
+import URLSearchParams from './net/url/urlsearchparams';
 
+global.URL = URL;
+global.URLSearchParams = URLSearchParams as any;
 global.XMLHttpRequest = XHR as any;
 global.FormData = FormData;
 global.process = global.process || {
