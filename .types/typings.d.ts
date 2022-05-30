@@ -92,6 +92,7 @@ declare module NodeJS {
     SMFApplication: typeof __SF_UIApplication; //ios global application from framework
     Device: Device;
     XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
+    FormData: ConstructorOf<FormData, Partial<FormData>>;
 
     lang: Record<string, any>; //Old i18n polyfill, replace later
   }
