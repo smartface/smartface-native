@@ -6,6 +6,8 @@ import * as TimerOverride from './core/timers';
 
 global.XMLHttpRequest = XHR as any;
 global.FormData = FormData;
+import 'whatwg-fetch';
+
 global.process = global.process || {
   env: {
     NODE_ENV: 'production'
