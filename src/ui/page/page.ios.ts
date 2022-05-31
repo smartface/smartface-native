@@ -27,7 +27,8 @@ const NativeOrientationMapping = {
   [PageOrientation.AUTO]: NativeOrientation.AUTO,
   [PageOrientation.LANDSCAPELEFT]: NativeOrientation.LANDSCAPELEFT,
   [PageOrientation.LANDSCAPERIGHT]: NativeOrientation.LANDSCAPERIGHT,
-  [PageOrientation.UNKNOWN]: NativeOrientation.AUTO
+  [PageOrientation.UNKNOWN]: NativeOrientation.AUTO,
+  [PageOrientation.AUTOLANDSCAPE]: NativeOrientation.AUTOLANDSCAPE
 };
 
 export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
