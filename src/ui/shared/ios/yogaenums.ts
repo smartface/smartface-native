@@ -14,7 +14,8 @@ export enum YGJustify {
   Center,
   FlexEnd,
   SpaceBetween,
-  SpaceAround
+  SpaceAround,
+  SpaceEvenly
 }
 export enum YGAlign {
   Auto,

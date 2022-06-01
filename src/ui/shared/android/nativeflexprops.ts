@@ -24,7 +24,8 @@ export const NativeJustifyContent = {
   CENTER: NativeYogaJustify.CENTER,
   FLEX_END: NativeYogaJustify.FLEX_END,
   SPACE_BETWEEN: NativeYogaJustify.SPACE_BETWEEN,
-  SPACE_AROUND: NativeYogaJustify.SPACE_AROUND
+  SPACE_AROUND: NativeYogaJustify.SPACE_AROUND,
+  SPACE_EVENLY: NativeYogaJustify.SPACE_EVENLY
 };
 
 export const NativeAlignContent = {

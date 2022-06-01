@@ -18,7 +18,8 @@ export const JustifyContent = {
   CENTER: YGJustify.Center,
   FLEX_END: YGJustify.FlexEnd,
   SPACE_BETWEEN: YGJustify.SpaceBetween,
-  SPACE_AROUND: YGJustify.SpaceAround
+  SPACE_AROUND: YGJustify.SpaceAround,
+  SPACE_EVENLY: YGJustify.SpaceEvenly
 };
 
 export const AlignContent = {
