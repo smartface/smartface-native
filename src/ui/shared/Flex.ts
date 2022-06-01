@@ -130,7 +130,16 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    SPACE_AROUND = 4
+    SPACE_AROUND = 4,
+    /**
+     * @property {Number} SPACE_EVENLY
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.2
+     */
+    SPACE_EVENLY = 5
   }
   /**
    * @enum {Number} UI.FlexLayout.AlignContent
