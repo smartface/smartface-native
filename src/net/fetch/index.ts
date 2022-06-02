@@ -553,27 +553,19 @@ export function fetch(input: any, init: any): Promise<Response> {
       //@ts-ignore
       options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
       const body = 'response' in xhr ? xhr.response : xhr.responseText;
-      setTimeout(function () {
-        resolve(new Response(body, options));
-      }, 0);
+      resolve(new Response(body, options));
     };
 
     xhr.onerror = function () {
-      setTimeout(function () {
-        reject(new TypeError('Network request failed'));
-      }, 0);
+      reject(new TypeError('Network request failed'));
     };
 
     xhr.ontimeout = function () {
-      setTimeout(function () {
-        reject(new TypeError('Network request failed'));
-      }, 0);
+      reject(new TypeError('Network request failed'));
     };
 
     xhr.onabort = function () {
-      setTimeout(function () {
-        reject(new DOMException('Aborted', 'AbortError'));
-      }, 0);
+      reject(new DOMException('Aborted', 'AbortError'));
     };
 
     function fixUrl(url) {
