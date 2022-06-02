@@ -6,6 +6,7 @@ import * as TimerOverride from './core/timers';
 import URL from './net/url';
 import URLSearchParams from './net/url/urlsearchparams';
 import { AbortController, AbortSignal } from 'abort-controller';
+import { fetch, Response, Request, Headers } from './net/fetch';
 
 global.URL = URL;
 global.URLSearchParams = URLSearchParams as any;
@@ -16,7 +17,10 @@ global.XMLHttpRequest = XHR as any;
 global.FormData = FormData;
 global.AbortController = AbortController as any;
 global.AbortSignal = AbortSignal as any;
-import 'whatwg-fetch';
+global.fetch = fetch as any;
+global.Response = Response as any;
+global.Request = Request as any;
+global.Headers = Headers as any;
 
 global.process = global.process || {
   env: {
