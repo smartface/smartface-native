@@ -46,6 +46,11 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _adjustableFontSizeStep: number;
   private fontInitial: Font | null;
   protected _textColor: ILabel['textColor'];
+  private _paddingLeft: number;
+  private _paddingRight: number;
+  private _paddingTop: number;
+  private _paddingBottom: number;
+  private _padding: number;
   constructor(params: Partial<TProps>) {
     super(params);
   }
@@ -210,16 +215,22 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   }
 
   get padding() {
-    return this.paddingLeft;
+    return this._padding;
   }
   set padding(value: ILabel['padding']) {
+    this._padding = value;
     const paddingNative = AndroidUnitConverter.dpToPixel(value);
-    this.nativeObject.setPaddingRelative(paddingNative, paddingNative, paddingNative, paddingNative);
+    const paddingLeft = this._paddingLeft !== undefined ? this._paddingLeft : paddingNative;
+    const paddingTop = this._paddingTop !== undefined ? this._paddingTop : paddingNative;
+    const paddingRight = this._paddingRight !== undefined ? this._paddingRight : paddingNative;
+    const paddingBottom = this._paddingBottom !== undefined ? this.paddingBottom : paddingNative;
+    this.nativeObject.setPaddingRelative(paddingLeft, paddingTop, paddingRight, paddingBottom);
   }
   get paddingLeft() {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingLeft());
   }
   set paddingLeft(value: ILabel['paddingLeft']) {
+    this._paddingLeft = value;
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
     const paddingTop = this.paddingTop;
@@ -234,6 +245,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingRight());
   }
   set paddingRight(value: ILabel['paddingRight']) {
+    this._paddingRight = value;
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingTop = this.paddingTop;
@@ -248,6 +260,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingTop());
   }
   set paddingTop(value: ILabel['paddingTop']) {
+    this._paddingTop = value;
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
@@ -262,6 +275,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingBottom());
   }
   set paddingBottom(value: ILabel['paddingBottom']) {
+    this._paddingBottom = value;
     const paddingLeft = this.paddingLeft;
     const paddingTop = this.paddingTop;
     const paddingRight = this.paddingRight;
