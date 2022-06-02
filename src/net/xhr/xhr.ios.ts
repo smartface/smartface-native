@@ -340,7 +340,10 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   }
 
   private emitEvent(eventName: XHREvents, ...args: Array<any>) {
-    this.emit(eventName);
+    // If eventName is error, an error occurs in the events dependency used by the event emitter.
+    try {
+      this.emit(eventName);
+    } catch (error) {}
 
     if (typeof this['on' + eventName] === 'function') {
       this['on' + eventName](...args);
