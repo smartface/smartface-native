@@ -554,16 +554,8 @@ export function fetch(input: any, init: any): Promise<Response> {
       reject(new Error('Aborted')); //TODO: use DOMException
     };
 
-    function fixUrl(url) {
-      try {
-        return url === '' && global.location.href ? global.location.href : url;
-      } catch (e) {
-        return url;
-      }
-    }
-
     //@ts-ignore
-    xhr.open(request.method, fixUrl(request.url), true);
+    xhr.open(request.method, request.url, true);
 
     if (request.credentials === 'include') {
       //@ts-ignore
