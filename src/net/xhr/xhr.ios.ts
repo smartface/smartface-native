@@ -27,7 +27,7 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   private _headers: any;
   private _errorFlag: boolean;
   private _sendFlag: boolean;
-  private _responseType: XMLHttpRequestResponseType = XMLHttpRequestResponseType.empty;
+  private _responseType: XMLHttpRequestResponseType;
   private _responseURL?: string;
   private _status: number;
 
@@ -36,6 +36,7 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   constructor() {
     super();
     this._readyState = XHRIOS.UNSENT;
+    this._responseType = XMLHttpRequestResponseType.empty;
   }
 
   protected createNativeObject() {

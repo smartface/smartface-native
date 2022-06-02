@@ -62,7 +62,6 @@ type AlertParams = {
   }[];
 };
 
-
 // The fetch API and related typings
 // from this Apache-2.0-licensed repo: https://github.com/Microsoft/TypeScript
 type RequestCredentials = 'include' | 'omit' | 'same-origin';
@@ -179,6 +178,7 @@ declare function setTimeout(fn: () => void, time: number): Timeout;
 declare function setInterval(fn: () => void, time: number): Timeout;
 declare function clearInterval(intervalId: Timeout): void;
 declare function clearTimeout(timeoutId: Timeout): void;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare const XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
 
 declare module NodeJS {

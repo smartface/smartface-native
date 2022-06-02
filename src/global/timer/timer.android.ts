@@ -45,7 +45,6 @@ class TimerAndroid extends TimerBase {
       this.nativeObject = NativeRunnable.implement({
         run: runnableTask.bind(this)
       });
-      //TODO: long not found, is it global?
       TimerAndroid.handler.postDelayed(this.nativeObject, long(this.delay));
     }
   }
@@ -54,7 +53,6 @@ class TimerAndroid extends TimerBase {
 function runnableTask() {
   this.task();
   if (this.repeat) {
-    //TODO: long not found, is it global?
     TimerAndroid.handler.postDelayed(this.nativeObject, long(this.delay));
   }
 }
