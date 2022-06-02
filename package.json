@@ -12,7 +12,7 @@
     "deploy:alpha": "npm run deploy -- --tag alpha",
     "deploy:beta": "npm run deploy -- --tag beta",
     "deploy:prod": "npm run deploy -- --tag latest",
-    "dev": "cp -r .types ./src/ && npx tsc -w --project tsconfig.dev.json",
+    "dev": "npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
     "lint:write": "npx prettier --write ./**/*",
     "build:document": "node typedoc.js"
