@@ -5,7 +5,7 @@ import FormData from '../formdata';
 const support = {
   searchParams: 'URLSearchParams' in global,
   iterable: 'Symbol' in global && 'iterator' in Symbol,
-  blob: false,
+  blob: false, // Blob is not supported for now (NTVE-830)
   // 'FileReader' in global &&
   // 'Blob' in global &&
   // (function() {
@@ -144,13 +144,13 @@ export class Headers {
     return iteratorFor(items);
   }
 
-  public entries = () => {
+  public entries(): any {
     const items: any[] = [];
     this.forEach((value: any, name: any) => {
       items.push([name, value]);
     }, undefined);
     return iteratorFor(items);
-  };
+  }
 }
 
 if (support.iterable) {
