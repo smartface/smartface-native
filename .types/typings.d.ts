@@ -180,6 +180,7 @@ declare function clearInterval(intervalId: Timeout): void;
 declare function clearTimeout(timeoutId: Timeout): void;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare const XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
+declare const FormData: ConstructorOf<FormData, Partial<FormData>>;
 
 declare module NodeJS {
   interface Global {
