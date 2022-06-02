@@ -516,26 +516,12 @@ export class Response extends Body {
   }
 }
 
-export const DOMException = global.DOMException;
-try {
-  new DOMException();
-} catch (err) {
-  DOMException = function (message, name) {
-    this.message = message;
-    this.name = name;
-    const error = Error(message);
-    this.stack = error.stack;
-  };
-  DOMException.prototype = Object.create(Error.prototype);
-  DOMException.prototype.constructor = DOMException;
-}
-
 export function fetch(input: any, init: any): Promise<Response> {
   return new Promise(function (resolve, reject) {
     const request = new Request(input, init);
 
     if (request.signal && request.signal.aborted) {
-      return reject(new DOMException('Aborted', 'AbortError'));
+      return reject(new Error('Aborted')); //TODO: use DOMException
     }
 
     const xhr = new XMLHttpRequest();
@@ -565,7 +551,7 @@ export function fetch(input: any, init: any): Promise<Response> {
     };
 
     xhr.onabort = function () {
-      reject(new DOMException('Aborted', 'AbortError'));
+      reject(new Error('Aborted')); //TODO: use DOMException
     };
 
     function fixUrl(url) {
