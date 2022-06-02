@@ -273,6 +273,10 @@ export default class XHRAndroid<TEvent extends string = XHREvents, TProps extend
   }
 
   private _emitEvent(eventName: XHREvents, ...args: Array<any>) {
+    // If eventName is error, an error occurs in the events dependency used by the event emitter.
+    try {
+      this.emit(eventName);
+    } catch (error) {}
     this['on' + eventName]?.(...args);
     const handlers = this._listeners.get(eventName) || [];
     handlers.forEach((handler) => {
