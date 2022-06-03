@@ -1,15 +1,7 @@
 // from this MIT-licensed repo: https://github.com/facebook/react-native
-
-function validateBaseUrl(url: string) {
-  // from this MIT-licensed gist: https://gist.github.com/dperini/729294
-  return /^(?:(?:(?:https?|ftp):)?\/\/)(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)*(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/.test(
-    url
-  );
-}
-
-export default class URL {
+export default class URLClass implements URL {
   _url: string;
-  _searchParamsInstance : URLSearchParams | null = null;
+  _searchParamsInstance: URLSearchParams | null = null;
 
   static createObjectURL(blob: any): string {
     throw new Error('URL.createObjectURL not supported');
@@ -19,8 +11,8 @@ export default class URL {
     // Do nothing.
   }
 
-  constructor(url: string, base: string | URL) {
-    let baseUrl : string | null = null;
+  constructor(url: string, base?: string | URL) {
+    let baseUrl: string | null = null;
     if (!base || validateBaseUrl(url)) {
       this._url = url;
       if (!this._url.endsWith('/')) {
@@ -89,7 +81,7 @@ export default class URL {
   }
 
   get searchParams(): URLSearchParams {
-    if (this._searchParamsInstance == null) {
+    if (this._searchParamsInstance === null) {
       this._searchParamsInstance = new URLSearchParams();
     }
     return this._searchParamsInstance;
@@ -111,4 +103,11 @@ export default class URL {
   get username(): string {
     throw new Error('URL.username is not implemented');
   }
+}
+
+function validateBaseUrl(url: string) {
+  // from this MIT-licensed gist: https://gist.github.com/dperini/729294
+  return /^(?:(?:(?:https?|ftp):)?\/\/)(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)*(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/.test(
+    url
+  );
 }

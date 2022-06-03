@@ -1,2 +1,2 @@
-import URL from './url'
+import URL from './url';
 export default URL;

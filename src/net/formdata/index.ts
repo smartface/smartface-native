@@ -1,19 +1,3 @@
-type FormDataValue = string | { name?: string; type?: string; uri: string };
-
-type FormDataNameValuePair = [string, FormDataValue];
-
-export type FormDataPart =
-  | {
-      string: string;
-      fieldName: string;
-    }
-  | {
-      uri: string;
-      name?: string;
-      type?: string;
-      fieldName: string;
-    };
-
 export default class FormData {
   _parts: Array<FormDataNameValuePair>;
 
