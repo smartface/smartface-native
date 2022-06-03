@@ -12,7 +12,7 @@
     "deploy:alpha": "npm run deploy -- --tag alpha",
     "deploy:beta": "npm run deploy -- --tag beta",
     "deploy:prod": "npm run deploy -- --tag latest",
-    "dev": "cp -r .types ./src/ && npx tsc -w --project tsconfig.dev.json",
+    "dev": "npx tsc -w --project tsconfig.dev.json",
     "lint": "npx prettier --check ./**/*",
     "lint:write": "npx prettier --write ./**/*",
     "build:document": "node typedoc.js"
@@ -34,10 +34,11 @@
   "license": "ISC",
   "homepage": "https://github.com/smartface/smartface-native",
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@types/node": "^14.1.0",
+    "@types/node": "^17.0.38",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "browserify": "14.1.0",

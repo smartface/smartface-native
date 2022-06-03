@@ -1,5 +1,5 @@
 import { ISwipeView, SwipeViewState } from './swipeview';
-import { IPage } from '../page/page';
+import { IPage, PageOrientation } from '../page/page';
 import PageIOS from '../page/page.ios';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewIOS from '../view/view.ios';
@@ -243,7 +243,7 @@ export default class SwipeViewIOS<TEvent extends string = SwipeViewEvents, TNati
       if (page.nativeObject.constructor.name !== 'SMFUIViewController') {
         return;
       }
-      page.orientation = PageIOS.Orientation.AUTO as any; //TODO: Type issue on Orientation being array or not
+      page.orientation = PageOrientation.AUTO as any; //TODO: Type issue on Orientation being array or not
       this._instanceArray.push(page);
       this._pageNativeObjectArray.push(page.nativeObject);
     });

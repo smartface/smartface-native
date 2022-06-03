@@ -15,7 +15,9 @@ export enum PageOrientation {
   PORTRAIT,
   PORTRAITUPSIDEDOWN,
   LANDSCAPELEFT,
-  LANDSCAPERIGHT
+  LANDSCAPERIGHT,
+  AUTO,
+  AUTOLANDSCAPE
 }
 
 export enum LargeTitleDisplayMode {
@@ -29,16 +31,6 @@ export enum PresentationStyle {
   CROSSDISSOLVE,
   PARTIALCURL
 }
-
-export const Orientation = {
-  PORTRAIT: [PageOrientation.PORTRAIT],
-  UPSIDEDOWN: [PageOrientation.PORTRAITUPSIDEDOWN],
-  AUTOPORTRAIT: [PageOrientation.PORTRAIT, PageOrientation.PORTRAITUPSIDEDOWN],
-  LANDSCAPELEFT: [PageOrientation.LANDSCAPELEFT],
-  LANDSCAPERIGHT: [PageOrientation.LANDSCAPERIGHT],
-  AUTOLANDSCAPE: [PageOrientation.LANDSCAPELEFT, PageOrientation.LANDSCAPERIGHT],
-  AUTO: [PageOrientation.PORTRAIT, PageOrientation.PORTRAITUPSIDEDOWN, PageOrientation.LANDSCAPELEFT, PageOrientation.LANDSCAPERIGHT]
-};
 
 export interface PageAndroidParams {
   /**
@@ -343,7 +335,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * });
    * ```
    */
-  onOrientationChange(e: { orientation: PageOrientation[] }): void;
+  onOrientationChange(e: { orientation: PageOrientation }): void;
   skipDefaults?: boolean;
   parentController: IController;
 }
@@ -366,7 +358,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
 //   }
 //   statusBar: StatusBar;
 //   orientation: PageOrientation;
-//   onOrientationChange(e: { orientation: PageOrientation[]; }): void {
+//   onOrientationChange(e: { orientation: PageOrientation; }): void {
 //     throw new Error('Method not implemented.');
 //   }
 //   headerBar?: HeaderBar;
@@ -420,7 +412,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   isInsideBottomTabBar: boolean;
   abstract orientation: PageOrientation;
   abstract transitionViews: IView[];
-  abstract onOrientationChange(e: { orientation: PageOrientation[] }): void;
+  abstract onOrientationChange(e: { orientation: PageOrientation }): void;
   abstract onLoad(): void;
   abstract onShow(): void;
   abstract onHide(): void;
@@ -434,7 +426,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
     PresentationStyle: typeof PresentationStyle;
   };
-  static Orientation: typeof Orientation;
+  static Orientation: typeof PageOrientation;
 }
 
 export declare class PageImpl extends AbstractPage implements IPage {
@@ -449,13 +441,13 @@ export declare class PageImpl extends AbstractPage implements IPage {
   statusBar: typeof StatusBar;
   headerBar?: HeaderBar | undefined;
   getCurrentController(): IController;
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined });
-  onOrientationChange(e: { orientation: PageOrientation[] }): void;
+  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }): void;
+  onOrientationChange(e: { orientation: PageOrientation }): void;
   present(params?: ControllerParams): void;
   dismiss(params?: ControllerParams): void;
   static iOS: {
     LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
     PresentationStyle: typeof PresentationStyle;
   };
-  static Orientation: typeof Orientation;
+  static Orientation: typeof PageOrientation;
 }

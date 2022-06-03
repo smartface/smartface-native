@@ -2,6 +2,7 @@ import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, Shimme
 import FlexLayout from '../flexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
+import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
 
 export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = any> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
   private _contentLayout: FlexLayout;
@@ -39,6 +40,7 @@ export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TN
   set contentLayout(value: IShimmerFlexLayout['contentLayout']) {
     this._contentLayout = value;
     this.nativeObject.contentView = value.nativeObject;
+    this.contentLayoutProperties();
   }
   get pauseDuration(): IShimmerFlexLayout['pauseDuration'] {
     return this.nativeObject.shimmeringPauseDuration * 1000;
@@ -92,6 +94,46 @@ export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TN
         if (value) self.nativeObject.shimmeringEndFadeDuration = value / 1000;
       }
     });
+  }
+
+  private contentLayoutProperties() {
+    // This is done because some yoga properties need to be applied to shimmer itself instead of contentLayout
+    const self = this;
+    const properties: Partial<IShimmerFlexLayout> = {
+      get margin() {
+        return self.margin;
+      },
+      set margin(value) {
+        self.margin = value;
+      },
+      get marginLeft() {
+        return self.marginLeft;
+      },
+      set marginLeft(value) {
+        self.marginLeft = value;
+      },
+      get marginRight() {
+        return self.marginRight;
+      },
+      set marginRight(value) {
+        self.marginRight = value;
+      },
+      get marginTop() {
+        return self.marginTop;
+      },
+      set marginTop(value) {
+        self.marginTop = value;
+      },
+      get marginBottom() {
+        return self.marginBottom;
+      },
+      set marginBottom(value) {
+        self.marginBottom = value;
+      }
+    };
+    if (this.contentLayout) {
+      copyObjectPropertiesWithDescriptors(this.contentLayout, properties);
+    }
   }
 
   static Android: typeof AbstractShimmerFlexLayout.Android = {

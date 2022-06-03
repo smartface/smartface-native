@@ -233,8 +233,6 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     return this.nativeObject.getHint().toString();
   }
   set hint(value: string) {
-    const enableHintMessage = this._errorText !== '';
-    this.nativeObject.setHintEnabled(enableHintMessage);
     this.nativeObject.setHint(value);
   }
 

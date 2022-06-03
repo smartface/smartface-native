@@ -711,16 +711,11 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setPadding(YogaEdge.VERTICAL, DpToPixel(paddingVertical));
   }
   get padding() {
-    // YogaEdge.ALL not working on YogaCore. We are getting what we set.
-    return PixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
+    return PixelToDp(this.yogaNode.getPadding(YogaEdge.ALL).value);
   }
   set padding(padding) {
-    // YogaEdge.ALL not working on YogaCore. We are setting border to all.
     const db_padding = DpToPixel(padding);
-    this.yogaNode.setPadding(YogaEdge.TOP, db_padding);
-    this.yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
-    this.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
-    this.yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
+    this.yogaNode.setPadding(YogaEdge.ALL, db_padding);
   }
   get marginTop() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
@@ -771,20 +766,11 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setMargin(YogaEdge.VERTICAL, DpToPixel(marginVertical));
   }
   get margin() {
-    // YogaEdge.ALL not working on YogaCore. We are getting what we set.
-    return PixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
+    return PixelToDp(this.yogaNode.getMargin(YogaEdge.ALL).value);
   }
   set margin(margin) {
-    // YogaEdge.ALL not working on YogaCore. We are setting border to all.
     const db_margin = DpToPixel(margin);
-    this.yogaNode.setMargin(YogaEdge.TOP, db_margin);
-    this.yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
-    this.yogaNode.setMargin(YogaEdge.LEFT, db_margin);
-    this.yogaNode.setMargin(YogaEdge.RIGHT, db_margin);
-    this.yogaNode.setMargin(YogaEdge.START, db_margin);
-    this.yogaNode.setMargin(YogaEdge.END, db_margin);
-    this.yogaNode.setMargin(YogaEdge.HORIZONTAL, db_margin);
-    this.yogaNode.setMargin(YogaEdge.VERTICAL, db_margin);
+    this.yogaNode.setMargin(YogaEdge.ALL, db_margin);
   }
   get borderTopWidth() {
     return PixelToDp(this.yogaNode.getBorder(YogaEdge.TOP).value);

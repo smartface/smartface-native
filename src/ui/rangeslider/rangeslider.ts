@@ -1,27 +1,28 @@
-import { AbstractView, IView } from '../view/view';
+import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import Color from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IImage } from '../image/image';
 
-export type RangeSliderIOSProps = IView['ios'] &
-  Partial<{
-    thumbShadowColor: Color;
-    thumbShadowOpacity: number;
-    thumbShadowRadius: number;
-    thumbShadowOffset: Point2D;
-    showsThumbImageShadow?: boolean;
-    applyThumbViewChanges: () => void;
-  }>;
+export interface RangeSliderIOSProps extends ViewIOSProps {
+  thumbShadowColor: Color;
+  thumbShadowOpacity: number;
+  thumbShadowRadius: number;
+  thumbShadowOffset: Point2D;
+  isHapticSnap?: boolean;
+  thumbImage?: IImage;
+  showsThumbImageShadow?: boolean;
+  applyThumbViewChanges: () => void;
+}
 
-export type RangeSliderAndroidProps = IView['android'] &
-  Partial<{
-    thumbSize: number;
-    thumbColor: Color;
-    thumbBorderColor: Color;
-    thumbBorderWidth: number;
-  }>;
+export interface RangeSliderAndroidProps extends ViewAndroidProps {
+  thumbSize: number;
+  thumbColor: Color;
+  thumbBorderColor: Color;
+  outerTrackWeight?: number;
+  thumbBorderWidth: number;
+}
 
 export interface IRangeSlider<
   TEvent extends string = RangeSliderEvents,
@@ -29,15 +30,12 @@ export interface IRangeSlider<
 > extends IView<TEvent | RangeSliderEvents, any, TProps> {
   trackColor?: Color;
   outerTrackColor?: Color;
-  outerTrackWeight?: number;
   trackWeight?: number;
   rangeEnabled?: boolean;
   value?: number[];
   snapStepSize?: number;
   minValue?: number;
   maxValue?: number;
-  thumbImage?: IImage;
-  isHapticSnap?: boolean;
   isTrackRounded?: boolean;
   /**
    * @deprecated

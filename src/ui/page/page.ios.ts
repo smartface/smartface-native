@@ -1,4 +1,4 @@
-import { AbstractPage, IPage, LargeTitleDisplayMode, Orientation, PageOrientation, PresentationStyle } from './page';
+import { AbstractPage, IPage, LargeTitleDisplayMode, PageOrientation, PresentationStyle } from './page';
 import Screen from '../../device/screen';
 import { OrientationType } from '../../device/screen/screen';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
@@ -10,6 +10,27 @@ import { PageEvents } from './page-events';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import { IFlexLayout } from '../flexlayout/flexlayout';
 import StatusBar from '../../application/statusbar';
+import { YGUnit } from '../shared/ios/yogaenums';
+
+const NativeOrientation = {
+  PORTRAIT: [PageOrientation.PORTRAIT],
+  UPSIDEDOWN: [PageOrientation.PORTRAITUPSIDEDOWN],
+  AUTOPORTRAIT: [PageOrientation.PORTRAIT, PageOrientation.PORTRAITUPSIDEDOWN],
+  LANDSCAPELEFT: [PageOrientation.LANDSCAPELEFT],
+  LANDSCAPERIGHT: [PageOrientation.LANDSCAPERIGHT],
+  AUTOLANDSCAPE: [PageOrientation.LANDSCAPELEFT, PageOrientation.LANDSCAPERIGHT],
+  AUTO: [PageOrientation.PORTRAIT, PageOrientation.PORTRAITUPSIDEDOWN, PageOrientation.LANDSCAPELEFT, PageOrientation.LANDSCAPERIGHT]
+};
+
+const NativeOrientationMapping = {
+  [PageOrientation.PORTRAIT]: NativeOrientation.PORTRAIT,
+  [PageOrientation.PORTRAITUPSIDEDOWN]: NativeOrientation.UPSIDEDOWN,
+  [PageOrientation.AUTO]: NativeOrientation.AUTO,
+  [PageOrientation.LANDSCAPELEFT]: NativeOrientation.LANDSCAPELEFT,
+  [PageOrientation.LANDSCAPERIGHT]: NativeOrientation.LANDSCAPERIGHT,
+  [PageOrientation.UNKNOWN]: NativeOrientation.AUTO,
+  [PageOrientation.AUTOLANDSCAPE]: NativeOrientation.AUTOLANDSCAPE
+};
 
 export default class PageIOS<TEvent extends string = PageEvents, TNative extends { [key: string]: any } = __SF_UIViewController, TProps extends IPage = IPage>
   extends AbstractPage<TEvent | PageEvents, TNative, TProps>
@@ -26,6 +47,11 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private _largeTitleDisplayMode: number;
   private _leftItem: any;
   private _orientationNative: PageOrientation[];
+  private _orientation: PageOrientation;
+  private _formerSafeAreaPaddingTop: number;
+  private _formerSafeAreaPaddingBottom: number;
+  private _formerSafeAreaPaddingLeft: number;
+  private _formerSafeAreaPaddingRight: number;
   constructor(params?: Partial<TProps>) {
     super(params);
     this.nativeObject.automaticallyAdjustsScrollViewInsets = false;
@@ -36,6 +62,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.pageView.applyLayout = () => {
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     };
+    this.orientation = PageOrientation.PORTRAIT;
   }
 
   protected createNativeObject() {
@@ -53,17 +80,21 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this._largeTitleDisplayMode = 0;
     this._orientationNative = [PageOrientation.PORTRAIT];
     this.pageView = new FlexLayoutIOS();
+    this.setLayoutParams();
     this.routerPath = null;
     this.statusBar = StatusBar;
+    this._formerSafeAreaPaddingRight = 0;
+    this._formerSafeAreaPaddingBottom = 0;
+    this._formerSafeAreaPaddingLeft = 0;
+    this._formerSafeAreaPaddingTop = 0;
     super.preConstruct(params);
     this.headerBarProperties();
   }
   onLoad(): void {}
   onShow(): void {}
   onHide: () => void;
-  onOrientationChange: (e: { orientation: PageOrientation[] }) => void;
+  onOrientationChange: (e: { orientation: PageOrientation }) => void;
 
-  orientation: IPage['orientation'] = PageOrientation.PORTRAIT;
   parentController: IPage['parentController'];
 
   get layout(): IPage['layout'] {
@@ -71,6 +102,13 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   }
   statusBar: IPage['statusBar'];
 
+  get orientation() {
+    return this._orientation;
+  }
+  set orientation(value) {
+    this._orientation = value;
+    this.nativeObject.orientations = NativeOrientationMapping[value];
+  }
   get transitionViews(): IPage['transitionViews'] {
     return this._transitionViews;
   }
@@ -118,11 +156,32 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     }
   }
 
+  /**
+   * Here, this method is always triggered by the native side and it manipulates the paddingLeft etc..
+   * Therefore, we hold all the padding values before and subtract them beforehand so that
+   * padding wouldn't always increase. Then we increase our padding relative to the safearea(notch etc.).
+   * */
   private calculateSafeAreaPaddings(paddingObject: PageIOS['_safeAreaPaddingObject']) {
-    this.pageView.paddingTop = paddingObject.top;
-    this.pageView.paddingBottom = paddingObject.bottom;
-    this.pageView.paddingLeft = paddingObject.left;
-    this.pageView.paddingRight = paddingObject.right;
+    let currentPaddingTop = this.pageView.paddingTop || 0;
+    let currentPaddingBottom = this.pageView.paddingBottom || 0;
+    let currentPaddingLeft = this.pageView.paddingLeft || 0;
+    let currentPaddingRight = this.pageView.paddingRight || 0;
+
+    currentPaddingTop = currentPaddingTop - this._formerSafeAreaPaddingTop + paddingObject.top;
+    currentPaddingBottom = currentPaddingBottom - this._formerSafeAreaPaddingBottom + paddingObject.bottom;
+    currentPaddingLeft = currentPaddingLeft - this._formerSafeAreaPaddingLeft + paddingObject.left;
+    currentPaddingRight = currentPaddingRight - this._formerSafeAreaPaddingRight + paddingObject.right;
+
+    this.pageView.paddingTop = currentPaddingTop;
+    this.pageView.paddingBottom = currentPaddingBottom;
+    this.pageView.paddingLeft = currentPaddingLeft;
+    this.pageView.paddingRight = currentPaddingRight;
+
+    this._formerSafeAreaPaddingTop = paddingObject.top;
+    this._formerSafeAreaPaddingBottom = paddingObject.bottom;
+    this._formerSafeAreaPaddingLeft = paddingObject.left;
+    this._formerSafeAreaPaddingRight = paddingObject.right;
+
     this.calculatePosition();
   }
 
@@ -133,6 +192,23 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   private getParentViewController(controller: __SF_UIViewController) {
     const parent = Invocation.invokeInstanceMethod(controller, 'parentViewController', [], 'NSObject') as __SF_UIViewController;
     return parent ? this.getParentViewController(parent) : controller;
+  }
+
+  private setLayoutParams() {
+    const pageLayout = this.pageView;
+    const layoutParams = {
+      get padding() {
+        return pageLayout.nativeObject.yoga.getYGValueForKey('padding');
+      },
+      set padding(value: number) {
+        pageLayout.paddingTop = pageLayout.paddingTop ?? value;
+        pageLayout.paddingBottom = pageLayout.paddingBottom ?? value;
+        pageLayout.paddingLeft = pageLayout.paddingLeft ?? value;
+        pageLayout.paddingRight = pageLayout.paddingRight ?? value;
+        pageLayout.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'padding');
+      }
+    };
+    copyObjectPropertiesWithDescriptors(pageLayout, layoutParams);
   }
 
   private setNativeParams() {
@@ -214,30 +290,28 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
 
   private initPageEvents() {
     this.nativeObject.viewWillTransition = () => {
-      if (typeof this.onOrientationChange === 'function') {
-        let tempOrientation: PageOrientation[];
-        switch (Screen.orientation) {
-          case OrientationType.PORTRAIT:
-            tempOrientation = PageIOS.Orientation.PORTRAIT;
-            break;
-          case OrientationType.UPSIDEDOWN:
-            tempOrientation = PageIOS.Orientation.UPSIDEDOWN;
-            break;
-          case OrientationType.LANDSCAPELEFT:
-            tempOrientation = PageIOS.Orientation.LANDSCAPELEFT;
-            break;
-          case OrientationType.LANDSCAPERIGHT:
-            tempOrientation = PageIOS.Orientation.LANDSCAPERIGHT;
-            break;
-          default:
-            tempOrientation = PageIOS.Orientation.PORTRAIT;
-        }
-        const callbackParam = {
-          orientation: tempOrientation
-        };
-        this.emit('orientationChange', callbackParam);
-        this.onOrientationChange?.(callbackParam);
+      let tempOrientation: PageOrientation[];
+      switch (Screen.orientation) {
+        case OrientationType.PORTRAIT:
+          tempOrientation = NativeOrientation.PORTRAIT;
+          break;
+        case OrientationType.UPSIDEDOWN:
+          tempOrientation = NativeOrientation.UPSIDEDOWN;
+          break;
+        case OrientationType.LANDSCAPELEFT:
+          tempOrientation = NativeOrientation.LANDSCAPELEFT;
+          break;
+        case OrientationType.LANDSCAPERIGHT:
+          tempOrientation = NativeOrientation.LANDSCAPERIGHT;
+          break;
+        default:
+          tempOrientation = NativeOrientation.PORTRAIT;
       }
+      const callbackParam = {
+        orientation: tempOrientation as unknown as PageOrientation
+      };
+      this.emit('orientationChange', callbackParam);
+      this.onOrientationChange?.(callbackParam);
     };
     this.nativeObject.onLoad = () => {
       this.onLoad?.();
@@ -391,5 +465,5 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     LargeTitleDisplayMode: LargeTitleDisplayMode,
     PresentationStyle: PresentationStyle
   };
-  static Orientation = Orientation;
+  static Orientation = PageOrientation;
 }

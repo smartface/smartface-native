@@ -24,7 +24,7 @@ declare interface ErrorType {
   stack: string;
 }
 
-type ConstructorOf<I, P = any> = new (params?: P) => I;
+declare type ConstructorOf<I, P = any> = new (params?: P) => I;
 
 declare type ExtractValue<T extends { [key: string]: any }> = T extends {
   [key: string]: any;
@@ -43,13 +43,13 @@ declare interface Error {
   stack?: string;
 }
 
-interface UnhandledError extends Error {}
+declare interface UnhandledError extends Error {}
 
 declare type DeviceOS = 'Android' | 'iOS';
-declare type XMLHttpRequest = IXMLHttpRequest;
 
 declare class Device {
   static deviceOS: DeviceOS;
+  static language: string;
 }
 
 type AlertParams = {
@@ -61,40 +61,3 @@ type AlertParams = {
     onClick?: () => void;
   }[];
 };
-
-// Native mobile globals
-declare function requireClass(className: string): any;
-declare function defineClass(className: string, opts?: any): any;
-declare const SMFApplication: typeof __SF_UIApplication; //ios global application from framework
-
-//android value converters. convert from js value to java values
-declare function long(value: number): number;
-declare function array(outerRadii: any, type?: string): any[];
-declare function toJSArray(val: any): any[];
-declare function float(val: any): number;
-declare function int(val: any): number;
-declare function release(value: any): any;
-declare function arrayLength(array: any[]): number;
-
-//javascript standard globals
-declare function alert(params: string | AlertParams): void;
-declare function setTimeout(fn: () => void, time: number): Timeout;
-declare function setInterval(fn: () => void, time: number): Timeout;
-declare function clearInterval(intervalId: Timeout): void;
-declare function clearTimeout(timeoutId: Timeout): void;
-declare const XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
-
-declare module NodeJS {
-  interface Global {
-    // Native mobile globals
-    requireClass(className: string): any;
-    defineClass(className: string, opts?: any): any;
-    SMFApplication: typeof __SF_UIApplication; //ios global application from framework
-    Device: Device;
-    XMLHttpRequest: ConstructorOf<IXMLHttpRequest, Partial<IXMLHttpRequest>>;
-
-    lang: Record<string, any>; //Old i18n polyfill, replace later
-  }
-}
-
-declare var global: NodeJS.Global & typeof globalThis;

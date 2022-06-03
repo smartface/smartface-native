@@ -21,6 +21,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _scale: Point2D;
   private _width: number;
   private _height: number;
+  private _paddingRight: IView['paddingRight'];
+  private _paddingLeft: IView['paddingLeft'];
+  private _paddingTop: IView['paddingBottom'];
+  private _paddingBottom: IView['paddingTop'];
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
@@ -792,34 +796,38 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   get paddingLeft() {
-    return this.nativeObject.yoga.getYGValueForKey('paddingLeft');
+    return this._paddingLeft;
   }
 
   set paddingLeft(value) {
+    this._paddingLeft = value;
     this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingLeft');
   }
 
   get paddingTop() {
-    return this.nativeObject.yoga.getYGValueForKey('paddingTop');
+    return this._paddingTop;
   }
 
   set paddingTop(value) {
+    this._paddingTop = value;
     this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingTop');
   }
 
   get paddingRight() {
-    return this.nativeObject.yoga.getYGValueForKey('paddingRight');
+    return this._paddingRight;
   }
 
   set paddingRight(value) {
+    this._paddingRight = value;
     this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingRight');
   }
 
   get paddingBottom() {
-    return this.nativeObject.yoga.getYGValueForKey('paddingBottom');
+    return this._paddingBottom;
   }
 
   set paddingBottom(value) {
+    this._paddingBottom = value;
     this.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, 'paddingBottom');
   }
 

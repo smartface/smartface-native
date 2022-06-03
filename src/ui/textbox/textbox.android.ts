@@ -256,7 +256,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   }
   set onEditBegins(value: () => void) {
     this._onEditBegins = value;
-    this.nativeObject.setOnEditBegins(value);
+    this.nativeObject.setOnEditBegins(value.bind(this));
   }
 
   get cursorColor(): Color {
@@ -357,7 +357,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   }
   set onEditEnds(value: () => void) {
     this._onEditEnds = value;
-    this.nativeObject.setOnEditEnds(value);
+    this.nativeObject.setOnEditEnds(value.bind(this));
   }
 
   get onActionButtonPress(): (e?: { actionKeyType: ActionKeyType }) => void {

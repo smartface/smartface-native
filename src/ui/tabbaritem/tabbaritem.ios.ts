@@ -16,10 +16,10 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   private _nativeView: any;
   private _title: string;
   private _icon: ITabbarItem['icon'];
-  private _badge: Partial<IBadge> | IBadge;
   private _route: string;
   private _font: ITabbarItem['ios']['font'];
   private _badgeProps: Partial<IBadge>;
+  private _badge: IBadge;
 
   constructor(params: Partial<ITabbarItem> = {}) {
     super(params);
@@ -33,7 +33,6 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
   protected preConstruct(params: Partial<ITabbarItem>): void {
     this._title = '';
     this._badgeProps = {};
-    this._badge = new BadgeIOS({ nativeObject: this.nativeObject });
     super.preConstruct(params);
     this.addIOSProps(this.getIOSProps());
   }
@@ -129,9 +128,13 @@ export default class TabbarItemIOS extends NativeMobileComponent<any, ITabbarIte
     }
   }
   get badge(): IBadge {
-    // This is done this way because nativeObject is always changing. Never create another badge object again.
+    // This is done this way because nativeObject is always changing. Always create another badge object.
     // This might reduce performance a bit, but this will stay like this until there's a better solution.
-    return new BadgeIOS({ ...this._badgeProps, nativeObject: this.nativeObject });
+    if (this._badge) {
+      this.setBadgeProps(this._badge); //add the existing props to the new badge
+    }
+    this._badge = new BadgeIOS({ ...this._badgeProps, nativeObject: this.nativeObject });
+    return this._badge;
   }
 
   set badge(value: IBadge) {

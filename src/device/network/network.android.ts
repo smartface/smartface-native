@@ -135,9 +135,10 @@ class NetworkAndroid extends NativeComponent implements NetworkBase {
   get connectionType() {
     //Deprecated in API level 29
     const activeInternet = getActiveInternet();
-    if (activeInternet === null)
+    if (!activeInternet) {
       // undefined or null
       return this.ConnectionType.NONE;
+    }
 
     const nConnectionType = activeInternet.getType();
     const cTypeEnum = getConnectionTypeEnum(nConnectionType);

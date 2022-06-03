@@ -277,7 +277,7 @@ export class TabBarControllerImpl extends AbstractTabBarController {
   show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
     throw new Error('Method not implemented.');
   }
-  onOrientationChange(e: { orientation: PageOrientation[] }): void {
+  onOrientationChange(e: { orientation: PageOrientation }): void {
     throw new Error('Method not implemented.');
   }
 }

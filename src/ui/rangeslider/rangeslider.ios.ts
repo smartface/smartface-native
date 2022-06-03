@@ -65,6 +65,19 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
       },
       applyThumbViewChanges: () => {
         self.nativeObject.applyThumbViewChanges();
+      },
+      get thumbImage(): Image {
+        return self._thumbImage;
+      },
+      set thumbImage(value: Image) {
+        self._thumbImage = value;
+        self.nativeObject.thumbImage = self._thumbImage ? self._thumbImage.nativeObject : undefined;
+      },
+      get isHapticSnap(): boolean {
+        return self.nativeObject.isHapticSnap;
+      },
+      set isHapticSnap(value: boolean) {
+        self.nativeObject.isHapticSnap = value;
       }
     });
 
@@ -137,21 +150,6 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
   }
   set maxValue(value: number) {
     this.nativeObject.maximumValue = value;
-  }
-
-  get thumbImage(): Image {
-    return this._thumbImage;
-  }
-  set thumbImage(value: Image) {
-    this._thumbImage = value;
-    this.nativeObject.thumbImage = this._thumbImage ? this._thumbImage.nativeObject : undefined;
-  }
-
-  get isHapticSnap(): boolean {
-    return this.nativeObject.isHapticSnap;
-  }
-  set isHapticSnap(value: boolean) {
-    this.nativeObject.isHapticSnap = value;
   }
 
   get isTrackRounded(): boolean {
