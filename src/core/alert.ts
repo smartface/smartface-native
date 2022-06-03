@@ -83,7 +83,7 @@ export default function alert(options: string | AlertOptions, title?: string): A
   };
   const defaultButton: AlertButton = {
     type: AlertView.Android.ButtonType.NEUTRAL,
-    text: global?.lang?.ok || 'OK',
+    text: 'OK',
     onClick: () => {}
   };
   let buttons: AlertButton[] = [];
@@ -91,7 +91,7 @@ export default function alert(options: string | AlertOptions, title?: string): A
     const newMessage = typeof options.message !== 'string' ? String(options) : options.message;
     buttons = options.buttons || [defaultButton];
     paramOptions.message = newMessage || '';
-    defaultButton.text = options.defaultButtonText || global?.lang?.ok || 'OK';
+    defaultButton.text = options.defaultButtonText || 'OK';
     paramOptions.title = options.title || '';
   } else {
     paramOptions.message = options;

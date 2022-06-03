@@ -307,8 +307,8 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     return this._textAligment;
   }
   set textAlignment(value: TextAlignment) {
-    this._textAligment = value
-    
+    this._textAligment = value;
+
     this.nativeObject.contentVerticalAlignment = ContentVerticalAlignmentMapping[value];
     this.nativeObject.textAlignment = TextAlignmentMapping[value];
   }

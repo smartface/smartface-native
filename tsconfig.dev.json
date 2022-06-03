@@ -1,20 +1,6 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": false,
-    "allowJs": false,
-    "strictNullChecks": true,
-    "exactOptionalPropertyTypes": false,
-    "baseUrl": ".",
-    "rootDir": "src",
-    "declaration": true,
-    "outDir": "../../InternalProjects/sf-playground/scripts/node_modules/@smartface/native",
-    "target": "ES5",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "lib": ["ES2015"],
-    "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
-  },
-  "include": ["./src/**/*"],
-  "files": [".types/typings.d.ts", ".types/missings-android.d.ts", ".types/missings-ios.d.ts", ".types/xmlhttprequest.d.ts"]
+    "outDir": "../../InternalProjects/sf-playground/scripts/node_modules/@smartface/native"
+  }
 }

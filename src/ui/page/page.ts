@@ -16,7 +16,8 @@ export enum PageOrientation {
   PORTRAITUPSIDEDOWN,
   LANDSCAPELEFT,
   LANDSCAPERIGHT,
-  AUTO
+  AUTO,
+  AUTOLANDSCAPE
 }
 
 export enum LargeTitleDisplayMode {

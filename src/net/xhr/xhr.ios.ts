@@ -1,6 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { FormData, FormDataPart, statuses, IXHR, XMLHttpRequestResponseType } from './xhr';
+import FormData from '../formdata';
+import { statuses, IXHR, XMLHttpRequestResponseType } from './xhr';
 import { XHREvents } from './xhr-events';
 
 class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = MobileOSProps> extends NativeEventEmitterComponent<TEvent | XHREvents, any, TProps> implements IXHR {
@@ -26,7 +27,7 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   private _headers: any;
   private _errorFlag: boolean;
   private _sendFlag: boolean;
-  private _responseType: XMLHttpRequestResponseType = XMLHttpRequestResponseType.empty;
+  private _responseType: XMLHttpRequestResponseType;
   private _responseURL?: string;
   private _status: number;
 
@@ -35,6 +36,7 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   constructor() {
     super();
     this._readyState = XHRIOS.UNSENT;
+    this._responseType = XMLHttpRequestResponseType.empty;
   }
 
   protected createNativeObject() {
@@ -339,7 +341,10 @@ class XHRIOS<TEvent extends string = XHREvents, TProps extends MobileOSProps = M
   }
 
   private emitEvent(eventName: XHREvents, ...args: Array<any>) {
-    this.emit(eventName);
+    // If eventName is error, an error occurs in the events dependency used by the event emitter.
+    try {
+      this.emit(eventName);
+    } catch (error) {}
 
     if (typeof this['on' + eventName] === 'function') {
       this['on' + eventName](...args);
