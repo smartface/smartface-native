@@ -1,6 +1,6 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import { IAsyncTask, IAsyncTaskAndroidProps, Status } from './asynctask';
+import { IAsyncTask, IAsyncTaskAndroidProps, AsyncTaskStatus } from './asynctask';
 import { AsyncTaskEvents } from './asynctask-events';
 
 const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
@@ -9,10 +9,6 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
   extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TProps>
   implements IAsyncTask
 {
-  protected createNativeObject() {
-    return new SFAsyncTask();
-  }
-  static Events = AsyncTaskEvents;
   private _task: IAsyncTask['task'];
   constructor(params?: TProps) {
     super(params);
@@ -37,6 +33,9 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
     this.nativeObject.setJsCallback(callbacks);
     this.addAndroidProps(this.getAndroidProps());
   }
+  protected createNativeObject() {
+    return new SFAsyncTask();
+  }
   private getAndroidProps(): IAsyncTask['android'] {
     const self = this;
     return {
@@ -48,7 +47,7 @@ export class AsyncTaskAndroid<TEvent extends string = AsyncTaskEvents, TProps ex
   onComplete: () => void;
   onCancelled: () => void;
   onPreExecute: () => void;
-  getStatus?: () => Status;
+  getStatus?: () => AsyncTaskStatus;
   get task() {
     return this._task;
   }

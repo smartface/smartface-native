@@ -1,10 +1,9 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import { AsyncTaskEvents } from './asynctask-events';
 
-export enum Status {
+export enum AsyncTaskStatus {
   /**
    * Indicates that onComplete has finished.
    *
@@ -43,7 +42,7 @@ export interface IAsyncTaskAndroidProps {
    * @since 3.2.2
    * @return {AsyncTask.Android.Status} status
    */
-  getStatus?: () => Status;
+  getStatus?: () => AsyncTaskStatus;
 }
 
 /**
@@ -64,7 +63,7 @@ export interface IAsyncTaskAndroidProps {
  *     asynctask.run();
  */
 export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
-  extends INativeComponent,
+  extends INativeMobileComponent<any, TMobile>,
     IEventEmitter<TEvent | AsyncTaskEvents> {
   /**
    * This event describes task of AsyncTask instance.
@@ -153,23 +152,4 @@ export interface IAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile ext
    * @return {Boolean} false For Android, if the task could not be cancelled, typically because it has already completed normally; true otherwise.
    */
   cancel(): void;
-  ios: TMobile['ios'];
-  android: TMobile['android'];
-}
-
-export declare class AbstractAsyncTask<TEvent extends string = AsyncTaskEvents, TMobile extends MobileOSProps<{}, IAsyncTaskAndroidProps> = MobileOSProps<{}, IAsyncTaskAndroidProps>>
-  extends NativeEventEmitterComponent<TEvent | AsyncTaskEvents, any, TMobile>
-  implements IAsyncTask
-{
-  protected createNativeObject(): any;
-  task: () => void;
-  onComplete: () => void;
-  onPreExecute: () => void;
-  onCancelled: () => void;
-  getStatus?: () => Status;
-  run(): void;
-  cancel(): void;
-  static readonly Android: {
-    Status: Status;
-  };
 }
