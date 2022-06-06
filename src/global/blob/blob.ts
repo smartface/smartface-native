@@ -1,4 +1,4 @@
-import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 
 export interface IBlobAndroidProps {
   /**
@@ -44,7 +44,7 @@ export interface IBlob<TNative = any, TProps extends MobileOSProps<{}, IBlobAndr
    * @method toBase64
    * @since 0.1
    */
-  toBase64: () => string;
+  toBase64(): string;
 
   /**
    * Converts to base64 asynchronously
@@ -69,12 +69,16 @@ export interface IBlob<TNative = any, TProps extends MobileOSProps<{}, IBlobAndr
   toString: () => string;
 }
 
-export abstract class AbstractBlob implements IBlob {
-  ios: Partial<{}>;
-  android: Partial<IBlobAndroidProps>;
-  nativeObject: any;
+export abstract class AbstractBlob extends NativeMobileComponent<any, MobileOSProps<{}, IBlobAndroidProps>> implements IBlob {
   abstract get type(): string;
   abstract get size(): number;
+
+  /*
+   * Returns a base64 String
+   *
+   * @method toBase64
+   * @since 0.1
+   */
   abstract toBase64(): string;
   abstract toBase64Async(handlers: { onComplete: (base64: String) => void; onFailure?: () => void }): void;
   abstract toString(): string;
