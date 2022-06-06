@@ -4,11 +4,19 @@ import ISecureData from './securedata';
 class SecureDataIOS extends NativeMobileComponent implements ISecureData {
   protected _key: string;
   protected _service?: string;
-  constructor(params?: { key: string; ios?: { service?: any } }) {
+  constructor(params?: Partial<ISecureData>) {
     super(params);
+    this.addIOSProps(this.getIOSProps());
   }
-
-  protected createNativeObject(params?: { key: string; ios?: { service?: any } }) {
+  private getIOSProps() {
+    const self = this;
+    return {
+      get service() {
+        return self._service;
+      }
+    };
+  }
+  protected createNativeObject(params?: Partial<ISecureData>) {
     const _key = params?.key;
     const _service = params?.ios?.service;
     if (!_key || !_service) {
