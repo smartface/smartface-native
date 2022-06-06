@@ -4,8 +4,8 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import { IFile } from './file';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import PathAndroid from '../path/path.android';
-import NativeComponent from '../../core/native-component';
 import { PATH_FILE_TYPE } from '../path/path';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 const activity = AndroidConfig.activity;
 
 const NativeFile = requireClass('java.io.File');
@@ -17,7 +17,7 @@ const NativeBitmap = requireClass('android.graphics.Bitmap');
 const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
 const NativeFileInputStream = requireClass('java.io.FileInputStream');
 const NativeFileUtil = requireClass('io.smartface.android.utils.FileUtil');
-export default class FileAndroid extends NativeComponent implements IFile {
+export default class FileAndroid extends NativeMobileComponent implements IFile {
   protected createNativeObject() {
     return null;
   }
@@ -26,9 +26,6 @@ export default class FileAndroid extends NativeComponent implements IFile {
   type: PATH_FILE_TYPE;
   fullPath: string;
   drawableResourceId: number;
-  ios: {
-    getNSURL: () => __SF_NSURL;
-  };
   private pathResolver = new PathAndroid();
   constructor(params?: Partial<IFile>) {
     super(params);
@@ -72,7 +69,6 @@ export default class FileAndroid extends NativeComponent implements IFile {
         break;
     }
   }
-  android: Partial<{}>;
 
   get creationDate(): number {
     return this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1;
