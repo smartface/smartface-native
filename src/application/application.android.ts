@@ -2,7 +2,6 @@ import Accelerometer from '../device/accelerometer';
 import Location from '../device/location';
 import TypeUtil from '../util/type';
 import AndroidConfig from '../util/Android/androidconfig';
-import Http from '../net/http';
 import Network from '../device/network';
 import { ApplicationEvents } from './application-events';
 import type SliderDrawer from '../ui/sliderdrawer';
@@ -18,6 +17,7 @@ import NativeEventEmitterComponent from '../core/native-event-emitter-component'
 import PageAndroid from '../ui/page/page.android';
 import Page from '../ui/page';
 import { EventListenerCallback } from '../core/eventemitter';
+import HttpAndroid from '../net/http/http.android';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -509,7 +509,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   private cancelAllBackgroundJobs() {
     Location.stop();
     Accelerometer.stop();
-    Http.cancelAll();
+    HttpAndroid.cancelAll();
     Network.cancelAll();
   }
   private checkIsAppShortcut(e: Record<string, any>) {

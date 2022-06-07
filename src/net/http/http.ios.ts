@@ -1,10 +1,11 @@
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import FileIOS from '../../io/file/file.ios';
 import Image from '../../ui/image';
-import { HttpBase, HttpRequest, IHttp } from './http';
+import { HttpIOSProps, HttpRequest, IHttp } from './http';
 
-export default class HttpIOS extends HttpBase {
+export default class HttpIOS extends NativeMobileComponent<any, MobileOSProps<HttpIOSProps, {}>> implements IHttp {
   protected createNativeObject() {
     return new __SF_Http();
   }
