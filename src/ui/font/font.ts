@@ -115,6 +115,13 @@ export abstract class AbstractFont extends NativeComponent {
    */
   static DEFAULT = FontStyle.DEFAULT.toString();
 
+  /**
+   * Default iOS System font family. Only works on iOS.
+   *
+   * @android
+   * @ios
+   * @since 0.1
+   */
   static IOS_SYSTEM_FONT = FontStyle.IOS_SYSTEM_FONT.toString();
   /**
    * Represents normal font style
