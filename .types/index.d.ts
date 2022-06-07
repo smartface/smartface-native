@@ -4,3 +4,4 @@
 /// <reference path="./typings.d.ts" />
 /// <reference path="./xmlhttprequest.d.ts" />
 /// <reference path="./fetch.d.ts" />
+/// <reference path="./url.d.ts" />
