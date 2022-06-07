@@ -1,4 +1,5 @@
 // from this MIT-licensed repo: https://github.com/facebook/react-native
+
 export default class URLClass implements URL {
   _url: string;
   _searchParamsInstance: URLSearchParams | null = null;
@@ -82,9 +83,9 @@ export default class URLClass implements URL {
 
   get searchParams(): URLSearchParams {
     if (this._searchParamsInstance === null) {
-      this._searchParamsInstance = new URLSearchParams();
+      this._searchParamsInstance = new URLSearchParams() as any;
     }
-    return this._searchParamsInstance;
+    return this._searchParamsInstance as any; //Compiler Shouldn't get angry at all.
   }
 
   toJSON(): string {

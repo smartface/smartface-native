@@ -23,3 +23,5 @@ declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response
 
 //DOM Based globals
 declare var XMLHttpRequest: ConstructorOf<IXMLHttpRequest>;
+declare var URL: typeof _URL;
+declare var URLSearchParams: typeof _URLSearchParams;
