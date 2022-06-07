@@ -1,9 +1,9 @@
 // from this MIT-licensed repo: https://github.com/facebook/react-native
 
-export default class URLSearchParams implements URLSearchParams {
+export default class URLSearchParams {
   _searchParams: string[][] = [];
 
-  constructor(params: any) {
+  constructor(params?: Record<string, any>) {
     if (typeof params === 'object') {
       Object.keys(params).forEach((key) => this.append(key, params[key]));
     }
