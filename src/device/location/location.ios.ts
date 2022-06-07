@@ -1,4 +1,3 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Invocation from '../../util/iOS/invocation';
 import { ILocation, LocationBase } from './location';

@@ -17,7 +17,7 @@ const NativeShimmeringDirectionMapping = {
   [ShimmeringDirection.DOWN]: 1
 };
 
-export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements IShimmerFlexLayout {
+export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements IShimmerFlexLayout<TEvent> {
   private _layout;
   private _baseAlpha: number;
   private _direction: ShimmeringDirection;
