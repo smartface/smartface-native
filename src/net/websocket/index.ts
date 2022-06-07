@@ -1,6 +1,6 @@
-import { WebSocketBase } from './websocket';
+import { IWebSocket } from './websocket';
 
-const WebSocket: typeof WebSocketBase = require(`./websocket.${Device.deviceOS.toLowerCase()}`).default;
-type WebSocket = WebSocketBase;
+const WebSocket: ConstructorOf<IWebSocket, Partial<IWebSocket>> = require(`./websocket.${Device.deviceOS.toLowerCase()}`).default;
+type WebSocket = IWebSocket;
 
 export default WebSocket;

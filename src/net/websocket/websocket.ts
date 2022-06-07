@@ -74,7 +74,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
-   * webSocket.on(WebSocket.Events.Message, (params) => {
+   * webSocket.on('message', (params) => {
    *  console.info('onMessage', params);
    * });
    * ```
@@ -93,7 +93,7 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
-   * webSocket.on(WebSocket.Events.Close, (params) => {
+   * webSocket.on('close', (params) => {
    *  console.info('onClose', params);
    * });
    * ```
@@ -112,24 +112,10 @@ export interface IWebSocket extends INativeComponent, IEventEmitter<WebSocketEve
    * import WebSocket from '@smartface/native/net/websocket';
    *
    * const webSocket = new WebSocket();
-   * webSocket.on(WebSocket.Events.Failure, (params) => {
+   * webSocket.on('failure', (params) => {
    *  console.info('onFailure', params);
    * });
    * ```
    */
   onFailure: (e: { code: number; message: string }) => void;
-}
-
-export declare class WebSocketBase<TEvent extends string = WebSocketEvents> extends NativeEventEmitterComponent<TEvent | WebSocketEvents, any> implements IWebSocket {
-  protected createNativeObject(params?: Partial<Record<string, any>>);
-  constructor(params?: Partial<IWebSocket>);
-  onOpen: () => void;
-  onMessage: (e: { string?: string | undefined; blob?: Blob | undefined }) => void;
-  onClose: (e: { code: number; reason: string }) => void;
-  onFailure: (e: { code: number; message: string }) => void;
-  headers: Record<string, string>;
-  get url(): string;
-  set url(value: string);
-  close(params: { code: number; reason?: string | undefined }): void;
-  send(params: { data: string | Blob }): boolean;
 }
