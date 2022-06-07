@@ -1,8 +1,9 @@
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Color from '../color';
 import Font from '../font';
-import { AttributedStringBase, IAttributedString } from './attributedstring';
+import { IAttributedString } from './attributedstring';
 
-export default class AttributedStringIOS extends AttributedStringBase implements IAttributedString {
+export default class AttributedStringIOS extends NativeMobileComponent<any, IAttributedString> implements IAttributedString {
   private _string: IAttributedString['string'];
   private _foregroundColor: IAttributedString['foregroundColor'];
   private _underlineColor: IAttributedString['ios']['underlineColor'];
@@ -12,8 +13,11 @@ export default class AttributedStringIOS extends AttributedStringBase implements
   private _underline: IAttributedString['underline'];
   private _strikethrough: IAttributedString['strikethrough'];
   private _link?: string;
-  constructor(params?: ConstructorParameters<typeof AttributedStringBase>['0']) {
+  constructor(params?: IAttributedString) {
     super(params);
+  }
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    return null;
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._string = '';
