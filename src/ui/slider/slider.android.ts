@@ -11,7 +11,7 @@ const SeekBar = requireClass('android.widget.SeekBar');
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
 
-export default class SliderAndroid<TEvent extends string = SliderEvents> extends ViewAndroid<TEvent | SliderEvents, any, ISlider> implements ISlider {
+export default class SliderAndroid<TEvent extends string = SliderEvents> extends ViewAndroid<TEvent | SliderEvents, any, ISlider> implements ISlider<TEvent> {
   private _layerDrawable: any;
   private _defaultThumb: any;
   private _minValue: number;
@@ -26,10 +26,8 @@ export default class SliderAndroid<TEvent extends string = SliderEvents> extends
   }
   constructor(params?: Partial<ISlider>) {
     super(params);
-
     this._layerDrawable = this.nativeObject.getProgressDrawable().getCurrent();
     this._defaultThumb = this.nativeObject.getThumb();
-
     if (!this.skipDefaults) {
       // SET DEFAULTS
       this._thumbColor = ColorAndroid.GRAY;
