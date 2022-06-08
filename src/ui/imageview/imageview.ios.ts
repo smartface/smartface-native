@@ -1,4 +1,4 @@
-import { IImageView, ImageFillType, ImageViewFillTypeIOS } from './imageview';
+import { IImageView, ImageFillType } from './imageview';
 import File from '../../io/file';
 import Color from '../color';
 import ImageIOS from '../image/image.ios';

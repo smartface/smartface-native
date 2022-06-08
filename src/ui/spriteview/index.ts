@@ -29,6 +29,7 @@ export default class SpriteView extends ImageView implements ISpriteView {
     this._currentFrame = 0;
     this._frameCount = 0;
     this._frames = [];
+    //@ts-ignore Since spriteview doesn't have Android/iOS specific classes, preConstruct doesn't exist in it. Therefore, this raises error but the method is there.
     super.preConstruct(params);
   }
 
