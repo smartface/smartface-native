@@ -1,6 +1,4 @@
-import { EventEmitter, IEventEmitter } from '../../core/eventemitter';
-import { INativeComponent } from '../../core/inative-component';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { IEventEmitter } from '../../core/eventemitter';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
@@ -12,7 +10,7 @@ import { MenuItemEvents } from './menuitem-events';
  * MenuItem's style is used to specify behaviour and appearance of the item. This enumeration
  * describes available styles for iOS.
  */
-export enum Style {
+export enum MenuItemStyle {
   /**
    * @property {Number} DEFAULT
    * @ios
@@ -54,6 +52,11 @@ export interface MenuItemAndroidProps {
    * @since 1.1.8
    */
   titleColor: Color;
+  /**
+   * Private method for Android to get the title of the menuitem.
+   * @private
+   */
+  spanTitle(): string;
 }
 
 export interface MenuItemIOSProps {
@@ -64,7 +67,7 @@ export interface MenuItemIOSProps {
    * @ios
    * @since 1.1.8
    */
-  style: Style;
+  style: MenuItemStyle;
 }
 
 /**
@@ -105,26 +108,11 @@ export interface IMenuItem<TEvent extends string = MenuItemEvents, TProps extend
    * ```
    */
   onSelected: () => void;
-}
-
-export declare class AbstractMenuItem<
-    TEvent extends string = MenuItemEvents,
-    TProps extends MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps> = MobileOSProps<MenuItemIOSProps, MenuItemAndroidProps>
-  >
-  extends NativeEventEmitterComponent<TEvent | MenuItemEvents, any, TProps>
-  implements IMenuItem
-{
-  protected createNativeObject(params?: Record<string, any>);
-  static Styles: typeof Style;
-  constructor(params?: Partial<AbstractMenuItem>);
-  // TODO: No implemented getActionView
-  getActionView: any;
-  title: string;
-  onSelected: () => void;
   /**
    * Used privately by the framework.
    * @ios
    * @android
+   * @private
    */
   onSelectedListener: () => void;
 }

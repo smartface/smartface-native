@@ -12,6 +12,10 @@ export enum PATH_FILE_TYPE {
 }
 
 export interface PathAndroidProps {
+  /**
+   * Determines which storage type the path uses. Please note that you should have appropiate permissions in order to access external storage.
+   * @android
+   */
   storages: {
     external: string | null;
     internal: string | null;
@@ -30,6 +34,9 @@ export abstract class PathBase extends NativeComponent implements IPath {
     super(params);
   }
 
+  /**
+   * List of the file types that can be used on Path.
+   */
   static FILE_TYPE = PATH_FILE_TYPE;
   /**
    * Gets data directory path of the application.
@@ -59,6 +66,12 @@ export abstract class PathBase extends NativeComponent implements IPath {
     throw new Error('Method not implemented.');
   }
 
+  /**
+   * Gets the path to the root of the application's images directory.
+   * @example
+   * import Path from '@smartface/native/io/path';
+   * console.log(Path.ImagesURLScheme); => images://
+   */
   static get ImagesUriScheme(): string {
     throw new Error('Method not implemented.');
   }

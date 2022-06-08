@@ -31,18 +31,16 @@ export declare class HardwareBase {
    * @since 0.1
    */
   static readonly UID: string;
-  /**
-   *
-   * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
-   * @property {String} IMEI
-   * @android
-   * @readonly
-   * @static
-   * @since 0.1
-   */
-  static readonly IMEI?: string;
   static readonly android: {
-    // TODO: discuss why IMEI is in android
+    /**
+     * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+     * You cannot get IMEI programmatiocally on iOS.
+     * @property {String} IMEI
+     * @android
+     * @readonly
+     * @static
+     * @since 0.1
+     */
     readonly IMEI?: string;
     /**
      *
@@ -73,6 +71,16 @@ export declare class HardwareBase {
        */
       requestRecordPermission?: (callback: (...args) => void) => void;
     };
+    /**
+     * Gets human readable modelname of the device.
+     * @ios
+     * @example
+     * ```
+     * import Hardware from '@smartface/native/device/hardware';
+     *
+     * Hardware.ios.modelName; // iPhone X
+     * ```
+     */
     modelName?: string;
   };
   /**
@@ -108,5 +116,8 @@ export declare class HardwareBase {
    */
   static getDeviceModelName(): string;
 
+  /**
+   * DeviceType is to determine if the current device which the application is open is phone, tablet or else.
+   */
   static deviceType: DeviceType;
 }

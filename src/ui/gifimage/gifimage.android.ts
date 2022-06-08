@@ -2,12 +2,13 @@
 const NativeGifDrawable = requireClass('pl.droidsonroids.gif.GifDrawable');
 
 import FileStream from '../../io/filestream';
-import File from '../../io/file';
-import Blob from '../../global/blob';
 import ImageAndroid from '../../ui/image/image.android';
 import { AndroidProps, AbstractGifImage, IGifImage, iOSProps } from './gifimage';
 import { Size } from '../../primitive/size';
 import IBlob from '../../global/blob/blob';
+import { IFile } from '../../io/file/file';
+import FileAndroid from '../../io/file/file.android';
+import BlobAndroid from '../../global/blob/blob.android';
 
 export default class GifImageAndroid extends AbstractGifImage {
   protected createNativeObject(params?: Partial<AbstractGifImage>) {
@@ -15,7 +16,7 @@ export default class GifImageAndroid extends AbstractGifImage {
     this._content = params?.android?.content || null;
     return nativeObject;
   }
-  private _content: File | Blob | null;
+  private _content: IFile | IBlob | null;
   private _seekPosition: number;
   private _speed: number;
   constructor(params: Partial<IGifImage> = {}) {
@@ -23,7 +24,7 @@ export default class GifImageAndroid extends AbstractGifImage {
   }
 
   static createFromFile(path: string, width?: number, height?: number) {
-    const file: File | undefined = typeof path === 'string' ? new File({ path }) : undefined;
+    const file: IFile | undefined = typeof path === 'string' ? new FileAndroid({ path }) : undefined;
     if (file?.nativeObject) {
       return new GifImageAndroid({
         android: {
@@ -34,7 +35,7 @@ export default class GifImageAndroid extends AbstractGifImage {
     } else return null;
   }
 
-  static createFromBlob(blob: Blob) {
+  static createFromBlob(blob: IBlob): IGifImage | null {
     const byteArray = blob.nativeObject.toByteArray();
     if (byteArray)
       return new GifImageAndroid({
@@ -69,10 +70,10 @@ export default class GifImageAndroid extends AbstractGifImage {
   }
 
   toBlob(): IBlob | null {
-    if (this._content instanceof File) {
+    if (this._content instanceof FileAndroid) {
       const myFileStream = this._content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-      return (myFileStream?.readToEnd() as Blob) || null;
-    } else if (this._content instanceof Blob) {
+      return (myFileStream?.readToEnd() as BlobAndroid) || null;
+    } else if (this._content instanceof BlobAndroid) {
       return this._content;
     }
     return null;

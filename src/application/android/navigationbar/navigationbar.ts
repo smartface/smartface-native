@@ -1,5 +1,8 @@
 import Color from '../../../ui/color';
 
+/**
+ * Determines whether the navigation bar should be light theme or dark theme based.
+ */
 export enum NavigationBarStyle {
   DARKCONTENT,
   LIGHTCONTENT

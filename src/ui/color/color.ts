@@ -124,7 +124,15 @@ export abstract class AbstractColor extends NativeComponent {
   abstract green(): number;
   abstract blue(): number;
   abstract alpha(): number;
+  /**
+   * Please only pass this property in constructor.
+   * @android
+   * @private
+   */
   isGradient?: boolean;
+  /**
+   * Get/sets the direction of the gradient image.
+   */
   direction: GradientDirection;
 
   /**

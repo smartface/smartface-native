@@ -1,9 +1,9 @@
-import { AbstractDialog, DEFAULT_TRANSLUCENCY } from './dialog';
+import { IDialog, DEFAULT_TRANSLUCENCY } from './dialog';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 
-export default class DialogIOS extends AbstractDialog {
-  setShowListener(): void {}
+export default class DialogIOS extends NativeMobileComponent implements IDialog {
   private dialogView: FlexLayout;
   createNativeObject() {
     return null;

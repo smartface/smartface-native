@@ -1,6 +1,5 @@
-import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
-import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import Blob from '../../global/blob';
 import File from '../../io/file';
 import { IImage } from '../../ui/image/image';
@@ -18,7 +17,10 @@ import { IImage } from '../../ui/image/image';
  * @ios
  * @since 4.3.4
  */
-export interface iOSProps {
+export interface HttpIOSProps {
+  /**
+   * Determines whether to use the pinned certificates to validate the server trust.
+   */
   sslPinning?: { host: string; certificates: string[]; validateCertificateChain?: boolean; validateHost?: boolean }[];
 }
 
@@ -82,11 +84,23 @@ type UploadParams = RequestParamsType<
   };
 };
 
-export interface IHttp extends INativeComponent {
+export interface IHttp extends INativeMobileComponent<any, MobileOSProps<HttpIOSProps, {}>> {
+  /**
+   * Toggles if the instance should keep the cookies from the server.
+   */
   cookiePersistenceEnabled: boolean;
+  /**
+   * Get/sets the default timeout value. It is recommended to set this on constructor.
+   * @default 10000
+   * @example
+   * import Http from '@smartface/native/net/http';
+   * const http = new Http({
+   *  timeout: 5000,
+   * //...other values
+   * });
+   */
   timeout: number;
   headers: Record<string, string>;
-  ios: Partial<iOSProps>;
   /**
    * Cancels all requests.
    *
@@ -139,28 +153,10 @@ export interface IHttp extends INativeComponent {
    * @since 0.1
    */
   request(params: RequestParams, isMultipart?: boolean): HttpRequest;
+  /**
+   * Uploads something. Accepts blob as type.
+   */
   upload(params: UploadParams): HttpRequest;
-}
-
-export abstract class HttpBase extends NativeMobileComponent<any, WithMobileOSProps<IHttp, iOSProps, {}>> implements IHttp {
-  constructor(params?: Partial<IHttp>) {
-    super(params);
-  }
-  abstract cookiePersistenceEnabled: boolean;
-  abstract get timeout(): number;
-  abstract set timeout(value);
-  abstract get headers(): Record<string, string>;
-  abstract requestFile(params: FileRequestParams): HttpRequest;
-  abstract requestImage(params: ImageRequestParams): HttpRequest;
-  abstract requestString(params: StringRequestParams): HttpRequest;
-  abstract requestJSON(params: JSONRequestParams): HttpRequest;
-  abstract request(params: RequestParams): HttpRequest;
-  abstract upload(params: UploadParams): HttpRequest;
-  abstract cancelAll(): void;
-
-  static cancelAll(): void {
-    throw new Error('Method not implemented.');
-  }
 }
 
 /**

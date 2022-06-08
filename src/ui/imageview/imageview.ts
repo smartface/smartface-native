@@ -335,48 +335,12 @@ export interface IImageView<
     useHTTPCacheControl?: boolean;
     onSuccess?: (image: IImage, cache: ImageCacheType) => void;
     onFailure?: () => void;
-    image: any;
-    cache: ImageCacheType;
+    cache?: ImageCacheType;
     android?: {
       useDiskCache?: boolean;
       useMemoryCache?: boolean;
       cacheSignature?: string | null;
     };
-    ios?: { isRefreshCached?: boolean };
-  }): void;
-}
-
-export declare class AbstractImageView<TEvent extends string = ImageViewEvents> extends AbstractView<TEvent> implements IImageView<TEvent> {
-  static FillType: typeof ImageFillType;
-  constructor(params?: Partial<IImageView>);
-  image: string | IImage | null;
-
-  tintColor: Color;
-
-  imageFillType: ImageFillType;
-
-  loadFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: IImage;
-    fade?: boolean;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: () => void;
-    onFailure?: () => void;
-    android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
-    ios?: { isRefreshCached?: boolean };
-  }): void;
-
-  loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void;
-
-  fetchFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: IImage;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
-    onFailure?: () => void;
-    android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
   }): void;
 }

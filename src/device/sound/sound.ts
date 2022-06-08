@@ -1,7 +1,8 @@
-import Page from '../../ui/page';
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { INativeComponent } from '../../core/inative-component';
+import { IEventEmitter } from '../../core/eventemitter';
+import { IPage } from '../../ui/page/page';
 
 /**
  * @class Device.Sound
@@ -21,11 +22,7 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
  *     mySound.loadURL(your-url);
  *
  */
-export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEvents> {
-  constructor(params?: Partial<SoundImpl>) {
-    super(params);
-  }
-  static Events: typeof SoundEvents;
+export interface ISound extends INativeComponent, IEventEmitter<SoundEvents> {
   /**
    * Checks whether the sound is playing.
    *
@@ -35,7 +32,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract get isPlaying(): boolean;
+  readonly isPlaying: boolean;
   /**
    * Gets/sets whether the sound is looping or non-looping.
    *
@@ -45,17 +42,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract get isLooping(): boolean;
-  /**
-   * Gets/sets whether the sound is looping or non-looping.
-   *
-   * @property {Boolean} isLooping
-   * @readonly
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  abstract set isLooping(isLooping: boolean);
+  isLooping: boolean;
   /**
    * Gets/sets the volume of the sound. The range is between {0.0, 1.0}
    *
@@ -64,7 +51,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract volume: number;
+  volume: number;
   /**
    * Gets the duration in milliseconds.
    *
@@ -74,7 +61,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract get totalDuration(): number;
+  readonly totalDuration: number;
   /**
    * Gets the current duration in milliseconds.
    *
@@ -84,7 +71,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract get currentDuration(): number;
+  readonly currentDuration: number;
   /**
    * Triggered when the sound is ready for playing.
    *
@@ -103,7 +90,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * });
    * ```
    */
-  abstract onReady: () => void;
+  onReady: () => void;
   /**
    *
    * Triggered when the sound complited playing.
@@ -123,7 +110,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * });
    * ```
    */
-  abstract onFinish: () => void;
+  onFinish: () => void;
   /**
    * Pauses the sound.
    *
@@ -132,7 +119,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract pause(): void;
+  pause(): void;
   /**
    * Seeks to specified time position.
    *
@@ -142,7 +129,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract seekTo(milliseconds: number): void;
+  seekTo(milliseconds: number): void;
   /**
    * Stops the sound.
    *
@@ -151,7 +138,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract stop(): void;
+  stop(): void;
   /**
    * plays the sound.
    *
@@ -160,7 +147,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract play(): void;
+  play(): void;
   /**
    * Loads the source. {@link Application.Android.Permissions#READ_EXTERNAL_STORAGE} permission is required to load local files.
    *
@@ -170,7 +157,7 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract loadFile(file: File): void;
+  loadFile(file: File): void;
   /**
    * Loads the source.
    *
@@ -180,49 +167,30 @@ export abstract class AbstractSound extends NativeEventEmitterComponent<SoundEve
    * @ios
    * @since 0.1
    */
-  abstract loadURL(url: string): void;
-  static android: {
-    /**
-     * Picks a sound on the device.
-     *
-     *     @example
-     *     import Sound from '@smartface/native/device/sound';
-     *     Sound.android.pick({onSuccess: soundPicked});
-     *
-     *     function soundPicked(e) {
-     *         if(!e.sound.isPlaying)
-     *             e.sound.play();
-     *     }
-     *
-     * @method pick
-     * @param {Object} params Object describing function parameters.
-     * @param {UI.Page} params.page (required since 1.1.8)
-     * @param {Function} params.onSuccess Callback for success situation.
-     * @param {Object} params.onSuccess.param
-     * @param {Device.Sound} params.onSuccess.param.sound
-     * @param {Function} [params.onFailure] Callback for failure situation.
-     * @static
-     * @android
-     * @since 1.1.8
-     */
-    pick: (params: { page: Page; onSuccess: (e: { sound: SoundImpl }) => void; onFailure: () => void }) => void | undefined;
-  };
-}
-
-export declare class SoundImpl extends AbstractSound {
-  get isPlaying(): boolean;
-  get isLooping(): boolean;
-  set isLooping(isLooping: boolean);
-  volume: number;
-  get totalDuration(): number;
-  get currentDuration(): number;
-  onReady: () => void;
-  onFinish: () => void;
-  pause(): void;
-  seekTo(milliseconds: number): void;
-  stop(): void;
-  play(): void;
-  loadFile(file: File): void;
   loadURL(url: string): void;
-  protected createNativeObject(): any;
+
+  /**
+   * Picks a sound on the device.
+   *
+   *     @example
+   *     import Sound from '@smartface/native/device/sound';
+   *     Sound.android.pick({onSuccess: soundPicked});
+   *
+   *     function soundPicked(e) {
+   *         if(!e.sound.isPlaying)
+   *             e.sound.play();
+   *     }
+   *
+   * @method pick
+   * @param {Object} params Object describing function parameters.
+   * @param {UI.Page} params.page (required since 1.1.8)
+   * @param {Function} params.onSuccess Callback for success situation.
+   * @param {Object} params.onSuccess.param
+   * @param {Device.Sound} params.onSuccess.param.sound
+   * @param {Function} [params.onFailure] Callback for failure situation.
+   * @static
+   * @android
+   * @since 1.1.8
+   */
+  pick: (params: { page: IPage; onSuccess: (e: { sound: ISound }) => void; onFailure: () => void }) => void;
 }

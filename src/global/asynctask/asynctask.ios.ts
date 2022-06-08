@@ -11,11 +11,8 @@ export class AsyncTaskIOS<TEvent extends string = AsyncTaskEvents, TProps extend
     return new __SF_NSOperationQueue();
   }
   static Events = AsyncTaskEvents;
-  constructor(params: Partial<IAsyncTask> = {}) {
-    super();
-    const { android, ios, ...rest } = params;
-
-    Object.assign(this, rest);
+  constructor(params: TProps) {
+    super(params);
   }
   task: () => void;
   onComplete: () => void;

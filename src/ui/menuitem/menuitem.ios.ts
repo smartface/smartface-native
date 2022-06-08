@@ -1,4 +1,4 @@
-import { IMenuItem, Style } from './menuitem';
+import { IMenuItem, MenuItemStyle } from './menuitem';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MenuItemEvents } from './menuitem-events';
 
@@ -7,28 +7,28 @@ export default class MenuItemIOS extends NativeEventEmitterComponent<MenuItemEve
     return null;
   }
   static Styles = {
-    DEFAULT: Style.DEFAULT,
-    CANCEL: Style.CANCEL,
-    DESTRUCTIVE: Style.DESTRUCTIVE
+    DEFAULT: MenuItemStyle.DEFAULT,
+    CANCEL: MenuItemStyle.CANCEL,
+    DESTRUCTIVE: MenuItemStyle.DESTRUCTIVE
   };
   private _title: string;
-  private _style: Style;
+  private _style: MenuItemStyle;
   constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addIOSProps(this.getIOSProps());
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this._title = '';
-    this._style = Style.DEFAULT;
+    this._style = MenuItemStyle.DEFAULT;
     super.preConstruct(params);
   }
   private getIOSProps() {
     const self = this;
     return {
-      get style(): Style {
+      get style(): MenuItemStyle {
         return self._style;
       },
-      set style(color: Style) {
+      set style(color: MenuItemStyle) {
         self._style = color;
       }
     };

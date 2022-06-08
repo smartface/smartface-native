@@ -104,29 +104,3 @@ export interface IAttributedString<TNative = any, TProps extends MobileOSProps<A
    */
   underline: boolean;
 }
-
-export abstract class AttributedStringBase<TNative = any, TProps extends MobileOSProps<AttributedStringiOSProps, {}> = MobileOSProps<AttributedStringiOSProps, {}>>
-  extends NativeMobileComponent<TNative, TProps>
-  implements IAttributedString
-{
-  abstract get backgroundColor(): Color;
-  abstract set backgroundColor(value: Color);
-  abstract get string(): string;
-  abstract set string(value: string);
-  abstract get font(): AbstractFont | null;
-  abstract set font(value: AbstractFont | null);
-  abstract get foregroundColor(): Color;
-  abstract set foregroundColor(value: Color);
-  abstract get link(): string | undefined;
-  abstract set link(value: string | undefined);
-  abstract get strikethrough(): boolean;
-  abstract set strikethrough(value: boolean);
-  abstract get underline(): boolean;
-  abstract set underline(value: boolean);
-  constructor(params?: TProps) {
-    super(params);
-  }
-  protected createNativeObject(): any {
-    return null;
-  }
-}

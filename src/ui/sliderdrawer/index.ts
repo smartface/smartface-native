@@ -1,5 +1,5 @@
-import { AbstractSliderDrawer } from './sliderdrawer';
+import { ISliderDrawer } from './sliderdrawer';
 
-const SliderDrawer: typeof AbstractSliderDrawer = require(`./sliderdrawer.${Device.deviceOS.toLowerCase()}`).default;
-type SliderDrawer = AbstractSliderDrawer;
+const SliderDrawer: ConstructorOf<ISliderDrawer, Partial<ISliderDrawer>> = require(`./sliderdrawer.${Device.deviceOS.toLowerCase()}`).default;
+type SliderDrawer = ISliderDrawer;
 export default SliderDrawer;

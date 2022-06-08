@@ -4,12 +4,14 @@ import Color from '../color';
 import { IPage } from '../page/page';
 
 export interface IWebBrowserIOSProps {
+  /**
+   * The color to tint the the control buttons on the header bar and bottom bar.
+   *
+   * @property {UI.Color} [itemColor = UI.Color.create("#00A1F1")]
+   * @ios
+   * @since 0.1
+   */
   itemColor?: Color;
-}
-
-export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBrowserIOSProps, {}> = MobileOSProps<IWebBrowserIOSProps, {}>> extends INativeMobileComponent<TNative, TProps> {
-  url: string;
-  barColor?: Color;
 }
 
 /**
@@ -29,10 +31,25 @@ export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBro
  *       });
  *       webBrowser.show(this);
  */
-export class WebBrowserBase extends NativeComponent {
-  protected createNativeObject(params?: Partial<Record<string, any>>) {
-    throw new Error('createNativeObject Method not implemented.');
-  }
+export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBrowserIOSProps, {}> = MobileOSProps<IWebBrowserIOSProps, {}>> extends INativeMobileComponent<TNative, TProps> {
+  /**
+   * Only HTTP and HTTPS URLs are supported.
+   *
+   * @property {String} [url = ""]
+   * @android
+   * @ios
+   * @since 2.0.11
+   */
+  url: string;
+  /**
+   * The color to tint the background of the header bar and bottom bar.
+   *
+   * @property {UI.Color} [barColor = UI.Color.WHITE]
+   * @android
+   * @ios
+   * @since 2.0.11
+   */
+  barColor?: Color;
   /**
    *
    * This function shows WebBrowser on the given UI.Page.
@@ -43,10 +60,5 @@ export class WebBrowserBase extends NativeComponent {
    * @ios
    * @since 2.0.11
    */
-  show(page: IPage) {
-    throw new Error('show() Method not implemented.');
-  }
-  constructor(params?: Partial<IWebBrowser>) {
-    super(params);
-  }
+  show(page: IPage): void;
 }
