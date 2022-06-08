@@ -100,6 +100,17 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @since 1.1.10
    */
   pages: IPage[];
+  /**
+   * Gets/Sets the callback triggered when a page is selected after a swipe action.
+   *
+   * @event onPageSelected
+   * @deprecated
+   * @param index
+   * @param page Selected page instance
+   * @android
+   * @ios
+   * @since 1.1.10
+   */
   onPageSelected: (index: number, page: IPage) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
@@ -174,25 +185,44 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @since 1.1.10
    */
   swipeToIndex(index: number, animated: boolean): void;
+  /**
+   * Gets/sets over-scroll mode for this view.
+   *
+   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+   * @android
+   * @since 3.0.2
+   */
   overScrollMode: OverScrollMode;
+  /**
+   * Gets/sets the callback which is responsible to create pages. Please note that the positions go from 0 to whatever page count is.
+   * @example
+   * const pages = [Page1, Page2, Page3];
+   * const swipeView = new SwipeView();
+   * swipeView.pageCount = pages.length;
+   * swipeView.onPageCreate = (position) => {
+   * 	return pages[position];
+   * });
+   * ```
+   */
   onPageCreate: (position: number) => IPage | null;
+  /**
+   * Gets/Sets the count of the pages to be created. Please note that all positions should have a Page class to be returned.
+   * Make sure that both lengths are always equal or have a fallback page.
+   * If onPageCreate cannot find any page class, it will either crash the application or throw an error.
+   * @example
+   * ```
+   * const pages = [Page1, Page2, Page3];
+   * const swipeView = new SwipeView();
+   * swipeView.pageCount = pages.length;
+   * swipeView.onPageCreate = (position) => {
+   * 	return pages[position];
+   * });
+   * ```
+   */
   pageCount: number;
+  /**
+   * Private native property for Android to work on. You shouldn't be using this.
+   * @private
+   */
   pagerAdapter: { notifyDataSetChanged: () => void };
-}
-
-export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents> extends AbstractView<TEvent | SwipeViewEvents, any, ISwipeView> implements ISwipeView {
-  constructor(params?: Partial<ISwipeView>);
-  onPageCreate: (position: number) => IPage;
-  pageCount: number;
-  pagerAdapter: { notifyDataSetChanged: () => void };
-  page: IPage;
-  pages: IPage[];
-  onPageSelected: (index: number, page: IPage) => void;
-  onPageScrolled: (index: number, offset: number) => void;
-  onStateChanged: (state: SwipeViewState) => void;
-  currentIndex: number;
-  pagingEnabled: boolean;
-  swipeToIndex(index: number, animated: boolean): void;
-  overScrollMode: OverScrollMode;
-  static State: typeof SwipeViewState;
 }

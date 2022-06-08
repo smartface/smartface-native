@@ -113,6 +113,14 @@ export declare interface ITabbarItem extends INativeMobileComponent<any, WithMob
    * @since 1.1.10
    */
   route: string;
+  /**
+   * Parent of the tabbarItem. This is a private property, you shouldn't be using this.
+   * @private
+   */
   tabBarItemParent: ITabBarController | IBottomTabBar | null;
+  /**
+   * Index of this tabbarItem which belongs in their parent. This is a private property, you shouldn't be using this.
+   * @private
+   */
   index: number | null;
 }

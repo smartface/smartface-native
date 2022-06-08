@@ -56,10 +56,10 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
   /**
    * Enables/disables the Switch.
    *
-   *     @example
-   *     import Switch from '@smartface/native/ui/switch';
-   *     var mySwitch = new Switch();
-   *     mySwitch.enabled = false;
+   * @example
+   * import Switch from '@smartface/native/ui/switch';
+   * var mySwitch = new Switch();
+   * mySwitch.enabled = false;
    *
    * @since 1.1.8
    * @property {Boolean} [enabled = true]
