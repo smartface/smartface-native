@@ -196,6 +196,7 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
   /**
    * Gets/sets the callback which is responsible to create pages. Please note that the positions go from 0 to whatever page count is.
    * @example
+   * ```
    * const pages = [Page1, Page2, Page3];
    * const swipeView = new SwipeView();
    * swipeView.pageCount = pages.length;

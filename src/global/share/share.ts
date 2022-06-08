@@ -18,7 +18,7 @@ export declare class ShareBase {
    *
    *     @example
    *     import Share from '@smartface/native/share';
-   *     Share.shareText("Hello from @smartface/native", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
+   *     Share.shareText("Hello from '@smartface/native'", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
    *
    * @method shareText
    * @param {String} text

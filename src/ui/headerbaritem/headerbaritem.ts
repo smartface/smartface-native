@@ -287,9 +287,11 @@ export interface HeaderBarItemAndroidProps {
       * Gets/sets elevation of the header bar.
       * @android
       * @example
-      * ```import Page from '@smartface/native/ui/page';
+      * ```
+      * import Page from '@smartface/native/ui/page';
            const myPage = new Page();
            myPage.headerBar.android.elevation = 10;
+           
            ```
       */
   elevation: number;
@@ -308,7 +310,8 @@ export interface HeaderBarItemAndroidProps {
   /**
             * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
             * @example
-            * ```import Page from '@smartface/native/ui/page';
+            * ```
+            * import Page from '@smartface/native/ui/page';
                const myPage = new Page();
                myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
                ```
