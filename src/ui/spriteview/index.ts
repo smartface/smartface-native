@@ -19,7 +19,7 @@ export default class SpriteView extends ImageView implements ISpriteView {
   private _currentFrame: number;
   private _frameCount: number;
   private _frames: IImage[];
-  private _timer?: Timer;
+  private _timer?: number;
 
   constructor(params?: Partial<ISpriteView>) {
     super(params);
@@ -90,7 +90,7 @@ export default class SpriteView extends ImageView implements ISpriteView {
    * spriteView.stop();
    */
   stop() {
-    if (this._timer) {
+    if (typeof this._timer === 'number') {
       Timer.clearTimer(this._timer);
     }
   }
