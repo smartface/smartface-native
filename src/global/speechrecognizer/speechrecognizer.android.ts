@@ -1,5 +1,5 @@
 import AndroidConfig from '../../util/Android/androidconfig';
-import { RecognizerAndroidError, SpeechRecognizerBase, RecognizerError } from './speechrecognizer';
+import { ISpeechRecognizer, RecognizerAndroidError, RecognizerError } from './speechrecognizer';
 
 const NativeSpeechRecognizer = requireClass('android.speech.SpeechRecognizer');
 const Intent = requireClass('android.content.Intent');
@@ -31,7 +31,7 @@ function createIntent(params: { locale: string }) {
   return _intent;
 }
 
-class SpeechRecognizerAndroid implements SpeechRecognizerBase {
+class SpeechRecognizerClass implements ISpeechRecognizer {
   nativeObject: any;
   _isRunning = false;
   intent;
@@ -96,10 +96,12 @@ class SpeechRecognizerAndroid implements SpeechRecognizerBase {
   }
   readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError } = RecognizerError;
   ios = {
-    isLocaleSupported() {}
+    isLocaleSupported() {
+      return false;
+    }
   };
 }
 
-const SpeechRecognizer = new SpeechRecognizerAndroid();
+const SpeechRecognizer = new SpeechRecognizerClass();
 
 export default SpeechRecognizer;
