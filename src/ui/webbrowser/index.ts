@@ -1,6 +1,6 @@
-import { WebBrowserBase } from './webbrowser';
+import { IWebBrowser } from './webbrowser';
 
-const WebBrowser: typeof WebBrowserBase = require(`./webbrowser.${Device.deviceOS.toLowerCase()}`).default;
-type WebBrowser = WebBrowserBase;
+const WebBrowser: ConstructorOf<IWebBrowser, Partial<IWebBrowser>> = require(`./webbrowser.${Device.deviceOS.toLowerCase()}`).default;
+type WebBrowser = IWebBrowser;
 
 export default WebBrowser;
