@@ -1,13 +1,13 @@
-import AttributedString from '../attributedstring';
-import Image from '../image';
 import Font from '../font';
 import Color from '../color';
-import Badge from '../badge';
 import { Point2D } from '../../primitive/point2d';
-import View from '../view';
 import NativeComponent from '../../core/native-component';
 import { INativeComponent } from '../../core/inative-component';
 import { IImage } from '../image/image';
+import { IView } from '../view/view';
+import { IBadge } from '../badge/badge';
+import { IAttributedString } from '../attributedstring/attributedstring';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
@@ -16,7 +16,7 @@ import { IImage } from '../image/image';
  * @since 3.2.1
  * @ios
  */
-export enum SystemItem {
+export enum HeaderBarSystemItem {
   /**
    * The system Done button. Localized.
    *
@@ -249,6 +249,127 @@ export enum SystemItem {
   RED = 22
 }
 
+export interface HeaderBarItemAndroidProps {
+  /**
+   * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
+   * shown in the header bar.
+   *
+   * Attributed title won't show if item is set as left item to header bar.
+   *
+   * @property {UI.AttributedString} attributedTitle
+   * @android
+   * @since 4.0.0
+   */
+  attributedTitle: IAttributedString;
+
+  /**
+   * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
+   *
+   *     @example
+   *     var myItem = new HeaderBarItem({
+   *         android: {
+   *             systemIcon: 17301545   // OR 'ic_dialog_email'
+   *         },
+   *         color: Color.RED,
+   *         onPress: function() {
+   *             console.log("You pressed Done item!");
+   *         }
+   *     });
+   *     this.headerBar.setItems([myItem]);
+   *
+   * @property {Number | String} systemIcon
+   * @android
+   * @see https://developer.android.com/reference/android/R.drawable
+   * @since 4.0.2
+   */
+  systemIcon: number | string;
+  /**
+      * Gets/sets elevation of the header bar.
+      * @android
+      * @example
+      * ```import Page from '@smartface/native/ui/page';
+           const myPage = new Page();
+           myPage.headerBar.android.elevation = 10;
+           ```
+      */
+  elevation: number;
+  /**
+   * Gets/sets the content inset of headerbar. Minimum API Level 21 required.
+   * The content inset affects the valid area for Headerbar content other than the navigation button and menu.
+   * Insets define the minimum margin for these custom views like titleLayout and can be used to effectively align HeaderBar content along well-known gridlines.
+   */
+  contentInset: { left: number; right: number };
+  /**
+   * Gets/sets the logo visibility of the HeaderBar. If logo is disable, logo image will newer shown. This property will work only for Android.
+   * @default false
+   * @android
+   */
+  logoEnabled: boolean;
+  /**
+            * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
+            * @example
+            * ```import Page from '@smartface/native/ui/page';
+               const myPage = new Page();
+               myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
+               ```
+            */
+  subtitle: string;
+  /**
+   * Gets/sets titleFont of header bar subtitle.
+   * @android
+   */
+  subtitleFont: Font;
+}
+
+export interface HeaderBarItemIOSProps {
+  /**
+   * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
+   *
+   *     @example
+   *     var myItem = new HeaderBarItem({
+   *         ios:{
+   *             systemItem : HeaderBarItem.iOS.SystemItem.TRASH
+   *         },
+   *         onPress: function() {
+   *             console.log("You pressed TRASH item!");
+   *         }
+   *     });
+   *     this.headerBar.setItems([myItem]);
+   *
+   * @property {UI.HeaderBarItem.iOS.SystemItem} systemItem
+   * @readonly
+   * @ios
+   * @since 3.2.1
+   */
+  systemItem: HeaderBarSystemItem;
+  /**
+   * Gets/sets font of header bar item.
+   *
+   * @property {UI.Font} font
+   * @ios
+   * @since 4.0.0
+   */
+  font: Font;
+  /**
+   * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
+   * @ios
+   * @default false
+   */
+  translucent: boolean;
+  /**
+   * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
+   */
+  titleFont: Font;
+  /**
+   * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance.
+   * This change can be observed only on the pages that added to navigator style router.
+   * Default value is undefined, it gets title value from previous page's header bar title property.
+   * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour.
+   * This property will work only for iOS. You should access this property from page.parentController
+   */
+  backBarButtonItem: IHeaderBarItem;
+}
+
 /**
  * @class UI.HeaderBarItem
  * @since 0.1
@@ -268,7 +389,7 @@ export enum SystemItem {
  *     });
  *     myPage.headerBar.setItems([myItem]);
  */
-export interface IHeaderBarItem extends INativeComponent {
+export interface IHeaderBarItem extends INativeMobileComponent<any, MobileOSProps<HeaderBarItemIOSProps, HeaderBarItemAndroidProps>> {
   /**
    * Gets/sets title of header bar item. If image is not set, title will be
    * shown in the header bar.
@@ -298,125 +419,6 @@ export interface IHeaderBarItem extends INativeComponent {
         readonly height: number;
       }
     | undefined;
-  android: Partial<{
-    /**
-     * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
-     * shown in the header bar.
-     *
-     * Attributed title won't show if item is set as left item to header bar.
-     *
-     * @property {UI.AttributedString} attributedTitle
-     * @android
-     * @since 4.0.0
-     */
-    attributedTitle: AttributedString;
-
-    /**
-     * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
-     *
-     *     @example
-     *     var myItem = new HeaderBarItem({
-     *         android: {
-     *             systemIcon: 17301545   // OR 'ic_dialog_email'
-     *         },
-     *         color: Color.RED,
-     *         onPress: function() {
-     *             console.log("You pressed Done item!");
-     *         }
-     *     });
-     *     this.headerBar.setItems([myItem]);
-     *
-     * @property {Number | String} systemIcon
-     * @android
-     * @see https://developer.android.com/reference/android/R.drawable
-     * @since 4.0.2
-     */
-    systemIcon: number | string;
-    /**
-		 * Gets/sets elevation of the header bar.
-		 * @android
-		 * @example
-		 * ```import Page from '@smartface/native/ui/page';
-					const myPage = new Page();
-					myPage.headerBar.android.elevation = 10;
-					```
-		 */
-    elevation: number;
-    /**
-     * Gets/sets the content inset of headerbar. Minimum API Level 21 required.
-     * The content inset affects the valid area for Headerbar content other than the navigation button and menu.
-     * Insets define the minimum margin for these custom views like titleLayout and can be used to effectively align HeaderBar content along well-known gridlines.
-     */
-    contentInset: { left: number; right: number };
-    /**
-     * Gets/sets the logo visibility of the HeaderBar. If logo is disable, logo image will newer shown. This property will work only for Android.
-     * @default false
-     * @android
-     */
-    logoEnabled: boolean;
-    /**
-           * Gets/sets subtitle of the header bar. If not set subtitle will not show. This property will work only for Android.
-           * @example
-           * ```import Page from '@smartface/native/ui/page';
-              const myPage = new Page();
-              myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
-              ```
-           */
-    subtitle: string;
-    /**
-     * Gets/sets titleFont of header bar subtitle.
-     * @android
-     */
-    subtitleFont: Font;
-  }>;
-  ios: Partial<{
-    /**
-     * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
-     *
-     *     @example
-     *     var myItem = new HeaderBarItem({
-     *         ios:{
-     *             systemItem : HeaderBarItem.iOS.SystemItem.TRASH
-     *         },
-     *         onPress: function() {
-     *             console.log("You pressed TRASH item!");
-     *         }
-     *     });
-     *     this.headerBar.setItems([myItem]);
-     *
-     * @property {UI.HeaderBarItem.iOS.SystemItem} systemItem
-     * @readonly
-     * @ios
-     * @since 3.2.1
-     */
-    systemItem: SystemItem;
-    /**
-     * Gets/sets font of header bar item.
-     *
-     * @property {UI.Font} font
-     * @ios
-     * @since 4.0.0
-     */
-    font: Font;
-    /**
-     * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
-     * @ios
-     * @default false
-     */
-    translucent: boolean;
-    /**
-     * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
-     */
-    titleFont: Font;
-    /**
-     * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance.
-     * This change can be observed only on the pages that added to navigator style router.
-     * Default value is undefined, it gets title value from previous page's header bar title property.
-     * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour.
-     * This property will work only for iOS. You should access this property from page.parentController
-     */
-    backBarButtonItem: IHeaderBarItem;
-  }>;
   /**
    * Gets/sets Image Object or Image Path of header bar item. Image is set to null as default.
    *
@@ -437,7 +439,7 @@ export interface IHeaderBarItem extends INativeComponent {
    * @ios
    * @since 4.1.5
    */
-  customView: View | undefined;
+  customView: IView | undefined;
   /**
    * Gets/sets enabled status of header bar item. Enabled is set to true as
    * default.
@@ -496,7 +498,7 @@ export interface IHeaderBarItem extends INativeComponent {
    * @readonly
    * @since 3.0.0
    */
-  badge: Badge;
+  badge: IBadge;
   /**
    * A content description briefly describes the view. VoiceOver will read this string when a user selects the associated element.
    *
@@ -506,42 +508,5 @@ export interface IHeaderBarItem extends INativeComponent {
    * @member UI.HeaderBarItem
    * @since 4.4.1
    */
-  accessibilityLabel: string;
-}
-
-export declare class AbstractHeaderBarItem extends NativeComponent implements IHeaderBarItem {
-  protected createNativeObject();
-  constructor(params?: Partial<AbstractHeaderBarItem>);
-  title: string;
-  readonly size: {
-    readonly width: number;
-    readonly height: number;
-  };
-  android: Partial<{
-    attributedTitle: AttributedString;
-    systemIcon: number | string;
-    elevation: number;
-    contentInset: { left: number; right: number };
-    logoEnabled: boolean;
-    subtitle: string;
-    subtitleFont: Font;
-  }>;
-  ios: Partial<{
-    systemItem: SystemItem;
-    font: Font;
-    translucent: boolean;
-    titleFont: Font;
-    backBarButtonItem: IHeaderBarItem;
-  }>;
-  static iOS: {
-    SystemItem: typeof SystemItem;
-  };
-  image: IImage | string | null;
-  customView: View;
-  enabled: boolean;
-  getScreenLocation(): Point2D;
-  onPress: (() => void) | null;
-  color: Color | null;
-  badge: Badge;
   accessibilityLabel: string;
 }

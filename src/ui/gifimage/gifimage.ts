@@ -1,10 +1,8 @@
 import { INativeComponent } from '../../core/inative-component';
 import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
-import Blob from '../../global/blob';
 import IBlob from '../../global/blob/blob';
-import File from '../../io/file';
+import { IFile } from '../../io/file/file';
 import { Size } from '../../primitive/size';
-import Image from '../image';
 import { IImage } from '../image/image';
 
 export type iOSProps = {
@@ -38,9 +36,17 @@ export type AndroidProps = {
    */
   speed?: number;
 
+  /**
+   * This is an internal property. It hold the native drawable value of the gifimage
+   * @private
+   */
   drawable?: any;
 
-  content?: File | Blob;
+  /**
+   * This is an internal property. It hold the native file of the gifimage
+   * @private
+   */
+  content?: IFile | IBlob;
 
   /**
    * Restarts the GifImage.
@@ -108,7 +114,7 @@ export abstract class AbstractGifImage extends NativeMobileComponent<any, IGifIm
    * @ios
    * @since 3.2.0
    */
-  static createFromBlob(blob: Blob): IGifImage | null {
+  static createFromBlob(blob: IBlob): IGifImage | null {
     throw new Error('Method not implemented.');
   }
 
