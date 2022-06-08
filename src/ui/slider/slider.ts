@@ -1,9 +1,37 @@
 import Color from '../color';
 import { IImage } from '../image/image';
-import { AbstractView, IView } from '../view/view';
+import { IView } from '../view/view';
 import { SliderEvents } from './slider-events';
 
+/**
+ * @class UI.Slider
+ * @since 0.1
+ * @extends UI.View
+ *
+ * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
+ *
+ *     @example
+ *     import Color from '@smartface/native/ui/color';
+ *     import Slider from '@smartface/native/ui/slider';
+ *     const mySlider = new Slider({
+ *         width: 200,
+ *         maxValue: 100,
+ *         minValue: 0,
+ *         value: 40,
+ *         minTrackColor: Color.RED,
+ *         thumbColor: Color.BLUE,
+ *         onValueChange: () => {
+ *             console.log("Slider's value: " + mySlider.value);
+ *         }
+ *     });
+ *
+ */
 export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEvent | SliderEvents> {
+  /**
+   * A private variable which is passed to the constructor whether to assign the default values or not.
+   * You shouldn't need this.
+   * @private
+   */
   skipDefaults: boolean;
   /**
    * Gets/sets color of the thumb.
@@ -37,11 +65,11 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
   /**
    * Gets/sets color of the thumb's minimum track color.
    *
-   *     @example
-   *     import Slider from '@smartface/native/ui/slider';
-   *     import Color from '@smartface/native/ui/color';
-   *     var mySlider = new Slider();
-   *     mySlider.minTrackColor = Color.BLUE;
+   * @example
+   * import Slider from '@smartface/native/ui/slider';
+   * import Color from '@smartface/native/ui/color';
+   * const mySlider = new Slider();
+   * mySlider.minTrackColor = Color.BLUE;
    *
    * @property {UI.Color} [minTrackColor = UI.Color.DARKGRAY]
    * @android
