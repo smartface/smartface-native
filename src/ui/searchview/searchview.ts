@@ -436,6 +436,47 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * ```
    */
   onSearchButtonClicked: () => void;
+  on(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchBegin', callback: () => void): () => void;
+  on(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchEnd', callback: () => void): () => void;
+  on(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  on(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cancelButtonClicked', callback: () => void): void;
+  off(eventName: 'searchBegin', callback: () => void): void;
+  off(eventName: 'searchButtonClicked', callback: () => void): void;
+  off(eventName: 'searchEnd', callback: () => void): void;
+  off(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  off(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cancelButtonClicked', ): void;
+  emit(eventName: 'searchBegin', ): void;
+  emit(eventName: 'searchButtonClicked', ): void;
+  emit(eventName: 'searchEnd', ): void;
+  emit(eventName: 'textChanged', searchText: string): void;
+  emit(eventName: SearchViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchBegin', callback: () => void): () => void;
+  once(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchEnd', callback: () => void): () => void;
+  once(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  once(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchBegin', callback: () => void): void;
+  prependListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchEnd', callback: () => void): void;
+  prependListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchBegin', callback: () => void): void;
+  prependOnceListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchEnd', callback: () => void): void;
+  prependOnceListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependOnceListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView<TEvent | SearchViewEvents> {
@@ -462,4 +503,45 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   onSearchEnd: () => void;
   onTextChanged: (searchText: string) => void;
   onSearchButtonClicked: () => void;
+    on(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchBegin', callback: () => void): () => void;
+  on(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchEnd', callback: () => void): () => void;
+  on(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  on(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cancelButtonClicked', callback: () => void): void;
+  off(eventName: 'searchBegin', callback: () => void): void;
+  off(eventName: 'searchButtonClicked', callback: () => void): void;
+  off(eventName: 'searchEnd', callback: () => void): void;
+  off(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  off(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cancelButtonClicked', ): void;
+  emit(eventName: 'searchBegin', ): void;
+  emit(eventName: 'searchButtonClicked', ): void;
+  emit(eventName: 'searchEnd', ): void;
+  emit(eventName: 'textChanged', searchText: string): void;
+  emit(eventName: SearchViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchBegin', callback: () => void): () => void;
+  once(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchEnd', callback: () => void): () => void;
+  once(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  once(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchBegin', callback: () => void): void;
+  prependListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchEnd', callback: () => void): void;
+  prependListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchBegin', callback: () => void): void;
+  prependOnceListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchEnd', callback: () => void): void;
+  prependOnceListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependOnceListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
 }

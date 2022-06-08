@@ -495,8 +495,57 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 0.1
    */
+
+  on(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  on(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  on(eventName: 'clusterPress', callback: (pinArray:Pin[]) => void): () => void;
+  on(eventName: 'create', callback: () => void): () => void;
+  on(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  on(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  on(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cameraMoveEnded', callback: () => void): void;
+  off(eventName: 'cameraMoveStarted', callback: () => void): void;
+  off(eventName: 'clusterPress', callback: () => void): void;
+  off(eventName: 'create', callback: (pinArray:Pin[]) => void): void;
+  off(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  off(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  off(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cameraMoveEnded', ): void;
+  emit(eventName: 'cameraMoveStarted', ): void;
+  emit(eventName: 'clusterPress',pinArray:Pin[] ): void;
+  emit(eventName: 'create', ): void;
+  emit(eventName: 'longPress',location:{latitude: number, longitude: number} ): void;
+  emit(eventName: 'press',location:{latitude: number, longitude: number} ): void;
+  emit(eventName: MapViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  once(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  once(eventName: 'clusterPress', callback: (pinArray:Pin[]) => void): () => void;
+  once(eventName: 'create', callback: () => void): () => void;
+  once(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  once(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  once(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependListener(eventName: 'clusterPress', callback: (pinArray:Pin[]) => void): void;
+  prependListener(eventName: 'create', callback: () => void): void;
+  prependListener(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependListener(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependOnceListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependOnceListener(eventName: 'clusterPress', callback: (pinArray:Pin[]) => void): void;
+  prependOnceListener(eventName: 'create', callback: () => void): void;
+  prependOnceListener(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependOnceListener(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependOnceListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
   type: MapViewType;
-}
+
+} 
 
 export declare class AbstractMapView<TEvent extends string = MapViewEvents> extends AbstractView<TEvent | MapViewEvents, any, IMapView> implements IMapView<TEvent | MapViewEvents> {
   constructor(params?: Partial<IMapView>);
@@ -533,6 +582,53 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   onCameraMoveEnded: () => void;
   onLongPress: (location: { latitude: number; longitude: number }) => void;
   onCreate: () => void;
+  on(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  on(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  on(eventName: 'clusterPress', callback: (pins: Pin[]) => void): () => void;
+  on(eventName: 'create', callback: () => void): () => void;
+  on(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  on(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  on(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cameraMoveEnded', callback: () => void): void;
+  off(eventName: 'cameraMoveStarted', callback: () => void): void;
+  off(eventName: 'clusterPress', callback: () => void): void;
+  off(eventName: 'create', callback: (pins: Pin[]) => void): void;
+  off(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  off(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  off(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cameraMoveEnded', ): void;
+  emit(eventName: 'cameraMoveStarted', ): void;
+  emit(eventName: 'clusterPress',pins: Pin[] ): void;
+  emit(eventName: 'create', ): void;
+  emit(eventName: 'longPress',location:{latitude: number, longitude: number} ): void;
+  emit(eventName: 'press',location:{latitude: number, longitude: number} ): void;
+  emit(eventName: MapViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  once(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  once(eventName: 'clusterPress', callback: (pins: Pin[]) => void): () => void;
+  once(eventName: 'create', callback: () => void): () => void;
+  once(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  once(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): () => void;
+  once(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependListener(eventName: 'clusterPress', callback: (pins: Pin[]) => void): void;
+  prependListener(eventName: 'create', callback: () => void): void;
+  prependListener(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependListener(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependOnceListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependOnceListener(eventName: 'clusterPress', callback: (pins: Pin[]) => void): void;
+  prependOnceListener(eventName: 'create', callback: () => void): void;
+  prependOnceListener(eventName: 'longPress', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependOnceListener(eventName: 'press', callback: (location:{latitude: number, longitude: number}) => void): void;
+  prependOnceListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
   type: MapViewType;
 
   static Type: typeof MapViewType;

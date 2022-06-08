@@ -231,4 +231,21 @@ export declare interface IPicker<
    * @since 3.1.1
    */
   okFont: Font;
+  on(eventName: 'selected', callback: (currentIndex:number) => void): () => void;
+  on(eventName: PickerEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'selected', callback: (currentIndex:number) => void): void;
+  off(eventName: PickerEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'selected', currentIndex:number): void;
+  emit(eventName: PickerEvents, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: (currentIndex:number) => void): () => void;
+  once(eventName: PickerEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: (currentIndex:number) => void): void;
+  prependListener(eventName: PickerEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: (currentIndex:number) => void): void;
+  prependOnceListener(eventName: PickerEvents, callback: (...args: any[]) => void): void;
 }

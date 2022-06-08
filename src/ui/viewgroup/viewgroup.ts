@@ -151,6 +151,29 @@ export interface IViewGroup<
    * ```
    */
   onViewRemoved: (view: IView) => void;
+  on(eventName: 'viewAdded', callback: (view: IView) => void): () => void;
+  on(eventName: 'viewRemoved', callback: (view: IView) => void): () => void;
+  on(eventName: ViewGroupEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'viewAdded', callback: (view: IView) => void): void;
+  off(eventName: 'viewRemoved', callback: (view: IView) => void): void;
+  off(eventName: ViewGroupEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'viewAdded', view: IView): void;
+  emit(eventName: 'viewRemoved', view: IView): void;
+  emit(eventName: ViewGroupEvents, ...args: any[]): void;
+
+  once(eventName: 'viewAdded', callback: () => void): (view: IView) => void;
+  once(eventName: 'viewRemoved', callback: () => void): (view: IView) => void;
+  once(eventName: ViewGroupEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'viewAdded', callback: (view: IView) => void): void;
+  prependListener(eventName: 'viewRemoved', callback: (view: IView) => void): void;
+  prependListener(eventName: ViewGroupEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'viewAdded', callback: (view: IView) => void): void;
+  prependOnceListener(eventName: 'viewRemoved', callback: (view: IView) => void): void;
+  prependOnceListener(eventName: ViewGroupEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractViewGroup<TEvent extends string = ViewGroupEvents, TNative = any, TProps extends IViewGroup = IViewGroup>

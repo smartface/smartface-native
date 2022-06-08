@@ -1,10 +1,12 @@
-import { AbstractDatePicker, IDatePicker, DatePickerStyle, DatePickerMode } from './datepicker';
+import { IDatePicker, DatePickerStyle, DatePickerMode } from './datepicker';
 import AndroidConfig from '../../util/Android/androidconfig';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
+import { DatePickerEvents } from './datepicker-events';
 
 const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
 const NativeDialogInterface = requireClass('android.content.DialogInterface');
 
-export default class DatePickerAndroid extends AbstractDatePicker {
+export default class DatePickerAndroid<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent, any, IDatePicker> implements IDatePicker {
   onDateSelected: IDatePicker['onDateSelected'];
   onCancelled: IDatePicker['onCancelled'];
   createNativeObject(params: Partial<IDatePicker> = {}) {

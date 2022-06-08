@@ -209,6 +209,29 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * ```
    */
   onSelected: (index: number) => void;
+  /*   on(eventName: 'pageCreate', callback: (position: number) => void): () => void;
+  on(eventName: 'selected', callback: (position: number) => void): () => void;
+  on(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'pageCreate', callback: (position: number) => void): void;
+  off(eventName: 'selected', callback: (position: number) => void): void;
+  off(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'pageCreate', position: number): void;
+  emit(eventName: 'selected', position: number): void;
+  emit(eventName: TabBarControllerEvents, ...args: any[]): void;
+
+  once(eventName: 'pageCreate', callback: (position: number) => void): () => void;
+  once(eventName: 'selected', callback: (position: number) => void): () => void;
+  once(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'pageCreate', callback: (position: number) => void): void;
+  prependListener(eventName: 'selected', callback: (position: number) => void): void;
+  prependListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'pageCreate', callback: (position: number) => void): void;
+  prependOnceListener(eventName: 'selected', callback: (position: number) => void): void;
+  prependOnceListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void; */
 }
 
 export abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {

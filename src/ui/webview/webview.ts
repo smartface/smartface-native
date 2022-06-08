@@ -485,4 +485,58 @@ export interface IWebView<TEvent extends string = WebViewEvents, TMobile extends
    * @since 2.0.7
    */
   clearAllData(): void;
+
+  on(eventName: 'backButtonPressed', callback: () => void): () => void;
+  on(eventName: 'changedURL', callback: (e: { url: string }) => void): () => void;
+  on(eventName: 'consoleMessage', callback: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void): () => void;
+  on(eventName: 'error', callback: (e: { url: string; code: number; message: string }) => void): () => void;
+  on(eventName: 'load', callback: (e: { url: string }) => void): () => void;
+  on(eventName: 'openNewWindow', callback: (e?: { url: string }) => void): () => void;
+  on(eventName: 'show', callback: (e: { url: string }) => void): () => void;
+  on(eventName: WebViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'backButtonPressed', callback: () => void): void;
+  off(eventName: 'changedURL', callback: (e: { url: string }) => void): void;
+  off(eventName: 'consoleMessage', callback: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void): void;
+  off(eventName: 'error', callback: (e: { url: string; code: number; message: string }) => void): void;
+  off(eventName: 'load', callback: (e: { url: string }) => void): void;
+  off(eventName: 'openNewWindow', callback: (e?: { url: string }) => void): void;
+  off(eventName: 'show', callback: (e: { url: string }) => void): void;
+  off(eventName: WebViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'backButtonPressed', ): void;
+  emit(eventName: 'changedURL', e: { url: string }): void;
+  emit(eventName: 'consoleMessage', params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }): void;
+  emit(eventName: 'error', e: { url: string; code: number; message: string }): void;
+  emit(eventName: 'load', e: { url: string }): void;
+  emit(eventName: 'openNewWindow', e?: { url: string }): void;
+  emit(eventName: 'show', e: { url: string }): void;
+  emit(eventName: WebViewEvents, ...args: any[]): void;
+
+  once(eventName: 'backButtonPressed', callback: () => void): () => void;
+  once(eventName: 'changedURL', callback: (e: { url: string }) => void): () => void;
+  once(eventName: 'consoleMessage', callback: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void): () => void;
+  once(eventName: 'error', callback: (e: { url: string; code: number; message: string }) => void): () => void;
+  once(eventName: 'load', callback: (e: { url: string }) => void): () => void;
+  once(eventName: 'openNewWindow', callback: (e?: { url: string }) => void): () => void;
+  once(eventName: 'show', callback: (e: { url: string }) => void): () => void;
+  once(eventName: WebViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependListener(eventName: 'changedURL', callback: (e: { url: string }) => void): void;
+  prependListener(eventName: 'consoleMessage', callback: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void): void;
+  prependListener(eventName: 'error', callback: (e: { url: string; code: number; message: string }) => void): void;
+  prependListener(eventName: 'load', callback: (e: { url: string }) => void): void;
+  prependListener(eventName: 'openNewWindow', callback: (e?: { url: string }) => void): void;
+  prependListener(eventName: 'show', callback: (e: { url: string }) => void): void;
+  prependListener(eventName: WebViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependOnceListener(eventName: 'changedURL', callback: (e: { url: string }) => void): void;
+  prependOnceListener(eventName: 'consoleMessage', callback: (params: { sourceId: number; message: string; lineNumber: number; messageLevel: string }) => void): void;
+  prependOnceListener(eventName: 'error', callback: (e: { url: string; code: number; message: string }) => void): void;
+  prependOnceListener(eventName: 'load', callback: (e: { url: string }) => void): void;
+  prependOnceListener(eventName: 'openNewWindow', callback: (e?: { url: string }) => void): void;
+  prependOnceListener(eventName: 'show', callback: (e: { url: string }) => void): void;
+  prependOnceListener(eventName: WebViewEvents, callback: (...args: any[]) => void): void;
 }

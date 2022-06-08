@@ -1,8 +1,9 @@
-import { AbstractDatePicker, DatePickerIOSProperties, DatePickerMode, DatePickerStyle, IDatePicker } from './datepicker';
+import { DatePickerIOSProperties, DatePickerMode, DatePickerStyle, IDatePicker } from './datepicker';
 import Color from '../color';
 import { DatePickerEvents } from './datepicker-events';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 
-export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends AbstractDatePicker implements IDatePicker<TEvent | DatePickerEvents> {
+export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent, any, IDatePicker> implements IDatePicker<TEvent | DatePickerEvents> {
   protected _nativeObject: __SF_UIDatePicker;
   private _titleColor: DatePickerIOSProperties['titleColor'];
   private _titleFont: DatePickerIOSProperties['titleFont'];
@@ -33,6 +34,8 @@ export default class DatePickerIOS<TEvent extends string = DatePickerEvents> ext
       this.onCancelled?.();
     };
   }
+  onDateSelected: (date: Date) => void;
+  onCancelled: () => void;
 
   setDate(date: Date) {
     this.nativeObject.defaultDate = date;

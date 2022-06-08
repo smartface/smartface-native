@@ -481,4 +481,76 @@ export interface IVideoView<
    * @since 4.3.1
    */
   page: Page | null;
+
+  on(eventName: 'finish', callback: () => void): () => void;
+  on(eventName: 'ready', callback: () => void): () => void;
+  on(eventName: 'failure', callback: () => void): () => void;
+  on(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback: (callback: (shouldRestore?: boolean) => void) => void): () => void;
+  on(eventName: 'willStartPictureInPicture', callback: () => void): () => void;
+  on(eventName: 'willStopPictureInPicture', callback: () => void): () => void;
+  on(eventName: 'didStartPictureInPicture', callback: () => void): () => void;
+  on(eventName: 'didStopPictureInPicture', callback: () => void): () => void;
+  on(eventName: 'fullScreenModeChanged', callback: (isFullScreen: boolean) => void): () => void;
+  on(eventName: 'controllerVisibilityChange', callback: (visible: boolean) => void): () => void;
+  on(eventName: VideoViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'finish', callback: () => void): void;
+  off(eventName: 'ready', callback: () => void): void;
+  off(eventName: 'failure', callback: () => void): void;
+  off(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback: (callback: (shouldRestore?: boolean) => void) => void): void;
+  off(eventName: 'willStartPictureInPicture', callback: () => void): void;
+  off(eventName: 'willStopPictureInPicture', callback: () => void): void;
+  off(eventName: 'didStartPictureInPicture', callback: () => void): void;
+  off(eventName: 'didStopPictureInPicture', callback: () => void): void;
+  off(eventName: 'fullScreenModeChanged', callback: (isFullScreen: boolean) => void): void;
+  off(eventName: 'controllerVisibilityChange', callback: (visible: boolean) => void): void;
+  off(eventName: VideoViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'finish', ): void;
+  emit(eventName: 'ready', ): void;
+  emit(eventName: 'failure', ): void;
+  emit(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler',callback: (shouldRestore?: boolean) => void ): void;
+  emit(eventName: 'willStartPictureInPicture', ): void;
+  emit(eventName: 'willStopPictureInPicture', ): void;
+  emit(eventName: 'didStartPictureInPicture', ): void;
+  emit(eventName: 'didStopPictureInPicture', ): void;
+  emit(eventName: 'fullScreenModeChanged',isFullScreen: boolean): void;
+  emit(eventName: 'controllerVisibilityChange',visible: boolean): void;
+  emit(eventName: VideoViewEvents, ...args: any[]): void;
+
+  once(eventName: 'finish', callback: () => void): () => void;
+  once(eventName: 'ready', callback: () => void): () => void;
+  once(eventName: 'failure', callback: () => void): () => void;
+  once(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback: (callback: (shouldRestore?: boolean) => void) => void): () => void;
+  once(eventName: 'willStartPictureInPicture', callback: () => void): () => void;
+  once(eventName: 'willStopPictureInPicture', callback: () => void): () => void;
+  once(eventName: 'didStartPictureInPicture', callback: () => void): () => void;
+  once(eventName: 'didStopPictureInPicture', callback: () => void): () => void;
+  once(eventName: 'fullScreenModeChanged', callback: (isFullScreen: boolean) => void): () => void;
+  once(eventName: 'controllerVisibilityChange', callback: (visible: boolean) => void): () => void;
+  once(eventName: VideoViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'finish', callback: () => void): void;
+  prependListener(eventName: 'ready', callback: () => void): void;
+  prependListener(eventName: 'failure', callback: () => void): void;
+  prependListener(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback: (callback: (shouldRestore?: boolean) => void) => void): void;
+  prependListener(eventName: 'willStartPictureInPicture', callback: () => void): void;
+  prependListener(eventName: 'willStopPictureInPicture', callback: () => void): void;
+  prependListener(eventName: 'didStartPictureInPicture', callback: () => void): void;
+  prependListener(eventName: 'didStopPictureInPicture', callback: () => void): void;
+  prependListener(eventName: 'fullScreenModeChanged', callback: (isFullScreen: boolean) => void): void;
+  prependListener(eventName: 'controllerVisibilityChange', callback: (visible: boolean) => void): void;
+  prependListener(eventName: VideoViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'finish', callback: () => void): void;
+  prependOnceListener(eventName: 'ready', callback: () => void): void;
+  prependOnceListener(eventName: 'failure', callback: () => void): void;
+  prependOnceListener(eventName: 'restoreUserInterfaceForPictureInPictureStopWithCompletionHandler', callback: (callback: (shouldRestore?: boolean) => void) => void): void;
+  prependOnceListener(eventName: 'willStartPictureInPicture', callback: () => void): void;
+  prependOnceListener(eventName: 'willStopPictureInPicture', callback: () => void): void;
+  prependOnceListener(eventName: 'didStartPictureInPicture', callback: () => void): void;
+  prependOnceListener(eventName: 'didStopPictureInPicture', callback: () => void): void;
+  prependOnceListener(eventName: 'fullScreenModeChanged', callback: () => void): void;
+  prependOnceListener(eventName: 'controllerVisibilityChange', callback: (visible: boolean) => void): void;
+  prependOnceListener(eventName: VideoViewEvents, callback: (...args: any[]) => void): void;
 }
