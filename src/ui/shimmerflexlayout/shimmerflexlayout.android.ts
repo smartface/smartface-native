@@ -1,4 +1,4 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
+import { IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewAndroid from '../view/view.android';
 import FlexLayout from '../flexlayout';
@@ -176,7 +176,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
     });
   }
 
-  static Android: typeof AbstractShimmerFlexLayout.Android = {
+  static Android = {
     Shimmer: ShimmerHighlight
   };
   static ShimmeringDirection = ShimmeringDirection;

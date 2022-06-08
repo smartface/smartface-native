@@ -21,8 +21,20 @@ import BottomTabBar from '../bottomtabbar';
  * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
 export interface IBottomTabBarController extends IController {
+  /**
+   * Internal property, please do not use it unless necessary.
+   * @private
+   */
   isInsideBottomTabBar: boolean;
+  /**
+   * Internal property, please do not use it unless necessary.
+   * @private
+   */
   shouldSelectViewController: (index: any) => boolean;
+  /**
+   * Internal property, please do not use it unless necessary.
+   * @private
+   */
   didSelectViewController: (index: any) => void;
   /**
    * Gets/sets child controllers of BottomTabbarController instance.

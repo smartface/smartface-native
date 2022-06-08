@@ -3,6 +3,7 @@ import NativeComponent from '../../core/native-component';
 import Invocation from '../../util/iOS/invocation';
 import MenuItem from '../menuitem';
 import Page from '../page';
+import { MenuItemStyle } from '../menuitem/menuitem';
 
 export default class MenuIOS extends NativeComponent implements AbstractMenu {
   protected createNativeObject() {
@@ -33,7 +34,7 @@ export default class MenuIOS extends NativeComponent implements AbstractMenu {
     }
 
     for (let i = 0; i < this.items.length; i++) {
-      const style = this.items[i].ios.style || MenuItem.Styles.DEFAULT;
+      const style = this.items[i].ios.style || MenuItemStyle.DEFAULT;
       const title = this.items[i].title;
       const listener = this.items[i].onSelectedListener.bind(this.items[i]); //Bind is used for switching scope on createAction
       const action = __SF_UIAlertAction.createAction(title, style, listener);

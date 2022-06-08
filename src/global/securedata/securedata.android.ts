@@ -1,27 +1,27 @@
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { AbstractSecureData } from './securedata';
+import ISecureData from './securedata';
 const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyStore');
 
-class SecureDataAndroid extends AbstractSecureData {
-  protected createNativeObject() {
-    return null;
-  }
-  service: string | undefined;
-  ios = {};
-  constructor(params: { key: string }) {
-    super();
-    if (!params || !params.key) {
-      throw new Error('Constructor parameters must have key parameter.');
-    }
-
-    if (!this.nativeObject) {
-      this.nativeObject = new NativeSFKeyStore(params.key);
-      AndroidConfig.activity.getLifecycle().addObserver(this.nativeObject);
-    }
+class SecureDataAndroid extends NativeMobileComponent implements ISecureData {
+  protected _key: string;
+  protected _service?: string;
+  constructor(params: any) {
+    super(params);
   }
   get key() {
     return this._key;
   }
+  protected createNativeObject(params) {
+    if (!params || !params.key) {
+      throw new Error('Constructor parameters must have key parameter.');
+    }
+
+    const nativeObject = new NativeSFKeyStore(params.key);
+    AndroidConfig.activity.getLifecycle().addObserver(this.nativeObject);
+    return nativeObject;
+  }
+  service: string | undefined;
   read(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.nativeObject.decryptData(function (msg, error) {

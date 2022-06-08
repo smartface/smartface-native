@@ -1,4 +1,4 @@
-import { AbstractSound } from './sound';
+import { ISound } from './sound';
 import Application from '../../application';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -7,6 +7,7 @@ import Page from '../../ui/page';
 import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import { SoundEvents } from './sound-events';
+import { IPage } from '../../ui/page/page';
 
 /* globals requireClass */
 const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
@@ -19,12 +20,8 @@ function getCurrentPageFragment() {
 
 export default class SoundAndroid<TEvent extends string = SoundEvents, TProps extends MobileOSProps = MobileOSProps>
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
-  implements AbstractSound
+  implements ISound
 {
-  protected createNativeObject() {
-    return new NativeMediaPlayer();
-  }
-  public static Events = SoundEvents;
   public static PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
   private _onReadyCallback: () => void;
   private _onFinishCallback: () => void;
@@ -49,22 +46,20 @@ export default class SoundAndroid<TEvent extends string = SoundEvents, TProps ex
         }
       })
     );
-    this.addAndroidProps(this.getAndroidProps());
   }
-  private getAndroidProps(): AbstractSound['android'] {
-    return {
-      pick(params: { page: Page; onSuccess: (e: { sound: SoundAndroid }) => void; onFailure: () => void }) {
-        SoundAndroid._pickParams = params;
-        const intent = new NativeIntent();
-        intent.setType('audio/*');
-        intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-        if (!(params?.page instanceof Page)) {
-          getCurrentPageFragment().startActivityForResult(intent, SoundAndroid.PICK_SOUND);
-        } else {
-          params.page.nativeObject.startActivityForResult(intent, SoundAndroid.PICK_SOUND);
-        }
-      }
-    };
+  protected createNativeObject() {
+    return new NativeMediaPlayer();
+  }
+  pick(params: { page: IPage; onSuccess: (e: { sound: SoundAndroid }) => void; onFailure: () => void }) {
+    SoundAndroid._pickParams = params;
+    const intent = new NativeIntent();
+    intent.setType('audio/*');
+    intent.setAction(NativeIntent.ACTION_GET_CONTENT);
+    if (!(params?.page instanceof Page)) {
+      getCurrentPageFragment().startActivityForResult(intent, SoundAndroid.PICK_SOUND);
+    } else {
+      params.page.nativeObject.startActivityForResult(intent, SoundAndroid.PICK_SOUND);
+    }
   }
   get volume(): number {
     return this._volume;

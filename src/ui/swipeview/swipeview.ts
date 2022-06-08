@@ -101,6 +101,17 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @since 1.1.10
    */
   pages: IPage[];
+  /**
+   * Gets/Sets the callback triggered when a page is selected after a swipe action.
+   *
+   * @event onPageSelected
+   * @deprecated
+   * @param index
+   * @param page Selected page instance
+   * @android
+   * @ios
+   * @since 1.1.10
+   */
   onPageSelected: (index: number, page: IPage) => void;
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
@@ -175,109 +186,87 @@ export interface ISwipeView<TEvent extends string = SwipeViewEvents, TMobile ext
    * @since 1.1.10
    */
   swipeToIndex(index: number, animated: boolean): void;
+  /**
+   * Gets/sets over-scroll mode for this view.
+   *
+   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+   * @android
+   * @since 3.0.2
+   */
   overScrollMode: OverScrollMode;
+  /**
+   * Gets/sets the callback which is responsible to create pages. Please note that the positions go from 0 to whatever page count is.
+   * @example
+   * ```
+   * const pages = [Page1, Page2, Page3];
+   * const swipeView = new SwipeView();
+   * swipeView.pageCount = pages.length;
+   * swipeView.onPageCreate = (position) => {
+   * 	return pages[position];
+   * });
+   * ```
+   */
   onPageCreate: (position: number) => IPage | null;
+  /**
+   * Gets/Sets the count of the pages to be created. Please note that all positions should have a Page class to be returned.
+   * Make sure that both lengths are always equal or have a fallback page.
+   * If onPageCreate cannot find any page class, it will either crash the application or throw an error.
+   * @example
+   * ```
+   * const pages = [Page1, Page2, Page3];
+   * const swipeView = new SwipeView();
+   * swipeView.pageCount = pages.length;
+   * swipeView.onPageCreate = (position) => {
+   * 	return pages[position];
+   * });
+   * ```
+   */
   pageCount: number;
+  /**
+   * Private native property for Android to work on. You shouldn't be using this.
+   * @private
+   */
   pagerAdapter: { notifyDataSetChanged: () => void };
 
-  on(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): () => void;
+  on(eventName: 'pageSelected', callback: (position: number, page: IPage) => void): () => void;
   on(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): () => void;
   on(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): () => void;
-  on(eventName: 'touch', callback: (offset:Point2D) => void): () => void;
-  on(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): () => void;
+  on(eventName: 'touch', callback: (offset: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (isInside: boolean, offset: Point2D) => void): () => void;
   on(eventName: SwipeViewEvents, callback: (...args: any[]) => void): () => void;
 
-  off(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
+  off(eventName: 'pageSelected', callback: (position: number, page: IPage) => void): void;
   off(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
   off(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  off(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  off(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
+  off(eventName: 'touch', callback: (offset: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (isInside: boolean, offset: Point2D) => void): void;
   off(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
 
-  emit(eventName: 'pageSelected', position:number, page: IPage): void;
+  emit(eventName: 'pageSelected', position: number, page: IPage): void;
   emit(eventName: 'pageScrolled', index: number, offset: number): void;
   emit(eventName: 'stateChanged', state: SwipeViewState): void;
-  emit(eventName: 'touch', offset:Point2D): void;
-  emit(eventName: 'touchEnded', isInside:boolean, offset:Point2D): void;
+  emit(eventName: 'touch', offset: Point2D): void;
+  emit(eventName: 'touchEnded', isInside: boolean, offset: Point2D): void;
   emit(eventName: SwipeViewEvents, ...args: any[]): void;
 
-  once(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): () => void;
+  once(eventName: 'pageSelected', callback: (position: number, page: IPage) => void): () => void;
   once(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): () => void;
   once(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): () => void;
-  once(eventName: 'touch', callback: (offset:Point2D) => void): () => void;
-  once(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): () => void;
+  once(eventName: 'touch', callback: (offset: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (isInside: boolean, offset: Point2D) => void): () => void;
   once(eventName: SwipeViewEvents, callback: (...args: any[]) => void): () => void;
 
-  prependListener(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
+  prependListener(eventName: 'pageSelected', callback: (position: number, page: IPage) => void): void;
   prependListener(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
   prependListener(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  prependListener(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  prependListener(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
+  prependListener(eventName: 'touch', callback: (offset: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (isInside: boolean, offset: Point2D) => void): void;
   prependListener(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
 
-  prependOnceListener(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
+  prependOnceListener(eventName: 'pageSelected', callback: (position: number, page: IPage) => void): void;
   prependOnceListener(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
   prependOnceListener(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  prependOnceListener(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  prependOnceListener(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
-  prependOnceListener(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
-}
-
-export declare class AbstractSwipeView<TEvent extends string = SwipeViewEvents> extends AbstractView<TEvent | SwipeViewEvents, any, ISwipeView> implements ISwipeView {
-  constructor(params?: Partial<ISwipeView>);
-  onPageCreate: (position: number) => IPage;
-  pageCount: number;
-  pagerAdapter: { notifyDataSetChanged: () => void };
-  page: IPage;
-  pages: IPage[];
-  onPageSelected: (index: number, page: IPage) => void;
-  onPageScrolled: (index: number, offset: number) => void;
-  onStateChanged: (state: SwipeViewState) => void;
-  currentIndex: number;
-  pagingEnabled: boolean;
-  swipeToIndex(index: number, animated: boolean): void;
-  overScrollMode: OverScrollMode;
-  static State: typeof SwipeViewState;
-
-  on(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): () => void;
-  on(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): () => void;
-  on(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): () => void;
-  on(eventName: 'touch', callback: (offset:Point2D) => void): () => void;
-  on(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): () => void;
-  on(eventName: SwipeViewEvents, callback: (...args: any[]) => void): () => void;
-
-  off(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
-  off(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
-  off(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  off(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  off(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
-  off(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
-
-  emit(eventName: 'pageSelected', position:number, page: IPage): void;
-  emit(eventName: 'pageScrolled', index: number, offset: number): void;
-  emit(eventName: 'stateChanged', state: SwipeViewState): void;
-  emit(eventName: 'touch', offset:Point2D): void;
-  emit(eventName: 'touchEnded', isInside:boolean, offset:Point2D): void;
-  emit(eventName: SwipeViewEvents, ...args: any[]): void;
-
-  once(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): () => void;
-  once(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): () => void;
-  once(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): () => void;
-  once(eventName: 'touch', callback: (offset:Point2D) => void): () => void;
-  once(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): () => void;
-  once(eventName: SwipeViewEvents, callback: (...args: any[]) => void): () => void;
-
-  prependListener(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
-  prependListener(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
-  prependListener(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  prependListener(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  prependListener(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
-  prependListener(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
-
-  prependOnceListener(eventName: 'pageSelected', callback: (position:number, page: IPage) => void): void;
-  prependOnceListener(eventName: 'pageScrolled', callback: (index: number, offset: number) => void): void;
-  prependOnceListener(eventName: 'stateChanged', callback: (state: SwipeViewState) => void): void;
-  prependOnceListener(eventName: 'touch', callback: (offset:Point2D) => void): void;
-  prependOnceListener(eventName: 'touchEnded', callback: (isInside:boolean, offset:Point2D) => void): void;
+  prependOnceListener(eventName: 'touch', callback: (offset: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (isInside: boolean, offset: Point2D) => void): void;
   prependOnceListener(eventName: SwipeViewEvents, callback: (...args: any[]) => void): void;
 }

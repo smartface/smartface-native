@@ -1,4 +1,4 @@
-import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 import FlexLayout from '../flexlayout';
 
 export const DEFAULT_TRANSLUCENCY = 58;
@@ -40,12 +40,15 @@ export interface DialogAndroidProps {
  *
  *     @example
  *     import Dialog from "@smartface/native/ui/dialog";
+ *     import { DialogStyle } from "@smartface/native/ui/dialog/dialog";
  *     import Button from "@smartface/native/ui/button";
  *     import Color from "@smartface/native/ui/color";
  *
  *     const myDialog = new Dialog({
  *      android: {
- *          themeStyle: Dialog.Android.Style.ThemeNoHeaderBar
+ *          themeStyle: DialogStyle.ThemeNoHeaderBar.
+ *     }    cancelable: true,
+ *          isTransparent: false
  *        }
  *     });
  *
@@ -54,7 +57,7 @@ export interface DialogAndroidProps {
  *         height: 80,
  *         backgroundColor: Color.BLUE,
  *         text: "Hide Dialog",
- *         onPress: function() {
+ *         onPress: () => {
  *             myDialog.hide();
  *         }
  *     });
@@ -93,14 +96,10 @@ export enum DialogStyle {
    * @android
    * @since 3.0.2
    */
-  ThemeNoHeaderBarWithTranslucentDecor = 16974404, //android.R.style.Theme_Material_Light_NoActionBar_TranslucentDecor
+  ThemeNoHeaderBarWithTranslucentDecor = 16974404 //android.R.style.Theme_Material_Light_NoActionBar_TranslucentDecor
 }
 
-export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps<{}, DialogAndroidProps> = MobileOSProps<{}, DialogAndroidProps>> extends NativeMobileComponent<TNative, TProps> {
-  constructor(params?: Partial<AbstractDialog>) {
-    super(params as any);
-  }
-  abstract setShowListener(): void;
+export interface IDialog<TNative = any, TProps extends MobileOSProps<{}, DialogAndroidProps> = MobileOSProps<{}, DialogAndroidProps>> extends INativeMobileComponent<TNative, TProps> {
   /**
    * Gets the layout of Dialog. You should add views to the layout of the dialog instance.
    *
@@ -108,7 +107,7 @@ export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps
    * @ios
    * @since 0.1
    */
-  abstract get layout(): FlexLayout;
+  readonly layout: FlexLayout;
   /**
    * Hides the dialog.
    *
@@ -116,7 +115,7 @@ export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps
    * @ios
    * @since 0.1
    */
-  abstract hide(): void;
+  hide(): void;
   /**
    * Shows the dialog.
    *
@@ -124,14 +123,5 @@ export abstract class AbstractDialog<TNative = any, TProps extends MobileOSProps
    * @android
    * @ios
    */
-  abstract show(): void;
-
-  static Style: DialogStyle;
-
-  static Android: {
-    Style: Partial<typeof DialogStyle>;
-  };
-  protected createNativeObject() {
-    throw new Error('Method not implemented');
-  }
+  show(): void;
 }

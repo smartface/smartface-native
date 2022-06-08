@@ -91,8 +91,24 @@ export interface PageIOSParams {
    * ```
    */
   onSafeAreaPaddingChange: ((padding: { left: number; top: number; right: number; bottom: number }) => void) | undefined;
+  /**
+   * This method is used to push the current page. Used internally.
+   * @private
+   * @ios
+   */
   present(params?: ControllerParams): void;
+  /**
+   *
+   * This property is used to determine which style (modal, sheet or normal) the page is gonna be pushed. Used internally.
+   * @private
+   * @ios
+   */
   presentationStyle: number;
+  /**
+   * Native equivelant of headerbar on iOS. Use page.headerBar (or parentController) instead.
+   * @ios
+   * @private
+   */
   navigationItem: HeaderBar;
 }
 
@@ -173,16 +189,6 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * This event is called when a page appears on the screen (everytime).
    * It will be better to set headerBar and statusBar properties in this callback.
    *
-   *     @example
-   *     import Page from '@smartface/native/ui/page';
-   *     import Application from '@smartface/native/application';
-   *     var myPage = new Page({
-   *         onShow: function() {
-   *             this.headerBar.visible = true;
-   *         }
-   *         Application.statusBar.visible = true;
-   *     });
-   *
    * @android
    * @ios
    * @example
@@ -190,7 +196,7 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * import Page from '@smartface/native/ui/page';
    *
    * const page = new Page();
-   * page.on(Page.Events.Show, () => {
+   * page.on('show', () => {
    * 	console.info('onShow');
    * });
    * ```
@@ -336,7 +342,15 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * ```
    */
   onOrientationChange(e: { orientation: PageOrientation }): void;
+  /**
+   * Determines if default configurations should be skipped or not. Only can be passed on constructor. Internal use only.
+   * @private
+   */
   skipDefaults?: boolean;
+  /**
+   * Gets/sets the parentcontroller(viewcontroller etc.) of the current page on iOS.
+   * You should access headerbar values through parentcontroller on iOS.
+   */
   parentController: IController;
 
   on(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): () => void;
@@ -458,15 +472,54 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   constructor(params?: Partial<TProps>) {
     super(params);
   }
+  /**
+   * Holds the controller classes which this page has. Used internally.
+   * @private
+   */
   childControllers: IController<any>[] = [];
+  /**
+   * For Android, holds the native menu instance which will open next. Used internally.
+   * @private
+   */
   contextMenu: { items: MenuItem[]; headerTitle: string };
+
+  /**
+   * For Android, TabbarController pages will be used like this. Used internally.
+   * @private
+   */
   tabBar?: TabBarController;
+
+  /**
+   * Gets the open controller. Internal use only.
+   * @private
+   */
   abstract getCurrentController(): IController;
+
+  /**
+   * Shows(pushes) the given controller. Internal use only.
+   * @private
+   */
   abstract show(params: { controller: IController; animated: any; isComingFromPresent?: boolean; onCompleteCallback?: () => void });
+  /**
+   * Shows(pushes) the given controller. Internal use only.
+   * @private
+   */
   parentController: IController;
-  popUpBackPage?: AbstractPage;
+  /**
+   * (Android) Holds the underlying page when modal is opened. Used internally.
+   * @private
+   */
+  popUpBackPage?: IPage;
+  /**
+   * Unique page ID. Used internally.
+   * @private
+   */
   pageID: number;
   popupBackNavigator: any;
+  /**
+   * On BottomTabBar/TopTabBar, this variable holds if the current page is the active page of pages. Used internally.
+   * @private
+   */
   isActive: boolean;
   isInsideBottomTabBar: boolean;
   abstract orientation: PageOrientation;
@@ -488,7 +541,7 @@ export abstract class AbstractPage<TEvent extends string = PageEvents, TNative =
   static Orientation: typeof PageOrientation;
 }
 
-export declare class PageImpl extends AbstractPage implements IPage {
+export declare class PageImpl extends AbstractPage {
   protected createNativeObject(): any;
   constructor(params?: Partial<AbstractPage>);
   onLoad(): void;

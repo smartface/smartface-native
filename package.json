@@ -1,6 +1,6 @@
 {
   "name": "@smartface/native",
-  "version": "5.0.2-alpha.21",
+  "version": "5.0.3-alpha.1",
   "description": "Core Modules of Native Libraries..",
   "main": "dist/index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.38",
+    "@types/node": "^17.0.40",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "browserify": "14.1.0",

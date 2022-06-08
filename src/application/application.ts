@@ -38,7 +38,7 @@ export interface ApplicationIOSProps {
    * @ios
    * @since 3.0.2
    */
-  bundleIdentifier: any;
+  bundleIdentifier: string;
   /**
    * It indicates the directionality of the language in the user interface of the app.
    *
@@ -47,9 +47,7 @@ export interface ApplicationIOSProps {
    * @ios
    * @since 3.1.3
    */
-  userInterfaceLayoutDirection: any;
-  registeredRemoteWithSuccessCallback: any;
-  registeredRemoteWithFailureCallback: any;
+  userInterfaceLayoutDirection: LayoutDirection;
 }
 export interface ApplicationAndroidProps {
   /**
@@ -114,7 +112,7 @@ export interface ApplicationAndroidProps {
    *
    *     @example
    *     import Application from '@smartface/native/application';
-   *     Application.android.dispatchTouchEvent = function(){
+   *     Application.android.dispatchTouchEvent = () => {
    *        return true; //Consume all touches & do not pass to window
    *     }
    *
@@ -138,6 +136,11 @@ export interface ApplicationAndroidProps {
    * @since 1.2
    */
   onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
+
+  /**
+   * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
+   * Works for Android 8.0 and above. Some phones might not have this.
+   */
   navigationBar?: NavigationBar;
   /**
    * This function checks if one of the dangerous permissions is granted at beginning or not.
@@ -159,8 +162,9 @@ export interface ApplicationAndroidProps {
    *
    *     @example
    *     import Application from '@smartface/native/application';
-   *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
-   *     Application.android.onRequestPermissionsResult = function(e){
+   *     const PERMISSION_CODE = 1002;
+   *     Application.android.requestPermissions(PERMISSION_CODE, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
+   *     Application.android.onRequestPermissionsResult = (e) => {
    *         console.log(JSON.stringify(e));
    *     }
    *
@@ -475,13 +479,26 @@ export enum ApplicationAndroidPermissions {
   WRITE_EXTERNAL_STORAGE = 'android.permission.WRITE_EXTERNAL_STORAGE',
   /**
    * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+   * You should include relevant permission setting to your AndroidManifest.xml file.
    *
    * @property WRITE_APN_SETTINGS
    * @readonly
    * @since 4.3.2
    */
+  WRITE_APN_SETTINGS = 'android.permission.WRITE_APN_SETTINGS',
+  /**
+   * Allows an app to use fingerprint hardware. This permission have been deprecated on API 26 or higher. Use `USE_BIOMETRICS` instead.
+   * @property USE_FINGERPINT
+   * @readonly
+   * @deprecated
+   */
   USE_FINGERPRINT = 'android.permission.USE_FINGERPRINT',
-  WRITE_APN_SETTINGS = 'android.permission.WRITE_APN_SETTINGS'
+  /**
+   * Allows an app to use device supported biometric modalities.
+   * @property USE_BIOMETRIC
+   * @readonly
+   */
+  USE_BIOMETRIC = 'android.permission.USE_BIOMETRIC'
 }
 
 /**
@@ -631,19 +648,19 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * To pass this method, URL schemes must be declared into "Info.plist" file for iOS
    * and AndroidManifest.xml file for Android.
    *
-   *     @example for Google Maps
+   * @example for Google Maps
    *
-   *		(Info.plist entry)
+   *		// (Info.plist entry)
    *      <key>LSApplicationQueriesSchemes</key>
    *      <array>
    *          <string>comgooglemaps</string>
    *      </array>
    *
-   *      After entry add on, urlScheme can be check;
+   *    // After entry add on, urlScheme can be check;
    * 	 	import Application from '@smartface/native/application';
-   *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+   *    const isAppAvaible = Application.canOpenUrl("comgooglemaps://");
    *
-   * 		(AndroidManifest.xml entry)
+   * 		// (AndroidManifest.xml entry)
    * 		<manifest ...>
    * 			...
    * 			<queries>
@@ -655,7 +672,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * 		</manifest>
    *
    * 	 	import Application from '@smartface/native/application';
-   *      var isAppAvaible = Application.canOpenUrl("geo://");
+   *    const isAppAvaible = Application.canOpenUrl("geo://");
    *
    * @method canOpenUrl
    * @param {String} url
@@ -677,10 +694,23 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 3.2.0
    */
   statusBar: typeof StatusBar;
+  /**
+   * Static variable that determines direction of the layouts. It can be LTR or RTL
+   */
   LayoutDirection: typeof LayoutDirection;
   Android: {
+    /**
+     * Static Variable to change keyboard type for input fields.
+     */
     KeyboardMode: typeof KeyboardMode;
+    /**
+     * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
+     * Works for Android 8.0 and above. Some phones might not have this.
+     */
     NavigationBar: {
+      /**
+       * Determines whether the navigation bar should be light theme or dark theme based.
+       */
       style: NavigationBarStyle;
     };
     /**
@@ -918,7 +948,21 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 4.3.6
    */
   isVoiceOverEnabled: Boolean;
+  /**
+   * Provides current page instance of the application. Please do not use this property for page actions.
+   * Works for Android only. Will always be undefined on iOS
+   * @android
+   * @private
+   */
   currentPage: IPage;
+  /**
+   * For internal usage only.
+   * @private
+   */
   registOnItemSelectedListener(): void;
+  /**
+   * For internal usage only.
+   * @private
+   */
   tabBar?: BottomTabBar;
 }

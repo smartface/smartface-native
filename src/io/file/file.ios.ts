@@ -4,7 +4,7 @@ import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import { PATH_FILE_TYPE } from '../path/path';
 
-export default class FileIOS extends AbstractFile implements IFile {
+export default class FileIOS extends NativeMobileComponent implements IFile {
   get type(): PATH_FILE_TYPE {
     return PATH_FILE_TYPE.FILE; // Doesn't exist on iOS
   }

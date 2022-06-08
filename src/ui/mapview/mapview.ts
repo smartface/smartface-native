@@ -303,6 +303,12 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
     latitude: number;
     longitude: number;
   };
+  /**
+   * Gets/Sets the ability to zoom on the mapview.
+   * @property
+   * @android
+   * @ios
+   */
   zoomEnabled: boolean;
 
   /**

@@ -356,6 +356,10 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   extends IView<TEvent | ListViewEvents, any, TMobile> {
   width: number;
   height: number;
+  /**
+   * This is an inner property which holds the parent native object(Android). Please do not use it.
+   * @private
+   */
   nativeInner: INativeInner;
   /**
    * This event is called before onRowCreate callback. Returns item type you should use based on position.
@@ -427,8 +431,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   itemCount: number;
   /**
    * Gets/sets height of a row in a ListView. Once you created the ListView,
-   * you can't change row height.
-   *
+   * you can't change row height. If you want to change height of row dynamically, use onRowHeight callback instead.
    *
    * @property {Number} rowHeight
    * @android
@@ -832,55 +835,4 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * @since 4.1.4
    */
   onRowCanSwipe: (index: number) => SwipeDirection[];
-}
-
-export declare class AbstractListView<TEvent extends string = ListViewEvents, TProps extends IListView = IListView>
-  extends AbstractView<TEvent | ListViewEvents, any, TProps>
-  implements IListView<TEvent | ListViewEvents>
-{
-  constructor(params?: Partial<TProps>);
-  onRowSwipe: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => ISwipeItem[];
-  onRowType: (index?: number) => number;
-  onRowCreate: (type?: number) => ListViewItem;
-  onRowHeight: (index?: number) => number;
-  nativeInner: INativeInner;
-  performBatchUpdates(updates: () => void, completion: { e: { finished: boolean } }): void;
-  onRowBind: (item: ListViewItem, index: number) => void;
-  onRowSelected: (item: ListViewItem, index: number) => void;
-  itemCount: number;
-  rowHeight: number;
-  verticalScrollBarEnabled: boolean;
-  scrollEnabled: boolean;
-  refreshEnabled: boolean;
-  rowMoveEnabled: boolean;
-  longPressDragEnabled: boolean;
-  getFirstVisibleIndex(): number;
-  getLastVisibleIndex(): number;
-  setPullRefreshColors(colors: Color[] | Color): void;
-  refreshData(): void;
-  deleteRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;
-  insertRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;
-  refreshRowRange(params: { positionStart: number; itemCount: number; ios?: { animation: RowAnimation } }): void;
-  swipeEnabled: boolean;
-  scrollTo(index: number, animated?: boolean): void;
-  startRefresh(): void;
-  stopRefresh(): void;
-  contentOffset: { readonly x: number; readonly y: number };
-  onScroll: ((params?: { translation: Point2D; contentOffset: Point2D }) => void) | null;
-  onPullRefresh: () => void;
-  contentInset: { top: number; bottom: number };
-  listViewItemByIndex(index: number): ListViewItem | undefined;
-  indexByListViewItem(item: ListViewItem): number;
-  onAttachedToWindow: () => void;
-  onDetachedFromWindow: () => void;
-  onRowMoved: (source: number, destination: number) => void;
-  onRowMove: (source: number, destination: number) => boolean;
-  onRowCanMove: (index: number) => boolean;
-  onRowCanSwipe: (index: number) => SwipeDirection[];
-
-  static SwipeItem: typeof SwipeItem;
-  static iOS: {
-    RowAnimation: typeof RowAnimation;
-  };
-  static SwipeDirection: typeof SwipeDirection;
 }

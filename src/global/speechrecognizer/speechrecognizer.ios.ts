@@ -1,6 +1,6 @@
 import Hardware from '../../device/hardware';
 import Timer from '../timer';
-import { RecognizerAndroidError, SpeechRecognizerBase, RecognizerError } from './speechrecognizer';
+import { ISpeechRecognizer, RecognizerAndroidError, RecognizerError } from './speechrecognizer';
 
 enum SFSpeechRecognizerAuthorizationStatus {
   notDetermined,
@@ -22,7 +22,7 @@ function isLocaleSupport(locale: { identifier: string } | __SF_NSLocale) {
   }
 }
 
-class SpeechRecognizerIOS implements SpeechRecognizerBase {
+class SpeechRecognizerClass implements ISpeechRecognizer {
   recognitionTask: any;
   recognitionRequest: any;
   avaudiosession: any;
@@ -232,6 +232,6 @@ class SpeechRecognizerIOS implements SpeechRecognizerBase {
   readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
 }
 
-const SpeechRecognizer = new SpeechRecognizerIOS();
+const SpeechRecognizerIOS = new SpeechRecognizerClass();
 
-export default SpeechRecognizer;
+export default SpeechRecognizerIOS;

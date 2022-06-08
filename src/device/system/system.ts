@@ -1,4 +1,5 @@
 /**
+ * Determines which operating system is currently running.
  * @enum {String} Device.System.OSType
  * @static
  * @since 2.0.7
@@ -101,7 +102,23 @@ export enum BiometryType {
  *
  */
 export declare class AbstractSystem {
+  /**
+   * Determines which operating system is currently running.
+   * @example
+   * import System from '@smartface/native/device/system';
+   * if(System.OS === System.OSType.Android) {
+   *   console.log("It is Android");
+   * }
+   */
   static OS: OSType.ANDROID | OSType.IOS;
+  /**
+   * Determines which operating system is currently running.
+   * @example
+   * import System from '@smartface/native/device/system';
+   * if(System.OS === System.OSType.Android) {
+   *   console.log("It is Android");
+   * }
+   */
   static OSType: typeof OSType;
   /**
    *

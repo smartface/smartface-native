@@ -1,5 +1,4 @@
-import { INativeComponent } from '../../core/inative-component';
-import { MobileOSProps, NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import { PATH_FILE_TYPE } from '../path/path';
@@ -7,7 +6,7 @@ import { PATH_FILE_TYPE } from '../path/path';
 export interface FileiOSProps {
   getNSURL: () => __SF_NSURL;
 }
-export interface IFile extends INativeComponent, MobileOSProps<FileiOSProps, {}> {
+export interface IFile extends INativeMobileComponent<any, MobileOSProps<FileiOSProps, {}>> {
   /**
    * Gets creation date of the File instance. If the file doesn't exist returns -1.
    * @android
@@ -178,7 +177,6 @@ export interface IFile extends INativeComponent, MobileOSProps<FileiOSProps, {}>
 export interface FileParams {
   path?: string;
 }
-
 export abstract class AbstractFile extends NativeMobileComponent<any, IFile> implements IFile {
   constructor(params?: Partial<IFile> & FileParams) {
     super(params);

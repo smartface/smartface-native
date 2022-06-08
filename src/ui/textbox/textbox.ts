@@ -171,15 +171,26 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * import TextBox from '@smartface/native/ui/textbox';
    *
    * const textBox = new TextBox();
-   * textBox.on(TextBox.Events.EditBegins, (params) => {
-   * 	console.info('onEditBegins', params);
-   * });
+   * 	console.info(textBox.cursorPosition);
+   *
    * ```
    */
   cursorPosition: {
     start: number;
     end: number;
   };
+  /**
+   * Gets/sets the event which will be triggered when the textbox object gains focus.
+   *  @example
+   * ```
+   * import TextBox from '@smartface/native/ui/textbox';
+   *
+   * const textBox = new TextBox();
+   * textBox.on('editBegins, () => {
+   * 	console.info('onEditBegins');
+   * });
+   * ```
+   */
   onEditBegins: () => void;
   /**
    * Gets/sets the cursor color of TextBox.
@@ -356,6 +367,9 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * ```
    */
   onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
+  /**
+   * Gets/sets if the textbox should be touchable and enabled. When set to false, textBox may dim itself depending on the OS.
+   */
   enabled?: boolean;
 
   on(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): () => void;

@@ -246,6 +246,14 @@ export interface ImageAndroidProps {
    * @since 2.0.10
    */
   round(radius: number): IImage;
+  /**
+   * Gets/Sets the systemicon of one of the Android system icons. You can use the numbers located at R.drawable
+   * @see https://developer.android.com/reference/android/R.drawable#constants_1
+   *
+   * @return UI.Image
+   * @android
+   * @since 2.0.10
+   */
   systemIcon: string | number;
 }
 
@@ -346,9 +354,25 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   get width(): number {
     return this.nativeObject.size.width;
   }
+  /**
+   * Gets/Sets the autoMirrored of image. This property sets direction of Image automatically related to system or application direction.
+   *
+   * @ios
+   * @android
+   * @property {Boolean} autoMirrored
+   * @since 3.1.3
+   */
   get autoMirrored(): boolean {
     throw new Error('Method not implemented.');
   }
+  /**
+   * Gets/Sets the autoMirrored of image. This property sets direction of Image automatically related to system or application direction.
+   *
+   * @ios
+   * @android
+   * @property {Boolean} autoMirrored
+   * @since 3.1.3
+   */
   set autoMirrored(value: boolean) {
     throw new Error('Method not implemented.');
   }
@@ -361,7 +385,17 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
     return 'Image';
   }
   static android: {
-    createRoundedImage(params): IImage | null;
+    /**
+     * Creates rounded image of given systemicon
+     *
+     * @android
+     * @static
+     * @method createSystemIcon
+     * @param {Number | String} systemIcon
+     * @see https://developer.android.com/reference/android/R.drawable
+     * @since 4.0.2
+     */
+    createRoundedImage(params: IImage['android']['systemIcon']): IImage | null;
     /**
      * Creates an Image object which built-in icon is created corresponding systemIcon value.
      * This method is Android only.
@@ -464,6 +498,10 @@ export abstract class AbstractImage<TNative extends { [key: string]: any } = any
   static createFromFile(path: string, width?: number, height?: number): IImage | null {
     throw new Error('Method not implemented.');
   }
+  /**
+   * This is an internal method which are used through the native codebase.
+   * @private
+   */
   static systemDrawableId(systemIcon: number) {
     throw new Error('Method not implemented.');
   }

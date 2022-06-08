@@ -7,10 +7,16 @@ export type AnimatorParams = {
 };
 
 export interface IAnimator {
-  perform(): AnimatorBase;
   /**
    * Performs the changes declared in animFunction with animation.
    * Duration indicates how long the animation will take in milliseconds.
+   * @android
+   * @ios
+   * @since 0.1
+   */
+  perform(): AnimatorBase;
+  /**
+   * Chains the perform method to another animator.
    * @android
    * @ios
    * @since 0.1
@@ -29,12 +35,34 @@ export interface IAnimator {
 
 export class AnimatorBase implements IAnimator {
   constructor(params: Partial<AnimatorParams>) {}
+  /**
+   * Performs the changes declared in animFunction with animation.
+   * Duration indicates how long the animation will take in milliseconds.
+   * @android
+   * @ios
+   * @since 0.1
+   */
   perform(): AnimatorBase {
     throw new Error('Method not implemented.');
   }
+
+  /**
+   * Chains the perform method to another animator.
+   * @android
+   * @ios
+   * @since 0.1
+   */
   then(duration: number, animFn: () => void): AnimatorBase {
     throw new Error('Method not implemented.');
   }
+
+  /**
+   * Runs the function provided after all animations are completed.
+   * Note that: It does not perform any animations.
+   * @android
+   * @ios
+   * @since 0.1
+   */
   complete(callback: () => void): void {
     throw new Error('Method not implemented.');
   }

@@ -1,5 +1,5 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout } from './shimmerflexlayout';
+import { IShimmerFlexLayout } from './shimmerflexlayout';
 
-const ShimmerFlexLayout: typeof AbstractShimmerFlexLayout = require(`./shimmerflexlayout.${Device.deviceOS.toLowerCase()}`).default;
+const ShimmerFlexLayout: ConstructorOf<IShimmerFlexLayout, Partial<IShimmerFlexLayout>> = require(`./shimmerflexlayout.${Device.deviceOS.toLowerCase()}`).default;
 type ShimmerFlexLayout = IShimmerFlexLayout;
 export default ShimmerFlexLayout;

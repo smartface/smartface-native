@@ -11,6 +11,7 @@
     "target": "ES5",
     "esModuleInterop": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "lib": ["ES2015"],
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]
