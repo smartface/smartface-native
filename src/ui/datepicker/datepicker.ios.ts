@@ -3,7 +3,10 @@ import Color from '../color';
 import { DatePickerEvents } from './datepicker-events';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 
-export default class DatePickerIOS<TEvent extends string = DatePickerEvents> extends NativeEventEmitterComponent<TEvent, any, IDatePicker> implements IDatePicker<TEvent | DatePickerEvents> {
+export default class DatePickerIOS<TEvent extends string = DatePickerEvents>
+  extends NativeEventEmitterComponent<TEvent | DatePickerEvents, any, IDatePicker>
+  implements IDatePicker<TEvent | DatePickerEvents>
+{
   protected _nativeObject: __SF_UIDatePicker;
   private _titleColor: DatePickerIOSProperties['titleColor'];
   private _titleFont: DatePickerIOSProperties['titleFont'];

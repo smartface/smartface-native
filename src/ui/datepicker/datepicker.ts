@@ -340,37 +340,25 @@ export interface IDatePicker<
 
   on(eventName: 'selected', callback: () => void): () => void;
   on(eventName: 'cancelled', callback: () => void): () => void;
-  on(eventName: DatePickerEvents, callback: (...args: any[]) => void): () => void;
-  on(eventName: string, callback: (...args: any[]) => void): () => void;
   on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
 
   off(eventName: 'selected', callback: () => void): void;
   off(eventName: 'cancelled', callback: () => void): void;
-  off(eventName: DatePickerEvents, callback: (...args: any[]) => void): void;
-  off(eventName: string, callback: (...args: any[]) => void): void;
   off(eventName: TEvent, callback: (...args: any[]) => void): void;
 
   emit(eventName: 'selected'): void;
   emit(eventName: 'cancelled'): void;
-  emit(eventName: DatePickerEvents, ...args: any[]): void;
-  emit(eventName: string, ...args: any[]): void;
   emit(eventName: TEvent, ...args: any[]): void;
 
   once(eventName: 'selected', callback: () => void): () => void;
   once(eventName: 'cancelled', callback: () => void): () => void;
-  once(eventName: DatePickerEvents, callback: (...args: any[]) => void): () => void;
-  once(eventName: string, callback: (...args: any[]) => void): () => void;
   once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
 
   prependListener(eventName: 'selected', callback: () => void): void;
   prependListener(eventName: 'cancelled', callback: () => void): void;
-  prependListener(eventName: DatePickerEvents, callback: (...args: any[]) => void): void;
-  prependListener(eventName: string, callback: (...args: any[]) => void): void;
   prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 
   prependOnceListener(eventName: 'selected', callback: () => void): void;
   prependOnceListener(eventName: 'cancelled', callback: () => void): void;
-  prependOnceListener(eventName: DatePickerEvents, callback: (...args: any[]) => void): void;
-  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
   prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }
