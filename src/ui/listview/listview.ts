@@ -431,8 +431,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
   itemCount: number;
   /**
    * Gets/sets height of a row in a ListView. Once you created the ListView,
-   * you can't change row height.
-   *
+   * you can't change row height. If you want to change height of row dynamically, use onRowHeight callback instead.
    *
    * @property {Number} rowHeight
    * @android
