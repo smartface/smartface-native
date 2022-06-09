@@ -25,6 +25,9 @@ class HardwareAndroidClass extends NativeMobileComponent implements IHardware {
   get brandName() {
     return NativeBuild.BRAND;
   }
+  get manufacturer() {
+    return NativeBuild.MANUFACTURER;
+  }
   get UID() {
     const activity = AndroidConfig.activity;
     const contentResolver = activity.getContentResolver();
@@ -56,9 +59,6 @@ class HardwareAndroidClass extends NativeMobileComponent implements IHardware {
       },
       get vendorID() {
         return NativeBuild.SERIAL;
-      },
-      get manufacturer() {
-        return NativeBuild.MANUFACTURER;
       }
     };
   }

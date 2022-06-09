@@ -17,6 +17,10 @@ class HardwareIOSClass extends NativeMobileComponent implements IHardware {
   get brandName() {
     return 'Apple';
   }
+  get manufacturer() {
+    // Since Apple phones are manufactured by.... Apple, we can safely assume that Apple is the manufacturer.
+    return this.brandName;
+  }
   get deviceType(): DeviceType {
     const nativeDeviceType = __SF_UIDevice.currentDevice().userInterfaceIdiom;
     switch (nativeDeviceType) {

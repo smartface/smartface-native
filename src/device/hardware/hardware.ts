@@ -26,13 +26,6 @@ export interface HardwareAndroidProps {
    * @since 0.1
    */
   readonly vendorID: number;
-
-  /**
-   * Returns the manufacturer of the device.
-   * @android
-   * @static
-   */
-  readonly manufacturer: string;
 }
 
 export interface HardwareIOSProps {
@@ -142,4 +135,11 @@ export interface IHardware extends INativeMobileComponent<any, MobileOSProps<Har
    * DeviceType is to determine if the current device which the application is open is phone, tablet or else.
    */
   readonly deviceType: DeviceType;
+
+  /**
+   * Returns the manufacturer of the device.
+   * @android
+   * @static
+   */
+  readonly manufacturer: string;
 }
