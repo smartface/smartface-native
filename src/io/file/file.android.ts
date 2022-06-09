@@ -1,10 +1,9 @@
-import Path from '../path';
 import FileStream from '../filestream';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { IFile } from './file';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import PathAndroid from '../path/path.android';
-import { PATH_FILE_TYPE } from '../path/path';
+import { PathFileType } from '../path/path';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 const activity = AndroidConfig.activity;
 
@@ -23,10 +22,9 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
   nativeAssetsList: any[] | undefined;
   resolvedPath: any;
-  type: PATH_FILE_TYPE;
+  type: PathFileType;
   fullPath: string;
   drawableResourceId: number;
-  private pathResolver = new PathAndroid();
   constructor(params?: Partial<IFile>) {
     super(params);
     if (typeof params?.path !== 'string') {
@@ -34,13 +32,13 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
     }
 
     if (params?.path) {
-      this.resolvedPath = this.pathResolver.resolve(params.path);
+      this.resolvedPath = PathAndroid.resolve(params.path);
     }
     this.type = this.resolvedPath.type;
     this.fullPath = this.resolvedPath.fullPath;
 
     switch (this.resolvedPath.type) {
-      case Path.FILE_TYPE.ASSET:
+      case PathFileType.ASSET:
         // this.nativeObject will be String for performance
         this.getNativeAssetsList()?.forEach((assetName) => {
           if (this.resolvedPath.name === assetName) {
@@ -50,18 +48,18 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
           }
         });
         break;
-      case Path.FILE_TYPE.DRAWABLE: {
+      case PathFileType.DRAWABLE: {
         // this.nativeObject will be Bitmap
         const resources = AndroidConfig.activityResources;
         this.drawableResourceId = resources.getIdentifier(this.resolvedPath.name, 'drawable', AndroidConfig.packageName);
         this.nativeObject = this.drawableResourceId !== 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
         break;
       }
-      case Path.FILE_TYPE.RAU_ASSETS:
-      case Path.FILE_TYPE.RAU_DRAWABLE:
-      case Path.FILE_TYPE.EMULATOR_ASSETS:
-      case Path.FILE_TYPE.EMULATOR_DRAWABLE:
-      case Path.FILE_TYPE.FILE:
+      case PathFileType.RAU_ASSETS:
+      case PathFileType.RAU_DRAWABLE:
+      case PathFileType.EMULATOR_ASSETS:
+      case PathFileType.EMULATOR_DRAWABLE:
+      case PathFileType.FILE:
         // this.nativeObject will be File
         this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
         break;
@@ -71,11 +69,11 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   get creationDate(): number {
-    return this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1;
+    return this.resolvedPath.type === PathFileType.FILE ? this.nativeObject.lastModified() : -1;
   }
 
   get exists(): boolean {
-    if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
+    if (this.resolvedPath.type === PathFileType.DRAWABLE || this.resolvedPath.type === PathFileType.ASSET) {
       return this.nativeObject ? true : false;
     } else {
       return this.nativeObject && this.nativeObject.exists();
@@ -92,15 +90,15 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   get isDirectory(): boolean {
-    return this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isDirectory() : false) : false;
+    return this.nativeObject ? (this.resolvedPath.type === PathFileType.FILE ? this.nativeObject.isDirectory() : false) : false;
   }
 
   get isFile(): boolean {
-    return this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isFile() : true) : false;
+    return this.nativeObject ? (this.resolvedPath.type === PathFileType.FILE ? this.nativeObject.isFile() : true) : false;
   }
 
   get modifiedDate(): number {
-    return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.lastModified() : -1;
+    return this.resolvedPath.type === PathFileType.FILE && this.nativeObject ? this.nativeObject.lastModified() : -1;
   }
 
   get name(): string {
@@ -108,7 +106,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   get parent() {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject) {
+    if (this.resolvedPath.type === PathFileType.FILE && this.nativeObject) {
       return new FileAndroid({
         path: this.nativeObject.getParent().getAbsolutePath()
       });
@@ -131,19 +129,19 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
       return -1;
     }
     switch (this.resolvedPath.type) {
-      case Path.FILE_TYPE.ASSET: {
+      case PathFileType.ASSET: {
         const assetsInputStream = activity.getAssets().open(this.nativeObject);
         const size = assetsInputStream.available();
         assetsInputStream.close();
         return size;
       }
-      case Path.FILE_TYPE.DRAWABLE:
+      case PathFileType.DRAWABLE:
         return this.nativeObject.getByteCount();
-      case Path.FILE_TYPE.FILE:
-      case Path.FILE_TYPE.EMULATOR_ASSETS:
-      case Path.FILE_TYPE.EMULATOR_DRAWABLE:
-      case Path.FILE_TYPE.RAU_ASSETS:
-      case Path.FILE_TYPE.RAU_DRAWABLE:
+      case PathFileType.FILE:
+      case PathFileType.EMULATOR_ASSETS:
+      case PathFileType.EMULATOR_DRAWABLE:
+      case PathFileType.RAU_ASSETS:
+      case PathFileType.RAU_DRAWABLE:
         return this.nativeObject.length();
       default:
         return -1;
@@ -151,7 +149,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   get writable(): boolean {
-    return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.canWrite() : false;
+    return this.resolvedPath.type === PathFileType.FILE && this.nativeObject ? this.nativeObject.canWrite() : false;
   }
 
   getNativeAssetsList(): any[] | undefined {
@@ -181,7 +179,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
       });
       if (destinationFile.isFile) {
         let destinationFileStream;
-        if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
+        if (this.resolvedPath.type === PathFileType.FILE) {
           let destinationConfigured;
           if (this.isDirectory) {
             destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
@@ -198,7 +196,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
             }
             return destinationConfigured && this.copyFile(this, destinationFile);
           }
-        } else if (this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
+        } else if (this.resolvedPath.type === PathFileType.ASSET) {
           if (destinationFile.exists && destinationFile.isDirectory) {
             destinationFile = new FileAndroid({
               path: destination + '/' + this.name
@@ -208,7 +206,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
             this.copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
             return true;
           }
-        } else if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
+        } else if (this.resolvedPath.type === PathFileType.DRAWABLE) {
           if (destinationFile.exists && destinationFile.isDirectory) {
             destinationFile = new FileAndroid({
               path: destination + '/' + this.name + '.png'
@@ -230,7 +228,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
         } else {
           if (destinationFile.exists && destinationFile.isDirectory) {
             let destinationFileName = destination + '/' + this.name;
-            if (this.resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE) {
+            if (this.resolvedPath.type === PathFileType.EMULATOR_DRAWABLE || this.resolvedPath.type === PathFileType.RAU_DRAWABLE) {
               destinationFileName += '.png';
             }
             destinationFile = new FileAndroid({
@@ -247,7 +245,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   createFile(createParents: boolean): boolean {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
+    if (this.resolvedPath.type === PathFileType.FILE) {
       if (this.nativeObject.exists()) {
         this.remove(true);
       }
@@ -264,18 +262,18 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   createDirectory(createParents: any): boolean {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
+    if (this.resolvedPath.type === PathFileType.FILE) {
       return createParents ? this.nativeObject.mkdirs() : this.nativeObject.mkdir();
     }
     return false;
   }
 
   remove(withChilds?: boolean): boolean {
-    return this.resolvedPath.type === Path.FILE_TYPE.FILE && this.removeFile(this, withChilds);
+    return this.resolvedPath.type === PathFileType.FILE && this.removeFile(this, withChilds);
   }
 
   getFiles(): IFile[] | null {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists) {
+    if (this.resolvedPath.type === PathFileType.FILE && this.nativeObject && this.exists) {
       const allJSFiles: FileAndroid[] = [];
       const allNativeFiles = toJSArray(this.nativeObject.listFiles());
       allNativeFiles?.forEach((tmpFile) => {
@@ -292,7 +290,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   move(destination: string): boolean {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
+    if (this.resolvedPath.type === PathFileType.FILE) {
       let destinationFile = new FileAndroid({
         path: destination
       });
@@ -330,7 +328,7 @@ export default class FileAndroid extends NativeMobileComponent implements IFile 
   }
 
   rename(newName: string): boolean {
-    if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
+    if (this.resolvedPath.type === PathFileType.FILE) {
       const newFileFullPath = this.path.substring(0, this.path.lastIndexOf('/') + 1) + newName;
       const newFile = new NativeFile(newFileFullPath);
       if (this.nativeObject.renameTo(newFile)) {

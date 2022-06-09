@@ -27,7 +27,7 @@ interface ContentSharing {
   parcelabels: any;
 }
 
-export class ShareAndroidClass extends NativeMobileComponent implements IShare {
+class ShareAndroidClass extends NativeMobileComponent implements IShare {
   protected createNativeObject() {
     return null;
   }

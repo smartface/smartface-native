@@ -1,28 +1,31 @@
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import File from '../../io/file';
-import { IPath, PathBase } from './path';
+import { IPath } from './path';
 
-export default class PathIOS extends PathBase {
+class PathIOSClass extends NativeMobileComponent implements IPath {
   constructor(params?: Partial<IPath>) {
     super(params);
   }
-
-  static get ImagesUriScheme(): string {
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    return null;
+  }
+  get ImagesUriScheme(): string {
     return 'images://';
   }
 
-  static get AssetsUriScheme(): string {
+  get AssetsUriScheme(): string {
     return 'assets://';
   }
 
-  static get Separator(): string {
+  get Separator(): string {
     return '/';
   }
 
-  static get DataDirectory(): string {
+  get DataDirectory(): string {
     return File.getDocumentsDirectory();
   }
-
-  static get android(): any {
-    return {};
-  }
 }
+
+const PathIOS = new PathIOSClass();
+
+export default PathIOS;

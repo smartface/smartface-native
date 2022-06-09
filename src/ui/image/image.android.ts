@@ -4,6 +4,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import FileAndroid from '../../io/file/file.android';
 import PathAndroid from '../../io/path/path.android';
 import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { PathFileType } from '../../io/path/path';
 
 const NativeBitmapFactory = requireClass('android.graphics.BitmapFactory');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
@@ -242,7 +243,7 @@ export default class ImageAndroid<TNative = any, TProps extends MobileOSProps<Im
     });
     if (imageFile?.nativeObject) {
       let bitmap;
-      if (imageFile.type === PathAndroid.FILE_TYPE.DRAWABLE) {
+      if (imageFile.type === PathFileType.DRAWABLE) {
         bitmap = imageFile.nativeObject;
       } else {
         if (width && height) {
@@ -274,7 +275,7 @@ export default class ImageAndroid<TNative = any, TProps extends MobileOSProps<Im
       const imageFile = new FileAndroid({
         path: params.path
       });
-      if (imageFile.type === PathAndroid.FILE_TYPE.ASSET || imageFile.type === PathAndroid.FILE_TYPE.DRAWABLE) {
+      if (imageFile.type === PathFileType.ASSET || imageFile.type === PathFileType.DRAWABLE) {
         const image = ImageAndroid.createFromFile(params.path);
         return image?.android.round?.(params.radius) || null;
       } else {

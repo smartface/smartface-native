@@ -26,7 +26,7 @@ const UIActivityType = {
   saveToCameraRoll: 'com.apple.UIKit.activity.SaveToCameraRoll'
 };
 
-export class ShareIOSClass extends NativeMobileComponent implements IShare {
+class ShareIOSClass extends NativeMobileComponent implements IShare {
   constructor(params?: any) {
     super(params);
     this.addIOSProps(this.getIOSProps());
