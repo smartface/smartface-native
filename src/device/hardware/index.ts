@@ -1,6 +1,5 @@
-import { HardwareBase } from './hardware';
+import { IHardware } from './hardware';
 
-const Hardware: typeof HardwareBase = require(`./hardware.${Device.deviceOS.toLowerCase()}`).default;
-type Hardware = HardwareBase;
+const Hardware: IHardware = require(`./hardware.${Device.deviceOS.toLowerCase()}`).default;
 
 export default Hardware;
