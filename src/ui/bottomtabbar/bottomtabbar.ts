@@ -40,7 +40,7 @@ export interface IBottomTabBarIOSProps {
  *
  * BottomTabBar represents a bottom navigation bar. You can specify bar color and item color.
  *
- * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
+ * @see {@link https://docs.smartface.io/smartface-native-framework/ui-elements/bottomtabbar  BottomTabBar}
  *
  */
 export interface IBottomTabBar extends INativeMobileComponent<any, MobileOSProps<IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> {

@@ -130,7 +130,7 @@ export interface IShare extends NativeMobileComponent<any, MobileOSProps<ShareIO
    * @param {Array} [params.blacklist]
    * @ios
    * @android
-   * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
+   * @see {@link https://docs.smartface.io/smartface-native-framework/miscellaneous-native-features/share-on-ios-and-android-1/#contacts-sharing  Contacts Sharing}
    * @since 4.2.1
    */
   shareContacts(params: { items: IContact[]; fileName?: string; page: IPage; blacklist: string[] }): void;
@@ -157,7 +157,7 @@ export interface IShare extends NativeMobileComponent<any, MobileOSProps<ShareIO
    * @param {Array} [params.blacklist]
    * @ios
    * @android
-   * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#multiple-sharing
+   * @see {@link https://docs.smartface.io/smartface-native-framework/miscellaneous-native-features/share-on-ios-and-android-1/#multiple-sharing Multiple Sharing}
    * @since 4.0.2
    */
   share(params: { items: any[]; page: IPage; blacklist: string[] }): void;
