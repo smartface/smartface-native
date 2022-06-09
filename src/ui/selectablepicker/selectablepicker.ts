@@ -1,6 +1,4 @@
-import { IEventEmitter } from '../../core/eventemitter';
-import { INativeComponent } from '../../core/inative-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
 import { SelectablePickerEvents } from './selectablepicker-events';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
@@ -52,7 +50,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets titleFont of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -99,7 +97,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets cancelButtonColor of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -108,7 +106,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  cancelButtonColor: Color;
+  cancelButtonColor: IColor;
 
   /**
    * Gets/sets cancelButtonFont of the SelectablePicker.
@@ -136,7 +134,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  doneButtonColor: Color;
+  doneButtonColor: IColor;
   /**
    * Gets/sets doneButtonText of the SelectablePicker.
    * This property only works with show method. Must set before show method.

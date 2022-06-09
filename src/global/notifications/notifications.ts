@@ -1,6 +1,6 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../../ui/color';
+import { IColor } from '../../ui/color/color';
 import { NotificationEvents } from './notifications-events';
 
 export enum AuthorizationStatus {
@@ -72,7 +72,7 @@ export interface NotificationAndroidProps {
    * @static
    * @since 0.1
    */
-  color?: Color;
+  color?: IColor;
   /**
    * Gets/sets the indeterminate status of the LocalNotification. If indeterminate,
    * set the progress this notification represents.

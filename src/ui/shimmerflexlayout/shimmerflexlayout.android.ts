@@ -6,6 +6,7 @@ import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
+import { IColor } from '../color/color';
 
 const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrameLayout');
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
@@ -27,8 +28,8 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   private _intensity?: number;
   private _repeatCount?: number;
   private _tilt?: number;
-  private _highlightColor?: Color;
-  private _baseColor?: Color;
+  private _highlightColor?: IColor;
+  private _baseColor?: IColor;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
   private _isShimmering: boolean;

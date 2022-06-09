@@ -1,5 +1,5 @@
-import { INativeMobileComponent, MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
-import Color from '../color';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { IColor } from '../color/color';
 import Font from '../font';
 import { AbstractFont } from '../font/font';
 
@@ -27,7 +27,7 @@ export interface AttributedStringiOSProps {
    * @ios
    * @since 3.0.0
    */
-  underlineColor: Color;
+  underlineColor: IColor;
   /**
    * Gets/sets strikethroughColor on AttributedString.
    *
@@ -35,7 +35,7 @@ export interface AttributedStringiOSProps {
    * @ios
    * @since 3.2.1
    */
-  strikethroughColor: Color;
+  strikethroughColor: IColor;
 }
 export interface IAttributedString<TNative = any, TProps extends MobileOSProps<AttributedStringiOSProps, {}> = MobileOSProps<AttributedStringiOSProps, {}>>
   extends INativeMobileComponent<TNative, TProps> {
@@ -47,7 +47,7 @@ export interface IAttributedString<TNative = any, TProps extends MobileOSProps<A
    * @ios
    * @since 3.0.0
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets string on AttributedString.
    *
@@ -75,7 +75,7 @@ export interface IAttributedString<TNative = any, TProps extends MobileOSProps<A
    * @ios
    * @since 3.0.0
    */
-  foregroundColor: Color;
+  foregroundColor: IColor;
   /**
    * Gets/sets link on AttributedString. If you want handle label click method, must set link string.
    *

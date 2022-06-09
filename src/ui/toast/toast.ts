@@ -1,6 +1,6 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeComponent } from '../../core/inative-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { ToastEvents } from './toast-events';
 
 /**
@@ -35,7 +35,7 @@ export interface IToast<TEvent extends string = ToastEvents> extends INativeComp
    * @property
    * @since 4.4.1
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets the actionTextColor of toast action text.
    * @android
@@ -43,7 +43,7 @@ export interface IToast<TEvent extends string = ToastEvents> extends INativeComp
    * @property
    * @since 4.4.1
    */
-  actionTextColor: Color;
+  actionTextColor: IColor;
   /**
    * Gets/sets the messageTextColor of toast message text.
    * @android
@@ -51,7 +51,7 @@ export interface IToast<TEvent extends string = ToastEvents> extends INativeComp
    * @property
    * @since 4.4.1
    */
-  messageTextColor: Color;
+  messageTextColor: IColor;
   /**
    * Gets/sets the bottom offset of toast message view from bottom.
    * @android

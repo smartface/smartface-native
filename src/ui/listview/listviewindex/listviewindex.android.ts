@@ -1,5 +1,5 @@
 import { MobileOSProps } from '../../../core/native-mobile-component';
-import { ColorImpl } from '../../color/color';
+import { IColor } from '../../color/color';
 import Font from '../../font';
 import { IImage, ImageIOSProps, ImageAndroidProps } from '../../image/image';
 import { IView, ViewIOSProps, ViewAndroidProps } from '../../view/view';
@@ -10,7 +10,7 @@ export default class ListViewIndexAndroid extends ViewAndroid implements IListVi
   items: (string | IImage<any, MobileOSProps<ImageIOSProps, ImageAndroidProps>>)[];
   indexDidSelect: (index: number) => void;
   backgroundView: IView<'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', { [key: string]: any }, MobileOSProps<ViewIOSProps, ViewAndroidProps>>;
-  tintColor: ColorImpl;
+  tintColor: IColor;
   itemSpacing: number;
   font: Font;
   indexInset: ListViewIndexInsetType;

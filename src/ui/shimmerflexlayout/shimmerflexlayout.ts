@@ -1,7 +1,7 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import FlexLayout from '../flexlayout';
-import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
+import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { ViewEvents } from '../view/view-events';
 
 export enum ShimmeringDirection {
@@ -196,7 +196,7 @@ export interface ShimmerFlexLayoutAndroidProps extends ViewAndroidProps {
    * @android
    * @since 3.1.3
    */
-  highlightColor: Color;
+  highlightColor: IColor;
   /**
    * Set base  color of content. This property must be used if given shimmer type is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
    *
@@ -204,7 +204,7 @@ export interface ShimmerFlexLayoutAndroidProps extends ViewAndroidProps {
    * @android
    * @since 3.1.3
    */
-  baseColor: Color;
+  baseColor: IColor;
   /**
    * Set the alpha of the shimmer highlight.
    *
@@ -212,7 +212,7 @@ export interface ShimmerFlexLayoutAndroidProps extends ViewAndroidProps {
    * @android
    * @since 3.1.3
    */
-  highlightAlpha: Color;
+  highlightAlpha: IColor;
 }
 
 export interface ShimmerFlexLayoutIOSProps extends ViewIOSProps {
@@ -288,7 +288,7 @@ export interface IShimmerFlexLayout<
    * @android
    * @since 3.1.3
    */
-  contentLayout: FlexLayout;
+  contentLayout: FlexLayout; //Didn't make IFlexLayout because shimmerflexlayout requires it as class.
 
   /**
    * Gives information about whether the shimmer animation started or not.

@@ -1,8 +1,8 @@
 import type View from '../view';
-import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
+import { IView, ViewIOSProps } from '../view/view';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import Color from '../color';
+import { IColor } from '../color/color';
 import FlexLayout from '../flexlayout';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextContentType from '../shared/textcontenttype';
@@ -155,7 +155,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  textColor: Color;
+  textColor: IColor;
   /**
    * Gets/sets the cursor position of TextBox.
    *
@@ -200,7 +200,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 3.2.1
    */
-  cursorColor: Color;
+  cursorColor: IColor;
   /**
    * Gets/sets hint text that will be displayed when TextBox is empty.
    *
@@ -219,7 +219,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  hintTextColor: Color;
+  hintTextColor: IColor;
 
   /**
    * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.

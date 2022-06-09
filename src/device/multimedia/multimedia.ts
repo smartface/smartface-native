@@ -1,8 +1,7 @@
-import Page from '../../ui/page';
-import Image from '../../ui/image';
-import File from '../../io/file';
-import Color from '../../ui/color';
+import { IPage } from '../../ui/page/page';
+import { IColor } from '../../ui/color/color';
 import { IImage } from '../../ui/image/image';
+import { IFile } from '../../io/file/file';
 
 export enum ActionType {
   /**
@@ -215,27 +214,27 @@ export enum GalleryAuthorizationStatus {
   AUTHORIZED = 3
 }
 export type ConvertToMp4Params = {
-  videoFile: File;
+  videoFile: IFile;
   outputFileName: string;
-  onCompleted: (params: { video: File }) => void;
+  onCompleted: (params: { video: IFile }) => void;
   onFailure?: () => void;
 };
 
 export type PickMultipleFromGalleryParams = {
   type?: Type;
-  page: Page;
+  page: IPage;
   android?: {
     fixOrientation?: boolean;
     maxImageSize?: number;
   };
-  onSuccess: (params: { assets: [{ image?: IImage; file?: File | null }] }) => void;
+  onSuccess: (params: { assets: [{ image?: IImage; file?: IFile | null }] }) => void;
   onCancel?: () => void;
   onFailure?: (e: [{ message: string; fileName: string | null; uri: string }]) => void;
 };
 
 export type LaunchCropperParams = {
-  page: Page;
-  asset: File | IImage;
+  page: IPage;
+  asset: IFile | IImage;
   aspectRatio?: { x: number; y: number };
   cropShape?: CropShape;
   headerBarTitle?: string;
@@ -261,8 +260,8 @@ export type LaunchCropperParams = {
     showOnlyIcons?: boolean;
     doneButtonTitle?: string;
     cancelButtonTitle?: string;
-    doneButtonColor?: Color;
-    cancelButtonColor?: Color;
+    doneButtonColor?: IColor;
+    cancelButtonColor?: IColor;
   };
   onSuccess: (params: { image?: IImage }) => void;
   onCancel?: () => void;
@@ -270,21 +269,21 @@ export type LaunchCropperParams = {
 };
 
 export type RecordVideoParams = {
-  page: Page;
+  page: IPage;
   maximumDuration?: Number;
   videoQuality?: Number;
   ios?: {
     cameraFlashMode?: CameraFlashMode;
     cameraDevice?: CameraDevice;
   };
-  onSuccess?: (params: { video: File }) => void;
+  onSuccess?: (params: { video: IFile }) => void;
   onCancel?: () => void;
   onFailure?: (e: { message: string }) => void;
 };
 
 export type MultimediaParams = {
   type?: Type;
-  page: Page;
+  page: IPage;
   action?: ActionType;
   allowsEditing?: boolean;
   aspectRatio?: { x: number; y: number };
@@ -307,7 +306,7 @@ export type MultimediaParams = {
     fixOrientation?: boolean;
     maxImageSize?: number;
   };
-  onSuccess: (params: { image?: IImage; video?: File }) => void;
+  onSuccess: (params: { image?: IImage; video?: IFile }) => void;
   onCancel?: () => void;
   onFailure?: (e: { message: string }) => void;
 };

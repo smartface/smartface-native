@@ -1,6 +1,6 @@
 import { IEventEmitter } from '../../core/eventemitter';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { MenuItemEvents } from './menuitem-events';
 
 /**
@@ -51,7 +51,7 @@ export interface MenuItemAndroidProps {
    * @android
    * @since 1.1.8
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Private method for Android to get the title of the menuitem.
    * @private

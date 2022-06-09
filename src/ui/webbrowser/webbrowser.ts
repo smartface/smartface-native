@@ -1,6 +1,5 @@
-import NativeComponent from '../../core/native-component';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IPage } from '../page/page';
 
 export interface IWebBrowserIOSProps {
@@ -11,7 +10,7 @@ export interface IWebBrowserIOSProps {
    * @ios
    * @since 0.1
    */
-  itemColor?: Color;
+  itemColor?: IColor;
 }
 
 /**
@@ -49,7 +48,7 @@ export interface IWebBrowser<TNative = any, TProps extends MobileOSProps<IWebBro
    * @ios
    * @since 2.0.11
    */
-  barColor?: Color;
+  barColor?: IColor;
   /**
    *
    * This function shows WebBrowser on the given UI.Page.

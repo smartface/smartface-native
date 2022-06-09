@@ -1,4 +1,4 @@
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
 import { INativeComponent } from '../../core/inative-component';
 import ViewState from '../shared/viewState';
@@ -30,7 +30,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  backgroundColor: Color | null;
+  backgroundColor: IColor | null;
   /**
    * Gets/sets textColor of badge.
    *
@@ -39,7 +39,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  textColor: ViewState<Color> | null;
+  textColor: ViewState<IColor> | null;
   /**
    * Gets/sets font of badge.
    *
@@ -57,7 +57,7 @@ export declare interface IBadge extends INativeComponent {
    * @ios
    * @since 3.1.0
    */
-  borderColor: Color | null;
+  borderColor: IColor | null;
   /**
    * Gets/sets border width of badge.
    *

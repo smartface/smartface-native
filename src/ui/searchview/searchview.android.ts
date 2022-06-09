@@ -13,7 +13,7 @@ import Page from '../page';
 import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { ColorImpl } from '../color/color';
+import { IColor } from '../color/color';
 import { IImage } from '../image/image';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
@@ -289,10 +289,10 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setTextColor(value.nativeObject);
   }
 
-  get cursorColor(): ColorImpl {
+  get cursorColor(): IColor {
     return this._textViewCursorColor;
   }
-  set cursorColor(value: ColorImpl) {
+  set cursorColor(value: IColor) {
     this._textViewCursorColor = value;
     SFEditText.setCursorColor(this.mSearchSrcTextView, this._textViewCursorColor.nativeObject);
   }

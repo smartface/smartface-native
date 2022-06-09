@@ -1,5 +1,4 @@
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
-import Color from '../color';
 import { AbstractPage, IPage, LargeTitleDisplayMode, PageAndroidParams, PageIOSParams, PageOrientation, PresentationStyle } from '../page/page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -11,6 +10,8 @@ import { IView } from '../view/view';
 import StatusBar from '../../application/statusbar';
 import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
 import type Page from '../page';
+import { IColor } from '../color/color';
+import ViewState from '../shared/viewState';
 
 export enum BarTextTransform {
   AUTO = 0,
@@ -49,7 +50,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @android
    * @since 3.2.0
    */
-  dividerColor: Color;
+  dividerColor: IColor;
   /**
    * Gets/sets the divider padding of the TabBarController.
    * @property {Number} [dividerPadding = 0]
@@ -71,7 +72,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  indicatorColor: Color;
+  indicatorColor: IColor;
   /**
    * Gets/sets the auto capitalize title of the items of TabBarController.
    * @property {Boolean} [autoCapitalize = true]
@@ -103,7 +104,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  barColor: Color;
+  barColor: IColor;
   /**
    * Gets/sets whether to enable scrollable tabs.
    * @property {Boolean} scrollEnabled
@@ -137,12 +138,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  iconColor:
-    | {
-        normal: Color;
-        selected: Color;
-      }
-    | Color;
+  iconColor: ViewState<IColor>;
   /**
    * Gets/sets the text color of the tabs. You can specify text colors for the different states (normal, selected) used for the tabs.
    * @property {UI.Color|Object} textColor
@@ -150,12 +146,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  textColor:
-    | {
-        normal: Color;
-        selected: Color;
-      }
-    | Color;
+  textColor: ViewState<IColor>;
 
   /**
    * Enables/Disables paging behavior.
@@ -225,19 +216,19 @@ export abstract class AbstractTabBarController<TEvent extends string = TabBarCon
 
   barHeight: number;
   items: ITabbarItem[];
-  dividerColor: Color;
+  dividerColor: IColor;
   dividerPadding: number;
   dividerWidth: number;
-  indicatorColor: Color;
+  indicatorColor: IColor;
   autoCapitalize: boolean;
   indicatorHeight: number;
   overScrollMode: OverScrollMode;
-  barColor: Color;
+  barColor: IColor;
   scrollEnabled: boolean;
   selectedIndex: number;
   abstract setSelectedIndex(index: number, animated: boolean): void;
-  iconColor: { normal: Color; selected: Color } | Color;
-  textColor: { normal: Color; selected: Color } | Color;
+  iconColor: ViewState<IColor>;
+  textColor: ViewState<IColor>;
   pagingEnabled: boolean;
   abstract onPageCreate(index: number): Page;
   abstract onSelected(index: number): void;

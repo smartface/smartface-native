@@ -2,7 +2,7 @@ import { IWebBrowser } from './webbrowser';
 import Page from '../page';
 import Invocation from '../../util/iOS/invocation';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { ColorImpl } from '../color/color';
+import { IColor } from '../color/color';
 
 export default class WebBrowserIOS extends NativeMobileComponent implements IWebBrowser {
   private _options?: Partial<IWebBrowser>;
@@ -11,7 +11,7 @@ export default class WebBrowserIOS extends NativeMobileComponent implements IWeb
     this._options = Object.assign({}, params);
   }
   url: string;
-  barColor?: ColorImpl | undefined;
+  barColor?: IColor | undefined;
   protected createNativeObject() {
     return null;
   }

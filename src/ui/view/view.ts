@@ -1,14 +1,13 @@
-import type Color from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { ViewEvents } from './view-events';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { IEventEmitter } from '../../core/eventemitter';
-import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import Flex from '../shared/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ViewState from '../shared/viewState';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import { IColor } from '../color/color';
 export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
@@ -40,7 +39,7 @@ export interface ViewAndroidProps {
    * @member UI.View
    * @since 3.2.1
    */
-  rippleColor: Color;
+  rippleColor: IColor;
   /**
    * Gets/Sets the elevation of the view. For the views that has
    * StateListAnimator natively like Button, will lost its own
@@ -135,7 +134,7 @@ export interface ViewIOSProps {
    * @ios
    * @since 2.0.6
    */
-  shadowColor: Color;
+  shadowColor: IColor;
   /**
    *
    * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
@@ -208,7 +207,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: ViewState<Color>;
+  backgroundColor: ViewState<IColor>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -217,7 +216,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @ios
    * @since 0.1
    */
-  borderColor: Color;
+  borderColor: IColor;
   /**
    * Sets/gets border thickness of bounded view. Accepts unsigned
    * numbers, 0 means no border.
@@ -948,8 +947,8 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: ViewState<Color>;
-  borderColor: Color;
+  backgroundColor: ViewState<IColor>;
+  borderColor: IColor;
   borderWidth: number;
   borderRadius: number;
   id: string;

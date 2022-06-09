@@ -1,4 +1,4 @@
-import Color from '../../../ui/color';
+import { IColor } from '../../../ui/color/color';
 
 /**
  * Determines whether the navigation bar should be light theme or dark theme based.
@@ -17,7 +17,7 @@ export enum NavigationBarStyle {
  * @since 4.0.0
  */
 export declare class NavigationBarBase {
-  color: Color;
+  color: IColor;
   /**
    * Style is an enum. It defines navigation bar appearance style.
    * Gets/sets transparency of status bar.This property works only for Android version

@@ -1,6 +1,6 @@
 import { ITextBox } from './textbox';
 import ActionKeyType from '../shared/android/actionkeytype';
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
@@ -13,6 +13,7 @@ import TextContentType from '../shared/textcontenttype';
 import View from '../view';
 import KeyboardAnimationDelegate from '../../util/iOS/keyboardanimationdelegate';
 import Invocation from '../../util/iOS/invocation';
+import ColorIOS from '../color/color.ios';
 
 const IOSKeyboardTypes = {
   default: 0, // Default type for the current input method.
@@ -87,7 +88,7 @@ const TextAlignmentMapping = {
 export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
   private _textAligment: number;
   private _hint: string;
-  private _hintTextColor: Color;
+  private _hintTextColor: IColor;
   private _clearButtonEnabled: boolean;
   private _keyboardLayout: FlexLayout | undefined;
   private keyboardanimationdelegate: KeyboardAnimationDelegate;
@@ -173,7 +174,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     return new __SF_UITextField();
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    this._hintTextColor = Color.create(199, 199, 205);
+    this._hintTextColor = ColorIOS.create(199, 199, 205);
     this._textAligment = TextAlignment.MIDLEFT;
     this._clearButtonEnabled = false;
     super.preConstruct(params);
@@ -313,12 +314,12 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.textAlignment = TextAlignmentMapping[value];
   }
 
-  get textColor(): Color {
-    return new Color({
+  get textColor(): IColor {
+    return new ColorIOS({
       color: this.nativeObject.textColor
     });
   }
-  set textColor(value: Color) {
+  set textColor(value: IColor) {
     this.nativeObject.textColor = value.nativeObject;
   }
 
@@ -412,12 +413,12 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
 
   onEditBegins: () => void;
 
-  get cursorColor(): Color {
-    return new Color({
+  get cursorColor(): IColor {
+    return new ColorIOS({
       color: this.nativeObject.valueForKey('tintColor')
     });
   }
-  set cursorColor(value: Color) {
+  set cursorColor(value: IColor) {
     this.nativeObject.setValueForKey(value.nativeObject, 'tintColor');
   }
 
@@ -443,10 +444,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.setValueForKey(nativeAttributeString, 'attributedPlaceholder');
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this._hintTextColor = value;
     this.hint = this.hint;
   }

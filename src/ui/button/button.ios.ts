@@ -1,10 +1,13 @@
 import { IButton } from './button';
-import Color from '../color';
 import ViewState from '../shared/viewState';
 import LabelIOS from '../label/label.ios';
 import { ButtonEvents } from './button-events';
-import Image from '../image';
+import ColorIOS from '../color/color.ios';
+import ImageIOS from '../image/image.ios';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
+import { IColor } from '../color/color';
+import { IImage } from '../image/image';
+import isViewState from '../../util/isViewState';
 
 enum ButtonState {
   NORMAL,
@@ -14,23 +17,23 @@ enum ButtonState {
   FOCUSED
 }
 
-const TextColorsInitial: ViewState<Color> = {
-  normal: Color.BLACK,
-  disabled: Color.BLACK,
-  selected: Color.BLACK,
-  pressed: Color.BLACK,
-  focused: Color.BLACK
+const TextColorsInitial: ViewState<IColor> = {
+  normal: ColorIOS.BLACK,
+  disabled: ColorIOS.BLACK,
+  selected: ColorIOS.BLACK,
+  pressed: ColorIOS.BLACK,
+  focused: ColorIOS.BLACK
 };
 
-const BackgroundColorsInitial: ViewState<Color> = {
-  normal: Color.TRANSPARENT,
-  disabled: Color.TRANSPARENT,
-  selected: Color.TRANSPARENT,
-  pressed: Color.TRANSPARENT,
-  focused: Color.TRANSPARENT
+const BackgroundColorsInitial: ViewState<IColor> = {
+  normal: ColorIOS.TRANSPARENT,
+  disabled: ColorIOS.TRANSPARENT,
+  selected: ColorIOS.TRANSPARENT,
+  pressed: ColorIOS.TRANSPARENT,
+  focused: ColorIOS.TRANSPARENT
 };
 
-const BackgroundImagesInitial: ViewState<Image> = {
+const BackgroundImagesInitial: ViewState<IImage> = {
   normal: undefined,
   disabled: undefined,
   selected: undefined,
@@ -99,9 +102,9 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
 
   set textColor(value: IButton['textColor']) {
     this._textColor = value;
-    if (value instanceof Color) {
+    if (value instanceof ColorIOS) {
       this.nativeObject.setTitleColor(value.nativeObject, ButtonState.NORMAL);
-    } else {
+    } else if (isViewState<IColor>(value)) {
       value.normal && this.nativeObject.setTitleColor(value.normal.nativeObject, ButtonState.NORMAL);
       value.disabled && this.nativeObject.setTitleColor(value.disabled.nativeObject, ButtonState.DISABLED);
       value.selected && this.nativeObject.setTitleColor(value.selected.nativeObject, ButtonState.SELECTED);
@@ -115,9 +118,9 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   }
   set backgroundColor(value: IButton['backgroundColor']) {
     this._backgroundColor = value;
-    if (value instanceof Color) {
+    if (value instanceof ColorIOS) {
       this.checkAndSetBackground(value, ButtonState.NORMAL);
-    } else {
+    } else if (isViewState<IColor>(value)) {
       value.normal && this.checkAndSetBackground(value.normal, ButtonState.NORMAL);
       value.disabled && this.checkAndSetBackground(value.disabled, ButtonState.DISABLED);
       value.selected && this.checkAndSetBackground(value.selected, ButtonState.SELECTED);
@@ -126,7 +129,7 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
     }
   }
 
-  private checkAndSetBackground(value: Color | Image, state: ButtonState) {
+  private checkAndSetBackground(value: IColor | IImage, state: ButtonState) {
     if (value.nativeObject.constructor.name === 'CAGradientLayer') {
       if (Object.keys(this.gradientColorObject).length === 0) {
         this.nativeObject.addFrameObserver();
@@ -156,9 +159,9 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
           this.nativeObject.removeFrameObserver();
         }
       }
-      if (value instanceof Color) {
+      if (value instanceof ColorIOS) {
         this.nativeObject.setBackgroundColor(value.nativeObject, state);
-      } else if (value instanceof Image) {
+      } else if (value instanceof ImageIOS) {
         this.nativeObject.setBackgroundImage(value.nativeObject, state);
       }
     }
@@ -169,9 +172,9 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   }
   set backgroundImage(value: IButton['backgroundImage']) {
     this._backgroundImage = value;
-    if (value instanceof Image) {
+    if (value instanceof ImageIOS) {
       this.checkAndSetBackground(value, ButtonState.NORMAL);
-    } else {
+    } else if (isViewState<IImage>(value)) {
       value.normal && this.checkAndSetBackground(value.normal, ButtonState.NORMAL);
       value.disabled && this.checkAndSetBackground(value.disabled, ButtonState.DISABLED);
       value.selected && this.checkAndSetBackground(value.selected, ButtonState.SELECTED);

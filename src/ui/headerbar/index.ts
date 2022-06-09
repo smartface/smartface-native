@@ -1,10 +1,9 @@
 import AttributedString from '../attributedstring';
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
 import { IView } from '../view/view';
 import HeaderBarItem from '../headerbaritem';
 import { LargeTitleDisplayMode } from '../page/page';
-import Image from '../image';
 import { IImage } from '../image/image';
 
 /**
@@ -102,7 +101,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
    *
@@ -122,7 +121,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  itemColor: Color;
+  itemColor: IColor;
   /**
    * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.
    *
@@ -194,7 +193,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets visibility of the header bar. For iOS, you should access this property from page.parentController.
    *
@@ -329,7 +328,7 @@ type IHeaderBar = {
      * @android
      * @since 0.1
      */
-    subtitleColor?: Color;
+    subtitleColor?: IColor;
 
     /**
      * Gets/sets elevation of the header bar.

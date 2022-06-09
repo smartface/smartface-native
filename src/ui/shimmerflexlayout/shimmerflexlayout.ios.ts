@@ -1,8 +1,8 @@
 import { IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
-import FlexLayout from '../flexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import FlexLayout from '../flexlayout';
 
 export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = any> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
   private _contentLayout: FlexLayout;

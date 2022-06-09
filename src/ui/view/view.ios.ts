@@ -1,5 +1,5 @@
 import { Point2D } from '../../primitive/point2d';
-import type Color from '../color';
+import { IColor } from '../color/color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import { Size } from '../../primitive/size';
@@ -121,7 +121,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       get shadowColor() {
         return self.shadowColor;
       },
-      set shadowColor(shadowColor: Color) {
+      set shadowColor(shadowColor: IColor) {
         self.shadowColor = shadowColor;
       },
       get exclusiveTouch() {
@@ -242,7 +242,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       color
     });
   }
-  private set shadowColor(shadowColor: Color) {
+  private set shadowColor(shadowColor: IColor) {
     const argShadowColor = new Invocation.Argument({
       type: 'CGColor',
       value: shadowColor.nativeObject
@@ -282,7 +282,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       color: this.nativeObject.layer.borderUIColor
     });
   }
-  set borderColor(value: Color) {
+  set borderColor(value: IColor) {
     this.nativeObject.layer.borderUIColor = value.nativeObject;
   }
 
