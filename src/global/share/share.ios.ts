@@ -1,12 +1,11 @@
 import { INativeComponent } from '../../core/inative-component';
-import Contacts from '../../device/contacts';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { IContact } from '../../device/contacts/contact/contact';
 import File from '../../io/file';
 import { IImage } from '../../ui/image/image';
-import Page from '../../ui/page';
 import { IPage } from '../../ui/page/page';
 import Invocation from '../../util/iOS/invocation';
-import { ShareBase } from './share';
+import { IShare } from './share';
 const UIActivityViewController = SF.requireClass('UIActivityViewController');
 
 const UIActivityType = {
@@ -27,36 +26,25 @@ const UIActivityType = {
   saveToCameraRoll: 'com.apple.UIKit.activity.SaveToCameraRoll'
 };
 
-export class ShareIOS implements ShareBase {
-  static ios__presentViewController(page: INativeComponent, activity) {
-    __SF_Dispatch.mainAsync(() => {
-      page.nativeObject.presentViewController(activity);
-    });
+export class ShareIOSClass extends NativeMobileComponent implements IShare {
+  constructor(params?: any) {
+    super(params);
+    this.addIOSProps(this.getIOSProps());
   }
-  static createActivity(activityItems) {
-    const alloc = UIActivityViewController.alloc();
-    const argActivityItems = new Invocation.Argument({
-      type: 'id',
-      value: activityItems
-    });
-    const argApplicationActivities = new Invocation.Argument({
-      type: 'NSObject',
-      value: undefined
-    });
-
-    return Invocation.invokeInstanceMethod(alloc, 'initWithActivityItems:applicationActivities:', [argActivityItems, argApplicationActivities], 'id');
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    return null;
   }
-  static shareText(text: INativeComponent, page: Page, blacklist: string[]) {
-    const activity = ShareIOS.createActivity([text]) as __SF_NSOBject;
+  shareText(text: string, page: IPage, blacklist: string[]) {
+    const activity = this.createActivity([text]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
-    ShareIOS.ios__presentViewController(page, activity);
+    this.ios__presentViewController(page, activity);
   }
-  static shareImage(image: IImage, page: IPage, blacklist: any[]) {
-    const activity = ShareIOS.createActivity([image.nativeObject]);
+  shareImage(image: IImage, page: IPage, blacklist: any[]) {
+    const activity = this.createActivity([image.nativeObject]);
     activity.excludedActivityTypes = blacklist;
-    ShareIOS.ios__presentViewController(page, activity);
+    this.ios__presentViewController(page, activity);
   }
-  static shareContacts(object: { items: IContact[]; fileName?: string; page: Page; blacklist: string[] }) {
+  shareContacts(object: { items: IContact[]; fileName?: string; page: IPage; blacklist: string[] }) {
     const items = object.items;
     const page = object.page;
     const blacklist = object.blacklist;
@@ -68,19 +56,19 @@ export class ShareIOS implements ShareBase {
     }
 
     const path = __SF_CNMutableContact.getShareableFilePathWithContactArrayFileName(_itemsNativeObject, fileName);
-    const activity = ShareIOS.createActivity([path]) as __SF_NSOBject;
+    const activity = this.createActivity([path]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
-    ShareIOS.ios__presentViewController(page, activity);
+    this.ios__presentViewController(page, activity);
   }
 
-  static shareFile(file: File, page: Page, blacklist: string[]) {
+  shareFile(file: File, page: IPage, blacklist: string[]) {
     const actualPath = file.nativeObject.getActualPath();
     const url = __SF_NSURL.fileURLWithPath(actualPath);
-    const activity = ShareIOS.createActivity([url]) as __SF_NSOBject;
+    const activity = this.createActivity([url]) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
-    ShareIOS.ios__presentViewController(page, activity);
+    this.ios__presentViewController(page, activity);
   }
-  static share(object: { items: INativeComponent[]; page: Page; blacklist: string[] }) {
+  share(object: { items: INativeComponent[]; page: IPage; blacklist: string[] }) {
     const items = object.items;
     const page = object.page;
     const blacklist = object.blacklist;
@@ -100,18 +88,40 @@ export class ShareIOS implements ShareBase {
       }
     }
 
-    const activity = ShareIOS.createActivity(_itemsNativeObject) as __SF_NSOBject;
+    const activity = this.createActivity(_itemsNativeObject) as __SF_NSOBject;
     activity.excludedActivityTypes = blacklist;
-    ShareIOS.ios__presentViewController(page, activity);
+    this.ios__presentViewController(page, activity);
   }
-  static ios = {
-    Facebook: UIActivityType.postToFacebook,
-    Twitter: UIActivityType.postToTwitter,
-    Flickr: UIActivityType.postToFlickr,
-    Message: UIActivityType.message,
-    Mail: UIActivityType.mail,
-    Vimeo: UIActivityType.postToVimeo
-  };
+  private getIOSProps() {
+    return {
+      Facebook: UIActivityType.postToFacebook,
+      Twitter: UIActivityType.postToTwitter,
+      Flickr: UIActivityType.postToFlickr,
+      Message: UIActivityType.message,
+      Mail: UIActivityType.mail,
+      Vimeo: UIActivityType.postToVimeo
+    };
+  }
+
+  private ios__presentViewController(page: INativeComponent, activity) {
+    __SF_Dispatch.mainAsync(() => {
+      page.nativeObject.presentViewController(activity);
+    });
+  }
+  private createActivity(activityItems: any[]) {
+    const alloc = UIActivityViewController.alloc();
+    const argActivityItems = new Invocation.Argument({
+      type: 'id',
+      value: activityItems
+    });
+    const argApplicationActivities = new Invocation.Argument({
+      type: 'NSObject',
+      value: undefined
+    });
+
+    return Invocation.invokeInstanceMethod(alloc, 'initWithActivityItems:applicationActivities:', [argActivityItems, argApplicationActivities], 'id');
+  }
 }
 
+const ShareIOS = new ShareIOSClass();
 export default ShareIOS;
