@@ -1,7 +1,7 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { DatePickerEvents } from './datepicker-events';
 import { IColor } from '../color/color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
@@ -140,7 +140,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -164,7 +164,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelFont: Font;
+  cancelFont: IFont;
   /**
    * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -188,7 +188,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okFont: Font;
+  okFont: IFont;
   /**
    * The mode determines whether dates, times, or both dates and times are displayed.
    *

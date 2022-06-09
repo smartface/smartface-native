@@ -2,18 +2,18 @@ import System from '../../device/system';
 import ColorIOS from '../../ui/color';
 import ImageIOS from '../../ui/image/image.ios';
 import { default as IHeaderBar } from '../headerbar';
-import Font from '../font';
-import View from '../view';
 import { IHeaderBarItem } from '../headerbaritem/headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import NavigationControllerIOS from './navigationcontroller.ios';
 import { IColor } from '../color/color';
+import { IFont } from '../font/font';
+import { IView } from '../view/view';
 
 export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHeaderBar> implements IHeaderBar {
   appearance?: __SF_UINavigationBarAppearance;
   navigationController?: NavigationControllerIOS;
   leftItemEnabled: boolean;
-  titleLayout?: View;
+  titleLayout?: IView;
   title: string;
   private _transparent: boolean;
   private _transparentEmptyImage: __SF_UIImage;
@@ -22,7 +22,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
   private _prefersLargeTitles: boolean;
   private _backIndicatorImage: ImageIOS;
   private _backIndicatorTransitionMaskImage: ImageIOS;
-  private _titleFont?: Font;
+  private _titleFont?: IFont;
   private _borderVisibility: boolean;
   setItems(items: IHeaderBarItem[]): void {}
   setLeftItem(item: IHeaderBarItem): void {}

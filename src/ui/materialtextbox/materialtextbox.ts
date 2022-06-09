@@ -1,5 +1,5 @@
 import { ITextBox, TextBoxAndroidProps, TextBoxiOSProps } from '../textbox/textbox';
-import Font from '../font';
+import { IFont } from '../font/font';
 import { IColor } from '../color/color';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IView } from '../view/view';
@@ -107,7 +107,7 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
    * @deprecated
    * @since 4.3.0
    */
-  inlineHintFont: Font;
+  inlineHintFont: IFont;
   /**
    * Gets/sets the underlineLabelsFont of the MaterialTextBox. This property overrides the labelsFont property for error and characterRestriction font.
    * This property will not do anything.
@@ -116,7 +116,7 @@ export interface MaterialTextBoxiOSProps extends TextBoxiOSProps {
    * @ios
    * @since 4.3.0
    */
-  underlineLabelsFont: Font;
+  underlineLabelsFont: IFont;
   /**
    * Gets/sets the clearButtonColor of the MaterialTextBox.
    * @property {UI.Color} clearButtonColor
@@ -308,7 +308,7 @@ export interface IMaterialTextBox<
    * @ios
    * @since 3.1.3
    */
-  labelsFont: Font;
+  labelsFont: IFont;
   /**
    * Gets/sets font of a Label.
    * In Android, to make hint text size as your given text size assign the font property in constructor.
@@ -327,5 +327,5 @@ export interface IMaterialTextBox<
    * @ios
    * @since 0.1
    */
-  font: Font;
+  font: IFont;
 }

@@ -8,7 +8,7 @@ import type KeyboardType from '../shared/keyboardtype';
 import { IImage } from '../image/image';
 import { IFlexLayout } from '../flexlayout/flexlayout';
 import { IPage } from '../page/page';
-import type Font from '../font';
+import { IFont } from '../font/font';
 
 /**
  * Bar style that specifies the search bar’s appearance.
@@ -329,7 +329,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  font: null | Font;
+  font: null | IFont;
   /**
    * Gets/sets text alignment of the SearchView.
    *
@@ -453,7 +453,7 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   hideKeyboard(): void;
   requestFocus(): void;
   removeFocus(): void;
-  font: Font;
+  font: IFont;
   textAlignment: TextAlignment;
   hintTextColor: IColor;
   textFieldBackgroundColor: IColor;

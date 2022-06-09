@@ -2,14 +2,14 @@ import { IBlurView } from './blurview';
 import ViewAndroid from '../view/view.android';
 import { BlurViewEvents } from './blurview-events';
 import AndroidConfig from '../../util/Android/androidconfig';
-import Color from '../color';
 import View from '../view';
+import { IColor } from '../color/color';
 
 const RenderScriptBlur = requireClass('eightbitlab.com.blurview.RenderScriptBlur');
 const NativeBlurView = requireClass('eightbitlab.com.blurview.BlurView');
 
 export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> extends ViewAndroid<TEvent | BlurViewEvents, any, IBlurView> implements IBlurView {
-  private _overlayColor: Color;
+  private _overlayColor: IColor;
   private _rootView: View;
   private _blurRadius: number;
   constructor(params?: Partial<IBlurView>) {
@@ -29,10 +29,10 @@ export default class BlurViewAndroid<TEvent extends string = BlurViewEvents> ext
   protected getAndroidProps() {
     const self = this;
     return {
-      get overlayColor(): Color {
+      get overlayColor(): IColor {
         return self._overlayColor;
       },
-      set overlayColor(value: Color) {
+      set overlayColor(value: IColor) {
         self._overlayColor = value;
         self.refreshBlurView();
       },

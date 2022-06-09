@@ -1,9 +1,8 @@
-import type View from '../view';
 import { IView, ViewIOSProps } from '../view/view';
-import Font from '../font';
-import TextAlignment from '../shared/textalignment';
 import { IColor } from '../color/color';
-import FlexLayout from '../flexlayout';
+import { IFlexLayout } from '../flexlayout/flexlayout';
+import { IFont } from '../font/font';
+import TextAlignment from '../shared/textalignment';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextContentType from '../shared/textcontenttype';
 import KeyboardType from '../shared/keyboardtype';
@@ -66,7 +65,7 @@ export interface TextBoxiOSProps extends ViewIOSProps {
    * @property {UI.FlexLayout} [keyboardLayout = undefined]
    * @ios
    */
-  keyboardLayout?: FlexLayout | undefined;
+  keyboardLayout?: IFlexLayout | undefined;
   /**
    * The custom input view to display instead of system keyboard
    * when the textbox object became focus. This property works only for iOS only.
@@ -79,7 +78,7 @@ export interface TextBoxiOSProps extends ViewIOSProps {
    */
   inputView?: {
     height: number;
-    view: View;
+    view: IView;
   };
 
   /**
@@ -122,7 +121,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  font: Font;
+  font: IFont;
   /**
    * Gets/sets the text of the TextBox.
    * @property {String} [text = ""]

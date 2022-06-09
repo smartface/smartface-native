@@ -1,4 +1,4 @@
-import Font from '../font';
+import { IFont } from '../font/font';
 import { Point2D } from '../../primitive/point2d';
 import { IImage } from '../image/image';
 import { IView } from '../view/view';
@@ -319,7 +319,7 @@ export interface HeaderBarItemAndroidProps {
    * Gets/sets titleFont of header bar subtitle.
    * @android
    */
-  subtitleFont: Font;
+  subtitleFont: IFont;
 }
 
 export interface HeaderBarItemIOSProps {
@@ -350,7 +350,7 @@ export interface HeaderBarItemIOSProps {
    * @ios
    * @since 4.0.0
    */
-  font: Font;
+  font: IFont;
   /**
    * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
    * @ios
@@ -360,7 +360,7 @@ export interface HeaderBarItemIOSProps {
   /**
    * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance.
    * This change can be observed only on the pages that added to navigator style router.

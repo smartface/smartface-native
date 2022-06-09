@@ -2,7 +2,7 @@ import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IColor } from '../color/color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
 
@@ -183,7 +183,7 @@ export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProp
    * @ios
    * @since 4.1.4
    */
-  font: Font | null;
+  font: IFont | null;
   /**
    * This event triggers after ListViewItem is swiped or clicked. To be aware, Android doesn't support click for now.
    *

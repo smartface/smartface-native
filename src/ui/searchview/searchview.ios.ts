@@ -1,7 +1,7 @@
 import { ISearchView, SearchViewStyle } from './searchview';
 import System from '../../device/system';
 import Color from '../color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import { SearchViewEvents } from './searchview-events';
@@ -28,7 +28,7 @@ const UISearchBarIcon = {
 export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _textAligment: number;
   private _constant: number;
-  private _hint;
+  private _hint: string;
   private _hintTextColor: IColor;
   private _textColor: IColor;
   private _backgroundColor: IColor;
@@ -386,10 +386,10 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this.nativeObject.resignFirstResponder();
   }
 
-  get font(): Font {
+  get font(): IFont {
     return this.textfield.valueForKey('font');
   }
-  set font(value: Font) {
+  set font(value: IFont) {
     this.textfield.setValueForKey(value, 'font');
   }
 

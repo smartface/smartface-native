@@ -4,6 +4,7 @@ import { WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
 import { IColor } from '../color/color';
 import Font from '../font';
+import { IFont } from '../font/font';
 import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
 export default class SwipeItem
@@ -17,7 +18,7 @@ export default class SwipeItem
   private _backgroundColor = Color.GRAY;
   private _textColor = Color.WHITE;
   private _icon?: IImage;
-  private _font: Font | null = Font.create(Font.DEFAULT, 14);
+  private _font: IFont | null = Font.create(Font.DEFAULT, 14);
   private _onPress: ISwipeItem['onPress'];
   private _padding: number = 0;
   private _iconTextSpacing: ISwipeItem['ios']['iconTextSpacing'];
@@ -46,7 +47,7 @@ export default class SwipeItem
   get font() {
     return this._font;
   }
-  set font(value: Font | null) {
+  set font(value: IFont | null) {
     this._font = value;
   }
   get backgroundColor() {
