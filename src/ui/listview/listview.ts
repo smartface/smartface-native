@@ -835,4 +835,311 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * @since 4.1.4
    */
   onRowCanSwipe: (index: number) => SwipeDirection[];
+  on(eventName: 'attachedToWindow', callback: () => void): () => void;
+  on(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'rowCanMove', callback: (index: number) => void): () => void;
+  on(eventName: 'rowCanSwipe', callback: (index: number) => void): () => void;
+  on(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  on(eventName: 'rowMove', callback: (source: number, destination: number) => void): () => void;
+  on(eventName: 'rowMoved', callback: (source: number, destination: number) => void): () => void;
+  on(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  on(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): () => void;
+  on(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): () => void;
+  on(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): () => void;
+  on(eventName: ListViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'attachedToWindow', callback: () => void): void;
+  off(eventName: 'detachedFromWindow', callback: () => void): void;
+  off(eventName: 'pullRefresh', callback: () => void): void;
+  off(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  off(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  off(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  off(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  off(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  off(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  off(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  off(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  off(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  off(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  off(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'attachedToWindow'): void;
+  emit(eventName: 'detachedFromWindow'): void;
+  emit(eventName: 'pullRefresh'): void;
+  emit(eventName: 'rowCanMove', index: number): void;
+  emit(eventName: 'rowCanSwipe', index: number): void;
+  emit(eventName: 'rowLongSelected', item: ListViewItem, index: number): void;
+  emit(eventName: 'rowMove', source: number, destination: number): void;
+  emit(eventName: 'rowMoved', source: number, destination: number): void;
+  emit(eventName: 'rowSelected', item: ListViewItem, index: number): void;
+  emit(eventName: 'rowSwipe', e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }): void;
+  emit(eventName: 'scroll', params?: { translation: Point2D; contentOffset: Point2D }): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset: Point2D, decelerate: boolean): void;
+  emit(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D): void;
+  emit(eventName: 'scrollStateChanged', newState?: ScrollState, contentOffset?: Point2D): void;
+  emit(eventName: ListViewEvents, ...args: any[]): void;
+
+  once(eventName: 'attachedToWindow', callback: () => void): () => void;
+  once(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  once(eventName: 'pullRefresh', callback: () => void): () => void;
+  once(eventName: 'rowCanMove', callback: (index: number) => void): () => void;
+  once(eventName: 'rowCanSwipe', callback: (index: number) => void): () => void;
+  once(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  once(eventName: 'rowMove', callback: (source: number, destination: number) => void): () => void;
+  once(eventName: 'rowMoved', callback: (source: number, destination: number) => void): () => void;
+  once(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  once(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): () => void;
+  once(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): () => void;
+  once(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): () => void;
+  once(eventName: ListViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependListener(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  prependListener(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  prependListener(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependListener(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  prependListener(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  prependListener(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependListener(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  prependListener(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  prependListener(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependOnceListener(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  prependOnceListener(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  prependOnceListener(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependOnceListener(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  prependOnceListener(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  prependOnceListener(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependOnceListener(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  prependOnceListener(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  prependOnceListener(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
+}
+
+export declare class AbstractListView<TEvent extends string = ListViewEvents, TProps extends IListView = IListView>
+  extends AbstractView<TEvent | ListViewEvents, any, TProps>
+  implements IListView<TEvent | ListViewEvents>
+{
+  constructor(params?: Partial<TProps>);
+  onRowSwipe: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => ISwipeItem[];
+  onRowType: (index?: number) => number;
+  onRowCreate: (type?: number) => ListViewItem;
+  onRowHeight: (index?: number) => number;
+  nativeInner: INativeInner;
+  performBatchUpdates(updates: () => void, completion: { e: { finished: boolean } }): void;
+  onRowBind: (item: ListViewItem, index: number) => void;
+  onRowSelected: (item: ListViewItem, index: number) => void;
+  itemCount: number;
+  rowHeight: number;
+  verticalScrollBarEnabled: boolean;
+  scrollEnabled: boolean;
+  refreshEnabled: boolean;
+  rowMoveEnabled: boolean;
+  longPressDragEnabled: boolean;
+  getFirstVisibleIndex(): number;
+  getLastVisibleIndex(): number;
+  setPullRefreshColors(colors: Color[] | Color): void;
+  refreshData(): void;
+  deleteRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;
+  insertRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;
+  refreshRowRange(params: { positionStart: number; itemCount: number; ios?: { animation: RowAnimation } }): void;
+  swipeEnabled: boolean;
+  scrollTo(index: number, animated?: boolean): void;
+  startRefresh(): void;
+  stopRefresh(): void;
+  contentOffset: { readonly x: number; readonly y: number };
+  onScroll: ((params?: { translation: Point2D; contentOffset: Point2D }) => void) | null;
+  onPullRefresh: () => void;
+  contentInset: { top: number; bottom: number };
+  listViewItemByIndex(index: number): ListViewItem | undefined;
+  indexByListViewItem(item: ListViewItem): number;
+  onAttachedToWindow: () => void;
+  onDetachedFromWindow: () => void;
+  onRowMoved: (source: number, destination: number) => void;
+  onRowMove: (source: number, destination: number) => boolean;
+  onRowCanMove: (index: number) => boolean;
+  onRowCanSwipe: (index: number) => SwipeDirection[];
+
+  static SwipeItem: typeof SwipeItem;
+  static iOS: {
+    RowAnimation: typeof RowAnimation;
+  };
+  static SwipeDirection: typeof SwipeDirection;
+  on(eventName: 'attachedToWindow', callback: () => void): () => void;
+  on(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'rowCanMove', callback: (index: number) => void): () => void;
+  on(eventName: 'rowCanSwipe', callback: (index: number) => void): () => void;
+  on(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  on(eventName: 'rowMove', callback: (source: number, destination: number) => void): () => void;
+  on(eventName: 'rowMoved', callback: (source: number, destination: number) => void): () => void;
+  on(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  on(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): () => void;
+  on(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): () => void;
+  on(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): () => void;
+  on(eventName: ListViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'attachedToWindow', callback: () => void): void;
+  off(eventName: 'detachedFromWindow', callback: () => void): void;
+  off(eventName: 'pullRefresh', callback: () => void): void;
+  off(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  off(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  off(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  off(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  off(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  off(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  off(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  off(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  off(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  off(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  off(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'attachedToWindow'): void;
+  emit(eventName: 'detachedFromWindow'): void;
+  emit(eventName: 'pullRefresh'): void;
+  emit(eventName: 'rowCanMove', index: number): void;
+  emit(eventName: 'rowCanSwipe', index: number): void;
+  emit(eventName: 'rowLongSelected', item: ListViewItem, index: number): void;
+  emit(eventName: 'rowMove', source: number, destination: number): void;
+  emit(eventName: 'rowMoved', source: number, destination: number): void;
+  emit(eventName: 'rowSelected', item: ListViewItem, index: number): void;
+  emit(eventName: 'rowSwipe', e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }): void;
+  emit(eventName: 'scroll', params?: { translation: Point2D; contentOffset: Point2D }): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset: Point2D, decelerate: boolean): void;
+  emit(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D): void;
+  emit(eventName: 'scrollStateChanged', newState?: ScrollState, contentOffset?: Point2D): void;
+  emit(eventName: ListViewEvents, ...args: any[]): void;
+
+  once(eventName: 'attachedToWindow', callback: () => void): () => void;
+  once(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  once(eventName: 'pullRefresh', callback: () => void): () => void;
+  once(eventName: 'rowCanMove', callback: (index: number) => void): () => void;
+  once(eventName: 'rowCanSwipe', callback: (index: number) => void): () => void;
+  once(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  once(eventName: 'rowMove', callback: (source: number, destination: number) => void): () => void;
+  once(eventName: 'rowMoved', callback: (source: number, destination: number) => void): () => void;
+  once(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): () => void;
+  once(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): () => void;
+  once(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): () => void;
+  once(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): () => void;
+  once(eventName: ListViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependListener(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  prependListener(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  prependListener(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependListener(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  prependListener(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  prependListener(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependListener(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  prependListener(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  prependListener(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependOnceListener(eventName: 'rowCanMove', callback: (index: number) => void): void;
+  prependOnceListener(eventName: 'rowCanSwipe', callback: (index: number) => void): void;
+  prependOnceListener(eventName: 'rowLongSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependOnceListener(eventName: 'rowMove', callback: (source: number, destination: number) => void): void;
+  prependOnceListener(eventName: 'rowMoved', callback: (source: number, destination: number) => void): void;
+  prependOnceListener(eventName: 'rowSelected', callback: (item: ListViewItem, index: number) => void): void;
+  prependOnceListener(
+    eventName: 'rowSwipe',
+    callback: (e: { index: number; direction: SwipeDirection; ios: Partial<{ expansionSettings: Partial<{ buttonIndex: number; fillOnTrigger: boolean; threshold: number }> }> }) => void
+  ): void;
+  prependOnceListener(eventName: 'scroll', callback: (params?: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D, decelerate: boolean) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollStateChanged', callback: (newState?: ScrollState, contentOffset?: Point2D) => void): void;
+  prependOnceListener(eventName: ListViewEvents, callback: (...args: any[]) => void): void;
 }

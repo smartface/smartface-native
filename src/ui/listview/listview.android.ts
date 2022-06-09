@@ -524,7 +524,8 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     RowAnimation: RowAnimation,
     ...ViewAndroid.iOS
   };
-  on(eventName: ViewEvents, callback: EventListenerCallback) {
+  on(eventName: ListViewEvents | ViewEvents, callback: EventListenerCallback) {
+    //@ts-ignore
     if (Object.values(ViewEvents).includes(eventName)) {
       this.setTouchHandlers();
     }
