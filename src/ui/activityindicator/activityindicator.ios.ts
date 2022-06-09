@@ -1,9 +1,10 @@
 import Color from '../../ui/color';
+import { IColor } from '../color/color';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 import { ActivityIndicatorViewStyle, IActivityIndicator } from './activityindicator';
 export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> extends ViewIOS<TEvent, any, IActivityIndicator> {
-  private _color: Color;
+  private _color: IColor;
   constructor(params?: Partial<IActivityIndicator>) {
     super(params);
     this.addIOSProps(this.getIOSProps());
@@ -30,7 +31,7 @@ export default class ActivityIndicatorIOS<TEvent extends string = ViewEvents> ex
   get color() {
     return this._color;
   }
-  set color(value: Color) {
+  set color(value: IColor) {
     this._color = value;
     this.nativeObject.color = value.nativeObject;
   }

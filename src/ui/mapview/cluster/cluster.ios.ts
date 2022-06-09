@@ -1,6 +1,5 @@
 import { ICluster, IClusterIOSProps } from './cluster';
 import MapView from '..';
-import { ColorImpl } from '../../color/color';
 import { MobileOSProps, NativeMobileComponent } from '../../../core/native-mobile-component';
 
 export default class ClusterIOS extends NativeMobileComponent<__SF_Cluster, MobileOSProps<ICluster['ios'], ICluster['android']>> implements ICluster {

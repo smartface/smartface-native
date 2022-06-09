@@ -1,9 +1,8 @@
 import { ConstructorOf } from '../../core/constructorof';
 import { IEventEmitter } from '../../core/eventemitter';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
-import Image from '../image';
 import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
 
@@ -118,12 +117,12 @@ export interface ISwipeItemIOSParams {
    * @ios
    * @since 4.1.4
    */
-  padding: number
+  padding: number;
   /**
    * @property {Number} [iconTextSpacing = 3] Space between icon and text.
    * @ios
    * @since 4.1.4
-   */;
+   */
   iconTextSpacing: number;
   /**
    * @property {Boolean} isAutoHide = true
@@ -157,7 +156,7 @@ export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProp
    * @ios
    * @since 4.1.4
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Set/Get text color of swipe item.
    *
@@ -166,7 +165,7 @@ export interface ISwipeItem extends IEventEmitter<SwipeItemEvents>, MobileOSProp
    * @ios
    * @since 4.1.4
    */
-  textColor: Color;
+  textColor: IColor;
   /**
    * Set/Get icon of swipe item.
    *

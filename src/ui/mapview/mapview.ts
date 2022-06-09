@@ -1,10 +1,11 @@
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
-import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
-import Pin from './pin';
 import { MapViewEvents } from './mapview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Cluster from './cluster';
+import Pin from './pin';
+import { IPin } from './pin/pin';
 
 /**
  * @enum UI.MapView.Type
@@ -193,7 +194,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterFillColor: Color;
+  clusterFillColor: IColor;
   /**
    * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
    *
@@ -202,7 +203,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @android
    * @since 3.0.1
    */
-  clusterBorderColor: Color;
+  clusterBorderColor: IColor;
   /**
    * This property sets cluster textColor. Cluster works on Android & iOS 11.0+.
    *
@@ -211,7 +212,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterTextColor: Color;
+  clusterTextColor: IColor;
   /**
    * This property sets cluster font. Cluster works on Android & iOS 11.0+.
    *
@@ -241,7 +242,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * });
    * ```
    */
-  onClusterPress: (pins: Pin[]) => void;
+  onClusterPress: (pins: IPin[]) => void;
   /**
    * This property sets center location of the map to the given latitude & longitude.
    *
@@ -361,7 +362,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @method getVisiblePins
    * @since 2.0.7
    */
-  getVisiblePins(): Pin[];
+  getVisiblePins(): IPin[];
   /**
    * Adds a UI.MapView.Pin on the map.
    *
@@ -371,7 +372,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @method addPin
    * @since 0.1
    */
-  addPin(pin: Pin): void;
+  addPin(pin: IPin): void;
   /**
    * Removes the UI.MapView.Pin from the map.
    *
@@ -381,7 +382,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  removePin(pin: Pin): void;
+  removePin(pin: IPin): void;
   /**
    * Removes all pins from the map.
    *
@@ -511,11 +512,11 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   compassEnabled: boolean;
   userLocationEnabled: boolean;
   clusterEnabled: boolean;
-  clusterFillColor: Color;
-  clusterBorderColor: Color;
-  clusterTextColor: Color;
+  clusterFillColor: IColor;
+  clusterBorderColor: IColor;
+  clusterTextColor: IColor;
   clusterFont: Font;
-  onClusterPress: (pins: Pin[]) => void;
+  onClusterPress: (pins: IPin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
   readonly zoomLevel: number | undefined;
   minZoomLevel: number;
@@ -530,9 +531,9 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
         bottomRight: { latitude: number; longitude: number };
       }
     | undefined;
-  getVisiblePins(): Pin[];
-  addPin(pin: Pin): void;
-  removePin(pin: Pin): void;
+  getVisiblePins(): IPin[];
+  addPin(pin: IPin): void;
+  removePin(pin: IPin): void;
   removeAllPins(): void;
   onPress: (location: { latitude: number; longitude: number }) => void;
   onCameraMoveStarted: () => void;

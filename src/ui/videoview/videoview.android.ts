@@ -6,6 +6,7 @@ import Color from '../color';
 import type Page from '../page';
 import ViewAndroid from '../view/view.android';
 import { VideoViewEvents } from './videoview-events';
+import { IColor } from '../color/color';
 
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 const NativeVideoView = requireClass('io.smartface.android.sfcore.ui.videoview.SFVideoView');
@@ -217,7 +218,7 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
   get borderColor() {
     return Color.BLACK;
   }
-  set borderColor(value: Color) {}
+  set borderColor(value: IColor) {}
   // Overridden property because videoview does not support background stuff.
   get borderRadius() {
     return 0;

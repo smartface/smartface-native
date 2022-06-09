@@ -1,6 +1,6 @@
 import { IImageView } from '../imageview/imageview';
 
-import Color from '../color';
+import { IColor } from '../color/color';
 import { GifImageViewEvents } from './gifimageview-events';
 import { IImage } from '../image/image';
 import { IGifImage } from '../gifimage/gifimage';
@@ -81,5 +81,5 @@ export interface IGifImageView<TEvent extends string = GifImageViewEvents> exten
    * @ios
    * @since 3.2.0
    */
-  tintColor: Color;
+  tintColor: IColor;
 }

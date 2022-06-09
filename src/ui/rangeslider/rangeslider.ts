@@ -1,5 +1,5 @@
 import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { Point2D } from '../../primitive/point2d';
 import { RangeSliderEvents } from './rangeslider-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -13,7 +13,7 @@ export interface RangeSliderIOSProps extends ViewIOSProps {
    * @property {UI.Color} [thumbShadowColor = UI.Color.GRAY]
    * @ios
    */
-  thumbShadowColor: Color;
+  thumbShadowColor: IColor;
   /**
    * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). Use {@link UI.RangeSlider#applyThumbViewChanges applyThumbViewChanges} after changes.
    *
@@ -89,7 +89,7 @@ export interface RangeSliderAndroidProps extends ViewAndroidProps {
    * @property {UI.Color} thumbColor
    * @android
    */
-  thumbColor: Color;
+  thumbColor: IColor;
   /**
    * Gets/Sets border color of the thumbs.
    *
@@ -97,7 +97,7 @@ export interface RangeSliderAndroidProps extends ViewAndroidProps {
    * @property {UI.Color} thumbBorderColor
    * @android
    */
-  thumbBorderColor: Color;
+  thumbBorderColor: IColor;
   /**
    * Gets/Sets weight of track line in RangeSlider.
    *
@@ -128,7 +128,7 @@ export interface IRangeSlider<
    * @android
    * @ios
    */
-  trackColor: Color;
+  trackColor: IColor;
   /**
    * Gets/Sets color of the bar line in RangeSlider.
    *
@@ -137,7 +137,7 @@ export interface IRangeSlider<
    * @android
    * @ios
    */
-  outerTrackColor: Color;
+  outerTrackColor: IColor;
   /**
    * Gets/Sets weight of track line. In Android, outer track line won't change unless {@link UI.RangeSlider#outerTrackWeight outerTrackWeight} specified.
    *

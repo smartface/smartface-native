@@ -4,14 +4,15 @@ import { Point2D } from '../../primitive/point2d';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import HeaderBarItemPadding from '../../util/Android/headerbaritempadding';
-import Badge from '../badge';
-import Color from '../color';
 import ImageAndroid from '../image/image.android';
-import MenuItem from '../menuitem';
-import SearchView from '../searchview';
-import View from '../view';
 import LayoutParams from '../../util/Android/layoutparams';
+import BadgeAndroid from '../badge/badge.android';
 import ColorAndroid from '../color/color.android';
+import { IColor } from '../color/color';
+import { IView } from '../view/view';
+import { IBadge } from '../badge/badge';
+import { IImage } from '../image/image';
+import { ISearchView } from '../searchview/searchview';
 
 const SFView = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil');
 const NativeTextButton = requireClass('android.widget.Button');
@@ -32,20 +33,20 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   }
   iOS = { SystemItem: {} };
   private _title: string;
-  private _image: ImageAndroid | string | null;
-  private _customView?: View;
+  private _image: IImage | string | null;
+  private _customView?: IView;
   private _enabled: boolean;
-  private _color: Color | null;
-  private _badge?: Badge;
+  private _color: IColor | null;
+  private _badge?: IBadge;
   private _accessibilityLabel: string;
   private isLeftItem: boolean;
   isBadgeEnabled: boolean;
   private actionBar: any | null;
   private _imageButton: boolean;
-  private _searchView: SearchView | null;
+  private _searchView: ISearchView | null;
   private _menuItem: any | null;
   nativeBadgeContainer: any;
-  private _itemColor: Color;
+  private _itemColor: IColor;
   private _systemIcon: number | string;
 
   protected preConstruct(params?: Partial<IHeaderBarItem>): void {
@@ -61,7 +62,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     this._imageButton = false;
     this._searchView = null;
     this._menuItem = null;
-    this._itemColor = Color.WHITE;
+    this._itemColor = ColorAndroid.WHITE;
     super.preConstruct(params);
   }
 
@@ -94,7 +95,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   get color() {
     return this._color;
   }
-  set color(value: Color | null) {
+  set color(value: IColor | null) {
     if (value instanceof ColorAndroid) {
       this._color = value;
       this.updateColor(value);
@@ -125,7 +126,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   get image() {
     return this._image;
   }
-  set image(value: ImageAndroid | string | null) {
+  set image(value: IImage | string | null) {
     if (value) {
       value = ImageAndroid.createImageFromPath(value); //IDE requires this implementation.
     }
@@ -189,7 +190,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   }
   get badge() {
     if (this._badge === undefined) {
-      this._badge = new Badge();
+      this._badge = new BadgeAndroid();
       this.isBadgeEnabled = true;
       this.assignRules(this._badge);
       this.addToHeaderView(this._badge);
@@ -212,8 +213,8 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
   get itemColor() {
     return this._itemColor;
   }
-  set itemColor(color: Color) {
-    if (color instanceof Color) {
+  set itemColor(color: IColor) {
+    if (color instanceof ColorAndroid) {
       this._itemColor = color;
     }
   }
@@ -249,7 +250,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
       this.nativeObject = new NativeTextButton(activity);
       this.updateAccessibilityLabel(this._accessibilityLabel);
       this.nativeObject.setText(itemTitle);
-      this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+      this.nativeObject.setBackgroundColor(ColorAndroid.TRANSPARENT.nativeObject);
       this.nativeObject.setPaddingRelative(HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal);
       this.imageButton = false;
       this.color = this._color;
@@ -270,7 +271,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
       this.nativeObject && this.nativeObject.setContentDescription(accessibilityLabel);
     }
   }
-  assignRules(badge) {
+  assignRules(badge: IBadge) {
     if (!this.nativeObject) return;
     const ALIGN_END = 19;
 
@@ -280,7 +281,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
 
     badge.nativeObject.setLayoutParams(layoutParams);
   }
-  addToHeaderView(badge) {
+  addToHeaderView(badge: IBadge) {
     if (!this.nativeBadgeContainer || !badge) return;
 
     if (!badge.nativeObject.getParent()) {

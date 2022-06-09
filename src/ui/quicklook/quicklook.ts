@@ -1,6 +1,6 @@
 import StatusBar from '../../application/statusbar';
 import { INativeComponent } from '../../core/inative-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IPage } from '../page/page';
 
 /**
@@ -55,7 +55,7 @@ export interface IQuickLook extends INativeComponent {
    * @ios
    * @since 3.1.3
    */
-  titleColor: Color;
+  titleColor: IColor;
 
   /**
    * Gets/sets color of items on header & footer of QuickLook view.
@@ -69,7 +69,7 @@ export interface IQuickLook extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  itemColor: Color | null;
+  itemColor: IColor | null;
 
   /**
    * Gets status bar object. This property is readonly, you can not set

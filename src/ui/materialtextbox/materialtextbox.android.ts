@@ -3,9 +3,9 @@ import { Point2D } from '../../primitive/point2d';
 
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Color from '../color';
-import FlexLayout from '../flexlayout';
+import { IColor } from '../color/color';
 import Font from '../font';
+import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import TextBoxAndroid from '../textbox/textbox.android';
 import ViewAndroid from '../view/view.android';
 import TextAlignment from '../shared/textalignment';
@@ -42,14 +42,14 @@ const state_unfocused = -16842908;
 export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvents> extends ViewAndroid<TEvent | TextBoxEvents, any, IMaterialTextBox> implements IMaterialTextBox {
   private sfTextBox: TextBoxAndroid;
   private textBoxNativeObject: nativeTextInputEditText;
-  private __hintTextColor: Color;
-  private _hintFocusedTextColor: Color | null;
+  private __hintTextColor: IColor;
+  private _hintFocusedTextColor: IColor | null;
   private _errorText: string;
-  private _lineColorObj: { normal: Color | null; selected: Color | null };
-  private _errorColor: Color | null;
-  private _characterRestrictionColor: Color;
+  private _lineColorObj: { normal: IColor | null; selected: IColor | null };
+  private _errorColor: IColor | null;
+  private _characterRestrictionColor: IColor;
   private __font: Font;
-  private _rightLayout: FlexLayout | null;
+  private _rightLayout: FlexLayoutAndroid | null;
   private _rightLayoutWidth: number;
   private _enableCounterMaxLength: number;
   private _enableCounter: boolean;
@@ -80,13 +80,13 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
   set textAlignment(value) {
     this.sfTextBox.textAlignment = value;
   }
-  get textColor(): Color {
+  get textColor(): IColor {
     return this.sfTextBox.textColor;
   }
   set textColor(value) {
     this.sfTextBox.textColor = value;
   }
-  get cursorColor(): Color {
+  get cursorColor(): IColor {
     return this.sfTextBox.cursorColor;
   }
   set cursorColor(value) {
@@ -236,28 +236,28 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     this.nativeObject.setHint(value);
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this.__hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this.__hintTextColor = value;
     this.nativeObject.changedErrorTextColor(hintTextColorFieldName, value.nativeObject);
   }
 
-  get selectedHintTextColor(): Color | null {
+  get selectedHintTextColor(): IColor | null {
     return this._hintFocusedTextColor;
   }
-  set selectedHintTextColor(value: Color | null) {
+  set selectedHintTextColor(value: IColor | null) {
     if (value) {
       this._hintFocusedTextColor = value;
       this.nativeObject.changedErrorTextColor(hintFocusedTextColorFieldName, value.nativeObject);
     }
   }
 
-  get lineColor(): { normal: Color | null; selected: Color | null } {
+  get lineColor(): { normal: IColor | null; selected: IColor | null } {
     return this._lineColorObj;
   }
-  set lineColor(value: { normal: Color | null; selected: Color | null }) {
+  set lineColor(value: { normal: IColor | null; selected: IColor | null }) {
     this._lineColorObj = value;
 
     const jsColorArray: any[] = [];
@@ -293,10 +293,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     this.textBoxNativeObject.setSingleLine(!value);
   }
 
-  get errorColor(): Color | null {
+  get errorColor(): IColor | null {
     return this._errorColor;
   }
-  set errorColor(value: Color | null) {
+  set errorColor(value: IColor | null) {
     this._errorColor = value;
     if (value) {
       if (this._enableErrorMessage !== true) {
@@ -338,16 +338,16 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     this.sfTextBox.enabled = value;
   }
 
-  get rightLayout(): { view: FlexLayout | null; width: number; height?: number } {
+  get rightLayout(): { view: FlexLayoutAndroid | null; width: number; height?: number } {
     return {
       view: this._rightLayout,
       width: this._rightLayoutWidth
     };
   }
-  set rightLayout(value: { view: FlexLayout | null; width: number; height?: number }) {
+  set rightLayout(value: { view: FlexLayoutAndroid | null; width: number; height?: number }) {
     this._rightLayout = value.view;
     this._rightLayoutWidth = value.width || 30;
-    const parentFL = new FlexLayout();
+    const parentFL = new FlexLayoutAndroid();
     this.nativeObject.setRightLayout(this._rightLayout?.nativeObject, this._rightLayout?.android?.yogaNode, parentFL.nativeObject, this._rightLayoutWidth);
   }
 
@@ -426,10 +426,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     this.nativeObject.setCounterMaxLength(this._enableCounterMaxLength);
   }
 
-  get characterRestrictionColor(): Color {
+  get characterRestrictionColor(): IColor {
     return this._characterRestrictionColor;
   }
-  set characterRestrictionColor(value: Color) {
+  set characterRestrictionColor(value: IColor) {
     this._characterRestrictionColor = value;
 
     if (this._enableCounter !== true) {

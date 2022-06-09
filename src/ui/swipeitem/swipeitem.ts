@@ -2,6 +2,7 @@ import { ISwipeItem, ISwipeItemAndroidParams, ISwipeItemIOSParams } from '.';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { WithMobileOSProps } from '../../core/native-mobile-component';
 import Color from '../color';
+import { IColor } from '../color/color';
 import Font from '../font';
 import { IImage } from '../image/image';
 import { SwipeItemEvents } from './swipeitem-events';
@@ -13,8 +14,8 @@ export default class SwipeItem
     return null;
   }
   private _text: string = 'Button';
-  private _backgroundColor: Color = Color.GRAY;
-  private _textColor: Color = Color.WHITE;
+  private _backgroundColor = Color.GRAY;
+  private _textColor = Color.WHITE;
   private _icon?: IImage;
   private _font: Font | null = Font.create(Font.DEFAULT, 14);
   private _onPress: ISwipeItem['onPress'];
@@ -51,13 +52,13 @@ export default class SwipeItem
   get backgroundColor() {
     return this._backgroundColor;
   }
-  set backgroundColor(value: Color) {
+  set backgroundColor(value: IColor) {
     this._backgroundColor = value;
   }
   get textColor() {
     return this._textColor;
   }
-  set textColor(value: Color) {
+  set textColor(value: IColor) {
     this._textColor = value;
   }
   get onPress() {

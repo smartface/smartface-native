@@ -3,7 +3,8 @@ import File from '../../io/file';
 import Page from '../page';
 import { VideoViewEvents } from './videoview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
+import { IFile } from '../../io/file/file';
 
 export interface IVideoViewIOSProps extends ViewIOSProps {
   /**
@@ -156,7 +157,7 @@ export interface IVideoViewAndroidProps extends ViewAndroidProps {
    * @android
    * @since 4.3.1
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
 
   /**
    * Sets whether a loading indicator is displayed when the player is in the buffering state.
@@ -349,7 +350,7 @@ export interface IVideoView<
    * @param {IO.File} file
    * @since 0.1
    */
-  loadFile(file: File): void;
+  loadFile(file: IFile): void;
   /**
    * This event is called when the video clip is ready to be played.
    *

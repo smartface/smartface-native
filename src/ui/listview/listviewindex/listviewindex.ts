@@ -1,4 +1,4 @@
-import Color from '../../color';
+import { IColor } from '../../color/color';
 import Font from '../../font';
 import { IImage } from '../../image/image';
 import { IView } from '../../view/view';
@@ -47,7 +47,7 @@ export interface IListViewIndex extends IView {
    * @default
    * @return {UI.Color}
    */
-  tintColor: Color;
+  tintColor: IColor;
   /**
    * Vertical spacing between the items. Equals to 1 point by default to match system appearance.
    * @property {number} itemSpacing

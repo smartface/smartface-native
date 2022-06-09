@@ -4,6 +4,7 @@ import { IBottomTabBar } from './bottomtabbar';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
+import { IColor } from '../color/color';
 
 const NativeBottomNavigationView = requireClass('com.google.android.material.bottomnavigation.BottomNavigationView');
 const NativeContextThemeWrapper = requireClass('android.view.ContextThemeWrapper');
@@ -18,7 +19,7 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
     return new NativeBottomNavigationView(new NativeContextThemeWrapper(activity, NativeR.style.Theme_MaterialComponents_Light));
   }
   private _itemColors: IBottomTabBar['itemColor'];
-  private _backgroundColor: Color;
+  private _backgroundColor: IColor;
   private _items: ITabbarItem[];
   constructor(params?: Partial<BottomTabBarAndroid>) {
     super(params);
@@ -61,7 +62,7 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   get itemColor() {
     return this._itemColors;
   }
-  set itemColor(colors: { normal: Color; selected: Color }) {
+  set itemColor(colors: { normal: IColor; selected: IColor }) {
     if (colors?.normal && colors?.selected) {
       if (colors.normal instanceof Color && colors.selected instanceof Color) {
         this._itemColors = colors;
@@ -81,7 +82,7 @@ export default class BottomTabBarAndroid extends NativeMobileComponent<any, IBot
   get backgroundColor() {
     return this._backgroundColor;
   }
-  set backgroundColor(color: Color) {
+  set backgroundColor(color: IColor) {
     if (color instanceof Color) {
       this._backgroundColor = color;
       this.nativeObject.setBackgroundColor(color.nativeObject);

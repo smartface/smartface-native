@@ -1,4 +1,3 @@
-import Color from '../color';
 import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import ViewAndroid from '../view/view.android';
@@ -11,6 +10,8 @@ import TextDirection from '../shared/textdirection';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import isViewState from '../../util/isViewState';
+import { IColor } from '../color/color';
+import Color from '../color';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -104,8 +105,8 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize, maximumTextSize, this.android.adjustableFontSizeStep, TypeValue.COMPLEX_UNIT_DIP);
   }
 
-  private createColorStateList(textColors: IViewState<Color>) {
-    const colorsSets: Color[] = [];
+  private createColorStateList(textColors: IViewState<IColor>) {
+    const colorsSets: IColor[] = [];
     const statesSet: any[] = [];
     if (textColors.normal) {
       statesSet.push(ViewAndroid.State.STATE_NORMAL);

@@ -2,6 +2,7 @@ import { IPicker, PickerIOSProperties } from './picker';
 import Color from '../color';
 import ViewIOS from '../view/view.ios';
 import { PickerEvents } from './picker-events';
+import { IColor } from '../color/color';
 
 export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEvent | PickerEvents, PickerIOSProperties> implements IPicker<TEvent | PickerEvents> {
   protected createNativeObject() {
@@ -23,8 +24,8 @@ export default class PickerIOS<TEvent extends PickerEvents> extends ViewIOS<TEve
   protected _onSelectedCallback: IPicker['onSelected'];
   private pickerDelegate: __SF_UIPickerViewDelegate;
   private pickerDataSource: __SF_UIPickerViewDataSource;
-  private _cancelHighlightedColor?: Color;
-  private _okHighlightedColor?: Color;
+  private _cancelHighlightedColor?: IColor;
+  private _okHighlightedColor?: IColor;
 
   constructor(params: Partial<IPicker> = {}) {
     super(params);
