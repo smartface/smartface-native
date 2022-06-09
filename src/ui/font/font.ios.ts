@@ -12,7 +12,8 @@ export default class FontIOS extends AbstractFont implements IFont {
     return null;
   }
   sizeOfString(string: string, maxWidth: number): Size {
-    throw new Error('Method not implemented.');
+    // Native Font is directly used as normal class. This method is actually not doing anything, it is __SF_UIFont.sizeOfString value that works.
+    return { height: 0, width: 0 };
   }
   static create(fontFamily: string, size: number, style: FontStyle): FontIOS | null {
     if (fontFamily === FontIOS.DEFAULT || fontFamily === FontIOS.IOS_SYSTEM_FONT) {

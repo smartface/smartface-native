@@ -1,12 +1,15 @@
 import { IHeaderBarItem } from './headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import Invocation from '../../util/iOS/invocation';
-import Badge from '../badge';
-import Color from '../color';
-import FlexLayout from '../flexlayout';
-import Font from '../font';
-import Image from '../image';
+import { IImage } from '../image/image';
+import { IBadge } from '../badge/badge';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { IView } from '../view/view';
+import BadgeIOS from '../badge/badge.ios';
+import ColorIOS from '../color/color.ios';
+import ImageIOS from '../image/image.ios';
+import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 
 enum SystemItem {
   DONE,
@@ -50,14 +53,14 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
     SystemItem
   };
   private _systemItem;
-  private _badge: Badge;
+  private _badge: IBadge;
   private _nativeView;
-  private _font: Font | undefined;
+  private _font: IFont | undefined;
   private _customView: IView | undefined;
   private _onPress: IHeaderBarItem['onPress'] = null;
   preConstruct(params: Partial<IHeaderBarItem> = {}) {
     super.preConstruct(params);
-    this._badge = new Badge({ nativeObject: this.nativeObject });
+    this._badge = new BadgeIOS({ nativeObject: this.nativeObject });
     this._font = undefined;
     this._customView = undefined;
     const self = this;
@@ -68,7 +71,7 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
       get font() {
         return self._font;
       },
-      set font(value: Font | undefined) {
+      set font(value: IFont | undefined) {
         self._font = value;
         if (self._font) {
           self.nativeObject.setTitleTextAttributesForState({ NSFont: self._font }, 0); //UIControlStateNormal
@@ -92,7 +95,7 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
       retval = this._nativeView;
     } else {
       this._nativeView = this.nativeObject.containerView
-        ? new FlexLayout({
+        ? new FlexLayoutIOS({
             nativeObject: this.nativeObject.containerView
           })
         : undefined;
@@ -120,26 +123,26 @@ export default class HeaderBarItemIOS extends NativeMobileComponent<any, IHeader
   get image() {
     let retval: any = undefined;
     if (this.nativeObject.image) {
-      retval = Image.createFromImage(this.nativeObject.image);
+      retval = ImageIOS.createFromImage(this.nativeObject.image);
     }
     return retval;
   }
-  set image(value: string | Image) {
+  set image(value: string | IImage) {
     if (typeof value === 'string') {
-      const image = Image.createFromFile(value);
+      const image = ImageIOS.createFromFile(value);
       if (image) this.nativeObject.image = image.nativeObject;
-    } else if (value instanceof Image) {
+    } else if (value instanceof ImageIOS) {
       {
         this.nativeObject.image = value.nativeObject;
       }
     }
   }
   get color() {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.tintColor
     });
   }
-  set color(value: Color) {
+  set color(value: IColor) {
     if (value) {
       this.nativeObject.tintColor = value.nativeObject;
     }

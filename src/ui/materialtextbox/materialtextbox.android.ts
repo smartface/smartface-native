@@ -4,7 +4,7 @@ import { Point2D } from '../../primitive/point2d';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import { IColor } from '../color/color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import TextBoxAndroid from '../textbox/textbox.android';
 import ViewAndroid from '../view/view.android';
@@ -48,7 +48,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
   private _lineColorObj: { normal: IColor | null; selected: IColor | null };
   private _errorColor: IColor | null;
   private _characterRestrictionColor: IColor;
-  private __font: Font;
+  private __font: IFont;
   private _rightLayout: FlexLayoutAndroid | null;
   private _rightLayoutWidth: number;
   private _enableCounterMaxLength: number;
@@ -56,7 +56,7 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
   private _enableErrorMessage: boolean;
   private _enableCharacterRestriction: boolean;
   private _touchEnable: boolean;
-  get font(): Font {
+  get font(): IFont {
     return this.sfTextBox.font;
   }
   set font(value) {
@@ -310,10 +310,10 @@ export default class MaterialTextBoxAndroid<TEvent extends string = TextBoxEvent
     }
   }
 
-  get labelsFont(): Font {
+  get labelsFont(): IFont {
     return this.__font;
   }
-  set labelsFont(value: Font) {
+  set labelsFont(value: IFont) {
     this.__font = value;
     this.nativeObject.setTypeface(value.nativeObject);
     this.nativeObject.setExpandedHintTextSize(AndroidUnitConverter.dpToPixel(value.size));

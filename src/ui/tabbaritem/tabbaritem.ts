@@ -1,4 +1,4 @@
-import Font from '../font';
+import { IFont } from '../font/font';
 import { IBadge } from '../badge/badge';
 import { INativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
 import { IImage } from '../image/image';
@@ -15,7 +15,7 @@ export interface TabbarItemIOSProps {
    * @ios
    * @since 4.0.2
    */
-  font: Font;
+  font: IFont;
 }
 
 export interface TabbarItemAndroidProps {

@@ -1,9 +1,9 @@
 import { IMaterialTextBox } from './materialtextbox';
-import Font from '../font';
 import { TextBoxEvents } from '../textbox/textbox-events';
 import { IColor } from '../color/color';
 import { IView } from '../view/view';
 import { IFlexLayout } from '../flexlayout/flexlayout';
+import { IFont } from '../font/font';
 import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 import TextBoxIOS from '../textbox/textbox.ios';
 import ColorIOS from '../color/color.ios';
@@ -14,7 +14,7 @@ export default class MaterialTextBoxIOS<TEvent extends string = TextBoxEvents> e
   private _lineCount: number;
   private _rightLayout: { view: IView; width: number; height?: number };
   private _rightLayoutMain: IFlexLayout;
-  private _labelsFont: Font;
+  private _labelsFont: IFont;
   private _errorMessage: string;
   private __hint: string;
   private __hintTextColor: IColor;
@@ -391,20 +391,20 @@ export default class MaterialTextBoxIOS<TEvent extends string = TextBoxEvents> e
     // }
   }
 
-  get labelsFont(): Font {
+  get labelsFont(): IFont {
     return this._labelsFont;
   }
-  set labelsFont(value: Font) {
+  set labelsFont(value: IFont) {
     this._labelsFont = value;
     this.mdcTextInputControllerUnderline.leadingUnderlineLabelFont = value;
     this.mdcTextInputControllerUnderline.trailingUnderlineLabelFont = value;
     this.mdcTextInputControllerUnderline.inlinePlaceholderFont = value;
   }
 
-  get font(): Font {
+  get font(): IFont {
     return this.mdcTextInputControllerUnderline.textInputFont;
   }
-  set font(value: Font) {
+  set font(value: IFont) {
     this.mdcTextInputControllerUnderline.textInputFont = value;
   }
 

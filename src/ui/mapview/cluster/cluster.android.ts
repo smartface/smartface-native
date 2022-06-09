@@ -1,10 +1,11 @@
 import { ICluster } from './cluster';
 import MapView from '..';
 import TypeValue from '../../../util/Android/typevalue';
-import Font from '../../font';
+import { IFont } from '../../font/font';
 import { IColor } from '../../color/color';
 import { MobileOSProps, NativeMobileComponent } from '../../../core/native-mobile-component';
 import ColorAndroid from '../../color/color.android';
+import FontAndroid from '../../font/font.android';
 
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance().getApplicationContext();
@@ -27,13 +28,13 @@ export default class ClusterAndroid extends NativeMobileComponent<any, MobileOSP
     this._textColor = ColorAndroid.WHITE;
     this._fillColor = ColorAndroid.RED;
     this._borderColor = ColorAndroid.WHITE;
-    this._font = Font.create(Font.DEFAULT, 20, Font.BOLD) as any; //Weird font error
+    this._font = FontAndroid.create(FontAndroid.DEFAULT, 20, FontAndroid.BOLD); //Weird font error
     super.preConstruct(params);
   }
   private _borderColor: IColor;
   private _textColor: IColor;
   private _fillColor: IColor;
-  private _font: Font;
+  private _font: IFont;
 
   get borderColor(): ICluster['borderColor'] {
     return this._borderColor;

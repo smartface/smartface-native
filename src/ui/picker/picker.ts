@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IColor } from '../color/color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import ViewState from '../shared/viewState';
 import { IView } from '../view/view';
 import { PickerEvents } from './picker-events';
@@ -176,7 +176,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -194,7 +194,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  cancelFont: Font;
+  cancelFont: IFont;
   /**
    * Gets/sets cancelText of the picker. This property only works with show method. Must set before show method.
    *
@@ -230,5 +230,5 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  okFont: Font;
+  okFont: IFont;
 }

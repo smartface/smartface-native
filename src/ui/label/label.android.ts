@@ -1,7 +1,8 @@
-import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import ViewAndroid from '../view/view.android';
 import { ILabel, LabelAndroidProps } from './label';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { ViewEvents } from '../view/view-events';
 import { IViewState } from '../shared/viewState';
 import EllipsizeMode from '../shared/ellipsizemode';
@@ -10,8 +11,8 @@ import TextDirection from '../shared/textdirection';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import isViewState from '../../util/isViewState';
-import { IColor } from '../color/color';
-import Color from '../color';
+import ColorAndroid from '../color';
+import FontAndroid from '../font/font.android';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -44,7 +45,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _minimumFontSize: number;
   private _textDirection: TextDirection;
   private _adjustableFontSizeStep: number;
-  private fontInitial: Font | null;
+  private fontInitial: IFont | null;
   protected _textColor: ILabel['textColor'];
   private _paddingRight: ILabel['paddingRight'];
   private _paddingLeft: ILabel['paddingLeft'];
@@ -60,7 +61,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     this._minimumFontSize = MINIMUM_FONT_SIZE;
     this._adjustableFontSizeStep = 1;
     this.fontInitial = null;
-    this._textColor = Color.BLUE;
+    this._textColor = ColorAndroid.BLUE;
     this.viewNativeDefaultTextAlignment = TextAlignmentDic[TextAlignment.MIDLEFT];
     this.textAlignment = TextAlignment.MIDLEFT;
     super.preConstruct(params);
@@ -134,7 +135,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   get font() {
     const nativeTypeface = this.nativeObject.getTypeface();
     const textSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
-    return new Font({
+    return new FontAndroid({
       nativeObject: nativeTypeface,
       size: textSize
     });
@@ -184,7 +185,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return this._textColor;
   }
   set textColor(value: ILabel['textColor']) {
-    if (value instanceof Color && value.nativeObject) {
+    if (value instanceof ColorAndroid && value.nativeObject) {
       this._textColor = value;
       this.nativeObject.setTextColor(value.nativeObject);
     } else if (isViewState(value)) {

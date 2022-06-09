@@ -1,6 +1,6 @@
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { IColor } from '../color/color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import { MapViewEvents } from './mapview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Cluster from './cluster';
@@ -221,7 +221,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterFont: Font;
+  clusterFont: IFont;
 
   /**
    * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
@@ -515,7 +515,7 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   clusterFillColor: IColor;
   clusterBorderColor: IColor;
   clusterTextColor: IColor;
-  clusterFont: Font;
+  clusterFont: IFont;
   onClusterPress: (pins: IPin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
   readonly zoomLevel: number | undefined;
