@@ -1,4 +1,4 @@
-import { PATH_FILE_TYPE } from '../path/path';
+import { PathFileType } from '../path/path';
 import { AbstractFile, IFile } from './file';
 
 class FileImpl extends AbstractFile {
@@ -14,10 +14,10 @@ class FileImpl extends AbstractFile {
   set fullPath(value: string) {
     throw new Error('Method not implemented.');
   }
-  get type(): PATH_FILE_TYPE {
+  get type(): PathFileType {
     throw new Error('Method not implemented.');
   }
-  set type(value: PATH_FILE_TYPE) {
+  set type(value: PathFileType) {
     throw new Error('Method not implemented.');
   }
   get creationDate(): number {

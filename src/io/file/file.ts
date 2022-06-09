@@ -1,7 +1,7 @@
 import { INativeMobileComponent, MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import FileStream from '../filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
-import { PATH_FILE_TYPE } from '../path/path';
+import { PathFileType } from '../path/path';
 
 export interface FileiOSProps {
   getNSURL: () => __SF_NSURL;
@@ -170,7 +170,7 @@ export interface IFile extends INativeMobileComponent<any, MobileOSProps<FileiOS
    */
   readonly writable: boolean;
   rename(newName: string): boolean;
-  type: PATH_FILE_TYPE;
+  type: PathFileType;
   fullPath: string;
 }
 
@@ -185,8 +185,8 @@ export abstract class AbstractFile extends NativeMobileComponent<any, IFile> imp
   abstract set name(value: string);
   abstract get fullPath(): string;
   abstract set fullPath(value: string);
-  abstract get type(): PATH_FILE_TYPE;
-  abstract set type(value: PATH_FILE_TYPE);
+  abstract get type(): PathFileType;
+  abstract set type(value: PathFileType);
   abstract get creationDate(): number;
   abstract set creationDate(value: number);
   abstract get exists(): boolean;
