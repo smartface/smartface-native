@@ -1,6 +1,5 @@
-import { ShareBase } from './share';
+import { IShare } from './share';
 
-const Share: typeof ShareBase = require(`./share.${Device.deviceOS.toLowerCase()}`).default;
-type Share = ShareBase;
+const Share: IShare = require(`./share.${Device.deviceOS.toLowerCase()}`).default;
 
 export default Share;
