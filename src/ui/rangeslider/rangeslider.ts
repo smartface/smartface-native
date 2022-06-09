@@ -215,4 +215,22 @@ export interface IRangeSlider<
    * ```
    */
   onValueChange: (value: number[]) => void;
+
+  on(eventName: 'valueChange', callback: (value: number[]) => void): () => void;
+  on(eventName: RangeSliderEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'valueChange', callback: (value: number[]) => void): void;
+  off(eventName: RangeSliderEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'valueChange', value: number[]): void;
+  emit(eventName: RangeSliderEvents, ...args: any[]): void;
+
+  once(eventName: 'valueChange', callback: (value: number[]) => void): () => void;
+  once(eventName: RangeSliderEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'valueChange', callback: (value: number[]) => void): void;
+  prependListener(eventName: RangeSliderEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'valueChange', callback: (value: number[]) => void): void;
+  prependOnceListener(eventName: RangeSliderEvents, callback: (...args: any[]) => void): void;
 }
