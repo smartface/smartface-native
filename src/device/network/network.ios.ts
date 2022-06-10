@@ -1,5 +1,6 @@
-import { ConnectionType, NetworkBase, INetworkNotifier, NotifierAndroidProps } from './network';
+import { ConnectionType, INetwork, INetworkNotifier, NotifierAndroidProps } from './network';
 import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import HttpIOS from '../../net/http/http.ios';
 
 class Notifier extends NativeMobileComponent<any, MobileOSProps<{}, NotifierAndroidProps>> implements INetworkNotifier {
   private _connectionTypeChanged: ((type: ConnectionType) => void) | null;
@@ -55,7 +56,32 @@ class Notifier extends NativeMobileComponent<any, MobileOSProps<{}, NotifierAndr
   }
 }
 
-class NetworkIOS implements NetworkBase {
+class NetworkIOS implements INetwork {
+  async isConnected(checkUrl?: string): Promise<void> {
+    const url = checkUrl || 'https://www.google.com';
+
+    return new Promise((resolve, reject) => {
+      const noConnection = this.connectionType === ConnectionType.NONE;
+      if (noConnection) {
+        return reject();
+      }
+      const http = new HttpIOS();
+      http.request({
+        url,
+        onLoad: () => {
+          resolve();
+        },
+        onError: (e) => {
+          if (typeof e.statusCode === 'undefined') {
+            reject();
+          } else {
+            resolve();
+          }
+        },
+        method: 'GET'
+      });
+    });
+  }
   ConnectionType = ConnectionType;
   public readonly notifier: INetworkNotifier = new Notifier();
   public readonly Notifier = Notifier;
