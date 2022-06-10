@@ -107,7 +107,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     animated = !!animated; // not to pass null to native method
     this.nativeObject.setCurrentItem(index, animated);
   }
-  private getPageInstance(position: number) {
+  protected getPageInstance(position: number) {
     let pageInstance: PageAndroid;
     if (this.onPageCreate) {
       pageInstance = this.onPageCreate(position) as unknown as PageAndroid;
