@@ -24,24 +24,24 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
-  private _onSelectedCallback: (index: number) => void;
-  private _onPageCreateCallback: (index: number) => Page;
-  private _items: ITabbarItem[];
-  private _barColor: IColor;
-  private _indicatorColor: IColor;
-  private _textColor: ViewState<IColor>;
-  private _iconColor: ViewState<IColor>;
-  private _overScrollMode: OverScrollMode;
-  private _scrollEnabled: boolean;
-  private _dividerWidth: number;
-  private _dividerPadding: number;
-  private _dividerColor: IColor;
-  private _indicatorHeight: number;
-  private _autoCapitalize: boolean;
-  private tabLayout: any;
-  private divider: any;
-  private swipeView: SwipeView;
-  private dividerDrawable: typeof NativeGradientDrawable;
+  protected _onSelectedCallback: (index: number) => void;
+  protected _onPageCreateCallback: (index: number) => Page;
+  protected _items: ITabbarItem[];
+  protected _barColor: IColor;
+  protected _indicatorColor: IColor;
+  protected _textColor: ViewState<IColor>;
+  protected _iconColor: ViewState<IColor>;
+  protected _overScrollMode: OverScrollMode;
+  protected _scrollEnabled: boolean;
+  protected _dividerWidth: number;
+  protected _dividerPadding: number;
+  protected _dividerColor: IColor;
+  protected _indicatorHeight: number;
+  protected _autoCapitalize: boolean;
+  protected tabLayout: any;
+  protected divider: any;
+  protected swipeView: SwipeView;
+  protected dividerDrawable: typeof NativeGradientDrawable;
 
   preConstruct(params?: Partial<ITabBarController>) {
     this._scrollEnabled = false;
