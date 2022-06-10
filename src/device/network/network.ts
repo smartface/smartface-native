@@ -108,7 +108,7 @@ export interface INetworkNotifier extends INativeMobileComponent<any, MobileOSPr
  *
  *
  */
-export declare class NetworkBase {
+export interface INetwork {
   /**
    * @class Device.Network.Notifier
    * @since 3.0.1
@@ -125,7 +125,7 @@ export declare class NetworkBase {
    *     });
    *
    */
-  public readonly Notifier: ConstructorOf<INetworkNotifier, Partial<INetworkNotifier>>;
+  readonly Notifier: ConstructorOf<INetworkNotifier, Partial<INetworkNotifier>>;
   /**
    * @class Device.Network.Notifier
    * @since 3.0.1
@@ -142,7 +142,7 @@ export declare class NetworkBase {
    *     });
    *
    */
-  public readonly notifier: INetworkNotifier;
+  readonly notifier: INetworkNotifier;
   /**
    *
    * Returns the carrier name of the GSM connection.
@@ -218,7 +218,7 @@ export declare class NetworkBase {
   /**
    * Stops listening to any active notifier listeners.
    */
-  cancelAll: () => void;
+  cancelAll(): void;
   /**
    * Determines whether the current internet connection is made through wireless, cellular or other
    * Does not determine if the device is actually conntected to the internet.
@@ -226,4 +226,26 @@ export declare class NetworkBase {
    * You should ping somewhere (like https://smartface.io) to actually measure if the device is connected to the internet. .
    */
   ConnectionType: typeof ConnectionType;
+
+  /**
+   * Checks whether the device is connected to the internet right now. It will ping the given checkUrl parameter.
+   * Uses google.com if no parameter is given.
+   * @method
+   * @static
+   * @param checkUrl Used URL for check the internet
+   * @return {Promise<void>} - Resolves if the internet connectivity is available,
+   * rejects o/w
+   * @example
+   * ```
+   * import Network from '@smartface/native/device/network';
+   * Network.isConnected("myprivatenetwork.com")
+   *     .then(() => {
+   *         console.info("Connected to internet");
+   *     })
+   *     .catch(() => {
+   *         console.error("Not connected to internet");
+   *     });
+   * ```
+   */
+  isConnected(checkUrl?: string): Promise<void>;
 }
