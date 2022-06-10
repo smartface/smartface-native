@@ -1,12 +1,13 @@
 import { ISwipeView, SwipeViewState } from './swipeview';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import { IPage } from '../page/page';
+import { IPage, PageAndroidParams, PageIOSParams } from '../page/page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
 import ViewAndroid from '../view/view.android';
 import { SwipeViewEvents } from './swipeview-events';
 import type Page from '../page';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 const NativeView = requireClass('android.view.View');
 const NativeViewPager = requireClass('io.smartface.android.sfcore.ui.swipeview.SFSwipeView');
@@ -19,17 +20,35 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
   extends ViewAndroid<TEvent | SwipeViewEvents, TNative, TProps>
   implements ISwipeView
 {
-  onPageSelected: (index: number, page: IPage) => void;
-  onPageScrolled: (index: number, offset: number) => void;
+  private _onPageSelected: (index: number, page: IPage) => void;
+  private _onPageScrolled: (index: number, offset: number) => void;
   onStateChanged: (state: SwipeViewState) => void;
   onPageCreate: (position: number) => Page;
-  private _page: PageAndroid;
-  private _pages: IPage[];
-  private _lastIndex: number;
-  private _pageCount: number;
-  private _pageInstances: PageAndroid[];
+  protected _page: PageAndroid;
+  protected _pages: IPage[];
+  protected _lastIndex: number;
+  protected _pageCount: number;
+  protected _pageInstances: PageAndroid[];
   constructor(params?: Partial<TProps>) {
     super(params);
+  }
+  /**
+   * Those are done this way because rtl-swipe needs them as setter.
+   */
+  get onPageSelected() {
+    return this._onPageSelected;
+  }
+  set onPageSelected(value) {
+    this._onPageSelected = value;
+  }
+  /**
+   * Those are done this way because rtl-swipe needs them as setter.
+   */
+  get onPageScrolled() {
+    return this._onPageScrolled;
+  }
+  set onPageScrolled(value) {
+    this._onPageScrolled = value;
   }
 
   createNativeObject() {
@@ -117,7 +136,7 @@ export default class SwipeViewAndroid<TEvent extends string = SwipeViewEvents, T
     };
   }
 
-  private bypassPageSpecificProperties(page: PageAndroid) {
+  protected bypassPageSpecificProperties(page: PageAndroid) {
     page.headerBar.visible = false;
     Object.keys(page.headerBar).forEach(function (key) {
       Object.defineProperty(page.headerBar, key, {
