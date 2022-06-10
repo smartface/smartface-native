@@ -33,8 +33,8 @@ interface AlertOptions {
  * @param {AlertButton[]} options.buttons shows OK if omited
  * @param {string} title optinal title
  * @returns {UI.AlertView} created AlertView object
- * @see {@link https://developer.smartface.io/docs/alertview|AlertView Guide}
- * @see {@link http://ref.smartface.io/#!/api/UI.AlertView.Android.ButtonType|Button Types}
+ * @see {@link https://docs.smartface.io/smartface-native-framework/ui-elements/alertview  AlertView Guide}
+ * @see {@link https://ref.smartface.io/enums/alertview.ButtonType.html  Button Types}
  * @example
  * ```
  * alert("Hello World!");
