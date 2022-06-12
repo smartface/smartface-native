@@ -1,4 +1,6 @@
+import { IEventEmitter } from '../../core/eventemitter';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { PermissionEvents } from './permission-events';
 
 export enum PermissionIOSAuthorizationStatus {
   NOT_DETERMINED,
@@ -325,14 +327,32 @@ export interface PermissionAndroidProps {
    * @android
    * @since 1.2
    */
-  requestPermissions(requestIdentifier: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): void;
+  requestPermissions(requestIdentifier: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): Promise<PermissionResult[]>;
 }
 
-export interface IPermission extends INativeMobileComponent<any, MobileOSProps<PermissionIOSProps, PermissionAndroidProps>> {
+export interface IPermission extends IEventEmitter<PermissionEvents>, INativeMobileComponent<any, MobileOSProps<PermissionIOSProps, PermissionAndroidProps>> {
   /**
    * Requests permissions for both OS. If you want to get a permission which is specific to certain OS, please use their respective method instead.
    * For Android, this will override onRequestPermissionsResult method, therefore if you want to handle another android specific permissions,
    * please override the method again.
    */
   requestPermission(permission: Exclude<Extract<keyof typeof Permissions, string>, 'IOS' | 'ANDROID'>): Promise<PermissionResult>;
+
+  on(eventName: 'requestPermissionsResult', callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): () => void;
+  on(eventName: PermissionEvents, callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): () => void;
+
+  off(eventName: 'requestPermissionsResult', callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
+  off(eventName: PermissionEvents, callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
+
+  emit(eventName: 'requestPermissionsResult', e: { requestCode: number; result: boolean[] | boolean }): void;
+  emit(eventName: PermissionEvents, e: { requestCode: number; result: boolean[] | boolean }): void;
+
+  once(eventName: 'requestPermissionsResult', callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): () => void;
+  once(eventName: PermissionEvents, callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): () => void;
+
+  prependListener(eventName: 'requestPermissionsResult', callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
+  prependListener(eventName: PermissionEvents, callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
+
+  prependOnceListener(eventName: 'requestPermissionsResult', callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
+  prependOnceListener(eventName: PermissionEvents, callback: (e: { requestCode: number; result: boolean[] | boolean }) => void): void;
 }

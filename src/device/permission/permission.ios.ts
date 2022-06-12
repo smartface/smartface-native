@@ -1,8 +1,9 @@
-import { NativeMobileComponent } from '../../core/native-mobile-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Invocation from '../../util/iOS/invocation';
 import { Permissions, IPermission, PermissionIOSAuthorizationStatus, PermissionResult } from './permission';
+import { PermissionEvents } from './permission-events';
 
-class PermissionIOSClass extends NativeMobileComponent<any, IPermission> implements IPermission {
+class PermissionIOSClass extends NativeEventEmitterComponent<PermissionEvents, any, IPermission> implements IPermission {
   protected createNativeObject() {
     return null;
   }
@@ -51,7 +52,9 @@ class PermissionIOSClass extends NativeMobileComponent<any, IPermission> impleme
         return true;
       },
       onRequestPermissionsResult: () => {},
-      requestPermissions() {},
+      requestPermissions() {
+        return Promise.resolve([]);
+      },
       shouldShowRequestPermissionRationale() {
         return true;
       }

@@ -155,6 +155,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
         };
 
         Permission.android.onRequestPermissionsResult?.(permissionResults);
+        Permission.emit('requestPermissionsResult', permissionResults);
         this.emit('requestPermissionResult', permissionResults);
       },
       onActivityResult: (requestCode, resultCode, data) => {
