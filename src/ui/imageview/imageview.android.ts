@@ -9,6 +9,7 @@ import ViewAndroid from '../view/view.android';
 import { ImageViewEvents } from './imageview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
+import { PathFileType } from '../../io/path/path';
 
 const NativeImageView = requireClass('android.widget.ImageView');
 const SFGlide = requireClass('io.smartface.android.sfcore.ui.imageview.SFGlide');
@@ -160,11 +161,11 @@ export default class ImageViewAndroid<TEvent extends string = ImageViewEvents> e
       android.cacheSignature
     );
     const resolvedPath = file.resolvedPath;
-    if (!AndroidConfig.isEmulator && resolvedPath.type === PathAndroid.FILE_TYPE.DRAWABLE) {
+    if (!AndroidConfig.isEmulator && resolvedPath.type === PathFileType.DRAWABLE) {
       const resources = AndroidConfig.activity.getResources();
       const drawableResourceId = resources.getIdentifier(resolvedPath.name, 'drawable', AndroidConfig.packageName);
       SFGlide.loadByResourceId(drawableResourceId, parameters);
-    } else if (!AndroidConfig.isEmulator && resolvedPath.type === PathAndroid.FILE_TYPE.ASSET) {
+    } else if (!AndroidConfig.isEmulator && resolvedPath.type === PathFileType.ASSET) {
       const assetPrefix = 'file:///android_asset/';
       const assetFilePath = assetPrefix + resolvedPath.name;
       SFGlide.loadFromAsset(assetFilePath, parameters);

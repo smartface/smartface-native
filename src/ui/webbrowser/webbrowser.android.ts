@@ -1,5 +1,5 @@
 import { NativeMobileComponent } from '../../core/native-mobile-component';
-import { ColorImpl } from '../color/color';
+import { IColor } from '../color/color';
 import { IPage } from '../page/page';
 import { IWebBrowser } from './webbrowser';
 
@@ -13,7 +13,7 @@ export default class WebBrowserAndroid extends NativeMobileComponent implements 
     this._options = Object.assign({}, params);
   }
   url: string;
-  barColor?: ColorImpl | undefined;
+  barColor?: IColor | undefined;
   protected createNativeObject() {
     return null;
   }

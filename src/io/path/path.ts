@@ -1,7 +1,8 @@
 import { INativeComponent } from '../../core/inative-component';
 import NativeComponent from '../../core/native-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 
-export enum PATH_FILE_TYPE {
+export enum PathFileType {
   FILE = 0,
   ASSET = 1,
   DRAWABLE = 2,
@@ -24,47 +25,22 @@ export interface PathAndroidProps {
   };
 }
 
-export interface IPath extends INativeComponent {}
-
-export abstract class PathBase extends NativeComponent implements IPath {
-  protected createNativeObject() {
-    return null;
-  }
-  constructor(params?: Partial<IPath>) {
-    super(params);
-  }
-
-  /**
-   * List of the file types that can be used on Path.
-   */
-  static FILE_TYPE = PATH_FILE_TYPE;
-  /**
-   * Gets data directory path of the application.
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  static get DataDirectory(): string {
-    throw new Error('Method not implemented.');
-  }
+export interface IPath extends INativeMobileComponent<any, MobileOSProps<{}, PathAndroidProps>> {
+  get DataDirectory(): string;
   /**
    * Gets URI scheme for files under assets folder.
    * @android
    * @ios
    * @since 0.1
    */
-  static get AssetsUriScheme(): string {
-    throw new Error('Method not implemented.');
-  }
+  get AssetsUriScheme(): string;
   /**
    * Gets path separator for the running environment.
    * @android
    * @ios
    * @since 0.1
    */
-  static get Separator(): string {
-    throw new Error('Method not implemented.');
-  }
+  get Separator(): string;
 
   /**
    * Gets the path to the root of the application's images directory.
@@ -72,10 +48,5 @@ export abstract class PathBase extends NativeComponent implements IPath {
    * import Path from '@smartface/native/io/path';
    * console.log(Path.ImagesURLScheme); => images://
    */
-  static get ImagesUriScheme(): string {
-    throw new Error('Method not implemented.');
-  }
-  static get android(): PathAndroidProps {
-    throw new Error('Method not implemented.');
-  }
+  get ImagesUriScheme(): string;
 }

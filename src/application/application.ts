@@ -130,12 +130,12 @@ export interface ApplicationAndroidProps {
    * @event onRequestPermissionsResult
    * @param {Object} e
    * @param {Number} e.requestCode
-   * @param {Boolean} e.result
+   * @param {Boolean} e.result Will return array if permission request is multiple.
    * @android
-   * @deprecated
+   * @deprecated Use Permissions.android.onRequestPermissionsResult instead
    * @since 1.2
    */
-  onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
+  onRequestPermissionsResult: (e: { requestCode: number; result: boolean[] | boolean }) => void;
 
   /**
    * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
@@ -274,6 +274,9 @@ export enum KeyboardMode {
   AlwaysHidden = 3
 }
 
+/**
+ * @deprecated Use Permmission.AndroidPermissions instead
+ */
 export enum ApplicationAndroidPermissions {
   /**
    * Allows to read the calendar data.
@@ -637,6 +640,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @param {String} params.chooserTitle Added in 1.1.13.
    * @param {String} params.action  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
    * @readonly
+   * @deprecated Use Linking.openURL instead
    * @android
    * @ios
    * @since 0.1
@@ -677,6 +681,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @method canOpenUrl
    * @param {String} url
    * @return {Boolean}
+   * @deprecated Use Linking.canOpenURL instead
    * @ios
    * @android
    * @since 4.3.6

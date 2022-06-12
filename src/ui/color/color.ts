@@ -42,7 +42,36 @@ export enum GradientDirection {
   DIAGONAL_RIGHT
 }
 
-type ConstructorParams = { color: AbstractColor | __SF_UIColor };
+type ConstructorParams = { color: IColor | __SF_UIColor };
+
+export interface IColor extends NativeComponent {
+  /**
+   * Gets the red value of the color
+   */
+  red(): number;
+  /**
+   * Gets the green value of the color
+   */
+  green(): number;
+  /**
+   * Gets the blue value of the color
+   */
+  blue(): number;
+  /**
+   * Gets the alpha value of the color
+   */
+  alpha(): number;
+  /**
+   * Please only pass this property in constructor.
+   * @android
+   * @private
+   */
+  isGradient?: boolean;
+  /**
+   * Get/sets the direction of the gradient image.
+   */
+  direction: GradientDirection;
+}
 
 /**
  * @since 0.1
@@ -55,10 +84,24 @@ type ConstructorParams = { color: AbstractColor | __SF_UIColor };
  *     const myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
  *     const myHEXColor = Color.create("#FFAACC");
  */
-export abstract class AbstractColor extends NativeComponent {
+export abstract class AbstractColor extends NativeComponent implements IColor {
   constructor(params?: ConstructorParams) {
     super(params);
   }
+  red(): number {
+    throw new Error('Method not implemented.');
+  }
+  green(): number {
+    throw new Error('Method not implemented.');
+  }
+  blue(): number {
+    throw new Error('Method not implemented.');
+  }
+  alpha(): number {
+    throw new Error('Method not implemented.');
+  }
+  isGradient?: boolean | undefined;
+  direction: GradientDirection;
   protected createNativeObject(params: any) {
     return;
   }
@@ -76,7 +119,7 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(alpha: number, red: number, green: number, blue: number): AbstractColor;
+  static create(alpha: number, red: number, green: number, blue: number): IColor;
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -90,7 +133,7 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(red: number, green: number, blue: number): AbstractColor;
+  static create(red: number, green: number, blue: number): IColor;
   /**
    * Creates a new color with RGB-ARGB or hexadecimal parameters
    *
@@ -104,8 +147,8 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static create(color: string): AbstractColor;
-  static create(color: any): AbstractColor {
+  static create(color: string): IColor;
+  static create(color: any): IColor {
     throw new Error('Not implemented');
   }
   /**
@@ -116,97 +159,82 @@ export abstract class AbstractColor extends NativeComponent {
    * can specify start-end colors and direction of gradient.
    * @since 0.1
    */
-  static createGradient(params: { direction: GradientDirection; startColor: AbstractColor; endColor: AbstractColor }): AbstractColor {
+  static createGradient(params: { direction: GradientDirection; startColor: IColor; endColor: IColor }): IColor {
     throw new Error('Not implemented');
   }
 
-  abstract red(): number;
-  abstract green(): number;
-  abstract blue(): number;
-  abstract alpha(): number;
-  /**
-   * Please only pass this property in constructor.
-   * @android
-   * @private
-   */
-  isGradient?: boolean;
-  /**
-   * Get/sets the direction of the gradient image.
-   */
-  direction: GradientDirection;
-
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static BLACK: AbstractColor;
+  static BLACK: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static BLUE: AbstractColor;
+  static BLUE: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static CYAN: AbstractColor;
+  static CYAN: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static DARKGRAY: AbstractColor;
+  static DARKGRAY: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static GRAY: AbstractColor;
+  static GRAY: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static GREEN: AbstractColor;
+  static GREEN: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static LIGHTGRAY: AbstractColor;
+  static LIGHTGRAY: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static MAGENTA: AbstractColor;
+  static MAGENTA: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static RED: AbstractColor;
+  static RED: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static TRANSPARENT: AbstractColor;
+  static TRANSPARENT: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static YELLOW: AbstractColor;
+  static YELLOW: IColor;
   /**
    * @android
    * @ios
    * @since 0.1
    */
-  static WHITE: AbstractColor;
+  static WHITE: IColor;
 
   /**
    * Returns the red value of a color instance.
@@ -223,7 +251,7 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static red(color: AbstractColor): number {
+  static red(color: IColor): number {
     throw new Error('Not implemented');
   }
   /**
@@ -241,7 +269,7 @@ export abstract class AbstractColor extends NativeComponent {
       * @ios
       * @since 0.1
       */
-  static green(color: AbstractColor): number {
+  static green(color: IColor): number {
     throw new Error('Not implemented');
   }
   /**
@@ -258,7 +286,7 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static blue(color: AbstractColor): number {
+  static blue(color: IColor): number {
     throw new Error('Not implemented');
   }
 
@@ -276,19 +304,9 @@ export abstract class AbstractColor extends NativeComponent {
    * @ios
    * @since 0.1
    */
-  static alpha(color: AbstractColor): number {
+  static alpha(color: IColor): number {
     throw new Error('Not implemented');
   }
 
   static GradientDirection: typeof GradientDirection;
-}
-
-/**
- * Only to use type of export
- */
-export declare class ColorImpl extends AbstractColor {
-  red(): number;
-  green(): number;
-  blue(): number;
-  alpha(): number;
 }

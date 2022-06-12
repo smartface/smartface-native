@@ -1,6 +1,5 @@
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
-import type Color from '../color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -13,6 +12,7 @@ import ColorAndroid from '../color/color.android';
 import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import type ScrollViewAndroid from '../scrollview/scrollview.android';
 import { EventListenerCallback } from '../../core/eventemitter';
+import { IColor } from '../color/color';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -92,7 +92,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _sfOnTouchViewManager: any;
   private _touchEnabled: boolean;
   private _rippleEnabled: boolean;
-  private _rippleColor?: Color;
+  private _rippleColor?: IColor;
   private _useForeground: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
@@ -156,7 +156,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       get rippleColor() {
         return self.rippleColor;
       },
-      set rippleColor(value: Color | undefined) {
+      set rippleColor(value: IColor | undefined) {
         self.rippleColor = value;
       },
       get zIndex() {
@@ -347,7 +347,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get borderColor() {
     return this._borderColor;
   }
-  set borderColor(value: Color) {
+  set borderColor(value: IColor) {
     this._borderColor = value;
     this._resetBackground();
     this._setBorderToAllEdges();
@@ -865,7 +865,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get rippleColor() {
     return this._rippleColor;
   }
-  set rippleColor(value: Color | undefined) {
+  set rippleColor(value: IColor | undefined) {
     this._rippleColor = value;
     this.rippleEnabled = true; //If user sets rippleColor, always set rippleenabled to true. They can set to false if needed.
     if (this._rippleColor && this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {

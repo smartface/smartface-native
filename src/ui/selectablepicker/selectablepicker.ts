@@ -1,7 +1,5 @@
-import { IEventEmitter } from '../../core/eventemitter';
-import { INativeComponent } from '../../core/inative-component';
-import Color from '../color';
-import Font from '../font';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { SelectablePickerEvents } from './selectablepicker-events';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 
@@ -52,7 +50,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets titleFont of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -61,7 +59,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets multiSelectEnabled of the SelectablePicker. You must set this property in constructor
    * and can not change this property on run-time. Otherwise SelectablePicker may not work properly.
@@ -99,7 +97,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets cancelButtonColor of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -108,7 +106,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  cancelButtonColor: Color;
+  cancelButtonColor: IColor;
 
   /**
    * Gets/sets cancelButtonFont of the SelectablePicker.
@@ -118,7 +116,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  cancelButtonFont: Font;
+  cancelButtonFont: IFont;
   /**
    * Gets/sets cancelButtonText of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -136,7 +134,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  doneButtonColor: Color;
+  doneButtonColor: IColor;
   /**
    * Gets/sets doneButtonText of the SelectablePicker.
    * This property only works with show method. Must set before show method.
@@ -154,7 +152,7 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @android
    * @since 4.0.5
    */
-  doneButtonFont: Font;
+  doneButtonFont: IFont;
   /**
    * This function shows SelectablePicker in a dialog.
    *

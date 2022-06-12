@@ -1,13 +1,11 @@
-import Font from '../font';
-import Color from '../color';
+import { IFont } from '../font/font';
 import { Point2D } from '../../primitive/point2d';
-import NativeComponent from '../../core/native-component';
-import { INativeComponent } from '../../core/inative-component';
 import { IImage } from '../image/image';
 import { IView } from '../view/view';
 import { IBadge } from '../badge/badge';
 import { IAttributedString } from '../attributedstring/attributedstring';
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { IColor } from '../color/color';
 
 /**
  * Defines system-supplied images for bar button items. [Apple Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
@@ -321,7 +319,7 @@ export interface HeaderBarItemAndroidProps {
    * Gets/sets titleFont of header bar subtitle.
    * @android
    */
-  subtitleFont: Font;
+  subtitleFont: IFont;
 }
 
 export interface HeaderBarItemIOSProps {
@@ -352,7 +350,7 @@ export interface HeaderBarItemIOSProps {
    * @ios
    * @since 4.0.0
    */
-  font: Font;
+  font: IFont;
   /**
    * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
    * @ios
@@ -362,7 +360,7 @@ export interface HeaderBarItemIOSProps {
   /**
    * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets backBarButtonItem of the header bar. When it set, it will change the next page's back button appearance.
    * This change can be observed only on the pages that added to navigator style router.
@@ -483,7 +481,7 @@ export interface IHeaderBarItem extends INativeMobileComponent<any, MobileOSProp
    * @ios
    * @since 0.1
    */
-  color: Color | null;
+  color: IColor | null;
   /**
    * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge should not be given in constructor. In Android,
    * badge does not appear when assigned to {@link UI.HeaderBar#setLeftItem left item} of HeaderBar.

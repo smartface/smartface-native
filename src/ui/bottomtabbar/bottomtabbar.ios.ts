@@ -5,6 +5,7 @@ import SystemIOS from '../../device/system/system.ios';
 import ColorIOS from '../color/color.ios';
 import ImageIOS from '../image/image.ios';
 import TabBarItemIOS from '../tabbaritem/tabbaritem.ios';
+import { IColor } from '../color/color';
 
 export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobileOSProps<IBottomTabBar, IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> implements IBottomTabBar {
   private appearance: any;
@@ -127,7 +128,7 @@ export default class BottomTabBarIOS extends NativeMobileComponent<any, WithMobi
       color: this.nativeObject.unselectedItemTintColor
     });
   }
-  set unselectedItemColor(value: ColorIOS) {
+  set unselectedItemColor(value: IColor) {
     this.nativeObject.unselectedItemTintColor = value.nativeObject;
   }
   get backgroundImage() {

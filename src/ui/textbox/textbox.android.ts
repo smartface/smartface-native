@@ -1,16 +1,14 @@
 import { ITextBox } from './textbox';
 import ActionKeyType from '../shared/android/actionkeytype';
-import Color from '../color';
-import Font from '../font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
-import ViewAndroid from '../view/view.android';
 import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import SystemServices from '../../util/Android/systemservices';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TextViewAndroid from '../textview/textview.android';
+import { IColor } from '../color/color';
 
 const NativeTextWatcher = requireClass('android.text.TextWatcher');
 const NativeTextView = requireClass('android.widget.TextView');
@@ -85,8 +83,8 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _keyboardType: KeyboardType;
   private _actionKeyType: ActionKeyType;
   private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
-  private _cursorColor: Color;
-  private _hintTextColor: Color;
+  private _cursorColor: IColor;
+  private _hintTextColor: IColor;
   private _onEditBegins: () => void;
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
@@ -215,10 +213,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
   }
 
-  get textColor(): Color {
+  get textColor(): IColor {
     return this._textColor as any;
   }
-  set textColor(value: Color) {
+  set textColor(value: IColor) {
     this._textColor = value;
     this.nativeObject.setTextColor(value.nativeObject);
   }
@@ -259,10 +257,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject.setOnEditBegins(value.bind(this));
   }
 
-  get cursorColor(): Color {
+  get cursorColor(): IColor {
     return this._cursorColor;
   }
-  set cursorColor(value: Color) {
+  set cursorColor(value: IColor) {
     this._cursorColor = value;
     SFEditText.setCursorColor(this.nativeObject, value.nativeObject);
   }
@@ -274,10 +272,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject.setHint(value);
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this._hintTextColor = value;
     this.nativeObject.setHintTextColor(value.nativeObject);
   }

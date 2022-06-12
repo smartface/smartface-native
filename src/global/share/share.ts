@@ -1,7 +1,59 @@
-import Page from '../../ui/page';
 import File from '../../io/file';
 import { IContact } from '../../device/contacts/contact/contact';
 import { IImage } from '../../ui/image/image';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import { IPage } from '../../ui/page/page';
+
+export interface ShareIOSProps {
+  /**
+   * @property {String} AirDrop
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly AirDrop: string;
+  /**
+   * @property {String} Facebook
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly Facebook: string;
+  /**
+   * @property {String} Twitter
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly Twitter: string;
+  /**
+   * @property {String} Message
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly Message: string;
+  /**
+   * @property {String} Mail
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly Mail: string;
+  /**
+   * @property {String} Vimeo
+   * @static
+   * @readonly
+   * @ios
+   * @since 0.1
+   */
+  readonly Vimeo: string;
+}
 
 /**
  * @class Share
@@ -12,7 +64,7 @@ import { IImage } from '../../ui/image/image';
  * other apps on the device. Blacklist works for iOS only.
  *
  */
-export declare class ShareBase {
+export interface IShare extends NativeMobileComponent<any, MobileOSProps<ShareIOSProps, {}>> {
   /**
    * Shares a text.
    *
@@ -28,7 +80,7 @@ export declare class ShareBase {
    * @android
    * @since 0.1
    */
-  static shareText(text: string, page: Page, blacklist: string[]): void;
+  shareText(text: string, page: IPage, blacklist: string[]): void;
   /**
    * Shares an image.
    *
@@ -47,7 +99,7 @@ export declare class ShareBase {
    * @ios
    * @since 0.1
    */
-  static shareImage(image: IImage, page: Page, blacklist: string[]): void;
+  shareImage(image: IImage, page: IPage, blacklist: string[]): void;
   /**
    * Shares a file.
    *
@@ -66,7 +118,7 @@ export declare class ShareBase {
    * @android
    * @since 0.1
    */
-  static shareFile(file: File, page: Page, blacklist: string[]): void;
+  shareFile(file: File, page: IPage, blacklist: string[]): void;
   /**
    * Shares contact.
    *
@@ -78,10 +130,10 @@ export declare class ShareBase {
    * @param {Array} [params.blacklist]
    * @ios
    * @android
-   * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#contacts-sharing
+   * @see {@link https://docs.smartface.io/smartface-native-framework/miscellaneous-native-features/share-on-ios-and-android-1/#contacts-sharing  Contacts Sharing}
    * @since 4.2.1
    */
-  static shareContacts(params: { items: IContact[]; fileName?: string; page: Page; blacklist: string[] }): void;
+  shareContacts(params: { items: IContact[]; fileName?: string; page: IPage; blacklist: string[] }): void;
 
   /**
    * Shares file, image & text.
@@ -105,58 +157,8 @@ export declare class ShareBase {
    * @param {Array} [params.blacklist]
    * @ios
    * @android
-   * @see https://developer.smartface.io/docs/native-share-in-ios-and-android#multiple-sharing
+   * @see {@link https://docs.smartface.io/smartface-native-framework/miscellaneous-native-features/share-on-ios-and-android-1/#multiple-sharing Multiple Sharing}
    * @since 4.0.2
    */
-  static share(params: { items: any[]; page: Page; blacklist: string[] }): void;
-  static ios: Partial<{
-    /**
-     * @property {String} AirDrop
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly AirDrop: string;
-    /**
-     * @property {String} Facebook
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly Facebook: string;
-    /**
-     * @property {String} Twitter
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly Twitter: string;
-    /**
-     * @property {String} Message
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly Message: string;
-    /**
-     * @property {String} Mail
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly Mail: string;
-    /**
-     * @property {String} Vimeo
-     * @static
-     * @readonly
-     * @ios
-     * @since 0.1
-     */
-    readonly Vimeo: string;
-  }>;
+  share(params: { items: any[]; page: IPage; blacklist: string[] }): void;
 }

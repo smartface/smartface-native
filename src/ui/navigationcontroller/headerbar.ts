@@ -1,27 +1,28 @@
 import System from '../../device/system';
-import Color from '../../ui/color';
+import ColorIOS from '../../ui/color';
 import ImageIOS from '../../ui/image/image.ios';
 import { default as IHeaderBar } from '../headerbar';
-import Font from '../font';
-import View from '../view';
 import { IHeaderBarItem } from '../headerbaritem/headerbaritem';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import NavigationControllerIOS from './navigationcontroller.ios';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
+import { IView } from '../view/view';
 
 export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHeaderBar> implements IHeaderBar {
   appearance?: __SF_UINavigationBarAppearance;
   navigationController?: NavigationControllerIOS;
   leftItemEnabled: boolean;
-  titleLayout?: View;
+  titleLayout?: IView;
   title: string;
   private _transparent: boolean;
   private _transparentEmptyImage: __SF_UIImage;
-  private _titleColor: Color;
+  private _titleColor: IColor;
   private _visible: boolean;
   private _prefersLargeTitles: boolean;
   private _backIndicatorImage: ImageIOS;
   private _backIndicatorTransitionMaskImage: ImageIOS;
-  private _titleFont?: Font;
+  private _titleFont?: IFont;
   private _borderVisibility: boolean;
   setItems(items: IHeaderBarItem[]): void {}
   setLeftItem(item: IHeaderBarItem): void {}
@@ -68,7 +69,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
       }
       this.nativeObject.shadowImage = __SF_UIImage.getInstance();
       this.nativeObject.translucent = true;
-      this.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
+      this.nativeObject.backgroundColor = ColorIOS.TRANSPARENT.nativeObject;
       this._borderVisibility = false;
     } else {
       if (this.nativeObject.backgroundImage === this._transparentEmptyImage) {
@@ -105,7 +106,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     this.navigationController?.nativeObject.setNavigationBarHiddenAnimated(!value, true);
   }
   get itemColor(): IHeaderBar['itemColor'] {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.tintColor
     });
   }
@@ -113,12 +114,12 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     this.nativeObject.tintColor = value.nativeObject;
   }
   get backgroundColor(): IHeaderBar['backgroundColor'] {
-    return new Color({
+    return new ColorIOS({
       color: this.nativeObject.barTintColor
     });
   }
   set backgroundColor(value: IHeaderBar['backgroundColor']) {
-    if (value instanceof Color) {
+    if (value instanceof ColorIOS) {
       // Xcode 13.1 background bug fixes [NTVE-398]
       if (parseInt(System.OSVersion) >= 15) {
         if (this.appearance) {
@@ -160,7 +161,7 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
 
     if (parseInt(System.OSVersion) >= 15) {
       if (this.appearance) {
-        this.appearance.shadowColor = value ? Color.TRANSPARENT.nativeObject : Color.GRAY.nativeObject;
+        this.appearance.shadowColor = value ? ColorIOS.TRANSPARENT.nativeObject : ColorIOS.GRAY.nativeObject;
       }
       this.nativeObject.standardAppearance = this.appearance;
       this.nativeObject.scrollEdgeAppearance = this.appearance;

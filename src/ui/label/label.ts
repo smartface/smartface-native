@@ -1,5 +1,4 @@
-import Color from '../color';
-import Font from '../font';
+import { IFont } from '../font/font';
 import TextAlignment from '../shared/textalignment';
 import { ViewEvents } from '../view/view-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -7,6 +6,7 @@ import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import EllipsizeMode from '../shared/ellipsizemode';
 import TextDirection from '../shared/textdirection';
 import ViewState from '../shared/viewState';
+import { IColor } from '../color/color';
 
 export interface LabelAndroidProps extends ViewAndroidProps {
   /**
@@ -47,7 +47,7 @@ export declare interface ILabel<TEvent extends string = ViewEvents, TMobile exte
    * @ios
    * @since 0.1
    */
-  font: Font;
+  font: IFont;
   /**
    * Enables/disables multiple line property of a Label. If set to true
    * and the text is long enough, text will be shown in multiline. Setting multiline will override the {@link UI.Label#ellipsizeMode ellipsizeMode} prop.
@@ -109,7 +109,7 @@ export declare interface ILabel<TEvent extends string = ViewEvents, TMobile exte
    * @ios
    * @since 0.1
    */
-  textColor: ViewState<Color>;
+  textColor: ViewState<IColor>;
 
   /**
    * This property adjusts font size according to view's fixed width. The adjustment of font size happens according to {@link UI.Label#minimumFontSize minimumFontSize} , maximum font size (which is current label font size) & {@link UI.Label#adjustableFontSizeStep adjustableFontSizeStep}(just Android)

@@ -1,9 +1,9 @@
 import { AbstractFont, FontStyle } from './font';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
-import Path from '../../io/path';
 import { Size } from '../../primitive/size';
 import * as TextViewSizeCalculator from '../../util/Android/textviewsizecalculator';
+import { PathFileType } from '../../io/path/path';
 
 const NativeTypeface = requireClass('android.graphics.Typeface');
 
@@ -121,7 +121,7 @@ export default class FontAndroid extends AbstractFont {
         path: path
       });
       if (fontFile.exists && fontFile.nativeObject) {
-        if (fontFile.type === Path.FILE_TYPE.ASSET) {
+        if (fontFile.type === PathFileType.ASSET) {
           const assets = AndroidConfig.activity.getAssets();
           typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
         } else {

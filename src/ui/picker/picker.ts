@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
-import Font from '../font';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import ViewState from '../shared/viewState';
 import { IView } from '../view/view';
 import { PickerEvents } from './picker-events';
@@ -24,7 +24,7 @@ export interface PickerIOSProperties {
    * @ios
    * @since 3.1.1
    */
-  cancelHighlightedColor?: Color;
+  cancelHighlightedColor?: IColor;
   /**
    * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -32,7 +32,7 @@ export interface PickerIOSProperties {
    * @ios
    * @since 3.1.1
    */
-  okHighlightedColor?: Color;
+  okHighlightedColor?: IColor;
   /**
    * Gets/sets dialogLineColor of Picker.
    *
@@ -40,7 +40,7 @@ export interface PickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  dialogLineColor?: Color;
+  dialogLineColor?: IColor;
   rowHeight?: number;
 }
 
@@ -107,7 +107,7 @@ export declare interface IPicker<
    * @ios
    * @since 4.2.3
    */
-  textColor?: Color;
+  textColor?: IColor;
   /**
    * Gets/sets dialogBackgroundColor of Picker.
    *
@@ -116,7 +116,7 @@ export declare interface IPicker<
    * @ios
    * @since 4.2.3
    */
-  dialogBackgroundColor: ViewState<Color>;
+  dialogBackgroundColor: ViewState<IColor>;
   /**
    * This event is called when scroll ends & an item is selected on a picker.
    *
@@ -167,7 +167,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets titleFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -176,7 +176,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -185,7 +185,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  cancelColor: Color;
+  cancelColor: IColor;
   /**
    * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -194,7 +194,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  cancelFont: Font;
+  cancelFont: IFont;
   /**
    * Gets/sets cancelText of the picker. This property only works with show method. Must set before show method.
    *
@@ -212,7 +212,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  okColor: Color;
+  okColor: IColor;
   /**
    * Gets/sets okText of the picker. This property only works with show method. Must set before show method.
    *
@@ -230,7 +230,7 @@ export declare interface IPicker<
    * @ios
    * @since 3.1.1
    */
-  okFont: Font;
+  okFont: IFont;
   on(eventName: 'selected', callback: (currentIndex:number) => void): () => void;
   on(eventName: PickerEvents, callback: (...args: any[]) => void): () => void;
 

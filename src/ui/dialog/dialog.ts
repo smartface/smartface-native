@@ -1,5 +1,5 @@
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout from '../flexlayout';
+import { IFlexLayout } from '../flexlayout/flexlayout';
 
 export const DEFAULT_TRANSLUCENCY = 58;
 
@@ -107,7 +107,7 @@ export interface IDialog<TNative = any, TProps extends MobileOSProps<{}, DialogA
    * @ios
    * @since 0.1
    */
-  readonly layout: FlexLayout;
+  readonly layout: IFlexLayout;
   /**
    * Hides the dialog.
    *

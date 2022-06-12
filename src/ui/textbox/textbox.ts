@@ -1,9 +1,8 @@
-import type View from '../view';
-import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
-import Font from '../font';
+import { IView, ViewIOSProps } from '../view/view';
+import { IColor } from '../color/color';
+import { IFlexLayout } from '../flexlayout/flexlayout';
+import { IFont } from '../font/font';
 import TextAlignment from '../shared/textalignment';
-import Color from '../color';
-import FlexLayout from '../flexlayout';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextContentType from '../shared/textcontenttype';
 import KeyboardType from '../shared/keyboardtype';
@@ -66,7 +65,7 @@ export interface TextBoxiOSProps extends ViewIOSProps {
    * @property {UI.FlexLayout} [keyboardLayout = undefined]
    * @ios
    */
-  keyboardLayout?: FlexLayout | undefined;
+  keyboardLayout?: IFlexLayout | undefined;
   /**
    * The custom input view to display instead of system keyboard
    * when the textbox object became focus. This property works only for iOS only.
@@ -79,7 +78,7 @@ export interface TextBoxiOSProps extends ViewIOSProps {
    */
   inputView?: {
     height: number;
-    view: View;
+    view: IView;
   };
 
   /**
@@ -122,7 +121,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  font: Font;
+  font: IFont;
   /**
    * Gets/sets the text of the TextBox.
    * @property {String} [text = ""]
@@ -155,7 +154,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  textColor: Color;
+  textColor: IColor;
   /**
    * Gets/sets the cursor position of TextBox.
    *
@@ -200,7 +199,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 3.2.1
    */
-  cursorColor: Color;
+  cursorColor: IColor;
   /**
    * Gets/sets hint text that will be displayed when TextBox is empty.
    *
@@ -219,7 +218,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  hintTextColor: Color;
+  hintTextColor: IColor;
 
   /**
    * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.

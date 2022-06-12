@@ -1,4 +1,4 @@
-import Color from '../../ui/color';
+import { IColor } from '../../ui/color/color';
 
 export enum StatusBarStyle {
   DEFAULT,
@@ -7,18 +7,18 @@ export enum StatusBarStyle {
 
 export abstract class AbstractStatusBar {
   abstract height: number;
-  abstract backgroundColor: Color;
+  abstract backgroundColor: IColor;
   abstract visible: boolean;
   abstract style: StatusBarStyle;
   android: {
-    color?: Color;
+    color?: IColor;
     transparent?: boolean;
   };
 }
 
 export class StatusBarImpl extends AbstractStatusBar {
   height: number;
-  backgroundColor: Color;
+  backgroundColor: IColor;
   visible: boolean;
   style: StatusBarStyle;
 }

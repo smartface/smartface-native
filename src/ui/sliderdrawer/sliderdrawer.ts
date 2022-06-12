@@ -1,7 +1,6 @@
 import { IEventEmitter } from '../../core/eventemitter';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { INativeMobileComponent } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IFlexLayout } from '../flexlayout/flexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 
@@ -204,5 +203,5 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
   /**
    * Gets/Sets the background color of SliderDrawer
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
 }

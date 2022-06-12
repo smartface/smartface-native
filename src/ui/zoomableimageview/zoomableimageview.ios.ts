@@ -1,13 +1,7 @@
 import ImageIOS from '../image/image.ios';
 import ImageViewIOS from '../imageview/imageview.ios';
 import ViewIOS from '../view/view.ios';
-import ScrollViewIOS from '../scrollview/scrollview.ios';
 import { IZoomableImageView } from './zoomableimageview';
-import { MobileOSProps } from '../../core/native-mobile-component';
-import { ColorImpl } from '../color/color';
-import { IImage, ImageIOSProps, ImageAndroidProps } from '../image/image';
-import ImageCacheType from '../shared/imagecachetype';
-import { IFile } from '../../io/file/file';
 import { IImageView } from '../imageview/imageview';
 
 export default class ZoomableImageViewIOS extends ViewIOS implements IZoomableImageView {

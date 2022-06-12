@@ -1,11 +1,8 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { DatePickerEvents } from './datepicker-events';
-import Color from '../color';
-import Font from '../font';
-import { ConstructorOf } from '../../core/constructorof';
-import NativeComponent from '../../core/native-component';
-import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import { IEventEmitter } from '../../core/eventemitter';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -135,7 +132,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets titleFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -143,7 +140,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -151,7 +148,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelColor: Color;
+  cancelColor: IColor;
   /**
    * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -159,7 +156,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelHighlightedColor: Color;
+  cancelHighlightedColor: IColor;
   /**
    * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -167,7 +164,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelFont: Font;
+  cancelFont: IFont;
   /**
    * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -175,7 +172,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okColor: Color;
+  okColor: IColor;
   /**
    * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -183,7 +180,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okHighlightedColor: Color;
+  okHighlightedColor: IColor;
   /**
    * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -191,7 +188,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okFont: Font;
+  okFont: IFont;
   /**
    * The mode determines whether dates, times, or both dates and times are displayed.
    *
@@ -223,7 +220,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  textColor?: Color;
+  textColor?: IColor;
   /**
    * Gets/sets dialogLineColor of Picker.
    *
@@ -231,7 +228,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  dialogLineColor: Color;
+  dialogLineColor: IColor;
   /**
    * Gets/sets dialogBackgroundColor of Picker.
    *
@@ -239,7 +236,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  dialogBackgroundColor: Color;
+  dialogBackgroundColor: IColor;
 }
 
 export interface DatePickerAndroidProperties {

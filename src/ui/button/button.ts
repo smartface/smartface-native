@@ -1,8 +1,8 @@
-import Image from '../image';
 import { ButtonEvents } from './button-events';
 import { ILabel } from '../label/label';
 import ViewState from '../shared/viewState';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { IImage } from '../image/image';
 
 type MobileProps = MobileOSProps<ILabel['ios'], ILabel['android']>;
 export interface IButton<TEvent extends string = ButtonEvents, TMobile extends MobileProps = MobileProps> extends ILabel<TEvent | ButtonEvents, TMobile> {
@@ -42,7 +42,7 @@ export interface IButton<TEvent extends string = ButtonEvents, TMobile extends M
    * @android
    * @ios
    */
-  backgroundImage: ViewState<Image>;
+  backgroundImage: ViewState<IImage>;
   /**
    * @deprecated
    * @example

@@ -18,7 +18,7 @@ import BottomTabBar from '../bottomtabbar';
  *     bottomTabBarController.shouldSelectByIndex = function (e){return true || false}
  *     bottomTabBarController.didSelectByIndex = function (e){}
  *
- * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
+ * @see {@link https://smartface.github.io/router/classes/BottomTabBarRouter.html  BottomTabBarRouter}
  */
 export interface IBottomTabBarController extends IController {
   /**

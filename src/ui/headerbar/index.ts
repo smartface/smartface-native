@@ -1,11 +1,10 @@
 import AttributedString from '../attributedstring';
-import Color from '../color';
-import Font from '../font';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { IView } from '../view/view';
-import HeaderBarItem from '../headerbaritem';
 import { LargeTitleDisplayMode } from '../page/page';
-import Image from '../image';
 import { IImage } from '../image/image';
+import { IHeaderBarItem } from '../headerbaritem/headerbaritem';
 
 /**
  * @class UI.HeaderBar
@@ -102,7 +101,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
    *
@@ -122,7 +121,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  itemColor: Color;
+  itemColor: IColor;
   /**
    * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.
    *
@@ -194,7 +193,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets visibility of the header bar. For iOS, you should access this property from page.parentController.
    *
@@ -213,7 +212,7 @@ type IHeaderBar = {
    * @param {Array<UI.HeaderBarItem>} items Array of HeaderBarItem objects to add
    * @since 0.1
    */
-  setItems(items: HeaderBarItem[]): void;
+  setItems(items: IHeaderBarItem[]): void;
 
   /**
    * Sets left item of header bar to given item.
@@ -231,7 +230,7 @@ type IHeaderBar = {
    * @method setLeftItem
    * @param {UI.HeaderBarItem} item HeaderBarItem to add.
    */
-  setLeftItem(item: HeaderBarItem): void;
+  setLeftItem(item: IHeaderBarItem): void;
   android: Partial<{
     /**
      * Gets/sets attributed title of the header bar.
@@ -257,7 +256,7 @@ type IHeaderBar = {
      * @android
      * @since 4.0.0
      */
-    subtitleFont?: Font;
+    subtitleFont?: IFont;
 
     /**
      * Gets/sets the content inset of headerbar. Minimum API Level 21 required. The content inset affects the valid area for Headerbar content other than
@@ -329,7 +328,7 @@ type IHeaderBar = {
      * @android
      * @since 0.1
      */
-    subtitleColor?: Color;
+    subtitleColor?: IColor;
 
     /**
      * Gets/sets elevation of the header bar.
@@ -386,7 +385,7 @@ type IHeaderBar = {
      * @ios
      * @since 4.0.0
      */
-    titleFont?: Font;
+    titleFont?: IFont;
     /**
      * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
      *
@@ -417,7 +416,7 @@ type IHeaderBar = {
      * @ios
      * @since 0.1
      */
-    backBarButtonItem?: HeaderBarItem;
+    backBarButtonItem?: IHeaderBarItem;
     /**
      * Gets/sets the mode to use how to display title of header bar.
      * This property will work only for iOS.

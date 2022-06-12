@@ -1,6 +1,6 @@
-import { AbstractView, IView } from '../view/view';
-import Color from '../color';
-import File from '../../io/file';
+import { IView } from '../view/view';
+import { IColor } from '../color/color';
+import { IFile } from '../../io/file/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -219,7 +219,7 @@ export interface IImageView<
    * @ios
    * @since 3.1.3
    */
-  tintColor: Color | null;
+  tintColor: IColor | null;
   /**
    * Gets/sets image fill type.
    *
@@ -295,7 +295,7 @@ export interface IImageView<
    * @since 3.1.0
    */
   loadFromFile(params: {
-    file: File;
+    file: IFile;
     fade?: boolean;
     width?: number;
     height?: number;

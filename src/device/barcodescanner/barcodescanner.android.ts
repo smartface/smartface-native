@@ -3,6 +3,8 @@ import { IView } from '../../ui/view/view';
 import ViewAndroid from '../../ui/view/view.android';
 import { IViewGroup } from '../../ui/viewgroup/viewgroup';
 import AndroidConfig from '../../util/Android/androidconfig';
+import Permission from '../permission';
+import { Permissions } from '../permission/permission';
 import { IBarcodeScanner } from './barcodescanner';
 const ZXingScannerView = requireClass('me.dm7.barcodescanner.zxing.ZXingScannerView');
 
@@ -64,21 +66,7 @@ export default class BarcodeScannerAndroid implements IBarcodeScanner {
   }
   applyOrientationParentView() {}
 
-  checkPermission(): Promise<void> {
-    const CAMERA_PERMISSION_CODE = 1002;
-    return new Promise((resolve, reject) => {
-      if (Application.android.checkPermission?.(Application.Android.Permissions.CAMERA)) {
-        resolve();
-      } else {
-        Application.android.requestPermissions?.(CAMERA_PERMISSION_CODE, Application.Android.Permissions.CAMERA);
-      }
-      Application.android.onRequestPermissionsResult = (e) => {
-        if (e.requestCode === CAMERA_PERMISSION_CODE && e.result) {
-          resolve();
-        } else {
-          reject();
-        }
-      };
-    });
+  async checkPermission(): Promise<void> {
+    await Permission.requestPermission(Permissions.CAMERA);
   }
 }

@@ -1,4 +1,4 @@
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IImage } from '../image/image';
 import { IView } from '../view/view';
 import { SliderEvents } from './slider-events';
@@ -47,7 +47,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * @ios
    * @since 0.1
    */
-  thumbColor: Color;
+  thumbColor: IColor;
   /**
    * Gets/sets image of the thumb.
    *
@@ -76,7 +76,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * @ios
    * @since 0.1
    */
-  minTrackColor: Color;
+  minTrackColor: IColor;
   /**
    * Gets/sets color of the thumb's maximum track color.
    *
@@ -91,7 +91,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * @ios
    * @since 0.1
    */
-  maxTrackColor: Color;
+  maxTrackColor: IColor;
   /**
    * Gets/sets value of the slider. This value should be less or equals to maxValue,
    * greater or equals to minValue.

@@ -1,8 +1,8 @@
-import { AbstractFont } from './font';
+import { AbstractFont, IFont } from './font';
 
-declare class FontImpl extends AbstractFont {
-    get size(): number;
-    sizeOfString(string: string, maxWidth: number): { width: number; height: number; };
+declare class FontImpl extends AbstractFont implements IFont {
+  get size(): number;
+  sizeOfString(string: string, maxWidth: number): { width: number; height: number };
 }
 
 const Font: typeof FontImpl = require(`./font.${Device.deviceOS.toLowerCase()}`).default;

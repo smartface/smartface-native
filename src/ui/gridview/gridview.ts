@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
-import Color from '../color';
+import { IColor } from '../color/color';
 import GridViewItem from '../gridviewitem';
 import LayoutManager from '../layoutmanager';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -373,7 +373,7 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
    * @ios
    * @since 3.0.2
    */
-  setPullRefreshColors(color: Color[]): void;
+  setPullRefreshColors(color: IColor[]): void;
   /**
    * This method notify the GridView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
    * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.GridView#performBatchUpdates performBatchUpdates}.
@@ -591,7 +591,7 @@ export declare class AbstractGridView<TEvent extends string = GridViewEvents, TP
   refreshEnabled: boolean;
   getFirstVisibleIndex(): number;
   getLastVisibleIndex(): number;
-  setPullRefreshColors(color: Color[]): void;
+  setPullRefreshColors(color: IColor[]): void;
   deleteRowRange(params: { positionStart: number; itemCount: number }): void;
   insertRowRange(params: { positionStart: number; itemCount: number }): void;
   refreshRowRange(params: { positionStart: number; itemCount: number }): void;
