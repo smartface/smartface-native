@@ -2,7 +2,8 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { DatePickerEvents } from './datepicker-events';
 import { IColor } from '../color/color';
 import { IFont } from '../font/font';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { IEventEmitter } from '../../core/eventemitter';
 
 /**
  * @enum UI.DatePicker.Android.Style

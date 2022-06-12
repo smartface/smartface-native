@@ -1,15 +1,8 @@
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
-import { AbstractPage, IPage, LargeTitleDisplayMode, PageAndroidParams, PageIOSParams, PageOrientation, PresentationStyle } from '../page/page';
+import { IPage, PageAndroidParams, PageIOSParams } from '../page/page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout from '../flexlayout';
-import { IController } from '../navigationcontroller/navigationcontroller';
-import { HeaderBar } from '../navigationcontroller/headerbar';
-import { IView } from '../view/view';
-import StatusBar from '../../application/statusbar';
-import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
-import type Page from '../page';
 import { IColor } from '../color/color';
 import ViewState from '../shared/viewState';
 
@@ -29,7 +22,7 @@ export interface ITabBarControllerAndroidProps extends PageAndroidParams {
    * @android
    * @since 3.2.0
    */
-  dividerColor: Color;
+  dividerColor: IColor;
   /**
    * Gets/sets the divider padding of the TabBarController.
    * @property {Number} [dividerPadding = 0]
@@ -43,14 +36,14 @@ export interface ITabBarControllerAndroidProps extends PageAndroidParams {
    * @android
    * @since 3.2.0
    */
-  dividerWidth: number
+  dividerWidth: number;
   /**
    * Gets/sets over-scroll mode for top tab bar.
    *
    * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
    * @android
    * @since 3.2.0
-   */;
+   */
   overScrollMode: OverScrollMode;
 }
 
@@ -228,24 +221,6 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
   on(eventName: 'selected', callback: (position: number) => void): () => void;
   on(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): () => void;
 
-  barHeight: number;
-  items: ITabbarItem[];
-  dividerColor: IColor;
-  dividerPadding: number;
-  dividerWidth: number;
-  indicatorColor: IColor;
-  autoCapitalize: boolean;
-  indicatorHeight: number;
-  overScrollMode: OverScrollMode;
-  barColor: IColor;
-  scrollEnabled: boolean;
-  selectedIndex: number;
-  abstract setSelectedIndex(index: number, animated: boolean): void;
-  iconColor: ViewState<IColor>;
-  textColor: ViewState<IColor>;
-  pagingEnabled: boolean;
-  abstract onPageCreate(index: number): Page;
-  abstract onSelected(index: number): void;
   off(eventName: 'pageCreate', callback: (position: number) => void): void;
   off(eventName: 'selected', callback: (position: number) => void): void;
   off(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
@@ -261,7 +236,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
   prependListener(eventName: 'pageCreate', callback: (position: number) => void): void;
   prependListener(eventName: 'selected', callback: (position: number) => void): void;
   prependListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
-  
+
   prependOnceListener(eventName: 'pageCreate', callback: (position: number) => void): void;
   prependOnceListener(eventName: 'selected', callback: (position: number) => void): void;
   prependOnceListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
