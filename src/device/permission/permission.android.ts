@@ -1,6 +1,7 @@
-import { NativeMobileComponent } from '../../core/native-mobile-component';
+import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { Permissions, IPermission, PermissionIOSAuthorizationStatus, PermissionResult } from './permission';
+import { PermissionEvents } from './permission-events';
 
 let lastRequestPermissionCode = 2000;
 
@@ -9,7 +10,7 @@ const PermissionAndroidMapping = {
   [Permissions.LOCATION]: Permissions.ANDROID.ACCESS_COARSE_LOCATION
 };
 
-class PermissionAndroidClass extends NativeMobileComponent<any, IPermission> implements IPermission {
+class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvents, any, IPermission> implements IPermission {
   protected createNativeObject() {
     return null;
   }
@@ -27,7 +28,7 @@ class PermissionAndroidClass extends NativeMobileComponent<any, IPermission> imp
       if (this.android.checkPermission?.(currentPermission)) {
         resolve(PermissionResult.GRANTED); // Already granted, no need to request again
       } else {
-        this.android.onRequestPermissionsResult = (e) => {
+        this.once('requestPermissionsResult', (e) => {
           const currentPermissionRationale = this.android.shouldShowRequestPermissionRationale?.(currentPermission);
           // This is just one permission, therefore always use the first result.
           const currentPermissionResult = e.result[0];
@@ -38,12 +39,13 @@ class PermissionAndroidClass extends NativeMobileComponent<any, IPermission> imp
           } else {
             reject(PermissionResult.NEVER_ASK_AGAIN);
           }
-        };
+        });
         this.android.requestPermissions?.(requestPermissionCode, currentPermission);
       }
     });
   }
   private getAndroidProps(): IPermission['android'] {
+    const self = this;
     return {
       shouldShowRequestPermissionRationale(permission: Permissions.ANDROID) {
         if (typeof permission !== 'string') {
@@ -56,14 +58,20 @@ class PermissionAndroidClass extends NativeMobileComponent<any, IPermission> imp
         const packageName = AndroidConfig.activity.getPackageName(); //Did it this way to prevent potential circular dependency issue.
         return packageManager.checkPermission(permission, packageName) === 0; // PackageManager.PERMISSION_GRANTED
       },
-      requestPermissions(requestCode: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): void {
-        if (typeof requestCode !== 'number') {
-          throw new Error('requestCode must be number');
-        } else if (typeof permissions !== 'string' && !Array.isArray(permissions)) {
-          throw new Error('permissions must be AndroidPermissions or array of AndroidPermissions');
-        }
-        const currentPermissions = Array.isArray(permissions) ? permissions : [permissions];
-        AndroidConfig.activity.requestPermissions(array(currentPermissions, 'java.lang.String'), requestCode);
+      requestPermissions(requestCode: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): Promise<PermissionResult[]> {
+        return new Promise((resolve, reject) => {
+          if (typeof requestCode !== 'number') {
+            reject('requestCode must be number');
+          } else if (typeof permissions !== 'string' && !Array.isArray(permissions)) {
+            reject('permissions must be AndroidPermissions or array of AndroidPermissions');
+          }
+          const currentPermissions = Array.isArray(permissions) ? permissions : [permissions];
+          self.once('requestPermissionsResult', (e) => {
+            const results = e.result.map((result) => result === 0);
+            resolve(results);
+          });
+          AndroidConfig.activity.requestPermissions(array(currentPermissions, 'java.lang.String'), requestCode);
+        });
       }
     };
   }
