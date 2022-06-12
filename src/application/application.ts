@@ -130,12 +130,12 @@ export interface ApplicationAndroidProps {
    * @event onRequestPermissionsResult
    * @param {Object} e
    * @param {Number} e.requestCode
-   * @param {Boolean} e.result
+   * @param {Boolean} e.result Will return array if permission request is multiple.
    * @android
-   * @deprecated
+   * @deprecated Use Permissions.android.onRequestPermissionsResult instead
    * @since 1.2
    */
-  onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
+  onRequestPermissionsResult: (e: { requestCode: number; result: boolean[] | boolean }) => void;
 
   /**
    * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
@@ -274,6 +274,9 @@ export enum KeyboardMode {
   AlwaysHidden = 3
 }
 
+/**
+ * @deprecated Use Permmission.AndroidPermissions instead
+ */
 export enum ApplicationAndroidPermissions {
   /**
    * Allows to read the calendar data.
