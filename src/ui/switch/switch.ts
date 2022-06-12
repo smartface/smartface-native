@@ -147,5 +147,24 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * @ios
    * @since 5.0.1
    */
+    
   toggleOffColor: IColor;
+
+  on(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): () => void;
+  on(eventName: SwitchEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  off(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'toggleChanged', isChecked: boolean): void;
+  emit(eventName: SwitchEvents, ...args: any[]): void;
+
+  once(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): () => void;
+  once(eventName: SwitchEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  prependListener(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  prependOnceListener(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
 }

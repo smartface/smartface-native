@@ -2,7 +2,8 @@ import NativeEventEmitterComponent from '../../core/native-event-emitter-compone
 import { DatePickerEvents } from './datepicker-events';
 import { IColor } from '../color/color';
 import { IFont } from '../font/font';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { IEventEmitter } from '../../core/eventemitter';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -250,11 +251,12 @@ export interface DatePickerAndroidProperties {
   style: DatePickerStyle;
 }
 
-export declare interface IDatePicker<
+export interface IDatePicker<
   TEvent extends string = DatePickerEvents,
   TNative = any,
   TMobile extends MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties> = MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties>
-> extends NativeEventEmitterComponent<TEvent | DatePickerEvents, TNative, TMobile> {
+> extends INativeMobileComponent<TNative, TMobile>,
+    IEventEmitter<TEvent | DatePickerEvents> {
   /**
    * Sets the initial date avaliable on the picker.
    *
@@ -333,33 +335,28 @@ export declare interface IDatePicker<
    * ```
    */
   onCancelled: () => void;
-}
 
-export abstract class AbstractDatePicker extends NativeEventEmitterComponent<DatePickerEvents, any, IDatePicker> implements IDatePicker {
-  constructor(params?: Partial<IDatePicker>) {
-    super(params);
-  }
-  abstract setDate(date: Date): void;
-  abstract setMinDate(date: Date): void;
-  abstract setMaxDate(date: Date): void;
-  abstract show(): void;
-  onDateSelected: (date: Date) => void;
-  onCancelled: () => void;
+  on(eventName: 'selected', callback: () => void): () => void;
+  on(eventName: 'cancelled', callback: () => void): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
 
-  static Android: {
-    Style: typeof DatePickerStyle;
-  };
-  static iOS: {
-    DatePickerMode: typeof DatePickerMode;
-  };
-  protected createNativeObject() {
-    throw new Error('Method not implemented');
-  }
-}
+  off(eventName: 'selected', callback: () => void): void;
+  off(eventName: 'cancelled', callback: () => void): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
 
-export declare class DatePickerImpl extends AbstractDatePicker {
-  setDate(date: Date): void;
-  setMinDate(date: Date): void;
-  setMaxDate(date: Date): void;
-  show(): void;
+  emit(eventName: 'selected'): void;
+  emit(eventName: 'cancelled'): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: () => void): () => void;
+  once(eventName: 'cancelled', callback: () => void): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: () => void): void;
+  prependListener(eventName: 'cancelled', callback: () => void): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: () => void): void;
+  prependOnceListener(eventName: 'cancelled', callback: () => void): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }

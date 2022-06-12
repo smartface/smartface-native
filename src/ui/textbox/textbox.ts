@@ -370,4 +370,46 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * Gets/sets if the textbox should be touchable and enabled. When set to false, textBox may dim itself depending on the OS.
    */
   enabled?: boolean;
+
+  on(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): () => void;
+  on(eventName: 'clearButtonPress', callback: () => void): () => void;
+  on(eventName: 'editBegins', callback: () => void): () => void;
+  on(eventName: 'editEnds', callback: () => void): () => void;
+  on(eventName: 'textChanged', callback: (e?: { insertedText: string; location: number }) => void): () => void;
+  on(eventName: TextBoxEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): void;
+  off(eventName: 'clearButtonPress', callback: () => void): void;
+  off(eventName: 'editBegins', callback: () => void): void;
+  off(eventName: 'editEnds', callback: () => void): void;
+  off(eventName: 'textChanged', callback: (e?: { insertedText: string; location: number }) => void): void;
+  off(eventName: TextBoxEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'actionButtonPress', e?: { actionKeyType: ActionKeyType }): void;
+  emit(eventName: 'clearButtonPress', ): void;
+  emit(eventName: 'editBegins', ): void;
+  emit(eventName: 'editEnds', ): void;
+  emit(eventName: 'textChanged', e?: { insertedText: string; location: number }): void;
+  emit(eventName: TextBoxEvents, ...args: any[]): void;
+
+  once(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): () => void;
+  once(eventName: 'clearButtonPress', callback: () => void): () => void;
+  once(eventName: 'editBegins', callback: () => void): () => void;
+  once(eventName: 'editEnds', callback: () => void): () => void;
+  once(eventName: 'textChanged', callback: (e?: { insertedText: string; location: number }) => void): () => void;
+  once(eventName: TextBoxEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): void;
+  prependListener(eventName: 'clearButtonPress', callback: () => void): void;
+  prependListener(eventName: 'editBegins', callback: () => void): void;
+  prependListener(eventName: 'editEnds', callback: () => void): void;
+  prependListener(eventName: 'textChanged', callback: (e?: { insertedText: string; location: number }) => void): void;
+  prependListener(eventName: TextBoxEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'actionButtonPress', callback: (e?: { actionKeyType: ActionKeyType }) => void): void;
+  prependOnceListener(eventName: 'clearButtonPress', callback: () => void): void;
+  prependOnceListener(eventName: 'editBegins', callback: () => void): void;
+  prependOnceListener(eventName: 'editEnds', callback: () => void): void;
+  prependOnceListener(eventName: 'textChanged', callback: (e?: { insertedText: string; location: number }) => void): void;
+  prependOnceListener(eventName: TextBoxEvents, callback: (...args: any[]) => void): void;
 }

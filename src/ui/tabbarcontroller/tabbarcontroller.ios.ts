@@ -6,7 +6,10 @@ import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import { PageImpl } from '../page/page';
 
-export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents> extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
+export default class TabBarControllerIOS<TEvent extends string = TabBarControllerEvents>
+  extends PageIOS<TEvent | TabBarControllerEvents, any, ITabBarController>
+  implements ITabBarController<TEvent | TabBarControllerEvents>
+{
   dividerColor: Color;
   dividerPadding: number;
   dividerWidth: number;

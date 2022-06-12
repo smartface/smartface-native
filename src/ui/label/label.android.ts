@@ -36,7 +36,10 @@ const MAX_INT_VALUE = 2147483647;
 const AUTO_SIZE_TEXT_TYPE_NONE = 0;
 const MINIMUM_FONT_SIZE = 7;
 
-export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel> extends ViewAndroid<TEvent, TNative, TProps> implements ILabel {
+export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel>
+  extends ViewAndroid<TEvent, TNative, TProps>
+  implements ILabel<TEvent, TProps>
+{
   private _ellipsizeMode: ILabel['ellipsizeMode'];
   protected _textAlignment: TextAlignment;
   protected viewNativeDefaultTextAlignment: number;

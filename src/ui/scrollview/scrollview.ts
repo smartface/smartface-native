@@ -319,6 +319,48 @@ export interface IScrollView<TEvent extends string = ScrollViewEvents, TMobile e
    * @since 1.1.13
    */
   readonly contentOffset: Point2D;
+
+  on(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): () => void;
+  on(eventName: ScrollViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  off(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'scroll', params: { translation: Point2D; contentOffset: Point2D }): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset:Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset:Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset:Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset:Point2D,decelerate:boolean): void;
+  emit(eventName: ScrollViewEvents, ...args: any[]): void;
+
+  once(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): () => void;
+  once(eventName: ScrollViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  prependListener(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  prependOnceListener(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents> extends AbstractViewGroup<TEvent | ScrollViewEvents, any, IScrollView> implements IScrollView {
@@ -334,4 +376,47 @@ export declare class AbstractScrollView<TEvent extends string = ScrollViewEvents
   contentOffset: Point2D;
   static Align: typeof ScrollViewAlign;
   static Edge: typeof ScrollViewEdge;
+
+  on(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): () => void;
+  on(eventName: ScrollViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  off(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'scroll', params: { translation: Point2D; contentOffset: Point2D }): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset:Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset:Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset:Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset:Point2D,decelerate:boolean): void;
+  emit(eventName: ScrollViewEvents, ...args: any[]): void;
+
+  once(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): () => void;
+  once(eventName: ScrollViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  prependListener(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'scroll', callback: (params: { translation: Point2D; contentOffset: Point2D }) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset:Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset:Point2D,decelerate:boolean) => void): void;
+  prependOnceListener(eventName: ScrollViewEvents, callback: (...args: any[]) => void): void;
 }
+

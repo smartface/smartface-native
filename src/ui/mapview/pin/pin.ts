@@ -56,4 +56,28 @@ export interface IPin<TEvent extends string = PinEvents, TMobile extends MobileO
    * ```
    */
   onInfoWindowPress: () => void;
+
+  on(eventName: 'infoWindowPress', callback: () => void): () => void;
+  on(eventName: 'press', callback: (state: object) => void): () => void;
+  on(eventName: PinEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'infoWindowPress', callback: () => void): void;
+  off(eventName: 'press', callback: (state: object) => void): void;
+  off(eventName: PinEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'infoWindowPress'): void;
+  emit(eventName: 'press'): void;
+  emit(eventName: PinEvents, ...args: any[]): void;
+
+  once(eventName: 'infoWindowPress', callback: () => void): () => void;
+  once(eventName: 'press', callback: (state: object) => void): () => void;
+  once(eventName: PinEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'infoWindowPress', callback: () => void): void;
+  prependListener(eventName: 'press', callback: (state: object) => void): void;
+  prependListener(eventName: PinEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'infoWindowPress', callback: () => void): void;
+  prependOnceListener(eventName: 'press', callback: (state: object) => void): void;
+  prependOnceListener(eventName: PinEvents, callback: (...args: any[]) => void): void;
 }

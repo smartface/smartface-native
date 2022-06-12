@@ -810,6 +810,42 @@ export interface IView<
   };
   android: TMobileProps['android'];
   ios: TMobileProps['ios'];
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }
 
 /**
@@ -922,6 +958,61 @@ export class ViewBase<TEvent extends string = ViewEvents, TNative = any, TProps 
   };
   static Events = ViewEvents;
   static Border = Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: ViewEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.on(eventName as any, callback);
+  }
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void {
+    super.off(eventName as any, callback);
+  }
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void {
+    super.emit(eventName as any, ...args);
+  }
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.once(eventName as any, callback);
+  }
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
@@ -988,4 +1079,46 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   masksToBounds: boolean;
   maskedBorders: Border[];
   static readonly Border: typeof Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

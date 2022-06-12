@@ -54,7 +54,7 @@ const YogaEdge = {
 
 export default class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
-  implements IView
+  implements IView<TEvent, TNative, TProps>
 {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
@@ -884,7 +884,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   // End of Ripple Effect
 
-  on(eventName: ViewEvents, callback: EventListenerCallback) {
+  on(eventName: any, callback: EventListenerCallback) {
     if (Object.values(ViewEvents).includes(eventName)) {
       this.setTouchHandlers();
     }

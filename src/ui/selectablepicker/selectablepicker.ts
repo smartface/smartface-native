@@ -165,4 +165,27 @@ export declare interface ISelectablePicker<TEvent extends string = SelectablePic
    * @since 4.0.5
    */
   show(done: (param: { items: number | number[] }) => void, cancel: () => void): void;
+  on(eventName: 'selected', callback: (index?: number, selected?: boolean) => void): () => void;
+  on(eventName: SelectablePickerEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'selected', callback: (index?: number, selected?: boolean) => void): void;
+  off(eventName: SelectablePickerEvents, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'selected', index?: number, selected?: boolean): void;
+  emit(eventName: SelectablePickerEvents, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: (index?: number, selected?: boolean) => void): () => void;
+  once(eventName: SelectablePickerEvents, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: (index?: number, selected?: boolean) => void): void;
+  prependListener(eventName: SelectablePickerEvents, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: (index?: number, selected?: boolean) => void): void;
+  prependOnceListener(eventName: SelectablePickerEvents, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

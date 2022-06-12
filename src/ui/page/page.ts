@@ -352,6 +352,65 @@ export declare interface IPage<TEvent extends string = PageEvents, TMobile exten
    * You should access headerbar values through parentcontroller on iOS.
    */
   parentController: IController;
+
+  on(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): () => void;
+  on(eventName: 'dismissComplete', callback: () => void): () => void;
+  on(eventName: 'dismissStart', callback: () => void): () => void;
+  on(eventName: 'dismissCancel', callback: () => void): () => void;
+  on(eventName: 'hide', callback: () => void): () => void;
+  on(eventName: 'show', callback: () => void): () => void;
+  on(eventName: 'orientationChange', callback: (e: { orientation: PageOrientation }) => void): () => void;
+  on(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): void;
+  off(eventName: 'dismissComplete', callback: () => void): void;
+  off(eventName: 'dismissStart', callback: () => void): void;
+  off(eventName: 'dismissCancel', callback: () => void): void;
+  off(eventName: 'hide', callback: () => void): void;
+  off(eventName: 'load', callback: () => void): void;
+  off(eventName: 'show', callback: () => void): void;
+  off(eventName: 'orientationChange', callback: (e: { orientation: PageOrientation }) => void): void;
+  off(eventName: PageEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'safeAreaPaddingChange', padding: { left: number; top: number; right: number; bottom: number }): void;
+  emit(eventName: 'dismissComplete', ): void;
+  emit(eventName: 'dismissStart', ): void;
+  emit(eventName: 'dismissCancel', ): void;
+  emit(eventName: 'hide', ): void;
+  emit(eventName: 'load', ): void;
+  emit(eventName: 'show', ): void;
+  emit(eventName: 'orientationChange', e: { orientation: PageOrientation }): void;
+  emit(eventName: PageEvents, ...args: any[]): void;
+
+  once(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): () => void;
+  once(eventName: 'dismissComplete', callback: () => void): () => void;
+  once(eventName: 'dismissStart', callback: () => void): () => void;
+  once(eventName: 'dismissCancel', callback: () => void): () => void;
+  once(eventName: 'hide', callback: () => void): () => void;
+  once(eventName: 'load', callback: () => void): () => void;
+  once(eventName: 'show', callback: () => void): () => void;
+  once(eventName: 'orientationChange', callback: (e: { orientation: PageOrientation }) => void): () => void;
+  once(eventName: PageEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): void;
+  prependListener(eventName: 'dismissComplete', callback: () => void): void;
+  prependListener(eventName: 'dismissStart', callback: () => void): void;
+  prependListener(eventName: 'dismissCancel', callback: () => void): void;
+  prependListener(eventName: 'hide', callback: () => void): void;
+  prependListener(eventName: 'load', callback: () => void): void;
+  prependListener(eventName: 'show', callback: () => void): void;
+  prependListener(eventName: 'orientationChange', callback: (e: { orientation: PageOrientation }) => void): void;
+  prependListener(eventName: PageEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'safeAreaPaddingChange', callback: (padding: { left: number; top: number; right: number; bottom: number }) => void): void;
+  prependOnceListener(eventName: 'dismissComplete', callback: () => void): void;
+  prependOnceListener(eventName: 'dismissStart', callback: () => void): void;
+  prependOnceListener(eventName: 'dismissCancel', callback: () => void): void;
+  prependOnceListener(eventName: 'hide', callback: () => void): void;
+  prependOnceListener(eventName: 'load', callback: () => void): void;
+  prependOnceListener(eventName: 'show', callback: () => void): void;
+  prependOnceListener(eventName: 'orientationChange', callback: (e: { orientation: PageOrientation }) => void): void;
+  prependOnceListener(eventName: PageEvents, callback: (...args: any[]) => void): void;
 }
 
 // export class PageBase<TEvent extends string = PageEvents, TNative = any, TProps extends IPage = IPage>

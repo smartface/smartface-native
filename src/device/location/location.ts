@@ -135,6 +135,24 @@ export interface ILocation<TEvent extends string = LocationEvents, TMobile exten
    */
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void): void;
   __onActivityResult: (resultCode: number) => void;
+
+  on(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: LocationEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  off(eventName: LocationEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'locationChanged', e: { latitude: number; longitude: number }): void;
+  emit(eventName: LocationEvents, ...args: any[]): void;
+
+  once(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: LocationEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: LocationEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: LocationEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare namespace LocationBase {

@@ -173,4 +173,34 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * ```
    */
   onValueChange: (value: number) => void;
+
+  on(eventName: 'valueChange', callback: (value: number) => void): () => void;
+  on(eventName: 'trackStart', callback: () => void): () => void;
+  on(eventName: 'trackEnd', callback: () => void): () => void;
+  on(eventName: SliderEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'valueChange', callback: (value: number) => void): void;
+  off(eventName: 'trackStart', callback: () => void): void;
+  off(eventName: 'trackEnd', callback: () => void): void;
+  off(eventName: SliderEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'valueChange', value: number): void;
+  emit(eventName: 'trackStart'): void;
+  emit(eventName: 'trackEnd'): void;
+  emit(eventName: SliderEvents, ...args: any[]): void;
+
+  once(eventName: 'valueChange', callback: (value: number) => void): () => void;
+  once(eventName: 'trackStart', callback: () => void): () => void;
+  once(eventName: 'trackEnd', callback: () => void): () => void;
+  once(eventName: SliderEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'valueChange', callback: (value: number) => void): void;
+  prependListener(eventName: 'trackStart', callback: () => void): void;
+  prependListener(eventName: 'trackEnd', callback: () => void): void;
+  prependListener(eventName: SliderEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'valueChange', callback: (value: number) => void): void;
+  prependOnceListener(eventName: 'trackStart', callback: () => void): void;
+  prependOnceListener(eventName: 'trackEnd', callback: () => void): void;
+  prependOnceListener(eventName: SliderEvents, callback: (...args: any[]) => void): void;
 }
