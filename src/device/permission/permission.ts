@@ -323,11 +323,11 @@ export interface PermissionAndroidProps {
    *     }
    *
    * @method requestPermissions
-   * @param {Number} requestIdentifier This number will be returned in {@link Permission.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not.
+   * @param {Number} requestIdentifier Optional. If not provided, it will be given automatically.
    * @android
    * @since 1.2
    */
-  requestPermissions(requestIdentifier: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): Promise<PermissionResult[]>;
+  requestPermissions(permissions: Permissions.ANDROID[] | Permissions.ANDROID, requestIdentifier?: number): Promise<PermissionResult[]>;
 }
 
 export interface IPermission extends IEventEmitter<PermissionEvents>, INativeMobileComponent<any, MobileOSProps<PermissionIOSProps, PermissionAndroidProps>> {
