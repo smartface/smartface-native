@@ -68,7 +68,7 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
           }
           const currentPermissions = Array.isArray(permissions) ? permissions : [permissions];
           self.once('requestPermissionsResult', (e) => {
-            const results = e.result.map((result) => result === 0);
+            const results = e.result.map((result) => (result ? PermissionResult.GRANTED : PermissionResult.DENIED));
             resolve(results);
           });
           AndroidConfig.activity.requestPermissions(array(currentPermissions, 'java.lang.String'), currentRequestCode);

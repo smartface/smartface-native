@@ -57,8 +57,7 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
             // User only let us to use approx location
             return 'approximate';
           } else {
-            // User granted both.
-            return 'precise';
+            return result.length > 1 ? 'precise' : 'approximate';
           }
         })
         .then((permissionType: 'approximate' | 'precise') => {
