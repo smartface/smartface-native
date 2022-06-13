@@ -88,7 +88,7 @@ export default function alert(options: string | AlertOptions, title?: string): A
   };
   let buttons: AlertButton[] = [];
   if (typeof options !== 'string') {
-    const newMessage = typeof options.message !== 'string' ? String(options) : options.message;
+    const newMessage = typeof options === 'string' ? options : options?.message || '';
     buttons = options.buttons || [defaultButton];
     paramOptions.message = newMessage || '';
     defaultButton.text = options.defaultButtonText || 'OK';

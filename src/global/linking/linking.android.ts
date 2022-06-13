@@ -31,7 +31,7 @@ class LinkingAndroidClass implements ILinking {
     launchIntent.setData(NativeUri.parse(url));
     const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
     const componentName = launchIntent.resolveActivity(packageManager);
-    if (componentName === null) {
+    if (!componentName) {
       return false;
     }
     const fallback = '{com.android.fallback/com.android.fallback.Fallback}';
