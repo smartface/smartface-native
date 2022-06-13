@@ -1,17 +1,17 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import * as RequestCodes from '../../util/Android/requestcodes';
-import { ILocation } from './location';
+import { PermissionIOSAuthorizationStatus, PermissionResult, Permissions } from '../permission/permission';
+import PermissionAndroid from '../permission/permission.android';
+import { ILocation, LocationAndroidPriority } from './location';
 import { LocationEvents } from './location-events';
 const PROVIDER = {
-  AUTO: 'auto',
-  GPS: 'gps', //ToDo: Deprecated, remove next release
-  NETWORK: 'network' //ToDo: Deprecated, remove next release
+  AUTO: 'auto'
 };
-const PRIORITY = {
+const PriorityAndroidMapping = {
   HIGH_ACCURACY: 100, // PRIORITY_HIGH_ACCURACY
   BALANCED: 102, // PRIORITY_BALANCED_POWER_ACCURACY
   LOW_POWER: 104, // PRIORITY_LOW_POWER
-  NO_POWER: 105 // PRIORITY_NO_POWER}
+  NO_POWER: 105 // PRIORITY_NO_POWER
 };
 const SETTINGS_STATUS_CODES = {
   DENIED: 'DENIED',
@@ -24,11 +24,12 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
     return null;
   }
   readonly Android = {
-    Provider: PROVIDER,
-    Priority: PRIORITY,
+    Priority: LocationAndroidPriority,
     SettingsStatusCodes: SETTINGS_STATUS_CODES
   };
-  iOS = {};
+  iOS = {
+    AuthorizationStatus: PermissionIOSAuthorizationStatus
+  };
   private _instance: any;
   CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
   Events = LocationEvents;
@@ -42,6 +43,43 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
       authorizationStatus: {}
     });
     this.addAndroidProps(this.getAndroidProps());
+  }
+  getCurrentLocation(shouldRequestPreciseLocation?: boolean, priority: keyof typeof LocationAndroidPriority = 'BALANCED'): ReturnType<ILocation['getCurrentLocation']> {
+    return new Promise((resolve, reject) => {
+      const permissions = shouldRequestPreciseLocation ? [Permissions.ANDROID.ACCESS_COARSE_LOCATION, Permissions.ANDROID.ACCESS_FINE_LOCATION] : [Permissions.ANDROID.ACCESS_COARSE_LOCATION];
+      PermissionAndroid.android
+        .requestPermissions?.(permissions)
+        .then((result) => {
+          // result[0] => approximate, result[1] => precise
+          if (result[0] === PermissionResult.DENIED) {
+            reject({ type: 'approximate', result: PermissionResult.DENIED });
+          } else if (result[1] === PermissionResult.DENIED) {
+            // User only let us to use approx location
+            return 'approximate';
+          } else {
+            // User granted both.
+            return 'precise';
+          }
+        })
+        .then((permissionType: 'approximate' | 'precise') => {
+          this.android.checkSettings({
+            onSuccess: () => {
+              this.start(priority, 1000);
+              this.once('locationChanged', (location) => {
+                this.stop();
+                resolve({ ...location, type: permissionType, result: PermissionResult.GRANTED });
+              });
+            },
+            onFailure: (e: { statusCode: string }) => {
+              const isFailureReasonDeny = e.statusCode === this.Android.SettingsStatusCodes.DENIED;
+              reject({ type: isFailureReasonDeny ? PermissionResult.DENIED : PermissionResult.NEVER_ASK_AGAIN });
+            }
+          });
+        })
+        .catch((e) => {
+          reject({ type: PermissionResult.DENIED, error: e });
+        });
+    });
   }
   onLocationChanged: (e: { latitude: number; longitude: number }) => void;
   private getAndroidProps() {
@@ -89,8 +127,9 @@ class LocationAndroid extends NativeEventEmitterComponent<LocationEvents> implem
     }
     return this._instance;
   }
-  start(priority = this.Android.Priority.HIGH_ACCURACY, interval = 1000) {
-    this.__getInstance().start(priority, interval);
+  start(priority = 'BALANCED', interval = 1000) {
+    const nativePriority = PriorityAndroidMapping[priority];
+    this.__getInstance().start(nativePriority, interval);
   }
   stop() {
     this.__getInstance().stop();

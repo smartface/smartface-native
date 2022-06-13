@@ -40,7 +40,7 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
             reject(PermissionResult.NEVER_ASK_AGAIN);
           }
         });
-        this.android.requestPermissions?.(requestPermissionCode, currentPermission);
+        this.android.requestPermissions?.(currentPermission, requestPermissionCode);
       }
     });
   }
@@ -58,9 +58,10 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
         const packageName = AndroidConfig.activity.getPackageName(); //Did it this way to prevent potential circular dependency issue.
         return packageManager.checkPermission(permission, packageName) === 0; // PackageManager.PERMISSION_GRANTED
       },
-      requestPermissions(requestCode: number, permissions: Permissions.ANDROID[] | Permissions.ANDROID): Promise<PermissionResult[]> {
+      requestPermissions(permissions: Permissions.ANDROID[] | Permissions.ANDROID, requestCode?: number): Promise<PermissionResult[]> {
+        const currentRequestCode = requestCode || ++lastRequestPermissionCode;
         return new Promise((resolve, reject) => {
-          if (typeof requestCode !== 'number') {
+          if (typeof currentRequestCode !== 'number') {
             reject('requestCode must be number');
           } else if (typeof permissions !== 'string' && !Array.isArray(permissions)) {
             reject('permissions must be AndroidPermissions or array of AndroidPermissions');
@@ -70,7 +71,7 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
             const results = e.result.map((result) => result === 0);
             resolve(results);
           });
-          AndroidConfig.activity.requestPermissions(array(currentPermissions, 'java.lang.String'), requestCode);
+          AndroidConfig.activity.requestPermissions(array(currentPermissions, 'java.lang.String'), currentRequestCode);
         });
       }
     };
