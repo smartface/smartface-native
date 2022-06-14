@@ -16,7 +16,7 @@ class CallDetectionAndroid extends NativeEventEmitterComponent<CallDetectionEven
   protected createNativeObject() {
     return null;
   }
-  onCallStateChanged: (params: { state: State; incomingNumber?: string; observer?: any }) => void;
+  onCallStateChanged: (params: { state: State; observer?: any }) => void;
   constructor() {
     super();
     const callStateChangedCallback = (state) => {
