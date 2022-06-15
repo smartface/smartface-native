@@ -612,6 +612,15 @@ export interface IView<
     INativeComponent<TNative> {
   parent: IView | undefined;
   readonly uniqueId: string;
+  /**
+   * Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree. 
+   * It is useful to call this method when you want to change layout parameters on runtime.
+   * If this view layout invalidated, call applyLayout from the Page.layout in the iOS and from the view itself in the Android.
+   *
+   * @method applyLayout
+   * @android
+   * @ios
+   */
   applyLayout(): void;
   /**
    * This method put a view to the top of other views in z-direction.

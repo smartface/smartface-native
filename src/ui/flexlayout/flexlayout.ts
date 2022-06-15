@@ -201,16 +201,6 @@ export interface IFlexLayout<
    * @since 0.1
    */
   flexWrap: Flex.FlexWrap | null;
-  /**
-   * This functions recalculates the positioning parameters.
-   * It is useful to call this method when you want to change layout parameters on runtime.
-   * If you change view's position, you should call applyLayout from the Page.layout. You shouldn't call applyLayout from its parent or itself
-   *
-   * @method applyLayout
-   * @android
-   * @ios
-   */
-  applyLayout(): void;
 }
 
 export declare class FlexLayoutBase<TEvent extends string = FlexLayoutEvents, TNative = any> extends AbstractViewGroup<TEvent | FlexLayoutEvents, TNative, IFlexLayout> implements IFlexLayout {
