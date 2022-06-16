@@ -538,9 +538,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignContent(value) {
-    console.log('typeof alignContent: ', typeof value);
-
-    // this.nativeObject.yoga.alignContent = value;
     this.nativeObject.yoga.setNumberValueForKey(value, 'alignContent');
   }
 
