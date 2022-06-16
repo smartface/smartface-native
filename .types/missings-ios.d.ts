@@ -109,6 +109,7 @@ declare class __SF_UIView extends __SF_NSOBject {
   static viewAppearanceSemanticContentAttribute(): number;
   static performWithoutAnimationWrapper(param: any): any;
   static animation(duration: number, delay: number, animations: () => void, completion?: () => void): void;
+  static applyToRootView();
 
   onTouch: (e: any) => void;
   onTouchCancelled: (e: any) => void;
