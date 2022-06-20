@@ -224,13 +224,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.didSetTouchHandler = true;
   }
 
-  //TODO: Didn't delete these functions to not break backward compatibility. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
   protected _setBorderToAllEdges() {
-    const borderWidthPx = DpToPixel(this.borderWidth) || 0;
-    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
+    this.yogaNode.setBorder(YogaEdge.ALL, DpToPixel(this.borderWidth) || 0);
   }
 
   private _setMaskedBorders(bitwiseBorders) {
@@ -358,9 +353,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set borderWidth(value) {
     this._borderWidth = value;
-
     this._resetBackground();
     this._setBorderToAllEdges();
+    this.requestLayout();
   }
 
   get borderRadius() {
@@ -568,6 +563,16 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     position.width && (this.width = position.width);
     position.height && (this.height = position.height);
   }
+  requestLayout(size?: {oldVal?: any, newVal?: any}, invalidate?: Boolean) {
+
+    let changed = size?.oldVal != size?.newVal;
+    if((size?.oldVal != undefined && size?.newVal != undefined) && !changed)
+        return;
+    
+    this.nativeObject.requestLayout();
+    if(invalidate)
+        this.nativeObject.invalidate();
+  }
   applyLayout() {
     this._nativeObject.requestLayout();
     this._nativeObject.invalidate();
@@ -579,42 +584,55 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this._nativeObject.getLeft());
   }
   set left(left) {
+    let oldLeft = this.left;
     this.yogaNode.setPosition(YogaEdge.LEFT, DpToPixel(left));
+    this.requestLayout({oldVal: oldLeft, newVal: left});
   }
   get top() {
     return PixelToDp(this._nativeObject.getTop());
   }
   set top(top) {
+    let oldTop = this.top;
     this.yogaNode.setPosition(YogaEdge.TOP, DpToPixel(top));
+    this.requestLayout({oldVal: oldTop, newVal: top});
   }
   get right() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.RIGHT).value);
   }
   set right(right) {
+    let oldRight = this.right;
     this.yogaNode.setPosition(YogaEdge.RIGHT, DpToPixel(right));
+    this.requestLayout({oldVal: oldRight, newVal: right});
   }
   get bottom() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.BOTTOM).value);
   }
   set bottom(bottom) {
+    let oldBottom = this.bottom;
     this.yogaNode.setPosition(YogaEdge.BOTTOM, DpToPixel(bottom));
+    this.requestLayout({oldVal: oldBottom, newVal: bottom});
   }
   get positionStart() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.START).value);
   }
   set positionStart(start) {
+    let oldPosStart = this.positionStart;
     this.yogaNode.setPosition(YogaEdge.START, DpToPixel(start));
+    this.requestLayout({oldVal: oldPosStart, newVal: start});
   }
   get end() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.END).value);
   }
   set end(end) {
+    let oldEnd = this.end;
     this.yogaNode.setPosition(YogaEdge.END, DpToPixel(end));
+    this.requestLayout({oldVal: oldEnd, newVal: end});
   }
   get height() {
     return PixelToDp(this.yogaNode.getHeight());
   }
   set height(height) {
+    let oldHeight = this.height;
     this.yogaNode.setHeight(DpToPixel(height));
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
     // TODO: Find another way to do this
@@ -622,11 +640,13 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
+    this.requestLayout({oldVal: oldHeight, newVal: height});
   }
   get width() {
     return PixelToDp(this.yogaNode.getWidth());
   }
   set width(width) {
+    let oldWidth = this.width;
     this.yogaNode.setWidth(DpToPixel(width));
 
     // To sove AND-2693. We should give -2 to the bound for not stretching when user set height.
@@ -637,140 +657,183 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         layoutParams.width = -2;
       }
     }
+    this.requestLayout({oldVal: oldWidth, newVal: width});
   }
   get minWidth() {
     return PixelToDp(this.yogaNode.getMinWidth().value);
   }
   set minWidth(minWidth) {
+    let oldMinWidth = this.minWidth;
     this.yogaNode.setMinWidth(DpToPixel(minWidth));
+    this.requestLayout({oldVal: oldMinWidth, newVal: minWidth});
   }
   get minHeight() {
     return PixelToDp(this.yogaNode.getMinHeight().value);
   }
   set minHeight(minHeight) {
+    let oldMinHeight = this.minHeight;
     this.yogaNode.setMinHeight(DpToPixel(minHeight));
+    this.requestLayout({oldVal: oldMinHeight, newVal: minHeight});
   }
   get maxWidth() {
     return PixelToDp(this.yogaNode.getMaxWidth().value);
   }
   set maxWidth(maxWidth) {
+    let oldMaxWidth = this.maxWidth;
     this.yogaNode.setMaxWidth(DpToPixel(maxWidth));
+    this.requestLayout({oldVal: oldMaxWidth, newVal: maxWidth});
   }
   get maxHeight() {
     return PixelToDp(this.yogaNode.getMaxHeight().value);
   }
   set maxHeight(maxHeight) {
+    let oldMaxHeight = this.maxHeight;
     this.yogaNode.setMaxHeight(DpToPixel(maxHeight));
+    this.requestLayout({oldVal: oldMaxHeight, newVal: maxHeight});
   }
   get paddingTop() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
   }
   set paddingTop(paddingTop) {
+    let oldPaddingTop = this.paddingTop;
     this.yogaNode.setPadding(YogaEdge.TOP, DpToPixel(paddingTop));
+    this.requestLayout({oldVal: oldPaddingTop, newVal: paddingTop});
   }
   get paddingBottom() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.BOTTOM).value);
   }
   set paddingBottom(paddingBottom) {
+    let oldPaddingBottom = this.paddingBottom;
     this.yogaNode.setPadding(YogaEdge.BOTTOM, DpToPixel(paddingBottom));
+    this.requestLayout({oldVal: oldPaddingBottom, newVal: paddingBottom});
   }
   get paddingStart() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.START).value);
   }
   set paddingStart(paddingStart) {
+    let oldPaddingStart = this.paddingStart;
     this.yogaNode.setPadding(YogaEdge.START, DpToPixel(paddingStart));
+    this.requestLayout({oldVal: oldPaddingStart, newVal: paddingStart});
   }
   get paddingEnd() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.END).value);
   }
   set paddingEnd(paddingEnd) {
+    let oldPaddingEnd = this.paddingEnd;
     this.yogaNode.setPadding(YogaEdge.END, DpToPixel(paddingEnd));
+    this.requestLayout({oldVal: oldPaddingEnd, newVal: paddingEnd});
   }
   get paddingLeft() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.LEFT).value);
   }
   set paddingLeft(paddingLeft) {
+    let oldPaddingLeft = this.paddingLeft;
     this.yogaNode.setPadding(YogaEdge.LEFT, DpToPixel(paddingLeft));
+    this.requestLayout({oldVal: oldPaddingLeft, newVal: paddingLeft});
   }
   get paddingRight() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.RIGHT).value);
   }
   set paddingRight(paddingRight) {
+    let oldPaddingiRight = this.paddingRight;
     this.yogaNode.setPadding(YogaEdge.RIGHT, DpToPixel(paddingRight));
+    this.requestLayout({oldVal: oldPaddingiRight, newVal: paddingRight});
   }
   get paddingHorizontal() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.HORIZONTAL).value);
   }
   set paddingHorizontal(paddingHorizontal) {
+    let oldPaddingHorizontal = this.paddingHorizontal;
     this.yogaNode.setPadding(YogaEdge.HORIZONTAL, DpToPixel(paddingHorizontal));
+    this.requestLayout({oldVal: oldPaddingHorizontal, newVal: paddingHorizontal});
   }
   get paddingVertical() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.VERTICAL).value);
   }
   set paddingVertical(paddingVertical) {
+    let oldPaddingVertical = this.paddingVertical;
     this.yogaNode.setPadding(YogaEdge.VERTICAL, DpToPixel(paddingVertical));
+    this.requestLayout({oldVal: oldPaddingVertical, newVal: paddingVertical});
   }
   get padding() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.ALL).value);
   }
   set padding(padding) {
-    const db_padding = DpToPixel(padding);
-    this.yogaNode.setPadding(YogaEdge.ALL, db_padding);
+    let oldPadding = this.padding;
+    this.yogaNode.setPadding(YogaEdge.ALL, DpToPixel(padding));
+    this.requestLayout({oldVal: oldPadding, newVal: padding});
   }
   get marginTop() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
   }
   set marginTop(marginTop) {
+    let oldMarginTop = this.marginTop;
     this.yogaNode.setMargin(YogaEdge.TOP, DpToPixel(marginTop));
+    this.requestLayout({oldVal: oldMarginTop, newVal: marginTop});
   }
   get marginBottom() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.BOTTOM).value);
   }
   set marginBottom(marginBottom) {
+    let oldMarginBottom = this.marginBottom;
     this.yogaNode.setMargin(YogaEdge.BOTTOM, DpToPixel(marginBottom));
+    this.requestLayout({oldVal: oldMarginBottom, newVal: marginBottom});
   }
   get marginStart() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.START).value);
   }
   set marginStart(marginStart) {
+    let oldMarginStart = this.marginStart;
     this.yogaNode.setMargin(YogaEdge.START, DpToPixel(marginStart));
+    this.requestLayout({oldVal: oldMarginStart, newVal: marginStart});
   }
   get marginEnd() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.END).value);
   }
   set marginEnd(marginEnd) {
+    let oldMarginEnd = this.marginEnd;
     this.yogaNode.setMargin(YogaEdge.END, DpToPixel(marginEnd));
+    this.requestLayout({oldVal: oldMarginEnd, newVal: marginEnd});
   }
   get marginLeft() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.LEFT).value);
   }
   set marginLeft(marginLeft) {
+    let oldMarginLeft = this.marginLeft;
     this.yogaNode.setMargin(YogaEdge.LEFT, DpToPixel(marginLeft));
+    this.requestLayout({oldVal: oldMarginLeft, newVal: marginLeft});
   }
   get marginRight() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.RIGHT).value);
   }
   set marginRight(marginRight) {
+    let oldMarginRight = this.marginRight;
     this.yogaNode.setMargin(YogaEdge.RIGHT, DpToPixel(marginRight));
+    this.requestLayout({oldVal: oldMarginRight, newVal: this.marginRight});
   }
   get marginHorizontal() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.HORIZONTAL).value);
   }
   set marginHorizontal(marginHorizontal) {
+    let oldMarginHorizontal = this.marginHorizontal;
     this.yogaNode.setMargin(YogaEdge.HORIZONTAL, DpToPixel(marginHorizontal));
+    this.requestLayout({oldVal: oldMarginHorizontal, newVal: marginHorizontal});
   }
   get marginVertical() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.VERTICAL).value);
   }
   set marginVertical(marginVertical) {
+    let oldMarginVertical = this.marginVertical;
     this.yogaNode.setMargin(YogaEdge.VERTICAL, DpToPixel(marginVertical));
+    this.requestLayout({oldVal: oldMarginVertical, newVal: marginVertical});
   }
   get margin() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.ALL).value);
   }
   set margin(margin) {
-    const db_margin = DpToPixel(margin);
-    this.yogaNode.setMargin(YogaEdge.ALL, db_margin);
+    let oldMargin = this.margin;
+    this.yogaNode.setMargin(YogaEdge.ALL,  DpToPixel(margin));
+    this.requestLayout({oldVal: oldMargin, newVal: margin});
   }
   get borderTopWidth() {
     return PixelToDp(this.yogaNode.getBorder(YogaEdge.TOP).value);
@@ -812,39 +875,50 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return this.yogaNode.getFlexGrow();
   }
   set flexGrow(flexGrow) {
+    let oldFlexGrow = this.flexGrow;
     this.yogaNode.setFlexGrow(flexGrow);
     if (flexGrow > 0) {
       this.flexBasis = 1;
     } else {
       this.flexBasis = NaN;
     }
+    this.requestLayout({oldVal: oldFlexGrow, newVal: flexGrow});
   }
   get flexShrink() {
     return this.yogaNode.getFlexShrink();
   }
   set flexShrink(flexShrink) {
+    let oldFlexShrink = this.flexShrink;
     this.yogaNode.setFlexShrink(flexShrink);
+    this.requestLayout({oldVal: oldFlexShrink, newVal: flexShrink});
   }
   get flexBasis() {
     return this.yogaNode.getFlexBasis().value;
   }
   set flexBasis(flexBasis) {
+    let oldFlexBasis = this.flexBasis;
     this.yogaNode.setFlexBasis(flexBasis);
+    this.requestLayout({oldVal: oldFlexBasis, newVal: flexBasis});
   }
   get alignSelf() {
     return this.yogaNode.getAlignSelf();
   }
   set alignSelf(alignSelf) {
+    let oldAlignSelf = this.alignSelf;
     this.yogaNode.setAlignSelf(alignSelf);
+    this.requestLayout({oldVal: oldAlignSelf, newVal: alignSelf});
   }
   get positionType() {
     return this.yogaNode.getPositionType();
   }
   set positionType(position) {
+    let oldPositionType = this.positionType;
     this.yogaNode.setPositionType(position);
+    this.requestLayout({oldVal: oldPositionType, newVal: position});
   }
   dirty() {
-    this.yogaNode.dirty();
+    if(this.yogaNode.isMeasureDefined())
+        this.yogaNode.dirty();
   }
   // Ripple Effect
   get rippleEnabled() {
