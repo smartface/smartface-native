@@ -63,7 +63,6 @@ export interface DialogAndroidProps {
  *     });
  *
  *     myDialog.layout.addChild(myButton);
- *     myDialog.layout.applyLayout();
  *     myDialog.show();
  *
  */
