@@ -145,6 +145,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   }
   set font(value: ILabel['font']) {
     this.fontInitial = value;
+    this.dirty();
     this.nativeObject.setTypeface(value.nativeObject);
     if (value.size && typeof value.size === 'number') {
       this.nativeObject.setTextSize(TypeValue.COMPLEX_UNIT_DIP, value.size);
@@ -162,6 +163,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   }
   set maxLines(value: ILabel['maxLines']) {
     const valueInt = isNaN(value) ? 0 : value;
+    this.dirty();
     this.nativeObject.setMaxLines(valueInt === 0 ? MAX_INT_VALUE : valueInt);
   }
   get ellipsizeMode(): ILabel['ellipsizeMode'] {
@@ -175,6 +177,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return this.nativeObject.getText().toString();
   }
   set text(value: ILabel['text']) {
+    this.dirty();
     this.nativeObject.setText(String(value));
   }
   get textAlignment(): ILabel['textAlignment'] {
@@ -228,6 +231,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingTop = this._paddingTop !== undefined ? this._paddingTop : paddingNative;
     const paddingRight = this._paddingRight !== undefined ? this._paddingRight : paddingNative;
     const paddingBottom = this._paddingBottom !== undefined ? this.paddingBottom : paddingNative;
+    this.dirty();
     this.nativeObject.setPaddingRelative(paddingLeft, paddingTop, paddingRight, paddingBottom);
   }
   get paddingLeft(): number {
@@ -238,6 +242,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
     const paddingTop = this.paddingTop;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(value),
       AndroidUnitConverter.dpToPixel(paddingTop),
@@ -253,6 +258,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingTop = this.paddingTop;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(paddingTop),
@@ -268,6 +274,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(value),
@@ -283,6 +290,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingTop = this.paddingTop;
     const paddingRight = this.paddingRight;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(paddingTop),
