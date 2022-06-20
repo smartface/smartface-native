@@ -36,13 +36,17 @@ export default class GridViewItemAndroid<TEvent extends string = FlexLayoutEvent
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
   }
   set height(value: number) {
-    this.nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(value);
+    let layoutParams = this.nativeObject.getLayoutParams()
+    layoutParams.height = AndroidUnitConverter.dpToPixel(value);
+    this.nativeObject.setLayoutParams(layoutParams);
   }
   // Added due to problem in row height for RecyclerView
   get width(): number {
     return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
   }
   set width(value: number) {
-    this.nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(value);
+    let layoutParams = this.nativeObject.getLayoutParams()
+    layoutParams.width = AndroidUnitConverter.dpToPixel(value);
+    this.nativeObject.setLayoutParams(layoutParams);
   }
 }

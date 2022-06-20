@@ -171,6 +171,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
   set barHeight(value: number) {
     this.tabLayout.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(value));
+    this.tabLayout.nativeObject.requestLayout();
   }
 
   get items(): ITabbarItem[] {
