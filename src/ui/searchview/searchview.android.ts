@@ -240,6 +240,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       },
       set iconifiedByDefault(value) {
         self._iconifiedByDefault = value;
+        self.dirty();
         self.nativeObject.setIconifiedByDefault(value);
       }
     };
