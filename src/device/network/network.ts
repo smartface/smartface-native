@@ -191,6 +191,8 @@ export interface INetwork {
   /**
    *
    * Returns the MAC address of the bluetooth adaptor on the device.
+   * This requires the Permissions.ANDROID.BLUETOOTH_CONNECT permission on Android 12 and higher, 
+   * and the Permissions.ANDROID.BLUETOOTH permission for Android 11 and below.
    * @property {String} bluetoothMacAddress
    * @readonly
    * @static

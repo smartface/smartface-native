@@ -259,7 +259,20 @@ export namespace Permissions {
      * @property USE_BIOMETRIC
      * @readonly
      */
-    USE_BIOMETRIC = 'android.permission.USE_BIOMETRIC'
+    USE_BIOMETRIC = 'android.permission.USE_BIOMETRIC',
+    /**
+     * Allows applications to connect to paired bluetooth devices.
+     * 
+     * @property BLUETOOTH
+     * @readonly
+     */
+    BLUETOOTH = 'android.permission.BLUETOOTH',
+    /**
+     * Required to be able to connect to paired Bluetooth devices.
+     * @property BLUETOOTH_CONNECT
+     * @readonly
+     */
+    BLUETOOTH_CONNECT = 'android.permission.BLUETOOTH_CONNECT'
   }
   export const LOCATION = 'LOCATION';
   export const CAMERA = 'CAMERA';
