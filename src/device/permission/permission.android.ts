@@ -3,6 +3,8 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import { Permissions, IPermission, PermissionIOSAuthorizationStatus, PermissionResult } from './permission';
 import { PermissionEvents } from './permission-events';
 
+const NativeBuild = requireClass('android.os.Build');
+
 let lastRequestPermissionCode = 2000;
 
 const PermissionAndroidMapping = {
@@ -57,9 +59,9 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
         let _permission = permission;
         const packageManager = AndroidConfig.activity.getPackageManager();
         const packageName = AndroidConfig.activity.getPackageName(); //Did it this way to prevent potential circular dependency issue.
-        // After Android 12, we have to use Permissions.ANDROID.BLUETOOTH_CONNECT instead of Permissions.ANDROID.BLUETOOTH 
+        // After Android 12, we have to use Permissions.ANDROID.BLUETOOTH_CONNECT instead of Permissions.ANDROID.BLUETOOTH
         // for network.bluetoothMacAddress.
-        if(_permission === Permissions.ANDROID.BLUETOOTH_CONNECT) {
+        if (_permission === Permissions.ANDROID.BLUETOOTH_CONNECT) {
           _permission = self.getBluetoothPermissionName();
         }
         return packageManager.checkPermission(_permission, packageName) === 0; // PackageManager.PERMISSION_GRANTED
@@ -92,11 +94,11 @@ class PermissionAndroidClass extends NativeEventEmitterComponent<PermissionEvent
       }
     };
   }
-  private getBluetoothPermissionName() : Permissions.ANDROID {
+  private getBluetoothPermissionName(): Permissions.ANDROID {
     if (NativeBuild.VERSION.SDK_INT >= NativeBuild.VERSION_CODES.S) {
       return Permissions.ANDROID.BLUETOOTH_CONNECT;
-    }else {
-      return Permissions.ANDROID.BLUETOOTH
+    } else {
+      return Permissions.ANDROID.BLUETOOTH;
     }
   }
 }
