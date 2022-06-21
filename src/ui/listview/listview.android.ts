@@ -22,6 +22,11 @@ const SFItemTouchHelperCallback = requireClass('io.smartface.android.sfcore.ui.l
 const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.SFItemTouchHelper');
 const SFOnScrollListener = requireClass('io.smartface.android.sfcore.ui.listview.SFOnScrollListener');
 
+const NativeSwipeDirection = {
+  [SwipeDirection.LEFTTORIGHT]: 1 << 3,
+  [SwipeDirection.RIGHTTOLEFT]: 1 << 2
+};
+
 export default class ListViewAndroid<TEvent extends string = ListViewEvents> extends ViewAndroid<TEvent | ListViewEvents, any, IListView> implements IListView {
   private _layoutManager: { nativeObject: any };
   private nativeDataAdapter: any;
@@ -415,8 +420,9 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           return this.nativeSwipeItemInstance;
         },
         onRowCanSwipe: (index: number) => {
-          const result = this.onRowCanSwipe?.(index);
-          return !result ? SwipeDirection.LEFTTORIGHT | SwipeDirection.RIGHTTOLEFT : result.reduce((acc, cValue) => acc | cValue, 0);
+          let swipeDirections = this.onRowCanSwipe?.(index);
+          swipeDirections = swipeDirections.map((swipeDirection) => NativeSwipeDirection[swipeDirection]);
+          return !swipeDirections ? NativeSwipeDirection[SwipeDirection.LEFTTORIGHT] | NativeSwipeDirection[SwipeDirection.RIGHTTOLEFT] : swipeDirections.reduce((acc, cValue) => acc | cValue, 0);
         }
       });
       this.nItemTouchHelper = new SFItemTouchHelper(this.sfItemTouchHelperCallback);
