@@ -1,112 +1,104 @@
-import { BaseData } from './data';
+import { IData } from './data';
 
-class DataIOS implements BaseData {
-  static ios = {
-    getNativeObject() {
-      return new __SF_NSUserDefaults('SF_USER_DEFAULTS');
+class DataIOSClass implements IData {
+  private nativeData: __SF_NSUserDefaults;
+  constructor() {
+    this.nativeData = new __SF_NSUserDefaults('SF_USER_DEFAULTS');
+  }
+  getBooleanVariable(key: string): boolean | null {
+    let retval = null;
+    if (typeof key === 'string' && this.nativeData.objectForKey(key) !== undefined) {
+      retval = this.nativeData.boolForKey(key);
     }
-  };
-  static getStringVariable(key: string) {
+    return retval;
+  }
+  getStringVariable(key: string): string | null {
     if (typeof key === 'string') {
-      return DataIOS.ios.getNativeObject().stringForKey(key);
+      return this.nativeData.stringForKey(key);
+    } else {
+      return null;
     }
   }
-
-  static getBooleanVariable(key: string) {
+  getIntVariable(key: string): number | null {
     let retval = null;
-    if (typeof key === 'string' && DataIOS.ios.getNativeObject().objectForKey(key) !== undefined) {
-      retval = DataIOS.ios.getNativeObject().boolForKey(key);
+    if (typeof key === 'string' && this.nativeData.objectForKey(key) !== undefined) {
+      retval = this.nativeData.integerForKey(key);
     }
     return retval;
   }
-
-  static getIntVariable(key: string) {
+  getFloatVariable(key: string): number | null {
     let retval = null;
-    if (typeof key === 'string' && DataIOS.ios.getNativeObject().objectForKey(key) !== undefined) {
-      retval = DataIOS.ios.getNativeObject().integerForKey(key);
+    if (typeof key === 'string' && this.nativeData.objectForKey(key) !== undefined) {
+      retval = this.nativeData.floatForKey(key);
     }
     return retval;
   }
-
-  static getFloatVariable(key: string) {
+  getLongVariable(key: string): number | null {
     let retval = null;
-    if (typeof key === 'string' && DataIOS.ios.getNativeObject().objectForKey(key) !== undefined) {
-      retval = DataIOS.ios.getNativeObject().floatForKey(key);
+    if (typeof key === 'string' && this.nativeData.objectForKey(key) !== undefined) {
+      retval = this.nativeData.doubleForKey(key);
     }
     return retval;
   }
-
-  static getLongVariable(key: string) {
-    let retval = null;
-    if (typeof key === 'string' && DataIOS.ios.getNativeObject().objectForKey(key) !== undefined) {
-      retval = DataIOS.ios.getNativeObject().doubleForKey(key);
-    }
-    return retval;
-  }
-
-  static setStringVariable(key: string, value: string) {
+  setStringVariable(key: string, value: string): void {
     if (typeof key === 'string' && typeof value === 'string') {
-      DataIOS.ios.getNativeObject().setObjectForKey(value, key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.setObjectForKey(value, key);
+      this.nativeData.synchronize();
     }
   }
-
-  static setBooleanVariable(key: string, value: boolean) {
+  setBooleanVariable(key: string, value: boolean): void {
     if (typeof key === 'string' && typeof value === 'boolean') {
-      DataIOS.ios.getNativeObject().setBoolForKey(value, key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.setBoolForKey(value, key);
+      this.nativeData.synchronize();
     }
   }
-
-  static setIntVariable(key: string, value: number) {
+  setIntVariable(key: string, value: number): void {
     if (typeof key === 'string' && typeof value === 'number') {
-      DataIOS.ios.getNativeObject().setIntegerForKey(value, key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.setIntegerForKey(value, key);
+      this.nativeData.synchronize();
     }
   }
-
-  static setFloatVariable(key: string, value: number) {
+  setFloatVariable(key: string, value: number): void {
     if (typeof key === 'string' && typeof value === 'number') {
-      DataIOS.ios.getNativeObject().setFloatForKey(value, key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.setFloatForKey(value, key);
+      return this.nativeData.synchronize();
     }
   }
-
-  static setLongVariable(key: string, value: number) {
+  setLongVariable(key: string, value: number): void {
     if (typeof key === 'string' && typeof value === 'number') {
-      DataIOS.ios.getNativeObject().setDoubleForKey(value, key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.setDoubleForKey(value, key);
+      this.nativeData.synchronize();
     }
   }
-
-  static containsVariable(key: string) {
+  containsVariable(key: string): boolean {
     if (typeof key === 'string') {
       let retval = false;
-      if (DataIOS.ios.getNativeObject().objectForKey(key) !== undefined) {
+      if (this.nativeData.objectForKey(key) !== undefined) {
         retval = true;
       }
       return retval;
+    } else {
+      return false;
     }
   }
-
-  static removeVariable(key: string) {
+  removeVariable(key: string): void {
     if (typeof key === 'string') {
-      DataIOS.ios.getNativeObject().removeObjectForKey(key);
-      return DataIOS.ios.getNativeObject().synchronize();
+      this.nativeData.removeObjectForKey(key);
+      this.nativeData.synchronize();
     }
   }
-
-  static removeAllVariables() {
-    const dictionary = DataIOS.ios.getNativeObject().dictionaryRepresentation();
+  removeAllVariables(): void {
+    const dictionary = this.nativeData.dictionaryRepresentation();
     for (const key in dictionary) {
       //TODO: prototype method
       // eslint-disable-next-line no-prototype-builtins
       if (dictionary.hasOwnProperty(key)) {
-        DataIOS.ios.getNativeObject().removeObjectForKey(key);
+        this.nativeData.removeObjectForKey(key);
       }
     }
-    return DataIOS.ios.getNativeObject().synchronize();
+    this.nativeData.synchronize();
   }
 }
 
+const DataIOS = new DataIOSClass();
 export default DataIOS;
