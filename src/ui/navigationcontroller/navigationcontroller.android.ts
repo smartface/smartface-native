@@ -180,6 +180,7 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
     FragmentTransition.checkBottomTabBarVisible(this.popUpBackPage);
 
     if (this.popUpBackPage) {
+      this.popUpBackPage.onShow?.(); //NTVE-82, might need to be done with a different way.
       Application.currentPage = this.popUpBackPage;
     }
     ViewController.activateRootController(Application.currentPage);
