@@ -62,7 +62,6 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this.pageView.applyLayout = () => {
       this.pageView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     };
-    this.orientation = PageOrientation.PORTRAIT;
   }
 
   protected createNativeObject() {
@@ -78,7 +77,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     this._safeAreaPaddingObject = { top: 0, bottom: 0, left: 0, right: 0 };
     this._presentationStyle = 0;
     this._largeTitleDisplayMode = 0;
-    this._orientationNative = [PageOrientation.PORTRAIT];
+    this.orientation = PageOrientation.PORTRAIT;
     this.pageView = new FlexLayoutIOS();
     this.setLayoutParams();
     this.routerPath = null;
@@ -107,6 +106,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
   }
   set orientation(value) {
     this._orientation = value;
+    this._orientationNative = NativeOrientationMapping[value];
     this.nativeObject.orientations = NativeOrientationMapping[value];
   }
   get transitionViews(): IPage['transitionViews'] {
@@ -290,25 +290,25 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
 
   private initPageEvents() {
     this.nativeObject.viewWillTransition = () => {
-      let tempOrientation: PageOrientation[];
+      let tempOrientation: PageOrientation;
       switch (Screen.orientation) {
         case OrientationType.PORTRAIT:
-          tempOrientation = NativeOrientation.PORTRAIT;
+          tempOrientation = PageOrientation.PORTRAIT;
           break;
         case OrientationType.UPSIDEDOWN:
-          tempOrientation = NativeOrientation.UPSIDEDOWN;
+          tempOrientation = PageOrientation.PORTRAITUPSIDEDOWN;
           break;
         case OrientationType.LANDSCAPELEFT:
-          tempOrientation = NativeOrientation.LANDSCAPELEFT;
+          tempOrientation = PageOrientation.LANDSCAPELEFT;
           break;
         case OrientationType.LANDSCAPERIGHT:
-          tempOrientation = NativeOrientation.LANDSCAPERIGHT;
+          tempOrientation = PageOrientation.LANDSCAPERIGHT;
           break;
         default:
-          tempOrientation = NativeOrientation.PORTRAIT;
+          tempOrientation = PageOrientation.UNKNOWN;
       }
       const callbackParam = {
-        orientation: tempOrientation as unknown as PageOrientation
+        orientation: tempOrientation
       };
       this.emit('orientationChange', callbackParam);
       this.onOrientationChange?.(callbackParam);

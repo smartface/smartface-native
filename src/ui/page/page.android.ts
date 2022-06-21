@@ -73,7 +73,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     this.isCreated = false;
     this.optionsMenu = null;
     this.actionBar = null;
-    this._orientation = PageOrientationAndroid.AUTO; //TODO: Types are different
+    this._orientation = PageOrientationAndroid.PORTRAIT;
     this._headerBarItems = [];
     this._borderVisibility = true;
     this._transparent = false;
