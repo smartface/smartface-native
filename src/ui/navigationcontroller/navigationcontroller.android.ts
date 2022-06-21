@@ -160,7 +160,9 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       return;
     }
     params.controller.popupBackNavigator = this;
+
     ViewController.deactivateRootController(Application.currentPage);
+    Application.currentPage.onHide?.();
     ViewController.activateController(params.controller);
 
     ViewController.setController({
@@ -168,7 +170,6 @@ export default class NavigationControllerAndroid extends AbstractNavigationContr
       animation: params.animated,
       isComingFromPresent: true
     });
-
     params?.onComplete?.();
   }
   dismiss(params: Parameters<INavigationController['dismiss']>['0']) {
