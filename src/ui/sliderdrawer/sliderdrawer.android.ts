@@ -108,6 +108,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   set height(value: ISliderDrawer['height']) {
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.height = UnitConverter.dpToPixel(value);
+    this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
   }
   get width(): ISliderDrawer['width'] {
     // Added due to using DrawerLayout as a parent
@@ -116,6 +117,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   set width(value: ISliderDrawer['width']) {
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.width = UnitConverter.dpToPixel(value);
+    this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
   }
   get backgroundColor(): ISliderDrawer['backgroundColor'] {
     return this._backgroundColor;

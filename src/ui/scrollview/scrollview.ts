@@ -247,7 +247,7 @@ export interface IScrollView<TEvent extends string = ScrollViewEvents, TMobile e
    */
   scrollBarEnabled: boolean;
   /**
-   * Scrollview layout size will be calculated by device automatically when autoSizeEnabled is true. To do the automatic calculation, you need to set scrollview.autoSizeEnabled property true and need to call scrollview.layout.applyLayout() function after every change.
+   * Scrollview layout size will be calculated by device automatically when autoSizeEnabled is true. To do the automatic calculation, you need to set scrollview.autoSizeEnabled property true.
    *
    * @property {Boolean} [autoSizeEnabled = false]
    * @android

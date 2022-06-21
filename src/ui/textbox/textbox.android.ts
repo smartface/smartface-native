@@ -188,6 +188,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._hasEventsLocked = true;
     if (typeof value !== 'string') value = '';
 
+    this.dirty();
     this.nativeObject.setText('' + value);
 
     this.nativeObject.setSelection(value.length);
@@ -269,6 +270,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     return this.nativeObject.getHint()?.toString();
   }
   set hint(value: string) {
+    this.dirty();
     this.nativeObject.setHint(value);
   }
 
