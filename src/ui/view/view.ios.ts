@@ -1,5 +1,5 @@
 import { Point2D } from '../../primitive/point2d';
-import type Color from '../color';
+import { IColor } from '../color/color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import { Size } from '../../primitive/size';
@@ -9,7 +9,10 @@ import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps>
+  extends ViewBase<TEvent, TNative, TProps>
+  implements IView<TEvent, TNative, TProps>
+{
   protected createNativeObject(): any {
     return new __SF_UIView();
   }
@@ -121,7 +124,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       get shadowColor() {
         return self.shadowColor;
       },
-      set shadowColor(shadowColor: Color) {
+      set shadowColor(shadowColor: IColor) {
         self.shadowColor = shadowColor;
       },
       get exclusiveTouch() {
@@ -242,7 +245,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       color
     });
   }
-  private set shadowColor(shadowColor: Color) {
+  private set shadowColor(shadowColor: IColor) {
     const argShadowColor = new Invocation.Argument({
       type: 'CGColor',
       value: shadowColor.nativeObject
@@ -282,7 +285,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       color: this.nativeObject.layer.borderUIColor
     });
   }
-  set borderColor(value: Color) {
+  set borderColor(value: IColor) {
     this.nativeObject.layer.borderUIColor = value.nativeObject;
   }
 
@@ -501,6 +504,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
   set isIncludedInLayout(value) {
     this.nativeObject.yoga.isIncludedInLayout = value;
+    this.applyLayoutToRootView();
   }
 
   /*
@@ -517,7 +521,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     return this.nativeObject.yoga.direction;
   }
   set direction(value) {
-    this.nativeObject.yoga.direction = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'direction');
   }
 
   get flexDirection() {
@@ -525,7 +529,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexDirection(value) {
-    this.nativeObject.yoga.flexDirection = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexDirection');
   }
 
   get justifyContent() {
@@ -533,7 +537,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set justifyContent(value) {
-    this.nativeObject.yoga.justifyContent = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'justifyContent');
   }
 
   get alignContent() {
@@ -541,7 +545,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignContent(value) {
-    this.nativeObject.yoga.alignContent = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignContent');
   }
 
   get alignItems() {
@@ -549,7 +553,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignItems(value) {
-    this.nativeObject.yoga.alignItems = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignItems');
   }
 
   get alignSelf() {
@@ -557,7 +561,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignSelf(value) {
-    this.nativeObject.yoga.alignSelf = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignSelf');
   }
 
   get positionType() {
@@ -565,7 +569,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set positionType(value) {
-    this.nativeObject.yoga.position = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'position');
   }
 
   get flexWrap() {
@@ -573,7 +577,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexWrap(value) {
-    this.nativeObject.yoga.flexWrap = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexWrap');
   }
 
   get display() {
@@ -581,14 +585,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set display(value) {
-    this.nativeObject.yoga.display = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'display');
   }
   get flexGrow() {
     return this.nativeObject.yoga.flexGrow;
   }
 
   set flexGrow(value) {
-    this.nativeObject.yoga.flexGrow = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexGrow');
     if (value > 0) {
       this.flexBasis = 1;
     } else if (value === 0) {
@@ -627,7 +631,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexShrink(value) {
-    this.nativeObject.yoga.flexShrink = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexShrink');
   }
 
   get flexBasis() {
@@ -876,7 +880,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderLeftWidth(value) {
-    this.nativeObject.yoga.borderLeftWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderLeftWidth');
   }
 
   get borderTopWidth() {
@@ -884,7 +888,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderTopWidth(value) {
-    this.nativeObject.yoga.borderTopWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderTopWidth');
   }
 
   get borderRightWidth() {
@@ -892,7 +896,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderRightWidth(value) {
-    this.nativeObject.yoga.borderRightWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderRightWidth');
   }
 
   get borderBottomWidth() {
@@ -900,7 +904,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderBottomWidth(value) {
-    this.nativeObject.yoga.borderBottomWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderBottomWidth');
   }
 
   get borderStartWidth() {
@@ -908,7 +912,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderStartWidth(value) {
-    this.nativeObject.yoga.borderStartWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderStartWidth');
   }
 
   get borderEndWidth() {
@@ -916,7 +920,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderEndWidth(value) {
-    this.nativeObject.yoga.borderEndWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderEndWidth');
   }
 
   get borderWidth() {
@@ -927,7 +931,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     // Native object's layer must be updated!
     // Yoga's borderWidth property only effects positioning of its child view.
     this.nativeObject.layer.borderWidth = value;
-    this.nativeObject.yoga.borderWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderWidth');
   }
 
   /*
@@ -1021,7 +1025,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set aspectRatio(value) {
-    this.nativeObject.yoga.aspectRatio = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'aspectRatio');
   }
 
   /*
@@ -1103,4 +1107,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     const h = frame.height || 0;
     return !(x > w || x < 0 || y > h || y < 0);
   }
+
+  private applyLayoutToRootView = () => {
+    __SF_UIView.applyToRootView();
+  };
 }

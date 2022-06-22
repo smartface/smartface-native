@@ -69,4 +69,27 @@ export declare interface ITimePicker<TEvent extends string = TimePickerEvents> e
    * ```
    */
   onTimeSelected: (e: { hour: number; minute: number }) => void;
+  on(eventName: 'selected', callback: (e: { hour: number; minute: number }) => void): () => void;
+  on(eventName: TimePickerEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'selected', callback: (e: { hour: number; minute: number }) => void): void;
+  off(eventName: TimePickerEvents, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'selected', e: { hour: number; minute: number }): void;
+  emit(eventName: TimePickerEvents, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: (e: { hour: number; minute: number }) => void): () => void;
+  once(eventName: TimePickerEvents, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: (e: { hour: number; minute: number }) => void): void;
+  prependListener(eventName: TimePickerEvents, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: (e: { hour: number; minute: number }) => void): void;
+  prependOnceListener(eventName: TimePickerEvents, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

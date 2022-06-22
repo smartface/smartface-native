@@ -1,9 +1,9 @@
 import { FlexLayoutEvents } from './flexlayout-events';
-import Color from '../color';
 import { AbstractViewGroup, IViewGroup, ViewGroupAndroidProps } from '../viewgroup/viewgroup';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Flex from '../shared/Flex';
 import { ViewIOSProps } from '../view/view';
+import { IColor } from '../color/color';
 
 export interface FlexLayoutIOSProps extends ViewIOSProps {}
 export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {
@@ -35,7 +35,7 @@ export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {
    * @member UI.View
    * @since 3.2.1
    */
-  rippleColor: Color;
+  rippleColor: IColor;
   /**
    * Allows you to watch events as they are dispatched to your children,
    * and take ownership of the current gesture at any point.
@@ -201,16 +201,6 @@ export interface IFlexLayout<
    * @since 0.1
    */
   flexWrap: Flex.FlexWrap | null;
-  /**
-   * This functions recalculates the positioning parameters.
-   * It is useful to call this method when you want to change layout parameters on runtime.
-   * If you change view's position, you should call applyLayout from the Page.layout. You shouldn't call applyLayout from its parent or itself
-   *
-   * @method applyLayout
-   * @android
-   * @ios
-   */
-  applyLayout(): void;
 }
 
 export declare class FlexLayoutBase<TEvent extends string = FlexLayoutEvents, TNative = any> extends AbstractViewGroup<TEvent | FlexLayoutEvents, TNative, IFlexLayout> implements IFlexLayout {

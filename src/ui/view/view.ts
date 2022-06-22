@@ -1,14 +1,13 @@
-import type Color from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { ViewEvents } from './view-events';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { IEventEmitter } from '../../core/eventemitter';
-import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import Flex from '../shared/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ViewState from '../shared/viewState';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import { IColor } from '../color/color';
 export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
@@ -40,7 +39,7 @@ export interface ViewAndroidProps {
    * @member UI.View
    * @since 3.2.1
    */
-  rippleColor: Color;
+  rippleColor: IColor;
   /**
    * Gets/Sets the elevation of the view. For the views that has
    * StateListAnimator natively like Button, will lost its own
@@ -135,7 +134,7 @@ export interface ViewIOSProps {
    * @ios
    * @since 2.0.6
    */
-  shadowColor: Color;
+  shadowColor: IColor;
   /**
    *
    * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
@@ -208,7 +207,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: ViewState<Color>;
+  backgroundColor: ViewState<IColor>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -217,7 +216,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @ios
    * @since 0.1
    */
-  borderColor: Color;
+  borderColor: IColor;
   /**
    * Sets/gets border thickness of bounded view. Accepts unsigned
    * numbers, 0 means no border.
@@ -613,6 +612,15 @@ export interface IView<
     INativeComponent<TNative> {
   parent: IView | undefined;
   readonly uniqueId: string;
+  /**
+   * Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree. 
+   * It is useful to call this method when you want to change layout parameters on runtime.
+   * If this view layout invalidated, call applyLayout from the Page.layout in the iOS and from the view itself in the Android.
+   *
+   * @method applyLayout
+   * @android
+   * @ios
+   */
   applyLayout(): void;
   /**
    * This method put a view to the top of other views in z-direction.
@@ -811,6 +819,42 @@ export interface IView<
   };
   android: TMobileProps['android'];
   ios: TMobileProps['ios'];
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }
 
 /**
@@ -923,6 +967,61 @@ export class ViewBase<TEvent extends string = ViewEvents, TNative = any, TProps 
   };
   static Events = ViewEvents;
   static Border = Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: ViewEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.on(eventName as any, callback);
+  }
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void {
+    super.off(eventName as any, callback);
+  }
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void {
+    super.emit(eventName as any, ...args);
+  }
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.once(eventName as any, callback);
+  }
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
@@ -948,8 +1047,8 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: ViewState<Color>;
-  borderColor: Color;
+  backgroundColor: ViewState<IColor>;
+  borderColor: IColor;
   borderWidth: number;
   borderRadius: number;
   id: string;
@@ -989,4 +1088,46 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   masksToBounds: boolean;
   maskedBorders: Border[];
   static readonly Border: typeof Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

@@ -1,23 +1,26 @@
-import Page from '../page';
-import { IWebBrowser, WebBrowserBase } from './webbrowser';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
+import { IColor } from '../color/color';
+import { IPage } from '../page/page';
+import { IWebBrowser } from './webbrowser';
 
-export default class WebBrowserAndroid extends WebBrowserBase {
+const NativeCustomTabsIntent = requireClass('androidx.browser.customtabs.CustomTabsIntent');
+const NativeUri = requireClass('android.net.Uri');
+const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance();
+export default class WebBrowserAndroid extends NativeMobileComponent implements IWebBrowser {
   private _options?: Partial<IWebBrowser>;
   constructor(params?: Partial<IWebBrowser>) {
     super(params);
     this._options = Object.assign({}, params);
   }
+  url: string;
+  barColor?: IColor | undefined;
   protected createNativeObject() {
     return null;
   }
-  show(page: Page) {
+  show(page: IPage) {
     if (!(this._options && this._options.url && (this._options.url.startsWith('https://') || this._options.url.startsWith('http://')))) {
       throw new Error('The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.');
     } else {
-      const NativeCustomTabsIntent = requireClass('androidx.browser.customtabs.CustomTabsIntent');
-      const NativeUri = requireClass('android.net.Uri');
-      const spratAndroidActivityInstance = requireClass('io.smartface.android.SpratAndroidActivity').getInstance();
-
       const builder = new NativeCustomTabsIntent.Builder();
       if (this._options.barColor?.nativeObject) {
         builder.setToolbarColor(this._options.barColor?.nativeObject);

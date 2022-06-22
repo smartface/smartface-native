@@ -1,6 +1,6 @@
-import Page from '../../ui/page';
 import NativeComponent from '../../core/native-component';
 import { IContact } from './contact/contact';
+import { IPage } from '../../ui/page/page';
 
 /**
  * @class Device.Contacts
@@ -38,7 +38,7 @@ export class ContactsBase extends NativeComponent {
    *     @example
    *     import Contacts from '@smartface/native/device/contacts';
    *
-   *     let myContact = new Contacts.Contact({
+   *     const myContact = new Contacts.Contact({
    *         firstName: 'Smartface',
    *         namePrefix: 'Mr.',
    *         lastName: 'Team',
@@ -49,24 +49,14 @@ export class ContactsBase extends NativeComponent {
    *      });
    *      Contacts.add({
    *          contact: myContact,
-   *          onSuccess : function(){
+   *          onSuccess: () => {
    *              console.log("Success");
    *          },
-   *          onFailure : function(){
+   *          onFailure: () => {
    *              console.log("Failure");
    *          }
    *      });
    *
-   *
-   * @param {Object} params Object describing properties
-   * @param {IContact} params.contact Object describing contact properties
-   * @param {Function} params.onSuccess This event is called after adding contact successfully.
-   * @param {Function} [params.onFailure] This event is called after adding contact fails.
-   * @param {Object} params.onFailure.params
-   * @param {String} params.onFailure.params.message
-   * @param {UI.Page} [params.page] The page parameter is optional. If this property is set,
-   *                                the contacts will be editable before saving.
-   * @method add
    * @android
    * @ios
    * @since 0.1
@@ -91,19 +81,12 @@ export class ContactsBase extends NativeComponent {
    *         }
    *     });
    *
-   * @param {Object} params Object describing callbacks
-   * @param {UI.Page} params.page
-   * @param {Function} params.onSuccess This event is called after getting contact successfully.
-   * @param {Object} params.onSuccess.params
-   * @param {IContact} params.onSuccess.params.contact
-   * @param {Function} [params.onFailure] This event is called after getting contact fails.
-   * @method pick
    * @android
    * @ios
    * @since 0.1
    */
   pickContact(
-    page: Page,
+    page: IPage,
     handlers: {
       onSuccess: (contact: IContact) => void;
       onFailure?: () => void;
@@ -157,12 +140,6 @@ export class ContactsBase extends NativeComponent {
    *         }
    *     });
    *
-   * @param {String} phoneNumber Phone number to search in contacts
-   * @param {Object} callbacks Object describing callbacks
-   * @param {Function} callbacks.onSuccess This event is called after getting contact successfully.
-   * @param {Device.Contacts.Contact[]} callbacks.onSuccess.contact passes {@link Device.Contacts.Contact Contact} array.
-   * @param {Function} [callbacks.onFailure] This event is called after getting contact fails.
-   * @method getContactsByPhoneNumber
    * @android
    * @ios
    * @since 4.3.0

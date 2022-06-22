@@ -14,7 +14,7 @@ export const SwipeViewEvents = {
   PageSelected: 'pageSelected',
   /**
    * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
-   * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
+   * Click this link for SwipeToIndex and onPageScrolled use together: "https://docs.smartface.io/smartface-native-framework/ui-elements/swipeview#using-with-one-page-and-component"
    *
    * @event onPageScrolled
    * @param index  Index of the first page from the left that is currently visible.

@@ -1,4 +1,4 @@
-import { AbstractImageView } from './imageview';
+import { IImageView } from './imageview';
 
 /**
  * @since 0.1
@@ -17,7 +17,7 @@ import { AbstractImageView } from './imageview';
  *     myPage.layout.addChild(myImageView);
  *
  */
-const ImageView: typeof AbstractImageView = require(`./imageview.${Device.deviceOS.toLowerCase()}`).default;
-type ImageView = AbstractImageView;
+const ImageView: ConstructorOf<IImageView, Partial<IImageView>> = require(`./imageview.${Device.deviceOS.toLowerCase()}`).default;
+type ImageView = IImageView;
 
 export default ImageView;

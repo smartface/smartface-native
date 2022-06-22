@@ -1,7 +1,6 @@
 import { IEventEmitter } from '../../core/eventemitter';
-import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { INativeMobileComponent } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IFlexLayout } from '../flexlayout/flexlayout';
 import { SliderDrawerEvents } from './sliderdrawer-events';
 
@@ -193,29 +192,16 @@ export declare interface ISliderDrawer<TEvent extends string = SliderDrawerEvent
    * ```
    */
   onLoad: () => void | null;
+  /**
+   * Gets/Sets the height of SliderDrawer
+   */
   height: number;
+  /**
+   * Gets/Sets the width of SliderDrawer
+   */
   width: number;
-  backgroundColor: Color;
-}
-
-export declare class AbstractSliderDrawer<TEvent extends string = SliderDrawerEvents>
-  extends NativeEventEmitterComponent<TEvent | SliderDrawerEvents>
-  implements ISliderDrawer<TEvent | SliderDrawerEvents>
-{
-  protected createNativeObject();
-  constructor(params?: Partial<ISliderDrawer>);
-  backgroundColor: Color;
-  readonly state: SliderDrawerState;
-  width: number;
-  height: number;
-  drawerPosition: SliderDrawerPosition;
-  readonly layout: IFlexLayout;
-  enabled: boolean;
-  show(): void;
-  hide(): void;
-  onShow: () => void;
-  onHide: () => void;
-  onLoad: () => void;
-  static State: typeof SliderDrawerState;
-  static Position: typeof SliderDrawerPosition;
+  /**
+   * Gets/Sets the background color of SliderDrawer
+   */
+  backgroundColor: IColor;
 }

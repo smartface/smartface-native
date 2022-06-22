@@ -1,13 +1,14 @@
-import Image from '../image';
 import { ButtonEvents } from './button-events';
 import { ILabel } from '../label/label';
 import ViewState from '../shared/viewState';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { IImage } from '../image/image';
 
 type MobileProps = MobileOSProps<ILabel['ios'], ILabel['android']>;
 export interface IButton<TEvent extends string = ButtonEvents, TMobile extends MobileProps = MobileProps> extends ILabel<TEvent | ButtonEvents, TMobile> {
   /**
-   * Enables/disables the Button. This will dim the button color. You can set the dim property on Button style.
+   * Enables/disables the Button. This will dim the button color. You can set the dim property on Button style
+   * You can set dimemd style by passing Object to the color property. This is also configurable fron Smartface IDE.
    *
    *     @example
    *     import Button from '@smartface/native/ui/button';
@@ -41,14 +42,14 @@ export interface IButton<TEvent extends string = ButtonEvents, TMobile extends M
    * @android
    * @ios
    */
-  backgroundImage: ViewState<Image>;
+  backgroundImage: ViewState<IImage>;
   /**
    * @deprecated
    * @example
    * ```
    * import Button from '@smartface/native/ui/button';
    *
-   * this.button1.on(Button.Events.Press, () => {
+   * this.button1.on('press', () => {
    *  console.info('Button pressed');
    * });
    * ```
@@ -61,7 +62,7 @@ export interface IButton<TEvent extends string = ButtonEvents, TMobile extends M
    * ```
    * import Button from '@smartface/native/ui/button';
    *
-   * this.button1.on(Button.Events.LongPress, () => {
+   * this.button1.on('longpress', () => {
    *  console.info('Button long pressed');
    * });
    * ```

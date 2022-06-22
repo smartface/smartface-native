@@ -4,6 +4,9 @@ import { SwipeDirection } from '../swipeitem';
 import { MobileOSProps } from '../../core/native-mobile-component';
 
 export interface ListViewItemIOSProperties extends FlexLayoutIOSProps {
+  /**
+   * Programmatically swipes to the given direction of the listviewitem
+   */
   expandSwipe?(direction?: SwipeDirection): void;
 }
 
@@ -23,6 +26,7 @@ export declare interface IListViewItem<
   /**
    * Inner nativeObject. This property is only available for Android.
    * @android
+   * @private
    */
   nativeInner: any;
 }

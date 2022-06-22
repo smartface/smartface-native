@@ -1,14 +1,6 @@
-import FlexLayout from '../flexlayout';
-import { AbstractDialog, DialogStyle } from './dialog';
-declare class DialogImpl extends AbstractDialog {
-  setShowListener(): void;
-  get layout(): FlexLayout;
-  hide(): void;
-  show(): void;
-  get android(): Partial<{ themeStyle: DialogStyle; isTransparent: boolean; cancelable: boolean }>;
-}
+import { IDialog } from './dialog';
 
-const Dialog: typeof DialogImpl = require(`./dialog.${Device.deviceOS.toLowerCase()}`).default;
+const Dialog: ConstructorOf<IDialog, Partial<IDialog>> = require(`./dialog.${Device.deviceOS.toLowerCase()}`).default;
 
-type Dialog = DialogImpl;
+type Dialog = IDialog;
 export default Dialog;

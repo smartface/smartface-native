@@ -1,8 +1,6 @@
-import { AbstractMenuItem } from './menuitem';
+import { IMenuItem } from './menuitem';
 
-const MenuItem: typeof AbstractMenuItem = require(`./menuitem.${Device.deviceOS.toLowerCase()}`).default;
-type MenuItem = AbstractMenuItem;
+const MenuItem: ConstructorOf<IMenuItem, Partial<IMenuItem>> = require(`./menuitem.${Device.deviceOS.toLowerCase()}`).default;
+type MenuItem = IMenuItem;
 
 export default MenuItem;
-
-new MenuItem();

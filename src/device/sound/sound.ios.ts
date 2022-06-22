@@ -1,12 +1,13 @@
-import { AbstractSound } from './sound';
+import { ISound } from './sound';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import File from '../../io/file';
 import { SoundEvents } from './sound-events';
+import { IPage, PageIOSParams, PageAndroidParams } from '../../ui/page/page';
 
 export default class SoundIOS<TEvent extends string = SoundEvents, TProps extends MobileOSProps = MobileOSProps>
   extends NativeEventEmitterComponent<TEvent | SoundEvents, any, TProps>
-  implements AbstractSound
+  implements ISound
 {
   protected createNativeObject() {
     return null;
@@ -18,6 +19,9 @@ export default class SoundIOS<TEvent extends string = SoundEvents, TProps extend
   private _onFinishCallback: () => void;
   constructor(params?: TProps) {
     super(params);
+  }
+  pick() {
+    return;
   }
   get onReady() {
     return this._onReadyCallback;

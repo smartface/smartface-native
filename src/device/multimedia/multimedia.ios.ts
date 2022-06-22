@@ -36,7 +36,7 @@ const UIImagePickerControllerQualityType = {
 };
 
 const AVMediaType = {
-  Video: 'vide'
+  Video: 'vide' //TODO: This might be a typo, check later.
 };
 
 const AVAuthorizationStatus = {
@@ -55,7 +55,7 @@ const PHAuthorizationStatus = {
   Authorized: 3 // User has authorized this application to access photos data.
 };
 
-class MultimediaIOS implements MultimediaBase {
+class MultimediaIOSClass implements MultimediaBase {
   CropShape = {
     RECTANGLE: 0,
     OVAL: 1
@@ -507,6 +507,6 @@ class MultimediaIOS implements MultimediaBase {
   }
 }
 
-const Multimedia = new MultimediaIOS();
+const MultimediaIOS = new MultimediaIOSClass();
 
-export default Multimedia;
+export default MultimediaIOS;

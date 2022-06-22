@@ -1,8 +1,7 @@
 import { ISearchView, SearchViewStyle } from './searchview';
 import System from '../../device/system';
 import Color from '../color';
-import Font from '../font';
-import Image from '../image';
+import { IFont } from '../font/font';
 import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import { SearchViewEvents } from './searchview-events';
@@ -10,6 +9,8 @@ import Page from '../page';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import Invocation from '../../util/iOS/invocation';
 import KeyboardAnimationDelegate from '../../util/iOS/keyboardanimationdelegate';
+import { IColor } from '../color/color';
+import { IImage } from '../image/image';
 
 const UISearchBarStyle = {
   default: 0,
@@ -27,13 +28,13 @@ const UISearchBarIcon = {
 export default class SearchViewIOS<TEvent extends string = SearchViewEvents> extends ViewIOS<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView {
   private _textAligment: number;
   private _constant: number;
-  private _hint;
-  private _hintTextColor: Color;
-  private _textColor: Color;
-  private _backgroundColor: Color;
-  private _backgroundImage: Image;
-  private _iconImage: Image;
-  private _searchIcon: Image;
+  private _hint: string;
+  private _hintTextColor: IColor;
+  private _textColor: IColor;
+  private _backgroundColor: IColor;
+  private _backgroundImage: IImage;
+  private _iconImage: IImage;
+  private _searchIcon: IImage;
   private _borderWidth: number;
   private _searchContainerView: any;
   private _isAddedHeaderBar: boolean;
@@ -154,10 +155,10 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
       set keyboardAppearance(value: KeyboardAppearance) {
         self.nativeObject.setValueForKey(value, 'keyboardAppearance');
       },
-      get backgroundImage(): Image {
+      get backgroundImage(): IImage {
         return self._backgroundImage;
       },
-      set backgroundImage(value: Image) {
+      set backgroundImage(value: IImage) {
         self._backgroundImage = value;
         self.nativeObject.setSearchFieldBackgroundImage(self._backgroundImage.nativeObject, 0);
       },
@@ -311,18 +312,18 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     }
   }
 
-  get iconImage(): Image {
+  get iconImage(): IImage {
     return this._iconImage;
   }
-  set iconImage(value: Image) {
+  set iconImage(value: IImage) {
     this._iconImage = value;
     this.nativeObject.setIconImage(value.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
   }
 
-  get searchIcon(): Image {
+  get searchIcon(): IImage {
     return this._searchIcon;
   }
-  set searchIcon(value: Image) {
+  set searchIcon(value: IImage) {
     this._searchIcon = value;
     this.nativeObject.setIconImage(this._searchIcon.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
   }
@@ -385,10 +386,10 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this.nativeObject.resignFirstResponder();
   }
 
-  get font(): Font {
+  get font(): IFont {
     return this.textfield.valueForKey('font');
   }
-  set font(value: Font) {
+  set font(value: IFont) {
     this.textfield.setValueForKey(value, 'font');
   }
 
@@ -408,20 +409,20 @@ export default class SearchViewIOS<TEvent extends string = SearchViewEvents> ext
     this.textfield.setValueForKey(horizontal, 'textAlignment');
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this._hintTextColor = value;
     this.hint = this._hint;
   }
 
-  get textFieldBackgroundColor(): Color {
+  get textFieldBackgroundColor(): IColor {
     return new Color({
       color: this.nativeObject.valueForKey('searchField').valueForKey('backgroundColor')
     });
   }
-  set textFieldBackgroundColor(value: Color) {
+  set textFieldBackgroundColor(value: IColor) {
     this.nativeObject.valueForKey('searchField').setValueForKey(value.nativeObject, 'backgroundColor');
   }
 

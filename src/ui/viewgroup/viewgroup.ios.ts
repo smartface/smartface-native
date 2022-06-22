@@ -48,6 +48,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
     const uniqueId = view.uniqueId;
     this._children[uniqueId] = view;
     this.nativeObject.addSubview(view.nativeObject);
+    __SF_UIView.applyToRootView()
   }
 
   private getAndroidProps() {
@@ -61,6 +62,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
     view.nativeObject.removeFromSuperview();
     delete this._children[view.uniqueId];
     view.parent = undefined;
+    __SF_UIView.applyToRootView();
   }
 
   removeAll() {
@@ -69,6 +71,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
       this._children[child].nativeObject.removeFromSuperview();
     }
     this._children = {};
+    __SF_UIView.applyToRootView();
   }
 
   getChildCount() {

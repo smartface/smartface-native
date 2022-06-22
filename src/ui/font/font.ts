@@ -10,7 +10,26 @@ export enum FontStyle {
   BOLD_ITALIC = 6
 }
 
-export abstract class AbstractFont extends NativeComponent {
+export interface IFont extends NativeComponent {
+  /**
+   * Gets/sets size of font.
+   *
+   * @android
+   * @ios
+   * @since 4.2.3
+   */
+  size: number;
+  /**
+   * This method returns the string size
+   *
+   * @android
+   * @ios
+   * @since 1.1.18
+   */
+  sizeOfString(string: string, maxWidth: number): Size;
+}
+
+export abstract class AbstractFont extends NativeComponent implements IFont {
   constructor(params?: Partial<AbstractFont>) {
     super(params);
   }
@@ -88,7 +107,7 @@ export abstract class AbstractFont extends NativeComponent {
   /**
    * iOS Only Static Properties
    */
-  static ios: Partial<{
+  static ios: {
     /**
      * @method allFontNames
      * @ios
@@ -104,7 +123,7 @@ export abstract class AbstractFont extends NativeComponent {
      * @since 0.1
      */
     allFontNames(): string[];
-  }>;
+  };
 
   /**
    * Default font family. This might be different for Android and iOS.
@@ -115,6 +134,13 @@ export abstract class AbstractFont extends NativeComponent {
    */
   static DEFAULT = FontStyle.DEFAULT.toString();
 
+  /**
+   * Default iOS System font family. Only works on iOS.
+   *
+   * @android
+   * @ios
+   * @since 0.1
+   */
   static IOS_SYSTEM_FONT = FontStyle.IOS_SYSTEM_FONT.toString();
   /**
    * Represents normal font style

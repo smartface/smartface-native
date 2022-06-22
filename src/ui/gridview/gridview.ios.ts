@@ -1,11 +1,11 @@
 import { GridViewSnapAlignment, IGridView, ScrollEventHandler } from './gridview';
 import { Point2D } from '../../primitive/point2d';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
-import ColorIOS from '../color/color.ios';
 import GridViewItemIOS from '../gridviewitem/gridviewitem.ios';
 import LayoutManagerIOS from '../layoutmanager/layoutmanager.ios';
 import ViewIOS from '../view/view.ios';
 import { GridViewEvents } from './gridview-events';
+import { IColor } from '../color/color';
 
 const DEFAULT_ITEM_LENGTH = 50;
 const NSIndexPath = SF.requireClass('NSIndexPath');
@@ -192,7 +192,7 @@ export default class GridViewIOS<TEvent extends string = GridViewEvents> extends
     const visibleIndex = visibleIndexArray[visibleIndexArray.length - 1];
     return visibleIndex?.row || 0;
   }
-  setPullRefreshColors(color: ColorIOS[] | ColorIOS): void {
+  setPullRefreshColors(color: IColor[] | IColor): void {
     this.refreshControl.tintColor = Array.isArray(color) ? color[0].nativeObject : color.nativeObject;
   }
   deleteRowRange(params: { positionStart: number; itemCount: number }): void {

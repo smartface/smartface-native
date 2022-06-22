@@ -94,7 +94,6 @@ export interface ICallDetection extends NativeEventEmitterComponent<CallDetectio
    * @event onCallStateChanged
    * @param {Object} params
    * @param {Device.CallDetection.State} state
-   * @param {String} incomingNumber Android only parameter
    * @android
    * @ios
    * @deprecated
@@ -108,5 +107,5 @@ export interface ICallDetection extends NativeEventEmitterComponent<CallDetectio
    * });
    * ```
    */
-  onCallStateChanged: (e: { state: State; incomingNumber?: string; observer?: any }) => void;
+  onCallStateChanged: (e: { state: State; observer?: any }) => void;
 }

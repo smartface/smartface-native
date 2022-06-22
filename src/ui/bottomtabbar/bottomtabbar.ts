@@ -1,5 +1,5 @@
 import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
+import { IColor } from '../color/color';
 import TabBarItem from '../tabbaritem';
 
 export interface IBottomTabBarAndroidProps {
@@ -40,7 +40,7 @@ export interface IBottomTabBarIOSProps {
  *
  * BottomTabBar represents a bottom navigation bar. You can specify bar color and item color.
  *
- * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
+ * @see {@link https://docs.smartface.io/smartface-native-framework/ui-elements/bottomtabbar  BottomTabBar}
  *
  */
 export interface IBottomTabBar extends INativeMobileComponent<any, MobileOSProps<IBottomTabBarIOSProps, IBottomTabBarAndroidProps>> {
@@ -52,7 +52,7 @@ export interface IBottomTabBar extends INativeMobileComponent<any, MobileOSProps
    * @ios
    * @since 1.1.10
    */
-  backgroundColor: Color;
+  backgroundColor: IColor;
   /**
    * Gets/sets title and icon color of the tab bar items.
    *
@@ -64,8 +64,8 @@ export interface IBottomTabBar extends INativeMobileComponent<any, MobileOSProps
    * @since 1.1.10
    */
   itemColor: {
-    normal: Color;
-    selected: Color;
+    normal: IColor;
+    selected: IColor;
   };
   /**
    * Gets/sets items of the tab bar.

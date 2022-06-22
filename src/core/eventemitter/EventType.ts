@@ -1,1 +1,1 @@
-export type EventType = string | { [key: string]: string; };
+export type EventType = string | Record<string, string>;

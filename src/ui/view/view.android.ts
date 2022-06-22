@@ -1,6 +1,5 @@
 import { Point2D } from '../../primitive/point2d';
 import { Rectangle } from '../../primitive/rectangle';
-import type Color from '../color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -13,6 +12,7 @@ import ColorAndroid from '../color/color.android';
 import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import type ScrollViewAndroid from '../scrollview/scrollview.android';
 import { EventListenerCallback } from '../../core/eventemitter';
+import { IColor } from '../color/color';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -54,7 +54,7 @@ const YogaEdge = {
 
 export default class ViewAndroid<TEvent extends string = ViewEvents, TNative extends { [key: string]: any } = { [key: string]: any }, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
-  implements IView
+  implements IView<TEvent, TNative, TProps>
 {
   static readonly Border = {
     TOP_LEFT: 1 << 0,
@@ -92,7 +92,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _sfOnTouchViewManager: any;
   private _touchEnabled: boolean;
   private _rippleEnabled: boolean;
-  private _rippleColor?: Color;
+  private _rippleColor?: IColor;
   private _useForeground: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
@@ -156,7 +156,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       get rippleColor() {
         return self.rippleColor;
       },
-      set rippleColor(value: Color | undefined) {
+      set rippleColor(value: IColor | undefined) {
         self.rippleColor = value;
       },
       get zIndex() {
@@ -224,13 +224,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.didSetTouchHandler = true;
   }
 
-  //TODO: Didn't delete these functions to not break backward compatibility. Setting border to all edges won't work as expected. Be aware for future Yoga upgrade.
   protected _setBorderToAllEdges() {
-    const borderWidthPx = DpToPixel(this.borderWidth) || 0;
-    this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
-    this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
+    this.yogaNode.setBorder(YogaEdge.ALL, DpToPixel(this.borderWidth) || 0);
   }
 
   private _setMaskedBorders(bitwiseBorders) {
@@ -347,7 +342,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get borderColor() {
     return this._borderColor;
   }
-  set borderColor(value: Color) {
+  set borderColor(value: IColor) {
     this._borderColor = value;
     this._resetBackground();
     this._setBorderToAllEdges();
@@ -358,9 +353,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set borderWidth(value) {
     this._borderWidth = value;
-
     this._resetBackground();
     this._setBorderToAllEdges();
+    this.requestLayout();
   }
 
   get borderRadius() {
@@ -568,6 +563,11 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     position.width && (this.width = position.width);
     position.height && (this.height = position.height);
   }
+  requestLayout(invalidate?: Boolean) {
+    this.nativeObject.requestLayout();
+    if(invalidate)
+        this.nativeObject.invalidate();
+  }
   applyLayout() {
     this._nativeObject.requestLayout();
     this._nativeObject.invalidate();
@@ -580,36 +580,42 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set left(left) {
     this.yogaNode.setPosition(YogaEdge.LEFT, DpToPixel(left));
+    this.requestLayout();
   }
   get top() {
     return PixelToDp(this._nativeObject.getTop());
   }
   set top(top) {
     this.yogaNode.setPosition(YogaEdge.TOP, DpToPixel(top));
+    this.requestLayout();
   }
   get right() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.RIGHT).value);
   }
   set right(right) {
     this.yogaNode.setPosition(YogaEdge.RIGHT, DpToPixel(right));
+    this.requestLayout();
   }
   get bottom() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.BOTTOM).value);
   }
   set bottom(bottom) {
     this.yogaNode.setPosition(YogaEdge.BOTTOM, DpToPixel(bottom));
+    this.requestLayout();
   }
   get positionStart() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.START).value);
   }
   set positionStart(start) {
     this.yogaNode.setPosition(YogaEdge.START, DpToPixel(start));
+    this.requestLayout();
   }
   get end() {
     return PixelToDp(this.yogaNode.getPosition(YogaEdge.END).value);
   }
   set end(end) {
     this.yogaNode.setPosition(YogaEdge.END, DpToPixel(end));
+    this.requestLayout();
   }
   get height() {
     return PixelToDp(this.yogaNode.getHeight());
@@ -622,6 +628,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       const layoutParams = this._nativeObject.getLayoutParams();
       layoutParams && (layoutParams.height = -2);
     }
+    this.requestLayout();
   }
   get width() {
     return PixelToDp(this.yogaNode.getWidth());
@@ -637,140 +644,161 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         layoutParams.width = -2;
       }
     }
+    this.requestLayout();
   }
   get minWidth() {
     return PixelToDp(this.yogaNode.getMinWidth().value);
   }
   set minWidth(minWidth) {
     this.yogaNode.setMinWidth(DpToPixel(minWidth));
+    this.requestLayout();
   }
   get minHeight() {
     return PixelToDp(this.yogaNode.getMinHeight().value);
   }
   set minHeight(minHeight) {
     this.yogaNode.setMinHeight(DpToPixel(minHeight));
+    this.requestLayout();
   }
   get maxWidth() {
     return PixelToDp(this.yogaNode.getMaxWidth().value);
   }
   set maxWidth(maxWidth) {
     this.yogaNode.setMaxWidth(DpToPixel(maxWidth));
+    this.requestLayout();
   }
   get maxHeight() {
     return PixelToDp(this.yogaNode.getMaxHeight().value);
   }
   set maxHeight(maxHeight) {
     this.yogaNode.setMaxHeight(DpToPixel(maxHeight));
+    this.requestLayout();
   }
   get paddingTop() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
   }
   set paddingTop(paddingTop) {
     this.yogaNode.setPadding(YogaEdge.TOP, DpToPixel(paddingTop));
+    this.requestLayout();
   }
   get paddingBottom() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.BOTTOM).value);
   }
   set paddingBottom(paddingBottom) {
     this.yogaNode.setPadding(YogaEdge.BOTTOM, DpToPixel(paddingBottom));
+    this.requestLayout();
   }
   get paddingStart() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.START).value);
   }
   set paddingStart(paddingStart) {
     this.yogaNode.setPadding(YogaEdge.START, DpToPixel(paddingStart));
+    this.requestLayout();
   }
   get paddingEnd() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.END).value);
   }
   set paddingEnd(paddingEnd) {
     this.yogaNode.setPadding(YogaEdge.END, DpToPixel(paddingEnd));
+    this.requestLayout();
   }
   get paddingLeft() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.LEFT).value);
   }
   set paddingLeft(paddingLeft) {
     this.yogaNode.setPadding(YogaEdge.LEFT, DpToPixel(paddingLeft));
+    this.requestLayout();
   }
   get paddingRight() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.RIGHT).value);
   }
   set paddingRight(paddingRight) {
     this.yogaNode.setPadding(YogaEdge.RIGHT, DpToPixel(paddingRight));
+    this.requestLayout();
   }
   get paddingHorizontal() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.HORIZONTAL).value);
   }
   set paddingHorizontal(paddingHorizontal) {
     this.yogaNode.setPadding(YogaEdge.HORIZONTAL, DpToPixel(paddingHorizontal));
+    this.requestLayout();
   }
   get paddingVertical() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.VERTICAL).value);
   }
   set paddingVertical(paddingVertical) {
     this.yogaNode.setPadding(YogaEdge.VERTICAL, DpToPixel(paddingVertical));
+    this.requestLayout();
   }
   get padding() {
     return PixelToDp(this.yogaNode.getPadding(YogaEdge.ALL).value);
   }
   set padding(padding) {
-    const db_padding = DpToPixel(padding);
-    this.yogaNode.setPadding(YogaEdge.ALL, db_padding);
+    this.yogaNode.setPadding(YogaEdge.ALL, DpToPixel(padding));
+    this.requestLayout();
   }
   get marginTop() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
   }
   set marginTop(marginTop) {
     this.yogaNode.setMargin(YogaEdge.TOP, DpToPixel(marginTop));
+    this.requestLayout();
   }
   get marginBottom() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.BOTTOM).value);
   }
   set marginBottom(marginBottom) {
     this.yogaNode.setMargin(YogaEdge.BOTTOM, DpToPixel(marginBottom));
+    this.requestLayout();
   }
   get marginStart() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.START).value);
   }
   set marginStart(marginStart) {
     this.yogaNode.setMargin(YogaEdge.START, DpToPixel(marginStart));
+    this.requestLayout();
   }
   get marginEnd() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.END).value);
   }
   set marginEnd(marginEnd) {
     this.yogaNode.setMargin(YogaEdge.END, DpToPixel(marginEnd));
+    this.requestLayout();
   }
   get marginLeft() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.LEFT).value);
   }
   set marginLeft(marginLeft) {
     this.yogaNode.setMargin(YogaEdge.LEFT, DpToPixel(marginLeft));
+    this.requestLayout();
   }
   get marginRight() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.RIGHT).value);
   }
   set marginRight(marginRight) {
     this.yogaNode.setMargin(YogaEdge.RIGHT, DpToPixel(marginRight));
+    this.requestLayout();
   }
   get marginHorizontal() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.HORIZONTAL).value);
   }
   set marginHorizontal(marginHorizontal) {
     this.yogaNode.setMargin(YogaEdge.HORIZONTAL, DpToPixel(marginHorizontal));
+    this.requestLayout();
   }
   get marginVertical() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.VERTICAL).value);
   }
   set marginVertical(marginVertical) {
     this.yogaNode.setMargin(YogaEdge.VERTICAL, DpToPixel(marginVertical));
+    this.requestLayout();
   }
   get margin() {
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.ALL).value);
   }
   set margin(margin) {
-    const db_margin = DpToPixel(margin);
-    this.yogaNode.setMargin(YogaEdge.ALL, db_margin);
+    this.yogaNode.setMargin(YogaEdge.ALL,  DpToPixel(margin));
+    this.requestLayout();
   }
   get borderTopWidth() {
     return PixelToDp(this.yogaNode.getBorder(YogaEdge.TOP).value);
@@ -818,33 +846,39 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     } else {
       this.flexBasis = NaN;
     }
+    this.requestLayout();
   }
   get flexShrink() {
     return this.yogaNode.getFlexShrink();
   }
   set flexShrink(flexShrink) {
     this.yogaNode.setFlexShrink(flexShrink);
+    this.requestLayout();
   }
   get flexBasis() {
     return this.yogaNode.getFlexBasis().value;
   }
   set flexBasis(flexBasis) {
     this.yogaNode.setFlexBasis(flexBasis);
+    this.requestLayout();
   }
   get alignSelf() {
     return this.yogaNode.getAlignSelf();
   }
   set alignSelf(alignSelf) {
     this.yogaNode.setAlignSelf(alignSelf);
+    this.requestLayout();
   }
   get positionType() {
     return this.yogaNode.getPositionType();
   }
   set positionType(position) {
     this.yogaNode.setPositionType(position);
+    this.requestLayout();
   }
   dirty() {
-    this.yogaNode.dirty();
+    if(this.yogaNode.isMeasureDefined())
+        this.yogaNode.dirty();
   }
   // Ripple Effect
   get rippleEnabled() {
@@ -865,7 +899,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get rippleColor() {
     return this._rippleColor;
   }
-  set rippleColor(value: Color | undefined) {
+  set rippleColor(value: IColor | undefined) {
     this._rippleColor = value;
     this.rippleEnabled = true; //If user sets rippleColor, always set rippleenabled to true. They can set to false if needed.
     if (this._rippleColor && this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
@@ -884,7 +918,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   // End of Ripple Effect
 
-  on(eventName: ViewEvents, callback: EventListenerCallback) {
+  on(eventName: any, callback: EventListenerCallback) {
     if (Object.values(ViewEvents).includes(eventName)) {
       this.setTouchHandlers();
     }

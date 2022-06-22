@@ -13,7 +13,6 @@ class AccelerometerIOS extends NativeEventEmitterComponent<AccelerometerEvents, 
       this.onAccelerate?.(params);
     };
 
-    // eventCallbacksAssign(this, EventFunctions);
     const self = this;
     this.addIOSProps({
       get accelerometerUpdateInterval() {

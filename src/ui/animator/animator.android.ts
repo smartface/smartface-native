@@ -31,7 +31,6 @@ export default class AnimatorAndroid extends AnimatorBase {
         this._nextAnimator.perform();
       } else if (this._completeFn) {
         this._completeFn();
-        this._layout.applyLayout();
       }
     };
   }
@@ -60,8 +59,6 @@ export default class AnimatorAndroid extends AnimatorBase {
     );
     NativeTransitionManager.beginDelayedTransition(this._layout.nativeObject, transitionSet);
     this._animFn();
-    this._layout.applyLayout();
-    this.applyLayoutInners(this._layout);
 
     return this;
   }
@@ -92,15 +89,6 @@ export default class AnimatorAndroid extends AnimatorBase {
     });
     animator.perform();
     return animator;
-  }
-
-  applyLayoutInners(rootLayout: IViewGroup) {
-    const innerGroups: any[] = [];
-    this.addInnerNativeViewGroups(rootLayout.nativeObject, innerGroups);
-    innerGroups.forEach((viewGroup) => {
-      viewGroup.requestLayout();
-      viewGroup.invalidate();
-    });
   }
 
   addInnerNativeViewGroups(viewGroup: any, viewGroups: IViewGroup[]) {

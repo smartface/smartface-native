@@ -31,14 +31,18 @@ export default class ListViewItemAndroid<TEvent extends string = FlexLayoutEvent
     return UnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
   }
   set height(value: number) {
-    this.nativeObject.getLayoutParams().height = UnitConverter.dpToPixel(value);
+    let layoutParams = this.nativeObject.getLayoutParams();
+    layoutParams.height = UnitConverter.dpToPixel(value);
+    this.nativeObject.setLayoutParams(layoutParams);
   }
   // Added due to problem in row height for RecyclerView
   get width(): number {
     return UnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
   }
   set width(value: number) {
-    this.nativeObject.getLayoutParams().width = UnitConverter.dpToPixel(value);
+    let layoutParams = this.nativeObject.getLayoutParams();
+    layoutParams.width = UnitConverter.dpToPixel(value);
+    this.nativeObject.setLayoutParams(layoutParams);
   }
 
   getIOSParams() {

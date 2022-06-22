@@ -1,6 +1,5 @@
-import { PathBase } from './path';
+import { IPath } from './path';
 
-const Path: typeof PathBase = require(`./path.${Device.deviceOS.toLowerCase()}`).default;
-type Path = PathBase;
+const Path: IPath = require(`./path.${Device.deviceOS.toLowerCase()}`).default;
 
 export default Path;

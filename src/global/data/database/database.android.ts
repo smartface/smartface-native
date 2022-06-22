@@ -1,6 +1,7 @@
 import NativeComponent from '../../../core/native-component';
 import File from '../../../io/file';
 import Path from '../../../io/path';
+import { PathFileType } from '../../../io/path/path';
 import { Database, BaseDatabase } from './database';
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
@@ -15,16 +16,16 @@ export default class DatabaseAndroid extends BaseDatabase {
     if (typeof params?.inMemory === 'boolean' && params.inMemory) {
       this.nativeObject = NativeSQLiteDatabase.create(null);
     } else if (params?.file instanceof File) {
-      if (params.file.type === Path.FILE_TYPE.FILE) {
+      if (params.file.type === PathFileType.FILE) {
         //TODO: file needs nativeObject
         this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
-      } else if (params.file.type === Path.FILE_TYPE.RAU_ASSETS || params.file.type === Path.FILE_TYPE.EMULATOR_ASSETS) {
+      } else if (params.file.type === PathFileType.RAU_ASSETS || params.file.type === PathFileType.EMULATOR_ASSETS) {
         if (!params.file.exists) {
           throw new Error('Open Database from Assets failed. Database not exists and cannot create database on assets');
         }
         //TODO: file needs nativeObject
         this.nativeObject = NativeSQLiteDatabase.openOrCreateDatabase(params.file.nativeObject, null);
-      } else if (params.file.type === Path.FILE_TYPE.ASSET) {
+      } else if (params.file.type === PathFileType.ASSET) {
         const destinationOnRoot = new File({
           path: Path.DataDirectory + '/' + params.file.name
         });

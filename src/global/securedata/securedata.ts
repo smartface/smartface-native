@@ -1,21 +1,26 @@
-import { INativeComponent } from '../../core/inative-component';
-import NativeComponent from '../../core/native-component';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 
-interface ISecureData extends INativeComponent {
-  save(params: { value: string }): Promise<void>;
-  read(): Promise<any>;
-  delete(): Promise<void>;
-  readonly key: string;
+interface SecureDataIOSProps {
+  service: string;
 }
 
-export abstract class AbstractSecureData extends NativeComponent implements ISecureData {
-  protected _key: string;
-  protected _service?: string;
-  abstract save(params: { value: string }): Promise<void>;
-  abstract read(): Promise<any>;
-  abstract delete(): Promise<void>;
-  abstract key: string;
-  abstract ios?: { service?: string };
+interface ISecureData extends INativeMobileComponent<any, MobileOSProps<SecureDataIOSProps, {}>> {
+  /**
+   * Saves the given value to the secure data.
+   */
+  save(params: { value: string }): Promise<void>;
+  /**
+   * Reads the value from the secure data.
+   */
+  read(): Promise<any>;
+  /**
+   * Deletes the value from the secure data.
+   */
+  delete(): Promise<void>;
+  /**
+   * Gets the key of the secure data.
+   */
+  readonly key: string;
 }
 
 export default ISecureData;

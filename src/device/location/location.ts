@@ -1,6 +1,100 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { PermissionIOSAuthorizationStatus, PermissionResult } from '../permission/permission';
 import { LocationEvents } from './location-events';
+
+type GetCurrentLocationArgs = {
+  /**
+   * Will return undefined if permission is denied.
+   */
+  latitude?: number;
+  /**
+   * Will return undefined if permission is denied.
+   */
+  longitude?: number;
+  /**
+   * Will always return 'precise' on iOS.
+   * For Android:
+   * 1. 'approximate' will return if user only granted approximate location permission.
+   * 2. 'precise' will return if user granted precise location permission
+   * 3. undefined will return if user denied both.
+   */
+  type?: 'approximate' | 'precise';
+  /**
+   * Actual permission result. For Android, this will be equivelant to approximate location permission result.
+   */
+  result: PermissionResult;
+};
+
+/**
+ * @enum Device.Location.Android.Priority
+ * @android
+ * @since 3.1.1
+ *
+ * Location Priority enums indicates the quality of service for location updates.
+ * For example, if your application wants high accuracy location it should start a location  with  Location.Android.Priority.HIGH_ACCURACY.
+ *
+ */
+export enum LocationAndroidPriority {
+  /**
+   * High accuracy. Least battery efficient. Uses GPS only.
+   *
+   * @property HIGH_ACCURACY
+   * @static
+   * @readonly
+   * @since 3.1.1
+   */
+  HIGH_ACCURACY,
+
+  /**
+   * Block level accuracy is considered to be about 100 meter accuracy.
+   * Using a coarse accuracy such as this often consumes less power.
+   *
+   * @property BALANCED
+   * @static
+   * @readonly
+   * @since 3.1.1
+   */
+  BALANCED,
+  /**
+   * City level accuracy is considered to be about 10km accuracy.
+   * Using a coarse accuracy such as this often consumes less power
+   *
+   * @property LOW_POWER
+   * @static
+   * @readonly
+   * @since 3.1.1
+   */
+  LOW_POWER,
+  /**
+   * No locations will be returned unless a different client has requested location updates in which case this request will act as a passive listener to those locations.
+   *
+   * @property NO_POWER
+   * @static
+   * @readonly
+   * @since 3.1.1
+   */
+  NO_POWER
+}
+
+export enum LocationAndroidSettingsStatusCodes {
+  /**
+   * @property {NUMBER} OTHER
+   * @android
+   * @since 4.0.2
+   *
+   * Location settings can't be changed to meet the requirements, no dialog pops up.
+   */
+  OTHER = 0,
+  /**
+   * @property {NUMBER} DENIED
+   * @android
+   * @since 4.0.2
+   *
+   * The user explicitly denied the use of location services for this app.
+   */
+  DENIED = 1
+}
 
 export interface ILocationAndroidProps {
   /**
@@ -17,7 +111,7 @@ export interface ILocationAndroidProps {
    * @static
    * @since 4.0.2
    */
-  checkSettings(handlers: { onSuccess: () => void; onFailure: (e: { statusCode: LocationBase.Android.SettingsStatusCodes }) => void }): void;
+  checkSettings(handlers: { onSuccess: () => void; onFailure: (e: { statusCode: LocationAndroidSettingsStatusCodes }) => void }): void;
 }
 
 export interface ILocationIOSProps {
@@ -40,7 +134,7 @@ export interface ILocationIOSProps {
    * @static
    * @since 2.0.11
    */
-  getAuthorizationStatus(): LocationBase.iOS.AuthorizationStatus;
+  getAuthorizationStatus(): PermissionIOSAuthorizationStatus;
   /**
    * Returns a Boolean value indicating whether location services are enabled on the device.
    *
@@ -88,7 +182,7 @@ export interface ILocation<TEvent extends string = LocationEvents, TMobile exten
    * @static
    * @since 0.1
    */
-  start(priority?: LocationBase.Android.Priority, interval?: number): void;
+  start(priority?: keyof typeof LocationAndroidPriority, interval?: number): void;
   /**
    * Stops capturing.
    *
@@ -134,187 +228,61 @@ export interface ILocation<TEvent extends string = LocationEvents, TMobile exten
    * @since 4.0.2
    */
   getLastKnownLocation(onSuccess: (e: { latitude: number; longitude: number }) => void, onFailure: () => void): void;
+  /**
+   * This is an internal function. It is a callback for 'onActivityResult' on Application.
+   * @private
+   * @android
+   */
   __onActivityResult: (resultCode: number) => void;
-}
 
-export declare namespace LocationBase {
   /**
-   * iOS Specific Properties.
-   * @class Device.Location.iOS
-   * @since 3.1.1
+   * Gets location latitude and longitude. Handles permissions by itself.
+   * @param {boolean} shouldRequestPreciseLocation Android only. When set to true, it will request for precise location. When set to false, it will request for approximate location only
+   * @param {Location.Android.Priority} priority Sets the priority of the location request. Defaults to BALANCED
+   * @returns {Object} It either returns the permission result if permission is denied. If successful, it will return
+   * @see https://developer.android.com/training/location/permissions#types-of-access
+   * @see https://developer.android.com/training/location/change-location-settings#location-request
+   * @example
+   * ```
+   * import Location from '@smartface/native/device/location';
+   *
+   * Location.getLocation()
+   *     .then(location => {
+   *         let requestOptions = {
+   *             'url': 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.latitude + ',' + location.longitude + '&sensor=true',
+   *             'method': 'GET'
+   *         };
+   *     })
+   *     .catch(e => {
+   *         // e is in the type of PermissionResult
+   *         console.log("Location cannot be retrieved");
+   *     });
+   * ```
    */
-  namespace iOS {
-    /**
-     * @enum {Number} Device.Location.iOS.AuthorizationStatus
-     * @since 3.1.1
-     * @ios
-     */
-    enum AuthorizationStatus {
-      /**
-       * The user has not yet made a choice regarding whether this app can use location services.
-       *
-       * @property {Number} NOTDETERMINED
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      NOTDETERMINED = 0,
-      /**
-       * This app is not authorized to use location services.
-       *
-       * @property {Number} RESTRICTED
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      RESTRICTED = 1,
-      /**
-       * The user explicitly denied the use of location services for this app or location services are currently disabled in Settings.
-       *
-       * @property {Number} DENIED
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      DENIED = 2,
-      /**
-       * This app is authorized to use location services.
-       *
-       * @property {Number} AUTHORIZED
-       * @static
-       * @ios
-       * @readonly
-       * @since 3.1.1
-       */
-      AUTHORIZED = 3
-    }
-  }
-  /**
-   * Android Specific Properties.
-   * @class Device.Location.Android
-   * @since 1.1.16
-   */
-  namespace Android {
-    /**
-     * @enum Device.Location.Android.Provider
-     * @android
-     * @since 1.1.16
-     *
-     * Location providers for Android. For lower power consumption use Network
-     * but for better accuracy use GPS; for let the device decide to provider use Auto
-     * or don't pass parameter.
-     * Location.android.Provider deprecated since 1.1.16. Use Device.Location.Android.Provider instead.
-     *
-     * @deprecated Use {@link Device.Location.Android.Priority} instead
-     */
-    enum Provider {
-      /**
-       * Let the device decide provider to use.
-       *
-       * @property AUTO
-       * @static
-       * @readonly
-       * @since 1.1.16
-       */
-      AUTO,
-      /**
-       * Use GPS as location provider. GPS has better accuracy and also has higher power
-       * consumption than {@link Location.Android.Provider#NETWORK NETWORK}.
-       *
-       * @property GPS
-       * @static
-       * @readonly
-       * @since 1.1.16
-       */
-      GPS,
-      /**
-       * Use network as location provider. Network has lower power consumption and accuracy
-       * than {@link Location.Android.Provider#GPS GPS}.
-       *
-       * @property NETWORK
-       * @static
-       * @readonly
-       * @since 1.1.16
-       */
-      NETWORK
-    }
-    /**
-     * @enum Device.Location.Android.Priority
-     * @android
-     * @since 3.1.1
-     *
-     * Location Priority enums indicates the quality of service for location updates.
-     * For example, if your application wants high accuracy location it should start a location  with  Location.Android.Priority.HIGH_ACCURACY.
-     *
-     */
-    enum Priority {
-      /**
-       * High accuracy. Least battery efficient. Uses GPS only.
-       *
-       * @property HIGH_ACCURACY
-       * @static
-       * @readonly
-       * @since 3.1.1
-       */
-      HIGH_ACCURACY,
+  getCurrentLocation(shouldRequestPreciseLocation?: boolean, priority?: keyof typeof LocationAndroidPriority): Promise<GetCurrentLocationArgs>;
 
-      /**
-       * Block level accuracy is considered to be about 100 meter accuracy.
-       * Using a coarse accuracy such as this often consumes less power.
-       *
-       * @property BALANCED
-       * @static
-       * @readonly
-       * @since 3.1.1
-       */
-      BALANCED,
-      /**
-       * City level accuracy is considered to be about 10km accuracy.
-       * Using a coarse accuracy such as this often consumes less power
-       *
-       * @property LOW_POWER
-       * @static
-       * @readonly
-       * @since 3.1.1
-       */
-      LOW_POWER,
-      /**
-       * No locations will be returned unless a different client has requested location updates in which case this request will act as a passive listener to those locations.
-       *
-       * @property NO_POWER
-       * @static
-       * @readonly
-       * @since 3.1.1
-       */
-      NO_POWER
-    }
-    /**
-     * @enum Device.Location.Android.SettingsStatusCodes
-     * @android
-     * @since 4.0.2
-     *
-     * Location settings specific status codes.
-     */
-    enum SettingsStatusCodes {
-      /**
-       * @property {NUMBER} OTHER
-       * @android
-       * @since 4.0.2
-       *
-       * Location settings can't be changed to meet the requirements, no dialog pops up.
-       */
-      OTHER = 0,
-      /**
-       * @property {NUMBER} DENIED
-       * @android
-       * @since 4.0.2
-       *
-       * The user explicitly denied the use of location services for this app.
-       */
-      DENIED = 1
-    }
-  }
+  on(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: LocationEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  off(eventName: LocationEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'locationChanged', e: { latitude: number; longitude: number }): void;
+  emit(eventName: LocationEvents, ...args: any[]): void;
+
+  once(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: LocationEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: LocationEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'locationChanged', callback: (e: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: LocationEvents, callback: (...args: any[]) => void): void;
+
+  iOS: {
+    AuthorizationStatus: typeof PermissionIOSAuthorizationStatus;
+  };
+  Android: {
+    Priority: typeof LocationAndroidPriority;
+  };
 }

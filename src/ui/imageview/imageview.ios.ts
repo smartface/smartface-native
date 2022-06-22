@@ -1,4 +1,4 @@
-import { IImageView, ImageFillType, ImageViewFillTypeIOS } from './imageview';
+import { IImageView, ImageFillType } from './imageview';
 import File from '../../io/file';
 import Color from '../color';
 import ImageIOS from '../image/image.ios';
@@ -197,74 +197,42 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
     ios?: { isRefreshCached?: boolean };
     cache?: ImageCacheType;
   }): void {
-    if (typeof params.url === 'string') {
-      // Deprecated: Use loadFromUrl(object);
-      this.nativeObject.loadFromURL(
-        __SF_NSURL.URLWithString(params.url),
-        params.placeholder ? params.placeholder.nativeObject : undefined,
-        params.headers,
-        undefined,
-        (innerFade, image, error, cache, url) => {
-          if (!error) {
-            if (cache === ImageCacheType.NONE && innerFade !== false) {
-              const alpha = this.nativeObject.alpha;
-              this.nativeObject.alpha = 0;
-              __SF_UIView.animation(
-                0.3,
-                0,
-                () => {
-                  this.nativeObject.alpha = alpha;
-                },
-                () => {}
-              );
-            }
-
-            __SF_Dispatch.mainAsync((innerIndex) => {
-              params.onSuccess?.();
-            });
-          } else {
-            __SF_Dispatch.mainAsync((innerIndex) => {
-              params.onFailure?.();
-            });
-          }
-        }
-      );
-    } else if (typeof params.url === 'object') {
-      // Deprecated: Use useHTTPCacheControl option.
-      const options = params.ios && params.ios.isRefreshCached ? SDWebImageOptions.SDWebImageRefreshCached : params.useHTTPCacheControl ? SDWebImageOptions.SDWebImageRefreshCached : undefined;
-
-      const headers = params.headers;
-      this.nativeObject.loadFromURL(
-        __SF_NSURL.URLWithString(params.url),
-        params.placeholder ? params.placeholder.nativeObject : undefined,
-        headers,
-        options ? options : undefined,
-        (innerFade, image, error, cache, url) => {
-          if (!error) {
-            // TODO Recheck after build
-            if (cache === ImageCacheType.NONE && innerFade !== false) {
-              const alpha = this.nativeObject.alpha;
-              this.nativeObject.alpha = 0;
-              __SF_UIView.animation(
-                0.3,
-                0,
-                () => {
-                  this.nativeObject.alpha = alpha;
-                },
-                () => {}
-              );
-            }
-            __SF_Dispatch.mainAsync((innerIndex) => {
-              params.onSuccess?.();
-            });
-          } else {
-            __SF_Dispatch.mainAsync((innerIndex) => {
-              params.onFailure?.();
-            });
-          }
-        }
-      ); //onFailure COR-1817
+    if (typeof params.url !== 'string') {
+      throw new Error('url must be a string');
     }
+    const options = params.ios?.isRefreshCached ? SDWebImageOptions.SDWebImageRefreshCached : params.useHTTPCacheControl ? SDWebImageOptions.SDWebImageRefreshCached : undefined;
+    const fade = typeof params.fade === 'boolean' ? params.fade : true;
+
+    this.nativeObject.loadFromURL(
+      __SF_NSURL.URLWithString(params.url),
+      params.placeholder ? params.placeholder.nativeObject : undefined,
+      params.headers,
+      options || undefined,
+      (image, error, cache, url) => {
+        if (!error) {
+          if (cache === ImageCacheType.NONE && fade) {
+            const alpha = this.nativeObject.alpha;
+            this.nativeObject.alpha = 0;
+            __SF_UIView.animation(
+              0.3,
+              0,
+              () => {
+                this.nativeObject.alpha = alpha;
+              },
+              () => {}
+            );
+          }
+
+          __SF_Dispatch.mainAsync((innerIndex) => {
+            params.onSuccess?.();
+          });
+        } else {
+          __SF_Dispatch.mainAsync((innerIndex) => {
+            params.onFailure?.();
+          });
+        }
+      }
+    );
   }
 
   loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void {

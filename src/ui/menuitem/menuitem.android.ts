@@ -1,9 +1,9 @@
-import { IMenuItem, Style } from './menuitem';
+import { IMenuItem, MenuItemStyle } from './menuitem';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Exception from '../../util/exception';
 import TypeUtil from '../../util/type';
-import Color from '../color';
 import { MenuItemEvents } from './menuitem-events';
+import { IColor } from '../color/color';
 
 const NativeSpannable = requireClass('android.text.Spanned');
 const NativeColorSpan = requireClass('android.text.style.ForegroundColorSpan');
@@ -15,12 +15,12 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   }
   static Events = MenuItemEvents;
   static Styles = {
-    DEFAULT: Style.DEFAULT,
-    CANCEL: Style.CANCEL,
-    DESTRUCTIVE: Style.DESTRUCTIVE
+    DEFAULT: MenuItemStyle.DEFAULT,
+    CANCEL: MenuItemStyle.CANCEL,
+    DESTRUCTIVE: MenuItemStyle.DESTRUCTIVE
   };
   private _title: string;
-  private _titleColor?: Color;
+  private _titleColor?: IColor;
   constructor(params?: Partial<IMenuItem>) {
     super(params);
     this.addAndroidProps(this.getAndroidProps());
@@ -28,10 +28,10 @@ export default class MenuItemAndroid extends NativeEventEmitterComponent<MenuIte
   getAndroidProps() {
     const self = this;
     return {
-      get titleColor(): Color | undefined {
+      get titleColor(): IColor | undefined {
         return self._titleColor;
       },
-      set titleColor(color: Color | undefined) {
+      set titleColor(color: IColor | undefined) {
         self._titleColor = color;
       },
       spanTitle() {

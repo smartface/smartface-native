@@ -1,8 +1,8 @@
-import Color from '../color';
-import Font from '../font';
 import TextAlignment from '../shared/textalignment';
 import ViewAndroid from '../view/view.android';
 import { ILabel, LabelAndroidProps } from './label';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { ViewEvents } from '../view/view-events';
 import { IViewState } from '../shared/viewState';
 import EllipsizeMode from '../shared/ellipsizemode';
@@ -11,6 +11,8 @@ import TextDirection from '../shared/textdirection';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import isViewState from '../../util/isViewState';
+import ColorAndroid from '../color';
+import FontAndroid from '../font/font.android';
 
 const NativeTextView = requireClass('androidx.appcompat.widget.AppCompatTextView');
 const NativeTextViewCompat = requireClass('androidx.core.widget.TextViewCompat');
@@ -34,7 +36,10 @@ const MAX_INT_VALUE = 2147483647;
 const AUTO_SIZE_TEXT_TYPE_NONE = 0;
 const MINIMUM_FONT_SIZE = 7;
 
-export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel> extends ViewAndroid<TEvent, TNative, TProps> implements ILabel {
+export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = LabelAndroidProps, TProps extends ILabel = ILabel>
+  extends ViewAndroid<TEvent, TNative, TProps>
+  implements ILabel<TEvent, TProps>
+{
   private _ellipsizeMode: ILabel['ellipsizeMode'];
   protected _textAlignment: TextAlignment;
   protected viewNativeDefaultTextAlignment: number;
@@ -43,7 +48,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   private _minimumFontSize: number;
   private _textDirection: TextDirection;
   private _adjustableFontSizeStep: number;
-  private fontInitial: Font | null;
+  private fontInitial: IFont | null;
   protected _textColor: ILabel['textColor'];
   private _paddingRight: ILabel['paddingRight'];
   private _paddingLeft: ILabel['paddingLeft'];
@@ -59,7 +64,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     this._minimumFontSize = MINIMUM_FONT_SIZE;
     this._adjustableFontSizeStep = 1;
     this.fontInitial = null;
-    this._textColor = Color.BLUE;
+    this._textColor = ColorAndroid.BLUE;
     this.viewNativeDefaultTextAlignment = TextAlignmentDic[TextAlignment.MIDLEFT];
     this.textAlignment = TextAlignment.MIDLEFT;
     super.preConstruct(params);
@@ -104,8 +109,8 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     NativeTextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this.nativeObject, this.minimumFontSize, maximumTextSize, this.android.adjustableFontSizeStep, TypeValue.COMPLEX_UNIT_DIP);
   }
 
-  private createColorStateList(textColors: IViewState<Color>) {
-    const colorsSets: Color[] = [];
+  private createColorStateList(textColors: IViewState<IColor>) {
+    const colorsSets: IColor[] = [];
     const statesSet: any[] = [];
     if (textColors.normal) {
       statesSet.push(ViewAndroid.State.STATE_NORMAL);
@@ -133,13 +138,14 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   get font() {
     const nativeTypeface = this.nativeObject.getTypeface();
     const textSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
-    return new Font({
+    return new FontAndroid({
       nativeObject: nativeTypeface,
       size: textSize
     });
   }
   set font(value: ILabel['font']) {
     this.fontInitial = value;
+    this.dirty();
     this.nativeObject.setTypeface(value.nativeObject);
     if (value.size && typeof value.size === 'number') {
       this.nativeObject.setTextSize(TypeValue.COMPLEX_UNIT_DIP, value.size);
@@ -157,6 +163,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
   }
   set maxLines(value: ILabel['maxLines']) {
     const valueInt = isNaN(value) ? 0 : value;
+    this.dirty();
     this.nativeObject.setMaxLines(valueInt === 0 ? MAX_INT_VALUE : valueInt);
   }
   get ellipsizeMode(): ILabel['ellipsizeMode'] {
@@ -170,6 +177,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return this.nativeObject.getText().toString();
   }
   set text(value: ILabel['text']) {
+    this.dirty();
     this.nativeObject.setText(String(value));
   }
   get textAlignment(): ILabel['textAlignment'] {
@@ -183,7 +191,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     return this._textColor;
   }
   set textColor(value: ILabel['textColor']) {
-    if (value instanceof Color && value.nativeObject) {
+    if (value instanceof ColorAndroid && value.nativeObject) {
       this._textColor = value;
       this.nativeObject.setTextColor(value.nativeObject);
     } else if (isViewState(value)) {
@@ -223,6 +231,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingTop = this._paddingTop !== undefined ? this._paddingTop : paddingNative;
     const paddingRight = this._paddingRight !== undefined ? this._paddingRight : paddingNative;
     const paddingBottom = this._paddingBottom !== undefined ? this.paddingBottom : paddingNative;
+    this.dirty();
     this.nativeObject.setPaddingRelative(paddingLeft, paddingTop, paddingRight, paddingBottom);
   }
   get paddingLeft(): number {
@@ -233,6 +242,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
     const paddingTop = this.paddingTop;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(value),
       AndroidUnitConverter.dpToPixel(paddingTop),
@@ -248,6 +258,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingTop = this.paddingTop;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(paddingTop),
@@ -263,6 +274,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingBottom = this.paddingBottom;
     const paddingRight = this.paddingRight;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(value),
@@ -278,6 +290,7 @@ export default class LabelAndroid<TEvent extends string = ViewEvents, TNative = 
     const paddingLeft = this.paddingLeft;
     const paddingTop = this.paddingTop;
     const paddingRight = this.paddingRight;
+    this.dirty();
     this.nativeObject.setPaddingRelative(
       AndroidUnitConverter.dpToPixel(paddingLeft),
       AndroidUnitConverter.dpToPixel(paddingTop),

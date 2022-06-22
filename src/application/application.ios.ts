@@ -25,7 +25,7 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
   __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
 }
 
-class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
+class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.statusBar = StatusBar;
     this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
@@ -274,6 +274,6 @@ class ApplicationIOS extends NativeEventEmitterComponent<ApplicationEvents> impl
   }
 }
 
-const ApplicationIOSInstance = new ApplicationIOS();
+const ApplicationIOS = new ApplicationIOSClass();
 
-export default ApplicationIOSInstance;
+export default ApplicationIOS;

@@ -1,18 +1,19 @@
 import { ITextBox } from './textbox';
 import ActionKeyType from '../shared/android/actionkeytype';
-import Color from '../color';
-import Font from '../font';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import ViewIOS from '../view/view.ios';
 import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
-import FlexLayout from '../flexlayout';
+import { IFlexLayout } from '../flexlayout/flexlayout';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextContentType from '../shared/textcontenttype';
-import View from '../view';
 import KeyboardAnimationDelegate from '../../util/iOS/keyboardanimationdelegate';
 import Invocation from '../../util/iOS/invocation';
+import ColorIOS from '../color/color.ios';
+import FlexLayoutIOS from '../flexlayout/flexlayout.ios';
 
 const IOSKeyboardTypes = {
   default: 0, // Default type for the current input method.
@@ -87,15 +88,15 @@ const TextAlignmentMapping = {
 export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative = {}, TProps extends ITextBox = ITextBox> extends ViewIOS<TEvent | TextBoxEvents, TNative, TProps> implements ITextBox {
   private _textAligment: number;
   private _hint: string;
-  private _hintTextColor: Color;
+  private _hintTextColor: IColor;
   private _clearButtonEnabled: boolean;
-  private _keyboardLayout: FlexLayout | undefined;
+  private _keyboardLayout: IFlexLayout | undefined;
   private keyboardanimationdelegate: KeyboardAnimationDelegate;
   private _inputView: {
     height: number;
-    view: View;
+    view: ViewIOS;
   };
-  private _inputViewMain: FlexLayout;
+  private _inputViewMain: IFlexLayout;
   private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
   private _onClearButtonPress: () => void;
   private _onEditEnds: () => void;
@@ -173,7 +174,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     return new __SF_UITextField();
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    this._hintTextColor = Color.create(199, 199, 205);
+    this._hintTextColor = ColorIOS.create(199, 199, 205);
     this._textAligment = TextAlignment.MIDLEFT;
     this._clearButtonEnabled = false;
     super.preConstruct(params);
@@ -189,10 +190,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
       set adjustFontSizeToFit(value: boolean) {
         self.nativeObject.adjustsFontSizeToFitWidth = value;
       },
-      get keyboardLayout(): FlexLayout | undefined {
+      get keyboardLayout(): IFlexLayout | undefined {
         return self._keyboardLayout;
       },
-      set keyboardLayout(value: FlexLayout | undefined) {
+      set keyboardLayout(value: IFlexLayout | undefined) {
         if (value === undefined) {
           self._keyboardLayout = value;
           self.nativeObject.setValueForKey(undefined, 'inputAccessoryView');
@@ -236,10 +237,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         self._clearButtonEnabled = value;
         self.nativeObject.clearButtonMode = value ? 1 : 0;
       },
-      get inputView(): { height: number; view: View } {
+      get inputView(): { height: number; view: ViewIOS } {
         return self._inputView;
       },
-      set inputView(value: { height: number; view: View }) {
+      set inputView(value: { height: number; view: ViewIOS }) {
         self._inputView = value;
 
         if (self._inputView === undefined) {
@@ -248,7 +249,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
         }
 
         if (!self._inputViewMain) {
-          const flexMain = new FlexLayout();
+          const flexMain = new FlexLayoutIOS();
           flexMain.nativeObject.frame = {
             x: 0,
             y: 0,
@@ -277,10 +278,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     };
   }
 
-  get font(): Font {
+  get font(): IFont {
     return this.nativeObject.font;
   }
-  set font(value: Font) {
+  set font(value: IFont) {
     this.nativeObject.font = value;
   }
 
@@ -313,12 +314,12 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.textAlignment = TextAlignmentMapping[value];
   }
 
-  get textColor(): Color {
-    return new Color({
+  get textColor(): IColor {
+    return new ColorIOS({
       color: this.nativeObject.textColor
     });
   }
-  set textColor(value: Color) {
+  set textColor(value: IColor) {
     this.nativeObject.textColor = value.nativeObject;
   }
 
@@ -412,12 +413,12 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
 
   onEditBegins: () => void;
 
-  get cursorColor(): Color {
-    return new Color({
+  get cursorColor(): IColor {
+    return new ColorIOS({
       color: this.nativeObject.valueForKey('tintColor')
     });
   }
-  set cursorColor(value: Color) {
+  set cursorColor(value: IColor) {
     this.nativeObject.setValueForKey(value.nativeObject, 'tintColor');
   }
 
@@ -443,10 +444,10 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.setValueForKey(nativeAttributeString, 'attributedPlaceholder');
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this._hintTextColor = value;
     this.hint = this.hint;
   }

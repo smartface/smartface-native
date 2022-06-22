@@ -1,20 +1,21 @@
 /*globals requireClass*/
-import { ISearchView, SearchViewStyle } from './searchview';
 import ColorAndroid from '../color/color.android';
 import ImageAndroid from '../image/image.android';
 import KeyboardType from '../shared/keyboardtype';
 import ViewAndroid from '../view/view.android';
 import { SearchViewEvents } from './searchview-events';
 import Exception from '../../util/exception';
-import Font from '../font';
 import TextAlignment from '../shared/textalignment';
-import { IView, SemanticContentAttribute } from '../view/view';
-import Page from '../page';
+import PageAndroid from '../page/page.android';
 import SystemServices from '../../util/Android/systemservices';
 import TypeValue from '../../util/Android/typevalue';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { ColorImpl } from '../color/color';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
+import { IView, SemanticContentAttribute } from '../view/view';
+import { ISearchView, SearchViewStyle } from './searchview';
 import { IImage } from '../image/image';
+import FontAndroid from '../font/font.android';
 
 const GradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const PorterDuff = requireClass('android.graphics.PorterDuff');
@@ -103,7 +104,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
   private _isClicklistenerAdded: boolean;
   private _leftItem: any;
   private _underlineColor: { normal: ColorAndroid; focus: ColorAndroid };
-  private _font: Font;
+  private _font: IFont;
   private _textalignment;
   private textFieldBackgroundDrawable: typeof GradientDrawable;
   private _onSearchBeginCallback: () => void;
@@ -239,6 +240,7 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
       },
       set iconifiedByDefault(value) {
         self._iconifiedByDefault = value;
+        self.dirty();
         self.nativeObject.setIconifiedByDefault(value);
       }
     };
@@ -289,10 +291,10 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.mSearchSrcTextView.setTextColor(value.nativeObject);
   }
 
-  get cursorColor(): ColorImpl {
+  get cursorColor(): IColor {
     return this._textViewCursorColor;
   }
-  set cursorColor(value: ColorImpl) {
+  set cursorColor(value: IColor) {
     this._textViewCursorColor = value;
     SFEditText.setCursorColor(this.mSearchSrcTextView, this._textViewCursorColor.nativeObject);
   }
@@ -321,11 +323,11 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     }
   }
 
-  get font(): Font {
+  get font(): IFont {
     return this._font;
   }
-  set font(value: Font) {
-    if (value instanceof Font) {
+  set font(value: IFont) {
+    if (value instanceof FontAndroid) {
       this._font = value;
       this.mSearchSrcTextView.setTypeface(value.nativeObject);
       this.mSearchSrcTextView.setTextSize(COMPLEX_UNIT_DIP, value.size);
@@ -392,14 +394,14 @@ export default class SearchViewAndroid<TEvent extends string = SearchViewEvents>
     this.setOnSearchButtonClickedListener();
   }
 
-  addToHeaderBar(page: Page): void {
+  addToHeaderBar(page: PageAndroid): void {
     if (page) {
       // TODO Recheck after talk with Furkan
       page.headerBar?.addViewToHeaderBar(this);
     }
   }
 
-  removeFromHeaderBar(page: Page): void {
+  removeFromHeaderBar(page: PageAndroid): void {
     if (page) {
       // TODO Recheck after talk with Furkan
       page.headerBar?.removeViewFromHeaderBar(this);

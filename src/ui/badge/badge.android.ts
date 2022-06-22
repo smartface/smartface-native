@@ -2,12 +2,13 @@ import { IBadge } from './badge';
 import NativeComponent from '../../core/native-component';
 import Color from '../color';
 import ViewAndroid from '../view/view.android';
-import ViewState, { IViewState } from '../shared/viewState';
+import { IViewState } from '../shared/viewState';
 import Font from '../font';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeValue from '../../util/Android/typevalue';
 import isViewState from '../../util/isViewState';
+import { IColor } from '../color/color';
 
 const NativeGradientDrawable = requireClass('android.graphics.drawable.GradientDrawable');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
@@ -23,7 +24,7 @@ const TextViewContentPadding = {
 };
 
 export default class BadgeAndroid extends NativeComponent implements IBadge {
-  private _borderColor: Color;
+  private _borderColor: IColor;
   private _visible: boolean;
   private _text: string;
   private _backgroundColor: IBadge['backgroundColor'];
@@ -131,7 +132,7 @@ export default class BadgeAndroid extends NativeComponent implements IBadge {
     this._borderWidth = AndroidUnitConverter.dpToPixel(value);
     this.backgroundColor = null; //re-set Drawable
   }
-  private createColorStateList(textColors: IViewState<Color>) {
+  private createColorStateList(textColors: IViewState<IColor>) {
     const statesSet: any[] = [];
     const colorsSets: any[] = [];
     if (textColors.normal) {
