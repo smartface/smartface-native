@@ -23,8 +23,18 @@ const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.
 const SFOnScrollListener = requireClass('io.smartface.android.sfcore.ui.listview.SFOnScrollListener');
 
 const NativeSwipeDirection = {
-  [SwipeDirection.LEFTTORIGHT]: 1 << 3,
-  [SwipeDirection.RIGHTTOLEFT]: 1 << 2
+  LEFTTORIGHT: 1 << 3,
+  RIGHTTOLEFT: 1 << 2
+};
+
+const NativeSwipeDirectionMapping = {
+  [SwipeDirection.LEFTTORIGHT]: NativeSwipeDirection.LEFTTORIGHT,
+  [SwipeDirection.RIGHTTOLEFT]: NativeSwipeDirection.RIGHTTOLEFT
+};
+
+const NativeSwipeDirectionInverseMapping = {
+  [NativeSwipeDirection.LEFTTORIGHT]: SwipeDirection.LEFTTORIGHT,
+  [NativeSwipeDirection.RIGHTTOLEFT]: SwipeDirection.RIGHTTOLEFT
 };
 
 export default class ListViewAndroid<TEvent extends string = ListViewEvents> extends ViewAndroid<TEvent | ListViewEvents, any, IListView> implements IListView {
@@ -354,9 +364,9 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           this.emit('rowCanMove', index);
           return result === undefined ? true : result;
         },
-        onRowSwipe: (direction: SwipeDirection, index: number) => {
+        onRowSwipe: (direction: keyof typeof NativeSwipeDirection, index: number) => {
           const params = {
-            direction,
+            direction: NativeSwipeDirectionInverseMapping[direction],
             index,
             ios: {
               expansionSettings: {}
@@ -421,8 +431,10 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
         },
         onRowCanSwipe: (index: number) => {
           let swipeDirections = this.onRowCanSwipe?.(index);
-          swipeDirections = swipeDirections.map((swipeDirection) => NativeSwipeDirection[swipeDirection]);
-          return !swipeDirections ? NativeSwipeDirection[SwipeDirection.LEFTTORIGHT] | NativeSwipeDirection[SwipeDirection.RIGHTTOLEFT] : swipeDirections.reduce((acc, cValue) => acc | cValue, 0);
+          swipeDirections = swipeDirections.map((swipeDirection) => NativeSwipeDirectionMapping[swipeDirection]);
+          return !swipeDirections
+            ? NativeSwipeDirectionMapping[SwipeDirection.LEFTTORIGHT] | NativeSwipeDirectionMapping[SwipeDirection.RIGHTTOLEFT]
+            : swipeDirections.reduce((acc, cValue) => acc | cValue, 0);
         }
       });
       this.nItemTouchHelper = new SFItemTouchHelper(this.sfItemTouchHelperCallback);
