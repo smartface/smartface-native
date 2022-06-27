@@ -159,7 +159,9 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
 
     // TODO Recheck after build
     image.nativeObject = this._isSetTintColor ? image.nativeObject.imageWithRenderingMode(2) : image.nativeObject;
-    this._imageTemplate = image.nativeObject;
+    if (this._isSetTintColor) {
+      this._imageTemplate = image.nativeObject;
+    }
     this.nativeObject.loadImage(image.nativeObject);
   }
 
@@ -170,10 +172,12 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
   }
   set tintColor(value: Color) {
     if (this.nativeObject?.image) {
-      const template = this._imageTemplate || this.nativeObject.image.imageWithRenderingMode(2);
-      this.nativeObject.image = template;
-      this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
+      if (!this._imageTemplate) {
+        this._imageTemplate = this.nativeObject.image.imageWithRenderingMode(2);
+      }
+      this.nativeObject.image = this._imageTemplate;
     }
+
     this._isSetTintColor = true;
     this.nativeObject.tintColor = value.nativeObject;
   }
@@ -224,6 +228,11 @@ export default class ImageViewIOS<TEvent extends string = ImageViewEvents> exten
           }
 
           __SF_Dispatch.mainAsync((innerIndex) => {
+            /**
+             * This is put here because it was overriding tintColor of the existing image.
+             * We want the tintColor to be the same.
+             */
+            this.image = ImageIOS.createFromImage(image);
             params.onSuccess?.();
           });
         } else {
