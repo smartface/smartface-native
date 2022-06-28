@@ -152,6 +152,7 @@ export default class PageIOS<TEvent extends string = PageEvents, TNative extends
     if (this._orientationNative.indexOf(currentOrientation) === -1) {
       __SF_UIDevice.changeOrientation(currentOrientation); //Workaround for IOS-2580
       __SF_UIDevice.changeOrientation(this._orientationNative[0]);
+      this.layout.applyLayout();
     }
   }
 
