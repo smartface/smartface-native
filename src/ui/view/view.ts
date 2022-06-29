@@ -96,7 +96,7 @@ export interface ViewIOSProps {
    */
   masksToBounds: boolean;
   /**
-   * The offset (in points) of the shadow. "masksToBounds" property must be false for shadow.
+   * The offset (in points) of the shadow. This will set "masksToBounds" property to false.
    *
    *     @example
    *     view.masksToBounds = false;

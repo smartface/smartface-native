@@ -111,6 +111,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
         };
       },
       set shadowOffset(shadowOffset: Point2D) {
+        self.masksToBounds = false;
         const argShadowOffset = new Invocation.Argument({
           type: 'CGSize',
           value: {
