@@ -100,39 +100,70 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   onTouchCancelled: (point: Point2D) => boolean;
   onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D | undefined) => boolean;
 
-  private getIOSProperties() {
+  private getIOSProperties(): IView['ios'] {
     const self = this;
     return {
       get shadowOffset() {
-        return self.shadowOffset;
+        const size = Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowOffset', [], 'CGSize') as Size;
+        return {
+          x: size.width || 0,
+          y: size.height || 0
+        };
       },
       set shadowOffset(shadowOffset: Point2D) {
-        self.shadowOffset = shadowOffset;
+        const argShadowOffset = new Invocation.Argument({
+          type: 'CGSize',
+          value: {
+            width: shadowOffset.x || 0,
+            height: shadowOffset.y || 0
+          }
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowOffset:', [argShadowOffset]);
       },
       get shadowRadius() {
-        return self.shadowRadius;
+        return Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowRadius', [], 'CGFloat') as number;
       },
       set shadowRadius(shadowRadius: number) {
-        self.shadowRadius = shadowRadius;
+        const argShadowRadius = new Invocation.Argument({
+          type: 'CGFloat',
+          value: shadowRadius
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowRadius:', [argShadowRadius]);
       },
       get shadowOpacity() {
-        return self.shadowRadius;
+        return Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowOpacity', [], 'CGFloat');
       },
       set shadowOpacity(shadowOpacity: number) {
-        self.shadowOpacity = shadowOpacity;
+        const argShadowOpacity = new Invocation.Argument({
+          type: 'float',
+          value: shadowOpacity
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowOpacity:', [argShadowOpacity]);
       },
       get shadowColor() {
-        return self.shadowColor;
+        const color = Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowColor', [], 'CGColor');
+        return new ColorIOS({
+          color
+        });
       },
       set shadowColor(shadowColor: IColor) {
-        self.shadowColor = shadowColor;
+        const argShadowColor = new Invocation.Argument({
+          type: 'CGColor',
+          value: shadowColor.nativeObject
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
       },
       get exclusiveTouch() {
-        return self.exclusiveTouch as boolean;
+        return Invocation.invokeInstanceMethod(self.nativeObject, 'isExclusiveTouch', [], 'BOOL') as boolean;
       },
       set exclusiveTouch(value: boolean) {
-        self.exclusiveTouch = value;
+        const argExclusiveTouch = new Invocation.Argument({
+          type: 'BOOL',
+          value: value
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
       },
+      // deprecated. Remove this set if you encounter this and want to clear up later.
       get masksToBounds() {
         return self.masksToBounds;
       },
@@ -140,10 +171,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
         self.masksToBounds = value;
       },
       get clipsToBounds() {
-        return self.clipsToBounds;
+        return self.nativeObject.valueForKey('clipsToBounds');
       },
       set clipsToBounds(value) {
-        self.clipsToBounds = value;
+        self.nativeObject.setValueForKey(value, 'clipsToBounds');
       },
       get viewAppearanceSemanticContentAttribute() {
         return __SF_UIView.viewAppearanceSemanticContentAttribute();
@@ -194,90 +225,11 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     Invocation.invokeInstanceMethod(this.nativeObject, 'setIsAccessibilityElement:', [isAccessibility]);
   }
 
-  // ios
-  private get shadowOffset() {
-    this.ios.shadowOffset = { x: 10, y: 10 };
-    const size = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOffset', [], 'CGSize') as Size;
-    return {
-      x: size.width,
-      y: size.height
-    };
-  }
-  private set shadowOffset(shadowOffset: Point2D) {
-    const argShadowOffset = new Invocation.Argument({
-      type: 'CGSize',
-      value: {
-        width: shadowOffset.x,
-        height: shadowOffset.y
-      }
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOffset:', [argShadowOffset]);
-  }
-
-  // ios
-  private get shadowRadius() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowRadius', [], 'CGFloat') as number;
-  }
-  private set shadowRadius(shadowRadius) {
-    const argShadowRadius = new Invocation.Argument({
-      type: 'CGFloat',
-      value: shadowRadius
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowRadius:', [argShadowRadius]);
-  }
-
-  // ios
-  private get shadowOpacity() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'CGFloat');
-  }
-  private set shadowOpacity(shadowOpacity) {
-    const argShadowOpacity = new Invocation.Argument({
-      type: 'float',
-      value: shadowOpacity
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOpacity:', [argShadowOpacity]);
-  }
-
-  // ios
-  private get shadowColor() {
-    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
-    return new ColorIOS({
-      color
-    });
-  }
-  private set shadowColor(shadowColor: IColor) {
-    const argShadowColor = new Invocation.Argument({
-      type: 'CGColor',
-      value: shadowColor.nativeObject
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
-  }
-
-  // ios
-  private get exclusiveTouch() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'isExclusiveTouch', [], 'BOOL') as boolean;
-  }
-  private set exclusiveTouch(value: boolean) {
-    const argExclusiveTouch = new Invocation.Argument({
-      type: 'BOOL',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
-  }
-
   get masksToBounds() {
     return this.nativeObject.layer.masksToBounds;
   }
   set masksToBounds(value: boolean) {
     this.nativeObject.layer.masksToBounds = value;
-  }
-
-  // ios
-  private get clipsToBounds() {
-    return this.nativeObject.valueForKey('clipsToBounds');
-  }
-  private set clipsToBounds(value: number) {
-    this.nativeObject.setValueForKey(value, 'clipsToBounds');
   }
 
   get borderColor() {

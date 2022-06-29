@@ -90,15 +90,16 @@ export interface ViewIOSProps {
    * A Boolean value that determines whether subviews are confined to the bounds of the view.
    *
    * @property {Boolean} [masksToBounds = false]
+   * @deprecated Use view.maskToBounds instead
    * @ios
    * @since 1.1.15
    */
   masksToBounds: boolean;
   /**
-   * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The offset (in points) of the shadow. "masksToBounds" property must be false for shadow.
    *
    *     @example
-   *     view.ios.masksToBounds = false;
+   *     view.masksToBounds = false;
    *     view.ios.shadowOffset = {x:10,y:10};
    *     view.ios.shadowRadius = 5;
    *     view.ios.shadowOpacity = 0.5;
@@ -112,7 +113,7 @@ export interface ViewIOSProps {
    */
   shadowOffset: Point2D;
   /**
-   * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The blur radius (in points) used to render the shadow. masksToBounds" property must be false for shadow.
    *
    * @property {Number} [shadowRadius = 3]
    * @ios
@@ -120,7 +121,7 @@ export interface ViewIOSProps {
    */
   shadowRadius: number;
   /**
-   * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
+   * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "masksToBounds" property must be false for shadow.
    *
    * @property {Number} [shadowOpacity = 0]
    * @ios
@@ -128,7 +129,7 @@ export interface ViewIOSProps {
    */
   shadowOpacity: number;
   /**
-   * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The color of the shadow. "masksToBounds" property must be false for shadow.
    *
    * @property {UI.Color} [shadowColor = UI.Color.BLACK]
    * @ios
@@ -613,7 +614,7 @@ export interface IView<
   parent: IView | undefined;
   readonly uniqueId: string;
   /**
-   * Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree. 
+   * Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree.
    * It is useful to call this method when you want to change layout parameters on runtime.
    * If this view layout invalidated, call applyLayout from the Page.layout in the iOS and from the view itself in the Android.
    *
