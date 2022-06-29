@@ -1,7 +1,7 @@
 import { ITimer, TimerParams } from './timer';
 
 class TimerIOSClass implements ITimer {
-  timerCount = 0;
+  timerCount = -1;
   timerMap: Map<number, __SF_Timer> = new Map();
   setTimeout(params: { task: () => void; delay: number }): number {
     return this.createTimer({ ...params, repeat: false });
@@ -17,13 +17,13 @@ class TimerIOSClass implements ITimer {
   clearAllTimer() {
     this.timerMap.forEach((timer, key) => this.clearTimer(key));
     this.timerMap.clear();
-    this.timerCount = 0;
+    this.timerCount = -1;
   }
   private createTimer(params: TimerParams) {
     const timer = new __SF_Timer();
     timer.scheduledTimer(params.delay / 1000, () => params.task?.(), params.repeat!);
 
-    this.timerMap.set(this.timerCount++, timer);
+    this.timerMap.set(++this.timerCount, timer);
     return this.timerCount;
   }
 }

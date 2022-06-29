@@ -40,7 +40,7 @@ class TimerHelper extends NativeComponent {
 }
 
 class TimerAndroidClass implements ITimer {
-  timerCount = 0;
+  timerCount = -1;
   timerMap: Map<number, TimerHelper> = new Map();
   setTimeout(params: { task: () => void; delay: number }) {
     return this.createTimer({ ...params, repeat: false });
@@ -59,11 +59,11 @@ class TimerAndroidClass implements ITimer {
   clearAllTimer() {
     TimerHandler.removeCallbacksAndMessages(null);
     this.timerMap.clear();
-    this.timerCount = 0;
+    this.timerCount = -1;
   }
   private createTimer(params: TimerParams) {
     const timer = new TimerHelper(params);
-    this.timerMap.set(this.timerCount++, timer);
+    this.timerMap.set(++this.timerCount, timer);
     return this.timerCount;
   }
 }
