@@ -5,7 +5,7 @@ import Timer from '../global/timer';
 import Invocation from '../util/iOS/invocation';
 import { ApplicationEvents } from './application-events';
 import StatusBar from './statusbar';
-import { ApplicationBase } from './application';
+import { IApplication } from './application';
 import Page from '../ui/page';
 import NavigationController from '../ui/navigationcontroller';
 import { IBottomTabBar } from '../ui/bottomtabbar/bottomtabbar';
@@ -25,20 +25,20 @@ if (viewAppearanceSemanticContentAttribute !== undefined) {
   __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
 }
 
-class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents> implements ApplicationBase {
+class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents> implements IApplication {
   protected preConstruct(params?: Partial<Record<string, any>>): void {
     this.statusBar = StatusBar;
     this.keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
     super.preConstruct(params);
   }
 
-  onUnhandledError: ApplicationBase['onUnhandledError'];
-  onExit: ApplicationBase['onExit'];
-  onReceivedNotification: ApplicationBase['onReceivedNotification'];
-  onApplicationCallReceived: ApplicationBase['onApplicationCallReceived'];
-  onMaximize: ApplicationBase['onMaximize'];
-  onMinimize: ApplicationBase['onMinimize'];
-  onAppShortcutReceived: ApplicationBase['onAppShortcutReceived'];
+  onUnhandledError: IApplication['onUnhandledError'];
+  onExit: IApplication['onExit'];
+  onReceivedNotification: IApplication['onReceivedNotification'];
+  onApplicationCallReceived: IApplication['onApplicationCallReceived'];
+  onMaximize: IApplication['onMaximize'];
+  onMinimize: IApplication['onMinimize'];
+  onAppShortcutReceived: IApplication['onAppShortcutReceived'];
   currentPage: Page;
   statusBar: typeof StatusBar;
   tabBar?: IBottomTabBar;
@@ -82,10 +82,11 @@ class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents>
       if (url && type === 'NSUserActivityTypeBrowsingWeb') {
         this.emit('applicationCallReceived', {
           data: e,
+          url: url.absoluteString,
           eventType: 'callback',
-          result: undefined
+          result: -1
         });
-        return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
+        return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString) ?? true;
       }
       return false;
     };
@@ -165,7 +166,7 @@ class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents>
     sliderDrawer.nativeObject.Pages = rootPage;
     sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, this._sliderDrawer.nativeObject);
   }
-  call(params: Parameters<ApplicationBase['call']>['0']) {
+  call(params: Parameters<IApplication['call']>['0']) {
     SMFApplication.call(params.uriScheme, params.data || {}, params.onSuccess, params.onFailure);
   }
   hideKeyboard() {
@@ -237,7 +238,7 @@ class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents>
   get isVoiceOverEnabled() {
     return __SF_UIAccessibility.isVoiceOverRunning();
   }
-  get ios(): ApplicationBase['ios'] {
+  get ios(): IApplication['ios'] {
     return {
       get bundleIdentifier() {
         const mainBundle = Invocation.invokeClassMethod('NSBundle', 'mainBundle', [], 'NSObject');

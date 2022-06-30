@@ -9,7 +9,7 @@ import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar//bottomtabbar';
-import { ApplicationAndroidPermissions, ApplicationBase, KeyboardMode } from './application';
+import { ApplicationAndroidPermissions, IApplication, KeyboardMode } from './application';
 import SystemServices from '../util/Android/systemservices';
 import * as RequestCodes from '../util/Android/requestcodes';
 import ViewController from '../util/Android/transition/viewcontroller';
@@ -72,7 +72,7 @@ const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
-class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
+class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEvents, any, IApplication> implements IApplication {
   protected createNativeObject() {
     return {};
   }
@@ -86,12 +86,12 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
   statusBar: typeof StatusBar;
   private _sliderDrawer: SliderDrawerAndroid;
   private _keepScreenAwake: boolean;
-  private _onUnhandledError: ApplicationBase['onUnhandledError'];
+  private _onUnhandledError: IApplication['onUnhandledError'];
   private _currentPage: PageAndroid;
-  private _dispatchTouchEvent: ApplicationBase['android']['dispatchTouchEvent'];
+  private _dispatchTouchEvent: IApplication['android']['dispatchTouchEvent'];
   private __isSetOnItemSelectedListener: boolean;
-  private _onReceivedNotification: ApplicationBase['onReceivedNotification'];
-  private _keyboardMode: ApplicationBase['android']['keyboardMode'];
+  private _onReceivedNotification: IApplication['onReceivedNotification'];
+  private _keyboardMode: IApplication['android']['keyboardMode'];
   private _secureWindowContent: boolean;
   private spratAndroidActivityInstance: any;
   private _drawerLayout: any;
@@ -208,7 +208,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
       }
     }
   }
-  call(params: Parameters<ApplicationBase['call']>['0']) {
+  call(params: Parameters<IApplication['call']>['0']) {
     const _uriScheme = params.uriScheme;
     const _data = params.data || {};
     const _onSuccess = params.onSuccess;
@@ -320,7 +320,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
   set onUnhandledError(value) {
     this._onUnhandledError = value;
     //@ts-ignore TODO: global Application variable from framework. NTVE-616
-    Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+    Application.onUnhandledError = (e: Parameters<IApplication['onUnhandledError']>['0']) => {
       this.emit('unhandledError', e);
       this._onUnhandledError?.(e);
     };
@@ -396,7 +396,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
     return this._onReceivedNotification;
   }
   set onReceivedNotification(callback) {
-    this._onReceivedNotification = (data: Parameters<ApplicationBase['onReceivedNotification']>['0']) => {
+    this._onReceivedNotification = (data: Parameters<IApplication['onReceivedNotification']>['0']) => {
       callback?.(data);
       this.emit('receivedNotification', data);
     };
@@ -410,7 +410,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
     }
     return false;
   }
-  get android(): ApplicationBase['android'] {
+  get android(): IApplication['android'] {
     const self = this;
     return {
       Permissions,
@@ -516,7 +516,7 @@ class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEve
   on(eventName: ApplicationEvents, callback: EventListenerCallback) {
     if (eventName === ApplicationEvents.UnhandledError) {
       //@ts-ignore TODO: global Application variable from framework. NTVE-616
-      Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+      Application.onUnhandledError = (e: Parameters<IApplication['onUnhandledError']>['0']) => {
         this.emit('unhandledError', e);
         this._onUnhandledError?.(e);
       };

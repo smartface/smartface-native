@@ -19,6 +19,18 @@ interface ApplicationCallParams {
   action?: string;
 }
 
+interface ApplicationCallReceivedParams {
+  eventType: string;
+  url: string;
+  data: Record<string, any>;
+  result: number;
+}
+
+interface ReceivedNotificationParams {
+  remote?: Record<string, any>;
+  local?: Record<string, any>;
+}
+
 export interface ApplicationIOSProps {
   /**
    * The event is called when a user taps a universal link.
@@ -100,7 +112,7 @@ export interface ApplicationAndroidProps {
    * ```
    * import Application from '@smartface/native/application';
    *
-   * Application.on(Application.Events.BackButtonPressed, () => {
+   * Application.on(Application.Events.backButtonPressed, () => {
    * 	console.info('onBackButtonPressed');
    * });
    * ```
@@ -510,7 +522,7 @@ export enum ApplicationAndroidPermissions {
  *
  * A set of collection for application based properties and methods.
  */
-export interface ApplicationBase extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
+export interface IApplication extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
   /**
    * The received bytes from the application.
    *
@@ -795,7 +807,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * });
    * ```
    */
-  onReceivedNotification: (data: Partial<{ remote: { [key: string]: any }; local: { [key: string]: any } }>) => void;
+  onReceivedNotification: (data: ReceivedNotificationParams) => void;
   /**
    * Triggered when application is called by another application.
    * For Android, onApplicationCallReceived will be triggered when
@@ -827,7 +839,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * });
    * ```
    */
-  onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
+  onApplicationCallReceived: (e: ApplicationCallReceivedParams) => void;
   /**
    * Triggered when application is opened by an app shortcut.
    * App shortcuts is also named Home Screen Quick Actions in iOS.
@@ -847,7 +859,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * ```
    * import Application from '@smartface/native/application';
    *
-   * Application.on(Application.Events.AppShortcutReceived, (params) => {
+   * Application.on(Application.Events.appShortcutReceived, (params) => {
    * 	console.info('onAppShortcutReceived', params);
    * });
    * ```
@@ -970,4 +982,64 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @private
    */
   tabBar?: BottomTabBar;
+
+  on(eventName: 'exit', callback: () => void): () => void;
+  on(eventName: 'maximize', callback: () => void): () => void;
+  on(eventName: 'minimize', callback: () => void): () => void;
+  on(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): () => void;
+  on(eventName: 'unhandledError', callback: (e: UnhandledError) => void): () => void;
+  on(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): () => void;
+  on(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): () => void;
+  on(eventName: 'backButtonPressed', callback: () => void): () => void;
+  on(eventName: ApplicationEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'exit', callback: () => void): void;
+  off(eventName: 'maximize', callback: () => void): void;
+  off(eventName: 'minimize', callback: () => void): void;
+  off(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  off(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  off(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  off(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  off(eventName: 'backButtonPressed', callback: () => void): void;
+  off(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'exit'): void;
+  emit(eventName: 'maximize'): void;
+  emit(eventName: 'minimize'): void;
+  emit(eventName: 'receivedNotification', e: ReceivedNotificationParams): void;
+  emit(eventName: 'unhandledError', e: UnhandledError): void;
+  emit(eventName: 'applicationCallReceived', e: ApplicationCallReceivedParams): void;
+  emit(eventName: 'appShortcutReceived', e: Record<string, any>): void;
+  emit(eventName: 'backButtonPressed'): void;
+  emit(eventName: ApplicationEvents, ...args: any[]): void;
+
+  once(eventName: 'exit', callback: () => void): () => void;
+  once(eventName: 'maximize', callback: () => void): () => void;
+  once(eventName: 'minimize', callback: () => void): () => void;
+  once(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): () => void;
+  once(eventName: 'unhandledError', callback: (e: UnhandledError) => void): () => void;
+  once(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): () => void;
+  once(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): () => void;
+  once(eventName: 'backButtonPressed', callback: () => void): () => void;
+  once(eventName: ApplicationEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'exit', callback: () => void): void;
+  prependListener(eventName: 'maximize', callback: () => void): void;
+  prependListener(eventName: 'minimize', callback: () => void): void;
+  prependListener(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  prependListener(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  prependListener(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  prependListener(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  prependListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependListener(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'exit', callback: () => void): void;
+  prependOnceListener(eventName: 'maximize', callback: () => void): void;
+  prependOnceListener(eventName: 'minimize', callback: () => void): void;
+  prependOnceListener(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  prependOnceListener(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  prependOnceListener(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  prependOnceListener(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  prependOnceListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependOnceListener(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
 }
