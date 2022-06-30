@@ -64,14 +64,6 @@ class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents>
       }
     }
   } as const;
-  onUserActivityCallback(e) {
-    const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
-    const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
-    if (url && type === 'NSUserActivityTypeBrowsingWeb') {
-      return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
-    }
-    return false;
-  }
   constructor() {
     super();
     if (SMFApplication.sharedInstance) {
@@ -82,6 +74,21 @@ class ApplicationIOSClass extends NativeEventEmitterComponent<ApplicationEvents>
         return typeof innerReturnValue === 'boolean' ? innerReturnValue : true;
       };
     }
+
+    //@ts-ignore TODO: global Application variable from framework. NTVE-697
+    Application.onUserActivityCallback = (e) => {
+      const url = Invocation.invokeInstanceMethod(e.userActivity, 'webpageURL', [], 'NSObject');
+      const type = Invocation.invokeInstanceMethod(e.userActivity, 'activityType', [], 'NSString');
+      if (url && type === 'NSUserActivityTypeBrowsingWeb') {
+        this.emit('applicationCallReceived', {
+          data: e,
+          eventType: 'callback',
+          result: undefined
+        });
+        return this.ios.onUserActivityWithBrowsingWeb?.(url.absoluteString);
+      }
+      return false;
+    };
 
     //@ts-ignore TODO: global Application variable from framework. NTVE-697
     Application.onAppShortcutReceive = (e) => {
