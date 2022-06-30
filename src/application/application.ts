@@ -26,7 +26,7 @@ interface ApplicationCallReceivedParams {
   result: number;
 }
 
-interface ReceivedNotificationParams {
+export interface ReceivedNotificationParams {
   remote?: Record<string, any>;
   local?: Record<string, any>;
 }
