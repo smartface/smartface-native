@@ -23,7 +23,7 @@ class CallDetectionIOS extends NativeEventEmitterComponent<CallDetectionEvents> 
         state = State.INCOMING;
       }
       this.onCallStateChanged?.({ state, observer });
-      this.emit(CallDetectionEvents.CallStateChanged, state, observer);
+      this.emit(CallDetectionEvents.CallStateChanged, { state, observer });
     };
   }
 }
