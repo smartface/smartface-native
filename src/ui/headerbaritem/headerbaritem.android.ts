@@ -321,7 +321,7 @@ export default class HeaderBarItemAndroid extends NativeMobileComponent<any, IHe
     return nativeImageButton;
   }
 
-  updateColor(color: ColorAndroid) {
+  updateColor(color: IColor) {
     if (this.nativeObject && color instanceof ColorAndroid) {
       if (this.image || this.android.systemIcon) {
         const imageCopy = this.nativeObject.getDrawable().mutate();
