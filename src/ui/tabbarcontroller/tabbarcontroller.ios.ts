@@ -31,7 +31,6 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
 
     this.nativeObject.viewControllerForIndex = (index: number) => {
       const retval = this.onPageCreate?.(index)?.nativeObject;
-      this.emit('pageCreate', index);
       return retval;
     };
 

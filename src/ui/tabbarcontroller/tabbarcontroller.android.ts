@@ -74,7 +74,6 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         page: this as any, //TODO: Fix typing
         flexGrow: 1,
         onPageCreate: (position: number) => {
-          this.emit('pageCreate', position);
           if (!this.onPageCreate) {
             return null;
           }
