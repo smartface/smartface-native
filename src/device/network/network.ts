@@ -181,8 +181,10 @@ export interface INetwork {
   get SMSEnabled(): boolean;
   /**
    *
-   * Returns the 'International Mobile Subscriber Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+   * Returns the 'International Mobile Subscriber Identity' of the device. Requires the {@link Application.Android.Permissions#READ_PHONE_STATE}  
+   * If your app runs on Android 10 (API level 29) or above, a SecurityException occurs.
    * @property {String} IMSI
+   * @deprecated
    * @readonly
    * @static
    * @since 0.1
