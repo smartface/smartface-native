@@ -19,9 +19,9 @@ class CallDetectionAndroid extends NativeEventEmitterComponent<CallDetectionEven
     super();
     const callStateChangedCallback = (state) => {
       this.onCallStateChanged?.({
-        state: state
+        state
       });
-      this.emit(CallDetectionEvents.CallStateChanged, state);
+      this.emit(CallDetectionEvents.CallStateChanged, { state });
     };
     const telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
     if (NativeBuild.VERSION.SDK_INT >= NativeBuild.VERSION_CODES.S) {
@@ -38,7 +38,7 @@ class CallDetectionAndroid extends NativeEventEmitterComponent<CallDetectionEven
   }
 
   private hasReadPhoneStatePermission(): boolean {
-    return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, NativeManifest.permission.READ_PHONE_STATE) == NativePackageManager.PERMISSION_GRANTED;
+    return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, NativeManifest.permission.READ_PHONE_STATE) === NativePackageManager.PERMISSION_GRANTED;
   }
 }
 

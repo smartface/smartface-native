@@ -31,6 +31,7 @@ import Color from '../color';
 import { IImage } from '../image/image';
 import HeaderBarItemAndroid from '../headerbaritem/headerbaritem.android';
 import TypeUtil from '../../util/type';
+import { IColor } from '../color/color';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -103,7 +104,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private rootLayout: FlexLayoutAndroid;
   private _headerBarItems: HeaderBarItemAndroid[];
   private returnRevealAnimation: boolean;
-  private _headerBarColor: ColorAndroid;
+  private _headerBarColor: IColor;
   private _headerBarImage: IImage;
   private _titleLayout?: HeaderBar['titleLayout'];
   private _onBackButtonPressed: IPage['android']['onBackButtonPressed'];
@@ -111,13 +112,13 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
   private _borderVisibility: HeaderBar['borderVisibility'];
   private _transparent: HeaderBar['transparent'];
   private _alpha: HeaderBar['alpha'];
-  private _headerBarTitleColor: Color;
+  private _headerBarTitleColor: IColor;
   private _leftItemEnabled: boolean;
-  private _leftItemColor: ColorAndroid | null;
-  private _itemColor: ColorAndroid;
+  private _leftItemColor: IColor | null;
+  private _itemColor: IColor;
   private _headerBarLogo: IImage;
   private _headerBarElevation: number;
-  private _headerBarSubtitleColor: ColorAndroid;
+  private _headerBarSubtitleColor: IColor;
   private pageLayout: any;
   private _attributedTitle: any;
   private _attributedSubtitle: any;
@@ -269,6 +270,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
               if (!this.isSwipeViewPage) {
                 this.onShow?.();
                 this.emit('show');
+              }
+              // This is added because of FW-941. itemColor can only be set at onShow(onViewCreated) event.
+              if (this.headerBar?.itemColor instanceof ColorAndroid) {
+                this.headerBar.itemColor = this.headerBar.itemColor;
               }
 
               const spratIntent = AndroidConfig.activity.getIntent();
@@ -493,10 +498,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         self._headerBarTitleColor = value as unknown as Color;
         self.toolbar.setTitleTextColor(value.nativeObject);
       },
-      get leftItemColor(): ColorAndroid | null {
+      get leftItemColor(): IColor | null {
         return self._leftItemColor;
       },
-      set leftItemColor(value: ColorAndroid | null) {
+      set leftItemColor(value: IColor | null) {
         self._leftItemColor = value;
         if (value instanceof ColorAndroid) {
           const drawable = self.toolbar.getNavigationIcon();
@@ -508,10 +513,10 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._itemColor;
       },
       set itemColor(value: HeaderBar['itemColor']) {
-        self._itemColor = value as ColorAndroid;
-        self._leftItemColor = (self._headerBarLeftItem?.color || value) as ColorAndroid;
+        self._itemColor = value;
+        self._leftItemColor = self._headerBarLeftItem?.color || value;
         for (let i = 0; i < self._headerBarItems.length; i++) {
-          self._headerBarItems[i].updateColor((self._headerBarItems[i].color || value) as ColorAndroid);
+          self._headerBarItems[i].updateColor(self._headerBarItems[i].color || value);
         }
         (self.headerBar as any).leftItemColor = value; //TODO: lefItemColor is an internal value. Consider opening it back.
         for (let i = 0; i < self._headerBarItems.length; i++) {
@@ -615,6 +620,11 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
             item.menuItem?.setActionView(itemView);
           }
         });
+
+        // This is added because of FW-941. itemColor needs to be set again after any headerbaritem creation..
+        if (self.headerBar?.itemColor instanceof ColorAndroid) {
+          self.headerBar.itemColor = self.headerBar.itemColor;
+        }
       },
       setLeftItem(leftItem: HeaderBarItem) {
         if (!leftItem || !(leftItem instanceof HeaderBarItem)) {

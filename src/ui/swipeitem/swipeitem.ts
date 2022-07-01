@@ -37,7 +37,9 @@ export default class SwipeItem
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
   }
-
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    super.preConstruct(params);
+  }
   get text() {
     return this._text;
   }

@@ -41,7 +41,6 @@ export interface FlexLayoutAndroidProps extends ViewGroupAndroidProps {
    * and take ownership of the current gesture at any point.
    *
    * @event onInterceptTouchEvent
-   * @deprecated
    * @return {Boolean} Return true to steal motion events from the children
    * @android
    * @member UI.FlexLayout

@@ -30,7 +30,8 @@ export default class ImageIOS<
     this.addIOSProps(this.getIOSProps());
     this.addAndroidProps(this.getAndroidProps());
     if (params.path) {
-      if (params.path.includes('.app')) {
+      // smartfaceProject/assets folder is not accessible from Documents(Assets folder on xcode)
+      if (params.path.includes('.app') && !params.path.includes('/assets')) {
         // Publish project image caching.
         // For using [UIImage imageNamed:] function.
         const array = params.path.split('/');

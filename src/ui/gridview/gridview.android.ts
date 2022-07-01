@@ -31,13 +31,13 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
   private _onScroll: IGridView['onScroll'];
   private _onScrollStateChanged: IGridView['android']['onScrollStateChanged'];
   private _layoutManager: LayoutManagerAndroid | undefined;
-  private _gridViewItems: Record<string, GridViewItem> = {};
-  private _itemCount: IGridView['itemCount'] = 0;
-  private isScrollListenerAdded = false;
-  private _scrollBarEnabled: IGridView['scrollBarEnabled'] = false;
+  private _gridViewItems: Record<string, GridViewItem>;
+  private _itemCount: IGridView['itemCount'];
+  private isScrollListenerAdded;
+  private _scrollBarEnabled: IGridView['scrollBarEnabled'];
   private _scrollEnabled: IGridView['scrollBarEnabled'];
   private _nativePagerSnapHelper: any;
-  private _paginationEnabled: boolean = false;
+  private _paginationEnabled: boolean;
   private _onScrollListener: any;
   private _snapToAlignment: any;
   private _nativeLinearSnapHelper: any;
@@ -54,6 +54,12 @@ export default class GridViewAndroid<TEvent extends string = GridViewEvents> ext
     return new NativeSwipeRefreshLayout(AndroidConfig.activity);
   }
   preConstruct(params?: Partial<IGridView>) {
+    this._itemCount = 0;
+    this.isScrollListenerAdded = false;
+    this._scrollBarEnabled = false;
+    this._paginationEnabled = false;
+    this._gridViewItems = {};
+
     this.setNativeInner();
     this.setDataAdapter();
     this.addAndroidProps(this.getAndroidProps());

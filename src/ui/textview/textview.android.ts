@@ -135,7 +135,7 @@ export default class TextViewAndroid<TEvent extends string = TextViewEvents, TPr
       return;
     }
     const lineSpan = NativeLineHeightSpan.implement({
-      chooseHeight: function (text, start, end, spanstartv, v, fm) {
+      chooseHeight: (text, start, end, spanstartv, v, fm) => {
         fm.ascent -= AndroidUnitConverter.dpToPixel(this._lineSpacing);
         fm.descent += AndroidUnitConverter.dpToPixel(this._lineSpacing);
       }
