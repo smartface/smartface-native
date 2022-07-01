@@ -8,9 +8,11 @@ export enum DeviceType {
 
 export interface HardwareAndroidProps {
   /**
-   * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+   * Returns 'International Mobile Equipment Identity' of the device. Requires the {@link Application.Android.Permissions#READ_PHONE_STATE} 
+   * If your app runs on Android 10 (API level 29) or above, a SecurityException occurs.
    * You cannot get IMEI programmatiocally on iOS.
    * @property {String} IMEI
+   * @deprecated
    * @android
    * @readonly
    * @static
@@ -18,8 +20,10 @@ export interface HardwareAndroidProps {
    */
   readonly IMEI: string;
   /**
-   * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
+   * Returns the vendor id of the device. Requires the {@link Application.Android.Permissions#READ_PHONE_STATE} 
+   * If your app runs on Android 10 (API level 29) or above, a SecurityException occurs.
    * @property {Number} vendorID
+   * @deprecated
    * @android
    * @readonly
    * @static
