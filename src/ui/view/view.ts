@@ -238,6 +238,81 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    */
   borderRadius: number;
   /**
+   * Sets/gets top-left corner radius of a view.
+   * 
+   * @property {Number} [borderTopLeftRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopLeftRadius: number;
+  /**
+   * Sets/gets top-right corner radius of a view.
+   * 
+   * @property {Number} [borderTopRightRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopRightRadius: number;
+  /**
+   * Sets/gets top-start corner radius of a view.
+   * 
+   * @property {Number} [borderTopStartRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopStartRadius: number;
+  /**
+   * Sets/gets top-end corner radius of a view.
+   * 
+   * @property {Number} [borderTopEndRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopEndRadius: number;
+  /**
+   * Sets/gets bottom-left corner radius of a view.
+   * 
+   * @property {Number} [borderBottomLeftRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomLeftRadius: number;
+   /**
+   * Sets/gets bottom-right corner radius of a view.
+   * 
+   * @property {Number} [borderBottomRightRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomRightRadius: number;
+
+   /**
+   * Sets/gets bottom-start corner radius of a view.
+   * 
+   * @property {Number} [borderBottomStartRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomStartRadius: number;
+
+  /**
+   * Sets/gets bottom-end corner radius of a view.
+   * 
+   * @property {Number} [borderBottomEndRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomEndRadius: number;
+
+  /**
    * Gets/sets id of a view. It should be unique number for each object
    * inside page. Id will be generated unique by default.
    *
@@ -582,6 +657,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @ios
    * @android
    * @since 4.1.4
+   * @deprecated since 5.0.3 Use the borderBottomRightRadius, borderBottomLeftRadius, borderTopRightRadius, borderTopLeftRadius properties instead.
    */
   maskedBorders: Border[];
 }
@@ -1052,6 +1128,10 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   borderColor: IColor;
   borderWidth: number;
   borderRadius: number;
+  borderTopLeftRadius: number;
+  borderTopRightRadius: number;
+  borderBottomRightRadius: number;
+  borderBottomLeftRadius: number;
   id: string;
   testId: string;
   visible: boolean;

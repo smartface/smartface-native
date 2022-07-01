@@ -13,6 +13,8 @@ import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import type ScrollViewAndroid from '../scrollview/scrollview.android';
 import { EventListenerCallback } from '../../core/eventemitter';
 import { IColor } from '../color/color';
+import { throws } from 'assert';
+import View from '.';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -86,6 +88,14 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   protected _borderColor: IView['borderColor'];
   protected _borderWidth: number;
   protected _borderRadius: number;
+  protected _borderTopLeftRadius: number;
+  protected _borderTopRightRadius: number;
+  protected _borderBottomRightRadius: number;
+  protected _borderBottomLeftRadius: number;
+  protected _borderTopStartRadius: number;
+  protected _borderTopEndRadius: number;
+  protected _borderBottomStartRadius: number;
+  protected _borderBottomEndRadius: number;
   protected _backgroundColor: IView['backgroundColor'];
   protected _overScrollMode: OverScrollMode;
   protected didSetTouchHandler: boolean;
@@ -94,6 +104,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _rippleEnabled: boolean;
   private _rippleColor?: IColor;
   private _useForeground: boolean;
+  private _bitwiseBorders: number = 0;  
+  private _isRTL: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
   protected createNativeObject() {
@@ -108,6 +120,14 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._borderColor = ColorAndroid.BLACK;
     this._borderWidth = 0;
     this._borderRadius = 0;
+    this._borderBottomLeftRadius = 0;
+    this._borderBottomRightRadius = 0;
+    this._borderTopLeftRadius = 0;
+    this._borderTopRightRadius = 0;
+    this._borderTopStartRadius = -1;
+    this._borderTopEndRadius = -1;
+    this._borderBottomStartRadius = -1;
+    this._borderBottomEndRadius = -1;
     this._backgroundColor = ColorAndroid.TRANSPARENT;
     this.didSetTouchHandler = false;
     this._touchEnabled = true;
@@ -120,6 +140,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._scale = { x: 1.0, y: 1.0 };
     this._masksToBounds = true;
     this._maskedBorders = [ViewAndroid.Border.TOP_LEFT, ViewAndroid.Border.TOP_RIGHT, ViewAndroid.Border.BOTTOM_RIGHT, ViewAndroid.Border.BOTTOM_LEFT];
+    this._isRTL = AndroidConfig.activity.getResources().getConfiguration().getLayoutDirection() == 1;
     super.preConstruct(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
@@ -229,7 +250,6 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
 
   private _setMaskedBorders(bitwiseBorders) {
-    const borderRadiusInDp = DpToPixel(this.borderRadius);
     const borderRadiuses = Array(8).fill(0);
     for (let i = 0; i < 4; i++) {
       const borderEnum = 1 << i;
@@ -237,16 +257,24 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
           case ViewAndroid.Border.TOP_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 0, 3);
+            let topStartValue = !this._isRTL ?  this._borderTopStartRadius : this._borderTopEndRadius;
+            let topLeftValue: number = (topStartValue != -1) ? topStartValue : this._borderTopLeftRadius;
+            borderRadiuses.fill(DpToPixel(topLeftValue), 0, 3);
             break;
           case ViewAndroid.Border.TOP_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 2, 4);
+            let topEndValue = !this._isRTL ?  this._borderTopEndRadius : this._borderTopStartRadius ;
+            let topRightValue: number = topEndValue != -1 ? topEndValue : this._borderTopRightRadius;
+            borderRadiuses.fill(DpToPixel(topRightValue), 2, 4);
             break;
           case ViewAndroid.Border.BOTTOM_RIGHT:
-            borderRadiuses.fill(borderRadiusInDp, 4, 6);
+            let bottomEndValue = !this._isRTL ?  this._borderBottomEndRadius : this._borderBottomStartRadius;
+            let bottomRightValue: number = (bottomEndValue != -1) ? bottomEndValue : this._borderBottomRightRadius;
+            borderRadiuses.fill(DpToPixel(bottomRightValue), 4, 6);
             break;
           case ViewAndroid.Border.BOTTOM_LEFT:
-            borderRadiuses.fill(borderRadiusInDp, 6, 8);
+            let bottomStartValue = !this._isRTL ?  this._borderBottomStartRadius : this._borderBottomEndRadius;
+            let bottomLeftValue: number = (bottomStartValue != -1) ? bottomStartValue  : this._borderBottomLeftRadius;
+            borderRadiuses.fill(DpToPixel(bottomLeftValue), 6, 8);
             break;
           default:
             break;
@@ -256,9 +284,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return borderRadiuses;
   }
   private _resetBackground() {
-    const bitwiseBorders = this.maskedBorders?.reduce((acc, cValue) => acc | cValue, 0);
     //Provide backward support in case of diff behavior of border radius.
-    const borderRadiuses = bitwiseBorders !== ViewAndroid.Border.ALL ? this._setMaskedBorders(bitwiseBorders) : [DpToPixel(this.borderRadius)];
+    const borderRadiuses = this._setMaskedBorders(this._bitwiseBorders);
     const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;
     const borderColorNative = this.borderColor?.nativeObject || ColorAndroid.BLACK.nativeObject;
 
@@ -364,15 +391,123 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   set borderRadius(value) {
     this._borderRadius = value;
+    this._borderBottomLeftRadius = value;
+    this._borderBottomStartRadius = -1; 
+    this._borderBottomRightRadius = value;
+    this._borderBottomEndRadius = -1;
+    this._borderTopLeftRadius = value;
+    this._borderTopStartRadius = -1;
+    this._borderTopRightRadius = value;
+    this._borderTopEndRadius = -1;
+    this._bitwiseBorders = ViewAndroid.Border.ALL;
+    
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
 
+  get borderBottomLeftRadius() {
+   return this._borderBottomLeftRadius;
+  }
+
+  set borderBottomLeftRadius(value) {
+    this._borderBottomLeftRadius = value;   
+    this._bitwiseBorders |= ViewAndroid.Border.BOTTOM_LEFT;
+
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+  
+  get borderBottomStartRadius() {
+    return this._borderBottomStartRadius;
+  }
+ 
+  set borderBottomStartRadius(value) {
+     this._borderBottomStartRadius = value;   
+     this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_LEFT : ViewAndroid.Border.BOTTOM_RIGHT;
+ 
+     this._resetBackground();
+     this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderBottomRightRadius() {
+    return this._borderBottomRightRadius;   
+  }
+
+  set borderBottomRightRadius(value) {
+    this._borderBottomRightRadius = value;   
+    this._bitwiseBorders |= ViewAndroid.Border.BOTTOM_RIGHT;
+
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderBottomEndRadius() {
+    return this._borderBottomEndRadius;
+  }
+ 
+  set borderBottomEndRadius(value) {
+     this._borderBottomEndRadius = value;   
+     this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_RIGHT : ViewAndroid.Border.BOTTOM_LEFT;
+ 
+     this._resetBackground();
+     this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderTopLeftRadius() {
+    return this._borderTopLeftRadius;
+  }
+
+  set borderTopLeftRadius(value) {
+    this._borderTopLeftRadius = value; 
+    this._bitwiseBorders |= ViewAndroid.Border.TOP_LEFT;
+    
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderTopStartRadius() {
+    return this._borderTopStartRadius;
+  }
+
+  set borderTopStartRadius(value) {
+    this._borderTopStartRadius = value; 
+    this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.TOP_LEFT : ViewAndroid.Border.TOP_RIGHT;
+    
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderTopRightRadius() {
+    return this._borderTopRightRadius; 
+  }
+
+  set borderTopRightRadius(value) {
+    this._borderTopRightRadius = value;
+    this._bitwiseBorders |= ViewAndroid.Border.TOP_RIGHT;
+
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+
+  get borderTopEndRadius() {
+    return this._borderTopEndRadius;
+  }
+
+  set borderTopEndRadius(value) {
+    this._borderTopEndRadius = value; 
+    this._bitwiseBorders |= !this._isRTL ?  ViewAndroid.Border.TOP_RIGHT : ViewAndroid.Border.TOP_LEFT;
+    
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
+  }
+  
   get maskedBorders() {
     return this._maskedBorders;
   }
   set maskedBorders(value) {
     this._maskedBorders = value;
+    this._bitwiseBorders = value.reduce((acc, cValue) => acc | cValue, 0);
+
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
