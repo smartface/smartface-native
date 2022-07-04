@@ -239,7 +239,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
   borderRadius: number;
   /**
    * Sets/gets top-left corner radius of a view.
-   * 
+   *
    * @property {Number} [borderTopLeftRadius = 0]
    * @android
    * @ios
@@ -248,7 +248,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
   borderTopLeftRadius: number;
   /**
    * Sets/gets top-right corner radius of a view.
-   * 
+   *
    * @property {Number} [borderTopRightRadius = 0]
    * @android
    * @ios
@@ -257,7 +257,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
   borderTopRightRadius: number;
   /**
    * Sets/gets top-start corner radius of a view.
-   * 
+   *
    * @property {Number} [borderTopStartRadius = -1]
    * @android
    * @ios
@@ -266,7 +266,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
   borderTopStartRadius: number;
   /**
    * Sets/gets top-end corner radius of a view.
-   * 
+   *
    * @property {Number} [borderTopEndRadius = -1]
    * @android
    * @ios
@@ -275,16 +275,16 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
   borderTopEndRadius: number;
   /**
    * Sets/gets bottom-left corner radius of a view.
-   * 
+   *
    * @property {Number} [borderBottomLeftRadius = 0]
    * @android
    * @ios
    * @since 5.0.3
    */
   borderBottomLeftRadius: number;
-   /**
+  /**
    * Sets/gets bottom-right corner radius of a view.
-   * 
+   *
    * @property {Number} [borderBottomRightRadius = 0]
    * @android
    * @ios
@@ -292,9 +292,9 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    */
   borderBottomRightRadius: number;
 
-   /**
+  /**
    * Sets/gets bottom-start corner radius of a view.
-   * 
+   *
    * @property {Number} [borderBottomStartRadius = -1]
    * @android
    * @ios
@@ -304,7 +304,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
 
   /**
    * Sets/gets bottom-end corner radius of a view.
-   * 
+   *
    * @property {Number} [borderBottomEndRadius = -1]
    * @android
    * @ios
@@ -1105,6 +1105,10 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
+  borderTopStartRadius: number;
+  borderTopEndRadius: number;
+  borderBottomStartRadius: number;
+  borderBottomEndRadius: number;
   protected createNativeObject(): any;
   parent: IView | undefined;
   get uniqueId(): string;
