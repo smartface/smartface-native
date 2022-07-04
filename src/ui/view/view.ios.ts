@@ -29,6 +29,17 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _paddingTop: IView['paddingBottom'];
   private _paddingBottom: IView['paddingTop'];
 
+  private _isLTR: boolean;
+
+  private _borderTopLeftRadius = 0;
+  private _borderTopRightRadius = 0;
+  private _borderBottomLeftRadius = 0;
+  private _borderBottomRightRadius = 0;
+  private _borderTopStartRadius = -1;
+  private _borderTopEndRadius = -1;
+  private _borderBottomStartRadius = -1;
+  private _borderBottomEndRadius = -1;
+
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
 
@@ -81,6 +92,9 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     };
 
     this.addIOSProps(this.getIOSProperties());
+    const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
+    const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
+    this._isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
   }
 
   protected preConstruct(params?: Partial<Record<string, any>>): void {
@@ -305,6 +319,112 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
   set borderRadius(value) {
     this.nativeObject.layer.cornerRadius = value;
+  }
+
+  get borderTopLeftRadius() {
+    return this._borderTopLeftRadius;
+  }
+
+  set borderTopLeftRadius(value) {
+    this._borderTopLeftRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderTopRightRadius() {
+    return this._borderTopRightRadius;
+  }
+
+  set borderTopRightRadius(value) {
+    this._borderTopRightRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderBottomLeftRadius() {
+    return this._borderBottomLeftRadius;
+  }
+
+  set borderBottomLeftRadius(value) {
+    this._borderBottomLeftRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderBottomRightRadius() {
+    return this._borderBottomRightRadius;
+  }
+
+  set borderBottomRightRadius(value) {
+    this._borderBottomRightRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderTopStartRadius() {
+    return this._borderTopStartRadius;
+  }
+
+  set borderTopStartRadius(value) {
+    this._borderTopStartRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderTopEndRadius() {
+    return this._borderTopEndRadius;
+  }
+
+  set borderTopEndRadius(value) {
+    this._borderTopEndRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderBottomStartRadius() {
+    return this._borderBottomStartRadius;
+  }
+
+  set borderBottomStartRadius(value) {
+    this._borderBottomStartRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  get borderBottomEndRadius() {
+    return this._borderBottomEndRadius;
+  }
+
+  set borderBottomEndRadius(value) {
+    this._borderBottomEndRadius = value;
+    this.applyBorderRadiuses();
+  }
+
+  private applyBorderRadiuses() {
+    /* check direction and calculate topLeft, topRight, bottomLeft, bottomRight */
+    let topLeft = 0;
+    let topRight = 0;
+    let bottomLeft = 0;
+    let bottomRight = 0;
+
+    // find topLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderTopStartRadius !== -1) {
+      if (this._isLTR) topLeft = this._borderTopStartRadius;
+      else topRight = this._borderTopStartRadius;
+    } else if (this._borderTopLeftRadius !== 0) topLeft = this._borderTopLeftRadius;
+
+    // find topRight radius based on direction and replace its value if direction is RTL
+    if (this._borderTopEndRadius !== -1) {
+      if (this._isLTR) topRight = this._borderTopEndRadius;
+      else topLeft = this._borderTopEndRadius;
+    } else if (this._borderTopRightRadius !== 0) topRight = this._borderTopRightRadius;
+
+    // find bottomLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomStartRadius !== -1) {
+      if (this._isLTR) bottomLeft = this._borderBottomStartRadius;
+      else bottomRight = this._borderBottomStartRadius;
+    } else if (this._borderBottomLeftRadius !== 0) bottomLeft = this._borderBottomLeftRadius;
+
+    // find bottomRight radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomEndRadius !== -1) {
+      if (this._isLTR) bottomRight = this._borderBottomEndRadius;
+      else bottomLeft = this._borderBottomEndRadius;
+    } else if (this._borderBottomRightRadius !== 0) bottomRight = this._borderBottomRightRadius;
+
+    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
   }
 
   get maskedBorders() {
