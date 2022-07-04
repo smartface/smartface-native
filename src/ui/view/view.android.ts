@@ -13,8 +13,6 @@ import type ViewGroupAndroid from '../viewgroup/viewgroup.android';
 import type ScrollViewAndroid from '../scrollview/scrollview.android';
 import { EventListenerCallback } from '../../core/eventemitter';
 import { IColor } from '../color/color';
-import { throws } from 'assert';
-import View from '.';
 
 const NativeR = requireClass('android.R');
 const NativeView = requireClass('android.view.View');
@@ -283,6 +281,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     }
     return borderRadiuses;
   }
+
   private _resetBackground() {
     //Provide backward support in case of diff behavior of border radius.
     const borderRadiuses = this._setMaskedBorders(this._bitwiseBorders);
@@ -391,6 +390,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   set borderRadius(value) {
     this._borderRadius = value;
+    //Re-set all the border radius properties to override. 
     this._borderBottomLeftRadius = value;
     this._borderBottomStartRadius = -1; 
     this._borderBottomRightRadius = value;
