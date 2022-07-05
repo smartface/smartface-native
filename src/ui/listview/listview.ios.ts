@@ -9,6 +9,8 @@ import { ListViewEvents } from './listview-events';
 import ListViewItemIOS from '../listviewitem/listviewitem.ios';
 import Invocation from '../../util/iOS/invocation';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
+import { ViewEvents } from '../view/view-events';
+import { EventListenerCallback } from '../../core/eventemitter';
 
 export default class ListViewIOS<TEvent extends string = ListViewEvents> extends ViewIOS<TEvent | ListViewEvents, __SF_UITableView, IListView> implements IListView {
   protected createNativeObject() {
@@ -26,7 +28,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
-    this.setScrollEvents();
     super.preConstruct(params);
   }
   nativeInner: INativeInner;
@@ -286,10 +287,6 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       this.onRowSelected?.(this._listItemArray[e.uuid], e.index);
     };
 
-    this.nativeObject.didScroll = (e) => {
-      this.emit('scroll', e);
-      this.onScroll?.(e);
-    };
     this.nativeObject.canMoveRowAt = (e) => {
       this.emit('rowCanMove', e.indexPath.row);
       this.onRowCanMove?.(e.indexPath.row);
@@ -391,6 +388,23 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
   }
   set rowMoveEnabled(value: boolean) {
     this.nativeObject.setEditing(value);
+  }
+
+  on(eventName: ListViewEvents | ViewEvents, callback: EventListenerCallback) {
+    if (eventName === 'scroll') {
+      this.nativeObject.didScroll = (e) => {
+        this.emit('scroll', e);
+        this.onScroll?.(e);
+      };
+    } else if (
+      eventName === 'scrollBeginDecelerating' ||
+      eventName === 'scrollEndDecelerating' ||
+      eventName === 'scrollEndDraggingWillDecelerate' ||
+      eventName === 'scrollEndDraggingWithVelocityTargetContentOffset'
+    ) {
+      this.setScrollEvents();
+    }
+    return super.on(eventName, callback);
   }
   longPressDragEnabled: boolean;
 
