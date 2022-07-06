@@ -132,6 +132,7 @@ export interface ViewIOSProps {
    * The color of the shadow. "masksToBounds" property must be false for shadow.
    *
    * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+   * @deprecated Use {@link UI.View#shadowColor}
    * @ios
    * @since 2.0.6
    */
