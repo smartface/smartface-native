@@ -25,7 +25,7 @@ export interface TextBoxAndroidProps extends TextViewAndroidPRoperties {
    * @android
    * @since 2.0.10
    */
-  maxLength?: (value: number) => void;
+  maxLength: number;
 }
 
 export interface TextBoxiOSProps extends ViewIOSProps {
@@ -386,9 +386,9 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
   off(eventName: TextBoxEvents, callback: (...args: any[]) => void): void;
 
   emit(eventName: 'actionButtonPress', e?: { actionKeyType: ActionKeyType }): void;
-  emit(eventName: 'clearButtonPress', ): void;
-  emit(eventName: 'editBegins', ): void;
-  emit(eventName: 'editEnds', ): void;
+  emit(eventName: 'clearButtonPress'): void;
+  emit(eventName: 'editBegins'): void;
+  emit(eventName: 'editEnds'): void;
   emit(eventName: 'textChanged', e?: { insertedText: string; location: number }): void;
   emit(eventName: TextBoxEvents, ...args: any[]): void;
 
