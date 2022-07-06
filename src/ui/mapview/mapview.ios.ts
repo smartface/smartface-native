@@ -381,6 +381,10 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   get centerLocation(): IMapView['centerLocation'] {
     return this.nativeObject.centerLocation;
   }
+
+  set centerLocation(value: IMapView['centerLocation']) {
+    this.setCenterLocationWithZoomLevel(value, this._zoomLevel ?? DEFAULT_ZOOM_LEVEL, false);
+  }
   get zoomEnabled(): IMapView['zoomEnabled'] {
     return this.nativeObject.zoomEnabled;
   }
