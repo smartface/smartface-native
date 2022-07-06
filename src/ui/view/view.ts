@@ -660,6 +660,17 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @deprecated since 5.0.3 Use the borderBottomRightRadius, borderBottomLeftRadius, borderTopRightRadius, borderTopLeftRadius properties instead.
    */
   maskedBorders: Border[];
+  /**
+   * The color of the shadow. 
+   * {@link UI.View.ios#masksToBounds} property must be false for shadow on iOS.
+   * On Android, this property only works on Android 9 and above.
+   *
+   * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+   * @ios
+   * @android
+   * @since 5.0.3
+   */
+  shadowColor: IColor;
 }
 
 /**
@@ -1109,6 +1120,7 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   borderTopEndRadius: number;
   borderBottomStartRadius: number;
   borderBottomEndRadius: number;
+  shadowColor: IColor;
   protected createNativeObject(): any;
   parent: IView | undefined;
   get uniqueId(): string;

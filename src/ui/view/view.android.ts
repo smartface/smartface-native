@@ -22,6 +22,7 @@ const SFViewUtil = requireClass('io.smartface.android.sfcore.ui.view.SFViewUtil'
 const SFOnTouchViewManager = requireClass('io.smartface.android.sfcore.ui.touch.SFOnTouchViewManager');
 const NativeColorStateList = requireClass('android.content.res.ColorStateList');
 const NativeRippleDrawable = requireClass('android.graphics.drawable.RippleDrawable');
+const NativeBuild = requireClass('android.os.Build');
 
 function PixelToDp(px: number) {
   return AndroidUnitConverter.pixelToDp(px);
@@ -1052,6 +1053,18 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     }
   }
   // End of Ripple Effect
+  get shadowColor() {
+    if (NativeBuild.VERSION.SDK_INT >= 28) {
+      return new ColorAndroid({ color: this.nativeObject.getOutlineSpotShadowColor() });
+    }
+    return ColorAndroid.BLACK;
+  }
+  set shadowColor(shadowColor: IColor) {
+    if (NativeBuild.VERSION.SDK_INT >= 28) {
+      this.nativeObject.setOutlineAmbientShadowColor(shadowColor.nativeObject)
+      this.nativeObject.setOutlineSpotShadowColor(shadowColor.nativeObject)
+    }
+  }
 
   on(eventName: any, callback: EventListenerCallback) {
     if (Object.values(ViewEvents).includes(eventName)) {
