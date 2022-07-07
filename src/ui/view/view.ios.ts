@@ -1143,6 +1143,21 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.yoga.markDirty();
   }
 
+  get shadowColor() {
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    return new ColorIOS({
+      color
+    });
+  }
+
+  set shadowColor(shadowColor: IColor) {
+    const argShadowColor = new Invocation.Argument({
+      type: 'CGColor',
+      value: shadowColor.nativeObject
+    });
+    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
+  }
+
   static readonly ios = {
     get viewAppearanceSemanticContentAttribute() {
       return __SF_UIView.viewAppearanceSemanticContentAttribute();
