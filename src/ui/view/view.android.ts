@@ -103,7 +103,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _rippleEnabled: boolean;
   private _rippleColor?: IColor;
   private _useForeground: boolean;
-  private _bitwiseBorders: number = 0;  
+  private _bitwiseBorders: number = 0;
   private _isRTL: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
@@ -139,7 +139,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._scale = { x: 1.0, y: 1.0 };
     this._masksToBounds = true;
     this._maskedBorders = [ViewAndroid.Border.TOP_LEFT, ViewAndroid.Border.TOP_RIGHT, ViewAndroid.Border.BOTTOM_RIGHT, ViewAndroid.Border.BOTTOM_LEFT];
-    this._isRTL = AndroidConfig.activity.getResources().getConfiguration().getLayoutDirection() == 1;
+    this._isRTL = AndroidConfig.activity.getResources().getConfiguration().getLayoutDirection() === 1;
     super.preConstruct(params);
 
     this.addAndroidProps(this.getAndroidSpecificProps());
@@ -255,26 +255,30 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
       if (bitwiseBorders & borderEnum) {
         bitwiseBorders &= ~borderEnum;
         switch (borderEnum) {
-          case ViewAndroid.Border.TOP_LEFT:
-            let topStartValue = !this._isRTL ?  this._borderTopStartRadius : this._borderTopEndRadius;
-            let topLeftValue: number = (topStartValue != -1) ? topStartValue : this._borderTopLeftRadius;
+          case ViewAndroid.Border.TOP_LEFT: {
+            const topStartValue = !this._isRTL ? this._borderTopStartRadius : this._borderTopEndRadius;
+            const topLeftValue: number = topStartValue !== -1 ? topStartValue : this._borderTopLeftRadius;
             borderRadiuses.fill(DpToPixel(topLeftValue), 0, 3);
             break;
-          case ViewAndroid.Border.TOP_RIGHT:
-            let topEndValue = !this._isRTL ?  this._borderTopEndRadius : this._borderTopStartRadius ;
-            let topRightValue: number = topEndValue != -1 ? topEndValue : this._borderTopRightRadius;
+          }
+          case ViewAndroid.Border.TOP_RIGHT: {
+            const topEndValue = !this._isRTL ? this._borderTopEndRadius : this._borderTopStartRadius;
+            const topRightValue: number = topEndValue !== -1 ? topEndValue : this._borderTopRightRadius;
             borderRadiuses.fill(DpToPixel(topRightValue), 2, 4);
             break;
-          case ViewAndroid.Border.BOTTOM_RIGHT:
-            let bottomEndValue = !this._isRTL ?  this._borderBottomEndRadius : this._borderBottomStartRadius;
-            let bottomRightValue: number = (bottomEndValue != -1) ? bottomEndValue : this._borderBottomRightRadius;
+          }
+          case ViewAndroid.Border.BOTTOM_RIGHT: {
+            const bottomEndValue = !this._isRTL ? this._borderBottomEndRadius : this._borderBottomStartRadius;
+            const bottomRightValue: number = bottomEndValue !== -1 ? bottomEndValue : this._borderBottomRightRadius;
             borderRadiuses.fill(DpToPixel(bottomRightValue), 4, 6);
             break;
-          case ViewAndroid.Border.BOTTOM_LEFT:
-            let bottomStartValue = !this._isRTL ?  this._borderBottomStartRadius : this._borderBottomEndRadius;
-            let bottomLeftValue: number = (bottomStartValue != -1) ? bottomStartValue  : this._borderBottomLeftRadius;
+          }
+          case ViewAndroid.Border.BOTTOM_LEFT: {
+            const bottomStartValue = !this._isRTL ? this._borderBottomStartRadius : this._borderBottomEndRadius;
+            const bottomLeftValue: number = bottomStartValue !== -1 ? bottomStartValue : this._borderBottomLeftRadius;
             borderRadiuses.fill(DpToPixel(bottomLeftValue), 6, 8);
             break;
+          }
           default:
             break;
         }
@@ -391,9 +395,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
 
   set borderRadius(value) {
     this._borderRadius = value;
-    //Re-set all the border radius properties to override. 
+    //Re-set all the border radius properties to override.
     this._borderBottomLeftRadius = value;
-    this._borderBottomStartRadius = -1; 
+    this._borderBottomStartRadius = -1;
     this._borderBottomRightRadius = value;
     this._borderBottomEndRadius = -1;
     this._borderTopLeftRadius = value;
@@ -401,41 +405,41 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this._borderTopRightRadius = value;
     this._borderTopEndRadius = -1;
     this._bitwiseBorders = ViewAndroid.Border.ALL;
-    
+
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
 
   get borderBottomLeftRadius() {
-   return this._borderBottomLeftRadius;
+    return this._borderBottomLeftRadius;
   }
 
   set borderBottomLeftRadius(value) {
-    this._borderBottomLeftRadius = value;   
+    this._borderBottomLeftRadius = value;
     this._bitwiseBorders |= ViewAndroid.Border.BOTTOM_LEFT;
 
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
-  
+
   get borderBottomStartRadius() {
     return this._borderBottomStartRadius;
   }
- 
+
   set borderBottomStartRadius(value) {
-     this._borderBottomStartRadius = value;   
-     this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_LEFT : ViewAndroid.Border.BOTTOM_RIGHT;
- 
-     this._resetBackground();
-     this.android.updateRippleEffectIfNeeded?.();
+    this._borderBottomStartRadius = value;
+    this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_LEFT : ViewAndroid.Border.BOTTOM_RIGHT;
+
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
   }
 
   get borderBottomRightRadius() {
-    return this._borderBottomRightRadius;   
+    return this._borderBottomRightRadius;
   }
 
   set borderBottomRightRadius(value) {
-    this._borderBottomRightRadius = value;   
+    this._borderBottomRightRadius = value;
     this._bitwiseBorders |= ViewAndroid.Border.BOTTOM_RIGHT;
 
     this._resetBackground();
@@ -445,13 +449,13 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   get borderBottomEndRadius() {
     return this._borderBottomEndRadius;
   }
- 
+
   set borderBottomEndRadius(value) {
-     this._borderBottomEndRadius = value;   
-     this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_RIGHT : ViewAndroid.Border.BOTTOM_LEFT;
- 
-     this._resetBackground();
-     this.android.updateRippleEffectIfNeeded?.();
+    this._borderBottomEndRadius = value;
+    this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.BOTTOM_RIGHT : ViewAndroid.Border.BOTTOM_LEFT;
+
+    this._resetBackground();
+    this.android.updateRippleEffectIfNeeded?.();
   }
 
   get borderTopLeftRadius() {
@@ -459,9 +463,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
 
   set borderTopLeftRadius(value) {
-    this._borderTopLeftRadius = value; 
+    this._borderTopLeftRadius = value;
     this._bitwiseBorders |= ViewAndroid.Border.TOP_LEFT;
-    
+
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
@@ -471,15 +475,15 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
 
   set borderTopStartRadius(value) {
-    this._borderTopStartRadius = value; 
+    this._borderTopStartRadius = value;
     this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.TOP_LEFT : ViewAndroid.Border.TOP_RIGHT;
-    
+
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
 
   get borderTopRightRadius() {
-    return this._borderTopRightRadius; 
+    return this._borderTopRightRadius;
   }
 
   set borderTopRightRadius(value) {
@@ -495,13 +499,13 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
 
   set borderTopEndRadius(value) {
-    this._borderTopEndRadius = value; 
-    this._bitwiseBorders |= !this._isRTL ?  ViewAndroid.Border.TOP_RIGHT : ViewAndroid.Border.TOP_LEFT;
-    
+    this._borderTopEndRadius = value;
+    this._bitwiseBorders |= !this._isRTL ? ViewAndroid.Border.TOP_RIGHT : ViewAndroid.Border.TOP_LEFT;
+
     this._resetBackground();
     this.android.updateRippleEffectIfNeeded?.();
   }
-  
+
   get maskedBorders() {
     return this._maskedBorders;
   }
@@ -701,8 +705,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   requestLayout(invalidate?: Boolean) {
     this.nativeObject.requestLayout();
-    if(invalidate)
-        this.nativeObject.invalidate();
+    if (invalidate) {
+      this.nativeObject.invalidate();
+    }
   }
   applyLayout() {
     this._nativeObject.requestLayout();
@@ -933,7 +938,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return PixelToDp(this.yogaNode.getMargin(YogaEdge.ALL).value);
   }
   set margin(margin) {
-    this.yogaNode.setMargin(YogaEdge.ALL,  DpToPixel(margin));
+    this.yogaNode.setMargin(YogaEdge.ALL, DpToPixel(margin));
     this.requestLayout();
   }
   get borderTopWidth() {
@@ -1013,8 +1018,9 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.requestLayout();
   }
   dirty() {
-    if(this.yogaNode.isMeasureDefined())
-        this.yogaNode.dirty();
+    if (this.yogaNode.isMeasureDefined()) {
+      this.yogaNode.dirty();
+    }
   }
   // Ripple Effect
   get rippleEnabled() {
@@ -1061,8 +1067,8 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   }
   set shadowColor(shadowColor: IColor) {
     if (NativeBuild.VERSION.SDK_INT >= 28) {
-      this.nativeObject.setOutlineAmbientShadowColor(shadowColor.nativeObject)
-      this.nativeObject.setOutlineSpotShadowColor(shadowColor.nativeObject)
+      this.nativeObject.setOutlineAmbientShadowColor(shadowColor.nativeObject);
+      this.nativeObject.setOutlineSpotShadowColor(shadowColor.nativeObject);
     }
   }
 

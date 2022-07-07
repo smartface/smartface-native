@@ -31,14 +31,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   private _isLTR: boolean;
 
-  private _borderTopLeftRadius = 0;
-  private _borderTopRightRadius = 0;
-  private _borderBottomLeftRadius = 0;
-  private _borderBottomRightRadius = 0;
-  private _borderTopStartRadius = -1;
-  private _borderTopEndRadius = -1;
-  private _borderBottomStartRadius = -1;
-  private _borderBottomEndRadius = -1;
+  private _borderTopLeftRadius: number;
+  private _borderTopRightRadius: number;
+  private _borderBottomLeftRadius: number;
+  private _borderBottomRightRadius: number;
+  private _borderTopStartRadius: number;
+  private _borderTopEndRadius: number;
+  private _borderBottomStartRadius: number;
+  private _borderBottomEndRadius: number;
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
@@ -98,16 +98,24 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    super.preConstruct(params);
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;
     this._width = 0;
     this._height = 0;
+    this._borderTopLeftRadius = 0;
+    this._borderTopRightRadius = 0;
+    this._borderBottomLeftRadius = 0;
+    this._borderBottomRightRadius = 0;
+    this._borderTopStartRadius = -1;
+    this._borderTopEndRadius = -1;
+    this._borderBottomStartRadius = -1;
+    this._borderBottomEndRadius = -1;
     this._scale = {
       x: 1.0,
       y: 1.0
     };
+    super.preConstruct(params);
   }
   onTouch: (e?: Point2D | undefined) => boolean;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean;
