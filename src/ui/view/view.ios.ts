@@ -385,6 +385,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       else bottomLeft = this._borderBottomEndRadius;
     } else if (this._borderBottomRightRadius !== 0) bottomRight = this._borderBottomRightRadius;
 
+    // Every corner needs to be calculated in order to draw frame of container individiucally.
+    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
+    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
+    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
     this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
   }
 
