@@ -103,7 +103,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
   private _rippleEnabled: boolean;
   private _rippleColor?: IColor;
   private _useForeground: boolean;
-  private _bitwiseBorders: number = 0;
+  protected _bitwiseBorders: number = 0;
   private _isRTL: boolean;
   yogaNode: any;
   // as { updateRippleEffectIfNeeded: () => void; rippleColor: Color | null; [key: string]: any } & TNative;
@@ -248,7 +248,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     this.yogaNode.setBorder(YogaEdge.ALL, DpToPixel(this.borderWidth) || 0);
   }
 
-  private _setMaskedBorders(bitwiseBorders) {
+  protected _setMaskedBorders(bitwiseBorders) {
     const borderRadiuses = Array(8).fill(0);
     for (let i = 0; i < 4; i++) {
       const borderEnum = 1 << i;
@@ -287,7 +287,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     return borderRadiuses;
   }
 
-  private _resetBackground() {
+  protected _resetBackground() {
     //Provide backward support in case of diff behavior of border radius.
     const borderRadiuses = this._setMaskedBorders(this._bitwiseBorders);
     const borderWidth = this.borderWidth ? DpToPixel(this.borderWidth) : 0;

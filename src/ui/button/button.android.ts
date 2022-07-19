@@ -80,34 +80,13 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     this.__backgroundImages = value;
     this.setBackgroundImage();
   }
-  get borderWidth(): IButton['borderWidth'] {
-    return this._borderWidth;
-  }
-  set borderWidth(value: IButton['borderWidth']) {
-    this._borderWidth = value;
-    this.setBackgroundImage();
-    this._setBorderToAllEdges();
-    this.setBorder();
-  }
-  get borderRadius(): IButton['borderRadius'] {
-    return AndroidUnitConverter.pixelToDp(this._borderRadius);
-  }
-  set borderRadius(value: IButton['borderRadius']) {
-    const radius = isNaN(value) ? 0 : value;
-    this._borderRadius = AndroidUnitConverter.dpToPixel(radius);
-    this.setBorder();
-    if (this.__backgroundImages) {
-      this.setBackgroundImage();
-    } else {
-      this.setBackgroundColor();
-    }
-  }
   get borderColor(): IButton['borderColor'] {
     return this._borderColor;
   }
   set borderColor(value: IButton['borderColor']) {
     this._borderColor = value;
     this.setBorder();
+    this._setBorderToAllEdges();
   }
   get textAlignment(): IButton['textAlignment'] {
     return this._textAlignment;
@@ -119,16 +98,28 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
   onPress: IButton['onPress'];
   onLongPress: IButton['onLongPress'];
 
+    _resetBackground() {
+        this.setBorder();
+        if (this.__backgroundImages) {
+            this.setBackgroundImage();
+        } else {
+            this.setBackgroundColor();
+        }
+    }
+  
   private setBackgroundColor() {
     const backgroundColors: any = this._backgroundColor;
+    const borderRadiuses = this._setMaskedBorders(this._bitwiseBorders);
+    const nativeFloatArray = array(borderRadiuses, 'float');
+    
     if (backgroundColors instanceof Color && backgroundColors.isGradient) {
       this.backgroundDrawable = backgroundColors.nativeObject;
-      this.backgroundDrawable.setCornerRadius(this._borderRadius);
+      this.backgroundDrawable.setCornerRadii(nativeFloatArray);
     } else if (backgroundColors instanceof Color && !backgroundColors.isGradient) {
       release(this.backgroundDrawable);
       this.backgroundDrawable = new NativeGradientDrawable();
       this.backgroundDrawable.setColor(backgroundColors.nativeObject);
-      this.backgroundDrawable.setCornerRadius(this._borderRadius);
+      this.backgroundDrawable.setCornerRadii(nativeFloatArray);
     } else if (isViewState<Color>(backgroundColors)) {
       release(this.backgroundDrawable);
       this.backgroundDrawable = new NativeStateListDrawable();
@@ -141,7 +132,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
           stateDrawable = new NativeGradientDrawable();
           stateDrawable.setColor(backgroundColors.normal.nativeObject);
         }
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadii(nativeFloatArray);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_NORMAL, stateDrawable);
       }
       if (backgroundColors.disabled) {
@@ -151,7 +142,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
           stateDrawable = new NativeGradientDrawable();
           stateDrawable.setColor(backgroundColors.disabled.nativeObject);
         }
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadii(nativeFloatArray);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_DISABLED, stateDrawable);
       }
       if (backgroundColors.selected) {
@@ -161,7 +152,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
           stateDrawable = new NativeGradientDrawable();
           stateDrawable.setColor(backgroundColors.selected.nativeObject);
         }
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadii(nativeFloatArray);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_SELECTED, stateDrawable);
       }
       if (backgroundColors.pressed) {
@@ -171,7 +162,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
           stateDrawable = new NativeGradientDrawable();
           stateDrawable.setColor(backgroundColors.pressed.nativeObject);
         }
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadii(nativeFloatArray);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_PRESSED, stateDrawable);
       }
       if (backgroundColors.focused) {
@@ -181,7 +172,7 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
           stateDrawable = new NativeGradientDrawable();
           stateDrawable.setColor(backgroundColors.focused.nativeObject);
         }
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadii(nativeFloatArray);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_FOCUSED, stateDrawable);
       }
     }
@@ -192,10 +183,11 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
     const resources = AndroidConfig.activityResources;
     let bitmap: any;
     const backgroundImages: any = this.__backgroundImages;
+    const borderRadiusInPx = AndroidUnitConverter.dpToPixel(this._borderRadius);
     if (backgroundImages instanceof ImageAndroid) {
       bitmap = backgroundImages.nativeObject.getBitmap();
       this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-      this.backgroundDrawable.setCornerRadius(this._borderRadius);
+      this.backgroundDrawable.setCornerRadius(borderRadiusInPx);
       this.setBackground(0);
     } else if (isViewState<ImageAndroid>(backgroundImages)) {
       let stateDrawable: any;
@@ -206,50 +198,52 @@ export default class ButtonAndroid<TEvent extends string = ButtonEvents, TNative
         image = backgroundImages.normal;
         bitmap = image.nativeObject.getBitmap();
         stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadius(borderRadiusInPx);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_NORMAL, stateDrawable);
       }
       if (backgroundImages.disabled) {
         image = backgroundImages.disabled;
         bitmap = image.nativeObject.getBitmap();
         stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadius(borderRadiusInPx);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_DISABLED, stateDrawable);
       }
       if (backgroundImages.selected) {
         image = backgroundImages.selected;
         bitmap = image.nativeObject.getBitmap();
         stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadius(borderRadiusInPx);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_SELECTED, stateDrawable);
       }
       if (backgroundImages.pressed) {
         image = backgroundImages.pressed;
         bitmap = image.nativeObject.getBitmap();
         stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadius(borderRadiusInPx);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_PRESSED, stateDrawable);
       }
       if (backgroundImages.focused) {
         image = backgroundImages.focused;
         bitmap = image.nativeObject.getBitmap();
         stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-        stateDrawable.setCornerRadius(this._borderRadius);
+        stateDrawable.setCornerRadius(borderRadiusInPx);
         this.backgroundDrawable.addState(ViewAndroid.State.STATE_FOCUSED, stateDrawable);
       }
       this.setBackground(0);
     }
   }
 
-  private setBorder() {
-    const borderWidth_px = AndroidUnitConverter.dpToPixel(this.borderWidth);
-    // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
-    // so we should use created drawables.
-    if (borderWidth_px >= 0) {
-      this.borderShapeDrawable = SFViewUtil.getShapeDrawable(this.borderColor.nativeObject, borderWidth_px, this._borderRadius);
-      this.setBackground(1);
+    private setBorder() {
+        const borderWidth_px = AndroidUnitConverter.dpToPixel(this.borderWidth);
+        // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
+        // so we should use created drawables.
+        if (borderWidth_px >= 0) {
+            const borderRadiuses = this._setMaskedBorders(this._bitwiseBorders);
+            const nativeFloatArray = array(borderRadiuses, 'float');
+            this.borderShapeDrawable = SFViewUtil.getShapeDrawable(this.borderColor.nativeObject, borderWidth_px, nativeFloatArray);
+            this.setBackground(1);
+        }
     }
-  }
 
   private setBackground(layerIndex: number) {
     const background = this.nativeObject.getBackground();
