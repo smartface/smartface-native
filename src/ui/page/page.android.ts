@@ -658,10 +658,8 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._headerBarElevation === null ? AndroidUnitConverter.pixelToDp(self.actionBar.getElevation()) : self._headerBarElevation;
       },
       set elevation(value: HeaderBar['android']['elevation']) {
-        if (value) {
-          self._headerBarElevation = value;
-          self.actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
-        }
+        self._headerBarElevation = value || 0;
+        self.actionBar.setElevation(AndroidUnitConverter.dpToPixel(self._headerBarElevation));
       },
       get subtitle(): HeaderBar['android']['subtitle'] {
         return self.toolbar.getSubtitle();
