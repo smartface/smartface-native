@@ -463,6 +463,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         if (value === self._transparent) {
           return;
         }
+        self._transparent = value;
         const pageLayoutParams = self.pageLayout.getLayoutParams();
         if (self._transparent) {
           pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
