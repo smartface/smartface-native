@@ -200,7 +200,16 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    STRETCH = 4
+    STRETCH = 4,
+    /**
+     * @property {Number} BASELINE
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    BASELINE = 5
   }
   /**
    * @enum {Number} UI.FlexLayout.FlexWrap
