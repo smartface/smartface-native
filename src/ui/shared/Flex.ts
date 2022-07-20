@@ -209,7 +209,16 @@ namespace Flex {
      * @readonly
      * @since 5.0.3
      */
-    BASELINE = 5
+    BASELINE = 5,
+    /**
+     * @property {Number} SPACE_BETWEEN
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    SPACE_BETWEEN = 6
   }
   /**
    * @enum {Number} UI.FlexLayout.FlexWrap
