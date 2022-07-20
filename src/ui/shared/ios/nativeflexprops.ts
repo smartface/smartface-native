@@ -29,7 +29,8 @@ export const AlignContent = {
   CENTER: YGAlign.Center,
   STRETCH: YGAlign.Stretch,
   BASELINE: YGAlign.Baseline,
-  SPACE_BETWEEN: YGAlign.SpaceBetween
+  SPACE_BETWEEN: YGAlign.SpaceBetween,
+  SPACE_AROUND: YGAlign.SpaceAround
 };
 
 export const AlignItems = {

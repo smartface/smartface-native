@@ -35,7 +35,8 @@ export const NativeAlignContent = {
   FLEX_END: NativeYogaAlign.FLEX_END,
   STRETCH: NativeYogaAlign.STRETCH,
   BASELINE: NativeYogaAlign.BASELINE,
-  SPACE_BETWEEN: NativeYogaAlign.SPACE_BETWEEN
+  SPACE_BETWEEN: NativeYogaAlign.SPACE_BETWEEN,
+  SPACE_AROUND: NativeYogaAlign.SPACE_AROUND
 };
 
 export const NativeFlexWrap = {
