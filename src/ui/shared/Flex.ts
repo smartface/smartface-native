@@ -229,7 +229,16 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    WRAP = 1
+    WRAP = 1,
+    /**
+     * @property {Number} WRAP_REVERSE
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    WRAP_REVERSE = 2
   }
   /**
    * @enum {Number} UI.FlexLayout.AlignItems

@@ -41,7 +41,8 @@ export const AlignItems = {
 
 export const FlexWrap = {
   NOWRAP: YGWrap.NoWrap,
-  WRAP: YGWrap.Wrap
+  WRAP: YGWrap.Wrap,
+  WRAP_REVERSE: YGWrap.WrapReverse
 };
 
 export const Display = {

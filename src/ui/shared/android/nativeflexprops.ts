@@ -38,7 +38,8 @@ export const NativeAlignContent = {
 
 export const NativeFlexWrap = {
   NOWRAP: NativeYogaWrap.NO_WRAP,
-  WRAP: NativeYogaWrap.WRAP
+  WRAP: NativeYogaWrap.WRAP,
+  WRAP_REVERSE: NativeYogaWrap.WRAP_REVERSE,
 };
 
 export const NativeAlignItems = {
