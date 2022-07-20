@@ -273,6 +273,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       }
 
       this.onRowBind?.(this._listItemArray[e.cell.uuid], e.indexPath.row);
+      this._listItemArray[e.cell.uuid].applyLayout()
     };
 
     // var _cellIdentifier = "cell";
