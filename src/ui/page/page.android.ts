@@ -419,7 +419,12 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._headerBarColor;
       },
       set backgroundColor(value: HeaderBar['backgroundColor']) {
-        self.toolbar.setBackgroundColor(value.nativeObject);
+        self._headerBarColor = value;
+        if (self._transparent) {
+          self.toolbar.setBackgroundColor(ColorAndroid.TRANSPARENT.nativeObject);
+        } else {
+          self.toolbar.setBackgroundColor(value.nativeObject);
+        }
       },
       get backgroundImage(): HeaderBar['backgroundImage'] {
         return self._headerBarImage;
@@ -481,6 +486,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
           self.headerBar.backgroundColor = ColorAndroid.TRANSPARENT;
         } else {
           pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
+          self.headerBar.backgroundColor = self._headerBarColor;
         }
         pageLayoutParams && self.pageLayout.setLayoutParams(pageLayoutParams);
       },
