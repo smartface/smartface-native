@@ -1,10 +1,10 @@
 import { AbstractPage, IPage, LargeTitleDisplayMode, PageOrientation, PresentationStyle } from './page';
 import Application from '../../application';
-import Contacts from '../../device/contacts/contacts.android';
+import ContactsAndroid from '../../device/contacts/contacts.android';
 import MultimediaAndroid from '../../device/multimedia/multimedia.android';
-import Screen from '../../device/screen';
+import ScreenAndroid from '../../device/screen';
 import { OrientationType } from '../../device/screen/screen';
-import Notifications from '../../global/notifications';
+import NotificationsAndroid from '../../global/notifications/notifications.android';
 import ColorAndroid from '../color/color.android';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
 import HeaderBarItem from '../headerbaritem';
@@ -13,25 +13,24 @@ import SoundAndroid from '../../device/sound/sound.android';
 import WebViewAndroid from '../webview/webview.android';
 import DocumentPickerAndroid from '../../device/documentpicker/documentpicker.android';
 import EmailComposerAndroid from '../emailcomposer/emailcomposer.android';
-import ViewController from '../../util/Android/transition/viewcontroller';
-import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import ImageAndroid from '../image/image.android';
-import SearchView from '../searchview';
-import AndroidUnitConverter from '../../util/Android/unitconverter';
+import SearchViewAndroid from '../searchview/searchview.android';
 import StatusBar from '../../application/statusbar';
 import { HeaderBar } from '../navigationcontroller/headerbar';
 import { IController } from '../navigationcontroller/navigationcontroller';
+import { IImage } from '../image/image';
+import HeaderBarItemAndroid from '../headerbaritem/headerbaritem.android';
+import { IColor } from '../color/color';
+
+import TypeUtil from '../../util/type';
+import ViewController from '../../util/Android/transition/viewcontroller';
+import FragmentTransition from '../../util/Android/transition/fragmenttransition';
 import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import LayoutParams from '../../util/Android/layoutparams';
-import SystemServices from '../../util/Android/systemservices';
+import AndroidUnitConverter from '../../util/Android/unitconverter';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
-import type FlexLayout from '../flexlayout';
-import Color from '../color';
-import { IImage } from '../image/image';
-import HeaderBarItemAndroid from '../headerbaritem/headerbaritem.android';
-import TypeUtil from '../../util/type';
-import { IColor } from '../color/color';
+import SystemServices from '../../util/Android/systemservices';
 
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeView = requireClass('android.view.View');
@@ -185,7 +184,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
     AndroidConfig.activity.setRequestedOrientation(nativeOrientation);
   }
   get layout(): IPage['layout'] {
-    return this.rootLayout as unknown as FlexLayout;
+    return this.rootLayout;
   }
   get isShown(): boolean {
     return this._isShown;
@@ -284,7 +283,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
                   Application.onReceivedNotification?.({
                     remote: parsedJson
                   });
-                  Notifications.onNotificationClick?.(parsedJson);
+                  NotificationsAndroid.onNotificationClick?.(parsedJson);
                   //clears notification intent extras
                   spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON);
                   spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_CLICKED);
@@ -311,7 +310,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
       },
       onConfigurationChanged: () => {
         let tempOrientation: number;
-        switch (Screen.orientation) {
+        switch (ScreenAndroid.orientation) {
           case OrientationType.PORTRAIT:
             tempOrientation = PageAndroid.Orientation.PORTRAIT;
             break;
@@ -357,7 +356,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         // for better performance. Remove if statement.
         // RequestCodes.Contacts.PICK_REQUEST_CODE  // deprecated
         if (RequestCodes.Contacts.PICK_REQUEST_CODE === requestCode || RequestCodes.Contacts.PICKFROM_REQUEST_CODE === requestCode) {
-          Contacts.onActivityResult(requestCode, resultCode, data);
+          ContactsAndroid.onActivityResult(requestCode, resultCode, data);
         } else if (
           requestCode === RequestCodes.Multimedia.PICK_FROM_GALLERY ||
           requestCode === RequestCodes.Multimedia.CAMERA_REQUEST ||
@@ -426,8 +425,20 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._headerBarImage;
       },
       set backgroundImage(value: HeaderBar['backgroundImage']) {
-        self._headerBarImage = value;
-        self.toolbar.setBackground(value.nativeObject);
+        let imageValue: ImageAndroid | null = null;
+        if (value instanceof ImageAndroid) {
+          imageValue = value;
+        } else if (typeof value === 'string') {
+          imageValue = ImageAndroid.createFromFile(value);
+        } else {
+          this._image = null;
+          this.nativeObject.setImageDrawable(null);
+        }
+
+        if (imageValue) {
+          self._headerBarImage = imageValue;
+          self.toolbar.setBackground(imageValue.nativeObject);
+        }
       },
       get titleLayout(): HeaderBar['titleLayout'] {
         return self._titleLayout;
@@ -496,7 +507,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
         return self._headerBarTitleColor;
       },
       set titleColor(value: HeaderBar['titleColor']) {
-        self._headerBarTitleColor = value as unknown as Color;
+        self._headerBarTitleColor = value;
         self.toolbar.setTitleTextColor(value.nativeObject);
       },
       get leftItemColor(): IColor | null {
@@ -535,7 +546,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
       /**
        * Implemented for just SearchView
        */
-      addViewToHeaderBar(view: SearchView) {
+      addViewToHeaderBar(view: SearchViewAndroid) {
         self._headerBarItems.unshift(
           new HeaderBarItemAndroid({
             //@ts-ignore TODO: Add searchView as member property
@@ -584,7 +595,7 @@ export default class PageAndroid<TEvent extends string = PageEvents, TNative = a
               const customViewContainer = new FlexLayoutAndroid();
               const cParent = item.customView.getParent();
               if (cParent !== null) {
-                (cParent as FlexLayoutAndroid).removeAll(); //TODO: getParent should not return View
+                cParent.removeAll(); //TODO: getParent should not return View
               }
               customViewContainer.addChild(item.customView as FlexLayoutAndroid);
               item.nativeObject = customViewContainer.nativeObject;

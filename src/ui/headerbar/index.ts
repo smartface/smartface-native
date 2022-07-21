@@ -141,7 +141,7 @@ type IHeaderBar = {
    * @ios
    * @since 0.1
    */
-  backgroundImage: IImage;
+  backgroundImage: IImage | string;
   /**
    * Gets/sets the navigation indicator visibility of the headerBar.
    * If false navigation indicator will not show, otherwise will show

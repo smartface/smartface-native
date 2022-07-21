@@ -140,14 +140,17 @@ export class HeaderBar extends NativeMobileComponent<__SF_UINavigationBar, IHead
     return ImageIOS.createFromImage(this.nativeObject.backgroundImage);
   }
   set backgroundImage(value: IHeaderBar['backgroundImage']) {
+    const backgroundImageValue = value instanceof ImageIOS ? value : ImageIOS.createFromFile(value as string);
     if (parseInt(System.OSVersion) >= 15) {
-      if (this.appearance) {
-        this.appearance.backgroundImage = value.nativeObject;
+      if (this.appearance && backgroundImageValue) {
+        this.appearance.backgroundImage = backgroundImageValue.nativeObject;
       }
       this.nativeObject.standardAppearance = this.appearance;
       this.nativeObject.scrollEdgeAppearance = this.appearance;
     } else {
-      this.nativeObject.backgroundImage = value.nativeObject;
+      if (backgroundImageValue) {
+        this.nativeObject.backgroundImage = backgroundImageValue.nativeObject;
+      }
     }
   }
   get height(): IHeaderBar['height'] {
