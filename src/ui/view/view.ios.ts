@@ -8,6 +8,7 @@ import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import TimerIOS from '../../global/timer/timer.ios';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
@@ -288,7 +289,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderTopLeftRadius(value) {
     this._borderTopLeftRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderTopRightRadius() {
@@ -297,7 +297,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderTopRightRadius(value) {
     this._borderTopRightRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderBottomLeftRadius() {
@@ -306,7 +305,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderBottomLeftRadius(value) {
     this._borderBottomLeftRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderBottomRightRadius() {
@@ -315,7 +313,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderBottomRightRadius(value) {
     this._borderBottomRightRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderTopStartRadius() {
@@ -324,7 +321,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderTopStartRadius(value) {
     this._borderTopStartRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderTopEndRadius() {
@@ -333,7 +329,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderTopEndRadius(value) {
     this._borderTopEndRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderBottomStartRadius() {
@@ -342,7 +337,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderBottomStartRadius(value) {
     this._borderBottomStartRadius = value;
-    this.applyBorderRadiuses();
   }
 
   get borderBottomEndRadius() {
@@ -351,7 +345,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
 
   set borderBottomEndRadius(value) {
     this._borderBottomEndRadius = value;
-    this.applyBorderRadiuses();
   }
 
   private applyBorderRadiuses() {
@@ -386,9 +379,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else if (this._borderBottomRightRadius !== 0) bottomRight = this._borderBottomRightRadius;
 
     // Every corner needs to be calculated in order to draw frame of container individiucally.
-    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
-    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
-    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
     this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
   }
 
@@ -709,6 +699,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       this.flexBasis = NaN;
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get flexShrink() {
@@ -1034,6 +1026,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get height() {
@@ -1047,6 +1041,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get minWidth() {
