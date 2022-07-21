@@ -8,6 +8,7 @@ import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import TimerIOS from '../../global/timer/timer.ios';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
@@ -28,6 +29,17 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _paddingLeft: IView['paddingLeft'];
   private _paddingTop: IView['paddingBottom'];
   private _paddingBottom: IView['paddingTop'];
+
+  private _isLTR: boolean;
+
+  private _borderTopLeftRadius: number;
+  private _borderTopRightRadius: number;
+  private _borderBottomLeftRadius: number;
+  private _borderBottomRightRadius: number;
+  private _borderTopStartRadius: number;
+  private _borderTopEndRadius: number;
+  private _borderBottomStartRadius: number;
+  private _borderBottomEndRadius: number;
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
@@ -81,19 +93,30 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     };
 
     this.addIOSProps(this.getIOSProperties());
+    const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
+    const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
+    this._isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
   }
 
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    super.preConstruct(params);
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;
     this._width = 0;
     this._height = 0;
+    this._borderTopLeftRadius = 0;
+    this._borderTopRightRadius = 0;
+    this._borderBottomLeftRadius = 0;
+    this._borderBottomRightRadius = 0;
+    this._borderTopStartRadius = -1;
+    this._borderTopEndRadius = -1;
+    this._borderBottomStartRadius = -1;
+    this._borderBottomEndRadius = -1;
     this._scale = {
       x: 1.0,
       y: 1.0
     };
+    super.preConstruct(params);
   }
   onTouch: (e?: Point2D | undefined) => boolean;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean;
@@ -258,6 +281,105 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
   set borderRadius(value) {
     this.nativeObject.layer.cornerRadius = value;
+  }
+
+  get borderTopLeftRadius() {
+    return this._borderTopLeftRadius;
+  }
+
+  set borderTopLeftRadius(value) {
+    this._borderTopLeftRadius = value;
+  }
+
+  get borderTopRightRadius() {
+    return this._borderTopRightRadius;
+  }
+
+  set borderTopRightRadius(value) {
+    this._borderTopRightRadius = value;
+  }
+
+  get borderBottomLeftRadius() {
+    return this._borderBottomLeftRadius;
+  }
+
+  set borderBottomLeftRadius(value) {
+    this._borderBottomLeftRadius = value;
+  }
+
+  get borderBottomRightRadius() {
+    return this._borderBottomRightRadius;
+  }
+
+  set borderBottomRightRadius(value) {
+    this._borderBottomRightRadius = value;
+  }
+
+  get borderTopStartRadius() {
+    return this._borderTopStartRadius;
+  }
+
+  set borderTopStartRadius(value) {
+    this._borderTopStartRadius = value;
+  }
+
+  get borderTopEndRadius() {
+    return this._borderTopEndRadius;
+  }
+
+  set borderTopEndRadius(value) {
+    this._borderTopEndRadius = value;
+  }
+
+  get borderBottomStartRadius() {
+    return this._borderBottomStartRadius;
+  }
+
+  set borderBottomStartRadius(value) {
+    this._borderBottomStartRadius = value;
+  }
+
+  get borderBottomEndRadius() {
+    return this._borderBottomEndRadius;
+  }
+
+  set borderBottomEndRadius(value) {
+    this._borderBottomEndRadius = value;
+  }
+
+  private applyBorderRadiuses() {
+    /* check direction and calculate topLeft, topRight, bottomLeft, bottomRight */
+    let topLeft = 0;
+    let topRight = 0;
+    let bottomLeft = 0;
+    let bottomRight = 0;
+
+    // find topLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderTopStartRadius !== -1) {
+      if (this._isLTR) topLeft = this._borderTopStartRadius;
+      else topRight = this._borderTopStartRadius;
+    } else if (this._borderTopLeftRadius !== 0) topLeft = this._borderTopLeftRadius;
+
+    // find topRight radius based on direction and replace its value if direction is RTL
+    if (this._borderTopEndRadius !== -1) {
+      if (this._isLTR) topRight = this._borderTopEndRadius;
+      else topLeft = this._borderTopEndRadius;
+    } else if (this._borderTopRightRadius !== 0) topRight = this._borderTopRightRadius;
+
+    // find bottomLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomStartRadius !== -1) {
+      if (this._isLTR) bottomLeft = this._borderBottomStartRadius;
+      else bottomRight = this._borderBottomStartRadius;
+    } else if (this._borderBottomLeftRadius !== 0) bottomLeft = this._borderBottomLeftRadius;
+
+    // find bottomRight radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomEndRadius !== -1) {
+      if (this._isLTR) bottomRight = this._borderBottomEndRadius;
+      else bottomLeft = this._borderBottomEndRadius;
+    } else if (this._borderBottomRightRadius !== 0) bottomRight = this._borderBottomRightRadius;
+
+    // Every corner needs to be calculated in order to draw frame of container individiucally.
+    this.nativeObject.roundCorners(topLeft, topRight, bottomLeft, bottomRight);
   }
 
   get maskedBorders() {
@@ -577,6 +699,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       this.flexBasis = NaN;
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get flexShrink() {
@@ -902,6 +1026,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get height() {
@@ -915,6 +1041,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     } else {
       throw new TypeError(Exception.TypeError.NUMBER);
     }
+
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get minWidth() {
@@ -1021,6 +1149,21 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
      */
   dirty() {
     this.nativeObject.yoga.markDirty();
+  }
+
+  get shadowColor() {
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    return new ColorIOS({
+      color
+    });
+  }
+
+  set shadowColor(shadowColor: IColor) {
+    const argShadowColor = new Invocation.Argument({
+      type: 'CGColor',
+      value: shadowColor.nativeObject
+    });
+    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
   }
 
   static readonly ios = {

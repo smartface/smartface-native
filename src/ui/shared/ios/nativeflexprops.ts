@@ -18,7 +18,8 @@ export const JustifyContent = {
   CENTER: YGJustify.Center,
   FLEX_END: YGJustify.FlexEnd,
   SPACE_BETWEEN: YGJustify.SpaceBetween,
-  SPACE_AROUND: YGJustify.SpaceAround
+  SPACE_AROUND: YGJustify.SpaceAround,
+  SPACE_EVENLY: YGJustify.SpaceEvenly
 };
 
 export const AlignContent = {
@@ -26,7 +27,10 @@ export const AlignContent = {
   FLEX_START: YGAlign.FlexStart,
   FLEX_END: YGAlign.FlexEnd,
   CENTER: YGAlign.Center,
-  STRETCH: YGAlign.Stretch
+  STRETCH: YGAlign.Stretch,
+  BASELINE: YGAlign.Baseline,
+  SPACE_BETWEEN: YGAlign.SpaceBetween,
+  SPACE_AROUND: YGAlign.SpaceAround
 };
 
 export const AlignItems = {
@@ -40,7 +44,8 @@ export const AlignItems = {
 
 export const FlexWrap = {
   NOWRAP: YGWrap.NoWrap,
-  WRAP: YGWrap.Wrap
+  WRAP: YGWrap.Wrap,
+  WRAP_REVERSE: YGWrap.WrapReverse
 };
 
 export const Display = {

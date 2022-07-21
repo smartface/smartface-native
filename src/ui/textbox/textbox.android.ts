@@ -82,6 +82,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _isPassword: boolean;
   private _keyboardType: KeyboardType;
   private _actionKeyType: ActionKeyType;
+  private _maxLength: number;
   private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
   private _cursorColor: IColor;
   private _hintTextColor: IColor;
@@ -129,8 +130,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     );
 
     this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
-
-    this.addAndroidProps(this.androidProps());
   }
 
   protected preConstruct(params?: Partial<TProps>): void {
@@ -143,6 +142,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._autoCapitalize = AutoCapitalize.NONE;
     this._didSetOnEditorActionListener = false;
     super.preConstruct(params);
+    this.addAndroidProps(this.androidProps());
   }
   protected createNativeObject() {
     //AND-3123: Due to the issue, hardware button listener added.
@@ -168,8 +168,11 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private androidProps() {
     const self = this;
     return {
-      maxLength(value: number): void {
-        const filterArray = toJSArray(self.nativeObject.getFilters());
+      get maxLength(): number {
+        return self._maxLength || 0;
+      },
+      set maxLength(value: number) {
+        const filterArray = toJSArray(self.nativeObject.getFilters()) || [];
         for (let i = 0; i < filterArray.length; i++) {
           if ((filterArray[i] + '').includes('android.text.InputFilter$LengthFilter')) {
             filterArray.splice(i, 1);
@@ -178,6 +181,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
         }
         filterArray.push(new NativeInputFilter.LengthFilter(value));
         self.nativeObject.setFilters(array(filterArray, 'android.text.InputFilter'));
+        self._maxLength = value;
       }
     };
   }
