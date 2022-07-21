@@ -8,6 +8,7 @@ import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import TimerIOS from '../../global/timer/timer.ios';
 
 export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps>
   extends ViewBase<TEvent, TNative, TProps>
@@ -738,7 +739,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       this.flexBasis = NaN;
     }
 
-    setTimeout(() => this.applyBorderRadiuses(), 0);
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get flexShrink() {
@@ -1065,7 +1066,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       throw new TypeError(Exception.TypeError.NUMBER);
     }
 
-    setTimeout(() => this.applyBorderRadiuses(), 0);
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get height() {
@@ -1080,7 +1081,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
       throw new TypeError(Exception.TypeError.NUMBER);
     }
 
-    setTimeout(() => this.applyBorderRadiuses(), 0);
+    TimerIOS.setTimeout({ task: () => this.applyBorderRadiuses(), delay: 0 });
   }
 
   get minWidth() {
