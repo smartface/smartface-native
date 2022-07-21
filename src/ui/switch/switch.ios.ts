@@ -1,16 +1,15 @@
 import { ISwitch } from './switch';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
-import Color from '../color';
+import ColorIOS from '../color/color.ios';
 import ViewIOS from '../view/view.ios';
 import { SwitchEvents } from './switch-events';
 import { IColor } from '../color/color';
 
 export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<TEvent | SwitchEvents, __SF_UISwitch, ISwitch> {
-  private _toggleOnColor: IColor = Color.GREEN;
-  private _toggleOffColor: IColor = Color.create('#FAFAFF');
-
-  private _thumbOnColor: IColor = Color.WHITE;
-  private _thumbOffColor: IColor = Color.WHITE;
+  private _toggleOnColor: IColor;
+  private _toggleOffColor: IColor;
+  private _thumbOnColor: IColor;
+  private _thumbOffColor: IColor;
 
   onToggleChanged: (toggle: boolean) => void;
   constructor(params?: Partial<ISwitch>) {
@@ -20,6 +19,10 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     return new __SF_UISwitch();
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.toggleOnColor = ColorIOS.GREEN;
+    this.toggleOffColor = ColorIOS.create('#FAFAFF');
+    this.thumbOnColor = ColorIOS.WHITE;
+    this.thumbOffColor = ColorIOS.WHITE;
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
     } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
@@ -53,7 +56,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     if (this.nativeObject.thumbTintColor === undefined) {
       return null;
     } else {
-      return new Color({
+      return new ColorIOS({
         color: this.nativeObject.thumbTintColor
       });
     }
