@@ -91,6 +91,24 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
   thumbOffColor: IColor;
 
   /**
+   * Gets/sets the background of the switch when it is OFF.  It is set to gray
+   * by default. This property works only for Android.
+   *
+   *     @example
+   *     import Switch from '@smartface/native/ui/switch';
+   *     import Color from '@smartface/native/ui/color';
+   *     var mySwitch = new Switch();
+   *     mySwitch.toggleOffColor = Color.DARKGRAY;
+   *
+   * @property {UI.Color} toggleOffColor
+   * @android
+   * @ios
+   * @since 5.0.1
+   */
+
+  toggleOffColor: IColor;
+
+  /**
    * Gets/sets toggle value of Switch. When Switch is ON,
    * the value of this property will be true. It is set to false by default.
    *
@@ -132,23 +150,6 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * ```
    */
   onToggleChanged: (toggle: boolean) => void;
-  /**
-   * Gets/sets the background of the switch when it is OFF.  It is set to gray
-   * by default. This property works only for Android.
-   *
-   *     @example
-   *     import Switch from '@smartface/native/ui/switch';
-   *     import Color from '@smartface/native/ui/color';
-   *     var mySwitch = new Switch();
-   *     mySwitch.toggleOffColor = Color.DARKGRAY;
-   *
-   * @property {UI.Color} toggleOffColor
-   * @android
-   * @ios
-   * @since 5.0.1
-   */
-    
-  toggleOffColor: IColor;
 
   on(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): () => void;
   on(eventName: SwitchEvents, callback: (...args: any[]) => void): () => void;
