@@ -10,7 +10,7 @@ import { fetch, Response, Request, Headers } from './net/fetch';
 
 global.URL = URL as any;
 global.URLSearchParams = URLSearchParams as any;
-// TODO: abort-controller needs console.assert.
+// TODO: abort-controller needs console.assert
 // It has to be implemented in framework-core like other console functions.
 global.console.assert = function (param1, param2) {};
 global.XMLHttpRequest = XHR as any;
