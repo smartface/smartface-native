@@ -290,7 +290,7 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
     return this.nativeObject.rotateEnabled;
   }
   set rotateEnabled(value: IMapView['rotateEnabled']) {
-    this.nativeObject.setRotateEnabled(value)
+    this.nativeObject.setRotateEnabled(value);
   }
   get compassEnabled(): IMapView['compassEnabled'] {
     return this.nativeObject.showsCompass;
@@ -381,11 +381,15 @@ export default class MapViewIOS<TEvent extends string = MapViewEvents> extends V
   get centerLocation(): IMapView['centerLocation'] {
     return this.nativeObject.centerLocation;
   }
+
+  set centerLocation(value: IMapView['centerLocation']) {
+    this.setCenterLocationWithZoomLevel(value, this._zoomLevel ?? DEFAULT_ZOOM_LEVEL, false);
+  }
   get zoomEnabled(): IMapView['zoomEnabled'] {
     return this.nativeObject.zoomEnabled;
   }
   set zoomEnabled(value: IMapView['zoomEnabled']) {
-    this.nativeObject.setZoomEnabled(value)
+    this.nativeObject.setZoomEnabled(value);
   }
   get visibleRegion(): IMapView['visibleRegion'] {
     const topLeft = this.nativeObject.getTopLeftCoordinate();

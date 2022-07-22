@@ -6,9 +6,10 @@ import File from '../../io/file';
 import FileStream from '../../io/filestream';
 import Path from '../../io/path';
 import AndroidConfig from '../../util/Android/androidconfig';
-import { HttpBase, HttpRequest, IHttp } from './http';
+import { HttpIOSProps, HttpRequest, IHttp } from './http';
 import BlobAndroid from '../../global/blob/blob.android';
 import ImageAndroid from '../../ui/image/image.android';
+import { NativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
 
 const OkHttpClientBuilder = requireClass('okhttp3.OkHttpClient$Builder');
 const OkHttpRequestBuilder = requireClass('okhttp3.Request$Builder');
@@ -31,7 +32,7 @@ const activity = AndroidConfig.activity;
 
 const _instanceCollection: HttpAndroid[] = [];
 
-export default class HttpAndroid extends HttpBase {
+export default class HttpAndroid extends NativeMobileComponent<any, MobileOSProps<HttpIOSProps, {}>> implements IHttp {
   protected createNativeObject() {
     return null;
   }

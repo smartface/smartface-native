@@ -2,7 +2,7 @@ import { ITabBarController } from './tabbarcontroller';
 import Application from '../../application';
 import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
-import Color from '../color';
+import { IColor } from '../color/color';
 import type Page from '../page';
 import PageAndroid from '../page/page.android';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -10,6 +10,9 @@ import SwipeView from '../swipeview';
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
 import TabbarItemAndroid from '../tabbaritem/tabbaritem.android';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
+import ColorAndroid from '../color/color.android';
+import isViewState from '../../util/isViewState';
+import ViewState from '../shared/viewState';
 
 /* globals requireClass */
 const NativeTabLayout = requireClass('com.google.android.material.tabs.TabLayout');
@@ -21,24 +24,24 @@ const PorterDuff = requireClass('android.graphics.PorterDuff');
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
 export default class TabBarControllerAndroid<TEvent extends string = TabBarControllerEvents> extends PageAndroid<TEvent | TabBarControllerEvents, any, ITabBarController> implements ITabBarController {
-  private _onSelectedCallback: (index: number) => void;
-  private _onPageCreateCallback: (index: number) => Page;
-  private _items: ITabbarItem[];
-  private _barColor: Color;
-  private _indicatorColor: Color;
-  private _textColor: Color | { normal: Color; selected: Color };
-  private _iconColor: Color | { normal: Color; selected: Color };
-  private _overScrollMode: OverScrollMode;
-  private _scrollEnabled: boolean;
-  private _dividerWidth: number;
-  private _dividerPadding: number;
-  private _dividerColor: Color;
-  private _indicatorHeight: number;
-  private _autoCapitalize: boolean;
-  private tabLayout: any;
-  private divider: any;
-  private swipeView: SwipeView;
-  private dividerDrawable: typeof NativeGradientDrawable;
+  protected _onSelectedCallback: (index: number) => void;
+  protected _onPageCreateCallback: (index: number) => Page;
+  protected _items: ITabbarItem[];
+  protected _barColor: IColor;
+  protected _indicatorColor: IColor;
+  protected _textColor: ViewState<IColor>;
+  protected _iconColor: ViewState<IColor>;
+  protected _overScrollMode: OverScrollMode;
+  protected _scrollEnabled: boolean;
+  protected _dividerWidth: number;
+  protected _dividerPadding: number;
+  protected _dividerColor: IColor;
+  protected _indicatorHeight: number;
+  protected _autoCapitalize: boolean;
+  protected tabLayout: any;
+  protected divider: any;
+  protected swipeView: SwipeView;
+  protected dividerDrawable: typeof NativeGradientDrawable;
 
   preConstruct(params?: Partial<ITabBarController>) {
     this._scrollEnabled = false;
@@ -47,10 +50,10 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     this._autoCapitalize = true;
     this._items = [];
     this._overScrollMode = OverScrollMode.ALWAYS;
-    this._dividerColor = Color.BLACK;
-    this._indicatorColor = Color.create('#00A1F1');
-    this._barColor = Color.WHITE;
-    this._textColor = Color.BLACK;
+    this._dividerColor = ColorAndroid.BLACK;
+    this._indicatorColor = ColorAndroid.create('#00A1F1');
+    this._barColor = ColorAndroid.WHITE;
+    this._textColor = ColorAndroid.BLACK;
     this.tabLayout = {};
     super.preConstruct(params);
     this.addAndroidProps(this.getAndroidProps());
@@ -71,7 +74,6 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         page: this as any, //TODO: Fix typing
         flexGrow: 1,
         onPageCreate: (position: number) => {
-          this.emit('pageCreate', position);
           if (!this.onPageCreate) {
             return null;
           }
@@ -92,16 +94,16 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         this.emit('selected', tab.getPosition());
         if (!this.iconColor) return;
 
-        const selectedColor = this.iconColor instanceof Color ? this.iconColor : this.iconColor.selected;
+        const selectedColor = isViewState<IColor>(this.iconColor) ? this.iconColor.selected : this.iconColor;
         const tabIcon = tab.getIcon();
-        tabIcon && tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN);
+        tabIcon && selectedColor && tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN);
       },
       onTabUnselected: (tab) => {
         if (!this.iconColor) return;
 
-        const normalColor = this.iconColor instanceof Color ? this.iconColor : this.iconColor.normal;
+        const normalColor = isViewState<IColor>(this.iconColor) ? this.iconColor.normal : this.iconColor;
         const tabIcon = tab.getIcon();
-        tabIcon && tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN);
+        tabIcon && normalColor && tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN);
       },
       onTabReselected: (tab) => {}
     });
@@ -126,10 +128,10 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
         self.divider.setDividerPadding(px);
         self.divider.setDividerDrawable(self.dividerDrawable);
       },
-      get dividerColor(): Color {
+      get dividerColor(): IColor {
         return self._dividerColor;
       },
-      set dividerColor(value: Color) {
+      set dividerColor(value: IColor) {
         self._dividerColor = value;
         if (self.dividerDrawable) {
           self.dividerDrawable.setColor(value.nativeObject);
@@ -159,7 +161,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   onShow: () => void;
 
   // TODO Unused fields
-  dividerColor: Color;
+  dividerColor: IColor;
   dividerPadding: number;
   dividerWidth: number;
 
@@ -168,6 +170,7 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
   }
   set barHeight(value: number) {
     this.tabLayout.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(value));
+    this.tabLayout.nativeObject.requestLayout();
   }
 
   get items(): ITabbarItem[] {
@@ -199,10 +202,10 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     }
   }
 
-  get indicatorColor(): Color {
+  get indicatorColor(): IColor {
     return this._indicatorColor;
   }
-  set indicatorColor(value: Color) {
+  set indicatorColor(value: IColor) {
     this._indicatorColor = value;
     this.tabLayout.nativeObject.setSelectedTabIndicatorColor(value.nativeObject);
   }
@@ -230,10 +233,10 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
 
   overScrollMode: OverScrollMode;
 
-  get barColor(): Color {
+  get barColor(): IColor {
     return this._barColor;
   }
-  set barColor(value: Color) {
+  set barColor(value: IColor) {
     this._barColor = value;
     this.tabLayout.nativeObject.setBackgroundColor(value.nativeObject);
   }
@@ -260,31 +263,33 @@ export default class TabBarControllerAndroid<TEvent extends string = TabBarContr
     this.swipeView.swipeToIndex(index, animated);
   }
 
-  get iconColor(): Color | { normal: Color; selected: Color } {
+  get iconColor(): ViewState<IColor> {
     return this._iconColor;
   }
-  set iconColor(value: Color | { normal: Color; selected: Color }) {
+  set iconColor(value: ViewState<IColor>) {
     this._iconColor = value;
-    const normalColor = value instanceof Color ? value : value.normal;
-    const selectedColor = value instanceof Color ? value : value.selected;
+    const normalColor = isViewState<IColor>(value) ? value.normal : value;
+    const selectedColor = isViewState<IColor>(value) ? value.selected : value;
     for (let i = 0; i < this._items.length; i++) {
       const tabIcon = this.tabLayout.nativeObject.getTabAt(i).getIcon();
       if (i === this.selectedIndex) {
-        tabIcon && tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN);
+        tabIcon && selectedColor && tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN);
       } else {
-        tabIcon && tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN);
+        tabIcon && normalColor && tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN);
       }
     }
   }
 
-  get textColor(): Color | { normal: Color; selected: Color } {
+  get textColor(): ViewState<IColor> {
     return this._textColor;
   }
-  set textColor(value: Color | { normal: Color; selected: Color }) {
+  set textColor(value: ViewState<IColor>) {
     this._textColor = value;
-    const normalColor = value instanceof Color ? value : value.normal;
-    const selectedColor = value instanceof Color ? value : value.selected;
-    this.tabLayout.nativeObject.setTabTextColors(normalColor.nativeObject, selectedColor.nativeObject);
+    const normalColor = isViewState<IColor>(value) ? value.normal : value;
+    const selectedColor = isViewState<IColor>(value) ? value.selected : value;
+    if (normalColor && selectedColor) {
+      this.tabLayout.nativeObject.setTabTextColors(normalColor.nativeObject, selectedColor.nativeObject);
+    }
   }
 
   get pagingEnabled(): boolean {

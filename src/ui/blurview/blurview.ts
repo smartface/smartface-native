@@ -1,8 +1,7 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
 import { AbstractView, ViewAndroidProps, ViewIOSProps, IView } from '../view/view';
-import type View from '../view';
 import { BlurViewEvents } from './blurview-events';
+import { IColor } from '../color/color';
 
 /**
  * Blur styles
@@ -90,14 +89,14 @@ export interface BlurViewAndroidProps extends ViewAndroidProps {
    * @android
    * @since 4.3.1
    */
-  rootView: View;
+  rootView: IView;
   /**
    * Gets/sets the color overlay to be drawn on top of blurred content.
    * @property {UI.Color} overlayColor
    * @android
    * @since 4.3.1
    */
-  overlayColor: Color;
+  overlayColor: IColor;
 }
 
 export declare interface IBlurView<TEvent extends string = BlurViewEvents> extends IView<TEvent | BlurViewEvents, any, MobileOSProps<BlurViewiOSProps, BlurViewAndroidProps>> {}

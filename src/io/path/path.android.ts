@@ -1,6 +1,7 @@
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TypeUtil from '../../util/type';
-import { IPath, PathAndroidProps, PathBase } from './path';
+import { IPath, PathAndroidProps, PathFileType } from './path';
 
 const NativeFile = requireClass('java.io.File');
 const NativeEnvironment = requireClass('android.os.Environment');
@@ -29,30 +30,34 @@ const drawableSizes = ['small', 'normal', 'large', 'xlarge'];
 const drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
 let desiredDrawableSizeIndex: number;
 let desiredDrawableDensityIndex: number;
-export default class PathAndroid extends PathBase {
+class PathAndroidClass extends NativeMobileComponent<any, MobileOSProps<{}, PathAndroidProps>> implements IPath {
   constructor(params?: Partial<IPath>) {
     super(params);
     this.setScreenConfigs();
+    this.addAndroidProps(this.getAndroidProps());
   }
 
-  static get ImagesUriScheme(): string {
+  protected createNativeObject(params?: Partial<Record<string, any>>) {
+    return null;
+  }
+  get ImagesUriScheme(): string {
     return 'images://';
   }
 
-  static get AssetsUriScheme(): string {
+  get AssetsUriScheme(): string {
     return 'assets://';
   }
 
-  static get Separator(): string {
+  get Separator(): string {
     return '/';
   }
 
-  static get DataDirectory(): string {
+  get DataDirectory(): string {
     const filesDir = AndroidConfig.activity.getFilesDir();
     return filesDir ? filesDir.getAbsolutePath() : null;
   }
 
-  static get android(): PathAndroidProps {
+  private getAndroidProps(): PathAndroidProps {
     return {
       get storages() {
         if (!storages.isResolved) {
@@ -99,15 +104,15 @@ export default class PathAndroid extends PathBase {
 
       if (AndroidConfig.isEmulator) {
         // This is emulator. Check file system
-        resolvedPaths[path].type = PathAndroid.FILE_TYPE.EMULATOR_ASSETS;
+        resolvedPaths[path].type = PathFileType.EMULATOR_ASSETS;
         resolvedPaths[path].fullPath = this.getEmulatorAssetsPath() + '/' + fileName;
       } else {
         // This is player. Check RAU
-        resolvedPaths[path].type = PathAndroid.FILE_TYPE.RAU_ASSETS;
+        resolvedPaths[path].type = PathFileType.RAU_ASSETS;
         resolvedPaths[path].fullPath = this.getRauAssetsPath() + '/' + fileName;
         // if assets not exists in rau
         if (!this.checkFileExistsInPath(resolvedPaths[path].fullPath)) {
-          resolvedPaths[path].type = PathAndroid.FILE_TYPE.ASSET;
+          resolvedPaths[path].type = PathFileType.ASSET;
           resolvedPaths[path].fullPath = this.getExternalFilesDirPath() + '/' + fileName;
         }
       }
@@ -123,16 +128,16 @@ export default class PathAndroid extends PathBase {
 
       if (AndroidConfig.isEmulator) {
         // This is emulator. Check file system
-        resolvedPaths[path].type = PathAndroid.FILE_TYPE.EMULATOR_DRAWABLE;
+        resolvedPaths[path].type = PathFileType.EMULATOR_DRAWABLE;
         resolvedPaths[path].fullPath = this.findDrawableAtDirectory(this.getEmulatorDrawablePath(), fileName);
       } else {
         // This is player and does not supports RAU drawable get it from apk
-        resolvedPaths[path].type = PathAndroid.FILE_TYPE.DRAWABLE;
+        resolvedPaths[path].type = PathFileType.DRAWABLE;
         resolvedPaths[path].fullPath = path;
       }
     } else {
       // cache normal path too for performance. We dont want to check more.
-      resolvedPaths[path].type = PathAndroid.FILE_TYPE.FILE;
+      resolvedPaths[path].type = PathFileType.FILE;
       resolvedPaths[path].name = path.substring(path.lastIndexOf('/') + 1, path.length);
       resolvedPaths[path].fullPath = path;
     }
@@ -260,3 +265,7 @@ export default class PathAndroid extends PathBase {
     }
   }
 }
+
+const PathAndroid = new PathAndroidClass();
+
+export default PathAndroid;

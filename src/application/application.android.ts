@@ -2,7 +2,6 @@ import Accelerometer from '../device/accelerometer';
 import Location from '../device/location';
 import TypeUtil from '../util/type';
 import AndroidConfig from '../util/Android/androidconfig';
-import Http from '../net/http';
 import Network from '../device/network';
 import { ApplicationEvents } from './application-events';
 import type SliderDrawer from '../ui/sliderdrawer';
@@ -10,7 +9,7 @@ import SliderDrawerAndroid from '../ui/sliderdrawer/sliderdrawer.android';
 import StatusBar from './statusbar';
 import NavigationBar from './android/navigationbar';
 import { IBottomTabBar } from '../ui/bottomtabbar//bottomtabbar';
-import { ApplicationAndroidPermissions, ApplicationBase, KeyboardMode } from './application';
+import { ApplicationAndroidPermissions, IApplication, KeyboardMode } from './application';
 import SystemServices from '../util/Android/systemservices';
 import * as RequestCodes from '../util/Android/requestcodes';
 import ViewController from '../util/Android/transition/viewcontroller';
@@ -18,6 +17,8 @@ import NativeEventEmitterComponent from '../core/native-event-emitter-component'
 import PageAndroid from '../ui/page/page.android';
 import Page from '../ui/page';
 import { EventListenerCallback } from '../core/eventemitter';
+import HttpAndroid from '../net/http/http.android';
+import Permission from '../device/permission';
 
 const NativeSpratAndroidActivity = requireClass('io.smartface.android.SpratAndroidActivity');
 const NativeActivityLifeCycleListener = requireClass('io.smartface.android.listeners.ActivityLifeCycleListener');
@@ -71,7 +72,7 @@ const FLAG_ACTIVITY_NEW_TASK = 268435456;
 const REQUEST_CODE_CALL_APPLICATION = 114;
 const FLAG_SECURE = 8192;
 
-class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, any, ApplicationBase> implements ApplicationBase {
+class ApplicationAndroidClass extends NativeEventEmitterComponent<ApplicationEvents, any, IApplication> implements IApplication {
   protected createNativeObject() {
     return {};
   }
@@ -85,12 +86,12 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   statusBar: typeof StatusBar;
   private _sliderDrawer: SliderDrawerAndroid;
   private _keepScreenAwake: boolean;
-  private _onUnhandledError: ApplicationBase['onUnhandledError'];
+  private _onUnhandledError: IApplication['onUnhandledError'];
   private _currentPage: PageAndroid;
-  private _dispatchTouchEvent: ApplicationBase['android']['dispatchTouchEvent'];
+  private _dispatchTouchEvent: IApplication['android']['dispatchTouchEvent'];
   private __isSetOnItemSelectedListener: boolean;
-  private _onReceivedNotification: ApplicationBase['onReceivedNotification'];
-  private _keyboardMode: ApplicationBase['android']['keyboardMode'];
+  private _onReceivedNotification: IApplication['onReceivedNotification'];
+  private _keyboardMode: IApplication['android']['keyboardMode'];
   private _secureWindowContent: boolean;
   private spratAndroidActivityInstance: any;
   private _drawerLayout: any;
@@ -145,12 +146,16 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         this.onExit?.();
         this.emit('exit');
       },
-      onRequestPermissionsResult: (requestCode, permission, grantResult) => {
+      onRequestPermissionsResult: (requestCode: number, permission: string[], grantResult: number[]) => {
+        const grantResultJS = toJSArray(grantResult);
+
         const permissionResults = {
           requestCode,
-          result: grantResult === 0
+          result: grantResultJS.map((result) => result === 0) //PackageManager.PERMISSION_GRANTED
         };
-        this.android.onRequestPermissionsResult?.(permissionResults);
+
+        Permission.android.onRequestPermissionsResult?.(permissionResults);
+        Permission.emit('requestPermissionsResult', permissionResults);
         this.emit('requestPermissionResult', permissionResults);
       },
       onActivityResult: (requestCode, resultCode, data) => {
@@ -203,7 +208,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
       }
     }
   }
-  call(params: Parameters<ApplicationBase['call']>['0']) {
+  call(params: Parameters<IApplication['call']>['0']) {
     const _uriScheme = params.uriScheme;
     const _data = params.data || {};
     const _onSuccess = params.onSuccess;
@@ -270,7 +275,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     launchIntent.setData(NativeUri.parse(url));
     const packageManager = AndroidConfig.activity.getApplicationContext().getPackageManager();
     const componentName = launchIntent.resolveActivity(packageManager);
-    if (componentName === null) {
+    if (!componentName) {
       return false;
     } else {
       const fallback = '{com.android.fallback/com.android.fallback.Fallback}';
@@ -315,7 +320,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   set onUnhandledError(value) {
     this._onUnhandledError = value;
     //@ts-ignore TODO: global Application variable from framework. NTVE-616
-    Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+    Application.onUnhandledError = (e: Parameters<IApplication['onUnhandledError']>['0']) => {
       this.emit('unhandledError', e);
       this._onUnhandledError?.(e);
     };
@@ -391,7 +396,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     return this._onReceivedNotification;
   }
   set onReceivedNotification(callback) {
-    this._onReceivedNotification = (data: Parameters<ApplicationBase['onReceivedNotification']>['0']) => {
+    this._onReceivedNotification = (data: Parameters<IApplication['onReceivedNotification']>['0']) => {
       callback?.(data);
       this.emit('receivedNotification', data);
     };
@@ -405,7 +410,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
     }
     return false;
   }
-  get android(): ApplicationBase['android'] {
+  get android(): IApplication['android'] {
     const self = this;
     return {
       Permissions,
@@ -434,15 +439,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
         if (!TypeUtil.isNumeric(requestCode) || !TypeUtil.isString(permissions)) {
           throw new Error('requestCode must be numeric or permission must be Application.Permission type or array of Application.Permission.');
         }
-        if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
-          self.android.onRequestPermissionsResult &&
-            self.android.onRequestPermissionsResult({
-              requestCode: requestCode,
-              result: self.android.checkPermission?.(permissions) || false
-            });
-        } else {
-          AndroidConfig.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
-        }
+        AndroidConfig.activity.requestPermissions(array([permissions], 'java.lang.String'), requestCode);
       },
       shouldShowRequestPermissionRationale(permission) {
         if (!TypeUtil.isString(permission)) {
@@ -509,7 +506,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   private cancelAllBackgroundJobs() {
     Location.stop();
     Accelerometer.stop();
-    Http.cancelAll();
+    HttpAndroid.cancelAll();
     Network.cancelAll();
   }
   private checkIsAppShortcut(e: Record<string, any>) {
@@ -519,7 +516,7 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   on(eventName: ApplicationEvents, callback: EventListenerCallback) {
     if (eventName === ApplicationEvents.UnhandledError) {
       //@ts-ignore TODO: global Application variable from framework. NTVE-616
-      Application.onUnhandledError = (e: Parameters<ApplicationBase['onUnhandledError']>['0']) => {
+      Application.onUnhandledError = (e: Parameters<IApplication['onUnhandledError']>['0']) => {
         this.emit('unhandledError', e);
         this._onUnhandledError?.(e);
       };
@@ -528,6 +525,6 @@ class ApplicationAndroid extends NativeEventEmitterComponent<ApplicationEvents, 
   }
 }
 
-const ApplicationInstance = new ApplicationAndroid();
+const ApplicationAndroid = new ApplicationAndroidClass();
 
-export default ApplicationInstance;
+export default ApplicationAndroid;

@@ -2,9 +2,10 @@ import File from '../../io/file';
 import Color from '../../ui/color';
 import Application from '../../application';
 import { IQuickLook } from './quicklook';
-import Page from '../page';
 import NativeComponent from '../../core/native-component';
 import StatusBar from '../../application/statusbar';
+import { IColor } from '../color/color';
+import { IPage } from '../page/page';
 
 export default class QuickLookIOS extends NativeComponent implements IQuickLook {
   protected createNativeObject() {
@@ -40,25 +41,25 @@ export default class QuickLookIOS extends NativeComponent implements IQuickLook 
     this.nativeObject.document = uRLArray;
   }
 
-  get titleColor(): Color {
+  get titleColor(): IColor {
     return new Color({
       color: this.nativeObject.titleColor
     });
   }
-  set titleColor(value: Color) {
+  set titleColor(value: IColor) {
     this.nativeObject.titleColor = value.nativeObject;
   }
 
-  get itemColor(): Color {
+  get itemColor(): IColor {
     return new Color({
       color: this.nativeObject.itemColor
     });
   }
-  set itemColor(value: Color) {
+  set itemColor(value: IColor) {
     this.nativeObject.itemColor = value.nativeObject;
   }
 
-  show(page: Page) {
+  show(page: IPage) {
     page.nativeObject.presentViewController(this.nativeObject);
   }
 }

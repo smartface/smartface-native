@@ -1,9 +1,37 @@
-import Color from '../color';
+import { IColor } from '../color/color';
 import { IImage } from '../image/image';
-import { AbstractView, IView } from '../view/view';
+import { IView } from '../view/view';
 import { SliderEvents } from './slider-events';
 
+/**
+ * @class UI.Slider
+ * @since 0.1
+ * @extends UI.View
+ *
+ * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
+ *
+ *     @example
+ *     import Color from '@smartface/native/ui/color';
+ *     import Slider from '@smartface/native/ui/slider';
+ *     const mySlider = new Slider({
+ *         width: 200,
+ *         maxValue: 100,
+ *         minValue: 0,
+ *         value: 40,
+ *         minTrackColor: Color.RED,
+ *         thumbColor: Color.BLUE,
+ *         onValueChange: () => {
+ *             console.log("Slider's value: " + mySlider.value);
+ *         }
+ *     });
+ *
+ */
 export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEvent | SliderEvents> {
+  /**
+   * A private variable which is passed to the constructor whether to assign the default values or not.
+   * You shouldn't need this.
+   * @private
+   */
   skipDefaults: boolean;
   /**
    * Gets/sets color of the thumb.
@@ -19,7 +47,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * @ios
    * @since 0.1
    */
-  thumbColor: Color;
+  thumbColor: IColor;
   /**
    * Gets/sets image of the thumb.
    *
@@ -37,18 +65,18 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
   /**
    * Gets/sets color of the thumb's minimum track color.
    *
-   *     @example
-   *     import Slider from '@smartface/native/ui/slider';
-   *     import Color from '@smartface/native/ui/color';
-   *     var mySlider = new Slider();
-   *     mySlider.minTrackColor = Color.BLUE;
+   * @example
+   * import Slider from '@smartface/native/ui/slider';
+   * import Color from '@smartface/native/ui/color';
+   * const mySlider = new Slider();
+   * mySlider.minTrackColor = Color.BLUE;
    *
    * @property {UI.Color} [minTrackColor = UI.Color.DARKGRAY]
    * @android
    * @ios
    * @since 0.1
    */
-  minTrackColor: Color;
+  minTrackColor: IColor;
   /**
    * Gets/sets color of the thumb's maximum track color.
    *
@@ -63,7 +91,7 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * @ios
    * @since 0.1
    */
-  maxTrackColor: Color;
+  maxTrackColor: IColor;
   /**
    * Gets/sets value of the slider. This value should be less or equals to maxValue,
    * greater or equals to minValue.
@@ -145,4 +173,34 @@ export interface ISlider<TEvent extends string = SliderEvents> extends IView<TEv
    * ```
    */
   onValueChange: (value: number) => void;
+
+  on(eventName: 'valueChange', callback: (value: number) => void): () => void;
+  on(eventName: 'trackStart', callback: () => void): () => void;
+  on(eventName: 'trackEnd', callback: () => void): () => void;
+  on(eventName: SliderEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'valueChange', callback: (value: number) => void): void;
+  off(eventName: 'trackStart', callback: () => void): void;
+  off(eventName: 'trackEnd', callback: () => void): void;
+  off(eventName: SliderEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'valueChange', value: number): void;
+  emit(eventName: 'trackStart'): void;
+  emit(eventName: 'trackEnd'): void;
+  emit(eventName: SliderEvents, ...args: any[]): void;
+
+  once(eventName: 'valueChange', callback: (value: number) => void): () => void;
+  once(eventName: 'trackStart', callback: () => void): () => void;
+  once(eventName: 'trackEnd', callback: () => void): () => void;
+  once(eventName: SliderEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'valueChange', callback: (value: number) => void): void;
+  prependListener(eventName: 'trackStart', callback: () => void): void;
+  prependListener(eventName: 'trackEnd', callback: () => void): void;
+  prependListener(eventName: SliderEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'valueChange', callback: (value: number) => void): void;
+  prependOnceListener(eventName: 'trackStart', callback: () => void): void;
+  prependOnceListener(eventName: 'trackEnd', callback: () => void): void;
+  prependOnceListener(eventName: SliderEvents, callback: (...args: any[]) => void): void;
 }

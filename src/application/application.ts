@@ -19,6 +19,18 @@ interface ApplicationCallParams {
   action?: string;
 }
 
+interface ApplicationCallReceivedParams {
+  eventType: string;
+  url: string;
+  data: Record<string, any>;
+  result: number;
+}
+
+export interface ReceivedNotificationParams {
+  remote?: Record<string, any>;
+  local?: Record<string, any>;
+}
+
 export interface ApplicationIOSProps {
   /**
    * The event is called when a user taps a universal link.
@@ -38,7 +50,7 @@ export interface ApplicationIOSProps {
    * @ios
    * @since 3.0.2
    */
-  bundleIdentifier: any;
+  bundleIdentifier: string;
   /**
    * It indicates the directionality of the language in the user interface of the app.
    *
@@ -47,9 +59,7 @@ export interface ApplicationIOSProps {
    * @ios
    * @since 3.1.3
    */
-  userInterfaceLayoutDirection: any;
-  registeredRemoteWithSuccessCallback: any;
-  registeredRemoteWithFailureCallback: any;
+  userInterfaceLayoutDirection: LayoutDirection;
 }
 export interface ApplicationAndroidProps {
   /**
@@ -102,7 +112,7 @@ export interface ApplicationAndroidProps {
    * ```
    * import Application from '@smartface/native/application';
    *
-   * Application.on(Application.Events.BackButtonPressed, () => {
+   * Application.on(Application.Events.backButtonPressed, () => {
    * 	console.info('onBackButtonPressed');
    * });
    * ```
@@ -114,7 +124,7 @@ export interface ApplicationAndroidProps {
    *
    *     @example
    *     import Application from '@smartface/native/application';
-   *     Application.android.dispatchTouchEvent = function(){
+   *     Application.android.dispatchTouchEvent = () => {
    *        return true; //Consume all touches & do not pass to window
    *     }
    *
@@ -132,12 +142,17 @@ export interface ApplicationAndroidProps {
    * @event onRequestPermissionsResult
    * @param {Object} e
    * @param {Number} e.requestCode
-   * @param {Boolean} e.result
+   * @param {Boolean} e.result Will return array if permission request is multiple.
    * @android
-   * @deprecated
+   * @deprecated Use Permissions.android.onRequestPermissionsResult instead
    * @since 1.2
    */
-  onRequestPermissionsResult: (e: { requestCode: number; result: boolean }) => void;
+  onRequestPermissionsResult: (e: { requestCode: number; result: boolean[] | boolean }) => void;
+
+  /**
+   * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
+   * Works for Android 8.0 and above. Some phones might not have this.
+   */
   navigationBar?: NavigationBar;
   /**
    * This function checks if one of the dangerous permissions is granted at beginning or not.
@@ -159,8 +174,9 @@ export interface ApplicationAndroidProps {
    *
    *     @example
    *     import Application from '@smartface/native/application';
-   *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
-   *     Application.android.onRequestPermissionsResult = function(e){
+   *     const PERMISSION_CODE = 1002;
+   *     Application.android.requestPermissions(PERMISSION_CODE, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
+   *     Application.android.onRequestPermissionsResult = (e) => {
    *         console.log(JSON.stringify(e));
    *     }
    *
@@ -270,6 +286,9 @@ export enum KeyboardMode {
   AlwaysHidden = 3
 }
 
+/**
+ * @deprecated Use Permmission.AndroidPermissions instead
+ */
 export enum ApplicationAndroidPermissions {
   /**
    * Allows to read the calendar data.
@@ -475,13 +494,26 @@ export enum ApplicationAndroidPermissions {
   WRITE_EXTERNAL_STORAGE = 'android.permission.WRITE_EXTERNAL_STORAGE',
   /**
    * Allows applications to write the apn settings and read sensitive fields of an existing apn settings like user and password.
+   * You should include relevant permission setting to your AndroidManifest.xml file.
    *
    * @property WRITE_APN_SETTINGS
    * @readonly
    * @since 4.3.2
    */
+  WRITE_APN_SETTINGS = 'android.permission.WRITE_APN_SETTINGS',
+  /**
+   * Allows an app to use fingerprint hardware. This permission have been deprecated on API 26 or higher. Use `USE_BIOMETRICS` instead.
+   * @property USE_FINGERPINT
+   * @readonly
+   * @deprecated
+   */
   USE_FINGERPRINT = 'android.permission.USE_FINGERPRINT',
-  WRITE_APN_SETTINGS = 'android.permission.WRITE_APN_SETTINGS'
+  /**
+   * Allows an app to use device supported biometric modalities.
+   * @property USE_BIOMETRIC
+   * @readonly
+   */
+  USE_BIOMETRIC = 'android.permission.USE_BIOMETRIC'
 }
 
 /**
@@ -490,7 +522,7 @@ export enum ApplicationAndroidPermissions {
  *
  * A set of collection for application based properties and methods.
  */
-export interface ApplicationBase extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
+export interface IApplication extends NativeEventEmitterComponent<ApplicationEvents, any, MobileOSProps<ApplicationIOSProps, ApplicationAndroidProps>> {
   /**
    * The received bytes from the application.
    *
@@ -620,6 +652,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @param {String} params.chooserTitle Added in 1.1.13.
    * @param {String} params.action  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
    * @readonly
+   * @deprecated Use Linking.openURL instead
    * @android
    * @ios
    * @since 0.1
@@ -631,19 +664,19 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * To pass this method, URL schemes must be declared into "Info.plist" file for iOS
    * and AndroidManifest.xml file for Android.
    *
-   *     @example for Google Maps
+   * @example for Google Maps
    *
-   *		(Info.plist entry)
+   *		// (Info.plist entry)
    *      <key>LSApplicationQueriesSchemes</key>
    *      <array>
    *          <string>comgooglemaps</string>
    *      </array>
    *
-   *      After entry add on, urlScheme can be check;
+   *    // After entry add on, urlScheme can be check;
    * 	 	import Application from '@smartface/native/application';
-   *      var isAppAvaible = Application.canOpenUrl("comgooglemaps://");
+   *    const isAppAvaible = Application.canOpenUrl("comgooglemaps://");
    *
-   * 		(AndroidManifest.xml entry)
+   * 		// (AndroidManifest.xml entry)
    * 		<manifest ...>
    * 			...
    * 			<queries>
@@ -655,11 +688,12 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * 		</manifest>
    *
    * 	 	import Application from '@smartface/native/application';
-   *      var isAppAvaible = Application.canOpenUrl("geo://");
+   *    const isAppAvaible = Application.canOpenUrl("geo://");
    *
    * @method canOpenUrl
    * @param {String} url
    * @return {Boolean}
+   * @deprecated Use Linking.canOpenURL instead
    * @ios
    * @android
    * @since 4.3.6
@@ -677,10 +711,23 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 3.2.0
    */
   statusBar: typeof StatusBar;
+  /**
+   * Static variable that determines direction of the layouts. It can be LTR or RTL
+   */
   LayoutDirection: typeof LayoutDirection;
   Android: {
+    /**
+     * Static Variable to change keyboard type for input fields.
+     */
     KeyboardMode: typeof KeyboardMode;
+    /**
+     * This lets you determine the navigation bar of the phone(the bar which usually has native back button and app switch)
+     * Works for Android 8.0 and above. Some phones might not have this.
+     */
     NavigationBar: {
+      /**
+       * Determines whether the navigation bar should be light theme or dark theme based.
+       */
       style: NavigationBarStyle;
     };
     /**
@@ -760,7 +807,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * });
    * ```
    */
-  onReceivedNotification: (data: Partial<{ remote: { [key: string]: any }; local: { [key: string]: any } }>) => void;
+  onReceivedNotification: (data: ReceivedNotificationParams) => void;
   /**
    * Triggered when application is called by another application.
    * For Android, onApplicationCallReceived will be triggered when
@@ -792,7 +839,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * });
    * ```
    */
-  onApplicationCallReceived: (e: { data: { [key: string]: any } }) => void;
+  onApplicationCallReceived: (e: ApplicationCallReceivedParams) => void;
   /**
    * Triggered when application is opened by an app shortcut.
    * App shortcuts is also named Home Screen Quick Actions in iOS.
@@ -812,7 +859,7 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * ```
    * import Application from '@smartface/native/application';
    *
-   * Application.on(Application.Events.AppShortcutReceived, (params) => {
+   * Application.on(Application.Events.appShortcutReceived, (params) => {
    * 	console.info('onAppShortcutReceived', params);
    * });
    * ```
@@ -918,7 +965,81 @@ export interface ApplicationBase extends NativeEventEmitterComponent<Application
    * @since 4.3.6
    */
   isVoiceOverEnabled: Boolean;
+  /**
+   * Provides current page instance of the application. Please do not use this property for page actions.
+   * Works for Android only. Will always be undefined on iOS
+   * @android
+   * @private
+   */
   currentPage: IPage;
+  /**
+   * For internal usage only.
+   * @private
+   */
   registOnItemSelectedListener(): void;
+  /**
+   * For internal usage only.
+   * @private
+   */
   tabBar?: BottomTabBar;
+
+  on(eventName: 'exit', callback: () => void): () => void;
+  on(eventName: 'maximize', callback: () => void): () => void;
+  on(eventName: 'minimize', callback: () => void): () => void;
+  on(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): () => void;
+  on(eventName: 'unhandledError', callback: (e: UnhandledError) => void): () => void;
+  on(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): () => void;
+  on(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): () => void;
+  on(eventName: 'backButtonPressed', callback: () => void): () => void;
+  on(eventName: ApplicationEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'exit', callback: () => void): void;
+  off(eventName: 'maximize', callback: () => void): void;
+  off(eventName: 'minimize', callback: () => void): void;
+  off(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  off(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  off(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  off(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  off(eventName: 'backButtonPressed', callback: () => void): void;
+  off(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'exit'): void;
+  emit(eventName: 'maximize'): void;
+  emit(eventName: 'minimize'): void;
+  emit(eventName: 'receivedNotification', e: ReceivedNotificationParams): void;
+  emit(eventName: 'unhandledError', e: UnhandledError): void;
+  emit(eventName: 'applicationCallReceived', e: ApplicationCallReceivedParams): void;
+  emit(eventName: 'appShortcutReceived', e: Record<string, any>): void;
+  emit(eventName: 'backButtonPressed'): void;
+  emit(eventName: ApplicationEvents, ...args: any[]): void;
+
+  once(eventName: 'exit', callback: () => void): () => void;
+  once(eventName: 'maximize', callback: () => void): () => void;
+  once(eventName: 'minimize', callback: () => void): () => void;
+  once(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): () => void;
+  once(eventName: 'unhandledError', callback: (e: UnhandledError) => void): () => void;
+  once(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): () => void;
+  once(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): () => void;
+  once(eventName: 'backButtonPressed', callback: () => void): () => void;
+  once(eventName: ApplicationEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'exit', callback: () => void): void;
+  prependListener(eventName: 'maximize', callback: () => void): void;
+  prependListener(eventName: 'minimize', callback: () => void): void;
+  prependListener(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  prependListener(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  prependListener(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  prependListener(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  prependListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependListener(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'exit', callback: () => void): void;
+  prependOnceListener(eventName: 'maximize', callback: () => void): void;
+  prependOnceListener(eventName: 'minimize', callback: () => void): void;
+  prependOnceListener(eventName: 'receivedNotification', callback: (e: ReceivedNotificationParams) => void): void;
+  prependOnceListener(eventName: 'unhandledError', callback: (e: UnhandledError) => void): void;
+  prependOnceListener(eventName: 'applicationCallReceived', callback: (e: ApplicationCallReceivedParams) => void): void;
+  prependOnceListener(eventName: 'appShortcutReceived', callback: (e: Record<string, any>) => void): void;
+  prependOnceListener(eventName: 'backButtonPressed', callback: () => void): void;
+  prependOnceListener(eventName: ApplicationEvents, callback: (...args: any[]) => void): void;
 }

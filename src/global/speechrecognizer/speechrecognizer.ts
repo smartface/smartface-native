@@ -75,7 +75,7 @@ export const RecognizerError = <const>{
  *     }
  *
  */
-export declare class SpeechRecognizerBase {
+export interface ISpeechRecognizer {
   /**
    * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
    *
@@ -92,7 +92,7 @@ export declare class SpeechRecognizerBase {
    * @ios
    * @since 1.1.13
    */
-  static start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void;
+  start(params: { locale: string; onResult: (result: any) => void; onFinish: (result: any) => void; onError: (error: typeof RecognizerError) => void }): void;
   /**
    * Stop speech recognition service.
    *
@@ -101,7 +101,7 @@ export declare class SpeechRecognizerBase {
    * @ios
    * @since 1.1.13
    */
-  static stop(): void;
+  stop(): void;
   /**
    * Returns whether speech recognition service runs or not.
    *
@@ -111,8 +111,8 @@ export declare class SpeechRecognizerBase {
    * @ios
    * @since 1.1.13
    */
-  static isRunning(): boolean;
-  static ios: Partial<{
+  isRunning(): boolean;
+  ios: {
     /**
      * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
      *
@@ -123,6 +123,6 @@ export declare class SpeechRecognizerBase {
      * @since 1.1.16
      */
     isLocaleSupported(locale: string): boolean;
-  }>;
-  static readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
+  };
+  readonly Error: typeof RecognizerError & { android: typeof RecognizerAndroidError };
 }

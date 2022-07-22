@@ -1,5 +1,5 @@
-import { AbstractListView } from './listview';
+import { IListView } from './listview';
 
-const ListView: typeof AbstractListView = require(`./listview.${Device.deviceOS.toLowerCase()}`).default;
-type ListView = AbstractListView;
+const ListView: ConstructorOf<IListView, Partial<IListView>> = require(`./listview.${Device.deviceOS.toLowerCase()}`).default;
+type ListView = IListView;
 export default ListView;

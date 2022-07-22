@@ -60,6 +60,23 @@ export interface IAccelerometer extends NativeEventEmitterComponent<Acceleromete
    */
   onAccelerate: (e: { x: number; y: number; z: number }) => void;
 
+  on(eventName: 'accelerate', callback: (e: { x: number; y: number; z: number }) => void): () => void;
+  on(eventName: AccelerometerEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'accelerate', callback: (e: { x: number; y: number; z: number }) => void): void;
+  off(eventName: AccelerometerEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'accelerate', e: { x: number; y: number; z: number }): void;
+  emit(eventName: AccelerometerEvents, ...args: any[]): void;
+
+  once(eventName: 'accelerate', callback: (e: { x: number; y: number; z: number }) => void): () => void;
+  once(eventName: AccelerometerEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'accelerate', callback: (e: { x: number; y: number; z: number }) => void): void;
+  prependListener(eventName: AccelerometerEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'accelerate', callback: (e: { x: number; y: number; z: number }) => void): void;
+  prependOnceListener(eventName: AccelerometerEvents, callback: (...args: any[]) => void): void;
   ios: Partial<{
     /**
      * The interval, in millisecond, for providing accelerometer updates to the block handler.

@@ -1,6 +1,6 @@
-import { AbstractAsyncTask } from './asynctask';
+import { IAsyncTask } from './asynctask';
 
-const AsyncTask: typeof AbstractAsyncTask = require(`./asynctask.${Device.deviceOS.toLowerCase()}`).default;
-type AsyncTask = AbstractAsyncTask;
+const AsyncTask: ConstructorOf<IAsyncTask, Partial<IAsyncTask>> = require(`./asynctask.${Device.deviceOS.toLowerCase()}`).default;
+type AsyncTask = IAsyncTask;
 
 export default AsyncTask;

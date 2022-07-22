@@ -1,8 +1,26 @@
 import StatusBar from '../../application/statusbar';
 import { INativeComponent } from '../../core/inative-component';
-import Color from '../color';
-import Page from '../page';
+import { IColor } from '../color/color';
+import { IPage } from '../page/page';
 
+/**
+ *
+ * Quick Look lets people preview Keynote, Numbers, Pages, and PDF documents,
+ * as well as images and other types of files, even if your app doesn't support those file formats.
+ * For further information: https://developer.apple.com/ios/human-interface-guidelines/features/quick-look/
+ * This class works only for IOS.
+ *
+ *     @example
+ *     import QuickLook from '@smartface/native/ui/quicklook';
+ *     const quickLook = new QuickLook();
+ *     const testPDF = "assets://test.pdf";
+ *     const testImage = "images://test.png";
+ *     quickLook.document = [testPDF,testImage];
+ *     quickLook.itemColor = Color.WHITE;
+ *     quickLook.show(myPage);
+ *
+ * @since 0.1
+ */
 export interface IQuickLook extends INativeComponent {
   /**
    * Gets/sets array of documents(paths) that will be shown on QuickLook.
@@ -37,7 +55,7 @@ export interface IQuickLook extends INativeComponent {
    * @ios
    * @since 3.1.3
    */
-  titleColor: Color;
+  titleColor: IColor;
 
   /**
    * Gets/sets color of items on header & footer of QuickLook view.
@@ -51,7 +69,7 @@ export interface IQuickLook extends INativeComponent {
    * @ios
    * @since 0.1
    */
-  itemColor: Color | null;
+  itemColor: IColor | null;
 
   /**
    * Gets status bar object. This property is readonly, you can not set
@@ -71,17 +89,5 @@ export interface IQuickLook extends INativeComponent {
    * @method show
    * @since 0.1
    */
-  show(page: Page): void;
-}
-
-export declare class QuickLookBase implements IQuickLook {
-  constructor(params?: Partial<IQuickLook>);
-  document: string[];
-  barColor: boolean;
-  titleColor: Color;
-  itemColor: Color | null;
-  statusBar: typeof StatusBar | null;
-  show(page: Page): void;
-
-  nativeObject: any;
+  show(page: IPage): void;
 }

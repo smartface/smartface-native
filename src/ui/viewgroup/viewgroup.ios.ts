@@ -16,7 +16,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   extends ViewIOS<ViewGroupEvents | ExtractEventValues<TEvent>, TNative, TProps>
   implements IViewGroup
 {
-  private _children: Record<string, IView> = {};
+  private _childs: Record<string, IView> = {};
   onChildViewAdded: IViewGroup['onViewAdded'];
   onChildViewRemoved: IViewGroup['onViewRemoved'];
   onViewRemovedInnerCallback: IViewGroup['onViewRemoved'];
@@ -24,7 +24,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   constructor(params?: Partial<TProps>) {
     super(params);
     this.nativeObject.didAddSubview = (e: __SF_UIView) => {
-      const view = this._children[e.subview.uuid];
+      const view = this._childs[e.subview.uuid];
       if (view) {
         this.onViewAdded?.(view);
         this.onChildViewAdded?.(view);
@@ -32,7 +32,7 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
       }
     };
     this.nativeObject.willRemoveSubview = (e: __SF_UIView) => {
-      const view = this._children[e.subview.uuid];
+      const view = this._childs[e.subview.uuid];
       if (view) {
         this.onViewRemoved?.(view);
         this.onChildViewRemoved?.(view);
@@ -46,8 +46,9 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   addChild(view: IView): void {
     view.parent = this;
     const uniqueId = view.uniqueId;
-    this._children[uniqueId] = view;
+    this._childs[uniqueId] = view;
     this.nativeObject.addSubview(view.nativeObject);
+    __SF_UIView.applyToRootView();
   }
 
   private getAndroidProps() {
@@ -59,30 +60,32 @@ export default class ViewGroupIOS<TEvent extends string = ViewGroupEvents, TNati
   // TODO: Make View disposable and move that logic into
   removeChild(view: ViewIOS) {
     view.nativeObject.removeFromSuperview();
-    delete this._children[view.uniqueId];
+    delete this._childs[view.uniqueId];
     view.parent = undefined;
+    __SF_UIView.applyToRootView();
   }
 
   removeAll() {
-    for (const child in this._children) {
-      this._children[child].parent = undefined;
-      this._children[child].nativeObject.removeFromSuperview();
+    for (const child in this._childs) {
+      this._childs[child].parent = undefined;
+      this._childs[child].nativeObject.removeFromSuperview();
     }
-    this._children = {};
+    this._childs = {};
+    __SF_UIView.applyToRootView();
   }
 
   getChildCount() {
-    return Object.keys(this._children).length;
+    return Object.keys(this._childs).length;
   }
 
   getChildList() {
-    return Object.values(this._children);
+    return Object.values(this._childs);
   }
 
   findChildById(id: string) {
-    for (const prop in this._children) {
-      if (this._children[prop].id === id) {
-        return this._children[prop];
+    for (const prop in this._childs) {
+      if (this._childs[prop].id === id) {
+        return this._childs[prop];
       }
     }
   }

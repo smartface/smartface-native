@@ -1,4 +1,4 @@
-import { TabBarControllerImpl } from './tabbarcontroller';
+import { ITabBarController } from './tabbarcontroller';
 
 /**
  * @class UI.TabBarController
@@ -72,7 +72,7 @@ import { TabBarControllerImpl } from './tabbarcontroller';
  *     }
  *
  */
-const TabBarController: typeof TabBarControllerImpl = require(`./tabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
-type TabBarController = TabBarControllerImpl;
+const TabBarController: ConstructorOf<ITabBarController, Partial<ITabBarController>> = require(`./tabbarcontroller.${Device.deviceOS.toLowerCase()}`).default;
+type TabBarController = ITabBarController;
 
 export default TabBarController;

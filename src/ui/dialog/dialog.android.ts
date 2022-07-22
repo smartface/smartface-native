@@ -4,8 +4,9 @@ import SystemServices from '../../util/Android/systemservices';
 import Color from '../color';
 import FlexLayout from '../flexlayout';
 import Screen from '../../device/screen';
-import { AbstractDialog, DialogStyle, DEFAULT_TRANSLUCENCY } from './dialog';
+import { DialogStyle, DEFAULT_TRANSLUCENCY, IDialog } from './dialog';
 import Application from '../../application';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
 
 const NativeDialog = requireClass('android.app.Dialog');
 const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
@@ -19,7 +20,7 @@ interface IDialogAndroid {
   themeStyle: DialogStyle;
 }
 
-export default class DialogAndroid extends AbstractDialog {
+export default class DialogAndroid extends NativeMobileComponent implements IDialog {
   private _isTransparent: boolean;
   private _themeStyle: DialogStyle;
   private _layout: FlexLayout;
@@ -48,7 +49,7 @@ export default class DialogAndroid extends AbstractDialog {
     super.preConstruct(params);
     this.addAndroidProps(this.getAndroidProps());
   }
-  setShowListener() {
+  private setShowListener() {
     const listener = DialogInterface.OnShowListener.implement({
       onShow: () => this._onShowCallback?.()
     });
@@ -70,7 +71,7 @@ export default class DialogAndroid extends AbstractDialog {
       this.dialogWindow.setBackgroundDrawable(this.colorDrawable);
       const statusBarHeight = Application.statusBar.visible ? Application.statusBar.height : 0;
       const layoutHeight = Screen.height - statusBarHeight;
-      if(statusBarHeight > 0) {
+      if (statusBarHeight > 0) {
         this._layout.height = layoutHeight;
       }
       this.dialogWindow.setLayout(LayoutParams.MATCH_PARENT, statusBarHeight > 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT);

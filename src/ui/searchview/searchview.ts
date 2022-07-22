@@ -1,15 +1,14 @@
 import { AbstractView, IView } from '../view/view';
-import type Color from '../color';
-import type Image from '../image';
-import type Page from '../page';
-import type FlexLayout from '../flexlayout';
-import type Font from '../font';
+import { IColor } from '../color/color';
 import KeyboardAppearance from '../shared/keyboardappearance';
 import TextAlignment from '../shared/textalignment';
 import { SearchViewEvents } from './searchview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import type KeyboardType from '../shared/keyboardtype';
 import { IImage } from '../image/image';
+import { IFlexLayout } from '../flexlayout/flexlayout';
+import { IPage } from '../page/page';
+import { IFont } from '../font/font';
 
 /**
  * Bar style that specifies the search bar’s appearance.
@@ -92,7 +91,7 @@ export type SearchViewIOSProps = IView['ios'] & {
    * @android
    * @since 3.2.1
    */
-  cursorColor?: Color;
+  cursorColor?: IColor;
   /**
    * Gets/sets cancel button color of searchview. This property works only for IOS.
    *
@@ -100,7 +99,7 @@ export type SearchViewIOSProps = IView['ios'] & {
    * @ios
    * @since 1.1.12
    */
-  cancelButtonColor?: Color;
+  cancelButtonColor?: IColor;
   /**
    * Gets/sets cancel button text of searchview. This property works only for IOS.
    *
@@ -134,7 +133,7 @@ export type SearchViewIOSProps = IView['ios'] & {
    * @ios
    * @since 3.0.2
    */
-  loadingColor?: Color;
+  loadingColor?: IColor;
   keyboardAppearance?: KeyboardAppearance;
 };
 
@@ -183,7 +182,7 @@ export type SearchViewAndroidProps = IView['android'] & {
    * @android
    * @since 3.2.2
    */
-  leftItem: IImage | FlexLayout;
+  leftItem: IImage | IFlexLayout;
   /**
    * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
    *
@@ -221,7 +220,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @android
    * @since 3.2.1
    */
-  cursorColor?: Color;
+  cursorColor?: IColor;
   /**
    * Gets/sets text color of SearchView.
    *
@@ -230,7 +229,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  textColor: Color;
+  textColor: IColor;
   /**
    * Gets/sets search icon image of SearchView.
    *
@@ -261,7 +260,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  addToHeaderBar(page: Page): void;
+  addToHeaderBar(page: IPage): void;
   /**
    * Sets/gets border thickness of bounded view. Accepts unsigned
    * numbers, 0 means no border. When the searchview is added to header bar,
@@ -282,7 +281,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  removeFromHeaderBar(page: Page): void;
+  removeFromHeaderBar(page: IPage): void;
   /**
    * This function shows keyboard.
    *
@@ -330,7 +329,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @ios
    * @since 0.1
    */
-  font: null | Font;
+  font: null | IFont;
   /**
    * Gets/sets text alignment of the SearchView.
    *
@@ -348,7 +347,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @android
    * @since 0.1
    */
-  hintTextColor: Color;
+  hintTextColor: IColor;
   /**
    * Gets/sets the color of the textFieldBackgroundColor.
    *
@@ -357,7 +356,7 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * @android
    * @since 3.0.2
    */
-  textFieldBackgroundColor: Color;
+  textFieldBackgroundColor: IColor;
   /**
    * This event is called when user focus on the search view by selecting it.
    *
@@ -436,6 +435,47 @@ export declare interface ISearchView<TEvent extends string = SearchViewEvents> e
    * ```
    */
   onSearchButtonClicked: () => void;
+  on(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchBegin', callback: () => void): () => void;
+  on(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchEnd', callback: () => void): () => void;
+  on(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  on(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cancelButtonClicked', callback: () => void): void;
+  off(eventName: 'searchBegin', callback: () => void): void;
+  off(eventName: 'searchButtonClicked', callback: () => void): void;
+  off(eventName: 'searchEnd', callback: () => void): void;
+  off(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  off(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cancelButtonClicked', ): void;
+  emit(eventName: 'searchBegin', ): void;
+  emit(eventName: 'searchButtonClicked', ): void;
+  emit(eventName: 'searchEnd', ): void;
+  emit(eventName: 'textChanged', searchText: string): void;
+  emit(eventName: SearchViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchBegin', callback: () => void): () => void;
+  once(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchEnd', callback: () => void): () => void;
+  once(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  once(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchBegin', callback: () => void): void;
+  prependListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchEnd', callback: () => void): void;
+  prependListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchBegin', callback: () => void): void;
+  prependOnceListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchEnd', callback: () => void): void;
+  prependOnceListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependOnceListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractSearchView<TEvent extends string = SearchViewEvents> extends AbstractView<TEvent | SearchViewEvents, any, ISearchView> implements ISearchView<TEvent | SearchViewEvents> {
@@ -444,22 +484,63 @@ export declare class AbstractSearchView<TEvent extends string = SearchViewEvents
   };
   text: string;
   hint: string;
-  cursorColor: Color;
-  textColor: Color;
-  iconImage: Image;
+  cursorColor: IColor;
+  textColor: IColor;
+  iconImage: IImage;
   searchIcon: IImage;
-  addToHeaderBar(page: Page): void;
-  removeFromHeaderBar(page: Page): void;
+  addToHeaderBar(page: IPage): void;
+  removeFromHeaderBar(page: IPage): void;
   showKeyboard(): void;
   hideKeyboard(): void;
   requestFocus(): void;
   removeFocus(): void;
-  font: Font;
+  font: IFont;
   textAlignment: TextAlignment;
-  hintTextColor: Color;
-  textFieldBackgroundColor: Color;
+  hintTextColor: IColor;
+  textFieldBackgroundColor: IColor;
   onSearchBegin: () => void;
   onSearchEnd: () => void;
   onTextChanged: (searchText: string) => void;
   onSearchButtonClicked: () => void;
+    on(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchBegin', callback: () => void): () => void;
+  on(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  on(eventName: 'searchEnd', callback: () => void): () => void;
+  on(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  on(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cancelButtonClicked', callback: () => void): void;
+  off(eventName: 'searchBegin', callback: () => void): void;
+  off(eventName: 'searchButtonClicked', callback: () => void): void;
+  off(eventName: 'searchEnd', callback: () => void): void;
+  off(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  off(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cancelButtonClicked', ): void;
+  emit(eventName: 'searchBegin', ): void;
+  emit(eventName: 'searchButtonClicked', ): void;
+  emit(eventName: 'searchEnd', ): void;
+  emit(eventName: 'textChanged', searchText: string): void;
+  emit(eventName: SearchViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cancelButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchBegin', callback: () => void): () => void;
+  once(eventName: 'searchButtonClicked', callback: () => void): () => void;
+  once(eventName: 'searchEnd', callback: () => void): () => void;
+  once(eventName: 'textChanged', callback: (searchText: string) => void): () => void;
+  once(eventName: SearchViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchBegin', callback: () => void): void;
+  prependListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependListener(eventName: 'searchEnd', callback: () => void): void;
+  prependListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cancelButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchBegin', callback: () => void): void;
+  prependOnceListener(eventName: 'searchButtonClicked', callback: () => void): void;
+  prependOnceListener(eventName: 'searchEnd', callback: () => void): void;
+  prependOnceListener(eventName: 'textChanged', callback: (searchText: string) => void): void;
+  prependOnceListener(eventName: SearchViewEvents, callback: (...args: any[]) => void): void;
 }

@@ -152,6 +152,24 @@ export declare interface ITextView<
    * ```
    */
   onLinkClick: (e: string | undefined) => void;
+
+  on(eventName: 'linkClick', callback: (link: string) => void): () => void;
+  on(eventName: TextViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'linkClick', callback: (link: string) => void): void;
+  off(eventName: TextViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'linkClick', link: string): void;
+  emit(eventName: TextViewEvents, ...args: any[]): void;
+
+  once(eventName: 'linkClick', callback: (link: string) => void): () => void;
+  once(eventName: TextViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'linkClick', callback: (link: string) => void): void;
+  prependListener(eventName: TextViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'linkClick', callback: (link: string) => void): void;
+  prependOnceListener(eventName: TextViewEvents, callback: (...args: any[]) => void): void;
   /**
    * Gets/sets letterSpacing on TextView. letterSpacing just work with attributedText.
    *

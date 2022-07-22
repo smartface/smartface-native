@@ -4,7 +4,8 @@ import { IQuickLook } from './quicklook';
 import StatusBar from '../../application/statusbar';
 import NativeComponent from '../../core/native-component';
 import Color from '../color';
-import Page from '../page';
+import { IColor } from '../color/color';
+import { IPage } from '../page/page';
 
 export default class QuickLookAndroid extends NativeComponent implements IQuickLook {
   protected createNativeObject() {
@@ -12,8 +13,8 @@ export default class QuickLookAndroid extends NativeComponent implements IQuickL
   }
   document: string[] = [];
   barColor: boolean = false;
-  titleColor: Color = Color.TRANSPARENT;
-  itemColor: Color | null = null;
+  titleColor = Color.TRANSPARENT;
+  itemColor: IColor | null = null;
   statusBar: typeof StatusBar | null = null;
 
   constructor(params?: Partial<IQuickLook>) {
@@ -24,5 +25,5 @@ export default class QuickLookAndroid extends NativeComponent implements IQuickL
     return 'QuickLook';
   }
 
-  show(page: Page): void {}
+  show(page: IPage): void {}
 }

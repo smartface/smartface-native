@@ -1,6 +1,6 @@
-import { AbstractRangeSlider } from './rangeslider';
+import { IRangeSlider } from './rangeslider';
 
-const RangeSlider: typeof AbstractRangeSlider = require(`./rangeslider.${Device.deviceOS.toLowerCase()}`).default;
-type RangeSlider = AbstractRangeSlider;
+const RangeSlider: ConstructorOf<IRangeSlider, Partial<IRangeSlider>> = require(`./rangeslider.${Device.deviceOS.toLowerCase()}`).default;
+type RangeSlider = IRangeSlider;
 
 export default RangeSlider;

@@ -63,6 +63,10 @@ export interface IFileStream extends INativeComponent {
    */
   path: string;
 
+  /**
+   * iOS only property. Gets the offset of the file stream set as padding.
+   * @ios
+   */
   offset: number;
 
   /**
@@ -96,7 +100,7 @@ export interface IFileStream extends INativeComponent {
    */
   write(content: string | IBlob): boolean;
   /**
-   * iOS only metthod
+   * Scans through the end of the file. See the example in the file and blob.
    * @iOS
    */
   seekToEnd?: () => void;

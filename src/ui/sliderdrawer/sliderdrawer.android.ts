@@ -5,7 +5,7 @@ import UnitConverter from '../../util/Android/unitconverter';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ColorAndroid from '../color/color.android';
 import FlexLayoutAndroid from '../flexlayout/flexlayout.android';
-import { ColorImpl } from '../color/color';
+import { IColor } from '../color/color';
 
 const NativeDrawerLayout = requireClass('androidx.drawerlayout.widget.DrawerLayout');
 
@@ -19,7 +19,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   private _state: SliderDrawerState;
   private drawerLayoutParams: any;
   drawerListener: any;
-  _backgroundColor: ColorImpl;
+  _backgroundColor: IColor;
   isSliderDrawerAttached;
   onShow: () => void | null;
   onHide: () => void | null;
@@ -108,6 +108,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   set height(value: ISliderDrawer['height']) {
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.height = UnitConverter.dpToPixel(value);
+    this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
   }
   get width(): ISliderDrawer['width'] {
     // Added due to using DrawerLayout as a parent
@@ -116,6 +117,7 @@ export default class SliderDrawerAndroid<TEvent extends string = SliderDrawerEve
   set width(value: ISliderDrawer['width']) {
     // Added due to using DrawerLayout as a parent
     this.drawerLayoutParams.width = UnitConverter.dpToPixel(value);
+    this.layout.nativeObject.setLayoutParams(this.drawerLayoutParams);
   }
   get backgroundColor(): ISliderDrawer['backgroundColor'] {
     return this._backgroundColor;

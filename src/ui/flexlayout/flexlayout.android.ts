@@ -44,30 +44,35 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   }
   set direction(direction) {
     this.yogaNode.setDirection(direction);
+    this.requestLayout();
   }
   get flexDirection() {
     return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), NativeFlexDirection);
   }
   set flexDirection(flexDirection) {
     this.yogaNode.setFlexDirection(flexDirection);
+    this.requestLayout();
   }
   get justifyContent() {
     return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), NativeJustifyContent);
   }
   set justifyContent(justifyContent) {
     this.yogaNode.setJustifyContent(justifyContent);
+    this.requestLayout();
   }
   get alignContent() {
     return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), NativeAlignContent);
   }
   set alignContent(alignContent) {
     this.yogaNode.setAlignContent(alignContent);
+    this.requestLayout();
   }
   get alignItems() {
     return this.convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), NativeAlignItems);
   }
   set alignItems(alignItems) {
     this.yogaNode.setAlignItems(alignItems);
+    this.requestLayout();
   }
   get flexWrap() {
     return this._flexWrap;
@@ -75,6 +80,7 @@ export default class FlexLayoutAndroid<TEvent extends string = FlexLayoutEvents,
   set flexWrap(flexWrap) {
     this._flexWrap = flexWrap;
     this.yogaNode.setWrap(flexWrap);
+    this.requestLayout();
   }
 
   toString() {

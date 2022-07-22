@@ -130,7 +130,16 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    SPACE_AROUND = 4
+    SPACE_AROUND = 4,
+    /**
+     * @property {Number} SPACE_EVENLY
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    SPACE_EVENLY = 5
   }
   /**
    * @enum {Number} UI.FlexLayout.AlignContent
@@ -191,7 +200,34 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    STRETCH = 4
+    STRETCH = 4,
+    /**
+     * @property {Number} BASELINE
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    BASELINE = 5,
+    /**
+     * @property {Number} SPACE_BETWEEN
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    SPACE_BETWEEN = 6,
+    /**
+     * @property {Number} SPACE_AROUND
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    SPACE_AROUND = 7
   }
   /**
    * @enum {Number} UI.FlexLayout.FlexWrap
@@ -220,7 +256,16 @@ namespace Flex {
      * @readonly
      * @since 0.1
      */
-    WRAP = 1
+    WRAP = 1,
+    /**
+     * @property {Number} WRAP_REVERSE
+     * @static
+     * @android
+     * @ios
+     * @readonly
+     * @since 5.0.3
+     */
+    WRAP_REVERSE = 2
   }
   /**
    * @enum {Number} UI.FlexLayout.AlignItems

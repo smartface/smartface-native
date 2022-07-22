@@ -34,60 +34,9 @@ Thanks! :heart: :heart:
 
 Smartface Team
 
-# Create New Module
+# I want to add a new module
 
-If you want to implement a new feature, make sure that the folder it is in is relevant.
-E.g. if your element derives from View or ViewGroup, that should be located in UI.
-
-## File Structure
-
-yourModule
-
-- yourModule.android.ts -> Main code of Android
-- yourModule.iOS.ts -> Main code of Android
-- yourModule.ts -> Main declarations of each property to be used. Have your OS specific value separated with iOS and Android
-- index.ts -> Main file that separates imports for both OS
-
-### yourModule.ts
-
-All of the interface, class and event etc. definitions should be located here.
-
-#### Example from Animator
-
-```
-  /**
-   * Performs the changes declared in animFunction with animation inside the layout provided.
-   * Duration indicates how long the animation will take in milliseconds.
-   * For animation rootLayout you should choose parent layout for Android, you can choose page
-   * layout for iOS as shown in example.
-   * While animating Textbox, you may see the hint of the Textbox disappear on Android.
-   * This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should
-   * set empty text to the Textbox onComplete callback of animation.
-   * @android
-   * @ios
-   * @since 0.1
-   */
-  static animate(rootLayout: IViewGroup, duration: number, animFn: () => void): AnimatorBase {
-    throw new Error('Method not implemented.');
-  }
-```
-
-### yourModule.\*.ts
-
-Your code and logic should be here for both OS. Happy Coding!
-
-### index.ts
-
-The main block that separates iOS&Android code should be here. Example usage from Animator:
-
-```
-import { AnimatorBase } from './animator';
-
-const Animator: typeof AnimatorBase = require(`./animator.${Device.deviceOS.toLowerCase()}`).default;
-type Animator = AnimatorBase;
-
-export default Animator;
-```
+Before anything, please read our [Architecture Documentation](./ARCHITECTURE.md) carefully. Any PR that isn't on par with architecture will be rejected.
 
 # Versioning
 
@@ -103,21 +52,23 @@ As explained above, the release process consists alpha, beta and production. The
 
 ## How to Publish Alpha Version
 
-1. Accept the PR and changes
-2. Create a new version via `yarn version --prerelease --preid=alpha`
-3. Push the changes via `git push && git push --tags`. Automatic build will not trigger if you don't push the tags
+1. Accept the PR targeted to `release/alpha`
+2. Merge the changes, the CI/CD will automatically increase version, commit the version change.
 
 ## How to Publish Beta Version
 
-1. Merge the changes from Alpha(develop)
-2. Create a new version via `yarn version --prerelease --preid=beta`
-3. Push the changes via `git push && git push --tags`. Automatic build will not trigger if you don't push the tags
+1. Create a PR from `release/alpha` to `release/beta`. It's highly likely that conflict will happen in the merge.
+2. Make sure `package.json` has beta version instead of alpha.
+3. If not, create a new version via `yarn version --prerelease --preid=beta`
+4. Merge the changes, the CI/CD will automatically increase version, commit the version change.
 
 ## How to Publish Production Version
 
-1. Merge the changes from Beta(develop)
+This step requires manual action.
+
+1. Merge the changes from `release/beta`. If conflict occur on `package.json` with versions, resolve the conflict with current change(version shouldn't be alpha or beta)
 2. Create a new version via `yarn version --patch` (or minor)
-3. Push the changes via `git push && git push --tags`. Automatic build will not trigger if you don't push the tags
+3. Push the changes
 
 ## How to Hotfix
 
@@ -135,16 +86,16 @@ Sometimes, there will be a need to change something on old versions. In that cas
 
 > **WARNING**: New modules under primitive must be defined in typedoc.js
 
-Local Build
+## Local Build for testing
 
 1. Run `yarn install` on project folder
 2. Run `yarn build:document`
 3. Navigate to /docs and open `index.html` file.
 
-Docker Build
+## Docker Build
 
 `docker build -t smartface-native-documentation .`
 
-Docker Run
+## Docker Run
 
 `docker run -d -p 80:80 smartface-native-documentation`

@@ -1,5 +1,5 @@
 import { Point2D } from '../../primitive/point2d';
-import type Color from '../color';
+import { IColor } from '../color/color';
 import { ViewEvents } from './view-events';
 import { IView, IViewProps, ViewBase } from './view';
 import { Size } from '../../primitive/size';
@@ -8,8 +8,12 @@ import Invocation from '../../util/iOS/invocation';
 import Exception from '../../util/exception';
 import ColorIOS from '../color/color.ios';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import TimerIOS from '../../global/timer/timer.ios';
 
-export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps> extends ViewBase<TEvent, TNative, TProps> implements IView {
+export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, TProps extends IViewProps = IViewProps>
+  extends ViewBase<TEvent, TNative, TProps>
+  implements IView<TEvent, TNative, TProps>
+{
   protected createNativeObject(): any {
     return new __SF_UIView();
   }
@@ -25,6 +29,17 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   private _paddingLeft: IView['paddingLeft'];
   private _paddingTop: IView['paddingBottom'];
   private _paddingBottom: IView['paddingTop'];
+
+  private _isLTR: boolean;
+
+  private _borderTopLeftRadius: number;
+  private _borderTopRightRadius: number;
+  private _borderBottomLeftRadius: number;
+  private _borderBottomRightRadius: number;
+  private _borderTopStartRadius: number;
+  private _borderTopEndRadius: number;
+  private _borderBottomStartRadius: number;
+  private _borderBottomEndRadius: number;
 
   gradientColor: __SF_CAGradientLayer | null;
   private _parent?: IViewGroup;
@@ -78,58 +93,101 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     };
 
     this.addIOSProps(this.getIOSProperties());
+    const semanticContent = __SF_UIView.viewAppearanceSemanticContentAttribute();
+    const UILayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
+    this._isLTR = semanticContent === 0 ? UILayoutDirection === 0 : semanticContent === 3;
   }
 
   protected preConstruct(params?: Partial<Record<string, any>>): void {
-    super.preConstruct(params);
     this._rotation = 0;
     this._rotationX = 0;
     this._rotationY = 0;
     this._width = 0;
     this._height = 0;
+    this._borderTopLeftRadius = 0;
+    this._borderTopRightRadius = 0;
+    this._borderBottomLeftRadius = 0;
+    this._borderBottomRightRadius = 0;
+    this._borderTopStartRadius = -1;
+    this._borderTopEndRadius = -1;
+    this._borderBottomStartRadius = -1;
+    this._borderBottomEndRadius = -1;
     this._scale = {
       x: 1.0,
       y: 1.0
     };
+    super.preConstruct(params);
   }
   onTouch: (e?: Point2D | undefined) => boolean;
   onTouchEnded: (isInside: boolean, point: Point2D) => boolean;
   onTouchCancelled: (point: Point2D) => boolean;
   onTouchMoved: (e: boolean | { isInside: boolean }, point?: Point2D | undefined) => boolean;
 
-  private getIOSProperties() {
+  private getIOSProperties(): IView['ios'] {
     const self = this;
     return {
       get shadowOffset() {
-        return self.shadowOffset;
+        const size = Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowOffset', [], 'CGSize') as Size;
+        return {
+          x: size.width || 0,
+          y: size.height || 0
+        };
       },
       set shadowOffset(shadowOffset: Point2D) {
-        self.shadowOffset = shadowOffset;
+        self.masksToBounds = false;
+        const argShadowOffset = new Invocation.Argument({
+          type: 'CGSize',
+          value: {
+            width: shadowOffset.x || 0,
+            height: shadowOffset.y || 0
+          }
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowOffset:', [argShadowOffset]);
       },
       get shadowRadius() {
-        return self.shadowRadius;
+        return Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowRadius', [], 'CGFloat') as number;
       },
       set shadowRadius(shadowRadius: number) {
-        self.shadowRadius = shadowRadius;
+        const argShadowRadius = new Invocation.Argument({
+          type: 'CGFloat',
+          value: shadowRadius
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowRadius:', [argShadowRadius]);
       },
       get shadowOpacity() {
-        return self.shadowRadius;
+        return Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowOpacity', [], 'CGFloat');
       },
       set shadowOpacity(shadowOpacity: number) {
-        self.shadowOpacity = shadowOpacity;
+        const argShadowOpacity = new Invocation.Argument({
+          type: 'float',
+          value: shadowOpacity
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowOpacity:', [argShadowOpacity]);
       },
       get shadowColor() {
-        return self.shadowColor;
+        const color = Invocation.invokeInstanceMethod(self.nativeObject.layer, 'shadowColor', [], 'CGColor');
+        return new ColorIOS({
+          color
+        });
       },
-      set shadowColor(shadowColor: Color) {
-        self.shadowColor = shadowColor;
+      set shadowColor(shadowColor: IColor) {
+        const argShadowColor = new Invocation.Argument({
+          type: 'CGColor',
+          value: shadowColor.nativeObject
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
       },
       get exclusiveTouch() {
-        return self.exclusiveTouch as boolean;
+        return Invocation.invokeInstanceMethod(self.nativeObject, 'isExclusiveTouch', [], 'BOOL') as boolean;
       },
       set exclusiveTouch(value: boolean) {
-        self.exclusiveTouch = value;
+        const argExclusiveTouch = new Invocation.Argument({
+          type: 'BOOL',
+          value: value
+        });
+        Invocation.invokeInstanceMethod(self.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
       },
+      // deprecated. Remove this set if you encounter this and want to clear up later.
       get masksToBounds() {
         return self.masksToBounds;
       },
@@ -137,10 +195,10 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
         self.masksToBounds = value;
       },
       get clipsToBounds() {
-        return self.clipsToBounds;
+        return self.nativeObject.valueForKey('clipsToBounds');
       },
       set clipsToBounds(value) {
-        self.clipsToBounds = value;
+        self.nativeObject.setValueForKey(value, 'clipsToBounds');
       },
       get viewAppearanceSemanticContentAttribute() {
         return __SF_UIView.viewAppearanceSemanticContentAttribute();
@@ -191,77 +249,6 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     Invocation.invokeInstanceMethod(this.nativeObject, 'setIsAccessibilityElement:', [isAccessibility]);
   }
 
-  // ios
-  private get shadowOffset() {
-    this.ios.shadowOffset = { x: 10, y: 10 };
-    const size = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOffset', [], 'CGSize') as Size;
-    return {
-      x: size.width,
-      y: size.height
-    };
-  }
-  private set shadowOffset(shadowOffset: Point2D) {
-    const argShadowOffset = new Invocation.Argument({
-      type: 'CGSize',
-      value: {
-        width: shadowOffset.x,
-        height: shadowOffset.y
-      }
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOffset:', [argShadowOffset]);
-  }
-
-  // ios
-  private get shadowRadius() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowRadius', [], 'CGFloat') as number;
-  }
-  private set shadowRadius(shadowRadius) {
-    const argShadowRadius = new Invocation.Argument({
-      type: 'CGFloat',
-      value: shadowRadius
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowRadius:', [argShadowRadius]);
-  }
-
-  // ios
-  private get shadowOpacity() {
-    return Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowOpacity', [], 'CGFloat');
-  }
-  private set shadowOpacity(shadowOpacity) {
-    const argShadowOpacity = new Invocation.Argument({
-      type: 'float',
-      value: shadowOpacity
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowOpacity:', [argShadowOpacity]);
-  }
-
-  // ios
-  private get shadowColor() {
-    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
-    return new ColorIOS({
-      color
-    });
-  }
-  private set shadowColor(shadowColor: Color) {
-    const argShadowColor = new Invocation.Argument({
-      type: 'CGColor',
-      value: shadowColor.nativeObject
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
-  }
-
-  // ios
-  private get exclusiveTouch() {
-    return Invocation.invokeInstanceMethod(this.nativeObject, 'isExclusiveTouch', [], 'BOOL') as boolean;
-  }
-  private set exclusiveTouch(value: boolean) {
-    const argExclusiveTouch = new Invocation.Argument({
-      type: 'BOOL',
-      value: value
-    });
-    Invocation.invokeInstanceMethod(this.nativeObject, 'setExclusiveTouch:', [argExclusiveTouch]);
-  }
-
   get masksToBounds() {
     return this.nativeObject.layer.masksToBounds;
   }
@@ -269,20 +256,12 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.layer.masksToBounds = value;
   }
 
-  // ios
-  private get clipsToBounds() {
-    return this.nativeObject.valueForKey('clipsToBounds');
-  }
-  private set clipsToBounds(value: number) {
-    this.nativeObject.setValueForKey(value, 'clipsToBounds');
-  }
-
   get borderColor() {
     return new ColorIOS({
       color: this.nativeObject.layer.borderUIColor
     });
   }
-  set borderColor(value: Color) {
+  set borderColor(value: IColor) {
     this.nativeObject.layer.borderUIColor = value.nativeObject;
   }
 
@@ -302,6 +281,119 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
   set borderRadius(value) {
     this.nativeObject.layer.cornerRadius = value;
+  }
+
+  get borderTopLeftRadius() {
+    return this._borderTopLeftRadius;
+  }
+
+  set borderTopLeftRadius(value) {
+    this._borderTopLeftRadius = value;
+    this.calculateTopRadius();
+  }
+
+  get borderTopRightRadius() {
+    return this._borderTopRightRadius;
+  }
+
+  set borderTopRightRadius(value) {
+    this._borderTopRightRadius = value;
+    this.calculateTopRadius();
+  }
+
+  get borderBottomLeftRadius() {
+    return this._borderBottomLeftRadius;
+  }
+
+  set borderBottomLeftRadius(value) {
+    this._borderBottomLeftRadius = value;
+    this.calculateBottomRadius();
+  }
+
+  get borderBottomRightRadius() {
+    return this._borderBottomRightRadius;
+  }
+
+  set borderBottomRightRadius(value) {
+    this._borderBottomRightRadius = value;
+    this.calculateBottomRadius();
+  }
+
+  get borderTopStartRadius() {
+    return this._borderTopStartRadius;
+  }
+
+  set borderTopStartRadius(value) {
+    this._borderTopStartRadius = value;
+    this.calculateTopRadius();
+  }
+
+  get borderTopEndRadius() {
+    return this._borderTopEndRadius;
+  }
+
+  set borderTopEndRadius(value) {
+    this._borderTopEndRadius = value;
+    this.calculateTopRadius();
+  }
+
+  get borderBottomStartRadius() {
+    return this._borderBottomStartRadius;
+  }
+
+  set borderBottomStartRadius(value) {
+    this._borderBottomStartRadius = value;
+    this.calculateBottomRadius();
+  }
+
+  get borderBottomEndRadius() {
+    return this._borderBottomEndRadius;
+  }
+
+  set borderBottomEndRadius(value) {
+    this._borderBottomEndRadius = value;
+    this.calculateBottomRadius();
+  }
+
+  private calculateTopRadius() {
+    /* check direction and calculate topLeft, topRight, bottomLeft, bottomRight */
+    let topLeft = 0;
+    let topRight = 0;
+
+    // find topLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderTopStartRadius !== -1) {
+      if (this._isLTR) topLeft = this._borderTopStartRadius;
+      else topRight = this._borderTopStartRadius;
+    } else if (this._borderTopLeftRadius !== 0) topLeft = this._borderTopLeftRadius;
+
+    // find topRight radius based on direction and replace its value if direction is RTL
+    if (this._borderTopEndRadius !== -1) {
+      if (this._isLTR) topRight = this._borderTopEndRadius;
+      else topLeft = this._borderTopEndRadius;
+    } else if (this._borderTopRightRadius !== 0) topRight = this._borderTopRightRadius;
+
+    this.nativeObject.borderTopLeftRadius = topLeft;
+    this.nativeObject.borderTopRightRadius = topRight;
+  }
+
+  private calculateBottomRadius() {
+    let bottomLeft = 0;
+    let bottomRight = 0;
+
+    // find bottomLeft radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomStartRadius !== -1) {
+      if (this._isLTR) bottomLeft = this._borderBottomStartRadius;
+      else bottomRight = this._borderBottomStartRadius;
+    } else if (this._borderBottomLeftRadius !== 0) bottomLeft = this._borderBottomLeftRadius;
+
+    // find bottomRight radius based on direction and replace its value if direction is RTL
+    if (this._borderBottomEndRadius !== -1) {
+      if (this._isLTR) bottomRight = this._borderBottomEndRadius;
+      else bottomLeft = this._borderBottomEndRadius;
+    } else if (this._borderBottomRightRadius !== 0) bottomRight = this._borderBottomRightRadius;
+
+    this.nativeObject.borderBottomLeftRadius = bottomLeft;
+    this.nativeObject.borderBottomRightRadius = bottomRight;
   }
 
   get maskedBorders() {
@@ -501,6 +593,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
   set isIncludedInLayout(value) {
     this.nativeObject.yoga.isIncludedInLayout = value;
+    this.applyLayoutToRootView();
   }
 
   /*
@@ -517,7 +610,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     return this.nativeObject.yoga.direction;
   }
   set direction(value) {
-    this.nativeObject.yoga.direction = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'direction');
   }
 
   get flexDirection() {
@@ -525,7 +618,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexDirection(value) {
-    this.nativeObject.yoga.flexDirection = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexDirection');
   }
 
   get justifyContent() {
@@ -533,7 +626,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set justifyContent(value) {
-    this.nativeObject.yoga.justifyContent = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'justifyContent');
   }
 
   get alignContent() {
@@ -541,7 +634,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignContent(value) {
-    this.nativeObject.yoga.alignContent = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignContent');
   }
 
   get alignItems() {
@@ -549,7 +642,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignItems(value) {
-    this.nativeObject.yoga.alignItems = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignItems');
   }
 
   get alignSelf() {
@@ -557,7 +650,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set alignSelf(value) {
-    this.nativeObject.yoga.alignSelf = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'alignSelf');
   }
 
   get positionType() {
@@ -565,7 +658,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set positionType(value) {
-    this.nativeObject.yoga.position = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'position');
   }
 
   get flexWrap() {
@@ -573,7 +666,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexWrap(value) {
-    this.nativeObject.yoga.flexWrap = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexWrap');
   }
 
   get display() {
@@ -581,14 +674,14 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set display(value) {
-    this.nativeObject.yoga.display = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'display');
   }
   get flexGrow() {
     return this.nativeObject.yoga.flexGrow;
   }
 
   set flexGrow(value) {
-    this.nativeObject.yoga.flexGrow = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexGrow');
     if (value > 0) {
       this.flexBasis = 1;
     } else if (value === 0) {
@@ -627,7 +720,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set flexShrink(value) {
-    this.nativeObject.yoga.flexShrink = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'flexShrink');
   }
 
   get flexBasis() {
@@ -876,7 +969,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderLeftWidth(value) {
-    this.nativeObject.yoga.borderLeftWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderLeftWidth');
   }
 
   get borderTopWidth() {
@@ -884,7 +977,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderTopWidth(value) {
-    this.nativeObject.yoga.borderTopWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderTopWidth');
   }
 
   get borderRightWidth() {
@@ -892,7 +985,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderRightWidth(value) {
-    this.nativeObject.yoga.borderRightWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderRightWidth');
   }
 
   get borderBottomWidth() {
@@ -900,7 +993,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderBottomWidth(value) {
-    this.nativeObject.yoga.borderBottomWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderBottomWidth');
   }
 
   get borderStartWidth() {
@@ -908,7 +1001,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderStartWidth(value) {
-    this.nativeObject.yoga.borderStartWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderStartWidth');
   }
 
   get borderEndWidth() {
@@ -916,7 +1009,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set borderEndWidth(value) {
-    this.nativeObject.yoga.borderEndWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderEndWidth');
   }
 
   get borderWidth() {
@@ -927,7 +1020,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     // Native object's layer must be updated!
     // Yoga's borderWidth property only effects positioning of its child view.
     this.nativeObject.layer.borderWidth = value;
-    this.nativeObject.yoga.borderWidth = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'borderWidth');
   }
 
   /*
@@ -1021,7 +1114,7 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
   }
 
   set aspectRatio(value) {
-    this.nativeObject.yoga.aspectRatio = value;
+    this.nativeObject.yoga.setNumberValueForKey(value, 'aspectRatio');
   }
 
   /*
@@ -1066,6 +1159,21 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     this.nativeObject.yoga.markDirty();
   }
 
+  get shadowColor() {
+    const color = Invocation.invokeInstanceMethod(this.nativeObject.layer, 'shadowColor', [], 'CGColor');
+    return new ColorIOS({
+      color
+    });
+  }
+
+  set shadowColor(shadowColor: IColor) {
+    const argShadowColor = new Invocation.Argument({
+      type: 'CGColor',
+      value: shadowColor.nativeObject
+    });
+    Invocation.invokeInstanceMethod(this.nativeObject.layer, 'setShadowColor:', [argShadowColor]);
+  }
+
   static readonly ios = {
     get viewAppearanceSemanticContentAttribute() {
       return __SF_UIView.viewAppearanceSemanticContentAttribute();
@@ -1103,4 +1211,8 @@ export default class ViewIOS<TEvent extends string = ViewEvents, TNative = any, 
     const h = frame.height || 0;
     return !(x > w || x < 0 || y > h || y < 0);
   }
+
+  private applyLayoutToRootView = () => {
+    __SF_UIView.applyToRootView();
+  };
 }

@@ -54,8 +54,7 @@ function startNotificationIntent(self, params) {
     notificationIntent.putExtra(key.toString(), params[key]);
   });
 
-  // PendingIntent.FLAG_ONE_SHOT
-  self.mPendingIntent = NativePendingIntent.getBroadcast(AndroidConfig.activity, 0, notificationIntent, 1073741824);
+  self.mPendingIntent = NativePendingIntent.getBroadcast(AndroidConfig.activity, 0, notificationIntent, NativePendingIntent.FLAG_ONE_SHOT | NativePendingIntent.FLAG_IMMUTABLE);
   const alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
   const fireDate = params.fireDate ? params.fireDate : 0;
   if (params.repeatInterval) {

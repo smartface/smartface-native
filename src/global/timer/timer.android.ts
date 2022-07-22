@@ -1,60 +1,72 @@
-import { TimerBase } from './timer';
+import NativeComponent from '../../core/native-component';
+import { ITimer, TimerParams } from './timer';
 
 /* global requireClass */
 const NativeSFHandler = requireClass('io.smartface.android.sfcore.global.SFHandler');
 const NativeRunnable = requireClass('java.lang.Runnable');
+const TimerHandler = NativeSFHandler.getHandler();
 
-class TimerAndroid extends TimerBase {
-  protected createNativeObject(): any {
-    return null;
-  }
-  private repeat: boolean = false;
-  private task: any;
-  private delay: number;
-  static handler = NativeSFHandler.getHandler();
-  static setTimeout(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({ ...params, repeat: false });
-  }
-  static setInterval(params: { task: () => void; delay: number }) {
-    return new TimerAndroid({ ...params, repeat: true }) as TimerBase;
-  }
-  static clearTimer(timer: TimerAndroid) {
-    if (timer && timer.nativeObject) {
-      timer.repeat = false;
-      TimerAndroid.handler.removeCallbacks(timer.nativeObject, null);
-    } else {
-      throw new Error('Not found given timer.');
-    }
-  }
-  static clearAllTimer() {
-    TimerAndroid.handler.removeCallbacksAndMessages(null);
-  }
-  constructor(params?: Partial<{ task: () => void; repeat: boolean; delay: number }>) {
+class TimerHelper extends NativeComponent {
+  repeat: boolean;
+  task: any;
+  delay: number;
+
+  constructor(params?: TimerParams) {
     super(params);
-    if (params?.repeat) {
-      this.repeat = params?.repeat;
-    }
+  }
 
-    if (params) {
-      this.task = params.task;
-      this.delay = 0;
-      if (typeof params.delay === 'number') {
-        this.delay = params.delay;
+  protected createNativeObject(params?: TimerParams) {
+    if (!params) {
+      return null;
+    }
+    this.repeat = !!params.repeat;
+    this.task = params.task;
+    this.delay = 0;
+
+    if (typeof params.delay === 'number') {
+      this.delay = params.delay;
+    }
+    const nativeObject = NativeRunnable.implement({
+      run: () => {
+        this.task();
+        if (this.repeat) {
+          TimerHandler.postDelayed(this.nativeObject, long(this.delay));
+        }
       }
+    });
+    TimerHandler.postDelayed(nativeObject, long(this.delay));
+    return nativeObject;
+  }
+}
 
-      this.nativeObject = NativeRunnable.implement({
-        run: runnableTask.bind(this)
-      });
-      TimerAndroid.handler.postDelayed(this.nativeObject, long(this.delay));
+class TimerAndroidClass implements ITimer {
+  timerCount = -1;
+  timerMap: Map<number, TimerHelper> = new Map();
+  setTimeout(params: { task: () => void; delay: number }) {
+    return this.createTimer({ ...params, repeat: false });
+  }
+  setInterval(params: { task: () => void; delay: number }) {
+    return this.createTimer({ ...params, repeat: true });
+  }
+  clearTimer(timerId: number) {
+    const currentTimer = this.timerMap.get(timerId);
+    if (currentTimer?.nativeObject) {
+      currentTimer.repeat = false;
+      TimerHandler.removeCallbacks(currentTimer.nativeObject, null);
+      this.timerMap.delete(timerId);
     }
   }
-}
-
-function runnableTask() {
-  this.task();
-  if (this.repeat) {
-    TimerAndroid.handler.postDelayed(this.nativeObject, long(this.delay));
+  clearAllTimer() {
+    TimerHandler.removeCallbacksAndMessages(null);
+    this.timerMap.clear();
+    this.timerCount = -1;
+  }
+  private createTimer(params: TimerParams) {
+    const timer = new TimerHelper(params);
+    this.timerMap.set(++this.timerCount, timer);
+    return this.timerCount;
   }
 }
 
+const TimerAndroid = new TimerAndroidClass();
 export default TimerAndroid;

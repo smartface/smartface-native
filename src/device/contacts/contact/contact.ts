@@ -29,5 +29,8 @@ export interface IContact extends INativeComponent {
   nickname?: string;
   displayName?: string;
   photo?: IBlob | null;
-  postalAddresses: string[] | { value: ContactIOSPostalType }[]; // String on Android and object on iOS
+  /**
+   * String on Android and object on iOS
+   */
+  postalAddresses: string[] | { value: ContactIOSPostalType }[];
 }

@@ -1,5 +1,4 @@
-import { NetworkBase } from './network';
+import { INetwork } from './network';
 
-const Network: NetworkBase = require(`./network.${Device.deviceOS.toLowerCase()}`).default;
-type Network = NetworkBase;
+const Network: INetwork = require(`./network.${Device.deviceOS.toLowerCase()}`).default;
 export default Network;

@@ -1,11 +1,11 @@
 /* globals requireClass */
 import File from '../file';
-import Path from '../path';
 import TypeUtil from '../../util/type';
 import Blob from '../../global/blob';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { IFileStream, FileStreamType, FileContentMode, FileStreamParams } from './filestream';
 import NativeComponent from '../../core/native-component';
+import { PathFileType } from '../path/path';
 
 const StringUtil = requireClass('io.smartface.android.utils.StringUtil');
 const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
@@ -51,7 +51,7 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
     }
 
     if (this._mode === FileStreamAndroid.StreamType.APPEND) {
-      if (this._fileObject.type !== Path.FILE_TYPE.FILE) {
+      if (this._fileObject.type !== PathFileType.FILE) {
         throw new Error('FileStream.StreamType.APPEND can be used for only files.');
       }
 
@@ -64,7 +64,7 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
         this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
       }
     } else if (this._mode === FileStreamAndroid.StreamType.READ) {
-      if (this._fileObject.type === Path.FILE_TYPE.ASSET) {
+      if (this._fileObject.type === PathFileType.ASSET) {
         if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
           const inputStreamReader = new NativeInputStreamReader(this._fileObject.nativeObject);
           this.nativeObject = new NativeBufferedReader(inputStreamReader);
@@ -72,7 +72,7 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
           const fileInputStream = new NativeFileInputStream(this._fileObject.nativeObject);
           this.nativeObject = new NativeBufferedInputStream(fileInputStream);
         }
-      } else if (this._fileObject.type === Path.FILE_TYPE.DRAWABLE) {
+      } else if (this._fileObject.type === PathFileType.DRAWABLE) {
         const inputStream = AndroidConfig.activityResources.openRawResource(this._fileObject.drawableResourceId);
         if (this._contentMode === FileStreamAndroid.ContentMode.TEXT) {
           const inputStreamReader = new NativeInputStreamReader(inputStream);
@@ -90,7 +90,7 @@ export default class FileStreamAndroid extends NativeComponent implements IFileS
         }
       }
     } else if (this._mode === FileStreamAndroid.StreamType.WRITE) {
-      if (this._fileObject.type !== Path.FILE_TYPE.FILE) {
+      if (this._fileObject.type !== PathFileType.FILE) {
         throw new Error('FileStream.StreamType.WRITE can be used for only files.');
       }
 

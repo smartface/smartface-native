@@ -506,6 +506,23 @@ export interface ILiveMediaPublisher<TEvent extends string = LiveMediaPublisherE
    * ```
    */
   onChange: (params: { event: number; message: string }) => void;
+  on(eventName: 'change', callback: (e: { event: number, message: string }) => void): () => void;
+  on(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  off(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'change', e: { event: number, message: string }): void;
+  emit(eventName: LiveMediaPublisherEvents, ...args: any[]): void;
+
+  once(eventName: 'change', callback: (e: { event: number, message: string }) => void): () => void;
+  once(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  prependListener(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  prependOnceListener(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMediaPublisherEvents> extends AbstractView<TEvent> implements ILiveMediaPublisher<TEvent | LiveMediaPublisherEvents> {
@@ -529,4 +546,34 @@ export declare class AbstractLiveMediaPublisher<TEvent extends string = LiveMedi
   static VideoPreset: typeof VideoPreset;
   static VideoProfile: typeof VideoProfile;
   static AudioProfile: typeof AudioProfile;
+  on(eventName: 'change', callback: (e: { event: number, message: string }) => void): () => void;
+  on(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  off(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+
+  emit(eventName: 'change', e: { event: number, message: string }): void;
+  emit(eventName: LiveMediaPublisherEvents, ...args: any[]): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'change', callback: (e: { event: number, message: string }) => void): () => void;
+  once(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  prependListener(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'change', callback: (e: { event: number, message: string }) => void): void;
+  prependOnceListener(eventName: LiveMediaPublisherEvents, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

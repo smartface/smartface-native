@@ -1,7 +1,8 @@
-import { ConnectionType, NetworkBase, INetworkNotifier } from './network';
+import { ConnectionType, INetwork, INetworkNotifier } from './network';
 import NativeComponent from '../../core/native-component';
 import { NativeMobileComponent } from '../../core/native-mobile-component';
 import AndroidConfig from '../../util/Android/androidconfig';
+import HttpAndroid from '../../net/http/http.android';
 
 const SFNetworkNotifier = requireClass('io.smartface.android.sfcore.device.network.SFNetworkNotifier');
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
@@ -104,7 +105,7 @@ class Notifier extends NativeMobileComponent implements INetworkNotifier {
   }
 }
 
-class NetworkAndroid extends NativeComponent implements NetworkBase {
+class NetworkAndroid extends NativeComponent implements INetwork {
   protected createNativeObject() {
     return;
   }
@@ -112,6 +113,31 @@ class NetworkAndroid extends NativeComponent implements NetworkBase {
   readonly roamingEnabled = false;
   constructor() {
     super();
+  }
+  isConnected(checkUrl?: string): Promise<void> {
+    const url = checkUrl || 'https://www.google.com';
+
+    return new Promise((resolve, reject) => {
+      const noConnection = this.connectionType === ConnectionType.NONE;
+      if (noConnection) {
+        return reject();
+      }
+      const http = new HttpAndroid();
+      http.request({
+        url,
+        onLoad: () => {
+          resolve();
+        },
+        onError: (e) => {
+          if (typeof e.statusCode === 'undefined') {
+            reject();
+          } else {
+            resolve();
+          }
+        },
+        method: 'GET'
+      });
+    });
   }
   public readonly notifier = new Notifier();
   public readonly Notifier = Notifier;

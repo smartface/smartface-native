@@ -64,7 +64,10 @@ export default class LabelIOS<TEvent extends string = ViewEvents, TNative = any,
     return this.nativeObject.text;
   }
   set text(value: ILabel['text']) {
+    this.nativeObject.yoga.markDirty();
     this.nativeObject.text = value;
+
+    __SF_UIView.applyToRootView();
   }
   get textAlignment() {
     return this._textAlignment;

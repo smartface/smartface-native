@@ -1,16 +1,14 @@
 import { ITextBox } from './textbox';
 import ActionKeyType from '../shared/android/actionkeytype';
-import Color from '../color';
-import Font from '../font';
 import KeyboardType from '../shared/keyboardtype';
 import TextAlignment from '../shared/textalignment';
 import TextView from '../textview';
-import ViewAndroid from '../view/view.android';
 import AutoCapitalize from '../shared/autocapitalize';
 import { TextBoxEvents } from './textbox-events';
 import SystemServices from '../../util/Android/systemservices';
 import AndroidConfig from '../../util/Android/androidconfig';
 import TextViewAndroid from '../textview/textview.android';
+import { IColor } from '../color/color';
 
 const NativeTextWatcher = requireClass('android.text.TextWatcher');
 const NativeTextView = requireClass('android.widget.TextView');
@@ -84,9 +82,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private _isPassword: boolean;
   private _keyboardType: KeyboardType;
   private _actionKeyType: ActionKeyType;
+  private _maxLength: number;
   private _onTextChanged: (e?: { insertedText: string; location: number }) => void;
-  private _cursorColor: Color;
-  private _hintTextColor: Color;
+  private _cursorColor: IColor;
+  private _hintTextColor: IColor;
   private _onEditBegins: () => void;
   private _onEditEnds: () => void;
   private _onActionButtonPress: (e?: { actionKeyType: ActionKeyType }) => void;
@@ -131,8 +130,6 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     );
 
     this.actionKeyType = ActionKeyType.DEFAULT; // Added for https://smartface.atlassian.net/browse/AND-3869
-
-    this.addAndroidProps(this.androidProps());
   }
 
   protected preConstruct(params?: Partial<TProps>): void {
@@ -145,6 +142,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._autoCapitalize = AutoCapitalize.NONE;
     this._didSetOnEditorActionListener = false;
     super.preConstruct(params);
+    this.addAndroidProps(this.androidProps());
   }
   protected createNativeObject() {
     //AND-3123: Due to the issue, hardware button listener added.
@@ -170,8 +168,11 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
   private androidProps() {
     const self = this;
     return {
-      maxLength(value: number): void {
-        const filterArray = toJSArray(self.nativeObject.getFilters());
+      get maxLength(): number {
+        return self._maxLength || 0;
+      },
+      set maxLength(value: number) {
+        const filterArray = toJSArray(self.nativeObject.getFilters()) || [];
         for (let i = 0; i < filterArray.length; i++) {
           if ((filterArray[i] + '').includes('android.text.InputFilter$LengthFilter')) {
             filterArray.splice(i, 1);
@@ -180,6 +181,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
         }
         filterArray.push(new NativeInputFilter.LengthFilter(value));
         self.nativeObject.setFilters(array(filterArray, 'android.text.InputFilter'));
+        self._maxLength = value;
       }
     };
   }
@@ -190,6 +192,7 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this._hasEventsLocked = true;
     if (typeof value !== 'string') value = '';
 
+    this.dirty();
     this.nativeObject.setText('' + value);
 
     this.nativeObject.setSelection(value.length);
@@ -215,10 +218,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
   }
 
-  get textColor(): Color {
+  get textColor(): IColor {
     return this._textColor as any;
   }
-  set textColor(value: Color) {
+  set textColor(value: IColor) {
     this._textColor = value;
     this.nativeObject.setTextColor(value.nativeObject);
   }
@@ -259,10 +262,10 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     this.nativeObject.setOnEditBegins(value.bind(this));
   }
 
-  get cursorColor(): Color {
+  get cursorColor(): IColor {
     return this._cursorColor;
   }
-  set cursorColor(value: Color) {
+  set cursorColor(value: IColor) {
     this._cursorColor = value;
     SFEditText.setCursorColor(this.nativeObject, value.nativeObject);
   }
@@ -271,13 +274,14 @@ export default class TextBoxAndroid<TEvent extends string = TextBoxEvents, TNati
     return this.nativeObject.getHint()?.toString();
   }
   set hint(value: string) {
+    this.dirty();
     this.nativeObject.setHint(value);
   }
 
-  get hintTextColor(): Color {
+  get hintTextColor(): IColor {
     return this._hintTextColor;
   }
-  set hintTextColor(value: Color) {
+  set hintTextColor(value: IColor) {
     this._hintTextColor = value;
     this.nativeObject.setHintTextColor(value.nativeObject);
   }

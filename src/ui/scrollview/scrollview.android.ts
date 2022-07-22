@@ -10,8 +10,8 @@ import AndroidUnitConverter from '../../util/Android/unitconverter';
 import AndroidConfig from '../../util/Android/androidconfig';
 import FlexLayout from '../flexlayout';
 
-const NativeHorizontalScroll = requireClass('io.smartface.android.sfcore.SFHorizontalScrollView');
-const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
+const NativeHorizontalScroll = requireClass('io.smartface.android.sfcore.ui.scrollview.SFHorizontalScrollView');
+const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.ui.scrollview.SFScrollView');
 const NativeView = requireClass('android.view.View');
 const NativeViewTreeObserver = requireClass('android.view.ViewTreeObserver');
 
@@ -28,20 +28,21 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
   private prevX: number;
   private prevOldX: number;
   private _layout: FlexLayoutAndroid;
-  private _autoSizeEnabled;
   onScroll: (params: { translation: Point2D; contentOffset: Point2D }) => void;
   constructor(params?: IScrollView) {
     super(params);
     this.addAndroidProps(this.getAndroidProps());
     this._layout = new FlexLayoutAndroid();
+
     // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
     // So, the user have to set width and height for the layout of scrollview.
     // If the issue is fixed, you can try below lines.
 
     // const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
     // const layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
-    // this.nativeObject.addView(thid._layout.nativeObject, layoutParams);
+    // this.nativeObject.addView(this._layout.nativeObject, layoutParams);
     this.nativeObject.addView(this._layout.nativeObject);
+    this.nativeObject.setLayout(this._layout.nativeObject);
     this._layout.parent = this;
   }
   private getAndroidProps(): IScrollView['android'] {
@@ -57,7 +58,6 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     };
   }
   protected preConstruct(params) {
-    this._autoSizeEnabled = false;
     super.preConstruct(params);
   }
 
@@ -120,58 +120,13 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
       _animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate);
     }
   }
-  private calculateScrollViewSize() {
-    const childViews = this._layout.childViews;
-    const keys = Object.keys(childViews);
-    const arrayLenght = keys.length;
-    if (this.align === ScrollViewAlign.VERTICAL) {
-      let layoutHeight = this.height;
-      for (let i = 0; i < arrayLenght; i++) {
-        const viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
-        const viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
-        const viewBottomMargin = childViews[keys[i]].marginBottom || 0;
-        const layoutPaddingBottom = this.layout.paddingBottom || 0;
 
-        const measuredHeight = viewY + viewHeight + viewBottomMargin + layoutPaddingBottom;
-        if (measuredHeight > layoutHeight) {
-          layoutHeight = measuredHeight;
-        }
-      }
-      this.layout.height = layoutHeight;
-    } else {
-      let layoutWidth = this.width;
-      for (let i = 0; i < arrayLenght; i++) {
-        const viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
-        const viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
-        const viewRightMargin = childViews[keys[i]].marginRight || 0;
-        const layoutPaddingRight = this.layout.paddingRight || 0;
-        const measuredWidth = viewX + viewWidth + viewRightMargin + layoutPaddingRight;
-        if (measuredWidth > layoutWidth) layoutWidth = measuredWidth;
-      }
-      this.layout.width = layoutWidth;
-    }
-  }
   addChild(view: ViewAndroid) {
     // Overridden from ViewGroup due to difference between FlexLayout.
     this.nativeObject.removeView(this._layout.nativeObject);
     view.parent = this;
     this._layout.childViews[view.id] = view;
     this.nativeObject.addView(view.nativeObject);
-  }
-  applyLayout(): void {
-    // ToDo: This method will overwrite flexlayout's applyLayout. It is not sure that we should overwrite it.
-    if (this.autoSizeEnabled) {
-      const nativeGlobalLayoutListener = NativeViewTreeObserver.OnGlobalLayoutListener.implement({
-        onGlobalLayout: () => {
-          this.calculateScrollViewSize();
-          this.layout.nativeObject.requestLayout();
-          this.layout.nativeObject.invalidate();
-          this.layout.nativeObject.getViewTreeObserver().removeOnGlobalLayoutListener(nativeGlobalLayoutListener);
-        }
-      });
-      this.layout.nativeObject.getViewTreeObserver().addOnGlobalLayoutListener(nativeGlobalLayoutListener);
-      this.layout.nativeObject.requestLayout();
-    }
   }
   toString(): string {
     return 'ScrollView';
@@ -194,10 +149,10 @@ export default class ScrollViewAndroid<TEvent extends string = ScrollViewEvents>
     this.nativeObject.setHorizontalScrollBarEnabled(value);
   }
   get autoSizeEnabled() {
-    return this._autoSizeEnabled;
+    return this.nativeObject.getAutoSizeEnabled();
   }
   set autoSizeEnabled(value) {
-    this._autoSizeEnabled = value;
+    this.nativeObject.setAutoSizeEnabled(value);
   }
   get contentOffset() {
     return {

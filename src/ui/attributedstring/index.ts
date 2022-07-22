@@ -1,7 +1,7 @@
 import { ConstructorOf } from '../../core/constructorof';
-import { AttributedStringBase } from './attributedstring';
+import { IAttributedString } from './attributedstring';
 
-const AttributedString: ConstructorOf<AttributedStringBase, Partial<AttributedStringBase>> = require(`./attributedstring.${Device.deviceOS.toLowerCase()}`).default;
-type AttributedString = AttributedStringBase;
+const AttributedString: ConstructorOf<IAttributedString, Partial<IAttributedString>> = require(`./attributedstring.${Device.deviceOS.toLowerCase()}`).default;
+type AttributedString = IAttributedString;
 
 export default AttributedString;

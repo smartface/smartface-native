@@ -1,4 +1,4 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
+import { IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewAndroid from '../view/view.android';
 import FlexLayout from '../flexlayout';
@@ -6,6 +6,7 @@ import Color from '../color';
 import AndroidConfig from '../../util/Android/androidconfig';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { IViewProps, ViewIOSProps, ViewAndroidProps } from '../view/view';
+import { IColor } from '../color/color';
 
 const NativeShimmerFrameLayout = requireClass('com.facebook.shimmer.ShimmerFrameLayout');
 const NativeShimmer = requireClass('com.facebook.shimmer.Shimmer');
@@ -17,7 +18,7 @@ const NativeShimmeringDirectionMapping = {
   [ShimmeringDirection.DOWN]: 1
 };
 
-export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements IShimmerFlexLayout {
+export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents> extends ViewAndroid<TEvent> implements IShimmerFlexLayout<TEvent> {
   private _layout;
   private _baseAlpha: number;
   private _direction: ShimmeringDirection;
@@ -27,8 +28,8 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
   private _intensity?: number;
   private _repeatCount?: number;
   private _tilt?: number;
-  private _highlightColor?: Color;
-  private _baseColor?: Color;
+  private _highlightColor?: IColor;
+  private _baseColor?: IColor;
   private _shimmerBuilder: any;
   private _highlightAlpha: number;
   private _isShimmering: boolean;
@@ -176,7 +177,7 @@ export default class ShimmerFlexLayoutAndroid<TEvent extends string = ViewEvents
     });
   }
 
-  static Android: typeof AbstractShimmerFlexLayout.Android = {
+  static Android = {
     Shimmer: ShimmerHighlight
   };
   static ShimmeringDirection = ShimmeringDirection;

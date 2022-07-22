@@ -1,5 +1,3 @@
-import NativeComponent from '../../core/native-component';
-
 export interface TimerParams {
   task: () => void;
   repeat?: boolean;
@@ -33,64 +31,41 @@ export interface TimerParams {
  *
  *
  */
-export abstract class TimerBase extends NativeComponent {
-  constructor(params?: Partial<TimerParams>) {
-    super(params);
-  }
+export interface ITimer {
   /**
    * @method setTimeout
    *
    * Calls a function after a spesified time elapses.
    *
-   * @param {Object} params Parameters
-   * @param {Function} params.task Function to be called
-   * @param {Number} params.delay Time elapsed in millisecond
-   * @return {Timer}
    * @static
    * @since 0.1
    */
-  static setTimeout(params: TimerParams): TimerBase {
-    throw new Error('Method not implemented.');
-  }
+  setTimeout(params: TimerParams): number;
   /**
    * @method setInterval
    *
    * Calls a function repeatedly after a spesified time elapses.
    *
-   * @param {Object} params Parameters
-   * @param {Function} params.task Function to be called
-   * @param {Number} params.delay Time elapsed in millisecond
-   * @return {Timer}
    * @static
    * @since 0.1
    */
-  static setInterval(params: TimerParams): TimerBase {
-    throw new Error('Method not implemented.');
-  }
+  setInterval(params: TimerParams): number;
   /**
    * @method clearTimer
    *
-   * Clears a spesified Timer instance.
+   * Clears a specified Timer instance.
    *
-   * @param {Timer} timer
    * @static
    * @since 0.1
    */
-  static clearTimer(timer: any): void {
-    throw new Error('Method not implemented.');
-  }
+  clearTimer(timerId: number): void;
   /**
    * @method clearAllTimer
    *
-   * Clears all Timer instance.
+   * Clears all the Timers.
    *
    * @static
    * @since 0.1
    */
-  static clearAllTimer(): void {
-    throw new Error('Method not implemented.');
-  }
-  protected createNativeObject() {
-    throw new Error('Method not implemented.');
-  }
+  clearAllTimer(): void;
 }

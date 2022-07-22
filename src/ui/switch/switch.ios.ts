@@ -1,15 +1,15 @@
 import { ISwitch } from './switch';
 import UIControlEvents from '../../util/iOS/uicontrolevents';
-import Color from '../color';
+import ColorIOS from '../color/color.ios';
 import ViewIOS from '../view/view.ios';
 import { SwitchEvents } from './switch-events';
+import { IColor } from '../color/color';
 
 export default class SwitchIOS<TEvent extends string = SwitchEvents> extends ViewIOS<TEvent | SwitchEvents, __SF_UISwitch, ISwitch> {
-  private _toggleOnColor: Color = Color.GREEN;
-  private _toggleOffColor: Color = Color.create('#FAFAFF');
-
-  private _thumbOnColor: Color = Color.WHITE;
-  private _thumbOffColor: Color = Color.WHITE;
+  private _toggleOnColor: IColor;
+  private _toggleOffColor: IColor;
+  private _thumbOnColor: IColor;
+  private _thumbOffColor: IColor;
 
   onToggleChanged: (toggle: boolean) => void;
   constructor(params?: Partial<ISwitch>) {
@@ -19,6 +19,10 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     return new __SF_UISwitch();
   }
   protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.toggleOnColor = ColorIOS.GREEN;
+    this.toggleOffColor = ColorIOS.create('#FAFAFF');
+    this.thumbOnColor = ColorIOS.WHITE;
+    this.thumbOffColor = ColorIOS.WHITE;
     if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 3) {
       this.nativeObject.setValueForKey(3, 'semanticContentAttribute');
     } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() === 4) {
@@ -48,16 +52,16 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this.nativeObject.setEnabled = value;
   }
 
-  get thumbOnColor(): Color | null {
+  get thumbOnColor(): IColor | null {
     if (this.nativeObject.thumbTintColor === undefined) {
       return null;
     } else {
-      return new Color({
+      return new ColorIOS({
         color: this.nativeObject.thumbTintColor
       });
     }
   }
-  set thumbOnColor(value: Color | undefined | null) {
+  set thumbOnColor(value: IColor | undefined | null) {
     if (value === null || value === undefined) {
       this.nativeObject.thumbTintColor = undefined;
     } else {
@@ -67,14 +71,13 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
   }
 
   // TODO There is nothing related to thumbOffColor
-  get thumbOffColor(): Color {
+  get thumbOffColor(): IColor {
     return this._thumbOffColor;
   }
 
-  set thumbOffColor(value: Color) {
+  set thumbOffColor(value: IColor) {
     if (!value) return;
 
-    
     this._thumbOffColor = value;
     if (!this.nativeObject.isOn) {
       this.nativeObject.thumbTintColor = value.nativeObject;
@@ -85,7 +88,7 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     }
   }
 
-  // thumbOffColor: Color;
+  // thumbOffColor: IColor;
 
   get toggle(): boolean {
     return this.nativeObject.isOn;
@@ -95,19 +98,19 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     this.triggerCallbackToJS();
   }
 
-  get toggleOnColor(): Color {
+  get toggleOnColor(): IColor {
     return this._toggleOnColor;
   }
-  set toggleOnColor(value: Color) {
+  set toggleOnColor(value: IColor) {
     this._toggleOnColor = value;
     this.nativeObject.onTintColor = value.nativeObject;
   }
 
-  get toggleOffColor(): Color {
+  get toggleOffColor(): IColor {
     return this._toggleOffColor;
   }
 
-  set toggleOffColor(value: Color) {
+  set toggleOffColor(value: IColor) {
     if (!value) return;
 
     this._toggleOffColor = value;
@@ -120,5 +123,3 @@ export default class SwitchIOS<TEvent extends string = SwitchEvents> extends Vie
     }
   }
 }
-
-import '@smartface/native';

@@ -1,27 +1,37 @@
-import { eventCallbacksAssign } from '../../core/eventemitter/eventCallbacksAssign';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import Invocation from '../../util/iOS/invocation';
-import { ILocation, LocationBase } from './location';
+import { PermissionIOSAuthorizationStatus, PermissionResult, Permissions } from '../permission/permission';
+import PermissionIOS from '../permission/permission.ios';
+import { ILocation, LocationAndroidPriority, LocationAndroidSettingsStatusCodes } from './location';
 import { LocationEvents } from './location-events';
-const IOS_AUTHORIZATION_STATUS = {
-  //deprecated
-  NotDetermined: 0,
-  Restricted: 1,
-  Denied: 2,
-  Authorized: 3
-};
+
 const IOS_NATIVE_AUTHORIZATION_STATUS = { NotDetermined: 0, Restricted: 1, Denied: 2, AuthorizedAlways: 3, AuthorizedWhenInUse: 4 };
-const IOS_AUTHORIZATION_STATUS_B = { NOTDETERMINED: 0, RESTRICTED: 1, DENIED: 2, AUTHORIZED: 3 };
 
 class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILocation> implements ILocation {
   delegate?: __SF_CLLocationManagerDelegate;
-  Android = { Provider: {}, Priority: {}, SettingsStatusCodes: {} };
-  iOS = { AuthorizationStatus: IOS_AUTHORIZATION_STATUS_B };
-  private _authorizationStatus: LocationBase.iOS.AuthorizationStatus;
+  Android = { Priority: LocationAndroidPriority, SettingsStatusCodes: LocationAndroidSettingsStatusCodes };
+  iOS = { AuthorizationStatus: PermissionIOSAuthorizationStatus };
+  private _authorizationStatus: PermissionIOSAuthorizationStatus;
   __onActivityResult: (resultCode: number) => void;
   onLocationChanged: (...args: any[]) => {};
   constructor() {
     super();
+  }
+  getCurrentLocation(): ReturnType<ILocation['getCurrentLocation']> {
+    return new Promise((resolve, reject) => {
+      PermissionIOS.ios
+        .requestAuthorization?.(Permissions.IOS.LOCATION)
+        .then(() => {
+          this.start();
+          this.once('locationChanged', (location) => {
+            this.stop();
+            resolve({ ...location, type: 'precise', result: PermissionResult.GRANTED }); // For iOS, location type doesn't matter at all.
+          });
+        })
+        .catch(() => {
+          reject({ type: 'precise', result: PermissionResult.DENIED });
+        });
+    });
   }
   preConstruct() {
     super.preConstruct();
@@ -33,7 +43,7 @@ class LocationIOS extends NativeEventEmitterComponent<LocationEvents, any, ILoca
   }
   private getIOSProps(): ILocation['ios'] {
     return {
-      authorizationStatus: IOS_AUTHORIZATION_STATUS,
+      authorizationStatus: PermissionIOSAuthorizationStatus,
       native: { authorizationStatus: IOS_NATIVE_AUTHORIZATION_STATUS },
       locationServicesEnabled: () => {
         return __SF_CLLocationManager.locationServicesEnabled();

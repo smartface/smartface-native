@@ -1,13 +1,12 @@
 import ViewAndroid from '../view/view.android';
 import AndroidConfig from '../../util/Android/androidconfig';
 import File from '../../io/file';
-import Path from '../../io/path';
 import { WebView as WebViewRequestCodes } from '../../util/Android/requestcodes';
 import { WebViewEvents } from './webview-events';
 import WebView from '.';
-import { AndroidProps, iOSProps, IWebView } from './webview';
+import { IWebView } from './webview';
 import OverScrollMode from '../shared/android/overscrollmode';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { PathFileType } from '../../io/path/path';
 
 const NativeView = requireClass('android.view.View');
 const NativeCookieManager = requireClass('android.webkit.CookieManager');
@@ -176,11 +175,11 @@ export default class WebViewAndroid<TEvent extends string = WebViewEvents> exten
   }
   loadFile(file: File) {
     if (file instanceof File) {
-      if (file.type === Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
+      if (file.type === PathFileType.FILE || file.type === PathFileType.EMULATOR_ASSETS || file.type === PathFileType.RAU_ASSETS) {
         //Generate FILE PATH
         this.nativeObject.loadUrl('file:///' + file.fullPath);
         //@ts-ignore
-      } else if (file.type === Path.FILE_TYPE.ASSET) {
+      } else if (file.type === PathFileType.ASSET) {
         this.nativeObject.loadUrl('file:///android_asset/' + file.path.replace('assets://', ''));
       }
     }

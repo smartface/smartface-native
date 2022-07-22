@@ -1,5 +1,5 @@
-import { CameraDevice, CameraFlashMode, ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from './multimedia';
-import File from '../../io/file';
+import { ConvertToMp4Params, LaunchCropperParams, MultimediaBase, MultimediaParams, PickMultipleFromGalleryParams, RecordVideoParams } from './multimedia';
+import FileAndroid from '../../io/file/file.android';
 import ImageAndroid from '../../ui/image/image.android';
 import Page from '../../ui/page';
 
@@ -7,6 +7,7 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import * as RequestCodes from '../../util/Android/requestcodes';
 import AndroidUnitConverter from '../../util/Android/unitconverter';
 import TypeUtil from '../../util/type';
+import { IPage } from '../../ui/page/page';
 
 /* global requireClass */
 const NativeMediaStore = requireClass('android.provider.MediaStore');
@@ -80,7 +81,7 @@ class MultimediaAndroid implements MultimediaBase {
   PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
   PICK_MULTIPLE_FROM_GALLERY = RequestCodes.Multimedia.PICK_MULTIPLE_FROM_GALLERY;
   CropImage = RequestCodes.Multimedia.CropImage;
-  private _captureParams: { page?: Page } = {};
+  private _captureParams: { page?: IPage } = {};
   private _pickParams = {};
   private _action = 0;
   private _fileURI = null;
@@ -157,7 +158,7 @@ class MultimediaAndroid implements MultimediaBase {
 
     NativeSFMultimedia.convertToMp4(videoFile.nativeObject, outputFileName, {
       onCompleted: (outputVideoFilePath) => {
-        const video = new File({ path: outputVideoFilePath });
+        const video = new FileAndroid({ path: outputVideoFilePath });
         onCompleted && onCompleted({ video });
       },
       onFailure
@@ -175,7 +176,7 @@ class MultimediaAndroid implements MultimediaBase {
       android: { rotateText: rotateText, scaleText: scaleText, cropText: cropText, maxResultSize: maxResultSize = {}, hideBottomControls: hideBottomControls = false } = {}
     } = params;
 
-    if (!asset || (!(asset instanceof File) && !(asset instanceof ImageAndroid))) throw new TypeError('Asset parameter must be typeof File or Image');
+    if (!asset || (!(asset instanceof FileAndroid) && !(asset instanceof ImageAndroid))) throw new TypeError('Asset parameter must be typeof File or Image');
 
     this._captureParams = {};
     this._pickParams = params;
@@ -348,13 +349,13 @@ class MultimediaAndroid implements MultimediaBase {
                     image: new ImageAndroid({
                       bitmap: asset.bitmap
                     }),
-                    file: new File({
+                    file: new FileAndroid({
                       path: asset.realPath
                     })
                   };
                 } else {
                   return {
-                    file: new File({
+                    file: new FileAndroid({
                       path: asset.realPath
                     })
                   };
@@ -451,7 +452,7 @@ class MultimediaAndroid implements MultimediaBase {
             }
           } else {
             onSuccess({
-              video: new File({
+              video: new FileAndroid({
                 path: realPath
               })
             });
@@ -543,7 +544,7 @@ class MultimediaAndroid implements MultimediaBase {
       } else {
         const realPath = getRealPathFromURI(uri);
         onSuccess({
-          video: new File({
+          video: new FileAndroid({
             path: realPath
           })
         });

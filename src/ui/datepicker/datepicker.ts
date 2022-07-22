@@ -1,10 +1,9 @@
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import { DatePickerEvents } from './datepicker-events';
-import Color from '../color';
-import Font from '../font';
-import { ConstructorOf } from '../../core/constructorof';
-import NativeComponent from '../../core/native-component';
-import { MobileOSProps } from '../../core/native-mobile-component';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+import { IEventEmitter } from '../../core/eventemitter';
 
 /**
  * @enum UI.DatePicker.Android.Style
@@ -134,7 +133,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  titleColor: Color;
+  titleColor: IColor;
   /**
    * Gets/sets titleFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -142,7 +141,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  titleFont: Font;
+  titleFont: IFont;
   /**
    * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -150,7 +149,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelColor: Color;
+  cancelColor: IColor;
   /**
    * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -158,7 +157,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelHighlightedColor: Color;
+  cancelHighlightedColor: IColor;
   /**
    * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
    *
@@ -166,7 +165,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  cancelFont: Font;
+  cancelFont: IFont;
   /**
    * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -174,7 +173,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okColor: Color;
+  okColor: IColor;
   /**
    * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -182,7 +181,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okHighlightedColor: Color;
+  okHighlightedColor: IColor;
   /**
    * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
    *
@@ -190,7 +189,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 3.1.3
    */
-  okFont: Font;
+  okFont: IFont;
   /**
    * The mode determines whether dates, times, or both dates and times are displayed.
    *
@@ -222,7 +221,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  textColor?: Color;
+  textColor?: IColor;
   /**
    * Gets/sets dialogLineColor of Picker.
    *
@@ -230,7 +229,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  dialogLineColor: Color;
+  dialogLineColor: IColor;
   /**
    * Gets/sets dialogBackgroundColor of Picker.
    *
@@ -238,7 +237,7 @@ export interface DatePickerIOSProperties {
    * @ios
    * @since 4.2.3
    */
-  dialogBackgroundColor: Color;
+  dialogBackgroundColor: IColor;
 }
 
 export interface DatePickerAndroidProperties {
@@ -252,11 +251,12 @@ export interface DatePickerAndroidProperties {
   style: DatePickerStyle;
 }
 
-export declare interface IDatePicker<
+export interface IDatePicker<
   TEvent extends string = DatePickerEvents,
   TNative = any,
   TMobile extends MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties> = MobileOSProps<DatePickerIOSProperties, DatePickerAndroidProperties>
-> extends NativeEventEmitterComponent<TEvent | DatePickerEvents, TNative, TMobile> {
+> extends INativeMobileComponent<TNative, TMobile>,
+    IEventEmitter<TEvent | DatePickerEvents> {
   /**
    * Sets the initial date avaliable on the picker.
    *
@@ -335,33 +335,28 @@ export declare interface IDatePicker<
    * ```
    */
   onCancelled: () => void;
-}
 
-export abstract class AbstractDatePicker extends NativeEventEmitterComponent<DatePickerEvents, any, IDatePicker> implements IDatePicker {
-  constructor(params?: Partial<IDatePicker>) {
-    super(params);
-  }
-  abstract setDate(date: Date): void;
-  abstract setMinDate(date: Date): void;
-  abstract setMaxDate(date: Date): void;
-  abstract show(): void;
-  onDateSelected: (date: Date) => void;
-  onCancelled: () => void;
+  on(eventName: 'selected', callback: () => void): () => void;
+  on(eventName: 'cancelled', callback: () => void): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
 
-  static Android: {
-    Style: typeof DatePickerStyle;
-  };
-  static iOS: {
-    DatePickerMode: typeof DatePickerMode;
-  };
-  protected createNativeObject() {
-    throw new Error('Method not implemented');
-  }
-}
+  off(eventName: 'selected', callback: () => void): void;
+  off(eventName: 'cancelled', callback: () => void): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
 
-export declare class DatePickerImpl extends AbstractDatePicker {
-  setDate(date: Date): void;
-  setMinDate(date: Date): void;
-  setMaxDate(date: Date): void;
-  show(): void;
+  emit(eventName: 'selected'): void;
+  emit(eventName: 'cancelled'): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: () => void): () => void;
+  once(eventName: 'cancelled', callback: () => void): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: () => void): void;
+  prependListener(eventName: 'cancelled', callback: () => void): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: () => void): void;
+  prependOnceListener(eventName: 'cancelled', callback: () => void): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }

@@ -22,6 +22,21 @@ const SFItemTouchHelperCallback = requireClass('io.smartface.android.sfcore.ui.l
 const SFItemTouchHelper = requireClass('io.smartface.android.sfcore.ui.listview.SFItemTouchHelper');
 const SFOnScrollListener = requireClass('io.smartface.android.sfcore.ui.listview.SFOnScrollListener');
 
+const NativeSwipeDirection = {
+  LEFTTORIGHT: 1 << 3,
+  RIGHTTOLEFT: 1 << 2
+};
+
+const NativeSwipeDirectionMapping = {
+  [SwipeDirection.LEFTTORIGHT]: NativeSwipeDirection.LEFTTORIGHT,
+  [SwipeDirection.RIGHTTOLEFT]: NativeSwipeDirection.RIGHTTOLEFT
+};
+
+const NativeSwipeDirectionInverseMapping = {
+  [NativeSwipeDirection.LEFTTORIGHT]: SwipeDirection.LEFTTORIGHT,
+  [NativeSwipeDirection.RIGHTTOLEFT]: SwipeDirection.RIGHTTOLEFT
+};
+
 export default class ListViewAndroid<TEvent extends string = ListViewEvents> extends ViewAndroid<TEvent | ListViewEvents, any, IListView> implements IListView {
   private _layoutManager: { nativeObject: any };
   private nativeDataAdapter: any;
@@ -349,9 +364,9 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           this.emit('rowCanMove', index);
           return result === undefined ? true : result;
         },
-        onRowSwipe: (direction: SwipeDirection, index: number) => {
+        onRowSwipe: (direction: keyof typeof NativeSwipeDirection, index: number) => {
           const params = {
-            direction,
+            direction: NativeSwipeDirectionInverseMapping[direction],
             index,
             ios: {
               expansionSettings: {}
@@ -415,8 +430,11 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
           return this.nativeSwipeItemInstance;
         },
         onRowCanSwipe: (index: number) => {
-          const result = this.onRowCanSwipe?.(index);
-          return !result ? SwipeDirection.LEFTTORIGHT | SwipeDirection.RIGHTTOLEFT : result.reduce((acc, cValue) => acc | cValue, 0);
+          let swipeDirections = this.onRowCanSwipe?.(index);
+          swipeDirections = swipeDirections.map((swipeDirection) => NativeSwipeDirectionMapping[swipeDirection]);
+          return !swipeDirections
+            ? NativeSwipeDirectionMapping[SwipeDirection.LEFTTORIGHT] | NativeSwipeDirectionMapping[SwipeDirection.RIGHTTOLEFT]
+            : swipeDirections.reduce((acc, cValue) => acc | cValue, 0);
         }
       });
       this.nItemTouchHelper = new SFItemTouchHelper(this.sfItemTouchHelperCallback);
@@ -524,7 +542,8 @@ export default class ListViewAndroid<TEvent extends string = ListViewEvents> ext
     RowAnimation: RowAnimation,
     ...ViewAndroid.iOS
   };
-  on(eventName: ViewEvents, callback: EventListenerCallback) {
+  on(eventName: ListViewEvents | ViewEvents, callback: EventListenerCallback) {
+    //@ts-ignore
     if (Object.values(ViewEvents).includes(eventName)) {
       this.setTouchHandlers();
     }

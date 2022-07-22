@@ -1,10 +1,11 @@
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
-import Color from '../color';
-import Font from '../font';
-import Pin from './pin';
+import { IColor } from '../color/color';
+import { IFont } from '../font/font';
 import { MapViewEvents } from './mapview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
 import Cluster from './cluster';
+import Pin from './pin';
+import { IPin } from './pin/pin';
 
 /**
  * @enum UI.MapView.Type
@@ -193,7 +194,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterFillColor: Color;
+  clusterFillColor: IColor;
   /**
    * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
    *
@@ -202,7 +203,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @android
    * @since 3.0.1
    */
-  clusterBorderColor: Color;
+  clusterBorderColor: IColor;
   /**
    * This property sets cluster textColor. Cluster works on Android & iOS 11.0+.
    *
@@ -211,7 +212,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterTextColor: Color;
+  clusterTextColor: IColor;
   /**
    * This property sets cluster font. Cluster works on Android & iOS 11.0+.
    *
@@ -220,7 +221,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 3.0.1
    */
-  clusterFont: Font;
+  clusterFont: IFont;
 
   /**
    * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
@@ -241,7 +242,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * });
    * ```
    */
-  onClusterPress: (pins: Pin[]) => void;
+  onClusterPress: (pins: IPin[]) => void;
   /**
    * This property sets center location of the map to the given latitude & longitude.
    *
@@ -290,19 +291,24 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    */
   maxZoomLevel: number;
   /**
-   * This property gets center location of the map to the given latitude & longitude. Getting this property must be
+   * This property gets/sets center location of the map to the given latitude & longitude. Getting/setting this property must be
    * in onCreate event or after.
    *
    * @property {Object} centerLocation
    * @android
    * @ios
-   * @readonly
    * @since 0.1
    */
-  readonly centerLocation: {
+  centerLocation: {
     latitude: number;
     longitude: number;
   };
+  /**
+   * Gets/Sets the ability to zoom on the mapview.
+   * @property
+   * @android
+   * @ios
+   */
   zoomEnabled: boolean;
 
   /**
@@ -355,7 +361,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @method getVisiblePins
    * @since 2.0.7
    */
-  getVisiblePins(): Pin[];
+  getVisiblePins(): IPin[];
   /**
    * Adds a UI.MapView.Pin on the map.
    *
@@ -365,7 +371,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @method addPin
    * @since 0.1
    */
-  addPin(pin: Pin): void;
+  addPin(pin: IPin): void;
   /**
    * Removes the UI.MapView.Pin from the map.
    *
@@ -375,7 +381,7 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 0.1
    */
-  removePin(pin: Pin): void;
+  removePin(pin: IPin): void;
   /**
    * Removes all pins from the map.
    *
@@ -495,6 +501,54 @@ export interface IMapView<TEvent extends string = MapViewEvents, TMobile extends
    * @ios
    * @since 0.1
    */
+
+  on(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  on(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  on(eventName: 'clusterPress', callback: (pinArray: Pin[]) => void): () => void;
+  on(eventName: 'create', callback: () => void): () => void;
+  on(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cameraMoveEnded', callback: () => void): void;
+  off(eventName: 'cameraMoveStarted', callback: () => void): void;
+  off(eventName: 'clusterPress', callback: () => void): void;
+  off(eventName: 'create', callback: (pinArray: Pin[]) => void): void;
+  off(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  off(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  off(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cameraMoveEnded'): void;
+  emit(eventName: 'cameraMoveStarted'): void;
+  emit(eventName: 'clusterPress', pinArray: Pin[]): void;
+  emit(eventName: 'create'): void;
+  emit(eventName: 'longPress', location: { latitude: number; longitude: number }): void;
+  emit(eventName: 'press', location: { latitude: number; longitude: number }): void;
+  emit(eventName: MapViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  once(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  once(eventName: 'clusterPress', callback: (pinArray: Pin[]) => void): () => void;
+  once(eventName: 'create', callback: () => void): () => void;
+  once(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependListener(eventName: 'clusterPress', callback: (pinArray: Pin[]) => void): void;
+  prependListener(eventName: 'create', callback: () => void): void;
+  prependListener(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependOnceListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependOnceListener(eventName: 'clusterPress', callback: (pinArray: Pin[]) => void): void;
+  prependOnceListener(eventName: 'create', callback: () => void): void;
+  prependOnceListener(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
   type: MapViewType;
 }
 
@@ -505,11 +559,11 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
   compassEnabled: boolean;
   userLocationEnabled: boolean;
   clusterEnabled: boolean;
-  clusterFillColor: Color;
-  clusterBorderColor: Color;
-  clusterTextColor: Color;
-  clusterFont: Font;
-  onClusterPress: (pins: Pin[]) => void;
+  clusterFillColor: IColor;
+  clusterBorderColor: IColor;
+  clusterTextColor: IColor;
+  clusterFont: IFont;
+  onClusterPress: (pins: IPin[]) => void;
   setCenterLocationWithZoomLevel(centerLocation: { latitude: number; longitude: number }, zoomLevel: number, animated: boolean): void;
   readonly zoomLevel: number | undefined;
   minZoomLevel: number;
@@ -524,15 +578,62 @@ export declare class AbstractMapView<TEvent extends string = MapViewEvents> exte
         bottomRight: { latitude: number; longitude: number };
       }
     | undefined;
-  getVisiblePins(): Pin[];
-  addPin(pin: Pin): void;
-  removePin(pin: Pin): void;
+  getVisiblePins(): IPin[];
+  addPin(pin: IPin): void;
+  removePin(pin: IPin): void;
   removeAllPins(): void;
   onPress: (location: { latitude: number; longitude: number }) => void;
   onCameraMoveStarted: () => void;
   onCameraMoveEnded: () => void;
   onLongPress: (location: { latitude: number; longitude: number }) => void;
   onCreate: () => void;
+  on(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  on(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  on(eventName: 'clusterPress', callback: (pins: Pin[]) => void): () => void;
+  on(eventName: 'create', callback: () => void): () => void;
+  on(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  on(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'cameraMoveEnded', callback: () => void): void;
+  off(eventName: 'cameraMoveStarted', callback: () => void): void;
+  off(eventName: 'clusterPress', callback: () => void): void;
+  off(eventName: 'create', callback: (pins: Pin[]) => void): void;
+  off(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  off(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  off(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'cameraMoveEnded'): void;
+  emit(eventName: 'cameraMoveStarted'): void;
+  emit(eventName: 'clusterPress', pins: Pin[]): void;
+  emit(eventName: 'create'): void;
+  emit(eventName: 'longPress', location: { latitude: number; longitude: number }): void;
+  emit(eventName: 'press', location: { latitude: number; longitude: number }): void;
+  emit(eventName: MapViewEvents, ...args: any[]): void;
+
+  once(eventName: 'cameraMoveEnded', callback: () => void): () => void;
+  once(eventName: 'cameraMoveStarted', callback: () => void): () => void;
+  once(eventName: 'clusterPress', callback: (pins: Pin[]) => void): () => void;
+  once(eventName: 'create', callback: () => void): () => void;
+  once(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): () => void;
+  once(eventName: MapViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependListener(eventName: 'clusterPress', callback: (pins: Pin[]) => void): void;
+  prependListener(eventName: 'create', callback: () => void): void;
+  prependListener(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'cameraMoveEnded', callback: () => void): void;
+  prependOnceListener(eventName: 'cameraMoveStarted', callback: () => void): void;
+  prependOnceListener(eventName: 'clusterPress', callback: (pins: Pin[]) => void): void;
+  prependOnceListener(eventName: 'create', callback: () => void): void;
+  prependOnceListener(eventName: 'longPress', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: 'press', callback: (location: { latitude: number; longitude: number }) => void): void;
+  prependOnceListener(eventName: MapViewEvents, callback: (...args: any[]) => void): void;
   type: MapViewType;
 
   static Type: typeof MapViewType;

@@ -1,16 +1,12 @@
-import { ConnectionType, NetworkBase, INetworkNotifier } from './network';
-import NativeComponent from '../../core/native-component';
+import { ConnectionType, INetwork, INetworkNotifier, NotifierAndroidProps } from './network';
+import { MobileOSProps, NativeMobileComponent } from '../../core/native-mobile-component';
+import HttpIOS from '../../net/http/http.ios';
 
-class Notifier extends NativeComponent implements INetworkNotifier {
+class Notifier extends NativeMobileComponent<any, MobileOSProps<{}, NotifierAndroidProps>> implements INetworkNotifier {
   private _connectionTypeChanged: ((type: ConnectionType) => void) | null;
-  readonly android = {
-    isInitialStickyNotification() {
-      return false;
-    },
-    initialCacheEnabled: false
-  };
   constructor(params?: { connectionTypeChanged: (type: ConnectionType) => void }) {
-    super(params);
+    super(params as any);
+    this.addAndroidProps(this.getAndroidProps());
   }
   connectionTypeChanged: ((type: ConnectionType) => void) | null;
   protected createNativeObject(): any {
@@ -36,6 +32,14 @@ class Notifier extends NativeComponent implements INetworkNotifier {
     };
     return nativeObject;
   }
+  private getAndroidProps() {
+    return {
+      isInitialStickyNotification() {
+        return false;
+      },
+      initialCacheEnabled: false
+    };
+  }
   subscribe(callback: Notifier['_connectionTypeChanged']) {
     if (typeof callback === 'function') {
       this.connectionTypeChanged = callback;
@@ -52,7 +56,32 @@ class Notifier extends NativeComponent implements INetworkNotifier {
   }
 }
 
-class NetworkIOS implements NetworkBase {
+class NetworkIOS implements INetwork {
+  async isConnected(checkUrl?: string): Promise<void> {
+    const url = checkUrl || 'https://www.google.com';
+
+    return new Promise((resolve, reject) => {
+      const noConnection = this.connectionType === ConnectionType.NONE;
+      if (noConnection) {
+        return reject();
+      }
+      const http = new HttpIOS();
+      http.request({
+        url,
+        onLoad: () => {
+          resolve();
+        },
+        onError: (e) => {
+          if (typeof e.statusCode === 'undefined') {
+            reject();
+          } else {
+            resolve();
+          }
+        },
+        method: 'GET'
+      });
+    });
+  }
   ConnectionType = ConnectionType;
   public readonly notifier: INetworkNotifier = new Notifier();
   public readonly Notifier = Notifier;

@@ -1,6 +1,9 @@
 import Screen from '../../device/screen';
 import Invocation from './invocation';
 
+const IPHONE_SAFE_AREA_OFFSET = 44; //iPhone X and later with notch
+const DEFAULT_STATUSBAR_HEIGHT = 20; //
+
 interface KeyboardInfoParams {
   userInfo?: {
     UIKeyboardAnimationDurationUserInfoKey: number;
@@ -15,6 +18,9 @@ export default class KeyboardAnimationDelegate {
   private _isKeyboadAnimationCompleted = false;
   private parentView: __SF_UIView;
   private parentDialog?: __SF_UIView; /** Might be wrong type */
+
+  static ApplicationKeyboardHeight = 0;
+  static isKeyboardVisible = false;
   nativeObject: any;
   constructor(params: any) {
     this.nativeObject = params.nativeObject;
@@ -30,7 +36,13 @@ export default class KeyboardAnimationDelegate {
       parent = this.parentView;
       if (navigationController) {
         const subView = navigationController.view.subviews[0];
-        parent ||= subView?.subviews[0];
+
+        if (subView) {
+          const wrapperView = subView.subviews[0];
+          if (wrapperView) {
+            parent = subView;
+          }
+        }
       }
     }
 
@@ -38,7 +50,7 @@ export default class KeyboardAnimationDelegate {
   }
 
   defaultTopPosition() {
-    let top = KeyboardAnimationDelegate.offsetFromTop(this);
+    let top = this.offsetFromTop();
     if (this.parent().constructor.name === 'UINavigationTransitionView') {
       top = 0;
     }
@@ -56,9 +68,9 @@ export default class KeyboardAnimationDelegate {
     }
 
     const controlValue = top + height;
-    if (controlValue + KeyboardAnimationDelegate.offsetFromTop(this) > Screen.height - keyboardHeight) {
+    if (controlValue + this.offsetFromTop() > Screen.height - keyboardHeight) {
       this._isKeyboadAnimationCompleted = false;
-      this._topDistance = controlValue + KeyboardAnimationDelegate.offsetFromTop(this) - (Screen.height - keyboardHeight);
+      this._topDistance = controlValue + this.offsetFromTop() - (Screen.height - keyboardHeight);
 
       if (!this.parentDialog) {
         if (this.getParentViewController().tabBarController) {
@@ -108,7 +120,7 @@ export default class KeyboardAnimationDelegate {
       }
     } else {
       if (this.getParentViewController()) {
-        if (this.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this) && this.getParentViewController().view.frame.y !== 0) {
+        if (this.getParentViewController().view.frame.y !== this.offsetFromTop() && this.getParentViewController().view.frame.y !== 0) {
           if (e?.userInfo) {
             this.keyboardHideAnimation({
               userInfo: e.userInfo,
@@ -121,7 +133,7 @@ export default class KeyboardAnimationDelegate {
           }
         }
       } else if (this.parentDialog) {
-        if (this.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(this)) {
+        if (this.parentDialog.frame.y !== this.offsetFromTop()) {
           if (e?.userInfo) {
             this.keyboardHideAnimation({
               userInfo: e.userInfo,
@@ -269,38 +281,36 @@ export default class KeyboardAnimationDelegate {
       }
     }
 
-    const statusBar = KeyboardAnimationDelegate.statusBarFrames(this);
-    this._top += statusBar.viewRect.height! > 20 ? 20 : 0;
+    const statusBar = this.statusBarFrames();
+    this._top += statusBar.viewRect.height || 0 > DEFAULT_STATUSBAR_HEIGHT ? DEFAULT_STATUSBAR_HEIGHT : 0;
 
     const temp = this._top;
     this._top = 0;
     return temp;
   }
 
-  static ApplicationKeyboardHeight = 0;
-  static isKeyboardVisible = false;
-  static offsetFromTop(instance: KeyboardAnimationDelegate): number {
-    if (!instance.getParentViewController()) {
+  offsetFromTop(): number {
+    if (!this.getParentViewController()) {
       return 0;
     }
 
-    const statusBar = KeyboardAnimationDelegate.statusBarFrames(instance);
-    if (instance && instance.getParentViewController().navigationController && instance.getParentViewController().navigationController.navigationBar.visible) {
-      if (!instance.getParentViewController().statusBarHidden) {
-        //44 point = iPhone X
-        return (
-          (statusBar.viewRect.height === 44 ? 44 : statusBar.viewRect.height || 0 > 20 ? 20 : statusBar.frame.height) ||
-          0 + (instance.getParentViewController().navigationController.navigationBar.frame.height || 0)
-        );
+    const statusBar = this.statusBarFrames();
+    if (this.getParentViewController().navigationController && this.getParentViewController().navigationController.navigationBar.visible) {
+      const navigationFrameHeight = this.getParentViewController().navigationController.navigationBar.frame.height || 0;
+      if (!this.getParentViewController().statusBarHidden) {
+        const statusBarHeight = statusBar.viewRect.height || 0 > DEFAULT_STATUSBAR_HEIGHT ? DEFAULT_STATUSBAR_HEIGHT : statusBar.frame.height;
+        const statusBarOffset = statusBar.viewRect.height === IPHONE_SAFE_AREA_OFFSET ? IPHONE_SAFE_AREA_OFFSET : statusBarHeight || 0;
+
+        return statusBarOffset + navigationFrameHeight;
       } else {
-        return instance.getParentViewController().navigationController.navigationBar.frame.height || 0;
+        return navigationFrameHeight;
       }
     } else {
       return 0;
     }
   }
-  static statusBarFrames(self: KeyboardAnimationDelegate): { frame: __SF_NSRect; windowRect: __SF_NSRect; viewRect: __SF_NSRect } {
-    if (!self.getParentViewController()) {
+  statusBarFrames(): { frame: __SF_NSRect; windowRect: __SF_NSRect; viewRect: __SF_NSRect } {
+    if (!this.getParentViewController()) {
       const frame: __SF_NSRect = {
         x: 0,
         y: 0,
@@ -313,7 +323,7 @@ export default class KeyboardAnimationDelegate {
         viewRect: frame
       };
     }
-    const view = self.getParentViewController().view;
+    const view = this.getParentViewController().view;
     const statusBarFrame = __SF_UIApplication.sharedApplication().statusBarFrame;
     const viewWindow = Invocation.invokeInstanceMethod(view, 'window', [], 'NSObject');
     const argRect = new Invocation.Argument({

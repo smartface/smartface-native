@@ -30,6 +30,8 @@ const DefaultLocation = Object.freeze({
   longitude: -73.9675491
 });
 
+const DefaultZoomLevel = 10;
+
 export default class MapViewAndroid<TEvent extends string = MapViewEvents> extends ViewAndroid<TEvent | MapViewEvents, any, IMapView> implements IMapView {
   onClusterPress: (pins: PinAndroid[]) => void;
   onPress: (location: { latitude: number; longitude: number }) => void;
@@ -72,7 +74,7 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
     this._scrollEnabled = true;
     this._zoomEnabled = true;
     this._userLocationEnabled = false;
-    this._zoomLevel = 10;
+    this._zoomLevel = DefaultZoomLevel;
     this._isMoveStarted = false;
     this._clusterEnabled = false;
     this._pins = [];
@@ -374,6 +376,11 @@ export default class MapViewAndroid<TEvent extends string = MapViewEvents> exten
       latitude: nativeLatLng.latitude,
       longitude: nativeLatLng.longitude
     };
+  }
+  set centerLocation(value: IMapView['centerLocation']) {
+    this._centerLocation = value;
+
+    this.setCenterLocationWithZoomLevel(value, this._zoomLevel ?? DefaultZoomLevel, false);
   }
   get visibleRegion(): IMapView['visibleRegion'] {
     if (!this._nativeGoogleMap) {

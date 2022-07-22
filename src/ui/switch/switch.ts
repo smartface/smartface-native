@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
-import Color from '../color';
-import IImage from '../image';
+import { IColor } from '../color/color';
+import { IImage } from '../image/image';
 import { IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { SwitchEvents } from './switch-events';
 
@@ -15,7 +15,7 @@ export interface SwitchAndroidProps extends ViewAndroidProps {
    * @deprecated
    * @since 1.1.8
    */
-  thumbOffColor?: Color;
+  thumbOffColor?: IColor;
   /**
    * Gets/sets the toggle image of the switch. This property should be used before assigning colors.
    *
@@ -48,7 +48,7 @@ export interface SwitchAndroidProps extends ViewAndroidProps {
    * @deprecated
    * @since 0.1
    */
-  toggleOffColor: Color;
+  toggleOffColor: IColor;
 }
 
 export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends MobileOSProps<ViewIOSProps, SwitchAndroidProps> = MobileOSProps<ViewIOSProps, SwitchAndroidProps>>
@@ -56,10 +56,10 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
   /**
    * Enables/disables the Switch.
    *
-   *     @example
-   *     import Switch from '@smartface/native/ui/switch';
-   *     var mySwitch = new Switch();
-   *     mySwitch.enabled = false;
+   * @example
+   * import Switch from '@smartface/native/ui/switch';
+   * var mySwitch = new Switch();
+   * mySwitch.enabled = false;
    *
    * @since 1.1.8
    * @property {Boolean} [enabled = true]
@@ -77,7 +77,7 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * @ios
    * @since 0.1
    */
-  thumbOnColor: Color;
+  thumbOnColor: IColor;
 
   /**
    * Gets/sets color of the thumb when Switch is OFF.
@@ -88,7 +88,25 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * @ios
    * @since 5.0.1
    */
-  thumbOffColor: Color;
+  thumbOffColor: IColor;
+
+  /**
+   * Gets/sets the background of the switch when it is OFF.  It is set to gray
+   * by default. This property works only for Android.
+   *
+   *     @example
+   *     import Switch from '@smartface/native/ui/switch';
+   *     import Color from '@smartface/native/ui/color';
+   *     var mySwitch = new Switch();
+   *     mySwitch.toggleOffColor = Color.DARKGRAY;
+   *
+   * @property {UI.Color} toggleOffColor
+   * @android
+   * @ios
+   * @since 5.0.1
+   */
+
+  toggleOffColor: IColor;
 
   /**
    * Gets/sets toggle value of Switch. When Switch is ON,
@@ -110,7 +128,7 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * @ios
    * @since 0.1
    */
-  toggleOnColor: Color;
+  toggleOnColor: IColor;
 
   /**
    * This event is called when the state of switch changes from ON to OFF or vice versa.
@@ -132,20 +150,22 @@ export interface ISwitch<TEvent extends string = SwitchEvents, TProps extends Mo
    * ```
    */
   onToggleChanged: (toggle: boolean) => void;
-  /**
-   * Gets/sets the background of the switch when it is OFF.  It is set to gray
-   * by default. This property works only for Android.
-   *
-   *     @example
-   *     import Switch from '@smartface/native/ui/switch';
-   *     import Color from '@smartface/native/ui/color';
-   *     var mySwitch = new Switch();
-   *     mySwitch.toggleOffColor = Color.DARKGRAY;
-   *
-   * @property {UI.Color} toggleOffColor
-   * @android
-   * @ios
-   * @since 5.0.1
-   */
-  toggleOffColor: Color;
+
+  on(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): () => void;
+  on(eventName: SwitchEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  off(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'toggleChanged', isChecked: boolean): void;
+  emit(eventName: SwitchEvents, ...args: any[]): void;
+
+  once(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): () => void;
+  once(eventName: SwitchEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  prependListener(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'toggleChanged', callback: (isChecked: boolean) => void): void;
+  prependOnceListener(eventName: SwitchEvents, callback: (...args: any[]) => void): void;
 }

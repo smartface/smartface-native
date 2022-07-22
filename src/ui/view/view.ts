@@ -1,14 +1,13 @@
-import type Color from '../color';
 import { Point2D } from '../../primitive/point2d';
 import { ViewEvents } from './view-events';
-import { MobileOSProps, WithMobileOSProps } from '../../core/native-mobile-component';
+import { MobileOSProps } from '../../core/native-mobile-component';
 import { IEventEmitter } from '../../core/eventemitter';
-import { ExtractEventValues } from '../../core/eventemitter/extract-event-values';
 import Flex from '../shared/Flex';
 import { INativeComponent } from '../../core/inative-component';
 import NativeEventEmitterComponent from '../../core/native-event-emitter-component';
 import ViewState from '../shared/viewState';
 import { IViewGroup } from '../viewgroup/viewgroup';
+import { IColor } from '../color/color';
 export interface ViewAndroidProps {
   readonly yogaNode: any;
   overScrollMode: number;
@@ -40,7 +39,7 @@ export interface ViewAndroidProps {
    * @member UI.View
    * @since 3.2.1
    */
-  rippleColor: Color;
+  rippleColor: IColor;
   /**
    * Gets/Sets the elevation of the view. For the views that has
    * StateListAnimator natively like Button, will lost its own
@@ -91,15 +90,16 @@ export interface ViewIOSProps {
    * A Boolean value that determines whether subviews are confined to the bounds of the view.
    *
    * @property {Boolean} [masksToBounds = false]
+   * @deprecated Use view.maskToBounds instead
    * @ios
    * @since 1.1.15
    */
   masksToBounds: boolean;
   /**
-   * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The offset (in points) of the shadow. This will set "masksToBounds" property to false.
    *
    *     @example
-   *     view.ios.masksToBounds = false;
+   *     view.masksToBounds = false;
    *     view.ios.shadowOffset = {x:10,y:10};
    *     view.ios.shadowRadius = 5;
    *     view.ios.shadowOpacity = 0.5;
@@ -113,7 +113,7 @@ export interface ViewIOSProps {
    */
   shadowOffset: Point2D;
   /**
-   * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The blur radius (in points) used to render the shadow. masksToBounds" property must be false for shadow.
    *
    * @property {Number} [shadowRadius = 3]
    * @ios
@@ -121,7 +121,7 @@ export interface ViewIOSProps {
    */
   shadowRadius: number;
   /**
-   * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
+   * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "masksToBounds" property must be false for shadow.
    *
    * @property {Number} [shadowOpacity = 0]
    * @ios
@@ -129,13 +129,14 @@ export interface ViewIOSProps {
    */
   shadowOpacity: number;
   /**
-   * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
+   * The color of the shadow. "masksToBounds" property must be false for shadow.
    *
    * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+   * @deprecated Use {@link UI.View#shadowColor}
    * @ios
    * @since 2.0.6
    */
-  shadowColor: Color;
+  shadowColor: IColor;
   /**
    *
    * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
@@ -208,7 +209,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @member UI.View
    * @since 0.1
    */
-  backgroundColor: ViewState<Color>;
+  backgroundColor: ViewState<IColor>;
   /**
    * Sets/gets border color of bounded view.
    *
@@ -217,7 +218,7 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @ios
    * @since 0.1
    */
-  borderColor: Color;
+  borderColor: IColor;
   /**
    * Sets/gets border thickness of bounded view. Accepts unsigned
    * numbers, 0 means no border.
@@ -237,6 +238,81 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @since 0.1
    */
   borderRadius: number;
+  /**
+   * Sets/gets top-left corner radius of a view.
+   *
+   * @property {Number} [borderTopLeftRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopLeftRadius: number;
+  /**
+   * Sets/gets top-right corner radius of a view.
+   *
+   * @property {Number} [borderTopRightRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopRightRadius: number;
+  /**
+   * Sets/gets top-start corner radius of a view.
+   *
+   * @property {Number} [borderTopStartRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopStartRadius: number;
+  /**
+   * Sets/gets top-end corner radius of a view.
+   *
+   * @property {Number} [borderTopEndRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderTopEndRadius: number;
+  /**
+   * Sets/gets bottom-left corner radius of a view.
+   *
+   * @property {Number} [borderBottomLeftRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomLeftRadius: number;
+  /**
+   * Sets/gets bottom-right corner radius of a view.
+   *
+   * @property {Number} [borderBottomRightRadius = 0]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomRightRadius: number;
+
+  /**
+   * Sets/gets bottom-start corner radius of a view.
+   *
+   * @property {Number} [borderBottomStartRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomStartRadius: number;
+
+  /**
+   * Sets/gets bottom-end corner radius of a view.
+   *
+   * @property {Number} [borderBottomEndRadius = -1]
+   * @android
+   * @ios
+   * @since 5.0.3
+   */
+  borderBottomEndRadius: number;
+
   /**
    * Gets/sets id of a view. It should be unique number for each object
    * inside page. Id will be generated unique by default.
@@ -582,8 +658,20 @@ export interface IViewProps<TProps extends MobileOSProps<ViewIOSProps, ViewAndro
    * @ios
    * @android
    * @since 4.1.4
+   * @deprecated since 5.0.3 Use the borderBottomRightRadius, borderBottomLeftRadius, borderTopRightRadius, borderTopLeftRadius properties instead.
    */
   maskedBorders: Border[];
+  /**
+   * The color of the shadow. 
+   * {@link UI.View.ios#masksToBounds} property must be false for shadow on iOS.
+   * On Android, this property only works on Android 9 and above.
+   *
+   * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+   * @ios
+   * @android
+   * @since 5.0.3
+   */
+  shadowColor: IColor;
 }
 
 /**
@@ -613,6 +701,15 @@ export interface IView<
     INativeComponent<TNative> {
   parent: IView | undefined;
   readonly uniqueId: string;
+  /**
+   * Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree.
+   * It is useful to call this method when you want to change layout parameters on runtime.
+   * If this view layout invalidated, call applyLayout from the Page.layout in the iOS and from the view itself in the Android.
+   *
+   * @method applyLayout
+   * @android
+   * @ios
+   */
   applyLayout(): void;
   /**
    * This method put a view to the top of other views in z-direction.
@@ -811,6 +908,42 @@ export interface IView<
   };
   android: TMobileProps['android'];
   ios: TMobileProps['ios'];
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
 }
 
 /**
@@ -923,12 +1056,72 @@ export class ViewBase<TEvent extends string = ViewEvents, TNative = any, TProps 
   };
   static Events = ViewEvents;
   static Border = Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: ViewEvents, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.on(eventName as any, callback);
+  }
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void {
+    super.off(eventName as any, callback);
+  }
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void {
+    super.emit(eventName as any, ...args);
+  }
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void {
+    return super.once(eventName as any, callback);
+  }
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void {
+    super.prependListener(eventName as any, callback);
+  }
 }
 
 export declare class AbstractView<TEvent extends string = ViewEvents, TNative = unknown, TProps extends IViewProps = IViewProps>
   extends NativeEventEmitterComponent<TEvent, TNative, TProps>
   implements IView<TEvent, TNative, TProps>
 {
+  borderTopStartRadius: number;
+  borderTopEndRadius: number;
+  borderBottomStartRadius: number;
+  borderBottomEndRadius: number;
+  shadowColor: IColor;
   protected createNativeObject(): any;
   parent: IView | undefined;
   get uniqueId(): string;
@@ -948,10 +1141,14 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   accessible: boolean;
   accessibilityLabel: string;
   alpha: number;
-  backgroundColor: ViewState<Color>;
-  borderColor: Color;
+  backgroundColor: ViewState<IColor>;
+  borderColor: IColor;
   borderWidth: number;
   borderRadius: number;
+  borderTopLeftRadius: number;
+  borderTopRightRadius: number;
+  borderBottomRightRadius: number;
+  borderBottomLeftRadius: number;
   id: string;
   testId: string;
   visible: boolean;
@@ -989,4 +1186,46 @@ export declare class AbstractView<TEvent extends string = ViewEvents, TNative = 
   masksToBounds: boolean;
   maskedBorders: Border[];
   static readonly Border: typeof Border;
+
+  on(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  on(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  on(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  on(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  on(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'touch', callback: (e: Point2D) => void): void;
+  off(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  off(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  off(eventName: TEvent, callback: (...args: any[]) => void): void;
+  off(eventName: string, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'touch', point: Point2D): void;
+  emit(eventName: 'touchEnded', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchMoved', params: { isInside: boolean } & Point2D): void;
+  emit(eventName: 'touchCancelled', point: Point2D): void;
+  emit(eventName: TEvent, ...args: any[]): void;
+  emit(eventName: string, ...args: any[]): void;
+
+  once(eventName: 'touch', callback: (e: Point2D) => void): () => void;
+  once(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): () => void;
+  once(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): () => void;
+  once(eventName: TEvent, callback: (...args: any[]) => void): () => void;
+  once(eventName: string, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependListener(eventName: string, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'touch', callback: (e: Point2D) => void): void;
+  prependOnceListener(eventName: 'touchEnded', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchMoved', callback: (e: { isInside: boolean } & Point2D) => void): void;
+  prependOnceListener(eventName: 'touchCancelled', callback: (point: Point2D) => boolean): void;
+  prependOnceListener(eventName: TEvent, callback: (...args: any[]) => void): void;
+  prependOnceListener(eventName: string, callback: (...args: any[]) => void): void;
 }

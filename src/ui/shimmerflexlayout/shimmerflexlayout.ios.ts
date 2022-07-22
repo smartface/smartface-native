@@ -1,8 +1,8 @@
-import { AbstractShimmerFlexLayout, IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
-import FlexLayout from '../flexlayout';
+import { IShimmerFlexLayout, ShimmerHighlight, ShimmeringDirection } from './shimmerflexlayout';
 import { ViewEvents } from '../view/view-events';
 import ViewIOS from '../view/view.ios';
 import copyObjectPropertiesWithDescriptors from '../../util/copyObjectPropertiesWithDescriptors';
+import FlexLayout from '../flexlayout';
 
 export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TNative = any> extends ViewIOS<TEvent, TNative, IShimmerFlexLayout> implements IShimmerFlexLayout {
   private _contentLayout: FlexLayout;
@@ -136,7 +136,7 @@ export default class ShimmerFlexLayoutIOS<TEvent extends string = ViewEvents, TN
     }
   }
 
-  static Android: typeof AbstractShimmerFlexLayout.Android = {
+  static Android = {
     Shimmer: ShimmerHighlight
   };
   static ShimmeringDirection = ShimmeringDirection;

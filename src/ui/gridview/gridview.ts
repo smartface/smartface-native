@@ -1,6 +1,6 @@
 import { MobileOSProps } from '../../core/native-mobile-component';
 import { Point2D } from '../../primitive/point2d';
-import Color from '../color';
+import { IColor } from '../color/color';
 import GridViewItem from '../gridviewitem';
 import LayoutManager from '../layoutmanager';
 import OverScrollMode from '../shared/android/overscrollmode';
@@ -373,7 +373,7 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
    * @ios
    * @since 3.0.2
    */
-  setPullRefreshColors(color: Color[]): void;
+  setPullRefreshColors(color: IColor[]): void;
   /**
    * This method notify the GridView  that given range of items deleted. Must set the itemCount value to a changed number before calling this function.
    * For iOS, If you want to make multiple changes (insert, delete, refresh) as a single animation, you should use {UI.GridView#performBatchUpdates performBatchUpdates}.
@@ -485,6 +485,96 @@ export interface IGridView<TEvent extends string = GridViewEvents, TMobile exten
    * @since 3.0.2
    */
   itemByIndex(index: number): GridViewItem | undefined;
+  on(eventName: 'attachedToWindow', callback: () => void): () => void;
+  on(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  on(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): () => void;
+  on(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): () => void;
+  on(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): () => void;
+  on(eventName: GridViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'attachedToWindow', callback: () => void): void;
+  off(eventName: 'detachedFromWindow', callback: () => void): void;
+  off(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  off(eventName: 'pullRefresh', callback: () => void): void;
+  off(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  off(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  off(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  off(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  off(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  off(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'attachedToWindow'): void;
+  emit(eventName: 'detachedFromWindow'): void;
+  emit(eventName: 'gesture', params: { distanceX: number; distanceY: number }): void;
+  emit(eventName: 'pullRefresh'): void;
+  emit(eventName: 'itemLongSelected', selectedItem: GridViewItem, index?: number): void;
+  emit(eventName: 'itemSelected', gridViewItem: GridViewItem, index?: number): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset: Point2D,decelerate:boolean): void;
+  emit(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D): void;
+  emit(eventName: 'scrollStateChanged', scrollState: ScrollState, contentOffset: Point2D): void;
+  emit(eventName: 'scroll', e: { contentOffset: Point2D; android?: { translation?: Point2D } }): void;
+  emit(eventName: GridViewEvents, ...args: any[]): void;
+
+  once(eventName: 'attachedToWindow', callback: () => void): () => void;
+  once(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  once(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): () => void;
+  once(eventName: 'pullRefresh', callback: () => void): () => void;
+  once(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): () => void;
+  once(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): () => void;
+  once(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): () => void;
+  once(eventName: GridViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependListener(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  prependListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependListener(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  prependListener(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  prependListener(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  prependOnceListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependOnceListener(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  prependOnceListener(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  prependOnceListener(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
 }
 
 export declare class AbstractGridView<TEvent extends string = GridViewEvents, TProps extends IGridView = IGridView> extends AbstractView<TEvent | GridViewEvents, any, IGridView> implements IGridView {
@@ -501,7 +591,7 @@ export declare class AbstractGridView<TEvent extends string = GridViewEvents, TP
   refreshEnabled: boolean;
   getFirstVisibleIndex(): number;
   getLastVisibleIndex(): number;
-  setPullRefreshColors(color: Color[]): void;
+  setPullRefreshColors(color: IColor[]): void;
   deleteRowRange(params: { positionStart: number; itemCount: number }): void;
   insertRowRange(params: { positionStart: number; itemCount: number }): void;
   refreshRowRange(params: { positionStart: number; itemCount: number }): void;
@@ -517,4 +607,95 @@ export declare class AbstractGridView<TEvent extends string = GridViewEvents, TP
   static iOS: {
     DecelerationRate: typeof DecelerationRate;
   };
+    on(eventName: 'attachedToWindow', callback: () => void): () => void;
+  on(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  on(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'pullRefresh', callback: () => void): () => void;
+  on(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): () => void;
+  on(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): () => void;
+  on(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): () => void;
+  on(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  on(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): () => void;
+  on(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): () => void;
+  on(eventName: GridViewEvents, callback: (...args: any[]) => void): () => void;
+
+  off(eventName: 'attachedToWindow', callback: () => void): void;
+  off(eventName: 'detachedFromWindow', callback: () => void): void;
+  off(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  off(eventName: 'pullRefresh', callback: () => void): void;
+  off(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  off(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  off(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  off(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  off(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  off(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  off(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  off(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
+
+  emit(eventName: 'attachedToWindow'): void;
+  emit(eventName: 'detachedFromWindow'): void;
+  emit(eventName: 'gesture', params: { distanceX: number; distanceY: number }): void;
+  emit(eventName: 'pullRefresh'): void;
+  emit(eventName: 'itemLongSelected', selectedItem: GridViewItem, index?: number): void;
+  emit(eventName: 'itemSelected', gridViewItem: GridViewItem, index?: number): void;
+  emit(eventName: 'scrollBeginDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollBeginDragging', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDecelerating', contentOffset: Point2D): void;
+  emit(eventName: 'scrollEndDraggingWillDecelerate', contentOffset: Point2D,decelerate:boolean): void;
+  emit(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D): void;
+  emit(eventName: 'scrollStateChanged', scrollState: ScrollState, contentOffset: Point2D): void;
+  emit(eventName: 'scroll', e: { contentOffset: Point2D; android?: { translation?: Point2D } }): void;
+  emit(eventName: GridViewEvents, ...args: any[]): void;
+
+  once(eventName: 'attachedToWindow', callback: () => void): () => void;
+  once(eventName: 'detachedFromWindow', callback: () => void): () => void;
+  once(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): () => void;
+  once(eventName: 'pullRefresh', callback: () => void): () => void;
+  once(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): () => void;
+  once(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): () => void;
+  once(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): () => void;
+  once(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): () => void;
+  once(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): () => void;
+  once(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): () => void;
+  once(eventName: GridViewEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependListener(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  prependListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependListener(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  prependListener(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  prependListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  prependListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  prependListener(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  prependListener(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'attachedToWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'detachedFromWindow', callback: () => void): void;
+  prependOnceListener(eventName: 'gesture', callback: (params: { distanceX: number; distanceY: number }) => boolean): void;
+  prependOnceListener(eventName: 'pullRefresh', callback: () => void): void;
+  prependOnceListener(eventName: 'itemLongSelected', callback: (selectedItem: GridViewItem, index?: number) => void): void;
+  prependOnceListener(eventName: 'itemSelected', callback: (gridViewItem: GridViewItem, index?: number) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollBeginDragging', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDecelerating', callback: (contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWillDecelerate', callback: (contentOffset: Point2D,decelerate:boolean) => void): void;
+  prependOnceListener(eventName: 'scrollEndDraggingWithVelocityTargetContentOffset', callback: (contentOffset: Point2D, velocity: Point2D, targetContentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scrollStateChanged', callback: (scrollState: ScrollState, contentOffset: Point2D) => void): void;
+  prependOnceListener(eventName: 'scroll', callback: (e: { contentOffset: Point2D; android?: { translation?: Point2D } }) => void): void;
+  prependOnceListener(eventName: GridViewEvents, callback: (...args: any[]) => void): void;
 }
+

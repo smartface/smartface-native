@@ -1,7 +1,22 @@
-import { AbstractSecureData } from './securedata';
+import { NativeMobileComponent } from '../../core/native-mobile-component';
+import ISecureData from './securedata';
 
-class SecureDataIOS extends AbstractSecureData {
-  protected createNativeObject(params?: { key: string; ios?: { service?: any } }) {
+class SecureDataIOS extends NativeMobileComponent implements ISecureData {
+  protected _key: string;
+  protected _service?: string;
+  constructor(params?: Partial<ISecureData>) {
+    super(params);
+    this.addIOSProps(this.getIOSProps());
+  }
+  private getIOSProps() {
+    const self = this;
+    return {
+      get service() {
+        return self._service;
+      }
+    };
+  }
+  protected createNativeObject(params?: Partial<ISecureData>) {
     const _key = params?.key;
     const _service = params?.ios?.service;
     if (!_key || !_service) {
@@ -16,20 +31,12 @@ class SecureDataIOS extends AbstractSecureData {
       UNHANDLEDERROR: 'Keychain unhandled error.'
     }
   };
-  constructor(params?: { key: string; ios?: { service?: any } }) {
-    super(params);
-  }
-
   get key() {
     return this._key;
   }
 
   set key(value: string) {
     this._key = value;
-  }
-
-  set ios(value: { service: string }) {
-    this._service = value.service;
   }
 
   read(): Promise<any> {

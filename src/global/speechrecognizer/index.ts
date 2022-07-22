@@ -1,6 +1,5 @@
-import { SpeechRecognizerBase } from './speechrecognizer';
+import { ISpeechRecognizer } from './speechrecognizer';
 
-const SpeechRecognizer: typeof SpeechRecognizerBase = require(`./speechrecognizer.${Device.deviceOS.toLowerCase()}`).default;
-type SpeechRecognizer = SpeechRecognizerBase;
+const SpeechRecognizer: ISpeechRecognizer = require(`./speechrecognizer.${Device.deviceOS.toLowerCase()}`).default;
 
 export default SpeechRecognizer;

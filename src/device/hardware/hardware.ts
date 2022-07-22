@@ -1,7 +1,64 @@
+import { INativeMobileComponent, MobileOSProps } from '../../core/native-mobile-component';
+
 export enum DeviceType {
   UNSPECIFIED = 'unspecified',
   PHONE = 'phone',
   TABLET = 'tablet'
+}
+
+export interface HardwareAndroidProps {
+  /**
+   * Returns 'International Mobile Equipment Identity' of the device. Requires the {@link Application.Android.Permissions#READ_PHONE_STATE} 
+   * If your app runs on Android 10 (API level 29) or above, a SecurityException occurs.
+   * You cannot get IMEI programmatiocally on iOS.
+   * @property {String} IMEI
+   * @deprecated
+   * @android
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly IMEI: string;
+  /**
+   * Returns the vendor id of the device. Requires the {@link Application.Android.Permissions#READ_PHONE_STATE} 
+   * If your app runs on Android 10 (API level 29) or above, a SecurityException occurs.
+   * @property {Number} vendorID
+   * @deprecated
+   * @android
+   * @readonly
+   * @static
+   * @since 0.1
+   */
+  readonly vendorID: number;
+}
+
+export interface HardwareIOSProps {
+  /**
+   *
+   * Microphone related properties
+   *
+   * @ios
+   * @readonly
+   * @static
+   * @since 1.1.12
+   */
+  microphone: {
+    /**
+     *
+     * Checks to see if calling process has permission to record audio. The callback will be called
+     * immediately if permission has already been granted or denied.  Otherwise, it presents a dialog to notify
+     * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
+     * indicates whether permission has been granted.
+     *
+     * @param {Function} callback for permission situation.
+     * @method requestRecordPermission
+     * @ios
+     * @readonly
+     * @static
+     * @since 1.1.12
+     */
+    requestRecordPermission?: (callback: (...args) => void) => void;
+  };
 }
 
 /**
@@ -19,7 +76,7 @@ export enum DeviceType {
  *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
  *
  */
-export declare class HardwareBase {
+export interface IHardware extends INativeMobileComponent<any, MobileOSProps<HardwareIOSProps, HardwareAndroidProps>> {
   /**
    *
    * Returns the unique id of the device. The value may change if the device is formatted.
@@ -30,51 +87,7 @@ export declare class HardwareBase {
    * @static
    * @since 0.1
    */
-  static readonly UID: string;
-  /**
-   *
-   * Returns 'International Mobile Equipment Identity' of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
-   * @property {String} IMEI
-   * @android
-   * @readonly
-   * @static
-   * @since 0.1
-   */
-  static readonly IMEI?: string;
-  static readonly android: {
-    // TODO: discuss why IMEI is in android
-    readonly IMEI?: string;
-    /**
-     *
-     * Returns the vendor id of the device. If your app runs on Android 10 (API level 29) , the method returns null or placeholder data if the app has the READ_PHONE_STATE permission. Otherwise, a SecurityException occurs.
-     * @property {Number} vendorID
-     * @android
-     * @readonly
-     * @static
-     * @since 0.1
-     */
-    readonly vendorID?: number;
-  };
-  static ios: {
-    microphone?: {
-      /**
-       *
-       * Checks to see if calling process has permission to record audio. The callback will be called
-       * immediately if permission has already been granted or denied.  Otherwise, it presents a dialog to notify
-       * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
-       * indicates whether permission has been granted.
-       *
-       * @param {Function} callback for permission situation.
-       * @method requestRecordPermission
-       * @ios
-       * @readonly
-       * @static
-       * @since 1.1.12
-       */
-      requestRecordPermission?: (callback: (...args) => void) => void;
-    };
-    modelName?: string;
-  };
+  readonly UID: string;
   /**
    *
    * Returns the model name of the device.
@@ -85,7 +98,7 @@ export declare class HardwareBase {
    * @static
    * @since 0.1
    */
-  static readonly brandModel: string;
+  readonly brandModel: string;
   /**
    *
    * Returns the brand name of the device.
@@ -96,17 +109,41 @@ export declare class HardwareBase {
    * @static
    * @since 0.1
    */
-  static readonly brandName: string;
+  readonly brandName: string;
+  /**
+   * Gets human readable modelname of the device.
+   * @ios
+   * @android
+   * @example
+   * ```
+   * import Hardware from '@smartface/native/device/hardware';
+   *
+   * Hardware.modelName; // iPhone X
+   * Hardware.modelName; // Samsung Galaxy S10
+   * ```
+   */
+  readonly modelName: string;
   /**
    *
    * Returns the device model name.
+   * @deprecated Use Hardware.modelName instead
    * @android
    * @ios
    * @readonly
    * @static
    * @since 0.1
    */
-  static getDeviceModelName(): string;
+  getDeviceModelName(): string;
 
-  static deviceType: DeviceType;
+  /**
+   * DeviceType is to determine if the current device which the application is open is phone, tablet or else.
+   */
+  readonly deviceType: DeviceType;
+
+  /**
+   * Returns the manufacturer of the device.
+   * @android
+   * @static
+   */
+  readonly manufacturer: string;
 }

@@ -2,13 +2,13 @@ import { AbstractFile, FileParams, IFile } from './file';
 import FileStream from '../../io/filestream';
 import { FileContentMode, FileStreamType } from '../filestream/filestream';
 import { NativeMobileComponent, WithMobileOSProps } from '../../core/native-mobile-component';
-import { PATH_FILE_TYPE } from '../path/path';
+import { PathFileType } from '../path/path';
 
-export default class FileIOS extends AbstractFile implements IFile {
-  get type(): PATH_FILE_TYPE {
-    return PATH_FILE_TYPE.FILE; // Doesn't exist on iOS
+export default class FileIOS extends NativeMobileComponent implements IFile {
+  get type(): PathFileType {
+    return PathFileType.FILE; // Doesn't exist on iOS
   }
-  set type(value: PATH_FILE_TYPE) {}
+  set type(value: PathFileType) {}
   fullPath: string;
   protected createNativeObject() {
     return null;

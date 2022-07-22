@@ -1,6 +1,6 @@
-import { AbstractView, IView } from '../view/view';
-import Color from '../color';
-import File from '../../io/file';
+import { IView } from '../view/view';
+import { IColor } from '../color/color';
+import { IFile } from '../../io/file/file';
 import ImageCacheType from '../shared/imagecachetype';
 import { ImageViewEvents } from './imageview-events';
 import { MobileOSProps } from '../../core/native-mobile-component';
@@ -219,7 +219,7 @@ export interface IImageView<
    * @ios
    * @since 3.1.3
    */
-  tintColor: Color | null;
+  tintColor: IColor | null;
   /**
    * Gets/sets image fill type.
    *
@@ -295,7 +295,7 @@ export interface IImageView<
    * @since 3.1.0
    */
   loadFromFile(params: {
-    file: File;
+    file: IFile;
     fade?: boolean;
     width?: number;
     height?: number;
@@ -335,48 +335,12 @@ export interface IImageView<
     useHTTPCacheControl?: boolean;
     onSuccess?: (image: IImage, cache: ImageCacheType) => void;
     onFailure?: () => void;
-    image: any;
-    cache: ImageCacheType;
+    cache?: ImageCacheType;
     android?: {
       useDiskCache?: boolean;
       useMemoryCache?: boolean;
       cacheSignature?: string | null;
     };
-    ios?: { isRefreshCached?: boolean };
-  }): void;
-}
-
-export declare class AbstractImageView<TEvent extends string = ImageViewEvents> extends AbstractView<TEvent> implements IImageView<TEvent> {
-  static FillType: typeof ImageFillType;
-  constructor(params?: Partial<IImageView>);
-  image: string | IImage | null;
-
-  tintColor: Color;
-
-  imageFillType: ImageFillType;
-
-  loadFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: IImage;
-    fade?: boolean;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: () => void;
-    onFailure?: () => void;
-    android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
-    ios?: { isRefreshCached?: boolean };
-  }): void;
-
-  loadFromFile(params: { file: File; fade?: boolean; width?: number; height?: number; android?: { useMemoryCache?: boolean } }): void;
-
-  fetchFromUrl(params: {
-    url: string;
-    headers?: { [name: string]: string };
-    placeholder?: IImage;
-    useHTTPCacheControl?: boolean;
-    onSuccess?: (image: IImage, cache: ImageCacheType) => void;
-    onFailure?: () => void;
-    android?: { useDiskCache?: boolean; useMemoryCache?: boolean };
     ios?: { isRefreshCached?: boolean };
   }): void;
 }

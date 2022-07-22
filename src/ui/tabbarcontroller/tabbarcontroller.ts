@@ -1,16 +1,10 @@
 import { ITabbarItem } from '../tabbaritem/tabbaritem';
-import Color from '../color';
-import { AbstractPage, IPage, LargeTitleDisplayMode, PageAndroidParams, PageIOSParams, PageOrientation, PresentationStyle } from '../page/page';
+import { IPage, PageAndroidParams, PageIOSParams } from '../page/page';
 import { TabBarControllerEvents } from './tabbarcontroller-events';
 import OverScrollMode from '../shared/android/overscrollmode';
 import { MobileOSProps } from '../../core/native-mobile-component';
-import FlexLayout from '../flexlayout';
-import { IController } from '../navigationcontroller/navigationcontroller';
-import { HeaderBar } from '../navigationcontroller/headerbar';
-import { IView } from '../view/view';
-import StatusBar from '../../application/statusbar';
-import { ControllerPresentParams } from '../../util/Android/transition/viewcontroller';
-import type Page from '../page';
+import { IColor } from '../color/color';
+import ViewState from '../shared/viewState';
 
 export enum BarTextTransform {
   AUTO = 0,
@@ -21,7 +15,37 @@ export enum BarTextTransform {
 export interface ITabBarControllerIOSProps extends PageIOSParams {
   barTextTransform: BarTextTransform;
 }
-export interface ITabBarControllerAndroidProps extends PageAndroidParams {}
+export interface ITabBarControllerAndroidProps extends PageAndroidParams {
+  /**
+   * Gets/sets the divider color of the TabBarController.
+   * @property {UI.Color} [dividerColor = UI.Color.BLACK]
+   * @android
+   * @since 3.2.0
+   */
+  dividerColor: IColor;
+  /**
+   * Gets/sets the divider padding of the TabBarController.
+   * @property {Number} [dividerPadding = 0]
+   * @android
+   * @since 3.2.0
+   */
+  dividerPadding: number;
+  /**
+   * Gets/sets the divider width of the TabBarController.
+   * @property {Number} [dividerWidth = 0]
+   * @android
+   * @since 3.2.0
+   */
+  dividerWidth: number;
+  /**
+   * Gets/sets over-scroll mode for top tab bar.
+   *
+   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+   * @android
+   * @since 3.2.0
+   */
+  overScrollMode: OverScrollMode;
+}
 
 export declare interface ITabBarController<TEvent extends string = TabBarControllerEvents>
   extends IPage<TEvent | TabBarControllerEvents, MobileOSProps<ITabBarControllerIOSProps, ITabBarControllerAndroidProps>> {
@@ -49,7 +73,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @android
    * @since 3.2.0
    */
-  dividerColor: Color;
+  dividerColor: IColor;
   /**
    * Gets/sets the divider padding of the TabBarController.
    * @property {Number} [dividerPadding = 0]
@@ -71,7 +95,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  indicatorColor: Color;
+  indicatorColor: IColor;
   /**
    * Gets/sets the auto capitalize title of the items of TabBarController.
    * @property {Boolean} [autoCapitalize = true]
@@ -88,14 +112,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @since 3.2.0
    */
   indicatorHeight: number;
-  /**
-   * Gets/sets over-scroll mode for top tab bar.
-   *
-   * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
-   * @android
-   * @since 3.2.0
-   */
-  overScrollMode: OverScrollMode;
+
   /**
    * Gets/sets bar color of tabs.
    * @property {UI.Color} [barColor = Color.WHITE]
@@ -103,7 +120,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  barColor: Color;
+  barColor: IColor;
   /**
    * Gets/sets whether to enable scrollable tabs.
    * @property {Boolean} scrollEnabled
@@ -137,12 +154,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  iconColor:
-    | {
-        normal: Color;
-        selected: Color;
-      }
-    | Color;
+  iconColor: ViewState<IColor>;
   /**
    * Gets/sets the text color of the tabs. You can specify text colors for the different states (normal, selected) used for the tabs.
    * @property {UI.Color|Object} textColor
@@ -150,12 +162,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * @ios
    * @since 3.2.0
    */
-  textColor:
-    | {
-        normal: Color;
-        selected: Color;
-      }
-    | Color;
+  textColor: ViewState<IColor>;
 
   /**
    * Enables/Disables paging behavior.
@@ -173,7 +180,6 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    *
    * @event onPageCreate
    * @param index
-   * @deprecated
    * @return UI.Page
    * @android
    * @ios
@@ -188,7 +194,7 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * });
    * ```
    */
-  onPageCreate: (index: number) => Page;
+  onPageCreate(index: number): IPage;
   /**
    * This event called when a tab is chosen by the user.
    *
@@ -208,76 +214,23 @@ export declare interface ITabBarController<TEvent extends string = TabBarControl
    * });
    * ```
    */
-  onSelected: (index: number) => void;
-}
+  onSelected(index: number): void;
 
-export abstract class AbstractTabBarController<TEvent extends string = TabBarControllerEvents> extends AbstractPage<TEvent> implements ITabBarController<TEvent> {
-  orientation: PageOrientation;
-  transitionViews: IView[];
-  layout: FlexLayout;
-  statusBar: typeof StatusBar;
-  headerBar?: HeaderBar | undefined;
-  static iOS: {
-    BarTextTransform: typeof BarTextTransform;
-    LargeTitleDisplayMode: typeof LargeTitleDisplayMode;
-    PresentationStyle: typeof PresentationStyle;
-  };
+  on(eventName: 'selected', callback: (position: number) => void): () => void;
+  on(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): () => void;
 
-  barHeight: number;
-  items: ITabbarItem[];
-  dividerColor: Color;
-  dividerPadding: number;
-  dividerWidth: number;
-  indicatorColor: Color;
-  autoCapitalize: boolean;
-  indicatorHeight: number;
-  overScrollMode: OverScrollMode;
-  barColor: Color;
-  scrollEnabled: boolean;
-  selectedIndex: number;
-  abstract setSelectedIndex(index: number, animated: boolean): void;
-  iconColor: { normal: Color; selected: Color } | Color;
-  textColor: { normal: Color; selected: Color } | Color;
-  pagingEnabled: boolean;
-  abstract onPageCreate(index: number): Page;
-  abstract onSelected(index: number): void;
-}
+  off(eventName: 'selected', callback: (position: number) => void): void;
+  off(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
 
-export class TabBarControllerImpl extends AbstractTabBarController {
-  protected createNativeObject() {
-    throw new Error('Method not implemented.');
-  }
-  onLoad(): void {
-    throw new Error('Method not implemented.');
-  }
-  onShow(): void {
-    throw new Error('Method not implemented.');
-  }
-  onHide(): void {
-    throw new Error('Method not implemented.');
-  }
-  onPageCreate(index: number): Page {
-    throw new Error('Method not implemented.');
-  }
-  onSelected(index: number): void {
-    throw new Error('Method not implemented.');
-  }
-  present(params?: ControllerPresentParams): void {
-    throw new Error('Method not implemented.');
-  }
-  dismiss(params?: { onComplete: () => void }): void {
-    throw new Error('Method not implemented.');
-  }
-  setSelectedIndex(index: number, animated: boolean): void {
-    throw new Error('Method not implemented.');
-  }
-  getCurrentController(): IController {
-    throw new Error('Method not implemented.');
-  }
-  show(params: { controller: IController; animated: any; isComingFromPresent?: boolean | undefined; onCompleteCallback?: (() => void) | undefined }) {
-    throw new Error('Method not implemented.');
-  }
-  onOrientationChange(e: { orientation: PageOrientation }): void {
-    throw new Error('Method not implemented.');
-  }
+  emit(eventName: 'selected', position: number): void;
+  emit(eventName: TabBarControllerEvents, ...args: any[]): void;
+
+  once(eventName: 'selected', callback: (position: number) => void): () => void;
+  once(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): () => void;
+
+  prependListener(eventName: 'selected', callback: (position: number) => void): void;
+  prependListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
+
+  prependOnceListener(eventName: 'selected', callback: (position: number) => void): void;
+  prependOnceListener(eventName: TabBarControllerEvents, callback: (...args: any[]) => void): void;
 }

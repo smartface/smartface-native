@@ -24,7 +24,8 @@ export const NativeJustifyContent = {
   CENTER: NativeYogaJustify.CENTER,
   FLEX_END: NativeYogaJustify.FLEX_END,
   SPACE_BETWEEN: NativeYogaJustify.SPACE_BETWEEN,
-  SPACE_AROUND: NativeYogaJustify.SPACE_AROUND
+  SPACE_AROUND: NativeYogaJustify.SPACE_AROUND,
+  SPACE_EVENLY: NativeYogaJustify.SPACE_EVENLY
 };
 
 export const NativeAlignContent = {
@@ -32,12 +33,16 @@ export const NativeAlignContent = {
   FLEX_START: NativeYogaAlign.FLEX_START,
   CENTER: NativeYogaAlign.CENTER,
   FLEX_END: NativeYogaAlign.FLEX_END,
-  STRETCH: NativeYogaAlign.STRETCH
+  STRETCH: NativeYogaAlign.STRETCH,
+  BASELINE: NativeYogaAlign.BASELINE,
+  SPACE_BETWEEN: NativeYogaAlign.SPACE_BETWEEN,
+  SPACE_AROUND: NativeYogaAlign.SPACE_AROUND
 };
 
 export const NativeFlexWrap = {
   NOWRAP: NativeYogaWrap.NO_WRAP,
-  WRAP: NativeYogaWrap.WRAP
+  WRAP: NativeYogaWrap.WRAP,
+  WRAP_REVERSE: NativeYogaWrap.WRAP_REVERSE,
 };
 
 export const NativeAlignItems = {
