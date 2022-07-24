@@ -4,6 +4,11 @@ name: API Doc Release Manually
 
 on:
   workflow_dispatch:
+    inputs:
+      releaseCycle:
+        default: 'release'
+        description: 'Determined which release cycle the doc will be published to. Available options are : "alpha", "beta" and "release"'
+        required: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,21 +43,6 @@ jobs:
       - name: echo version
         run: echo "${{ steps.package-version.outputs.current-version}}"
 
-      - name: is this cycle alpha
-        if: contains(steps.package-version.outputs.current-version, 'alpha')
-        run: echo "RELEASE_CYCLE=alpha" >> $GITHUB_ENV
-
-      - name: is this cycle beta
-        if: contains(steps.package-version.outputs.current-version, 'beta')
-        run: echo "RELEASE_CYCLE=beta" >> $GITHUB_ENV
-
-      - name: is this cycle release
-        if: true && !contains(steps.package-version.outputs.current-version, 'beta') && !contains(steps.package-version.outputs.current-version, 'alpha')
-        run: echo "RELEASE_CYCLE=release" >> $GITHUB_ENV
-
-      - name: echo release cycle
-        run: echo "$RELEASE_CYCLE"
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -71,11 +61,11 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ref:${{env.RELEASE_CYCLE}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ref:${{github.event.inputs.releaseCycle}}
 
       - name: Run the image in a container
         uses: addnab/docker-run-action@v3
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/ref:${{env.RELEASE_CYCLE}}
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/ref:${{github.event.inputs.releaseCycle}}
           run: |
             echo ${{ steps.docker_build.outputs.digest }}
