@@ -24,21 +24,6 @@ jobs:
           npm run deploy:prod
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
-      - name: Setup Git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "info@smartface.io"
-      - name: Update Alpha Branch
-        run: |
-          git checkout release/alpha
-          git merge master
-      - name: Update Beta Branch
-        run: |
-          git checkout release/beta
-          git merge master
-      - name: Sync Changes
-        run: |
-          git push
   buildDoc:
     runs-on: ubuntu-latest
     needs: [publishProd]

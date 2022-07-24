@@ -1,5 +1,5 @@
 /**
- * This internal method will be used for inheriting OS specific getter and setters.
+ * This method will be used for inheriting OS specific getter and setters.
  * This also helps for composition between multiple objects across different files.
  * 
  * @param target 
