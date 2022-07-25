@@ -1,12 +1,12 @@
 import OverScrollMode from '../shared/android/overscrollmode';
 import ListViewItem from '../listviewitem';
-import Color from '../color';
 import ScrollState from '../shared/android/scrollstate';
 import { AbstractView, IView, ViewAndroidProps, ViewIOSProps } from '../view/view';
 import { Point2D } from '../../primitive/point2d';
 import { ListViewEvents } from './listview-events';
 import SwipeItem, { ISwipeItem, SwipeDirection } from '../swipeitem';
 import { MobileOSProps } from '../../core/native-mobile-component';
+import { IColor } from '../color/color';
 
 /**
  * The type of animation to use when rows are inserted or deleted or reloaded.
@@ -520,7 +520,7 @@ export interface IListView<TEvent extends string = ListViewEvents, TMobile exten
    * @ios
    * @since 0.1
    */
-  setPullRefreshColors(colors: Color[] | Color): void;
+  setPullRefreshColors(colors: IColor[] | IColor): void;
   /**
    * This method notify ListView for data changes. After this method is called
    * ListView refreshes itself and recreates the rows. Do not forget to
@@ -987,7 +987,7 @@ export declare class AbstractListView<TEvent extends string = ListViewEvents, TP
   longPressDragEnabled: boolean;
   getFirstVisibleIndex(): number;
   getLastVisibleIndex(): number;
-  setPullRefreshColors(colors: Color[] | Color): void;
+  setPullRefreshColors(colors: IColor[] | IColor): void;
   refreshData(): void;
   deleteRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;
   insertRowRange(params: { positionStart: number; itemCount: number; ios: Partial<{ animation: RowAnimation }> }): void;

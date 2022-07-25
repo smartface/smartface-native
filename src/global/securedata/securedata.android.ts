@@ -12,13 +12,14 @@ class SecureDataAndroid extends NativeMobileComponent implements ISecureData {
   get key() {
     return this._key;
   }
+  set key(value) {}
   protected createNativeObject(params) {
     if (!params || !params.key) {
       throw new Error('Constructor parameters must have key parameter.');
     }
 
     const nativeObject = new NativeSFKeyStore(params.key);
-    AndroidConfig.activity.getLifecycle().addObserver(this.nativeObject);
+    AndroidConfig.activity.getLifecycle().addObserver(nativeObject);
     return nativeObject;
   }
   service: string | undefined;

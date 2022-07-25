@@ -703,7 +703,7 @@ export default class ViewAndroid<TEvent extends string = ViewEvents, TNative ext
     position.width && (this.width = position.width);
     position.height && (this.height = position.height);
   }
-  requestLayout(invalidate?: Boolean) {
+  requestLayout(invalidate?: boolean) {
     this.nativeObject.requestLayout();
     if (invalidate) {
       this.nativeObject.invalidate();
