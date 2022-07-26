@@ -77,7 +77,7 @@ export default class VideoViewAndroid<TEvent extends string = VideoViewEvents> e
       },
       set loadingIndicatorEnabled(value) {
         self._showLoadingIndicator = value;
-        this.nativeInner.setShowBuffering(value ? SHOW_BUFFERING_ALWAYS : SHOW_BUFFERING_NEVER);
+        self.nativeInner.setShowBuffering(value ? SHOW_BUFFERING_ALWAYS : SHOW_BUFFERING_NEVER);
       },
       get nextButtonEnabled() {
         return self._nextButtonEnabled;
