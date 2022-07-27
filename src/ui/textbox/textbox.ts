@@ -180,7 +180,13 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
   };
   /**
    * Gets/sets the event which will be triggered when the textbox object gains focus.
-   *  @example
+   * On iOS, you can return boolean variable to open keyboard or not.
+   * On Android, return value is ignored
+   * true -> works normally
+   * false -> doesn't open keyboard but still triggers the event
+   * @since 7.1.1 -> return value will only work on Smartface version 7.1.1 or above.
+   * @example
+   * @returns true
    * ```
    * import TextBox from '@smartface/native/ui/textbox';
    *
@@ -190,7 +196,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * });
    * ```
    */
-  onEditBegins: () => void;
+  onEditBegins: () => boolean | void;
   /**
    * Gets/sets the cursor color of TextBox.
    *
@@ -328,12 +334,18 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
   /**
    * This event is called when user finishes editing by clicking return key
    * or clicking outside of the TextBox.
+   * On iOS, you can return boolean variable to close keyboard or not.
+   * On Android, return value is ignored
+   * true -> works normally
+   * false -> doesn't close the keyboard but still triggers the event
+   *
+   * @example
+   * @returns true
    *
    * @event onEditEnds
    * @android
    * @ios
-   * @since 0.1
-   * @deprecated
+   * @since 7.1.1 -> return value will only work on Smartface version 7.1.1 or above.
    * @example
    * ```
    * import TextBox from '@smartface/native/ui/textbox';
@@ -344,7 +356,7 @@ export interface ITextBox<TEvent extends string = TextBoxEvents, TMobile extends
    * });
    * ```
    */
-  onEditEnds: () => void;
+  onEditEnds: () => boolean | void;
   /**
    * This event is called when user clicks action key on the keyboard.
    *

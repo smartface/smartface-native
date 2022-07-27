@@ -108,11 +108,13 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this.nativeObject.textBoxDelegate = (method: { name?: string; range: number; replacementString: string }) => {
       if (method.name === 'textFieldShouldBeginEditing') {
         this.keyboardanimationdelegate.textFieldShouldBeginEditing();
-        this.onEditBegins?.();
         this.emit('editBegins');
+        const returnValue = this.onEditBegins?.() ?? true;
+        return returnValue;
       } else if (method.name === 'textFieldShouldEndEditing') {
-        this.onEditEnds?.();
         this.emit('editEnds');
+        const returnValue = this.onEditEnds?.() ?? true;
+        return returnValue;
       } else if (method.name === 'textFieldShouldReturn') {
         this.onActionButtonPress?.({
           actionKeyType: this.actionKeyType
@@ -121,9 +123,9 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
           actionKeyType: this.actionKeyType
         });
       } else if (method.name === 'textFieldShouldClear') {
-        const returnValue = this.onClearButtonPress?.();
+        const returnValue = this.onClearButtonPress?.() ?? true;
         this.emit('clearButtonPress');
-        return returnValue === undefined ? true : returnValue;
+        return returnValue;
       } else if (method.name === 'shouldChangeCharactersIn:Range:ReplacementString') {
         this.onTextChanged?.({
           location: method.range,
@@ -411,7 +413,7 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     }
   }
 
-  onEditBegins: () => void;
+  onEditBegins: () => boolean | void;
 
   get cursorColor(): IColor {
     return new ColorIOS({
@@ -585,17 +587,17 @@ export default class TextBoxIOS<TEvent extends string = TextBoxEvents, TNative =
     this._onTextChanged = value;
   }
 
-  get onClearButtonPress(): () => void {
+  get onClearButtonPress(): () => boolean | void {
     return this._onClearButtonPress;
   }
-  set onClearButtonPress(value: () => void) {
+  set onClearButtonPress(value: () => boolean | void) {
     this._onClearButtonPress = value;
   }
 
-  get onEditEnds(): () => void {
+  get onEditEnds(): () => boolean | void {
     return this._onEditEnds;
   }
-  set onEditEnds(value: () => void) {
+  set onEditEnds(value: () => boolean | void) {
     this._onEditEnds = value;
   }
 
