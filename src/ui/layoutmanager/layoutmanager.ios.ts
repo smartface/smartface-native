@@ -37,7 +37,7 @@ export default class LayoutManagerIOS extends AbstractLayoutManager<__SF_UIColle
     this._sectionInset = { bottom: 0, left: 0, right: 0, top: 0 };
     this._contentInset = { bottom: 0, left: 0, right: 0, top: 0 };
     this._onItemLength = () => DEFAULT_ITEM_LENGTH;
-    this._scrollDirection = ScrollDirection.VERTICAL;
+    this.scrollDirection = ScrollDirection.VERTICAL;
     this.collectionView = null;
     super.preConstruct(params);
   }
