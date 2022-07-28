@@ -41,12 +41,12 @@ const BackgroundImagesInitial: ViewState<IImage> = {
   focused: undefined
 };
 export default class ButtonIOS<TEvent extends string = ButtonEvents> extends LabelIOS<ButtonEvents> implements IButton<TEvent> {
-  protected _backgroundImage: IButton['backgroundImage'] = BackgroundImagesInitial;
-  protected _textColor: IButton['textColor'] = TextColorsInitial;
-  protected _backgroundColor: IButton['backgroundColor'] = BackgroundColorsInitial;
+  protected _backgroundImage: IButton['backgroundImage'];
+  protected _textColor: IButton['textColor'];
+  protected _backgroundColor: IButton['backgroundColor'];
   protected _nativeObject: __SF_UIButton;
   protected _text: IButton['text'];
-  private gradientColorObject: Record<string, any> = {};
+  private gradientColorObject: Record<string, any>;
   onPress: IButton['onPress'];
   constructor(params: Partial<IButton> = {}) {
     super(params);
@@ -58,6 +58,13 @@ export default class ButtonIOS<TEvent extends string = ButtonEvents> extends Lab
   }
   protected createNativeObject() {
     return new __SF_UIButton();
+  }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.gradientColorObject = {};
+    this._backgroundImage = BackgroundImagesInitial;
+    this._textColor = TextColorsInitial;
+    this._backgroundColor = BackgroundColorsInitial;
+    super.preConstruct(params);
   }
   onLongPress: () => void;
 

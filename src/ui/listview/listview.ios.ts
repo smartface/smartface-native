@@ -28,6 +28,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
     this.addIOSProps(this.getIOSParams());
     this.addAndroidProps(this.getAndroidParams());
     this.setNativeObjectParams();
+    this.onRowHeight = () => 0;
     super.preConstruct(params);
   }
   nativeInner: INativeInner;
@@ -274,7 +275,7 @@ export default class ListViewIOS<TEvent extends string = ListViewEvents> extends
       }
 
       this.onRowBind?.(this._listItemArray[e.cell.uuid], e.indexPath.row);
-      this._listItemArray[e.cell.uuid].applyLayout()
+      this._listItemArray[e.cell.uuid].applyLayout();
     };
 
     // var _cellIdentifier = "cell";
