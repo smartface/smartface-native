@@ -13,18 +13,30 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
   createNativeObject() {
     return new __SF_MultiSlider();
   }
+  protected preConstruct(params?: Partial<Record<string, any>>): void {
+    this.nativeObject.layer.masksToBounds = false;
+    this.nativeObject.isVertical = false;
+    this.nativeObject.thumbCount = 2;
+    this.nativeObject.snapStepSize = 1;
+    this.nativeObject.minimumValue = 0;
+    this.nativeObject.maximumValue = 5;
+    this._rangeEnabled = true;
+    super.preConstruct(params);
+    this.addIOSProps(this.getIOSProps());
+  }
   constructor(params: Partial<IRangeSlider> = {}) {
     super(params);
 
-    this._nativeObject.layer.masksToBounds = false;
-    this._nativeObject.isVertical = false;
-    this._nativeObject.thumbCount = 2;
-    this._nativeObject.snapStepSize = 1;
-    this._nativeObject.minimumValue = 0;
-    this._nativeObject.maximumValue = 5;
+    this.nativeObject.addJSTarget(() => {
+      this.onValueChange?.(this.value);
+      this.emit('valueChange', this.value);
+    }, UIControlEvents.valueChanged);
+  }
 
+  private getIOSProps() {
     const self = this;
-    this.addIOSProps({
+
+    return {
       get thumbShadowColor(): Color {
         return self.nativeObject.thumbShadowColor;
       },
@@ -79,13 +91,7 @@ export default class RangeSliderIOS<TEvent extends string = RangeSliderEvents> e
       set isHapticSnap(value: boolean) {
         self.nativeObject.isHapticSnap = value;
       }
-    });
-
-    const valueChangeHandler = () => {
-      self.onValueChange?.(self.value);
-      self.emit(RangeSliderEvents.ValueChange, self.value);
     };
-    self.nativeObject.addJSTarget(valueChangeHandler, UIControlEvents.valueChanged);
   }
 
   get rangeEnabled(): boolean {

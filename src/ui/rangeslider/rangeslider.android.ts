@@ -3,15 +3,20 @@ import AndroidConfig from '../../util/Android/androidconfig';
 import AndroidUnitConverter from '../../util/Android/unitconverter.js';
 import { RangeSliderEvents } from './rangeslider-events';
 import ViewAndroid from '../view/view.android';
-import { IRangeSlider } from './rangeslider';
+import { IRangeSlider, RangeSliderAndroidProps, RangeSliderIOSProps } from './rangeslider';
 import Color from '../color';
+import { MobileOSProps } from '../../core/native-mobile-component';
 
 const NativeSFRangeSlider = requireClass('io.smartface.android.sfcore.ui.rangeslider.SFRangeSlider');
 
 export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvents> extends ViewAndroid<TEvent | RangeSliderEvents, any, IRangeSlider> implements IRangeSlider {
-  private _snapStepSize: number = 1;
-  private _minValue: number = 0;
-  private _maxValue: number = 5;
+  private _snapStepSize: number;
+  private _minValue: number;
+  private _maxValue: number;
+  private _thumbSize: number;
+  private _isTrackRounded: boolean;
+  private _rangeEnabled: boolean;
+  private _maxValueChanged: boolean;
   private _thumbBorderWidth: number;
   private _trackWeight: number;
   private _outerTrackWeight: number;
@@ -19,11 +24,18 @@ export default class RangeSliderAndroid<TEvent extends string = RangeSliderEvent
   private _outerTrackColor: Color;
   private _thumbColor: Color;
   private _thumbBorderColor: Color;
-  private _thumbSize: number = 5;
-  private _isTrackRounded: boolean = true;
-  private _rangeEnabled: boolean = true;
-  private _maxValueChanged: boolean = false;
   private _onValueChange: (value: number[]) => void;
+  protected preConstruct(params?: Partial<IRangeSlider<'valueChange' | 'touch' | 'touchCancelled' | 'touchEnded' | 'touchMoved', MobileOSProps<RangeSliderIOSProps, RangeSliderAndroidProps>>>): void {
+    this._snapStepSize = 1;
+    this._minValue = 0;
+    this._maxValue = 5;
+    this._thumbSize = 5;
+    this._isTrackRounded = true;
+    this._rangeEnabled = true;
+    this._maxValueChanged = false;
+
+    super.preConstruct(params);
+  }
   createNativeObject() {
     return new NativeSFRangeSlider(AndroidConfig.activity);
   }
