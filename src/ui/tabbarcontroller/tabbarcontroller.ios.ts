@@ -86,8 +86,8 @@ export default class TabBarControllerIOS<TEvent extends string = TabBarControlle
     return this._autoCapitalize;
   }
   set autoCapitalize(value: boolean) {
-    this._barTextTransform = value ? BarTextTransform.AUTO : BarTextTransform.NONE;
     this._autoCapitalize = value;
+    this.ios.barTextTransform = value ? BarTextTransform.AUTO : BarTextTransform.NONE;
   }
 
   get indicatorHeight(): number {

@@ -108,7 +108,7 @@ export default class TabbarItemAndroid extends NativeMobileComponent<any, ITabba
       // TODO: Refactor this implemenation. Discuss with ios team.
       value = { ...value, ...this.makeSelector(normal, selected) };
     }
-    this.nativeObject?.setIcon((value as ImageAndroid).nativeObject);
+    this.nativeObject?.setIcon((value as ImageAndroid)?.nativeObject || EmptyImage.nativeObject);
   }
   get badge() {
     if (this._badgeObj === undefined) {
